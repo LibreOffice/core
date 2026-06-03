@@ -747,7 +747,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         { u"ProgressMax"_ustr, 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"ProgressCurrent"_ustr, 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"WrittenNumberStyles"_ustr, 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { u"UsePrettyPrinting"_ustr, 0, ::cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"UsePrettyPrinting"_ustr, 0, ::cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"StreamRelPath"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },

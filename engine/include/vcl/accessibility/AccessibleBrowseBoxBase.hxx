@@ -147,7 +147,7 @@ public:
     // XServiceInfo
 
     /** @return  Whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
 
     /** @return  A list of all supported services. */
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;

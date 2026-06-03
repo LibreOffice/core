@@ -267,7 +267,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::getInputString( sal_Int32 nKey, d
 OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString( const OUString& aFormat,
                                                                              double fValue,
                                                                              const lang::Locale& nLocale,
-                                                                             sal_Bool bAllowEnglish )
+                                                                             bool bAllowEnglish )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -294,7 +294,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString( con
 sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( const OUString& aFormat,
                                                                               double fValue,
                                                                               const lang::Locale& nLocale,
-                                                                              sal_Bool bAllowEnglish,
+                                                                              bool bAllowEnglish,
                                                                               sal_Int32 aDefaultColor )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -331,7 +331,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
     return u"com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject"_ustr;
 }
 
-sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -367,7 +367,7 @@ uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsObj::getByKey( sal_I
 
 uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType,
                                                                  const lang::Locale& nLocale,
-                                                                 sal_Bool bCreate )
+                                                                 bool bCreate )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -394,7 +394,7 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
                                                  const lang::Locale& nLocale,
-                                                 sal_Bool bScan )
+                                                 bool bScan )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -539,8 +539,8 @@ void SAL_CALL SvNumberFormatsObj::removeByKey( sal_Int32 nKey )
 
 OUString SAL_CALL SvNumberFormatsObj::generateFormat( sal_Int32 nBaseKey,
                                                       const lang::Locale& nLocale,
-                                                      sal_Bool bThousands,
-                                                      sal_Bool bRed, sal_Int16 nDecimals,
+                                                      bool bThousands,
+                                                      bool bRed, sal_Int16 nDecimals,
                                                       sal_Int16 nLeading )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -599,7 +599,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatIndex( sal_Int16 nIndex, const l
     return nRet;
 }
 
-sal_Bool SAL_CALL SvNumberFormatsObj::isTypeCompatible( sal_Int16 nOldType, sal_Int16 nNewType )
+bool SAL_CALL SvNumberFormatsObj::isTypeCompatible( sal_Int16 nOldType, sal_Int16 nNewType )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -626,7 +626,7 @@ OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
     return u"SvNumberFormatsObj"_ustr;
 }
 
-sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -836,7 +836,7 @@ OUString SAL_CALL SvNumberFormatObj::getImplementationName()
     return u"SvNumberFormatObj"_ustr;
 }
 
-sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -962,7 +962,7 @@ OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
     return u"SvNumberFormatSettingsObj"_ustr;
 }
 
-sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

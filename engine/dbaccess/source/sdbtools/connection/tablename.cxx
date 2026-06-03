@@ -194,7 +194,7 @@ namespace sdbtools
         }
     }
 
-    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 Type, sal_Bool Quote )
+    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 Type, bool Quote )
     {
         EntryGuard aGuard( *this );
 

@@ -82,12 +82,12 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
         // container.XContainerListener
         virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
@@ -233,7 +233,7 @@ Sequence< OUString > SAL_CALL ConfigurationAccess_UICommand::getElementNames()
     return getAllCommands();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
+bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
 {
     return getByNameImpl( rCommandURL ).hasValue();
 }
@@ -244,7 +244,7 @@ Type SAL_CALL ConfigurationAccess_UICommand::getElementType()
     return cppu::UnoType<Sequence< PropertyValue >>::get();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
+bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
 {
     // There must are global commands!
     return true;
@@ -687,7 +687,7 @@ Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
     return comphelper::mapKeysToSequence( m_aModuleToCommandFileMap );
 }
 
-sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
+bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
 {
     std::unique_lock g(m_aMutex);
 
@@ -701,7 +701,7 @@ Type SAL_CALL UICommandDescription::getElementType()
     return cppu::UnoType<XNameAccess>::get();
 }
 
-sal_Bool SAL_CALL UICommandDescription::hasElements()
+bool SAL_CALL UICommandDescription::hasElements()
 {
     // generic UI commands are always available!
     return true;

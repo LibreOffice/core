@@ -56,7 +56,7 @@ OUString SAL_CALL RegionMapChartType::getImplementationName()
     return u"com.sun.star.comp.chart.RegionMapChartType"_ustr;
 }
 
-sal_Bool SAL_CALL RegionMapChartType::supportsService(const OUString& rServiceName)
+bool SAL_CALL RegionMapChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

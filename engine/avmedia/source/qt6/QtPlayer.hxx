@@ -38,16 +38,16 @@ public:
     // XPlayer
     virtual void SAL_CALL start() override;
     virtual void SAL_CALL stop() override;
-    virtual sal_Bool SAL_CALL isPlaying() override;
+    virtual bool SAL_CALL isPlaying() override;
     virtual double SAL_CALL getDuration() override;
     virtual void SAL_CALL setMediaTime(double fTime) override;
     virtual double SAL_CALL getMediaTime() override;
-    virtual void SAL_CALL setPlaybackLoop(sal_Bool bSet) override;
-    virtual sal_Bool SAL_CALL isPlaybackLoop() override;
+    virtual void SAL_CALL setPlaybackLoop(bool bSet) override;
+    virtual bool SAL_CALL isPlaybackLoop() override;
     virtual void SAL_CALL setVolumeDB(sal_Int16 nVolumeDB) override;
     virtual sal_Int16 SAL_CALL getVolumeDB() override;
-    virtual void SAL_CALL setMute(sal_Bool bSet) override;
-    virtual sal_Bool SAL_CALL isMute() override;
+    virtual void SAL_CALL setMute(bool bSet) override;
+    virtual bool SAL_CALL isMute() override;
     virtual css::awt::Size SAL_CALL getPreferredPlayerWindowSize() override;
     virtual css::uno::Reference<css::media::XPlayerWindow>
         SAL_CALL createPlayerWindow(const css::uno::Sequence<css::uno::Any>& rArgs) override;
@@ -55,7 +55,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     virtual void SAL_CALL disposing() final override;

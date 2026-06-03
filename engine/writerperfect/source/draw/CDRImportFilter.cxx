@@ -40,7 +40,7 @@ OUString SAL_CALL CDRImportFilter::getImplementationName()
     return u"com.sun.star.comp.Draw.CDRImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL CDRImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL CDRImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

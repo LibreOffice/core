@@ -36,7 +36,7 @@ namespace connectivity::flat
         OUString SAL_CALL getImplementationName(  ) override;
         // XDriver
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-        virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
+        virtual bool SAL_CALL acceptsURL( const OUString& url ) override;
         virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
     };
 

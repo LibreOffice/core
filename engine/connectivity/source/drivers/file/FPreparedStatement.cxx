@@ -152,7 +152,7 @@ void SAL_CALL OPreparedStatement::close(  )
 }
 
 
-sal_Bool SAL_CALL OPreparedStatement::execute(  )
+bool SAL_CALL OPreparedStatement::execute(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -208,9 +208,9 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  )
 }
 
 
-void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
+void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, bool x )
 {
-    setParameter(parameterIndex,static_cast<bool>(x));
+    setParameter(parameterIndex,x);
 }
 
 void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x )

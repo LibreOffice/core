@@ -369,7 +369,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             /* To ensure that all page names are unique, we check the ones we
                want to insert and insert them into a substitution list if
                necessary.
-               bNameOK is sal_False if the user has canceled. */
+               bNameOK is false if the user has canceled. */
             bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
 
             if( bNameOK )

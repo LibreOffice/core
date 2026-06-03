@@ -90,7 +90,7 @@ Sequence< OUString > SAL_CALL ImageManager::getAllImageNames( ::sal_Int16 nImage
     return m_pImpl->getAllImageNames( nImageType );
 }
 
-sal_Bool SAL_CALL ImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
+bool SAL_CALL ImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 {
     return m_pImpl->hasImage(nImageType,aCommandURL);
 }
@@ -148,12 +148,12 @@ void SAL_CALL ImageManager::storeToStorage( const uno::Reference< XStorage >& St
     m_pImpl->storeToStorage(Storage);
 }
 
-sal_Bool SAL_CALL ImageManager::isModified()
+bool SAL_CALL ImageManager::isModified()
 {
     return m_pImpl->isModified();
 }
 
-sal_Bool SAL_CALL ImageManager::isReadOnly()
+bool SAL_CALL ImageManager::isReadOnly()
 {
     return m_pImpl->isReadOnly();
 }

@@ -77,7 +77,7 @@ public:
 
     virtual void SAL_CALL rejectDrop() override {}
 
-    virtual void SAL_CALL dropComplete(sal_Bool /*bSuccess*/) override {}
+    virtual void SAL_CALL dropComplete(bool /*bSuccess*/) override {}
 };
 }
 
@@ -103,9 +103,9 @@ void JSDropTarget::removeDropTargetListener(
     std::erase(m_aListeners, xListener);
 }
 
-sal_Bool JSDropTarget::isActive() { return false; }
+bool JSDropTarget::isActive() { return false; }
 
-void JSDropTarget::setActive(sal_Bool /*active*/) {}
+void JSDropTarget::setActive(bool /*active*/) {}
 
 sal_Int8 JSDropTarget::getDefaultActions() { return 0; }
 
@@ -116,7 +116,7 @@ OUString JSDropTarget::getImplementationName()
     return u"com.sun.star.datatransfer.dnd.JSDropTarget"_ustr;
 }
 
-sal_Bool JSDropTarget::supportsService(OUString const& ServiceName)
+bool JSDropTarget::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

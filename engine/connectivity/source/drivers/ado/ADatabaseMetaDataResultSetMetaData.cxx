@@ -97,7 +97,7 @@ OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnLabel(sal_Int32 c
     return getColumnName(column);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency(sal_Int32 column)
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency(sal_Int32 column)
 {
     if (m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCurrency();
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency(sal_Int32 colum
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSigned(sal_Int32 column)
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSigned(sal_Int32 column)
 {
     if (m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSigned();
@@ -167,7 +167,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::isNullable(sal_Int32 colu
     return sal_Int32(false);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly(sal_Int32 column)
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly(sal_Int32 column)
 {
     if (m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isReadOnly();
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly(sal_Int32 colum
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
 {
     if (m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isDefinitelyWritable();
@@ -200,7 +200,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable(sal_I
     ;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable(sal_Int32 column)
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable(sal_Int32 column)
 {
     if (m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isWritable();

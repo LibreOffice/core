@@ -154,7 +154,7 @@ private:
 
     /** @short  it indicates, that the member m_xTargetFrame was new created for this
                 load request and must be closed in case loading (not handling!)
-                operation failed. The default value is sal_False!
+                operation failed. The default value is false!
      */
     bool m_bCloseFrameOnError;
 
@@ -162,7 +162,7 @@ private:
                 in combination with the m_sTarget value "_self") was suspended.
                 Normally it will be replaced by the new loaded document. But in case
                 loading (not handling!) failed, it must be reactivated.
-                The default value is sal_False!
+                The default value is false!
      */
     bool m_bReactivateControllerOnError;
 
@@ -288,8 +288,8 @@ public:
                 specify a timeout in [ms].
                 A value 0 let it wait forever!
 
-        @return sal_True if the started load process could be finished in time;
-                sal_False if the specified time was over.
+        @return true if the started load process could be finished in time;
+                false if the specified time was over.
 
         @throw  ... currently not used :-)
 
@@ -498,10 +498,10 @@ private:
                 points to the container window of a frame.
 
         @param  bForceToFront
-                if it's set to sal_False... showing of the window is done more intelligent.
+                if it's set to false... showing of the window is done more intelligent.
                 setVisible() is called only if the window was not shown before.
                 This mode is needed by b) and c)
-                If it's set to sal_True... both actions has to be done: setVisible(), toFront()!
+                If it's set to true... both actions has to be done: setVisible(), toFront()!
                 This mode is needed by a)
      */
     static void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
@@ -514,9 +514,9 @@ private:
         @param  xFrame
                 the frame, which should be checked.
 
-        @return [sal_Bool]
-                sal_True if this frame is already used for loading,
-                sal_False otherwise.
+        @return [bool]
+                true if this frame is already used for loading,
+                false otherwise.
      */
     static bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame);
 

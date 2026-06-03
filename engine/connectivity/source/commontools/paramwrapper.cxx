@@ -177,7 +177,7 @@ namespace dbtools::param
     }
 
 
-    sal_Bool ParameterWrapper::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
+    bool ParameterWrapper::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
     {
         OSL_ENSURE( PROPERTY_ID_VALUE == nHandle, "ParameterWrapper::convertFastPropertyValue: the only non-readonly prop should be our PROPERTY_VALUE!" );
 
@@ -284,7 +284,7 @@ namespace dbtools::param
     }
 
 
-    sal_Bool SAL_CALL ParameterWrapperContainer::hasElements()
+    bool SAL_CALL ParameterWrapperContainer::hasElements()
     {
         std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();

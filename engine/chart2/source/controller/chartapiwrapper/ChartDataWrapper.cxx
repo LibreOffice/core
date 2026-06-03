@@ -531,7 +531,7 @@ double SAL_CALL ChartDataWrapper::getNotANumber()
     return DBL_MIN;
 }
 
-sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
+bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
 {
     return nNumber == DBL_MIN
         || std::isnan( nNumber )
@@ -689,7 +689,7 @@ OUString SAL_CALL ChartDataWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.ChartData"_ustr;
 }
 
-sal_Bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

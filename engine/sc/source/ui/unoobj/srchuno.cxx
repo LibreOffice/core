@@ -184,7 +184,7 @@ OUString SAL_CALL ScCellSearchObj::getImplementationName()
     return u"ScCellSearchObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

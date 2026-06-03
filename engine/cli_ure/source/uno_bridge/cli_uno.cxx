@@ -245,7 +245,7 @@ void Bridge::call_cli(
             {
                 map_to_uno(
                     uno_args[ nPos ], args[ nPos ], param.pTypeRef,
-                         sal_True == param.bIn /* assign if inout */);
+                         true == param.bIn /* assign if inout */);
                      // out array
             }
             catch (...)

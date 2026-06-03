@@ -180,7 +180,7 @@ public:
 
     virtual css::uno::Reference< css::view::XRenderable > GetRenderable() override;
 
-    // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
+    // virtual sal_uInt16           Print( SfxProgress &rProgress, bool bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;
     virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL ) override;
     virtual OUString        GetSelectionText( bool bCompleteWords = false, bool bOnlyASample = false ) override;

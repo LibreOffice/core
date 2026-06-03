@@ -353,7 +353,7 @@ Sequence< OUString > SAL_CALL GlobalEventConfig::getElementNames(  )
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->getElementNames( );
 }
-sal_Bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName )
+bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasByName( aName );
@@ -363,7 +363,7 @@ Type SAL_CALL GlobalEventConfig::getElementType(  )
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return GlobalEventConfig_Impl::getElementType( );
 }
-sal_Bool SAL_CALL GlobalEventConfig::hasElements(  )
+bool SAL_CALL GlobalEventConfig::hasElements(  )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasElements( );

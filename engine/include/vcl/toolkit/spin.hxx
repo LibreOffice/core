@@ -79,7 +79,7 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 private:
-    // moves the focus to the upper or lower rect. Return sal_True if the focus rect actually changed.
+    // moves the focus to the upper or lower rect. Return true if the focus rect actually changed.
     SAL_DLLPRIVATE bool        ImplMoveFocus( bool _bUpper );
     SAL_DLLPRIVATE void        ImplCalcFocusRect( bool _bUpper );
 

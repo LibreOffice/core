@@ -38,7 +38,7 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextField >& xTextField);
 
-    virtual sal_Bool SAL_CALL Update() override;
+    virtual bool SAL_CALL Update() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

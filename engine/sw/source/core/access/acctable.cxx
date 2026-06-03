@@ -865,7 +865,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColu
     }
 }
 
-sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
+bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
 {
     SolarMutexGuard aGuard;
 
@@ -890,7 +890,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
     return bRet;
 }
 
-sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
+bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
         sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
@@ -945,7 +945,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleSummary()
     return uno::Reference< XAccessible >();
 }
 
-sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
+bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
             sal_Int32 nRow, sal_Int32 nColumn )
 {
     bool bRet = false;
@@ -1237,7 +1237,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     }
 }
 
-sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
+bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
     sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
@@ -1436,7 +1436,7 @@ void SwAccessibleTable::AddSelectionCell(
 }
 
 // XAccessibleTableSelection
-sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
+bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
 {
     SolarMutexGuard g;
 
@@ -1452,7 +1452,7 @@ sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
 
     return true;
 }
-sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
+bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
 {
     SolarMutexGuard g;
 
@@ -1469,7 +1469,7 @@ sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
     return true;
 }
 
-sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
+bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
 {
     SolarMutexGuard g;
 
@@ -1487,7 +1487,7 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
     return true;
 }
 
-sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
+bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
 {
     SolarMutexGuard g;
 

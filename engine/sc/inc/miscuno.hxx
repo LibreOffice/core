@@ -34,7 +34,7 @@ OUString SAL_CALL ClassName::getImplementationName()                        \
 {                                                                           \
     return ClassNameAscii;                                                  \
 }                                                                           \
-sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
+bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
 {                                                                           \
     return cppu::supportsService(this, ServiceName);                        \
 }
@@ -97,12 +97,12 @@ public:
     virtual                 ~ScIndexEnumeration() override;
 
                             // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Any SAL_CALL nextElement() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
@@ -126,11 +126,11 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 

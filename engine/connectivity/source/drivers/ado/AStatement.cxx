@@ -244,7 +244,7 @@ void OStatement_Base::assignRecordSet( ADORecordset* _pRS )
         m_RecordSet.PutRefDataSource( static_cast<IDispatch*>(m_Command) );
 }
 
-sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql )
+bool SAL_CALL OStatement_Base::execute( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -430,7 +430,7 @@ sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  )
 }
 
 
-sal_Bool SAL_CALL OStatement_Base::getMoreResults(  )
+bool SAL_CALL OStatement_Base::getMoreResults(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -709,7 +709,7 @@ void OStatement_Base::setCursorName(std::u16string_view _par0)
     return *getArrayHelper();
 }
 
-sal_Bool OStatement_Base::convertFastPropertyValue(
+bool OStatement_Base::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
                             sal_Int32 nHandle,

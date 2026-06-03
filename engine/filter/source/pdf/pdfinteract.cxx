@@ -47,7 +47,7 @@ void SAL_CALL PDFInteractionHandler::initialize(const css::uno::Sequence<css::un
         aProperties.get(u"Parent"_ustr) >>= m_xParent;
 }
 
-sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< task::XInteractionRequest >& i_xRequest )
+bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< task::XInteractionRequest >& i_xRequest )
 {
     bool bHandled = false;
 
@@ -73,7 +73,7 @@ OUString SAL_CALL PDFInteractionHandler::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL PDFInteractionHandler::supportsService( const OUString& rServiceName )
+bool SAL_CALL PDFInteractionHandler::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

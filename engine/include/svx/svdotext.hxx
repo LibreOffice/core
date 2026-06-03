@@ -245,8 +245,8 @@ protected:
 
     // For objects with free size (flow text). The flag is set by the
     // application on create. If the object width is later resized,
-    // AutoGrowWidth will be disabled (set to sal_False). This flag will
-    // then also be set to sal_False, so that the object behaves like a
+    // AutoGrowWidth will be disabled (set to false). This flag will
+    // then also be set to false, so that the object behaves like a
     // normal text object.
     // Width resize can result from:
     // - Interactive Resize in single or multiple selections

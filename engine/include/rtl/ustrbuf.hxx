@@ -630,22 +630,6 @@ public:
     }
 
     /**
-        Appends the string representation of the <code>sal_Bool</code>
-        argument to the string buffer.
-
-        The argument is converted to a string as if by the method
-        <code>String.valueOf</code>, and the characters of that
-        string are then appended to this string buffer.
-
-        @param   b   a <code>sal_Bool</code>.
-        @return  this string buffer.
-     */
-    OUStringBuffer & append(sal_Bool b)
-    {
-        return insert(getLength(), b);
-    }
-
-    /**
         Appends the string representation of the ASCII <code>char</code>
         argument to this string buffer.
 
@@ -903,34 +887,11 @@ public:
     }
 
     /**
-        Inserts the string representation of the <code>sal_Bool</code>
-        argument into this string buffer.
-
-        The second argument is converted to a string as if by the method
-        <code>String.valueOf</code>, and the characters of that
-        string are then inserted into this string buffer at the indicated
-        offset.
-        <p>
-        The offset argument must be greater than or equal to
-        <code>0</code>, and less than or equal to the length of this
-        string buffer.
-
-        @param      offset   the offset.
-        @param      b        a <code>sal_Bool</code>.
-        @return     this string buffer.
-     */
-    OUStringBuffer & insert(sal_Int32 offset, sal_Bool b)
-    {
-        sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
-        return insert( offset, sz, rtl_ustr_valueOfBoolean( sz, b ) );
-    }
-
-    /**
         Inserts the string representation of the <code>bool</code>
         argument into this string buffer.
 
         The second argument is converted to a string as if by the method
-        <code>OUString::boolean</code>, and the characters of that
+        <code>String.valueOf</code>, and the characters of that
         string are then inserted into this string buffer at the indicated
         offset.
         <p>

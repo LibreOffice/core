@@ -391,7 +391,7 @@ namespace sdbtools
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
 
-    sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name )
+    bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 
@@ -399,7 +399,7 @@ namespace sdbtools
         return !pNameCheck->validateName( Name );
     }
 
-    sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name )
+    bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 

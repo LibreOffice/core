@@ -346,7 +346,7 @@ uno::Type SAL_CALL SvxDrawPage::getElementType()
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SAL_CALL SvxDrawPage::hasElements()
+bool SAL_CALL SvxDrawPage::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -527,7 +527,7 @@ rtl::Reference<SdrObject> SvxDrawPage::CreateSdrObject_(const Reference< drawing
         aNewPolygon.setClosed(true);
         pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
 
-        // #107245# pObj->SetExtrudeCharacterMode(sal_True);
+        // #107245# pObj->SetExtrudeCharacterMode(true);
         pObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
     else if(nType == SdrObjKind::E3D_Lathe)
@@ -540,7 +540,7 @@ rtl::Reference<SdrObject> SvxDrawPage::CreateSdrObject_(const Reference< drawing
         aNewPolygon.setClosed(true);
         pLatheObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
 
-        // #107245# pObj->SetLatheCharacterMode(sal_True);
+        // #107245# pObj->SetLatheCharacterMode(true);
         pLatheObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
 
@@ -825,7 +825,7 @@ OUString SAL_CALL SvxDrawPage::getImplementationName()
     return u"SvxDrawPage"_ustr;
 }
 
-sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -886,7 +886,7 @@ css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxDrawPage::getF
 }
 
 // XFormsSupplier2
-sal_Bool SAL_CALL SvxDrawPage::hasForms()
+bool SAL_CALL SvxDrawPage::hasForms()
 {
     SolarMutexGuard g;
 

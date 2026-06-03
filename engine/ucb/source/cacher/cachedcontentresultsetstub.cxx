@@ -166,7 +166,7 @@ OUString SAL_CALL CachedContentResultSetStub::getImplementationName()
     return u"com.sun.star.comp.ucb.CachedContentResultSetStub"_ustr;
 }
 
-sal_Bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& ServiceName )
+bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -302,7 +302,7 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
 
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetch( sal_Int32 nRowStartPosition
-    , sal_Int32 nRowCount, sal_Bool bDirection )
+    , sal_Int32 nRowCount, bool bDirection )
 {
     std::unique_lock aGuard(m_aMutex);
     impl_init_xRowOrigin(aGuard);
@@ -453,7 +453,7 @@ void CachedContentResultSetStub
 //virtual
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection )
+        , sal_Int32 nRowCount, bool bDirection )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_init_xContentAccessOrigin(aGuard);
@@ -465,7 +465,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 //virtual
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection )
+        , sal_Int32 nRowCount, bool bDirection )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_init_xContentAccessOrigin(aGuard);
@@ -477,7 +477,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 //virtual
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContents( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection )
+        , sal_Int32 nRowCount, bool bDirection )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_init_xContentAccessOrigin(aGuard);
@@ -504,7 +504,7 @@ OUString SAL_CALL CachedContentResultSetStubFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.CachedContentResultSetStubFactory"_ustr;
 }
-sal_Bool SAL_CALL CachedContentResultSetStubFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL CachedContentResultSetStubFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

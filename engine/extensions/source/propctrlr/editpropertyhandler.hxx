@@ -49,7 +49,7 @@ namespace pcr
         virtual void                            SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
         virtual css::uno::Sequence< OUString >  SAL_CALL getSupersededProperties( ) override;
         virtual css::uno::Sequence< OUString >  SAL_CALL getActuatingProperties( ) override;
-        virtual void                            SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) override;
+        virtual void                            SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
 
         // PropertyHandler overridables
         virtual css::uno::Sequence< css::beans::Property >

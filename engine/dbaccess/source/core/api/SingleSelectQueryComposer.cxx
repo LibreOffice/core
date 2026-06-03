@@ -277,7 +277,7 @@ OUString SAL_CALL OSingleSelectQueryComposer::getImplementationName()
     {
         return u"org.openoffice.comp.dba.OSingleSelectQueryComposer"_ustr;
     }
-sal_Bool SAL_CALL OSingleSelectQueryComposer::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OSingleSelectQueryComposer::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -444,13 +444,13 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getSt
     return getStructuredCondition(F_tmp);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator )
+void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator )
 {
     auto F_tmp = std::mem_fn(&OSingleSelectQueryComposer::implSetHavingClause);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator )
+void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator )
 {
     auto F_tmp = std::mem_fn(&OSingleSelectQueryComposer::implSetFilter);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
@@ -565,7 +565,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnNameOrderBy_throw(const Refer
     return impl_getColumnRealName_throw(column, false);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending )
+void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, bool ascending )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OUString sColumnName( impl_getColumnNameOrderBy_throw(column) );

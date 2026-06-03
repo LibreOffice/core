@@ -185,7 +185,7 @@ Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getChara
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getCharacterStream"_ustr, *this );
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -419,7 +419,7 @@ css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -429,7 +429,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  )
     return m_nCurrentFetchState == SQL_NO_DATA;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -439,7 +439,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
     return m_nRowPos == 1;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -485,7 +485,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -502,7 +502,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
 {
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -517,7 +517,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
     return bRet;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row )
+bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -533,7 +533,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row )
     return bRet;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row )
+bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -549,7 +549,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row )
     return bRet;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -573,7 +573,7 @@ Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -583,7 +583,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
     return m_pRowStatusArray[0] == SQL_ROW_DELETED;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
 {
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -592,7 +592,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
     return m_pRowStatusArray[0] == SQL_ROW_ADDED;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -603,7 +603,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -614,7 +614,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -633,7 +633,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -727,7 +727,7 @@ const OUString & ODatabaseMetaDataResultSet::getCursorName()
     return *getArrayHelper();
 }
 
-sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
+bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
                             sal_Int32 nHandle,

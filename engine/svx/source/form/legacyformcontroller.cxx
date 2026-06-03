@@ -94,7 +94,7 @@ namespace svxform
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     private:
@@ -180,7 +180,7 @@ namespace svxform
         return u"org.openoffice.comp.svx.LegacyFormController"_ustr;
     }
 
-    sal_Bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName )
+    bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName )
     {
         return cppu::supportsService(this, _serviceName);
     }

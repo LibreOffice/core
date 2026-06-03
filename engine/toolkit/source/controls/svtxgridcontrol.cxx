@@ -734,7 +734,7 @@ Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelectedRows()
 }
 
 
-sal_Bool SAL_CALL SVTXGridControl::hasSelectedRows()
+bool SAL_CALL SVTXGridControl::hasSelectedRows()
 {
     SolarMutexGuard aGuard;
 
@@ -745,7 +745,7 @@ sal_Bool SAL_CALL SVTXGridControl::hasSelectedRows()
 }
 
 
-sal_Bool SAL_CALL SVTXGridControl::isRowSelected( ::sal_Int32 index )
+bool SAL_CALL SVTXGridControl::isRowSelected( ::sal_Int32 index )
 {
     SolarMutexGuard aGuard;
 
@@ -844,7 +844,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
 }
 
 
-void SVTXGridControl::setEnable( sal_Bool bEnable )
+void SVTXGridControl::setEnable( bool bEnable )
 {
     SolarMutexGuard aGuard;
 

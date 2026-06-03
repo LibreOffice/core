@@ -164,7 +164,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwTransferable final : public Transfe
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
     virtual void        ObjectReleased() override;
-    virtual sal_Bool SAL_CALL isComplex() override;
+    virtual bool SAL_CALL isComplex() override;
 
     using TransferableHelper::StartDrag;
 

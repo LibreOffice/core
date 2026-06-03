@@ -901,7 +901,7 @@ bool SdDrawDocument::MoveSelectedPages(sal_uInt16 nTargetPage)
 
 // + Move selected pages after said page
 //   (nTargetPage = (sal_uInt16)-1  --> move before first page)
-// + Returns sal_True when the page has been moved
+// + Returns true when the page has been moved
 bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*>& rSelectedPages)
 {
     SdPage* pPage              = nullptr;

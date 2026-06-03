@@ -800,7 +800,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
         xDiaProps->setPropertyValue( u"RelativePosition"_ustr, Any() );
     }
 }
-sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
+bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
 {
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -826,7 +826,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, uno::Any(true) );
 }
-sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
+bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
 {
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -2043,7 +2043,7 @@ OUString SAL_CALL DiagramWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.Diagram"_ustr;
 }
 
-sal_Bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

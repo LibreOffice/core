@@ -141,7 +141,7 @@ OUString SAL_CALL OrdinalSuffixService::getImplementationName()
     return cOrdinalSuffix;
 }
 
-sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServiceName)
+bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

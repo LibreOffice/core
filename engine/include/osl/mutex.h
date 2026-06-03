@@ -48,7 +48,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroyMutex(oslMutex Mutex);
     @param Mutex handle to a created mutex.
     @retval False if system-call fails.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex);
+SAL_DLLPUBLIC bool SAL_CALL osl_acquireMutex(oslMutex Mutex);
 
 /** Try to acquire the mutex without blocking.
 
@@ -56,14 +56,14 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex);
 
     @retval False if it could not be acquired.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex);
+SAL_DLLPUBLIC bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex);
 
 /** Release the mutex.
 
     @param Mutex handle to a created mutex.
     @retval False if system-call fails.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex);
+SAL_DLLPUBLIC bool SAL_CALL osl_releaseMutex(oslMutex Mutex);
 
 /** Returns a unique and global mutex.
 

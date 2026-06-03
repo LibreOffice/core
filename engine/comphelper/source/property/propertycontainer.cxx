@@ -43,7 +43,7 @@ Sequence< Type > OPropertyContainer::getBaseTypes()
     return cppu::OPropertySetHelper::getTypes();
 }
 
-sal_Bool OPropertyContainer::convertFastPropertyValue(
+bool OPropertyContainer::convertFastPropertyValue(
     Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {
     return OPropertyContainerHelper::convertFastPropertyValue( _rConvertedValue, _rOldValue, _nHandle, _rValue );

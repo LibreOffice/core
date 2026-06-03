@@ -99,7 +99,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             sal_Int32(200), xBmp->getSize().Height);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "alpha state mismatch",
-                            aContainedBmp.HasAlpha(), bool(xBmp->hasAlpha()));
+                            aContainedBmp.HasAlpha(), xBmp->hasAlpha());
 
     CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
                             xBmp->getScaledBitmap( geometry::RealSize2D(500,500), false ).is());
@@ -261,9 +261,9 @@ private:
 
     // XBitmap
     virtual geometry::IntegerSize2D SAL_CALL getSize() override { return maSize; }
-    virtual sal_Bool SAL_CALL hasAlpha(  ) override { return mnBitsPerPixel != 8; }
+    virtual bool SAL_CALL hasAlpha(  ) override { return mnBitsPerPixel != 8; }
     virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( const geometry::RealSize2D&,
-                                                                           sal_Bool ) override { return this; }
+                                                                           bool ) override { return this; }
 
     // XIntegerReadOnlyBitmap
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getData( rendering::IntegerBitmapLayout&     bitmapLayout,
@@ -351,7 +351,7 @@ private:
         return 255;
     }
 
-    virtual sal_Bool SAL_CALL getIndex( uno::Sequence< double >& entry,
+    virtual bool SAL_CALL getIndex( uno::Sequence< double >& entry,
                                           ::sal_Int32 nIndex ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "Got palette getIndex interface call without handing out palette",
@@ -368,8 +368,8 @@ private:
         return true; // no palette transparency here.
     }
 
-    virtual sal_Bool SAL_CALL setIndex( const uno::Sequence< double >&,
-                                          sal_Bool,
+    virtual bool SAL_CALL setIndex( const uno::Sequence< double >&,
+                                          bool,
                                           ::sal_Int32 nIndex ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "Got palette setIndex interface call without handing out palette",

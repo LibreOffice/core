@@ -403,7 +403,7 @@ public:
     // only screen:
     void    DrawSelectiveObjects(SdrLayerID nLayer);
 
-    bool    SetChangedClip();       // sal_False = not
+    bool    SetChangedClip();       // false = not
     vcl::Region  GetChangedAreaRegion();
 
     void    FindChanged();

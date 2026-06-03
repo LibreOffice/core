@@ -161,7 +161,7 @@ class StorageHolder final
                     using the given open mode. If it failed there is second step,
                     which tries to do the same again ... but removing a might existing
                     WRITE flag from the open mode. The user can suppress this fallback
-                    handling by setting the parameter bAllowFallback to sal_False.
+                    handling by setting the parameter bAllowFallback to false.
 
             @param  xBaseStorage
                     the storage, where the sub element should be searched.

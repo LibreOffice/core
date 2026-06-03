@@ -32,7 +32,7 @@ public:
 private:
     virtual void SAL_CALL setRegressionProperties(
         sal_Int32 aDegree,
-        sal_Bool  aForceIntercept,
+        bool  aForceIntercept,
         double    aInterceptValue,
         sal_Int32 aPeriod,
         sal_Int32 nMovingType) override;
@@ -43,7 +43,7 @@ private:
         sal_Int32 nPointCount,
         const css::uno::Reference<css::chart2::XScaling>& xScalingX,
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
-        sal_Bool bMaySkipPointsInCalculation ) override;
+        bool bMaySkipPointsInCalculation ) override;
 };
 
 } //  namespace chart

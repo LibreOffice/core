@@ -51,7 +51,7 @@ css::uno::Sequence< OUString > SAL_CALL OTable::getSupportedServiceNames(  )
     return { isNew()?u"com.sun.star.sdbcx.TableDescriptor"_ustr:u"com.sun.star.sdbcx.Table"_ustr };
 }
 
-sal_Bool SAL_CALL OTable::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OTable::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

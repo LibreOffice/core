@@ -86,7 +86,7 @@ public:
 
     // XServiceInfo Methods
     virtual OUString SAL_CALL getImplementationName(  ) override { return getServiceImplName(); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override
     {
         css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
         return std::find(sServices.begin(), sServices.end(), ServiceName) != sServices.end();

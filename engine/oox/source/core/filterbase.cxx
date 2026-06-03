@@ -398,7 +398,7 @@ bool FilterBase::importBinaryData( StreamDataSequence & orDataSeq, const OUStrin
 
 // com.sun.star.lang.XServiceInfo interface
 
-sal_Bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName )
+bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -462,7 +462,7 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
 
 // com.sun.star.document.XFilter interface
 
-sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq )
+bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq )
 {
     if( !mxImpl->mxModel.is() || !mxImpl->mxModelFactory.is() || (mxImpl->meDirection == FILTERDIRECTION_UNKNOWN) )
         throw RuntimeException();

@@ -646,7 +646,7 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
 
 // XFilePicker functions
 
-void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode )
+void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( bool bMode )
 {
     SolarMutexGuard g;
 
@@ -1399,7 +1399,7 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
     return aRetval;
 }
 
-void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnable )
+void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, bool bEnable )
 {
     // skip this built-in one which is Enabled by default
     if (nControlId == ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR && bEnable)
@@ -1617,7 +1617,7 @@ void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFi
 #endif
 }
 
-sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState )
+bool SAL_CALL SalGtkFilePicker::setShowState( bool bShowState )
 {
     SolarMutexGuard g;
 
@@ -1651,7 +1651,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState )
     return true;
 }
 
-sal_Bool SAL_CALL SalGtkFilePicker::getShowState()
+bool SAL_CALL SalGtkFilePicker::getShowState()
 {
     SolarMutexGuard g;
 

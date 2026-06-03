@@ -1250,7 +1250,7 @@ OUString SAL_CALL NativeNumberSupplierService::getImplementationName()
     return implementationName;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 NativeNumberSupplierService::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

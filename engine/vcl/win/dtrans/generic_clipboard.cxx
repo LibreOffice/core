@@ -60,7 +60,7 @@ OUString SAL_CALL GenericClipboard::getImplementationName(  )
     return "com.sun.star.comp.datatransfer.clipboard.GenericClipboard";
 }
 
-sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )
+bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -144,7 +144,7 @@ typedef struct _rtl_TextEncodingInfo
     True if the given encoding uses single octets as basic units of
     information, false otherwise.
  */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
+SAL_DLLPUBLIC bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding);
 
 /** Return information about a text encoding.
 
@@ -159,7 +159,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncodi
     True if information about the given encoding is available, false
     otherwise.
  */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_getTextEncodingInfo(
+SAL_DLLPUBLIC bool SAL_CALL rtl_getTextEncodingInfo(
         rtl_TextEncoding eTextEncoding, rtl_TextEncodingInfo* pEncInfo );
 
 /** Map from a numeric Windows charset to a text encoding.

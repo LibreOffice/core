@@ -82,7 +82,7 @@ namespace osl_Condition
             ::osl::Condition aCond;
             bRes = aCond.check();
 
-            CPPUNIT_ASSERT_MESSAGE("#test comment#: create a condition its initial check state should be sal_False.",
+            CPPUNIT_ASSERT_MESSAGE("#test comment#: create a condition its initial check state should be false.",
                                    !bRes );
         }
 
@@ -116,7 +116,7 @@ namespace osl_Condition
             aCond.set();
             bRes = aCond.check();
 
-            CPPUNIT_ASSERT_MESSAGE("#test comment#: check state should be sal_True after set.",
+            CPPUNIT_ASSERT_MESSAGE("#test comment#: check state should be true after set.",
                                    bRes );
         }
 
@@ -271,7 +271,7 @@ namespace osl_Condition
     };
 
     /** testing the method:
-        sal_Bool check()
+        bool check()
     */
     class check : public CppUnit::TestFixture
     {

@@ -44,7 +44,7 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const &
+    virtual bool SAL_CALL supportsService(OUString const &
                           rServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL

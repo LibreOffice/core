@@ -213,7 +213,7 @@ void FormViewPageWindowAdapter::dispose()
     m_aControllerList.clear();
 }
 
-sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements()
+bool SAL_CALL FormViewPageWindowAdapter::hasElements()
 {
     return getCount() != 0;
 }

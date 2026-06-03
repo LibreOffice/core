@@ -267,7 +267,7 @@ public:
     void setWait(sal_Int32 nSec)
         {
             m_nWaitSec = nSec;
-            //m_bWait = sal_True;
+            //m_bWait = true;
         }
 
     virtual void SAL_CALL suspend() override
@@ -278,7 +278,7 @@ public:
         }
 
 protected:
-    //sal_Bool m_bWait;
+    //bool m_bWait;
     sal_Int32 m_nWaitSec;
 
     void SAL_CALL run() override
@@ -903,7 +903,7 @@ namespace osl_Thread
                 bool bRes = aCountThread->create();
                 CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
-                // sal_Bool bRunning = aCountThread->isRunning();
+                // bool bRunning = aCountThread->isRunning();
                 // sal_Int32 nValue = 0;
                 suspendCountThread(aCountThread);
 

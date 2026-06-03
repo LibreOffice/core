@@ -64,7 +64,7 @@ OUString ManifestWriter::getImplementationName()
     return u"com.sun.star.packages.manifest.comp.ManifestWriter"_ustr;
 }
 
-sal_Bool SAL_CALL ManifestWriter::supportsService(OUString const & rServiceName)
+bool SAL_CALL ManifestWriter::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

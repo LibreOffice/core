@@ -84,12 +84,12 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override = 0;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
         // OPropertySetHelper
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
+        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
 
         // XExecutableDialog
         virtual void SAL_CALL setTitle( const OUString& aTitle ) override;

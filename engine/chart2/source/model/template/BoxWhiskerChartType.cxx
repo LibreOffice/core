@@ -131,7 +131,7 @@ OUString SAL_CALL BoxWhiskerChartType::getImplementationName()
     return u"com.sun.star.comp.chart.BoxWhiskerChartType"_ustr;
 }
 
-sal_Bool SAL_CALL BoxWhiskerChartType::supportsService(const OUString& rServiceName)
+bool SAL_CALL BoxWhiskerChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

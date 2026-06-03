@@ -94,7 +94,7 @@ namespace io_stm {
     public: // XServiceInfo
         virtual OUString    SAL_CALL getImplementationName() override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-        virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool     SAL_CALL supportsService(const OUString& ServiceName) override;
     };
 
     }
@@ -434,7 +434,7 @@ OUString Pump::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool Pump::supportsService(const OUString& ServiceName)
+bool Pump::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

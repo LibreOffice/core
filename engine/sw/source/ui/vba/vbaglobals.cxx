@@ -150,12 +150,12 @@ float SAL_CALL SwVbaGlobals::PointsToCentimeters( float Points )
     return getApplication()->PointsToCentimeters( Points );
 }
 
-float SAL_CALL SwVbaGlobals::PixelsToPoints( float Pixels, ::sal_Bool fVertical )
+float SAL_CALL SwVbaGlobals::PixelsToPoints( float Pixels, bool fVertical )
 {
     return getApplication()->PixelsToPoints( Pixels, fVertical );
 }
 
-float SAL_CALL SwVbaGlobals::PointsToPixels( float Points, ::sal_Bool fVertical )
+float SAL_CALL SwVbaGlobals::PointsToPixels( float Points, bool fVertical )
 {
     return getApplication()->PointsToPixels( Points, fVertical );
 }

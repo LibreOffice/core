@@ -500,7 +500,7 @@ public:
         return u"com.sun.star.comp.framework.AutoRecovery"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -558,7 +558,7 @@ protected:
 
     // OPropertySetHelper
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(      css::uno::Any& aConvertedValue,
+    virtual bool SAL_CALL convertFastPropertyValue(      css::uno::Any& aConvertedValue,
                                                              css::uno::Any& aOldValue      ,
                                                              sal_Int32      nHandle        ,
                                                        const css::uno::Any& aValue         ) override;
@@ -699,9 +699,9 @@ private:
                 the closing document, which should be deregistered.
 
         @param  bStopListening
-                sal_False: must be used in case this method is called within disposing() of the document,
+                false: must be used in case this method is called within disposing() of the document,
                        where it makes no sense to deregister our listener. The container dies...
-                sal_True : must be used in case this method is used on "deregistration" of this document, where
+                true : must be used in case this method is used on "deregistration" of this document, where
                        we must deregister our listener .-)
 
         @threadsafe
@@ -761,11 +761,11 @@ private:
                              will be postponed if there exists other unsaved
                              documents. This feature was implemented, because
                              we don't wish to disturb the user on it's work.
-                             ... bAllowUserIdleLoop should be set to sal_True
+                             ... bAllowUserIdleLoop should be set to true
                 Job::EmergencySave / Job::SessionSave =>
                              Here we must finish our work ASAP! It's not allowed
                              to postpone any document.
-                             ... bAllowUserIdleLoop must(!) be set to sal_False
+                             ... bAllowUserIdleLoop must(!) be set to false
 
         @param  pParams
                 sometimes this method is required inside an external dispatch request.
@@ -1102,7 +1102,7 @@ const sal_Int32       GIVE_UP_RETRY                          =   1; // in case F
 // should be flushed an exception ... so the special error handler for this scenario is triggered
 // #define TRIGGER_FULL_DISC_CHECK
 
-// force "return sal_False" for the method impl_enoughDiscSpace().
+// force "return false" for the method impl_enoughDiscSpace().
 // #define SIMULATE_FULL_DISC
 
 class CacheLockGuard
@@ -1617,7 +1617,7 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
     // document closed => remove temp. files and configuration entries
     else if ( aEvent.EventName == u"OnUnload"_ustr )
     {
-        implts_deregisterDocument(xDocument); // sal_True => stop listening for disposing() !
+        implts_deregisterDocument(xDocument); // true => stop listening for disposing() !
     }
 }
 
@@ -1707,7 +1707,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
     if (xDocument.is())
     {
-        implts_deregisterDocument(xDocument, false); // sal_False => don't call removeEventListener() .. because it's not needed here
+        implts_deregisterDocument(xDocument, false); // false => don't call removeEventListener() .. because it's not needed here
         return;
     }
 
@@ -2562,7 +2562,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     if (bStopListening)
         implts_stopModifyListeningOnDoc(aInfo);
 
-    implts_flushConfigItem(aInfo, true); // sal_True => remove it from config
+    implts_flushConfigItem(aInfo, true); // true => remove it from config
 }
 
 void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument)
@@ -3918,7 +3918,7 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
     if (pIt != m_lDocCache.end())
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        implts_flushConfigItem(rInfo, true); // sal_True => remove it from xml config!
+        implts_flushConfigItem(rInfo, true); // true => remove it from xml config!
 
         m_lDocCache.erase(pIt);
     }
@@ -3956,7 +3956,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
     return AutoRecovery::E_COPIED;
 }
 
-sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*aConvertedValue*/,
+bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*aConvertedValue*/,
                                                                css::uno::Any& /*aOldValue*/      ,
                                                                sal_Int32      /*nHandle*/        ,
                                                          const css::uno::Any& /*aValue*/         )
@@ -3982,7 +3982,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                     bool bRecoveryData = !m_lDocCache.empty();
 
                     // exists session data ... => then we can't say, that these
-                    // data are valid for recovery. So we have to return sal_False then!
+                    // data are valid for recovery. So we have to return false then!
                     if (bSessionData)
                         bRecoveryData = false;
 
@@ -4100,7 +4100,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 {
 #ifdef SIMULATE_FULL_DISC
-    return sal_False;
+    return false;
 #else  // SIMULATE_FULL_DISC
     // In case an error occurs and we are not able to retrieve the needed information
     // it's better to "disable" the feature ShowErrorOnFullDisc !

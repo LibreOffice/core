@@ -256,7 +256,7 @@ css::uno::Sequence<OUString> QtClipboard::getSupportedServiceNames()
     return { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
 }
 
-sal_Bool QtClipboard::supportsService(const OUString& ServiceName)
+bool QtClipboard::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

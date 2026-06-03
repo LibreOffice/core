@@ -281,7 +281,7 @@ public:
     //  XModel
 
 
-    virtual sal_Bool SAL_CALL attachResource(const OUString& sURL,
+    virtual bool SAL_CALL attachResource(const OUString& sURL,
                                              const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
 
     virtual OUString SAL_CALL getURL() override;
@@ -296,7 +296,7 @@ public:
 
     virtual void SAL_CALL unlockControllers() override;
 
-    virtual sal_Bool SAL_CALL hasControllersLocked() override;
+    virtual bool SAL_CALL hasControllersLocked() override;
 
     virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController() override;
 
@@ -327,13 +327,13 @@ public:
     //  XModifiable2
 
 
-    virtual sal_Bool SAL_CALL disableSetModified(  ) override;
-    virtual sal_Bool SAL_CALL enableSetModified(  ) override;
-    virtual sal_Bool SAL_CALL isSetModifiedEnabled(  ) override;
+    virtual bool SAL_CALL disableSetModified(  ) override;
+    virtual bool SAL_CALL enableSetModified(  ) override;
+    virtual bool SAL_CALL isSetModifiedEnabled(  ) override;
 
-    virtual sal_Bool SAL_CALL isModified() override;
+    virtual bool SAL_CALL isModified() override;
 
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual void SAL_CALL setModified( bool bModified ) override;
 
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& xListener ) override ;
 
@@ -343,7 +343,7 @@ public:
     //  XCloseable
 
 
-    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) override;
+    virtual void SAL_CALL close( bool bDeliverOwnership ) override;
 
 
     //  XCloseBroadcaster
@@ -378,11 +378,11 @@ public:
     //  XStorable
 
 
-    virtual sal_Bool SAL_CALL hasLocation() override;
+    virtual bool SAL_CALL hasLocation() override;
 
     virtual OUString SAL_CALL getLocation() override;
 
-    virtual sal_Bool SAL_CALL isReadonly() override;
+    virtual bool SAL_CALL isReadonly() override;
 
     virtual void SAL_CALL store() override;
 
@@ -461,7 +461,7 @@ public:
 
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
 
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
 
     //  XEventsSupplier
@@ -481,7 +481,7 @@ public:
 
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() override;
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() override;
-    virtual sal_Bool SAL_CALL getAllowMacroExecution() override;
+    virtual bool SAL_CALL getAllowMacroExecution() override;
 
 
     //  XScriptInvocationContext
@@ -559,7 +559,7 @@ public:
     virtual OUString SAL_CALL getUntitledPrefix() override;
 
     // css.document.XDocumentRecovery
-    virtual sal_Bool SAL_CALL wasModifiedSinceLastSave() override;
+    virtual bool SAL_CALL wasModifiedSinceLastSave() override;
     virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
     virtual void SAL_CALL recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
 
@@ -652,12 +652,12 @@ public:
 
     virtual void SAL_CALL checkOut(  ) override;
     virtual void SAL_CALL cancelCheckOut(  ) override;
-    virtual void SAL_CALL checkIn( sal_Bool bIsMajor, const OUString & rMessage  ) override;
+    virtual void SAL_CALL checkIn( bool bIsMajor, const OUString & rMessage  ) override;
 
-    virtual sal_Bool SAL_CALL isVersionable( ) override;
-    virtual sal_Bool SAL_CALL canCheckOut( ) override;
-    virtual sal_Bool SAL_CALL canCancelCheckOut( ) override;
-    virtual sal_Bool SAL_CALL canCheckIn( ) override;
+    virtual bool SAL_CALL isVersionable( ) override;
+    virtual bool SAL_CALL canCheckOut( ) override;
+    virtual bool SAL_CALL canCancelCheckOut( ) override;
+    virtual bool SAL_CALL canCheckIn( ) override;
 
     /// @throws css::uno::RuntimeException
     bool getBoolPropertyValue( const OUString& rName );

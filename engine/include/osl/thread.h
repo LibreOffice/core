@@ -141,7 +141,7 @@ SAL_DLLPUBLIC oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread T
 
     @param Thread       Handle to thread
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread);
+SAL_DLLPUBLIC bool SAL_CALL osl_isThreadRunning(const oslThread Thread);
 
 /** Blocks the calling thread until Thread has terminated.
     Returns immediately if Thread is NULL.
@@ -172,7 +172,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_terminateThread(oslThread Thread);
 
     @param Thread       Handle to thread to schedule in after
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread);
+SAL_DLLPUBLIC bool SAL_CALL osl_scheduleThread(oslThread Thread);
 
 /** Offers the rest of the threads time-slice to the OS.
     Under POSIX you _need_ to yield(), otherwise, since the
@@ -209,7 +209,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroyThreadKey(oslThreadKey Key);
 SAL_DLLPUBLIC void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key);
 
 /** Set to key associated thread specific data. */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData);
+SAL_DLLPUBLIC bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData);
 
 /** Get the current thread local text encoding. */
 SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void);

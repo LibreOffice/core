@@ -29,7 +29,7 @@ using namespace ::com::sun::star::registry;
 
 namespace cppu {
 
-sal_Bool component_writeInfoHelper(
+bool component_writeInfoHelper(
     SAL_UNUSED_PARAMETER void *, void * pRegistryKey,
     const struct ImplementationEntry entries[])
 {

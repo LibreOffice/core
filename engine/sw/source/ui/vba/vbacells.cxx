@@ -36,7 +36,7 @@ public:
     explicit CellsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), mnIndex( 0 )
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mnIndex < mxIndexAccess->getCount() );
     }
@@ -93,7 +93,7 @@ public:
     {
         return cppu::UnoType<word::XCell>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return true;
     }

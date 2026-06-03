@@ -324,7 +324,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
+bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -352,7 +352,7 @@ uno::Type SAL_CALL OZipFileAccess::getElementType()
     return cppu::UnoType<io::XInputStream>::get();
 }
 
-sal_Bool SAL_CALL OZipFileAccess::hasElements()
+bool SAL_CALL OZipFileAccess::hasElements()
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -450,7 +450,7 @@ OUString SAL_CALL OZipFileAccess::getImplementationName()
     return u"com.sun.star.comp.package.zip.ZipFileAccess"_ustr;
 }
 
-sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
+bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

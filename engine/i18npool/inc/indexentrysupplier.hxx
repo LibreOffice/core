@@ -47,11 +47,11 @@ public:
     virtual css::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
         const css::lang::Locale& rLocale ) override;
 
-    virtual sal_Bool SAL_CALL loadAlgorithm(
+    virtual bool SAL_CALL loadAlgorithm(
         const css::lang::Locale& rLocale,
         const OUString& SortAlgorithm, sal_Int32 collatorOptions ) override;
 
-    virtual sal_Bool SAL_CALL usePhoneticEntry(
+    virtual bool SAL_CALL usePhoneticEntry(
         const css::lang::Locale& rLocale ) override;
 
     virtual OUString SAL_CALL getPhoneticCandidate( const OUString& IndexEntry,
@@ -68,12 +68,12 @@ public:
     virtual OUString SAL_CALL getIndexCharacter( const OUString& IndexEntry,
         const css::lang::Locale& rLocale, const OUString& SortAlgorithm ) override;
 
-    virtual OUString SAL_CALL getIndexFollowPageWord( sal_Bool MorePages,
+    virtual OUString SAL_CALL getIndexFollowPageWord( bool MorePages,
         const css::lang::Locale& rLocale ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:

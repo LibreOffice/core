@@ -34,7 +34,7 @@ public:
     IndexEntrySupplier_Unicode( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Unicode() override;
 
-    virtual sal_Bool SAL_CALL loadAlgorithm(
+    virtual bool SAL_CALL loadAlgorithm(
         const css::lang::Locale& rLocale,
         const OUString& SortAlgorithm, sal_Int32 collatorOptions ) override;
 

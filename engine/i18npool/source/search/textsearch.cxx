@@ -1570,7 +1570,7 @@ TextSearch::getImplementationName()
     return u"com.sun.star.util.TextSearch_i18n"_ustr;
 }
 
-sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
+bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

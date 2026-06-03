@@ -80,10 +80,10 @@ namespace xforms
         virtual void SAL_CALL setPattern( const OUString& _pattern ) override;
         virtual sal_Int16 SAL_CALL getWhiteSpaceTreatment() override;
         virtual void SAL_CALL setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) override;
-        virtual sal_Bool SAL_CALL getIsBasic() override;
+        virtual bool SAL_CALL getIsBasic() override;
         virtual sal_Int16 SAL_CALL getTypeClass() override;
 
-        virtual sal_Bool SAL_CALL validate( const OUString& value ) override;
+        virtual bool SAL_CALL validate( const OUString& value ) override;
         virtual OUString SAL_CALL explainInvalid( const OUString& value ) override;
 
     public:

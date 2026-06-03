@@ -47,8 +47,8 @@ public:
         sal_uInt16 &    rnPageSize) override;
 
     /** isValid.
-     *  @return sal_True  upon successful initialization,
-     *          sal_False otherwise.
+     *  @return true  upon successful initialization,
+     *          false otherwise.
      */
     inline bool isValid() const;
 

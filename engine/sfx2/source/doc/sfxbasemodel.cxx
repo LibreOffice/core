@@ -511,10 +511,10 @@ SfxSaveGuard::~SfxSaveGuard()
     m_pData->m_bSaving = false;
 
     // m_bSuicide was set e.g. in case someone tried to close a document, while it was used for
-    // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
+    // storing at the same time. Further m_bSuicide was set to true only if close(true) was called.
     // So the ownership was delegated to the place where a veto exception was thrown.
     // Now we have to call close() again and delegate the ownership to the next one, which
-    // can't accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed...
+    // can't accept that. Close(false) can't work in this case. Because then the document will may be never closed...
 
     if ( !m_pData->m_bSuicide )
         return;
@@ -875,7 +875,7 @@ void SAL_CALL SfxBaseModel::disposing( const lang::EventObject& aObject )
 //  frame::XModel
 
 
-sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&                   rURL    ,
+bool SAL_CALL SfxBaseModel::attachResource( const   OUString&                   rURL    ,
                                                 const   Sequence< beans::PropertyValue >&  rArgs   )
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
@@ -1340,7 +1340,7 @@ void SAL_CALL SfxBaseModel::unlockControllers()
 //  frame::XModel
 
 
-sal_Bool SAL_CALL SfxBaseModel::hasControllersLocked()
+bool SAL_CALL SfxBaseModel::hasControllersLocked()
 {
     SfxModelGuard aGuard( *this );
     return ( m_pData->m_nControllerLockCount != 0 ) ;
@@ -1401,7 +1401,7 @@ Reference< XInterface > SAL_CALL SfxBaseModel::getCurrentSelection()
 //  XModifiable2
 
 
-sal_Bool SAL_CALL SfxBaseModel::disableSetModified()
+bool SAL_CALL SfxBaseModel::disableSetModified()
 {
     SfxModelGuard aGuard( *this );
 
@@ -1414,7 +1414,7 @@ sal_Bool SAL_CALL SfxBaseModel::disableSetModified()
     return bResult;
 }
 
-sal_Bool SAL_CALL SfxBaseModel::enableSetModified()
+bool SAL_CALL SfxBaseModel::enableSetModified()
 {
     SfxModelGuard aGuard( *this );
 
@@ -1427,7 +1427,7 @@ sal_Bool SAL_CALL SfxBaseModel::enableSetModified()
     return bResult;
 }
 
-sal_Bool SAL_CALL SfxBaseModel::isSetModifiedEnabled()
+bool SAL_CALL SfxBaseModel::isSetModifiedEnabled()
 {
     SfxModelGuard aGuard( *this );
 
@@ -1441,7 +1441,7 @@ sal_Bool SAL_CALL SfxBaseModel::isSetModifiedEnabled()
 //  XModifiable
 
 
-sal_Bool SAL_CALL SfxBaseModel::isModified()
+bool SAL_CALL SfxBaseModel::isModified()
 {
     SfxModelGuard aGuard( *this );
 
@@ -1452,7 +1452,7 @@ sal_Bool SAL_CALL SfxBaseModel::isModified()
 //  XModifiable
 
 
-void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
+void SAL_CALL SfxBaseModel::setModified( bool bModified )
 {
     SfxModelGuard aGuard( *this );
 
@@ -1486,7 +1486,7 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const Reference< util::XModifyL
 //  XCloseable
 
 
-void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership )
+void SAL_CALL SfxBaseModel::close( bool bDeliverOwnership )
 {
     SolarMutexGuard aGuard;
     if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
@@ -1598,7 +1598,7 @@ void SAL_CALL SfxBaseModel::print(const Sequence< beans::PropertyValue >& rOptio
 //  XStorable
 
 
-sal_Bool SAL_CALL SfxBaseModel::hasLocation()
+bool SAL_CALL SfxBaseModel::hasLocation()
 {
     SfxModelGuard aGuard( *this );
 
@@ -1629,7 +1629,7 @@ OUString SAL_CALL SfxBaseModel::getLocation()
 //  XStorable
 
 
-sal_Bool SAL_CALL SfxBaseModel::isReadonly()
+bool SAL_CALL SfxBaseModel::isReadonly()
 {
     SfxModelGuard aGuard( *this );
 
@@ -1837,7 +1837,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     }
 }
 
-sal_Bool SAL_CALL SfxBaseModel::wasModifiedSinceLastSave()
+bool SAL_CALL SfxBaseModel::wasModifiedSinceLastSave()
 {
     SfxModelGuard aGuard( *this );
     return m_pData->m_oDirtyTimestamp.has_value();
@@ -2392,7 +2392,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
 // XTransferable
 
 
-sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
     SfxModelGuard aGuard( *this );
 
@@ -2491,7 +2491,7 @@ Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getDia
     return xDialogLibraries;
 }
 
-sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution()
+bool SAL_CALL SfxBaseModel::getAllowMacroExecution()
 {
     SfxModelGuard aGuard( *this );
 
@@ -2707,7 +2707,7 @@ void SAL_CALL SfxBaseModel::cancelCheckOut(  )
     }
 }
 
-void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage )
+void SAL_CALL SfxBaseModel::checkIn( bool bIsMajor, const OUString& rMessage )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
     if ( !pMedium )
@@ -2803,22 +2803,22 @@ bool SfxBaseModel::getBoolPropertyValue( const OUString& rName )
     return bValue;
 }
 
-sal_Bool SAL_CALL SfxBaseModel::isVersionable( )
+bool SAL_CALL SfxBaseModel::isVersionable( )
 {
     return getBoolPropertyValue( u"IsVersionable"_ustr );
 }
 
-sal_Bool SAL_CALL SfxBaseModel::canCheckOut( )
+bool SAL_CALL SfxBaseModel::canCheckOut( )
 {
     return getBoolPropertyValue( u"CanCheckOut"_ustr );
 }
 
-sal_Bool SAL_CALL SfxBaseModel::canCancelCheckOut( )
+bool SAL_CALL SfxBaseModel::canCancelCheckOut( )
 {
     return getBoolPropertyValue( u"CanCancelCheckOut"_ustr );
 }
 
-sal_Bool SAL_CALL SfxBaseModel::canCheckIn( )
+bool SAL_CALL SfxBaseModel::canCheckIn( )
 {
     return getBoolPropertyValue( u"CanCheckIn"_ustr );
 }

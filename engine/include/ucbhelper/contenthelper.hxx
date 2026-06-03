@@ -321,7 +321,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName() override = 0;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override = 0;

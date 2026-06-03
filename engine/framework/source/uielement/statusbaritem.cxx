@@ -196,7 +196,7 @@ void SAL_CALL StatusbarItem::setAccessibleName( const OUString& rAccessibleName 
         m_pStatusBar->SetAccessibleName( m_nId, rAccessibleName );
 }
 
-sal_Bool SAL_CALL StatusbarItem::getVisible()
+bool SAL_CALL StatusbarItem::getVisible()
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -205,7 +205,7 @@ sal_Bool SAL_CALL StatusbarItem::getVisible()
     return false;
 }
 
-void SAL_CALL StatusbarItem::setVisible( sal_Bool bVisible )
+void SAL_CALL StatusbarItem::setVisible( bool bVisible )
 {
     SolarMutexGuard aGuard;
     if ( !m_pStatusBar )

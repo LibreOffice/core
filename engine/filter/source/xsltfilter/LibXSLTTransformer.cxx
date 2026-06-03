@@ -393,7 +393,7 @@ namespace XSLT
     }
 
     //  XServiceInfo
-    sal_Bool LibXSLTTransformer::supportsService(const OUString& sServiceName)
+    bool LibXSLTTransformer::supportsService(const OUString& sServiceName)
     {
         return cppu::supportsService(this, sServiceName);
     }

@@ -95,12 +95,12 @@ private:
      */
     bool updateModelFromControl(const weld::Entry* pField = nullptr);
 
-    /** @return </sal_True>, if the edit field contains a valid range entry. If no
-        XCellRangesAccess can be obtained, </sal_False> is returned.
+    /** @return </true>, if the edit field contains a valid range entry. If no
+        XCellRangesAccess can be obtained, </false> is returned.
      */
     bool isRangeFieldContentValid(weld::Entry& rEdit);
 
-    /** @return </sal_True>, if the tab-page is in a consistent (committable) state
+    /** @return </true>, if the tab-page is in a consistent (committable) state
      */
     bool isValid();
     void setDirty();

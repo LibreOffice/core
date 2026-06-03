@@ -647,12 +647,9 @@ sal_Int8 SAL_CALL ScSolverSettings::getStatus() { return m_nStatus; }
 
 OUString SAL_CALL ScSolverSettings::getErrorMessage() { return m_sErrorMessage; }
 
-sal_Bool SAL_CALL ScSolverSettings::getSuppressDialog() { return m_bSuppressDialog; }
+bool SAL_CALL ScSolverSettings::getSuppressDialog() { return m_bSuppressDialog; }
 
-void SAL_CALL ScSolverSettings::setSuppressDialog(sal_Bool bSuppress)
-{
-    m_bSuppressDialog = bSuppress;
-}
+void SAL_CALL ScSolverSettings::setSuppressDialog(bool bSuppress) { m_bSuppressDialog = bSuppress; }
 
 void SAL_CALL ScSolverSettings::reset() { m_pSettings->ResetToDefaults(); }
 
@@ -978,7 +975,7 @@ void SAL_CALL ScSolverSettings::saveToFile() { m_pSettings->SaveSolverSettings()
 // XServiceInfo
 OUString SAL_CALL ScSolverSettings::getImplementationName() { return u"ScSolverSettings"_ustr; }
 
-sal_Bool SAL_CALL ScSolverSettings::supportsService(const OUString& rServiceName)
+bool SAL_CALL ScSolverSettings::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

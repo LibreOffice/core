@@ -240,7 +240,7 @@ namespace dbaui
         @param  _xDatasource
             Asked for the properties.
         @param  _rAutoIncrementValueEnabled
-            <OUT/> Set to sal_True when the property was set in the datasource.
+            <OUT/> Set to true when the property was set in the datasource.
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */
@@ -252,7 +252,7 @@ namespace dbaui
         @param  _xConnection
             Used to get the datasource as parent from the connection.
         @param  _rAutoIncrementValueEnabled
-            <OUT/> Set to sal_True when the property was set in the datasource.
+            <OUT/> Set to true when the property was set in the datasource.
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */

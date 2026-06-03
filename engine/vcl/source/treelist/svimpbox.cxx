@@ -2501,7 +2501,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             // is from SvTreeListBox::KeyInput. If we set bKeyUsed to true here, then the key input
             // is just silenced. However, we want SvLBox::KeyInput to get a chance, to do the QuickSelection
             // handling.
-            // (The old code here which intentionally set bKeyUsed to sal_True said this was because of "quick search"
+            // (The old code here which intentionally set bKeyUsed to true said this was because of "quick search"
             // handling, but actually there was no quick search handling anymore. We just re-implemented it.)
             // #i31275# / 2009-06-16 / frank.schoenheit@sun.com
             bKeyUsed = false;

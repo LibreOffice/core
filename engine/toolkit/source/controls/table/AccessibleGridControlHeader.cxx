@@ -139,12 +139,12 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibl
     return {};
 }
 //row headers not selectable
-sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )
+bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )
 {
     return false;
 }
 //columns aren't selectable
-sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 )
+bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 )
 {
     return false;
 }
@@ -159,7 +159,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCell
     return implGetChild(nRow, nColumn);
 }
 // not selectable
-sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
+bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
         sal_Int32 /*nRow*/, sal_Int32 /*nColumn */)
 {
     return false;

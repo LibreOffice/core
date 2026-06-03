@@ -140,17 +140,17 @@ public:
      */
     void        SAL_CALL stop();
 
-    /** Returns sal_True if timer is running.
+    /** Returns true if timer is running.
      */
-    sal_Bool    SAL_CALL isTicking() const;
+    bool    SAL_CALL isTicking() const;
 
     /** Is the timer expired?
      */
-    sal_Bool    SAL_CALL isExpired() const;
+    bool    SAL_CALL isExpired() const;
 
     /** Does pTimer expires before us?
      */
-    sal_Bool    SAL_CALL expiresBefore( const Timer* pTimer ) const;
+    bool    SAL_CALL expiresBefore( const Timer* pTimer ) const;
 
     /** Set the absolute time when the timer should fire.
      */

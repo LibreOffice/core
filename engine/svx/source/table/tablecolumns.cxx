@@ -108,7 +108,7 @@ Type SAL_CALL TableColumns::getElementType()
 }
 
 
-sal_Bool SAL_CALL TableColumns::hasElements()
+bool SAL_CALL TableColumns::hasElements()
 {
     throwIfDisposed();
 

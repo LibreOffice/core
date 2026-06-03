@@ -104,7 +104,7 @@ void FuText::StopEditMode()
         This must not happen for note caption objects. They will be removed
         below together with the cell note if the text is empty (independent of
         border and area formatting). It is possible to prevent automatic
-        deletion by passing sal_True to this function. The return value changes
+        deletion by passing true to this function. The return value changes
         from SdrEndTextEditKind::Deleted to SdrEndTextEditKind::ShouldBeDeleted in this
         case. */
     /*SdrEndTextEditKind eResult =*/ pView->SdrEndTextEdit( pNote != nullptr );

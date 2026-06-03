@@ -307,15 +307,15 @@ static void impl_unpackLocalizedProperties(    const   Sequence< OUString >&   l
     }
 }
 
-Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames)
+Sequence< bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames)
 {
     sal_Int32 i;
 
     // size of return list is fix!
     // Every item must match to length of incoming name list.
     sal_Int32 nCount = rNames.getLength();
-    Sequence< sal_Bool > lStates(nCount);
-    sal_Bool* plStates = lStates.getArray();
+    Sequence< bool > lStates(nCount);
+    bool* plStates = lStates.getArray();
 
     // We must be sure to return a valid information every time!
     // Set default to non readonly... similar to the configuration handling of this property.

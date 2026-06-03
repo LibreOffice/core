@@ -165,7 +165,7 @@ public:
     SAL_DLLPRIVATE void PutDate( double );
     bool PutBool( bool );
     SAL_DLLPRIVATE void PutErr( sal_uInt16 );
-    void PutStringExt( const OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
+    void PutStringExt( const OUString& );     // with extended analysis (International, "true"/"false")
     SAL_DLLPRIVATE bool PutInt64( sal_Int64 );
     SAL_DLLPRIVATE bool PutUInt64( sal_uInt64 );
     bool PutString( const OUString& );

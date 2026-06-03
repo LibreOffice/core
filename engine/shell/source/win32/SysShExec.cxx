@@ -403,7 +403,7 @@ OUString SAL_CALL CSysShExec::getImplementationName(  )
     return "com.sun.star.sys.shell.SystemShellExecute";
 }
 
-sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
+bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

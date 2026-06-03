@@ -175,7 +175,7 @@ OUString SAL_CALL PageBackground::getImplementationName()
     return u"com.sun.star.comp.chart2.PageBackground"_ustr;
 }
 
-sal_Bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )
+bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

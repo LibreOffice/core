@@ -728,7 +728,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL GtkTransferable::getT
     return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
 }
 
-sal_Bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
+bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     const std::vector<css::datatransfer::DataFlavor> aAll =
         getTransferDataFlavorsAsVector();
@@ -962,7 +962,7 @@ public:
      */
 
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /*
@@ -1019,7 +1019,7 @@ Sequence< OUString > VclGtkClipboard::getSupportedServiceNames()
     return aRet;
 }
 
-sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName )
+bool VclGtkClipboard::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1642,7 +1642,7 @@ OUString SAL_CALL GtkInstDropTarget::getImplementationName()
     return u"com.sun.star.datatransfer.dnd.VclGtkDropTarget"_ustr;
 }
 
-sal_Bool SAL_CALL GtkInstDropTarget::supportsService(OUString const & ServiceName)
+bool SAL_CALL GtkInstDropTarget::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1697,7 +1697,7 @@ void GtkInstDragSource::deinitialize()
     m_pFrame = nullptr;
 }
 
-sal_Bool GtkInstDragSource::isDragImageSupported()
+bool GtkInstDragSource::isDragImageSupported()
 {
     return true;
 }
@@ -1712,7 +1712,7 @@ OUString SAL_CALL GtkInstDragSource::getImplementationName()
     return u"com.sun.star.datatransfer.dnd.VclGtkDragSource"_ustr;
 }
 
-sal_Bool SAL_CALL GtkInstDragSource::supportsService(OUString const & ServiceName)
+bool SAL_CALL GtkInstDragSource::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

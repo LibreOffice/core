@@ -649,7 +649,7 @@ void ODBExport::exportDataSourceSettings()
                     exportDataSourceSettingsSequence< double >( aIter );
                     break;
                 case TypeClass_BOOLEAN:
-                    exportDataSourceSettingsSequence< sal_Bool >( aIter );
+                    exportDataSourceSettingsSequence< bool >( aIter );
                     break;
                 case TypeClass_BYTE:
                     exportDataSourceSettingsSequence< sal_Int8 >( aIter );

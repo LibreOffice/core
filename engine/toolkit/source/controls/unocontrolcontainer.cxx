@@ -540,7 +540,7 @@ uno::Type SAL_CALL UnoControlContainer::getElementType(  )
     return cppu::UnoType<awt::XControlModel>::get();
 }
 
-sal_Bool SAL_CALL UnoControlContainer::hasElements(  )
+bool SAL_CALL UnoControlContainer::hasElements(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return !mpControls->empty();
@@ -771,7 +771,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
 
 
 // awt::XWindow
-void UnoControlContainer::setVisible( sal_Bool bVisible )
+void UnoControlContainer::setVisible( bool bVisible )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 

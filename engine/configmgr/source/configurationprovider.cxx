@@ -114,7 +114,7 @@ private:
             : u"com.sun.star.comp.configuration.ConfigurationProvider"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL

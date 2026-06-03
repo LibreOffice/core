@@ -49,7 +49,7 @@ namespace xmlscript
         virtual ~XMLBasicExporterBase() override;
 
         // XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -58,7 +58,7 @@ namespace xmlscript
         virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& rxDoc ) override;
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+        virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
         virtual void SAL_CALL cancel() override;
     };
 

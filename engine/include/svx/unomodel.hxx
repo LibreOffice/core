@@ -78,7 +78,7 @@ public:
     // XModel
     virtual void SAL_CALL lockControllers(  ) override;
     virtual void SAL_CALL unlockControllers(  ) override;
-    virtual sal_Bool SAL_CALL hasControllersLocked(  ) override;
+    virtual bool SAL_CALL hasControllersLocked(  ) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -93,7 +93,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAnyCompareFactory

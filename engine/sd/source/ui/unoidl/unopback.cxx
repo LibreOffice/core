@@ -165,7 +165,7 @@ OUString SAL_CALL SdUnoPageBackground::getImplementationName()
     return u"SdUnoPageBackground"_ustr;
 }
 
-sal_Bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

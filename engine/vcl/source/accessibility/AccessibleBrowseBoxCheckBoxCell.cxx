@@ -73,7 +73,7 @@ Any SAL_CALL AccessibleCheckBoxCell::getCurrentValue(  )
     return Any(nValue);
 }
 
-sal_Bool SAL_CALL AccessibleCheckBoxCell::setCurrentValue( const Any& )
+bool SAL_CALL AccessibleCheckBoxCell::setCurrentValue( const Any& )
 {
     return false;
 }

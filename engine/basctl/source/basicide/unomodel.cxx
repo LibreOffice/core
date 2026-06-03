@@ -44,7 +44,7 @@ public:
         : m_sText(sSelectedText)
         , m_bHasElements(true) {}
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         return m_bHasElements;
     }
@@ -82,7 +82,7 @@ OUString SIDEModel::getImplementationName()
     return u"com.sun.star.comp.basic.BasicIDE"_ustr;
 }
 
-sal_Bool SIDEModel::supportsService(const OUString& rServiceName)
+bool SIDEModel::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -761,7 +761,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL X509Certificate_MSCryptImpl::supportsService(const OUString& serviceName)
+bool SAL_CALL X509Certificate_MSCryptImpl::supportsService(const OUString& serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

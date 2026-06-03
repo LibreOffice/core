@@ -78,7 +78,7 @@ public:
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
@@ -159,7 +159,7 @@ OUString SAL_CALL DBTypeDetection::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName)
+bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -194,7 +194,7 @@ public:
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
     // XLoader
@@ -219,7 +219,7 @@ OUString SAL_CALL DBContentLoader::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
+bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -46,7 +46,7 @@ void SAL_CALL SecurityEngine::setKeyId( sal_Int32 id )
 }
 
 /* XMissionTaker */
-sal_Bool SAL_CALL SecurityEngine::endMission(  )
+bool SAL_CALL SecurityEngine::endMission(  )
 {
     bool rc = m_bMissionDone;
 

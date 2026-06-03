@@ -38,7 +38,7 @@ Type ScriptEventContainer::getElementType()
     return mType;
 }
 
-sal_Bool ScriptEventContainer::hasElements()
+bool ScriptEventContainer::hasElements()
 {
     return !mHashMap.empty();
 }
@@ -61,7 +61,7 @@ Sequence< OUString > ScriptEventContainer::getElementNames()
     return mNames;
 }
 
-sal_Bool ScriptEventContainer::hasByName( const OUString& aName )
+bool ScriptEventContainer::hasByName( const OUString& aName )
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     bool bRet = ( aIt != mHashMap.end() );

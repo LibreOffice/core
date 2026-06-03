@@ -34,7 +34,7 @@ SidebarController* SfxUnoSidebar::getSidebarController()
     return SidebarController::GetSidebarControllerForFrame(xFrame);
 }
 
-void SAL_CALL SfxUnoSidebar::showDecks(const sal_Bool bVisible)
+void SAL_CALL SfxUnoSidebar::showDecks(const bool bVisible)
 {
     SolarMutexGuard aGuard;
 
@@ -49,7 +49,7 @@ void SAL_CALL SfxUnoSidebar::showDecks(const sal_Bool bVisible)
     }
 }
 
-void SAL_CALL SfxUnoSidebar::setVisible(const sal_Bool bVisible)
+void SAL_CALL SfxUnoSidebar::setVisible(const bool bVisible)
 {
     SolarMutexGuard aGuard;
 
@@ -64,7 +64,7 @@ void SAL_CALL SfxUnoSidebar::setVisible(const sal_Bool bVisible)
     }
 }
 
-sal_Bool SAL_CALL SfxUnoSidebar::isVisible()
+bool SAL_CALL SfxUnoSidebar::isVisible()
 {
     SolarMutexGuard aGuard;
 

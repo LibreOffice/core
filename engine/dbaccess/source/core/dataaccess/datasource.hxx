@@ -128,7 +128,7 @@ public:
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // OComponentHelper
@@ -145,7 +145,7 @@ public:
 // cppu::OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
                             css::uno::Any & rConvertedValue,
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,

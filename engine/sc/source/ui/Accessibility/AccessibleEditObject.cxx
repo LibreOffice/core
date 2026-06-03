@@ -403,7 +403,7 @@ void SAL_CALL ScAccessibleEditObject::selectAccessibleChild( sal_Int64 )
 {
 }
 
-sal_Bool SAL_CALL ScAccessibleEditObject::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL ScAccessibleEditObject::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     uno::Reference<XAccessible> xAcc = getAccessibleChild( nChildIndex );
     uno::Reference<XAccessibleContext> xContext;

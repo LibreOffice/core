@@ -117,7 +117,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     {
     }
 
-    // get the CTL (Complex Text Layout) from general options, returns sal_True if we have a CTL font on our hands.
+    // get the CTL (Complex Text Layout) from general options, returns true if we have a CTL font on our hands.
     mbUseCTLFont = maConfigI18N.ReadBool( u"CTLFont"_ustr, false );
 
     mbUseLosslessCompression = maConfigItem.ReadBool( u"UseLosslessCompression"_ustr, false );

@@ -158,7 +158,7 @@ void SAL_CALL FilePickerListener::fileSelectionChanged( const css::ui::dialogs::
                  Sequence< sal_Int8 > aDIB( dwFileSize );
 
                  DWORD dwBytesRead;
-                 sal_Bool bSuccess = ReadFile (hFile, aDIB.getArray( ), dwFileSize, &dwBytesRead, NULL) ;
+                 bool bSuccess = ReadFile (hFile, aDIB.getArray( ), dwFileSize, &dwBytesRead, NULL) ;
                  CloseHandle (hFile);
 
                  BITMAPFILEHEADER* pbmfh = (BITMAPFILEHEADER*)aDIB.getConstArray( );
@@ -248,7 +248,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( RDB_SYSPATH ) );
 
     // Print a message if an error occurred.
-    if ( g_xFactory.is() == sal_False )
+    if ( g_xFactory.is() == false )
     {
         OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
@@ -274,7 +274,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
             xFPNotifier->addFilePickerListener( xFPListener );
 
         xFilePicker->setTitle( OUString("FileOpen Simple..."));
-        xFilePicker->setMultiSelectionMode( sal_True );
+        xFilePicker->setMultiSelectionMode( true );
         xFilePicker->setDefaultName( OUString("d:\\test2.sxw"));
 
         OUString aDirURL;
@@ -294,9 +294,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         Reference< XFilePickerControlAccess > xFPControlAccess( xFilePicker, UNO_QUERY );
 
         Any aAny;
-        sal_Bool bChkState = sal_False;
+        bool bChkState = false;
 
-        aAny.setValue( &bChkState, cppu::UnoType<sal_Bool>::get());
+        aAny.setValue( &bChkState, cppu::UnoType<bool>::get());
         xFPControlAccess->setValue( CHECKBOX_AUTOEXTENSION, 0, aAny );
 
         OUString aVersion( L"Version 1" );
@@ -307,14 +307,14 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
         xFilePicker->execute( );
 
-        sal_Bool bCheckState;
+        bool bCheckState;
         aAny = xFPControlAccess->getValue( CHECKBOX_AUTOEXTENSION, 0 );
         if ( aAny.hasValue( ) )
-            bCheckState = *reinterpret_cast< const sal_Bool* >( aAny.getValue( ) );
+            bCheckState = *reinterpret_cast< const bool* >( aAny.getValue( ) );
 
         aAny = xFPControlAccess->getValue( CHECKBOX_READONLY, 0 );
         if ( aAny.hasValue( ) )
-            bCheckState = *reinterpret_cast< const sal_Bool* >( aAny.getValue( ) );
+            bCheckState = *reinterpret_cast< const bool* >( aAny.getValue( ) );
 
         aAny = xFPControlAccess->getValue( LISTBOX_VERSION, GET_SELECTED_ITEM );
         sal_Int32 nSel;
@@ -339,7 +339,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     // Print a message if an error occurred.
-    if ( xComponent.is() == sal_False )
+    if ( xComponent.is() == false )
     {
         OSL_FAIL("Error shutting down");
     }

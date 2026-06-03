@@ -73,7 +73,7 @@ namespace framework
                 return u"com.sun.star.comp.framework.LayoutManager"_ustr;
             }
 
-            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+            virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
             {
                 return cppu::supportsService(this, ServiceName);
             }
@@ -92,34 +92,34 @@ namespace framework
             virtual void SAL_CALL setDockingAreaAcceptor( const css::uno::Reference< css::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) final override;
             virtual void SAL_CALL createElement( const OUString& aName ) override;
             virtual void SAL_CALL destroyElement( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL requestElement( const OUString& ResourceURL ) override;
+            virtual bool SAL_CALL requestElement( const OUString& ResourceURL ) override;
             virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL getElement( const OUString& aName ) override;
             virtual css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > SAL_CALL getElements(  ) override;
-            virtual sal_Bool SAL_CALL showElement( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL hideElement( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) override;
-            virtual sal_Bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) override;
-            virtual sal_Bool SAL_CALL floatWindow( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL lockWindow( const OUString& ResourceURL ) override;
-            virtual sal_Bool SAL_CALL unlockWindow( const OUString& ResourceURL ) override;
+            virtual bool SAL_CALL showElement( const OUString& aName ) override;
+            virtual bool SAL_CALL hideElement( const OUString& aName ) override;
+            virtual bool SAL_CALL dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) override;
+            virtual bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) override;
+            virtual bool SAL_CALL floatWindow( const OUString& aName ) override;
+            virtual bool SAL_CALL lockWindow( const OUString& ResourceURL ) override;
+            virtual bool SAL_CALL unlockWindow( const OUString& ResourceURL ) override;
             virtual void SAL_CALL setElementSize( const OUString& aName, const css::awt::Size& aSize ) override;
             virtual void SAL_CALL setElementPos( const OUString& aName, const css::awt::Point& aPos ) override;
             virtual void SAL_CALL setElementPosSize( const OUString& aName, const css::awt::Point& aPos, const css::awt::Size& aSize ) override;
-            virtual sal_Bool SAL_CALL isElementVisible( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL isElementFloating( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL isElementDocked( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL isElementLocked( const OUString& ResourceURL ) override;
+            virtual bool SAL_CALL isElementVisible( const OUString& aName ) override;
+            virtual bool SAL_CALL isElementFloating( const OUString& aName ) override;
+            virtual bool SAL_CALL isElementDocked( const OUString& aName ) override;
+            virtual bool SAL_CALL isElementLocked( const OUString& ResourceURL ) override;
             virtual css::awt::Size SAL_CALL getElementSize( const OUString& aName ) override;
             virtual css::awt::Point SAL_CALL getElementPos( const OUString& aName ) override;
             virtual void SAL_CALL lock(  ) override;
             virtual void SAL_CALL unlock(  ) override;
             virtual void SAL_CALL doLayout(  ) override;
-            virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
-            virtual sal_Bool SAL_CALL isVisible() override;
+            virtual void SAL_CALL setVisible( bool bVisible ) override;
+            virtual bool SAL_CALL isVisible() override;
 
             // XMenuBarMergingAcceptor
 
-            virtual sal_Bool SAL_CALL setMergedMenuBar( const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar ) override;
+            virtual bool SAL_CALL setMergedMenuBar( const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar ) override;
             virtual void SAL_CALL removeMergedMenuBar(  ) override;
 
             //  XWindowListener

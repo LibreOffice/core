@@ -30,10 +30,10 @@ namespace connectivity::dbase
     class ODbaseDatabaseMetaData :  public file::ODatabaseMetaData
     {
         virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
-        virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+        virtual bool SAL_CALL isReadOnly(  ) override;
         virtual OUString SAL_CALL getURL(  ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const css::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Bool unique, sal_Bool approximate ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const css::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
 
         virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) override;
         virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) override;
@@ -41,8 +41,8 @@ namespace connectivity::dbase
         virtual sal_Int32 SAL_CALL getMaxColumnsInIndex(  ) override;
         virtual sal_Int32 SAL_CALL getMaxColumnsInTable(  ) override;
 
-        virtual sal_Bool SAL_CALL supportsAlterTableWithAddColumn(  ) override;
-        virtual sal_Bool SAL_CALL supportsAlterTableWithDropColumn(  ) override;
+        virtual bool SAL_CALL supportsAlterTableWithAddColumn(  ) override;
+        virtual bool SAL_CALL supportsAlterTableWithDropColumn(  ) override;
 
         virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) override;
         virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) override;

@@ -83,7 +83,7 @@ XPropertySetInfo_impl::getProperties()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XPropertySetInfo_impl::hasPropertyByName( const OUString& aName )
 {
     return std::any_of(std::cbegin(m_seq), std::cend(m_seq),

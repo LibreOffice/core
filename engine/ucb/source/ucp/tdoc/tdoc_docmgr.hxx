@@ -75,7 +75,7 @@ namespace tdoc_ucp {
             // util::XCloseListener
             virtual void SAL_CALL queryClosing(
                     const css::lang::EventObject& Source,
-                    sal_Bool GetsOwnership ) override;
+                    bool GetsOwnership ) override;
 
             virtual void SAL_CALL notifyClosing(
                     const css::lang::EventObject& Source ) override;

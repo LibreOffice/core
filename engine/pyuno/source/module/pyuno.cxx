@@ -242,7 +242,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         break;
     }
     case typelib_TypeClass_BOOLEAN:
-        if (*static_cast<sal_Bool const *>(pVal))
+        if (*static_cast<bool const *>(pVal))
             buf.append( "true" );
         else
             buf.append( "false" );

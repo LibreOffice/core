@@ -47,7 +47,7 @@ public:
 
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
 
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     explicit CDOTransferable(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,

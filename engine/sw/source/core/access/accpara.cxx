@@ -847,7 +847,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
     return nRet;
 }
 
-sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
+bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1482,7 +1482,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     // From the perspective of the a11y API the character attributes, which
     // are set at the automatic paragraph style of the paragraph, are treated
     // as run attributes.
-    //    SwXTextCursor::GetCursorAttr( *pPaM, aSet, sal_True, sal_True );
+    //    SwXTextCursor::GetCursorAttr( *pPaM, aSet, true, true );
     // get character attributes from automatic paragraph style and merge these into <aSet>
     if ( pTextNode->HasSwAttrSet() )
     {
@@ -2006,7 +2006,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
     return nEnd;
 }
 
-sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -2209,7 +2209,7 @@ TextSegment SwAccessibleParagraph::getTextBehindIndex(sal_Int32 nIndex, sal_Int1
     }
 
 /*
-        sal_Bool bWord = sal_False;
+        bool bWord = false;
     bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
         if (nTextType == AccessibleTextType::WORD)
@@ -2246,7 +2246,7 @@ TextSegment SwAccessibleParagraph::getTextBehindIndex(sal_Int32 nIndex, sal_Int1
     }
     else
     {
-        bWord = sal_False;
+        bWord = false;
         while( !bWord )
         {
             nIndex = std::max( (sal_Int32)(nIndex+1), aBound.endPos );
@@ -2268,7 +2268,7 @@ TextSegment SwAccessibleParagraph::getTextBehindIndex(sal_Int32 nIndex, sal_Int1
     return aResult;
 }
 
-sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -2280,7 +2280,7 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     return true;
 }
 
-sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
+bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
     sal_Int32 nEndIndex, AccessibleScrollType aScrollType )
 {
     SolarMutexGuard aGuard;
@@ -2345,7 +2345,7 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
 
 // XAccessibleEditableText
 
-sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -2360,7 +2360,7 @@ sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIn
     return true;
 }
 
-sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
+bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -2375,17 +2375,17 @@ sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
     return true;
 }
 
-sal_Bool SwAccessibleParagraph::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SwAccessibleParagraph::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     return replaceText( nStartIndex, nEndIndex, OUString() );
 }
 
-sal_Bool SwAccessibleParagraph::insertText( const OUString& sText, sal_Int32 nIndex )
+bool SwAccessibleParagraph::insertText( const OUString& sText, sal_Int32 nIndex )
 {
     return replaceText( nIndex, nIndex, sText );
 }
 
-sal_Bool SwAccessibleParagraph::replaceText(
+bool SwAccessibleParagraph::replaceText(
     sal_Int32 nStartIndex, sal_Int32 nEndIndex,
     const OUString& sReplacement )
 {
@@ -2429,7 +2429,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
 
 }
 
-sal_Bool SwAccessibleParagraph::setAttributes(
+bool SwAccessibleParagraph::setAttributes(
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex,
     const uno::Sequence<PropertyValue>& rAttributeSet )
@@ -2484,7 +2484,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     return bRet;
 }
 
-sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
+bool SwAccessibleParagraph::setText( const OUString& sText )
 {
     return replaceText(0, GetString().getLength(), sText);
 }
@@ -2499,7 +2499,7 @@ void SwAccessibleParagraph::selectAccessibleChild(
     m_aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
-sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
+bool SwAccessibleParagraph::isAccessibleChildSelected(
     sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
@@ -2736,7 +2736,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
 }
 
 //MSAA Extension Implementation in app  module
-sal_Bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const css::awt::Point&, sal_Bool )
+bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const css::awt::Point&, bool )
 {
     return false;
 }
@@ -2793,7 +2793,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionStart( sal_Int32 nSe
     ThrowIfDisposed();
 
     sal_Int32 nStart=-1, nEnd=-1;
-    /*sal_Bool bSelected = */GetSelectionAtIndex(&nSelectedPortionIndex, nStart, nEnd );
+    /*bool bSelected = */GetSelectionAtIndex(&nSelectedPortionIndex, nStart, nEnd );
     return nStart;
 }
 
@@ -2804,11 +2804,11 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionEnd( sal_Int32 nSele
     ThrowIfDisposed();
 
     sal_Int32 nStart=-1, nEnd=-1;
-    /*sal_Bool bSelected = */GetSelectionAtIndex(&nSelectedPortionIndex, nStart, nEnd );
+    /*bool bSelected = */GetSelectionAtIndex(&nSelectedPortionIndex, nStart, nEnd );
     return nEnd;
 }
 
-sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionIndex )
+bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionIndex )
 {
     SolarMutexGuard g;
 

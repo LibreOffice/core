@@ -40,10 +40,10 @@ public:
     // Attributes
     virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL setName( const OUString& _name ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
-    virtual sal_Bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
+    virtual bool SAL_CALL getEnabled() override;
+    virtual void SAL_CALL setEnabled( bool _enabled ) override;
 
     // Methods
     virtual void SAL_CALL Delete(  ) override;
@@ -69,10 +69,10 @@ public:
     // Attributes
     virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL setName( const OUString& _name ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
-    virtual sal_Bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
+    virtual bool SAL_CALL getEnabled() override;
+    virtual void SAL_CALL setEnabled( bool _enabled ) override;
 
     // Methods
     virtual void SAL_CALL Delete(  ) override;

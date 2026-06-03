@@ -155,7 +155,7 @@ namespace frm
         return u"com.sun.star.comp.forms.FormOperations"_ustr;
     }
 
-    sal_Bool SAL_CALL FormOperations::supportsService( const OUString& ServiceName )
+    bool SAL_CALL FormOperations::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -383,7 +383,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature )
+    bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature )
     {
         MethodGuard aGuard( *this );
 
@@ -461,7 +461,7 @@ namespace frm
             {
                 if(!checkConfirmation(needConfirmation, shouldCommit))
                     return false;
-                sal_Bool bTmp;
+                bool bTmp;
                 if (shouldCommit && !xFrmOps->commitCurrentRecord(bTmp))
                     return false;
             }
@@ -581,12 +581,12 @@ namespace frm
                 // TODO: re-implement this...
                 // run in an own thread if...
                 // ... the data source is thread safe...
-                sal_Bool bAllowOwnThread = sal_False;
+                bool bAllowOwnThread = false;
                 if ( ::comphelper::hasProperty( PROPERTY_THREADSAFE, m_xCursorProperties ) )
                     m_xCursorProperties->getPropertyValue( PROPERTY_THREADSAFE ) >>= bAllowOwnThread;
 
                 // ... the record count is unknown
-                sal_Bool bNeedOwnThread sal_False;
+                bool bNeedOwnThread false;
                 if ( ::comphelper::hasProperty( PROPERTY_ROWCOUNTFINAL, m_xCursorProperties ) )
                     m_xCursorProperties->getPropertyValue( PROPERTY_ROWCOUNTFINAL ) >>= bNeedOwnThread;
 
@@ -845,7 +845,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL FormOperations::commitCurrentRecord( sal_Bool& _out_rRecordInserted )
+    bool SAL_CALL FormOperations::commitCurrentRecord( bool& _out_rRecordInserted )
     {
         MethodGuard aGuard( *this );
         _out_rRecordInserted = false;
@@ -854,7 +854,7 @@ namespace frm
     }
 
 
-    bool FormOperations::impl_commitCurrentRecord_throw( sal_Bool* _pRecordInserted ) const
+    bool FormOperations::impl_commitCurrentRecord_throw( bool* _pRecordInserted ) const
     {
 #ifdef DBG_UTIL
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentRecord_throw: to be called within a MethodGuard'ed section only!" );
@@ -882,7 +882,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL FormOperations::commitCurrentControl()
+    bool SAL_CALL FormOperations::commitCurrentControl()
     {
         MethodGuard aGuard( *this );
         return impl_commitCurrentControl_throw();
@@ -933,7 +933,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL FormOperations::isInsertionRow()
+    bool SAL_CALL FormOperations::isInsertionRow()
     {
         bool bIs = false;
         try
@@ -949,7 +949,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL FormOperations::isModifiedRow()
+    bool SAL_CALL FormOperations::isModifiedRow()
     {
         bool bIs = false;
         try
@@ -1436,7 +1436,7 @@ namespace frm
         if ( !impl_hasCursor_nothrow() )
             return;
 
-        sal_Bool bRecordInserted = false;
+        bool bRecordInserted = false;
         bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )
@@ -1470,7 +1470,7 @@ namespace frm
         if ( !impl_hasCursor_nothrow() )
             return;
 
-        sal_Bool bRecordInserted = false;
+        bool bRecordInserted = false;
         bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )

@@ -1349,7 +1349,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     // as long as bMovedFwd is false, the Frame may flow backwards (until
     // it has been moved forward once)
     bool bMovedFwd = false;
-    sal_Bool bFormatted = false;        // For the widow/orphan rules, we encourage the
+    bool bFormatted = false;        // For the widow/orphan rules, we encourage the
                                             // last ContentFrame of a chain to format. This only
                                             // needs to happen once. Every time the Frame is
                                             // moved, the flag will have to be reset.

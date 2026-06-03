@@ -48,7 +48,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnCount(  )
     return m_mColumns.size();
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCaseSensitive();
@@ -96,21 +96,21 @@ OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_
     return OUString();
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCurrency();
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isAutoIncrement();
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSigned( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSigned( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSigned();
@@ -140,24 +140,24 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::isNullable( sal_Int32 col
     return sal_Int32(false);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSearchable();
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 column )
 {
     return isDefinitelyWritable(column);
 }

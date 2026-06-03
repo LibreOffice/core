@@ -588,7 +588,7 @@ void OS2METReader::AddPointsToPath(const tools::Polygon & rPoly)
 
     if (pPathStack==nullptr || rPoly.GetSize()==0) return;
     tools::PolyPolygon * pPP=&(pPathStack->aPPoly);
-    if (pPP->Count()==0 /*|| pPathStack->bClosed==sal_True*/) pPP->Insert(rPoly);
+    if (pPP->Count()==0 /*|| pPathStack->bClosed==true*/) pPP->Insert(rPoly);
     else {
         tools::Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
         nOldSize=aLastPoly.GetSize();

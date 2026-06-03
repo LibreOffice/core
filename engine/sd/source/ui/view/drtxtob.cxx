@@ -493,7 +493,7 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell& rViewShell, ::sd::View* pV
         nWhich = aIter.NextWhich();
     }
 
-    rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets acquired
+    rSet.Put( aAttrSet, false ); // <- false, so DontCare-Status gets acquired
 
     // these are disabled in outline-mode
     if (!(dynamic_cast<const DrawViewShell*>(&rViewShell)

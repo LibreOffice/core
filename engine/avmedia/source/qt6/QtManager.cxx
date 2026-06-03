@@ -40,7 +40,7 @@ OUString SAL_CALL QtManager::getImplementationName()
     return u"com.sun.star.comp.media.Manager_Qt"_ustr;
 }
 
-sal_Bool SAL_CALL QtManager::supportsService(const OUString& ServiceName)
+bool SAL_CALL QtManager::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

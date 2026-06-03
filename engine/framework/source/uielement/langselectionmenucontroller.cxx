@@ -59,7 +59,7 @@ OUString SAL_CALL LanguageSelectionMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.LanguageSelectionMenuController"_ustr;
 }
 
-sal_Bool SAL_CALL LanguageSelectionMenuController::supportsService( const OUString& sServiceName )
+bool SAL_CALL LanguageSelectionMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

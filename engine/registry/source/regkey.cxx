@@ -44,7 +44,7 @@ void REGISTRY_CALLTYPE releaseKey(RegKeyHandle hKey)
     }
 }
 
-sal_Bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle hKey)
+bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle hKey)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     return pKey != nullptr && pKey->isReadOnly();
@@ -551,7 +551,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
 
 RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
                                               rtl_uString* keyName,
-                                              SAL_UNUSED_PARAMETER sal_Bool,
+                                              SAL_UNUSED_PARAMETER bool,
                                                 rtl_uString** pResolvedName)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);

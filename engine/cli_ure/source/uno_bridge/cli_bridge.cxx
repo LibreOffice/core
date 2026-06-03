@@ -93,7 +93,7 @@ void SAL_CALL Mapping_uno2cli(
     {
         assert(td && ppOut && "### null ptr!");
         OSL_ENSURE( (sizeof(System::Char) == sizeof(sal_Unicode))
-                    && (sizeof(System::Boolean) == sizeof(sal_Bool))
+                    && (sizeof(System::Boolean) == sizeof(bool))
                     && (sizeof(System::SByte) == sizeof(sal_Int8))
                     && (sizeof(System::Int16) == sizeof(sal_Int16))
                     && (sizeof(System::UInt16) == sizeof(sal_uInt16))

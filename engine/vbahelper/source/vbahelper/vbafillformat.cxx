@@ -73,7 +73,7 @@ ScVbaFillFormat::setForeColorAndInternalStyle( sal_Int32 nForeColor )
 }
 
 // Attributes
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaFillFormat::getVisible()
 {
     drawing::FillStyle nFillStyle;
@@ -84,7 +84,7 @@ ScVbaFillFormat::getVisible()
 }
 
 void SAL_CALL
-ScVbaFillFormat::setVisible( sal_Bool _visible )
+ScVbaFillFormat::setVisible( bool _visible )
 {
     drawing::FillStyle aFillStyle;
     m_xPropertySet->getPropertyValue( u"FillStyle"_ustr ) >>= aFillStyle;

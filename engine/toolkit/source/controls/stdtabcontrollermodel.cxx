@@ -226,14 +226,14 @@ css::uno::Sequence< css::uno::Type > StdTabControllerModel::getTypes()
     return aTypeList;
 }
 
-sal_Bool StdTabControllerModel::getGroupControl(  )
+bool StdTabControllerModel::getGroupControl(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return mbGroupControl;
 }
 
-void StdTabControllerModel::setGroupControl( sal_Bool GroupControl )
+void StdTabControllerModel::setGroupControl( bool GroupControl )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -415,7 +415,7 @@ OUString StdTabControllerModel::getImplementationName()
     return u"stardiv.Toolkit.StdTabControllerModel"_ustr;
 }
 
-sal_Bool StdTabControllerModel::supportsService(OUString const & ServiceName)
+bool StdTabControllerModel::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

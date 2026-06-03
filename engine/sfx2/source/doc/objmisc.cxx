@@ -314,7 +314,7 @@ bool SfxObjectShell::IsModified() const
 void SfxObjectShell::SetModified( bool bModifiedP )
 {
     SAL_INFO_IF( !bModifiedP && !IsEnableSetModified(), "sfx",
-        "SFX_PERSIST: SetModified( sal_False ), although IsEnableSetModified() == sal_False" );
+        "SFX_PERSIST: SetModified( false ), although IsEnableSetModified() == false" );
 
     if( !IsEnableSetModified() )
         return;
@@ -361,7 +361,7 @@ bool SfxObjectShell::IsReadOnlyUI() const
 
 /*  [Description]
 
-    Returns sal_True if the document for the UI is treated as r/o. This is
+    Returns true if the document for the UI is treated as r/o. This is
     regardless of the actual r/o, which can be checked with <IsReadOnly()>.
 */
 
@@ -374,7 +374,7 @@ bool SfxObjectShell::IsReadOnlyMedium() const
 
 /*  [Description]
 
-    Returns sal_True when the medium is r/o, for instance when opened as r/o.
+    Returns true when the medium is r/o, for instance when opened as r/o.
 */
 
 {

@@ -137,7 +137,7 @@ OUString SAL_CALL SwUnoModule::getImplementationName(  )
     return u"com.sun.star.comp.Writer.WriterModule"_ustr;
 }
 
-sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName )
+bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

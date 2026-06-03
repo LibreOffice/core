@@ -84,7 +84,7 @@ public:
     // XPropertySet and friends
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
     virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
@@ -165,8 +165,8 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
 
     // XControl
-    virtual sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
-    void SAL_CALL setDesignMode(sal_Bool bOn) override;
+    virtual bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
+    void SAL_CALL setDesignMode(bool bOn) override;
 
 protected:
     // OFormNavigationHelper overriables

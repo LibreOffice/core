@@ -110,7 +110,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -180,7 +180,7 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
@@ -214,38 +214,38 @@ public:
     // XTextCursor
     virtual void SAL_CALL collapseToStart() override;
     virtual void SAL_CALL collapseToEnd() override;
-    virtual sal_Bool SAL_CALL isCollapsed() override;
-    virtual sal_Bool SAL_CALL goLeft(sal_Int16 nCount, sal_Bool bExpand) override;
-    virtual sal_Bool SAL_CALL goRight(sal_Int16 nCount, sal_Bool bExpand) override;
-    virtual void SAL_CALL gotoStart(sal_Bool bExpand) override;
-    virtual void SAL_CALL gotoEnd(sal_Bool bExpand) override;
+    virtual bool SAL_CALL isCollapsed() override;
+    virtual bool SAL_CALL goLeft(sal_Int16 nCount, bool bExpand) override;
+    virtual bool SAL_CALL goRight(sal_Int16 nCount, bool bExpand) override;
+    virtual void SAL_CALL gotoStart(bool bExpand) override;
+    virtual void SAL_CALL gotoEnd(bool bExpand) override;
     virtual void SAL_CALL gotoRange(
             const css::uno::Reference< css::text::XTextRange >& xRange,
-            sal_Bool bExpand) override;
+            bool bExpand) override;
 
     // XWordCursor
-    virtual sal_Bool SAL_CALL isStartOfWord() override;
-    virtual sal_Bool SAL_CALL isEndOfWord() override;
-    virtual sal_Bool SAL_CALL gotoNextWord(sal_Bool bExpand) override;
-    virtual sal_Bool SAL_CALL gotoPreviousWord(sal_Bool bExpand) override;
-    virtual sal_Bool SAL_CALL gotoEndOfWord(sal_Bool bExpand) override;
-    virtual sal_Bool SAL_CALL gotoStartOfWord(sal_Bool bExpand) override;
+    virtual bool SAL_CALL isStartOfWord() override;
+    virtual bool SAL_CALL isEndOfWord() override;
+    virtual bool SAL_CALL gotoNextWord(bool bExpand) override;
+    virtual bool SAL_CALL gotoPreviousWord(bool bExpand) override;
+    virtual bool SAL_CALL gotoEndOfWord(bool bExpand) override;
+    virtual bool SAL_CALL gotoStartOfWord(bool bExpand) override;
 
     // XSentenceCursor
-    virtual sal_Bool SAL_CALL isStartOfSentence() override;
-    virtual sal_Bool SAL_CALL isEndOfSentence() override;
-    virtual sal_Bool SAL_CALL gotoNextSentence(sal_Bool Expand) override;
-    virtual sal_Bool SAL_CALL gotoPreviousSentence(sal_Bool Expand) override;
-    virtual sal_Bool SAL_CALL gotoStartOfSentence(sal_Bool Expand) override;
-    virtual sal_Bool SAL_CALL gotoEndOfSentence(sal_Bool Expand) override;
+    virtual bool SAL_CALL isStartOfSentence() override;
+    virtual bool SAL_CALL isEndOfSentence() override;
+    virtual bool SAL_CALL gotoNextSentence(bool Expand) override;
+    virtual bool SAL_CALL gotoPreviousSentence(bool Expand) override;
+    virtual bool SAL_CALL gotoStartOfSentence(bool Expand) override;
+    virtual bool SAL_CALL gotoEndOfSentence(bool Expand) override;
 
     // XParagraphCursor
-    virtual sal_Bool SAL_CALL isStartOfParagraph() override;
-    virtual sal_Bool SAL_CALL isEndOfParagraph() override;
-    virtual sal_Bool SAL_CALL gotoStartOfParagraph(sal_Bool Expand) override;
-    virtual sal_Bool SAL_CALL gotoEndOfParagraph(sal_Bool Expand) override;
-    virtual sal_Bool SAL_CALL gotoNextParagraph(sal_Bool Expand) override;
-    virtual sal_Bool SAL_CALL gotoPreviousParagraph(sal_Bool Expand) override;
+    virtual bool SAL_CALL isStartOfParagraph() override;
+    virtual bool SAL_CALL isEndOfParagraph() override;
+    virtual bool SAL_CALL gotoStartOfParagraph(bool Expand) override;
+    virtual bool SAL_CALL gotoEndOfParagraph(bool Expand) override;
+    virtual bool SAL_CALL gotoNextParagraph(bool Expand) override;
+    virtual bool SAL_CALL gotoPreviousParagraph(bool Expand) override;
 
     // XRedline
     virtual void SAL_CALL makeRedline(

@@ -108,7 +108,7 @@ public:
     void                    SetStates();
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;

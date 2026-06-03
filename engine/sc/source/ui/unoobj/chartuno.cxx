@@ -138,7 +138,7 @@ rtl::Reference<ScChartObj> ScChartsObj::GetObjectByName_Impl(const OUString& aNa
 void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                                         const awt::Rectangle& aRect,
                                         const uno::Sequence<table::CellRangeAddress>& aRanges,
-                                        sal_Bool bColumnHeaders, sal_Bool bRowHeaders )
+                                        bool bColumnHeaders, bool bRowHeaders )
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
@@ -337,7 +337,7 @@ uno::Type SAL_CALL ScChartsObj::getElementType()
     return cppu::UnoType<table::XTableChart>::get();
 }
 
-sal_Bool SAL_CALL ScChartsObj::hasElements()
+bool SAL_CALL ScChartsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return getCount() != 0;
@@ -397,7 +397,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()
     return {};
 }
 
-sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
+bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     SdrOle2Obj* aOle2Obj = sctools::findChartsByName(pDocShell, nTab, aName,
@@ -593,7 +593,7 @@ void ScChartObj::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/,
 
 // XTableChart
 
-sal_Bool SAL_CALL ScChartObj::getHasColumnHeaders()
+bool SAL_CALL ScChartObj::getHasColumnHeaders()
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;
@@ -602,7 +602,7 @@ sal_Bool SAL_CALL ScChartObj::getHasColumnHeaders()
     return bColHeaders;
 }
 
-void SAL_CALL ScChartObj::setHasColumnHeaders( sal_Bool bHasColumnHeaders )
+void SAL_CALL ScChartObj::setHasColumnHeaders( bool bHasColumnHeaders )
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;
@@ -612,7 +612,7 @@ void SAL_CALL ScChartObj::setHasColumnHeaders( sal_Bool bHasColumnHeaders )
         Update_Impl( xRanges, bHasColumnHeaders, bOldRowHeaders );
 }
 
-sal_Bool SAL_CALL ScChartObj::getHasRowHeaders()
+bool SAL_CALL ScChartObj::getHasRowHeaders()
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;
@@ -621,7 +621,7 @@ sal_Bool SAL_CALL ScChartObj::getHasRowHeaders()
     return bRowHeaders;
 }
 
-void SAL_CALL ScChartObj::setHasRowHeaders( sal_Bool bHasRowHeaders )
+void SAL_CALL ScChartObj::setHasRowHeaders( bool bHasRowHeaders )
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;

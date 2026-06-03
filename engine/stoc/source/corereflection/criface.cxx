@@ -700,7 +700,7 @@ void InterfaceIdlClassImpl::initMembers()
     _pSortedMemberInit = std::move(pSortedMemberInit);
 }
 
-sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
+bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
 {
     if (xType.is() && xType->getTypeClass() == TypeClass_INTERFACE)
     {

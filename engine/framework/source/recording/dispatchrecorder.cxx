@@ -43,7 +43,7 @@ OUString SAL_CALL DispatchRecorder::getImplementationName()
     return u"com.sun.star.comp.framework.DispatchRecorder"_ustr;
 }
 
-sal_Bool SAL_CALL DispatchRecorder::supportsService( const OUString& sServiceName )
+bool SAL_CALL DispatchRecorder::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -374,7 +374,7 @@ css::uno::Type SAL_CALL DispatchRecorder::getElementType()
     return cppu::UnoType<css::frame::DispatchStatement>::get();
 }
 
-sal_Bool SAL_CALL DispatchRecorder::hasElements()
+bool SAL_CALL DispatchRecorder::hasElements()
 {
     return (! m_aStatements.empty());
 }

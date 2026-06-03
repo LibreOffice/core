@@ -61,7 +61,7 @@ extern "C" {
 SAL_DLLPUBLIC void SAL_CALL rtl_createUuid(
                               sal_uInt8 *pTargetUUID,
                               const sal_uInt8 *pPredecessorUUID,
-                              sal_Bool bUseEthernetAddress );
+                              bool bUseEthernetAddress );
 
 /** Compare two UUID's lexically
 

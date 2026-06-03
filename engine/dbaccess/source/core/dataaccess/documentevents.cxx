@@ -166,7 +166,7 @@ namespace dbaccess
         return comphelper::mapKeysToSequence( mrEventsData );
     }
 
-    sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& Name )
+    bool SAL_CALL DocumentEvents::hasByName( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( mrMutex );
 
@@ -178,7 +178,7 @@ namespace dbaccess
         return ::cppu::UnoType< Sequence< PropertyValue > >::get();
     }
 
-    sal_Bool SAL_CALL DocumentEvents::hasElements(  )
+    bool SAL_CALL DocumentEvents::hasElements(  )
     {
         ::osl::MutexGuard aGuard( mrMutex );
         return !mrEventsData.empty();

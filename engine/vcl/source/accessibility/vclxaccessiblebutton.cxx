@@ -159,7 +159,7 @@ sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( )
 }
 
 
-sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex )
+bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -250,7 +250,7 @@ Any VCLXAccessibleButton::getCurrentValue(  )
 }
 
 
-sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber )
+bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber )
 {
     OExternalLockGuard aGuard( this );
 

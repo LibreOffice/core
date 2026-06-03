@@ -184,7 +184,7 @@ namespace canvas
         return u"Canvas::ParametricPolyPolygon"_ustr;
     }
 
-    sal_Bool SAL_CALL ParametricPolyPolygon::supportsService( const OUString& ServiceName )
+    bool SAL_CALL ParametricPolyPolygon::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

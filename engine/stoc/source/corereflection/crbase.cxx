@@ -89,7 +89,7 @@ OUString IdlClassImpl::getName()
     return _aName;
 }
 
-sal_Bool IdlClassImpl::equals( const Reference< XIdlClass >& xType )
+bool IdlClassImpl::equals( const Reference< XIdlClass >& xType )
 {
     return (xType.is() &&
             (xType->getTypeClass() == _eTypeClass) && (xType->getName() == _aName));
@@ -111,7 +111,7 @@ const bool s_aAssignableFromTab[11][11] =
 /* TypeClass_DOUBLE */          { false, false, true,  true,  true,  true,  true,  true,  true,  true,  true  }
 };
 
-sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
+bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
 {
     TypeClass eAssign = getTypeClass();
     if (equals( xType ) || eAssign == TypeClass_ANY) // default shot

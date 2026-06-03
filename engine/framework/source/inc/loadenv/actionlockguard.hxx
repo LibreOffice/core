@@ -76,8 +76,8 @@ class ActionLockGuard final
             @param  xLock
                     points to the outside resource, which should be locked.
 
-            @return sal_True, if new resource could be set and locked.
-                    sal_False otherwise.
+            @return true, if new resource could be set and locked.
+                    false otherwise.
          */
         bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
@@ -101,8 +101,8 @@ class ActionLockGuard final
             @param  xLock
                     points to the outside resource, which should be locked.
 
-            @return sal_True, if new resource could be set and locked.
-                    sal_False otherwise.
+            @return true, if new resource could be set and locked.
+                    false otherwise.
          */
         void freeResource()
         {

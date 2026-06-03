@@ -152,7 +152,7 @@ namespace dbaui
     {
         return u"com.sun.star.uno.comp.sdb.RowsetFilterDialog"_ustr;
     }
-    sal_Bool SAL_CALL RowsetFilterDialog::supportsService(const OUString& _rServiceName)
+    bool SAL_CALL RowsetFilterDialog::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -208,7 +208,7 @@ namespace dbaui
     {
         return u"com.sun.star.uno.comp.sdb.RowsetOrderDialog"_ustr;
     }
-    sal_Bool SAL_CALL RowsetOrderDialog::supportsService(const OUString& _rServiceName)
+    bool SAL_CALL RowsetOrderDialog::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

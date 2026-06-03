@@ -109,7 +109,7 @@ namespace dbtools
 
 namespace
 {
-    typedef sal_Bool (SAL_CALL XDatabaseMetaData::*FMetaDataSupport)();
+    typedef bool (SAL_CALL XDatabaseMetaData::*FMetaDataSupport)();
 }
 
 sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
@@ -1641,7 +1641,7 @@ namespace
         {
             return m_xSource->getElementType();
         }
-        virtual sal_Bool SAL_CALL hasElements(  ) override
+        virtual bool SAL_CALL hasElements(  ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->hasElements();

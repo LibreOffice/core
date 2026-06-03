@@ -212,19 +212,19 @@ void SAL_CALL SolverComponent::setConstraints( const uno::Sequence<sheet::Solver
     maConstraints = _constraints;
 }
 
-sal_Bool SAL_CALL SolverComponent::getMaximize()
+bool SAL_CALL SolverComponent::getMaximize()
 {
     return mbMaximize;
 }
 
-void SAL_CALL SolverComponent::setMaximize( sal_Bool _maximize )
+void SAL_CALL SolverComponent::setMaximize( bool _maximize )
 {
     mbMaximize = _maximize;
 }
 
 // XSolver: get results
 
-sal_Bool SAL_CALL SolverComponent::getSuccess()
+bool SAL_CALL SolverComponent::getSuccess()
 {
     return mbSuccess;
 }
@@ -241,7 +241,7 @@ uno::Sequence<double> SAL_CALL SolverComponent::getSolution()
 
 // XServiceInfo
 
-sal_Bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName )
+bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

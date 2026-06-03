@@ -314,7 +314,7 @@ OUString SAL_CALL Title::getImplementationName()
     return u"com.sun.star.comp.chart2.Title"_ustr;
 }
 
-sal_Bool SAL_CALL Title::supportsService( const OUString& rServiceName )
+bool SAL_CALL Title::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

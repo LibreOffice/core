@@ -64,7 +64,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const char * pImplNam
     return pRet;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -92,14 +92,14 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             for( ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
-            return sal_True;
+            return true;
         }
         catch (registry::InvalidRegistryException &)
         {
             OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 } // extern "C"

@@ -333,14 +333,14 @@ sal_Int16 SAL_CALL ConvDic::getConversionType(  )
 }
 
 
-void SAL_CALL ConvDic::setActive( sal_Bool bActivate )
+void SAL_CALL ConvDic::setActive( bool bActivate )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     bIsActive = bActivate;
 }
 
 
-sal_Bool SAL_CALL ConvDic::isActive(  )
+bool SAL_CALL ConvDic::isActive(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return bIsActive;
@@ -569,7 +569,7 @@ OUString SAL_CALL ConvDic::getImplementationName(  )
     return u"com.sun.star.lingu2.ConvDic"_ustr;
 }
 
-sal_Bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
+bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

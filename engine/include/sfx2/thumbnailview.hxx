@@ -86,7 +86,7 @@ struct ThumbnailItemAttributes;
     The exact window size for a specific item size can be calculated by
     CalcWindowSizePixel(). To do this all relevant data (number of columns/...)
     have to be specified and if no number of rows was set, all items need to
-    be inserted. If the window was created with WB_BORDER/Border=sal_True the
+    be inserted. If the window was created with WB_BORDER/Border=true the
     size has to be specified with SetOutputSizePixel(). In other cases different
     size-methods can be used. With CalcItemSize() the inner and outer size of
     an item could be calculated (for this the free space defined by
@@ -102,7 +102,7 @@ struct ThumbnailItemAttributes;
     since the output area will be precomputed. If this is not done the first
     Paint will appear a little bit slower. Therefore the Control, if it is loaded
     from the resource and only supplied with items during runtime, should be
-    loaded with Hide = sal_True and then displayed with Show().
+    loaded with Hide = true and then displayed with Show().
 
     In case of a visible Control the creation of the new output area could be
     activated before Paint by calling Format().
@@ -111,7 +111,7 @@ struct ThumbnailItemAttributes;
 
     If Drag and Drop will be called from the ValueSet the Command-Handler has to
     be overridden. From this StartDrag needs to be called. If this method returns
-    sal_True the drag-process could be initiated by  ExecuteDrag(), otherwise no
+    true the drag-process could be initiated by  ExecuteDrag(), otherwise no
     processing will take place. This method makes sure that ValueSet stops its
     processing and as appropriate selects the entry. Therefore the calling of
     Select-Handler within this function must be expected.

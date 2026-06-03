@@ -300,7 +300,7 @@ public:
     void ClearModel(bool bCalledFromDestructor);
 
     // Override this to enable the Swap/LoadOnDemand of graphics.
-    // If rbDeleteAfterUse is set to sal_True the SvStream instance from
+    // If rbDeleteAfterUse is set to true the SvStream instance from
     // the caller will be disposed after use.
     // If this method returns NULL, a temporary file will be allocated for
     // swapping.
@@ -434,7 +434,7 @@ public:
     bool IsChanged() const { return mbChanged; }
     virtual void SetChanged(bool bFlg = true);
 
-    // If set to sal_True, graphics from graphics objects will:
+    // If set to true, graphics from graphics objects will:
     // - not be loaded immediately when loading a document,
     //   but only once they are needed (e.g. displayed).
     // - be pruned from memory if they are not needed.
@@ -443,7 +443,7 @@ public:
     bool            IsSwapGraphics() const { return m_bSwapGraphics; }
     void            SetSwapGraphics();
 
-    // Text frames without filling can be select with a mouse click by default (sal_False).
+    // Text frames without filling can be select with a mouse click by default (false).
     // With this flag set to true you can hit them only in the area in which text is to be
     // found.
     bool            IsPickThroughTransparentTextFrames() const  { return m_bTransparentTextFrames; }
@@ -463,15 +463,15 @@ public:
     // rSourceModel may very well be empty afterwards.
     // nFirstPageNum,nLastPageNum: The pages to take from rSourceModel
     // nDestPos..................: position to insert
-    // bMergeMasterPages.........: sal_True = needed MasterPages will be taken
+    // bMergeMasterPages.........: true = needed MasterPages will be taken
     //                                   from rSourceModel
-    //                             sal_False= the MasterPageDescriptors of
+    //                             false= the MasterPageDescriptors of
     //                                   the pages of the rSourceModel will be
     //                                   mapped on the existing  MasterPages.
     // bUndo.....................: An undo action is generated for the merging.
     //                             Undo is only for the target model, not for the
     //                             rSourceModel.
-    // bTreadSourceAsConst.......: sal_True=the SourceModel will not be changed,
+    // bTreadSourceAsConst.......: true=the SourceModel will not be changed,
     //                             so pages will be copied.
     virtual void Merge(SdrModel& rSourceModel,
                sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
@@ -479,7 +479,7 @@ public:
                bool bMergeMasterPages, bool bAllMasterPages,
                bool bUndo = true, bool bTreadSourceAsConst = false);
 
-    // Behaves like Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
+    // Behaves like Merge(SourceModel=DestModel,nFirst,nLast,nDest,false,false,bUndo,!bMoveNoCopy);
     void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                    sal_uInt16 nDestPos,
                    bool bUndo, bool bMoveNoCopy);

@@ -66,14 +66,14 @@ SwVbaView::~SwVbaView()
 {
 }
 
-sal_Bool SwVbaView::getShowAll()
+bool SwVbaView::getShowAll()
 {
     bool bShowFormattingMarks = false;
     mxViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) >>= bShowFormattingMarks;
     return bShowFormattingMarks;
 }
 
-void SwVbaView::setShowAll(sal_Bool bSet)
+void SwVbaView::setShowAll(bool bSet)
 {
     mxViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(bSet));
 }
@@ -201,7 +201,7 @@ SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */)
     // not support in Writer
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwVbaView::getTableGridLines()
 {
     bool bShowTableGridLine = false;
@@ -210,7 +210,7 @@ SwVbaView::getTableGridLines()
 }
 
 void SAL_CALL
-SwVbaView::setTableGridLines( sal_Bool _tablegridlines )
+SwVbaView::setTableGridLines( bool _tablegridlines )
 {
     mxViewSettings->setPropertyValue(u"ShowTableBoundaries"_ustr, uno::Any( _tablegridlines ) );
 }

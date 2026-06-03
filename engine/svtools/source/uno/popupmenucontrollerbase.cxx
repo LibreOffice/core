@@ -84,7 +84,7 @@ void  PopupMenuControllerBase::disposing(std::unique_lock<std::mutex>& /*rGuard*
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL PopupMenuControllerBase::supportsService( const OUString& ServiceName )
+bool SAL_CALL PopupMenuControllerBase::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

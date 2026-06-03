@@ -109,7 +109,7 @@ OUString SAL_CALL StarOfficeWriterImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Writer.StarOfficeWriterImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL StarOfficeWriterImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL StarOfficeWriterImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

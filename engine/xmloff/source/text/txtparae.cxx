@@ -581,7 +581,7 @@ BoundFrameSets::BoundFrameSets(const Reference<XInterface>& rModel)
 void FieldParamExporter::Export()
 {
     const Type aStringType = ::cppu::UnoType<OUString>::get();
-    const Type aBoolType = cppu::UnoType<sal_Bool>::get();
+    const Type aBoolType = cppu::UnoType<bool>::get();
     const Type aSeqType = cppu::UnoType<Sequence<OUString>>::get();
     const Type aIntType = ::cppu::UnoType<sal_Int32>::get();
     const Sequence<OUString> vParameters(m_xFieldParams->getElementNames());

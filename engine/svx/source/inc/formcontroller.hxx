@@ -232,7 +232,7 @@ namespace svxform
         virtual void SAL_CALL disposing() override;
 
     // OPropertySetHelper
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue,
+        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue,
                                                 sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
@@ -258,7 +258,7 @@ namespace svxform
 
     // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
     // css::container::XEnumerationAccess
         virtual css::uno::Reference< css::container::XEnumeration> SAL_CALL createEnumeration() override;
@@ -279,7 +279,7 @@ namespace svxform
         virtual void SAL_CALL setMode(const OUString& Mode) override;
         virtual OUString SAL_CALL getMode() override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes() override;
-        virtual sal_Bool SAL_CALL supportsMode(const OUString& Mode) override;
+        virtual bool SAL_CALL supportsMode(const OUString& Mode) override;
 
     // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() override;
@@ -353,9 +353,9 @@ namespace svxform
         virtual void SAL_CALL rowSetChanged(const css::lang::EventObject& event) override;
 
     // XRowSetApproveListener
-        virtual sal_Bool SAL_CALL approveCursorMove(const css::lang::EventObject& event) override;
-        virtual sal_Bool SAL_CALL approveRowChange(const  css::sdb::RowChangeEvent& event) override;
-        virtual sal_Bool SAL_CALL approveRowSetChange(const css::lang::EventObject& event) override;
+        virtual bool SAL_CALL approveCursorMove(const css::lang::EventObject& event) override;
+        virtual bool SAL_CALL approveRowChange(const  css::sdb::RowChangeEvent& event) override;
+        virtual bool SAL_CALL approveRowSetChange(const css::lang::EventObject& event) override;
 
     // XRowSetApproveBroadcaster
         virtual void SAL_CALL addRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener>& listener) override;
@@ -377,22 +377,22 @@ namespace svxform
         virtual void SAL_CALL removeParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& aListener) override;
 
     // XDatabaseParameterListener
-        virtual sal_Bool SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& aEvent) override;
+        virtual bool SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& aEvent) override;
 
     // XConfirmDeleteBroadcaster
         virtual void SAL_CALL addConfirmDeleteListener(const css::uno::Reference< css::form::XConfirmDeleteListener>& aListener) override;
         virtual void SAL_CALL removeConfirmDeleteListener(const css::uno::Reference< css::form::XConfirmDeleteListener>& aListener) override;
 
     // XConfirmDeleteListener
-        virtual sal_Bool SAL_CALL confirmDelete(const  css::sdb::RowChangeEvent& aEvent) override;
+        virtual bool SAL_CALL confirmDelete(const  css::sdb::RowChangeEvent& aEvent) override;
 
     // XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
 
     // XResetListener
-        virtual sal_Bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) override;
+        virtual bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) override;
         virtual void SAL_CALL resetted(const css::lang::EventObject& rEvent) override;
 
         // XFeatureInvalidation

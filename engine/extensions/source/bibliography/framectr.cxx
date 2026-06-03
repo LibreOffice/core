@@ -169,7 +169,7 @@ OUString SAL_CALL BibFrameController_Impl::getImplementationName()
     return u"com.sun.star.comp.extensions.Bibliography"_ustr;
 }
 
-sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName )
+bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService( this, sServiceName );
 }
@@ -187,12 +187,12 @@ void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg
     m_xFrame->addFrameActionListener( m_xImpl );
 }
 
-sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ )
+bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ )
 {
     return false;
 }
 
-sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend )
+bool BibFrameController_Impl::suspend( bool bSuspend )
 {
     if ( bSuspend )
         getFrame()->removeFrameActionListener( m_xImpl );

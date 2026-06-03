@@ -219,7 +219,7 @@ namespace dbaccess
         }
 
         // XEmbeddedClient
-        virtual void SAL_CALL visibilityChanged( sal_Bool /*bVisible*/ ) override
+        virtual void SAL_CALL visibilityChanged( bool /*bVisible*/ ) override
         {
         }
     };
@@ -1271,7 +1271,7 @@ void ODocumentDefinition::saveAs()
         if ( m_pImpl->m_aProps.aTitle.isEmpty() )
         {
             aGuard.clear();
-            save(false, css::uno::Reference<css::awt::XTopWindow>()); // (sal_False) : we don't want an approve dialog
+            save(false, css::uno::Reference<css::awt::XTopWindow>()); // (false) : we don't want an approve dialog
             return;
         }
     }
@@ -1835,7 +1835,7 @@ void SAL_CALL ODocumentDefinition::store(  )
     }
 }
 
-sal_Bool SAL_CALL ODocumentDefinition::close(  )
+bool SAL_CALL ODocumentDefinition::close(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1998,7 +1998,7 @@ void ODocumentDefinition::updateDocumentTitle()
         xTitle->setTitle(sName);
 }
 
-void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject&, sal_Bool )
+void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject&, bool )
 {
     try
     {

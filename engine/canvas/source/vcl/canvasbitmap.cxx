@@ -72,7 +72,7 @@ namespace vclcanvas
         return u"VCLCanvas.CanvasBitmap"_ustr;
     }
 
-    sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
+    bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

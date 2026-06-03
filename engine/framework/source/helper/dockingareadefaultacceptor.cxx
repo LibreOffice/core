@@ -57,7 +57,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::ge
     return xContainerWindow;
 }
 
-sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
+bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
 {
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner );

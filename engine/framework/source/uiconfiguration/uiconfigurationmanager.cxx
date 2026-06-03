@@ -81,7 +81,7 @@ public:
         return u"com.sun.star.comp.framework.UIConfigurationManager"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -106,8 +106,8 @@ public:
     virtual void SAL_CALL reset() override;
     virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL createSettings(  ) override;
-    virtual sal_Bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, sal_Bool bWriteable ) override;
+    virtual bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
+    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, bool bWriteable ) override;
     virtual void SAL_CALL replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
     virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) override;
     virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
@@ -120,12 +120,12 @@ public:
     virtual void SAL_CALL reload() override;
     virtual void SAL_CALL store() override;
     virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual sal_Bool SAL_CALL isModified() override;
-    virtual sal_Bool SAL_CALL isReadOnly() override;
+    virtual bool SAL_CALL isModified() override;
+    virtual bool SAL_CALL isReadOnly() override;
 
     // XUIConfigurationStorage
     virtual void SAL_CALL setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual sal_Bool SAL_CALL hasStorage() override;
+    virtual bool SAL_CALL hasStorage() override;
 
 private:
     // private data types
@@ -890,7 +890,7 @@ Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings()
     return Reference< XIndexContainer >( new RootItemContainer() );
 }
 
-sal_Bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceURL )
+bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -904,7 +904,7 @@ sal_Bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceU
     return false;
 }
 
-Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OUString& ResourceURL, sal_Bool bWriteable )
+Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OUString& ResourceURL, bool bWriteable )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1220,7 +1220,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     impl_Initialize();
 }
 
-sal_Bool SAL_CALL UIConfigurationManager::hasStorage()
+bool SAL_CALL UIConfigurationManager::hasStorage()
 {
     SolarMutexGuard g;
 
@@ -1357,14 +1357,14 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
         xTransactedObject->commit();
 }
 
-sal_Bool SAL_CALL UIConfigurationManager::isModified()
+bool SAL_CALL UIConfigurationManager::isModified()
 {
     SolarMutexGuard g;
 
     return m_bModified;
 }
 
-sal_Bool SAL_CALL UIConfigurationManager::isReadOnly()
+bool SAL_CALL UIConfigurationManager::isReadOnly()
 {
     SolarMutexGuard g;
 

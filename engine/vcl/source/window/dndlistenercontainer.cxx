@@ -68,12 +68,12 @@ void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< X
     maDropTargetListeners.removeInterface( g, dtl );
 }
 
-sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
+bool SAL_CALL DNDListenerContainer::isActive(  )
 {
     return m_bActive;
 }
 
-void SAL_CALL DNDListenerContainer::setActive( sal_Bool active )
+void SAL_CALL DNDListenerContainer::setActive( bool active )
 {
     m_bActive = active;
 }
@@ -414,7 +414,7 @@ void SAL_CALL DNDListenerContainer::rejectDrop(  )
     // nothing to do here
 }
 
-void SAL_CALL DNDListenerContainer::dropComplete( sal_Bool success )
+void SAL_CALL DNDListenerContainer::dropComplete( bool success )
 {
     if( m_xDropTargetDropContext.is() )
     {

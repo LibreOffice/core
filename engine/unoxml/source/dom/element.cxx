@@ -381,7 +381,7 @@ namespace DOM
     Returns true when an attribute with a given name is specified on this
     element or has a default value, false otherwise.
     */
-    sal_Bool SAL_CALL CElement::hasAttribute(OUString const& name)
+    bool SAL_CALL CElement::hasAttribute(OUString const& name)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -394,7 +394,7 @@ namespace DOM
     Returns true when an attribute with a given local name and namespace
     URI is specified on this element or has a default value, false otherwise.
     */
-    sal_Bool SAL_CALL CElement::hasAttributeNS(
+    bool SAL_CALL CElement::hasAttributeNS(
             OUString const& namespaceURI, OUString const& localName)
     {
         ::osl::MutexGuard const g(m_rMutex);

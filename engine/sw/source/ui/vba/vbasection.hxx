@@ -42,8 +42,8 @@ public:
     virtual ~SwVbaSection() override;
 
     // Attributes
-    virtual sal_Bool SAL_CALL getProtectedForForms() override;
-    virtual void SAL_CALL setProtectedForForms( sal_Bool _protectedforforms ) override;
+    virtual bool SAL_CALL getProtectedForForms() override;
+    virtual void SAL_CALL setProtectedForForms( bool _protectedforforms ) override;
 
     // Methods
     virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) override;

@@ -46,16 +46,16 @@ public:
     void SAL_CALL setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& xMenu ) override;
 
     // XTopWindow2
-    virtual sal_Bool SAL_CALL getIsMaximized() override;
-    virtual void SAL_CALL setIsMaximized( sal_Bool _ismaximized ) override;
-    virtual sal_Bool SAL_CALL getIsMinimized() override;
-    virtual void SAL_CALL setIsMinimized( sal_Bool _isminimized ) override;
+    virtual bool SAL_CALL getIsMaximized() override;
+    virtual void SAL_CALL setIsMaximized( bool _ismaximized ) override;
+    virtual bool SAL_CALL getIsMinimized() override;
+    virtual void SAL_CALL setIsMinimized( bool _isminimized ) override;
     virtual ::sal_Int32 SAL_CALL getDisplay() override;
     virtual void SAL_CALL setDisplay( ::sal_Int32 _display ) override;
 
     // XTopWindow3
-    virtual sal_Bool SAL_CALL getFullScreen() override;
-    virtual void SAL_CALL setFullScreen(sal_Bool value) override;
+    virtual bool SAL_CALL getFullScreen() override;
+    virtual void SAL_CALL setFullScreen(bool value) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

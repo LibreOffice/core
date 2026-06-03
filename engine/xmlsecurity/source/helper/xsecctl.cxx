@@ -960,20 +960,20 @@ SignatureInformations XSecController::getSignatureInformations() const
  * XSAXEventKeeperStatusChangeListener
  */
 
-void SAL_CALL XSecController::blockingStatusChanged( sal_Bool isBlocking )
+void SAL_CALL XSecController::blockingStatusChanged( bool isBlocking )
 {
     m_bIsBlocking = isBlocking;
     checkChainingStatus();
 }
 
 void SAL_CALL XSecController::collectionStatusChanged(
-    sal_Bool isInsideCollectedElement )
+    bool isInsideCollectedElement )
 {
     m_bIsCollectingElement = isInsideCollectedElement;
     checkChainingStatus();
 }
 
-void SAL_CALL XSecController::bufferStatusChanged( sal_Bool /*isBufferEmpty*/)
+void SAL_CALL XSecController::bufferStatusChanged( bool /*isBufferEmpty*/)
 {
 
 }

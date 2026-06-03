@@ -212,7 +212,7 @@ Type SAL_CALL MenuBarWrapper::getElementType()
     return cppu::UnoType<XDispatchProvider>::get();
 }
 
-sal_Bool SAL_CALL MenuBarWrapper::hasElements()
+bool SAL_CALL MenuBarWrapper::hasElements()
 {
     SolarMutexGuard g;
 
@@ -254,7 +254,7 @@ Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
     return comphelper::mapKeysToSequence( m_aPopupControllerCache );
 }
 
-sal_Bool SAL_CALL MenuBarWrapper::hasByName(
+bool SAL_CALL MenuBarWrapper::hasByName(
     const OUString& aName )
 {
     SolarMutexGuard g;

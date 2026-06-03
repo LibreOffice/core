@@ -64,7 +64,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionCount()
     return 0;
 }
 
-sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIndex )
+bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -205,7 +205,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getEndIndex()
     return 0;
 }
 
-sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
+bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
 {
     SolarMutexGuard g;
 

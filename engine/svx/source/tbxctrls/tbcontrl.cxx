@@ -302,7 +302,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
@@ -561,7 +561,7 @@ private:
                                 Color nColor1, Color nColor2, Color nColorDist,
                                 SvxBorderLineStyle nStyle, Bitmap& rBmp);
 
-        void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
+        void            UpdatePaintLineColor();       // returns true if maPaintCol has changed
 
         static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pImage);
         sal_Int32       GetStylePos( sal_Int32  nListPos, tools::Long nWidth );
@@ -3362,7 +3362,7 @@ OUString SvxStyleToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.StyleToolBoxControl"_ustr;
 }
 
-sal_Bool SvxStyleToolBoxControl::supportsService( const OUString& rServiceName )
+bool SvxStyleToolBoxControl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
@@ -3715,7 +3715,7 @@ OUString SvxFontNameToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.FontNameToolBoxControl"_ustr;
 }
 
-sal_Bool SvxFontNameToolBoxControl::supportsService( const OUString& rServiceName )
+bool SvxFontNameToolBoxControl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
@@ -3971,7 +3971,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     m_xPaletteManager->AddRecentColor(aColor, sColorName);
 }
 
-sal_Bool SvxColorToolBoxControl::opensSubToolbar()
+bool SvxColorToolBoxControl::opensSubToolbar()
 {
     // We mark this controller as a sub-toolbar controller, so we get notified
     // (through updateImage method) on button image changes, and could redraw

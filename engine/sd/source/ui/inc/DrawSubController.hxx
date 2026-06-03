@@ -32,7 +32,7 @@ namespace sd {
     public:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override = 0;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override = 0;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override = 0;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
     };
 

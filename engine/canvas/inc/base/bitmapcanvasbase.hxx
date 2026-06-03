@@ -76,13 +76,13 @@ namespace canvas
             return BaseType::maCanvasHelper.getSize();
         }
 
-        virtual sal_Bool SAL_CALL hasAlpha(  ) override
+        virtual bool SAL_CALL hasAlpha(  ) override
         {
             return true;
         }
 
         virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize,
-                                                                                                                   sal_Bool                                      beFast ) override
+                                                                                                                   bool                                      beFast ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

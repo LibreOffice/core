@@ -50,7 +50,7 @@ protected:
         getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
-    virtual sal_Bool SAL_CALL supportsCategories() override;
+    virtual bool SAL_CALL supportsCategories() override;
     virtual rtl::Reference< ::chart::ChartType >
         getChartTypeForNewSeries2( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;

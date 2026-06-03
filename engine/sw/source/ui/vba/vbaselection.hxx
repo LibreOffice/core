@@ -109,7 +109,7 @@ public:
     virtual void SAL_CALL Paste(  ) override;
     virtual void SAL_CALL Collapse( const css::uno::Any& Direction ) override;
     virtual void SAL_CALL WholeStory(  ) override;
-    virtual sal_Bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
+    virtual bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
     virtual void SAL_CALL SplitTable() override;
     virtual css::uno::Any SAL_CALL Paragraphs( const css::uno::Any& aIndex ) override;
 

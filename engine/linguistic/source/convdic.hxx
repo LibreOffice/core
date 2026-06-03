@@ -92,8 +92,8 @@ public:
     virtual OUString SAL_CALL getName(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
     virtual sal_Int16 SAL_CALL getConversionType(  ) override;
-    virtual void SAL_CALL setActive( sal_Bool bActivate ) override;
-    virtual sal_Bool SAL_CALL isActive(  ) override;
+    virtual void SAL_CALL setActive( bool bActivate ) override;
+    virtual bool SAL_CALL isActive(  ) override;
     virtual void SAL_CALL clear(  ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getConversionEntries( css::linguistic2::ConversionDirection eDirection ) override;
@@ -112,7 +112,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     bool    HasEntry( const OUString &rLeftText, std::u16string_view rRightText );

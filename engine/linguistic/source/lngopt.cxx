@@ -373,7 +373,7 @@ OUString SAL_CALL LinguProps::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
+bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -316,7 +316,7 @@ public:
     virtual OUString SAL_CALL queryTypeByURL(const OUString& sURL) override;
 
     virtual OUString SAL_CALL queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
-                                                           sal_Bool                                         bAllowDeep ) override;
+                                                           bool                                         bAllowDeep ) override;
 
 };
 

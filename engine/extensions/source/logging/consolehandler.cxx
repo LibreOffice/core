@@ -78,11 +78,11 @@ namespace logging
         virtual ::sal_Int32 SAL_CALL getLevel() override;
         virtual void SAL_CALL setLevel( ::sal_Int32 _level ) override;
         virtual void SAL_CALL flush(  ) override;
-        virtual sal_Bool SAL_CALL publish( const LogRecord& Record ) override;
+        virtual bool SAL_CALL publish( const LogRecord& Record ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // OComponentHelper
@@ -220,7 +220,7 @@ namespace logging
     }
 
 
-    sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord )
+    bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord )
     {
         MethodGuard aGuard( *this );
 
@@ -241,7 +241,7 @@ namespace logging
         return u"com.sun.star.comp.extensions.ConsoleHandler"_ustr;
     }
 
-    sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }

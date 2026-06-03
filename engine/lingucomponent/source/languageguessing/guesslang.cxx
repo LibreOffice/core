@@ -79,7 +79,7 @@ public:
 
     // XServiceInfo implementation
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XLanguageGuessing implementation
@@ -299,7 +299,7 @@ OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
     return u"com.sun.star.lingu2.LanguageGuessing"_ustr;
 }
 
-sal_Bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )
+bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

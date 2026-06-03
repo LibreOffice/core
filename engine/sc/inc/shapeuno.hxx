@@ -127,7 +127,7 @@ public:
                             // XText
     virtual void SAL_CALL   insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange,
                                 const css::uno::Reference< css::text::XTextContent >& xContent,
-                                sal_Bool bAbsorb ) override;
+                                bool bAbsorb ) override;
     virtual void SAL_CALL   removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) override;
 
                             // XSimpleText
@@ -136,9 +136,9 @@ public:
     virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL
                             createTextCursorByRange( const css::uno::Reference< css::text::XTextRange >& aTextPosition ) override;
     virtual void SAL_CALL   insertString( const css::uno::Reference< css::text::XTextRange >& xRange,
-                                        const OUString& aString, sal_Bool bAbsorb ) override;
+                                        const OUString& aString, bool bAbsorb ) override;
     virtual void SAL_CALL   insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange,
-                                        sal_Int16 nControlCharacter, sal_Bool bAbsorb ) override;
+                                        sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
                             // XTextRange
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -163,7 +163,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override ;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 

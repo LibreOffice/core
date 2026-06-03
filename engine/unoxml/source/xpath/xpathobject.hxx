@@ -62,7 +62,7 @@ namespace XPath
      /**
         get value of a boolean object
      */
-     virtual sal_Bool SAL_CALL getBoolean() override;
+     virtual bool SAL_CALL getBoolean() override;
 
     /**
         get number as byte

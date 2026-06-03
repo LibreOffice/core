@@ -84,13 +84,13 @@ public:
 
 
     // Methods XLibraryContainerPassword
-    virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name ) override;
-    virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name ) override;
-    virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
+    virtual bool SAL_CALL isLibraryPasswordProtected( const OUString& Name ) override;
+    virtual bool SAL_CALL isLibraryPasswordVerified( const OUString& Name ) override;
+    virtual bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
     virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword ) override;
     // XLibraryQueryExecutable
-    virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&) override;
+    virtual bool SAL_CALL HasExecutableCode(const OUString&) override;
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
@@ -139,7 +139,7 @@ public:
 
     // XVBAModuleInfo
     virtual css::script::ModuleInfo SAL_CALL getModuleInfo( const OUString& ModuleName ) override;
-    virtual sal_Bool SAL_CALL hasModuleInfo( const OUString& ModuleName ) override;
+    virtual bool SAL_CALL hasModuleInfo( const OUString& ModuleName ) override;
     virtual void SAL_CALL insertModuleInfo( const OUString& ModuleName, const css::script::ModuleInfo& ModuleInfo ) override;
     virtual void SAL_CALL removeModuleInfo( const OUString& ModuleName ) override;
 

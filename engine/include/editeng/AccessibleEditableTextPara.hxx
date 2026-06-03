@@ -98,7 +98,7 @@ public:
 
     // XAccessibleText (this comes implicitly inherited by XAccessibleEditableText AND by XAccessibleMultiLineText)
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
-    virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
+    virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
@@ -107,7 +107,7 @@ public:
     virtual OUString SAL_CALL getSelectedText() override;
     virtual sal_Int32 SAL_CALL getSelectionStart() override;
     virtual sal_Int32 SAL_CALL getSelectionEnd() override;
-    virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual OUString SAL_CALL getText() override;
     virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
@@ -116,17 +116,17 @@ public:
     virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
     virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-    virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
+    virtual bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
 
     // XAccessibleEditableText
-    virtual sal_Bool SAL_CALL cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual sal_Bool SAL_CALL pasteText( sal_Int32 nIndex ) override;
-    virtual sal_Bool SAL_CALL deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual sal_Bool SAL_CALL insertText( const OUString& sText, sal_Int32 nIndex ) override;
-    virtual sal_Bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) override;
-    virtual sal_Bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::uno::Sequence< css::beans::PropertyValue >& aAttributeSet ) override;
-    virtual sal_Bool SAL_CALL setText( const OUString& sText ) override;
+    virtual bool SAL_CALL cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual bool SAL_CALL pasteText( sal_Int32 nIndex ) override;
+    virtual bool SAL_CALL deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual bool SAL_CALL insertText( const OUString& sText, sal_Int32 nIndex ) override;
+    virtual bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) override;
+    virtual bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::uno::Sequence< css::beans::PropertyValue >& aAttributeSet ) override;
+    virtual bool SAL_CALL setText( const OUString& sText ) override;
 
     // XAccessibleTextAttributes
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& RequestedAttributes ) override;
@@ -229,7 +229,7 @@ public:
      */
     SvxViewForwarder&   GetViewForwarder() const;
 
-    /** Query whether a GetEditViewForwarder( sal_False ) will return a forwarder
+    /** Query whether a GetEditViewForwarder( false ) will return a forwarder
 
         @attention This method does not lock the SolarMutex,
         leaving that to the calling code. This is because only
@@ -288,7 +288,7 @@ private:
 
     /** Get the current selection of this paragraph
 
-        @return sal_False, if nothing in this paragraph is selected
+        @return false, if nothing in this paragraph is selected
      */
     bool GetSelection(sal_Int32& nStartPos, sal_Int32& nEndPos );
 

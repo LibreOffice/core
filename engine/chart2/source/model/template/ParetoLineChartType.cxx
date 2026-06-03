@@ -56,7 +56,7 @@ OUString SAL_CALL ParetoLineChartType::getImplementationName()
     return u"com.sun.star.comp.chart.ParetoLineChartType"_ustr;
 }
 
-sal_Bool SAL_CALL ParetoLineChartType::supportsService(const OUString& rServiceName)
+bool SAL_CALL ParetoLineChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

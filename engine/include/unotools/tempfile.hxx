@@ -154,7 +154,7 @@ public:
                     ~TempFileNamed();
 
                     /**
-                    Returns sal_True if it has a valid file name.
+                    Returns true if it has a valid file name.
                     */
     bool            IsValid() const;
 

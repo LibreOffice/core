@@ -51,7 +51,7 @@ public:
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
@@ -84,8 +84,8 @@ public:
         setFieldType( const css::chart2::DataPointCustomLabelFieldType FieldType ) override;
     virtual OUString SAL_CALL getGuid() override;
     void SAL_CALL setGuid( const OUString& guid ) override;
-    virtual sal_Bool SAL_CALL getDataLabelsRange() override;
-    virtual void SAL_CALL setDataLabelsRange( sal_Bool dataLabelsRange ) override;
+    virtual bool SAL_CALL getDataLabelsRange() override;
+    virtual void SAL_CALL setDataLabelsRange( bool dataLabelsRange ) override;
     virtual OUString SAL_CALL getCellRange() override;
     virtual void SAL_CALL setCellRange( const OUString& cellRange ) override;
 

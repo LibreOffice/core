@@ -38,22 +38,22 @@ ScVbaAssistant::~ScVbaAssistant()
 {
 }
 
-sal_Bool SAL_CALL ScVbaAssistant::getVisible()
+bool SAL_CALL ScVbaAssistant::getVisible()
 {
     return m_bIsVisible;
 }
 
-void SAL_CALL ScVbaAssistant::setVisible( sal_Bool bVisible )
+void SAL_CALL ScVbaAssistant::setVisible( bool bVisible )
 {
     m_bIsVisible = bVisible;
 }
 
-sal_Bool SAL_CALL ScVbaAssistant::getOn()
+bool SAL_CALL ScVbaAssistant::getOn()
 {
     return false;
 }
 
-void SAL_CALL ScVbaAssistant::setOn( sal_Bool bOn )
+void SAL_CALL ScVbaAssistant::setOn( bool bOn )
 {
     setVisible( bOn );
 }

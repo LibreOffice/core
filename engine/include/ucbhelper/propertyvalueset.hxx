@@ -84,11 +84,11 @@ public:
     virtual ~PropertyValueSet() override;
 
     // XRow
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     wasNull() override;
     virtual OUString SAL_CALL
     getString( sal_Int32 columnIndex ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     getBoolean( sal_Int32 columnIndex ) override;
     virtual sal_Int8 SAL_CALL
     getByte( sal_Int32 columnIndex ) override;

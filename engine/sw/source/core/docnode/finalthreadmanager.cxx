@@ -274,7 +274,7 @@ OUString SAL_CALL FinalThreadManager::getImplementationName()
     return u"com.sun.star.util.comp.FinalThreadManager"_ustr;
 }
 
-sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName)
+bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

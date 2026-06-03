@@ -89,7 +89,7 @@ OUString StringResourceImpl::getImplementationName(  )
     return u"com.sun.star.comp.scripting.StringResource"_ustr;
 }
 
-sal_Bool StringResourceImpl::supportsService( const OUString& rServiceName )
+bool StringResourceImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -169,13 +169,13 @@ bool StringResourceImpl::implHasEntryForId(std::unique_lock<std::mutex>& rGuard,
     return bSuccess;
 }
 
-sal_Bool StringResourceImpl::hasEntryForId( const OUString& ResourceID )
+bool StringResourceImpl::hasEntryForId( const OUString& ResourceID )
 {
     std::unique_lock aGuard( m_aMutex );
     return implHasEntryForId(aGuard, ResourceID, m_pCurrentLocaleItem);
 }
 
-sal_Bool StringResourceImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
+bool StringResourceImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -265,7 +265,7 @@ void StringResourceImpl::implCheckReadOnly( const char* pExceptionMsg )
     }
 }
 
-sal_Bool StringResourceImpl::isReadOnly()
+bool StringResourceImpl::isReadOnly()
 {
     return m_bReadOnly;
 }
@@ -292,7 +292,7 @@ void StringResourceImpl::implSetCurrentLocale( std::unique_lock<std::mutex>& rGu
     }
 }
 
-void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
+void StringResourceImpl::setCurrentLocale( const Locale& locale, bool FindClosestMatch )
 {
     std::unique_lock aGuard( m_aMutex );
     implSetCurrentLocale( aGuard, locale, FindClosestMatch, false/*bUseDefaultIfNoMatch*/ );
@@ -647,7 +647,7 @@ OUString StringResourcePersistenceImpl::getImplementationName(  )
 }
 
 
-sal_Bool StringResourcePersistenceImpl::supportsService( const OUString& rServiceName )
+bool StringResourcePersistenceImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
@@ -721,11 +721,11 @@ OUString StringResourcePersistenceImpl::resolveStringForLocale( const OUString& 
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
-sal_Bool StringResourcePersistenceImpl::hasEntryForId( const OUString& ResourceID )
+bool StringResourcePersistenceImpl::hasEntryForId( const OUString& ResourceID )
 {
     return StringResourceImpl::hasEntryForId( ResourceID ) ;
 }
-sal_Bool StringResourcePersistenceImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
+bool StringResourcePersistenceImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
 {
     return StringResourceImpl::hasEntryForIdAndLocale( ResourceID, locale );
@@ -744,11 +744,11 @@ Sequence< Locale > StringResourcePersistenceImpl::getLocales(  )
 }
 
 // XStringResourceManager
-sal_Bool StringResourcePersistenceImpl::isReadOnly()
+bool StringResourcePersistenceImpl::isReadOnly()
 {
     return StringResourceImpl::isReadOnly();
 }
-void StringResourcePersistenceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
+void StringResourcePersistenceImpl::setCurrentLocale( const Locale& locale, bool FindClosestMatch )
 {
     StringResourceImpl::setCurrentLocale( locale, FindClosestMatch );
 }
@@ -802,7 +802,7 @@ void StringResourcePersistenceImpl::store()
 {
 }
 
-sal_Bool StringResourcePersistenceImpl::isModified(  )
+bool StringResourcePersistenceImpl::isModified(  )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -2014,7 +2014,7 @@ OUString StringResourceWithStorageImpl::getImplementationName(  )
     return u"com.sun.star.comp.scripting.StringResourceWithStorage"_ustr;
 }
 
-sal_Bool StringResourceWithStorageImpl::supportsService( const OUString& rServiceName )
+bool StringResourceWithStorageImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2072,11 +2072,11 @@ OUString StringResourceWithStorageImpl::resolveStringForLocale( const OUString& 
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
-sal_Bool StringResourceWithStorageImpl::hasEntryForId( const OUString& ResourceID )
+bool StringResourceWithStorageImpl::hasEntryForId( const OUString& ResourceID )
 {
     return StringResourceImpl::hasEntryForId( ResourceID ) ;
 }
-sal_Bool StringResourceWithStorageImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
+bool StringResourceWithStorageImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
 {
     return StringResourceImpl::hasEntryForIdAndLocale( ResourceID, locale );
@@ -2104,11 +2104,11 @@ Sequence< Locale > StringResourceWithStorageImpl::getLocales(  )
 }
 
 // XStringResourceManager
-sal_Bool StringResourceWithStorageImpl::isReadOnly()
+bool StringResourceWithStorageImpl::isReadOnly()
 {
     return StringResourceImpl::isReadOnly();
 }
-void StringResourceWithStorageImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
+void StringResourceWithStorageImpl::setCurrentLocale( const Locale& locale, bool FindClosestMatch )
 {
     StringResourceImpl::setCurrentLocale( locale, FindClosestMatch );
 }
@@ -2161,7 +2161,7 @@ void StringResourceWithStorageImpl::store()
     m_bModified = false;
 }
 
-sal_Bool StringResourceWithStorageImpl::isModified(  )
+bool StringResourceWithStorageImpl::isModified(  )
 {
     return StringResourcePersistenceImpl::isModified();
 }
@@ -2289,7 +2289,7 @@ OUString StringResourceWithLocationImpl::getImplementationName(  )
     return u"com.sun.star.comp.scripting.StringResourceWithLocation"_ustr;
 }
 
-sal_Bool StringResourceWithLocationImpl::supportsService( const OUString& rServiceName )
+bool StringResourceWithLocationImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2362,11 +2362,11 @@ OUString StringResourceWithLocationImpl::resolveStringForLocale( const OUString&
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
-sal_Bool StringResourceWithLocationImpl::hasEntryForId( const OUString& ResourceID )
+bool StringResourceWithLocationImpl::hasEntryForId( const OUString& ResourceID )
 {
     return StringResourceImpl::hasEntryForId( ResourceID ) ;
 }
-sal_Bool StringResourceWithLocationImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
+bool StringResourceWithLocationImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
 {
     return StringResourceImpl::hasEntryForIdAndLocale( ResourceID, locale );
@@ -2394,11 +2394,11 @@ Sequence< Locale > StringResourceWithLocationImpl::getLocales(  )
 }
 
 // XStringResourceManager
-sal_Bool StringResourceWithLocationImpl::isReadOnly()
+bool StringResourceWithLocationImpl::isReadOnly()
 {
     return StringResourceImpl::isReadOnly();
 }
-void StringResourceWithLocationImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
+void StringResourceWithLocationImpl::setCurrentLocale( const Locale& locale, bool FindClosestMatch )
 {
     StringResourceImpl::setCurrentLocale( locale, FindClosestMatch );
 }
@@ -2453,7 +2453,7 @@ void StringResourceWithLocationImpl::store()
     m_bModified = false;
 }
 
-sal_Bool StringResourceWithLocationImpl::isModified(  )
+bool StringResourceWithLocationImpl::isModified(  )
 {
     return StringResourcePersistenceImpl::isModified();
 }

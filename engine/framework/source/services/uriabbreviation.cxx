@@ -35,7 +35,7 @@ OUString SAL_CALL UriAbbreviation::getImplementationName()
     return u"com.sun.star.comp.framework.UriAbbreviation"_ustr;
 }
 
-sal_Bool SAL_CALL UriAbbreviation::supportsService( const OUString& sServiceName )
+bool SAL_CALL UriAbbreviation::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

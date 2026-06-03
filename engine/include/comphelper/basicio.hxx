@@ -32,9 +32,6 @@ namespace comphelper
 // bool
 COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, bool& _rVal);
 COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, bool _bVal);
-void operator <<(
-    css::uno::Reference<css::io::XObjectOutputStream> const &, sal_Bool)
-    = delete;
 
 // OUString
 COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, OUString& _rStr);

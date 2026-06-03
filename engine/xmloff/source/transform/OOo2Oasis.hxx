@@ -56,14 +56,14 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel(  ) override;
 
     /// @throws css::uno::Exception

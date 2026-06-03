@@ -62,7 +62,7 @@ public:
                         const Reference < XInterface >& TestObject,
                         sal_Int32 hTestHandle)
         throw ( IllegalArgumentException, RuntimeException);
-    virtual sal_Bool SAL_CALL testPassed()
+    virtual bool SAL_CALL testPassed()
         throw ( RuntimeException);
     virtual Sequence< OUString > SAL_CALL getErrors()
         throw (RuntimeException);
@@ -168,7 +168,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
 }
 
 
-sal_Bool OMarkableOutputStreamTest::testPassed()                        throw (RuntimeException)
+bool OMarkableOutputStreamTest::testPassed()                        throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
@@ -408,7 +408,7 @@ public:
         throw ( IllegalArgumentException,
                 RuntimeException) ;
 
-    virtual sal_Bool SAL_CALL testPassed()
+    virtual bool SAL_CALL testPassed()
         throw ( RuntimeException);
     virtual Sequence< OUString > SAL_CALL getErrors()
         throw (RuntimeException);
@@ -521,7 +521,7 @@ sal_Int32 OMarkableInputStreamTest::test(
 }
 
 
-sal_Bool OMarkableInputStreamTest::testPassed()                                         throw (RuntimeException)
+bool OMarkableInputStreamTest::testPassed()                                         throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }

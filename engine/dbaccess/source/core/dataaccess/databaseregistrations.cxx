@@ -69,13 +69,13 @@ namespace dbaccess
         virtual ~DatabaseRegistrations() override;
 
     public:
-        virtual sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) override;
+        virtual bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) override;
         virtual Sequence< OUString > SAL_CALL getRegistrationNames() override;
         virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) override;
         virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) override;
         virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) override;
         virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) override;
-        virtual sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) override;
+        virtual bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) override;
         virtual void SAL_CALL addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) override;
         virtual void SAL_CALL removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) override;
 
@@ -218,7 +218,7 @@ namespace dbaccess
             throw IllegalArgumentException( OUString(), *this, 2 );
     }
 
-    sal_Bool SAL_CALL DatabaseRegistrations::hasRegisteredDatabase( const OUString& Name )
+    bool SAL_CALL DatabaseRegistrations::hasRegisteredDatabase( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         ::utl::OConfigurationNode aNodeForName = impl_getNodeForName_nothrow( Name );
@@ -326,7 +326,7 @@ namespace dbaccess
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::changedDatabaseLocation, aEvent );
     }
 
-    sal_Bool SAL_CALL DatabaseRegistrations::isDatabaseRegistrationReadOnly( const OUString& Name )
+    bool SAL_CALL DatabaseRegistrations::isDatabaseRegistrationReadOnly( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(Name);

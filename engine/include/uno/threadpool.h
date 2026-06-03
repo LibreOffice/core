@@ -44,7 +44,7 @@ extern "C" {
 
   @see uno_releaseIdFromCurrentThread()
  */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
+CPPU_DLLPUBLIC bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
     SAL_THROW_EXTERN_C();
 
 
@@ -144,7 +144,7 @@ uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
   @param doRequest The function, that shall be called to execute the request.
                    0 if pJob is a reply.
   @param bIsOneway True, if the request is asynchronous. False, if it is synchronous.
-                   Set to sal_False, if pJob is a reply.
+                   Set to false, if pJob is a reply.
  */
 CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_putJob(
@@ -152,7 +152,7 @@ uno_threadpool_putJob(
     sal_Sequence *pThreadId,
     void *pJob,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
-    sal_Bool bIsOneway ) SAL_THROW_EXTERN_C();
+    bool bIsOneway ) SAL_THROW_EXTERN_C();
 
 /**
   All threads, that are waiting on the hPool handle, are forced out of the pool.

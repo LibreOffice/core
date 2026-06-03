@@ -76,12 +76,9 @@ public:
         throw css::uno::RuntimeException(u"not implemented"_ustr);
     }
 
-    void SAL_CALL setVisible(sal_Bool bVisible) override { m_pWeldWidget->set_visible(bVisible); }
+    void SAL_CALL setVisible(bool bVisible) override { m_pWeldWidget->set_visible(bVisible); }
 
-    void SAL_CALL setEnable(sal_Bool bSensitive) override
-    {
-        m_pWeldWidget->set_sensitive(bSensitive);
-    }
+    void SAL_CALL setEnable(bool bSensitive) override { m_pWeldWidget->set_sensitive(bSensitive); }
 
     void SAL_CALL setFocus() override { m_pWeldWidget->grab_focus(); }
 

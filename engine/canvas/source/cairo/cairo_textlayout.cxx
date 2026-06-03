@@ -131,14 +131,14 @@ namespace cairocanvas
         maLogicalAdvancements = aAdvancements;
     }
 
-    uno::Sequence< sal_Bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    uno::Sequence< bool > SAL_CALL TextLayout::queryKashidaPositions(  )
     {
         std::unique_lock aGuard( m_aMutex );
 
         return maKashidaPositions;
     }
 
-    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< sal_Bool >& aPositions )
+    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< bool >& aPositions )
     {
         std::unique_lock aGuard( m_aMutex );
 
@@ -208,7 +208,7 @@ namespace cairocanvas
     }
 
     rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/,
-                                                    sal_Bool /*bExcludeLigatures*/ )
+                                                    bool /*bExcludeLigatures*/ )
     {
         // TODO
         return rendering::Caret();
@@ -216,7 +216,7 @@ namespace cairocanvas
 
     sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/,
                                                           sal_Int32 /*nCaretAdvancement*/,
-                                                          sal_Bool /*bExcludeLigatures*/ )
+                                                          bool /*bExcludeLigatures*/ )
     {
         // TODO
         return 0;
@@ -279,8 +279,7 @@ namespace cairocanvas
         if (maLogicalAdvancements.hasElements())
         {
             KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
-            static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
-            std::span<const bool> aKashidaArray(reinterpret_cast<const bool *>(maKashidaPositions.getConstArray()), maKashidaPositions.getLength());
+            std::span<const bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
 
             rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets, aKashidaArray,
                                    ::canvastools::numeric_cast<sal_uInt16>(maText.StartPosition),
@@ -350,7 +349,7 @@ namespace cairocanvas
         return u"CairoCanvas::TextLayout"_ustr;
     }
 
-    sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
+    bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

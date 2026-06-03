@@ -201,7 +201,7 @@ OUString AccessibleTabBarPage::getImplementationName()
 }
 
 
-sal_Bool AccessibleTabBarPage::supportsService( const OUString& rServiceName )
+bool AccessibleTabBarPage::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

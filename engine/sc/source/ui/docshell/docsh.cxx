@@ -1245,7 +1245,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     LoadMediumGuard aLoadGuard(m_pDocument.get());
 
-    bool bRet = false; // sal_False means user quit!
+    bool bRet = false; // false means user quit!
                            // On error: Set error at stream
 
     ScRefreshTimerProtector aProt( m_pDocument->GetRefreshTimerControlAddress() );
@@ -3121,7 +3121,7 @@ bool ScDocShell::PrepareClose( bool bUI )
 
 bool ScDocShell::HasAutomaticTableName( std::u16string_view rFilter )
 {
-    //  sal_True for those filters that keep the default table name
+    //  true for those filters that keep the default table name
     //  (which is language specific)
 
     return rFilter == SC_TEXT_CSV_FILTER_NAME
@@ -3273,7 +3273,7 @@ void ScDocShell::SetDocumentModified()
         if ( pList && ( m_pDocument->IsDetectiveDirty() || pList->HasAddError() ) &&
              pList->Count() && !IsInUndo() && ScModule::get()->GetAppOptions().GetDetectiveAuto() )
         {
-            GetDocFunc().DetectiveRefresh(true);    // sal_True = caused by automatic update
+            GetDocFunc().DetectiveRefresh(true);    // true = caused by automatic update
         }
         m_pDocument->SetDetectiveDirty(false);         // always reset, also if not refreshed
     }

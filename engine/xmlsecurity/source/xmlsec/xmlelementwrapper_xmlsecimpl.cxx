@@ -35,7 +35,7 @@ OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
     return u"com.sun.star.xml.wrapper.XMLElementWrapper"_ustr;
 }
 
-sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
+bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

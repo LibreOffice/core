@@ -206,7 +206,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  )
 }
 
 
-sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql )
+bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql )
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_STATEMENT, sql );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -360,7 +360,7 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  )
 }
 
 
-sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  )
+bool SAL_CALL java_sql_Statement_Base::getMoreResults(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "getMoreResults", mID );
@@ -649,7 +649,7 @@ void java_sql_Statement_Base::setCursorName(const OUString &_par0)
     return *getArrayHelper();
 }
 
-sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
+bool java_sql_Statement_Base::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
                             sal_Int32 nHandle,

@@ -81,7 +81,7 @@ void SAL_CALL QtPlayer::stop()
     }
 }
 
-sal_Bool SAL_CALL QtPlayer::isPlaying()
+bool SAL_CALL QtPlayer::isPlaying()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -117,14 +117,14 @@ double SAL_CALL QtPlayer::getMediaTime()
     return m_xMediaPlayer->position() / 1000.0;
 }
 
-void SAL_CALL QtPlayer::setPlaybackLoop(sal_Bool bSet)
+void SAL_CALL QtPlayer::setPlaybackLoop(bool bSet)
 {
     assert(m_xMediaPlayer);
     const int nLoops = bSet ? QMediaPlayer::Infinite : QMediaPlayer::Once;
     m_xMediaPlayer->setLoops(nLoops);
 }
 
-sal_Bool SAL_CALL QtPlayer::isPlaybackLoop()
+bool SAL_CALL QtPlayer::isPlaybackLoop()
 {
     assert(m_xMediaPlayer);
     return m_xMediaPlayer->loops() == QMediaPlayer::Infinite;
@@ -155,7 +155,7 @@ sal_Int16 SAL_CALL QtPlayer::getVolumeDB()
     return (fVolume * 40) - 40;
 }
 
-void SAL_CALL QtPlayer::setMute(sal_Bool bSet)
+void SAL_CALL QtPlayer::setMute(bool bSet)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -165,7 +165,7 @@ void SAL_CALL QtPlayer::setMute(sal_Bool bSet)
     pAudioOutput->setMuted(bSet);
 }
 
-sal_Bool SAL_CALL QtPlayer::isMute()
+bool SAL_CALL QtPlayer::isMute()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -298,7 +298,7 @@ OUString SAL_CALL QtPlayer::getImplementationName()
     return u"com.sun.star.comp.avmedia.Player_Qt"_ustr;
 }
 
-sal_Bool SAL_CALL QtPlayer::supportsService(const OUString& rServiceName)
+bool SAL_CALL QtPlayer::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

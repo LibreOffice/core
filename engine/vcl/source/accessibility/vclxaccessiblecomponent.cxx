@@ -71,7 +71,7 @@ OUString VCLXAccessibleComponent::getImplementationName()
     return u"com.sun.star.comp.toolkit.AccessibleWindow"_ustr;
 }
 
-sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName )
+bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

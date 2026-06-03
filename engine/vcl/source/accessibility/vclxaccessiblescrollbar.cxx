@@ -91,7 +91,7 @@ sal_Int32 VCLXAccessibleScrollBar::getAccessibleActionCount( )
 }
 
 
-sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex )
+bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -169,7 +169,7 @@ Any VCLXAccessibleScrollBar::getCurrentValue(  )
 }
 
 
-sal_Bool VCLXAccessibleScrollBar::setCurrentValue( const Any& aNumber )
+bool VCLXAccessibleScrollBar::setCurrentValue( const Any& aNumber )
 {
     OExternalLockGuard aGuard( this );
 

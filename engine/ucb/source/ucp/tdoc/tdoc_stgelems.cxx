@@ -237,7 +237,7 @@ uno::Type SAL_CALL Storage::getElementType()
 
 
 // virtual
-sal_Bool SAL_CALL Storage::hasElements()
+bool SAL_CALL Storage::hasElements()
 {
     return m_xWrappedStorage->hasElements();
 }
@@ -261,7 +261,7 @@ uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
 
 
 // virtual
-sal_Bool SAL_CALL Storage::hasByName( const OUString& aName )
+bool SAL_CALL Storage::hasByName( const OUString& aName )
 {
     return m_xWrappedStorage->hasByName( aName );
 }
@@ -341,7 +341,7 @@ void SAL_CALL Storage::copyStorageElementLastCommitTo(
 
 
 // virtual
-sal_Bool SAL_CALL Storage::isStreamElement(
+bool SAL_CALL Storage::isStreamElement(
         const OUString& aElementName )
 {
     return m_xWrappedStorage->isStreamElement( aElementName );
@@ -349,7 +349,7 @@ sal_Bool SAL_CALL Storage::isStreamElement(
 
 
 // virtual
-sal_Bool SAL_CALL Storage::isStorageElement(
+bool SAL_CALL Storage::isStorageElement(
         const OUString& aElementName )
 {
     return m_xWrappedStorage->isStorageElement( aElementName );

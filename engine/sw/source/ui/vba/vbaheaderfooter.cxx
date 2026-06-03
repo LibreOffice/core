@@ -44,18 +44,18 @@ SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInt
 {
 }
 
-sal_Bool SAL_CALL SwVbaHeaderFooter::getIsHeader()
+bool SAL_CALL SwVbaHeaderFooter::getIsHeader()
 {
     return mbHeader;
 }
 
-sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious()
+bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious()
 {
     // seems always false
     return false;
 }
 
-void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( sal_Bool /*_linktoprevious*/ )
+void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( bool /*_linktoprevious*/ )
 {
     // not support in Writer
 }

@@ -54,7 +54,7 @@ public:
                        std::vector<OUString>             _aNames  );
     virtual ~OEnumerationByName() override;
 
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual bool SAL_CALL hasMoreElements(  ) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
@@ -82,7 +82,7 @@ public:
     OEnumerationByIndex(css::uno::Reference< css::container::XIndexAccess > _xAccess);
     virtual ~OEnumerationByIndex() override;
 
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual bool SAL_CALL hasMoreElements(  ) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
@@ -111,7 +111,7 @@ public:
     OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems);
     virtual ~OAnyEnumeration() override;
 
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual bool SAL_CALL hasMoreElements(  ) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
 
 };

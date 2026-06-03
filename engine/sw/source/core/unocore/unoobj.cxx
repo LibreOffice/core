@@ -945,7 +945,7 @@ OUString SwXTextCursor::getImplementationName()
     return u"SwXTextCursor"_ustr;
 }
 
-sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -991,7 +991,7 @@ void SAL_CALL SwXTextCursor::collapseToEnd()
     }
 }
 
-sal_Bool SAL_CALL SwXTextCursor::isCollapsed()
+bool SAL_CALL SwXTextCursor::isCollapsed()
 {
     SolarMutexGuard aGuard;
 
@@ -1004,8 +1004,8 @@ sal_Bool SAL_CALL SwXTextCursor::isCollapsed()
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::goLeft(sal_Int16 nCount, bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1027,8 +1027,8 @@ SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::goRight(sal_Int16 nCount, bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1051,7 +1051,7 @@ SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand)
 }
 
 void SAL_CALL
-SwXTextCursor::gotoStart(sal_Bool Expand)
+SwXTextCursor::gotoStart(bool Expand)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("gotoStart");
@@ -1103,7 +1103,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
 }
 
 void SAL_CALL
-SwXTextCursor::gotoEnd(sal_Bool Expand)
+SwXTextCursor::gotoEnd(bool Expand)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("gotoEnd");
@@ -1136,7 +1136,7 @@ SwXTextCursor::gotoEnd(sal_Bool Expand)
 
 void SAL_CALL
 SwXTextCursor::gotoRange(
-    const uno::Reference< text::XTextRange > & xRange, sal_Bool bExpand)
+    const uno::Reference< text::XTextRange > & xRange, bool bExpand)
 {
     SolarMutexGuard aGuard;
     if (!xRange.is())
@@ -1294,7 +1294,7 @@ SwXTextCursor::gotoRangeImpl(
     }
 }
 
-sal_Bool SAL_CALL SwXTextCursor::isStartOfWord()
+bool SAL_CALL SwXTextCursor::isStartOfWord()
 {
     SolarMutexGuard aGuard;
 
@@ -1305,7 +1305,7 @@ sal_Bool SAL_CALL SwXTextCursor::isStartOfWord()
     return bRet;
 }
 
-sal_Bool SAL_CALL SwXTextCursor::isEndOfWord()
+bool SAL_CALL SwXTextCursor::isEndOfWord()
 {
     SolarMutexGuard aGuard;
 
@@ -1316,8 +1316,8 @@ sal_Bool SAL_CALL SwXTextCursor::isEndOfWord()
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoNextWord(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoNextWord(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1367,8 +1367,8 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoPreviousWord(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1411,8 +1411,8 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoEndOfWord(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1450,8 +1450,8 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoStartOfWord(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1489,7 +1489,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXTextCursor::isStartOfSentence()
 {
     SolarMutexGuard aGuard;
@@ -1512,7 +1512,7 @@ SwXTextCursor::isStartOfSentence()
     return bRet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXTextCursor::isEndOfSentence()
 {
     SolarMutexGuard aGuard;
@@ -1536,8 +1536,8 @@ SwXTextCursor::isEndOfSentence()
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoNextSentence(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoNextSentence(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1576,8 +1576,8 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoPreviousSentence(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoPreviousSentence(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1609,8 +1609,8 @@ SwXTextCursor::gotoPreviousSentence(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoStartOfSentence(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoStartOfSentence(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1637,8 +1637,8 @@ SwXTextCursor::gotoStartOfSentence(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoEndOfSentence(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoEndOfSentence(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1666,7 +1666,7 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXTextCursor::isStartOfParagraph()
 {
     SolarMutexGuard aGuard;
@@ -1677,7 +1677,7 @@ SwXTextCursor::isStartOfParagraph()
     return bRet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXTextCursor::isEndOfParagraph()
 {
     SolarMutexGuard aGuard;
@@ -1688,8 +1688,8 @@ SwXTextCursor::isEndOfParagraph()
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoStartOfParagraph(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoStartOfParagraph(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1713,8 +1713,8 @@ SwXTextCursor::gotoStartOfParagraph(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoEndOfParagraph(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1738,8 +1738,8 @@ SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoNextParagraph(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoNextParagraph(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -1754,8 +1754,8 @@ SwXTextCursor::gotoNextParagraph(sal_Bool Expand)
     return bRet;
 }
 
-sal_Bool SAL_CALL
-SwXTextCursor::gotoPreviousParagraph(sal_Bool Expand)
+bool SAL_CALL
+SwXTextCursor::gotoPreviousParagraph(bool Expand)
 {
     SolarMutexGuard aGuard;
 
@@ -3110,7 +3110,7 @@ SwXTextCursor::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SwXTextCursor::hasElements()
+bool SAL_CALL SwXTextCursor::hasElements()
 {
     return true;
 }

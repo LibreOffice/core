@@ -471,7 +471,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT);
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_BACKGROUND,
                   PROP_DATAPOINT_LABEL_FILL_BACKGROUND,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_HATCH_NAME,

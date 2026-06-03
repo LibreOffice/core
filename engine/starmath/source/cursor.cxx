@@ -731,7 +731,7 @@ bool SmCursor::InsertRow() {
     if(pLineParent->GetType() == SmNodeType::Matrix)
         pMatrix = static_cast<SmMatrixNode*>(pLineParent);
 
-    //If we're not in a context that supports InsertRow, return sal_False
+    //If we're not in a context that supports InsertRow, return false
     if(!pTable && !pMatrix)
         return false;
 

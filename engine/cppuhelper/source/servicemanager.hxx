@@ -223,7 +223,7 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
@@ -252,12 +252,12 @@ private:
 
     virtual css::uno::Type SAL_CALL getElementType() override;
 
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
     createEnumeration() override;
 
-    virtual sal_Bool SAL_CALL has(css::uno::Any const & aElement) override;
+    virtual bool SAL_CALL has(css::uno::Any const & aElement) override;
 
     virtual void SAL_CALL insert(css::uno::Any const & aElement) override;
 
@@ -300,7 +300,7 @@ private:
     virtual css::beans::Property SAL_CALL getPropertyByName(
         OUString const & aName) override;
 
-    virtual sal_Bool SAL_CALL hasPropertyByName(OUString const & Name) override;
+    virtual bool SAL_CALL hasPropertyByName(OUString const & Name) override;
 
     virtual void SAL_CALL disposing(css::lang::EventObject const & Source) override;
 

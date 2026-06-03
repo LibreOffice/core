@@ -63,8 +63,8 @@ public:
     virtual OUString SAL_CALL getNameLocal() override;
     virtual void SAL_CALL setNameLocal( const OUString& _namelocal ) override;
     virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
-    virtual sal_Bool SAL_CALL getAutomaticallyUpdate() override;
-    virtual void SAL_CALL setAutomaticallyUpdate( sal_Bool _automaticallyupdate ) override;
+    virtual bool SAL_CALL getAutomaticallyUpdate() override;
+    virtual void SAL_CALL setAutomaticallyUpdate( bool _automaticallyupdate ) override;
     virtual css::uno::Any SAL_CALL getBaseStyle() override;
     virtual void SAL_CALL setBaseStyle( const css::uno::Any& _basestyle ) override;
     virtual css::uno::Any SAL_CALL getNextParagraphStyle() override;

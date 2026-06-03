@@ -255,7 +255,7 @@ Type SAL_CALL OFrames::getElementType()
 }
 
 //  XElementAccess
-sal_Bool SAL_CALL OFrames::hasElements()
+bool SAL_CALL OFrames::hasElements()
 {
     SolarMutexGuard g;
 
@@ -297,7 +297,7 @@ void OFrames::impl_resetObject()
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
+    we return "false". (else true) This mechanism is used to throw an ASSERT!
 
     ATTENTION
 

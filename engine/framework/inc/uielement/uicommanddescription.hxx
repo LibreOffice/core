@@ -47,7 +47,7 @@ class UICommandDescription : public UICommandDescription_BASE
             return u"com.sun.star.comp.framework.UICommandDescription"_ustr;
         }
 
-        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+        virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
         {
             return cppu::supportsService(this, ServiceName);
         }
@@ -64,11 +64,11 @@ private:
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
 public:
         typedef std::unordered_map< OUString,

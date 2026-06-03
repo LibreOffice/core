@@ -618,7 +618,7 @@ uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType()
     return cppu::UnoType<sheet::XSubTotalField>::get();
 }
 
-sal_Bool SAL_CALL ScSubTotalDescriptorBase::hasElements()
+bool SAL_CALL ScSubTotalDescriptorBase::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -838,37 +838,37 @@ void SAL_CALL ScConsolidationDescriptor::setStartOutputPosition(
     aParam.nTab = aStartOutputPosition.Sheet;
 }
 
-sal_Bool SAL_CALL ScConsolidationDescriptor::getUseColumnHeaders()
+bool SAL_CALL ScConsolidationDescriptor::getUseColumnHeaders()
 {
     SolarMutexGuard aGuard;
     return aParam.bByCol;
 }
 
-void SAL_CALL ScConsolidationDescriptor::setUseColumnHeaders( sal_Bool bUseColumnHeaders )
+void SAL_CALL ScConsolidationDescriptor::setUseColumnHeaders( bool bUseColumnHeaders )
 {
     SolarMutexGuard aGuard;
     aParam.bByCol = bUseColumnHeaders;
 }
 
-sal_Bool SAL_CALL ScConsolidationDescriptor::getUseRowHeaders()
+bool SAL_CALL ScConsolidationDescriptor::getUseRowHeaders()
 {
     SolarMutexGuard aGuard;
     return aParam.bByRow;
 }
 
-void SAL_CALL ScConsolidationDescriptor::setUseRowHeaders( sal_Bool bUseRowHeaders )
+void SAL_CALL ScConsolidationDescriptor::setUseRowHeaders( bool bUseRowHeaders )
 {
     SolarMutexGuard aGuard;
     aParam.bByRow = bUseRowHeaders;
 }
 
-sal_Bool SAL_CALL ScConsolidationDescriptor::getInsertLinks()
+bool SAL_CALL ScConsolidationDescriptor::getInsertLinks()
 {
     SolarMutexGuard aGuard;
     return aParam.bReferenceData;
 }
 
-void SAL_CALL ScConsolidationDescriptor::setInsertLinks( sal_Bool bInsertLinks )
+void SAL_CALL ScConsolidationDescriptor::setInsertLinks( bool bInsertLinks )
 {
     SolarMutexGuard aGuard;
     aParam.bReferenceData = bInsertLinks;
@@ -2151,7 +2151,7 @@ OUString SAL_CALL ScDatabaseRangeObj::getImplementationName()
     return u"ScDatabaseRangeObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2288,7 +2288,7 @@ uno::Type SAL_CALL ScDatabaseRangesObj::getElementType()
     return cppu::UnoType<sheet::XDatabaseRange>::get();
 }
 
-sal_Bool SAL_CALL ScDatabaseRangesObj::hasElements()
+bool SAL_CALL ScDatabaseRangesObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -2333,7 +2333,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
     return {};
 }
 
-sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
+bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -2408,7 +2408,7 @@ uno::Any ScUnnamedDatabaseRangesObj::getByTable( sal_Int32 nTab )
     return uno::Any(xRange);
 }
 
-sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
+bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
 {
     SolarMutexGuard aGuard;
     if (pDocShell)

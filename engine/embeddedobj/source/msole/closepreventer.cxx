@@ -22,7 +22,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <osl/diagnose.h>
 
-void SAL_CALL OClosePreventer::queryClosing(const css::lang::EventObject&, sal_Bool)
+void SAL_CALL OClosePreventer::queryClosing(const css::lang::EventObject&, bool)
 {
     throw css::util::CloseVetoException();
 }

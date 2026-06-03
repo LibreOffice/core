@@ -260,14 +260,14 @@ void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
         DataType::VARCHAR);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSearchable();
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isAutoIncrement();
@@ -297,7 +297,7 @@ OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCaseSensitive();

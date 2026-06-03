@@ -62,14 +62,14 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroyCondition(oslCondition Condition);
     @param Condition handle to a created condition.
     @retval False if system-call failed.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setCondition(oslCondition Condition);
+SAL_DLLPUBLIC bool SAL_CALL osl_setCondition(oslCondition Condition);
 
 /** Sets condition to False => wait() will block, check() returns False
 
     @param Condition handle to a created condition.
     @retval False if system-call failed.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
+SAL_DLLPUBLIC bool SAL_CALL osl_resetCondition(oslCondition Condition);
 
 /** Blocks if condition is not set.
 
@@ -86,7 +86,7 @@ SAL_DLLPUBLIC oslConditionResult SAL_CALL osl_waitCondition(oslCondition Conditi
     @retval True condition is set
     @retval False condition is not set
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition);
+SAL_DLLPUBLIC bool SAL_CALL osl_checkCondition(oslCondition Condition);
 
 #ifdef __cplusplus
 }

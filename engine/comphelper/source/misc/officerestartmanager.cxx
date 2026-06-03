@@ -74,7 +74,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 }
 
 
-sal_Bool SAL_CALL OOfficeRestartManager::isRestartRequested( sal_Bool bOfficeInitialized )
+bool SAL_CALL OOfficeRestartManager::isRestartRequested( bool bOfficeInitialized )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -133,7 +133,7 @@ OUString SAL_CALL OOfficeRestartManager::getImplementationName()
     return u"com.sun.star.comp.task.OfficeRestartManager"_ustr;
 }
 
-sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName )
+bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }

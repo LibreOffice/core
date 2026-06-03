@@ -321,7 +321,7 @@ OUString SAL_CALL MSOLEDialogObjectCreator::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& ServiceName )
+bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

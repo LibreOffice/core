@@ -89,8 +89,8 @@ public:
     virtual css::linguistic2::DictionaryType SAL_CALL
         getDictionaryType() override;
     virtual void SAL_CALL
-        setActive( sal_Bool bActivate ) override;
-    virtual sal_Bool SAL_CALL
+        setActive( bool bActivate ) override;
+    virtual bool SAL_CALL
         isActive() override;
     virtual sal_Int32 SAL_CALL
         getCount() override;
@@ -101,31 +101,31 @@ public:
     virtual css::uno::Reference<
             css::linguistic2::XDictionaryEntry > SAL_CALL
         getEntry( const OUString& aWord ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         addEntry( const css::uno::Reference<
                 css::linguistic2::XDictionaryEntry >& xDicEntry ) override;
-    virtual sal_Bool SAL_CALL
-        add( const OUString& aWord, sal_Bool bIsNegative,
+    virtual bool SAL_CALL
+        add( const OUString& aWord, bool bIsNegative,
                 const OUString& aRplcText ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         remove( const OUString& aWord ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isFull() override;
     virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > > SAL_CALL
         getEntries() override;
     virtual void SAL_CALL
         clear() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         addDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         removeDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
 
     // XStorable
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasLocation() override;
     virtual OUString SAL_CALL
         getLocation() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isReadonly() override;
     virtual void SAL_CALL
         store() override;
@@ -161,7 +161,7 @@ public:
     // XDictionaryEntry
     virtual OUString SAL_CALL
         getDictionaryWord() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isNegative() override;
     virtual OUString SAL_CALL
         getReplacementText() override;

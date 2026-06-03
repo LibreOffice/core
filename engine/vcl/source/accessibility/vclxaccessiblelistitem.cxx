@@ -156,7 +156,7 @@ OUString VCLXAccessibleListItem::getImplementationName()
     return u"com.sun.star.comp.toolkit.AccessibleListItem"_ustr;
 }
 
-sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )
+bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -274,7 +274,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getCaretPosition()
     return -1;
 }
 
-sal_Bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
+bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -362,7 +362,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionEnd()
     return 0;
 }
 
-sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -412,7 +412,7 @@ css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBehindIn
     return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
 }
 
-sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -442,7 +442,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
     return bRet;
 }
 
-sal_Bool VCLXAccessibleListItem::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool VCLXAccessibleListItem::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }

@@ -839,7 +839,7 @@ void ChildrenManagerImpl::UpdateSelection()
     // Remember the current and new focused shape.
     AccessibleShape* pCurrentlyFocusedShape = nullptr;
     AccessibleShape* pNewFocusedShape = nullptr;
-    typedef std::pair< AccessibleShape* , sal_Bool > PAIR_SHAPE;//sal_Bool Selected,UnSelected.
+    typedef std::pair< AccessibleShape* , bool > PAIR_SHAPE;//bool Selected,UnSelected.
     typedef std::vector< PAIR_SHAPE > VEC_SHAPE;
     VEC_SHAPE vecSelect;
     int nAddSelect=0;

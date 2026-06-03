@@ -67,15 +67,15 @@ public:
     // XNumberFormatPreviewer
     virtual OUString SAL_CALL convertNumberToPreviewString(
                             const OUString& aFormat, double fValue,
-                            const css::lang::Locale& nLocale, sal_Bool bAllowEnglish ) override;
+                            const css::lang::Locale& nLocale, bool bAllowEnglish ) override;
     virtual sal_Int32 SAL_CALL queryPreviewColorForNumber(
                             const OUString& aFormat, double fValue,
-                            const css::lang::Locale& nLocale, sal_Bool bAllowEnglish,
+                            const css::lang::Locale& nLocale, bool bAllowEnglish,
                             sal_Int32 aDefaultColor ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -98,9 +98,9 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
                             getByKey( sal_Int32 nKey ) override;
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL queryKeys( sal_Int16 nType,
-                            const css::lang::Locale& nLocale, sal_Bool bCreate ) override;
+                            const css::lang::Locale& nLocale, bool bCreate ) override;
     virtual sal_Int32 SAL_CALL queryKey( const OUString& aFormat,
-                            const css::lang::Locale& nLocale, sal_Bool bScan ) override;
+                            const css::lang::Locale& nLocale, bool bScan ) override;
     virtual sal_Int32 SAL_CALL addNew( const OUString& aFormat,
                             const css::lang::Locale& nLocale ) override;
     virtual sal_Int32 SAL_CALL addNewConverted( const OUString& aFormat,
@@ -108,8 +108,8 @@ public:
                             const css::lang::Locale& nNewLocale ) override;
     virtual void SAL_CALL removeByKey( sal_Int32 nKey ) override;
     virtual OUString SAL_CALL generateFormat( sal_Int32 nBaseKey,
-                            const css::lang::Locale& nLocale, sal_Bool bThousands,
-                            sal_Bool bRed, sal_Int16 nDecimals, sal_Int16 nLeading ) override;
+                            const css::lang::Locale& nLocale, bool bThousands,
+                            bool bRed, sal_Int16 nDecimals, sal_Int16 nLeading ) override;
 
     // XNumberFormatTypes
     virtual sal_Int32 SAL_CALL getStandardIndex( const css::lang::Locale& nLocale ) override;
@@ -117,13 +117,13 @@ public:
                             const css::lang::Locale& nLocale ) override;
     virtual sal_Int32 SAL_CALL getFormatIndex( sal_Int16 nIndex,
                             const css::lang::Locale& nLocale ) override;
-    virtual sal_Bool SAL_CALL isTypeCompatible( sal_Int16 nOldType, sal_Int16 nNewType ) override;
+    virtual bool SAL_CALL isTypeCompatible( sal_Int16 nOldType, sal_Int16 nNewType ) override;
     virtual sal_Int32 SAL_CALL getFormatForLocale( sal_Int32 nKey,
                             const css::lang::Locale& nLocale ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -171,7 +171,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -212,7 +212,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

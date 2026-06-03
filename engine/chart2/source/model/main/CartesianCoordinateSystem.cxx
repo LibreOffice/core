@@ -75,7 +75,7 @@ OUString SAL_CALL CartesianCoordinateSystem::getImplementationName()
     return u"com.sun.star.comp.chart.CartesianCoordinateSystem"_ustr;
 }
 
-sal_Bool SAL_CALL CartesianCoordinateSystem::supportsService( const OUString& rServiceName )
+bool SAL_CALL CartesianCoordinateSystem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -100,7 +100,7 @@ OUString SAL_CALL CartesianCoordinateSystem2d::getImplementationName()
     return u"com.sun.star.comp.chart2.CartesianCoordinateSystem2d"_ustr;
 }
 
-sal_Bool SAL_CALL CartesianCoordinateSystem2d::supportsService( const OUString& rServiceName )
+bool SAL_CALL CartesianCoordinateSystem2d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -128,7 +128,7 @@ OUString SAL_CALL CartesianCoordinateSystem3d::getImplementationName()
     return u"com.sun.star.comp.chart2.CartesianCoordinateSystem3d"_ustr;
 }
 
-sal_Bool SAL_CALL CartesianCoordinateSystem3d::supportsService( const OUString& rServiceName )
+bool SAL_CALL CartesianCoordinateSystem3d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

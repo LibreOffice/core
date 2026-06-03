@@ -299,7 +299,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
         { lcl_aGDIMetaFileMIMETypeHighContrast, u"GDIMetaFile"_ustr, cppu::UnoType<uno::Sequence< sal_Int8 >>::get() }
     };
 }
-sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
     return ( aFlavor.MimeType == lcl_aGDIMetaFileMIMEType ||
              aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast );
@@ -312,7 +312,7 @@ OUString SAL_CALL ChartView::getImplementationName()
     return CHART_VIEW_SERVICE_IMPLEMENTATION_NAME;
 }
 
-sal_Bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )
+bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1718,7 +1718,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
     {
         //#i77362 change notification for changes on additional shapes are missing
         if( ! (rValue >>= m_bSdrViewIsInEditMode) )
-            throw lang::IllegalArgumentException( u"Property 'SdrViewIsInEditMode' requires value of type sal_Bool"_ustr, nullptr, 0 );
+            throw lang::IllegalArgumentException( u"Property 'SdrViewIsInEditMode' requires value of type bool"_ustr, nullptr, 0 );
     }
     else
         throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard " + rPropertyName, nullptr );

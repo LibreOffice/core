@@ -75,7 +75,7 @@ public:
 
      // XElementAccess
      virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // css::container::XContainer
     void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
@@ -103,7 +103,7 @@ public:
     virtual ::sal_Int16 SAL_CALL getActiveTabPageID() override;
     virtual void SAL_CALL setActiveTabPageID( ::sal_Int16 _activetabpageid ) override;
     virtual ::sal_Int16 SAL_CALL getTabPageCount(  ) override;
-    virtual sal_Bool SAL_CALL isTabPageActive( ::sal_Int16 tabPageIndex ) override;
+    virtual bool SAL_CALL isTabPageActive( ::sal_Int16 tabPageIndex ) override;
     virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPage( ::sal_Int16 tabPageIndex ) override;
     virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPageByID( ::sal_Int16 tabPageID ) override;
     virtual void SAL_CALL addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;

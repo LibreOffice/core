@@ -125,7 +125,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
             {
                 case typelib_TypeClass_BOOLEAN:
                     sig.append('i');
-                    args.push_back(*reinterpret_cast<sal_Bool const*>(arguments[i]));
+                    args.push_back(*reinterpret_cast<bool const*>(arguments[i]));
                     break;
                 case typelib_TypeClass_BYTE:
                     sig.append('i');

@@ -80,7 +80,7 @@ OUString SAL_CALL KitInteractionHandler::getImplementationName()
     return u"com.sun.star.comp.uui.KitInteractionHandler"_ustr;
 }
 
-sal_Bool SAL_CALL KitInteractionHandler::supportsService(OUString const & rServiceName)
+bool SAL_CALL KitInteractionHandler::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -452,7 +452,7 @@ bool KitInteractionHandler::handleFilterOptionsRequest(
     return false;
 }
 
-sal_Bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
+bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();

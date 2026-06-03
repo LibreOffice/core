@@ -216,7 +216,7 @@ bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-// If we handle a KeyEvent, then the return value is sal_True else FALSE.
+// If we handle a KeyEvent, then the return value is true else FALSE.
 bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
     bool bReturn = false;

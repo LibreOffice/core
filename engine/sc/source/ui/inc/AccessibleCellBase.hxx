@@ -66,7 +66,7 @@ public:
     virtual css::uno::Any SAL_CALL
         getCurrentValue() override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         setCurrentValue( const css::uno::Any& aNumber ) override;
 
     virtual css::uno::Any SAL_CALL

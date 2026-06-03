@@ -118,7 +118,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector<beans::Prop
 
     rOutProperties.emplace_back( "FillBackground",
                   FillProperties::PROP_FILL_BACKGROUND,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
@@ -164,7 +164,7 @@ void lcl_AddPropertiesToVector_only_BitmapProperties(std::vector<beans::Property
 
     rOutProperties.emplace_back( "FillBitmapLogicalSize",
                   FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 

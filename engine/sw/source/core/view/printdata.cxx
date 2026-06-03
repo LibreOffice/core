@@ -273,7 +273,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     uno::Sequence< OUString > aChoices{ SwResId( STR_PRINTOPTUI_PRINTALLPAGES ),
                                         SwResId( STR_PRINTOPTUI_PRINTPAGES ),
                                         SwResId( STR_PRINTOPTUI_PRINTSELECTION ) };
-    uno::Sequence< sal_Bool > aChoicesDisabled{ false, false, !bHasSelection };
+    uno::Sequence< bool > aChoicesDisabled{ false, false, !bHasSelection };
     uno::Sequence< OUString > aHelpIds{ u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
                                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"_ustr,
                                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"_ustr };
@@ -298,7 +298,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            u"EvenOdd"_ustr,
                                                            uno::Sequence<OUString>(),
                                                            0,
-                                                           uno::Sequence< sal_Bool >(),
+                                                           uno::Sequence< bool >(),
                                                            aEvenOddOpt);
 
     // create a list box for notes content
@@ -318,7 +318,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            u"PrintAnnotationMode"_ustr,
                                                            aChoices,
                                                            bHasPostIts ? static_cast<sal_uInt16>(nPrintPostIts) : 0,
-                                                           uno::Sequence< sal_Bool >(),
+                                                           uno::Sequence< bool >(),
                                                            aAnnotOpt);
 
     // create subsection for Page settings
@@ -352,7 +352,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                                u"PrintProspectRTL"_ustr,
                                                                aBRTLChoices,
                                                                nBRTLChoice,
-                                                               uno::Sequence< sal_Bool >(),
+                                                               uno::Sequence< bool >(),
                                                                aBrochureRTLOpt);
     }
 

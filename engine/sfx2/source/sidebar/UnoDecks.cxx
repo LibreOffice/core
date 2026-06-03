@@ -75,7 +75,7 @@ uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
 
 }
 
-sal_Bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
+bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -133,7 +133,7 @@ uno::Type SAL_CALL SfxUnoDecks::getElementType()
     return uno::Type();
 }
 
-sal_Bool SAL_CALL SfxUnoDecks::hasElements()
+bool SAL_CALL SfxUnoDecks::hasElements()
 {
     SolarMutexGuard aGuard;
 

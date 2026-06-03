@@ -108,7 +108,7 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
     css::beans::Property* pProperties = _rProps.getArray() + nOldCount;
     *pProperties++ = css::beans::Property(PROPERTY_BUTTONTYPE, PROPERTY_ID_BUTTONTYPE, cppu::UnoType<FormButtonType>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_STATE, PROPERTY_ID_DEFAULT_STATE, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
-    *pProperties++ = css::beans::Property(PROPERTY_DISPATCHURLINTERNAL, PROPERTY_ID_DISPATCHURLINTERNAL, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_DISPATCHURLINTERNAL, PROPERTY_ID_DISPATCHURLINTERNAL, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_TARGET_URL, PROPERTY_ID_TARGET_URL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_TARGET_FRAME, PROPERTY_ID_TARGET_FRAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
@@ -291,7 +291,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
 }
 
 
-sal_Bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {
     bool bModified = false;
     switch ( _nHandle )
@@ -597,7 +597,7 @@ void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
 }
 
 
-sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel )
+bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel )
 {
     startOrStopModelPropertyListening( false );
     bool bResult = OClickableImageBaseControl::setModel( _rxModel );
@@ -684,7 +684,7 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
 }
 
 
-void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn )
+void SAL_CALL OButtonControl::setDesignMode( bool _bOn )
 {
     OClickableImageBaseControl::setDesignMode( _bOn  );
 

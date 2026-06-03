@@ -186,7 +186,7 @@ public:
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<style::XStyle>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return getCount() > 0; }
+    virtual bool SAL_CALL hasElements(  ) override { return getCount() > 0; }
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
@@ -198,7 +198,7 @@ public:
     {
         return mxParaStyles->getElementNames();
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         // search in the MSOStyleName table first
         for( const MSOStyleNameTable* pTable = aMSOStyleNameTable; pTable->pMSOStyleName != nullptr; pTable++ )
@@ -260,7 +260,7 @@ class StylesEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 m_nIndex;
 public:
     explicit StylesEnumWrapper( SwVbaStyles* _pStyles ) : m_pStyles( _pStyles ), m_nIndex( 1 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( m_nIndex <= m_pStyles->getCount() );
     }

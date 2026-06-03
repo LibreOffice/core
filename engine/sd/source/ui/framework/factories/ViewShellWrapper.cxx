@@ -103,7 +103,7 @@ bool ViewShellWrapper::isAnchorOnly()
 
 //----- XSelectionSupplier --------------------------------------------------
 
-sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
+bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
 {
     if (!mpSlideSorterViewShell)
         return false;

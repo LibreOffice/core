@@ -27,7 +27,7 @@ public:
     {
     }
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         return (mnIndex < mxIndexAccess->getCount());
     }
@@ -77,7 +77,7 @@ public:
         return cppu::UnoType<word::XContentControlListEntry>::get();
     }
 
-    sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
+    bool SAL_CALL hasElements() override { return getCount() != 0; }
 
     // XEnumerationAccess
     uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override

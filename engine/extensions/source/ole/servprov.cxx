@@ -297,7 +297,7 @@ OUString OleConverter::getImplementationName()
         : OUString("com.sun.star.comp.ole.OleConverterVar1");
 }
 
-sal_Bool OleConverter::supportsService(OUString const & ServiceName)
+bool OleConverter::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -380,7 +380,7 @@ OUString OleClient::getImplementationName()
     return "com.sun.star.comp.ole.OleClient";
 }
 
-sal_Bool OleClient::supportsService(OUString const & ServiceName)
+bool OleClient::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -501,7 +501,7 @@ OUString OleServer::getImplementationName()
     return "com.sun.star.comp.ole.OleServer";
 }
 
-sal_Bool OleServer::supportsService(OUString const & ServiceName)
+bool OleServer::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

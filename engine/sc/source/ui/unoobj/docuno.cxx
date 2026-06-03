@@ -338,7 +338,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                            u"EvenOdd"_ustr,
                                                            uno::Sequence<OUString>(),
                                                            0,
-                                                           uno::Sequence< sal_Bool >(),
+                                                           uno::Sequence< bool >(),
                                                            aEvenOddOpt);
 
     assert(nIdx == nNumProps);
@@ -3148,7 +3148,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getLinks()
 
 // XActionLockable
 
-sal_Bool SAL_CALL ScModelObj::isActionLocked()
+bool SAL_CALL ScModelObj::isActionLocked()
 {
     SolarMutexGuard aGuard;
     bool bLocked = false;
@@ -3239,7 +3239,7 @@ void SAL_CALL ScModelObj::calculateAll()
     }
 }
 
-sal_Bool SAL_CALL ScModelObj::isAutomaticCalculationEnabled()
+bool SAL_CALL ScModelObj::isAutomaticCalculationEnabled()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -3249,7 +3249,7 @@ sal_Bool SAL_CALL ScModelObj::isAutomaticCalculationEnabled()
     return false;
 }
 
-void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabledIn )
+void SAL_CALL ScModelObj::enableAutomaticCalculation( bool bEnabledIn )
 {
     bool bEnabled(bEnabledIn);
     SolarMutexGuard aGuard;
@@ -3291,7 +3291,7 @@ void SAL_CALL ScModelObj::unprotect( const OUString& aPassword )
     }
 }
 
-sal_Bool SAL_CALL ScModelObj::isProtected()
+bool SAL_CALL ScModelObj::isProtected()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -3342,7 +3342,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
 // XConsolidatable
 
 uno::Reference<sheet::XConsolidationDescriptor> SAL_CALL ScModelObj::createConsolidationDescriptor(
-                                sal_Bool bEmpty )
+                                bool bEmpty )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScConsolidationDescriptor> pNew = new ScConsolidationDescriptor;
@@ -3925,7 +3925,7 @@ OUString SAL_CALL ScModelObj::getImplementationName()
     */
 }
 
-sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -4205,14 +4205,14 @@ void ScModelObj::HandleCalculateEvents()
 
 // XOpenCLSelection
 
-sal_Bool ScModelObj::isOpenCLEnabled()
+bool ScModelObj::isOpenCLEnabled()
 {
     return ScCalcConfig::isOpenCLEnabled();
 }
 
-void ScModelObj::enableOpenCL(sal_Bool bEnable)
+void ScModelObj::enableOpenCL(bool bEnable)
 {
-    if (ScCalcConfig::isOpenCLEnabled() == static_cast<bool>(bEnable))
+    if (ScCalcConfig::isOpenCLEnabled() == bEnable)
         return;
     if (ScCalcConfig::getForceCalculationType() != ForceCalculationNone)
         return;
@@ -4235,7 +4235,7 @@ void ScModelObj::enableOpenCL(sal_Bool bEnable)
 
 }
 
-void ScModelObj::enableAutomaticDeviceSelection(sal_Bool bForce)
+void ScModelObj::enableAutomaticDeviceSelection(bool bForce)
 {
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
     aConfig.mbOpenCLAutoSelect = true;
@@ -4359,7 +4359,7 @@ void ScModelObj::disableOpcodeSubsetTest()
     setOpcodeSubsetTest(false);
 }
 
-sal_Bool ScModelObj::isOpcodeSubsetTested()
+bool ScModelObj::isOpcodeSubsetTested()
 {
     return officecfg::Office::Calc::Formula::Calculation::OpenCLSubsetOnly::get();
 }
@@ -4476,7 +4476,7 @@ uno::Type SAL_CALL ScDrawPagesObj::getElementType()
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL ScDrawPagesObj::hasElements()
+bool SAL_CALL ScDrawPagesObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -4804,7 +4804,7 @@ uno::Type SAL_CALL ScTableSheetsObj::getElementType()
     return cppu::UnoType<sheet::XSpreadsheet>::get();
 }
 
-sal_Bool SAL_CALL ScTableSheetsObj::hasElements()
+bool SAL_CALL ScTableSheetsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -4847,7 +4847,7 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
     return uno::Sequence<OUString>();
 }
 
-sal_Bool SAL_CALL ScTableSheetsObj::hasByName( const OUString& aName )
+bool SAL_CALL ScTableSheetsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -4983,7 +4983,7 @@ uno::Type SAL_CALL ScTableColumnsObj::getElementType()
     return cppu::UnoType<table::XCellRange>::get();
 }
 
-sal_Bool SAL_CALL ScTableColumnsObj::hasElements()
+bool SAL_CALL ScTableColumnsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -5011,7 +5011,7 @@ uno::Sequence<OUString> SAL_CALL ScTableColumnsObj::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const OUString& aName )
+bool SAL_CALL ScTableColumnsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     SCCOL nCol = 0;
@@ -5061,7 +5061,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
         if (bOpt)
             rFunc.SetWidthOrHeight(
                 true, aColArr, nTab, SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, true, true);
-        // sal_False for columns currently has no effect
+        // false for columns currently has no effect
     }
     else if ( aPropertyName == SC_UNONAME_NEWPAGE || aPropertyName == SC_UNONAME_MANPAGE )
     {
@@ -5229,7 +5229,7 @@ uno::Type SAL_CALL ScTableRowsObj::getElementType()
     return cppu::UnoType<table::XCellRange>::get();
 }
 
-sal_Bool SAL_CALL ScTableRowsObj::hasElements()
+bool SAL_CALL ScTableRowsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -5551,7 +5551,7 @@ uno::Type SAL_CALL ScAnnotationsObj::getElementType()
     return cppu::UnoType<sheet::XSheetAnnotation>::get();
 }
 
-sal_Bool SAL_CALL ScAnnotationsObj::hasElements()
+bool SAL_CALL ScAnnotationsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -5705,7 +5705,7 @@ uno::Type SAL_CALL ScScenariosObj::getElementType()
     return cppu::UnoType<sheet::XScenario>::get();
 }
 
-sal_Bool SAL_CALL ScScenariosObj::hasElements()
+bool SAL_CALL ScScenariosObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -5740,7 +5740,7 @@ uno::Sequence<OUString> SAL_CALL ScScenariosObj::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScScenariosObj::hasByName( const OUString& aName )
+bool SAL_CALL ScScenariosObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     SCTAB nIndex;

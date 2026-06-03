@@ -27,7 +27,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 
-sal_Bool SAL_CALL OPrivateRow::wasNull(  )
+bool SAL_CALL OPrivateRow::wasNull(  )
     {
         return m_aRow[m_nPos].isNull();
     }
@@ -36,7 +36,7 @@ sal_Bool SAL_CALL OPrivateRow::wasNull(  )
         m_nPos = columnIndex;
         return m_aRow[m_nPos].getString();
     }
-    sal_Bool SAL_CALL OPrivateRow::getBoolean( ::sal_Int32 columnIndex )
+    bool SAL_CALL OPrivateRow::getBoolean( ::sal_Int32 columnIndex )
     {
         m_nPos = columnIndex;
         return m_aRow[m_nPos].getBool();

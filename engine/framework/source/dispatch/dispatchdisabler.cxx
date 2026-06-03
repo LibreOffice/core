@@ -102,7 +102,7 @@ uno::Type SAL_CALL DispatchDisabler::getElementType()
     return aModuleType;
 }
 
-::sal_Bool SAL_CALL DispatchDisabler::hasElements()
+bool SAL_CALL DispatchDisabler::hasElements()
 {
     return !maDisabledURLs.empty();
 }
@@ -118,7 +118,7 @@ uno::Sequence< OUString > SAL_CALL DispatchDisabler::getElementNames()
     return getInterceptedURLs();
 }
 
-sal_Bool SAL_CALL DispatchDisabler::hasByName( const OUString& rName )
+bool SAL_CALL DispatchDisabler::hasByName( const OUString& rName )
 {
     return maDisabledURLs.find(rName) != maDisabledURLs.end();
 }
@@ -150,7 +150,7 @@ OUString SAL_CALL DispatchDisabler::getImplementationName()
     return u"com.sun.star.comp.framework.services.DispatchDisabler"_ustr;
 }
 
-sal_Bool SAL_CALL DispatchDisabler::supportsService( const OUString& sServiceName )
+bool SAL_CALL DispatchDisabler::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

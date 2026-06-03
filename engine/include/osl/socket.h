@@ -253,11 +253,11 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket Socket);
 /** Binds the given address to the socket.
     @param[in] Socket
     @param[in] Addr
-    @retval sal_False if the bind failed
-    @retval sal_True if bind is successful
+    @retval false if the bind failed
+    @retval true if bind is successful
     @see osl_getLastSocketError()
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_bindAddrToSocket(
+SAL_DLLPUBLIC bool SAL_CALL osl_bindAddrToSocket(
                            oslSocket Socket,
                            oslSocketAddr Addr);
 
@@ -284,9 +284,9 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_connectSocketTo(
     @param[in] MaxPendingConnections denotes the length of the queue of
     pending connections for this socket. If MaxPendingConnections is
     -1, the systems default value will be used (Usually 5).
-    @retval sal_False if the listen failed.
+    @retval false if the listen failed.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_listenOnSocket(
+SAL_DLLPUBLIC bool SAL_CALL osl_listenOnSocket(
                             oslSocket Socket,
                             sal_Int32 MaxPendingConnections);
 
@@ -416,11 +416,11 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendToSocket(
     @param Socket the Socket to perform the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
 
-    @retval sal_True if read operations (recv, recvFrom, accept) on the Socket
+    @retval true if read operations (recv, recvFrom, accept) on the Socket
         will NOT block;
-    @retval sal_False if it would block or if an error occurred.
+    @retval false if it would block or if an error occurred.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isReceiveReady(
+SAL_DLLPUBLIC bool SAL_CALL osl_isReceiveReady(
                             oslSocket Socket,
                             const TimeValue* pTimeout);
 
@@ -432,11 +432,11 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isReceiveReady(
     @param pTimeout if NULL, the operation will block without a timeout. Otherwise
         the time define by timeout value.
 
-    @retval sal_True if send operations (send, sendTo) on the Socket
+    @retval true if send operations (send, sendTo) on the Socket
     will NOT block
-    @retval sal_False if it would block or if an error occurred.
+    @retval false if it would block or if an error occurred.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isSendReady(
+SAL_DLLPUBLIC bool SAL_CALL osl_isSendReady(
                             oslSocket Socket,
                             const TimeValue* pTimeout);
 
@@ -447,11 +447,11 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isSendReady(
     @param Socket the Socket to perform the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
 
-    @retval sal_True if OOB-request operations (recv with appropriate flags)
+    @retval true if OOB-request operations (recv with appropriate flags)
         on the Socket will NOT block
-    @retval sal_False if it would block or if an error occurred.
+    @retval false if it would block or if an error occurred.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isExceptionPending(
+SAL_DLLPUBLIC bool SAL_CALL osl_isExceptionPending(
                             oslSocket Socket,
                             const TimeValue* pTimeout);
 
@@ -465,9 +465,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isExceptionPending(
         @li osl_Socket_DirWrite - closes read and write operations.
     @endparblock
 
-    @retval sal_True if the socket could be closed down.
+    @retval true if the socket could be closed down.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_shutdownSocket(
+SAL_DLLPUBLIC bool SAL_CALL osl_shutdownSocket(
                             oslSocket Socket,
                             oslSocketDirection Direction);
 
@@ -485,15 +485,15 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_shutdownSocket(
     @param Option
     @parblock
         Denotes the option to query.  Valid values (depending on the Level) are:
-        @li osl_Socket_Option_Debug - (sal_Bool) Socket debug flag 1 = enabled, 0 = disabled.
+        @li osl_Socket_Option_Debug - (bool) Socket debug flag 1 = enabled, 0 = disabled.
         @li osl_Socket_OptionAcceptConn
-        @li osl_Socket_OptionReuseAddr - (sal_Bool) Allows the socket to be bound to an address that is
+        @li osl_Socket_OptionReuseAddr - (bool) Allows the socket to be bound to an address that is
             already in use. 1 = multiple bound allowed, 0 = no multiple bounds allowed
-        @li osl_Socket_OptionKeepAlive (sal_Bool) Keepalive packets are sent by the underlying socket.
+        @li osl_Socket_OptionKeepAlive (bool) Keepalive packets are sent by the underlying socket.
             1 = enabled, 0 = disabled
-        @li osl_Socket_OptionDontRoute - (sal_Bool) Do not route: send directly to interface.
+        @li osl_Socket_OptionDontRoute - (bool) Do not route: send directly to interface.
             1 = do not route , 0 = routing possible
-        @li osl_Socket_OptionBroadcast - (sal_Bool) Transmission of broadcast messages are allowed on the socket.
+        @li osl_Socket_OptionBroadcast - (bool) Transmission of broadcast messages are allowed on the socket.
             1 = transmission allowed, 0 = transmission disallowed
         @li osl_Socket_OptionUseLoopback
         @li osl_Socket_OptionLinger (sal_Int32) Linger on close if unsent data is present.
@@ -548,7 +548,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getSocketOption(
 
     @retval True if the option could be changed.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setSocketOption(
+SAL_DLLPUBLIC bool SAL_CALL osl_setSocketOption(
                             oslSocket Socket,
                             oslSocketOptionLevel Level,
                             oslSocketOption Option,
@@ -558,13 +558,13 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setSocketOption(
 /** Enables/disables non-blocking-mode of the socket.
 
     @param Socket Change mode for this socket.
-    @param On sal_True enables non-blocking mode, sal_False disables non-blocking mode.
+    @param On true enables non-blocking mode, false disables non-blocking mode.
 
-    @retval sal_True if mode could be changed.
+    @retval true if mode could be changed.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_enableNonBlockingMode(
+SAL_DLLPUBLIC bool SAL_CALL osl_enableNonBlockingMode(
                             oslSocket Socket,
-                            sal_Bool On);
+                            bool On);
 
 
 /** Query state of non-blocking-mode of the socket.
@@ -573,7 +573,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_enableNonBlockingMode(
 
     @retval True if non-blocking-mode is enabled.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket);
+SAL_DLLPUBLIC bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket);
 
 /** Queries the socket for its type.
 
@@ -665,10 +665,10 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_copySocketAddr(
         oslSocketAddr Addr);
 
 /** Compares the values of two SocketAddresses.
-    @retval sal_True if both addresses denote the same socket address.
-    @retval sal_False if both addresses do not denote the same socket address.
+    @retval true if both addresses denote the same socket address.
+    @retval false if both addresses do not denote the same socket address.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isEqualSocketAddr(
+SAL_DLLPUBLIC bool SAL_CALL osl_isEqualSocketAddr(
     oslSocketAddr Addr1, oslSocketAddr Addr2);
 
 /** Uses the systems name-service interface to find an address for strHostname.
@@ -737,9 +737,9 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
 /** Sets the Port of Addr.
     @param[in] Addr the SocketAddr to perform the operation on.
     @param[in] Port is expected in host byte-order.
-    @retval sal_False if Addr is not an inet-addr.
+    @retval false if Addr is not an inet-addr.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(
+SAL_DLLPUBLIC bool SAL_CALL osl_setInetPortOfSocketAddr(
         oslSocketAddr Addr, sal_Int32 Port);
 
 
@@ -841,8 +841,8 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAd
 
 /** Retrieve this machines hostname (NOT the FQDN)
     @param  strLocalHostname out-parameter. The string that receives the local host name.
-    @retval sal_True upon success
-    @retval sal_False
+    @retval true upon success
+    @retval false
 */
 SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLocalHostname);
 

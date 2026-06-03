@@ -242,7 +242,7 @@ OUString SwXModule::getImplementationName()
     return u"SwXModule"_ustr;
 }
 
-sal_Bool SwXModule::supportsService(const OUString& rServiceName)
+bool SwXModule::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -499,7 +499,7 @@ OUString SwXPrintSettings::getImplementationName()
     return u"SwXPrintSettings"_ustr;
 }
 
-sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName)
+bool SwXPrintSettings::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -948,7 +948,7 @@ OUString SwXViewSettings::getImplementationName()
     return u"SwXViewSettings"_ustr;
 }
 
-sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName)
+bool SwXViewSettings::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

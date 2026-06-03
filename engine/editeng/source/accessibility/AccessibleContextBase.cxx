@@ -307,7 +307,7 @@ OUString SAL_CALL AccessibleContextBase::getImplementationName()
     return u"AccessibleContextBase"_ustr;
 }
 
-sal_Bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
+bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

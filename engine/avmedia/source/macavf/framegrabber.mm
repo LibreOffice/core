@@ -102,7 +102,7 @@ OUString SAL_CALL FrameGrabber::getImplementationName(  )
     return AVMEDIA_MACAVF_FRAMEGRABBER_IMPLEMENTATIONNAME;
 }
 
-sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
+bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME;
 }

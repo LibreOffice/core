@@ -311,7 +311,7 @@ OUString SAL_CALL OOoEmbeddedObjectFactory::getImplementationName()
     return u"com.sun.star.comp.embed.OOoEmbeddedObjectFactory"_ustr;
 }
 
-sal_Bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -357,7 +357,7 @@ OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::getImplementationName()
     return u"com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"_ustr;
 }
 
-sal_Bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

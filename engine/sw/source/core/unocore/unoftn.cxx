@@ -187,7 +187,7 @@ const size_t g_nServicesEndnote( std::size(g_ServicesFootnote) );
 
 const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
 
-sal_Bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -457,7 +457,7 @@ uno::Type SAL_CALL SwXFootnote::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SwXFootnote::hasElements()
+bool SAL_CALL SwXFootnote::hasElements()
 {
     return true;
 }

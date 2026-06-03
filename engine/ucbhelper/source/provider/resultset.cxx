@@ -53,7 +53,7 @@ static const uno::Type& sal_Int32_getCppuType()
     return cppu::UnoType<sal_Int32>::get();
 }
 
-static const uno::Type& sal_Bool_getCppuType()
+static const uno::Type& bool_getCppuType()
 {
     return cppu::UnoType<bool>::get();
 }
@@ -63,7 +63,7 @@ constexpr PropertyInfo aPropertyTable[] =
     { u"IsRowCountFinal"_ustr,
       1000,
       beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY,
-      &sal_Bool_getCppuType
+      &bool_getCppuType
     },
     { u"RowCount"_ustr,
       1001,
@@ -114,7 +114,7 @@ public:
     virtual uno::Sequence< beans::Property > SAL_CALL getProperties() override;
     virtual beans::Property SAL_CALL getPropertyByName(
             const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 };
 
 }
@@ -212,7 +212,7 @@ OUString SAL_CALL ResultSet::getImplementationName()
     return u"ResultSet"_ustr;
 }
 
-sal_Bool SAL_CALL ResultSet::supportsService( const OUString& ServiceName )
+bool SAL_CALL ResultSet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -289,7 +289,7 @@ uno::Reference< sdbc::XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::next()
+bool SAL_CALL ResultSet::next()
 {
     // Note: Cursor is initially positioned before the first row.
     //       First call to 'next()' moves it to first row.
@@ -317,7 +317,7 @@ sal_Bool SAL_CALL ResultSet::next()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::isBeforeFirst()
+bool SAL_CALL ResultSet::isBeforeFirst()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast )
@@ -339,7 +339,7 @@ sal_Bool SAL_CALL ResultSet::isBeforeFirst()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::isAfterLast()
+bool SAL_CALL ResultSet::isAfterLast()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
     m_pImpl->m_xDataSupplier->validate();
@@ -348,7 +348,7 @@ sal_Bool SAL_CALL ResultSet::isAfterLast()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::isFirst()
+bool SAL_CALL ResultSet::isFirst()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast )
@@ -363,7 +363,7 @@ sal_Bool SAL_CALL ResultSet::isFirst()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::isLast()
+bool SAL_CALL ResultSet::isLast()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast )
@@ -404,7 +404,7 @@ void SAL_CALL ResultSet::afterLast()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::first()
+bool SAL_CALL ResultSet::first()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
@@ -423,7 +423,7 @@ sal_Bool SAL_CALL ResultSet::first()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::last()
+bool SAL_CALL ResultSet::last()
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
@@ -457,7 +457,7 @@ sal_Int32 SAL_CALL ResultSet::getRow()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
+bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 {
 /*
     If the row number is positive, the cursor moves to the given row number
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
+bool SAL_CALL ResultSet::relative( sal_Int32 rows )
 {
 /*
     Attempting to move beyond the first/last row in the result set
@@ -594,7 +594,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::previous()
+bool SAL_CALL ResultSet::previous()
 {
 /*
     previous() is not the same as relative( -1 ) because it makes sense
@@ -635,7 +635,7 @@ void SAL_CALL ResultSet::refreshRow()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::rowUpdated()
+bool SAL_CALL ResultSet::rowUpdated()
 {
     m_pImpl->m_xDataSupplier->validate();
     return false;
@@ -643,7 +643,7 @@ sal_Bool SAL_CALL ResultSet::rowUpdated()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::rowInserted()
+bool SAL_CALL ResultSet::rowInserted()
 {
     m_pImpl->m_xDataSupplier->validate();
     return false;
@@ -651,7 +651,7 @@ sal_Bool SAL_CALL ResultSet::rowInserted()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::rowDeleted()
+bool SAL_CALL ResultSet::rowDeleted()
 {
     m_pImpl->m_xDataSupplier->validate();
     return false;
@@ -674,7 +674,7 @@ uno::Reference< uno::XInterface > SAL_CALL ResultSet::getStatement()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::wasNull()
+bool SAL_CALL ResultSet::wasNull()
 {
     // This method can not be implemented correctly!!! Imagine different
     // threads doing a getXYZ - wasNull calling sequence on the same
@@ -724,7 +724,7 @@ OUString SAL_CALL ResultSet::getString( sal_Int32 columnIndex )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL ResultSet::getBoolean( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
 
@@ -1501,7 +1501,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
 
 
 // virtual
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
+bool SAL_CALL PropertySetInfo::hasPropertyByName(
         const OUString& Name )
 {
     beans::Property aProp;

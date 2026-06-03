@@ -80,9 +80,9 @@ public:
 
     static XmlStyleFamily GetChartFamilyID() { return XmlStyleFamily::SCH_CHART_ID; }
 
-    /** @param bPushLastChartType If </sal_False>, in case a new chart type has to
+    /** @param bPushLastChartType If </false>, in case a new chart type has to
                be added (because it does not exist yet), it is appended at the
-               end of the chart-type container.  When </sal_True>, a new chart type
+               end of the chart-type container.  When </true>, a new chart type
                is added at one position before the last one, i.e. the formerly
                last chart type is pushed back, so that it remains the last one.
 

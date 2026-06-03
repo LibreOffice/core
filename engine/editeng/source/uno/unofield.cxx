@@ -580,7 +580,7 @@ void SAL_CALL SvxUnoTextField::release() noexcept
 }
 
 // Interface text::XTextField
-OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
+OUString SAL_CALL SvxUnoTextField::getPresentation( bool bShowCommand )
 {
     SolarMutexGuard aGuard;
     if (bShowCommand)
@@ -865,7 +865,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

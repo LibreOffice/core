@@ -41,7 +41,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-sal_Bool operator == ( const Locale &rL1, const Locale &rL2 )
+bool operator == ( const Locale &rL1, const Locale &rL2 )
 {
     return  rL1.Language ==  rL2.Language   &&
             rL1.Country  ==  rL2.Country    &&
@@ -52,7 +52,7 @@ sal_Bool operator == ( const Locale &rL1, const Locale &rL2 )
 SpellChecker::SpellChecker() :
     aEvtListeners   ( GetLinguMutex() ),
     pPropHelper(NULL),
-    bDisposing(sal_False)
+    bDisposing(false)
 {
 }
 
@@ -96,12 +96,12 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 }
 
 
-sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
+bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!aSuppLocales.getLength())
         getLocales();
     sal_Int32 nLen = aSuppLocales.getLength();
@@ -110,7 +110,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = sal_True;
+            bRes = true;
             break;
         }
     }
@@ -153,7 +153,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale & )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
@@ -161,13 +161,13 @@ sal_Bool SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
-        return sal_True;
+        return true;
 
     if (!hasLocale( rLocale ))
 #ifdef LINGU_EXCEPTIONS
         throw( IllegalArgumentException() );
 #else
-        return sal_True;
+        return true;
 #endif
 
     // Get property values to be used.
@@ -292,14 +292,14 @@ Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     SpellChecker::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -308,14 +308,14 @@ sal_Bool SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     SpellChecker::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -370,7 +370,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -408,7 +408,7 @@ OUString SAL_CALL SpellChecker::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
+bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
@@ -429,7 +429,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 }
 
 
-sal_Bool SAL_CALL SpellChecker_writeInfo(
+bool SAL_CALL SpellChecker_writeInfo(
             void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
 {
     try
@@ -444,11 +444,11 @@ sal_Bool SAL_CALL SpellChecker_writeInfo(
         for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
             xNewKey->createKey( aServices.getConstArray()[i] );
 
-        return sal_True;
+        return true;
     }
     catch(Exception &)
     {
-        return sal_False;
+        return false;
     }
 }
 

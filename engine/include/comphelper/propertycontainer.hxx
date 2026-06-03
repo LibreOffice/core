@@ -55,7 +55,7 @@ protected:
     css::uno::Sequence< css::uno::Type > getBaseTypes();
 
 // OPropertySetHelper overridables
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
                             css::uno::Any & rConvertedValue,
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,

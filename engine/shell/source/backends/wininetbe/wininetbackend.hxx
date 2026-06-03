@@ -38,7 +38,7 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
         virtual OUString SAL_CALL
             getImplementationName(  ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
             supportsService( const OUString& aServiceName ) override;
 
         virtual uno::Sequence<OUString> SAL_CALL

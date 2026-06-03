@@ -50,7 +50,7 @@ public:
     static OUString         GetValueText( SvxCellOrientation nVal );
     virtual SvxOrientationItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    /** Returns sal_True, if the item represents STACKED state. */
+    /** Returns true, if the item represents STACKED state. */
     bool                    IsStacked() const;
     /** Returns the rotation this item represents (returns nStdAngle for STANDARD and STACKED state). */
     Degree100               GetRotation( Degree100 nStdAngle ) const;

@@ -581,7 +581,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_trim_WithLength(
     the length of the string.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfBoolean(
-        char * str, sal_Bool b ) SAL_THROW_EXTERN_C();
+        char * str, bool b ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MAX_VALUEOFBOOLEAN 6
 
 /** Create the string representation of a character.
@@ -721,7 +721,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfDouble(
     @return
     true if the string is "1" or "true" in any ASCII case, false otherwise.
  */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_str_toBoolean(
+SAL_DLLPUBLIC bool SAL_CALL rtl_str_toBoolean(
         const char * str ) SAL_THROW_EXTERN_C();
 
 /** Interpret a string as an integer.
@@ -1399,7 +1399,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString2String(
   @return
   True if the conversion succeeded, false otherwise.
  */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_convertUStringToString(
+SAL_DLLPUBLIC bool SAL_CALL rtl_convertUStringToString(
                                              rtl_String ** pTarget,
                                              sal_Unicode const * pSource,
                                              sal_Int32 nLength,

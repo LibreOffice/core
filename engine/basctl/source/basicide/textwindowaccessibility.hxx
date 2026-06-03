@@ -183,7 +183,7 @@ private:
 
     virtual ::sal_Int32 SAL_CALL getCaretPosition() override;
 
-    virtual sal_Bool SAL_CALL setCaretPosition(::sal_Int32 nIndex) override;
+    virtual bool SAL_CALL setCaretPosition(::sal_Int32 nIndex) override;
 
     virtual ::sal_Unicode SAL_CALL getCharacter(::sal_Int32 nIndex) override;
 
@@ -204,10 +204,10 @@ private:
 
     virtual ::sal_Int32 SAL_CALL getSelectionEnd() override;
 
-    virtual sal_Bool SAL_CALL setSelection(::sal_Int32 nStartIndex,
+    virtual bool SAL_CALL setSelection(::sal_Int32 nStartIndex,
                                              ::sal_Int32 nEndIndex) override;
 
-    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
+    virtual bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
 
     virtual OUString SAL_CALL getText() override;
 
@@ -218,30 +218,30 @@ private:
     virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
 
-    virtual sal_Bool SAL_CALL copyText(::sal_Int32 nStartIndex,
+    virtual bool SAL_CALL copyText(::sal_Int32 nStartIndex,
                                          ::sal_Int32 nEndIndex) override;
 
-    virtual sal_Bool SAL_CALL cutText(::sal_Int32 nStartIndex,
+    virtual bool SAL_CALL cutText(::sal_Int32 nStartIndex,
                                         ::sal_Int32 nEndIndex) override;
 
-    virtual sal_Bool SAL_CALL pasteText(::sal_Int32 nIndex) override;
+    virtual bool SAL_CALL pasteText(::sal_Int32 nIndex) override;
 
-    virtual sal_Bool SAL_CALL deleteText(::sal_Int32 nStartIndex,
+    virtual bool SAL_CALL deleteText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex) override;
 
-    virtual sal_Bool SAL_CALL insertText(OUString const & rText,
+    virtual bool SAL_CALL insertText(OUString const & rText,
                                            ::sal_Int32 nIndex) override;
 
-    virtual sal_Bool SAL_CALL replaceText(
+    virtual bool SAL_CALL replaceText(
         ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
         OUString const & rReplacement) override;
 
-    virtual sal_Bool SAL_CALL setAttributes(
+    virtual bool SAL_CALL setAttributes(
         ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
         css::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet) override;
 
-    virtual sal_Bool SAL_CALL setText(OUString const & rText) override;
+    virtual bool SAL_CALL setText(OUString const & rText) override;
 
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
     getDefaultAttributes(const css::uno::Sequence< OUString >& RequestedAttributes) override;

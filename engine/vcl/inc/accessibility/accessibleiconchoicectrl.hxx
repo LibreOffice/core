@@ -58,7 +58,7 @@ public:
 
     // XAccessibleSelection
     void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
-    sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
     void SAL_CALL clearAccessibleSelection(  ) override;
     void SAL_CALL selectAllAccessibleChildren(  ) override;
     sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;

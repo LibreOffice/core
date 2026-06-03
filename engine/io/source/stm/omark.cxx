@@ -100,7 +100,7 @@ public: // XConnectable
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() override;
     Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
     // helper methods
@@ -347,7 +347,7 @@ OUString OMarkableOutputStream::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName)
+bool OMarkableOutputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -412,7 +412,7 @@ public: // XConnectable
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() override;
     Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    sal_Bool                         SAL_CALL  supportsService(const OUString& ServiceName) override;
+    bool                         SAL_CALL  supportsService(const OUString& ServiceName) override;
 
 private:
     void checkMarksAndFlush();
@@ -757,7 +757,7 @@ OUString OMarkableInputStream::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName)
+bool OMarkableInputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

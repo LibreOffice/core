@@ -85,7 +85,7 @@ public:
             Returns <TRUE/> if there is a (at least one) relation of the
             given type and <FALSE/> if there is no such relation in the set.
     */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     containsRelation(css::accessibility::AccessibleRelationType eRelationType) override;
 
     /** Retrieve and return the relation with the given relation type.

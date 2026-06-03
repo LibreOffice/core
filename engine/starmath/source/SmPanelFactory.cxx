@@ -53,7 +53,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
+    bool SAL_CALL supportsService(OUString const& ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -121,7 +121,7 @@ OUString SmPanelFactory::getImplementationName()
     return u"org.libreoffice.comp.Math.sidebar.SmPanelFactory"_ustr;
 }
 
-sal_Bool SmPanelFactory::supportsService(OUString const& ServiceName)
+bool SmPanelFactory::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

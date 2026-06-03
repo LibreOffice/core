@@ -32,7 +32,7 @@ public:
     OUString SAL_CALL getDefaultPropertyName() override;
 
     // Default member: True if the specified form field object is a valid listbox field
-    sal_Bool SAL_CALL getValid() override;
+    bool SAL_CALL getValid() override;
 
     // Returns and sets the index for the default listbox entry
     sal_Int32 SAL_CALL getDefault() override;

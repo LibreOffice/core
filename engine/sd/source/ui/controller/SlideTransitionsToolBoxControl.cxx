@@ -82,7 +82,7 @@ OUString SAL_CALL SlideTransitionsToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.sd.SlideTransitionsToolBoxControl"_ustr;
 }
 
-sal_Bool SAL_CALL SlideTransitionsToolBoxControl::supportsService(const OUString& rServiceName)
+bool SAL_CALL SlideTransitionsToolBoxControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

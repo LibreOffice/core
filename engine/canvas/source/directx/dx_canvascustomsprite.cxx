@@ -85,7 +85,7 @@ namespace dxcanvas
         return "DXCanvas.CanvasCustomSprite";
     }
 
-    sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )
+    bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

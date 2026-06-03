@@ -65,19 +65,19 @@ namespace pcr
         // css::beans::XPropertySet and friends
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
         // css::inspection::XObjectInspectorModel
-        virtual sal_Bool SAL_CALL getHasHelpSection() override;
+        virtual bool SAL_CALL getHasHelpSection() override;
         virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() override;
         virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() override;
-        virtual sal_Bool SAL_CALL getIsReadOnly() override;
-        virtual void SAL_CALL setIsReadOnly( sal_Bool IsReadOnly ) override;
+        virtual bool SAL_CALL getIsReadOnly() override;
+        virtual void SAL_CALL setIsReadOnly( bool IsReadOnly ) override;
 
         // css::lang::XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
     protected:
         void enableHelpSectionProperties( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );

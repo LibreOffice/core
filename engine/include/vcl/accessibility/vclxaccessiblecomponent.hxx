@@ -69,7 +69,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::accessibility::XAccessibleContext

@@ -873,7 +873,7 @@ sal_Int16 VCLXCheckBox::getState()
     return nState;
 }
 
-void VCLXCheckBox::enableTriState( sal_Bool b )
+void VCLXCheckBox::enableTriState( bool b )
 {
     SolarMutexGuard aGuard;
 
@@ -1175,7 +1175,7 @@ void VCLXRadioButton::setActionCommand( const OUString& rCommand )
     maActionCommand = rCommand;
 }
 
-void VCLXRadioButton::setState( sal_Bool b )
+void VCLXRadioButton::setState( bool b )
 {
     SolarMutexGuard aGuard;
 
@@ -1194,7 +1194,7 @@ void VCLXRadioButton::setState( sal_Bool b )
     }
 }
 
-sal_Bool VCLXRadioButton::getState()
+bool VCLXRadioButton::getState()
 {
     SolarMutexGuard aGuard;
 
@@ -1342,7 +1342,7 @@ void VCLXSpinField::last()
         pSpinField->Last();
 }
 
-void VCLXSpinField::enableRepeat( sal_Bool bRepeat )
+void VCLXSpinField::enableRepeat( bool bRepeat )
 {
     SolarMutexGuard aGuard;
 
@@ -1611,7 +1611,7 @@ css::uno::Sequence< OUString> VCLXListBox::getSelectedItems()
     return aSeq;
 }
 
-void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect )
+void VCLXListBox::selectItemPos( sal_Int16 nPos, bool bSelect )
 {
     SolarMutexGuard aGuard;
 
@@ -1630,7 +1630,7 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect )
     }
 }
 
-void VCLXListBox::selectItemsPos( const css::uno::Sequence<sal_Int16>& aPositions, sal_Bool bSelect )
+void VCLXListBox::selectItemsPos( const css::uno::Sequence<sal_Int16>& aPositions, bool bSelect )
 {
     SolarMutexGuard aGuard;
 
@@ -1671,7 +1671,7 @@ void VCLXListBox::selectItemsPos( const css::uno::Sequence<sal_Int16>& aPosition
     SetSynthesizingVCLEvent( false );
 }
 
-void VCLXListBox::selectItem( const OUString& rItemText, sal_Bool bSelect )
+void VCLXListBox::selectItem( const OUString& rItemText, bool bSelect )
 {
     SolarMutexGuard aGuard;
 
@@ -1701,7 +1701,7 @@ sal_Int16 VCLXListBox::getDropDownLineCount()
     return nLines;
 }
 
-sal_Bool VCLXListBox::isMutipleMode()
+bool VCLXListBox::isMutipleMode()
 {
     SolarMutexGuard aGuard;
     bool bMulti = false;
@@ -1711,7 +1711,7 @@ sal_Bool VCLXListBox::isMutipleMode()
     return bMulti;
 }
 
-void VCLXListBox::setMultipleMode( sal_Bool bMulti )
+void VCLXListBox::setMultipleMode( bool bMulti )
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
@@ -3687,7 +3687,7 @@ css::awt::Selection VCLXEdit::getSelection()
     return css::awt::Selection( aSel.Min(), aSel.Max() );
 }
 
-sal_Bool VCLXEdit::isEditable()
+bool VCLXEdit::isEditable()
 {
     SolarMutexGuard aGuard;
 
@@ -3695,7 +3695,7 @@ sal_Bool VCLXEdit::isEditable()
     return pEdit && !pEdit->IsReadOnly() && pEdit->IsEnabled();
 }
 
-void VCLXEdit::setEditable( sal_Bool bEditable )
+void VCLXEdit::setEditable( bool bEditable )
 {
     SolarMutexGuard aGuard;
 
@@ -4792,7 +4792,7 @@ util::Date VCLXDateField::getLast()
         return util::Date();
 }
 
-void VCLXDateField::setLongFormat( sal_Bool bLong )
+void VCLXDateField::setLongFormat( bool bLong )
 {
     SolarMutexGuard aGuard;
 
@@ -4801,7 +4801,7 @@ void VCLXDateField::setLongFormat( sal_Bool bLong )
         pDateField->SetLongFormat( bLong );
 }
 
-sal_Bool VCLXDateField::isLongFormat()
+bool VCLXDateField::isLongFormat()
 {
     SolarMutexGuard aGuard;
 
@@ -4826,7 +4826,7 @@ void VCLXDateField::setEmpty()
     }
 }
 
-sal_Bool VCLXDateField::isEmpty()
+bool VCLXDateField::isEmpty()
 {
     SolarMutexGuard aGuard;
 
@@ -4834,12 +4834,12 @@ sal_Bool VCLXDateField::isEmpty()
     return pDateField && pDateField->IsEmptyDate();
 }
 
-void VCLXDateField::setStrictFormat( sal_Bool bStrict )
+void VCLXDateField::setStrictFormat( bool bStrict )
 {
     VCLXFormattedSpinField::setStrictFormat( bStrict );
 }
 
-sal_Bool VCLXDateField::isStrictFormat()
+bool VCLXDateField::isStrictFormat()
 {
     return VCLXFormattedSpinField::isStrictFormat();
 }
@@ -5009,7 +5009,7 @@ void VCLXTimeField::setEmpty()
         pTimeField->SetEmptyTime();
 }
 
-sal_Bool VCLXTimeField::isEmpty()
+bool VCLXTimeField::isEmpty()
 {
     SolarMutexGuard aGuard;
 
@@ -5017,12 +5017,12 @@ sal_Bool VCLXTimeField::isEmpty()
     return pTimeField && pTimeField->IsEmptyTime();
 }
 
-void VCLXTimeField::setStrictFormat( sal_Bool bStrict )
+void VCLXTimeField::setStrictFormat( bool bStrict )
 {
     VCLXFormattedSpinField::setStrictFormat( bStrict );
 }
 
-sal_Bool VCLXTimeField::isStrictFormat()
+bool VCLXTimeField::isStrictFormat()
 {
     return VCLXFormattedSpinField::isStrictFormat();
 }
@@ -5293,12 +5293,12 @@ double VCLXNumericField::getLast()
         : 0;
 }
 
-void VCLXNumericField::setStrictFormat( sal_Bool bStrict )
+void VCLXNumericField::setStrictFormat( bool bStrict )
 {
     VCLXFormattedSpinField::setStrictFormat( bStrict );
 }
 
-sal_Bool VCLXNumericField::isStrictFormat()
+bool VCLXNumericField::isStrictFormat()
 {
     return VCLXFormattedSpinField::isStrictFormat();
 }
@@ -5590,12 +5590,12 @@ void VCLXMetricField::setUserValue( ::sal_Int64 Value, ::sal_Int16 Unit )
     CallListeners();
 }
 
-void VCLXMetricField::setStrictFormat( sal_Bool bStrict )
+void VCLXMetricField::setStrictFormat( bool bStrict )
 {
     VCLXFormattedSpinField::setStrictFormat( bStrict );
 }
 
-sal_Bool VCLXMetricField::isStrictFormat()
+bool VCLXMetricField::isStrictFormat()
 {
     return VCLXFormattedSpinField::isStrictFormat();
 }
@@ -5792,12 +5792,12 @@ OUString VCLXPatternField::getString()
     return aString;
 }
 
-void VCLXPatternField::setStrictFormat( sal_Bool bStrict )
+void VCLXPatternField::setStrictFormat( bool bStrict )
 {
     VCLXFormattedSpinField::setStrictFormat( bStrict );
 }
 
-sal_Bool VCLXPatternField::isStrictFormat()
+bool VCLXPatternField::isStrictFormat()
 {
     return VCLXFormattedSpinField::isStrictFormat();
 }
@@ -6293,7 +6293,7 @@ css::awt::Selection VCLXFileControl::getSelection()
     return aSel;
 }
 
-sal_Bool VCLXFileControl::isEditable()
+bool VCLXFileControl::isEditable()
 {
     SolarMutexGuard aGuard;
 
@@ -6301,7 +6301,7 @@ sal_Bool VCLXFileControl::isEditable()
     return pFileControl && !pFileControl->GetEdit().IsReadOnly() && pFileControl->GetEdit().IsEnabled();
 }
 
-void VCLXFileControl::setEditable( sal_Bool bEditable )
+void VCLXFileControl::setEditable( bool bEditable )
 {
     SolarMutexGuard aGuard;
 
@@ -7111,7 +7111,7 @@ sal_Int16 SVTXCurrencyField::getDecimalDigits()
     return pField ? pField->GetFormatter().GetDecimalDigits() : 0;
 }
 
-void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict )
+void SVTXCurrencyField::setStrictFormat( bool bStrict )
 {
     SolarMutexGuard aGuard;
 
@@ -7120,7 +7120,7 @@ void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict )
         pField->GetFormatter().SetStrictFormat( bStrict );
 }
 
-sal_Bool SVTXCurrencyField::isStrictFormat()
+bool SVTXCurrencyField::isStrictFormat()
 {
     SolarMutexGuard aGuard;
 
@@ -7357,7 +7357,7 @@ sal_Int16 SVTXNumericField::getDecimalDigits()
     return pField ? pField->GetFormatter().GetDecimalDigits() : 0;
 }
 
-void SVTXNumericField::setStrictFormat( sal_Bool bStrict )
+void SVTXNumericField::setStrictFormat( bool bStrict )
 {
     SolarMutexGuard aGuard;
 
@@ -7366,7 +7366,7 @@ void SVTXNumericField::setStrictFormat( sal_Bool bStrict )
         pField->GetFormatter().SetStrictFormat( bStrict );
 }
 
-sal_Bool SVTXNumericField::isStrictFormat()
+bool SVTXNumericField::isStrictFormat()
 {
     SolarMutexGuard aGuard;
 
@@ -7517,7 +7517,7 @@ css::awt::Selection VCLXMultiLineEdit::getSelection()
     return aSel;
 }
 
-sal_Bool VCLXMultiLineEdit::isEditable()
+bool VCLXMultiLineEdit::isEditable()
 {
     SolarMutexGuard aGuard;
 
@@ -7525,7 +7525,7 @@ sal_Bool VCLXMultiLineEdit::isEditable()
     return pMultiLineEdit && !pMultiLineEdit->IsReadOnly() && pMultiLineEdit->IsEnabled();
 }
 
-void VCLXMultiLineEdit::setEditable( sal_Bool bEditable )
+void VCLXMultiLineEdit::setEditable( bool bEditable )
 {
     SolarMutexGuard aGuard;
 

@@ -173,7 +173,7 @@ void SAL_CALL Player::stop()
 }
 
 
-sal_Bool SAL_CALL Player::isPlaying()
+bool SAL_CALL Player::isPlaying()
 {
     if( !mpPlayer )
         return false;
@@ -233,19 +233,19 @@ double Player::getStopTime()
 }
 
 
-void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
+void SAL_CALL Player::setPlaybackLoop( bool bSet )
 {
     mbLooping = bSet;
 }
 
 
-sal_Bool SAL_CALL Player::isPlaybackLoop()
+bool SAL_CALL Player::isPlaybackLoop()
 {
     return mbLooping;
 }
 
 
-void SAL_CALL Player::setMute( sal_Bool bSet )
+void SAL_CALL Player::setMute( bool bSet )
 {
     if( !mpPlayer )
         return;
@@ -255,7 +255,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 }
 
 
-sal_Bool SAL_CALL Player::isMute()
+bool SAL_CALL Player::isMute()
 {
     return mbMuted;
 }
@@ -347,7 +347,7 @@ OUString SAL_CALL Player::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
+bool SAL_CALL Player::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_PLAYER_SERVICENAME;
 }

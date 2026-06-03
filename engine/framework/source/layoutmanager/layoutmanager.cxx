@@ -1243,7 +1243,7 @@ void SAL_CALL LayoutManager::reset()
 
 // XMenuBarMergingAcceptor
 
-sal_Bool SAL_CALL LayoutManager::setMergedMenuBar(
+bool SAL_CALL LayoutManager::setMergedMenuBar(
     const Reference< XIndexAccess >& xMergedMenuBar )
 {
     implts_setInplaceMenuBar( xMergedMenuBar );
@@ -1575,7 +1575,7 @@ void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
         implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::Any( aName ) );
 }
 
-sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
+bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
 {
     bool            bResult( false );
     bool            bNotify( false );
@@ -1703,7 +1703,7 @@ Sequence< Reference< ui::XUIElement > > SAL_CALL LayoutManager::getElements()
     return aSeq;
 }
 
-sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
+bool SAL_CALL LayoutManager::showElement( const OUString& aName )
 {
     bool            bResult( false );
     bool            bNotify( false );
@@ -1779,7 +1779,7 @@ sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
     return bResult;
 }
 
-sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
+bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
 {
     bool            bNotify( false );
     bool            bMustLayout( false );
@@ -1861,7 +1861,7 @@ sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
     return false;
 }
 
-sal_Bool SAL_CALL LayoutManager::dockWindow( const OUString& aName, DockingArea DockingArea, const awt::Point& Pos )
+bool SAL_CALL LayoutManager::dockWindow( const OUString& aName, DockingArea DockingArea, const awt::Point& Pos )
 {
     OUString aElementType;
     OUString aElementName;
@@ -1883,7 +1883,7 @@ sal_Bool SAL_CALL LayoutManager::dockWindow( const OUString& aName, DockingArea 
     return false;
 }
 
-sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ )
+bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ )
 {
     SolarMutexClearableGuard aReadLock;
     bool bResult( false );
@@ -1899,7 +1899,7 @@ sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ )
     return bResult;
 }
 
-sal_Bool SAL_CALL LayoutManager::floatWindow( const OUString& aName )
+bool SAL_CALL LayoutManager::floatWindow( const OUString& aName )
 {
     bool bResult( false );
     if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
@@ -1918,7 +1918,7 @@ sal_Bool SAL_CALL LayoutManager::floatWindow( const OUString& aName )
     return bResult;
 }
 
-sal_Bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
+bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
 {
     bool bResult( false );
     if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
@@ -1937,7 +1937,7 @@ sal_Bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
     return bResult;
 }
 
-sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
+bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
 {
     bool bResult( false );
     if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
@@ -2007,7 +2007,7 @@ void SAL_CALL LayoutManager::setElementPosSize( const OUString& aName, const awt
     }
 }
 
-sal_Bool SAL_CALL LayoutManager::isElementVisible( const OUString& aName )
+bool SAL_CALL LayoutManager::isElementVisible( const OUString& aName )
 {
     OUString aElementType;
     OUString aElementName;
@@ -2081,7 +2081,7 @@ sal_Bool SAL_CALL LayoutManager::isElementVisible( const OUString& aName )
     return false;
 }
 
-sal_Bool SAL_CALL LayoutManager::isElementFloating( const OUString& aName )
+bool SAL_CALL LayoutManager::isElementFloating( const OUString& aName )
 {
     if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2096,7 +2096,7 @@ sal_Bool SAL_CALL LayoutManager::isElementFloating( const OUString& aName )
     return false;
 }
 
-sal_Bool SAL_CALL LayoutManager::isElementDocked( const OUString& aName )
+bool SAL_CALL LayoutManager::isElementDocked( const OUString& aName )
 {
     if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2111,7 +2111,7 @@ sal_Bool SAL_CALL LayoutManager::isElementDocked( const OUString& aName )
     return false;
 }
 
-sal_Bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
+bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
 {
     if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2368,7 +2368,7 @@ bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSiz
     return true;
 }
 
-void SAL_CALL LayoutManager::setVisible( sal_Bool bVisible )
+void SAL_CALL LayoutManager::setVisible( bool bVisible )
 {
     SolarMutexClearableGuard aWriteLock;
     bool bWasVisible( m_bVisible );
@@ -2379,7 +2379,7 @@ void SAL_CALL LayoutManager::setVisible( sal_Bool bVisible )
         implts_setVisibleState( bVisible );
 }
 
-sal_Bool SAL_CALL LayoutManager::isVisible()
+bool SAL_CALL LayoutManager::isVisible()
 {
     SolarMutexGuard g;
     return m_bVisible;
@@ -2468,7 +2468,7 @@ void LayoutManager::implts_updateMenuBarClose()
         MenuBar* pMenuBar = pSysWindow->GetMenuBar();
         if ( pMenuBar )
         {
-            // TODO remove link on sal_False ?!
+            // TODO remove link on false ?!
             pMenuBar->ShowCloseButton(bShowCloseButton);
             pMenuBar->SetCloseButtonClickHdl(LINK(this, LayoutManager, MenuBarClose));
         }

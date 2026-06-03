@@ -555,7 +555,7 @@ extern "C" {
     Reader *ImportDOC();
     void ExportDOC( std::u16string_view, const OUString& rBaseURL, WriterRef& );
     Reader *ImportDOCX();
-    sal_uInt32 SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
+    sal_uInt32 SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, bool, const OUString& );
     sal_uInt32 GetSaveWarningOfMSVBAStorage_ww8( SfxObjectShell& );
 }
 
@@ -633,7 +633,7 @@ Reader* GetDOCXReader()
 #endif
 }
 
-typedef sal_uInt32 ( *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
+typedef sal_uInt32 ( *SaveOrDel )( SfxObjectShell&, SotStorage&, bool, const OUString& );
 typedef sal_uInt32 ( *GetSaveWarning )( SfxObjectShell& );
 
 ErrCode SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, bool bSaveInto, const OUString& rStorageName )

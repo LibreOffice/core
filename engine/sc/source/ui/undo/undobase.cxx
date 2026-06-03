@@ -71,7 +71,7 @@ bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
     // to each Undo-Action.
     // DetectiveRefresh is always called next,
     // the SdrUndoGroup is encapsulated in a ScUndoDraw action.
-    // AddUndoAction is only called with bTryMerg=sal_True
+    // AddUndoAction is only called with bTryMerg=true
     // for automatic update.
 
     if ( !pDetectiveUndo && dynamic_cast<const ScUndoDraw*>( pNextAction) !=  nullptr )

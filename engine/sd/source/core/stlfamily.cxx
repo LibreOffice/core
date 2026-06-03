@@ -177,7 +177,7 @@ OUString SAL_CALL SdStyleFamily::getImplementationName()
     return u"SdStyleFamily"_ustr;
 }
 
-sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -259,7 +259,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
     }
 }
 
-sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
+bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -298,7 +298,7 @@ Type SAL_CALL SdStyleFamily::getElementType()
     return cppu::UnoType<XStyle>::get();
 }
 
-sal_Bool SAL_CALL SdStyleFamily::hasElements()
+bool SAL_CALL SdStyleFamily::hasElements()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();

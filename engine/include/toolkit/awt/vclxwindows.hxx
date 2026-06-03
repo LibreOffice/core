@@ -157,7 +157,7 @@ public:
     sal_Int16 SAL_CALL getState(  ) override;
     void SAL_CALL setState( sal_Int16 n ) override;
     void SAL_CALL setLabel( const OUString& Label ) override;
-    void SAL_CALL enableTriState( sal_Bool b ) override;
+    void SAL_CALL enableTriState( bool b ) override;
 
     // css::awt::XButton:
     void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
@@ -202,8 +202,8 @@ public:
     // css::awt::XRadioButton
     void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
     void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    sal_Bool SAL_CALL getState(  ) override;
-    void SAL_CALL setState( sal_Bool b ) override;
+    bool SAL_CALL getState(  ) override;
+    void SAL_CALL setState( bool b ) override;
     void SAL_CALL setLabel( const OUString& Label ) override;
 
     // css::awt::XButton:
@@ -375,8 +375,8 @@ public:
     OUString SAL_CALL getSelectedText(  ) override;
     void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
     css::awt::Selection SAL_CALL getSelection(  ) override;
-    sal_Bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) override;
+    bool SAL_CALL isEditable(  ) override;
+    void SAL_CALL setEditable( bool bEditable ) override;
     void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
     sal_Int16 SAL_CALL getMaxTextLen(  ) override;
 
@@ -425,8 +425,8 @@ public:
     OUString SAL_CALL getSelectedText(  ) override;
     void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
     css::awt::Selection SAL_CALL getSelection(  ) override;
-    sal_Bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) override;
+    bool SAL_CALL isEditable(  ) override;
+    void SAL_CALL setEditable( bool bEditable ) override;
     void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
     sal_Int16 SAL_CALL getMaxTextLen(  ) override;
 
@@ -473,7 +473,7 @@ public:
     void SAL_CALL down(  ) override;
     void SAL_CALL first(  ) override;
     void SAL_CALL last(  ) override;
-    void SAL_CALL enableRepeat( sal_Bool bRepeat ) override;
+    void SAL_CALL enableRepeat( bool bRepeat ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -543,8 +543,8 @@ public:
     double SAL_CALL getSpinSize(  ) override;
     void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 };
@@ -586,11 +586,11 @@ public:
     css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
     OUString SAL_CALL getSelectedItem(  ) override;
     css::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
-    void SAL_CALL selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) override;
-    void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect ) override;
-    void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) override;
-    sal_Bool SAL_CALL isMutipleMode(  ) override;
-    void SAL_CALL setMultipleMode( sal_Bool bMulti ) override;
+    void SAL_CALL selectItemPos( sal_Int16 nPos, bool bSelect ) override;
+    void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
+    void SAL_CALL selectItem( const OUString& aItem, bool bSelect ) override;
+    bool SAL_CALL isMutipleMode(  ) override;
+    void SAL_CALL setMultipleMode( bool bMulti ) override;
     sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;
     void SAL_CALL makeVisible( sal_Int16 nEntry ) override;

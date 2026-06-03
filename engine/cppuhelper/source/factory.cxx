@@ -97,14 +97,14 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
 
     // XUnloadingPreference
-    virtual sal_Bool SAL_CALL releaseOnNotification() override;
+    virtual bool SAL_CALL releaseOnNotification() override;
 
     // WeakComponentImplHelper
     void SAL_CALL disposing() override;
@@ -303,7 +303,7 @@ OUString OFactoryComponentHelper::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool OFactoryComponentHelper::supportsService(
+bool OFactoryComponentHelper::supportsService(
     const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
@@ -319,10 +319,10 @@ Sequence< OUString > OFactoryComponentHelper::getSupportedServiceNames()
 // This class is used for single factories, component factories and
 // one-instance factories. Depending on the usage this function has
 // to return different values.
-// one-instance factory: sal_False
-// single factory: sal_True
-// component factory: sal_True
-sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification()
+// one-instance factory: false
+// single factory: true
+// component factory: true
+bool SAL_CALL OFactoryComponentHelper::releaseOnNotification()
 {
     if (m_bOneInstance)
         return false;
@@ -358,7 +358,7 @@ public:
 
     // OPropertySetHelper
     virtual IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
         Any & rConvertedValue, Any & rOldValue,
         sal_Int32 nHandle, Any const & rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
@@ -381,7 +381,7 @@ public:
     // XServiceInfo
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     // XUnloadingPreference
-    sal_Bool SAL_CALL releaseOnNotification() override;
+    bool SAL_CALL releaseOnNotification() override;
 
 
 private:
@@ -470,7 +470,7 @@ IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
 }
 
 
-sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
+bool ORegistryFactoryHelper::convertFastPropertyValue(
     Any &, Any &, sal_Int32, Any const & )
 {
     OSL_FAIL( "unexpected!" );
@@ -680,7 +680,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
     return m_aServiceNames;
 }
 
-sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification()
+bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification()
 {
     bool retVal= true;
     if( isOneInstance() && isInstance())

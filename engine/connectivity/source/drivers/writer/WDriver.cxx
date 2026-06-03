@@ -65,10 +65,7 @@ uno::Reference<sdbc::XConnection>
     return pCon;
 }
 
-sal_Bool SAL_CALL ODriver::acceptsURL(const OUString& url)
-{
-    return url.startsWith("sdbc:writer:");
-}
+bool SAL_CALL ODriver::acceptsURL(const OUString& url) { return url.startsWith("sdbc:writer:"); }
 
 uno::Sequence<sdbc::DriverPropertyInfo> SAL_CALL
 ODriver::getPropertyInfo(const OUString& url, const uno::Sequence<beans::PropertyValue>& /*info*/)

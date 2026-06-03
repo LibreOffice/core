@@ -336,7 +336,7 @@ void mapEntities(
         std::exit(EXIT_FAILURE);
     }
     for (;;) {
-        sal_Bool eof;
+        bool eof;
         e = f.isEndOfFile(&eof);
         if (e != osl::FileBase::E_None) {
             std::cerr

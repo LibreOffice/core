@@ -221,7 +221,7 @@ inline void ElementDescriptor::read(
 }
 
 template<>
-inline void ElementDescriptor::read<sal_Bool>(
+inline void ElementDescriptor::read<bool>(
     OUString const & propName, OUString const & attrName,
     bool forceAttribute )
 {
@@ -241,7 +241,7 @@ inline void ElementDescriptor::read<sal_Bool>(
 inline void ElementDescriptor::readBoolAttr(
     OUString const & rPropName, OUString const & rAttrName )
 {
-    read<sal_Bool>( rPropName, rAttrName );
+    read<bool>( rPropName, rAttrName );
 }
 
 template<typename T>

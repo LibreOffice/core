@@ -1458,7 +1458,7 @@ namespace xmloff
                         }
                         else
                         {
-                            // if the MultiLine property is sal_True, it is a TextArea
+                            // if the MultiLine property is true, it is a TextArea
                             bool bMultiLine = false;
                             if (m_xPropertyInfo->hasPropertyByName(PROPERTY_MULTILINE))
                                 // grid columns do not have this property...

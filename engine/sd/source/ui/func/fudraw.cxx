@@ -312,7 +312,7 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 
 /**
  * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ * @returns true if a KeyEvent is being processed, false otherwise
  */
 bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 {

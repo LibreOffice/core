@@ -494,7 +494,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
             "embed");
     OUString sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId1 + "']";
     OUString sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName("word/" + sFile));
 
     // 2nd picture: pencil grayscale
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
@@ -541,7 +541,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
             "embed");
     sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId4 + "']";
     sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName("word/" + sFile));
 
     // 5th picture: watercolor sponge
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
@@ -565,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
     CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId6);
 
     // no redundant wdp files saved
-    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName(u"word/media/hdphoto3.wdp"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/media/hdphoto3.wdp"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, fdo77719)

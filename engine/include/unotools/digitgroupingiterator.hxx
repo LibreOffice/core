@@ -164,15 +164,15 @@ public:
         digit. For example, for grouping in thousands and nIntegerDigits==7 the
         sequence returned would be {1,0,0,1,0,0,0} so the caller would add a
         separator after the 1st and the 4th digit. */
-    static css::uno::Sequence< sal_Bool > createForwardSequence(
+    static css::uno::Sequence< bool > createForwardSequence(
             sal_Int32 nIntegerDigits,
             const css::uno::Sequence< sal_Int32 > & rGroupings )
     {
         if (nIntegerDigits <= 0)
-            return css::uno::Sequence< sal_Bool >();
+            return css::uno::Sequence< bool >();
         DigitGroupingIterator aIterator( rGroupings);
-        css::uno::Sequence< sal_Bool > aSeq( nIntegerDigits);
-        sal_Bool* pArr = aSeq.getArray();
+        css::uno::Sequence< bool > aSeq( nIntegerDigits);
+        bool* pArr = aSeq.getArray();
         for (sal_Int32 j = 0; --nIntegerDigits >= 0; ++j)
         {
             if (j == aIterator.getPos())

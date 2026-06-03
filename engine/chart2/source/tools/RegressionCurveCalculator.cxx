@@ -70,7 +70,7 @@ bool RegressionCurveCalculator::isLogarithmicScaling(
 
 void RegressionCurveCalculator::setRegressionProperties(
     sal_Int32   aDegree,
-    sal_Bool    aForceIntercept,
+    bool    aForceIntercept,
     double      aInterceptValue,
     sal_Int32   aPeriod,
     sal_Int32   nMovingType )
@@ -128,7 +128,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     double min, double max, ::sal_Int32 nPointCount,
     const Reference< chart2::XScaling >& xScalingX,
     const Reference< chart2::XScaling >& /* xScalingY */,
-    sal_Bool /* bMaySkipPointsInCalculation */ )
+    bool /* bMaySkipPointsInCalculation */ )
 {
     if( nPointCount < 2 )
         throw lang::IllegalArgumentException(u"too few points"_ustr, static_cast<cppu::OWeakObject*>(this), 2);

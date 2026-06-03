@@ -125,7 +125,7 @@ public:
         return u"com.sun.star.comp.framework.Frame"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -160,12 +160,12 @@ public:
     virtual css::uno::Reference < css::frame::XFrame > SAL_CALL findFrame(
             const OUString & sTargetFrameName,
             sal_Int32 nSearchFlags) override;
-    virtual sal_Bool SAL_CALL isTop() override;
+    virtual bool SAL_CALL isTop() override;
     virtual void SAL_CALL activate() override;
     virtual void SAL_CALL deactivate() override;
-    virtual sal_Bool SAL_CALL isActive() override;
+    virtual bool SAL_CALL isActive() override;
     virtual void SAL_CALL contextChanged() override;
-    virtual sal_Bool SAL_CALL setComponent(
+    virtual bool SAL_CALL setComponent(
             const css::uno::Reference < css::awt::XWindow > & xComponentWindow,
             const css::uno::Reference < css::frame::XController > & xController) override;
     virtual css::uno::Reference < css::awt::XWindow > SAL_CALL getComponentWindow() override;
@@ -234,7 +234,7 @@ public:
 
     //  XActionLockable
 
-    virtual sal_Bool SAL_CALL isActionLocked() override;
+    virtual bool SAL_CALL isActionLocked() override;
     virtual void SAL_CALL addActionLock() override;
     virtual void SAL_CALL removeActionLock() override;
     virtual void SAL_CALL setActionLocks(sal_Int16 nLock) override;
@@ -242,7 +242,7 @@ public:
 
     //  XCloseable
 
-    virtual void SAL_CALL close(sal_Bool bDeliverOwnership) override;
+    virtual void SAL_CALL close(bool bDeliverOwnership) override;
 
     //  XCloseBroadcaster
 
@@ -297,7 +297,7 @@ public:
 
     virtual css::beans::Property SAL_CALL getPropertyByName(const OUString & sName) override;
 
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString & sName) override;
+    virtual bool SAL_CALL hasPropertyByName(const OUString & sName) override;
 
 
 private:
@@ -459,7 +459,7 @@ XFrameImpl::XFrameImpl( css::uno::Reference< css::uno::XComponentContext >  xCon
         , m_aListenerContainer        ( m_aMutex )
         , m_eActiveState              ( E_INACTIVE )
         , m_bIsFrameTop               ( true ) // I think we are top without a parent and there is no parent yet!
-        , m_bConnected                ( false ) // There exists no component inside of us => sal_False, we are not connected!
+        , m_bConnected                ( false ) // There exists no component inside of us => false, we are not connected!
         , m_nExternalLockCount        ( 0 )
         , m_bSelfClose                ( false ) // Important!
         , m_bIsHidden                 ( true )
@@ -1188,7 +1188,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
 }
 
 /*-****************************************************************************************************
-    @descr      Returns sal_True, if this frame is a "top frame", otherwise sal_False.
+    @descr      Returns true, if this frame is a "top frame", otherwise false.
                 The "m_bIsFrameTop" member must be set in the ctor or setCreator() method.
                 A top frame is a member of the top frame container or a member of the
                 task frame container. Both containers can create new frames if the findFrame()
@@ -1201,7 +1201,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
 
     @onerror    No error should occur!
 *//*-*****************************************************************************************************/
-sal_Bool SAL_CALL XFrameImpl::isTop()
+bool SAL_CALL XFrameImpl::isTop()
 {
     checkDisposed();
     SolarMutexGuard g;
@@ -1374,7 +1374,7 @@ void SAL_CALL XFrameImpl::deactivate()
 
     @onerror    No error should occur.
 *//*-*****************************************************************************************************/
-sal_Bool SAL_CALL XFrameImpl::isActive()
+bool SAL_CALL XFrameImpl::isActive()
 {
     checkDisposed();
     SolarMutexGuard g;
@@ -1420,7 +1420,7 @@ void SAL_CALL XFrameImpl::contextChanged()
     @onerror    We return <FALSE/>.
     @threadsafe yes
 *//*-*****************************************************************************************************/
-sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::XWindow >& xComponentWindow,
+bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::XWindow >& xComponentWindow,
                                       const css::uno::Reference< css::frame::XController >& xController )
 {
 
@@ -1655,7 +1655,7 @@ void SAL_CALL XFrameImpl::removeFrameActionListener( const css::uno::Reference< 
 
     @threadsafe yes
 *//*-*****************************************************************************************************/
-void SAL_CALL XFrameImpl::close( sal_Bool bDeliverOwnership )
+void SAL_CALL XFrameImpl::close( bool bDeliverOwnership )
 {
     checkDisposed();
 
@@ -2014,7 +2014,7 @@ css::beans::Property SAL_CALL XFrameImpl::getPropertyByName(const OUString& sNam
     return pIt->second;
 }
 
-sal_Bool SAL_CALL XFrameImpl::hasPropertyByName(const OUString& sName)
+bool SAL_CALL XFrameImpl::hasPropertyByName(const OUString& sName)
 {
     checkDisposed();
 
@@ -2667,7 +2667,7 @@ void SAL_CALL XFrameImpl::disposing( const css::lang::EventObject& aEvent )
                 false otherwise
     @threadsafe yes
 *//*-*************************************************************************************************************/
-sal_Bool SAL_CALL XFrameImpl::isActionLocked()
+bool SAL_CALL XFrameImpl::isActionLocked()
 {
     SolarMutexGuard g;
     return( m_nExternalLockCount!=0);

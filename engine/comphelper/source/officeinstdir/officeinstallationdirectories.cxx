@@ -194,7 +194,7 @@ OfficeInstallationDirectories::getImplementationName()
 }
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

@@ -91,10 +91,10 @@ struct ImplToolItem
     // bHorz denotes the toolbox alignment
     tools::Rectangle   GetDropDownRect( bool bHorz ) const;
 
-    // returns sal_True if the toolbar item is currently clipped, which can happen for docked toolbars
+    // returns true if the toolbar item is currently clipped, which can happen for docked toolbars
     bool IsClipped() const;
 
-    // returns sal_True if the toolbar item is currently hidden i.e. they are unchecked in the toolbar Customize menu
+    // returns true if the toolbar item is currently hidden i.e. they are unchecked in the toolbar Customize menu
     bool IsItemHidden() const;
 
 private:

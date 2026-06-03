@@ -79,7 +79,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     bool bRet = false;
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
@@ -144,7 +144,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
 {
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     bool bRet = false;
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
@@ -171,7 +171,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column )
 {
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())
@@ -210,13 +210,13 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column )
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
+bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
 {
     return true;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 ;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
 {
     return isDefinitelyWritable(column);
 }

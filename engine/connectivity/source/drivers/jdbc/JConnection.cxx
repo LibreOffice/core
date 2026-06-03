@@ -342,7 +342,7 @@ void SAL_CALL java_sql_Connection::commit(  )
     callVoidMethod_ThrowSQL("commit", mID);
 }
 
-sal_Bool SAL_CALL java_sql_Connection::isClosed(  )
+bool SAL_CALL java_sql_Connection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -350,7 +350,7 @@ sal_Bool SAL_CALL java_sql_Connection::isClosed(  )
     return callBooleanMethod( "isClosed", mID ) && java_sql_Connection_BASE::rBHelper.bDisposed;
 }
 
-sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  )
+bool SAL_CALL java_sql_Connection::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -370,19 +370,19 @@ void SAL_CALL java_sql_Connection::rollback(  )
     callVoidMethod_ThrowSQL("rollback", mID);
 }
 
-sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  )
+bool SAL_CALL java_sql_Connection::getAutoCommit(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "getAutoCommit", mID );
 }
 
-void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly )
+void SAL_CALL java_sql_Connection::setReadOnly( bool readOnly )
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithBoolArg_ThrowSQL("setReadOnly", mID, readOnly);
 }
 
-void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit )
+void SAL_CALL java_sql_Connection::setAutoCommit( bool autoCommit )
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithBoolArg_ThrowSQL("setAutoCommit", mID, autoCommit);

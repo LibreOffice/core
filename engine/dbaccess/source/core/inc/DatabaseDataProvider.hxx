@@ -61,14 +61,14 @@ private:
 
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // css::chart2::data::XDataProvider:
-    virtual sal_Bool SAL_CALL createDataSourcePossible(const css::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
+    virtual bool SAL_CALL createDataSourcePossible(const css::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource(const css::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource) override;
-    virtual sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(const OUString & aRangeRepresentation) override;
+    virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(const OUString & aRangeRepresentation) override;
     virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(const OUString & aRangeRepresentation) override;
 
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
@@ -104,16 +104,16 @@ private:
     virtual void SAL_CALL setCommandType(::sal_Int32 the_value) override;
     virtual OUString SAL_CALL getFilter() override;
     virtual void SAL_CALL setFilter(const OUString & the_value) override;
-    virtual sal_Bool SAL_CALL getApplyFilter() override;
-    virtual void SAL_CALL setApplyFilter( sal_Bool _applyfilter ) override;
+    virtual bool SAL_CALL getApplyFilter() override;
+    virtual void SAL_CALL setApplyFilter( bool _applyfilter ) override;
     virtual OUString SAL_CALL getHavingClause() override;
     virtual void SAL_CALL setHavingClause( const OUString& _havingclause ) override;
     virtual OUString SAL_CALL getGroupBy() override;
     virtual void SAL_CALL setGroupBy( const OUString& _groupby ) override;
     virtual OUString SAL_CALL getOrder() override;
     virtual void SAL_CALL setOrder( const OUString& _order ) override;
-    virtual sal_Bool SAL_CALL getEscapeProcessing() override;
-    virtual void SAL_CALL setEscapeProcessing(sal_Bool the_value) override;
+    virtual bool SAL_CALL getEscapeProcessing() override;
+    virtual void SAL_CALL setEscapeProcessing(bool the_value) override;
     virtual ::sal_Int32 SAL_CALL getRowLimit() override;
     virtual void SAL_CALL setRowLimit( ::sal_Int32 _rowlimit ) override;
     virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getActiveConnection() override;
@@ -124,7 +124,7 @@ private:
     // css::sdbc::XParameters
     virtual void SAL_CALL setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) override;
     virtual void SAL_CALL setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) override;
-    virtual void SAL_CALL setBoolean(sal_Int32 parameterIndex, sal_Bool x) override;
+    virtual void SAL_CALL setBoolean(sal_Int32 parameterIndex, bool x) override;
     virtual void SAL_CALL setByte(sal_Int32 parameterIndex, sal_Int8 x) override;
     virtual void SAL_CALL setShort(sal_Int32 parameterIndex, sal_Int16 x) override;
     virtual void SAL_CALL setInt(sal_Int32 parameterIndex, sal_Int32 x) override;
@@ -152,23 +152,23 @@ private:
     virtual void SAL_CALL removeRowSetListener(const css::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
 
     // css::sdbc::XResultSet
-    virtual sal_Bool SAL_CALL next() override;
-    virtual sal_Bool SAL_CALL isBeforeFirst() override;
-    virtual sal_Bool SAL_CALL isAfterLast() override;
-    virtual sal_Bool SAL_CALL isFirst() override;
-    virtual sal_Bool SAL_CALL isLast() override;
+    virtual bool SAL_CALL next() override;
+    virtual bool SAL_CALL isBeforeFirst() override;
+    virtual bool SAL_CALL isAfterLast() override;
+    virtual bool SAL_CALL isFirst() override;
+    virtual bool SAL_CALL isLast() override;
     virtual void SAL_CALL beforeFirst() override;
     virtual void SAL_CALL afterLast() override;
-    virtual sal_Bool SAL_CALL first() override;
-    virtual sal_Bool SAL_CALL last() override;
+    virtual bool SAL_CALL first() override;
+    virtual bool SAL_CALL last() override;
     virtual sal_Int32 SAL_CALL getRow() override;
-    virtual sal_Bool SAL_CALL absolute(sal_Int32 row) override;
-    virtual sal_Bool SAL_CALL relative(sal_Int32 rows) override;
-    virtual sal_Bool SAL_CALL previous() override;
+    virtual bool SAL_CALL absolute(sal_Int32 row) override;
+    virtual bool SAL_CALL relative(sal_Int32 rows) override;
+    virtual bool SAL_CALL previous() override;
     virtual void SAL_CALL refreshRow() override;
-    virtual sal_Bool SAL_CALL rowUpdated() override;
-    virtual sal_Bool SAL_CALL rowInserted() override;
-    virtual sal_Bool SAL_CALL rowDeleted() override;
+    virtual bool SAL_CALL rowUpdated() override;
+    virtual bool SAL_CALL rowInserted() override;
+    virtual bool SAL_CALL rowDeleted() override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement() override;
 
     // container::XChild
@@ -193,7 +193,7 @@ private:
     virtual void SAL_CALL addChartDataChangeEventListener(const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual void SAL_CALL removeChartDataChangeEventListener(const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double SAL_CALL getNotANumber() override;
-    virtual sal_Bool SAL_CALL isNotANumber(double nNumber ) override;
+    virtual bool SAL_CALL isNotANumber(double nNumber ) override;
 private:
     DatabaseDataProvider(DatabaseDataProvider const &) = delete;
     DatabaseDataProvider& operator =(DatabaseDataProvider const &) = delete;

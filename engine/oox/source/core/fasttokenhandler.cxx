@@ -35,7 +35,7 @@ OUString SAL_CALL FastTokenHandler::getImplementationName()
     return u"com.sun.star.comp.oox.core.FastTokenHandler"_ustr;
 }
 
-sal_Bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName )
+bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

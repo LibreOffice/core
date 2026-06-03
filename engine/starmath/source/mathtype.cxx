@@ -68,8 +68,8 @@ void MathType::Init()
 
 
 /*ToDo replace with table rather than switch, returns
- sal_True in the case that the char is just a char, and
- sal_False if the character is an operator which must not be
+ true in the case that the char is just a char, and
+ false if the character is an operator which must not be
  placed inside the quote sequence designed to protect
  against being parsed as a keyword
 

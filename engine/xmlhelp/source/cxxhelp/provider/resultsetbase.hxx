@@ -79,7 +79,7 @@ namespace chelp {
 
 
         // XRow
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         wasNull() override
         {
             if( 0<= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
@@ -98,7 +98,7 @@ namespace chelp {
                 return OUString();
         }
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         getBoolean( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
@@ -264,19 +264,19 @@ namespace chelp {
 
         // XResultSet
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         next() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         isBeforeFirst() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         isAfterLast() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         isFirst() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         isLast() override;
 
         virtual void SAL_CALL
@@ -285,34 +285,34 @@ namespace chelp {
         virtual void SAL_CALL
         afterLast() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         first() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         last() override;
 
         virtual sal_Int32 SAL_CALL
         getRow() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         absolute( sal_Int32 row ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         relative( sal_Int32 rows ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         previous() override;
 
         virtual void SAL_CALL
         refreshRow() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         rowUpdated() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         rowInserted() override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         rowDeleted() override;
 
 

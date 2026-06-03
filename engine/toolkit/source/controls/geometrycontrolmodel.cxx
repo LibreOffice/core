@@ -306,7 +306,7 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
     }
 
 
-    sal_Bool SAL_CALL OGeometryControlModel_Base::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
+    bool SAL_CALL OGeometryControlModel_Base::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
             sal_Int32 _nHandle, const Any& _rValue)
     {
         return OPropertyContainer::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);

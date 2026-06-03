@@ -45,9 +45,9 @@ public:
                        bool isHeader, sal_Int32 index );
 
     // Attributes
-    virtual sal_Bool SAL_CALL getIsHeader() override;
-    virtual sal_Bool SAL_CALL getLinkToPrevious() override;
-    virtual void SAL_CALL setLinkToPrevious( sal_Bool _linktoprevious ) override;
+    virtual bool SAL_CALL getIsHeader() override;
+    virtual bool SAL_CALL getLinkToPrevious() override;
+    virtual void SAL_CALL setLinkToPrevious( bool _linktoprevious ) override;
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() override;
     virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) override;
 

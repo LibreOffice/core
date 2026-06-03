@@ -64,7 +64,7 @@ typedef void (SAL_CALL * uno_ReleaseFunc)(
     @param release          function to release queried interfaces; defaults (0) to uno
     @return true if values are equal
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
+CPPU_DLLPUBLIC bool SAL_CALL uno_equalData(
     void * pVal1, struct _typelib_TypeDescription * pVal1TypeDescr,
     void * pVal2, struct _typelib_TypeDescription * pVal2TypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -80,7 +80,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
     @param release          function to release queried interfaces; defaults (0) to uno
     @return true if values are equal
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_equalData(
+CPPU_DLLPUBLIC bool SAL_CALL uno_type_equalData(
     void * pVal1, struct _typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, struct _typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -194,7 +194,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_constructData(
                             defaults (0) to uno
     @return true if destination has been successfully assigned
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
+CPPU_DLLPUBLIC bool SAL_CALL uno_assignData(
     void * pDest, struct _typelib_TypeDescription * pDestTypeDescr,
     void * pSource, struct _typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -217,7 +217,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
                             defaults (0) to uno
     @return true if destination has been successfully assigned
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
+CPPU_DLLPUBLIC bool SAL_CALL uno_type_assignData(
     void * pDest, struct _typelib_TypeDescriptionReference * pDestType,
     void * pSource, struct _typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -237,7 +237,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
                             defaults (0) to uno
     @return true if value is destination has been successfully assigned
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
+CPPU_DLLPUBLIC bool SAL_CALL uno_type_isAssignableFromData(
     struct _typelib_TypeDescriptionReference * pAssignable,
     void * pFrom, struct _typelib_TypeDescriptionReference * pFromType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )

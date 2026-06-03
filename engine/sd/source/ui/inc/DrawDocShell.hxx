@@ -146,9 +146,9 @@ public:
         @param rName the new name that is to be set for a slide.  This string
                      may be set to an empty string (see below).
 
-        @return sal_True, if the new name is unique.  Note that if the user entered
+        @return true, if the new name is unique.  Note that if the user entered
                 a default name of a not-yet-existing slide (e.g. 'Slide 17'),
-                sal_True is returned, but rName is set to an empty string.
+                true is returned, but rName is set to an empty string.
      */
     bool                    CheckPageName(weld::Window* pWin, OUString& rName );
 

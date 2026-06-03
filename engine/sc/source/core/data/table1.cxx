@@ -305,7 +305,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
     if (pDrawLayer)
     {
-        if ( pDrawLayer->ScAddPage( nTab ) )    // sal_False (not inserted) during Undo
+        if ( pDrawLayer->ScAddPage( nTab ) )    // false (not inserted) during Undo
         {
             pDrawLayer->ScRenamePage( nTab, aName );
             sal_uLong const nx = o3tl::convert((rDocument.MaxCol()+1) * STD_COL_WIDTH, o3tl::Length::twip, o3tl::Length::mm100);

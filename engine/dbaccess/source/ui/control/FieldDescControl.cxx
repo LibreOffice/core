@@ -271,7 +271,7 @@ IMPL_LINK(OFieldDescControl, ChangeHdl, weld::ComboBox&, rListBox, void)
     // Special treatment for Bool fields
     if (m_xRequired && &rListBox == m_xRequired->GetWidget() && m_xBoolDefault)
     {
-        // If m_xRequired = sal_True then the sal_Bool field must NOT contain <<none>>
+        // If m_xRequired = true then the bool field must NOT contain <<none>>
         OUString sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
 
         if (m_xRequired->get_active() == 0) // Yes
@@ -844,7 +844,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if (m_xBoolDefault)
     {
-        // If m_xRequired = sal_True then the sal_Bool field must NOT contain <<none>>
+        // If m_xRequired = true then the bool field must NOT contain <<none>>
         OUString sValue;
         pFieldDescr->GetControlDefault() >>= sValue;
         OUString sDef = BoolStringUI(sValue);

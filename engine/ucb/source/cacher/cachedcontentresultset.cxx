@@ -217,10 +217,10 @@ void CachedContentResultSet::CCRS_Cache
     sal_Int32 nDiff = nRow - m_pResult->StartIndex;
     if( nDiff < 0 )
         nDiff *= -1;
-    Sequence< sal_Bool >& rMappedReminder = getMappedReminder();
+    Sequence< bool >& rMappedReminder = getMappedReminder();
     if( nDiff < rMappedReminder.getLength() )
     {
-        sal_Bool* pMappedReminder = rMappedReminder.getArray();
+        bool* pMappedReminder = rMappedReminder.getArray();
         pMappedReminder[nDiff] = true;
     }
 }
@@ -238,7 +238,7 @@ bool CachedContentResultSet::CCRS_Cache
     return false;
 }
 
-Sequence< sal_Bool >& CachedContentResultSet::CCRS_Cache
+Sequence< bool >& CachedContentResultSet::CCRS_Cache
     ::getMappedReminder()
 {
     if( !m_pMappedReminder )
@@ -401,7 +401,7 @@ public:
     virtual css::beans::Property SAL_CALL
     getPropertyByName( const OUString& aName ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasPropertyByName( const OUString& Name ) override;
 };
 
@@ -470,7 +470,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     {
         Property& rMyProp = pProperties[ nOrigProps - nDeleted + 1 ];
         rMyProp.Name = g_sPropertyNameForFetchDirection;
-        rMyProp.Type = cppu::UnoType<sal_Bool>::get();
+        rMyProp.Type = cppu::UnoType<bool>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
         m_nFetchDirectionPropertyHandle = rMyProp.Handle;
@@ -529,7 +529,7 @@ Property SAL_CALL CCRS_PropertySetInfo
 }
 
 //virtual
-sal_Bool SAL_CALL CCRS_PropertySetInfo
+bool SAL_CALL CCRS_PropertySetInfo
     ::hasPropertyByName( const OUString& Name )
 {
     return ( impl_getPos( Name ) != -1 );
@@ -912,7 +912,7 @@ OUString SAL_CALL CachedContentResultSet::getImplementationName()
     return u"com.sun.star.comp.ucb.CachedContentResultSet"_ustr;
 }
 
-sal_Bool SAL_CALL CachedContentResultSet::supportsService( const OUString& ServiceName )
+bool SAL_CALL CachedContentResultSet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -1237,7 +1237,7 @@ Reference<XContent> CachedContentResultSet
 
 //virtual
 
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::next()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1274,7 +1274,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::previous()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1311,7 +1311,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::absolute( sal_Int32 row )
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1416,7 +1416,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::relative( sal_Int32 rows )
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1466,7 +1466,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::first()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1495,7 +1495,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::last()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1570,7 +1570,7 @@ void SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::isAfterLast()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1601,7 +1601,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::isBeforeFirst()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1635,7 +1635,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::isFirst()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1664,7 +1664,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::isLast()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1714,7 +1714,7 @@ void SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::rowUpdated()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1724,7 +1724,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     return false;
 }
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::rowInserted()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1735,7 +1735,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::rowDeleted()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1760,7 +1760,7 @@ Reference< XInterface > SAL_CALL CachedContentResultSet
 
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::wasNull()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1785,10 +1785,10 @@ OUString SAL_CALL CachedContentResultSet
 }
 
 //virtual
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::getBoolean( sal_Int32 columnIndex )
 {
-    return rowOriginGet<sal_Bool>(&css::sdbc::XRow::getBoolean, columnIndex);
+    return rowOriginGet<bool>(&css::sdbc::XRow::getBoolean, columnIndex);
 }
 
 //virtual
@@ -1992,7 +1992,7 @@ OUString SAL_CALL CachedContentResultSetFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.CachedContentResultSetFactory"_ustr;
 }
-sal_Bool SAL_CALL CachedContentResultSetFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL CachedContentResultSetFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

@@ -164,7 +164,7 @@ void call(
 #ifdef MACOSX
                     parameters[i].pTypeRef->eTypeClass, &subsp,
 #endif
-                    static_cast<unsigned long>(*static_cast<sal_Bool *>(arguments[i])), stack, &sp,
+                    static_cast<unsigned long>(*static_cast<bool *>(arguments[i])), stack, &sp,
                     gpr, &ngpr);
                 break;
             case typelib_TypeClass_BYTE:

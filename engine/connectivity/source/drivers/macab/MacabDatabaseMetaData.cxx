@@ -128,47 +128,47 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxTablesInSelect(  )
     return 1;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
+bool SAL_CALL MacabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::storesLowerCaseIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::storesLowerCaseIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::storesMixedCaseQuotedIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::storesMixedCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::storesMixedCaseIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::storesMixedCaseIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::storesUpperCaseIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::storesUpperCaseIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsAlterTableWithAddColumn(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsAlterTableWithAddColumn(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsAlterTableWithDropColumn(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsAlterTableWithDropColumn(  )
 {
     return false;
 }
@@ -178,7 +178,7 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxIndexLength(  )
     return 0; // 0 means no limit
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  )
 {
     return false;
 }
@@ -199,117 +199,117 @@ OUString SAL_CALL MacabDatabaseMetaData::getExtraNameCharacters(  )
     return OUString();
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::isCatalogAtStart(  )
+bool SAL_CALL MacabDatabaseMetaData::isCatalogAtStart(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
+bool SAL_CALL MacabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
+bool SAL_CALL MacabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsPositionedDelete(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsPositionedDelete(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsPositionedUpdate(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsPositionedUpdate(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInDataManipulation(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInDataManipulation(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92FullSQL(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsANSI92FullSQL(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92EntryLevelSQL(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsANSI92EntryLevelSQL(  )
 {
     return true; // should be supported at least
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsIntegrityEnhancementFacility(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsIntegrityEnhancementFacility(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInIndexDefinitions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInIndexDefinitions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInTableDefinitions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInTableDefinitions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInTableDefinitions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInTableDefinitions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInDataManipulation(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInDataManipulation(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOuterJoins(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsOuterJoins(  )
 {
     return false;
 }
@@ -329,198 +329,198 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxSchemaNameLength(  )
     return 0; // 0 means no limit
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTransactions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsTransactions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::allProceduresAreCallable(  )
+bool SAL_CALL MacabDatabaseMetaData::allProceduresAreCallable(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsStoredProcedures(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsStoredProcedures(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSelectForUpdate(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSelectForUpdate(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::allTablesAreSelectable(  )
+bool SAL_CALL MacabDatabaseMetaData::allTablesAreSelectable(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::isReadOnly(  )
+bool SAL_CALL MacabDatabaseMetaData::isReadOnly(  )
 {
     // for the moment, we have read-only addresses, but this might change in the future
     return true;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::usesLocalFiles(  )
+bool SAL_CALL MacabDatabaseMetaData::usesLocalFiles(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::usesLocalFilePerTable(  )
+bool SAL_CALL MacabDatabaseMetaData::usesLocalFilePerTable(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTypeConversion(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsTypeConversion(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::nullPlusNonNullIsNull(  )
+bool SAL_CALL MacabDatabaseMetaData::nullPlusNonNullIsNull(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsColumnAliasing(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsColumnAliasing(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTableCorrelationNames(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsTableCorrelationNames(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsExpressionsInOrderBy(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsExpressionsInOrderBy(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsGroupBy(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsGroupBy(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsGroupByBeyondSelect(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsGroupByBeyondSelect(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsGroupByUnrelated(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsGroupByUnrelated(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMultipleTransactions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsMultipleTransactions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMultipleResultSets(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsMultipleResultSets(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsLikeEscapeClause(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsLikeEscapeClause(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOrderByUnrelated(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsOrderByUnrelated(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsUnion(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsUnion(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsUnionAll(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsUnionAll(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMixedCaseIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsMixedCaseIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedAtEnd(  )
+bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedAtEnd(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedAtStart(  )
+bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedAtStart(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedHigh(  )
+bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedHigh(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedLow(  )
+bool SAL_CALL MacabDatabaseMetaData::nullsAreSortedLow(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInProcedureCalls(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInProcedureCalls(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInProcedureCalls(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInProcedureCalls(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCorrelatedSubqueries(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsCorrelatedSubqueries(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInComparisons(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInComparisons(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInExists(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInExists(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInIns(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInIns(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInQuantifieds(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsSubqueriesInQuantifieds(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  )
 {
     return false;
 }
@@ -612,27 +612,27 @@ OUString SAL_CALL MacabDatabaseMetaData::getNumericFunctions(  )
     return OUString();
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsExtendedSQLGrammar(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsExtendedSQLGrammar(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsCoreSQLGrammar(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsCoreSQLGrammar(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsMinimumSQLGrammar(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsMinimumSQLGrammar(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsFullOuterJoins(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsFullOuterJoins(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsLimitedOuterJoins(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsLimitedOuterJoins(  )
 {
     return false;
 }
@@ -657,7 +657,7 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxUserNameLength(  )
     return 0; // 0 means no limit
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetType( sal_Int32 setType )
+bool SAL_CALL MacabDatabaseMetaData::supportsResultSetType( sal_Int32 setType )
 {
     switch (setType)
     {
@@ -668,7 +668,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetType( sal_Int32 setTyp
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 )
 {
     switch (setType)
     {
@@ -679,52 +679,52 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::updatesAreDetected( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::updatesAreDetected( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::deletesAreDetected( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::deletesAreDetected( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::insertsAreDetected( sal_Int32 )
+bool SAL_CALL MacabDatabaseMetaData::insertsAreDetected( sal_Int32 )
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabDatabaseMetaData::supportsBatchUpdates(  )
+bool SAL_CALL MacabDatabaseMetaData::supportsBatchUpdates(  )
 {
     return false;
 }
@@ -1037,14 +1037,14 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getPrimaryKeys(
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getIndexInfo(
     const Any&, const OUString&, const OUString&,
-    sal_Bool, sal_Bool )
+    bool, bool )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getBestRowIdentifier(
     const Any&, const OUString&, const OUString&, sal_Int32,
-    sal_Bool )
+    bool )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }

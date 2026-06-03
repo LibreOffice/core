@@ -328,7 +328,7 @@ static size_t GetFontIndex(const SfxPoolItem& rItem,
 
 ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bClipboard )
 {
-    assert( IsUpdateLayout() && "WriteRTF for UpdateMode = sal_False!" );
+    assert( IsUpdateLayout() && "WriteRTF for UpdateMode = false!" );
     CheckIdleFormatter();
 
     sal_Int32 nStartNode, nEndNode;
@@ -1828,12 +1828,12 @@ void ImpEditEngine::Convert( EditView* pEditView, weld::Widget* pDialogParent,
     // disallow formatting, updating the view, ... while
     // non-interactively converting the document. (saves time)
     //if (!bIsInteractive)
-    //  SetUpdateMode( sal_False );
+    //  SetUpdateMode( false );
 
     aWrp.Convert();
 
     //if (!bIsInteractive)
-    //SetUpdateMode( sal_True, 0, sal_True );
+    //SetUpdateMode( true, 0, true );
 
     if ( !bMultipleDoc )
     {

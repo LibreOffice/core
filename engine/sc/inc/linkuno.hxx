@@ -107,7 +107,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -133,7 +133,7 @@ public:
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -145,11 +145,11 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -216,7 +216,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -255,11 +255,11 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -311,7 +311,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -337,7 +337,7 @@ public:
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -349,7 +349,7 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XDDELinks
     virtual css::uno::Reference< css::sheet::XDDELink > SAL_CALL addDDELink(
@@ -358,7 +358,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -398,12 +398,12 @@ public:
 
                             // XExternalDocLink
     virtual css::uno::Reference< css::sheet::XExternalSheetCache >
-        SAL_CALL addSheetCache( const OUString& aSheetName, sal_Bool bDynamicCache ) override;
+        SAL_CALL addSheetCache( const OUString& aSheetName, bool bDynamicCache ) override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -415,7 +415,7 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // Attributes
     virtual sal_Int32 SAL_CALL getTokenIndex() override;
@@ -443,7 +443,7 @@ public:
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -455,7 +455,7 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
 private:
     ScExternalDocLinksObj(const ScExternalDocLinksObj&) = delete;

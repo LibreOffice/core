@@ -1131,7 +1131,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                 if( pOPO && pOPO->GetOutlinerMode() == OutlinerMode::DontKnow )
                     pOPO->SetOutlinerMode( OutlinerMode::TitleObject );
 
-                // sal_True: don't delete "hard" attributes when doing this.
+                // true: don't delete "hard" attributes when doing this.
                 if (pTitleSheet)
                     pObj->SetStyleSheet(pTitleSheet, true);
             }
@@ -1202,7 +1202,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
 
         // This outliner is only used to create special text objects. As no
         // information about portions is saved in this outliner, the update mode
-        // can/should always remain sal_False.
+        // can/should always remain false.
         mpInternalOutliner->SetUpdateLayout( false );
         mpInternalOutliner->EnableUndo( false );
 
@@ -1213,8 +1213,8 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
         mpInternalOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
-    DBG_ASSERT( !mpInternalOutliner || ( ! mpInternalOutliner->IsUpdateLayout() ) , "InternalOutliner: UpdateMode = sal_True !" );
-    DBG_ASSERT( !mpInternalOutliner || ( ! mpInternalOutliner->IsUndoEnabled() ), "InternalOutliner: Undo = sal_True !" );
+    DBG_ASSERT( !mpInternalOutliner || ( ! mpInternalOutliner->IsUpdateLayout() ) , "InternalOutliner: UpdateMode = true !" );
+    DBG_ASSERT( !mpInternalOutliner || ( ! mpInternalOutliner->IsUndoEnabled() ), "InternalOutliner: Undo = true !" );
 
     // If you add stuff here, always clear it out.
     // Advantages:

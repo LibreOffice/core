@@ -334,7 +334,7 @@ OUString AccessibleTabBarPageList::getImplementationName()
 }
 
 
-sal_Bool AccessibleTabBarPageList::supportsService( const OUString& rServiceName )
+bool AccessibleTabBarPageList::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -540,7 +540,7 @@ void AccessibleTabBarPageList::selectAccessibleChild( sal_Int64 nChildIndex )
 }
 
 
-sal_Bool AccessibleTabBarPageList::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool AccessibleTabBarPageList::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

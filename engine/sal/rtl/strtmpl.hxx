@@ -512,7 +512,7 @@ template <typename C> sal_Int32 trim(C* pStr) { return trim_WithLength(pStr, get
 
 /* ----------------------------------------------------------------------- */
 
-template <typename C> sal_Int32 valueOfBoolean(C* pStr, sal_Bool b)
+template <typename C> sal_Int32 valueOfBoolean(C* pStr, bool b)
 {
     assert(pStr);
     if ( b )
@@ -609,7 +609,7 @@ sal_Int32 valueOfInt(C* pStr, T n, sal_Int16 nRadix)
 
 /* ----------------------------------------------------------------------- */
 
-template <typename C> sal_Bool toBoolean(const C* pStr)
+template <typename C> bool toBoolean(const C* pStr)
 {
     assert(pStr);
     if ( *pStr == '1' )

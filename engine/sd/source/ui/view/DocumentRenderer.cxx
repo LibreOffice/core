@@ -436,7 +436,7 @@ namespace {
                                     u"SlidesPerPage"_ustr ,
                                     GetSlidesPerPageSequence(),
                                     0,
-                                    Sequence< sal_Bool >(),
+                                    Sequence< bool >(),
                                     aContentOpt
                                     )
                                 );
@@ -450,7 +450,7 @@ namespace {
                                     u"SlidesPerPageOrder"_ustr ,
                                     CreateChoice(STR_IMPRESS_PRINT_UI_ORDER_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_ORDER_CHOICES)),
                                     0,
-                                    Sequence< sal_Bool >(),
+                                    Sequence< bool >(),
                                     aSlidesPerPageOpt )
                                 );
             }
@@ -552,7 +552,7 @@ namespace {
                                 mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES)) :
                                             CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW)),
                                 nDefaultChoice,
-                                Sequence< sal_Bool >(),
+                                Sequence< bool >(),
                                 aPageOptionsOpt
                                 )
                             );
@@ -592,7 +592,7 @@ namespace {
                                 u"PrintProspectRTL"_ustr ,
                                 aBRTLChoices,
                                 0,
-                                Sequence< sal_Bool >(),
+                                Sequence< bool >(),
                                 aIncludeOpt
                                 )
                             );
@@ -674,7 +674,7 @@ namespace {
             vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
             AddDialogControl(vcl::PrinterOptionsHelper::setChoiceListControlOpt(u"evenoddbox"_ustr, u""_ustr,
                                 uno::Sequence<OUString>(), u"EvenOdd"_ustr, uno::Sequence<OUString>(),
-                                0, uno::Sequence<sal_Bool>(), aEvenOddOpt));
+                                0, uno::Sequence<bool>(), aEvenOddOpt));
         }
 
         void AddDialogControl( const Any& i_rCtrl )

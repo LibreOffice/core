@@ -446,7 +446,7 @@ void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
 }
 
 
-void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
+void SAL_CALL OleEmbeddedObject::close( bool bDeliverOwnership )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -617,7 +617,7 @@ void SAL_CALL OleEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPos
 }
 
 
-void SAL_CALL OleEmbeddedObject::enableModeless( sal_Bool bEnable )
+void SAL_CALL OleEmbeddedObject::enableModeless( bool bEnable )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XInplaceObject > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -706,7 +706,7 @@ OUString SAL_CALL OleEmbeddedObject::getImplementationName()
     return u"com.sun.star.comp.embed.OleEmbeddedObject"_ustr;
 }
 
-sal_Bool SAL_CALL OleEmbeddedObject::supportsService(const OUString& ServiceName)
+bool SAL_CALL OleEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

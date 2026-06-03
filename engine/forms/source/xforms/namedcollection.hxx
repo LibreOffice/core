@@ -82,7 +82,7 @@ public:
         return Collection<T>::getElementType();
     }
 
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
     {
         return Collection<T>::hasElements();
     }
@@ -101,7 +101,7 @@ public:
         return getNames();
     }
 
-    virtual sal_Bool SAL_CALL hasByName(
+    virtual bool SAL_CALL hasByName(
         const OUString& aName ) override
     {
         return hasItem( aName );

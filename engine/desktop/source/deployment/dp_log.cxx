@@ -52,7 +52,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XProgressHandler
@@ -88,7 +88,7 @@ OUString ProgressLogImpl::getImplementationName()
     return u"com.sun.star.comp.deployment.ProgressLog"_ustr;
 }
 
-sal_Bool ProgressLogImpl::supportsService( const OUString& ServiceName )
+bool ProgressLogImpl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

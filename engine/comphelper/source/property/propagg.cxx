@@ -151,7 +151,7 @@ Property OPropertyArrayAggregationHelper::getPropertyByName( const OUString& _rP
 }
 
 
-sal_Bool OPropertyArrayAggregationHelper::hasPropertyByName(const OUString& _rPropertyName)
+bool OPropertyArrayAggregationHelper::hasPropertyByName(const OUString& _rPropertyName)
 {
     return nullptr != findPropertyByName( _rPropertyName );
 }
@@ -170,7 +170,7 @@ sal_Int32 OPropertyArrayAggregationHelper::getHandleByName(const OUString& _rPro
 }
 
 
-sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
+bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
             OUString* _pPropName, sal_Int16* _pAttributes, sal_Int32 _nHandle)
 {
     auto i = m_aPropertyAccessors.find(_nHandle);
@@ -809,7 +809,7 @@ css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const O
         return getPropertyDefaultByHandle(nHandle);
 }
 
-sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {
     bool bModified = false;
 

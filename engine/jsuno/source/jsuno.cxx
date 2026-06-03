@@ -2156,7 +2156,7 @@ ValueRef toJs(JSContext* ctx, css::uno::Type const& type, void const* value)
         case css::uno::TypeClass_VOID:
             return ValueRef(ctx, JS_UNDEFINED);
         case css::uno::TypeClass_BOOLEAN:
-            return ValueRef(ctx, JS_NewBool(ctx, *static_cast<sal_Bool const*>(value)));
+            return ValueRef(ctx, JS_NewBool(ctx, *static_cast<bool const*>(value)));
         case css::uno::TypeClass_BYTE:
             return ValueRef(ctx, JS_NewInt32(ctx, *static_cast<sal_Int8 const*>(value)));
         case css::uno::TypeClass_SHORT:
@@ -2538,9 +2538,9 @@ public:
 
     css::uno::Any SAL_CALL getValue(OUString const&) override { return {}; }
 
-    sal_Bool SAL_CALL hasMethod(OUString const&) override { return true; }
+    bool SAL_CALL hasMethod(OUString const&) override { return true; }
 
-    sal_Bool SAL_CALL hasProperty(OUString const&) override { return false; }
+    bool SAL_CALL hasProperty(OUString const&) override { return false; }
 
 private:
     css::uno::Type m_interfaceType;

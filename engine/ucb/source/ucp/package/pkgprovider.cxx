@@ -77,7 +77,7 @@ public:
     virtual uno::Any SAL_CALL
     getByHierarchicalName( const OUString& aName ) override
     { return m_xNA->getByHierarchicalName( aName ); }
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasByHierarchicalName( const OUString& aName ) override
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
@@ -140,7 +140,7 @@ ContentProvider::getImplementationName()
     return u"com.sun.star.comp.ucb.PackageContentProvider"_ustr;
 }
 
-sal_Bool
+bool
 ContentProvider::supportsService(const OUString& s)
 {
     return cppu::supportsService(this, s);

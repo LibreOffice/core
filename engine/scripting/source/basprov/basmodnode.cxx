@@ -107,7 +107,7 @@ namespace basprov
     }
 
 
-    sal_Bool BasicModuleNodeImpl::hasChildNodes(  )
+    bool BasicModuleNodeImpl::hasChildNodes(  )
     {
         SolarMutexGuard aGuard;
 

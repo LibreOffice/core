@@ -145,7 +145,7 @@ public:
     tools::Rectangle GetCellOutputRect(const ScAddress& rCellPos) const;
 
     // Query the range and rectangle of the main (non-repeat) cell range.
-    // Returns sal_False if not contained.
+    // Returns false if not contained.
     bool    GetMainCellRange( ScRange& rRange, tools::Rectangle& rPixRect ) const;
 };
 

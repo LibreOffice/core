@@ -113,10 +113,10 @@ Args *args_parse (void)
                     arg, length, pArgDescr[j].name)
                 == 0)
             {
-                args->bInhibitSplash  |= pArgDescr[j].bInhibitSplash;
-                args->bInhibitPagein  |= pArgDescr[j].bInhibitPagein;
-                args->bInhibitJavaLdx |= pArgDescr[j].bInhibitJavaLdx;
-                args->bInhibitPipe    |= pArgDescr[j].bInhibitPipe;
+                args->bInhibitSplash  |= (bool)pArgDescr[j].bInhibitSplash;
+                args->bInhibitPagein  |= (bool)pArgDescr[j].bInhibitPagein;
+                args->bInhibitJavaLdx |= (bool)pArgDescr[j].bInhibitJavaLdx;
+                args->bInhibitPipe    |= (bool)pArgDescr[j].bInhibitPipe;
                 if (pArgDescr[j].pPageinType)
                     args->pPageinType = pArgDescr[j].pPageinType;
                 break;

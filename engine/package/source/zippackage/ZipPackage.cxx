@@ -1007,7 +1007,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     throw NoSuchElementException();
 }
 
-sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
+bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 {
     if (aName == "/")
         // root directory
@@ -1772,7 +1772,7 @@ uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
     return aResult;
 }
 
-sal_Bool SAL_CALL ZipPackage::hasPendingChanges()
+bool SAL_CALL ZipPackage::hasPendingChanges()
 {
     return false;
 }
@@ -1792,7 +1792,7 @@ Sequence< OUString > ZipPackage::getSupportedServiceNames()
     return { u"com.sun.star.packages.Package"_ustr };
 }
 
-sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
+bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

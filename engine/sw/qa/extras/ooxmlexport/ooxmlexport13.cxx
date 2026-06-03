@@ -1224,7 +1224,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
         uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
         uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr)));
+        CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, u"StringItemList"_ustr).getLength());
     }
     else
@@ -1250,7 +1250,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"őőőőőőőőőőőűűűű"_ustr, getProperty<OUString>(xPropertySet, u"Label"_ustr));
 }
 

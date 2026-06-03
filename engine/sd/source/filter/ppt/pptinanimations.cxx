@@ -2855,7 +2855,7 @@ void AnimationImporter::dump( Any& rAny )
     sal_Int32 nInt;
     double fDouble;
     OUString aString;
-    sal_Bool bBool;
+    bool bBool;
     Event aEvent;
     Timing aTiming;
 
@@ -2948,7 +2948,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_DIRECTION:
         {
-            sal_Bool bDirection;
+            bool bDirection;
             if( aAny >>= bDirection )
             {
                 fprintf( mpFile, " direction=\"%s\"", bDirection ? "cclockwise" : "clockwise"  );
@@ -2979,7 +2979,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_PATH_EDIT_MODE:
         {
-            sal_Bool bPathEditMode;
+            bool bPathEditMode;
             if( aAny >>= bPathEditMode )
             {
                 fprintf( mpFile, " pptPathEditMode=\"%s\"", bPathEditMode ? "relative" : "fixed" );
@@ -3154,7 +3154,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_AFTEREFFECT:
         {
-            sal_Bool bAfterEffect;
+            bool bAfterEffect;
             if( aAny >>= bAfterEffect )
             {
                 fprintf( mpFile, "afterEffect=\"%s\"", bAfterEffect ? "true" : "false" );

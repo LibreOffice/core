@@ -59,7 +59,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName ) override;
+    virtual bool SAL_CALL supportsService( OUString const & serviceName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProvider
@@ -102,7 +102,7 @@ uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
     };
 }
 
-sal_Bool ExpandContentProviderImpl::supportsService(OUString const & serviceName )
+bool ExpandContentProviderImpl::supportsService(OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }

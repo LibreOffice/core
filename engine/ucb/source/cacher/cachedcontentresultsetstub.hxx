@@ -115,7 +115,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XFetchProvider
@@ -123,22 +123,22 @@ public:
 
     virtual css::ucb::FetchResult SAL_CALL
     fetch( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection ) override;
+        , sal_Int32 nRowCount, bool bDirection ) override;
 
 
     // XFetchProviderForContentAccess
 
     virtual css::ucb::FetchResult SAL_CALL
          fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection ) override;
+        , sal_Int32 nRowCount, bool bDirection ) override;
 
     virtual css::ucb::FetchResult SAL_CALL
          fetchContentIdentifiers( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection ) override;
+        , sal_Int32 nRowCount, bool bDirection ) override;
 
     virtual css::ucb::FetchResult SAL_CALL
          fetchContents( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection ) override;
+        , sal_Int32 nRowCount, bool bDirection ) override;
 };
 
 
@@ -155,7 +155,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XCachedContentResultSetStubFactory

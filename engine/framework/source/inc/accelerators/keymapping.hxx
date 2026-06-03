@@ -112,10 +112,10 @@ class KeyMapping
 
             @param  rCode
                     contains the converted code, but is defined only
-                    if this method returns sal_True!
+                    if this method returns true!
 
             @return [boolean]
-                    sal_True if conversion was successful.
+                    true if conversion was successful.
           */
         static bool impl_st_interpretIdentifierAsPureKeyCode(std::u16string_view sIdentifier,
                                                                 sal_uInt16&      rCode      );

@@ -70,7 +70,7 @@ public:
         return u"com.sun.star.comp.framework.RecentFilesMenuController"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }

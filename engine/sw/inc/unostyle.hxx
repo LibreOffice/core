@@ -71,7 +71,7 @@ public:
     //XNameAccess
     SW_DLLPUBLIC virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
+    virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -79,7 +79,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XStyleLoader
     virtual void SAL_CALL loadStylesFromURL(const OUString& rURL, const css::uno::Sequence< css::beans::PropertyValue >& aOptions) override;
@@ -87,7 +87,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetPageStyles();
@@ -128,12 +128,12 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
+    virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
 };
 
@@ -156,7 +156,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     virtual void Notify( const SfxHint&) override;
 };
@@ -169,7 +169,7 @@ public:
     virtual ~SwXAutoStylesEnumerator() override;
 
     //XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual bool SAL_CALL hasMoreElements(  ) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
 
     virtual void Notify( const SfxHint&) override;
@@ -287,8 +287,8 @@ public:
     void SetPhysical();
 
     //XStyle
-    virtual sal_Bool SAL_CALL isUserDefined() override;
-    virtual sal_Bool SAL_CALL isInUse() override;
+    virtual bool SAL_CALL isUserDefined() override;
+    virtual bool SAL_CALL isInUse() override;
     virtual OUString SAL_CALL getParentStyle() override;
     virtual void SAL_CALL setParentStyle(const OUString& aParentStyle ) override;
 
@@ -308,7 +308,7 @@ public:
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& rName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& rName) override;
+    virtual bool SAL_CALL hasByName(const OUString& rName) override;
 
     //XNameContainer
     virtual void SAL_CALL insertByName(const OUString& rName, const css::uno::Any& aElement) override;
@@ -317,11 +317,11 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     static rtl::Reference<SwXTextTableStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const TableStyleName& rTableAutoFormatName);
@@ -367,8 +367,8 @@ class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
     bool IsPhysical() const;
 
     //XStyle
-    virtual sal_Bool SAL_CALL isUserDefined() override;
-    virtual sal_Bool SAL_CALL isInUse() override;
+    virtual bool SAL_CALL isUserDefined() override;
+    virtual bool SAL_CALL isInUse() override;
     virtual OUString SAL_CALL getParentStyle() override;
     virtual void SAL_CALL setParentStyle(const OUString& aParentStyle ) override;
 
@@ -393,7 +393,7 @@ class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     static rtl::Reference<SwXTextCellStyle> CreateXTextCellStyle(SwDocShell* pDocShell, const UIName& sName);
@@ -425,12 +425,12 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
+    virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
     //XNameContainer
     virtual void SAL_CALL insertByName(const OUString& Name, const css::uno::Any& Element) override;
@@ -451,7 +451,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference<SwXBaseStyle> getStyleByName(const OUString& rName);

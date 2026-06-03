@@ -385,7 +385,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(int nEntry)
         OUString sTmpShort(m_pWordsLB->get_text(nEntry, 0));
 
         Reference<XDictionary> xDic = aDics[nLBPos];
-        if (xDic->remove(sTmpShort))  // sal_True on success
+        if (xDic->remove(sTmpShort))  // true on success
         {
             m_pWordsLB->remove(nEntry);
             SelectHdl(*m_pWordsLB);

@@ -171,7 +171,7 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     return aRet;
 }
 
- sal_Bool SAL_CALL CmdMailMsg::hasByName( const OUString& aName )
+ bool SAL_CALL CmdMailMsg::hasByName( const OUString& aName )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -205,7 +205,7 @@ Type SAL_CALL CmdMailMsg::getElementType(  )
     return Type();
 }
 
-sal_Bool SAL_CALL CmdMailMsg::hasElements(  )
+bool SAL_CALL CmdMailMsg::hasElements(  )
 {
     return getElementNames().hasElements();
 }

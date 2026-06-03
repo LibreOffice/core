@@ -60,7 +60,7 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "ShowLegendEntry",
                   PROP_DATASERIES_SHOW_LEGEND_ENTRY,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
@@ -72,13 +72,13 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "ShowCustomLeaderLines",
                   PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "InvertNegative",
                   PROP_DATASERIES_INVERT_NEGATIVE,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
@@ -90,43 +90,43 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "ConnectorLines",
                   PROP_DATASERIES_CONNECTOR_LINES,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "HasExplicitFill",
                   PROP_DATASERIES_HAS_EXPLICIT_FILL,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "HasDataLabels",
                   PROP_DATASERIES_HAS_DATA_LABELS,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "MeanLine",
                   PROP_DATASERIES_MEAN_LINE,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "MeanMarker",
                   PROP_DATASERIES_MEAN_MARKER,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "Nonoutliers",
                   PROP_DATASERIES_NONOUTLIERS,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "Outliers",
                   PROP_DATASERIES_OUTLIERS,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
@@ -156,7 +156,7 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "HasGeography",
                   PROP_DATASERIES_HAS_GEOGRAPHY,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 

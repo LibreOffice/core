@@ -40,8 +40,8 @@ public:
     virtual void SAL_CALL setText( const OUString& _text ) override;
     virtual sal_Int32 SAL_CALL getMaxLength() override;
     virtual void SAL_CALL setMaxLength( sal_Int32 _maxlength ) override;
-    virtual sal_Bool SAL_CALL getMultiline() override;
-    virtual void SAL_CALL setMultiline( sal_Bool _multiline ) override;
+    virtual bool SAL_CALL getMultiline() override;
+    virtual void SAL_CALL setMultiline( bool _multiline ) override;
     virtual sal_Int32 SAL_CALL getSpecialEffect() override;
     virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) override;
     virtual sal_Int32 SAL_CALL getBorderStyle() override;
@@ -50,10 +50,10 @@ public:
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
     virtual sal_Int32 SAL_CALL getBackColor() override;
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
-    virtual sal_Bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
-    virtual sal_Bool SAL_CALL getLocked() override;
-    virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) override;
+    virtual bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
+    virtual bool SAL_CALL getLocked() override;
+    virtual void SAL_CALL setLocked( bool bAutoSize ) override;
 
     // XDefaultProperty
     OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }

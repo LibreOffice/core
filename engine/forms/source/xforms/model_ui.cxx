@@ -271,7 +271,7 @@ static bool lcl_isWhitespace( const OUString& rString )
 }
 
 OUString Model::getNodeDisplayName( const css::uno::Reference<css::xml::dom::XNode>& xNode,
-                                    sal_Bool bDetail )
+                                    bool bDetail )
 {
     OUStringBuffer aBuffer;
 
@@ -335,7 +335,7 @@ OUString Model::getNodeName( const css::uno::Reference<css::xml::dom::XNode>& xN
 }
 
 OUString Model::getBindingName( const css::uno::Reference< ::css::beans::XPropertySet >& xBinding,
-                                sal_Bool /*bDetail*/ )
+                                bool /*bDetail*/ )
 {
     OUString sID;
     xBinding->getPropertyValue( u"BindingID"_ustr ) >>= sID;
@@ -354,7 +354,7 @@ OUString Model::getBindingName( const css::uno::Reference< ::css::beans::XProper
 }
 
 OUString Model::getSubmissionName( const css::uno::Reference< ::css::beans::XPropertySet >& xSubmission,
-                                   sal_Bool /*bDetail*/ )
+                                   bool /*bDetail*/ )
 {
     OUString sID;
     xSubmission->getPropertyValue( u"ID"_ustr ) >>= sID;
@@ -388,7 +388,7 @@ void Model::removeBindingIfUseless( const css::uno::Reference< ::css::beans::XPr
 
 css::uno::Reference<css::xml::dom::XDocument> Model::newInstance( const OUString& sName,
                          const OUString& sURL,
-                         sal_Bool bURLOnce )
+                         bool bURLOnce )
 {
     // create a default instance with <instanceData> element
     css::uno::Reference<css::xml::dom::XDocument> xInstance = getDocumentBuilder()->newDocument();
@@ -438,7 +438,7 @@ sal_Int32 xforms::lcl_findInstance( const InstanceCollection* pInstances,
 void Model::renameInstance( const OUString& sFrom,
                             const OUString& sTo,
                             const OUString& sURL,
-                            sal_Bool bURLOnce )
+                            bool bURLOnce )
 {
     sal_Int32 nPos = lcl_findInstance( mxInstances.get(), sFrom );
     if( nPos == -1 )
@@ -664,7 +664,7 @@ css::uno::Reference<css::xml::dom::XNode> Model::renameNode( const css::uno::Ref
 }
 
 css::uno::Reference< ::css::beans::XPropertySet > Model::getBindingForNode( const css::uno::Reference<css::xml::dom::XNode>& xNode,
-                                                sal_Bool bCreate )
+                                                bool bCreate )
 {
     OSL_ENSURE( xNode.is(), "no node?" );
 
@@ -802,7 +802,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
       want them. When this is fixed, the code below is nice and
       simple. The current code filters out the declarations.
     OUString sResult = xTextInputStream->readString( Sequence<sal_Unicode>(),
-                                                     sal_True );
+                                                     true );
     */
 
     // well, the serialization prepends XML header(s) that we need to
@@ -856,7 +856,7 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
 
 OUString Model::getResultForExpression(
     const css::uno::Reference< ::css::beans::XPropertySet >& xBinding,
-    sal_Bool bIsBindingExpression,
+    bool bIsBindingExpression,
     const OUString& sExpression )
 {
     Binding* pBinding = comphelper::getFromUnoTunnel<Binding>( xBinding );
@@ -888,12 +888,12 @@ OUString Model::getResultForExpression(
     return aBuffer.makeStringAndClear();
 }
 
-sal_Bool Model::isValidXMLName( const OUString& sName )
+bool Model::isValidXMLName( const OUString& sName )
 {
     return isValidQName( sName, nullptr );
 }
 
-sal_Bool Model::isValidPrefixName( const OUString& sName )
+bool Model::isValidPrefixName( const OUString& sName )
 {
     return ::isValidPrefixName( sName, nullptr );
 }

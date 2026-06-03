@@ -272,7 +272,7 @@ public:
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel() override;
 
     // XInitialization

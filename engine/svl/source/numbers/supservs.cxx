@@ -102,7 +102,7 @@ OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  
     return u"com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject"_ustr;
 }
 
-sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName )
+bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

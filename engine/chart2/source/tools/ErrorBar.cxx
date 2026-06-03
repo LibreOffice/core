@@ -441,7 +441,7 @@ OUString SAL_CALL ErrorBar::getImplementationName()
     return lcl_aServiceName;
 }
 
-sal_Bool SAL_CALL ErrorBar::supportsService( const OUString& rServiceName )
+bool SAL_CALL ErrorBar::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

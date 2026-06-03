@@ -130,14 +130,14 @@ void SAL_CALL ScAnnotationObj::setString( const OUString& aText )
 }
 
 void SAL_CALL ScAnnotationObj::insertString( const uno::Reference<text::XTextRange>& xRange,
-                                            const OUString& aString, sal_Bool bAbsorb )
+                                            const OUString& aString, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
     GetUnoText().insertString( xRange, aString, bAbsorb );
 }
 
 void SAL_CALL ScAnnotationObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
-                                            sal_Int16 nControlCharacter, sal_Bool bAbsorb )
+                                            sal_Int16 nControlCharacter, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
     GetUnoText().insertControlCharacter( xRange, nControlCharacter, bAbsorb );
@@ -187,14 +187,14 @@ OUString SAL_CALL ScAnnotationObj::getDate()
     return pNote ? pNote->GetDate() : OUString();
 }
 
-sal_Bool SAL_CALL ScAnnotationObj::getIsVisible()
+bool SAL_CALL ScAnnotationObj::getIsVisible()
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
     return pNote && pNote->IsCaptionShown();
 }
 
-void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible )
+void SAL_CALL ScAnnotationObj::setIsVisible( bool bIsVisible )
 {
     SolarMutexGuard aGuard;
     // show/hide note with undo action

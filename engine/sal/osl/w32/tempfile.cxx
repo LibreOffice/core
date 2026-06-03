@@ -67,7 +67,7 @@ static oslFileError osl_setup_createTempFile_impl_(
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL,
     rtl_uString**  ppustr_base_dir,
-    sal_Bool*      b_delete_on_close)
+    bool*      b_delete_on_close)
 {
     oslFileError osl_error;
 
@@ -185,7 +185,7 @@ oslFileError SAL_CALL osl_createTempFile(
 {
     rtl_uString*    base_directory = nullptr;
     LPWSTR          tmp_name;
-    sal_Bool        b_delete_on_close;
+    bool        b_delete_on_close;
     oslFileError    osl_error;
 
     osl_error = osl_setup_createTempFile_impl_(

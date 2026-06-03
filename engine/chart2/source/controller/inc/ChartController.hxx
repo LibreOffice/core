@@ -108,7 +108,7 @@ public:
     virtual void SAL_CALL
         attachFrame( const css::uno::Reference< css::frame::XFrame > & xFrame ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         attachModel( const css::uno::Reference< css::frame::XModel > & xModel ) override;
 
     virtual css::uno::Reference< css::frame::XFrame > SAL_CALL
@@ -123,8 +123,8 @@ public:
     virtual void SAL_CALL
         restoreViewData( const css::uno::Any& rValue ) override;
 
-    virtual sal_Bool SAL_CALL
-        suspend( sal_Bool bSuspend ) override;
+    virtual bool SAL_CALL
+        suspend( bool bSuspend ) override;
 
     // css::frame::XController2
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getComponentWindow() override;
@@ -152,7 +152,7 @@ public:
         queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor > & xDescripts) override;
 
     // css::view::XSelectionSupplier (optional interface)
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         select( const css::uno::Any& rSelection ) override;
 
     virtual css::uno::Any  SAL_CALL
@@ -176,7 +176,7 @@ public:
     // css::util::XCloseListener
     virtual void SAL_CALL
         queryClosing( const css::lang::EventObject& Source
-                            , sal_Bool GetsOwnership ) override;
+                            , bool GetsOwnership ) override;
 
     virtual void SAL_CALL
         notifyClosing( const css::lang::EventObject& Source ) override;
@@ -208,10 +208,10 @@ public:
         getPosSize() override;
 
     virtual void SAL_CALL
-        setVisible( sal_Bool Visible ) override;
+        setVisible( bool Visible ) override;
 
     virtual void SAL_CALL
-        setEnable( sal_Bool Enable ) override;
+        setEnable( bool Enable ) override;
 
     virtual void SAL_CALL
         setFocus() override;
@@ -290,7 +290,7 @@ public:
         @param rOutEqualRect is filled with a rectangle that denotes the region
                              in which the quick help does not change.
 
-        @return </sal_True>, if a quick help should be shown.
+        @return </true>, if a quick help should be shown.
      */
     bool requestQuickHelp(
         ::Point aAtLogicPosition, bool bIsBalloonHelp,
@@ -566,7 +566,7 @@ private:
         MOVE_OBJECT,
         CENTERED_RESIZE_OBJECT
     };
-    /// @return </sal_True>, if resize/move was successful
+    /// @return </true>, if resize/move was successful
     bool impl_moveOrResizeObject(
         const OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
     bool impl_DragDataPoint( std::u16string_view rCID, double fOffset );

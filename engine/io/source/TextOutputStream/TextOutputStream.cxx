@@ -85,7 +85,7 @@ public:
     // Methods XServiceInfo
         virtual OUString              SAL_CALL getImplementationName() override;
         virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 };
 
 }
@@ -208,7 +208,7 @@ OUString OTextOutputStream::getImplementationName()
     return u"com.sun.star.comp.io.TextOutputStream"_ustr;
 }
 
-sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName)
+bool OTextOutputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

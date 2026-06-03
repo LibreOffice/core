@@ -1919,7 +1919,7 @@ OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
     return u"SwXDocumentSettings"_ustr;
 }
 
-sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
+bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

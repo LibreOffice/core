@@ -283,12 +283,12 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         // UCS-4 little endian
         m_sEncoding = "ucs-4"_ostr;
     }
-/* TODO: no need to test for the moment since we return sal_False like default case anyway
+/* TODO: no need to test for the moment since we return false like default case anyway
     else if( 0x4c == pSource[0] && 0x6f == pSource[1]  &&
              0xa7 == static_cast<unsigned char> (pSource[2]) &&
              0x94 == static_cast<unsigned char> (pSource[3]) ) {
         // EBCDIC
-        bReturn = sal_False;   // must be extended
+        bReturn = false;   // must be extended
     }
 */
     else {

@@ -1536,7 +1536,7 @@ void PrintDialog::setupOptionalUI()
         OUString aText;
         OUString aPropertyName;
         Sequence< OUString > aChoices;
-        Sequence< sal_Bool > aChoicesDisabled;
+        Sequence< bool > aChoicesDisabled;
         Sequence< OUString > aHelpTexts;
         Sequence< OUString > aIDs;
         Sequence< OUString > aHelpIds;
@@ -2389,7 +2389,7 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, weld::ComboBox&, i_rBox, void )
     {
         maFirstPageSize = Size();
 
-        css::uno::Sequence<sal_Bool> aChoicesDisabled{
+        css::uno::Sequence<bool> aChoicesDisabled{
             false, // Original size
             false, // Fit to printable page
             (nVal == 2) /*Notes*/ ? true : false, // disable/enable Multiple sheets of paper

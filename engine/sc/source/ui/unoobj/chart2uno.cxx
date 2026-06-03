@@ -1010,7 +1010,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 }
 
-sal_Bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Sequence< beans::PropertyValue >& aArguments )
+bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Sequence< beans::PropertyValue >& aArguments )
 {
     SolarMutexGuard aGuard;
     if( ! m_pDocument )
@@ -2068,7 +2068,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     return comphelper::containerToSequence( aResult );
 }
 
-sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& aRangeRepresentation )
+bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& aRangeRepresentation )
 {
     SolarMutexGuard aGuard;
     if( ! m_pDocument )
@@ -2125,7 +2125,7 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRange
     return xResult;
 }
 
-sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
+bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
     const uno::Sequence<sheet::FormulaToken>& aTokens )
 {
     if (!aTokens.hasElements())
@@ -3503,7 +3503,7 @@ void ScChart2DataSequence::setDataChangedHint(bool b)
     m_bGotDataChangedHint = b;
 }
 
-sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
+bool ScChart2DataSequence::switchToNext(bool bWrap)
 {
     if(!mbTimeBased)
         return true;
@@ -3542,7 +3542,7 @@ void ScChart2DataSequence::setRange(sal_Int32 nStart, sal_Int32 nEnd)
     mnCurrentTab = mnTimeBasedStart;
 }
 
-sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
+bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
 {
     if(nPoint > mnTimeBasedEnd - mnTimeBasedStart)
         return false;

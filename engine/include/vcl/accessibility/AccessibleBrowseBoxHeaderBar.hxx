@@ -96,10 +96,10 @@ public:
     getSelectedAccessibleColumns() override;
 
     /** @return  TRUE, if the specified row is completely selected. */
-    virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow ) override;
+    virtual bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow ) override;
 
     /** @return  TRUE, if the specified column is completely selected. */
-    virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn ) override;
+    virtual bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn ) override;
 
     /** @return The XAccessible interface of the cell object at the specified
                 cell position. */
@@ -107,7 +107,7 @@ public:
     getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  TRUE, if the specified cell is selected. */
-    virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
+    virtual bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     // XAccessibleSelection
 
@@ -115,7 +115,7 @@ public:
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** @return  TRUE, if the specified child (row/column) is selected. */
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    virtual bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
 
     /** Clears the complete selection. */
     virtual void SAL_CALL clearAccessibleSelection() override;

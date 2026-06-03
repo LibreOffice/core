@@ -73,7 +73,7 @@ OUString SAL_CALL ActionTriggerContainer::getImplementationName()
     return IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER;
 }
 
-sal_Bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )
+bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

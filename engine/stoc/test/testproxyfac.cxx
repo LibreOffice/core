@@ -67,9 +67,9 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
         { return OUString("target"); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
+    virtual bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
-        { return sal_False; }
+        { return false; }
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException)
         { return Sequence< OUString >(); }
@@ -130,9 +130,9 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
         { return OUString("master"); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
+    virtual bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
-        { return sal_False; }
+        { return false; }
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException)
         { return Sequence< OUString >(); }

@@ -134,8 +134,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
     return aMimeTypeSeq;
 }
 
-sal_Bool SAL_CALL
-QtTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
+bool SAL_CALL QtTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     const auto aSeq = getTransferDataFlavors();
     return std::any_of(aSeq.begin(), aSeq.end(), [&](const css::datatransfer::DataFlavor& aFlavor) {
@@ -225,7 +224,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor>
     return aSeq;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 QtClipboardTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     bool bIsSupported = false;

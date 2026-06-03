@@ -73,7 +73,7 @@ ContentProviderImplHelper::~ContentProviderImplHelper()
 }
 
 // virtual
-sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
+bool SAL_CALL ContentProviderImplHelper::supportsService(
                                             const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

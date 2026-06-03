@@ -244,7 +244,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& sql )
     return sql;
 }
 
-void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
+void SAL_CALL OConnection::setAutoCommit( bool autoCommit )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -252,7 +252,7 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
     m_bAutoCommit = autoCommit;
 }
 
-sal_Bool SAL_CALL OConnection::getAutoCommit(  )
+bool SAL_CALL OConnection::getAutoCommit(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -268,7 +268,7 @@ void SAL_CALL OConnection::rollback(  )
 {
 }
 
-sal_Bool SAL_CALL OConnection::isClosed(  )
+bool SAL_CALL OConnection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -291,7 +291,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  )
     return xMetaData;
 }
 
-void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly )
+void SAL_CALL OConnection::setReadOnly( bool readOnly )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -300,7 +300,7 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly )
     m_bReadOnly = readOnly;
 }
 
-sal_Bool SAL_CALL OConnection::isReadOnly(  )
+bool SAL_CALL OConnection::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);

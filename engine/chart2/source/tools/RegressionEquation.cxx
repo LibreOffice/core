@@ -271,7 +271,7 @@ OUString SAL_CALL RegressionEquation::getImplementationName()
     return u"com.sun.star.comp.chart2.RegressionEquation"_ustr;
 }
 
-sal_Bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName )
+bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -50,7 +50,7 @@ uno::Type SAL_CALL SvUnoAttributeContainer::getElementType()
     return cppu::UnoType<xml::AttributeData>::get();
 }
 
-sal_Bool SAL_CALL SvUnoAttributeContainer::hasElements()
+bool SAL_CALL SvUnoAttributeContainer::hasElements()
 {
     return mpContainer->GetAttrCount() != 0;
 }
@@ -120,7 +120,7 @@ uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames()
     return aElementNames;
 }
 
-sal_Bool SAL_CALL SvUnoAttributeContainer::hasByName(const OUString& aName)
+bool SAL_CALL SvUnoAttributeContainer::hasByName(const OUString& aName)
 {
     return getIndexByName(aName ) != USHRT_MAX;
 }
@@ -222,7 +222,7 @@ uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames()
     return { u"com.sun.star.xml.AttributeContainer"_ustr };
 }
 
-sal_Bool SvUnoAttributeContainer::supportsService(const OUString& ServiceName)
+bool SvUnoAttributeContainer::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

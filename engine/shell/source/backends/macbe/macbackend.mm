@@ -338,7 +338,7 @@ OUString SAL_CALL MacOSXBackend::getImplementationName(void)
     return "com.sun.star.comp.configuration.backend.MacOSXBackend";
 }
 
-sal_Bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
+bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }

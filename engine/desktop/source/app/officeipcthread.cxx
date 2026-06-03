@@ -294,7 +294,7 @@ OUString SAL_CALL RequestHandlerController::getImplementationName()
     return u"com.sun.star.comp.RequestHandlerController"_ustr;
 }
 
-sal_Bool RequestHandlerController::supportsService(
+bool RequestHandlerController::supportsService(
     OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);

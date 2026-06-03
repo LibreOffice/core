@@ -71,7 +71,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     supportsService(OUString const & rServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -81,12 +81,12 @@ public:
     virtual css::uno::Any SAL_CALL
     getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId) override;
 
-    virtual sal_Bool SAL_CALL isVMStarted() override;
+    virtual bool SAL_CALL isVMStarted() override;
 
-    virtual sal_Bool SAL_CALL isVMEnabled() override;
+    virtual bool SAL_CALL isVMEnabled() override;
 
     // XJavaThreadRegister_11
-    virtual sal_Bool SAL_CALL isThreadAttached() override;
+    virtual bool SAL_CALL isThreadAttached() override;
 
     virtual void SAL_CALL registerThread() override;
 

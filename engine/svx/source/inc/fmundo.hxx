@@ -132,7 +132,7 @@ public:
 
     // UNO binding
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
-    //  virtual sal_Bool queryInterface(UsrUik, css::uno::Reference< css::uno::XInterface>&);
+    //  virtual bool queryInterface(UsrUik, css::uno::Reference< css::uno::XInterface>&);
     //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();
 
     void Lock() { osl_atomic_increment( &m_Locks ); }

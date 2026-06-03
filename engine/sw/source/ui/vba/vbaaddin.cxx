@@ -54,17 +54,17 @@ OUString SAL_CALL SwVbaAddin::getPath()
     return aURL.GetURLPath();
 }
 
-sal_Bool SAL_CALL SwVbaAddin::getAutoload()
+bool SAL_CALL SwVbaAddin::getAutoload()
 {
     return true;
 }
 
-sal_Bool SAL_CALL SwVbaAddin::getInstalled()
+bool SAL_CALL SwVbaAddin::getInstalled()
 {
     return mbInstalled;
 }
 
-void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed )
+void SAL_CALL SwVbaAddin::setInstalled( bool _installed )
 {
     if( bool(_installed) != mbInstalled )
     {

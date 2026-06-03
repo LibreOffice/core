@@ -136,7 +136,7 @@ namespace {
         GraphicExporter();
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
+        virtual bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
         virtual void SAL_CALL cancel(  ) override;
 
         // XExporter
@@ -144,11 +144,11 @@ namespace {
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XMimeTypeInfo
-        virtual sal_Bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) override;
+        virtual bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) override;
 
         VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, tools::Long nWidthPixel, tools::Long nHeightPixel ) const;
@@ -974,7 +974,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 }
 
 // XFilter
-sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
+bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1214,7 +1214,7 @@ OUString SAL_CALL GraphicExporter::getImplementationName(  )
     return u"com.sun.star.comp.Draw.GraphicExporter"_ustr;
 }
 
-sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
+bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1226,7 +1226,7 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
 }
 
 // XMimeTypeInfo
-sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& rMimeTypeName )
+bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& rMimeTypeName )
 {
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = rFilter.GetExportFormatCount();

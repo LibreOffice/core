@@ -1286,7 +1286,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     if (
         ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::ESpecialTarget::Default)                                               ) ||
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE , false) ||
-//      (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()     , false) == sal_True) ||
+//      (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()     , false) == true) ||
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW, false)
        )
     {
@@ -1665,7 +1665,7 @@ void LoadEnv::impl_reactForLoadingState()
     }
 
     // This max force an implicit closing of our target frame ...
-    // e.g. in case close(sal_True) was called before and the frame
+    // e.g. in case close(true) was called before and the frame
     // kill itself if our external use-lock is released here!
     // That's why we release this lock AFTER ALL OPERATIONS on this frame
     // are finished. The frame itself must handle then

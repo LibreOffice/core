@@ -137,7 +137,7 @@ rtl::Reference< ItemContainer > RootItemContainer::deepCopyContainer( const Refe
 }
 
 // XElementAccess
-sal_Bool SAL_CALL RootItemContainer::hasElements()
+bool SAL_CALL RootItemContainer::hasElements()
 {
     ShareGuard aLock( m_aShareMutex );
     return ( !m_aItemVector.empty() );
@@ -212,12 +212,12 @@ Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithArgumentsA
 }
 
 // XPropertySet helper
-sal_Bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConvertedValue ,
+bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConvertedValue ,
                                                                Any&       aOldValue       ,
                                                                sal_Int32  nHandle         ,
                                                                const Any& aValue             )
 {
-    //  Initialize state with sal_False !!!
+    //  Initialize state with false !!!
     //  (Handle can be invalid)
     bool bReturn = false;
 

@@ -61,7 +61,7 @@ public:
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void setAddIn( const css::uno::Reference< css::util::XRefreshable >& xAddIn );
@@ -91,7 +91,7 @@ public:
                                       css::chart::XChartData >& xData ) override;
 
     // ____ XModel ____
-    virtual sal_Bool SAL_CALL attachResource( const OUString& URL,
+    virtual bool SAL_CALL attachResource( const OUString& URL,
                                               const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
     virtual OUString SAL_CALL getURL() override;
     virtual css::uno::Sequence<
@@ -102,7 +102,7 @@ public:
                                                 css::frame::XController >& Controller ) override;
     virtual void SAL_CALL lockControllers() override;
     virtual void SAL_CALL unlockControllers() override;
-    virtual sal_Bool SAL_CALL hasControllersLocked() override;
+    virtual bool SAL_CALL hasControllersLocked() override;
     virtual css::uno::Reference<
         css::frame::XController > SAL_CALL getCurrentController() override;
     virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override;

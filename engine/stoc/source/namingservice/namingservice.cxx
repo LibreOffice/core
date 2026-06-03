@@ -52,7 +52,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
@@ -73,7 +73,7 @@ OUString NamingService_Impl::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool NamingService_Impl::supportsService( const OUString & rServiceName )
+bool NamingService_Impl::supportsService( const OUString & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

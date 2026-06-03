@@ -242,7 +242,7 @@ OUString SAL_CALL OleEmbeddedObjectFactory::getImplementationName()
     return u"com.sun.star.comp.embed.OLEEmbeddedObjectFactory"_ustr;
 }
 
-sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

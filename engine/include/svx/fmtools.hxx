@@ -76,7 +76,7 @@ public:
     // Construction/Destruction
     CursorWrapper(const css::uno::Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
     UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
-        // if bUseCloned == sal_True, the cursor is first doubled over the XCloneable interface (which it must implement)
+        // if bUseCloned == true, the cursor is first doubled over the XCloneable interface (which it must implement)
         // and then used
 
     friend bool operator==(const CursorWrapper& lhs, const CursorWrapper& rhs)

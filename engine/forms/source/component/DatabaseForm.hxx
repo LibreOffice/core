@@ -227,7 +227,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
 
     css::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
@@ -273,8 +273,8 @@ public:
     virtual void SAL_CALL setName(const OUString& aName) override;
 
     // css::awt::XTabControllerModel
-    virtual sal_Bool SAL_CALL getGroupControl() override;
-    virtual void SAL_CALL setGroupControl(sal_Bool /*_bGroupControl*/) override { }
+    virtual bool SAL_CALL getGroupControl() override;
+    virtual void SAL_CALL setGroupControl(bool /*_bGroupControl*/) override { }
     virtual void SAL_CALL setControlModels(const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rControls) override;
     virtual css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels() override;
     virtual void SAL_CALL setGroup(const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rGroup, const OUString& _rGroupName) override;
@@ -296,7 +296,7 @@ public:
     virtual void SAL_CALL load() override;
     virtual void SAL_CALL unload() override;
     virtual void SAL_CALL reload() override;
-    virtual sal_Bool SAL_CALL isLoaded() override;
+    virtual bool SAL_CALL isLoaded() override;
     virtual void SAL_CALL addLoadListener(const css::uno::Reference< css::form::XLoadListener>& _rxListener) override;
     virtual void SAL_CALL removeLoadListener(const css::uno::Reference< css::form::XLoadListener>& _rxListener) override;
 
@@ -309,9 +309,9 @@ public:
     virtual void SAL_CALL rowSetChanged(const css::lang::EventObject& event) override;
 
     // css::sdb::XRowSetApproveListener
-    virtual sal_Bool SAL_CALL approveCursorMove(const css::lang::EventObject& event) override;
-    virtual sal_Bool SAL_CALL approveRowChange(const css::sdb::RowChangeEvent& event) override;
-    virtual sal_Bool SAL_CALL approveRowSetChange(const css::lang::EventObject& event) override;
+    virtual bool SAL_CALL approveCursorMove(const css::lang::EventObject& event) override;
+    virtual bool SAL_CALL approveRowChange(const css::sdb::RowChangeEvent& event) override;
+    virtual bool SAL_CALL approveRowSetChange(const css::lang::EventObject& event) override;
 
     // css::sdb::XRowSetApproveBroadcaster
     virtual void SAL_CALL addRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener>& _rxListener) override;
@@ -334,23 +334,23 @@ public:
     virtual void SAL_CALL executeWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
     // css::sdbc::XResultSet
-    virtual sal_Bool SAL_CALL next() override;
-    virtual sal_Bool SAL_CALL isBeforeFirst() override;
-    virtual sal_Bool SAL_CALL isAfterLast() override;
-    virtual sal_Bool SAL_CALL isFirst() override;
-    virtual sal_Bool SAL_CALL isLast() override;
+    virtual bool SAL_CALL next() override;
+    virtual bool SAL_CALL isBeforeFirst() override;
+    virtual bool SAL_CALL isAfterLast() override;
+    virtual bool SAL_CALL isFirst() override;
+    virtual bool SAL_CALL isLast() override;
     virtual void SAL_CALL beforeFirst() override;
     virtual void SAL_CALL afterLast() override;
-    virtual sal_Bool SAL_CALL first() override;
-    virtual sal_Bool SAL_CALL last() override;
+    virtual bool SAL_CALL first() override;
+    virtual bool SAL_CALL last() override;
     virtual sal_Int32 SAL_CALL getRow() override;
-    virtual sal_Bool SAL_CALL absolute(sal_Int32 row) override;
-    virtual sal_Bool SAL_CALL relative(sal_Int32 rows) override;
-    virtual sal_Bool SAL_CALL previous() override;
+    virtual bool SAL_CALL absolute(sal_Int32 row) override;
+    virtual bool SAL_CALL relative(sal_Int32 rows) override;
+    virtual bool SAL_CALL previous() override;
     virtual void SAL_CALL refreshRow() override;
-    virtual sal_Bool SAL_CALL rowUpdated() override;
-    virtual sal_Bool SAL_CALL rowInserted() override;
-    virtual sal_Bool SAL_CALL rowDeleted() override;
+    virtual bool SAL_CALL rowUpdated() override;
+    virtual bool SAL_CALL rowInserted() override;
+    virtual bool SAL_CALL rowDeleted() override;
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getStatement() override;
 
     // css::sdbc::XResultSetUpdate
@@ -365,7 +365,7 @@ public:
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const css::uno::Sequence< css::uno::Any>& rows) override;
 
     // css::lang::XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
@@ -380,7 +380,7 @@ public:
     // css::sdbc::XParameters
     virtual void SAL_CALL setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) override;
     virtual void SAL_CALL setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) override;
-    virtual void SAL_CALL setBoolean(sal_Int32 parameterIndex, sal_Bool x) override;
+    virtual void SAL_CALL setBoolean(sal_Int32 parameterIndex, bool x) override;
     virtual void SAL_CALL setByte(sal_Int32 parameterIndex, sal_Int8 x) override;
     virtual void SAL_CALL setShort(sal_Int32 parameterIndex, sal_Int16 x) override;
     virtual void SAL_CALL setInt(sal_Int32 parameterIndex, sal_Int32 x) override;

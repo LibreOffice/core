@@ -65,7 +65,7 @@ TextConversionImpl::getConversionWithOffset( const OUString& aText, sal_Int32 nS
     return xTC->getConversionWithOffset(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions, offset);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
 {
     getLocaleSpecificTextConversion(rLocale);
@@ -107,7 +107,7 @@ TextConversionImpl::getImplementationName()
     return u"com.sun.star.i18n.TextConversion"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TextConversionImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

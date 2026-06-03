@@ -95,7 +95,7 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 }
 
 // XRow
-sal_Bool SAL_CALL OCallableStatement::wasNull(  )
+bool SAL_CALL OCallableStatement::wasNull(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -111,7 +111,7 @@ OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY_THROW)->getString( columnIndex );
 }
 
-sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);

@@ -2669,7 +2669,7 @@ public:
     {
         return u"com.sun.star.comp.WebDAVManager"_ustr;
     }
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }

@@ -1325,7 +1325,7 @@ uno::Reference< linguistic2::XThesaurus > SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     LngSvcMgr::addLinguServiceManagerListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
@@ -1341,7 +1341,7 @@ sal_Bool SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     LngSvcMgr::removeLinguServiceManagerListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
@@ -1800,7 +1800,7 @@ OUString SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     LngSvcMgr::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

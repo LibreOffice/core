@@ -181,14 +181,14 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         supportsService(const OUString& rServiceName) override;
     virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -221,14 +221,14 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         supportsService(const OUString& rServiceName) override;
     virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -429,7 +429,7 @@ SwXDocumentIndex::getImplementationName()
     return u"SwXDocumentIndex"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXDocumentIndex::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -1673,7 +1673,7 @@ SwXDocumentIndexMark::getImplementationName()
     return u"SwXDocumentIndexMark"_ustr;
 }
 
-sal_Bool SAL_CALL SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2321,7 +2321,7 @@ SwXDocumentIndexes::getImplementationName()
     return u"SwXDocumentIndexes"_ustr;
 }
 
-sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2440,7 +2440,7 @@ SwXDocumentIndexes::getElementNames()
     return aRet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXDocumentIndexes::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
@@ -2468,7 +2468,7 @@ SwXDocumentIndexes::getElementType()
     return cppu::UnoType<text::XDocumentIndex>::get();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXDocumentIndexes::hasElements()
 {
     return 0 != getCount();
@@ -2490,7 +2490,7 @@ SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
     return u"SwXDocumentIndex::StyleAccess_Impl"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -2581,7 +2581,7 @@ SwXDocumentIndex::StyleAccess_Impl::getElementType()
     return cppu::UnoType<uno::Sequence<OUString>>::get();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::hasElements()
 {
     return true;
@@ -2603,7 +2603,7 @@ SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
     return u"SwXDocumentIndex::TokenAccess_Impl"_ustr;
 }
 
-sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
+bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
         const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -3079,7 +3079,7 @@ SwXDocumentIndex::TokenAccess_Impl::getElementType()
     return cppu::UnoType<uno::Sequence< beans::PropertyValues >>::get();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::hasElements()
 {
     return true;

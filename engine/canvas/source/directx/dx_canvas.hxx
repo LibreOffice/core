@@ -99,7 +99,7 @@ namespace dxcanvas
         // XServiceInfo
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ) override;
 
     private:
         css::uno::Sequence< css::uno::Any >                maArguments;
@@ -158,7 +158,7 @@ namespace dxcanvas
         // XServiceInfo
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ) override;
 
         // BitmapProvider
         virtual IBitmapSharedPtr getBitmap() const override;

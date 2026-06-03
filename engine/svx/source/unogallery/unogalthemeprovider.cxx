@@ -48,7 +48,7 @@ protected:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
@@ -57,12 +57,12 @@ protected:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -88,7 +88,7 @@ OUString SAL_CALL GalleryThemeProvider::getImplementationName()
     return u"com.sun.star.comp.gallery.GalleryThemeProvider"_ustr;
 }
 
-sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName )
+bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -141,7 +141,7 @@ uno::Type SAL_CALL GalleryThemeProvider::getElementType()
 }
 
 
-sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
+bool SAL_CALL GalleryThemeProvider::hasElements()
 {
     const SolarMutexGuard aGuard;
 
@@ -186,7 +186,7 @@ uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
 }
 
 
-sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
+bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
 {
     const SolarMutexGuard aGuard;
 

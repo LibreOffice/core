@@ -191,13 +191,13 @@ public:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void SAL_CALL reinstallDeployedPackages(
-        sal_Bool force,
+        bool force,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual ::sal_Bool SAL_CALL isReadOnly(  ) override;
+    virtual bool SAL_CALL isReadOnly(  ) override;
 
-    virtual ::sal_Bool SAL_CALL synchronize(
+    virtual bool SAL_CALL synchronize(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 

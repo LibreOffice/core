@@ -582,11 +582,11 @@ namespace {
         virtual Type SAL_CALL getKeyType() override   { return cppu::UnoType<OUString>::get(); };
         virtual Type SAL_CALL getValueType() override { return cppu::UnoType<OUString>::get(); };
         virtual void SAL_CALL clear() override { maMap.clear(); }
-        virtual sal_Bool SAL_CALL containsKey( const Any& ) override
+        virtual bool SAL_CALL containsKey( const Any& ) override
         {
             throw css::uno::RuntimeException(u"not implemented"_ustr);
         }
-        virtual sal_Bool SAL_CALL containsValue( const Any& ) override
+        virtual bool SAL_CALL containsValue( const Any& ) override
         {
             throw css::uno::RuntimeException(u"not implemented"_ustr);
         }
@@ -625,7 +625,7 @@ namespace {
         {
             throw css::uno::RuntimeException(u"not implemented"_ustr);
         }
-        virtual sal_Bool SAL_CALL hasElements() override
+        virtual bool SAL_CALL hasElements() override
         {
             return !maMap.empty();
         }
@@ -1151,7 +1151,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 }
 
 // XFilter
-sal_Bool SAL_CALL SvXMLImport::filter( const uno::Sequence< beans::PropertyValue >& )
+bool SAL_CALL SvXMLImport::filter( const uno::Sequence< beans::PropertyValue >& )
 {
     return false;
 }
@@ -1275,7 +1275,7 @@ OUString SAL_CALL SvXMLImport::getImplementationName()
     return mpImpl->implementationName;
 }
 
-sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
+bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

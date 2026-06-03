@@ -307,9 +307,9 @@ namespace pcr
         virtual void SAL_CALL replaceByName( const OUString& _rName, const Any& aElement ) override;
         virtual Any SAL_CALL getByName( const OUString& _rName ) override;
         virtual Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& _rName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& _rName ) override;
         virtual Type SAL_CALL getElementType(  ) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) override;
+        virtual bool SAL_CALL hasElements(  ) override;
 
     protected:
         virtual ~EventHolder( ) override;
@@ -400,7 +400,7 @@ namespace pcr
         return aReturn;
     }
 
-    sal_Bool SAL_CALL EventHolder::hasByName( const OUString& _rName )
+    bool SAL_CALL EventHolder::hasByName( const OUString& _rName )
     {
         EventMap::const_iterator pos = m_aEventNameAccess.find( _rName );
         return pos != m_aEventNameAccess.end();
@@ -411,7 +411,7 @@ namespace pcr
         return cppu::UnoType<Sequence< PropertyValue >>::get();
     }
 
-    sal_Bool SAL_CALL EventHolder::hasElements(  )
+    bool SAL_CALL EventHolder::hasElements(  )
     {
         return !m_aEventNameAccess.empty();
     }
@@ -436,7 +436,7 @@ namespace pcr
         return u"com.sun.star.comp.extensions.EventHandler"_ustr;
     }
 
-    sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName )
+    bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -736,12 +736,12 @@ namespace pcr
         return aDescriptor;
     }
 
-    sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ )
+    bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ )
     {
         return false;
     }
 
-    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -807,7 +807,7 @@ namespace pcr
         return InteractiveSelectionResult_Success;
     }
 
-    void SAL_CALL EventHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ )
+    void SAL_CALL EventHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )
     {
         OSL_FAIL( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
@@ -820,7 +820,7 @@ namespace pcr
         m_xComponent.clear();
     }
 
-    sal_Bool SAL_CALL EventHandler::suspend( sal_Bool /*_bSuspend*/ )
+    bool SAL_CALL EventHandler::suspend( bool /*_bSuspend*/ )
     {
         return true;
     }

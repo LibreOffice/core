@@ -202,7 +202,7 @@ OUString UnoEditControl::GetComponentServiceName() const
     return sName;
 }
 
-sal_Bool SAL_CALL UnoEditControl::setModel(const uno::Reference< awt::XControlModel >& _rModel)
+bool SAL_CALL UnoEditControl::setModel(const uno::Reference< awt::XControlModel >& _rModel)
 {
     bool bReturn = UnoControlBase::setModel( _rModel );
     mbHasTextProperty = ImplHasProperty( BASEPROPERTY_TEXT );
@@ -399,12 +399,12 @@ awt::Selection UnoEditControl::getSelection()
     return aSel;
 }
 
-sal_Bool UnoEditControl::isEditable()
+bool UnoEditControl::isEditable()
 {
     return !ImplGetPropertyValue_BOOL( BASEPROPERTY_READONLY );
 }
 
-void UnoEditControl::setEditable( sal_Bool bEditable )
+void UnoEditControl::setEditable( bool bEditable )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_READONLY ), uno::Any(!bEditable), true );
 }
@@ -1017,7 +1017,7 @@ void UnoImageControlControl::dispose()
     UnoControl::dispose();
 }
 
-sal_Bool UnoImageControlControl::isTransparent()
+bool UnoImageControlControl::isTransparent()
 {
     return true;
 }
@@ -1145,7 +1145,7 @@ void UnoRadioButtonControl::dispose()
 }
 
 
-sal_Bool UnoRadioButtonControl::isTransparent()
+bool UnoRadioButtonControl::isTransparent()
 {
     return true;
 }
@@ -1215,13 +1215,13 @@ void UnoRadioButtonControl::setActionCommand( const OUString& rCommand )
     }
 }
 
-void UnoRadioButtonControl::setState( sal_Bool bOn )
+void UnoRadioButtonControl::setState( bool bOn )
 {
     sal_Int16 nState = bOn ? 1 : 0;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(nState), true );
 }
 
-sal_Bool UnoRadioButtonControl::getState()
+bool UnoRadioButtonControl::getState()
 {
     sal_Int16 nState = 0;
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ) );
@@ -1375,7 +1375,7 @@ void UnoCheckBoxControl::dispose()
     UnoControlBase::dispose();
 }
 
-sal_Bool UnoCheckBoxControl::isTransparent()
+bool UnoCheckBoxControl::isTransparent()
 {
     return true;
 }
@@ -1452,7 +1452,7 @@ sal_Int16 UnoCheckBoxControl::getState()
     return nState;
 }
 
-void UnoCheckBoxControl::enableTriState( sal_Bool b )
+void UnoCheckBoxControl::enableTriState( bool b )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TRISTATE ), uno::Any(b), true );
 }
@@ -1588,7 +1588,7 @@ css::uno::Sequence< css::uno::Type > UnoFixedHyperlinkControl::getTypes()
     return aTypeList.getTypes();
 }
 
-sal_Bool UnoFixedHyperlinkControl::isTransparent()
+bool UnoFixedHyperlinkControl::isTransparent()
 {
     return true;
 }
@@ -1785,7 +1785,7 @@ css::uno::Sequence< css::uno::Type > UnoFixedTextControl::getTypes()
     return aTypeList.getTypes();
 }
 
-sal_Bool UnoFixedTextControl::isTransparent()
+bool UnoFixedTextControl::isTransparent()
 {
     return true;
 }
@@ -1926,7 +1926,7 @@ OUString UnoGroupBoxControl::GetComponentServiceName() const
     return u"groupbox"_ustr;
 }
 
-sal_Bool UnoGroupBoxControl::isTransparent()
+bool UnoGroupBoxControl::isTransparent()
 {
     return true;
 }
@@ -2739,7 +2739,7 @@ uno::Sequence< OUString> UnoListBoxControl::getSelectedItems()
     return aSeq;
 }
 
-void UnoListBoxControl::selectItemPos( sal_Int16 nPos, sal_Bool bSelect )
+void UnoListBoxControl::selectItemPos( sal_Int16 nPos, bool bSelect )
 {
     if ( getPeer().is() )
     {
@@ -2749,7 +2749,7 @@ void UnoListBoxControl::selectItemPos( sal_Int16 nPos, sal_Bool bSelect )
     ImplUpdateSelectedItemsProperty();
 }
 
-void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositions, sal_Bool bSelect )
+void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositions, bool bSelect )
 {
     if ( getPeer().is() )
     {
@@ -2759,7 +2759,7 @@ void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositio
     ImplUpdateSelectedItemsProperty();
 }
 
-void UnoListBoxControl::selectItem( const OUString& aItem, sal_Bool bSelect )
+void UnoListBoxControl::selectItem( const OUString& aItem, bool bSelect )
 {
     if ( getPeer().is() )
     {
@@ -2788,12 +2788,12 @@ sal_Int16 UnoListBoxControl::getDropDownLineCount()
     return ImplGetPropertyValue_INT16( BASEPROPERTY_LINECOUNT );
 }
 
-sal_Bool UnoListBoxControl::isMutipleMode()
+bool UnoListBoxControl::isMutipleMode()
 {
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_MULTISELECTION );
 }
 
-void UnoListBoxControl::setMultipleMode( sal_Bool bMulti )
+void UnoListBoxControl::setMultipleMode( bool bMulti )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTISELECTION ), uno::Any(bMulti), true );
 }
@@ -2839,7 +2839,7 @@ void UnoListBoxControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines 
     Impl_getColumnsAndLines( nCols, nLines );
 }
 
-sal_Bool SAL_CALL UnoListBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
+bool SAL_CALL UnoListBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -3141,7 +3141,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
         }
     }
 }
-sal_Bool SAL_CALL UnoComboBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
+bool SAL_CALL UnoComboBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -3392,7 +3392,7 @@ void UnoSpinFieldControl::last()
         xField->last();
 }
 
-void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat )
+void UnoSpinFieldControl::enableRepeat( bool bRepeat )
 {
     mbRepeat = bRepeat;
 
@@ -3605,7 +3605,7 @@ util::Date UnoDateFieldControl::getLast()
     return mnLast;
 }
 
-void UnoDateFieldControl::setLongFormat( sal_Bool bLong )
+void UnoDateFieldControl::setLongFormat( bool bLong )
 {
     mbLongFormat = bLong ? TRISTATE_TRUE : TRISTATE_FALSE;
     if ( getPeer().is() )
@@ -3615,7 +3615,7 @@ void UnoDateFieldControl::setLongFormat( sal_Bool bLong )
     }
 }
 
-sal_Bool UnoDateFieldControl::isLongFormat()
+bool UnoDateFieldControl::isLongFormat()
 {
     return mbLongFormat == TRISTATE_TRUE;
 }
@@ -3629,7 +3629,7 @@ void UnoDateFieldControl::setEmpty()
     }
 }
 
-sal_Bool UnoDateFieldControl::isEmpty()
+bool UnoDateFieldControl::isEmpty()
 {
     bool bEmpty = false;
     if ( getPeer().is() )
@@ -3640,12 +3640,12 @@ sal_Bool UnoDateFieldControl::isEmpty()
     return bEmpty;
 }
 
-void UnoDateFieldControl::setStrictFormat( sal_Bool bStrict )
+void UnoDateFieldControl::setStrictFormat( bool bStrict )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
-sal_Bool UnoDateFieldControl::isStrictFormat()
+bool UnoDateFieldControl::isStrictFormat()
 {
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
@@ -3856,7 +3856,7 @@ void UnoTimeFieldControl::setEmpty()
     }
 }
 
-sal_Bool UnoTimeFieldControl::isEmpty()
+bool UnoTimeFieldControl::isEmpty()
 {
     bool bEmpty = false;
     if ( getPeer().is() )
@@ -3867,12 +3867,12 @@ sal_Bool UnoTimeFieldControl::isEmpty()
     return bEmpty;
 }
 
-void UnoTimeFieldControl::setStrictFormat( sal_Bool bStrict )
+void UnoTimeFieldControl::setStrictFormat( bool bStrict )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
-sal_Bool UnoTimeFieldControl::isStrictFormat()
+bool UnoTimeFieldControl::isStrictFormat()
 {
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
@@ -4067,12 +4067,12 @@ double UnoNumericFieldControl::getLast()
     return mnLast;
 }
 
-void UnoNumericFieldControl::setStrictFormat( sal_Bool bStrict )
+void UnoNumericFieldControl::setStrictFormat( bool bStrict )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
-sal_Bool UnoNumericFieldControl::isStrictFormat()
+bool UnoNumericFieldControl::isStrictFormat()
 {
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
@@ -4289,12 +4289,12 @@ double UnoCurrencyFieldControl::getLast()
     return mnLast;
 }
 
-void UnoCurrencyFieldControl::setStrictFormat( sal_Bool bStrict )
+void UnoCurrencyFieldControl::setStrictFormat( bool bStrict )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
-sal_Bool UnoCurrencyFieldControl::isStrictFormat()
+bool UnoCurrencyFieldControl::isStrictFormat()
 {
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
@@ -4472,12 +4472,12 @@ void UnoPatternFieldControl::getMasks( OUString& EditMask, OUString& LiteralMask
     LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );
 }
 
-void UnoPatternFieldControl::setStrictFormat( sal_Bool bStrict )
+void UnoPatternFieldControl::setStrictFormat( bool bStrict )
 {
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
 }
 
-sal_Bool UnoPatternFieldControl::isStrictFormat()
+bool UnoPatternFieldControl::isStrictFormat()
 {
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
@@ -4740,7 +4740,7 @@ OUString UnoFixedLineControl::GetComponentServiceName() const
     return u"FixedLine"_ustr;
 }
 
-sal_Bool UnoFixedLineControl::isTransparent()
+bool UnoFixedLineControl::isTransparent()
 {
     return true;
 }

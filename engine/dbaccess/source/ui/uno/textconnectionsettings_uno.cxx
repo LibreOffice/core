@@ -77,7 +77,7 @@ namespace dbaui
 
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) override;
+        virtual bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) override;
         virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const override;
 
         // Overrides to resolve inheritance ambiguity
@@ -123,7 +123,7 @@ namespace dbaui
     {
         return u"com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog"_ustr;
     }
-    sal_Bool SAL_CALL OTextConnectionSettingsDialog::supportsService(const OUString& _rServiceName)
+    bool SAL_CALL OTextConnectionSettingsDialog::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -162,7 +162,7 @@ namespace dbaui
         pProps[ nProp++ ] = Property(
             u"HeaderLine"_ustr,
             PROPERTY_ID_HEADER_LINE,
-            ::cppu::UnoType< sal_Bool >::get(),
+            ::cppu::UnoType< bool >::get(),
             PropertyAttribute::TRANSIENT
         );
 
@@ -222,7 +222,7 @@ namespace dbaui
         }
     }
 
-    sal_Bool SAL_CALL OTextConnectionSettingsDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+    bool SAL_CALL OTextConnectionSettingsDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
     {
         bool bModified = false;
 

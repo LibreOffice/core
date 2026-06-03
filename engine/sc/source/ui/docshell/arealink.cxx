@@ -466,7 +466,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     }
     else
     {
-        //  CanFitBlock sal_False -> Problems with summarized cells or table boundary reached!
+        //  CanFitBlock false -> Problems with summarized cells or table boundary reached!
         //! cell protection ???
 
         //! Link dialog must set default parent

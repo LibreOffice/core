@@ -748,7 +748,7 @@ uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SdUnoFindAllAccess::hasElements()
+bool SAL_CALL SdUnoFindAllAccess::hasElements()
 {
     return maSequence.hasElements();
 }

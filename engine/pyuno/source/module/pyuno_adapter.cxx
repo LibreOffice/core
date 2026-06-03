@@ -388,12 +388,12 @@ Any Adapter::getValue( const OUString & aPropertyName )
     return ret;
 }
 
-sal_Bool Adapter::hasMethod( const OUString & aMethodName )
+bool Adapter::hasMethod( const OUString & aMethodName )
 {
     return hasProperty( aMethodName );
 }
 
-sal_Bool Adapter::hasProperty( const OUString & aPropertyName )
+bool Adapter::hasProperty( const OUString & aPropertyName )
 {
     bool bRet = false;
     PyThreadAttach guard( mInterpreter );

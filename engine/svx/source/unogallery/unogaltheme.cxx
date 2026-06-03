@@ -69,7 +69,7 @@ OUString SAL_CALL GalleryTheme::getImplementationName()
     return u"com.sun.star.comp.gallery.GalleryTheme"_ustr;
 }
 
-sal_Bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
+bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -103,7 +103,7 @@ uno::Type SAL_CALL GalleryTheme::getElementType()
 }
 
 
-sal_Bool SAL_CALL GalleryTheme::hasElements()
+bool SAL_CALL GalleryTheme::hasElements()
 {
     const SolarMutexGuard aGuard;
 

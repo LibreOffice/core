@@ -262,7 +262,7 @@ OUString OO3ExtensionMigration::getImplementationName()
 }
 
 
-sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
+bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -391,7 +391,7 @@ namespace connectivity
     }
 
 
-    sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url )
+    bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url )
     {
         bool bEnabled = false;
         javaFrameworkError e = jfw_getEnabled(&bEnabled);
@@ -499,7 +499,7 @@ namespace connectivity
         return IMPL_NAME;
     }
 
-    sal_Bool SAL_CALL ODriverDelegator::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL ODriverDelegator::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }

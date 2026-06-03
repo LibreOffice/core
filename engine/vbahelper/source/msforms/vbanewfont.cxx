@@ -85,46 +85,46 @@ void SAL_CALL VbaNewFont::setWeight( sal_Int16 nWeight )
     setBold( nWeight >= 700 );
 }
 
-sal_Bool SAL_CALL VbaNewFont::getBold()
+bool SAL_CALL VbaNewFont::getBold()
 {
     uno::Any aAny = mxProps->getPropertyValue( u"FontWeight"_ustr );
     return aAny.get< float >() > awt::FontWeight::NORMAL;
 }
 
-void SAL_CALL VbaNewFont::setBold( sal_Bool bBold )
+void SAL_CALL VbaNewFont::setBold( bool bBold )
 {
     mxProps->setPropertyValue( u"FontWeight"_ustr , uno::Any( bBold ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
 }
 
-sal_Bool SAL_CALL VbaNewFont::getItalic()
+bool SAL_CALL VbaNewFont::getItalic()
 {
     uno::Any aAny = mxProps->getPropertyValue( u"FontSlant"_ustr );
     return aAny.get< awt::FontSlant >() != awt::FontSlant_NONE;
 }
 
-void SAL_CALL VbaNewFont::setItalic( sal_Bool bItalic )
+void SAL_CALL VbaNewFont::setItalic( bool bItalic )
 {
     mxProps->setPropertyValue( u"FontSlant"_ustr , uno::Any( bItalic ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
 }
 
-sal_Bool SAL_CALL VbaNewFont::getUnderline()
+bool SAL_CALL VbaNewFont::getUnderline()
 {
     uno::Any aAny = mxProps->getPropertyValue(u"FontUnderline"_ustr );
     return aAny.get< sal_Int16 >() != awt::FontUnderline::NONE;
 }
 
-void SAL_CALL VbaNewFont::setUnderline( sal_Bool bUnderline )
+void SAL_CALL VbaNewFont::setUnderline( bool bUnderline )
 {
     mxProps->setPropertyValue(u"FontUnderline"_ustr , uno::Any( bUnderline ? awt::FontUnderline::SINGLE : awt::FontUnderline::NONE ) );
 }
 
-sal_Bool SAL_CALL VbaNewFont::getStrikethrough()
+bool SAL_CALL VbaNewFont::getStrikethrough()
 {
     uno::Any aAny = mxProps->getPropertyValue( u"FontStrikeout"_ustr );
     return aAny.get< sal_Int16 >() != awt::FontStrikeout::NONE;
 }
 
-void SAL_CALL VbaNewFont::setStrikethrough( sal_Bool bStrikethrough )
+void SAL_CALL VbaNewFont::setStrikethrough( bool bStrikethrough )
 {
     mxProps->setPropertyValue( u"FontStrikeout"_ustr ,uno::Any( bStrikethrough ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
 }

@@ -43,7 +43,7 @@ InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 {
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode)
 {
@@ -135,7 +135,7 @@ InputSequenceCheckerImpl::getImplementationName()
     return OUString::createFromAscii(serviceName);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 InputSequenceCheckerImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

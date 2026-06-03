@@ -64,7 +64,7 @@ OUString SAL_CALL CSmplMailSuppl::getImplementationName()
     return "com.sun.star.sys.shell.SimpleSystemMail";
 }
 
-sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
+bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

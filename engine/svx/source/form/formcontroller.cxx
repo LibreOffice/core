@@ -642,7 +642,7 @@ Sequence< Type > SAL_CALL FormController::getTypes(  )
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL FormController::supportsService(const OUString& ServiceName)
+bool SAL_CALL FormController::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -664,7 +664,7 @@ Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames()
 }
 
 
-sal_Bool SAL_CALL FormController::approveReset(const EventObject& /*rEvent*/)
+bool SAL_CALL FormController::approveReset(const EventObject& /*rEvent*/)
 {
     return true;
 }
@@ -747,7 +747,7 @@ void FormController::impl_setTextOnAllFilter_throw()
 }
 // OPropertySetHelper
 
-sal_Bool FormController::convertFastPropertyValue( Any & /*rConvertedValue*/, Any & /*rOldValue*/,
+bool FormController::convertFastPropertyValue( Any & /*rConvertedValue*/, Any & /*rOldValue*/,
                                             sal_Int32 /*nHandle*/, const Any& /*rValue*/ )
 {
     return false;
@@ -1031,7 +1031,7 @@ void SAL_CALL FormController::setActiveTerm( ::sal_Int32 ActiveTerm )
 
 // XElementAccess
 
-sal_Bool SAL_CALL FormController::hasElements()
+bool SAL_CALL FormController::hasElements()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return !m_aChildren.empty();
@@ -2112,7 +2112,7 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
     // b. if the associated field is locked
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
     if (!(xBound.is() &&
-        ( (bLocked && bLocked != bool(xBound->getLock())) ||
+        ( (bLocked && bLocked != xBound->getLock()) ||
           !bLocked)))    // always uncheck individual fields when unlocking
         return;
 
@@ -3427,7 +3427,7 @@ Sequence< OUString > SAL_CALL FormController::getSupportedModes()
     return aModes;
 }
 
-sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode)
+bool SAL_CALL FormController::supportsMode(const OUString& Mode)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3579,7 +3579,7 @@ namespace
 
 // XRowSetApproveListener
 
-sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent)
+bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3667,7 +3667,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
 }
 
 
-sal_Bool SAL_CALL FormController::approveCursorMove(const EventObject& event)
+bool SAL_CALL FormController::approveCursorMove(const EventObject& event)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3684,7 +3684,7 @@ sal_Bool SAL_CALL FormController::approveCursorMove(const EventObject& event)
 }
 
 
-sal_Bool SAL_CALL FormController::approveRowSetChange(const EventObject& event)
+bool SAL_CALL FormController::approveRowSetChange(const EventObject& event)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3793,7 +3793,7 @@ void SAL_CALL FormController::removeParameterListener(const Reference< XDatabase
 
 // XDatabaseParameterListener
 
-sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent& aEvent)
+bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent& aEvent)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -3889,7 +3889,7 @@ void SAL_CALL FormController::removeConfirmDeleteListener(const Reference< XConf
 
 // XConfirmDeleteListener
 
-sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
+bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();

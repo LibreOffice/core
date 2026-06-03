@@ -228,7 +228,7 @@ void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     PropertyChgHelper::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
 {
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     PropertyChgHelper::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
 {
@@ -372,29 +372,29 @@ bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
             case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = ! *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = ! *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = ! *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = ! *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             case UPH_IS_SPELL_CLOSED_COMPOUND     :
             {
                 pbVal = &bIsSpellClosedCompound;
-                bSCWA = ! *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = ! *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             case UPH_IS_SPELL_HYPHENATED_COMPOUND :
             {
                 pbVal = &bIsSpellHyphenatedCompound;
-                bSCWA = ! *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = ! *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             default:

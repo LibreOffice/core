@@ -56,7 +56,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & rServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
@@ -68,7 +68,7 @@ public:
     virtual void SAL_CALL
     handle(css::uno::Reference< css::task::XInteractionRequest > const & rRequest) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         handleInteractionRequest(
             const css::uno::Reference< css::task::XInteractionRequest >& Request
         ) override;
@@ -140,7 +140,7 @@ OUString SAL_CALL UUIInteractionHandler::getImplementationName()
     return u"com.sun.star.comp.uui.UUIInteractionHandler"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 UUIInteractionHandler::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -201,7 +201,7 @@ UUIInteractionHandler::handle(
     }
 }
 
-sal_Bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
+bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
     const uno::Reference< task::XInteractionRequest >& Request )
 {
     try

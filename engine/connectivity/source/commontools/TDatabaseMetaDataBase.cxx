@@ -189,14 +189,14 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getPrimaryKeys(
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getIndexInfo(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/,
-        sal_Bool /*unique*/, sal_Bool /*approximate*/ )
+        bool /*unique*/, bool /*approximate*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getBestRowIdentifier(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/, sal_Int32 /*scope*/,
-        sal_Bool /*nullable*/ )
+        bool /*nullable*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
@@ -262,7 +262,7 @@ OUString SAL_CALL ODatabaseMetaDataBase::getIdentifierQuoteString(  )
     return callImplMethod(m_sIdentifierQuoteString,std::function<OUString(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_getIdentifierQuoteString_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::isCatalogAtStart(  )
+bool SAL_CALL ODatabaseMetaDataBase::isCatalogAtStart(  )
 {
     return callImplMethod(m_isCatalogAtStart,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_isCatalogAtStart_throw));
 }
@@ -272,37 +272,37 @@ OUString SAL_CALL ODatabaseMetaDataBase::getCatalogSeparator(  )
     return callImplMethod(m_sCatalogSeparator,std::function<OUString(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_getCatalogSeparator_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInTableDefinitions(  )
+bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInTableDefinitions(  )
 {
     return callImplMethod(m_supportsCatalogsInTableDefinitions,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsCatalogsInTableDefinitions_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInTableDefinitions(  )
+bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInTableDefinitions(  )
 {
     return callImplMethod(m_supportsSchemasInTableDefinitions,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsSchemasInTableDefinitions_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInDataManipulation(  )
+bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInDataManipulation(  )
 {
     return callImplMethod(m_supportsCatalogsInDataManipulation,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsCatalogsInDataManipulation_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInDataManipulation(  )
+bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInDataManipulation(  )
 {
     return callImplMethod(m_supportsSchemasInDataManipulation,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsSchemasInDataManipulation_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsMixedCaseQuotedIdentifiers(  )
+bool SAL_CALL ODatabaseMetaDataBase::supportsMixedCaseQuotedIdentifiers(  )
 {
     return callImplMethod(m_supportsMixedCaseQuotedIdentifiers,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsMixedCaseQuotedIdentifiers_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithAddColumn(  )
+bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithAddColumn(  )
 {
     return callImplMethod(m_supportsAlterTableWithAddColumn,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithAddColumn_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithDropColumn(  )
+bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithDropColumn(  )
 {
     return callImplMethod(m_supportsAlterTableWithDropColumn,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithDropColumn_throw));
 }
@@ -317,7 +317,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataBase::getMaxTablesInSelect(  )
     return callImplMethod(m_MaxTablesInSelect,std::function<sal_Int32(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_getMaxTablesInSelect_throw));
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataBase::storesMixedCaseQuotedIdentifiers(  )
+bool SAL_CALL ODatabaseMetaDataBase::storesMixedCaseQuotedIdentifiers(  )
 {
     return callImplMethod(m_storesMixedCaseQuotedIdentifiers,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_storesMixedCaseQuotedIdentifiers_throw));
 }

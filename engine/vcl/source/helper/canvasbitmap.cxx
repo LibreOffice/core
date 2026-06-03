@@ -313,14 +313,14 @@ geometry::IntegerSize2D SAL_CALL VclCanvasBitmap::getSize()
     return integerSize2DFromSize( m_aBmp.GetSizePixel() );
 }
 
-sal_Bool SAL_CALL VclCanvasBitmap::hasAlpha()
+bool SAL_CALL VclCanvasBitmap::hasAlpha()
 {
     SolarMutexGuard aGuard;
     return m_aBmp.HasAlpha();
 }
 
 uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( const geometry::RealSize2D& newSize,
-                                                                                sal_Bool beFast )
+                                                                                bool beFast )
 {
     SolarMutexGuard aGuard;
 
@@ -514,7 +514,7 @@ sal_Int32 SAL_CALL VclCanvasBitmap::getNumberOfEntries()
     return m_pBmpAcc->HasPalette() ? m_pBmpAcc->GetPaletteEntryCount() : 0 ;
 }
 
-sal_Bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, sal_Int32 nIndex )
+bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -535,7 +535,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, s
     return true; // no palette transparency here.
 }
 
-sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal_Bool, sal_Int32 nIndex )
+bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, bool, sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 

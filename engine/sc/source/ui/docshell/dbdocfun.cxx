@@ -679,7 +679,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
                                     bool bRecord, bool bApi )
 {
-    bool bDo = !rParam.bRemoveOnly; // sal_False = only delete
+    bool bDo = !rParam.bRemoveOnly; // false = only delete
     // A resize (extend/shrink) relocates the total row: bReplace && bDo, unlike the toggle
     // (ON: bReplace=false; OFF: bRemoveOnly=true). It is net-0 rows, which drives the tear
     // refusal and Undo/Redo handling below.

@@ -103,7 +103,7 @@ OUString SAL_CALL HHConvDic::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
+bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -120,7 +120,7 @@ public:
     // beans::XPropertySetInfo
     virtual css::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override;
     virtual css::beans::Property SAL_CALL getPropertyByName (const OUString& rsName) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName (const OUString& rsName) override;
+    virtual bool SAL_CALL hasPropertyByName (const OUString& rsName) override;
 
 private:
     static Theme& GetCurrentTheme();

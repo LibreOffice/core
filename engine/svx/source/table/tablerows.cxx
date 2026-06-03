@@ -102,7 +102,7 @@ Type SAL_CALL TableRows::getElementType()
 }
 
 
-sal_Bool SAL_CALL TableRows::hasElements()
+bool SAL_CALL TableRows::hasElements()
 {
     throwIfDisposed();
     return mxTableModel->getRowCount() != 0;

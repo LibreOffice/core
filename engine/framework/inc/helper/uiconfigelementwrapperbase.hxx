@@ -79,7 +79,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
 
         // XUIElementSettings
         virtual  void SAL_CALL updateSettings() override = 0;
-        virtual  css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) override;
+        virtual  css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( bool bWriteable ) override;
         virtual  void SAL_CALL setSettings( const css::uno::Reference< css::container::XIndexAccess >& UISettings ) override;
 
         // XUIElement
@@ -105,7 +105,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
     protected:
 
         //  OPropertySetHelper
-        virtual  sal_Bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
+        virtual  bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
                                                                                                                css::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,
                                                                                                                const css::uno::Any&  aValue          ) override;

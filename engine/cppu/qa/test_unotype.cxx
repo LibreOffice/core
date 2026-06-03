@@ -106,7 +106,7 @@ void Test::testUnoType() {
     t = cppu::UnoType<bool>::get();
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_BOOLEAN, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"boolean"_ustr, t.getTypeName());
-    CPPUNIT_ASSERT(bool(cppu::UnoType<sal_Bool>::get() == t));
+    CPPUNIT_ASSERT(bool(cppu::UnoType<bool>::get() == t));
     t = cppu::UnoType<sal_Int8>::get();
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_BYTE, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"byte"_ustr, t.getTypeName());
@@ -232,7 +232,7 @@ void Test::testGetTypeFavourUnsigned() {
         cppu::getTypeFavourUnsigned(static_cast<bool *>(nullptr)),
         cppu::UnoType<bool>::get());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::getTypeFavourUnsigned(static_cast<sal_Bool *>(nullptr)),
+        cppu::getTypeFavourUnsigned(static_cast<bool *>(nullptr)),
         cppu::UnoType<bool>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<sal_Int8 *>(nullptr)),
@@ -397,7 +397,7 @@ void Test::testGetTypeFavourChar() {
         cppu::getTypeFavourChar(static_cast<bool *>(nullptr)),
         cppu::UnoType<bool>::get());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::getTypeFavourChar(static_cast<sal_Bool *>(nullptr)),
+        cppu::getTypeFavourChar(static_cast<bool *>(nullptr)),
         cppu::UnoType<bool>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(static_cast<sal_Int8 *>(nullptr)),

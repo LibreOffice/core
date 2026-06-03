@@ -2638,7 +2638,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
 
         // #i78661 allow application to turn off capitalization of
         // start sentence explicitly.
-        // (This is done by setting IsFirstWordCapitalization to sal_False.)
+        // (This is done by setting IsFirstWordCapitalization to false.)
         bool bOldCapitalStartSentence = pAutoCorrect->IsAutoCorrFlag( ACFlags::CapitalStartSentence );
         if (!IsFirstWordCapitalization())
         {

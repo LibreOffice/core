@@ -55,7 +55,7 @@ Reference<XXMLSecurityContext> SAL_CALL SEInitializerGpg::createSecurityContext(
 void SAL_CALL SEInitializerGpg::freeSecurityContext(const uno::Reference<XXMLSecurityContext>&) {}
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SEInitializerGpg::supportsService(const OUString& rServiceName)
+bool SAL_CALL SEInitializerGpg::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

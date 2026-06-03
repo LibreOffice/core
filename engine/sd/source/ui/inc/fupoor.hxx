@@ -64,7 +64,7 @@ public:
     virtual void DoPaste(bool bMergeMasterPagesOnly = false );
     virtual void DoPasteUnformatted();
 
-    // mouse & key events; return value = sal_True: event has been handled
+    // mouse & key events; return value = true: event has been handled
     virtual bool KeyInput(const KeyEvent& rKEvt);
     virtual bool MouseMove(const MouseEvent& );
     virtual bool MouseButtonUp(const MouseEvent& rMEvt);

@@ -652,7 +652,7 @@ OUString SAL_CALL ScDocumentConfiguration::getImplementationName()
     return u"ScDocumentConfiguration"_ustr;
 }
 
-sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

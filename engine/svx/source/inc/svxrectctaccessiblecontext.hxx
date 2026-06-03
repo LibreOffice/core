@@ -150,7 +150,7 @@ public:
     virtual css::uno::Any SAL_CALL
         getCurrentValue() override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         setCurrentValue( const css::uno::Any& aNumber ) override;
 
     virtual css::uno::Any SAL_CALL
@@ -164,7 +164,7 @@ public:
 
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) override;
-    virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) override;
+    virtual bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) override;
     virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 

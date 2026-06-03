@@ -85,19 +85,19 @@ public:
 
         @param bCreate
         Determines whether an EditView should be created, if there is
-        none active. If set to sal_True, and the underlying object is
+        none active. If set to true, and the underlying object is
         not in EditMode, the text forwarder changes and the object is
         set to EditMode.
 
         @return the edit view forwarder, or NULL if the underlying
         object is dead, or if no view is available (if bCreate is
-        sal_False, NULL is also returned if the object is not in
+        false, NULL is also returned if the object is not in
         EditMode)
 
         @derive default implementation provided, overriding is optional
 
         @attention If this method is called with bCreate equal to
-        sal_True, all previously returned text forwarder can become
+        true, all previously returned text forwarder can become
         invalid
      */
     virtual SvxEditViewForwarder*  GetEditViewForwarder( bool bCreate = false );
@@ -260,7 +260,7 @@ public:
     virtual OutputDevice*   GetRefDevice() const = 0;
 
     /** Query paragraph and character index of the character at the
-        given point. Returns sal_True on success, sal_False otherwise
+        given point. Returns true on success, false otherwise
 
         @param rPoint
         Point to query text position of. Is interpreted in logical
@@ -284,7 +284,7 @@ public:
         that word up to and including the last space before the next
         word. The index values returned do not contain any leading or
         trailing white-space. If the input indices are invalid,
-        sal_False is returned.
+        false is returned.
 
         @param nPara[0 .. n-1]
         Index of paragraph to start the search in
@@ -448,7 +448,7 @@ public:
 
     /** Query state of forwarder
 
-        @return sal_False, if no longer valid
+        @return false, if no longer valid
      */
     virtual bool        IsValid() const = 0;
 

@@ -45,7 +45,7 @@ PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< uno::XComponentConte
 }
 
 // XFilter
-sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::PropertyValue >& rFilterData )
+bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::PropertyValue >& rFilterData )
 {
     bool bRet = false;
     if( m_xModel.is() )
@@ -191,7 +191,7 @@ OUString PDFIHybridAdaptor::getImplementationName()
     return u"org.libreoffice.comp.documents.HybridPDFImport"_ustr;
 }
 
-sal_Bool PDFIHybridAdaptor::supportsService(OUString const & ServiceName)
+bool PDFIHybridAdaptor::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

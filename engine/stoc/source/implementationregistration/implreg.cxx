@@ -1040,7 +1040,7 @@ public:
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
     // XImplementationRegistration
@@ -1049,7 +1049,7 @@ public:
         const OUString& location,
         const Reference < XSimpleRegistry > & xReg) override;
 
-    virtual sal_Bool SAL_CALL revokeImplementation(
+    virtual bool SAL_CALL revokeImplementation(
         const OUString& location,
         const Reference < XSimpleRegistry >& xReg) override;
 
@@ -1118,7 +1118,7 @@ OUString ImplementationRegistration::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName)
+bool ImplementationRegistration::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1324,7 +1324,7 @@ void ImplementationRegistration::registerImplementation(
 
 // virtual function revokeImplementation of XImplementationRegistration
 
-sal_Bool ImplementationRegistration::revokeImplementation(const OUString& location,
+bool ImplementationRegistration::revokeImplementation(const OUString& location,
                                                       const Reference < XSimpleRegistry >& xReg)
 {
     bool ret = false;

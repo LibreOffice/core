@@ -292,13 +292,13 @@ awt::Rectangle SAL_CALL ChartController::getPosSize()
     return aRet;
 }
 
-void SAL_CALL ChartController::setVisible( sal_Bool Visible )
+void SAL_CALL ChartController::setVisible( bool Visible )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->setVisible(Visible);
 }
 
-void SAL_CALL ChartController::setEnable( sal_Bool Enable )
+void SAL_CALL ChartController::setEnable( bool Enable )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->setEnable(Enable);
@@ -1608,7 +1608,7 @@ bool ChartController::requestQuickHelp(
 }
 
 // XSelectionSupplier (optional interface)
-sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
+bool SAL_CALL ChartController::select( const uno::Any& rSelection )
 {
     bool bSuccess = false;
 

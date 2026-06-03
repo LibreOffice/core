@@ -631,7 +631,7 @@ DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
                          getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Blue -45 Degrees"_ustr,
                          getProperty<OUString>(xStyle, u"FillHatchName"_ustr));
-    CPPUNIT_ASSERT(!getProperty<sal_Bool>(xStyle, u"FillBackground"_ustr));
+    CPPUNIT_ASSERT(!getProperty<bool>(xStyle, u"FillBackground"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, u"FillTransparence"_ustr));
 }
 

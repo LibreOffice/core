@@ -206,7 +206,7 @@ public:
     SAL_DLLPRIVATE virtual void HideSdrPage() override;
     bool IsObjMarkable(SdrObject const * pObj, SdrPageView const * pPV) const;
 
-    // Returns sal_True if objects, points or gluepoints are selected by drawing a frame
+    // Returns true if objects, points or gluepoints are selected by drawing a frame
     // (as long as the frame is drawn).
     bool IsMarking() const { return IsMarkObj() || IsMarkPoints() || IsMarkGluePoints(); }
 
@@ -294,15 +294,15 @@ public:
     // Selects the most upper of the marked objects (O1) and scans from there
     // towards bottom direction, selecting the first non-marked object (O2).
     // In case of success the marking of O1 is deleted, a marking is created at
-    // O2 and TRUE is returned. With the parameter bPrev=sal_True the scan
+    // O2 and TRUE is returned. With the parameter bPrev=true the scan
     // direction is turned to the other direction.
     bool MarkNextObj(bool bPrev=false);
 
     // Selects the most upper of the marked objects which is hit by rPnt/nTol
     // and scans from there to bottom direction, selecting the first non-marked
     // object (O2). In case of success the marking of O1 is deleted, a marking
-    // is created at O2 and sal_True is returned. With the parameter
-    // bPrev=sal_True the scan direction is turned to the other direction.
+    // is created at O2 and true is returned. With the parameter
+    // bPrev=true the scan direction is turned to the other direction.
     bool MarkNextObj(const Point& rPnt, short nTol, bool bPrev);
 
     // Mark all objects within a rectangular area
@@ -353,7 +353,7 @@ public:
     const SdrHdlList& GetHdlList() const { return maHdlList; }
 
     // Draw a selection frame for marking of points.
-    // This routine will just be started in case that HasMarkablePoints() returns sal_True.
+    // This routine will just be started in case that HasMarkablePoints() returns true.
     bool BegMarkPoints(const Point& rPnt, bool bUnmark = false);
     void MovMarkPoints(const Point& rPnt);
     bool EndMarkPoints();
@@ -397,8 +397,8 @@ public:
     SAL_DLLPRIVATE void MarkNextGluePoint();
 
     // Draw a selection frame for gluepoint marking.
-    // This routine will just be started in case that HasMarkablePoints() returns sal_True.
-    // The GlueEditMode sal_True is disregarded.
+    // This routine will just be started in case that HasMarkablePoints() returns true.
+    // The GlueEditMode true is disregarded.
     // bool BegMarkGluePoints(const Point& rPnt, OutputDevice* pOut);
     bool BegMarkGluePoints(const Point& rPnt, bool bUnmark = false);
     SAL_DLLPRIVATE void MovMarkGluePoints(const Point& rPnt);
@@ -406,11 +406,11 @@ public:
     SAL_DLLPRIVATE void BrkMarkGluePoints();
     bool IsMarkGluePoints() const { return (nullptr != mpMarkGluePointsOverlay); }
 
-    // bRestraintPaint=sal_False causes the handles not to be drawn immediately.
+    // bRestraintPaint=false causes the handles not to be drawn immediately.
     // AdjustMarkHdl is just called in case of changes; usually this causes an Invalidate
     // At the end of a redraw the handles are drawn automatically.
-    // The purpose is to avoid unnecessary flickering. -> This does not yet work, that's why sal_True!
-    void AdjustMarkHdl(SfxViewShell* pOtherShell = nullptr); //HMHBOOL bRestraintPaint=sal_True);
+    // The purpose is to avoid unnecessary flickering. -> This does not yet work, that's why true!
+    void AdjustMarkHdl(SfxViewShell* pOtherShell = nullptr); //HMHBOOL bRestraintPaint=true);
 
     const tools::Rectangle& GetMarkedObjRect() const; // SnapRects of Objects, without line width
     tools::Rectangle GetMarkedObjBoundRect() const;   // incl. line width, overlapping rags, ...
@@ -429,7 +429,7 @@ public:
     // all member objects of the group are directly accessible. All other
     // objects may not be processed in the meantime (until the next
     // LeaveGroup()). With markings which overlaps pages, every page is processed
-    // separately. The method returns sal_True, if at least one group was entered.
+    // separately. The method returns true, if at least one group was entered.
     void EnterMarkedGroup();
 
     // Rotation center point and start point of the axis of reflection, respectively

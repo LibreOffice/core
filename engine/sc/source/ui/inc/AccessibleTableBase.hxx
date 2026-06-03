@@ -90,11 +90,11 @@ public:
                 getSelectedAccessibleColumns(  ) override;
 
     /// Returns a boolean value indicating whether the specified row is selected.
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                 isAccessibleRowSelected( sal_Int32 nRow ) override;
 
     /// Returns a boolean value indicating whether the specified column is selected.
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                 isAccessibleColumnSelected( sal_Int32 nColumn ) override;
 
     /// Returns the Accessible at a specified row and column in the table.
@@ -110,7 +110,7 @@ public:
                 getAccessibleSummary(  ) override;
 
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                 isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     ///=====  XAccessibleExtendedTable  ========================================
@@ -138,10 +138,10 @@ public:
     /// override to calculate this on demand
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int64 nIndex) override;
-    virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override;
-    virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
+    virtual bool SAL_CALL selectRow( sal_Int32 row ) override;
+    virtual bool SAL_CALL selectColumn( sal_Int32 column ) override;
+    virtual bool SAL_CALL unselectRow( sal_Int32 row ) override;
+    virtual bool SAL_CALL unselectColumn( sal_Int32 column ) override;
 
 protected:
     /// Return this object's description.
@@ -167,7 +167,7 @@ public:
     virtual void SAL_CALL
         selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
 
     virtual void SAL_CALL

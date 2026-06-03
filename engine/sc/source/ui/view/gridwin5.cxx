@@ -321,7 +321,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 mrViewData.GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
 
-                // bForceToTop = sal_False, use the cell's real position
+                // bForceToTop = false, use the cell's real position
                 aPixRect = mrViewData.GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
             }
         }

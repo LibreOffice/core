@@ -52,7 +52,7 @@ OUString SAL_CALL NameContainer::getImplementationName()
     return u"com.sun.star.comp.chart.XMLNameSpaceMap"_ustr;
 }
 
-sal_Bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
+bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -101,13 +101,13 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames()
     return comphelper::mapKeysToSequence(m_aMap);
 }
 
-sal_Bool SAL_CALL NameContainer::hasByName( const OUString& rName )
+bool SAL_CALL NameContainer::hasByName( const OUString& rName )
 {
     return m_aMap.contains( rName );
 }
 
 // XElementAccess
-sal_Bool SAL_CALL NameContainer::hasElements()
+bool SAL_CALL NameContainer::hasElements()
 {
     return ! m_aMap.empty();
 }

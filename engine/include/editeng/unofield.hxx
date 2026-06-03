@@ -70,7 +70,7 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XTextField
-    virtual OUString SAL_CALL getPresentation( sal_Bool bShowCommand ) override;
+    virtual OUString SAL_CALL getPresentation( bool bShowCommand ) override;
 
     // XTextContent
     virtual void SAL_CALL attach( const css::uno::Reference< css::text::XTextRange >& xTextRange ) override;
@@ -94,7 +94,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };

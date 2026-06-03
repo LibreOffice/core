@@ -73,7 +73,7 @@ OUString SAL_CALL XMLSecurityContextGpg::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService(const OUString& serviceName)
+bool SAL_CALL XMLSecurityContextGpg::supportsService(const OUString& serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

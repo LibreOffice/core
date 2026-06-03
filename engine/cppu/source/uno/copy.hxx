@@ -136,7 +136,7 @@ inline void _copyConstructAnyFromData(
         break;
     case typelib_TypeClass_BOOLEAN:
         pDestAny->pData = &pDestAny->pReserved;
-        *static_cast<sal_Bool *>(pDestAny->pData) = bool(*static_cast<sal_Bool *>(pSource));
+        *static_cast<bool *>(pDestAny->pData) = *static_cast<bool *>(pSource);
         break;
     case typelib_TypeClass_BYTE:
         pDestAny->pData = &pDestAny->pReserved;
@@ -295,7 +295,7 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_BOOLEAN:
                 pDestAny->pData = &pDestAny->pReserved;
-                *static_cast<sal_Bool *>(pDestAny->pData) = false;
+                *static_cast<bool *>(pDestAny->pData) = false;
                 break;
             case typelib_TypeClass_BYTE:
                 pDestAny->pData = &pDestAny->pReserved;
@@ -546,7 +546,7 @@ inline void _copyConstructData(
         *static_cast<sal_Unicode *>(pDest) = *static_cast<sal_Unicode *>(pSource);
         break;
     case typelib_TypeClass_BOOLEAN:
-        *static_cast<sal_Bool *>(pDest) = bool(*static_cast<sal_Bool *>(pSource));
+        *static_cast<bool *>(pDest) = *static_cast<bool *>(pSource);
         break;
     case typelib_TypeClass_BYTE:
         *static_cast<sal_Int8 *>(pDest) = *static_cast<sal_Int8 *>(pSource);

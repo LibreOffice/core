@@ -63,7 +63,7 @@ OUString SAL_CALL OViewContainer::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.OViewContainer"_ustr;
     }
-sal_Bool SAL_CALL OViewContainer::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OViewContainer::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

@@ -102,7 +102,7 @@ OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
     return IMPLEMENTATIONNAME_ACTIONTRIGGER;
 }
 
-sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
+bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -133,16 +133,16 @@ Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-sal_Bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
+bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
     Any&        aConvertedValue,
     Any&        aOldValue,
     sal_Int32   nHandle,
     const Any&  aValue  )
 {
     //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
-    //  Return sal_True, if changed - else return sal_False.
+    //  Return true, if changed - else return false.
     //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
-    //  Initialize return value with sal_False !!!
+    //  Initialize return value with false !!!
     //  (Handle can be invalid)
     bool bReturn = false;
 

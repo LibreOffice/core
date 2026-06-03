@@ -71,7 +71,7 @@ public:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XSubToolbarController
-    virtual sal_Bool SAL_CALL opensSubToolbar() override;
+    virtual bool SAL_CALL opensSubToolbar() override;
     virtual OUString SAL_CALL getSubToolbarName() override;
     virtual void SAL_CALL functionSelected( const OUString& rCommand ) override;
     virtual void SAL_CALL updateImage() override;
@@ -80,7 +80,7 @@ public:
     virtual void SAL_CALL startDocking( const css::awt::DockingEvent& e ) override;
     virtual css::awt::DockingData SAL_CALL docking( const css::awt::DockingEvent& e ) override;
     virtual void SAL_CALL endDocking( const css::awt::EndDockingEvent& e ) override;
-    virtual sal_Bool SAL_CALL prepareToggleFloatingMode( const css::lang::EventObject& e ) override;
+    virtual bool SAL_CALL prepareToggleFloatingMode( const css::lang::EventObject& e ) override;
     virtual void SAL_CALL toggleFloatingMode( const css::lang::EventObject& e ) override;
     virtual void SAL_CALL closed( const css::lang::EventObject& e ) override;
     virtual void SAL_CALL endPopupMode( const css::awt::EndPopupModeEvent& e ) override;
@@ -93,7 +93,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -344,7 +344,7 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
     return nullptr;
 }
 
-sal_Bool SubToolBarController::opensSubToolbar()
+bool SubToolBarController::opensSubToolbar()
 {
     return !m_aLastCommand.isEmpty();
 }
@@ -395,7 +395,7 @@ void SubToolBarController::endDocking( const css::awt::EndDockingEvent& )
 {
 }
 
-sal_Bool SubToolBarController::prepareToggleFloatingMode( const css::lang::EventObject& )
+bool SubToolBarController::prepareToggleFloatingMode( const css::lang::EventObject& )
 {
     return false;
 }
@@ -523,7 +523,7 @@ OUString SubToolBarController::getImplementationName()
     return u"com.sun.star.comp.framework.SubToolBarController"_ustr;
 }
 
-sal_Bool SubToolBarController::supportsService( const OUString& rServiceName )
+bool SubToolBarController::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

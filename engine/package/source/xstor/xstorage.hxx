@@ -359,9 +359,9 @@ public:
             const OUString& aStorName,
             const css::uno::Reference< css::embed::XStorage >& xTargetStorage ) override;
 
-    virtual sal_Bool SAL_CALL isStreamElement( const OUString& aElementName ) override;
+    virtual bool SAL_CALL isStreamElement( const OUString& aElementName ) override;
 
-    virtual sal_Bool SAL_CALL isStorageElement( const OUString& aElementName ) override;
+    virtual bool SAL_CALL isStorageElement( const OUString& aElementName ) override;
 
     virtual void SAL_CALL removeElement( const OUString& aElementName ) override;
 
@@ -406,9 +406,9 @@ public:
 
     //  XModifiable
 
-    virtual sal_Bool SAL_CALL isModified() override;
+    virtual bool SAL_CALL isModified() override;
 
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual void SAL_CALL setModified( bool bModified ) override;
 
     virtual void SAL_CALL addModifyListener(
             const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -422,11 +422,11 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     virtual css::uno::Type SAL_CALL getElementType() override;
 
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     //  XComponent
 
@@ -449,7 +449,7 @@ public:
     virtual void SAL_CALL setEncryptionData(
             const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 
-    virtual sal_Bool SAL_CALL hasEncryptionData() override;
+    virtual bool SAL_CALL hasEncryptionData() override;
 
     //  XEncryptionProtectedStorage
 
@@ -489,14 +489,14 @@ public:
 
     virtual void SAL_CALL writeAndAttachToStream( const css::uno::Reference< css::io::XStream >& xStream ) override;
 
-    virtual void SAL_CALL attachToURL( const OUString& sURL, sal_Bool bReadOnly ) override;
+    virtual void SAL_CALL attachToURL( const OUString& sURL, bool bReadOnly ) override;
 
     virtual css::uno::Any SAL_CALL getElementPropertyValue( const OUString& sElementName, const OUString& sPropertyName ) override;
 
     virtual void SAL_CALL copyStreamElementData( const OUString& sStreamName, const css::uno::Reference< css::io::XStream >& xTargetStream ) override;
 
     // XRelationshipAccess
-    virtual sal_Bool SAL_CALL hasByID( const OUString& sID ) override;
+    virtual bool SAL_CALL hasByID( const OUString& sID ) override;
 
     virtual OUString SAL_CALL getTargetByID( const OUString& sID ) override;
 
@@ -508,11 +508,11 @@ public:
 
     virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
 
-    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const css::uno::Sequence< css::beans::StringPair >& aEntry, sal_Bool bReplace ) override;
+    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const css::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
 
     virtual void SAL_CALL removeRelationshipByID( const OUString& sID ) override;
 
-    virtual void SAL_CALL insertRelationships( const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aEntries, sal_Bool bReplace ) override;
+    virtual void SAL_CALL insertRelationships( const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
 
     virtual void SAL_CALL clearRelationships(  ) override;
 

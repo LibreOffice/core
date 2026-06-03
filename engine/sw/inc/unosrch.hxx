@@ -84,8 +84,8 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //XPropertyReplace
-    virtual sal_Bool SAL_CALL getValueSearch() override;
-    virtual void SAL_CALL setValueSearch(sal_Bool ValueSearch_) override;
+    virtual bool SAL_CALL getValueSearch() override;
+    virtual void SAL_CALL setValueSearch(bool ValueSearch_) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getSearchAttributes() override;
     virtual void SAL_CALL setSearchAttributes(const css::uno::Sequence< css::beans::PropertyValue >& aSearchAttribs) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getReplaceAttributes() override;
@@ -93,7 +93,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void    FillSearchItemSet(SfxItemSet& rSet) const;

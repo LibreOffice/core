@@ -1182,7 +1182,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf112633)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/media/hdphoto1.wdp"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"ppt/media/hdphoto1.wdp"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128952)

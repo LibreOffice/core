@@ -36,7 +36,7 @@ class CommandBarControlEnumeration : public ::cppu::WeakImplHelper< container::X
     sal_Int32 m_nCurrentPosition;
 public:
     explicit CommandBarControlEnumeration( CommandBarControls_BASE* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         if( m_nCurrentPosition < m_pCommandBarControls->getCount() )
             return true;
@@ -250,7 +250,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override
         { return cppu::UnoType<XCommandBarControl>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
         { return false; }
 };
 

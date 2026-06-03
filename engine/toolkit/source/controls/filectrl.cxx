@@ -148,7 +148,7 @@ void FileControl::Resize()
 
     if( mnInternalFlags & FileControlMode_Internal::INRESIZE )
         return;
-    mnInternalFlags |= FileControlMode_Internal::INRESIZE;//InResize = sal_True
+    mnInternalFlags |= FileControlMode_Internal::INRESIZE;//InResize = true
 
     Size aOutSz = GetOutputSizePixel();
     tools::Long nButtonTextWidth = maButton->GetTextWidth( maButtonText );
@@ -168,7 +168,7 @@ void FileControl::Resize()
     maEdit->setPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
     maButton->setPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
 
-    mnInternalFlags &= ~FileControlMode_Internal::INRESIZE; //InResize = sal_False
+    mnInternalFlags &= ~FileControlMode_Internal::INRESIZE; //InResize = false
 }
 
 

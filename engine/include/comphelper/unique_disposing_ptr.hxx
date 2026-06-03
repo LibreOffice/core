@@ -142,7 +142,7 @@ private:
                 return u"com.sun.star.comp.DisposingTerminateListener"_ustr;
         }
 
-        virtual sal_Bool SAL_CALL supportsService(const OUString& /*rName*/) override
+        virtual bool SAL_CALL supportsService(const OUString& /*rName*/) override
         {
             return false;
         }

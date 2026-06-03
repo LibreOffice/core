@@ -34,6 +34,7 @@
 #include <sal/types.h>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
+#include <boost/container/vector.hpp>
 
 #include "data.hxx"
 #include "localizedvaluenode.hxx"
@@ -58,7 +59,7 @@ bool parseHexDigit(char c, int * value)
     return true;
 }
 
-bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
+bool parseValue(xmlreader::Span const & text, bool * value) {
     assert(text.is() && value != nullptr);
     if (text == "true" || text == "1") {
         *value = true;
@@ -214,6 +215,38 @@ template< typename T > css::uno::Any parseListValue(
     return css::uno::Any(comphelper::containerToSequence(seq));
 }
 
+template<> css::uno::Any parseListValue<bool>(
+    OString const & separator, xmlreader::Span const & text)
+{
+    boost::container::vector<bool> seq;
+    xmlreader::Span sep;
+    if (separator.isEmpty()) {
+        sep = xmlreader::Span(RTL_CONSTASCII_STRINGPARAM(" "));
+    } else {
+        sep = xmlreader::Span(separator.getStr(), separator.getLength());
+    }
+    if (text.length != 0) {
+        for (xmlreader::Span t(text);;) {
+            sal_Int32 i = rtl_str_indexOfStr_WithLength(
+                t.begin, t.length, sep.begin, sep.length);
+            bool val;
+            if (!parseValue(
+                    xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
+            {
+                throw css::uno::RuntimeException(u"invalid value"_ustr);
+            }
+            seq.push_back(val);
+            if (i < 0) {
+                break;
+            }
+            t.begin += i + sep.length;
+            t.length -= i + sep.length;
+        }
+    }
+    return css::uno::Any(
+        css::uno::Sequence<bool>(seq.data(), static_cast<sal_Int32>(seq.size()) ) );
+}
+
 css::uno::Any parseValue(
     OString const & separator, xmlreader::Span const & text, Type type)
 {
@@ -221,7 +254,7 @@ css::uno::Any parseValue(
     case TYPE_ANY:
         throw css::uno::RuntimeException(u"invalid value of type any"_ustr);
     case TYPE_BOOLEAN:
-        return parseSingleValue< sal_Bool >(text);
+        return parseSingleValue< bool >(text);
     case TYPE_SHORT:
         return parseSingleValue< sal_Int16 >(text);
     case TYPE_INT:
@@ -235,7 +268,7 @@ css::uno::Any parseValue(
     case TYPE_HEXBINARY:
         return parseSingleValue< css::uno::Sequence< sal_Int8 > >(text);
     case TYPE_BOOLEAN_LIST:
-        return parseListValue< sal_Bool >(separator, text);
+        return parseListValue< bool >(separator, text);
     case TYPE_SHORT_LIST:
         return parseListValue< sal_Int16 >(separator, text);
     case TYPE_INT_LIST:
@@ -384,7 +417,7 @@ bool ValueParser::endElement() {
             } else {
                 switch (type_) {
                 case TYPE_BOOLEAN_LIST:
-                    *pValue = convertItems< sal_Bool >();
+                    *pValue = convertItems< bool >();
                     break;
                 case TYPE_SHORT_LIST:
                     *pValue = convertItems< sal_Int16 >();

@@ -106,7 +106,7 @@ OUString SAL_CALL BaseContainer::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
+bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -261,7 +261,7 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
 }
 
 
-sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
+bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
 {
     bool bHasOne = false;
 
@@ -295,7 +295,7 @@ css::uno::Type SAL_CALL BaseContainer::getElementType()
 }
 
 
-sal_Bool SAL_CALL BaseContainer::hasElements()
+bool SAL_CALL BaseContainer::hasElements()
 {
     bool bHasSome = false;
 

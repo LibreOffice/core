@@ -220,7 +220,7 @@ ScVbaLineFormat::setWeight( double _weight )
     setDashStyle( m_nLineDashStyle );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaLineFormat::getVisible()
 {
     drawing::LineStyle aLineStyle;
@@ -233,7 +233,7 @@ ScVbaLineFormat::getVisible()
 }
 
 void SAL_CALL
-ScVbaLineFormat::setVisible( sal_Bool _visible )
+ScVbaLineFormat::setVisible( bool _visible )
 {
     drawing::LineStyle aLineStyle;
     m_xPropertySet->getPropertyValue( u"LineStyle"_ustr ) >>= aLineStyle;

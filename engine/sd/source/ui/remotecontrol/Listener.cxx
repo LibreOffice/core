@@ -84,7 +84,7 @@ void SAL_CALL Listener::resumed()
 {
 }
 
-void SAL_CALL Listener::slideEnded (sal_Bool)
+void SAL_CALL Listener::slideEnded (bool)
 {
 }
 

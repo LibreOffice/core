@@ -66,7 +66,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         // XFilePicker functions
 
-        virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode ) override;
+        virtual void SAL_CALL setMultiSelectionMode( bool bMode ) override;
 
         virtual void SAL_CALL setDefaultName( const OUString& aName ) override;
 
@@ -98,7 +98,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
 
-        virtual void SAL_CALL enableControl( sal_Int16 nControlId, sal_Bool bEnable ) override;
+        virtual void SAL_CALL enableControl( sal_Int16 nControlId, bool bEnable ) override;
 
         virtual void SAL_CALL setLabel( sal_Int16 nControlId, const OUString& aLabel ) override;
 
@@ -116,9 +116,9 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage ) override;
 
-        virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState ) override;
+        virtual bool SAL_CALL setShowState( bool bShowState ) override;
 
-        virtual sal_Bool SAL_CALL getShowState(  ) override;
+        virtual bool SAL_CALL getShowState(  ) override;
 
         // XInitialization
 

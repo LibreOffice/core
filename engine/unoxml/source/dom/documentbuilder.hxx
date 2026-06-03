@@ -57,7 +57,7 @@ namespace DOM
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         /**
@@ -69,13 +69,13 @@ namespace DOM
         Indicates whether or not this parser is configured to understand
         namespaces.
         */
-        virtual sal_Bool SAL_CALL isNamespaceAware() override;
+        virtual bool SAL_CALL isNamespaceAware() override;
 
         /**
         Indicates whether or not this parser is configured to validate XML
         documents.
         */
-        virtual sal_Bool SAL_CALL isValidating() override;
+        virtual bool SAL_CALL isValidating() override;
 
         /**
         Obtain a new instance of a DOM Document object to build a DOM tree

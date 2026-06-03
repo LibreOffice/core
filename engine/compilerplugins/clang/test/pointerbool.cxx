@@ -14,7 +14,6 @@
 
 void func_ptr(int*);
 void func_bool(bool); // expected-note {{method here [loplugin:pointerbool]}}
-void func_salbool(sal_Bool);
 
 void test1(int* p1)
 {
@@ -23,10 +22,6 @@ void test1(int* p1)
         p1); // expected-error {{possibly unwanted implicit conversion when calling bool param [loplugin:pointerbool]}}
     // no warning expected
     func_bool(FALSE);
-    func_salbool(sal_False);
-    func_salbool(sal_True);
-    css::uno::Sequence<sal_Bool> aSeq;
-    func_bool(aSeq[0]);
 }
 
 void func_bool2(bool); // expected-note {{method here [loplugin:pointerbool]}}

@@ -55,7 +55,7 @@ inline sal_Int32 toInt32( std::u16string_view rStr )
 }
 
 inline bool getBoolAttr(
-    sal_Bool * pRet, OUString const & rAttrName,
+    bool * pRet, OUString const & rAttrName,
     css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
     sal_Int32 nUid )
 {

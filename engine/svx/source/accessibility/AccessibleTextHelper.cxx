@@ -130,7 +130,7 @@ public:
     bool HaveFocus() const
     {
         // No locking of solar mutex here, since we rely on the fact
-        // that sal_Bool access is atomic
+        // that bool access is atomic
         return mbThisHasFocus;
     }
     void SetChildFocus( sal_Int32 nChild, bool bHaveFocus );

@@ -105,7 +105,7 @@ namespace DOM
         return u"com.sun.star.comp.xml.dom.DocumentBuilder"_ustr;
     }
 
-    sal_Bool SAL_CALL CDocumentBuilder::supportsService(const OUString& aServiceName)
+    bool SAL_CALL CDocumentBuilder::supportsService(const OUString& aServiceName)
     {
         return cppu::supportsService(this, aServiceName);
     }
@@ -116,12 +116,12 @@ namespace DOM
         return Reference< XDOMImplementation >();
     }
 
-    sal_Bool SAL_CALL CDocumentBuilder::isNamespaceAware()
+    bool SAL_CALL CDocumentBuilder::isNamespaceAware()
     {
         return true;
     }
 
-    sal_Bool SAL_CALL CDocumentBuilder::isValidating()
+    bool SAL_CALL CDocumentBuilder::isValidating()
     {
         return false;
     }

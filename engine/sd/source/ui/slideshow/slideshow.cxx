@@ -260,7 +260,7 @@ OUString SAL_CALL SlideShow::getImplementationName(  )
     return u"com.sun.star.comp.sd.SlideShow"_ustr;
 }
 
-sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )
+bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -900,7 +900,7 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
 
 }
 
-sal_Bool SAL_CALL SlideShow::isRunning(  )
+bool SAL_CALL SlideShow::isRunning(  )
 {
     SolarMutexGuard aGuard;
     return mxController.is() && mxController->isRunning();
@@ -1176,7 +1176,7 @@ void SlideShow::StartFullscreenPresentation( )
                                mpCurrentViewShellBase->GetDocShell()->GetTitle(SFX_TITLE_DETECT));
     pWorkWindow->SetText(Title);
     pWorkWindow->StartPresentationMode( true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PresentationFlags::HideAllApps : PresentationFlags::NONE, nDisplay);
-    //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
+    //    pWorkWindow->ShowFullScreenMode(false, nDisplay);
 
     if (!pWorkWindow->IsVisible())
         return;

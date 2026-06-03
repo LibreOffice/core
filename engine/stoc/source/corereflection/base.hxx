@@ -106,7 +106,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XIdlReflection
@@ -115,7 +115,7 @@ public:
 
     // XHierarchicalNameAccess
     virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString & rName ) override;
-    virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString & rName ) override;
+    virtual bool SAL_CALL hasByHierarchicalName( const OUString & rName ) override;
 
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::reflection::XIdlClass > forType( typelib_TypeDescription * pTypeDescr );
@@ -150,9 +150,9 @@ public:
     // XIdlClassImpl default implementation
     virtual css::uno::TypeClass SAL_CALL getTypeClass() override;
     virtual OUString SAL_CALL getName() override;
-    virtual sal_Bool SAL_CALL equals( const css::uno::Reference< css::reflection::XIdlClass >& xType ) override;
+    virtual bool SAL_CALL equals( const css::uno::Reference< css::reflection::XIdlClass >& xType ) override;
 
-    virtual sal_Bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
     virtual void SAL_CALL createObject( css::uno::Any & rObj ) override;
 
     // def impl ????
@@ -204,7 +204,7 @@ public:
     virtual ~InterfaceIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual sal_Bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
     virtual css::uno::Reference< css::reflection::XIdlMethod > SAL_CALL getMethod( const OUString & rName ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
@@ -236,7 +236,7 @@ public:
     virtual ~CompoundIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual sal_Bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
@@ -258,7 +258,7 @@ public:
         {}
 
     // IdlClassImpl modifications
-    virtual sal_Bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
     virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL getComponentType() override;
     virtual css::uno::Reference< css::reflection::XIdlArray > SAL_CALL getArray() override;
 

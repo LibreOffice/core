@@ -111,7 +111,7 @@ void BubbleChartTypeTemplate::applyStyle2(
 }
 
 // ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
+bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
 {
     return false;
 }

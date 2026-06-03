@@ -190,7 +190,7 @@ namespace xmloff
                         aValue, eValueAttName);
                     break;
                 case TypeClass_BOOLEAN:
-                    exportRemainingPropertiesSequence< sal_Bool >(
+                    exportRemainingPropertiesSequence< bool >(
                         aValue, eValueAttName);
                     break;
                 case TypeClass_BYTE:

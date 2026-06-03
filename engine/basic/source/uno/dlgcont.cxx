@@ -452,7 +452,7 @@ void SfxDialogLibraryContainer::onNewRootStorage()
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ )
 {
     return false; // dialog library has no executable code

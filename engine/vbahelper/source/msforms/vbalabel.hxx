@@ -41,8 +41,8 @@ public:
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
     virtual sal_Int32 SAL_CALL getBackColor() override;
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
-    virtual sal_Bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
+    virtual bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

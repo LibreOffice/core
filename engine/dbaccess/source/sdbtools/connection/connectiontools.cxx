@@ -93,7 +93,7 @@ namespace sdbtools
         return u"com.sun.star.comp.dbaccess.ConnectionTools"_ustr;
     }
 
-    sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & ServiceName)
+    bool SAL_CALL ConnectionTools::supportsService(const OUString & ServiceName)
     {
         return cppu::supportsService(this, ServiceName);
     }

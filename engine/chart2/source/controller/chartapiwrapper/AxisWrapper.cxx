@@ -646,7 +646,7 @@ OUString SAL_CALL AxisWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.Axis"_ustr;
 }
 
-sal_Bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

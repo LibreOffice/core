@@ -127,7 +127,7 @@ OUString ScPanelFactory::getImplementationName()
     return u"org.apache.openoffice.comp.sc.sidebar.ScPanelFactory"_ustr;
 }
 
-sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)
+bool ScPanelFactory::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

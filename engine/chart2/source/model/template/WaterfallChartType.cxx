@@ -56,7 +56,7 @@ OUString SAL_CALL WaterfallChartType::getImplementationName()
     return u"com.sun.star.comp.chart.WaterfallChartType"_ustr;
 }
 
-sal_Bool SAL_CALL WaterfallChartType::supportsService(const OUString& rServiceName)
+bool SAL_CALL WaterfallChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

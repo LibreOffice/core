@@ -798,7 +798,7 @@ ErrCode ImportExcel8::Read()
 {
 #ifdef EXC_INCL_DUMPER
     {
-        Biff8RecDumper aDumper( GetRoot(), sal_True );
+        Biff8RecDumper aDumper( GetRoot(), true );
         if( aDumper.Dump( aIn ) )
             return ERRCODE_ABORT;
     }

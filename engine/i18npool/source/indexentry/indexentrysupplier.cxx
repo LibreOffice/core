@@ -43,7 +43,7 @@ Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Local
     return LocaleDataImpl::get()->getIndexAlgorithm(rLocale);
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
+bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
         sal_Int32 collatorOptions )
 {
     const Sequence < OUString > algorithmList = getAlgorithmList( rLocale );
@@ -55,7 +55,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, cons
     return false;
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale )
+bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale )
 {
     return LocaleDataImpl::get()->hasPhonetic(rLocale);
 }
@@ -161,7 +161,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
     }
 }
 
-OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePages,
+OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( bool bMorePages,
         const Locale& rLocale )
 {
     Sequence< OUString > aFollowPageWords = LocaleDataImpl::get()->getFollowPageWords(rLocale);
@@ -179,7 +179,7 @@ IndexEntrySupplier::getImplementationName()
     return implementationName;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 IndexEntrySupplier::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

@@ -102,7 +102,7 @@ namespace vcl::unohelper {
         return aDataFlavors;
     }
 
-    sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor )
+    bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor )
     {
         SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
         return ( nT == SotClipboardFormatId::STRING );

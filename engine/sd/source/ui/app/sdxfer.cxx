@@ -691,7 +691,7 @@ void SdTransferable::SetPageBookmarks( std::vector<OUString> && rPageBookmarks, 
         }
     }
 
-    // set flags for page transferable; if ( mbPageTransferablePersistent == sal_False ),
+    // set flags for page transferable; if ( mbPageTransferablePersistent == false ),
     // don't offer any formats => it's just for internal purposes
     mbPageTransferable = true;
     mbPageTransferablePersistent = bPersistent;

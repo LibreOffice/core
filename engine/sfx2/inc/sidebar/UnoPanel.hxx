@@ -37,8 +37,8 @@ public:
     virtual OUString SAL_CALL  getTitle() override;
     virtual void SAL_CALL setTitle( const OUString& newTitle ) override;
 
-    virtual sal_Bool SAL_CALL isExpanded() override;
-    virtual void SAL_CALL expand( const sal_Bool bCollapseOther ) override;
+    virtual bool SAL_CALL isExpanded() override;
+    virtual void SAL_CALL expand( const bool bCollapseOther ) override;
     virtual void SAL_CALL collapse( ) override;
 
     virtual sal_Int32 SAL_CALL getOrderIndex() override;

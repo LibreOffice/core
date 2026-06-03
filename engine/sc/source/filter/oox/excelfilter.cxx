@@ -179,7 +179,7 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
     return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
-sal_Bool SAL_CALL ExcelFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
+bool SAL_CALL ExcelFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
 {
     if ( XmlFilterBase::filter( rDescriptor ) )
         return true;

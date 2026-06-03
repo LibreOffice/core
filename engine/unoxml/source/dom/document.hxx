@@ -208,7 +208,7 @@ namespace DOM
         /**
         Imports a node from another document to this document.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL importNode(const css::uno::Reference< css::xml::dom::XNode >& importedNode, sal_Bool deep) override;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL importNode(const css::uno::Reference< css::xml::dom::XNode >& importedNode, bool deep) override;
 
         // XDocumentEvent
         virtual css::uno::Reference< css::xml::dom::events::XEvent > SAL_CALL createEvent(const OUString& eventType) override;
@@ -229,7 +229,7 @@ namespace DOM
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName() override;
         virtual OUString SAL_CALL getNodeValue() override;
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(sal_Bool deep) override;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override;
         // --- delegation for XNode base.
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL appendChild(const css::uno::Reference< css::xml::dom::XNode >& newChild) override
         {
@@ -283,11 +283,11 @@ namespace DOM
         {
             return CNode::getPreviousSibling();
         }
-        virtual sal_Bool SAL_CALL hasAttributes() override
+        virtual bool SAL_CALL hasAttributes() override
         {
             return CNode::hasAttributes();
         }
-        virtual sal_Bool SAL_CALL hasChildNodes() override
+        virtual bool SAL_CALL hasChildNodes() override
         {
             return CNode::hasChildNodes();
         }
@@ -296,7 +296,7 @@ namespace DOM
         {
             return CNode::insertBefore(newChild, refChild);
         }
-        virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver) override
+        virtual bool SAL_CALL isSupported(const OUString& feature, const OUString& ver) override
         {
             return CNode::isSupported(feature, ver);
         }

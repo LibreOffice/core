@@ -150,7 +150,7 @@ uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
+bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
 {
     ScSheetEventId nEvent = lcl_GetEventFromName(aName);
     return (nEvent != ScSheetEventId::NOTFOUND);
@@ -163,7 +163,7 @@ uno::Type SAL_CALL ScSheetEventsObj::getElementType()
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
-sal_Bool SAL_CALL ScSheetEventsObj::hasElements()
+bool SAL_CALL ScSheetEventsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     if (mpDocShell)

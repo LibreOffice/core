@@ -85,7 +85,7 @@ public:
         return cppu::UnoType<T>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
     {
         return ! maItems.empty();
     }
@@ -108,7 +108,7 @@ public:
         return comphelper::mapKeysToSequence(maItems);
     }
 
-    virtual sal_Bool SAL_CALL hasByName(
+    virtual bool SAL_CALL hasByName(
         const OUString& rName ) override
     {
         return hasItem( rName );

@@ -75,7 +75,7 @@ css::uno::Sequence<OUString> SAL_CALL SlideMasterPagesToolBoxControl::getSupport
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
-sal_Bool SAL_CALL SlideMasterPagesToolBoxControl::supportsService(const OUString& rServiceName)
+bool SAL_CALL SlideMasterPagesToolBoxControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

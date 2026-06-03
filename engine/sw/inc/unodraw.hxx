@@ -87,7 +87,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XShapes
     virtual void SAL_CALL add(const css::uno::Reference< css::drawing::XShape > & xShape) override;
@@ -99,7 +99,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XPropertySet
@@ -232,7 +232,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     virtual css::awt::Point SAL_CALL getPosition(  ) override;
@@ -271,7 +271,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 };
 #endif
 

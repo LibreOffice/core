@@ -78,7 +78,7 @@ OUString EmbedServer_Impl::getImplementationName()
     return "com.sun.star.comp.ole.EmbedServer";
 }
 
-sal_Bool EmbedServer_Impl::supportsService(OUString const & ServiceName)
+bool EmbedServer_Impl::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

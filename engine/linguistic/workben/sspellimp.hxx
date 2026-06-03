@@ -54,7 +54,7 @@ class SpellChecker :
     ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     PropertyHelper_Spell *                  pPropHelper;
-    sal_Bool                                    bDisposing;
+    bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     SpellChecker(const SpellChecker &);
@@ -78,12 +78,12 @@ public:
     virtual Sequence< Locale > SAL_CALL
         getLocales()
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasLocale( const Locale& rLocale )
             throw(RuntimeException);
 
     // XSpellChecker
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isValid( const OUString& rWord, const Locale& rLocale,
                 const PropertyValues& rProperties )
             throw(IllegalArgumentException,
@@ -95,11 +95,11 @@ public:
                   RuntimeException);
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
             throw(RuntimeException);
@@ -131,7 +131,7 @@ public:
     virtual OUString SAL_CALL
         getImplementationName()
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         supportsService( const OUString& rServiceName )
             throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL

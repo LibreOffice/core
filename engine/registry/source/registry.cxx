@@ -69,7 +69,7 @@ static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
     return RegError::INVALID_REGISTRY;
 }
 
-static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
+static bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
 {
     if (hReg)
         return static_cast<ORegistry*>(hReg)->isReadOnly();

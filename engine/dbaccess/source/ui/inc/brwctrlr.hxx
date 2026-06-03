@@ -164,7 +164,7 @@ namespace dbaui
         virtual void SAL_CALL focusLost(const css::awt::FocusEvent& e) override;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) override;
+        virtual bool SAL_CALL suspend(bool bSuspend) override;
 
         // css::lang::XComponent
         virtual void        SAL_CALL disposing() override;
@@ -176,10 +176,10 @@ namespace dbaui
         virtual void        SAL_CALL errorOccured(const css::sdb::SQLErrorEvent& aEvent) override;
 
         // css::form::XDatabaseParameterListener
-        virtual sal_Bool    SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& aEvent) override;
+        virtual bool    SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& aEvent) override;
 
         // css::form::XConfirmDeleteListener
-        virtual sal_Bool    SAL_CALL confirmDelete(const css::sdb::RowChangeEvent& aEvent) override;
+        virtual bool    SAL_CALL confirmDelete(const css::sdb::RowChangeEvent& aEvent) override;
 
         // css::form::XLoadListener
         virtual void SAL_CALL loaded(const css::lang::EventObject& aEvent) override;
@@ -189,7 +189,7 @@ namespace dbaui
         virtual void SAL_CALL reloaded(const css::lang::EventObject& aEvent) override;
 
         // css::form::XResetListener
-        virtual sal_Bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) override;
+        virtual bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) override;
         virtual void SAL_CALL resetted(const css::lang::EventObject& rEvent) override;
 
         // SbaGridListener
@@ -225,7 +225,7 @@ namespace dbaui
             const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) = 0;
             // called immediately after a successful CreateForm
             // do any initialization (data source etc.) here. the form should be fully functional after that.
-            // return sal_False if you didn't succeed (don't throw exceptions, they won't be caught)
+            // return false if you didn't succeed (don't throw exceptions, they won't be caught)
 
         css::uno::Reference< css::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service

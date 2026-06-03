@@ -97,7 +97,7 @@ data2string(void *data,
     case typelib_TypeClass_VOID:
         return u""_ustr;
     case typelib_TypeClass_BOOLEAN:
-        return *static_cast<const sal_Bool*>(data) ? u"true"_ustr : u"false"_ustr;
+        return *static_cast<const bool*>(data) ? u"true"_ustr : u"false"_ustr;
     case typelib_TypeClass_BYTE:
         return OUString::number(*static_cast<const sal_Int8*>(data));
     case typelib_TypeClass_SHORT:

@@ -69,8 +69,8 @@ public:
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
     virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value) override;
     virtual Any SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) override;
-    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) override;
+    virtual bool SAL_CALL hasMethod(const OUString& Name) override;
+    virtual bool SAL_CALL hasProperty(const OUString& Name) override;
 
 private:
     Reference< XAllListener >    m_xAllListener;
@@ -177,14 +177,14 @@ Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& )
 }
 
 
-sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
+bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
 {
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( Name );
     return xMethod.is();
 }
 
 
-sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
+bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
 {
     Reference< XIdlField > xField = m_xListenerType->getField( Name );
     return xField.is();
@@ -203,7 +203,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
@@ -278,7 +278,7 @@ OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
     return u"com.sun.star.comp.EventAttacher"_ustr;
 }
 
-sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
+bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

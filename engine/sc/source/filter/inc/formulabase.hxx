@@ -251,8 +251,8 @@ typedef css::sheet::FormulaToken       ApiToken;
 typedef css::uno::Sequence< ApiToken > ApiTokenSequence;
 
 /** Contains the base address and type of a special token representing an array
-    formula or a shared formula (sal_False), or a table operation (sal_True). */
-typedef css::beans::Pair< css::table::CellAddress, sal_Bool > ApiSpecialTokenInfo;
+    formula or a shared formula (false), or a table operation (true). */
+typedef css::beans::Pair< css::table::CellAddress, bool > ApiSpecialTokenInfo;
 
 /** A vector of formula tokens with additional convenience functions. */
 class ApiTokenVector
@@ -732,8 +732,8 @@ public:
         formulas, shared formulas, or table operations.
 
         @param orTokenInfo  (output parameter) The extracted information about
-            the token. Contains the base address and the token type (sal_False
-            for array or shared formulas, sal_True for table operations).
+            the token. Contains the base address and the token type (false
+            for array or shared formulas, true for table operations).
 
         @param rTokens  The token sequence to be parsed. If it contains exactly
             one OPCODE_BAD token with special token information, this

@@ -79,7 +79,7 @@ namespace canvas
         return u"canvas::CachedPrimitiveBase"_ustr;
     }
 
-    sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName )
+    bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

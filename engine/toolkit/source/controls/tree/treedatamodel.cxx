@@ -53,7 +53,7 @@ public:
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode );
 
     // XMutableTreeDataModel
-    virtual css::uno::Reference< css::awt::tree::XMutableTreeNode > SAL_CALL createNode( const css::uno::Any& DisplayValue, sal_Bool ChildrenOnDemand ) override;
+    virtual css::uno::Reference< css::awt::tree::XMutableTreeNode > SAL_CALL createNode( const css::uno::Any& DisplayValue, bool ChildrenOnDemand ) override;
     virtual void SAL_CALL setRoot( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& RootNode ) override;
 
     // XTreeDataModel
@@ -68,7 +68,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
@@ -100,7 +100,7 @@ public:
     virtual void SAL_CALL appendChild( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
     virtual void SAL_CALL insertChildByIndex( ::sal_Int32 Index, const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
     virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) override;
-    virtual void SAL_CALL setHasChildrenOnDemand( sal_Bool ChildrenOnDemand ) override;
+    virtual void SAL_CALL setHasChildrenOnDemand( bool ChildrenOnDemand ) override;
     virtual void SAL_CALL setDisplayValue( const css::uno::Any& Value ) override;
     virtual void SAL_CALL setNodeGraphicURL( const OUString& URL ) override;
     virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) override;
@@ -111,7 +111,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getChildCount(  ) override;
     virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getParent(  ) override;
     virtual ::sal_Int32 SAL_CALL getIndex( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual sal_Bool SAL_CALL hasChildrenOnDemand(  ) override;
+    virtual bool SAL_CALL hasChildrenOnDemand(  ) override;
     virtual css::uno::Any SAL_CALL getDisplayValue(  ) override;
     virtual OUString SAL_CALL getNodeGraphicURL(  ) override;
     virtual OUString SAL_CALL getExpandedGraphicURL(  ) override;
@@ -119,7 +119,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
@@ -171,7 +171,7 @@ void MutableTreeDataModel::broadcastImpl( std::unique_lock<std::mutex>& rGuard, 
     }
 }
 
-Reference< XMutableTreeNode > SAL_CALL MutableTreeDataModel::createNode( const Any& aValue, sal_Bool bChildrenOnDemand )
+Reference< XMutableTreeNode > SAL_CALL MutableTreeDataModel::createNode( const Any& aValue, bool bChildrenOnDemand )
 {
     return new MutableTreeNode( this, aValue, bChildrenOnDemand );
 }
@@ -248,7 +248,7 @@ OUString SAL_CALL MutableTreeDataModel::getImplementationName(  )
     return u"toolkit.MutableTreeDataModel"_ustr;
 }
 
-sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& ServiceName )
+bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -371,7 +371,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
     broadcast_changes(aGuard, xImpl, false);
 }
 
-void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDemand )
+void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( bool bChildrenOnDemand )
 {
     bool bChanged;
 
@@ -476,7 +476,7 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
     return -1;
 }
 
-sal_Bool SAL_CALL MutableTreeNode::hasChildrenOnDemand(  )
+bool SAL_CALL MutableTreeNode::hasChildrenOnDemand(  )
 {
     std::scoped_lock aGuard( maMutex );
     return mbHasChildrenOnDemand;
@@ -511,7 +511,7 @@ OUString SAL_CALL MutableTreeNode::getImplementationName(  )
     return u"toolkit.MutableTreeNode"_ustr;
 }
 
-sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName )
+bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

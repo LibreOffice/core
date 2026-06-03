@@ -100,8 +100,8 @@ private:
 
     sal_uInt8           mnTGAVersion;       // Enhanced TGA is defined as Version 2.0
     sal_uInt16          mnDestBitDepth;
-    bool                mbIndexing;         // sal_True if source contains indexing color values
-    bool                mbEncoding;         // sal_True if source is compressed
+    bool                mbIndexing;         // true if source contains indexing color values
+    bool                mbEncoding;         // true if source is compressed
 
     bool                ImplReadHeader();
     bool                ImplReadPalette();
@@ -190,7 +190,7 @@ bool TGAReader::ImplReadHeader()
     if ( !m_rTGA.good())
         return false;
 
-    // check for sal_True, VISI, ON-X, FILE in the signatures
+    // check for true, VISI, ON-X, FILE in the signatures
     if ( mpFileFooter->nSignature[ 0 ] == (('T'<<24)|('R'<<16)|('U'<<8)|'E') &&
          mpFileFooter->nSignature[ 1 ] == (('V'<<24)|('I'<<16)|('S'<<8)|'I') &&
          mpFileFooter->nSignature[ 2 ] == (('O'<<24)|('N'<<16)|('-'<<8)|'X') &&

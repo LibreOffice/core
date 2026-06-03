@@ -2302,7 +2302,7 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
     ModifyParentUnlockMutex_Impl( aGuard );
 }
 
-sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
+bool SAL_CALL OWriteStream::hasEncryptionData()
 {
     osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
@@ -2335,7 +2335,7 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
     return bRet;
 }
 
-sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
+bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2470,7 +2470,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAl
     return m_pImpl->GetAllRelationshipsIfAny();
 }
 
-void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, sal_Bool bReplace  )
+void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2554,7 +2554,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
     throw container::NoSuchElementException();
 }
 
-void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, sal_Bool bReplace  )
+void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 

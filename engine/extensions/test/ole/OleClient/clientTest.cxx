@@ -364,7 +364,7 @@ bool doPropertyTest(const Reference<XInvocation> & inv)
     Any inParamsLong, outParamsLong;
     Reference<XInterface> xintUnknown(getComObject(L"AxTestComponents.Foo"));
 
-    inBool <<= (sal_Bool) sal_True;
+    inBool <<= (bool) true;
     inv->setValue(OUString(L"prpBool"), inBool);
     outBool = inv->getValue(OUString(L"prpBool"));
 
@@ -644,7 +644,7 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
 
     //  in and out parameter
 
-    sal_Bool aBool = sal_True;
+    bool aBool = true;
     inBool.setValue(&aBool, cppu::UnoType<bool>::get());
     inv->invoke(OUString(L"inBool"), Sequence< Any > ( &inBool, 1), seqIndices, seqOut);
     seqIndices.realloc(0);

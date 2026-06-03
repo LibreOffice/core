@@ -837,7 +837,7 @@ static Type getUnoTypeForSbxBaseType( SbxDataType eType )
                             }
                             break;
         case SbxSTRING:     aRetType = cppu::UnoType<OUString>::get(); break;
-        case SbxBOOL:       aRetType = cppu::UnoType<sal_Bool>::get(); break;
+        case SbxBOOL:       aRetType = cppu::UnoType<bool>::get(); break;
         case SbxVARIANT:    aRetType = cppu::UnoType<Any>::get(); break;
         case SbxCHAR:       aRetType = cppu::UnoType<cppu::UnoCharType>::get(); break;
         case SbxBYTE:       aRetType = cppu::UnoType<sal_Int8>::get(); break;
@@ -3872,8 +3872,8 @@ public:
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
     virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value) override;
     virtual Any SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) override;
-    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) override;
+    virtual bool SAL_CALL hasMethod(const OUString& Name) override;
+    virtual bool SAL_CALL hasProperty(const OUString& Name) override;
 
 private:
     Reference< XAllListener >    m_xAllListener;
@@ -3977,14 +3977,14 @@ Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString&)
 }
 
 
-sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
+bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
 {
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( Name );
     return xMethod.is();
 }
 
 
-sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
+bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
 {
     Reference< XIdlField > xField = m_xListenerType->getField( Name );
     return xField.is();
@@ -4160,8 +4160,8 @@ public:
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
     virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue ) override;
     virtual Any SAL_CALL getValue( const OUString& rProperty ) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& rName ) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& rProp ) override;
+    virtual bool SAL_CALL hasMethod( const OUString& rName ) override;
+    virtual bool SAL_CALL hasProperty( const OUString& rProp ) override;
 
     virtual Any SAL_CALL invoke( const OUString& rFunction,
                                  const Sequence< Any >& rParams,
@@ -4253,12 +4253,12 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     return aRet;
 }
 
-sal_Bool SAL_CALL ModuleInvocationProxy::hasMethod( const OUString& )
+bool SAL_CALL ModuleInvocationProxy::hasMethod( const OUString& )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ModuleInvocationProxy::hasProperty( const OUString& )
+bool SAL_CALL ModuleInvocationProxy::hasProperty( const OUString& )
 {
     return false;
 }

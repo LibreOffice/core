@@ -57,26 +57,26 @@ void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ )
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields()
+bool SAL_CALL SwVbaTableOfContents::getUseFields()
 {
     bool bUseFields = false;
     mxTocProps->getPropertyValue(u"CreateFromMarks"_ustr) >>= bUseFields;
     return bUseFields;
 }
 
-void SAL_CALL SwVbaTableOfContents::setUseFields( sal_Bool _useFields )
+void SAL_CALL SwVbaTableOfContents::setUseFields( bool _useFields )
 {
     mxTocProps->setPropertyValue(u"CreateFromMarks"_ustr, uno::Any( _useFields ) );
 }
 
-sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels()
+bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels()
 {
     bool bUseOutlineLevels = false;
     mxTocProps->getPropertyValue(u"CreateFromOutline"_ustr) >>= bUseOutlineLevels;
     return bUseOutlineLevels;
 }
 
-void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( sal_Bool _useOutlineLevels )
+void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( bool _useOutlineLevels )
 {
     mxTocProps->setPropertyValue(u"CreateFromOutline"_ustr, uno::Any( _useOutlineLevels ) );
 }

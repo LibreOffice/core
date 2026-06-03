@@ -212,7 +212,7 @@ QtFilePicker::startExecuteModal(const Reference<css::ui::dialogs::XDialogClosedL
     m_pFileDialog->show();
 }
 
-void SAL_CALL QtFilePicker::setMultiSelectionMode(sal_Bool multiSelect)
+void SAL_CALL QtFilePicker::setMultiSelectionMode(bool multiSelect)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([this, multiSelect]() {
@@ -515,7 +515,7 @@ uno::Any SAL_CALL QtFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControl
     return res;
 }
 
-void SAL_CALL QtFilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
+void SAL_CALL QtFilePicker::enableControl(sal_Int16 controlId, bool enable)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([this, controlId, enable]() {
@@ -889,7 +889,7 @@ OUString SAL_CALL QtFilePicker::getImplementationName()
     return u"com.sun.star.ui.dialogs.QtFilePicker"_ustr;
 }
 
-sal_Bool SAL_CALL QtFilePicker::supportsService(const OUString& ServiceName)
+bool SAL_CALL QtFilePicker::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

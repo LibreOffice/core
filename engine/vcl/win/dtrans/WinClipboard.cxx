@@ -349,7 +349,7 @@ OUString SAL_CALL CWinClipboard::getImplementationName()
     return "com.sun.star.datatransfer.clipboard.ClipboardW32";
 }
 
-sal_Bool SAL_CALL CWinClipboard::supportsService(const OUString& ServiceName)
+bool SAL_CALL CWinClipboard::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

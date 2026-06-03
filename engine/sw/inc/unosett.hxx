@@ -64,7 +64,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void            Invalidate() {m_pDoc = nullptr;}
@@ -94,7 +94,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void            Invalidate() {m_pDoc = nullptr;}
@@ -124,7 +124,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void            Invalidate() {m_pDoc = nullptr;}
@@ -167,7 +167,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -184,7 +184,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     SW_DLLPUBLIC css::uno::Sequence<css::beans::PropertyValue> getRuleByIndex(sal_Int32 nIndex);
@@ -237,7 +237,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };

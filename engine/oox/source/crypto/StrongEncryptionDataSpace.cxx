@@ -33,7 +33,7 @@ StrongEncryptionDataSpace::StrongEncryptionDataSpace(const Reference<XComponentC
 {
 }
 
-sal_Bool StrongEncryptionDataSpace::generateEncryptionKey(const OUString& rPassword)
+bool StrongEncryptionDataSpace::generateEncryptionKey(const OUString& rPassword)
 {
     if (!mCryptoEngine)
         return false;
@@ -41,7 +41,7 @@ sal_Bool StrongEncryptionDataSpace::generateEncryptionKey(const OUString& rPassw
     return mCryptoEngine->generateEncryptionKey(rPassword);
 }
 
-sal_Bool StrongEncryptionDataSpace::checkDataIntegrity()
+bool StrongEncryptionDataSpace::checkDataIntegrity()
 {
     if (!mCryptoEngine)
         return false;
@@ -49,8 +49,8 @@ sal_Bool StrongEncryptionDataSpace::checkDataIntegrity()
     return mCryptoEngine->checkDataIntegrity();
 }
 
-sal_Bool StrongEncryptionDataSpace::decrypt(const Reference<XInputStream>& rxInputStream,
-                                            Reference<XOutputStream>& rxOutputStream)
+bool StrongEncryptionDataSpace::decrypt(const Reference<XInputStream>& rxInputStream,
+                                        Reference<XOutputStream>& rxOutputStream)
 {
     if (!mCryptoEngine)
         return false;
@@ -82,7 +82,7 @@ Reference<XInputStream> StrongEncryptionDataSpace::getStream(const Sequence<Name
     return nullptr;
 }
 
-sal_Bool StrongEncryptionDataSpace::readEncryptionInfo(const Sequence<NamedValue>& aStreams)
+bool StrongEncryptionDataSpace::readEncryptionInfo(const Sequence<NamedValue>& aStreams)
 {
     Reference<XInputStream> xEncryptionInfo = getStream(aStreams, u"EncryptionInfo");
     if (!xEncryptionInfo.is())
@@ -110,7 +110,7 @@ sal_Bool StrongEncryptionDataSpace::readEncryptionInfo(const Sequence<NamedValue
     return mCryptoEngine->readEncryptionInfo(xEncryptionInfo);
 }
 
-sal_Bool StrongEncryptionDataSpace::setupEncryption(const Sequence<NamedValue>& rMediaEncData)
+bool StrongEncryptionDataSpace::setupEncryption(const Sequence<NamedValue>& rMediaEncData)
 {
     if (!mCryptoEngine)
         return false;
@@ -180,7 +180,7 @@ OUString SAL_CALL StrongEncryptionDataSpace::getImplementationName()
     return u"com.sun.star.comp.oox.crypto.StrongEncryptionDataSpace"_ustr;
 }
 
-sal_Bool SAL_CALL StrongEncryptionDataSpace::supportsService(const OUString& rServiceName)
+bool SAL_CALL StrongEncryptionDataSpace::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

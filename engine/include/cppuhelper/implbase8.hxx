@@ -33,8 +33,8 @@ namespace cppu
     struct class_data8
     {
         sal_Int16 m_nTypes;
-        sal_Bool m_storedTypeRefs;
-        sal_Bool m_storedId;
+        bool m_storedTypeRefs;
+        bool m_storedId;
         sal_Int8 m_id[ 16 ];
         type_entry m_typeEntries[ 8 + 1 ];
     };

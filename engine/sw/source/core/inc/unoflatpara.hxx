@@ -79,9 +79,9 @@ public:
 
     // text::XFlatParagraph:
     virtual OUString SAL_CALL getText() override;
-    virtual sal_Bool SAL_CALL isModified() override;
-    virtual void SAL_CALL setChecked(::sal_Int32 nType, sal_Bool bVal) override;
-    virtual sal_Bool SAL_CALL isChecked(::sal_Int32 nType) override;
+    virtual bool SAL_CALL isModified() override;
+    virtual void SAL_CALL setChecked(::sal_Int32 nType, bool bVal) override;
+    virtual bool SAL_CALL isChecked(::sal_Int32 nType) override;
     virtual css::lang::Locale SAL_CALL getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) override;
     virtual css::lang::Locale SAL_CALL getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) override;
     virtual void SAL_CALL changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) override;

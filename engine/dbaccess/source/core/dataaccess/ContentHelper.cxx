@@ -87,7 +87,7 @@ OUString SAL_CALL OContentHelper::getImplementationName()
     {
         return u"com.sun.star.comp.sdb.Content"_ustr;
     }
-sal_Bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnCount()
     return m_aMacabFields.size();
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32)
 {
     return true;
 }
@@ -162,17 +162,17 @@ OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32)
     return OUString();
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isAutoIncrement(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isAutoIncrement(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isSigned(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isSigned(sal_Int32)
 {
     return false;
 }
@@ -192,22 +192,22 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::isNullable(sal_Int32)
     return sal_Int32(true);
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32)
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isReadOnly(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isReadOnly(sal_Int32)
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isDefinitelyWritable(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isDefinitelyWritable(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32)
+bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32)
 {
     return false;
 }

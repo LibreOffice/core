@@ -32,7 +32,7 @@ public:
     OUString SAL_CALL getDefaultPropertyName() override;
 
     // default member: True if the specified form field object is a valid text form field
-    sal_Bool SAL_CALL getValid() override;
+    bool SAL_CALL getValid() override;
 
     // Returns and sets the default text string of the input box
     OUString SAL_CALL getDefault() override;

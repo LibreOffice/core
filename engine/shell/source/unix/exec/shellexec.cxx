@@ -292,7 +292,7 @@ OUString SAL_CALL ShellExec::getImplementationName(  )
     return u"com.sun.star.comp.system.SystemShellExecute"_ustr;
 }
 
-sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
+bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -85,7 +85,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
     protected:
 
         //  OPropertySetHelper
-        virtual  sal_Bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
+        virtual  bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
                                                                                                                css::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,
                                                                                                                const css::uno::Any&  aValue          ) override;

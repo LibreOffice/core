@@ -82,9 +82,9 @@ public:
     css::uno::Any getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     sal_uInt32 getNumberFormatKey( sal_Int32 nAtColumn );
 
-    /// returns </sal_True> if the number could successfully be set at the given position
+    /// returns </true> if the number could successfully be set at the given position
     bool setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue );
-    /// returns </sal_True> if the text could successfully be set at the given position
+    /// returns </true> if the text could successfully be set at the given position
     bool setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const OUString & rText );
     bool setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const css::uno::Any & aValue );
 

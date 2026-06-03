@@ -128,7 +128,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
@@ -145,7 +145,7 @@ public:
 
     virtual css::uno::Type SAL_CALL getElementType() override;
 
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     virtual css::uno::Any SAL_CALL getByName(
         OUString const & aName) override;
@@ -153,7 +153,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
 
-    virtual sal_Bool SAL_CALL hasByName(OUString const & aName) override;
+    virtual bool SAL_CALL hasByName(OUString const & aName) override;
 
     virtual css::uno::Any SAL_CALL getByHierarchicalName(
         OUString const & aName) override;
@@ -164,10 +164,10 @@ public:
     virtual css::uno::Type SAL_CALL getTypeByHierarchicalName(
         OUString const & aName) override;
 
-    virtual sal_Bool SAL_CALL getModifiedByHierarchicalName(
+    virtual bool SAL_CALL getModifiedByHierarchicalName(
         OUString const & aName) override;
 
-    virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
+    virtual bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
 
     virtual void SAL_CALL replaceByHierarchicalName(
         OUString const & aName, css::uno::Any const & aElement) override;
@@ -189,7 +189,7 @@ public:
     virtual css::beans::Property SAL_CALL getPropertyByName(
         OUString const & aName) override;
 
-    virtual sal_Bool SAL_CALL hasPropertyByName(OUString const & Name) override;
+    virtual bool SAL_CALL hasPropertyByName(OUString const & Name) override;
 
     virtual OUString SAL_CALL getHierarchicalName() override;
 
@@ -285,7 +285,7 @@ public:
     virtual css::beans::Property SAL_CALL
     getPropertyByHierarchicalName(OUString const & aHierarchicalName) override;
 
-    virtual sal_Bool SAL_CALL hasPropertyByHierarchicalName(
+    virtual bool SAL_CALL hasPropertyByHierarchicalName(
         OUString const & aHierarchicalName) override;
 
     virtual void SAL_CALL replaceByName(

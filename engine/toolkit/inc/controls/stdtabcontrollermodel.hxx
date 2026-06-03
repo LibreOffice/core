@@ -97,8 +97,8 @@ public:
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XTabControllerModel
-    sal_Bool SAL_CALL getGroupControl(  ) override;
-    void SAL_CALL setGroupControl( sal_Bool GroupControl ) override;
+    bool SAL_CALL getGroupControl(  ) override;
+    void SAL_CALL setGroupControl( bool GroupControl ) override;
     void SAL_CALL setControlModels( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) override;
     css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels(  ) override;
     void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
@@ -114,7 +114,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

@@ -46,7 +46,7 @@ OUString SAL_CALL MediaTypeDetectionHelper::getImplementationName()
     return u"com.sun.star.comp.framework.MediaTypeDetectionHelper"_ustr;
 }
 
-sal_Bool SAL_CALL MediaTypeDetectionHelper::supportsService( const OUString& sServiceName )
+bool SAL_CALL MediaTypeDetectionHelper::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -59,7 +59,7 @@ css::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedSe
 
 //   XStringMapping
 
-sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rSeq)
+bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rSeq)
 {
     bool bModified = false;
     auto rSeqRange = asNonConstRange(rSeq);

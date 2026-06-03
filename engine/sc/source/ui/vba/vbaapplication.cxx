@@ -224,14 +224,14 @@ ScVbaApplication::getValue( const OUString& PropertyName )
     return xWSF->getValue( PropertyName );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::hasMethod( const OUString& Name )
 {
     uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
     return xWSF->hasMethod( Name );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::hasProperty( const OUString& Name )
 {
     uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
@@ -818,43 +818,43 @@ ScVbaApplication::getName()
 // error message thrown by OpenOffice
 
 void SAL_CALL
-ScVbaApplication::setDisplayAlerts(sal_Bool displayAlerts)
+ScVbaApplication::setDisplayAlerts(bool displayAlerts)
 {
     mrAppSettings.mbDisplayAlerts = displayAlerts;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getDisplayAlerts()
 {
     return mrAppSettings.mbDisplayAlerts;
 }
 
 void SAL_CALL
-ScVbaApplication::setEnableEvents(sal_Bool bEnable)
+ScVbaApplication::setEnableEvents(bool bEnable)
 {
     mrAppSettings.mbEnableEvents = bEnable;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getEnableEvents()
 {
     return mrAppSettings.mbEnableEvents;
 }
 
 void SAL_CALL
-ScVbaApplication::setEnableCancelKey(sal_Bool bEnable)
+ScVbaApplication::setEnableCancelKey(bool bEnable)
 {
     // Stub, does nothing
     mrAppSettings.mbEnableCancelKey = bEnable;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getEnableCancelKey()
 {
     return mrAppSettings.mbEnableCancelKey;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getDisplayFullScreen()
 {
     SfxViewShell* pShell  = excel::getCurrentBestViewShell( mxContext );
@@ -864,7 +864,7 @@ ScVbaApplication::getDisplayFullScreen()
 }
 
 void SAL_CALL
-ScVbaApplication::setDisplayFullScreen( sal_Bool bSet )
+ScVbaApplication::setDisplayFullScreen( bool bSet )
 {
     // #FIXME calling  ScViewUtil::SetFullScreen( *pShell, bSet );
     // directly results in a strange crash, using dispatch instead
@@ -872,7 +872,7 @@ ScVbaApplication::setDisplayFullScreen( sal_Bool bSet )
         dispatchRequests( getCurrentDocument(), u".uno:FullScreen"_ustr );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getDisplayScrollBars()
 {
     ScTabViewShell* pShell  = excel::getCurrentBestViewShell( mxContext );
@@ -884,7 +884,7 @@ ScVbaApplication::getDisplayScrollBars()
 }
 
 void SAL_CALL
-ScVbaApplication::setDisplayScrollBars( sal_Bool bSet )
+ScVbaApplication::setDisplayScrollBars( bool bSet )
 {
     // use uno here as it does all he repainting etc. magic
     uno::Reference< sheet::XSpreadsheetView > xView( getCurrentDocument()->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -893,50 +893,50 @@ ScVbaApplication::setDisplayScrollBars( sal_Bool bSet )
     xProps->setPropertyValue(u"HasHorizontalScrollBar"_ustr, uno::Any( bSet ) );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getDisplayExcel4Menus()
 {
     return mrAppSettings.mbExcel4Menus;
 }
 
 void SAL_CALL
-ScVbaApplication::setDisplayExcel4Menus( sal_Bool bSet )
+ScVbaApplication::setDisplayExcel4Menus( bool bSet )
 {
     mrAppSettings.mbExcel4Menus = bSet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getDisplayNoteIndicator()
 {
     return mrAppSettings.mbDisplayNoteIndicator;
 }
 
 void SAL_CALL
-ScVbaApplication::setDisplayNoteIndicator( sal_Bool bSet )
+ScVbaApplication::setDisplayNoteIndicator( bool bSet )
 {
     mrAppSettings.mbDisplayNoteIndicator = bSet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getShowWindowsInTaskbar()
 {
     return mrAppSettings.mbShowWindowsInTaskbar;
 }
 
 void SAL_CALL
-ScVbaApplication::setShowWindowsInTaskbar( sal_Bool bSet )
+ScVbaApplication::setShowWindowsInTaskbar( bool bSet )
 {
     mrAppSettings.mbShowWindowsInTaskbar = bSet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getIteration()
 {
     return ScModule::get()->GetDocOptions().IsIter();
 }
 
 void SAL_CALL
-ScVbaApplication::setIteration( sal_Bool bSet )
+ScVbaApplication::setIteration( bool bSet )
 {
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_SET_THROW );
@@ -1367,7 +1367,7 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )
 // this is bound to break when loading the document
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaApplication::getDisplayFormulaBar()
 {
     bool bRes = false;
@@ -1386,7 +1386,7 @@ ScVbaApplication::getDisplayFormulaBar()
 }
 
 void SAL_CALL
-ScVbaApplication::setDisplayFormulaBar( sal_Bool _displayformulabar )
+ScVbaApplication::setDisplayFormulaBar( bool _displayformulabar )
 {
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
     if ( pViewShell && ( _displayformulabar !=  getDisplayFormulaBar() ) )
@@ -1456,7 +1456,7 @@ void SAL_CALL ScVbaApplication::OnKey( const OUString& Key, const uno::Any& Proc
     }
 }
 
-void SAL_CALL ScVbaApplication::setScreenUpdating(sal_Bool bUpdate)
+void SAL_CALL ScVbaApplication::setScreenUpdating(bool bUpdate)
 {
     VbaApplicationBase::setScreenUpdating( bUpdate );
 

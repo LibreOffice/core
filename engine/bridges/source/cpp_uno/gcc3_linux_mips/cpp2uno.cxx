@@ -465,8 +465,8 @@ namespace
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
               ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+            aParam.bIn      = true;
+            aParam.bOut     = false;
 
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
@@ -580,7 +580,7 @@ namespace
     fprintf(stderr,"gp=%x,%x,%x,%x\n",gpreg[0],gpreg[1],gpreg[2],gpreg[3]);
 #endif
 
-    //sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
+    //bool bComplex = nFunctionIndex & 0x80000000 ? true : false;
 
     typelib_TypeClass aType =
       cpp_mediate( nFunctionIndex, vTableOffset, (void**)gpreg, (void**)fpreg, ovrflw, (sal_Int64*)nRegReturn );

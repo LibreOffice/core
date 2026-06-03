@@ -209,7 +209,7 @@ void SAL_CALL InteractionSupplyAuthentication::select()
 
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 InteractionSupplyAuthentication::canSetRealm()
 {
     return m_bCanSetRealm;
@@ -229,7 +229,7 @@ InteractionSupplyAuthentication::setRealm( const OUString& Realm )
 
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 InteractionSupplyAuthentication::canSetUserName()
 {
     return m_bCanSetUserName;
@@ -249,7 +249,7 @@ InteractionSupplyAuthentication::setUserName( const OUString& UserName )
 
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 InteractionSupplyAuthentication::canSetPassword()
 {
     return m_bCanSetPassword;
@@ -288,7 +288,7 @@ InteractionSupplyAuthentication::setRememberPassword(
 
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 InteractionSupplyAuthentication::canSetAccount()
 {
     return m_bCanSetAccount;
@@ -325,9 +325,9 @@ void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
 
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 InteractionSupplyAuthentication::canUseSystemCredentials(
-        sal_Bool& Default )
+        bool& Default )
 {
     Default = false;
     return m_bCanUseSystemCredentials;
@@ -336,7 +336,7 @@ InteractionSupplyAuthentication::canUseSystemCredentials(
 
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
-        sal_Bool UseSystemCredentials )
+        bool UseSystemCredentials )
 {
     if ( m_bCanUseSystemCredentials )
         m_bUseSystemCredentials = UseSystemCredentials;

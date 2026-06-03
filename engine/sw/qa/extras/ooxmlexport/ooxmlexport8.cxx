@@ -245,7 +245,7 @@ DECLARE_OOXMLEXPORT_TEST(testN766481, "n766481.docx")
     uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
     for (int i = 0; i < 2; ++i)
         xParaEnum->nextElement();
-    CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
+    CPPUNIT_ASSERT_EQUAL(false, xParaEnum->hasMoreElements());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN766487, "n766487.docx")
@@ -909,7 +909,7 @@ DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
         uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
         uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr)));
+        CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"dropdown default text"_ustr, getProperty<OUString>(xPropertySet, u"DefaultText"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< uno::Sequence<OUString> >(xPropertySet, u"StringItemList"_ustr).getLength());
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPropertySet, u"Dropdown"_ustr));

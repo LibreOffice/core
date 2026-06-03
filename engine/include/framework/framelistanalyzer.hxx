@@ -105,13 +105,13 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) FrameListAnalyzer final
             if (m_xReferenceFrame == help)
             {
                 m_xHelp   = NULL;
-                m_bIsHelp = sal_True;
+                m_bIsHelp = true;
             }
             else
             if (xOtherFrame == help)
             {
                 m_xHelp   = xOtherFrame;
-                m_bIsHelp = sal_False;
+                m_bIsHelp = false;
             }
             </listing>
 
@@ -131,13 +131,13 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) FrameListAnalyzer final
             if (m_xReferenceFrame == backing)
             {
                 m_xBackingComponent   = NULL;
-                m_bIsBackingComponent = sal_True;
+                m_bIsBackingComponent = true;
             }
             else
             if (xOtherFrame == backing)
             {
                 m_xBackingComponent   = xOtherFrame;
-                m_bIsBackingComponent = sal_False      ;
+                m_bIsBackingComponent = false      ;
             }
             </listing>
 

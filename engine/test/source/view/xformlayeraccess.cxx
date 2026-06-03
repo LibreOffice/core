@@ -48,7 +48,7 @@ void XFormLayerAccess::testSetFormDesignMode()
     CPPUNIT_ASSERT_EQUAL(!bCurrentMode, bNewMode);
 
     xFLA->setFormDesignMode(bCurrentMode);
-    CPPUNIT_ASSERT_EQUAL(bCurrentMode, static_cast<bool>(xFLA->isFormDesignMode()));
+    CPPUNIT_ASSERT_EQUAL(bCurrentMode, xFLA->isFormDesignMode());
 }
 
 } // namespace apitest

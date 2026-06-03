@@ -62,7 +62,7 @@ public:
     void                                            SAL_CALL getKernPairs( css::uno::Sequence< sal_Unicode >& rnChars1, css::uno::Sequence< sal_Unicode >& rnChars2, css::uno::Sequence< sal_Int16 >& rnKerns ) override;
 
     // css::lang::XFont2
-    sal_Bool                                        SAL_CALL hasGlyphs( const OUString& aText ) override;
+    bool                                        SAL_CALL hasGlyphs( const OUString& aText ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

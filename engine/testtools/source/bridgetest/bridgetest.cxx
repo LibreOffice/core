@@ -114,7 +114,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XMain
@@ -640,7 +640,7 @@ static bool performTest(
             {
                 bRet &= check(
                     (xLBT->transportPolyBoolean(
-                        TestPolyStruct< sal_Bool >(true)).
+                        TestPolyStruct< bool >(true)).
                      member),
                     "transportPolyBoolean");
                 TestPolyStruct< sal_Int64 > tps1(12345);
@@ -747,7 +747,7 @@ static bool performTest(
             TestEnum_CHECK, STRING_TEST_CONSTANT, 18, 0x5678, _arObj[2],
             Any(&_arObj[2], cppu::UnoType<XInterface>::get()));
         {
-            Sequence<sal_Bool> arBool({true, false, true});
+            Sequence<bool> arBool({true, false, true});
             Sequence<sal_Unicode> arChar({0x0065, 0x0066, 0x0067});
             Sequence<sal_Int8> arByte({1, 2, -1});
             Sequence<sal_Int16> arShort({-0x8000, 1, 0x7FFF});
@@ -788,7 +788,7 @@ static bool performTest(
             bRet &= check(seqSeqRet2 == arLong3, "sequence test");
             Sequence< Any > seqAnyRet(xBT2->setSequenceAny(arAny));
             bRet &= check(seqAnyRet == arAny, "sequence test");
-            Sequence< sal_Bool > seqBoolRet(xBT2->setSequenceBool(arBool));
+            Sequence< bool > seqBoolRet(xBT2->setSequenceBool(arBool));
             bRet &= check(seqBoolRet == arBool, "sequence test");
             Sequence< sal_Int8 > seqByteRet(xBT2->setSequenceByte(arByte));
             bRet &= check(seqByteRet == arByte, "sequence test");
@@ -823,7 +823,7 @@ static bool performTest(
             Sequence< TestElement > seqStructRet(
                 xBT2->setSequenceStruct(arStruct));
             bRet &= check(seqStructRet == arStruct, "sequence test");
-            Sequence< sal_Bool > arBoolTemp(cloneSequence(arBool));
+            Sequence< bool > arBoolTemp(cloneSequence(arBool));
             Sequence< sal_Unicode > arCharTemp(cloneSequence<sal_Unicode, cppu::UnoCharType>(arChar));
             Sequence< sal_Int8 > arByteTemp(cloneSequence(arByte));
             Sequence< sal_Int16 > arShortTemp(cloneSequence(arShort));
@@ -857,7 +857,7 @@ static bool performTest(
                  arAnyTemp == arAny && arLong2Temp == arLong3[0] &&
                  arLong3Temp == arLong3),
                 "sequence test");
-            Sequence< sal_Bool > arBoolOut;
+            Sequence< bool > arBoolOut;
             Sequence< sal_Unicode > arCharOut;
             Sequence< sal_Int8 > arByteOut;
             Sequence< sal_Int16 > arShortOut;
@@ -903,8 +903,8 @@ static bool performTest(
             Sequence< Any > arAny;
             Sequence< Any > seqAnyRet(xBT2->setSequenceAny(arAny));
             bRet &= check(seqAnyRet == arAny, "sequence test");
-            Sequence< sal_Bool > arBool;
-            Sequence< sal_Bool > seqBoolRet(xBT2->setSequenceBool(arBool));
+            Sequence< bool > arBool;
+            Sequence< bool > seqBoolRet(xBT2->setSequenceBool(arBool));
             bRet &= check(seqBoolRet == arBool, "sequence test");
             Sequence< sal_Int8 > arByte;
             Sequence< sal_Int8 > seqByteRet(xBT2->setSequenceByte(arByte));
@@ -1289,7 +1289,7 @@ OUString TestBridgeImpl::getImplementationName()
     return IMPLNAME;
 }
 
-sal_Bool TestBridgeImpl::supportsService( const OUString & rServiceName )
+bool TestBridgeImpl::supportsService( const OUString & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

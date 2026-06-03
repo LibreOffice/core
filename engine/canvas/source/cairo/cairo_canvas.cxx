@@ -114,7 +114,7 @@ namespace cairocanvas
     }
 
     //  XServiceInfo
-    sal_Bool Canvas::supportsService(const OUString& sServiceName)
+    bool Canvas::supportsService(const OUString& sServiceName)
     {
         return cppu::supportsService(this, sServiceName);
 

@@ -64,7 +64,7 @@ namespace emfio::emfreader
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
+            virtual bool SAL_CALL supportsService(const OUString&) override;
             virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
 
@@ -215,7 +215,7 @@ namespace emfio::emfreader
             return u"emfio::emfreader::XEmfParser"_ustr;
         }
 
-        sal_Bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)
+        bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)
         {
             return cppu::supportsService(this, rServiceName);
         }

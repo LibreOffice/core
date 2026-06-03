@@ -999,7 +999,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo80905)
         uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
         xFields->nextElement();
         // The problem was that there was only one field in the document, but there should be true.
-        CPPUNIT_ASSERT_EQUAL(true, static_cast<bool>(xFields->hasMoreElements()));
+        CPPUNIT_ASSERT_EQUAL(true, xFields->hasMoreElements());
     };
     createSwDoc("fdo80905.rtf");
     verify();
@@ -1041,8 +1041,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79959)
 {
     auto verify = [this]() {
         // This was false, as the style was imported as " Test", i.e. no whitespace stripping.
-        CPPUNIT_ASSERT_EQUAL(
-            true, static_cast<bool>(getStyles(u"ParagraphStyles"_ustr)->hasByName(u"Test"_ustr)));
+        CPPUNIT_ASSERT_EQUAL(true, getStyles(u"ParagraphStyles"_ustr)->hasByName(u"Test"_ustr));
     };
     createSwDoc("fdo79959.rtf");
     verify();

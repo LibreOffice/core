@@ -109,7 +109,7 @@ Sequence<OUString> KitClipboard::getSupportedServiceNames()
     return getSupportedServiceNames_static();
 }
 
-sal_Bool KitClipboard::supportsService(const OUString& ServiceName)
+bool KitClipboard::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -284,7 +284,7 @@ uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitTransferable::getTransferDat
     return m_aFlavors;
 }
 
-sal_Bool SAL_CALL KitTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+bool SAL_CALL KitTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     return std::find_if(std::cbegin(m_aFlavors), std::cend(m_aFlavors),
                         [&rFlavor](const datatransfer::DataFlavor& i) {

@@ -76,7 +76,7 @@ void VistaFilePicker::disposing(const css::lang::EventObject& /*aEvent*/)
 {
 }
 
-void SAL_CALL VistaFilePicker::setMultiSelectionMode(sal_Bool bMode)
+void SAL_CALL VistaFilePicker::setMultiSelectionMode(bool bMode)
 {
     ensureInit();
 
@@ -262,7 +262,7 @@ css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
 }
 
 void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
-                                             sal_Bool  bEnable   )
+                                             bool  bEnable   )
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_ENABLE_CONTROL);
@@ -319,12 +319,12 @@ void SAL_CALL VistaFilePicker::setImage(      sal_Int16      /*nImageFormat*/,
 {
 }
 
-sal_Bool SAL_CALL VistaFilePicker::setShowState(sal_Bool /*bShowState*/)
+bool SAL_CALL VistaFilePicker::setShowState(bool /*bShowState*/)
 {
     return false;
 }
 
-sal_Bool SAL_CALL VistaFilePicker::getShowState()
+bool SAL_CALL VistaFilePicker::getShowState()
 {
     return false;
 }
@@ -521,7 +521,7 @@ OUString SAL_CALL VistaFilePicker::getImplementationName()
         return "com.sun.star.ui.dialogs.Win32FilePicker";
 }
 
-sal_Bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
+bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

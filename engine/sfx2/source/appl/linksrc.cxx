@@ -387,13 +387,13 @@ bool SvLinkSource::HasDataLinks() const
     return bRet;
 }
 
-// sal_True => waiting for data
+// true => waiting for data
 bool SvLinkSource::IsPending() const
 {
     return false;
 }
 
-// sal_True => data complete loaded
+// true => data complete loaded
 bool SvLinkSource::IsDataComplete() const
 {
     return true;

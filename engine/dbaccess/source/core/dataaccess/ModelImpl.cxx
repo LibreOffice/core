@@ -415,7 +415,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
     {
         // the set of property value types in the bag is limited:
         Sequence< Type > aAllowedTypes({
-             cppu::UnoType<sal_Bool>::get(),
+             cppu::UnoType<bool>::get(),
              cppu::UnoType<double>::get(),
              cppu::UnoType<OUString>::get(),
              cppu::UnoType<sal_Int32>::get(),
@@ -1069,7 +1069,7 @@ std::span<const DefaultPropertyValue> ODatabaseModelImpl::getDefaultDataSourceSe
         { u"IgnoreDriverPrivileges"_ustr,     Any( true ) },
         { u"ImplicitCatalogRestriction"_ustr, ::cppu::UnoType< OUString >::get() },
         { u"ImplicitSchemaRestriction"_ustr,  ::cppu::UnoType< OUString >::get() },
-        { u"PrimaryKeySupport"_ustr,          ::cppu::UnoType< sal_Bool >::get() },
+        { u"PrimaryKeySupport"_ustr,          ::cppu::UnoType< bool >::get() },
         { u"ShowColumnDescription"_ustr,      Any( false ) },
         // known SDB level settings
         { u"NoNameLengthLimit"_ustr,          Any( false ) },

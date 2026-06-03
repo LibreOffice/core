@@ -42,7 +42,7 @@ OUString
     throw RuntimeException();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     transliteration_Numeric::equals( const OUString& /*str1*/, sal_Int32 /*pos1*/, sal_Int32 /*nCount1*/, sal_Int32& /*nMatch1*/, const OUString& /*str2*/, sal_Int32 /*pos2*/, sal_Int32 /*nCount2*/, sal_Int32& /*nMatch2*/ )
 {
     throw RuntimeException();

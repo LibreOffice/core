@@ -199,7 +199,7 @@ OUString SAL_CALL UcbPropertiesManager::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UcbPropertiesManager"_ustr;
 }
-sal_Bool SAL_CALL UcbPropertiesManager::supportsService( const OUString& ServiceName )
+bool SAL_CALL UcbPropertiesManager::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -241,7 +241,7 @@ Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName
 
 
 // virtual
-sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name )
+bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name )
 {
     Property aProp;
     return queryProperty( Name, aProp );

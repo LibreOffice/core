@@ -80,7 +80,7 @@ public:
     // XPropertySetInfo-methods
     virtual Sequence< Property > SAL_CALL getProperties() override;
     virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) override;
+    virtual bool SAL_CALL hasPropertyByName(const OUString& PropertyName) override;
 };
 
 }
@@ -121,7 +121,7 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & Proper
 /**
  * Return the sequence of properties, which are provided through the constructor.
  */
-sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName )
+bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName )
 {
     Property * pR;
     pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
@@ -602,7 +602,7 @@ void OPropertySetHelper::fire
     const Any * pNewValues,
     const Any * pOldValues,
     sal_Int32 nHandles, // This is the Count of the array
-    sal_Bool bVetoable
+    bool bVetoable
 )
 {
     if (! m_pReserved->m_bFireEvents)
@@ -961,7 +961,7 @@ void OPropertySetHelper::firePropertiesChangeEvent(
         rListener->propertiesChange( aChanges );
 }
 
-void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
+void OPropertySetHelper2::enableChangeListenerNotification( bool bEnable )
 {
     m_pReserved->m_bFireEvents = bEnable;
 }
@@ -975,7 +975,7 @@ static int compare_Property_Impl( const void *arg1, const void *arg2 ) noexcept
 
 }
 
-void OPropertyArrayHelper::init( sal_Bool bSorted )
+void OPropertyArrayHelper::init( bool bSorted )
 {
     sal_Int32 i, nElements = aInfos.getLength();
 
@@ -1002,7 +1002,7 @@ void OPropertyArrayHelper::init( sal_Bool bSorted )
 OPropertyArrayHelper::OPropertyArrayHelper(
     Property * pProps,
     sal_Int32 nEle,
-    sal_Bool bSorted )
+    bool bSorted )
     : m_pReserved(nullptr)
     , aInfos(pProps, nEle)
     , bRightOrdered( false )
@@ -1012,7 +1012,7 @@ OPropertyArrayHelper::OPropertyArrayHelper(
 
 OPropertyArrayHelper::OPropertyArrayHelper(
     const Sequence< Property > & aProps,
-    sal_Bool bSorted )
+    bool bSorted )
     : m_pReserved(nullptr)
     , aInfos(aProps)
     , bRightOrdered( false )
@@ -1027,7 +1027,7 @@ sal_Int32 OPropertyArrayHelper::getCount() const
 }
 
 
-sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
+bool OPropertyArrayHelper::fillPropertyMembersByHandle
 (
     OUString * pPropName,
     sal_Int16 * pAttributes,
@@ -1081,7 +1081,7 @@ Property OPropertyArrayHelper::getPropertyByName(const OUString& aPropertyName)
 }
 
 
-sal_Bool OPropertyArrayHelper::hasPropertyByName(const OUString& aPropertyName)
+bool OPropertyArrayHelper::hasPropertyByName(const OUString& aPropertyName)
 {
     Property * pR;
     pR = static_cast<Property *>(bsearch( &aPropertyName, aInfos.getConstArray(), aInfos.getLength(),

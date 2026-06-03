@@ -242,7 +242,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
 
     if(pTabViewShell!=nullptr)
     {
-        //  bDoneRefMode is sal_False when called from before SetReference.
+        //  bDoneRefMode is false when called from before SetReference.
         //  In that case, RefMode was just started and must not be ended now.
 
         if ( bDoneRefMode )

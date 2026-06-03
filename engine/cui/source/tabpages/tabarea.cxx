@@ -126,7 +126,7 @@ short SvxAreaTabDialog::Ok()
 {
     SavePalettes();
     // RET_OK is returned, if at least one
-    // TabPage returns sal_True in FillItemSet().
+    // TabPage returns true in FillItemSet().
     // This happens by default at the moment.
     return SfxTabDialogController::Ok();
 }

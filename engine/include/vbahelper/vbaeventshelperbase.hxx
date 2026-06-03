@@ -59,8 +59,8 @@ public:
     virtual ~VbaEventsHelperBase() override;
 
     // script::vba::XVBAEventProcessor
-    virtual sal_Bool SAL_CALL hasVbaEventHandler( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) override;
-    virtual sal_Bool SAL_CALL processVbaEvent( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) override;
+    virtual bool SAL_CALL hasVbaEventHandler( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) override;
+    virtual bool SAL_CALL processVbaEvent( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) override;
 
     // document::XEventListener
     virtual void SAL_CALL notifyEvent( const css::document::EventObject& rEvent ) override;
@@ -72,7 +72,7 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
     using WeakComponentImplHelperBase::disposing;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     // ::cppu::OComponentHelper
     virtual void SAL_CALL disposing() override;

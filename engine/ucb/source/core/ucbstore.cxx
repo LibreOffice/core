@@ -116,7 +116,7 @@ public:
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties() override;
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
     // Non-interface methods.
     void reset() { m_xProps.reset(); }
@@ -141,7 +141,7 @@ OUString SAL_CALL UcbStore::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UcbStore"_ustr;
 }
-sal_Bool SAL_CALL UcbStore::supportsService( const OUString& ServiceName )
+bool SAL_CALL UcbStore::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -218,7 +218,7 @@ OUString SAL_CALL PropertySetRegistry::getImplementationName()
     return u"com.sun.star.comp.ucb.PropertySetRegistry"_ustr;
 }
 
-sal_Bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceName )
+bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -234,7 +234,7 @@ css::uno::Sequence< OUString > SAL_CALL PropertySetRegistry::getSupportedService
 
 // virtual
 Reference< XPersistentPropertySet > SAL_CALL
-PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
+PropertySetRegistry::openPropertySet( const OUString& key, bool create )
 {
     if ( key.isEmpty() )
         return Reference< XPersistentPropertySet >();
@@ -423,7 +423,7 @@ css::uno::Type SAL_CALL PropertySetRegistry::getElementType()
 
 
 // virtual
-sal_Bool SAL_CALL PropertySetRegistry::hasElements()
+bool SAL_CALL PropertySetRegistry::hasElements()
 {
     Reference< XElementAccess > xElemAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
@@ -477,7 +477,7 @@ Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
 
 
 // virtual
-sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
+bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
 {
     Reference< XNameAccess > xNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
@@ -1025,7 +1025,7 @@ OUString SAL_CALL PersistentPropertySet::getImplementationName()
     return u"com.sun.star.comp.ucb.PersistentPropertySet"_ustr;
 }
 
-sal_Bool SAL_CALL PersistentPropertySet::supportsService( const OUString& ServiceName )
+bool SAL_CALL PersistentPropertySet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -2158,7 +2158,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
 
 
 // virtual
-sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
+bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
                                                     const OUString& Name )
 {
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(

@@ -46,14 +46,14 @@ public:
     virtual css::uno::Reference< css::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) override;
 
     // XModel
-    virtual sal_Bool SAL_CALL attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+    virtual bool SAL_CALL attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual OUString SAL_CALL getURL(  ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override;
     virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) override;
     virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) override;
     virtual void SAL_CALL lockControllers(  ) override;
     virtual void SAL_CALL unlockControllers(  ) override;
-    virtual sal_Bool SAL_CALL hasControllersLocked(  ) override;
+    virtual bool SAL_CALL hasControllersLocked(  ) override;
     virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) override;
     virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection(  ) override;

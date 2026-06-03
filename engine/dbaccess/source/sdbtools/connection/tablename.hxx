@@ -64,7 +64,7 @@ namespace sdbtools
         virtual OUString SAL_CALL getNameForSelect() override;
         virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getTable() override;
         virtual void SAL_CALL setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) override;
-        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, sal_Bool Quote ) override;
+        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, bool Quote ) override;
         virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) override;
 
     protected:

@@ -158,26 +158,26 @@ public:
 
     virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException);
     virtual Sequence< DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(RuntimeException);
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
+    virtual bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
 
     // XClipboardOwner
 
     virtual void SAL_CALL lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw(RuntimeException);
 
-    sal_Bool receivedLostOwnership() { return m_receivedLostOwnership; };
-    void clearReceivedLostOwnership() { m_receivedLostOwnership = sal_False; };
+    bool receivedLostOwnership() { return m_receivedLostOwnership; };
+    void clearReceivedLostOwnership() { m_receivedLostOwnership = false; };
 
 private:
     Sequence< DataFlavor > m_seqDFlv;
     OUString               m_Data;
-    sal_Bool               m_receivedLostOwnership;
+    bool               m_receivedLostOwnership;
 };
 
 //  ctor
 
 StringTransferable::StringTransferable( ) :
     m_seqDFlv( 1 ),
-    m_receivedLostOwnership( sal_False ),
+    m_receivedLostOwnership( false ),
     m_Data( OUString("clipboard test content") )
 {
     DataFlavor df;
@@ -221,17 +221,17 @@ Sequence< DataFlavor > SAL_CALL StringTransferable::getTransferDataFlavors(  )
 
 //  isDataFlavorSupported
 
-sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException)
 {
     sal_Int32 nLength = m_seqDFlv.getLength( );
-    sal_Bool bRet     = sal_False;
+    bool bRet     = false;
 
 //  for ( sal_Int32 i = 0; i < nLength; ++i )
 //  {
 //      if ( m_seqDFlv[i] == aFlavor )
 //      {
-//          bRet = sal_True;
+//          bRet = true;
 //          break;
 //      }
 //  }
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& a
 void SAL_CALL StringTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
     throw(RuntimeException)
 {
-    m_receivedLostOwnership = sal_True;
+    m_receivedLostOwnership = true;
 }
 
 //  main
@@ -280,7 +280,7 @@ int SAL_CALL main( int argc, const char* argv[] )
 
     try
     {
-        xServiceManager = createRegistryServiceFactory( aRegistry, sal_True );
+        xServiceManager = createRegistryServiceFactory( aRegistry, true );
         ENSURE( xServiceManager.is(), "*** ERROR *** service manager could not be created." );
 
         // create an instance of GenericClipboard service
@@ -309,7 +309,7 @@ int SAL_CALL main( int argc, const char* argv[] )
         Reference< XClipboardOwner > xOwner  = new ClipboardOwner();
         ClipboardOwner *pOwner = (ClipboardOwner *) xOwner.get();
 
-        TEST( "initial contents (none): ", xClipboard->getContents().is() == sal_False );
+        TEST( "initial contents (none): ", xClipboard->getContents().is() == false );
 
         PERFORM( "update on contents with clipboard owner: ", xClipboard->setContents( xContents, xOwner ) );
         TEST( "current clipboard contents: ", xContents == xClipboard->getContents() );
@@ -327,7 +327,7 @@ int SAL_CALL main( int argc, const char* argv[] )
         TEST( "if received exactly 1 lostOwnership message: ", pOwner->receivedLostOwnerships() == 1 );
         TEST( "if received lostOwnership message for the correct clipboard: ", pOwner->lostOwnershipClipboardValue() == xClipboard );
         TEST( "if received lostOwnership message for the correct transferable: ", pOwner->lostOwnershipTransferableValue() == xContents );
-        TEST( "current clipboard contents (none): ", xClipboard->getContents().is() == sal_False );
+        TEST( "current clipboard contents (none): ", xClipboard->getContents().is() == false );
 
         if( xClipboardNotifier.is() )
         {
@@ -351,7 +351,7 @@ int SAL_CALL main( int argc, const char* argv[] )
 
         PERFORM( "update on contents without data (clear): ", xClipboard->setContents( Reference< XTransferable >(), Reference< XClipboardOwner >() ) );
         TEST( "that no further lostOwnership messages were received: ", pOwner->receivedLostOwnerships() == 1 );
-        TEST( "current clipboard contents (none): ", xClipboard->getContents().is() == sal_False );
+        TEST( "current clipboard contents (none): ", xClipboard->getContents().is() == false );
 
         if( xClipboardNotifier.is() )
         {
@@ -393,7 +393,7 @@ int SAL_CALL main( int argc, const char* argv[] )
 
     catch (const Exception&)
     {
-        ENSURE( sal_False, "*** ERROR *** exception caught." );
+        ENSURE( false, "*** ERROR *** exception caught." );
     }
 
     // shutdown the service manager

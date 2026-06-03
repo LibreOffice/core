@@ -498,13 +498,13 @@ void SwXTextSearch::removeVetoableChangeListener(const OUString& /*rPropertyName
     OSL_FAIL("not implemented");
 }
 
-sal_Bool SwXTextSearch::getValueSearch()
+bool SwXTextSearch::getValueSearch()
 {
     SolarMutexGuard aGuard;
     return m_bIsValueSearch;
 }
 
-void SwXTextSearch::setValueSearch(sal_Bool ValueSearch_)
+void SwXTextSearch::setValueSearch(bool ValueSearch_)
 {
     SolarMutexGuard aGuard;
     m_bIsValueSearch = ValueSearch_;
@@ -555,7 +555,7 @@ OUString SwXTextSearch::getImplementationName()
     return u"SwXTextSearch"_ustr;
 }
 
-sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName)
+bool SwXTextSearch::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

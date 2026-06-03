@@ -172,7 +172,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (std::u16string_view rLayoutName, 
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, bool bCheck /*= sal_False*/ )
+void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, bool bCheck /*= false*/ )
 {
     const SfxStyleSearchBits nUsedMask = SfxStyleSearchBits::All & ~SfxStyleSearchBits::UserDefined;
 
@@ -1219,7 +1219,7 @@ OUString SAL_CALL SdStyleSheetPool::getImplementationName()
     return u"SdStyleSheetPool"_ustr;
 }
 
-sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1270,7 +1270,7 @@ Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName )
+bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName )
 {
     throwIfDisposed();
 
@@ -1296,7 +1296,7 @@ Type SAL_CALL SdStyleSheetPool::getElementType()
     return cppu::UnoType<XNameAccess>::get();
 }
 
-sal_Bool SAL_CALL SdStyleSheetPool::hasElements()
+bool SAL_CALL SdStyleSheetPool::hasElements()
 {
     return true;
 }

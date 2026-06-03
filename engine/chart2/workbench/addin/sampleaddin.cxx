@@ -34,7 +34,7 @@ using namespace com::sun::star;
 
 extern "C" {
 
-sal_Bool SAL_CALL component_writeInfo(
+bool SAL_CALL component_writeInfo(
     void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
 {
     if( pRegistryKey )
@@ -51,14 +51,14 @@ sal_Bool SAL_CALL component_writeInfo(
             for( sal_Int32 i = 0; i < aSequ.(); i++ )
                 xNewKey->createKey( pArray[i] );
 
-            return sal_True;
+            return true;
         }
         catch( const registry::InvalidRegistryException& )
         {
             TOOLS_WARN_EXCEPTION( "chart2", "" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
@@ -97,12 +97,12 @@ SampleAddIn::~SampleAddIn()
 {}
 
 // this functionality should be provided by the chart API some day
-sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAxis,
+bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAxis,
                                           double fValue,
-                                          sal_Bool bVertical,
+                                          bool bVertical,
                                           awt::Point& aOutPosition )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( xAxis.is())
     {
@@ -137,7 +137,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
                         aOutPosition.X = static_cast<sal_Int32>(aPos.X + nLength * fPercentage);
                         aOutPosition.Y = aPos.Y;
                     }
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             catch( const beans::UnknownPropertyException& )
@@ -293,7 +293,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     if( xTextProp.is())
                     {
                         uno::Any aTrueAny;
-                        aTrueAny <<= (sal_Bool)(sal_True);
+                        aTrueAny <<= (bool)(true);
                         try
                         {
                             xTextProp->setPropertyValue( "TextAutoGrowWidth" , aTrueAny );
@@ -329,7 +329,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     fMiddleVal = aData[ nMiddle ][ 0 ];
 
                 awt::Point aPos;
-                getLogicalPosition( xYAxisShape, fMiddleVal, sal_True, aPos );
+                getLogicalPosition( xYAxisShape, fMiddleVal, true, aPos );
                 awt::Size aSize = xXAxisShape->getSize();
 
                 if( mxMyRedLine.is())
@@ -624,7 +624,7 @@ OUString SAL_CALL SampleAddIn::getImplementationName() throw( uno::RuntimeExcept
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL SampleAddIn::supportsService( const OUString& ServiceName )
+bool SAL_CALL SampleAddIn::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

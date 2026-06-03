@@ -641,7 +641,7 @@ void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int64 nChildIndex )
     pToolBox->ChangeHighlight( nChildIndex );
 }
 
-sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();

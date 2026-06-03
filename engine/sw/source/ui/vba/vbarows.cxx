@@ -51,7 +51,7 @@ public:
     {
         mxIndexAccess = mxTextTable->getRows();
     }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( m_nIndex < mxIndexAccess->getCount() );
     }

@@ -80,7 +80,7 @@ OUString SAL_CALL Graphic::getImplementationName()
     return u"com.sun.star.comp.graphic.Graphic"_ustr;
 }
 
-sal_Bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
+bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
@@ -230,7 +230,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::applyDuotone(
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL Graphic::applyBrightnessContrast(
-    const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso )
+    const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nBrightness, sal_Int32 nContrast, bool mso )
 {
     ::Graphic aGraphic(rxGraphic);
     ::Graphic aReturnGraphic;

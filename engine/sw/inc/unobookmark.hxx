@@ -97,7 +97,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -165,10 +165,10 @@ class SwXFieldmarkParameters final
         // XNameAccess
         virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType(  ) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) override;
+        virtual bool SAL_CALL hasElements(  ) override;
 
         virtual void Notify( const SfxHint& rHint ) override;
 };
@@ -232,7 +232,7 @@ public:
     virtual css::uno::Reference<css::text::XTextRange> SAL_CALL getAnchor() override;
 
     // XTextField
-    virtual OUString SAL_CALL getPresentation(sal_Bool bShowCommand) override;
+    virtual OUString SAL_CALL getPresentation(bool bShowCommand) override;
 
     // XFormField
     virtual OUString SAL_CALL getFieldType() override;

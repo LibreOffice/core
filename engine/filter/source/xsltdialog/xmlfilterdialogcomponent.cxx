@@ -56,7 +56,7 @@ protected:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XExecutableDialog
@@ -109,7 +109,7 @@ Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames
     return { u"com.sun.star.ui.dialogs.XSLTFilterDialog"_ustr };
 }
 
-sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const OUString& ServiceName)
+bool SAL_CALL XMLFilterDialogComponent::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService( this, ServiceName );
 }

@@ -398,7 +398,7 @@ public:
     virtual ::sal_Int16 SAL_CALL compareRegionEnds( const css::uno::Reference< css::text::XTextRange >& xR1, const css::uno::Reference< css::text::XTextRange >& xR2 ) override final;
 
     // css::lang::XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     SAL_DLLPRIVATE virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     SAL_DLLPRIVATE static  css::uno::Sequence< OUString > getSupportedServiceNames_Static( );
 };
@@ -462,11 +462,11 @@ public:
     // css::text::XSimpleText
     virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursor(  ) override final;
     virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursorByRange( const css::uno::Reference< css::text::XTextRange >& aTextPosition ) override final;
-    virtual void SAL_CALL insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) override;
-    virtual void SAL_CALL insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb ) override;
+    virtual void SAL_CALL insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, bool bAbsorb ) override;
+    virtual void SAL_CALL insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
     // css::text::XText
-    virtual void SAL_CALL insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, sal_Bool bAbsorb ) override;
+    virtual void SAL_CALL insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, bool bAbsorb ) override;
     virtual void SAL_CALL removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) override;
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL setString( const OUString& aString ) override;
@@ -481,7 +481,7 @@ public:
 
     // css::container::XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override final;
-    virtual sal_Bool SAL_CALL hasElements(  ) override final;
+    virtual bool SAL_CALL hasElements(  ) override final;
 
     // css::text::XTextRangeMover
     virtual void SAL_CALL moveTextRange( const css::uno::Reference< css::text::XTextRange >& xRange, sal_Int16 nParagraphs ) override final;
@@ -583,7 +583,7 @@ public:
 
     // css::container::XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // css::beans::XPropertySet
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
@@ -621,7 +621,7 @@ public:
     virtual ~SvxUnoTextContentEnumeration() noexcept override;
 
     // css::container::XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual bool SAL_CALL hasMoreElements(  ) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
 };
 
@@ -639,7 +639,7 @@ public:
     virtual ~SvxUnoTextRangeEnumeration() noexcept override;
 
     // css::container::XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual bool SAL_CALL hasMoreElements(  ) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
 };
 
@@ -673,16 +673,16 @@ public:
     // css::text::XTextCursor -> css::text::XTextRange
     virtual void SAL_CALL collapseToStart(  ) override final;
     virtual void SAL_CALL collapseToEnd(  ) override final;
-    virtual sal_Bool SAL_CALL isCollapsed(  ) override final;
-    virtual sal_Bool SAL_CALL goLeft( sal_Int16 nCount, sal_Bool bExpand ) override final;
-    virtual sal_Bool SAL_CALL goRight( sal_Int16 nCount, sal_Bool bExpand ) override final;
-    virtual void SAL_CALL gotoStart( sal_Bool bExpand ) override final;
-    virtual void SAL_CALL gotoEnd( sal_Bool bExpand ) override final;
-    virtual void SAL_CALL gotoRange( const css::uno::Reference< css::text::XTextRange >& xRange, sal_Bool bExpand ) override final;
+    virtual bool SAL_CALL isCollapsed(  ) override final;
+    virtual bool SAL_CALL goLeft( sal_Int16 nCount, bool bExpand ) override final;
+    virtual bool SAL_CALL goRight( sal_Int16 nCount, bool bExpand ) override final;
+    virtual void SAL_CALL gotoStart( bool bExpand ) override final;
+    virtual void SAL_CALL gotoEnd( bool bExpand ) override final;
+    virtual void SAL_CALL gotoRange( const css::uno::Reference< css::text::XTextRange >& xRange, bool bExpand ) override final;
 
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override final;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override final;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override final;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override final;
 
     // css::lang::XTypeProvider

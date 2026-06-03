@@ -58,7 +58,7 @@ OUString SAL_CALL SfxMacroLoader::getImplementationName()
     return u"com.sun.star.comp.sfx2.SfxMacroLoader"_ustr;
 }
 
-sal_Bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
+bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

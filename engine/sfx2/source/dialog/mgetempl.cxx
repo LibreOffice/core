@@ -416,8 +416,8 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
 
     [Return value]
 
-    sal_Bool                sal_True:  The data had been changed
-                            sal_False: The data had not been changed
+    bool                true:  The data had been changed
+                            false: The data had not been changed
 
     [Cross-reference]
 

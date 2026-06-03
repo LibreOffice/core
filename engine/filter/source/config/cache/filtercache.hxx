@@ -323,7 +323,7 @@ class FilterCache : public cppu::BaseMutex
                         cache items seems to be available after calling of "loadAll()"
                         on this cache and first search does not had any valid results.
 
-            @return     sal_True if the required fill state exists for this cache; FALSE
+            @return     true if the required fill state exists for this cache; FALSE
                         otherwise.
 
             @throws css::uno::Exception
@@ -380,7 +380,7 @@ class FilterCache : public cppu::BaseMutex
                         specify the sub container of this cache, which should be used.
                         see also EItemType.
 
-            @return     [sal_Bool]
+            @return     [bool]
                         True, if the requested sub container contains some items;
                         False otherwise.
 
@@ -907,7 +907,7 @@ class FilterCache : public cppu::BaseMutex
             @param  sModule
                     the long name of the module (e.g. "com.sun.star.text.TextDocument").
 
-            @return sal_True if the requested module is installed; sal_False otherwise.
+            @return true if the requested module is installed; false otherwise.
          */
         bool impl_isModuleInstalled(const OUString& sModule);
 

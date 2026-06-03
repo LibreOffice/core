@@ -138,7 +138,7 @@ OUString SAL_CALL SdFilterDetect::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName )
+bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

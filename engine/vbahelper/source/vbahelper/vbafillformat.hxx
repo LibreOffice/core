@@ -48,8 +48,8 @@ public:
     /// @throws css::uno::RuntimeException
     void setForeColorAndInternalStyle( sal_Int32 nForeColor );
     // Attributes
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
     virtual double SAL_CALL getTransparency() override;
     virtual void SAL_CALL setTransparency( double _transparency ) override;
 

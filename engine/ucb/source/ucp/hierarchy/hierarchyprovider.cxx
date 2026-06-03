@@ -65,7 +65,7 @@ OUString SAL_CALL HierarchyContentProvider::getImplementationName()             
 {
     return u"com.sun.star.comp.ucb.HierarchyContentProvider"_ustr;
 }
-sal_Bool SAL_CALL HierarchyContentProvider::supportsService( const OUString& ServiceName )
+bool SAL_CALL HierarchyContentProvider::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

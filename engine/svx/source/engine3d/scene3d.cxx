@@ -604,7 +604,7 @@ void E3dScene::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double 
     // So currently the gluepoints are defined relative to the scene aOutRect.
     // Before turning the gluepoints are defined relative to the page. They
     // take no part in the rotation of the scene. To ensure this, there is the
-    // SetGlueReallyAbsolute(sal_True);
+    // SetGlueReallyAbsolute(true);
 
     // So that was the scene, now the objects used in the scene
     // 3D objects, if there is only one it can still have multiple surfaces but

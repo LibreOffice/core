@@ -54,7 +54,7 @@ OUString ScannerManager::getImplementationName()
 }
 
 
-sal_Bool ScannerManager::supportsService(OUString const & ServiceName)
+bool ScannerManager::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -66,7 +66,7 @@ css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
 }
 
 
-sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
+bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
 {
     return configureScannerAndScan( rContext, nullptr );
 }

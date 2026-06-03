@@ -750,7 +750,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
         case typelib_TypeClass_BOOLEAN:
         {
             System::Boolean aBool= *safe_cast<System::Boolean^>(cli_data);
-            *(sal_Bool*)uno_data= aBool == true ? sal_True : sal_False;
+            *(bool*)uno_data= aBool;
             break;
         }
         case typelib_TypeClass_BYTE:
@@ -868,7 +868,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     break;
                 case css::uno::TypeClass_BOOLEAN:
                     pAny->pData = &pAny->pReserved;
-                    *(sal_Bool *) &pAny->pReserved = *safe_cast<System::Boolean^>(aAny.Value);
+                    *(bool *) &pAny->pReserved = *safe_cast<System::Boolean^>(aAny.Value);
                     break;
                 case css::uno::TypeClass_BYTE:
                     pAny->pData = &pAny->pReserved;
@@ -1086,7 +1086,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     //Then we set a default value.
                     bool bDefault = (struct_td != NULL
                                      && struct_td->pParameterizedTypes != NULL
-                                     && struct_td->pParameterizedTypes[nPos] == sal_True
+                                     && struct_td->pParameterizedTypes[nPos]
                                      && val == nullptr)
                                     || cli_data == nullptr;
                     switch (member_type->eTypeClass)
@@ -1099,9 +1099,9 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         break;
                     case typelib_TypeClass_BOOLEAN:
                         if (bDefault)
-                            *(sal_Bool*) p = sal_False;
+                            *(bool*) p = false;
                         else
-                            *(sal_Bool*) p = *safe_cast<System::Boolean^>(val);
+                            *(bool*) p = *safe_cast<System::Boolean^>(val);
                         break;
                     case typelib_TypeClass_BYTE:
                         if (bDefault)
@@ -1236,7 +1236,10 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_BOOLEAN:
-                        seq = seq_allocate(nElements, sizeof (sal_Bool));
+                        seq = seq_allocate(nElements, sizeof (bool));
+                        // TODO the below code should be using System::Bool, not System::Char
+                        // so we check against what it should be using.
+                        static_assert(sizeof(bool) == sizeof(System::Bool));
                         sri::Marshal::Copy(safe_cast<cli::array<System::Char>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
@@ -1456,7 +1459,7 @@ void Bridge::map_to_cli(
         *cli_data= *(__wchar_t const*)uno_data;
         break;
     case typelib_TypeClass_BOOLEAN:
-        *cli_data = (*(bool const*)uno_data) == sal_True;
+        *cli_data = (*(bool const*)uno_data) == true;
         break;
     case typelib_TypeClass_BYTE:
         *cli_data = *(unsigned char const*) uno_data;

@@ -558,7 +558,7 @@ OUString SAL_CALL DataSeries::getImplementationName()
     return u"com.sun.star.comp.chart.DataSeries"_ustr;
 }
 
-sal_Bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )
+bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -144,7 +144,7 @@ protected:
 
 
     // Check if the whole text is selected.
-    // Still returns sal_True if there is no text present.
+    // Still returns true if there is no text present.
     bool ImpIsTextEditAllSelected() const;
     void ImpMakeTextCursorAreaVisible();
 
@@ -216,7 +216,7 @@ public:
     // when SdrEndTextEdit is called.
     // With the parameter pEditOutliner, the app has the possibility to specify his own outliner,
     // which is used for editing. After the SdrBeginTextEdit call, the outliner belongs to
-    // SdrObjEditView, and is also later destroyed by this via delete (if bDontDeleteOutliner=sal_False).
+    // SdrObjEditView, and is also later destroyed by this via delete (if bDontDeleteOutliner=false).
     // Afterwards the SdrObjEditView sets the modflag (EditEngine/Outliner) at this instance and also the
     // StatusEventHdl.
     // Similarly a specific OutlinerView can be specified.
@@ -232,11 +232,11 @@ public:
     virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);
     virtual bool IsTextEdit() const final override;
 
-    // This method returns sal_True, if the point rHit is inside the
+    // This method returns true, if the point rHit is inside the
     // objectspace or the OutlinerView.
     bool IsTextEditHit(const Point& rHit) const;
 
-    // This method returns sal_True, if the point rHit is inside the
+    // This method returns true, if the point rHit is inside the
     // handle-thick frame, which surrounds the OutlinerView at TextFrames.
     bool IsTextEditFrameHit(const Point& rHit) const;
 

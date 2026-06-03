@@ -213,7 +213,7 @@ Reference< css::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_
 }
 
 
-sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getBool();
 }
@@ -333,7 +333,7 @@ css::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex )
 }
 
 
-sal_Bool SAL_CALL OResultSet::isAfterLast(  )
+bool SAL_CALL OResultSet::isAfterLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -342,7 +342,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  )
     return m_nRowPos == sal_Int32(m_pFileSet->size());
 }
 
-sal_Bool SAL_CALL OResultSet::isFirst(  )
+bool SAL_CALL OResultSet::isFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -351,7 +351,7 @@ sal_Bool SAL_CALL OResultSet::isFirst(  )
     return m_nRowPos == 0;
 }
 
-sal_Bool SAL_CALL OResultSet::isLast(  )
+bool SAL_CALL OResultSet::isLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -387,7 +387,7 @@ void SAL_CALL OResultSet::close(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::first(  )
+bool SAL_CALL OResultSet::first(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -395,7 +395,7 @@ sal_Bool SAL_CALL OResultSet::first(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::last(  )
+bool SAL_CALL OResultSet::last(  )
 {
     // here I know definitely that I stand on the last record
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -403,21 +403,21 @@ sal_Bool SAL_CALL OResultSet::last(  )
     return m_pTable.is() && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,true);
 }
 
-sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row )
+bool SAL_CALL OResultSet::absolute( sal_Int32 row )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_pTable.is() && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE1,row,true);
 }
 
-sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row )
+bool SAL_CALL OResultSet::relative( sal_Int32 row )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_pTable.is() && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE1,row,true);
 }
 
-sal_Bool SAL_CALL OResultSet::previous(  )
+bool SAL_CALL OResultSet::previous(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -434,7 +434,7 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::rowDeleted(  )
+bool SAL_CALL OResultSet::rowDeleted(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -443,7 +443,7 @@ sal_Bool SAL_CALL OResultSet::rowDeleted(  )
     return m_bRowDeleted;
 }
 
-sal_Bool SAL_CALL OResultSet::rowInserted(  )
+bool SAL_CALL OResultSet::rowInserted(  )
 {   ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -451,7 +451,7 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  )
     return m_bRowInserted;
 }
 
-sal_Bool SAL_CALL OResultSet::rowUpdated(  )
+bool SAL_CALL OResultSet::rowUpdated(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -461,7 +461,7 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::isBeforeFirst(  )
+bool SAL_CALL OResultSet::isBeforeFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -470,7 +470,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  )
     return m_nRowPos == -1;
 }
 
-sal_Bool SAL_CALL OResultSet::next(  )
+bool SAL_CALL OResultSet::next(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -479,7 +479,7 @@ sal_Bool SAL_CALL OResultSet::next(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::wasNull(  )
+bool SAL_CALL OResultSet::wasNull(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -627,9 +627,9 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex )
 }
 
 
-void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x )
+void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, bool x )
 {
-    updateValue(columnIndex, static_cast<bool>(x));
+    updateValue(columnIndex, x);
 }
 
 void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x )

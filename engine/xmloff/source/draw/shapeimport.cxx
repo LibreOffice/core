@@ -107,7 +107,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 {
     mpImpl->mpGroupContext = nullptr;
 
-    // #88546# init to sal_False
+    // #88546# init to false
     mpImpl->mbHandleProgressBar = false;
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, rImporter );

@@ -47,7 +47,7 @@ namespace dbaui
         std::unique_ptr<weld::CheckButton>& xControl; // the dialog's control which displays this setting
         OUString    sControlId;         // the widget name of the control in the .ui
         sal_uInt16  nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
-        bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is sal_False, and vice versa
+        bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is false, and vice versa
         bool        bOptionalBool;      // type is OptionalBool
     };
 

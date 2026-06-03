@@ -263,7 +263,7 @@ OUString SAL_CALL DropTarget::getImplementationName(  )
     return "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1";
 }
 // XServiceInfo
-sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
+bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -284,12 +284,12 @@ void SAL_CALL DropTarget::removeDropTargetListener( const Reference< XDropTarget
     rBHelper.removeListener( cppu::UnoType<decltype(dtl)>::get(), dtl );
 }
 
-sal_Bool SAL_CALL DropTarget::isActive(  )
+bool SAL_CALL DropTarget::isActive(  )
 {
     return m_bActive; //m_bDropTargetRegistered;
 }
 
-void SAL_CALL DropTarget::setActive( sal_Bool _b )
+void SAL_CALL DropTarget::setActive( bool _b )
 {
     MutexGuard g(m_aMutex);
     m_bActive= _b;
@@ -573,9 +573,9 @@ void DropTarget::fire_dropActionChanged( const DropTargetDragEvent& dtde )
 // functions.
 // Only one listener which visible area is affected is allowed to call on
 // XDropTargetDropContext
-// Returning sal_False would cause the XDropTargetDropContext or ..DragContext implementation
+// Returning false would cause the XDropTargetDropContext or ..DragContext implementation
 // to throw an InvalidDNDOperationException, meaning that a Drag is not currently performed.
-// return sal_False results in throwing an InvalidDNDOperationException in the caller.
+// return false results in throwing an InvalidDNDOperationException in the caller.
 
 void DropTarget::_acceptDrop(sal_Int8 dropOperation, const Reference<XDropTargetDropContext>& context)
 {

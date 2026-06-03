@@ -233,7 +233,7 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners()
 }
 
 
-sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
+bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
                                                   const Reference< css::lang::XEventListener >& listener )
 {
     bool bRet;

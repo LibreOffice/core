@@ -81,7 +81,7 @@ public:
 
     // XSelectionSupplier
 
-    virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) override;
+    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
     virtual css::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;

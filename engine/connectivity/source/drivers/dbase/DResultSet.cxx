@@ -56,7 +56,7 @@ Sequence< OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  )
     return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
-sal_Bool SAL_CALL ODbaseResultSet::supportsService( const OUString& _rServiceName )
+bool SAL_CALL ODbaseResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -83,7 +83,7 @@ Any SAL_CALL ODbaseResultSet::getBookmark(  )
     return Any((*m_aRow)[0]->getValue().getInt32());
 }
 
-sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark )
+bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -94,7 +94,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark )
     return m_pTable.is() && Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true);
 }
 
-sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
+bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -128,7 +128,7 @@ sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any&
     return  nResult;
 }
 
-sal_Bool SAL_CALL ODbaseResultSet::hasOrderedBookmarks(  )
+bool SAL_CALL ODbaseResultSet::hasOrderedBookmarks(  )
 {
     return true;
 }

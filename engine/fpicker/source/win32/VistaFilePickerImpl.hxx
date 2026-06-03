@@ -59,9 +59,9 @@ const ::sal_Int32 FEATURE_IMAGEANCHOR    = 4096;
 const ::sal_Int32 FEATURE_GPGSIGN        = 8192;
 
 inline constexpr OUString PROP_PICKER_LISTENER(u"picker_listener"_ustr   ); // [XFilePickerListenert]
-inline constexpr OUString PROP_DIALOG_SHOW_RESULT(u"dialog_show_result"_ustr ); // [sal_Bool] true=OK, false=CANCEL
+inline constexpr OUString PROP_DIALOG_SHOW_RESULT(u"dialog_show_result"_ustr ); // [bool] true=OK, false=CANCEL
 inline constexpr OUString PROP_SELECTED_FILES(u"selected_files"_ustr     ); // [seq< OUString >] contains all user selected files (can be empty!)
-inline constexpr OUString PROP_MULTISELECTION_MODE(u"multiselection_mode"_ustr); // [sal_Bool] true=ON, false=OFF
+inline constexpr OUString PROP_MULTISELECTION_MODE(u"multiselection_mode"_ustr); // [bool] true=ON, false=OFF
 inline constexpr OUString PROP_TITLE(u"title"_ustr              ); // [OUString]
 inline constexpr OUString PROP_FILENAME(u"filename"_ustr          ); // [OUString]
 inline constexpr OUString PROP_DIRECTORY(u"directory"_ustr          ); // [OUString]
@@ -75,7 +75,7 @@ inline constexpr OUString PROP_CONTROL_ID(u"control_id"_ustr         ); // [sal_
 inline constexpr OUString PROP_CONTROL_ACTION(u"control_action"_ustr     ); // [sal_Int16]
 inline constexpr OUString PROP_CONTROL_VALUE(u"control_value"_ustr      ); // [Any]
 inline constexpr OUString PROP_CONTROL_LABEL(u"control_label"_ustr      ); // [OUString]
-inline constexpr OUString PROP_CONTROL_ENABLE(u"control_enable"_ustr     ); // [sal_Bool] true=ON, false=OFF
+inline constexpr OUString PROP_CONTROL_ENABLE(u"control_enable"_ustr     ); // [bool] true=ON, false=OFF
 inline constexpr OUString PROP_PARENT_WINDOW(u"ParentWindow"_ustr); //[css::awt::XWindow] preferred parent window
 inline constexpr OUString STRING_SEPARATOR(u"------------------------------------------"_ustr );
 

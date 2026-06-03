@@ -39,7 +39,7 @@
 
 // function pointer type.
 
-typedef sal_Bool (* FuncPtr )( sal_Bool );
+typedef bool (* FuncPtr )( bool );
 
 #endif // INCLUDED_SAL_QA_OSL_MODULE_OSL_MODULE_CONST_H
 

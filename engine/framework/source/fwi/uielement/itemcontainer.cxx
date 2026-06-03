@@ -133,7 +133,7 @@ rtl::Reference< ItemContainer > ItemContainer::deepCopyContainer( const Referenc
 }
 
 // XElementAccess
-sal_Bool SAL_CALL ItemContainer::hasElements()
+bool SAL_CALL ItemContainer::hasElements()
 {
     ShareGuard aLock( m_aShareMutex );
     return ( !m_aItemVector.empty() );

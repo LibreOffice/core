@@ -54,7 +54,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
@@ -74,7 +74,7 @@ public:
     virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     registerContentProvider( const css::uno::Reference< css::ucb::XContentProvider >&  Provider,
                              const OUString& Scheme,
-                             sal_Bool ReplaceExisting ) override;
+                             bool ReplaceExisting ) override;
     virtual void SAL_CALL
     deregisterContentProvider( const css::uno::Reference< css::ucb::XContentProvider >&  Provider,
                                const OUString& Scheme ) override;

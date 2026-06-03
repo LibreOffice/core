@@ -38,7 +38,7 @@ public:
     css::uno::Reference<css::sdbc::XConnection>
         SAL_CALL connect(const OUString& url,
                          const css::uno::Sequence<css::beans::PropertyValue>& info) override;
-    sal_Bool SAL_CALL acceptsURL(const OUString& url) override;
+    bool SAL_CALL acceptsURL(const OUString& url) override;
     css::uno::Sequence<css::sdbc::DriverPropertyInfo> SAL_CALL getPropertyInfo(
         const OUString& url, const css::uno::Sequence<css::beans::PropertyValue>& info) override;
 };

@@ -71,7 +71,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -144,7 +144,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -186,7 +186,7 @@ public:
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
 
     // XTextField
-    virtual OUString SAL_CALL getPresentation(sal_Bool bShowCommand) override;
+    virtual OUString SAL_CALL getPresentation(bool bShowCommand) override;
 
     // XDependentTextField
     virtual void SAL_CALL attachTextFieldMaster(
@@ -217,13 +217,13 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Any SAL_CALL nextElement() override;
 
 };

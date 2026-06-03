@@ -83,12 +83,12 @@ public:
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // css::container::XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
 // css::container::XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
@@ -107,7 +107,7 @@ public:
 // css::container::XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
 // css::container::XContainer
     virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
@@ -121,7 +121,7 @@ private:
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
         @param      _rName      the object name to check
-        @return                 sal_True if there already exists such an object
+        @return                 true if there already exists such an object
     */
     inline  bool    checkExistence(const OUString& _rName);
 

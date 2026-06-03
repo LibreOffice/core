@@ -54,7 +54,7 @@ namespace DOM
         /**
         Test if the DOM implementation implements a specific feature.
         */
-        virtual sal_Bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver) override;
+        virtual bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver) override;
         };
 }
 

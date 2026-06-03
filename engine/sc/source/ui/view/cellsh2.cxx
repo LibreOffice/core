@@ -1286,7 +1286,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 break;
             case SID_SBA_BRW_INSERT:
                 {
-                    //  SBA wants a sal_Bool-item, enabled
+                    //  SBA wants a bool-item, enabled
 
                     rSet.Put(SfxBoolItem(nWhich, true));
                 }

@@ -74,7 +74,7 @@ public:
 
     virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) override;
 
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, sal_Bool GetsOwnership ) override;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
     virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) override;
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

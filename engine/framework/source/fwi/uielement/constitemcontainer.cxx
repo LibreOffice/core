@@ -158,7 +158,7 @@ rtl::Reference< ConstItemContainer > ConstItemContainer::deepCopyContainer( cons
 }
 
 // XElementAccess
-sal_Bool SAL_CALL ConstItemContainer::hasElements()
+bool SAL_CALL ConstItemContainer::hasElements()
 {
     return ( !m_aItemVector.empty() );
 }

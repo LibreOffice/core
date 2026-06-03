@@ -176,7 +176,7 @@ OUString ExtensionManager::getImplementationName()
     return u"com.sun.star.comp.deployment.ExtensionManager"_ustr;
 }
 
-sal_Bool ExtensionManager::supportsService( const OUString& ServiceName )
+bool ExtensionManager::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -375,7 +375,7 @@ bool ExtensionManager::isUserDisabled(
     Reference<css::deployment::XPackage> const & userExtension = seqExtSameId[0];
     if (userExtension.is())
     {
-        beans::Optional<beans::Ambiguous<sal_Bool> > reg =
+        beans::Optional<beans::Ambiguous<bool> > reg =
             userExtension->isRegistered(Reference<task::XAbortChannel>(),
                                         Reference<ucb::XCommandEnvironment>());
         //If the value is ambiguous, then we assume that the extension
@@ -439,7 +439,7 @@ void ExtensionManager::activateExtension(
         if (aExt.is())
         {
             //get the registration value of the current iteration
-            beans::Optional<beans::Ambiguous<sal_Bool> > optReg =
+            beans::Optional<beans::Ambiguous<bool> > optReg =
                 aExt->isRegistered(xAbortChannel, xCmdEnv);
             //If nothing can be registered then break
             if (!optReg.IsPresent)
@@ -1152,7 +1152,7 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
 // Only to be called from unopkg or soffice bootstrap (with force=true in the
 // latter case):
 void ExtensionManager::reinstallDeployedExtensions(
-    sal_Bool force, OUString const & repository,
+    bool force, OUString const & repository,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
@@ -1169,7 +1169,7 @@ void ExtensionManager::reinstallDeployedExtensions(
             {
                 try
                 {
-                    beans::Optional< beans::Ambiguous< sal_Bool > > registered(
+                    beans::Optional< beans::Ambiguous< bool > > registered(
                         package->isRegistered(xAbortChannel, xCmdEnv));
                     if (registered.IsPresent &&
                         !(registered.Value.IsAmbiguous ||
@@ -1228,7 +1228,7 @@ void ExtensionManager::reinstallDeployedExtensions(
     }
 }
 
-sal_Bool ExtensionManager::synchronize(
+bool ExtensionManager::synchronize(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
@@ -1244,7 +1244,7 @@ sal_Bool ExtensionManager::synchronize(
         OUString sSynchronizingBundled(StrSyncRepository());
         sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
-        bModified |= static_cast<bool>(getBundledRepository()->synchronize(xAbortChannel, xCmdEnv));
+        bModified |= getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressBundled.update(u"\n\n"_ustr);
 
         //Always determine the active extension.
@@ -1372,7 +1372,7 @@ ExtensionManager::getExtensionsWithUnacceptedLicenses(
     return xPackageManager->getExtensionsWithUnacceptedLicenses(xCmdEnv);
 }
 
-sal_Bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
+bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
 {
     return getPackageManager(repository)->isReadOnly();
 }

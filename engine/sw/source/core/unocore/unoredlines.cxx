@@ -76,7 +76,7 @@ uno::Type SwXRedlines::getElementType(  )
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SwXRedlines::hasElements(  )
+bool SwXRedlines::hasElements(  )
 {
     SolarMutexGuard aGuard;
     const SwRedlineTable& rRedTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
@@ -88,7 +88,7 @@ OUString SwXRedlines::getImplementationName()
     return u"SwXRedlines"_ustr;
 }
 
-sal_Bool SwXRedlines::supportsService(const OUString& ServiceName)
+bool SwXRedlines::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -118,7 +118,7 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 {
 }
 
-sal_Bool SwXRedlineEnumeration::hasMoreElements()
+bool SwXRedlineEnumeration::hasMoreElements()
 {
     if(!m_pDoc)
         throw uno::RuntimeException();
@@ -142,7 +142,7 @@ OUString SwXRedlineEnumeration::getImplementationName()
     return u"SwXRedlineEnumeration"_ustr;
 }
 
-sal_Bool SwXRedlineEnumeration::supportsService(const OUString& ServiceName)
+bool SwXRedlineEnumeration::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

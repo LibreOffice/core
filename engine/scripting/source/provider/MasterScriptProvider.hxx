@@ -62,7 +62,7 @@ public:
     // XBrowseNode implementation
     virtual OUString SAL_CALL getName() override;
     virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes() override;
-    virtual sal_Bool SAL_CALL hasChildNodes() override;
+    virtual bool SAL_CALL hasChildNodes() override;
     virtual sal_Int16 SAL_CALL getType() override;
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
@@ -73,12 +73,12 @@ public:
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
 
     // XScriptProvider implementation

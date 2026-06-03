@@ -187,7 +187,7 @@ uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  )
     return cppu::UnoType<css::awt::XControlModel>::get();
 }
 
-sal_Bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  )
+bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  )
 {
     std::unique_lock aGuard( m_aMutex );
     return !m_aTabPageVector.empty();
@@ -254,7 +254,7 @@ void SAL_CALL UnoControlTabPageContainer::setActiveTabPageID( ::sal_Int16 _activ
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPageCount();
 }
-sal_Bool SAL_CALL UnoControlTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex )
+bool SAL_CALL UnoControlTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex )
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );

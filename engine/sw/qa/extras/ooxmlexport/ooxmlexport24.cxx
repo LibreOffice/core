@@ -539,7 +539,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXTextfield, "activex_textbox.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.TextField"_ustr)));
+        true, xServiceInfo->supportsService(u"com.sun.star.form.component.TextField"_ustr));
 
     // Check textfield is multi-line
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPropertySet, u"MultiLine"_ustr));
@@ -551,7 +551,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXTextfield, "activex_textbox.docx")
     uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape2->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo2(xPropertySet2, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo2->supportsService(u"com.sun.star.form.component.TextField"_ustr)));
+        true, xServiceInfo2->supportsService(u"com.sun.star.form.component.TextField"_ustr));
 
     // Check textfield is single-line
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropertySet2, u"MultiLine"_ustr));
@@ -572,7 +572,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXCheckbox, "activex_checkbox.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+        true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
 
     // Check custom label
     CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr,
@@ -608,7 +608,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+        true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Floating Check Box"_ustr,
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
@@ -633,7 +633,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
     xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+        true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Inline Check Box"_ustr,
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAtRunEnd)
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+        true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Inline Checkbox"_ustr,
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
@@ -746,7 +746,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAtRunEnd)
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
     xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+        true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Floating Checkbox"_ustr,
                          getProperty<OUString>(xPropertySet, u"Label"_ustr));
 

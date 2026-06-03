@@ -126,11 +126,6 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType()
 {
     return ::cppu::UnoType< bool >::get();
 }
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const sal_Bool * )
-{
-    return ::cppu::UnoType< bool >::get();
-}
-
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType(
     SAL_UNUSED_PARAMETER bool const * )
 {

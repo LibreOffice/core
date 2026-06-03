@@ -1230,7 +1230,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 }
 
 
-sal_Bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
+bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
 {
     if(m_bOnDeactivate)
         return true;
@@ -1294,7 +1294,7 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
 void SAL_CALL
 DocumentHolder::queryClosing(
     const lang::EventObject& aSource,
-    sal_Bool /*bGetsOwnership*/
+    bool /*bGetsOwnership*/
 )
 {
     if (!m_bLink

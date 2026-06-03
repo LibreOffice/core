@@ -135,7 +135,7 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
 
 //  XControl
 
-sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ )
+bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ )
 {
     // We have no model.
     return false;
@@ -177,7 +177,7 @@ void SAL_CALL FrameControl::dispose()
 
 //  XView
 
-sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ )
+bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ )
 {
     // it is not possible to print this control
     return false;
@@ -227,7 +227,7 @@ void SAL_CALL FrameControl::unadvise(   const   Type&                       aTyp
 
 //  OPropertySetHelper
 
-sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedValue ,
+bool FrameControl::convertFastPropertyValue(        Any&        rConvertedValue ,
                                                         Any&        rOldValue       ,
                                                         sal_Int32   nHandle         ,
                                                 const   Any&        rValue          )

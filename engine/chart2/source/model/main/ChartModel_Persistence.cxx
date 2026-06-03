@@ -203,7 +203,7 @@ void SAL_CALL ChartModel::storeSelf( const Sequence< beans::PropertyValue >& rMe
 }
 
 // frame::XStorable (base of XStorable2)
-sal_Bool SAL_CALL ChartModel::hasLocation()
+bool SAL_CALL ChartModel::hasLocation()
 {
     std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
     return !m_aResource.isEmpty();
@@ -214,7 +214,7 @@ OUString SAL_CALL ChartModel::getLocation()
     return impl_g_getLocation();
 }
 
-sal_Bool SAL_CALL ChartModel::isReadonly()
+bool SAL_CALL ChartModel::isReadonly()
 {
     //@todo guard
     return m_bReadOnly;
@@ -624,13 +624,13 @@ void ChartModel::impl_notifyModifiedListeners()
     }
 }
 
-sal_Bool SAL_CALL ChartModel::isModified()
+bool SAL_CALL ChartModel::isModified()
 {
     //@todo guard
     return m_bModified;
 }
 
-void SAL_CALL ChartModel::setModified( sal_Bool bModified )
+void SAL_CALL ChartModel::setModified( bool bModified )
 {
     // tdf#141914: allow to set *unmodified* when parent does not allow to set modified
     if (bModified)

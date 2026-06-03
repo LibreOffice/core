@@ -148,7 +148,7 @@ OUString SAL_CALL SecurityEnvironment_NssImpl::getImplementationName() {
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SecurityEnvironment_NssImpl::supportsService( const OUString& serviceName) {
+bool SAL_CALL SecurityEnvironment_NssImpl::supportsService( const OUString& serviceName) {
     return cppu::supportsService(this, serviceName);
 }
 

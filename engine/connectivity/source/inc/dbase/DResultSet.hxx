@@ -60,10 +60,10 @@ namespace connectivity::dbase
 
         // XRowLocate
         virtual css::uno::Any SAL_CALL getBookmark(  ) override;
-        virtual sal_Bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
-        virtual sal_Bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
+        virtual bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
+        virtual bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
         virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
-        virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) override;
+        virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
         virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
         // XDeleteRows
         virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) override;

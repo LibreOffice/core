@@ -1055,7 +1055,7 @@ public:
         @see setPos()
     */
 
-    RC isEndOfFile( sal_Bool *pIsEOF )
+    RC isEndOfFile( bool *pIsEOF )
     {
         return static_cast< RC >( osl_isEndOfFile( _pData, pIsEOF ) );
     }

@@ -69,7 +69,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
 
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // css.task.XJob
@@ -113,7 +113,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
                     If it's set to false we return false only in case executable couldn't be found
                     or couldn't be started.
 
-            @return sal_True if command was executed successfully; sal_False otherwise.
+            @return true if command was executed successfully; false otherwise.
          */
         static bool impl_execute(const OUString&                       sCommand      ,
                                 const css::uno::Sequence< OUString >& lArguments    ,

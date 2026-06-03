@@ -50,7 +50,7 @@ public:
 
     //  XServiceInfo
 
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
         const OUString& sServiceName
     ) override;
 
@@ -81,11 +81,11 @@ public:
         const cpo::uno::Reference< cpo::uno::XInterface >& xContext
     ) override;
 
-    virtual sal_Bool SAL_CALL setModel(
+    virtual bool SAL_CALL setModel(
         const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
     ) override = 0;
 
-    virtual void SAL_CALL setDesignMode( sal_Bool bOn ) override;
+    virtual void SAL_CALL setDesignMode( bool bOn ) override;
 
     virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL getContext() override;
 
@@ -95,9 +95,9 @@ public:
 
     virtual cpo::uno::Reference< cpo::awt::XView > SAL_CALL getView() override;
 
-    virtual sal_Bool SAL_CALL isDesignMode() override;
+    virtual bool SAL_CALL isDesignMode() override;
 
-    virtual sal_Bool SAL_CALL isTransparent() override;
+    virtual bool SAL_CALL isTransparent() override;
 
     //  XWindow
 
@@ -107,9 +107,9 @@ public:
                                         sal_Int32   nHeight ,
                                         sal_Int16   nFlags  ) override;
 
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
+    virtual void SAL_CALL setVisible( bool bVisible ) override;
 
-    virtual void SAL_CALL setEnable( sal_Bool bEnable ) override;
+    virtual void SAL_CALL setEnable( bool bEnable ) override;
 
     virtual void SAL_CALL setFocus() override;
 
@@ -167,7 +167,7 @@ public:
     virtual void SAL_CALL draw( sal_Int32   nX  ,
                                 sal_Int32   nY  ) override;
 
-    virtual sal_Bool SAL_CALL setGraphics(
+    virtual bool SAL_CALL setGraphics(
         const cpo::uno::Reference< cpo::awt::XGraphics >& xDevice
     ) override;
 

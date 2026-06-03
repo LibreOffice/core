@@ -64,7 +64,7 @@ public:
 
 // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 };
@@ -99,7 +99,7 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 // XCloseListener
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, sal_Bool GetsOwnership ) override;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
     virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) override;
 
 // XTerminateListener

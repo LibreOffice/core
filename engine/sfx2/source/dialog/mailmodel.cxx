@@ -806,8 +806,8 @@ bool CreateFromAddress_Impl( OUString& rFrom )
 
     [Return value]
 
-    sal_True:       Address could be created.
-    sal_False:      Address could not be created.
+    true:       Address could be created.
+    false:      Address could not be created.
 */
 
 {

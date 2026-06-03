@@ -228,7 +228,7 @@ T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
 
 
 // virtual
-sal_Bool SAL_CALL PropertyValueSet::wasNull()
+bool SAL_CALL PropertyValueSet::wasNull()
 {
     // This method can not be implemented correctly!!! Imagine different
     // threads doing a getXYZ - wasNull calling sequence on the same
@@ -245,7 +245,7 @@ OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
 
 
 // virtual
-sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
 {
     return getValue<bool, &ucbhelper_impl::PropertyValue::bBoolean>(PropsSet::Boolean, columnIndex);
 }

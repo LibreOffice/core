@@ -404,7 +404,7 @@ OUString XMLVersionListPersistence::getImplementationName()
     return u"XMLVersionListPersistence"_ustr;
 }
 
-sal_Bool XMLVersionListPersistence::supportsService(
+bool XMLVersionListPersistence::supportsService(
     OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);

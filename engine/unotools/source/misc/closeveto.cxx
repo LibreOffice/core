@@ -54,7 +54,7 @@ namespace utl
         }
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing( const EventObject& Source, sal_Bool GetsOwnership ) override;
+        virtual void SAL_CALL queryClosing( const EventObject& Source, bool GetsOwnership ) override;
         virtual void SAL_CALL notifyClosing( const EventObject& Source ) override;
 
         // XEventListener
@@ -73,7 +73,7 @@ namespace utl
 
     }
 
-    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject&, sal_Bool i_deliverOwnership )
+    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject&, bool i_deliverOwnership )
     {
         if ( !m_bHasOwnership )
             m_bHasOwnership = i_deliverOwnership;

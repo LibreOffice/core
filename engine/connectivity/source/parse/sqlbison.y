@@ -1580,14 +1580,14 @@ op_like:
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append(newNode("*", SQLNodeType::Punctuation));
-			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_False);
+			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, false);
 		}
 	|	op_like '?'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append(newNode("?", SQLNodeType::Punctuation));
-			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_False);
+			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, false);
 		}
 	;
 */

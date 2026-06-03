@@ -2442,7 +2442,7 @@ OUString ScDrawLayer::GetVisibleName( const SdrObject* pObj )
 
 static bool IsNamedObject( const SdrObject* pObj, std::u16string_view rName )
 {
-    //  sal_True if rName is the object's Name or PersistName
+    //  true if rName is the object's Name or PersistName
     //  (used to find a named object)
 
     return ( pObj->GetName() == rName ||

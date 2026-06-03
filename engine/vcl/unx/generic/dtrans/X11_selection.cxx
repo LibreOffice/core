@@ -2947,7 +2947,7 @@ void SelectionManager::reject( ::Window aDropWindow )
  *  XDragSource
  */
 
-sal_Bool SelectionManager::isDragImageSupported()
+bool SelectionManager::isDragImageSupported()
 {
     return false;
 }
@@ -4065,7 +4065,7 @@ void SelectionManagerHolder::initialize()
  *  XDragSource
  */
 
-sal_Bool SelectionManagerHolder::isDragImageSupported()
+bool SelectionManagerHolder::isDragImageSupported()
 {
     return m_xRealDragSource.is() && m_xRealDragSource->isDragImageSupported();
 }
@@ -4095,7 +4095,7 @@ OUString SelectionManagerHolder::getImplementationName()
     return u"com.sun.star.datatransfer.dnd.XdndSupport"_ustr;
 }
 
-sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName )
+bool SelectionManagerHolder::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

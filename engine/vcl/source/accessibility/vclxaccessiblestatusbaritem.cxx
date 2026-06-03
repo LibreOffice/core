@@ -196,7 +196,7 @@ OUString VCLXAccessibleStatusBarItem::getImplementationName()
 }
 
 
-sal_Bool VCLXAccessibleStatusBarItem::supportsService( const OUString& rServiceName )
+bool VCLXAccessibleStatusBarItem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -406,7 +406,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getCaretPosition()
 }
 
 
-sal_Bool VCLXAccessibleStatusBarItem::setCaretPosition( sal_Int32 nIndex )
+bool VCLXAccessibleStatusBarItem::setCaretPosition( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -481,7 +481,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getIndexAtPoint( const awt::Point& aPoint
 }
 
 
-sal_Bool VCLXAccessibleStatusBarItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleStatusBarItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -492,7 +492,7 @@ sal_Bool VCLXAccessibleStatusBarItem::setSelection( sal_Int32 nStartIndex, sal_I
 }
 
 
-sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -522,7 +522,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
 }
 
 
-sal_Bool VCLXAccessibleStatusBarItem::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool VCLXAccessibleStatusBarItem::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }

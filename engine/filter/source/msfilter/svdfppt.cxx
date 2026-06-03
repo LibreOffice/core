@@ -1929,7 +1929,7 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                     {
                                         //TODO/LATER: keep on hacking?!
                                         // we don't want to be modified
-                                        //xInplaceObj->EnableSetModified( sal_False );
+                                        //xInplaceObj->EnableSetModified( false );
                                         if ( rVisArea.IsEmpty() )
                                         {
                                             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rOe.nAspect ) );
@@ -1946,7 +1946,7 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                             awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
                                             xObj->setVisualAreaSize( rOe.nAspect, aSize );
                                         }
-                                        //xInplaceObj->EnableSetModified( sal_True );
+                                        //xInplaceObj->EnableSetModified( true );
                                     }
 
                                     svt::EmbeddedObjectRef aObj( xObj, rOe.nAspect );

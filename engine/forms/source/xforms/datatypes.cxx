@@ -138,7 +138,7 @@ namespace xforms
     }
 
 
-    sal_Bool SAL_CALL OXSDDataType::getIsBasic()
+    bool SAL_CALL OXSDDataType::getIsBasic()
     {
         return m_bIsBasic;
     }
@@ -150,7 +150,7 @@ namespace xforms
     }
 
 
-    sal_Bool OXSDDataType::validate( const OUString& sValue )
+    bool OXSDDataType::validate( const OUString& sValue )
     {
         return bool(!_validate( sValue ));
     }

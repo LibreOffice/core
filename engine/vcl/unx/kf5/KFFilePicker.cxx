@@ -93,7 +93,7 @@ uno::Any SAL_CALL KFFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControl
     return QtFilePicker::getValue(controlId, nControlAction);
 }
 
-void SAL_CALL KFFilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
+void SAL_CALL KFFilePicker::enableControl(sal_Int16 controlId, bool enable)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the functionality
@@ -136,7 +136,7 @@ OUString SAL_CALL KFFilePicker::getImplementationName()
     return u"com.sun.star.ui.dialogs.KFFilePicker"_ustr;
 }
 
-sal_Bool SAL_CALL KFFilePicker::supportsService(const OUString& ServiceName)
+bool SAL_CALL KFFilePicker::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

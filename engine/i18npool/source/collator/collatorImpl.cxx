@@ -210,7 +210,7 @@ OUString SAL_CALL CollatorImpl::getImplementationName()
     return u"com.sun.star.i18n.Collator"_ustr;
 }
 
-sal_Bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)
+bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

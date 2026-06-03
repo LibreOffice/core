@@ -32,7 +32,7 @@ class FileDialogItemEnumeration : public ::cppu::WeakImplHelper< container::XEnu
     std::vector< OUString >::iterator mIt;
 public:
     explicit FileDialogItemEnumeration( std::vector< OUString >&& rVector ) : m_sItems( std::move(rVector) ), mIt( m_sItems.begin() ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         return ( mIt != m_sItems.end() );
     }

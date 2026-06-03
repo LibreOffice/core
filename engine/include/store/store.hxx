@@ -238,7 +238,7 @@ public:
     }
 
     /** Check for a valid File Handle.
-        @return sal_True if valid, sal_False otherwise.
+        @return true if valid, false otherwise.
      */
     bool isValid() const
     {

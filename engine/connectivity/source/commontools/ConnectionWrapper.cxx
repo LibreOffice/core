@@ -135,7 +135,7 @@ css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceN
 }
 
 
-sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

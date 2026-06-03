@@ -527,7 +527,7 @@ public:
     TestSimpleFileTransferable(const OUString& fileURL);
     css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& flavor) override;
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& flavor) override;
+    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& flavor) override;
 
 private:
     OUString m_fileURL;
@@ -573,8 +573,7 @@ TestSimpleFileTransferable::getTransferDataFlavors()
     return { embed_source, objectdescriptor };
 }
 
-sal_Bool
-TestSimpleFileTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& flavor)
+bool TestSimpleFileTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& flavor)
 {
     if (flavor.MimeType == SotExchange::GetFormatMimeType(SotClipboardFormatId::EMBED_SOURCE))
         return true;

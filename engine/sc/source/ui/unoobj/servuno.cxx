@@ -100,7 +100,7 @@ public:
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         SolarMutexGuard aGuard;
         maCachedObject = uno::Any(); // clear cached object
@@ -165,7 +165,7 @@ public:
     }
     // XElemenAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override { return uno::Type(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return true; }
+    virtual bool SAL_CALL hasElements(  ) override { return true; }
 
 };
 

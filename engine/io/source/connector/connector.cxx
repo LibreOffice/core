@@ -57,7 +57,7 @@ namespace {
     public: // XServiceInfo
                 virtual OUString              SAL_CALL getImplementationName() override;
                 virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
+                virtual bool              SAL_CALL supportsService(const OUString& ServiceName) override;
     };
 
 }
@@ -155,7 +155,7 @@ OUString OConnector::getImplementationName()
     return u"com.sun.star.comp.io.Connector"_ustr;
 }
 
-sal_Bool OConnector::supportsService(const OUString& ServiceName)
+bool OConnector::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

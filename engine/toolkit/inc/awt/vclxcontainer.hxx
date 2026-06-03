@@ -39,8 +39,8 @@ public:
     css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > SAL_CALL getWindows(  ) override;
 
     // css::awt::XVclContainerPeer
-    void SAL_CALL enableDialogControl( sal_Bool bEnable ) override;
-    void SAL_CALL setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& WindowOrder, const css::uno::Sequence< css::uno::Any >& Tabs, sal_Bool GroupControl ) override;
+    void SAL_CALL enableDialogControl( bool bEnable ) override;
+    void SAL_CALL setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& WindowOrder, const css::uno::Sequence< css::uno::Any >& Tabs, bool GroupControl ) override;
     void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Windows ) override;
 
     // css::awt::XVclWindowPeer

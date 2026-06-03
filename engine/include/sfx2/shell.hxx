@@ -331,7 +331,7 @@ public:
         [Cross-reference]
 
         <SfxBindings::Invalidate(sal_uInt16)>
-        <SfxBindings::InvalidateAll(sal_Bool)>
+        <SfxBindings::InvalidateAll(bool)>
         */
     virtual void                Invalidate(sal_uInt16 nId = 0);
 
@@ -479,7 +479,7 @@ public:
     /**
 
         This method controls the activation of SfxShell instance. First, by calling
-        the virtual method <SfxShell::Activate(sal_Bool)> which gives the subclass the
+        the virtual method <SfxShell::Activate(bool)> which gives the subclass the
         opportunity to respond to the event.
 
         When bMDI == TRUE, the associated SbxObject is being 'armed', so that
@@ -495,7 +495,7 @@ public:
         BASIC methods can be called.
 
         Then the subclass gets the opportunity in every case to respond to the
-        event by calling the virtual method <SfxShell::Deactivate(sal_Bool)>.
+        event by calling the virtual method <SfxShell::Deactivate(bool)>.
         */
     SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame const *pFrame, bool bMDI);
 };

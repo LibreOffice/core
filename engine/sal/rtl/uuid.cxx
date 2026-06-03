@@ -54,7 +54,7 @@ struct UUID
 
 extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
                                         SAL_UNUSED_PARAMETER const sal_uInt8 *,
-                                        SAL_UNUSED_PARAMETER sal_Bool)
+                                        SAL_UNUSED_PARAMETER bool)
 {
     if (rtl_random_getBytes(nullptr, pTargetUUID, 16) != rtl_Random_E_None)
     {

@@ -134,7 +134,7 @@ namespace dxcanvas
     {
         return u"com.sun.star.comp.rendering.Canvas.GDI+"_ustr;
     }
-    sal_Bool Canvas::supportsService( const OUString& sServiceName )
+    bool Canvas::supportsService( const OUString& sServiceName )
     {
         return cppu::supportsService(this, sServiceName);
     }
@@ -224,7 +224,7 @@ namespace dxcanvas
     {
         return u"com.sun.star.comp.rendering.BitmapCanvas.GDI+"_ustr;
     }
-    sal_Bool BitmapCanvas::supportsService( const OUString& sServiceName )
+    bool BitmapCanvas::supportsService( const OUString& sServiceName )
     {
         return cppu::supportsService(this, sServiceName);
     }

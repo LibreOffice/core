@@ -114,7 +114,7 @@ uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames()
     return aRet;
 }
 
-sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName)
+bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName)
 {
     return std::find(std::begin(aNames), std::end(aNames), aName) != std::end(aNames);
 }
@@ -126,7 +126,7 @@ uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements()
+bool SAL_CALL ScLinkTargetTypesObj::hasElements()
 {
     return true;
 }
@@ -272,7 +272,7 @@ uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames()
     return xCollection->getElementNames();
 }
 
-sal_Bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName)
+bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName)
 {
     return xCollection->hasByName(aName);
 }
@@ -284,7 +284,7 @@ uno::Type SAL_CALL ScLinkTargetsObj::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL ScLinkTargetsObj::hasElements()
+bool SAL_CALL ScLinkTargetsObj::hasElements()
 {
     return xCollection->hasElements();
 }

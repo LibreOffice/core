@@ -313,18 +313,18 @@ public:
 
     //XEncryptionProtectedSource2
     virtual void SAL_CALL setEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
-    virtual sal_Bool SAL_CALL hasEncryptionData() override;
+    virtual bool SAL_CALL hasEncryptionData() override;
 
     //XRelationshipAccess
-    virtual sal_Bool SAL_CALL hasByID( const OUString& sID ) override;
+    virtual bool SAL_CALL hasByID( const OUString& sID ) override;
     virtual OUString SAL_CALL getTargetByID( const OUString& sID ) override;
     virtual OUString SAL_CALL getTypeByID( const OUString& sID ) override;
     virtual css::uno::Sequence< css::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID ) override;
     virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType ) override;
     virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
-    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const css::uno::Sequence< css::beans::StringPair >& aEntry, sal_Bool bReplace ) override;
+    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const css::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
     virtual void SAL_CALL removeRelationshipByID( const OUString& sID ) override;
-    virtual void SAL_CALL insertRelationships( const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aEntries, sal_Bool bReplace ) override;
+    virtual void SAL_CALL insertRelationships( const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
     virtual void SAL_CALL clearRelationships(  ) override;
 
     //XPropertySet

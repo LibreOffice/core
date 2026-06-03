@@ -203,7 +203,7 @@ public:
     virtual void SAL_CALL
     queryClosing(
         const css::lang::EventObject& aSource,
-        sal_Bool bGetsOwnership
+        bool bGetsOwnership
     ) override;
 
     virtual void SAL_CALL
@@ -236,7 +236,7 @@ public:
     getContainerWindow(
     ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     requestDockingAreaSpace(
         const css::awt::Rectangle& RequestedSpace
     ) override;

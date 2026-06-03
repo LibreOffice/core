@@ -127,7 +127,7 @@ public:
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
 private:
     typedef ::std::vector< uno::Reference< excel::XHyperlink > > HyperlinkVector;
@@ -177,7 +177,7 @@ uno::Type SAL_CALL ScVbaHlinkContainer::getElementType()
     return cppu::UnoType<excel::XHyperlink>::get();
 }
 
-sal_Bool SAL_CALL ScVbaHlinkContainer::hasElements()
+bool SAL_CALL ScVbaHlinkContainer::hasElements()
 {
     return !maHlinks.empty();
 }

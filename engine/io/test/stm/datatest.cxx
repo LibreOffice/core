@@ -77,7 +77,7 @@ public:
         throw ( IllegalArgumentException,
                 RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed()                              throw ( RuntimeException);
+    virtual bool SAL_CALL testPassed()                              throw ( RuntimeException);
     virtual Sequence< OUString > SAL_CALL getErrors()               throw (RuntimeException);
     virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getWarnings()                 throw (RuntimeException);
@@ -217,7 +217,7 @@ sal_Int32 ODataStreamTest::test(
 }
 
 
-sal_Bool ODataStreamTest::testPassed()                                      throw (RuntimeException)
+bool ODataStreamTest::testPassed()                                      throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
@@ -257,7 +257,7 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     rOutput->writeBoolean( 25 );
     ERROR_ASSERT( rInput->readBoolean() , "boolean read/write mismatch" );
 
-    rOutput->writeBoolean( sal_False );
+    rOutput->writeBoolean( false );
     ERROR_ASSERT( ! rInput->readBoolean() , "boolean read/write mismatch" );
 
     rOutput->writeFloat( (float) 42.42 );
@@ -363,7 +363,7 @@ public:
         m_l( -392 ),
         m_f( 7883.2 ),
         m_d( -123923.5 ),
-        m_b( sal_True ),
+        m_b( true ),
         m_byte( 42 ),
         m_c( 429 ),
         m_s( OUString( "foo"  ) )
@@ -425,7 +425,7 @@ public:
     sal_Int32   m_l;
     float   m_f;
     double  m_d;
-    sal_Bool    m_b;
+    bool    m_b;
     sal_Int8    m_byte;
     sal_Unicode m_c;
     OUString    m_s;
@@ -784,16 +784,16 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
 }
 
 
-sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XPropertySet > &r2 )
+bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XPropertySet > &r2 )
 {
-    sal_Bool b = sal_True;
+    bool b = true;
 
     if( r1->getPropertyValue("long").getValueType() == cppu::UnoType<void>::get() ||
         r2->getPropertyValue("long").getValueType() == cppu::UnoType<void>::get() ) {
 
         // one of the objects is not the correct propertyset !
         fprintf( stderr, "compareMyPropertySet: 1\n" );
-        return sal_False;
+        return false;
     }
 
     b = b && (  r1->getPropertyValue("long") ==
@@ -814,7 +814,7 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
                 r2->getPropertyValue("double") );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 4\n" );
 
-    sal_Bool b1(sal_False), b2(sal_False);
+    bool b1(false), b2(false);
     Any a =r1->getPropertyValue("bool");
     a >>= b1;
     a = r2->getPropertyValue("bool");
@@ -856,13 +856,13 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
             }
         }
         else {
-            b = sal_False;
+            b = false;
         }
         if( ! b ) fprintf( stderr, "compareMyPropertySet: 9\n" );
     }
     else {
         if( o2.getValueType()  == cppu::UnoType<XPersistObject>::get()) {
-            b = sal_False;
+            b = false;
         }
         if( ! b ) fprintf( stderr, "compareMyPropertySet: 10\n" );
     }
@@ -928,7 +928,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         any <<= d;
         rProp->setPropertyValue("double", any );
 
-        sal_Bool b = sal_True;
+        bool b = true;
         any.setValue( &b , cppu::UnoType<bool>::get() );
         rProp->setPropertyValue("bool", any );
 
@@ -987,7 +987,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             any <<= d;
             rProp->setPropertyValue("double", any );
 
-            sal_Bool b = sal_True;
+            bool b = true;
             any.setValue( &b , cppu::UnoType<bool>::get() );
             rProp->setPropertyValue("bool", any );
 

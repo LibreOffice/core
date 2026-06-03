@@ -59,7 +59,7 @@ OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
     return u"com.sun.star.comp.chart2.WizardDialog"_ustr;
 }
 
-sal_Bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceName )
+bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

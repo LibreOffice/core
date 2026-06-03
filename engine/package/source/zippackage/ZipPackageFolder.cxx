@@ -189,7 +189,7 @@ uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
 {
     return cppu::UnoType<XInterface>::get();
 }
-sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
+bool SAL_CALL ZipPackageFolder::hasElements(  )
 {
     return !maContents.empty();
 }
@@ -214,7 +214,7 @@ uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
     return comphelper::mapKeysToSequence(maContents);
 }
-sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
+bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
 {
     return hasByName( std::u16string_view( aName ));
 }
@@ -393,7 +393,7 @@ uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
     return { u"com.sun.star.packages.PackageFolder"_ustr };
 }
 
-sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceName )
+bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

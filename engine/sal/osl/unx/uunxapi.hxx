@@ -52,8 +52,8 @@ namespace osl
      The return value differs from the
      realpath function
 
-     @returns sal_True on success else
-     sal_False
+     @returns true on success else
+     false
 
      @see realpath
      **********************************/

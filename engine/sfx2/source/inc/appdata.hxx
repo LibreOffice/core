@@ -110,7 +110,7 @@ public:
                                 pAppDispat;     // Dispatcher if no document
     ::rtl::Reference<sfx2::sidebar::Theme> m_pSidebarTheme;
 
-    bool                        bDowning:1;   // sal_True on Exit and afterwards
+    bool                        bDowning:1;   // true on Exit and afterwards
     bool                        bInQuit : 1;
     bool                        bClosingDocs : 1;
 

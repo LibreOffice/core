@@ -67,7 +67,7 @@ private:
         return u"com.sun.star.comp.configuration.backend.KF5Backend"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const& ServiceName) override
     {
         return ServiceName == getSupportedServiceNames()[0];
     }

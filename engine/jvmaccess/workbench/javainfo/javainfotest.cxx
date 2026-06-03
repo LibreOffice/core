@@ -351,7 +351,7 @@ void printInfo(const JavaInfo& info)
     OString sLib= OUStringToOString(usLib, osl_getThreadTextEncoding());
     OUString usLibLocation= info.getLibLocations();
     OString sLibLocation= OUStringToOString(usLibLocation, osl_getThreadTextEncoding());
-    sal_Bool baccess= info.supportsAccessibility();
+    bool baccess= info.supportsAccessibility();
 
     printf("%s %s\n",sType.getStr(), sVersion.getStr());
     printf("\t%s \n",sHome.getStr());

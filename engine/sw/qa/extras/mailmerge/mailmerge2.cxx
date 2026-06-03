@@ -458,13 +458,13 @@ static std::ostream& operator<<(std::ostream& rStream, table::BorderLine const& 
 static std::ostream& operator<<(std::ostream& rStream, table::TableBorder const& rBorder)
 {
     rStream << "TableBorder(\n  "
-        << rBorder.TopLine << "," << static_cast<bool>(rBorder.IsTopLineValid) << ",\n  "
-        << rBorder.BottomLine << "," << static_cast<bool>(rBorder.IsBottomLineValid) << ",\n  "
-        << rBorder.LeftLine << "," << static_cast<bool>(rBorder.IsLeftLineValid) << ",\n  "
-        << rBorder.RightLine << "," << static_cast<bool>(rBorder.IsRightLineValid) << ",\n  "
-        << rBorder.HorizontalLine << "," << static_cast<bool>(rBorder.IsHorizontalLineValid) << ",\n  "
-        << rBorder.VerticalLine << "," << static_cast<bool>(rBorder.IsVerticalLineValid) << ",\n  "
-        << rBorder.Distance << "," << static_cast<bool>(rBorder.IsDistanceValid) << ")";
+        << rBorder.TopLine << "," << rBorder.IsTopLineValid << ",\n  "
+        << rBorder.BottomLine << "," << rBorder.IsBottomLineValid << ",\n  "
+        << rBorder.LeftLine << "," << rBorder.IsLeftLineValid << ",\n  "
+        << rBorder.RightLine << "," << rBorder.IsRightLineValid << ",\n  "
+        << rBorder.HorizontalLine << "," << rBorder.IsHorizontalLineValid << ",\n  "
+        << rBorder.VerticalLine << "," << rBorder.IsVerticalLineValid << ",\n  "
+        << rBorder.Distance << "," << rBorder.IsDistanceValid << ")";
     return rStream;
 }
 

@@ -95,7 +95,7 @@ public:
 
     virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation ) override;
     virtual void SAL_CALL rejectDrop(  ) override;
-    virtual void SAL_CALL dropComplete( sal_Bool success ) override;
+    virtual void SAL_CALL dropComplete( bool success ) override;
 
     /*
      * XDropTarget
@@ -103,8 +103,8 @@ public:
 
     virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
     virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
-    virtual sal_Bool SAL_CALL isActive(  ) override;
-    virtual void SAL_CALL setActive( sal_Bool active ) override;
+    virtual bool SAL_CALL isActive(  ) override;
+    virtual void SAL_CALL setActive( bool active ) override;
     virtual sal_Int8 SAL_CALL getDefaultActions(  ) override;
     virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) override;
 };

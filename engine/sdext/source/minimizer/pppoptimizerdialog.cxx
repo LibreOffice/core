@@ -54,7 +54,7 @@ OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
     return u"com.sun.star.comp.PresentationMinimizerImp"_ustr;
 }
 
-sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
+bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

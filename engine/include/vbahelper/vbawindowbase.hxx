@@ -65,8 +65,8 @@ public:
     virtual void SAL_CALL setLeft( sal_Int32 _left ) override ;
     virtual sal_Int32 SAL_CALL getTop() override ;
     virtual void SAL_CALL setTop( sal_Int32 _top ) override ;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
     virtual sal_Int32 SAL_CALL getWidth() override ;
     virtual void SAL_CALL setWidth( sal_Int32 _width ) override ;
 

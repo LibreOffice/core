@@ -153,7 +153,7 @@ ScFilterDetect::~ScFilterDetect()
 // This method is no longer used, but I do want to keep this for now to see
 // if we could transfer this check to the now centralized ascii detection
 // code in the filter module.
-static sal_Bool lcl_MayBeAscii( SvStream& rStream )
+static bool lcl_MayBeAscii( SvStream& rStream )
 {
     // ASCII/CSV is considered possible if there are no null bytes, or a Byte
     // Order Mark is present, or if, for Unicode UCS2/UTF-16, all null bytes
@@ -169,7 +169,7 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
     if ( nBytesRead >= 2 && (aBuffer[0] == 0xfffe || aBuffer[0] == 0xfeff) )
     {
         // Unicode BOM file may contain null bytes.
-        return sal_True;
+        return true;
     }
 
     const sal_uInt16* p = aBuffer;
@@ -334,7 +334,7 @@ OUString SAL_CALL ScFilterDetect::getImplementationName()
     return u"com.sun.star.comp.calc.FormatDetector"_ustr;
 }
 
-sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
+bool ScFilterDetect::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

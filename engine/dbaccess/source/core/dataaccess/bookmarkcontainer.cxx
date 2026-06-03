@@ -66,7 +66,7 @@ OUString SAL_CALL OBookmarkContainer::getImplementationName(  )
     return u"com.sun.star.comp.dba.OBookmarkContainer"_ustr;
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -183,7 +183,7 @@ Type SAL_CALL OBookmarkContainer::getElementType( )
     return ::cppu::UnoType<OUString>::get();
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::hasElements( )
+bool SAL_CALL OBookmarkContainer::hasElements( )
 {
     MutexGuard aGuard(m_rMutex);
     return !m_aBookmarks.empty();
@@ -239,7 +239,7 @@ Sequence< OUString > SAL_CALL OBookmarkContainer::getElementNames(  )
     return aNames;
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::hasByName( const OUString& _rName )
+bool SAL_CALL OBookmarkContainer::hasByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_rMutex);
 

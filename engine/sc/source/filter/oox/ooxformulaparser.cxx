@@ -112,7 +112,7 @@ OUString SAL_CALL OOXMLFormulaParser::getImplementationName()
     return u"com.sun.star.comp.oox.xls.FormulaParser"_ustr;
 }
 
-sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService )
+bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService )
 {
     return cppu::supportsService(this, rService);
 }

@@ -197,7 +197,7 @@ namespace frm
                           &m_bHideInactiveSelection, cppu::UnoType<decltype(m_bHideInactiveSelection)>::get() );
 
         registerMayBeVoidProperty( PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
-                                   &m_aTabStop, cppu::UnoType<sal_Bool>::get() );
+                                   &m_aTabStop, cppu::UnoType<bool>::get() );
         registerMayBeVoidProperty( PROPERTY_BACKGROUNDCOLOR, PROPERTY_ID_BACKGROUNDCOLOR, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
                                    &m_aBackgroundColor, cppu::UnoType<sal_Int32>::get() );
         registerMayBeVoidProperty( PROPERTY_BORDERCOLOR, PROPERTY_ID_BORDERCOLOR, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
@@ -368,7 +368,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL ORichTextModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+    bool SAL_CALL ORichTextModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;
 

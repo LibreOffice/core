@@ -54,8 +54,8 @@ namespace toolkit
         // XAnimatedImages
         virtual ::sal_Int32 SAL_CALL getStepTime() override;
         virtual void SAL_CALL setStepTime( ::sal_Int32 _steptime ) override;
-        virtual sal_Bool SAL_CALL getAutoRepeat() override;
-        virtual void SAL_CALL setAutoRepeat( sal_Bool _autorepeat ) override;
+        virtual bool SAL_CALL getAutoRepeat() override;
+        virtual void SAL_CALL setAutoRepeat( bool _autorepeat ) override;
         virtual ::sal_Int16 SAL_CALL getScaleMode() override;
         virtual void SAL_CALL setScaleMode( ::sal_Int16 _scalemode ) override;
         virtual ::sal_Int32 SAL_CALL getImageSetCount(  ) override;

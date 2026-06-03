@@ -84,7 +84,7 @@ private:
     virtual rtl::OUString SAL_CALL getImplementationName() override
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
@@ -173,7 +173,7 @@ private:
     virtual rtl::OUString SAL_CALL getImplementationName() override
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
@@ -248,7 +248,7 @@ component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool component_writeInfo(
+extern "C" SAL_DLLPUBLIC_EXPORT bool component_writeInfo(
     void * pServiceManager, void * pRegistryKey)
 {
     if (!component_writeInfoHelper(pServiceManager, pRegistryKey, services)) {

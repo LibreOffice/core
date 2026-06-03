@@ -162,7 +162,7 @@ OUString SAL_CALL SignatureCreatorImpl::getImplementationName(  )
     return SignatureCreatorImpl_getImplementationName();
 }
 
-sal_Bool SAL_CALL SignatureCreatorImpl::supportsService( const OUString& rServiceName )
+bool SAL_CALL SignatureCreatorImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

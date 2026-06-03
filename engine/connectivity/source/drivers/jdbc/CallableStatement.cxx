@@ -65,7 +65,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_CallableStatement::getTyp
     return ::comphelper::concatSequences(java_sql_PreparedStatement::getTypes(), aTypes);
 }
 
-sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  )
+bool SAL_CALL java_sql_CallableStatement::wasNull(  )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
     createStatement(t.pEnv);
@@ -73,7 +73,7 @@ sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  )
     return callBooleanMethod( "wasNull", mID );
 }
 
-sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
     createStatement(t.pEnv);

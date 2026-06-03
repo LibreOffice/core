@@ -200,7 +200,7 @@ class SW_DLLPUBLIC SwMailTransferable final :
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
 
     virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
+    virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 
     //XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;

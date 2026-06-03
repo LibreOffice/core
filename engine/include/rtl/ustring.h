@@ -179,7 +179,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_reverseCompare_WithLength(
     true if both strings are equal, false if they are not equal.
  */
 
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength(
+SAL_DLLPUBLIC bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength(
         const sal_Unicode * first, const char * second, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
@@ -907,7 +907,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_trim_WithLength(
     the length of the string.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean(
-        sal_Unicode * str, sal_Bool b ) SAL_THROW_EXTERN_C();
+        sal_Unicode * str, bool b ) SAL_THROW_EXTERN_C();
 #define RTL_USTR_MAX_VALUEOFBOOLEAN RTL_STR_MAX_VALUEOFBOOLEAN
 
 /** Create the string representation of a character.
@@ -1047,7 +1047,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(
     @return
     true if the string is "1" or "true" in any ASCII case, false otherwise.
  */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_ustr_toBoolean(
+SAL_DLLPUBLIC bool SAL_CALL rtl_ustr_toBoolean(
         const sal_Unicode * str ) SAL_THROW_EXTERN_C();
 
 /** Interpret a string as an integer.
@@ -2307,7 +2307,7 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     @return
     True if the conversion succeeded, false otherwise.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_convertStringToUString(
+SAL_DLLPUBLIC bool SAL_CALL rtl_convertStringToUString(
     rtl_uString ** target, char const * source, sal_Int32 length,
     rtl_TextEncoding encoding, sal_uInt32 flags) SAL_THROW_EXTERN_C();
 

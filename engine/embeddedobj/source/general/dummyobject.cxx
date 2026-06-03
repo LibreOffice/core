@@ -354,7 +354,7 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
+void SAL_CALL ODummyEmbeddedObject::saveCompleted( bool bUseNew )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -385,7 +385,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 }
 
 
-sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
+bool SAL_CALL ODummyEmbeddedObject::hasEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -430,7 +430,7 @@ void SAL_CALL ODummyEmbeddedObject::storeOwn()
 }
 
 
-sal_Bool SAL_CALL ODummyEmbeddedObject::isReadonly()
+bool SAL_CALL ODummyEmbeddedObject::isReadonly()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -522,7 +522,7 @@ void SAL_CALL ODummyEmbeddedObject::removeStateChangeListener(
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
+void SAL_CALL ODummyEmbeddedObject::close( bool bDeliverOwnership )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -624,7 +624,7 @@ OUString SAL_CALL ODummyEmbeddedObject::getImplementationName()
     return u"com.sun.star.comp.embed.ODummyEmbeddedObject"_ustr;
 }
 
-sal_Bool SAL_CALL ODummyEmbeddedObject::supportsService(const OUString& ServiceName)
+bool SAL_CALL ODummyEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

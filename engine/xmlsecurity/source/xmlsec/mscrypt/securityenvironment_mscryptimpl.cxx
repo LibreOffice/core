@@ -165,7 +165,7 @@ OUString SAL_CALL SecurityEnvironment_MSCryptImpl::getImplementationName() {
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUString& serviceName) {
+bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUString& serviceName) {
     return cppu::supportsService(this, serviceName);
 }
 /* XServiceInfo */

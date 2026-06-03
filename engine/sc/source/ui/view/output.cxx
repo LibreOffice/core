@@ -178,7 +178,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mbShowNullValues( true ),
     mbShowFormulas( false ),
     mbShowSpellErrors( false ),
-    mbMarkClipped( false ), // sal_False for printer/metafile etc.
+    mbMarkClipped( false ), // false for printer/metafile etc.
     mbSnapPixel( false ),
     mbAnyClipped( false ),
     mbVertical(false),
@@ -637,7 +637,7 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
         return;                     // not yet initialized -> everything "not printed"
 
     // mark printed range
-    // (everything in FillInfo is already initialized to sal_False)
+    // (everything in FillInfo is already initialized to false)
 
     sal_uInt16 nRangeCount = sal::static_int_cast<sal_uInt16>(pPageData->GetCount());
     for (sal_uInt16 nPos=0; nPos<nRangeCount; nPos++)

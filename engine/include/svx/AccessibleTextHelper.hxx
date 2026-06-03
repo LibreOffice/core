@@ -164,7 +164,7 @@ public:
 
         If the SvxEditSource's managed text can change between
         edit/non-edit mode (i.e. there are times when
-        SvxEditSource::GetEditViewForwarder(sal_False) returns
+        SvxEditSource::GetEditViewForwarder(false) returns
         NULL), then the two additional hints are required:
         SdrHintKind::BeginEdit and SdrHintKind::EndEdit. When the
         AccessibleTextHelper receives a SdrHintKind::BeginEdit, it expects

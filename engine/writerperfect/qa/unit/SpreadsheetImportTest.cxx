@@ -37,7 +37,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
@@ -69,7 +69,7 @@ OUString SAL_CALL SpreadsheetImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Wpft.QA.SpreadsheetImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL SpreadsheetImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -1062,7 +1062,7 @@ void SAL_CALL BibDataManager::reload(  )
 }
 
 
-sal_Bool SAL_CALL BibDataManager::isLoaded(  )
+bool SAL_CALL BibDataManager::isLoaded(  )
 {
     Reference< XLoadable >xFormAsLoadable( m_xForm, UNO_QUERY );
     DBG_ASSERT( xFormAsLoadable.is() || !m_xForm.is(), "BibDataManager::isLoaded: invalid form!");

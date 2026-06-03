@@ -196,7 +196,7 @@ css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
             u"stardiv.vcl.MenuBar"_ustr};
 }
 
-sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
+bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -334,7 +334,7 @@ sal_Int16 VCLXMenu::getItemPos(
 
 void VCLXMenu::enableItem(
     sal_Int16 nItemId,
-    sal_Bool bEnable )
+    bool bEnable )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -343,7 +343,7 @@ void VCLXMenu::enableItem(
         mpMenu->EnableItem( nItemId, bEnable );
 }
 
-sal_Bool VCLXMenu::isItemEnabled(
+bool VCLXMenu::isItemEnabled(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -468,7 +468,7 @@ sal_Int16 VCLXMenu::getDefaultItem(  )
 
 void VCLXMenu::checkItem(
     sal_Int16 nItemId,
-    sal_Bool bCheck )
+    bool bCheck )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -477,7 +477,7 @@ void VCLXMenu::checkItem(
         mpMenu->CheckItem( nItemId, bCheck );
 }
 
-sal_Bool VCLXMenu::isItemChecked(
+bool VCLXMenu::isItemChecked(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -627,7 +627,7 @@ namespace
 }
 
 
-sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  )
+bool SAL_CALL VCLXMenu::isPopupMenu(  )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -660,7 +660,7 @@ css::awt::MenuItemType SAL_CALL VCLXMenu::getItemType(
 }
 
 void SAL_CALL VCLXMenu::hideDisabledEntries(
-    sal_Bool bHide )
+    bool bHide )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -674,7 +674,7 @@ void SAL_CALL VCLXMenu::hideDisabledEntries(
 }
 
 
-sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
+bool SAL_CALL VCLXMenu::isInExecute(  )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -697,7 +697,7 @@ void SAL_CALL VCLXMenu::endExecute()
 
 
 void SAL_CALL VCLXMenu::enableAutoMnemonics(
-    sal_Bool bEnable )
+    bool bEnable )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -805,7 +805,7 @@ OUString SAL_CALL VCLXMenu::getTipHelpText(
 void SAL_CALL VCLXMenu::setItemImage(
     ::sal_Int16 nItemId,
     const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
-    sal_Bool bScale )
+    bool bScale )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );

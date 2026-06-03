@@ -854,7 +854,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         sal_Int32 nOldState = m_nObjectState;
 
         // TODO/LATER detect target state here and do a notification
-        // StateChangeNotification_Impl( sal_True, nOldState, nNewState );
+        // StateChangeNotification_Impl( true, nOldState, nNewState );
         if ( m_nObjectState == embed::EmbedStates::LOADED )
         {
             // if the target object is in loaded state

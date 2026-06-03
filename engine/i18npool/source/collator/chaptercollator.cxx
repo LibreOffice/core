@@ -80,7 +80,7 @@ ChapterCollator::getImplementationName()
     return cChapCollator;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ChapterCollator::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

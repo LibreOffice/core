@@ -418,7 +418,7 @@ public:
     SAL_DLLPRIVATE bool                 isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
 
     /// Defines which options in a UI element should be disabled or enabled.
-    void                                setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<sal_Bool>& rChoicesDisabled);
+    void                                setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<bool>& rChoicesDisabled);
 
     /** MakeEnabled will change the property rPropName depends on to the value
 
@@ -596,7 +596,7 @@ public:
     static css::uno::Any setChoiceListControlOpt( const OUString&  i_rID, const OUString& i_rTitle,
                              const css::uno::Sequence< OUString >& i_rHelpId, const OUString& i_rProperty,
                              const css::uno::Sequence< OUString >& i_rChoices, sal_Int32 i_nValue,
-                             const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
+                             const css::uno::Sequence< bool >& i_rDisabledChoices = css::uno::Sequence< bool >(),
                              const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /// Show a set of choices as radio buttons
@@ -604,7 +604,7 @@ public:
                              const OUString& i_rTitle,  const css::uno::Sequence< OUString >& i_rHelpId,
                              const OUString& i_rProperty, const css::uno::Sequence< OUString >& i_rChoices,
                              sal_Int32 i_nValue,
-                             const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
+                             const css::uno::Sequence< bool >& i_rDisabledChoices = css::uno::Sequence< bool >(),
                              const UIControlOptions& i_rControlOptions  = UIControlOptions());
 
     /** Show an integer range (e.g. a spin field)

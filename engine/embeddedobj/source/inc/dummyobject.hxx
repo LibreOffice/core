@@ -135,9 +135,9 @@ public:
                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void SAL_CALL saveCompleted( sal_Bool bUseNew ) override;
+    virtual void SAL_CALL saveCompleted( bool bUseNew ) override;
 
-    virtual sal_Bool SAL_CALL hasEntry() override;
+    virtual bool SAL_CALL hasEntry() override;
 
     virtual OUString SAL_CALL getEntryName() override;
 
@@ -146,7 +146,7 @@ public:
 
     virtual void SAL_CALL storeOwn() override;
 
-    virtual sal_Bool SAL_CALL isReadonly() override;
+    virtual bool SAL_CALL isReadonly() override;
 
     virtual void SAL_CALL reload(
                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
@@ -173,7 +173,7 @@ public:
 
 // XCloseable
 
-    virtual void SAL_CALL close( sal_Bool DeliverOwnership ) override;
+    virtual void SAL_CALL close( bool DeliverOwnership ) override;
 
     virtual void SAL_CALL addCloseListener(
                 const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
@@ -190,7 +190,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

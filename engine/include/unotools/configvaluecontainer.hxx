@@ -122,7 +122,7 @@ namespace utl
 
         /** commits any changes done
 
-            <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<TRUE/>).</p>
+            <p>Note that calling <method>write</method>(<true/) is the same as calling <method>commit</method>(<TRUE/>).</p>
 
             The current values in the exchange locations are written to the configuration nodes
             before the changes are committed.<br/>

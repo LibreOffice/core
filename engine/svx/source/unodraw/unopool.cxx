@@ -342,7 +342,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawPool::getImplementationId()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName )
+bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

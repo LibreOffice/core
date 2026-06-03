@@ -72,7 +72,7 @@ UnoInterfaceInfo::UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI,
        if ( ! m_typeDesc->aBase.bComplete)
     {
         typelib_TypeDescription* _pt = &m_typeDesc->aBase;
-        sal_Bool bComplete = ::typelib_typedescription_complete( & _pt);
+        bool bComplete = ::typelib_typedescription_complete( & _pt);
         if( ! bComplete)
         {
             throw BridgeRuntimeError("cannot make type complete: " + OUString::unacquired(& m_typeDesc->aBase.pTypeName));
@@ -511,8 +511,8 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
                         {
                             typelib_MethodParameter param;
                             param.pTypeRef = attribute_td->pAttributeTypeRef;
-                            param.bIn = sal_True;
-                            param.bOut = sal_False;
+                            param.bIn = true;
+                            param.bOut = false;
 
                             array<System::Object^>^ args =
                                 static_cast<array<System::Object^>^>(
@@ -960,8 +960,8 @@ void SAL_CALL cli_proxy_dispatch(
                 param.pTypeRef =
                     ((typelib_InterfaceAttributeTypeDescription *)member_td)
                     ->pAttributeTypeRef;
-                param.bIn = sal_True;
-                param.bOut = sal_False;
+                param.bIn = true;
+                param.bOut = false;
 
                 bridge->call_cli(
                     proxy->m_cliI,

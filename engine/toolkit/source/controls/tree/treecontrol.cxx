@@ -134,13 +134,13 @@ public:
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::view::XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) override;
+    virtual bool SAL_CALL select( const css::uno::Any& xSelection ) override;
     virtual css::uno::Any SAL_CALL getSelection(  ) override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // css::view::XMultiSelectionSupplier
-    virtual sal_Bool SAL_CALL addSelection( const css::uno::Any& Selection ) override;
+    virtual bool SAL_CALL addSelection( const css::uno::Any& Selection ) override;
     virtual void SAL_CALL removeSelection( const css::uno::Any& Selection ) override;
     virtual void SAL_CALL clearSelection(  ) override;
     virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) override;
@@ -152,10 +152,10 @@ public:
     virtual void SAL_CALL setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) override;
     virtual OUString SAL_CALL getDefaultCollapsedGraphicURL() override;
     virtual void SAL_CALL setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) override;
-    virtual sal_Bool SAL_CALL isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual sal_Bool SAL_CALL isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool SAL_CALL isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool SAL_CALL isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual void SAL_CALL makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual sal_Bool SAL_CALL isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool SAL_CALL isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual void SAL_CALL expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual void SAL_CALL collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual void SAL_CALL addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
@@ -163,8 +163,8 @@ public:
     virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
     virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
     virtual css::awt::Rectangle SAL_CALL getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual sal_Bool SAL_CALL isEditing(  ) override;
-    virtual sal_Bool SAL_CALL stopEditing(  ) override;
+    virtual bool SAL_CALL isEditing(  ) override;
+    virtual bool SAL_CALL stopEditing(  ) override;
     virtual void SAL_CALL cancelEditing(  ) override;
     virtual void SAL_CALL startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual void SAL_CALL addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
@@ -196,7 +196,7 @@ OUString UnoTreeControl::GetComponentServiceName() const
 // css::view::XSelectionSupplier
 
 
-sal_Bool SAL_CALL UnoTreeControl::select( const Any& rSelection )
+bool SAL_CALL UnoTreeControl::select( const Any& rSelection )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->select( rSelection );
 }
@@ -235,7 +235,7 @@ void SAL_CALL UnoTreeControl::removeSelectionChangeListener( const Reference< XS
 // css::view::XMultiSelectionSupplier
 
 
-sal_Bool SAL_CALL UnoTreeControl::addSelection( const Any& rSelection )
+bool SAL_CALL UnoTreeControl::addSelection( const Any& rSelection )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->addSelection(rSelection);
 }
@@ -298,13 +298,13 @@ void SAL_CALL UnoTreeControl::setDefaultCollapsedGraphicURL( const OUString& _de
 }
 
 
-sal_Bool SAL_CALL UnoTreeControl::isNodeExpanded( const Reference< XTreeNode >& xNode )
+bool SAL_CALL UnoTreeControl::isNodeExpanded( const Reference< XTreeNode >& xNode )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeExpanded(xNode);
 }
 
 
-sal_Bool SAL_CALL UnoTreeControl::isNodeCollapsed( const Reference< XTreeNode >& xNode )
+bool SAL_CALL UnoTreeControl::isNodeCollapsed( const Reference< XTreeNode >& xNode )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeCollapsed(xNode);
 }
@@ -316,7 +316,7 @@ void SAL_CALL UnoTreeControl::makeNodeVisible( const Reference< XTreeNode >& xNo
 }
 
 
-sal_Bool SAL_CALL UnoTreeControl::isNodeVisible( const Reference< XTreeNode >& xNode )
+bool SAL_CALL UnoTreeControl::isNodeVisible( const Reference< XTreeNode >& xNode )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isNodeVisible(xNode);
 }
@@ -376,13 +376,13 @@ awt::Rectangle SAL_CALL UnoTreeControl::getNodeRect( const Reference< XTreeNode 
 }
 
 
-sal_Bool SAL_CALL UnoTreeControl::isEditing(  )
+bool SAL_CALL UnoTreeControl::isEditing(  )
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->isEditing();
 }
 
 
-sal_Bool SAL_CALL UnoTreeControl::stopEditing()
+bool SAL_CALL UnoTreeControl::stopEditing()
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->stopEditing();
 }

@@ -53,7 +53,7 @@ OUString SAL_CALL MozillaBootstrap::getImplementationName(  )
     return u"com.sun.star.comp.mozilla.MozillaBootstrap"_ustr;
 }
 
-sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName )
+bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -83,11 +83,11 @@ OUString SAL_CALL MozillaBootstrap::getProfilePath( css::mozilla::MozillaProduct
 {
     return m_ProfileAccess->getProfilePath(product,profileName);
 }
-sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType /*product*/, const OUString& /*profileName*/ )
+bool SAL_CALL MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType /*product*/, const OUString& /*profileName*/ )
 {
     return true;
 }
-sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
+bool SAL_CALL MozillaBootstrap::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     return m_ProfileAccess->getProfileExists(product,profileName);
 }
@@ -109,7 +109,7 @@ OUString SAL_CALL MozillaBootstrap::getCurrentProfile(  )
 {
     return OUString();
 }
-sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  )
+bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  )
 {
     return true;
 }

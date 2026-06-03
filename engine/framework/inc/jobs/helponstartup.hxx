@@ -93,7 +93,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
 
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // css.task.XJob
@@ -138,8 +138,8 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
                     the help url for checking.
 
             @return [bool]
-                    sal_True if the given URL is any default one ...
-                    sal_False otherwise.
+                    true if the given URL is any default one ...
+                    false otherwise.
          */
         bool its_isHelpUrlADefaultOne(std::u16string_view sHelpURL);
 

@@ -602,7 +602,7 @@ void SetDocInfoState(
     catch (const uno::Exception&) {}
 
     // set the modified flag back if required
-    if (bIsModified != bool(xModifiable->isModified()))
+    if (bIsModified != xModifiable->isModified())
         xModifiable->setModified(bIsModified);
 }
 

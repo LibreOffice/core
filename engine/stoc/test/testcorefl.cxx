@@ -82,7 +82,7 @@ static inline bool uik_equals( const Uik & rUik1, const Uik & rUik2 )
             rUik1.m_Data5 == rUik2.m_Data5);
 }
 
-static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
+static bool test_corefl( const Reference< XIdlReflection > & xRefl )
 {
     Reference< XIdlClass > xClass;
     Reference< XHierarchicalNameAccess > xHNameAccess( xRefl, UNO_QUERY );
@@ -93,7 +93,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     OSL_ENSURE(xRefl->forName("ModuleA.ModuleB.EnumA").is(), "test_RegCoreReflection(): error 2e");
 
 
-    OSL_ENSURE(*(const sal_Bool *)xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstBoolean")).getValue() == aConstBoolean, "test_RegCoreReflection(): error 4c");
+    OSL_ENSURE(*(const bool *)xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstBoolean")).getValue() == aConstBoolean, "test_RegCoreReflection(): error 4c");
     OSL_ENSURE(*(const sal_Int8 *)xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstByte")).getValue() == aConstByte, "test_RegCoreReflection(): error 4e");
     OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstShort")) == aConstShort, "test_RegCoreReflection(): error 4g");
     OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstUShort")) == aConstUShort, "test_RegCoreReflection(): error 4i");
@@ -232,8 +232,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     {
         SAL_WARN( "stoc", "case 1" );
         Any bla = xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->get(Any());
-        OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 63");
-        return sal_False;
+        OSL_ENSURE(false, "test_RegCoreReflection(): error 63");
+        return false;
     }
     catch (IllegalArgumentException &)
     {
@@ -247,8 +247,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any gulp;
         rField.set( xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
         rField->set( blup, gulp);
-        OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 64");
-        return sal_False;
+        OSL_ENSURE(false, "test_RegCoreReflection(): error 64");
+        return false;
     }
     catch (IllegalArgumentException &)
     {
@@ -263,8 +263,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         blup <<= aStructC;
         rField.set( xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
         xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->set(blup, gulp);
-        OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 65");
-        return sal_False;
+        OSL_ENSURE(false, "test_RegCoreReflection(): error 65");
+        return false;
     }
     catch (IllegalArgumentException &)
     {
@@ -286,8 +286,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any a;
         a <<= xAI;
         Any bla = xRefl->forName("ModuleC.XInterfaceA")->getMethod(OUString("methodC"))->invoke(a, params);
-        OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 66");
-        return sal_False;
+        OSL_ENSURE(false, "test_RegCoreReflection(): error 66");
+        return false;
     }
     catch (IllegalArgumentException &)
     {
@@ -315,8 +315,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any a;
         a <<= xAI;
         Any bla = xRefl->forName("ModuleC.XInterfaceA")->getMethod(OUString("methodC"))->invoke(a, params);
-        OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 67");
-        return sal_False;
+        OSL_ENSURE(false, "test_RegCoreReflection(): error 67");
+        return false;
     }
     catch (IllegalArgumentException &)
     {
@@ -333,12 +333,12 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
                     == cppu::UnoType<Sequence<StructB>>::get()); (void)result;
     OSL_ENSURE(result, "test_RegCoreReflection(): error 68");
 
-    return sal_True;
+    return true;
 }
 
 SAL_IMPLEMENT_MAIN()
 {
-    sal_Bool bSucc = sal_False;
+    bool bSucc = false;
     try
     {
         OUString aLibName( "reflection.uno" SAL_DLLEXTENSION );

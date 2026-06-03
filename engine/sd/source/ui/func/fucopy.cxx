@@ -281,7 +281,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         mpDocSh->SetWaitCursor( false );
 
     // show handles
-    mpView->AdjustMarkHdl(); //HMH sal_True );
+    mpView->AdjustMarkHdl(); //HMH true );
     //HMHpView->ShowMarkHdl();
 
     mpView->EndUndo();

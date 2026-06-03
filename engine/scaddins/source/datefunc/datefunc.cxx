@@ -154,7 +154,7 @@ OUString SAL_CALL ScaDateAddIn::getImplementationName()
     return u"com.sun.star.sheet.addin.DateFunctionsImpl"_ustr;
 }
 
-sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName )
+bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }

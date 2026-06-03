@@ -404,7 +404,7 @@ beans::Property SAL_CALL Theme::getPropertyByName (const OUString& rsPropertyNam
         0);
 }
 
-sal_Bool SAL_CALL Theme::hasPropertyByName (const OUString& rsPropertyName)
+bool SAL_CALL Theme::hasPropertyByName (const OUString& rsPropertyName)
 {
     SolarMutexGuard aGuard;
 
@@ -518,7 +518,7 @@ css::uno::Type const & Theme::GetCppuType (const PropertyType eType)
             return cppu::UnoType<sal_Int32>::get();
 
         case PT_Boolean:
-            return cppu::UnoType<sal_Bool>::get();
+            return cppu::UnoType<bool>::get();
 
         case PT_Invalid:
         default:

@@ -222,7 +222,7 @@ XResultSet_impl::OneMore(std::unique_lock<std::mutex>& rGuard)
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::next()
 {
     std::unique_lock aGuard( m_aMutex );
@@ -234,28 +234,28 @@ XResultSet_impl::next()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::isBeforeFirst()
 {
     return m_nRow == -1;
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::isAfterLast()
 {
     return m_nRow >= sal::static_int_cast<sal_Int32>(m_aItems.size());   // Cannot happen, if m_aFolder.isOpen()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::isFirst()
 {
     return m_nRow == 0;
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::isLast()
 {
     std::unique_lock aGuard( m_aMutex );
@@ -283,7 +283,7 @@ XResultSet_impl::afterLast()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::first()
 {
     m_nRow = -1;
@@ -291,7 +291,7 @@ XResultSet_impl::first()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::last()
 {
     std::unique_lock aGuard( m_aMutex );
@@ -313,7 +313,7 @@ XResultSet_impl::getRow()
 }
 
 
-sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
+bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
 {
     std::unique_lock aGuard( m_aMutex );
     if( row >= 0 )
@@ -335,7 +335,7 @@ sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::relative( sal_Int32 row )
 {
     if( isAfterLast() || isBeforeFirst() )
@@ -349,7 +349,7 @@ XResultSet_impl::relative( sal_Int32 row )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::previous()
 {
     if( m_nRow > sal::static_int_cast<sal_Int32>(m_aItems.size()) )
@@ -367,19 +367,19 @@ XResultSet_impl::refreshRow()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::rowUpdated()
 {
     return false;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::rowInserted()
 {
     return false;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::rowDeleted()
 {
     return false;
@@ -578,7 +578,7 @@ XResultSet_impl::getPropertySetInfo()
     uno::Sequence< beans::Property > seq
     {
         { u"RowCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY },
-        { u"IsRowCountFinal"_ustr, -1, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY }
+        { u"IsRowCountFinal"_ustr, -1, cppu::UnoType<bool>::get(), beans::PropertyAttribute::READONLY }
     };
 
     return new XPropertySetInfo_impl( m_pMyShell, seq );

@@ -38,7 +38,7 @@ OUString SAL_CALL DispatchHelper::getImplementationName()
     return u"com.sun.star.comp.framework.services.DispatchHelper"_ustr;
 }
 
-sal_Bool SAL_CALL DispatchHelper::supportsService(const OUString& sServiceName)
+bool SAL_CALL DispatchHelper::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

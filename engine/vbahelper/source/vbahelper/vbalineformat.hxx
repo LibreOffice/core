@@ -56,8 +56,8 @@ public:
     virtual void SAL_CALL setEndArrowheadWidth( sal_Int32 _endarrowheadwidth ) override;
     virtual double SAL_CALL getWeight() override;
     virtual void SAL_CALL setWeight( double _weight ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
     virtual double SAL_CALL getTransparency() override;
     virtual void SAL_CALL setTransparency( double _transparency ) override;
     virtual sal_Int16 SAL_CALL getStyle() override;

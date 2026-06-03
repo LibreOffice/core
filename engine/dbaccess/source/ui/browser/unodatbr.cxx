@@ -892,7 +892,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
     }
 }
 
-sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend)
+bool SbaTableQueryBrowser::suspend(bool bSuspend)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1382,7 +1382,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
     m_aExternalFeatures.clear();
 }
 
-sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection )
+bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection )
 {
     SolarMutexGuard aGuard;
         // doin' a lot of VCL stuff here -> lock the SolarMutex
@@ -2176,7 +2176,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, const weld::TreeIter&, rParent, b
 // 0. Yeah, I know it is fairly likely nobody will ever read this
 // comment and make a decision what to do here, so I could as well
 // have just binned this...
-                    if (aWarnings.isValid() && sal_False)
+                    if (aWarnings.isValid() && false)
                     {
                         SQLContext aContext;
                         aContext.Message = DBA_RES(STR_OPENTABLES_WARNINGS);

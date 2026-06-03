@@ -188,7 +188,7 @@ XMLFilter::~XMLFilter()
 {}
 
 // ____ XFilter ____
-sal_Bool SAL_CALL XMLFilter::filter(
+bool SAL_CALL XMLFilter::filter(
     const Sequence< beans::PropertyValue >& aDescriptor )
 {
     bool bResult = false;
@@ -711,7 +711,7 @@ OUString SAL_CALL XMLFilter::getImplementationName()
     return u"com.sun.star.comp.chart2.XMLFilter"_ustr;
 }
 
-sal_Bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
+bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

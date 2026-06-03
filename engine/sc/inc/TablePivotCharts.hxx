@@ -49,7 +49,7 @@ public:
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName(OUString const & aName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(OUString const & aName) override;
+    virtual bool SAL_CALL hasByName(OUString const & aName) override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -57,11 +57,11 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 

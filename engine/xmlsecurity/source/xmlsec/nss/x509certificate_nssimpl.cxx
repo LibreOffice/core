@@ -485,7 +485,7 @@ OUString SAL_CALL X509Certificate_NssImpl::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL X509Certificate_NssImpl::supportsService(const OUString& serviceName)
+bool SAL_CALL X509Certificate_NssImpl::supportsService(const OUString& serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

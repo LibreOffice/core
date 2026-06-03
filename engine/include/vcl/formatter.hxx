@@ -223,8 +223,8 @@ public:
 
     SvNumberFormatter*  GetFormatter() const    { return m_pFormatter; }
     void    SetFormatter(SvNumberFormatter* pFormatter, bool bResetFormat = true);
-    // If bResetFormat is sal_False, the old format is tried to be kept. (expensive, if it is no default format, available in all formatters)
-    // If sal_True, the new FormatKey is set to zero
+    // If bResetFormat is false, the old format is tried to be kept. (expensive, if it is no default format, available in all formatters)
+    // If true, the new FormatKey is set to zero
 
     bool    GetThousandsSep() const;
     void    SetThousandsSep(bool _bUseSeparator);
@@ -244,7 +244,7 @@ public:
 
     OUString    GetFormat(LanguageType& eLang) const;
     bool        SetFormat(const OUString& rFormatString, LanguageType eLang);
-    // sal_False, if the FormatString could not be set (and very probably is invalid)
+    // false, if the FormatString could not be set (and very probably is invalid)
     // This Object is shared via all instances, so be careful!
 
     bool    IsStrictFormat() const              { return m_bStrictFormat; }
@@ -270,7 +270,7 @@ public:
     std::optional<double> ParseText(const OUString& rText);
 public:
 
-    //The following methods are interesting, if m_bTreatAsNumber is set to sal_False
+    //The following methods are interesting, if m_bTreatAsNumber is set to false
     //If someone does not care about all the double handling and just wants to print the text formatted.
     //(((The text will be formatted, using the Formatter, and then set)
     void SetTextFormatted(const OUString& rText);
@@ -289,7 +289,7 @@ public:
     */
     void    Commit();
 
-    // enable automatic coloring. if set to sal_True, and the format the field is working with for any current value
+    // enable automatic coloring. if set to true, and the format the field is working with for any current value
     // says that it has to be painted in a special color (e.g. a format where negative numbers should be printed
     // red), the text is painted with that color automatically.
     // The color used is the same as returned by GetLastOutputColor()

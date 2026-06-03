@@ -68,7 +68,7 @@ OUString SAL_CALL ResultSetImplHelper::getImplementationName()
     return u"ResultSetImplHelper"_ustr;
 }
 
-sal_Bool SAL_CALL ResultSetImplHelper::supportsService( const OUString& ServiceName )
+bool SAL_CALL ResultSetImplHelper::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

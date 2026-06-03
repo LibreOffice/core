@@ -59,8 +59,8 @@ public:
     virtual css::uno::Any SAL_CALL ListGalleries(const css::uno::Any& aIndex) override;
     virtual float SAL_CALL CentimetersToPoints(float Centimeters) override;
     virtual float SAL_CALL PointsToCentimeters(float Points) override;
-    virtual float SAL_CALL PixelsToPoints(float Pixels, ::sal_Bool fVertical) override;
-    virtual float SAL_CALL PointsToPixels(float Pixels, ::sal_Bool fVertical) override;
+    virtual float SAL_CALL PixelsToPoints(float Pixels, bool fVertical) override;
+    virtual float SAL_CALL PointsToPixels(float Pixels, bool fVertical) override;
     virtual float SAL_CALL InchesToPoints(float Inches) override;
     virtual float SAL_CALL PointsToInches(float Points) override;
     virtual float SAL_CALL MillimetersToPoints(float Millimeters) override;

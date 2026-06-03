@@ -66,7 +66,7 @@ public:
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
-    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<   css::beans::PropertyValue >& rDescriptor ) override;
+    virtual bool SAL_CALL filter( const css::uno::Sequence<   css::beans::PropertyValue >& rDescriptor ) override;
 
     void getSchemeColorToken(sal_Int32& nToken) const;
     ::Color getSchemeColor( sal_Int32 nToken ) const;

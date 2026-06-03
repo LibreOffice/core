@@ -208,8 +208,8 @@ public:
     getCommandInfoByName( const OUString& Name ) override;
     virtual ucb::CommandInfo SAL_CALL
     getCommandInfoByHandle( sal_Int32 Handle ) override;
-    virtual sal_Bool SAL_CALL hasCommandByName( const OUString& Name ) override;
-    virtual sal_Bool SAL_CALL hasCommandByHandle( sal_Int32 Handle ) override;
+    virtual bool SAL_CALL hasCommandByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasCommandByHandle( sal_Int32 Handle ) override;
 };
 
 
@@ -266,7 +266,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 
 
 // virtual
-sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
+bool SAL_CALL CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
 {
     return std::any_of(std::cbegin(m_xInfo), std::cend(m_xInfo),
@@ -275,7 +275,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 
 
 // virtual
-sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
+bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 {
     return std::any_of(std::cbegin(m_xInfo), std::cend(m_xInfo),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });

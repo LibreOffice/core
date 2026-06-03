@@ -185,7 +185,7 @@ void FmXUpdateMultiplexer::disposing(const EventObject& )
 }
 
 
-sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e)
+bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e)
 {
     EventObject aMulti( e );
     aMulti.Source = &m_rParent;
@@ -370,7 +370,7 @@ Sequence<sal_Int8> SAL_CALL FmXGridControl::getImplementationId(  )
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL FmXGridControl::supportsService(const OUString& ServiceName)
+bool SAL_CALL FmXGridControl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -406,7 +406,7 @@ OUString FmXGridControl::GetComponentServiceName() const
 }
 
 
-sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< css::awt::XControlModel >& rModel)
+bool SAL_CALL FmXGridControl::setModel(const Reference< css::awt::XControlModel >& rModel)
 {
     SolarMutexGuard aGuard;
 
@@ -613,7 +613,7 @@ void FmXGridControl::addModifyListener(const Reference< css::util::XModifyListen
 }
 
 
-sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection )
+bool SAL_CALL FmXGridControl::select( const Any& _rSelection )
 {
     SolarMutexGuard aGuard;
     Reference< XSelectionSupplier > xPeer(getPeer(), UNO_QUERY);
@@ -651,7 +651,7 @@ void SAL_CALL FmXGridControl::removeSelectionChangeListener( const Reference< XS
 }
 
 
-Sequence< sal_Bool > SAL_CALL FmXGridControl::queryFieldDataType( const Type& xType )
+Sequence< bool > SAL_CALL FmXGridControl::queryFieldDataType( const Type& xType )
 {
     if (getPeer().is())
     {
@@ -660,7 +660,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridControl::queryFieldDataType( const Type& xT
             return xPeerSupplier->queryFieldDataType(xType);
     }
 
-    return Sequence<sal_Bool>();
+    return Sequence<bool>();
 }
 
 
@@ -697,7 +697,7 @@ void SAL_CALL FmXGridControl::draw( sal_Int32 x, sal_Int32 y )
 }
 
 
-void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
+void SAL_CALL FmXGridControl::setDesignMode(bool bOn)
 {
     css::util::ModeChangeEvent aModeChangeEvent;
 
@@ -775,7 +775,7 @@ void SAL_CALL FmXGridControl::removeUpdateListener(const Reference< XUpdateListe
 }
 
 
-sal_Bool SAL_CALL FmXGridControl::commit()
+bool SAL_CALL FmXGridControl::commit()
 {
     Reference< XBoundComponent >  xBound(getPeer(), UNO_QUERY);
     if (xBound.is())
@@ -892,7 +892,7 @@ void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos)
 
 // XElementAccess
 
-sal_Bool SAL_CALL FmXGridControl::hasElements()
+bool SAL_CALL FmXGridControl::hasElements()
 {
     Reference< XElementAccess >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() && xPeer->hasElements();
@@ -959,7 +959,7 @@ css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedModes()
 }
 
 
-sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode)
+bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode)
 {
     Reference< css::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() && xPeer->supportsMode(Mode);
@@ -1131,7 +1131,7 @@ void FmXGridPeer::removeModifyListener(const Reference< css::util::XModifyListen
 
 
 #define LAST_KNOWN_TYPE     FormComponentType::PATTERNFIELD
-Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType )
+Sequence< bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType )
 {
     // a 'conversion table'
     static const bool bCanConvert[LAST_KNOWN_TYPE][4] =
@@ -1180,8 +1180,8 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
     std::vector< std::unique_ptr<DbGridColumn> > const & aColumns = pGrid->GetColumns();
 
-    Sequence<sal_Bool> aReturnSequence(nColumns);
-    sal_Bool* pReturnArray = aReturnSequence.getArray();
+    Sequence<bool> aReturnSequence(nColumns);
+    bool* pReturnArray = aReturnSequence.getArray();
 
     bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
 
@@ -1441,7 +1441,7 @@ void FmXGridPeer::removeUpdateListener(const Reference< XUpdateListener >& l)
 }
 
 
-sal_Bool FmXGridPeer::commit()
+bool FmXGridPeer::commit()
 {
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if (!m_xCursor.is() || !pGrid)
@@ -1642,7 +1642,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns)
 }
 
 
-void FmXGridPeer::setDesignMode(sal_Bool bOn)
+void FmXGridPeer::setDesignMode(bool bOn)
 {
     if (bOn != isDesignMode())
     {
@@ -1658,7 +1658,7 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn)
 }
 
 
-sal_Bool FmXGridPeer::isDesignMode()
+bool FmXGridPeer::isDesignMode()
 {
     VclPtr<vcl::Window> pWin = GetWindow();
     if (pWin)
@@ -2251,7 +2251,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt)
 
 // XElementAccess
 
-sal_Bool FmXGridPeer::hasElements()
+bool FmXGridPeer::hasElements()
 {
     return getCount() != 0;
 }
@@ -2344,7 +2344,7 @@ css::uno::Sequence<OUString> FmXGridPeer::getSupportedModes()
 }
 
 
-sal_Bool FmXGridPeer::supportsMode(const OUString& Mode)
+bool FmXGridPeer::supportsMode(const OUString& Mode)
 {
     css::uno::Sequence<OUString> aModes(getSupportedModes());
     return comphelper::findValue(aModes, Mode) != -1;
@@ -2529,13 +2529,13 @@ void FmXGridPeer::statusChanged(const css::frame::FeatureStateEvent& Event)
 }
 
 
-sal_Bool FmXGridPeer::approveReset(const EventObject& /*rEvent*/)
+bool FmXGridPeer::approveReset(const EventObject& /*rEvent*/)
 {
     return true;
 }
 
 
-sal_Bool SAL_CALL FmXGridPeer::select( const Any& _rSelection )
+bool SAL_CALL FmXGridPeer::select( const Any& _rSelection )
 {
     Sequence< Any > aBookmarks;
     if ( !( _rSelection >>= aBookmarks ) )

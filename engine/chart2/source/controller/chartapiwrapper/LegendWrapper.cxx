@@ -393,7 +393,7 @@ OUString SAL_CALL LegendWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.Legend"_ustr;
 }
 
-sal_Bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

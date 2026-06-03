@@ -158,7 +158,7 @@ OUString SAL_CALL FrameGrabber::getImplementationName(  )
     return u"com.sun.star.comp.avmedia.FrameGrabber_GStreamer"_ustr;
 }
 
-sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
+bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

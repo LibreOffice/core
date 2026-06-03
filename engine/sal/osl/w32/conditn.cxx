@@ -48,14 +48,14 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
         OSL_VERIFY(CloseHandle(Condition));
 }
 
-sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
+bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
     return SetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
 
-sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
+bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
@@ -90,7 +90,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     }
 }
 
-sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
+bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 

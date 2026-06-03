@@ -44,8 +44,8 @@ public:
 
 
 // class SdrCaptionEscIsRelItem
-// sal_True = line escape position is relative
-// sal_False = line escape position is absolute
+// true = line escape position is relative
+// false = line escape position is absolute
 
 class SVXCORE_DLLPUBLIC SdrCaptionEscIsRelItem final : public SdrYesNoItem {
 public:

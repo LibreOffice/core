@@ -124,7 +124,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     // XChild
     virtual Reference< XInterface > SAL_CALL getParent() override;
@@ -159,8 +159,8 @@ public:
     virtual void SAL_CALL setAcceleration( double _acceleration ) override;
     virtual double SAL_CALL getDecelerate() override;
     virtual void SAL_CALL setDecelerate( double _decelerate ) override;
-    virtual sal_Bool SAL_CALL getAutoReverse() override;
-    virtual void SAL_CALL setAutoReverse( sal_Bool _autoreverse ) override;
+    virtual bool SAL_CALL getAutoReverse() override;
+    virtual void SAL_CALL setAutoReverse( bool _autoreverse ) override;
     virtual Sequence< NamedValue > SAL_CALL getUserData() override;
     virtual void SAL_CALL setUserData( const Sequence< NamedValue >& _userdata ) override;
 
@@ -179,8 +179,8 @@ public:
     virtual void SAL_CALL setValueType( sal_Int16 _valuetype ) override;
     virtual sal_Int16 SAL_CALL getCalcMode() override;
     virtual void SAL_CALL setCalcMode( sal_Int16 _calcmode ) override;
-    virtual sal_Bool SAL_CALL getAccumulate() override;
-    virtual void SAL_CALL setAccumulate( sal_Bool _accumulate ) override;
+    virtual bool SAL_CALL getAccumulate() override;
+    virtual void SAL_CALL setAccumulate( bool _accumulate ) override;
     virtual sal_Int16 SAL_CALL getAdditive() override;
     virtual void SAL_CALL setAdditive( sal_Int16 _additive ) override;
     virtual Any SAL_CALL getFrom() override;
@@ -197,8 +197,8 @@ public:
     // XAnimateColor
     virtual sal_Int16 SAL_CALL getColorInterpolation() override;
     virtual void SAL_CALL setColorInterpolation( sal_Int16 _colorspace ) override;
-    virtual sal_Bool SAL_CALL getDirection() override;
-    virtual void SAL_CALL setDirection( sal_Bool _direction ) override;
+    virtual bool SAL_CALL getDirection() override;
+    virtual void SAL_CALL setDirection( bool _direction ) override;
 
     // XAnimateMotion
     virtual Any SAL_CALL getPath() override;
@@ -225,8 +225,8 @@ public:
     virtual void SAL_CALL setTransition( sal_Int16 _transition ) override;
     virtual sal_Int16 SAL_CALL getSubtype() override;
     virtual void SAL_CALL setSubtype( sal_Int16 _subtype ) override;
-    virtual sal_Bool SAL_CALL getMode() override;
-    virtual void SAL_CALL setMode( sal_Bool _mode ) override;
+    virtual bool SAL_CALL getMode() override;
+    virtual void SAL_CALL setMode( bool _mode ) override;
     virtual sal_Int32 SAL_CALL getFadeColor() override;
     virtual void SAL_CALL setFadeColor( sal_Int32 _fadecolor ) override;
 
@@ -235,10 +235,10 @@ public:
     virtual void SAL_CALL setSource( const Any& _source ) override;
     virtual double SAL_CALL getVolume() override;
     virtual void SAL_CALL setVolume( double _volume ) override;
-    sal_Bool SAL_CALL getHideDuringShow() override;
-    void SAL_CALL setHideDuringShow(sal_Bool bHideDuringShow) override;
-    sal_Bool SAL_CALL getNarration() override;
-    void SAL_CALL setNarration(sal_Bool bNarration) override;
+    bool SAL_CALL getHideDuringShow() override;
+    void SAL_CALL setHideDuringShow(bool bHideDuringShow) override;
+    bool SAL_CALL getNarration() override;
+    void SAL_CALL setNarration(bool bNarration) override;
 
 
     // XCommand - the following two shadowed by animate, unfortunately
@@ -251,7 +251,7 @@ public:
 
     // XElementAccess
     virtual Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual Reference< XEnumeration > SAL_CALL createEnumeration() override;
@@ -349,7 +349,7 @@ public:
     explicit TimeContainerEnumeration( std::vector< Reference< XAnimationNode > >&& rChildren );
 
     // Methods
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual Any SAL_CALL nextElement(  ) override;
 
 private:
@@ -371,7 +371,7 @@ TimeContainerEnumeration::TimeContainerEnumeration( std::vector< Reference< XAni
 }
 
 // Methods
-sal_Bool SAL_CALL TimeContainerEnumeration::hasMoreElements()
+bool SAL_CALL TimeContainerEnumeration::hasMoreElements()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -836,7 +836,7 @@ OUString AnimationNode::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool AnimationNode::supportsService(const OUString& ServiceName)
+bool AnimationNode::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1123,7 +1123,7 @@ void SAL_CALL AnimationNode::setDecelerate( double _decelerate )
 
 
 // XAnimationNode
-sal_Bool SAL_CALL AnimationNode::getAutoReverse()
+bool SAL_CALL AnimationNode::getAutoReverse()
 {
     std::unique_lock aGuard( m_aMutex );
     return mbAutoReverse;
@@ -1131,7 +1131,7 @@ sal_Bool SAL_CALL AnimationNode::getAutoReverse()
 
 
 // XAnimationNode
-void SAL_CALL AnimationNode::setAutoReverse( sal_Bool _autoreverse )
+void SAL_CALL AnimationNode::setAutoReverse( bool _autoreverse )
 {
     std::unique_lock l( m_aMutex );
     if( bool(_autoreverse) != mbAutoReverse )
@@ -1351,7 +1351,7 @@ void SAL_CALL AnimationNode::setCalcMode( sal_Int16 _calcmode )
 
 
 // XAnimate
-sal_Bool SAL_CALL AnimationNode::getAccumulate()
+bool SAL_CALL AnimationNode::getAccumulate()
 {
     std::unique_lock aGuard( m_aMutex );
     return mbAccumulate;
@@ -1359,7 +1359,7 @@ sal_Bool SAL_CALL AnimationNode::getAccumulate()
 
 
 // XAnimate
-void SAL_CALL AnimationNode::setAccumulate( sal_Bool _accumulate )
+void SAL_CALL AnimationNode::setAccumulate( bool _accumulate )
 {
     std::unique_lock l( m_aMutex );
     if( bool(_accumulate) != mbAccumulate )
@@ -1506,7 +1506,7 @@ void SAL_CALL AnimationNode::setColorInterpolation( sal_Int16 _colorspace )
 
 
 // XAnimateColor
-sal_Bool SAL_CALL AnimationNode::getDirection()
+bool SAL_CALL AnimationNode::getDirection()
 {
     std::unique_lock aGuard( m_aMutex );
     return mbDirection;
@@ -1514,7 +1514,7 @@ sal_Bool SAL_CALL AnimationNode::getDirection()
 
 
 // XAnimateColor
-void SAL_CALL AnimationNode::setDirection( sal_Bool _direction )
+void SAL_CALL AnimationNode::setDirection( bool _direction )
 {
     std::unique_lock l( m_aMutex );
     if( bool(_direction) != mbDirection )
@@ -1686,7 +1686,7 @@ void SAL_CALL AnimationNode::setSubtype( sal_Int16 _subtype )
 
 
 // XTransitionFilter
-sal_Bool SAL_CALL AnimationNode::getMode()
+bool SAL_CALL AnimationNode::getMode()
 {
     std::unique_lock aGuard( m_aMutex );
     return mbMode;
@@ -1694,7 +1694,7 @@ sal_Bool SAL_CALL AnimationNode::getMode()
 
 
 // XTransitionFilter
-void SAL_CALL AnimationNode::setMode( sal_Bool _mode )
+void SAL_CALL AnimationNode::setMode( bool _mode )
 {
     std::unique_lock l( m_aMutex );
     if( bool(_mode) != mbMode )
@@ -1761,32 +1761,32 @@ void SAL_CALL AnimationNode::setVolume( double _volume )
     }
 }
 
-sal_Bool SAL_CALL AnimationNode::getHideDuringShow()
+bool SAL_CALL AnimationNode::getHideDuringShow()
 {
     std::unique_lock aGuard(m_aMutex);
     return mbHideDuringShow;
 }
 
-void SAL_CALL AnimationNode::setHideDuringShow(sal_Bool bHideDuringShow)
+void SAL_CALL AnimationNode::setHideDuringShow(bool bHideDuringShow)
 {
     std::unique_lock l(m_aMutex);
-    if (static_cast<bool>(bHideDuringShow) != mbHideDuringShow)
+    if (bHideDuringShow != mbHideDuringShow)
     {
         mbHideDuringShow = bHideDuringShow;
         fireChangeListener(l);
     }
 }
 
-sal_Bool SAL_CALL AnimationNode::getNarration()
+bool SAL_CALL AnimationNode::getNarration()
 {
     std::unique_lock aGuard(m_aMutex);
     return mbNarration;
 }
 
-void SAL_CALL AnimationNode::setNarration(sal_Bool bNarration)
+void SAL_CALL AnimationNode::setNarration(bool bNarration)
 {
     std::unique_lock l(m_aMutex);
-    if (static_cast<bool>(bNarration) != mbNarration)
+    if (bNarration != mbNarration)
     {
         mbNarration = bNarration;
         fireChangeListener(l);
@@ -1838,7 +1838,7 @@ Type SAL_CALL AnimationNode::getElementType()
 
 
 // XElementAccess
-sal_Bool SAL_CALL AnimationNode::hasElements()
+bool SAL_CALL AnimationNode::hasElements()
 {
     std::unique_lock aGuard( m_aMutex );
     return !maChildren.empty();

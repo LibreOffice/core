@@ -89,7 +89,7 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
     ,m_nResultSetConcurrency( ResultSetConcurrency::READ_ONLY )
     ,m_bClone(false)
     ,m_bIgnoreResult(false)
-    ,m_bBeforeFirst(true) // changed from sal_False
+    ,m_bBeforeFirst(true) // changed from false
     ,m_bAfterLast(false)
     ,m_bIsInsertRow(false)
 {
@@ -177,7 +177,7 @@ void SAL_CALL ORowSetBase::disposing()
 }
 
 // XRow
-sal_Bool SAL_CALL ORowSetBase::wasNull(  )
+bool SAL_CALL ORowSetBase::wasNull(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -254,7 +254,7 @@ OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex )
     return getValue(columnIndex).getString();
 }
 
-sal_Bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getBool();
@@ -408,7 +408,7 @@ Any SAL_CALL ORowSetBase::getBookmark(  )
     return m_aBookmark;
 }
 
-sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark )
+bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark )
 {
     SAL_INFO("dbaccess", "ORowSetBase::moveToBookmark(Any) Clone = " << m_bClone);
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
@@ -458,7 +458,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark )
     return bRet;
 }
 
-sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
+bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
 {
     SAL_INFO("dbaccess", "ORowSetBase::moveRelativeToBookmark(Any," << rows << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -508,7 +508,7 @@ sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& _first, const Any& 
     return m_pCache->compareBookmarks(_first,_second);
 }
 
-sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  )
+bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -561,7 +561,7 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  )
 }
 
 // XResultSet
-sal_Bool SAL_CALL ORowSetBase::next(  )
+bool SAL_CALL ORowSetBase::next(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::next() Clone = " << m_bClone);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -621,7 +621,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  )
     return bRet;
 }
 
-sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  )
+bool SAL_CALL ORowSetBase::isBeforeFirst(  )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -632,7 +632,7 @@ sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  )
     return m_bBeforeFirst;
 }
 
-sal_Bool SAL_CALL ORowSetBase::isAfterLast(  )
+bool SAL_CALL ORowSetBase::isAfterLast(  )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -647,7 +647,7 @@ bool ORowSetBase::isOnFirst()
     return isFirst();
 }
 
-sal_Bool SAL_CALL ORowSetBase::isFirst(  )
+bool SAL_CALL ORowSetBase::isFirst(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::isFirst() Clone = " << m_bClone);
 
@@ -673,7 +673,7 @@ bool ORowSetBase::isOnLast()
     return isLast();
 }
 
-sal_Bool SAL_CALL ORowSetBase::isLast(  )
+bool SAL_CALL ORowSetBase::isLast(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::isLast() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -825,7 +825,7 @@ bool SAL_CALL ORowSetBase::move(std::function<bool(ORowSetBase *)> const & _aChe
     return bRet;
 }
 
-sal_Bool SAL_CALL ORowSetBase::first(  )
+bool SAL_CALL ORowSetBase::first(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::first() Clone = " << m_bClone);
     auto ioF_tmp = std::mem_fn(&ORowSetBase::isOnFirst);
@@ -833,7 +833,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  )
     return move(ioF_tmp,F_tmp);
 }
 
-sal_Bool SAL_CALL ORowSetBase::last(  )
+bool SAL_CALL ORowSetBase::last(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::last() Clone = " << m_bClone);
     auto ioL_tmp = std::mem_fn(&ORowSetBase::isOnLast);
@@ -870,7 +870,7 @@ sal_Int32 ORowSetBase::impl_getRow()
     return nPos;
 }
 
-sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row )
+bool SAL_CALL ORowSetBase::absolute( sal_Int32 row )
 {
     SAL_INFO("dbaccess", "ORowSetBase::absolute(" << row << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -915,7 +915,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row )
     return bRet;
 }
 
-sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows )
+bool SAL_CALL ORowSetBase::relative( sal_Int32 rows )
 {
     SAL_INFO("dbaccess", "ORowSetBase::relative(" << rows << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -970,7 +970,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows )
     return bRet;
 }
 
-sal_Bool SAL_CALL ORowSetBase::previous(  )
+bool SAL_CALL ORowSetBase::previous(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::previous() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -1100,7 +1100,7 @@ void SAL_CALL ORowSetBase::refreshRow(  )
     }
 }
 
-sal_Bool SAL_CALL ORowSetBase::rowUpdated(  )
+bool SAL_CALL ORowSetBase::rowUpdated(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -1111,7 +1111,7 @@ sal_Bool SAL_CALL ORowSetBase::rowUpdated(  )
     return m_pCache->rowUpdated();
 }
 
-sal_Bool SAL_CALL ORowSetBase::rowInserted(  )
+bool SAL_CALL ORowSetBase::rowInserted(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
 
@@ -1123,7 +1123,7 @@ sal_Bool SAL_CALL ORowSetBase::rowInserted(  )
     return m_pCache->rowInserted();
 }
 
-sal_Bool SAL_CALL ORowSetBase::rowDeleted(  )
+bool SAL_CALL ORowSetBase::rowDeleted(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -1225,7 +1225,7 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
     if ( m_aBookmark.hasValue() )
     {
         if (_ePrepareForDirection == CursorMoveDirection::CurrentRefresh ||
-            (m_pCache->isAfterLast() != bool(isAfterLast())) || ( m_pCache->isBeforeFirst() != bool(isBeforeFirst()) ) ||
+            (m_pCache->isAfterLast() != isAfterLast()) || ( m_pCache->isBeforeFirst() != isBeforeFirst() ) ||
              m_pCache->compareBookmarks( m_aBookmark, m_pCache->getBookmark() ) != CompareBookmark::EQUAL )
             bSuccess = m_pCache->moveToBookmark( m_aBookmark );
         else

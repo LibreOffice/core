@@ -77,7 +77,7 @@ OUString SAL_CALL ORoadmapEntry::getImplementationName(  )
     return u"com.sun.star.comp.toolkit.RoadmapItem"_ustr;
 }
 
-sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
+bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

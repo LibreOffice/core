@@ -180,7 +180,7 @@ namespace frm
     }
 
 
-    sal_Bool OScrollBarModel::convertFastPropertyValue(
+    bool OScrollBarModel::convertFastPropertyValue(
                 Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified( false );

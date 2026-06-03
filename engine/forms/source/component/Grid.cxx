@@ -259,7 +259,7 @@ void OGridControlModel::disposing(const EventObject& _rEvent)
 }
 
 // XSelectionSupplier
-sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement)
+bool SAL_CALL OGridControlModel::select(const Any& rElement)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference<XPropertySet> xSel;
@@ -380,10 +380,10 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
     *pProperties++ = css::beans::Property(PROPERTY_CLASSID, PROPERTY_ID_CLASSID, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_TAG, PROPERTY_ID_TAG, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
-    *pProperties++ = css::beans::Property(PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
-    *pProperties++ = css::beans::Property(PROPERTY_HASNAVIGATION, PROPERTY_ID_HASNAVIGATION, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    *pProperties++ = css::beans::Property(PROPERTY_ENABLED, PROPERTY_ID_ENABLED, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND);
-    *pProperties++ = css::beans::Property(PROPERTY_ENABLEVISIBLE, PROPERTY_ID_ENABLEVISIBLE, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
+    *pProperties++ = css::beans::Property(PROPERTY_HASNAVIGATION, PROPERTY_ID_HASNAVIGATION, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_ENABLED, PROPERTY_ID_ENABLED, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND);
+    *pProperties++ = css::beans::Property(PROPERTY_ENABLEVISIBLE, PROPERTY_ID_ENABLEVISIBLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_BORDER, PROPERTY_ID_BORDER, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_BORDERCOLOR, PROPERTY_ID_BORDERCOLOR, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
     *pProperties++ = css::beans::Property(PROPERTY_DEFAULTCONTROL, PROPERTY_ID_DEFAULTCONTROL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
@@ -406,12 +406,12 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
     *pProperties++ = css::beans::Property(PROPERTY_FONTEMPHASISMARK, PROPERTY_ID_FONTEMPHASISMARK, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_FONTRELIEF, PROPERTY_ID_FONTRELIEF, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_FONT_STRIKEOUT, PROPERTY_ID_FONT_STRIKEOUT, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::MAYBEDEFAULT);
-    *pProperties++ = css::beans::Property(PROPERTY_RECORDMARKER, PROPERTY_ID_RECORDMARKER, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
-    *pProperties++ = css::beans::Property(PROPERTY_PRINTABLE, PROPERTY_ID_PRINTABLE, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_RECORDMARKER, PROPERTY_ID_RECORDMARKER, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_PRINTABLE, PROPERTY_ID_PRINTABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_CURSORCOLOR, PROPERTY_ID_CURSORCOLOR, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT |
                                           css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::TRANSIENT);
-    *pProperties++ = css::beans::Property(PROPERTY_ALWAYSSHOWCURSOR, PROPERTY_ID_ALWAYSSHOWCURSOR, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
-    *pProperties++ = css::beans::Property(PROPERTY_DISPLAYSYNCHRON, PROPERTY_ID_DISPLAYSYNCHRON, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_ALWAYSSHOWCURSOR, PROPERTY_ID_ALWAYSSHOWCURSOR, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_DISPLAYSYNCHRON, PROPERTY_ID_DISPLAYSYNCHRON, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_HELPURL, PROPERTY_ID_HELPURL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_WRITING_MODE, PROPERTY_ID_WRITING_MODE, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_CONTEXT_WRITING_MODE, PROPERTY_ID_CONTEXT_WRITING_MODE, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::TRANSIENT);
@@ -483,7 +483,7 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
     }
 }
 
-sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
+bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                                     sal_Int32 nHandle, const Any& rValue )
 {
     bool bModified(false);

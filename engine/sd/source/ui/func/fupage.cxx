@@ -597,8 +597,8 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( bSetPageSizeAndBorder || !mbMasterPage )
         mpDrawViewShell->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
 
-    // if bMasterPage==sal_False then create a background-object for this page with the
-    // properties set in the dialog before, but if mbPageBckgrdDeleted==sal_True then
+    // if bMasterPage==false then create a background-object for this page with the
+    // properties set in the dialog before, but if mbPageBckgrdDeleted==true then
     // the background of this page was set to invisible, so it would be a mistake
     // to create a new background-object for this page !
 

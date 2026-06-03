@@ -46,13 +46,13 @@ namespace connectivity
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
         // XStringSubstitution
-        virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired ) override;
+        virtual OUString SAL_CALL substituteVariables( const OUString& aText, bool bSubstRequired ) override;
         virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) override;
         virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) override;
     };

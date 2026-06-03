@@ -1619,7 +1619,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf97601)
 
     // Make sure that the chart is marked as modified.
     uno::Reference<util::XModifiable> xModifiable(xChartComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xModifiable->isModified()));
+    CPPUNIT_ASSERT_EQUAL(true, xModifiable->isModified());
     calcLayout();
     // This never returned.
     Scheduler::ProcessEventsToIdle();

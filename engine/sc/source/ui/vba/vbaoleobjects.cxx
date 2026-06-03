@@ -67,7 +67,7 @@ public:
             return cppu::UnoType<drawing::XControlShape>::get();
         }
 
-        virtual sal_Bool SAL_CALL hasElements() override
+        virtual bool SAL_CALL hasElements() override
         {
             return ( getCount() > 0 );
         }
@@ -87,7 +87,7 @@ public:
                      uno::Reference< container::XIndexAccess > xIndexAccess )
             :  m_xParent(std::move( xParent )), m_xContext(std::move( xContext)), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
 
-        virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+        virtual bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }

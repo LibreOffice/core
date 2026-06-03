@@ -51,7 +51,7 @@ DECLARE_OOXMLEXPORT_TEST(testTscp, "tscp.docx")
     // No RDF statement on the first paragraph.
     uno::Reference<rdf::XResource> xParagraph(getParagraph(1), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
-    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(xStatements->hasMoreElements()));
+    CPPUNIT_ASSERT_EQUAL(false, xStatements->hasMoreElements());
 
     // 3 RDF statements on the second paragraph.
     xParagraph.set(getParagraph(2), uno::UNO_QUERY);
@@ -73,7 +73,7 @@ DECLARE_OOXMLEXPORT_TEST(testTscp, "tscp.docx")
     // No RDF statement on the third paragraph.
     xParagraph.set(getParagraph(3), uno::UNO_QUERY);
     xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
-    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(xStatements->hasMoreElements()));
+    CPPUNIT_ASSERT_EQUAL(false, xStatements->hasMoreElements());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo76589 )

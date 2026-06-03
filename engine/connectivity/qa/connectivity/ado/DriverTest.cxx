@@ -126,7 +126,7 @@ void AdoDriverTest::test_select_default_all()
         CPPUNIT_ASSERT_MESSAGE("cannot extract row from result set!", xDelegatorRow.is());
     }
 
-    sal_Bool result = xResultSet->first();
+    bool result = xResultSet->first();
     CPPUNIT_ASSERT_MESSAGE("fetch first row failed!", result);
 /*
     OUString mail = xDelegatorRow->getString(1);

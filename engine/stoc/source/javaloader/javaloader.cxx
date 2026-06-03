@@ -263,7 +263,7 @@ public:
 public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     virtual void SAL_CALL disposing() override;
@@ -272,7 +272,7 @@ public:
     virtual css::uno::Reference<XInterface> SAL_CALL activate(
         const OUString& implementationName, const OUString& implementationLoaderUrl,
         const OUString& locationUrl, const css::uno::Reference<XRegistryKey>& xKey) override;
-    virtual sal_Bool SAL_CALL writeRegistryInfo(
+    virtual bool SAL_CALL writeRegistryInfo(
         const css::uno::Reference<XRegistryKey>& xKey,
         const OUString& implementationLoaderUrl, const OUString& locationUrl) override;
 };
@@ -508,7 +508,7 @@ OUString SAL_CALL JavaComponentLoader::getImplementationName()
     return u"com.sun.star.comp.stoc.JavaComponentLoader"_ustr;
 }
 
-sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
+bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -520,7 +520,7 @@ Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
 
 
 // XImplementationLoader
-sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
+bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
     const OUString & rLibName)
 {

@@ -431,7 +431,7 @@ OUString SAL_CALL ORowSet::getImplementationName()
     return u"com.sun.star.comp.dba.ORowSet"_ustr;
 }
 
-sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName )
+bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -640,9 +640,9 @@ void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex )
     aNotify.firePropertyChange();
 }
 
-void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x )
+void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, bool x )
 {
-    updateValue(columnIndex, static_cast<bool>(x));
+    updateValue(columnIndex, x);
 }
 
 void SAL_CALL ORowSet::updateByte( sal_Int32 columnIndex, sal_Int8 x )
@@ -1072,7 +1072,7 @@ bool ORowSet::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _r
         [&aEvt](Reference<css::sdb::XRowSetApproveListener>& rxItem) {
             try
             {
-                return static_cast<bool>(rxItem->approveCursorMove(aEvt));
+                return rxItem->approveCursorMove(aEvt);
             }
             catch( RuntimeException& )
             {
@@ -1091,7 +1091,7 @@ void ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rG
         [&aEvt](Reference<css::sdb::XRowSetApproveListener>& rxItem) {
             try
             {
-                return static_cast<bool>(rxItem->approveRowChange(aEvt));
+                return rxItem->approveRowChange(aEvt);
             }
             catch( RuntimeException& )
             {
@@ -1252,7 +1252,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  )
 }
 
 // XRow
-sal_Bool SAL_CALL ORowSet::wasNull(  )
+bool SAL_CALL ORowSet::wasNull(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -1278,7 +1278,7 @@ OUString SAL_CALL ORowSet::getString( sal_Int32 columnIndex )
     return getInsertValue(columnIndex).getString();
 }
 
-sal_Bool SAL_CALL ORowSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL ORowSet::getBoolean( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getInsertValue(columnIndex).getBool();
@@ -2454,9 +2454,9 @@ void ORowSet::setParameter(sal_Int32 parameterIndex, const ORowSetValue& x)
     m_bParametersDirty = true;
 }
 
-void SAL_CALL ORowSet::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
+void SAL_CALL ORowSet::setBoolean( sal_Int32 parameterIndex, bool x )
 {
-    setParameter(parameterIndex, static_cast<bool>(x));
+    setParameter(parameterIndex, x);
 }
 
 void SAL_CALL ORowSet::setByte( sal_Int32 parameterIndex, sal_Int8 x )
@@ -2827,7 +2827,7 @@ OUString ORowSetClone::getImplementationName(  )
     return u"com.sun.star.sdb.ORowSetClone"_ustr;
 }
 
-sal_Bool ORowSetClone::supportsService( const OUString& _rServiceName )
+bool ORowSetClone::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

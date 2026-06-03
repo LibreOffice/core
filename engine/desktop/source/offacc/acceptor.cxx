@@ -195,7 +195,7 @@ Sequence<OUString> Acceptor::getSupportedServiceNames()
     return { u"com.sun.star.office.Acceptor"_ustr };
 }
 
-sal_Bool Acceptor::supportsService(OUString const & ServiceName)
+bool Acceptor::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

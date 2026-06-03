@@ -65,14 +65,14 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
@@ -127,14 +127,14 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL

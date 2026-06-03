@@ -43,7 +43,7 @@ public:
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) override;
 
-        virtual sal_Bool SAL_CALL isValidNatNum( const css::lang::Locale& rLocale,
+        virtual bool SAL_CALL isValidNatNum( const css::lang::Locale& rLocale,
                 sal_Int16 nNativeNumberMode ) override { return isValidNatNumImpl(rLocale, nNativeNumberMode); }
 
         virtual css::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
@@ -59,7 +59,7 @@ public:
 
         //XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations

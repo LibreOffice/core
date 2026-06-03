@@ -33,7 +33,7 @@ struct Registry_Api
 {
     void        (REGISTRY_CALLTYPE *acquire)            (RegHandle);
     void        (REGISTRY_CALLTYPE *release)            (RegHandle);
-    sal_Bool    (REGISTRY_CALLTYPE *isReadOnly)         (RegHandle);
+    bool    (REGISTRY_CALLTYPE *isReadOnly)         (RegHandle);
     RegError    (REGISTRY_CALLTYPE *openRootKey)        (RegHandle, RegKeyHandle*);
     RegError    (REGISTRY_CALLTYPE *getName)            (RegHandle, rtl_uString**);
     RegError    (REGISTRY_CALLTYPE *createRegistry)     (rtl_uString*, RegHandle*);
@@ -42,7 +42,7 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *destroyRegistry)    (RegHandle, rtl_uString*);
     void        (REGISTRY_CALLTYPE *acquireKey)         (RegKeyHandle);
     void        (REGISTRY_CALLTYPE *releaseKey)         (RegKeyHandle);
-    sal_Bool    (REGISTRY_CALLTYPE *isKeyReadOnly)      (RegKeyHandle);
+    bool    (REGISTRY_CALLTYPE *isKeyReadOnly)      (RegKeyHandle);
     RegError    (REGISTRY_CALLTYPE *getKeyName)         (RegKeyHandle, rtl_uString**);
     RegError    (REGISTRY_CALLTYPE *createKey)          (RegKeyHandle, rtl_uString*, RegKeyHandle*);
     RegError    (REGISTRY_CALLTYPE *openKey)            (RegKeyHandle, rtl_uString*, RegKeyHandle*);
@@ -60,7 +60,7 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *getStringListValue) (RegKeyHandle, rtl_uString*, char***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *getUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *freeValueList)      (RegValueType, RegValue, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *getResolvedKeyName) (RegKeyHandle, rtl_uString*, sal_Bool, rtl_uString**);
+    RegError    (REGISTRY_CALLTYPE *getResolvedKeyName) (RegKeyHandle, rtl_uString*, bool, rtl_uString**);
     RegError    (REGISTRY_CALLTYPE *getKeyNames)        (RegKeyHandle, rtl_uString*, rtl_uString***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *freeKeyNames)       (rtl_uString**, sal_uInt32);
 };

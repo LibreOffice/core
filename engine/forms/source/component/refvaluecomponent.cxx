@@ -123,7 +123,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+    bool SAL_CALL OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;
         switch ( _nHandle )
@@ -174,7 +174,7 @@ namespace frm
         if ( !m_sReferenceValue.isEmpty() )
             aTypes.push_back( cppu::UnoType<OUString>::get() );
 
-        aTypes.push_back( cppu::UnoType<sal_Bool>::get() );
+        aTypes.push_back( cppu::UnoType<bool>::get() );
 
         return comphelper::containerToSequence(aTypes);
     }

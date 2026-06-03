@@ -60,7 +60,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _rtl_ModuleCount
 typedef struct _rtl_StandardModuleCount
 {
     rtl_ModuleCount modCnt;
-     sal_Bool ( *canUnload ) ( struct _rtl_StandardModuleCount* a, TimeValue* libUnused);
+     bool ( *canUnload ) ( struct _rtl_StandardModuleCount* a, TimeValue* libUnused);
     oslInterlockedCount counter;
     TimeValue unusedSince;
 } rtl_StandardModuleCount;
@@ -81,7 +81,7 @@ SAL_DLLPUBLIC void rtl_moduleCount_release( rtl_ModuleCount * that ) SAL_COLD;
 
     @deprecated Do not use.
 */
-SAL_DLLPUBLIC sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue* libUnused) SAL_COLD;
+SAL_DLLPUBLIC bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue* libUnused) SAL_COLD;
 
 #ifdef __cplusplus
 }

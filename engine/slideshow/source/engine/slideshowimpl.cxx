@@ -272,17 +272,17 @@ public:
 private:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
     // XSlideShow:
-    virtual sal_Bool SAL_CALL nextEffect() override;
-    virtual sal_Bool SAL_CALL previousEffect() override;
-    virtual sal_Bool SAL_CALL startShapeActivity(
+    virtual bool SAL_CALL nextEffect() override;
+    virtual bool SAL_CALL previousEffect() override;
+    virtual bool SAL_CALL startShapeActivity(
         uno::Reference<drawing::XShape> const& xShape ) override;
-    virtual sal_Bool SAL_CALL stopShapeActivity(
+    virtual bool SAL_CALL stopShapeActivity(
         uno::Reference<drawing::XShape> const& xShape ) override;
-    virtual sal_Bool SAL_CALL pause( sal_Bool bPauseShow ) override;
+    virtual bool SAL_CALL pause( bool bPauseShow ) override;
     virtual uno::Reference<drawing::XDrawPage> SAL_CALL getCurrentSlide() override;
     virtual void SAL_CALL displaySlide(
         uno::Reference<drawing::XDrawPage> const& xSlide,
@@ -290,13 +290,13 @@ private:
         uno::Reference<animations::XAnimationNode> const& xRootNode,
         uno::Sequence<beans::PropertyValue> const& rProperties ) override;
     virtual void SAL_CALL registerUserPaintPolygons( const css::uno::Reference< css::lang::XMultiServiceFactory >& xDocFactory ) override;
-    virtual sal_Bool SAL_CALL setProperty(
+    virtual bool SAL_CALL setProperty(
         beans::PropertyValue const& rProperty ) override;
-    virtual sal_Bool SAL_CALL addView(
+    virtual bool SAL_CALL addView(
         uno::Reference<presentation::XSlideShowView> const& xView ) override;
-    virtual sal_Bool SAL_CALL removeView(
+    virtual bool SAL_CALL removeView(
         uno::Reference<presentation::XSlideShowView> const& xView ) override;
-    virtual sal_Bool SAL_CALL update( double & nNextTimeout ) override;
+    virtual bool SAL_CALL update( double & nNextTimeout ) override;
     virtual void SAL_CALL addSlideShowListener(
         uno::Reference<presentation::XSlideShowListener> const& xListener ) override;
     virtual void SAL_CALL removeSlideShowListener(
@@ -703,7 +703,7 @@ OUString SAL_CALL SlideShowImpl::getImplementationName()
     return u"com.sun.star.comp.presentation.SlideShow"_ustr;
 }
 
-sal_Bool SAL_CALL SlideShowImpl::supportsService(const OUString& aServiceName)
+bool SAL_CALL SlideShowImpl::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }
@@ -1219,7 +1219,7 @@ void SlideShowImpl::redisplayCurrentSlide()
         });
 }
 
-sal_Bool SlideShowImpl::nextEffect()
+bool SlideShowImpl::nextEffect()
 {
     mbMovingForward = true;
     osl::MutexGuard const guard( m_aMutex );
@@ -1236,7 +1236,7 @@ sal_Bool SlideShowImpl::nextEffect()
         return maEventMultiplexer.notifyNextEffect();
 }
 
-sal_Bool SlideShowImpl::previousEffect()
+bool SlideShowImpl::previousEffect()
 {
     mbMovingForward = false;
     osl::MutexGuard const guard( m_aMutex );
@@ -1280,7 +1280,7 @@ void SlideShowImpl::rewindEffectToPreviousSlide()
     maScreenUpdater.commitUpdates();
 }
 
-sal_Bool SlideShowImpl::startShapeActivity(
+bool SlideShowImpl::startShapeActivity(
     uno::Reference<drawing::XShape> const& /*xShape*/ )
 {
     // precondition: must only be called from the main thread!
@@ -1291,7 +1291,7 @@ sal_Bool SlideShowImpl::startShapeActivity(
     return false;
 }
 
-sal_Bool SlideShowImpl::stopShapeActivity(
+bool SlideShowImpl::stopShapeActivity(
     uno::Reference<drawing::XShape> const& /*xShape*/ )
 {
     // precondition: must only be called from the main thread!
@@ -1302,7 +1302,7 @@ sal_Bool SlideShowImpl::stopShapeActivity(
     return false;
 }
 
-sal_Bool SlideShowImpl::pause( sal_Bool bPauseShow )
+bool SlideShowImpl::pause( bool bPauseShow )
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -1339,7 +1339,7 @@ uno::Reference<drawing::XDrawPage> SlideShowImpl::getCurrentSlide()
         return uno::Reference<drawing::XDrawPage>();
 }
 
-sal_Bool SlideShowImpl::addView(
+bool SlideShowImpl::addView(
     uno::Reference<presentation::XSlideShowView> const& xView )
 {
     osl::MutexGuard const guard( m_aMutex );
@@ -1385,7 +1385,7 @@ sal_Bool SlideShowImpl::addView(
     return true;
 }
 
-sal_Bool SlideShowImpl::removeView(
+bool SlideShowImpl::removeView(
     uno::Reference<presentation::XSlideShowView> const& xView )
 {
     osl::MutexGuard const guard( m_aMutex );
@@ -1597,7 +1597,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     }
 }
 
-sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
+bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -2083,7 +2083,7 @@ void SlideShowImpl::resetCursor()
         pView->setCursorShape( nActualCursor );
 }
 
-sal_Bool SlideShowImpl::update( double & nNextTimeout )
+bool SlideShowImpl::update( double & nNextTimeout )
 {
     osl::MutexGuard const guard( m_aMutex );
 

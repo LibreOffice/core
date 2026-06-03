@@ -131,7 +131,7 @@ public:
         auto const t2 = cppu::UnoType<sal_Int32>::get();
         typelib_TypeDescriptionReference* ref = nullptr;
         typelib_TypeDescriptionReference* members[2] = { t1.getTypeLibType(), t2.getTypeLibType() };
-        sal_Bool const param[2] = { false, true };
+        bool const param[2] = { false, true };
         typelib_static_struct_type_init(&ref, "com.sun.star.beans.Optional<long>", nullptr, 2,
                                         members, param);
         CPPUNIT_ASSERT(ref != nullptr);

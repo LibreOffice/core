@@ -89,8 +89,8 @@ public:
     virtual void SAL_CALL setLeft( double _left ) override;
     virtual double SAL_CALL getTop() override;
     virtual void SAL_CALL setTop( double _top ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
     virtual sal_Int32 SAL_CALL getZOrderPosition() override;
     virtual sal_Int32 SAL_CALL getType() override;
     virtual double SAL_CALL getRotation() override;
@@ -98,10 +98,10 @@ public:
     virtual css::uno::Reference< ov::msforms::XLineFormat > SAL_CALL getLine() override;
     virtual css::uno::Reference< ov::msforms::XFillFormat > SAL_CALL getFill() override;
     virtual css::uno::Reference< ov::msforms::XPictureFormat > SAL_CALL getPictureFormat() override;
-    virtual sal_Bool SAL_CALL getLockAspectRatio() override;
-    virtual void SAL_CALL setLockAspectRatio( sal_Bool _lockaspectratio ) override;
-    virtual sal_Bool SAL_CALL getLockAnchor() override;
-    virtual void SAL_CALL setLockAnchor( sal_Bool _lockanchor ) override;
+    virtual bool SAL_CALL getLockAspectRatio() override;
+    virtual void SAL_CALL setLockAspectRatio( bool _lockaspectratio ) override;
+    virtual bool SAL_CALL getLockAnchor() override;
+    virtual void SAL_CALL setLockAnchor( bool _lockanchor ) override;
     virtual ::sal_Int32 SAL_CALL getRelativeHorizontalPosition() override;
     virtual void SAL_CALL setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalposition) override;
     virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() override;
@@ -115,8 +115,8 @@ public:
     virtual void SAL_CALL IncrementRotation( double Increment ) override;
     virtual void SAL_CALL IncrementLeft( double Increment ) override;
     virtual void SAL_CALL IncrementTop( double Increment ) override;
-    virtual void SAL_CALL ScaleHeight( double Factor, sal_Bool RelativeToOriginalSize, sal_Int32 Scale ) override;
-    virtual void SAL_CALL ScaleWidth( double Factor, sal_Bool RelativeToOriginalSize, sal_Int32 Scale ) override;
+    virtual void SAL_CALL ScaleHeight( double Factor, bool RelativeToOriginalSize, sal_Int32 Scale ) override;
+    virtual void SAL_CALL ScaleWidth( double Factor, bool RelativeToOriginalSize, sal_Int32 Scale ) override;
     // Replace??
     virtual void SAL_CALL Select( const css::uno::Any& Replace ) override;
     virtual css::uno::Any SAL_CALL ShapeRange( const css::uno::Any& index ) override;

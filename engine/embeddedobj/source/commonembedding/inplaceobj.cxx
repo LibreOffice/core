@@ -59,7 +59,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
     m_aClipRectangle = aClipRect;
 }
 
-void SAL_CALL OCommonEmbeddedObject::enableModeless( sal_Bool /*bEnable*/ )
+void SAL_CALL OCommonEmbeddedObject::enableModeless( bool /*bEnable*/ )
 {
     // TODO: notify model that it can not use modal dialogs
 }

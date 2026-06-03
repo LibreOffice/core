@@ -887,7 +887,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     return new SwChartDataSource(aLDS);
 }
 
-sal_Bool SAL_CALL SwChartDataProvider::createDataSourcePossible(
+bool SAL_CALL SwChartDataProvider::createDataSourcePossible(
         const uno::Sequence< beans::PropertyValue >& rArguments )
 {
     SolarMutexGuard aGuard;
@@ -1307,7 +1307,7 @@ uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDa
     return new SwChartDataSequence( *this, *pTableFormat, pUnoCursor );
 }
 
-sal_Bool SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentationPossible(
+bool SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentationPossible(
         const OUString& rRangeRepresentation )
 {
     SolarMutexGuard aGuard;
@@ -1393,7 +1393,7 @@ OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
     return u"SwChartDataProvider"_ustr;
 }
 
-sal_Bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceName )
+bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1750,7 +1750,7 @@ OUString SAL_CALL SwChartDataSource::getImplementationName(  )
     return u"SwChartDataSource"_ustr;
 }
 
-sal_Bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceName )
+bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2127,7 +2127,7 @@ OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
     return u"SwChartDataSequence"_ustr;
 }
 
-sal_Bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceName )
+bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2157,7 +2157,7 @@ void SwChartDataSequence::Notify( const SfxHint& rHint)
     }
 }
 
-sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
+bool SAL_CALL SwChartDataSequence::isModified(  )
 {
     SolarMutexGuard aGuard;
     if (m_bDisposed)
@@ -2167,7 +2167,7 @@ sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
 }
 
 void SAL_CALL SwChartDataSequence::setModified(
-        sal_Bool bModified )
+        bool bModified )
 {
     SolarMutexGuard aGuard;
     if (m_bDisposed)
@@ -2596,7 +2596,7 @@ OUString SAL_CALL SwChartLabeledDataSequence::getImplementationName(  )
     return u"SwChartLabeledDataSequence"_ustr;
 }
 
-sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
+bool SAL_CALL SwChartLabeledDataSequence::supportsService(
         const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);

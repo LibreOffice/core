@@ -1489,7 +1489,7 @@ void OleComponent::OnClose_Impl()
 
 // XCloseable
 
-void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
+void SAL_CALL OleComponent::close( bool bDeliverOwnership )
 {
     uno::Reference< uno::XInterface > xSelfHold;
     {
@@ -1688,7 +1688,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransferData
 }
 
 
-sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1753,12 +1753,12 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const css::uno::Sequence< sal_Int
     return 0;
 }
 
-sal_Bool SAL_CALL OleComponent::isModified()
+bool SAL_CALL OleComponent::isModified()
 {
     return m_bModified;
 }
 
-void SAL_CALL OleComponent::setModified( sal_Bool bModified )
+void SAL_CALL OleComponent::setModified( bool bModified )
 {
     m_bModified = bModified;
 

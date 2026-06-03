@@ -499,8 +499,8 @@ void unoInterfaceProxyDispatch(
           typelib_MethodParameter aParam;
           aParam.pTypeRef =
             ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
-          aParam.bIn        = sal_True;
-          aParam.bOut       = sal_False;
+          aParam.bIn        = true;
+          aParam.bOut       = false;
 
           typelib_TypeDescriptionReference * pReturnTypeRef = 0;
           OUString aVoidName("void");

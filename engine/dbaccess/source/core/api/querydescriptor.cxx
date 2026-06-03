@@ -194,7 +194,7 @@ OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  )
     return u"com.sun.star.sdb.OQueryDescriptor"_ustr;
 }
 
-sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

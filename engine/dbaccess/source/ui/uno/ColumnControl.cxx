@@ -46,7 +46,7 @@ OUString SAL_CALL OColumnControl::getImplementationName()
 {
         return SERVICE_CONTROLDEFAULT;
 }
-sal_Bool SAL_CALL OColumnControl::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OColumnControl::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

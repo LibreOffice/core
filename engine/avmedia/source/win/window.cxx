@@ -281,7 +281,7 @@ void SAL_CALL Window::update(  )
     ::RedrawWindow( mnFrameWnd, nullptr, nullptr, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE  );
 }
 
-sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
+bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
 {
         bool bRet = false;
 
@@ -339,13 +339,13 @@ awt::Rectangle SAL_CALL Window::getPosSize()
     return aRet;
 }
 
-void SAL_CALL Window::setVisible( sal_Bool bVisible )
+void SAL_CALL Window::setVisible( bool bVisible )
 {
     if( mnFrameWnd && mrPlayer.GetVideoWidth() && mrPlayer.GetVideoHeight() )
         ::ShowWindow( mnFrameWnd, bVisible ? SW_SHOW : SW_HIDE );
 }
 
-void SAL_CALL Window::setEnable( sal_Bool bEnable )
+void SAL_CALL Window::setEnable( bool bEnable )
 {
     if( mnFrameWnd )
         ::EnableWindow( mnFrameWnd, bEnable );
@@ -474,7 +474,7 @@ OUString SAL_CALL Window::getImplementationName(  )
     return AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME;
 }
 
-sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
+bool SAL_CALL Window::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

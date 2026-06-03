@@ -39,7 +39,7 @@ public:
         return u"com.sun.star.comp.framework.URLTransformer"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -49,13 +49,13 @@ public:
         return {u"com.sun.star.util.URLTransformer"_ustr};
     }
 
-    virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL ) override;
+    virtual bool SAL_CALL parseStrict( css::util::URL& aURL ) override;
 
-    virtual sal_Bool SAL_CALL parseSmart( css::util::URL& aURL, const OUString& sSmartProtocol ) override;
+    virtual bool SAL_CALL parseSmart( css::util::URL& aURL, const OUString& sSmartProtocol ) override;
 
-    virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL ) override;
+    virtual bool SAL_CALL assemble( css::util::URL& aURL ) override;
 
-    virtual OUString SAL_CALL getPresentation( const css::util::URL& aURL, sal_Bool bWithPassword ) override;
+    virtual OUString SAL_CALL getPresentation( const css::util::URL& aURL, bool bWithPassword ) override;
 };
 
 void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL)
@@ -106,7 +106,7 @@ void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL)
 }
 
 //  XURLTransformer
-sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL )
+bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL )
 {
     // Safe impossible cases.
     if ( aURL.Complete.isEmpty() )
@@ -156,7 +156,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL )
 
 //  XURLTransformer
 
-sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
+bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
                                                 const   OUString&    sSmartProtocol  )
 {
     // Safe impossible cases.
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
 }
 
 //  XURLTransformer
-sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL )
+bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL )
 {
     // Initialize parser.
     INetURLObject aParser;
@@ -264,7 +264,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL )
 //  XURLTransformer
 
 OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
-                                                            sal_Bool    bWithPassword   )
+                                                            bool    bWithPassword   )
 {
     // Safe impossible cases.
     if  ( aURL.Complete.isEmpty() )

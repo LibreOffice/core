@@ -48,8 +48,8 @@ public:
         const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override final;
     virtual void SAL_CALL removeDropTargetListener(
         const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override final;
-    virtual sal_Bool SAL_CALL isActive() override final;
-    virtual void SAL_CALL setActive(sal_Bool active) override final;
+    virtual bool SAL_CALL isActive() override final;
+    virtual void SAL_CALL setActive(bool active) override final;
     virtual sal_Int8 SAL_CALL getDefaultActions() override final;
     virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override final;
 };

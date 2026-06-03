@@ -2169,7 +2169,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
             aDestEnd.SetRow( rDestPos.Row() + nPastedCount - 1 );
         }
 
-        MarkRange( ScRange( rDestPos, aDestEnd ), false );          //! sal_False ???
+        MarkRange( ScRange( rDestPos, aDestEnd ), false );          //! false ???
 
         pDocSh->UpdateOle(GetViewData());
         SelectionChanged();

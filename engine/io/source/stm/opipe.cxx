@@ -80,7 +80,7 @@ public: // XConnectable
 public: // XServiceInfo
     OUString                    SAL_CALL getImplementationName() override;
     Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
 
@@ -334,7 +334,7 @@ OUString OPipeImpl::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool OPipeImpl::supportsService(const OUString& ServiceName)
+bool OPipeImpl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

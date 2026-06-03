@@ -798,7 +798,7 @@ bool OGenericUnoController::isUserDefinedFeature( const OUString& _rFeatureURL )
     return ( pos != m_aSupportedFeatures.end() ) && isUserDefinedFeature( pos->second.nFeatureId );
 }
 
-sal_Bool SAL_CALL OGenericUnoController::supportsService(const OUString& ServiceName)
+bool SAL_CALL OGenericUnoController::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -935,7 +935,7 @@ Reference< XFrame > SAL_CALL OGenericUnoController::getFrame()
     return m_aCurrentFrame.getFrame();
 }
 
-sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/)
+bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/)
 {
     SAL_WARN("dbaccess.ui", "OGenericUnoController::attachModel: not supported!" );
     return false;

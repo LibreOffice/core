@@ -603,13 +603,13 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::removeCurrentElement(  )
     removeNode(pOldCurrentElement);
 }
 
-sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::isCurrent( const uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node )
+bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::isCurrent( const uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node )
 {
     xmlNodePtr pNode = checkElement(node);
     return (pNode == m_pCurrentElement);
 }
 
-sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::isCurrentElementEmpty(  )
+bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::isCurrentElementEmpty(  )
 {
     bool rc = false;
 
@@ -880,7 +880,7 @@ OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getImplementationName(  )
     return u"com.sun.star.xml.wrapper.XMLDocumentWrapper"_ustr;
 }
 
-sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
+bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

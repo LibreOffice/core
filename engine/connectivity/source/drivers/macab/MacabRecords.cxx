@@ -368,7 +368,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     sal_Int32 numNonRequiredProperties = numProperties - requiredProperties.size();
 
     /* While searching through the properties for required properties, these
-     * sal_Bools will keep track of what we have found.
+     * bools will keep track of what we have found.
      */
     auto const bFoundRequiredProperties = std::make_unique<bool[]>(requiredProperties.size());
 

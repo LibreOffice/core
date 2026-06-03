@@ -412,7 +412,7 @@ OUString SAL_CALL ScNamedRangeObj::getImplementationName()
     return u"ScNamedRangeObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -604,7 +604,7 @@ uno::Type SAL_CALL ScNamedRangesObj::getElementType()
     return cppu::UnoType<sheet::XNamedRange>::get();   // must be suitable for getByIndex
 }
 
-sal_Bool SAL_CALL ScNamedRangesObj::hasElements()
+bool SAL_CALL ScNamedRangesObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -672,7 +672,7 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
     return {};
 }
 
-sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
+bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -702,7 +702,7 @@ void ScNamedRangesObj::unlock()
 
 // document::XActionLockable
 
-sal_Bool ScNamedRangesObj::isActionLocked()
+bool ScNamedRangesObj::isActionLocked()
 {
     SolarMutexGuard aGuard;
     return pDocShell->GetDocument().GetNamedRangesLockCount() != 0;
@@ -1136,7 +1136,7 @@ uno::Type SAL_CALL ScLabelRangesObj::getElementType()
     return cppu::UnoType<sheet::XLabelRange>::get();   // must be suitable for getByIndex
 }
 
-sal_Bool SAL_CALL ScLabelRangesObj::hasElements()
+bool SAL_CALL ScLabelRangesObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );

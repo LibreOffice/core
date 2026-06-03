@@ -384,7 +384,7 @@ void SAL_CALL SwVbaRange::setEnd( ::sal_Int32 _end )
     mxTextCursor->gotoRange( xEnd, true );
 }
 
-sal_Bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range )
+bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range )
 {
     SwVbaRange* pRange = dynamic_cast< SwVbaRange* >( Range.get() );
     if( !pRange )

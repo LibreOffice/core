@@ -88,15 +88,15 @@ public:
 
     // XSupportedLocales (for XSpellChecker)
     virtual Sequence< Locale > SAL_CALL getLocales() override;
-    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) override;
+    virtual bool SAL_CALL hasLocale( const Locale& rLocale ) override;
 
     // XSpellChecker
-    virtual sal_Bool SAL_CALL isValid( const OUString& rWord, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+    virtual bool SAL_CALL isValid( const OUString& rWord, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual Reference< XSpellAlternatives > SAL_CALL spell( const OUString& rWord, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL addLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
-    virtual sal_Bool SAL_CALL removeLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool SAL_CALL addLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool SAL_CALL removeLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
 
     // XServiceDisplayName
     virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) override;
@@ -111,7 +111,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

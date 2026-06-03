@@ -183,7 +183,7 @@ XTYPEPROVIDER_IMPL_10( ContentImplHelper,
                        container::XChild );
 
 // virtual
-sal_Bool SAL_CALL ContentImplHelper::supportsService(
+bool SAL_CALL ContentImplHelper::supportsService(
                                             const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

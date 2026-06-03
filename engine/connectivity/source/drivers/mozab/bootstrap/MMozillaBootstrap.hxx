@@ -47,7 +47,7 @@ namespace connectivity::mozab
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XMozillaBootstrap
@@ -57,15 +57,15 @@ namespace connectivity::mozab
         virtual ::sal_Int32 SAL_CALL getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list ) override;
         virtual OUString SAL_CALL getDefaultProfile( css::mozilla::MozillaProductType product ) override;
         virtual OUString SAL_CALL getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
-        virtual sal_Bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
-        virtual sal_Bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
+        virtual bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
+        virtual bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
 
         // XProfileManager
         virtual ::sal_Int32 SAL_CALL bootupProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
         virtual ::sal_Int32 SAL_CALL shutdownProfile(  ) override;
         virtual css::mozilla::MozillaProductType SAL_CALL getCurrentProduct(  ) override;
         virtual OUString SAL_CALL getCurrentProfile(  ) override;
-        virtual sal_Bool SAL_CALL isCurrentProfileLocked(  ) override;
+        virtual bool SAL_CALL isCurrentProfileLocked(  ) override;
         virtual OUString SAL_CALL setCurrentProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
 
         // XProxyRunner

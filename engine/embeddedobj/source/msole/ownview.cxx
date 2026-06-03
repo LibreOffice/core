@@ -583,7 +583,7 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
 }
 
 
-void SAL_CALL OwnView_Impl::queryClosing( const lang::EventObject&, sal_Bool )
+void SAL_CALL OwnView_Impl::queryClosing( const lang::EventObject&, bool )
 {
 }
 

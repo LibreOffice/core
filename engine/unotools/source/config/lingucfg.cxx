@@ -573,14 +573,14 @@ void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
     sal_Int32 nProps = rProperyNames.getLength();
 
     const uno::Sequence< uno::Any > aValues = GetProperties( rProperyNames );
-    const uno::Sequence< sal_Bool > aROStates = GetReadOnlyStates( rProperyNames );
+    const uno::Sequence< bool > aROStates = GetReadOnlyStates( rProperyNames );
 
     if (nProps  &&  aValues.getLength() == nProps &&  aROStates.getLength() == nProps)
     {
         SvtLinguOptions &rOpt = aOpt;
 
         const uno::Any *pValue = aValues.getConstArray();
-        const sal_Bool *pROStates = aROStates.getConstArray();
+        const bool *pROStates = aROStates.getConstArray();
         for (sal_Int32 i = 0;  i < nProps;  ++i)
         {
             const uno::Any &rVal = pValue[i];

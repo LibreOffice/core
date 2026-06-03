@@ -65,7 +65,7 @@ static void printValue( const Any & rVal )
             printValue( *(Any *)rVal.getValue() );
         break;
     case TypeClass_BOOLEAN:
-        printf( "%s", (*(sal_Bool *)rVal.getValue() ? "true" : "false") );
+        printf( "%s", (*(bool *)rVal.getValue() ? "true" : "false") );
         break;
     case TypeClass_CHAR:
     {
@@ -161,9 +161,9 @@ static void printValue( const Any & rVal )
 static Reference< XTypeConverter > s_xConverter;
 
 
-static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bExpectSuccess )
+static bool convertTo( const Type & rDestType, const Any & rVal, bool bExpectSuccess )
 {
-    sal_Bool bCanConvert = sal_False;
+    bool bCanConvert = false;
     Any aRet;
 
     OString aExcMsg;
@@ -171,7 +171,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
     try
     {
         aRet = s_xConverter->convertTo( rVal, rDestType );
-        bCanConvert = sal_True;
+        bCanConvert = true;
     }
     catch (const Exception & rExc)
     {
@@ -198,7 +198,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         {
         }
 #endif
-        return sal_False;
+        return false;
     }
     if (!bExpectSuccess && bCanConvert)
     {
@@ -211,7 +211,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         // for debugging, to trace again
         aRet = s_xConverter->convertTo( rVal, rDestType );
 #endif
-        return sal_False;
+        return false;
     }
 
 #ifdef __RECONVERSION_OUTPUT__
@@ -219,13 +219,13 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
     if (bCanConvert)
     {
         // re convert to original type
-        sal_Bool bReConvert = sal_False;
+        bool bReConvert = false;
         Any aRet2;
 
         try
         {
             aRet2 = s_xConverter->convertTo( aRet, rVal.getValueType() );
-            bReConvert = sal_True;
+            bReConvert = true;
         }
         catch (const Exception & rExc)
         {
@@ -258,25 +258,25 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
     }
 #endif
 
-    return sal_True;
+    return true;
 }
 
 
 typedef struct _ConvBlock
 {
     Any         _value;
-    sal_Bool    _toString, _toDouble, _toFloat;
-    sal_Bool    _toUINT32, _toINT32, _toUINT16, _toINT16, _toBYTE, _toBOOL, _toChar;
-    sal_Bool    _toTypeClass, _toSeqINT16, _toSeqAny;
+    bool    _toString, _toDouble, _toFloat;
+    bool    _toUINT32, _toINT32, _toUINT16, _toINT16, _toBYTE, _toBOOL, _toChar;
+    bool    _toTypeClass, _toSeqINT16, _toSeqAny;
 
     _ConvBlock()
     {
     }
     _ConvBlock( const Any & rValue_,
-                sal_Bool toString_, sal_Bool toDouble_, sal_Bool toFloat_,
-                sal_Bool toUINT32_, sal_Bool toINT32_, sal_Bool toUINT16_, sal_Bool toINT16_,
-                sal_Bool toBYTE_, sal_Bool toBOOL_, sal_Bool toChar_,
-                sal_Bool toTypeClass_, sal_Bool toSeqINT16_, sal_Bool toSeqAny_ )
+                bool toString_, bool toDouble_, bool toFloat_,
+                bool toUINT32_, bool toINT32_, bool toUINT16_, bool toINT16_,
+                bool toBYTE_, bool toBOOL_, bool toChar_,
+                bool toTypeClass_, bool toSeqINT16_, bool toSeqAny_ )
         : _value( rValue_ )
         , _toString( toString_ ), _toDouble( toDouble_ ), _toFloat( toFloat_ )
         , _toUINT32( toUINT32_ ), _toINT32( toINT32_ ), _toUINT16( toUINT16_ ), _toINT16( toINT16_ )
@@ -539,7 +539,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
 
-    sal_Bool bTmp = sal_True;
+    bool bTmp = true;
     aVal.setValue( &bTmp, cppu::UnoType<bool>::get() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -630,7 +630,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
         convertTo( cppu::UnoType<Sequence< sal_Int16 >>::get(), rVal, rBlock._toSeqINT16 );
         convertTo( cppu::UnoType<Sequence< Any >>::get(), rVal, rBlock._toSeqAny );
 
-        convertTo( cppu::UnoType<void>::get(), rVal, sal_True ); // anything converts to void
+        convertTo( cppu::UnoType<void>::get(), rVal, true ); // anything converts to void
     }
     s_xConverter.clear();
 

@@ -184,7 +184,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL ImplInspectorModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+    bool SAL_CALL ImplInspectorModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
     {
         return m_pProperties->convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
     }
@@ -202,7 +202,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL ImplInspectorModel::getHasHelpSection()
+    bool SAL_CALL ImplInspectorModel::getHasHelpSection()
     {
         return m_pProperties->hasHelpSection();
     }
@@ -220,18 +220,18 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly()
+    bool SAL_CALL ImplInspectorModel::getIsReadOnly()
     {
         return m_pProperties->isReadOnly();
     }
 
 
-    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool IsReadOnly )
+    void SAL_CALL ImplInspectorModel::setIsReadOnly( bool IsReadOnly )
     {
         setFastPropertyValue( static_cast<sal_Int32>(ModelPropertyId::IS_READ_ONLY), Any( IsReadOnly ) );
     }
 
-    sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName )
+    bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

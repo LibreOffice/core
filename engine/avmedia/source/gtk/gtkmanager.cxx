@@ -41,7 +41,7 @@ OUString SAL_CALL Manager::getImplementationName()
     return u"com.sun.star.comp.media.Manager_Gtk"_ustr;
 }
 
-sal_Bool SAL_CALL Manager::supportsService(const OUString& ServiceName)
+bool SAL_CALL Manager::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

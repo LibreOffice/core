@@ -63,13 +63,13 @@ int main( int argc, char *argv[] )
     OUString myDefault("$Default");
 
     OUString value;
-    sal_Bool useDefault;
+    bool useDefault;
 
     OUString aDummy;
     useDefault = bootstrap.getFrom(OUString("USEDEFAULT"), aDummy);
 
-    sal_Bool result = sal_False;
-    sal_Bool found  = sal_True;
+    bool result = false;
+    bool found  = true;
 
     if(useDefault)
         bootstrap.getFrom(name, value, myDefault);

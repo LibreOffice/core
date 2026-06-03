@@ -149,7 +149,7 @@ namespace basprov
         return u"com.sun.star.comp.scripting.ScriptProviderForBasic"_ustr;
     }
 
-    sal_Bool BasicProviderImpl::supportsService( const OUString& rServiceName )
+    bool BasicProviderImpl::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -434,7 +434,7 @@ namespace basprov
     }
 
 
-    sal_Bool BasicProviderImpl::hasChildNodes(  )
+    bool BasicProviderImpl::hasChildNodes(  )
     {
         SolarMutexGuard aGuard;
 

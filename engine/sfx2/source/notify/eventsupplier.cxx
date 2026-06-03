@@ -129,7 +129,7 @@ uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames()
 }
 
 
-sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
+bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -148,7 +148,7 @@ uno::Type SAL_CALL SfxEvents_Impl::getElementType()
 }
 
 
-sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
+bool SAL_CALL SfxEvents_Impl::hasElements()
 {
     std::unique_lock aGuard( maMutex );
 

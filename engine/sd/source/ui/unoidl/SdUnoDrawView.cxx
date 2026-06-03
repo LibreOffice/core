@@ -138,7 +138,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
 
 // XSelectionSupplier
 
-sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
+bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 {
     bool bOk = true;
 
@@ -521,7 +521,7 @@ OUString SAL_CALL SdUnoDrawView::getImplementationName(  )
     return u"com.sun.star.comp.sd.SdUnoDrawView"_ustr ;
 }
 
-sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

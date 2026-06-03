@@ -93,7 +93,7 @@ public:
 
     // css::awt::XControl
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
-    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& rxModel ) override;
+    bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& rxModel ) override;
 
     // css::awt::grid::XGridControl
     virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
@@ -108,8 +108,8 @@ public:
     virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) override;
     virtual void SAL_CALL deselectAllRows() override;
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
-    virtual sal_Bool SAL_CALL hasSelectedRows() override;
-    virtual sal_Bool SAL_CALL isRowSelected(::sal_Int32 index) override;
+    virtual bool SAL_CALL hasSelectedRows() override;
+    virtual bool SAL_CALL isRowSelected(::sal_Int32 index) override;
     virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
     virtual void SAL_CALL removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
 

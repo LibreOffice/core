@@ -284,7 +284,7 @@ OUString SAL_CALL CandleStickChartType::getImplementationName()
     return u"com.sun.star.comp.chart.CandleStickChartType"_ustr ;
 }
 
-sal_Bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

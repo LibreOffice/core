@@ -408,7 +408,7 @@ OUString SAL_CALL WinUserInfoBe::getImplementationName()
     return "com.sun.star.comp.configuration.backend.WinUserInfoBe";
 }
 
-sal_Bool SAL_CALL WinUserInfoBe::supportsService(const OUString& aServiceName)
+bool SAL_CALL WinUserInfoBe::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }

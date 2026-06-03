@@ -43,13 +43,13 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OUString SAL_CALL getHierarchy() override;
 
-    sal_Bool SAL_CALL equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther) override;
+    bool SAL_CALL equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

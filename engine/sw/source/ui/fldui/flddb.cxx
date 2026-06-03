@@ -192,7 +192,7 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     OUString sTableName;
     OUString sColumnName;
     SwDBData aData;
-    sal_Bool bIsTable;
+    bool bIsTable;
     aData.sDataSource = m_xDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
     aData.nCommandType = bIsTable ? 0 : 1;
@@ -472,7 +472,7 @@ IMPL_LINK(SwFieldDBPage, TreeSelectHdl, weld::TreeView&, rBox, void)
     {
         OUString sTableName;
         OUString sColumnName;
-        sal_Bool bIsTable;
+        bool bIsTable;
         OUString sDBName = m_xDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
         bNumFormat = GetFieldMgr().IsDBNumeric(sDBName,
                     sTableName,

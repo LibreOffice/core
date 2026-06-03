@@ -40,7 +40,7 @@ class RedlinesEnumeration : public ::cppu::WeakImplHelper< container::XEnumerati
     RevisionMap::iterator mIt;
 public:
     explicit RedlinesEnumeration( RevisionMap&& sMap ) : mRevisionMap( std::move(sMap) ), mIt( mRevisionMap.begin() ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mIt != mRevisionMap.end() );
     }
@@ -63,7 +63,7 @@ public:
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<beans::XPropertySet>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return ( !mRevisionMap.empty() ); }
+    virtual bool SAL_CALL hasElements(  ) override { return ( !mRevisionMap.empty() ); }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override { return mRevisionMap.size(); }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override

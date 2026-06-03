@@ -249,7 +249,7 @@ public:
     void            ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Window* pParent, bool bPrevNext = true );
                     /// Protect/unprotect ChangeTrack and return <TRUE/> if
                     /// protection was successfully changed.
-                    /// If bJustQueryIfProtected==sal_True protection is not
+                    /// If bJustQueryIfProtected==true protection is not
                     /// changed and <TRUE/> is returned if not protected or
                     /// password was entered correctly.
     bool            ExecuteChangeProtectionDialog( bool bJustQueryIfProtected = false );

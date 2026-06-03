@@ -24,8 +24,8 @@
 #include <svx/sdangitm.hxx>
 
 // SDRATTR_CAPTIONFIXEDANGLE SdrOnOffItem:
-// sal_True=angle predefined by SdrCaptionAngleItem
-// sal_False=free angle
+// true=angle predefined by SdrCaptionAngleItem
+// false=free angle
 
 // class SdrCaptionAngleItem
 // angle in 1/100 degree

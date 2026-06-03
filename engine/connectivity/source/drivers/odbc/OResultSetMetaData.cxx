@@ -203,7 +203,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_CASE_SENSITIVE) == SQL_TRUE;
 }
@@ -246,19 +246,19 @@ OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_FIXED_PREC_SCALE) == SQL_TRUE;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_AUTO_UNIQUE_VALUE) == SQL_TRUE;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UNSIGNED) == SQL_FALSE;
 }
@@ -308,24 +308,24 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column )
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_SEARCHABLE) != SQL_PRED_NONE;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_READONLY;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
+bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 }

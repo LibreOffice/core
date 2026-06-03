@@ -482,7 +482,7 @@ void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
 }
 
 // modify keyboard events
-// if a KeyEvent is being processed, then the return value is sal_True, else FALSE.
+// if a KeyEvent is being processed, then the return value is true, else FALSE.
 bool FuText::KeyInput(const KeyEvent& rKEvt)
 {
     bool bReturn = false;

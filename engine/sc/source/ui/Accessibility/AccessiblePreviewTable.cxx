@@ -230,7 +230,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessiblePreviewTable::getSelectedAccessi
     return {};
 }
 
-sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleRowSelected( sal_Int32 nRow )
+bool SAL_CALL ScAccessiblePreviewTable::isAccessibleRowSelected( sal_Int32 nRow )
 {
     //  in the page preview, there is no selection
 
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleRowSelected( sal_Int32 n
     return false;
 }
 
-sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     //  in the page preview, there is no selection
 
@@ -306,7 +306,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleSu
     return nullptr;
 }
 
-sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     //  in the page preview, there is no selection
     SolarMutexGuard aGuard;

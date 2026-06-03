@@ -558,10 +558,10 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
         m_xBtnRemove->set_sensitive(false);
         m_xAssignFrame->set_sensitive(false);
         m_xOptions->set_sensitive(false);
-        //bSaved=sal_False;
+        //bSaved=false;
         //xSaveObj->Restore();
         //@BugID 54702 enable/disable in the base class only
-        //SFX_APPWINDOW->Disable(sal_False);        //! general method in ScAnyRefDlg
+        //SFX_APPWINDOW->Disable(false);        //! general method in ScAnyRefDlg
         bRefInputMode = false;
     }
     else

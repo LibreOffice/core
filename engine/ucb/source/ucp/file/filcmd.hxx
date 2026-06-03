@@ -63,10 +63,10 @@ namespace fileaccess {
         virtual css::ucb::CommandInfo SAL_CALL
         getCommandInfoByHandle( sal_Int32 Handle ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasCommandByName( const OUString& Name ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasCommandByHandle( sal_Int32 Handle ) override;
 
 

@@ -106,7 +106,7 @@ void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild(sal_Int64 nChild
     OCommonAccessibleSelection::selectAccessibleChild(nChildIndex);
 }
 
-sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected(sal_Int64 nChildIndex)
+bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected(sal_Int64 nChildIndex)
 {
     OExternalLockGuard aGuard(this);
     return OCommonAccessibleSelection::isAccessibleChildSelected(nChildIndex);

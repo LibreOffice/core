@@ -73,7 +73,7 @@ namespace vclcanvas
         /** Actually perform the screen update
 
             @param bUpdateAll
-            sal_True, if everything must be updated, not only changed
+            true, if everything must be updated, not only changed
             sprites
 
             @param io_bSurfaceDirty

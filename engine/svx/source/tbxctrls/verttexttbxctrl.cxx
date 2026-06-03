@@ -150,7 +150,7 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStat
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL SvxVertCTLTextTbxCtrl::supportsService(const OUString& ServiceName)
+bool SAL_CALL SvxVertCTLTextTbxCtrl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

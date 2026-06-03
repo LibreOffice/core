@@ -557,7 +557,7 @@ void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int64 nChildIndex )
 }
 
 
-sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;

@@ -106,7 +106,7 @@ public:
 
 private:
     OInterfaceContainerHelper & rCont;
-    sal_Bool                    bIsList;
+    bool                    bIsList;
 
     detail::element_alias aData;
 
@@ -234,9 +234,9 @@ friend class OInterfaceIteratorHelper;
     detail::element_alias   aData;
     ::osl::Mutex &          rMutex;
     /** TRUE -> used by an iterator. */
-    sal_Bool                bInUse;
+    bool                bInUse;
     /** TRUE -> aData.pAsSequence is of type Sequence< XInterfaceSequence >. */
-    sal_Bool                bIsList;
+    bool                bIsList;
 
     OInterfaceContainerHelper( const OInterfaceContainerHelper & )
         SAL_DELETED_FUNCTION;
@@ -420,9 +420,9 @@ struct SAL_WARN_UNUSED OBroadcastHelperVar
     /** ListenerContainer class is thread safe. */
     container   aLC;
     /** Dispose call ready. */
-    sal_Bool                            bDisposed;
+    bool                            bDisposed;
     /** In dispose call. */
-    sal_Bool                            bInDispose;
+    bool                            bInDispose;
 
     /**
       Initialize the structure. bDispose and bInDispose are set to false.

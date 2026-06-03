@@ -126,7 +126,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XEnumerationAccess - was: XParagraphEnumerationAccess
@@ -134,7 +134,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     rtl::Reference< SwXParagraphEnumeration > createSwEnumeration();
     SwTableBox* GetTableBox() const { return m_pBox; }
@@ -174,7 +174,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine const * pLine);
@@ -202,15 +202,15 @@ public:
 
     //XTextTableCursor
     virtual OUString SAL_CALL getRangeName() override;
-    virtual sal_Bool SAL_CALL gotoCellByName( const OUString& aCellName, sal_Bool bExpand ) override;
-    virtual sal_Bool SAL_CALL goLeft( sal_Int16 nCount, sal_Bool bExpand ) override;
-    virtual sal_Bool SAL_CALL goRight( sal_Int16 nCount, sal_Bool bExpand ) override;
-    virtual sal_Bool SAL_CALL goUp( sal_Int16 nCount, sal_Bool bExpand ) override;
-    virtual sal_Bool SAL_CALL goDown( sal_Int16 nCount, sal_Bool bExpand ) override;
-    virtual void SAL_CALL gotoStart( sal_Bool bExpand ) override;
-    virtual void SAL_CALL gotoEnd( sal_Bool bExpand ) override;
-    virtual sal_Bool SAL_CALL mergeRange() override;
-    virtual sal_Bool SAL_CALL splitRange( sal_Int16 Count, sal_Bool Horizontal ) override;
+    virtual bool SAL_CALL gotoCellByName( const OUString& aCellName, bool bExpand ) override;
+    virtual bool SAL_CALL goLeft( sal_Int16 nCount, bool bExpand ) override;
+    virtual bool SAL_CALL goRight( sal_Int16 nCount, bool bExpand ) override;
+    virtual bool SAL_CALL goUp( sal_Int16 nCount, bool bExpand ) override;
+    virtual bool SAL_CALL goDown( sal_Int16 nCount, bool bExpand ) override;
+    virtual void SAL_CALL gotoStart( bool bExpand ) override;
+    virtual void SAL_CALL gotoEnd( bool bExpand ) override;
+    virtual bool SAL_CALL mergeRange() override;
+    virtual bool SAL_CALL splitRange( sal_Int16 Count, bool Horizontal ) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -223,7 +223,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 
@@ -313,7 +313,7 @@ public:
     virtual void SAL_CALL addChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual void SAL_CALL removeChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double SAL_CALL getNotANumber(  ) override;
-    virtual sal_Bool SAL_CALL isNotANumber( double nNumber ) override;
+    virtual bool SAL_CALL isNotANumber( double nNumber ) override;
 
     //XSortable
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL createSortDescriptor() override;
@@ -341,7 +341,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference< SwXTableRows > getSwRows();
@@ -395,7 +395,7 @@ public:
     virtual void SAL_CALL addChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual void SAL_CALL removeChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double SAL_CALL getNotANumber(  ) override;
-    virtual sal_Bool SAL_CALL isNotANumber( double nNumber ) override;
+    virtual bool SAL_CALL isNotANumber( double nNumber ) override;
 
     //XChartDataArray
     virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData(  ) override;
@@ -415,7 +415,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
@@ -442,7 +442,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XTableRows
     virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
@@ -450,7 +450,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -476,7 +476,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XTableColumns
     virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
@@ -484,7 +484,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

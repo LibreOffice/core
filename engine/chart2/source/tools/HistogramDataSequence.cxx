@@ -102,7 +102,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL HistogramDataSequence::getPrope
 
 OUString SAL_CALL HistogramDataSequence::getImplementationName() { return lcl_aServiceName; }
 
-sal_Bool SAL_CALL HistogramDataSequence::supportsService(const OUString& rServiceName)
+bool SAL_CALL HistogramDataSequence::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

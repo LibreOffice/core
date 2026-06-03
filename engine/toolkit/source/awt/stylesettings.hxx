@@ -133,8 +133,8 @@ namespace toolkit
         virtual void SAL_CALL setWindowTextColor( ::sal_Int32 _windowtextcolor ) override;
         virtual ::sal_Int32 SAL_CALL getWorkspaceColor() override;
         virtual void SAL_CALL setWorkspaceColor( ::sal_Int32 _workspacecolor ) override;
-        virtual sal_Bool SAL_CALL getHighContrastMode() override;
-        virtual void SAL_CALL setHighContrastMode( sal_Bool _highcontrastmode ) override;
+        virtual bool SAL_CALL getHighContrastMode() override;
+        virtual void SAL_CALL setHighContrastMode( bool _highcontrastmode ) override;
         virtual css::awt::FontDescriptor SAL_CALL getApplicationFont() override;
         virtual void SAL_CALL setApplicationFont( const css::awt::FontDescriptor& _applicationfont ) override;
         virtual css::awt::FontDescriptor SAL_CALL getHelpFont() override;

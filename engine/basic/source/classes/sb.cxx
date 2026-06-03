@@ -84,7 +84,7 @@ public:
         mbDisposed = bDisposed;
     }
 
-    virtual void SAL_CALL queryClosing( const lang::EventObject& rSource, sal_Bool bGetsOwnership ) override;
+    virtual void SAL_CALL queryClosing( const lang::EventObject& rSource, bool bGetsOwnership ) override;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& rSource ) override;
     virtual void SAL_CALL disposing( const lang::EventObject& rSource ) override;
 
@@ -160,7 +160,7 @@ void DocBasicItem::stopListening()
     }
 }
 
-void SAL_CALL DocBasicItem::queryClosing( const lang::EventObject& /*rSource*/, sal_Bool /*bGetsOwnership*/ )
+void SAL_CALL DocBasicItem::queryClosing( const lang::EventObject& /*rSource*/, bool /*bGetsOwnership*/ )
 {
 }
 

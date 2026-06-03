@@ -728,7 +728,7 @@ namespace toolkit
     }
 
 
-    sal_Bool SAL_CALL WindowStyleSettings::getHighContrastMode()
+    bool SAL_CALL WindowStyleSettings::getHighContrastMode()
     {
         StyleMethodGuard aGuard( pOwningWindow );
         const VclPtr<vcl::Window> pWindow = pOwningWindow->GetWindow();
@@ -738,7 +738,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL WindowStyleSettings::setHighContrastMode( sal_Bool _highcontrastmode )
+    void SAL_CALL WindowStyleSettings::setHighContrastMode( bool _highcontrastmode )
     {
         StyleMethodGuard aGuard( pOwningWindow );
         VclPtr<vcl::Window> pWindow = pOwningWindow->GetWindow();

@@ -290,7 +290,7 @@ private:
 protected:
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
+    virtual bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
     virtual void SAL_CALL cancel( ) override;
 
     // XImporter
@@ -308,7 +308,7 @@ public:
     virtual    ~SVGFilter() override;
 
     //  XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };

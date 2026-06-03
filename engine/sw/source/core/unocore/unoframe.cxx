@@ -1116,7 +1116,7 @@ OUString SwXFrame::getImplementationName()
     return u"SwXFrame"_ustr;
 }
 
-sal_Bool SwXFrame::supportsService(const OUString& rServiceName)
+bool SwXFrame::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -3304,7 +3304,7 @@ uno::Type  SwXTextFrame::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SwXTextFrame::hasElements()
+bool SwXTextFrame::hasElements()
 {
     return true;
 }
@@ -3341,7 +3341,7 @@ OUString SwXTextFrame::getImplementationName()
     return u"SwXTextFrame"_ustr;
 }
 
-sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName)
+bool SwXTextFrame::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -3411,7 +3411,7 @@ OUString SwXTextGraphicObject::getImplementationName()
     return u"SwXTextGraphicObject"_ustr;
 }
 
-sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName)
+bool SwXTextGraphicObject::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -3549,7 +3549,7 @@ OUString SwXTextEmbeddedObject::getImplementationName()
     return u"SwXTextEmbeddedObject"_ustr;
 }
 
-sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName)
+bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -44,7 +44,7 @@ SdUnoOutlineView::~SdUnoOutlineView() noexcept
 
 //----- XSelectionSupplier ----------------------------------------------------
 
-sal_Bool SAL_CALL SdUnoOutlineView::select( const Any&  )
+bool SAL_CALL SdUnoOutlineView::select( const Any&  )
 {
     // todo: add selections for text ranges
     return false;
@@ -136,7 +136,7 @@ OUString SAL_CALL SdUnoOutlineView::getImplementationName(  )
     return u"com.sun.star.comp.sd.SdUnoOutlineView"_ustr;
 }
 
-sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

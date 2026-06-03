@@ -108,7 +108,7 @@ public:
     {
     }
 
-    sal_Bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
+    bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
     uno::Any SAL_CALL nextElement() override
     {
@@ -183,7 +183,7 @@ public:
             new SwVbaContentControl(mxParent, mxContext, mxTextDocument, m_pCache)));
     }
 
-    sal_Bool SAL_CALL hasByName(const OUString& aName) override
+    bool SAL_CALL hasByName(const OUString& aName) override
     {
         sal_Int32 nCount = -1;
         m_pCache = lcl_getContentControl(aName, m_sTag, m_sTitle, nCount, mxTextDocument);
@@ -196,7 +196,7 @@ public:
         return cppu::UnoType<word::XContentControl>::get();
     }
 
-    sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
+    bool SAL_CALL hasElements() override { return getCount() != 0; }
 
     // XEnumerationAccess
     uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override

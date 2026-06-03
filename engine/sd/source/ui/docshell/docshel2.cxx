@@ -255,7 +255,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 
     pView->CompleteRedraw( pVDev, vcl::Region(::tools::Rectangle(aNullPt, aSize)) );
 
-    // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
+    // IsRedrawReady() always gives true while ( !pView->IsRedrawReady() ) {}
     pView.reset();
 
     pVDev->SetMapMode( MapMode() );
@@ -270,7 +270,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 /**
  * Checks if the page exists. If so, we force the user to enter a not yet used
  * name.
- * @return sal_False if the user cancels the action.
+ * @return false if the user cancels the action.
  */
 bool DrawDocShell::CheckPageName(weld::Window* pWin, OUString& rName)
 {

@@ -104,7 +104,7 @@ OUString SAL_CALL ContentProvider::getImplementationName()
     return u"com.sun.star.comp.GIOContentProvider"_ustr;
 }
 
-sal_Bool SAL_CALL ContentProvider::supportsService(const OUString& aServiceName)
+bool SAL_CALL ContentProvider::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }

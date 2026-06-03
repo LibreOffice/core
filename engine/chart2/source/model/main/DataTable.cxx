@@ -182,7 +182,7 @@ OUString SAL_CALL DataTable::getImplementationName()
     return u"com.sun.star.comp.chart2.DataTable"_ustr;
 }
 
-sal_Bool SAL_CALL DataTable::supportsService(const OUString& rServiceName)
+bool SAL_CALL DataTable::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

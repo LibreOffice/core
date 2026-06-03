@@ -131,7 +131,7 @@ void VCLXAccessibleMenu::selectAccessibleChild( sal_Int64 nChildIndex )
 }
 
 
-sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

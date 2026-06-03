@@ -37,7 +37,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
 
     public:
         //Methods from XCertificateExtension
-        virtual sal_Bool SAL_CALL isCritical() override
+        virtual bool SAL_CALL isCritical() override
         {
             return m_Extn.m_critical;
         }

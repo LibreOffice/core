@@ -190,13 +190,13 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
     return aSequence;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
+bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
 {
     OSL_FAIL("not implemented yet");
     return false;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
+bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
 {
     OSL_FAIL("not implemented yet");
     return false;
@@ -223,7 +223,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSumma
     return xAccessible;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
+bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
 {
     OSL_FAIL("not implemented yet");
     return false;
@@ -339,7 +339,7 @@ void SAL_CALL ScAccessibleTableBase::selectAccessibleChild( sal_Int64 /* nChildI
 {
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     // I don't need to guard, because the called functions have a guard
@@ -386,22 +386,22 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
     CommitChange(AccessibleEventId::TABLE_MODEL_CHANGED, uno::Any(), uno::Any(aModelChange));
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )
+bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::selectColumn( sal_Int32 )
+bool SAL_CALL ScAccessibleTableBase::selectColumn( sal_Int32 )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::unselectRow( sal_Int32 )
+bool SAL_CALL ScAccessibleTableBase::unselectRow( sal_Int32 )
 {
         return true;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::unselectColumn( sal_Int32 )
+bool SAL_CALL ScAccessibleTableBase::unselectColumn( sal_Int32 )
 {
     return true;
 }

@@ -84,7 +84,7 @@ public:
     explicit ODBFilter( const Reference< XComponentContext >& _rxContext );
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
+    virtual bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
 
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();

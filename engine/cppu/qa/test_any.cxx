@@ -228,12 +228,6 @@ void Test::testVoid() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -335,12 +329,6 @@ void Test::testBoolean() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", (a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", !b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", (a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !b);
     }
     {
         sal_Int8 b = 2;
@@ -448,12 +436,6 @@ void Test::testByte() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", (a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(1), b);
@@ -557,12 +539,6 @@ void Test::testShort() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
@@ -672,12 +648,6 @@ void Test::testUnsignedShort() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -781,12 +751,6 @@ void Test::testLong() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
@@ -894,12 +858,6 @@ void Test::testUnsignedLong() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -1003,12 +961,6 @@ void Test::testHyper() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
@@ -1116,12 +1068,6 @@ void Test::testUnsignedHyper() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -1227,12 +1173,6 @@ void Test::testFloat() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -1336,12 +1276,6 @@ void Test::testDouble() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
@@ -1450,12 +1384,6 @@ void Test::testChar() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -1559,12 +1487,6 @@ void Test::testString() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
@@ -1672,12 +1594,6 @@ void Test::testType() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -1782,12 +1698,6 @@ void Test::testSequence() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
@@ -1914,12 +1824,6 @@ void Test::testEnum() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -2028,12 +1932,6 @@ void Test::testStruct() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
@@ -2172,12 +2070,6 @@ void Test::testException() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -2308,12 +2200,6 @@ void Test::testInterface() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
-    }
-    {
         sal_Int8 b = 2;
         CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
@@ -2438,12 +2324,6 @@ void Test::testNull() {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("bool", b);
-    }
-    {
-        // [-loplugin:fakebool] false positive:
-        sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;

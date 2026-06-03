@@ -130,7 +130,7 @@ class SfxModelListener_Impl : public ::cppu::WeakImplHelper< css::util::XCloseLi
     SfxObjectShell* mpDoc;
 public:
     explicit SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) override ;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& aEvent, bool bDeliverOwnership ) override ;
     virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent ) override ;
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override ;
 
@@ -138,7 +138,7 @@ public:
 
 } // namespace
 
-void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , sal_Bool bDeliverOwnership)
+void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , bool bDeliverOwnership)
 {
     if (mpDoc->Get_Impl()->m_nClosingLockLevel)
     {
@@ -831,7 +831,7 @@ void SfxObjectShell::InitBasicManager_Impl()
         changed to return the Basic manager currently under construction, when
         called repeatedly.
 
-        The variable pImpl->bBasicInitialized will be set to sal_True after
+        The variable pImpl->bBasicInitialized will be set to true after
         construction now, to ensure that the recursive call of the function
         lcl_getBasicManagerForDocument() will be routed into this function too.
 

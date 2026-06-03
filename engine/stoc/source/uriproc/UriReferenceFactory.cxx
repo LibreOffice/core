@@ -112,7 +112,7 @@ public:
     virtual OUString SAL_CALL getUriReference() override
     { return m_base.getUriReference(); }
 
-    virtual sal_Bool SAL_CALL isAbsolute() override
+    virtual bool SAL_CALL isAbsolute() override
     { return m_base.isAbsolute(); }
 
     virtual OUString SAL_CALL getScheme() override
@@ -121,10 +121,10 @@ public:
     virtual OUString SAL_CALL getSchemeSpecificPart() override
     { return m_base.getSchemeSpecificPart(); }
 
-    virtual sal_Bool SAL_CALL isHierarchical() override
+    virtual bool SAL_CALL isHierarchical() override
     { return m_base.isHierarchical(); }
 
-    virtual sal_Bool SAL_CALL hasAuthority() override
+    virtual bool SAL_CALL hasAuthority() override
     { return m_base.hasAuthority(); }
 
     virtual OUString SAL_CALL getAuthority() override
@@ -133,7 +133,7 @@ public:
     virtual OUString SAL_CALL getPath() override
     { return m_base.getPath(); }
 
-    virtual sal_Bool SAL_CALL hasRelativePath() override
+    virtual bool SAL_CALL hasRelativePath() override
     { return m_base.hasRelativePath(); }
 
     virtual sal_Int32 SAL_CALL getPathSegmentCount() override
@@ -142,13 +142,13 @@ public:
     virtual OUString SAL_CALL getPathSegment(sal_Int32 index) override
     { return m_base.getPathSegment(index); }
 
-    virtual sal_Bool SAL_CALL hasQuery() override
+    virtual bool SAL_CALL hasQuery() override
     { return m_base.hasQuery(); }
 
     virtual OUString SAL_CALL getQuery() override
     { return m_base.getQuery(); }
 
-    virtual sal_Bool SAL_CALL hasFragment() override
+    virtual bool SAL_CALL hasFragment() override
     { return m_base.hasFragment(); }
 
     virtual OUString SAL_CALL getFragment() override
@@ -292,7 +292,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & serviceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
@@ -304,16 +304,16 @@ public:
     makeAbsolute(
         css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
         css::uno::Reference< css::uri::XUriReference > const & uriReference,
-        sal_Bool processAdditionalSpecialSegments,
+        bool processAdditionalSpecialSegments,
         css::uri::RelativeUriExcessParentSegments excessParentSegments) override;
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     makeRelative(
         css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
         css::uno::Reference< css::uri::XUriReference > const & uriReference,
-        sal_Bool preferAuthorityOverRelativePath,
-        sal_Bool preferAbsoluteOverRelativePath,
-        sal_Bool encodeRetainedSpecialSegments) override;
+        bool preferAuthorityOverRelativePath,
+        bool preferAbsoluteOverRelativePath,
+        bool encodeRetainedSpecialSegments) override;
 
 private:
     virtual ~Factory() override {}
@@ -330,7 +330,7 @@ OUString Factory::getImplementationName()
     return u"com.sun.star.comp.uri.UriReferenceFactory"_ustr;
 }
 
-sal_Bool Factory::supportsService(OUString const & serviceName)
+bool Factory::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
@@ -413,7 +413,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
 css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
     css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
     css::uno::Reference< css::uri::XUriReference > const & uriReference,
-    sal_Bool processAdditionalSpecialSegments,
+    bool processAdditionalSpecialSegments,
     css::uri::RelativeUriExcessParentSegments excessParentSegments)
 {
     if (!baseUriReference.is() || !baseUriReference->isAbsolute()
@@ -572,9 +572,9 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
 css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
     css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
     css::uno::Reference< css::uri::XUriReference > const & uriReference,
-    sal_Bool preferAuthorityOverRelativePath,
-    sal_Bool preferAbsoluteOverRelativePath,
-    sal_Bool encodeRetainedSpecialSegments)
+    bool preferAuthorityOverRelativePath,
+    bool preferAbsoluteOverRelativePath,
+    bool encodeRetainedSpecialSegments)
 {
     if (!baseUriReference.is() || !baseUriReference->isAbsolute()
         || !uriReference.is()) {

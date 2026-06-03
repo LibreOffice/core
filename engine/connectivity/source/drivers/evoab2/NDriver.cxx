@@ -77,7 +77,7 @@ OUString SAL_CALL OEvoabDriver::getImplementationName(  )
     // Please take care when changing it.
 }
 
-sal_Bool SAL_CALL OEvoabDriver::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OEvoabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -106,7 +106,7 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, co
     return pCon;
 }
 
-sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const OUString& url )
+bool SAL_CALL OEvoabDriver::acceptsURL( const OUString& url )
 {
     return acceptsURL_Stat(url);
 }

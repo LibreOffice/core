@@ -98,7 +98,7 @@ namespace XPath
      /**
         get value of a boolean object
      */
-    sal_Bool SAL_CALL CXPathObject::getBoolean()
+    bool SAL_CALL CXPathObject::getBoolean()
     {
         ::osl::MutexGuard const g(m_rMutex);
 

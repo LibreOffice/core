@@ -417,7 +417,7 @@ namespace
      {
         { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { u"UsePrettyPrinting"_ustr, 0, ::cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"UsePrettyPrinting"_ustr, 0, ::cppu::UnoType<bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
         { u"TargetStorage"_ustr, 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
         { u"StreamRelPath"_ustr, 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
      };
@@ -565,7 +565,7 @@ namespace
     }
 }
 
-sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave()
+bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave()
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
@@ -693,7 +693,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
 }
 
 // XModel
-sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments )
+bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments )
 {
     if (_rURL.isEmpty() && _rArguments.getLength() == 1 && _rArguments[0].Name == "SetEmbedded")
     {
@@ -876,7 +876,7 @@ void SAL_CALL ODatabaseDocument::unlockControllers(  )
     --m_pImpl->m_nControllerLockCount;
 }
 
-sal_Bool SAL_CALL ODatabaseDocument::hasControllersLocked(  )
+bool SAL_CALL ODatabaseDocument::hasControllersLocked(  )
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
@@ -932,7 +932,7 @@ Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  )
 }
 
 // XStorable
-sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  )
+bool SAL_CALL ODatabaseDocument::hasLocation(  )
 {
     return !getLocation().isEmpty();
 }
@@ -945,7 +945,7 @@ OUString SAL_CALL ODatabaseDocument::getLocation(  )
         // the location of the file which the document was possibly recovered from (which would be getDocFileLocation)
 }
 
-sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  )
+bool SAL_CALL ODatabaseDocument::isReadonly(  )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     return m_pImpl->m_bDocumentReadOnly;
@@ -1284,14 +1284,14 @@ void SAL_CALL ODatabaseDocument::removeModifyListener( const Reference< XModifyL
 }
 
 // XModifiable
-sal_Bool SAL_CALL ODatabaseDocument::isModified(  )
+bool SAL_CALL ODatabaseDocument::isModified(  )
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
     return m_pImpl->m_bModified;
 }
 
-void SAL_CALL ODatabaseDocument::setModified( sal_Bool _bModified )
+void SAL_CALL ODatabaseDocument::setModified( bool _bModified )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     if ( impl_isInitialized() )
@@ -1486,7 +1486,7 @@ void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
     }
 }
 
-void SAL_CALL ODatabaseDocument::close(sal_Bool bDeliverOwnership)
+void SAL_CALL ODatabaseDocument::close(bool bDeliverOwnership)
 {
     // nearly everything below can/must be done without our mutex locked, the below is just for
     // the checks for being disposed and the like
@@ -1891,7 +1891,7 @@ Sequence< OUString > ODatabaseDocument::getSupportedServiceNames()
     return { u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr, u"com.sun.star.document.OfficeDocument"_ustr };
 }
 
-sal_Bool ODatabaseDocument::supportsService( const OUString& _rServiceName )
+bool ODatabaseDocument::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -1986,7 +1986,7 @@ Reference< XStorageBasedLibraryContainer > SAL_CALL ODatabaseDocument::getDialog
     return m_pImpl->getLibraryContainer( false );
 }
 
-sal_Bool SAL_CALL ODatabaseDocument::getAllowMacroExecution()
+bool SAL_CALL ODatabaseDocument::getAllowMacroExecution()
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     return m_pImpl->adjustMacroMode_AutoReject();

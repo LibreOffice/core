@@ -41,7 +41,7 @@ SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rPa
     mxTextField.set( xTextField, uno::UNO_SET_THROW );
 }
 
-sal_Bool SAL_CALL SwVbaField::Update()
+bool SAL_CALL SwVbaField::Update()
 {
     uno::Reference< util::XUpdatable > xUpdatable( mxTextField, uno::UNO_QUERY );
     if( xUpdatable.is() )
@@ -247,7 +247,7 @@ public:
       mxEnumeration(std::move( xEnumeration ))
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return mxEnumeration->hasMoreElements();
     }
@@ -277,7 +277,7 @@ public:
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  mxEnumerationAccess->getElementType(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return mxEnumerationAccess->hasElements(); }
+    virtual bool SAL_CALL hasElements(  ) override { return mxEnumerationAccess->hasElements(); }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {

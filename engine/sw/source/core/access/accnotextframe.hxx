@@ -75,7 +75,7 @@ public:
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual sal_Int32 SAL_CALL getCaretPosition(  ) override;
-    virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
+    virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;//Shen Zhen Jie changed sal_Unicode to sal_uInt32
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
@@ -84,14 +84,14 @@ public:
     virtual OUString SAL_CALL getSelectedText(  ) override;
     virtual sal_Int32 SAL_CALL getSelectionStart(  ) override;
     virtual sal_Int32 SAL_CALL getSelectionEnd(  ) override;
-    virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual OUString SAL_CALL getText(  ) override;
     virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-    virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
+    virtual bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
 
     // XAccessibleHypertext
     virtual sal_Int32 SAL_CALL getHyperLinkCount() override;

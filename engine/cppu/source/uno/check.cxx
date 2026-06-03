@@ -54,14 +54,12 @@ struct C4 : public C3
 struct C5 : public C4
 {
     sal_Int64 n5;
-    // [-loplugin:fakebool] false positive:
-    sal_Bool b5;
+    bool b5;
 };
 struct C6 : public C1
 {
     C5 c6 CPPU_GCC3_ALIGN( C1 );
-    // [-loplugin:fakebool] false positive:
-    sal_Bool b6;
+    bool b6;
 };
 
 struct D
@@ -71,12 +69,9 @@ struct D
 };
 struct E
 {
-    // [-loplugin:fakebool] false positive:
-    sal_Bool a;
-    // [-loplugin:fakebool] false positive:
-    sal_Bool b;
-    // [-loplugin:fakebool] false positive:
-    sal_Bool c;
+    bool a;
+    bool b;
+    bool c;
     sal_Int16 d;
     sal_Int32 e;
 };
@@ -147,12 +142,6 @@ enum Enum
 #   pragma pack(pop)
 #endif
 
-// [-loplugin:fakebool] false positive:
-static_assert( static_cast<sal_Bool>(true) == sal_True,
-               "must be binary compatible" );
-// [-loplugin:fakebool] false positive:
-static_assert( static_cast<sal_Bool>(false) == sal_False,
-               "must be binary compatible" );
 #if SAL_TYPES_ALIGNMENT8 == 2
 static_assert(offsetof(AlignSize_Impl, dDouble) == 2, "offsetof(AlignSize_Impl, dDouble) != 2");
 static_assert(sizeof(AlignSize_Impl) == 10, "sizeof(AlignSize_Impl) != 10");

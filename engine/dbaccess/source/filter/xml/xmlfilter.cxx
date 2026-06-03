@@ -220,7 +220,7 @@ private:
 };
 }
 
-sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     FocusWindowWaitGuard aWindowFocusGuard;
     bool    bRet = false;

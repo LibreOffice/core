@@ -40,7 +40,7 @@ public:
     {
         return u"com.sun.star.sheet.comp.CreateDialogFactoryService"_ustr;
     }
-    virtual sal_Bool SAL_CALL supportsService(const OUString& serviceName) override
+    virtual bool SAL_CALL supportsService(const OUString& serviceName) override
     {
         return cppu::supportsService(this, serviceName);
     }

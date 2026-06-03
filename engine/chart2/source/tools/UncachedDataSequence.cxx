@@ -148,7 +148,7 @@ OUString SAL_CALL UncachedDataSequence::getImplementationName()
     return lcl_aServiceName;
 }
 
-sal_Bool SAL_CALL UncachedDataSequence::supportsService( const OUString& rServiceName )
+bool SAL_CALL UncachedDataSequence::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -252,7 +252,7 @@ uno::Type SAL_CALL UncachedDataSequence::getElementType()
     return cppu::UnoType<uno::Any>::get();
 }
 
-sal_Bool SAL_CALL UncachedDataSequence::hasElements()
+bool SAL_CALL UncachedDataSequence::hasElements()
 {
     if( ! m_xDataProvider.is())
         return false;
@@ -277,12 +277,12 @@ Reference< util::XCloneable > SAL_CALL UncachedDataSequence::createClone()
 }
 
 // ____ XModifiable ____
-sal_Bool SAL_CALL UncachedDataSequence::isModified()
+bool SAL_CALL UncachedDataSequence::isModified()
 {
     return false;
 }
 
-void SAL_CALL UncachedDataSequence::setModified( sal_Bool bModified )
+void SAL_CALL UncachedDataSequence::setModified( bool bModified )
 {
     if( bModified )
         fireModifyEvent();

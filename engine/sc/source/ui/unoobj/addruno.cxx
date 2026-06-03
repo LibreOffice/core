@@ -282,7 +282,7 @@ OUString SAL_CALL ScAddressConversionObj::getImplementationName()
     return u"ScAddressConversionObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

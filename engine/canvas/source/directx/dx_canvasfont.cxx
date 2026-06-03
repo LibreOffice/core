@@ -120,7 +120,7 @@ namespace dxcanvas
         return "DXCanvas::CanvasFont";
     }
 
-    sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName )
+    bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

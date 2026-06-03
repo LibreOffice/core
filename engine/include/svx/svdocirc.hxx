@@ -58,7 +58,7 @@ private:
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // copy values from pool
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // copy values into pool
 
-    // returns sal_True if paint requires a XPolygon
+    // returns true if paint requires a XPolygon
     SVX_DLLPRIVATE bool PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
     SVX_DLLPRIVATE virtual void RecalcXPoly() override;
 

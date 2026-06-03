@@ -136,10 +136,10 @@ public:
     // XSimpleText
     virtual void SAL_CALL insertString(
             const css::uno::Reference< css::text::XTextRange > & xRange,
-            const OUString& aString, sal_Bool bAbsorb) override;
+            const OUString& aString, bool bAbsorb) override;
     virtual void SAL_CALL insertControlCharacter(
             const css::uno::Reference< css::text::XTextRange > & xRange,
-            sal_Int16 nControlCharacter, sal_Bool bAbsorb) override;
+            sal_Int16 nControlCharacter, bool bAbsorb) override;
     SW_DLLPUBLIC virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override final;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
@@ -151,7 +151,7 @@ public:
     virtual void SAL_CALL insertTextContent(
             const css::uno::Reference< css::text::XTextRange > & xRange,
             const css::uno::Reference< css::text::XTextContent > & xContent,
-            sal_Bool bAbsorb) override;
+            bool bAbsorb) override;
     virtual void SAL_CALL removeTextContent(
             const css::uno::Reference< css::text::XTextContent > & xContent) override;
 

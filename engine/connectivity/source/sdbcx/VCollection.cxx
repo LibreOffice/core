@@ -468,7 +468,7 @@ Type SAL_CALL OCollection::getElementType(  )
     return cppu::UnoType<XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL OCollection::hasElements(  )
+bool SAL_CALL OCollection::hasElements(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return !m_pElements->empty();
@@ -480,7 +480,7 @@ sal_Int32 SAL_CALL OCollection::getCount(  )
     return m_pElements->size();
 }
 
-sal_Bool SAL_CALL OCollection::hasByName( const OUString& aName )
+bool SAL_CALL OCollection::hasByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_pElements->exists(aName);

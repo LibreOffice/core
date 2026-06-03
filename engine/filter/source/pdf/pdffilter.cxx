@@ -238,7 +238,7 @@ IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 }
 
 
-sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     FocusWindowWaitCursor aCur;
 
@@ -274,7 +274,7 @@ OUString SAL_CALL PDFFilter::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
+bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

@@ -210,7 +210,7 @@ constexpr auto SbxMINSNG2 = -1.175494351e-38;
 constexpr auto SBX_MAXINDEX = 0x3FF0;
 constexpr auto SBX_MAXINDEX32 = SbxMAXLNG;
 
-// The numeric values of sal_True and FALSE
+// The numeric values of true and FALSE
 enum SbxBOOL { SbxFALSE = 0, SbxTRUE = -1 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -307,7 +307,7 @@ OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
     return u"com.sun.star.comp.chart2.MeanValueRegressionCurve"_ustr;
 }
 
-sal_Bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rServiceName )
+bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -337,7 +337,7 @@ OUString SAL_CALL LinearRegressionCurve::getImplementationName()
     return u"com.sun.star.comp.chart2.LinearRegressionCurve"_ustr;
 }
 
-sal_Bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServiceName )
+bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -367,7 +367,7 @@ OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
     return u"com.sun.star.comp.chart2.LogarithmicRegressionCurve"_ustr;
 }
 
-sal_Bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& rServiceName )
+bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -397,7 +397,7 @@ OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
     return u"com.sun.star.comp.chart2.ExponentialRegressionCurve"_ustr;
 }
 
-sal_Bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& rServiceName )
+bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -427,7 +427,7 @@ OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
     return u"com.sun.star.comp.chart2.PotentialRegressionCurve"_ustr;
 }
 
-sal_Bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rServiceName )
+bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -457,7 +457,7 @@ OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
     return u"com.sun.star.comp.chart2.PolynomialRegressionCurve"_ustr;
 }
 
-sal_Bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rServiceName )
+bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -487,7 +487,7 @@ OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
     return u"com.sun.star.comp.chart2.MovingAverageRegressionCurve"_ustr;
 }
 
-sal_Bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString& rServiceName )
+bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

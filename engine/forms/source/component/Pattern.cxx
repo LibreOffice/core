@@ -112,7 +112,7 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
     *pProperties++ = css::beans::Property(PROPERTY_EMPTY_IS_NULL, PROPERTY_ID_EMPTY_IS_NULL, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
-    *pProperties++ = css::beans::Property(PROPERTY_FILTERPROPOSAL, PROPERTY_ID_FILTERPROPOSAL, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    *pProperties++ = css::beans::Property(PROPERTY_FILTERPROPOSAL, PROPERTY_ID_FILTERPROPOSAL, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
 }
 

@@ -1822,8 +1822,8 @@ static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { u"BasicLibraries"_ustr,         WID_MODEL_BASICLIBS,          cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
         { u"DialogLibraries"_ustr,        WID_MODEL_DIALOGLIBS,         cppu::UnoType<script::XLibraryContainer>::get(),  beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_RuntimeUID,           WID_MODEL_RUNTIMEUID,         ::cppu::UnoType<OUString>::get(),                      beans::PropertyAttribute::READONLY, 0},
-        { sUNO_Prop_HasValidSignatures,   WID_MODEL_HASVALIDSIGNATURES, ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
-        { sUNO_Prop_AllowLinkUpdate,      WID_MODEL_ALLOWLINKUPDATE,    ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
+        { sUNO_Prop_HasValidSignatures,   WID_MODEL_HASVALIDSIGNATURES, ::cppu::UnoType<bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
+        { sUNO_Prop_AllowLinkUpdate,      WID_MODEL_ALLOWLINKUPDATE,    ::cppu::UnoType<bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { u"Fonts"_ustr,                  WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_InteropGrabBag,       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { u"SlideSections"_ustr,          WID_MODEL_SLIDESECTIONS,      cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
@@ -2440,7 +2440,7 @@ void SAL_CALL SdXImpressDocument::unlockControllers(  )
     }
 }
 
-sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
+bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
 {
     ::SolarMutexGuard aGuard;
 
@@ -3025,7 +3025,7 @@ OUString SAL_CALL SdXImpressDocument::getImplementationName()
     */
 }
 
-sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -5656,7 +5656,7 @@ uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getElementNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName )
+bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName )
 {
     ::SolarMutexGuard aGuard;
 
@@ -5684,7 +5684,7 @@ uno::Type SAL_CALL SdDrawPagesAccess::getElementType()
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL SdDrawPagesAccess::hasElements()
+bool SAL_CALL SdDrawPagesAccess::hasElements()
 {
     return getCount() > 0;
 }
@@ -5781,7 +5781,7 @@ OUString SAL_CALL SdDrawPagesAccess::getImplementationName(  )
     return u"SdDrawPagesAccess"_ustr;
 }
 
-sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -5877,7 +5877,7 @@ uno::Type SAL_CALL SdMasterPagesAccess::getElementType()
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL SdMasterPagesAccess::hasElements()
+bool SAL_CALL SdMasterPagesAccess::hasElements()
 {
     return getCount() > 0;
 }
@@ -6047,7 +6047,7 @@ OUString SAL_CALL SdMasterPagesAccess::getImplementationName(  )
     return u"SdMasterPagesAccess"_ustr;
 }
 
-sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -6106,7 +6106,7 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
     return aRet;
 }
 
-sal_Bool SAL_CALL SdDocLinkTargets::hasByName( const OUString& aName )
+bool SAL_CALL SdDocLinkTargets::hasByName( const OUString& aName )
 {
     for (const auto & i : aNames)
         if ( i == aName )
@@ -6120,7 +6120,7 @@ uno::Type SAL_CALL SdDocLinkTargets::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL SdDocLinkTargets::hasElements()
+bool SAL_CALL SdDocLinkTargets::hasElements()
 {
     return true;
 }
@@ -6164,7 +6164,7 @@ OUString SAL_CALL SdDocLinkTargets::getImplementationName()
     return u"SdDocLinkTargets"_ustr;
 }
 
-sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -6233,7 +6233,7 @@ OUString SAL_CALL SdDocLinkTargetType::getImplementationName()
     return u"SdDocLinkTargetType"_ustr;
 }
 
-sal_Bool SAL_CALL SdDocLinkTargetType::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdDocLinkTargetType::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -6361,7 +6361,7 @@ uno::Sequence<OUString> SAL_CALL SdDocLinkTarget::getElementNames()
     }
 }
 
-sal_Bool SAL_CALL SdDocLinkTarget::hasByName(const OUString& aName)
+bool SAL_CALL SdDocLinkTarget::hasByName(const OUString& aName)
 {
     ::SolarMutexGuard aGuard;
 
@@ -6378,7 +6378,7 @@ uno::Type SAL_CALL SdDocLinkTarget::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL SdDocLinkTarget::hasElements()
+bool SAL_CALL SdDocLinkTarget::hasElements()
 {
     ::SolarMutexGuard aGuard;
 
@@ -6394,7 +6394,7 @@ OUString SAL_CALL SdDocLinkTarget::getImplementationName()
     return u"SdDocLinkTarget"_ustr;
 }
 
-sal_Bool SAL_CALL SdDocLinkTarget::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdDocLinkTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

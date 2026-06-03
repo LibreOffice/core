@@ -120,7 +120,7 @@ OUString SAL_CALL transliteration_commonclass::getImplementationName()
     return OUString::createFromAscii(implementationName);
 }
 
-sal_Bool SAL_CALL transliteration_commonclass::supportsService(const OUString& rServiceName)
+bool SAL_CALL transliteration_commonclass::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

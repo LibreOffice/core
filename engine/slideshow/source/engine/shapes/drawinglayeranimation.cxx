@@ -144,7 +144,7 @@ private:
     void updateShapeAttributes( double fTime,
                                 basegfx::B2DRectangle const& parentBounds );
 
-    // scroll horizontal? if sal_False, scroll is vertical.
+    // scroll horizontal? if false, scroll is vertical.
     bool ScrollHorizontal() const {
         return (drawing::TextAnimationDirection_LEFT == meDirection ||
                 drawing::TextAnimationDirection_RIGHT == meDirection);
@@ -200,7 +200,7 @@ private:
     bool                                        mbVisibleWhenStopped;
     bool                                        mbVisibleWhenStarted;
 
-    // Flag decides if TextScroll alternates. Default is sal_False.
+    // Flag decides if TextScroll alternates. Default is false.
     bool                                        mbAlternate;
 
     // Flag to remember if this is a simple scrolling text

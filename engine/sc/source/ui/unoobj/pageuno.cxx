@@ -47,7 +47,7 @@ OUString SAL_CALL ScPageObj::getImplementationName()
     return u"ScPageObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

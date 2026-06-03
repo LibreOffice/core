@@ -176,7 +176,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
@@ -232,7 +232,7 @@ public:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XSubToolbarController
-    virtual sal_Bool SAL_CALL opensSubToolbar() override;
+    virtual bool SAL_CALL opensSubToolbar() override;
     virtual OUString SAL_CALL getSubToolbarName() override;
     virtual void SAL_CALL functionSelected( const OUString& rCommand ) override;
     virtual void SAL_CALL updateImage() override;

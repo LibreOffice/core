@@ -56,8 +56,8 @@ public:
     virtual OUString SAL_CALL getAuthor() override;
     virtual void SAL_CALL setAuthor( const OUString& _author ) override;
     virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
 
     // Methods
     virtual void SAL_CALL Delete() override;

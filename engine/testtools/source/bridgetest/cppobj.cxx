@@ -134,7 +134,7 @@ class Test_Impl :
     bool m_bSequenceOfCallTestPassed;
     Mutex m_mutex;
 
-    Sequence<sal_Bool> _arBool;
+    Sequence<bool> _arBool;
     Sequence<sal_Unicode> _arChar;
     Sequence<sal_Int8> _arByte;
     Sequence<sal_Int16> _arShort;
@@ -170,11 +170,11 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XLBTestBase
-    virtual void SAL_CALL setValues( sal_Bool bBool,
+    virtual void SAL_CALL setValues( bool bBool,
                                      sal_Unicode cChar,
                                      sal_Int8 nByte,
                                      sal_Int16 nShort,
@@ -194,7 +194,7 @@ public:
                                      const css::uno::Sequence<TestElement >& rSequence,
                                      const ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
-    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL setValues2( sal_Bool& bBool,
+    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL setValues2( bool& bBool,
                                                                                  sal_Unicode& cChar,
                                                                                  sal_Int8& nByte,
                                                                                  sal_Int16& nShort,
@@ -214,7 +214,7 @@ public:
                                                                                  css::uno::Sequence<TestElement >& rSequence,
                                                                                  ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
-    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getValues( sal_Bool& bBool,
+    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getValues( bool& bBool,
                                                                                 sal_Unicode& cChar,
                                                                                 sal_Int8& nByte,
                                                                                 sal_Int16& nShort,
@@ -259,7 +259,7 @@ public:
         { return i1; }
     virtual double SAL_CALL testTenDoubles( double d1, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9, double d10 ) override
         { return d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8 + d9 + d10; }
-    virtual sal_Bool SAL_CALL getBool() override
+    virtual bool SAL_CALL getBool() override
         { return _aData.Bool; }
     virtual sal_Int8 SAL_CALL getByte() override
         { return _aData.Byte; }
@@ -298,7 +298,7 @@ public:
     virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getStruct() override
         { return _aStructData; }
 
-    virtual void SAL_CALL setBool( sal_Bool _bool ) override
+    virtual void SAL_CALL setBool( bool _bool ) override
         { _aData.Bool = _bool; }
     virtual void SAL_CALL setByte( sal_Int8 _byte ) override
         { _aData.Byte = _byte; }
@@ -346,8 +346,8 @@ public:
     virtual sal_Int32 SAL_CALL getRaiseAttr2() override
     { throw IllegalArgumentException(); }
 
-    virtual TestPolyStruct< sal_Bool > SAL_CALL transportPolyBoolean(
-        TestPolyStruct< sal_Bool > const & arg) override
+    virtual TestPolyStruct< bool > SAL_CALL transportPolyBoolean(
+        TestPolyStruct< bool > const & arg) override
     { return arg; }
 
     virtual void SAL_CALL transportPolyHyper(TestPolyStruct< sal_Int64 > &) override {}
@@ -369,9 +369,9 @@ public:
     virtual TestPolyStruct< Any > SAL_CALL getNullPolyAny() override
     { return TestPolyStruct< Any >(); }
 
-    virtual TestPolyStruct< Sequence< sal_Bool > > SAL_CALL
+    virtual TestPolyStruct< Sequence< bool > > SAL_CALL
     getNullPolySequence() override
-    { return TestPolyStruct< Sequence< sal_Bool > >(); }
+    { return TestPolyStruct< Sequence< bool > >(); }
 
     virtual TestPolyStruct< TestEnum > SAL_CALL getNullPolyEnum() override
     { return TestPolyStruct< TestEnum >(
@@ -395,7 +395,7 @@ public:
 
     virtual void SAL_CALL call( sal_Int32 nCallId, sal_Int32 nWaitMUSEC ) override;
     virtual void SAL_CALL callOneway( sal_Int32 nCallId, sal_Int32 nWaitMUSEC ) override;
-    virtual sal_Bool SAL_CALL sequenceOfCallTestPassed(  ) override;
+    virtual bool SAL_CALL sequenceOfCallTestPassed(  ) override;
     virtual void SAL_CALL startRecursiveCall(
         const css::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) override;
 
@@ -413,8 +413,8 @@ public: // XBridgeTest
     virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) override;
 
     // XBridgeTest2
-    virtual Sequence< sal_Bool > SAL_CALL setSequenceBool(
-        const Sequence< sal_Bool >& aSeq ) override;
+    virtual Sequence< bool > SAL_CALL setSequenceBool(
+        const Sequence< bool >& aSeq ) override;
     virtual Sequence< sal_Unicode > SAL_CALL setSequenceChar(
         const Sequence< sal_Unicode >& aSeq ) override;
     virtual Sequence< sal_Int8 > SAL_CALL setSequenceByte(
@@ -449,7 +449,7 @@ public: // XBridgeTest
         const Sequence<Sequence< sal_Int32 > >& aSeq ) override;
     virtual Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL setDim3(
         const Sequence< Sequence< Sequence< sal_Int32 > > >& aSeq ) override;
-    virtual void SAL_CALL setSequencesInOut(Sequence< sal_Bool >& aSeqBoolean,
+    virtual void SAL_CALL setSequencesInOut(Sequence< bool >& aSeqBoolean,
                                 Sequence< sal_Unicode >& aSeqChar,
                                 Sequence< sal_Int8 >& aSeqByte,
                                 Sequence< sal_Int16 >& aSeqShort,
@@ -466,7 +466,7 @@ public: // XBridgeTest
                                 Sequence< Any >& aSeqAny,
                                 Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                                 Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 ) override;
-    virtual void SAL_CALL setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
+    virtual void SAL_CALL setSequencesOut( Sequence< bool >& aSeqBoolean,
                              Sequence< sal_Unicode >& aSeqChar,
                              Sequence< sal_Int8 >& aSeqByte,
                              Sequence< sal_Int16 >& aSeqShort,
@@ -541,7 +541,7 @@ void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC )
 }
 
 
-sal_Bool Test_Impl::sequenceOfCallTestPassed()
+bool Test_Impl::sequenceOfCallTestPassed()
 {
     return m_bSequenceOfCallTestPassed;
 }
@@ -581,7 +581,7 @@ OUString Test_Impl::testMulti(Reference< XMulti > const & multi)
 }
 
 
-void Test_Impl::setValues( sal_Bool bBool,
+void Test_Impl::setValues( bool bBool,
                            sal_Unicode cChar,
                            sal_Int8 nByte,
                            sal_Int16 nShort,
@@ -607,7 +607,7 @@ void Test_Impl::setValues( sal_Bool bBool,
     _aStructData = rStruct;
 }
 
-::test::testtools::bridgetest::TestDataElements Test_Impl::setValues2( sal_Bool& bBool,
+::test::testtools::bridgetest::TestDataElements Test_Impl::setValues2( bool& bBool,
                                                                        sal_Unicode& cChar,
                                                                        sal_Int8& nByte,
                                                                        sal_Int16& nShort,
@@ -638,7 +638,7 @@ void Test_Impl::setValues( sal_Bool bBool,
     return _aStructData;
 }
 
-::test::testtools::bridgetest::TestDataElements Test_Impl::getValues( sal_Bool& bBool,
+::test::testtools::bridgetest::TestDataElements Test_Impl::getValues( bool& bBool,
                                                                       sal_Unicode& cChar,
                                                                       sal_Int8& nByte,
                                                                       sal_Int16& nShort,
@@ -747,8 +747,8 @@ void Test_Impl::setRuntimeException( sal_Int32 )
 }
 
 // XBridgeTest2 -------------------------------------------------------------
-Sequence< sal_Bool > SAL_CALL Test_Impl::setSequenceBool(
-        const Sequence< sal_Bool >& aSeq )
+Sequence< bool > SAL_CALL Test_Impl::setSequenceBool(
+        const Sequence< bool >& aSeq )
 {
     _arBool = aSeq;
     return aSeq;
@@ -873,7 +873,7 @@ Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL Test_Impl::setDim3(
     return aSeq;
 }
 
-void SAL_CALL Test_Impl::setSequencesInOut(Sequence< sal_Bool >& aSeqBoolean,
+void SAL_CALL Test_Impl::setSequencesInOut(Sequence< bool >& aSeqBoolean,
                                 Sequence< sal_Unicode >& aSeqChar,
                                 Sequence< sal_Int8 >& aSeqByte,
                                 Sequence< sal_Int16 >& aSeqShort,
@@ -910,7 +910,7 @@ void SAL_CALL Test_Impl::setSequencesInOut(Sequence< sal_Bool >& aSeqBoolean,
     _arLong3 = aSeqDim3;
 }
 
-void SAL_CALL Test_Impl::setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
+void SAL_CALL Test_Impl::setSequencesOut( Sequence< bool >& aSeqBoolean,
                              Sequence< sal_Unicode >& aSeqChar,
                              Sequence< sal_Int8 >& aSeqByte,
                              Sequence< sal_Int16 >& aSeqShort,
@@ -950,7 +950,7 @@ void SAL_CALL Test_Impl::setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
 void Test_Impl::testConstructorsService(
     Reference< XComponentContext > const & context)
 {
-    Sequence< sal_Bool > arg14{ true };
+    Sequence< bool > arg14{ true };
     Sequence< sal_Int8 > arg15{ SAL_MIN_INT8 };
     Sequence< sal_Int16 > arg16{ SAL_MIN_INT16 };
     Sequence< sal_uInt16 > arg17{ SAL_MAX_UINT16 };
@@ -964,11 +964,11 @@ void Test_Impl::testConstructorsService(
     Sequence< OUString > arg25 { u"test"_ustr };
     Sequence< Type > arg26{ UnoType< Any >::get() };
     Sequence< Any > arg27{ Any(true) };
-    Sequence< Sequence< sal_Bool > > arg28{ { true } };
+    Sequence< Sequence< bool > > arg28{ { true } };
     Sequence< Sequence< Any > > arg29{ { Any(true) } };
     Sequence< TestEnum > arg30{ TestEnum_TWO };
     Sequence< TestStruct > arg31(1); arg31.getArray()[0].member = 10;
-    Sequence< TestPolyStruct< sal_Bool > > arg32{ { true } };
+    Sequence< TestPolyStruct< bool > > arg32{ { true } };
     Sequence< TestPolyStruct< Any > > arg33(1); arg33.getArray()[0].member <<= true;
     Sequence< Reference< XInterface > > arg34(1);
     Constructors::create1(context,
@@ -1009,7 +1009,7 @@ void Test_Impl::testConstructorsService(
         arg34,
         TestEnum_TWO,
         TestStruct(10),
-        TestPolyStruct< sal_Bool >(true),
+        TestPolyStruct< bool >(true),
         TestPolyStruct< Any >(Any(true)),
         Reference< XInterface >(nullptr));
     Sequence< Any > args{
@@ -1050,7 +1050,7 @@ void Test_Impl::testConstructorsService(
         Any(arg34),
         Any(TestEnum_TWO),
         Any(TestStruct(10)),
-        Any(TestPolyStruct< sal_Bool >(true)),
+        Any(TestPolyStruct< bool >(true)),
         Any(TestPolyStruct< Any >(Any(true))),
         Any(Reference< XInterface >(nullptr))
     };
@@ -1103,7 +1103,7 @@ void Test_Impl::testConstructorsService(
         context,
         TestPolyStruct<Type>(cppu::UnoType<sal_Int32>::get()),
         TestPolyStruct<Any>(Any(true)),
-        TestPolyStruct<sal_Bool>(true),
+        TestPolyStruct<bool>(true),
         TestPolyStruct<sal_Int8>(SAL_MIN_INT8),
         TestPolyStruct<sal_Int16>(SAL_MIN_INT16),
         TestPolyStruct<sal_Int32>(SAL_MIN_INT32),
@@ -1128,7 +1128,7 @@ void Test_Impl::testConstructorsService(
             TestPolyStruct<sal_Unicode>('X')),
         TestPolyStruct<Sequence<Type> >(argSeq1),
         TestPolyStruct<Sequence<Any> >(arg27),
-        TestPolyStruct<Sequence<sal_Bool> >(arg14),
+        TestPolyStruct<Sequence<bool> >(arg14),
         TestPolyStruct<Sequence<sal_Int8> >(arg15),
         TestPolyStruct<Sequence<sal_Int16> >(arg16),
         TestPolyStruct<Sequence<sal_Int32> >(arg18),
@@ -1167,7 +1167,7 @@ OUString Test_Impl::getImplementationName()
     return IMPLNAME;
 }
 
-sal_Bool Test_Impl::supportsService( const OUString & rServiceName )
+bool Test_Impl::supportsService( const OUString & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

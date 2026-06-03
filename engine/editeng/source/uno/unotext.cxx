@@ -1516,7 +1516,7 @@ void SvxUnoTextRangeBase::GotoEnd(bool Expand) noexcept
 }
 
 // lang::XServiceInfo
-sal_Bool SAL_CALL SvxUnoTextRangeBase::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxUnoTextRangeBase::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -1759,7 +1759,7 @@ uno::Reference< text::XTextCursor > SAL_CALL SvxUnoTextBase::createTextCursorByR
     return xCursor;
 }
 
-void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb )
+void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRange >& xRange, const OUString& aString, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
 
@@ -1789,7 +1789,7 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     }
 }
 
-void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text::XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb )
+void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text::XTextRange >& xRange, sal_Int16 nControlCharacter, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
 
@@ -1871,7 +1871,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
 }
 
 // XText
-void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTextRange >& xRange, const uno::Reference< text::XTextContent >& xContent, sal_Bool bAbsorb )
+void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTextRange >& xRange, const uno::Reference< text::XTextContent >& xContent, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
 
@@ -1974,7 +1974,7 @@ uno::Type SAL_CALL SvxUnoTextBase::getElementType(  )
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SvxUnoTextBase::hasElements(  )
+bool SAL_CALL SvxUnoTextBase::hasElements(  )
 {
     SolarMutexGuard aGuard;
 

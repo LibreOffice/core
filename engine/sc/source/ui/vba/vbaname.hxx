@@ -44,8 +44,8 @@ public:
     virtual void SAL_CALL setName( const OUString &rName ) override;
     virtual OUString SAL_CALL getNameLocal() override;
     virtual void SAL_CALL setNameLocal( const OUString &rName ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool bVisible ) override;
     virtual OUString SAL_CALL getValue() override;
     virtual void SAL_CALL setValue( const OUString &rValue ) override;
     virtual OUString SAL_CALL getRefersTo() override;

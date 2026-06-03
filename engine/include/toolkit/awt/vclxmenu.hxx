@@ -97,10 +97,10 @@ public:
     virtual sal_Int16 SAL_CALL getItemId( sal_Int16 nPos ) override;
     virtual sal_Int16 SAL_CALL getItemPos( sal_Int16 nId ) override;
     virtual css::awt::MenuItemType SAL_CALL getItemType( ::sal_Int16 nItemPos ) override;
-    virtual void SAL_CALL enableItem( sal_Int16 nItemId, sal_Bool bEnable ) override;
-    virtual sal_Bool SAL_CALL isItemEnabled( sal_Int16 nItemId ) override;
-    virtual void SAL_CALL hideDisabledEntries( sal_Bool bHide ) override;
-    virtual void SAL_CALL enableAutoMnemonics( sal_Bool bEnable ) override;
+    virtual void SAL_CALL enableItem( sal_Int16 nItemId, bool bEnable ) override;
+    virtual bool SAL_CALL isItemEnabled( sal_Int16 nItemId ) override;
+    virtual void SAL_CALL hideDisabledEntries( bool bHide ) override;
+    virtual void SAL_CALL enableAutoMnemonics( bool bEnable ) override;
     virtual void SAL_CALL setItemText( sal_Int16 nItemId, const OUString& aText ) override;
     virtual OUString SAL_CALL getItemText( sal_Int16 nItemId ) override;
     virtual void SAL_CALL setCommand( sal_Int16 nItemId, const OUString& aCommand ) override;
@@ -112,7 +112,7 @@ public:
     virtual void SAL_CALL setTipHelpText( ::sal_Int16 nItemId, const OUString& sTipHelpText ) override;
     virtual OUString SAL_CALL getTipHelpText( ::sal_Int16 nItemId ) override;
 
-    virtual sal_Bool SAL_CALL isPopupMenu(  ) override;
+    virtual bool SAL_CALL isPopupMenu(  ) override;
     virtual void SAL_CALL setPopupMenu( sal_Int16 nItemId, const css::uno::Reference< css::awt::XPopupMenu >& aPopupMenu ) override;
     virtual css::uno::Reference< css::awt::XPopupMenu > SAL_CALL getPopupMenu( sal_Int16 nItemId ) override;
 
@@ -120,19 +120,19 @@ public:
     virtual void SAL_CALL insertSeparator( sal_Int16 nPos ) override;
     virtual void SAL_CALL setDefaultItem( sal_Int16 nItemId ) override;
     virtual sal_Int16 SAL_CALL getDefaultItem(  ) override;
-    virtual void SAL_CALL checkItem( sal_Int16 nItemId, sal_Bool bCheck ) override;
-    virtual sal_Bool SAL_CALL isItemChecked( sal_Int16 nItemId ) override;
+    virtual void SAL_CALL checkItem( sal_Int16 nItemId, bool bCheck ) override;
+    virtual bool SAL_CALL isItemChecked( sal_Int16 nItemId ) override;
     virtual ::sal_Int16 SAL_CALL execute( const css::uno::Reference< css::awt::XWindowPeer >& Parent, const css::awt::Rectangle& Position, ::sal_Int16 Direction ) override;
-    virtual sal_Bool SAL_CALL isInExecute(  ) override;
+    virtual bool SAL_CALL isInExecute(  ) override;
     virtual void SAL_CALL endExecute(  ) override;
     virtual void SAL_CALL setAcceleratorKeyEvent( ::sal_Int16 nItemId, const css::awt::KeyEvent& aKeyEvent ) override;
     virtual css::awt::KeyEvent SAL_CALL getAcceleratorKeyEvent( ::sal_Int16 nItemId ) override;
-    virtual void SAL_CALL setItemImage( ::sal_Int16 nItemId, const css::uno::Reference< css::graphic::XGraphic >& xGraphic, sal_Bool bScale ) override;
+    virtual void SAL_CALL setItemImage( ::sal_Int16 nItemId, const css::uno::Reference< css::graphic::XGraphic >& xGraphic, bool bScale ) override;
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getItemImage( ::sal_Int16 nItemId ) override;
 
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 

@@ -239,7 +239,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : private cppu::Bas
     bool        m_bInActivate       : 1;    // is a controller activated
     bool        m_bSetFocus         : 1;    // may the focus be changed over
     bool        m_bFilterMode       : 1;    // is a filter currently set to the controls
-    bool        m_bChangingDesignMode:1;    // sal_True within SetDesignMode
+    bool        m_bChangingDesignMode:1;    // true within SetDesignMode
     bool        m_bPreparedClose    : 1;    // for the current modification state of the current form
                                                 //  PrepareClose had been called and the user denied to save changes
     bool        m_bFirstActivation  : 1;    // has the shell ever been activated?

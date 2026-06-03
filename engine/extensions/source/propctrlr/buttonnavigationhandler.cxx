@@ -185,7 +185,7 @@ namespace pcr
     }
 
 
-    InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
@@ -206,7 +206,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ )
+    void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool /*_bFirstTimeInit*/ )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );

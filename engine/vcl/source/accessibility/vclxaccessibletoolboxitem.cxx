@@ -260,7 +260,7 @@ OUString VCLXAccessibleToolBoxItem::getImplementationName()
     return u"com.sun.star.comp.toolkit.AccessibleToolBoxItem"_ustr;
 }
 
-sal_Bool VCLXAccessibleToolBoxItem::supportsService( const OUString& rServiceName )
+bool VCLXAccessibleToolBoxItem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -430,7 +430,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getCaretPosition()
     return -1;
 }
 
-sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::setCaretPosition( sal_Int32 nIndex )
+bool SAL_CALL VCLXAccessibleToolBoxItem::setCaretPosition( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -492,7 +492,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getIndexAtPoint( const awt::Point&
     return nIndex;
 }
 
-sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL VCLXAccessibleToolBoxItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -502,7 +502,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::setSelection( sal_Int32 nStartIndex
     return false;
 }
 
-sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -534,7 +534,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sa
     return bReturn;
 }
 
-sal_Bool VCLXAccessibleToolBoxItem::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool VCLXAccessibleToolBoxItem::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
@@ -622,7 +622,7 @@ sal_Int32 VCLXAccessibleToolBoxItem::getAccessibleActionCount( )
     return ( m_pToolBox && m_pToolBox->ItemHasDropdown( m_nItemId ) ? 2 : 1 );
 }
 
-sal_Bool VCLXAccessibleToolBoxItem::doAccessibleAction ( sal_Int32 nIndex )
+bool VCLXAccessibleToolBoxItem::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -683,7 +683,7 @@ Any VCLXAccessibleToolBoxItem::getCurrentValue(  )
     return aValue;
 }
 
-sal_Bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber )
+bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber )
 {
     OExternalLockGuard aGuard( this );
 

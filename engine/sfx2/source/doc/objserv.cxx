@@ -155,7 +155,7 @@ public:
 
     void SetPreventClose( bool bPrevent ) { m_bPreventClose = bPrevent; }
 
-    virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) override;
+    virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, bool bDeliverOwnership ) override;
 
     virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) override ;
 
@@ -171,7 +171,7 @@ SfxClosePreventer_Impl::SfxClosePreventer_Impl()
 {
 }
 
-void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject&, sal_Bool bDeliverOwnership )
+void SAL_CALL SfxClosePreventer_Impl::queryClosing( const lang::EventObject&, bool bDeliverOwnership )
 {
     if ( m_bPreventClose )
     {
@@ -1460,7 +1460,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         {
                             if ( rCmisProperty.Id == "cmis:isVersionSeriesCheckedOut" )
                             {
-                                uno::Sequence< sal_Bool > bTmp;
+                                uno::Sequence< bool > bTmp;
                                 rCmisProperty.Value >>= bTmp;
                                 bCheckedOut = bTmp[0];
                             }
@@ -1495,7 +1495,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                             [](const document::CmisProperty& rProp) { return rProp.Id == "cmis:isVersionSeriesCheckedOut"; });
                         if (pProp != aCmisProperties.end())
                         {
-                            uno::Sequence< sal_Bool > bTmp;
+                            uno::Sequence< bool > bTmp;
                             pProp->Value >>= bTmp;
                             bCheckedOut = bTmp[0];
                         }

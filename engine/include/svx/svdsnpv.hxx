@@ -188,7 +188,7 @@ public:
     void BrkSetPageOrg();
     bool IsSetPageOrg() const { return (nullptr != mpPageOriginOverlay); }
 
-    // HitTest. If sal_True, in rnHelpLineNum is the number of the auxiliary line and in rpPv
+    // HitTest. If true, in rnHelpLineNum is the number of the auxiliary line and in rpPv
     // the appended PageView.
     bool PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const;
 
@@ -207,7 +207,7 @@ public:
 
     // SnapAngle is for angles in circle, RotateDragging, ...
     // The snapping of an angle is beared down, if it is switched off
-    // with SetAngleSnapEnabled(sal_False)
+    // with SetAngleSnapEnabled(false)
     // The snapping angles is independent of snapping coordinates
     // and so independent of the attitude IsSnapEnabled()
     // Only values should be specified for them is applied:
@@ -256,7 +256,7 @@ public:
     void SetBigOrtho(bool bOn) { mbBigOrtho=bOn; }
     bool IsBigOrtho() const { return mbBigOrtho; }
 
-    // If MoveOnlyDragging=sal_True only the center of the marked objects is
+    // If MoveOnlyDragging=true only the center of the marked objects is
     // transformed when Resize/Rotate/Shear/Mirror/Crook is executed.
     // Size, form and rotation angle of the objects are conserved only their positions
     // are changed. persistent. Default=FALSE. (ni)

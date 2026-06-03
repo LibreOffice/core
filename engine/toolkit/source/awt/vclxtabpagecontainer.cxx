@@ -99,7 +99,7 @@ void SAL_CALL VCLXTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpa
     return pTabCtrl ? pTabCtrl->GetPageCount() : 0;
 }
 
-sal_Bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex )
+bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex )
 {
     return (getActiveTabPageID() == tabPageIndex);
 }

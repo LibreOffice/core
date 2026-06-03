@@ -70,9 +70,9 @@ namespace osl_Security
     }; // class ctors
 
     /** testing the methods:
-        inline sal_Bool SAL_CALL logonUser(const OUString& strName,
+        inline bool SAL_CALL logonUser(const OUString& strName,
                                        const OUString& strPasswd);
-        inline sal_Bool SAL_CALL logonUser(const OUString & strName,
+        inline bool SAL_CALL logonUser(const OUString & strName,
                                        const OUString & strPasswd,
                                        const OUString & strFileServer);
     */
@@ -114,7 +114,7 @@ namespace osl_Security
     }; // class logonUser
 
     /** testing the method:
-        inline sal_Bool Security::getUserIdent( OUString& strIdent) const
+        inline bool Security::getUserIdent( OUString& strIdent) const
     */
     class getUserIdent : public CppUnit::TestFixture
     {
@@ -144,7 +144,7 @@ namespace osl_Security
     }; // class getUserIdent
 
     /** testing the method:
-        inline sal_Bool SAL_CALL getUserName( OUString& strName) const;
+        inline bool SAL_CALL getUserName( OUString& strName) const;
     */
     class getUserName : public CppUnit::TestFixture
     {
@@ -178,7 +178,7 @@ namespace osl_Security
     }; // class getUserName
 
     /** testing the method:
-        inline sal_Bool Security::getConfigDir( OUString& strDirectory ) const
+        inline bool Security::getConfigDir( OUString& strDirectory ) const
     */
     class getConfigDir : public CppUnit::TestFixture
     {
@@ -200,7 +200,7 @@ namespace osl_Security
     }; // class getConfigDir
 
     /** testing the method:
-        inline sal_Bool SAL_CALL isAdministrator() const;
+        inline bool SAL_CALL isAdministrator() const;
     */
     class isAdministrator : public CppUnit::TestFixture
     {
@@ -232,7 +232,7 @@ namespace osl_Security
         void getHandle_001( )
         {
             ::osl::Security aSec;
-            bRes = aSec.isAdministrator( ) == bool(osl_isAdministrator( aSec.getHandle( ) ));
+            bRes = aSec.isAdministrator( ) == osl_isAdministrator( aSec.getHandle( ) );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use getHandle function to call C API.",
                                      bRes );

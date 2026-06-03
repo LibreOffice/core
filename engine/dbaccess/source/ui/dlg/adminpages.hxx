@@ -146,9 +146,9 @@ namespace dbaui
     protected:
         /// default implementation: call FillItemSet, call prepareLeave,
         virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-        /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_False
+        /// default implementation: call implInitControls with the given item set and _bSaveValue = false
         virtual void Reset(const SfxItemSet* _rCoreAttrs) override;
-        /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_True
+        /// default implementation: call implInitControls with the given item set and _bSaveValue = true
         virtual void ActivatePage(const SfxItemSet& _rSet) override;
 
         // BuilderPage overridables
@@ -157,11 +157,11 @@ namespace dbaui
     protected:
         virtual void callModifiedHdl(weld::Widget* /*pControl*/ = nullptr) { m_aModifiedHandler.Call(this); }
 
-        /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
+        /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns true
         virtual bool prepareLeave() { return true; }
 
         /** called from within Reset and ActivatePage, use to initialize the controls with the items from the given set
-            @param      _bSaveValue     if set to sal_True, the implementation should call SaveValue on all relevant controls
+            @param      _bSaveValue     if set to true, the implementation should call SaveValue on all relevant controls
         */
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue);
 

@@ -369,9 +369,9 @@ public:
                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void SAL_CALL saveCompleted( sal_Bool bUseNew ) override;
+    virtual void SAL_CALL saveCompleted( bool bUseNew ) override;
 
-    virtual sal_Bool SAL_CALL hasEntry() override;
+    virtual bool SAL_CALL hasEntry() override;
 
     virtual OUString SAL_CALL getEntryName() override;
 
@@ -380,14 +380,14 @@ public:
     virtual void SAL_CALL breakLink( const css::uno::Reference< css::embed::XStorage >& xStorage,
                                      const OUString& sEntName ) override;
 
-    virtual sal_Bool SAL_CALL isLink() override;
+    virtual bool SAL_CALL isLink() override;
 
     virtual OUString SAL_CALL getLinkURL() override;
 
 // XCommonEmbedPersist
     virtual void SAL_CALL storeOwn() override;
 
-    virtual sal_Bool SAL_CALL isReadonly() override;
+    virtual bool SAL_CALL isReadonly() override;
 
     virtual void SAL_CALL reload(
                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
@@ -413,7 +413,7 @@ public:
 
 // XCloseable
 
-    virtual void SAL_CALL close( sal_Bool DeliverOwnership ) override;
+    virtual void SAL_CALL close( bool DeliverOwnership ) override;
 
     virtual void SAL_CALL addCloseListener(
                 const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
@@ -433,7 +433,7 @@ public:
     virtual void SAL_CALL setObjectRectangles( const css::awt::Rectangle& aPosRect,
                                           const css::awt::Rectangle& aClipRect ) override;
 
-    virtual void SAL_CALL enableModeless( sal_Bool bEnable ) override;
+    virtual void SAL_CALL enableModeless( bool bEnable ) override;
 
     virtual void SAL_CALL translateAccelerators(
                     const css::uno::Sequence< css::awt::KeyEvent >& aKeys ) override;
@@ -451,7 +451,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:

@@ -49,10 +49,10 @@ namespace comphelper
         // XNameAccess
         virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual sal_Bool SAL_CALL hasElements(  ) override;
+        virtual bool SAL_CALL hasElements(  ) override;
         virtual css::uno::Type SAL_CALL getElementType(  ) override;
 
     private:
@@ -136,7 +136,7 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
     return comphelper::mapKeysToSequence(maProperties);
 }
 
-sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
+bool SAL_CALL NameContainer::hasByName( const OUString& aName )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -144,7 +144,7 @@ sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
     return aIter != maProperties.end();
 }
 
-sal_Bool SAL_CALL NameContainer::hasElements(  )
+bool SAL_CALL NameContainer::hasElements(  )
 {
     std::scoped_lock aGuard( maMutex );
 

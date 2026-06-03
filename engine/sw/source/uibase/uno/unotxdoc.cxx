@@ -500,7 +500,7 @@ void SwXTextDocument::unlockControllers()
     maActionArr.pop_front();
 }
 
-sal_Bool SwXTextDocument::hasControllersLocked()
+bool SwXTextDocument::hasControllersLocked()
 {
     SolarMutexGuard aGuard;
     return !maActionArr.empty();
@@ -536,7 +536,7 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection()
     return xRef;
 }
 
-sal_Bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< beans::PropertyValue >& aArgs)
+bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< beans::PropertyValue >& aArgs)
 {
 #if ENABLE_YRS
     // this is for new document
@@ -581,7 +581,7 @@ void SwXTextDocument::dispose()
     SfxBaseModel::dispose();
 }
 
-void SwXTextDocument::close( sal_Bool bDeliverOwnership )
+void SwXTextDocument::close( bool bDeliverOwnership )
 {
     if(m_pDocShell)
     {
@@ -1411,7 +1411,7 @@ public:
         return cppu::UnoType<drawing::XDrawPage>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements() override { return true; }
+    virtual bool SAL_CALL hasElements() override { return true; }
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
@@ -1419,7 +1419,7 @@ public:
         return u"SwDrawPagesObj"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -1942,7 +1942,7 @@ OUString SwXTextDocument::getImplementationName()
     */
 }
 
-sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName)
+bool SwXTextDocument::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -3329,7 +3329,7 @@ Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
     return GetDocOrThrow().getXForms();
 }
 
-uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic)
+uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlatParagraphIterator(::sal_Int32 nTextMarkupType, bool bAutomatic)
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -4474,7 +4474,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getElementNames()
              m_sDrawingObjects };
 }
 
-sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
+bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
 {
     if( rName == m_sTables  ||
         rName == m_sFrames  ||
@@ -4494,7 +4494,7 @@ uno::Type  SwXLinkTargetSupplier::getElementType()
 
 }
 
-sal_Bool SwXLinkTargetSupplier::hasElements()
+bool SwXLinkTargetSupplier::hasElements()
 {
     return nullptr != m_pxDoc;
 }
@@ -4504,7 +4504,7 @@ OUString SwXLinkTargetSupplier::getImplementationName()
     return u"SwXLinkTargetSupplier"_ustr;
 }
 
-sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
+bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -4660,7 +4660,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     return aRet;
 }
 
-sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
+bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
 {
     bool bRet = false;
     OUString sParam(rName);
@@ -4719,7 +4719,7 @@ uno::Type  SwXLinkNameAccessWrapper::getElementType()
     return cppu::UnoType<XPropertySet>::get();
 }
 
-sal_Bool SwXLinkNameAccessWrapper::hasElements()
+bool SwXLinkNameAccessWrapper::hasElements()
 {
     bool bRet = false;
     if(m_pxDoc)
@@ -4818,7 +4818,7 @@ OUString SwXLinkNameAccessWrapper::getImplementationName()
     return u"SwXLinkNameAccessWrapper"_ustr;
 }
 
-sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
+bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -4894,7 +4894,7 @@ OUString SwXOutlineTarget::getImplementationName()
     return u"SwXOutlineTarget"_ustr;
 }
 
-sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName)
+bool SwXOutlineTarget::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -4961,7 +4961,7 @@ OUString SwXDrawingObjectTarget::getImplementationName()
     return u"SwXDrawingObjectTarget"_ustr;
 }
 
-sal_Bool SwXDrawingObjectTarget::supportsService(const OUString& ServiceName)
+bool SwXDrawingObjectTarget::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

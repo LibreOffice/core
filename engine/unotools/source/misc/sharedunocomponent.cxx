@@ -87,7 +87,7 @@ namespace utl
         virtual ~CloseableComponentImpl() override;
 
         // XCloseListener overridables
-        virtual void SAL_CALL queryClosing( const EventObject& Source, sal_Bool GetsOwnership ) override;
+        virtual void SAL_CALL queryClosing( const EventObject& Source, bool GetsOwnership ) override;
         virtual void SAL_CALL notifyClosing( const EventObject& Source ) override;
 
         // XEventListener overridables
@@ -158,7 +158,7 @@ namespace utl
         }
     }
 
-    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject& Source, sal_Bool /*GetsOwnership*/ )
+    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject& Source, bool /*GetsOwnership*/ )
     {
         // as long as we live, somebody wants to keep the object alive. So, veto the
         // closing

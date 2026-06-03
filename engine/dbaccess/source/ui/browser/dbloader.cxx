@@ -64,7 +64,7 @@ public:
 
     // XServiceInfo
     OUString                 SAL_CALL getImplementationName() override;
-    sal_Bool                 SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                 SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >     SAL_CALL getSupportedServiceNames() override;
 
     // XLoader
@@ -96,7 +96,7 @@ OUString SAL_CALL DBContentLoader::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
+bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

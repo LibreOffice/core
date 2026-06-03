@@ -25,8 +25,8 @@ public:
                     const rtl::Reference<SwXTextDocument>& xTextDocument);
 
     // XFormFields
-    sal_Bool SAL_CALL getShaded() override;
-    void SAL_CALL setShaded(sal_Bool bSet) override;
+    bool SAL_CALL getShaded() override;
+    void SAL_CALL setShaded(bool bSet) override;
     //css::uno::Reference<ooo::vba::word::XFormField> SAL_CALL Add(const css::uno::Any& Range, sal_Int32 Type) override;
 
     // XEnumerationAccess

@@ -211,7 +211,7 @@ OUString SAL_CALL FrameGrabber::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
+bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -126,7 +126,7 @@ void SwXTextView::Invalidate()
     m_pView = nullptr;
 }
 
-sal_Bool SwXTextView::select(const uno::Any& aInterface)
+bool SwXTextView::select(const uno::Any& aInterface)
 {
     SolarMutexGuard aGuard;
 
@@ -399,7 +399,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     return xController;
 }
 
-sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  )
+bool SAL_CALL SwXTextView::isFormDesignMode(  )
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
@@ -407,7 +407,7 @@ sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  )
     return !pFormShell || pFormShell->IsDesignMode();
 }
 
-void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool DesignMode )
+void SAL_CALL SwXTextView::setFormDesignMode( bool DesignMode )
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
@@ -485,7 +485,7 @@ uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings()
     return mxViewSettings;
 }
 
-Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAutomatic*/ )
+Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( bool /*bAutomatic*/ )
 {
     SolarMutexGuard aGuard;
 
@@ -535,7 +535,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
 }
 
 void SAL_CALL SwXTextView::setRubyList(
-    const Sequence< Sequence< PropertyValue > >& rRubyList, sal_Bool /*bAutomatic*/ )
+    const Sequence< Sequence< PropertyValue > >& rRubyList, bool /*bAutomatic*/ )
 {
     SolarMutexGuard aGuard;
 
@@ -815,7 +815,7 @@ OUString SwXTextView::getImplementationName()
     return u"SwXTextView"_ustr;
 }
 
-sal_Bool SwXTextView::supportsService(const OUString& rServiceName)
+bool SwXTextView::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -860,13 +860,13 @@ bool SwXTextViewCursor::IsTextSelection( bool bAllowTables ) const
     return bRes;
 }
 
-sal_Bool SwXTextViewCursor::isVisible()
+bool SwXTextViewCursor::isVisible()
 {
     OSL_FAIL("not implemented");
     return true;
 }
 
-void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/)
+void SwXTextViewCursor::setVisible(bool /*bVisible*/)
 {
     OSL_FAIL("not implemented");
 }
@@ -936,7 +936,7 @@ void SwXTextViewCursor::collapseToEnd()
 
 }
 
-sal_Bool SwXTextViewCursor::isCollapsed()
+bool SwXTextViewCursor::isCollapsed()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -953,7 +953,7 @@ sal_Bool SwXTextViewCursor::isCollapsed()
 
 }
 
-sal_Bool SwXTextViewCursor::goLeft(sal_Int16 nCount, sal_Bool bExpand)
+bool SwXTextViewCursor::goLeft(sal_Int16 nCount, bool bExpand)
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -968,7 +968,7 @@ sal_Bool SwXTextViewCursor::goLeft(sal_Int16 nCount, sal_Bool bExpand)
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand)
+bool SwXTextViewCursor::goRight(sal_Int16 nCount, bool bExpand)
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -986,7 +986,7 @@ sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand)
 
 void SwXTextViewCursor::gotoRange(
     const uno::Reference< text::XTextRange > & xRange,
-    sal_Bool bExpand)
+    bool bExpand)
 {
     SolarMutexGuard aGuard;
     if(!(m_pView && xRange.is()))
@@ -1113,7 +1113,7 @@ void SwXTextViewCursor::gotoRange(
 
 }
 
-void SwXTextViewCursor::gotoStart(sal_Bool bExpand)
+void SwXTextViewCursor::gotoStart(bool bExpand)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SwXTextViewCursor::gotoStart");
@@ -1127,7 +1127,7 @@ void SwXTextViewCursor::gotoStart(sal_Bool bExpand)
 
 }
 
-void SwXTextViewCursor::gotoEnd(sal_Bool bExpand)
+void SwXTextViewCursor::gotoEnd(bool bExpand)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SwXTextViewCursor::gotoEnd");
@@ -1141,7 +1141,7 @@ void SwXTextViewCursor::gotoEnd(sal_Bool bExpand)
 
 }
 
-sal_Bool SwXTextViewCursor::jumpToFirstPage()
+bool SwXTextViewCursor::jumpToFirstPage()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1160,7 +1160,7 @@ sal_Bool SwXTextViewCursor::jumpToFirstPage()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToLastPage()
+bool SwXTextViewCursor::jumpToLastPage()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1180,7 +1180,7 @@ sal_Bool SwXTextViewCursor::jumpToLastPage()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage)
+bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage)
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1192,7 +1192,7 @@ sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage)
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToNextPage()
+bool SwXTextViewCursor::jumpToNextPage()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1204,7 +1204,7 @@ sal_Bool SwXTextViewCursor::jumpToNextPage()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToPreviousPage()
+bool SwXTextViewCursor::jumpToPreviousPage()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1216,7 +1216,7 @@ sal_Bool SwXTextViewCursor::jumpToPreviousPage()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToEndOfPage()
+bool SwXTextViewCursor::jumpToEndOfPage()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1228,7 +1228,7 @@ sal_Bool SwXTextViewCursor::jumpToEndOfPage()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToStartOfPage()
+bool SwXTextViewCursor::jumpToStartOfPage()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1254,7 +1254,7 @@ sal_Int16 SwXTextViewCursor::getPage()
     return nRet;
 }
 
-sal_Bool SwXTextViewCursor::screenDown()
+bool SwXTextViewCursor::screenDown()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1269,7 +1269,7 @@ sal_Bool SwXTextViewCursor::screenDown()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::screenUp()
+bool SwXTextViewCursor::screenUp()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1514,7 +1514,7 @@ Any  SwXTextViewCursor::getPropertyDefault( const OUString& rPropertyName )
     return aRet;
 }
 
-sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
+bool SwXTextViewCursor::goDown(sal_Int16 nCount, bool bExpand)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SwXTextViewCursor::goDown");
@@ -1530,7 +1530,7 @@ sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::goUp(sal_Int16 nCount, sal_Bool bExpand)
+bool SwXTextViewCursor::goUp(sal_Int16 nCount, bool bExpand)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SwXTextViewCursor::goUp");
@@ -1546,7 +1546,7 @@ sal_Bool SwXTextViewCursor::goUp(sal_Int16 nCount, sal_Bool bExpand)
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::isAtStartOfLine()
+bool SwXTextViewCursor::isAtStartOfLine()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1561,7 +1561,7 @@ sal_Bool SwXTextViewCursor::isAtStartOfLine()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::isAtEndOfLine()
+bool SwXTextViewCursor::isAtEndOfLine()
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1576,7 +1576,7 @@ sal_Bool SwXTextViewCursor::isAtEndOfLine()
     return bRet;
 }
 
-void SwXTextViewCursor::gotoEndOfLine(sal_Bool bExpand)
+void SwXTextViewCursor::gotoEndOfLine(bool bExpand)
 {
     SolarMutexGuard aGuard;
     if(!m_pView)
@@ -1589,7 +1589,7 @@ void SwXTextViewCursor::gotoEndOfLine(sal_Bool bExpand)
 
 }
 
-void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand)
+void SwXTextViewCursor::gotoStartOfLine(bool bExpand)
 {
     SolarMutexGuard aGuard;
     if(!m_pView)
@@ -1607,7 +1607,7 @@ OUString SwXTextViewCursor::getImplementationName()
     return u"SwXTextViewCursor"_ustr;
 }
 
-sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName)
+bool SwXTextViewCursor::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

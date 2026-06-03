@@ -416,7 +416,7 @@ enum MSOPATHTYPE
 #define ESCHER_Prop_hspMaster                   769  /*  MSOHSP          master shape                                        */
 #define ESCHER_Prop_cxstyle                     771  /*  MSOCXSTYLE      Type of connector                                   */
 #define ESCHER_Prop_bWMode                      772  /*  ESCHERwMode     Settings for modifications to                       */
-#define ESCHER_Prop_fBackground                 831  /*  bool            If sal_True, this is the background shape.              */
+#define ESCHER_Prop_fBackground                 831  /*  bool            If true, this is the background shape.              */
 // GroupShape
 #define ESCHER_Prop_wzName                      896  /*  WCHAR*          Shape Name (present only if explicitly set)                                                            */
 #define ESCHER_Prop_wzDescription               897  /*  WCHAR*          alternate text                                                                                         */

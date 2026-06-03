@@ -188,9 +188,8 @@ SAL_DLLPUBLIC_EXPORT void releaseProxy(IntPtr pBridge, IntPtr pUnoInterface, Int
     bridge->release();
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool dispatchCall(IntPtr pBridge, IntPtr pUnoInterface, IntPtr pTypeDesc,
-                                           String sFunctionName, Value* pArgs, Value* pRet,
-                                           Value* pExc)
+SAL_DLLPUBLIC_EXPORT bool dispatchCall(IntPtr pBridge, IntPtr pUnoInterface, IntPtr pTypeDesc,
+                                       String sFunctionName, Value* pArgs, Value* pRet, Value* pExc)
 {
     Bridge* bridge = static_cast<Bridge*>(pBridge);
     Context* context = static_cast<Context*>(bridge->m_net_env->pContext);

@@ -165,7 +165,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCaretPosition(  )
     return -1;
 }
 
-sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::setCaretPosition ( sal_Int32 nIndex )
+bool SAL_CALL AccessibleBrowseBoxTableCell::setCaretPosition ( sal_Int32 nIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -223,7 +223,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getSelectionEnd(  )
 
     return OCommonAccessibleText::getSelectionEnd(  );
 }
-sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleBrowseBoxTableCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -268,7 +268,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleBrowseBoxTableCell::getTextBe
 
     return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
 }
-sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleBrowseBoxTableCell::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -280,7 +280,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::copyText( sal_Int32 nStartIndex,
     //!!! don't know how to put a string into the clipboard
     return false;
 }
-sal_Bool SAL_CALL AccessibleBrowseBoxTableCell::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool SAL_CALL AccessibleBrowseBoxTableCell::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }

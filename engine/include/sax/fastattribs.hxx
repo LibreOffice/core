@@ -124,7 +124,7 @@ public:
     sal_Int32 getValueTokenByIndex(sal_Int32 nTokenIndex) const;
 
     // XFastAttributeList
-    virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) override;
+    virtual bool SAL_CALL hasAttribute( ::sal_Int32 Token ) override;
     virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) override;
     virtual ::sal_Int32 SAL_CALL getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) override;
     virtual OUString SAL_CALL getValue( ::sal_Int32 Token ) override;

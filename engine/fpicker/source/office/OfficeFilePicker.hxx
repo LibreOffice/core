@@ -98,7 +98,7 @@ public:
     // XFilePicker functions
 
 
-    virtual void SAL_CALL           setMultiSelectionMode( sal_Bool bMode ) override;
+    virtual void SAL_CALL           setMultiSelectionMode( bool bMode ) override;
     virtual void SAL_CALL           setDefaultName( const OUString& aName ) override;
     virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) override;
     virtual OUString SAL_CALL    getDisplayDirectory() override;
@@ -113,7 +113,7 @@ public:
     virtual css::uno::Any SAL_CALL           getValue( sal_Int16 ElementID, sal_Int16 ControlAction ) override;
     virtual void SAL_CALL           setLabel( sal_Int16 ElementID, const OUString& aValue ) override;
     virtual OUString SAL_CALL    getLabel( sal_Int16 ElementID ) override;
-    virtual void SAL_CALL           enableControl( sal_Int16 ElementID, sal_Bool bEnable ) override;
+    virtual void SAL_CALL           enableControl( sal_Int16 ElementID, bool bEnable ) override;
 
 
     // XFilePickerNotifier functions
@@ -131,8 +131,8 @@ public:
     virtual sal_Int32 SAL_CALL      getAvailableWidth() override;
     virtual sal_Int32 SAL_CALL      getAvailableHeight() override;
     virtual void SAL_CALL           setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage ) override;
-    virtual sal_Bool SAL_CALL       setShowState( sal_Bool bShowState ) override;
-    virtual sal_Bool SAL_CALL       getShowState() override;
+    virtual bool SAL_CALL       setShowState( bool bShowState ) override;
+    virtual bool SAL_CALL       getShowState() override;
 
 
     // XFilterManager functions
@@ -171,7 +171,7 @@ public:
 
     /* XServiceInfo */
     virtual OUString SAL_CALL       getImplementationName() override;
-    virtual sal_Bool SAL_CALL       supportsService( const OUString& sServiceName ) override;
+    virtual bool SAL_CALL       supportsService( const OUString& sServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
                                     getSupportedServiceNames() override;
 
@@ -211,7 +211,7 @@ public:
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
                                     getSupportedServiceNames() override;
 };

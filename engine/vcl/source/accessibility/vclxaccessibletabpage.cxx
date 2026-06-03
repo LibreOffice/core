@@ -238,7 +238,7 @@ OUString VCLXAccessibleTabPage::getImplementationName()
 }
 
 
-sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName )
+bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -484,7 +484,7 @@ sal_Int32 VCLXAccessibleTabPage::getCaretPosition()
 }
 
 
-sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex )
+bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -558,7 +558,7 @@ sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& /*aPoint*/ )
 }
 
 
-sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -569,7 +569,7 @@ sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 }
 
 
-sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -598,7 +598,7 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     return bReturn;
 }
 
-sal_Bool VCLXAccessibleTabPage::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool VCLXAccessibleTabPage::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }

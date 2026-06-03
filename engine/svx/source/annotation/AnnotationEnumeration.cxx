@@ -40,7 +40,7 @@ public:
     AnnotationEnumeration& operator=(const AnnotationEnumeration&) = delete;
 
     // css::office::XAnnotationEnumeration:
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Reference<css::office::XAnnotation> SAL_CALL nextElement() override;
 
 private:
@@ -65,7 +65,7 @@ AnnotationEnumeration::AnnotationEnumeration(AnnotationVector&& rAnnotations)
 }
 
 // css::office::XAnnotationEnumeration:
-sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() { return maIter != maAnnotations.end(); }
+bool SAL_CALL AnnotationEnumeration::hasMoreElements() { return maIter != maAnnotations.end(); }
 
 css::uno::Reference<css::office::XAnnotation> SAL_CALL AnnotationEnumeration::nextElement()
 {

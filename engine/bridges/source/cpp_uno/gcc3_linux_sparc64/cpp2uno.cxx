@@ -389,8 +389,8 @@ static typelib_TypeClass cpp_mediate(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+            aParam.bIn      = true;
+            aParam.bOut     = false;
 
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
@@ -475,7 +475,7 @@ static void cpp_vtable_call(int nFunctionIndex, void** pCallStack, int vTableOff
 //  fprintf(stderr,"cpp_mediate nFunctionIndex=%x\n",nFunctionIndex);
 //  fflush(stderr);
 
-    //const sal_Bool bComplex = (nFunctionIndex & 0x80000000) ? sal_True : sal_False;
+    //const bool bComplex = (nFunctionIndex & 0x80000000) ? true : false;
     typelib_TypeClass aType =
         cpp_mediate( nFunctionIndex, vTableOffset, pCallStack+16, (sal_Int64*)&nRegReturn );
 

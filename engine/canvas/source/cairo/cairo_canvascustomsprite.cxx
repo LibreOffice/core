@@ -137,7 +137,7 @@ namespace cairocanvas
         return u"CairoCanvas.CanvasCustomSprite"_ustr;
     }
 
-    sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )
+    bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

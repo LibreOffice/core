@@ -1646,12 +1646,12 @@ public:
 
     // Methods XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // Methods XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override;
@@ -1670,7 +1670,7 @@ uno::Type ModuleContainer_Impl::getElementType()
     return aModuleType;
 }
 
-sal_Bool ModuleContainer_Impl::hasElements()
+bool ModuleContainer_Impl::hasElements()
 {
     return mpLib && !mpLib->GetModules().empty();
 }
@@ -1699,7 +1699,7 @@ uno::Sequence< OUString > ModuleContainer_Impl::getElementNames()
     return aRetSeq;
 }
 
-sal_Bool ModuleContainer_Impl::hasByName( const OUString& aName )
+bool ModuleContainer_Impl::hasByName( const OUString& aName )
 {
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
     bool bRet = (pMod != nullptr);
@@ -1777,12 +1777,12 @@ public:
 
     // Methods XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // Methods XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override;
@@ -1801,7 +1801,7 @@ uno::Type DialogContainer_Impl::getElementType()
     return aModuleType;
 }
 
-sal_Bool DialogContainer_Impl::hasElements()
+bool DialogContainer_Impl::hasElements()
 {
     bool bRet = false;
 
@@ -1858,7 +1858,7 @@ uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
     return aRetSeq;
 }
 
-sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
+bool DialogContainer_Impl::hasByName( const OUString& aName )
 {
     bool bRet = false;
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxClassType::DontCare );
@@ -1916,12 +1916,12 @@ public:
 
     // Methods XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // Methods XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override;
@@ -1939,7 +1939,7 @@ uno::Type LibraryContainer_Impl::getElementType()
     return aType;
 }
 
-sal_Bool LibraryContainer_Impl::hasElements()
+bool LibraryContainer_Impl::hasElements()
 {
     sal_Int32 nLibs = mpMgr->GetLibCount();
     bool bRet = (nLibs > 0);
@@ -2001,7 +2001,7 @@ uno::Sequence< OUString > LibraryContainer_Impl::getElementNames()
     return aRetSeq;
 }
 
-sal_Bool LibraryContainer_Impl::hasByName( const OUString& aName )
+bool LibraryContainer_Impl::hasByName( const OUString& aName )
 {
     bool bRet = mpMgr->HasLib( aName );
     return bRet;

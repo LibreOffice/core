@@ -48,15 +48,15 @@ public:
 
     // XPlayerWindow
     virtual void SAL_CALL update(  ) override;
-    virtual sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) override;
+    virtual bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) override;
     virtual css::media::ZoomLevel SAL_CALL getZoomLevel(  ) override;
     virtual void SAL_CALL setPointerType( sal_Int32 nPointerType ) override;
 
     // XWindow
     virtual void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) override;
     virtual css::awt::Rectangle SAL_CALL getPosSize(  ) override;
-    virtual void SAL_CALL setVisible( sal_Bool Visible ) override;
-    virtual void SAL_CALL setEnable( sal_Bool Enable ) override;
+    virtual void SAL_CALL setVisible( bool Visible ) override;
+    virtual void SAL_CALL setEnable( bool Enable ) override;
     virtual void SAL_CALL setFocus(  ) override;
     virtual void SAL_CALL addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
     virtual void SAL_CALL removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
@@ -78,7 +78,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 public:

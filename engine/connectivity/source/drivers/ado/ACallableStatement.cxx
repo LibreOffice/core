@@ -46,13 +46,13 @@ Any SAL_CALL OCallableStatement::queryInterface( const Type & rType )
 }
 
 
-sal_Bool SAL_CALL OCallableStatement::wasNull(  )
+bool SAL_CALL OCallableStatement::wasNull(  )
 {
     return m_aValue.isNull();
 }
 
 
-sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);

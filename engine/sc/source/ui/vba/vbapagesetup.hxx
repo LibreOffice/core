@@ -68,15 +68,15 @@ public:
     virtual void SAL_CALL setOrder(sal_Int32 order) override;
     virtual sal_Int32 SAL_CALL getFirstPageNumber() override;
     virtual void SAL_CALL setFirstPageNumber(sal_Int32 firstPageNumber) override;
-    virtual sal_Bool SAL_CALL getCenterVertically() override;
-    virtual void SAL_CALL setCenterVertically(sal_Bool centerVertically) override;
-    virtual sal_Bool SAL_CALL getCenterHorizontally() override;
-    virtual void SAL_CALL setCenterHorizontally(sal_Bool centerHorizontally) override;
-    virtual sal_Bool SAL_CALL getPrintHeadings() override;
-    virtual void SAL_CALL setPrintHeadings(sal_Bool printHeadings) override;
+    virtual bool SAL_CALL getCenterVertically() override;
+    virtual void SAL_CALL setCenterVertically(bool centerVertically) override;
+    virtual bool SAL_CALL getCenterHorizontally() override;
+    virtual void SAL_CALL setCenterHorizontally(bool centerHorizontally) override;
+    virtual bool SAL_CALL getPrintHeadings() override;
+    virtual void SAL_CALL setPrintHeadings(bool printHeadings) override;
 
-    virtual sal_Bool SAL_CALL getPrintGridlines() override;
-    virtual void SAL_CALL setPrintGridlines(sal_Bool _printgridlines) override;
+    virtual bool SAL_CALL getPrintGridlines() override;
+    virtual void SAL_CALL setPrintGridlines(bool _printgridlines) override;
     virtual OUString SAL_CALL getPrintTitleRows() override;
     virtual void SAL_CALL setPrintTitleRows(const OUString& _printtitlerows) override;
     virtual OUString SAL_CALL getPrintTitleColumns() override;

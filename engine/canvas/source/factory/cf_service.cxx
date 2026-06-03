@@ -86,7 +86,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName ) override;
+    virtual bool SAL_CALL supportsService( OUString const & serviceName ) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XMultiComponentFactory
@@ -180,7 +180,7 @@ OUString CanvasFactory::getImplementationName()
     return u"com.sun.star.comp.rendering.CanvasFactory"_ustr;
 }
 
-sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
+bool CanvasFactory::supportsService( OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }

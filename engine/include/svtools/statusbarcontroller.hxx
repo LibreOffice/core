@@ -78,12 +78,12 @@ class SVT_DLLPUBLIC StatusbarController :
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
         // XStatusbarController
-        virtual sal_Bool SAL_CALL mouseButtonDown( const css::awt::MouseEvent& aMouseEvent ) override;
-        virtual sal_Bool SAL_CALL mouseMove( const css::awt::MouseEvent& aMouseEvent ) override;
-        virtual sal_Bool SAL_CALL mouseButtonUp( const css::awt::MouseEvent& aMouseEvent ) override;
+        virtual bool SAL_CALL mouseButtonDown( const css::awt::MouseEvent& aMouseEvent ) override;
+        virtual bool SAL_CALL mouseMove( const css::awt::MouseEvent& aMouseEvent ) override;
+        virtual bool SAL_CALL mouseButtonUp( const css::awt::MouseEvent& aMouseEvent ) override;
         virtual void SAL_CALL command( const css::awt::Point& aPos,
                                        ::sal_Int32 nCommand,
-                                       sal_Bool bMouseEvent,
+                                       bool bMouseEvent,
                                        const css::uno::Any& aData ) override;
         virtual void SAL_CALL paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
                                      const css::awt::Rectangle& rOutputRectangle,

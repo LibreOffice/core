@@ -252,7 +252,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool )
+    void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();

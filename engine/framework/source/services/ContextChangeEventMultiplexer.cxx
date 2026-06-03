@@ -71,7 +71,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService  (
+    virtual bool SAL_CALL supportsService  (
         const OUString& rsServiceName) override;
     virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -284,7 +284,7 @@ OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName()
     return u"org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer"_ustr;
 }
 
-sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const OUString& rsServiceName)
+bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const OUString& rsServiceName)
 {
     return cppu::supportsService(this, rsServiceName);
 }

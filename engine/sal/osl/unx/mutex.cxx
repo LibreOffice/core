@@ -84,7 +84,7 @@ void SAL_CALL osl_destroyMutex(oslMutex pMutex)
     }
 }
 
-sal_Bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
+bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
@@ -103,7 +103,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
     return false;
 }
 
-sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
+bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
 {
     bool result = false;
 
@@ -121,7 +121,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
     return result;
 }
 
-sal_Bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
+bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 

@@ -195,7 +195,7 @@ OUString SAL_CALL GraphicDescriptor::getImplementationName()
     return u"com.sun.star.comp.graphic.GraphicDescriptor"_ustr;
 }
 
-sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
+bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -234,10 +234,10 @@ rtl::Reference<::comphelper::PropertySetInfo> GraphicDescriptor::createPropertyS
         { u"SizePixel"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::SizePixel ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
         { u"Size100thMM"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Size100thMM ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
         { u"BitsPerPixel"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::BitsPerPixel ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { u"Transparent"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Transparent ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { u"Alpha"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Alpha ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { u"Animated"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Animated ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { u"Linked"_ustr, sal_Int32(UnoGraphicProperty::Linked), cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Transparent"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Transparent ), cppu::UnoType< bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Alpha"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Alpha ), cppu::UnoType< bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Animated"_ustr, static_cast< sal_Int32 >( UnoGraphicProperty::Animated ), cppu::UnoType< bool >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"Linked"_ustr, sal_Int32(UnoGraphicProperty::Linked), cppu::UnoType<bool>::get(), beans::PropertyAttribute::READONLY, 0 },
         { u"OriginURL"_ustr, sal_Int32(UnoGraphicProperty::OriginURL), cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
 

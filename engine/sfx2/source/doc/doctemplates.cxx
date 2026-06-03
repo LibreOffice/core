@@ -179,7 +179,7 @@ public:
         return u"com.sun.star.comp.sfx2.DocumentTemplates"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -197,20 +197,20 @@ public:
 
     // --- XDocumentTemplates ---
     css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() override;
-    sal_Bool SAL_CALL               storeTemplate( const OUString& GroupName,
+    bool SAL_CALL               storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
                                                    const css::uno::Reference< css::frame::XStorable >& Storable ) override;
-    sal_Bool SAL_CALL               addTemplate( const OUString& GroupName,
+    bool SAL_CALL               addTemplate( const OUString& GroupName,
                                                  const OUString& TemplateName,
                                                  const OUString& SourceURL ) override;
-    sal_Bool SAL_CALL               removeTemplate( const OUString& GroupName,
+    bool SAL_CALL               removeTemplate( const OUString& GroupName,
                                                     const OUString& TemplateName ) override;
-    sal_Bool SAL_CALL               renameTemplate( const OUString& GroupName,
+    bool SAL_CALL               renameTemplate( const OUString& GroupName,
                                                     const OUString& OldTemplateName,
                                                     const OUString& NewTemplateName ) override;
-    sal_Bool SAL_CALL               addGroup( const OUString& GroupName ) override;
-    sal_Bool SAL_CALL               removeGroup( const OUString& GroupName ) override;
-    sal_Bool SAL_CALL               renameGroup( const OUString& OldGroupName,
+    bool SAL_CALL               addGroup( const OUString& GroupName ) override;
+    bool SAL_CALL               removeGroup( const OUString& GroupName ) override;
+    bool SAL_CALL               renameGroup( const OUString& OldGroupName,
                                                  const OUString& NewGroupName ) override;
     void SAL_CALL                   update() override;
 
@@ -1356,7 +1356,7 @@ OUString SfxDocTplService::CreateNewGroupFsys( const OUString& rGroupName, Conte
 }
 
 
-sal_Bool SfxDocTplService::addGroup( const OUString& rGroupName )
+bool SfxDocTplService::addGroup( const OUString& rGroupName )
 {
     if (!init())
         return false;
@@ -1441,7 +1441,7 @@ sal_Bool SfxDocTplService::addGroup( const OUString& rGroupName )
 }
 
 
-sal_Bool SfxDocTplService::removeGroup( const OUString& rGroupName )
+bool SfxDocTplService::removeGroup( const OUString& rGroupName )
 {
     // remove all the elements that have the prefix aTargetURL
     // if the group does not have other elements remove it
@@ -1550,7 +1550,7 @@ sal_Bool SfxDocTplService::removeGroup( const OUString& rGroupName )
 }
 
 
-sal_Bool SfxDocTplService::renameGroup( const OUString& rOldName,
+bool SfxDocTplService::renameGroup( const OUString& rOldName,
                                     const OUString& rNewName )
 {
     if ( rOldName == rNewName )
@@ -1652,7 +1652,7 @@ sal_Bool SfxDocTplService::renameGroup( const OUString& rOldName,
 }
 
 
-sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
+bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
                                                const uno::Reference< frame::XStorable >& rStorable )
 {
@@ -1832,7 +1832,7 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
 }
 
 
-sal_Bool SfxDocTplService::addTemplate( const OUString& rGroupName,
+bool SfxDocTplService::addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
                                              const OUString& rSourceURL )
 {
@@ -1996,7 +1996,7 @@ OUString SfxDocTplService::findParentTemplateDir(const OUString& rURL) const
     return OUString();
 }
 
-sal_Bool SfxDocTplService::removeTemplate( const OUString& rGroupName,
+bool SfxDocTplService::removeTemplate( const OUString& rGroupName,
                                        const OUString& rTemplateName )
 {
     if (!init())
@@ -2047,7 +2047,7 @@ sal_Bool SfxDocTplService::removeTemplate( const OUString& rGroupName,
 }
 
 
-sal_Bool SfxDocTplService::renameTemplate( const OUString& rGroupName,
+bool SfxDocTplService::renameTemplate( const OUString& rGroupName,
                                            const OUString& rOldName,
                                            const OUString& rNewName )
 {

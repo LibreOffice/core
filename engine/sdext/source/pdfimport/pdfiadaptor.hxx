@@ -49,7 +49,7 @@ namespace pdfi
                                           css::uno::XComponentContext >& xContext );
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
+        virtual bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
         virtual void SAL_CALL cancel() override;
 
         // XImporter
@@ -57,7 +57,7 @@ namespace pdfi
 
         OUString SAL_CALL getImplementationName() override;
 
-        sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+        bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
         css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };

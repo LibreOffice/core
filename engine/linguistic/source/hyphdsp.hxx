@@ -76,7 +76,7 @@ public:
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XHyphenator

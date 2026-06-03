@@ -65,7 +65,7 @@ OUString SAL_CALL OFileDriver::getImplementationName(  )
     return u"com.sun.star.sdbc.driver.file.Driver"_ustr;
 }
 
-sal_Bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -89,7 +89,7 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, con
     return pCon;
 }
 
-sal_Bool SAL_CALL OFileDriver::acceptsURL( const OUString& url )
+bool SAL_CALL OFileDriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:file:");
 }

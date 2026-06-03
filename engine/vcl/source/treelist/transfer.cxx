@@ -294,7 +294,7 @@ OUString SAL_CALL TransferableHelper::TerminateListener::getImplementationName()
     return u"com.sun.star.comp.svt.TransferableHelperTerminateListener"_ustr;
 }
 
-sal_Bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const OUString& /*rServiceName*/)
+bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const OUString& /*rServiceName*/)
 {
     return false;
 }
@@ -467,7 +467,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
     return maAny;
 }
 
-sal_Bool SAL_CALL TransferableHelper::isComplex()
+bool SAL_CALL TransferableHelper::isComplex()
 {
     // By default everything is complex, until proven otherwise
     // in the respective document type transferable handler.
@@ -491,7 +491,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
 }
 
 
-sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor )
+bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor )
 {
     const SolarMutexGuard aGuard;
 
@@ -740,7 +740,7 @@ bool TransferableHelper::SetBitmap(const Bitmap& rBitmap, const DataFlavor& rFla
         }
         else
         {
-            // explicitly use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
+            // explicitly use Bitmap::Write with bCompressed = false and bFileHeader = true
             WriteDIB(rBitmap, aMemStm, false, true);
         }
 
@@ -1606,7 +1606,7 @@ bool TransferableDataHelper::GetBitmap(const DataFlavor& rFlavor, Bitmap& rBmp) 
             Bitmap aBitmap;
             AlphaMask aMask;
 
-            // explicitly use Bitmap::Read with bFileHeader = sal_True
+            // explicitly use Bitmap::Read with bFileHeader = true
             // #i124085# keep DIBV5 for read from clipboard, but should not happen
             ReadDIBV5(aBitmap, aMask, *xStm);
 

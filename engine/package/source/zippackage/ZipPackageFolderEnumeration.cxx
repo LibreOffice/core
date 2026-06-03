@@ -31,7 +31,7 @@ ZipPackageFolderEnumeration::ZipPackageFolderEnumeration(ContentHash& rInput)
 
 ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration() {}
 
-sal_Bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements()
+bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements()
 {
     return (aIterator != rContents.end());
 }
@@ -56,7 +56,7 @@ uno::Sequence<OUString> ZipPackageFolderEnumeration::getSupportedServiceNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL ZipPackageFolderEnumeration::supportsService(OUString const& rServiceName)
+bool SAL_CALL ZipPackageFolderEnumeration::supportsService(OUString const& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

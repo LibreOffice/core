@@ -406,8 +406,8 @@ bool getBooleanList(
         SAL_WARN("configmgr.dconf", "too long boolean list for key " << key);
         return false;
     }
-    css::uno::Sequence<sal_Bool> v(static_cast<sal_Int32>(n));
-    static_assert(sizeof (sal_Bool) == sizeof (guchar), "size mismatch");
+    css::uno::Sequence<bool> v(static_cast<sal_Int32>(n));
+    static_assert(sizeof (bool) == sizeof (guchar), "size mismatch");
     std::memcpy(v.getArray(), p, n * sizeof (guchar));
         // assuming that n * sizeof (guchar) is small enough for std::size_t
     *value <<= v;
@@ -1182,16 +1182,16 @@ bool addProperty(
             }
         case TYPE_BOOLEAN_LIST:
             {
-                css::uno::Sequence<sal_Bool> seq(
-                    value.get<css::uno::Sequence<sal_Bool>>());
+                css::uno::Sequence<bool> seq(
+                    value.get<css::uno::Sequence<bool>>());
                 static_assert(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
-                static_assert(sizeof (sal_Bool) == 1, "size mismatch");
+                static_assert(sizeof (bool) == 1, "size mismatch");
                 v.reset(
                     g_variant_new_fixed_array(
                         G_VARIANT_TYPE_BOOLEAN, seq.getConstArray(),
-                        seq.getLength(), sizeof (sal_Bool)));
+                        seq.getLength(), sizeof (bool)));
                 break;
             }
         case TYPE_SHORT_LIST:

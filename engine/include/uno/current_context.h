@@ -38,7 +38,7 @@ extern "C"
     @param pEnvContext       context of returned interface's environment (commonly 0)
     @return                  true, if context ref was transferred (even if null ref)
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
+CPPU_DLLPUBLIC bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext,
     rtl_uString * pEnvDcp, void * pEnvContext )
     SAL_THROW_EXTERN_C();
@@ -50,7 +50,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
     @param pEnvContext      context of interface's environment (commonly 0)
     @return                 true, if context ref was transferred (even if null ref)
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
+CPPU_DLLPUBLIC bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
     rtl_uString * pEnvDcp, void * pEnvContext )
     SAL_THROW_EXTERN_C();

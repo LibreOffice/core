@@ -93,7 +93,7 @@ css::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
-sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
+bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
 {
     return !maProperties.empty();
 }
@@ -104,7 +104,7 @@ OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  )
     return u"IndexedPropertyValuesContainer"_ustr;
 }
 
-sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName )
+bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -66,7 +66,7 @@ public:
     virtual void SAL_CALL setValue( sal_Int16 nFieldIndex, sal_Int16 nValue ) override;
     virtual sal_Int16 SAL_CALL getValue(sal_Int16 nFieldIndex) override;
     virtual void SAL_CALL addValue(sal_Int16 nFieldIndex, sal_Int32 nAmount) override;
-    virtual sal_Bool SAL_CALL isValid() override;
+    virtual bool SAL_CALL isValid() override;
     virtual css::i18n:: Calendar SAL_CALL getLoadedCalendar() override;
     virtual OUString SAL_CALL getUniqueID() override;
     virtual sal_Int16 SAL_CALL getFirstDayOfWeek() override;
@@ -95,7 +95,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:

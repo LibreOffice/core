@@ -115,7 +115,7 @@ namespace calc
         return u"com.sun.star.comp.sheet.OCellListSource"_ustr;
     }
 
-    sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }

@@ -407,7 +407,7 @@ namespace pcr
     }
 
 
-    InteractiveSelectionResult SAL_CALL XSDValidationPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult SAL_CALL XSDValidationPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -548,7 +548,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL XSDValidationPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit )
+    void SAL_CALL XSDValidationPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();

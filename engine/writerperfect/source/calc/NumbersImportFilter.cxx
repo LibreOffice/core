@@ -45,7 +45,7 @@ OUString SAL_CALL NumbersImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Calc.NumbersImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL NumbersImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL NumbersImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -1333,7 +1333,7 @@ uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName )
+bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1347,7 +1347,7 @@ uno::Type SAL_CALL ScDPDimensions::getElementType()
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPDimensions::hasElements()
+bool SAL_CALL ScDPDimensions::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -1770,7 +1770,7 @@ uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName )
+bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1784,7 +1784,7 @@ uno::Type SAL_CALL ScDPHierarchies::getElementType()
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPHierarchies::hasElements()
+bool SAL_CALL ScDPHierarchies::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -1931,7 +1931,7 @@ uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPLevels::hasByName( const OUString& aName )
+bool SAL_CALL ScDPLevels::hasByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1945,7 +1945,7 @@ uno::Type SAL_CALL ScDPLevels::getElementType()
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPLevels::hasElements()
+bool SAL_CALL ScDPLevels::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -2409,7 +2409,7 @@ uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames()
     return getElementNames( false );
 }
 
-sal_Bool SAL_CALL ScDPMembers::hasByName( const OUString& aName )
+bool SAL_CALL ScDPMembers::hasByName( const OUString& aName )
 {
     return ( GetIndexFromName( aName ) >= 0 );
 }
@@ -2419,7 +2419,7 @@ uno::Type SAL_CALL ScDPMembers::getElementType()
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPMembers::hasElements()
+bool SAL_CALL ScDPMembers::hasElements()
 {
     return ( getCount() > 0 );
 }

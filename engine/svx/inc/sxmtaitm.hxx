@@ -24,7 +24,7 @@
 #include <svx/sdangitm.hxx>
 
 // Turn text automatically in wright position (automatic UpsideDown).
-// TextUpsideDown stays active and turns the text again if sal_True.
+// TextUpsideDown stays active and turns the text again if true.
 class SdrMeasureTextAutoAngleItem final : public SdrYesNoItem {
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureTextAutoAngleItem)

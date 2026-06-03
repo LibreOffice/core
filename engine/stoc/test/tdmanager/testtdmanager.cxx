@@ -323,7 +323,7 @@ bool writeInfo(void * registryKey, OUString const & implementationName,
 
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void *, void * registryKey) {
+extern "C" bool SAL_CALL component_writeInfo(void *, void * registryKey) {
     return registryKey
         && writeInfo(registryKey, Service::getImplementationName(),
                      Service::getSupportedServiceNames());

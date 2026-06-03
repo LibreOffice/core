@@ -1153,7 +1153,7 @@ void TitledBoxElement::endElement()
         ctx.importStringProperty( u"GroupName"_ustr, u"group-name"_ustr, xAttributes );
 
         sal_Int16 nVal = 0;
-        sal_Bool bChecked = false;
+        bool bChecked = false;
         if (getBoolAttr( &bChecked, u"checked"_ustr, xAttributes, m_pImport->XMLNS_DIALOGS_UID ) && bChecked)
         {
             nVal = 1;
@@ -1243,7 +1243,7 @@ void RadioGroupElement::endElement()
         ctx.importBooleanProperty( u"MultiLine"_ustr, u"multiline"_ustr, xAttributes );
         ctx.importStringProperty( u"GroupName"_ustr, u"group-name"_ustr, xAttributes );
         sal_Int16 nVal = 0;
-        sal_Bool bChecked = false;
+        bool bChecked = false;
         if (getBoolAttr( &bChecked, u"checked"_ustr, xAttributes, m_pImport->XMLNS_DIALOGS_UID ) && bChecked)
         {
             nVal = 1;
@@ -1490,12 +1490,12 @@ void CheckBoxElement::endElement()
     ctx.importImagePositionProperty( u"ImagePosition"_ustr, u"image-position"_ustr, _xAttributes );
     ctx.importBooleanProperty( u"MultiLine"_ustr, u"multiline"_ustr, _xAttributes );
 
-    sal_Bool bTriState = false;
+    bool bTriState = false;
     if (getBoolAttr( &bTriState, u"tristate"_ustr, _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
         xControlModel->setPropertyValue( u"TriState"_ustr, Any( bTriState ) );
     }
-    sal_Bool bChecked = false;
+    bool bChecked = false;
     if (getBoolAttr( &bChecked, u"checked"_ustr, _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
         // has "checked" attribute
@@ -1563,7 +1563,7 @@ void ButtonElement::endElement()
     ctx.importBooleanProperty( u"FocusOnClick"_ustr, u"grab-focus"_ustr, _xAttributes );
     ctx.importBooleanProperty( u"MultiLine"_ustr, u"multiline"_ustr, _xAttributes );
     // State
-    sal_Bool bChecked = false;
+    bool bChecked = false;
     if (getBoolAttr( &bChecked, u"checked"_ustr, _xAttributes, m_pImport->XMLNS_DIALOGS_UID ) && bChecked)
     {
         ctx.getControlModel()->setPropertyValue( u"State"_ustr , Any( sal_Int16(1) ) );

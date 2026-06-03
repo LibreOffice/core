@@ -227,7 +227,7 @@ OUString SAL_CALL KeynoteImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Impress.KeynoteImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

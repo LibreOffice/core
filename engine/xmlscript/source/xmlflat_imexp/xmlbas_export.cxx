@@ -51,7 +51,7 @@ namespace xmlscript
     }
 
     // XServiceInfo
-    sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName )
+    bool XMLBasicExporterBase::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -91,7 +91,7 @@ namespace xmlscript
 
     // XFilter
 
-sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
+bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
     {
         std::scoped_lock aGuard( m_aMutex );
 

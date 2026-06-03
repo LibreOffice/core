@@ -91,7 +91,7 @@ OUString SAL_CALL VCLBitmapCreator::getImplementationName()
     return impl_staticGetImplementationName();
 }
 
-sal_Bool SAL_CALL VCLBitmapCreator::supportsService( const OUString& ServiceName )
+bool SAL_CALL VCLBitmapCreator::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

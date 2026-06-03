@@ -54,7 +54,7 @@ OUString SAL_CALL UcbContentProviderProxyFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UcbContentProviderProxyFactory"_ustr;
 }
-sal_Bool SAL_CALL UcbContentProviderProxyFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL UcbContentProviderProxyFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -146,7 +146,7 @@ OUString SAL_CALL UcbContentProviderProxy::getImplementationName()
     return u"com.sun.star.comp.ucb.UcbContentProviderProxy"_ustr;
 }
 
-sal_Bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& ServiceName )
+bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -199,7 +199,7 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
 Reference< XContentProvider > SAL_CALL
 UcbContentProviderProxy::registerInstance( const OUString& Template,
                                              const OUString& Arguments,
-                                             sal_Bool ReplaceExisting )
+                                             bool ReplaceExisting )
 {
     // Just remember that this method was called ( and the params ).
 

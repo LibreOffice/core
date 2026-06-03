@@ -37,7 +37,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -54,7 +54,7 @@ OUString OrcusFormatDetect::getImplementationName()
     return u"com.sun.star.comp.sc.OrcusFilterDetect"_ustr;
 }
 
-sal_Bool OrcusFormatDetect::supportsService(const OUString& rServiceName)
+bool OrcusFormatDetect::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

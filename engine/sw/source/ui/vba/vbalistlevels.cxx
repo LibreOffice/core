@@ -32,7 +32,7 @@ class ListLevelsEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 m_nIndex;
 public:
     explicit ListLevelsEnumWrapper( SwVbaListLevels* pLevels ) : m_pListLevels( pLevels ), m_nIndex( 1 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( m_nIndex <= m_pListLevels->getCount() );
     }

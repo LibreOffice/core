@@ -39,7 +39,7 @@ css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames( 
     return { isNew()?u"com.sun.star.sdbcx.IndexColumnDescriptor"_ustr:u"com.sun.star.sdbcx.IndexColumn"_ustr };
 }
 
-sal_Bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

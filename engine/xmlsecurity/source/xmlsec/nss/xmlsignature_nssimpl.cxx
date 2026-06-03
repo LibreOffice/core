@@ -78,7 +78,7 @@ public:
     //Methods from XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
@@ -178,7 +178,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) {
     xmlNodePtr pNode = nullptr ;
-    //sal_Bool valid ;
+    //bool valid ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -294,7 +294,7 @@ OUString SAL_CALL XMLSignature_NssImpl::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rServiceName)
+bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rServiceName)
 {
     const css::uno::Sequence<OUString> aServiceNames = getSupportedServiceNames();
     for (OUString const & rCurrentServiceName : aServiceNames)

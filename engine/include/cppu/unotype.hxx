@@ -119,12 +119,20 @@ cppu_detail_getUnoType(SAL_UNUSED_PARAMETER bool const *) {
 }
 
 inline css::uno::Type const &
-cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_Bool const *) {
-    return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_BOOLEAN);
-}
-
-inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Int8 const *) {
+    return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_BYTE);
+}
+/*
+TODO This function should not be necessary.
+There are places like:
+   engine/comphelper/source/eventattachermgr/eventattachermgr.cxx:217
+that want to do
+   rRet <<= sal_uInt8(0);
+I suspect that this is a bug, judging by the call site,
+since it would previously have tried to store the value via the sal_Bool paths.
+*/
+inline css::uno::Type const &
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_uInt8 const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_BYTE);
 }
 

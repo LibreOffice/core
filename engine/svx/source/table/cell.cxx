@@ -887,7 +887,7 @@ sal_Int32 SAL_CALL Cell::getColumnSpan()
 }
 
 
-sal_Bool SAL_CALL Cell::isMerged()
+bool SAL_CALL Cell::isMerged()
 {
     return mbMerged;
 }
@@ -1644,7 +1644,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& 
 // XText
 
 
-void SAL_CALL Cell::insertTextContent( const Reference< XTextRange >& xRange, const Reference< XTextContent >& xContent, sal_Bool bAbsorb )
+void SAL_CALL Cell::insertTextContent( const Reference< XTextRange >& xRange, const Reference< XTextContent >& xContent, bool bAbsorb )
 {
     SvxUnoTextBase::insertTextContent( xRange, xContent, bAbsorb );
     notifyModified();
@@ -1661,14 +1661,14 @@ void SAL_CALL Cell::removeTextContent( const Reference< XTextContent >& xContent
 // XSimpleText
 
 
-void SAL_CALL Cell::insertString( const Reference< XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb )
+void SAL_CALL Cell::insertString( const Reference< XTextRange >& xRange, const OUString& aString, bool bAbsorb )
 {
     SvxUnoTextBase::insertString( xRange, aString, bAbsorb );
     notifyModified();
 }
 
 
-void SAL_CALL Cell::insertControlCharacter( const Reference< XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb )
+void SAL_CALL Cell::insertControlCharacter( const Reference< XTextRange >& xRange, sal_Int16 nControlCharacter, bool bAbsorb )
 {
     SvxUnoTextBase::insertControlCharacter( xRange, nControlCharacter, bAbsorb );
     notifyModified();

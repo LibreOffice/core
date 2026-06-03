@@ -40,7 +40,7 @@ extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
 extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_set_log_selector(char const *logSelector);
 
 // the return value is actually "enum sal_detail_LogAction", but due to ABI
-// compatibility, it's left as the original "sal_Bool" / "unsigned char".
+// compatibility, it's left as the original "bool" / "unsigned char".
 extern "C" SAL_DLLPUBLIC unsigned char SAL_CALL sal_detail_log_report(
     sal_detail_LogLevel level, char const * area);
 

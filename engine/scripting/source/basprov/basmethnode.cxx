@@ -119,7 +119,7 @@ namespace basprov
     }
 
 
-    sal_Bool BasicMethodNodeImpl::hasChildNodes(  )
+    bool BasicMethodNodeImpl::hasChildNodes(  )
     {
         return false;
     }
@@ -237,7 +237,7 @@ namespace basprov
     }
 
 
-    sal_Bool BasicMethodNodeImpl::hasMethod( const OUString& aName )
+    bool BasicMethodNodeImpl::hasMethod( const OUString& aName )
     {
         bool bReturn = false;
         if ( aName == BASPROV_PROPERTY_EDITABLE )
@@ -247,7 +247,7 @@ namespace basprov
     }
 
 
-    sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& )
+    bool BasicMethodNodeImpl::hasProperty( const OUString& )
     {
         return false;
     }

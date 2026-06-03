@@ -111,7 +111,7 @@ public:
         return u"com.sun.star.comp.frame.SessionListener"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -127,10 +127,10 @@ public:
     virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any  >& args) override;
 
     // XSessionManagerListener
-    virtual void SAL_CALL doSave( sal_Bool bShutdown, sal_Bool bCancelable ) override;
-    virtual void SAL_CALL approveInteraction( sal_Bool bInteractionGranted ) override;
+    virtual void SAL_CALL doSave( bool bShutdown, bool bCancelable ) override;
+    virtual void SAL_CALL approveInteraction( bool bInteractionGranted ) override;
    virtual void SAL_CALL shutdownCanceled() override;
-   virtual sal_Bool SAL_CALL doRestore() override;
+   virtual bool SAL_CALL doRestore() override;
 
     // XSessionManagerListener2
     virtual void SAL_CALL doQuit() override;
@@ -282,7 +282,7 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
     }
 }
 
-sal_Bool SAL_CALL SessionListener::doRestore()
+bool SAL_CALL SessionListener::doRestore()
 {
     SAL_INFO("fwk.session", "SessionListener::doRestore");
     osl::MutexGuard g(m_aMutex);
@@ -306,7 +306,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
     return m_bRestored;
 }
 
-void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelable*/ )
+void SAL_CALL SessionListener::doSave( bool bShutdown, bool /*bCancelable*/ )
 {
     SAL_INFO("fwk.session", "SessionListener::doSave");
 
@@ -325,7 +325,7 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
         m_rSessionManager->saveDone( this );
 }
 
-void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted )
+void SAL_CALL SessionListener::approveInteraction( bool bInteractionGranted )
 {
     SAL_INFO("fwk.session", "SessionListener::approveInteraction");
     // do AutoSave as the first step

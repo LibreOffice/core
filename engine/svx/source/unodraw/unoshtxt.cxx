@@ -65,7 +65,7 @@
 
     <p>If a SdrView is given at construction time, the caller is
     responsible for destroying this object when the view becomes
-    invalid (the views cannot notify). If GetViewForwarder(sal_True)
+    invalid (the views cannot notify). If GetViewForwarder(true)
     is called, the underlying shape is put into edit mode, the view
     forwarder returned encapsulates the OutlinerView and the next call
     to GetTextForwarder() yields a forwarder encapsulating the actual

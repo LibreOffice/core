@@ -51,16 +51,16 @@ namespace logging
 
     private:
         // XCsvLogFormatter
-        virtual sal_Bool SAL_CALL getLogEventNo() override;
-        virtual sal_Bool SAL_CALL getLogThread() override;
-        virtual sal_Bool SAL_CALL getLogTimestamp() override;
-        virtual sal_Bool SAL_CALL getLogSource() override;
+        virtual bool SAL_CALL getLogEventNo() override;
+        virtual bool SAL_CALL getLogThread() override;
+        virtual bool SAL_CALL getLogTimestamp() override;
+        virtual bool SAL_CALL getLogSource() override;
         virtual Sequence< OUString > SAL_CALL getColumnnames() override;
 
-        virtual void SAL_CALL setLogEventNo( sal_Bool log_event_no ) override;
-        virtual void SAL_CALL setLogThread( sal_Bool log_thread ) override;
-        virtual void SAL_CALL setLogTimestamp( sal_Bool log_timestamp ) override;
-        virtual void SAL_CALL setLogSource( sal_Bool log_source ) override;
+        virtual void SAL_CALL setLogEventNo( bool log_event_no ) override;
+        virtual void SAL_CALL setLogThread( bool log_thread ) override;
+        virtual void SAL_CALL setLogTimestamp( bool log_timestamp ) override;
+        virtual void SAL_CALL setLogSource( bool log_source ) override;
         virtual void SAL_CALL setColumnnames( const Sequence< OUString>& column_names) override;
 
         // XLogFormatter
@@ -70,7 +70,7 @@ namespace logging
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& service_name ) override;
+        virtual bool SAL_CALL supportsService( const OUString& service_name ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     private:
@@ -137,22 +137,22 @@ namespace logging
         m_Columnnames({ u"message"_ustr })
     { }
 
-    sal_Bool CsvFormatter::getLogEventNo()
+    bool CsvFormatter::getLogEventNo()
     {
         return m_LogEventNo;
     }
 
-    sal_Bool CsvFormatter::getLogThread()
+    bool CsvFormatter::getLogThread()
     {
         return m_LogThread;
     }
 
-    sal_Bool CsvFormatter::getLogTimestamp()
+    bool CsvFormatter::getLogTimestamp()
     {
         return m_LogTimestamp;
     }
 
-    sal_Bool CsvFormatter::getLogSource()
+    bool CsvFormatter::getLogSource()
     {
         return m_LogSource;
     }
@@ -162,22 +162,22 @@ namespace logging
         return m_Columnnames;
     }
 
-    void CsvFormatter::setLogEventNo(sal_Bool log_event_no)
+    void CsvFormatter::setLogEventNo(bool log_event_no)
     {
         m_LogEventNo = log_event_no;
     }
 
-    void CsvFormatter::setLogThread(sal_Bool log_thread)
+    void CsvFormatter::setLogThread(bool log_thread)
     {
         m_LogThread = log_thread;
     }
 
-    void CsvFormatter::setLogTimestamp(sal_Bool log_timestamp)
+    void CsvFormatter::setLogTimestamp(bool log_timestamp)
     {
         m_LogTimestamp = log_timestamp;
     }
 
-    void CsvFormatter::setLogSource(sal_Bool log_source)
+    void CsvFormatter::setLogSource(bool log_source)
     {
         m_LogSource = log_source;
     }
@@ -291,7 +291,7 @@ namespace logging
         return buf.makeStringAndClear();
     }
 
-    sal_Bool SAL_CALL CsvFormatter::supportsService( const OUString& service_name )
+    bool SAL_CALL CsvFormatter::supportsService( const OUString& service_name )
     {
         return cppu::supportsService(this, service_name);
     }

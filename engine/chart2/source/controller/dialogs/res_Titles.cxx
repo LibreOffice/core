@@ -108,7 +108,7 @@ void TitleResources::writeToResources(const TitleDialogData& rInput)
 
 void TitleResources::readFromResources(TitleDialogData& rOutput)
 {
-    sal_Bool* pExistenceList = rOutput.aExistenceList.getArray();
+    bool* pExistenceList = rOutput.aExistenceList.getArray();
     pExistenceList[0] = !m_xEd_Main->get_text().isEmpty();
     pExistenceList[1] = !m_xEd_Sub->get_text().isEmpty();
     pExistenceList[2] = !m_xEd_XAxis->get_text().isEmpty();

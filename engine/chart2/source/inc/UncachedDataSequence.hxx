@@ -78,7 +78,7 @@ public:
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
@@ -109,7 +109,7 @@ private:
 
     // ____ XElementAccess (base of XIndexAccess) ____
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // ____ XNamed (for setting a new range representation) ____
     virtual OUString SAL_CALL getName() override;
@@ -119,8 +119,8 @@ private:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // ____ XModifiable ____
-    virtual sal_Bool SAL_CALL isModified() override;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual bool SAL_CALL isModified() override;
+    virtual void SAL_CALL setModified( bool bModified ) override;
 
     // ____ XModifyBroadcaster (base of XModifiable) ____
     virtual void SAL_CALL addModifyListener(

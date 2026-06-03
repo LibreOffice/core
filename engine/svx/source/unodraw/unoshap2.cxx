@@ -347,7 +347,7 @@ uno::Type SAL_CALL SvxShapeGroup::getElementType()
 }
 
 
-sal_Bool SAL_CALL SvxShapeGroup::hasElements()
+bool SAL_CALL SvxShapeGroup::hasElements()
 {
     ::SolarMutexGuard aGuard;
 

@@ -58,8 +58,8 @@ namespace vcl::unotools
     public:
         // XBitmap
         VCL_DLLPUBLIC virtual css::geometry::IntegerSize2D SAL_CALL getSize() override;
-        VCL_DLLPUBLIC virtual sal_Bool SAL_CALL hasAlpha(  ) override;
-        VCL_DLLPUBLIC virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize, sal_Bool beFast ) override;
+        VCL_DLLPUBLIC virtual bool SAL_CALL hasAlpha(  ) override;
+        VCL_DLLPUBLIC virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize, bool beFast ) override;
 
         // XIntegerReadOnlyBitmap
         VCL_DLLPUBLIC virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) override;
@@ -70,8 +70,8 @@ namespace vcl::unotools
 
         // XBitmapPalette
         virtual sal_Int32 SAL_CALL getNumberOfEntries() override;
-        virtual sal_Bool SAL_CALL getIndex( css::uno::Sequence< double >& entry, ::sal_Int32 nIndex ) override;
-        virtual sal_Bool SAL_CALL setIndex( const css::uno::Sequence< double >& color, sal_Bool transparency, ::sal_Int32 nIndex ) override;
+        virtual bool SAL_CALL getIndex( css::uno::Sequence< double >& entry, ::sal_Int32 nIndex ) override;
+        virtual bool SAL_CALL setIndex( const css::uno::Sequence< double >& color, bool transparency, ::sal_Int32 nIndex ) override;
         virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace(  ) override;
 
         // XIntegerBitmapColorSpace

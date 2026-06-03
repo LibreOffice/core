@@ -462,7 +462,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
 #if HAVE_FEATURE_DESKTOP
     bShowStatusBar( true ),
 #else
-    bShowStatusBar( sal_False ),
+    bShowStatusBar( false ),
 #endif
     m_nLock( 0 ),
     pMasterFrame( pMaster ),

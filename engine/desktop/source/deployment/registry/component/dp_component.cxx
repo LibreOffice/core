@@ -126,7 +126,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         void componentLiveRemoval(ComponentBackendDb::Data const & data);
 
         // Package
-        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+        virtual beans::Optional< beans::Ambiguous<bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
@@ -154,7 +154,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         BackendImpl * getMyBackend() const;
 
         // Package
-        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+        virtual beans::Optional< beans::Ambiguous<bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
@@ -180,7 +180,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         const bool m_jarFile;
 
         // Package
-        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+        virtual beans::Optional< beans::Ambiguous<bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
@@ -221,7 +221,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         Reference<XInterface> impl_createInstance(OUString const& rService) const;
 
         // Package
-        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+        virtual beans::Optional< beans::Ambiguous<bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
@@ -316,7 +316,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageRegistry
@@ -554,7 +554,7 @@ OUString BackendImpl::getImplementationName()
     return u"com.sun.star.comp.deployment.component.PackageRegistryBackend"_ustr;
 }
 
-sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
+bool BackendImpl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1258,7 +1258,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
 //We could use here BackendImpl::hasActiveEntry. However, this check is just as well.
 //And it also shows the problem if another extension has overwritten an implementation
 //entry, because it contains the same service implementation
-beans::Optional< beans::Ambiguous<sal_Bool> >
+beans::Optional< beans::Ambiguous<bool> >
 BackendImpl::ComponentPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -1327,9 +1327,9 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     //call registerPackage.
     bool bAmbiguous = m_registered == Reg::Void // Reg::Void == we are in the progress of unregistration
         || m_registered == Reg::MaybeRegistered;
-    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+    return beans::Optional< beans::Ambiguous<bool> >(
         true /* IsPresent */,
-        beans::Ambiguous<sal_Bool>(
+        beans::Ambiguous<bool>(
             m_registered == Reg::Registered, bAmbiguous) );
 }
 
@@ -1444,16 +1444,16 @@ BackendImpl * BackendImpl::TypelibraryPackageImpl::getMyBackend() const
     return pBackend;
 }
 
-beans::Optional< beans::Ambiguous<sal_Bool> >
+beans::Optional< beans::Ambiguous<bool> >
 BackendImpl::TypelibraryPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & )
 {
     BackendImpl * that = getMyBackend();
-    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+    return beans::Optional< beans::Ambiguous<bool> >(
         true /* IsPresent */,
-        beans::Ambiguous<sal_Bool>(
+        beans::Ambiguous<bool>(
             that->hasInUnoRc(
                 m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB, getURL() ),
             false /* IsAmbiguous */ ) );
@@ -1577,14 +1577,14 @@ const
     return xService;
 }
 
-beans::Optional<beans::Ambiguous<sal_Bool> >
+beans::Optional<beans::Ambiguous<bool> >
 BackendImpl::OtherPlatformPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard& /* guard */,
     ::rtl::Reference<AbortChannel> const& /* abortChannel */,
     Reference<XCommandEnvironment> const& /* xCmdEnv */ )
 {
-    return beans::Optional<beans::Ambiguous<sal_Bool> >(true,
-            beans::Ambiguous<sal_Bool>(true, false));
+    return beans::Optional<beans::Ambiguous<bool> >(true,
+            beans::Ambiguous<bool>(true, false));
 }
 
 void
@@ -1626,15 +1626,15 @@ BackendImpl * BackendImpl::ComponentsPackageImpl::getMyBackend() const
     return pBackend;
 }
 
-beans::Optional< beans::Ambiguous<sal_Bool> >
+beans::Optional< beans::Ambiguous<bool> >
 BackendImpl::ComponentsPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & )
 {
-    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+    return beans::Optional< beans::Ambiguous<bool> >(
         true,
-        beans::Ambiguous<sal_Bool>(
+        beans::Ambiguous<bool>(
             getMyBackend()->hasInUnoRc(RCITEM_COMPONENTS, getURL()), false));
 }
 

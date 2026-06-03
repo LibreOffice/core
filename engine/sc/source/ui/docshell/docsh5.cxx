@@ -995,7 +995,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
                 m_pDocument->SetVisible( nNewTab, false );
 
             //  this is the active scenario, then
-            m_pDocument->CopyScenario( nNewTab, nTab, true );  // sal_True - don't copy anything from scenario
+            m_pDocument->CopyScenario( nNewTab, nTab, true );  // true - don't copy anything from scenario
 
             if (nFlags & ScScenarioFlags::ShowFrame)
                 PostPaint( 0,0,nTab, m_pDocument->MaxCol(),m_pDocument->MaxRow(),nTab, PaintPartFlags::Grid );  // paint frames

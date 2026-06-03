@@ -153,7 +153,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Gets the menu bar part of all addon components registered
             @return     A complete
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
 
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
@@ -162,7 +162,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Gets a toolbar part of a single addon
             @return     A complete
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
 
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
@@ -171,7 +171,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Gets a unique toolbar resource name of a single addon
             @return     A complete
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
 
         OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
@@ -180,7 +180,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Gets a NotebookBar part of a single addon
             @return     A complete
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
 
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsNotebookBarPart( sal_uInt32 nIndex ) const;
@@ -189,7 +189,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Gets a unique NotebookBar resource name of a single addon
             @return     A complete
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
 
         OUString GetAddonsNotebookBarResourceName( sal_uInt32    ) const;
@@ -198,7 +198,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Retrieves all available merge instructions for the Office menu bar
             @return     The filled MergeMenuDefinitionContainer
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
 
         const MergeMenuInstructionContainer& GetMergeMenuInstructions() const;
@@ -207,7 +207,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Retrieves all available merge instructions for a single toolbar
             @return     The filled
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
         bool GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
 
@@ -215,7 +215,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Retrieves all available merge instructions for Notebookbar
             @return     The filled
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
         bool GetMergeNotebookBarInstructions( const OUString& rNotebookBarName, MergeNotebookBarInstructionContainer& rNotebookBar ) const;
 
@@ -223,7 +223,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @short      Gets the Add-On help menu part of all addon components registered
             @return     A complete
 
-            @onerror    We return sal_False
+            @onerror    We return false
         *//*-*****************************************************************************************************/
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsHelpMenu() const;
 

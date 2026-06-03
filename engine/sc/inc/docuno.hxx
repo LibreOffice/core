@@ -188,7 +188,7 @@ public:
                             getLinks() override;
 
                             /// XActionLockable
-    virtual sal_Bool SAL_CALL isActionLocked() override;
+    virtual bool SAL_CALL isActionLocked() override;
     virtual void SAL_CALL   addActionLock() override;
     virtual void SAL_CALL   removeActionLock() override;
     virtual void SAL_CALL   setActionLocks( sal_Int16 nLock ) override;
@@ -200,13 +200,13 @@ public:
                             /// XCalculatable
     virtual void SAL_CALL   calculate() override;
     virtual void SAL_CALL   calculateAll() override;
-    virtual sal_Bool SAL_CALL isAutomaticCalculationEnabled() override;
-    virtual void SAL_CALL   enableAutomaticCalculation( sal_Bool bEnabled ) override;
+    virtual bool SAL_CALL isAutomaticCalculationEnabled() override;
+    virtual void SAL_CALL   enableAutomaticCalculation( bool bEnabled ) override;
 
                             /// XProtectable
     virtual void SAL_CALL   protect( const OUString& aPassword ) override;
     virtual void SAL_CALL   unprotect( const OUString& aPassword ) override;
-    virtual sal_Bool SAL_CALL isProtected() override;
+    virtual bool SAL_CALL isProtected() override;
 
                             /// XDrawPagesSupplier
     virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL
@@ -220,7 +220,7 @@ public:
 
                             /// XConsolidatable
     virtual css::uno::Reference< css::sheet::XConsolidationDescriptor >
-                            SAL_CALL createConsolidationDescriptor( sal_Bool bEmpty ) override;
+                            SAL_CALL createConsolidationDescriptor( bool bEmpty ) override;
     virtual void SAL_CALL consolidate( const css::uno::Reference< css::sheet::XConsolidationDescriptor >& xDescriptor ) override;
 
                             /// XDocumentAuditing
@@ -254,7 +254,7 @@ public:
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             /// XUnoTunnel
@@ -273,11 +273,11 @@ public:
     virtual void SAL_CALL removeChangesListener( const css::uno::Reference< css::util::XChangesListener >& aListener ) override;
 
     // XOpenCLSelection
-    virtual sal_Bool SAL_CALL isOpenCLEnabled() override;
+    virtual bool SAL_CALL isOpenCLEnabled() override;
 
-    virtual void SAL_CALL enableOpenCL(sal_Bool bEnable) override;
+    virtual void SAL_CALL enableOpenCL(bool bEnable) override;
 
-    virtual void SAL_CALL enableAutomaticDeviceSelection(sal_Bool bForce) override;
+    virtual void SAL_CALL enableAutomaticDeviceSelection(bool bForce) override;
 
     virtual void SAL_CALL disableAutomaticDeviceSelection() override;
 
@@ -294,7 +294,7 @@ public:
 
     virtual void SAL_CALL disableOpcodeSubsetTest() override;
 
-    virtual sal_Bool SAL_CALL isOpcodeSubsetTested() override;
+    virtual bool SAL_CALL isOpcodeSubsetTested() override;
 
     virtual void SAL_CALL setFormulaCellNumberLimit( sal_Int32 number ) override;
 
@@ -444,11 +444,11 @@ public:
 
                             /// XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -509,7 +509,7 @@ public:
 
                             /// XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             /// XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -518,11 +518,11 @@ public:
                             /// XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference<ScTableSheetObj> GetSheetByIndex(sal_Int32 nIndex) const;
@@ -560,7 +560,7 @@ public:
                             /// XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             /// XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -572,7 +572,7 @@ public:
 
                             /// XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             /// XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
@@ -592,7 +592,7 @@ public:
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     SC_DLLPUBLIC rtl::Reference<ScTableColumnObj> getScTableColumnByIndex( sal_Int32 Index ) const;
@@ -634,7 +634,7 @@ public:
 
                             /// XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             /// XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
@@ -653,7 +653,7 @@ public:
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void setPropertyValueIsFiltered( SolarMutexGuard& rGuard, bool b );
@@ -686,7 +686,7 @@ public:
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -726,11 +726,11 @@ public:
 
                             /// XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -764,7 +764,7 @@ public:
                             /// XNameAccess
     SC_DLLPUBLIC virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             /// XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -776,11 +776,11 @@ public:
 
                             /// XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

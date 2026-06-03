@@ -215,7 +215,7 @@ void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int64 nChildIndex )
     mpThumbnailView->SelectItem(pItem->mnId);
 }
 
-sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;

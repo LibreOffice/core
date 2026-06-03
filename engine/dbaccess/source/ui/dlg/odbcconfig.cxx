@@ -73,7 +73,7 @@ bool OOdbcEnumeration::load(const char* _pLibPath)
     m_pOdbcLib = osl_loadModule(m_sLibPath.pData, SAL_LOADMODULE_NOW);
     return (nullptr != m_pOdbcLib);
 #else
-    return sal_False;
+    return false;
 #endif
 }
 
@@ -168,7 +168,7 @@ bool OOdbcEnumeration::allocEnv()
     (*reinterpret_cast<TSQLSetEnvAttr>(m_pSetEnvAttr))(m_pImpl->hEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3),SQL_IS_INTEGER);
     return true;
 #else
-    return sal_False;
+    return false;
 #endif
 }
 

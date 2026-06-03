@@ -421,7 +421,7 @@ uno_threadpool_putJob(
     sal_Sequence *pThreadId,
     void *pJob,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
-    sal_Bool bIsOneway ) noexcept
+    bool bIsOneway ) noexcept
 {
     if (!getThreadPool(hPool)->addJob( pThreadId, bIsOneway, pJob ,doRequest, hPool ))
     {

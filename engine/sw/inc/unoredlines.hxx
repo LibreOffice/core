@@ -54,11 +54,11 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     static css::uno::Reference<css::beans::XPropertySet> GetObject(SwRangeRedline& rRedline);
@@ -76,12 +76,12 @@ public:
     SwXRedlineEnumeration(SwDoc& rDoc);
 
     //XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Any SAL_CALL nextElement() override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     virtual void Notify( const SfxHint& ) override;

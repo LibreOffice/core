@@ -162,7 +162,7 @@ protected:
     //   implement abstract methods from PropertySetHelper
 
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
         css::uno::Any& rConvertedValue,
         css::uno::Any& rOldValue,
         sal_Int32 nHandle,

@@ -1689,7 +1689,7 @@ oslFileError SAL_CALL osl_writeFileAt(
     return pImpl->writeFileAt(nOffset, pBuffer, nBytesToWrite, pBytesWritten);
 }
 
-oslFileError SAL_CALL osl_isEndOfFile(oslFileHandle Handle, sal_Bool *pIsEOF)
+oslFileError SAL_CALL osl_isEndOfFile(oslFileHandle Handle, bool *pIsEOF)
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 

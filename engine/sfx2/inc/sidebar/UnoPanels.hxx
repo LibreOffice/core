@@ -34,7 +34,7 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
 // XIndexAccess
 
@@ -44,7 +44,7 @@ public:
 
 // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
 private:
 

@@ -95,7 +95,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
@@ -337,7 +337,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL SvUnoImageMapObject::supportsService( const  OUString& ServiceName )
+bool SAL_CALL SvUnoImageMapObject::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -505,11 +505,11 @@ public:
 
     // XElementAccess
     virtual Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
@@ -622,7 +622,7 @@ Type SAL_CALL SvUnoImageMap::getElementType(  )
     return cppu::UnoType<XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL SvUnoImageMap::hasElements(  )
+bool SAL_CALL SvUnoImageMap::hasElements(  )
 {
     return (!maObjectList.empty());
 }
@@ -633,7 +633,7 @@ OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
     return u"org.openoffice.comp.svt.SvUnoImageMap"_ustr;
 }
 
-sal_Bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

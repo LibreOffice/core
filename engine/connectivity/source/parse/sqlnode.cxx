@@ -459,7 +459,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
 
             m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam, false );
             aNewParam.bQuote = rParam.bQuote;
-            //aNewParam.bPredicate = sal_False; // disable [ ] around names // look at i73215
+            //aNewParam.bPredicate = false; // disable [ ] around names // look at i73215
             OUStringBuffer aStringPara;
             for (sal_uInt32 i=1; i<nCount; i++)
             {
@@ -733,7 +733,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     const OSQLParseNode* pParaNode = nullptr;
 
     const SQLParseNodeParameter& aNewParam(rParam);
-    //aNewParam.bQuote = sal_True; // why setting this to true? @see https://bz.apache.org/ooo/show_bug.cgi?id=75557
+    //aNewParam.bQuote = true; // why setting this to true? @see https://bz.apache.org/ooo/show_bug.cgi?id=75557
 
     if ( !(bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(m_aChildren[0],column_ref) && columnMatchP(m_aChildren[0].get(), rParam)) )
         m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam, bSimple );

@@ -132,7 +132,7 @@ OUString PanelFactory::getImplementationName() {
     return u"org.openoffice.comp.Draw.framework.PanelFactory"_ustr;
 }
 
-sal_Bool PanelFactory::supportsService(OUString const & ServiceName) {
+bool PanelFactory::supportsService(OUString const & ServiceName) {
     return cppu::supportsService(this, ServiceName);
 }
 

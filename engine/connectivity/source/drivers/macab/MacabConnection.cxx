@@ -106,14 +106,14 @@ OUString SAL_CALL MacabConnection::nativeSQL( const OUString& _sSql )
     return _sSql;
 }
 
-void SAL_CALL MacabConnection::setAutoCommit( sal_Bool )
+void SAL_CALL MacabConnection::setAutoCommit( bool )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
     // here you  have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
 }
 
-sal_Bool SAL_CALL MacabConnection::getAutoCommit(  )
+bool SAL_CALL MacabConnection::getAutoCommit(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
@@ -139,7 +139,7 @@ void SAL_CALL MacabConnection::rollback(  )
     // same as commit but for the other case
 }
 
-sal_Bool SAL_CALL MacabConnection::isClosed(  )
+bool SAL_CALL MacabConnection::isClosed(  )
 {
     return doIsClosed();
 }
@@ -169,7 +169,7 @@ Reference< XDatabaseMetaData > SAL_CALL MacabConnection::getMetaData(  )
     return xMetaData;
 }
 
-void SAL_CALL MacabConnection::setReadOnly( sal_Bool )
+void SAL_CALL MacabConnection::setReadOnly( bool )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
@@ -177,7 +177,7 @@ void SAL_CALL MacabConnection::setReadOnly( sal_Bool )
     // set you connection to readonly
 }
 
-sal_Bool SAL_CALL MacabConnection::isReadOnly(  )
+bool SAL_CALL MacabConnection::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);

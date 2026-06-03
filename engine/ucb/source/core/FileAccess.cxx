@@ -95,27 +95,27 @@ public:
     virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) override;
     virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) override;
     virtual void SAL_CALL kill( const OUString& FileURL ) override;
-    virtual sal_Bool SAL_CALL isFolder( const OUString& FileURL ) override;
-    virtual sal_Bool SAL_CALL isReadOnly( const OUString& FileURL ) override;
-    virtual void SAL_CALL setReadOnly( const OUString& FileURL, sal_Bool bReadOnly ) override;
+    virtual bool SAL_CALL isFolder( const OUString& FileURL ) override;
+    virtual bool SAL_CALL isReadOnly( const OUString& FileURL ) override;
+    virtual void SAL_CALL setReadOnly( const OUString& FileURL, bool bReadOnly ) override;
     virtual void SAL_CALL createFolder( const OUString& NewFolderURL ) override;
     virtual sal_Int32 SAL_CALL getSize( const OUString& FileURL ) override;
     virtual OUString SAL_CALL getContentType( const OUString& FileURL ) override;
     virtual css::util::DateTime SAL_CALL getDateTimeModified( const OUString& FileURL ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, sal_Bool bIncludeFolders ) override;
-    virtual sal_Bool SAL_CALL exists( const OUString& FileURL ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, bool bIncludeFolders ) override;
+    virtual bool SAL_CALL exists( const OUString& FileURL ) override;
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL openFileRead( const OUString& FileURL ) override;
     virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL openFileWrite( const OUString& FileURL ) override;
     virtual css::uno::Reference< css::io::XStream > SAL_CALL openFileReadWrite( const OUString& FileURL ) override;
     virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
     virtual void SAL_CALL writeFile( const OUString& FileURL, const css::uno::Reference< css::io::XInputStream >& data ) override;
-    virtual sal_Bool SAL_CALL isHidden( const OUString& FileURL ) override;
-    virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) override;
+    virtual bool SAL_CALL isHidden( const OUString& FileURL ) override;
+    virtual void SAL_CALL setHidden( const OUString& FileURL, bool bHidden ) override;
 
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.comp.ucb.SimpleFileAccess"_ustr; }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
@@ -294,7 +294,7 @@ void OFileAccess::kill( const OUString& FileURL )
     }
 }
 
-sal_Bool OFileAccess::isFolder( const OUString& FileURL )
+bool OFileAccess::isFolder( const OUString& FileURL )
 {
     bool bRet = false;
     try
@@ -307,7 +307,7 @@ sal_Bool OFileAccess::isFolder( const OUString& FileURL )
     return bRet;
 }
 
-sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
+bool OFileAccess::isReadOnly( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
@@ -317,7 +317,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
     return bRet;
 }
 
-void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
+void OFileAccess::setReadOnly( const OUString& FileURL, bool bReadOnly )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
@@ -413,7 +413,7 @@ css::util::DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
     return aDateTime;
 }
 
-Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, sal_Bool bIncludeFolders )
+Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, bool bIncludeFolders )
 {
     // SfxContentHelper::GetFolderContents
 
@@ -449,7 +449,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
     return comphelper::containerToSequence(aFiles);
 }
 
-sal_Bool OFileAccess::exists( const OUString& FileURL )
+bool OFileAccess::exists( const OUString& FileURL )
 {
     bool bRet = false;
     try
@@ -661,7 +661,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
     }
 }
 
-sal_Bool OFileAccess::isHidden( const OUString& FileURL )
+bool OFileAccess::isHidden( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
@@ -671,7 +671,7 @@ sal_Bool OFileAccess::isHidden( const OUString& FileURL )
     return bRet;
 }
 
-void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
+void OFileAccess::setHidden( const OUString& FileURL, bool bHidden )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );

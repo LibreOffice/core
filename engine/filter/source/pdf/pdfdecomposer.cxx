@@ -43,7 +43,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString&) override;
+    bool SAL_CALL supportsService(const OUString&) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -112,7 +112,7 @@ OUString SAL_CALL XPdfDecomposer::getImplementationName()
     return u"com.sun.star.comp.PDF.PDFDecomposer"_ustr;
 }
 
-sal_Bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
+bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

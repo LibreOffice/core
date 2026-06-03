@@ -344,7 +344,7 @@ namespace comphelper
             return *static_cast< int const * >(lhs) < *static_cast< int const * >(rhs);
         }
         case typelib_TypeClass_BOOLEAN:
-            return *static_cast< sal_Bool const * >(lhs) < *static_cast< sal_Bool const * >(rhs);
+            return *static_cast< bool const * >(lhs) < *static_cast< bool const * >(rhs);
         case typelib_TypeClass_CHAR:
             return *static_cast< sal_Unicode const * >(lhs) < *static_cast< sal_Unicode const * >(rhs);
         case typelib_TypeClass_FLOAT:

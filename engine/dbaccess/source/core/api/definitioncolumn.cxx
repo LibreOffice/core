@@ -380,7 +380,7 @@ void OColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     }
 }
 
-sal_Bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle,
+bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle,
             const Any& rValue )
 {
     bool bModified( false );
@@ -521,7 +521,7 @@ void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32
     }
 }
 
-sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
     bool bModified(false);
     if ( m_bPureWrap )

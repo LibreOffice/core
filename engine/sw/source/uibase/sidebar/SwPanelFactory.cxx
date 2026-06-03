@@ -71,7 +71,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"_ustr; }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override

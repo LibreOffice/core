@@ -59,7 +59,7 @@ public:
 
     //XElementAccess (via XEnumerationAccess)
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 };
 
 typedef cppu::WeakImplHelper<css::container::XEnumerationAccess> SwXRedlineBaseClass;
@@ -101,7 +101,7 @@ public:
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     const SwRangeRedline*    GetRedline() const {return m_pRedline;}
     virtual void Notify( const SfxHint& ) override;

@@ -179,7 +179,7 @@ void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
 }
 
 
-sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
+bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue )
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)

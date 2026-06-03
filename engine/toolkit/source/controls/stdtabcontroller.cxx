@@ -370,7 +370,7 @@ OUString StdTabController::getImplementationName()
     return u"stardiv.Toolkit.StdTabController"_ustr;
 }
 
-sal_Bool StdTabController::supportsService(OUString const & ServiceName)
+bool StdTabController::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

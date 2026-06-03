@@ -260,13 +260,13 @@ ScVbaWorkbook::Protect( const uno::Any &aPassword )
     VbaDocumentBase::Protect( aPassword );
 }
 
-sal_Bool
+bool
 ScVbaWorkbook::getProtectStructure()
 {
     return getModel()->isProtected();
 }
 
-sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed()
+bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed()
 {
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
@@ -276,7 +276,7 @@ sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed()
     return false;
 }
 
-void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDisplayed )
+void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( bool _precisionAsDisplayed )
 {
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {

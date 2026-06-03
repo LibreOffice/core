@@ -766,7 +766,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 }
 
 // XFilter
-sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
+bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
 {
     // check for xHandler first... should have been supplied in initialize
     if( !mxHandler.is() )
@@ -887,7 +887,7 @@ OUString SAL_CALL SvXMLExport::getImplementationName(  )
     return m_implementationName;
 }
 
-sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName )
+bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

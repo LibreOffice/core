@@ -35,7 +35,7 @@ using namespace ::com::sun::star::lang;
 extern "C"
 {
 
-sal_Bool SAL_CALL component_writeInfo(
+bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -99,14 +99,14 @@ sal_Bool SAL_CALL component_writeInfo(
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OMyPersistObject_getServiceName() );
 
-            return sal_True;
+            return true;
         }
         catch (InvalidRegistryException &)
         {
             OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

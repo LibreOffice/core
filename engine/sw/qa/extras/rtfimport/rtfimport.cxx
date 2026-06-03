@@ -644,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96326)
                                                                     u"Bookmark"_ustr);
     uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
     // This was true, ffres=25 was interpreted as checked.
-    CPPUNIT_ASSERT_EQUAL(false, bool(xParameters->hasElements()));
+    CPPUNIT_ASSERT_EQUAL(false, xParameters->hasElements());
 
     // And this is checked.
     xFormField = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(2), 2),

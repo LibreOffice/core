@@ -216,7 +216,7 @@ private:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         implGetAccessibleContext() override;
 
-    // return sal_False in default case
+    // return false in default case
     virtual bool
         implIsSelected( sal_Int64 nAccessibleChildIndex ) override;
 

@@ -1744,7 +1744,7 @@ void SAL_CALL
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     ScAccessibleDocument::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;

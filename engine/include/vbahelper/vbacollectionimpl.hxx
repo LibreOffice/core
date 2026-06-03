@@ -73,7 +73,7 @@ public:
             css::uno::Reference< css::container::XIndexAccess > xIndexAccess ) :
         mxIndexAccess(std::move( xIndexAccess )), mnIndex( 0 ) {}
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         return mnIndex < mxIndexAccess->getCount();
     }
@@ -106,7 +106,7 @@ public:
             const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) :
         mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         return mxEnumeration->hasMoreElements();
     }
@@ -135,7 +135,7 @@ protected:
 public:
     /// @throws css::uno::RuntimeException
     EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< css::uno::XComponentContext >  xContext, css::uno::Reference< css::container::XEnumeration > xEnumeration ) : m_xParent( xParent ), m_xContext(std::move( xContext )),  m_xEnumeration(std::move( xEnumeration )) { }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override { return m_xEnumeration->hasMoreElements(); }
+    virtual bool SAL_CALL hasMoreElements(  ) override { return m_xEnumeration->hasMoreElements(); }
 };
 
 // a wrapper class for a providing a XIndexAccess, XNameAccess, XEnumerationAccess impl based on providing a vector of interfaces
@@ -158,7 +158,7 @@ private:
     public:
             XNamedEnumerationHelper( XNamedVec sMap ) : mXNamedVec(std::move( sMap )), mIt( mXNamedVec.begin() ) {}
 
-            virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+            virtual bool SAL_CALL hasMoreElements(  ) override
             {
             return ( mIt != mXNamedVec.end() );
             }
@@ -177,7 +177,7 @@ public:
     XNamedObjectCollectionHelper( XNamedVec sMap ) : mXNamedVec(std::move( sMap )), cachePos(mXNamedVec.begin()) {}
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override { return cppu::UnoType< OneIfc >::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return ( mXNamedVec.size() > 0 ); }
+    virtual bool SAL_CALL hasElements(  ) override { return ( mXNamedVec.size() > 0 ); }
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
@@ -199,7 +199,7 @@ public:
         }
         return sNames;
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         cachePos = mXNamedVec.begin();
         typename XNamedVec::iterator it_end = mXNamedVec.end();
@@ -327,7 +327,7 @@ public:
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override = 0;
     // XElementAccess
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
     {
         return ( m_xIndexAccess->getCount() > 0 );
     }

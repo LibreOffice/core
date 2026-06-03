@@ -279,12 +279,12 @@ public:
     css::util::Date SAL_CALL getFirst(  ) override;
     void SAL_CALL setLast( const css::util::Date& Date ) override;
     css::util::Date SAL_CALL getLast(  ) override;
-    void SAL_CALL setLongFormat( sal_Bool bLong ) override;
-    sal_Bool SAL_CALL isLongFormat(  ) override;
+    void SAL_CALL setLongFormat( bool bLong ) override;
+    bool SAL_CALL isLongFormat(  ) override;
     void SAL_CALL setEmpty(  ) override;
-    sal_Bool SAL_CALL isEmpty(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    bool SAL_CALL isEmpty(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
@@ -316,9 +316,9 @@ public:
     void SAL_CALL setLast( const css::util::Time& Time ) override;
     css::util::Time SAL_CALL getLast(  ) override;
     void SAL_CALL setEmpty(  ) override;
-    sal_Bool SAL_CALL isEmpty(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    bool SAL_CALL isEmpty(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
@@ -353,8 +353,8 @@ public:
     double SAL_CALL getSpinSize(  ) override;
     void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
@@ -398,8 +398,8 @@ public:
     virtual ::sal_Int64 SAL_CALL getSpinSize(  ) override;
     virtual void SAL_CALL setDecimalDigits( ::sal_Int16 nDigits ) override;
     virtual ::sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    virtual void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    virtual sal_Bool SAL_CALL isStrictFormat(  ) override;
+    virtual void SAL_CALL setStrictFormat( bool bStrict ) override;
+    virtual bool SAL_CALL isStrictFormat(  ) override;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
@@ -423,8 +423,8 @@ public:
     void SAL_CALL getMasks( OUString& EditMask, OUString& LiteralMask ) override;
     void SAL_CALL setString( const OUString& Str ) override;
     OUString SAL_CALL getString(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
@@ -456,8 +456,8 @@ public:
     OUString SAL_CALL getSelectedText(  ) override;
     void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
     css::awt::Selection SAL_CALL getSelection(  ) override;
-    sal_Bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) override;
+    bool SAL_CALL isEditable(  ) override;
+    void SAL_CALL setEditable( bool bEditable ) override;
     void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
     sal_Int16 SAL_CALL getMaxTextLen(  ) override;
 
@@ -502,8 +502,8 @@ public:
     double SAL_CALL getSpinSize(  ) override;
     void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -567,8 +567,8 @@ public:
     virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) override;
     virtual void SAL_CALL deselectAllRows() override;
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
-    virtual sal_Bool SAL_CALL hasSelectedRows() override;
-    virtual sal_Bool SAL_CALL isRowSelected(::sal_Int32 index) override;
+    virtual bool SAL_CALL hasSelectedRows() override;
+    virtual bool SAL_CALL isRowSelected(::sal_Int32 index) override;
     virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
     virtual void SAL_CALL removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
 
@@ -579,7 +579,7 @@ public:
     void SAL_CALL dispose(  ) override;
 
     // XWindow
-    void SAL_CALL setEnable( sal_Bool bEnable ) override;
+    void SAL_CALL setEnable( bool bEnable ) override;
 
 private:
     // VCLXWindow

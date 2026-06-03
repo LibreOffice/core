@@ -92,15 +92,15 @@ or extend the selected range. The selected range is realised via SelectDate()
 and SelectDateRange() and queried with GetSelectDateCount()/GetSelectDate().
 
 IsSelectLeft() returns the direction of the selection:
-sal_True is a selection to the left or up
-sal_False is a selection to the right or down
+true is a selection to the left or up
+false is a selection to the right or down
 
 --------------------------------------------------------------------------
 
 If the DateRange area changes and we want to take over the selection, we
-should only do this is if IsScrollDateRangeChanged() returns sal_True.
-This method returns sal_True if the area change was triggered by using the
-ScrollButtons and sal_False if it was triggered by Resize(), other method
+should only do this is if IsScrollDateRangeChanged() returns true.
+This method returns true if the area change was triggered by using the
+ScrollButtons and false if it was triggered by Resize(), other method
 calls or by ending a selection.
 
 *************************************************************************/

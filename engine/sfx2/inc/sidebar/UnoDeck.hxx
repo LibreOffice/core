@@ -34,8 +34,8 @@ public:
     virtual OUString SAL_CALL  getTitle() override;
     virtual void SAL_CALL setTitle( const OUString& newTitle ) override;
 
-    virtual sal_Bool SAL_CALL isActive() override;
-    virtual void SAL_CALL activate( const sal_Bool bActivate ) override;
+    virtual bool SAL_CALL isActive() override;
+    virtual void SAL_CALL activate( const bool bActivate ) override;
 
     virtual css::uno::Reference<css::ui::XPanels> SAL_CALL getPanels() override;
 

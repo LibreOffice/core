@@ -534,7 +534,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows )
 }
 
 
-sal_Bool SAL_CALL CellCursor::isMergeable(  )
+bool SAL_CALL CellCursor::isMergeable(  )
 {
     CellPos aStart, aEnd;
     return GetMergedSelection( aStart, aEnd );

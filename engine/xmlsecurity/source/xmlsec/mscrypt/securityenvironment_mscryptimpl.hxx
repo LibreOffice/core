@@ -117,7 +117,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Methods from XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
 
-        virtual sal_Bool SAL_CALL supportsService(
+        virtual bool SAL_CALL supportsService(
             const OUString& ServiceName
         ) override;
 

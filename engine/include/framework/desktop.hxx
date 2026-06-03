@@ -116,7 +116,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         //  XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
 
-        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+        virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -158,7 +158,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
             @onerror    False will be returned.
             @threadsafe yes
          */
-        virtual sal_Bool SAL_CALL terminate() override;
+        virtual bool SAL_CALL terminate() override;
 
         /**
             @interface  XDesktop
@@ -240,11 +240,11 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         virtual css::uno::Reference< css::frame::XFramesSupplier >                  SAL_CALL getCreator                 (                                                                                 ) override;
         virtual OUString                                                     SAL_CALL getName                    (                                                                                 ) override;
         virtual void                                                                SAL_CALL setName                    ( const OUString&                                         sName            ) override;
-        virtual sal_Bool                                                            SAL_CALL isTop                      (                                                                                 ) override;
+        virtual bool                                                            SAL_CALL isTop                      (                                                                                 ) override;
         virtual void                                                                SAL_CALL activate                   (                                                                                 ) override;
         virtual void                                                                SAL_CALL deactivate                 (                                                                                 ) override;
-        virtual sal_Bool                                                            SAL_CALL isActive                   (                                                                                 ) override;
-        virtual sal_Bool                                                            SAL_CALL setComponent               ( const css::uno::Reference< css::awt::XWindow >&                xComponentWindow ,
+        virtual bool                                                            SAL_CALL isActive                   (                                                                                 ) override;
+        virtual bool                                                            SAL_CALL setComponent               ( const css::uno::Reference< css::awt::XWindow >&                xComponentWindow ,
                                                                                                                           const css::uno::Reference< css::frame::XController >&          xController      ) override;
         virtual css::uno::Reference< css::awt::XWindow >                            SAL_CALL getComponentWindow         (                                                                                 ) override;
         virtual css::uno::Reference< css::frame::XController >                      SAL_CALL getController              (                                                                                 ) override;
@@ -287,7 +287,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
     private:
         //  OPropertySetHelper
-        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
+        virtual bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
                                                                                                                      css::uno::Any&  aOldValue       ,
                                                                                                                      sal_Int32       nHandle         ,
                                                                                                                const css::uno::Any&  aValue          ) override;

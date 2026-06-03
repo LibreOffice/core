@@ -157,7 +157,7 @@ public:
 
     // XElementAccess, base of XIndexAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     // XEnumerationAccess, base of XElementAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
@@ -190,7 +190,7 @@ public:
     virtual void SAL_CALL setMode( const OUString& aMode ) override;
     virtual OUString SAL_CALL getMode(  ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) override;
-    virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) override;
+    virtual bool SAL_CALL supportsMode( const OUString& aMode ) override;
 
     // XTabController, base of XFormController
     virtual void SAL_CALL setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) override;
@@ -317,7 +317,7 @@ Type SAL_CALL SbaXDataBrowserController::FormControllerImpl::getElementType(  )
     return ::cppu::UnoType< runtime::XFormController >::get();
 }
 
-sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::hasElements(  )
+bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::hasElements(  )
 {
     // no sub controllers, never
     return false;
@@ -405,7 +405,7 @@ Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::get
     return aModes;
 }
 
-sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode )
+bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode )
 {
     return aMode == "DataMode";
 }
@@ -1025,7 +1025,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt)
         return;
 
     SolarMutexGuard aGuard;
-    // the IsModified changed to sal_False ?
+    // the IsModified changed to false ?
     if  (   evt.PropertyName == PROPERTY_ISMODIFIED
         &&  !::comphelper::getBOOL(evt.NewValue)
         )
@@ -1104,7 +1104,7 @@ void SbaXDataBrowserController::elementReplaced(const css::container::ContainerE
         AddColumnListener(xNewColumn);
 }
 
-sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/)
+bool SbaXDataBrowserController::suspend(bool /*bSuspend*/)
 {
     m_aAsyncGetCellFocus.CancelCall();
     m_aAsyncDisplayError.CancelCall();
@@ -1247,7 +1247,7 @@ void SbaXDataBrowserController::errorOccured(const css::sdb::SQLErrorEvent& aEve
     }
 }
 
-sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabaseParameterEvent& aEvent)
+bool SbaXDataBrowserController::approveParameter(const css::form::DatabaseParameterEvent& aEvent)
 {
     if (aEvent.Source != getRowSet())
     {
@@ -1319,7 +1319,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
     return true;
 }
 
-sal_Bool SbaXDataBrowserController::approveReset(const css::lang::EventObject& /*rEvent*/)
+bool SbaXDataBrowserController::approveReset(const css::lang::EventObject& /*rEvent*/)
 {
     return true;
 }
@@ -1330,7 +1330,7 @@ void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent)
     setCurrentModified( false );
 }
 
-sal_Bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/)
+bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/)
 {
     std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(getFrameWeld(),
                                                 VclMessageType::Question, VclButtonsType::YesNo,

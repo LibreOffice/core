@@ -1037,7 +1037,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
         OUString aCtrlType;
         OUString aPropertyName;
         Sequence< OUString > aChoices;
-        Sequence< sal_Bool > aChoicesDisabled;
+        Sequence< bool > aChoicesDisabled;
         sal_Int32 aSelectionChecked = 0;
         for( const beans::PropertyValue& rEntry : aOptProp )
         {

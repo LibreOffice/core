@@ -64,7 +64,7 @@ namespace rtl_OStringBuffer
             OString       aStrtmp( kTestStr1 );
             OStringBuffer aStrBuftmp( aStrtmp );
             OStringBuffer aStrBuf( aStrBuftmp );
-            // sal_Bool res = cmpstr(aStrBuftmp.getStr(),aStrBuf.getStr());
+            // bool res = cmpstr(aStrBuftmp.getStr(),aStrBuf.getStr());
 
             sal_Int32 nLenStrBuftmp = aStrBuftmp.getLength();
 
@@ -3141,12 +3141,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[0]",
+                "Appends the bool(true) to the string buffer arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[0]",
+                "Appends the bool(true) to the string buffer arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3162,12 +3162,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[0]",
+                "Appends the bool(false) to the string buffer arrOUS[0]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[0]",
+                "Appends the bool(false) to the string buffer arrOUS[0]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3183,12 +3183,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[1]",
+                "Appends the bool(true) to the string buffer arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[1]",
+                "Appends the bool(true) to the string buffer arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3204,12 +3204,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[1]",
+                "Appends the bool(false) to the string buffer arrOUS[1]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[1]",
+                "Appends the bool(false) to the string buffer arrOUS[1]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3225,12 +3225,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[2]",
+                "Appends the bool(true) to the string buffer arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[2]",
+                "Appends the bool(true) to the string buffer arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3246,12 +3246,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[2]",
+                "Appends the bool(false) to the string buffer arrOUS[2]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[2]",
+                "Appends the bool(false) to the string buffer arrOUS[2]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3267,12 +3267,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[3]",
+                "Appends the bool(true) to the string buffer arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[3]",
+                "Appends the bool(true) to the string buffer arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3288,12 +3288,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[3]",
+                "Appends the bool(false) to the string buffer arrOUS[3]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[3]",
+                "Appends the bool(false) to the string buffer arrOUS[3]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3309,12 +3309,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[4]",
+                "Appends the bool(true) to the string buffer arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[4]",
+                "Appends the bool(true) to the string buffer arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3330,12 +3330,12 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[4]",
+                "Appends the bool(false) to the string buffer arrOUS[4]",
                 expVal, OString(aStrBuf.getStr())
             );
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[4]",
+                "Appends the bool(false) to the string buffer arrOUS[4]",
                 expVal.getLength(), aStrBuf.getLength()
             );
 
@@ -3346,13 +3346,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr47 );
             OStringBuffer   aStrBuf( kSInt32Max );
-            sal_Bool               input = sal_True;
+            bool               input = true;
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Bool(sal_True) to the string buffer(with INT_MAX)",
+                "Appends the bool(true) to the string buffer(with INT_MAX)",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -3362,13 +3362,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr48 );
             OStringBuffer   aStrBuf( kSInt32Max );
-            sal_Bool               input = sal_False;
+            bool               input = false;
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Bool(sal_False) to the string buffer(with INT_MAX)",
+                "Appends the bool(false) to the string buffer(with INT_MAX)",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 

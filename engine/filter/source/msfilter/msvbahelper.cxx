@@ -541,7 +541,7 @@ OUString SAL_CALL VBAMacroResolver::getImplementationName()
     return u"com.sun.star.comp.vba.VBAMacroResolver"_ustr;
 }
 
-sal_Bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService )
+bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService )
 {
     return cppu::supportsService(this, rService);
 }

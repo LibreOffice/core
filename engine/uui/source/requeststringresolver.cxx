@@ -42,7 +42,7 @@ UUIInteractionRequestStringResolver::getImplementationName()
     return u"com.sun.star.comp.uui.UUIInteractionRequestStringResolver"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 UUIInteractionRequestStringResolver::supportsService(
         OUString const & rServiceName)
 {

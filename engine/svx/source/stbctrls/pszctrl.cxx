@@ -262,9 +262,9 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 
                 NULL/Void   SfxPointItem    SvxSizeItem     SfxStringItem
     ------------------------------------------------------------------------
-    Position    sal_False                                       FALSE
+    Position    false                                       FALSE
     Size        FALSE                       TRUE            FALSE
-    Text        sal_False                       sal_False           TRUE
+    Text        false                       false           TRUE
 
 */
 

@@ -92,7 +92,7 @@ OUString SAL_CALL MainThreadExecutor::getImplementationName()
     return impl_staticGetImplementationName();
 }
 
-sal_Bool SAL_CALL MainThreadExecutor::supportsService( const OUString& ServiceName )
+bool SAL_CALL MainThreadExecutor::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

@@ -62,10 +62,10 @@ private:
     virtual ~Service() override {}
 
     virtual void SAL_CALL insertExtensionXcsFile(
-        sal_Bool shared, OUString const & fileUri) override;
+        bool shared, OUString const & fileUri) override;
 
     virtual void SAL_CALL insertExtensionXcuFile(
-        sal_Bool shared, OUString const & fileUri) override;
+        bool shared, OUString const & fileUri) override;
 
     virtual void SAL_CALL removeExtensionXcuFile(OUString const & fileUri) override;
 
@@ -78,7 +78,7 @@ private:
         return u"com.sun.star.comp.configuration.Update"_ustr;
     }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override {
+    bool SAL_CALL supportsService(OUString const & ServiceName) override {
         return cppu::supportsService(this, ServiceName);
     }
 
@@ -91,14 +91,14 @@ private:
 };
 
 void Service::insertExtensionXcsFile(
-    sal_Bool shared, OUString const & fileUri)
+    bool shared, OUString const & fileUri)
 {
     osl::MutexGuard g(*lock_);
     Components::getSingleton(context_).insertExtensionXcsFile(shared, fileUri);
 }
 
 void Service::insertExtensionXcuFile(
-    sal_Bool shared, OUString const & fileUri)
+    bool shared, OUString const & fileUri)
 {
     Broadcaster bc;
     {

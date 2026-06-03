@@ -43,10 +43,10 @@ public:
     ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes
-    virtual sal_Bool SAL_CALL getProtectStructure() override;
+    virtual bool SAL_CALL getProtectStructure() override;
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
-    virtual sal_Bool SAL_CALL getPrecisionAsDisplayed() override;
-    virtual void SAL_CALL setPrecisionAsDisplayed( sal_Bool _precisionAsDisplayed ) override;
+    virtual bool SAL_CALL getPrecisionAsDisplayed() override;
+    virtual void SAL_CALL setPrecisionAsDisplayed( bool _precisionAsDisplayed ) override;
     virtual OUString SAL_CALL getAuthor() override;
     virtual void SAL_CALL setAuthor( const OUString& _author ) override;
 

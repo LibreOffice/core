@@ -320,7 +320,7 @@ namespace svx
 
             case COMMIT_RECORD:
             {
-                sal_Bool bDummy( false );
+                bool bDummy( false );
                 bSuccess = m_xFormOperations->commitCurrentRecord( bDummy );
             }
             break;

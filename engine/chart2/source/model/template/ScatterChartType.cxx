@@ -196,7 +196,7 @@ OUString SAL_CALL ScatterChartType::getImplementationName()
     return u"com.sun.star.comp.chart.ScatterChartType"_ustr;
 }
 
-sal_Bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -45,16 +45,16 @@ void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& 
     rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
 
     //get possibilities
-    uno::Sequence< sal_Bool > aAxisPossibilityList;
+    uno::Sequence< bool > aAxisPossibilityList;
     AxisHelper::getAxisOrGridPossibilities( aAxisPossibilityList, xDiagram );
-    sal_Bool* pPossibilityList = aPossibilityList.getArray();
+    bool* pPossibilityList = aPossibilityList.getArray();
     pPossibilityList[2]=aAxisPossibilityList[0];//x axis title
     pPossibilityList[3]=aAxisPossibilityList[1];//y axis title
     pPossibilityList[4]=aAxisPossibilityList[2];//z axis title
     pPossibilityList[5]=aAxisPossibilityList[3];//secondary x axis title
     pPossibilityList[6]=aAxisPossibilityList[4];//secondary y axis title
 
-    sal_Bool* pExistenceList = aExistenceList.getArray();
+    bool* pExistenceList = aExistenceList.getArray();
     auto pTextList = aTextList.getArray();
     //find out which title exists and get their text
     //main title:

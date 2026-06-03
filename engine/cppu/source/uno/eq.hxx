@@ -128,8 +128,8 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (bool(static_cast<sal_Bool *>(pDestElements)[nPos]) !=
-                bool(static_cast<sal_Bool *>(pSourceElements)[nPos]))
+            if (static_cast<bool *>(pDestElements)[nPos] !=
+                static_cast<bool *>(pSourceElements)[nPos])
             {
                 return false;
             }
@@ -289,8 +289,8 @@ inline bool _equalData(
             && *static_cast<sal_Unicode *>(pDest) == *static_cast<sal_Unicode *>(pSource);
     case typelib_TypeClass_BOOLEAN:
         return eSourceTypeClass == typelib_TypeClass_BOOLEAN
-            && (bool(*static_cast<sal_Bool *>(pDest))
-                == bool(*static_cast<sal_Bool *>(pSource)));
+            && (*static_cast<bool *>(pDest)
+                == *static_cast<bool *>(pSource));
     case typelib_TypeClass_BYTE:
         switch (eSourceTypeClass)
         {

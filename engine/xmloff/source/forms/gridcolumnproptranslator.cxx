@@ -121,7 +121,7 @@ namespace xmloff
             // XPropertySetInfo
             virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) override;
             virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+            virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
         };
 
         OMergedPropertySetInfo::OMergedPropertySetInfo( const Reference< XPropertySetInfo >& _rxMasterInfo )
@@ -160,7 +160,7 @@ namespace xmloff
             return m_xMasterInfo->getPropertyByName( aName );
         }
 
-        sal_Bool SAL_CALL OMergedPropertySetInfo::hasPropertyByName( const OUString& Name )
+        bool SAL_CALL OMergedPropertySetInfo::hasPropertyByName( const OUString& Name )
         {
             if ( Name == PARA_ADJUST )
                 return true;

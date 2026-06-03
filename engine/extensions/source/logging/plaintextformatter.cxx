@@ -53,7 +53,7 @@ namespace logging
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     };
 
@@ -121,7 +121,7 @@ namespace logging
         return OUString();
     }
 
-    sal_Bool SAL_CALL PlainTextFormatter::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL PlainTextFormatter::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }

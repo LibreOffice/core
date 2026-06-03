@@ -266,10 +266,10 @@ private:
 //
 //   SfxItems:
 //   ~~~~~~~~~
-//     sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
-//     sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
+//     bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
+//     bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
 //     SfxStyleSheet* GetStyleSheet() const;
-//     sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
+//     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 //
 //   others:
 //   ~~~~~~~~~~

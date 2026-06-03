@@ -190,7 +190,7 @@ class Job final : public  ::cppu::WeakImplHelper<
 
         // XCloseListener
         virtual void SAL_CALL queryClosing ( const css::lang::EventObject& aEvent         ,
-                                                   sal_Bool                bGetsOwnership ) override;
+                                                   bool                bGetsOwnership ) override;
         virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent         ) override;
 
         // XEventListener

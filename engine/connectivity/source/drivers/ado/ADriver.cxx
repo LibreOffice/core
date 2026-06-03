@@ -83,7 +83,7 @@ Sequence< OUString > ODriver::getSupportedServiceNames( )
     return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
 }
 
-sal_Bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName )
+bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -101,7 +101,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
     return pCon;
 }
 
-sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
+bool SAL_CALL ODriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:ado:");
 }

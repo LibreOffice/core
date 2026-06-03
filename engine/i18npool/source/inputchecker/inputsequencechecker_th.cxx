@@ -76,7 +76,7 @@ static bool check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode)
     return (TAC_Composible[inputCheckMode][composible_class]);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 InputSequenceChecker_th::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
     sal_Unicode inputChar, sal_Int16 inputCheckMode)
 {

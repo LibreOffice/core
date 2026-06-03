@@ -847,7 +847,7 @@ OUString SAL_CALL Diagram::getImplementationName()
     return u"com.sun.star.comp.chart2.Diagram"_ustr;
 }
 
-sal_Bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
+bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

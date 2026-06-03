@@ -515,12 +515,12 @@ namespace
             explicit SwXShapesEnumeration(SwFmDrawPage* const pDrawPage);
 
             //XEnumeration
-            virtual sal_Bool SAL_CALL hasMoreElements() override;
+            virtual bool SAL_CALL hasMoreElements() override;
             virtual uno::Any SAL_CALL nextElement() override;
 
             //XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+            virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
             virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 }
@@ -537,7 +537,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwFmDrawPage* const pDrawPage)
     }
 }
 
-sal_Bool SwXShapesEnumeration::hasMoreElements()
+bool SwXShapesEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     return !m_aShapes.empty();
@@ -558,7 +558,7 @@ OUString SwXShapesEnumeration::getImplementationName()
     return u"SwXShapeEnumeration"_ustr;
 }
 
-sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName)
+bool SwXShapesEnumeration::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -580,7 +580,7 @@ OUString SwFmDrawPage::getImplementationName()
     return u"SwFmDrawPage"_ustr;
 }
 
-sal_Bool SwFmDrawPage::supportsService(const OUString& rServiceName)
+bool SwFmDrawPage::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -617,7 +617,7 @@ uno::Type  SwFmDrawPage::getElementType()
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SwFmDrawPage::hasElements()
+bool SwFmDrawPage::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -2222,7 +2222,7 @@ OUString SwXShape::getImplementationName()
     return u"SwXShape"_ustr;
 }
 
-sal_Bool SwXShape::supportsService(const OUString& rServiceName)
+bool SwXShape::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2875,7 +2875,7 @@ uno::Type SwXGroupShape::getElementType(  )
     return xAcc->getElementType();
 }
 
-sal_Bool SwXGroupShape::hasElements(  )
+bool SwXGroupShape::hasElements(  )
 {
     SolarMutexGuard aGuard;
     uno::Reference<XIndexAccess> xAcc;

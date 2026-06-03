@@ -108,7 +108,7 @@ void OResultSetPrivileges::disposing(std::unique_lock<std::mutex>& rGuard)
     m_xRow.clear();
 }
 
-sal_Bool SAL_CALL OResultSetPrivileges::next(  )
+bool SAL_CALL OResultSetPrivileges::next(  )
 {
     std::unique_lock aGuard( m_aMutex );
     throwIfDisposed(aGuard);

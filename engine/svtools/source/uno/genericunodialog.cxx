@@ -91,7 +91,7 @@ Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  )
     );
 }
 
-sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName)
+bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -114,7 +114,7 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
 }
 
 
-sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
+bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
 {
     switch (nHandle)
     {

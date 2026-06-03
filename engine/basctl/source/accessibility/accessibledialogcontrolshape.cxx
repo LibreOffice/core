@@ -280,7 +280,7 @@ OUString AccessibleDialogControlShape::getImplementationName()
     return u"com.sun.star.comp.basctl.AccessibleShape"_ustr;
 }
 
-sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName )
+bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

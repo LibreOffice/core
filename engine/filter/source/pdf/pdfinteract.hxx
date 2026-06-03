@@ -40,7 +40,7 @@ private:
 protected:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
@@ -50,7 +50,7 @@ protected:
     virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& ) override;
 
     // XInteractionHandler2
-    virtual sal_Bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) override;
+    virtual bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) override;
 
 public:
 

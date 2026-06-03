@@ -159,10 +159,10 @@ public:
     // XNameAccess
     virtual Any SAL_CALL getByName( OUString const & name ) override;
     virtual Sequence<OUString> SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( OUString const & name ) override;
+    virtual bool SAL_CALL hasByName( OUString const & name ) override;
     // XElementAccess
     virtual Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 };
 
 }
@@ -238,7 +238,7 @@ Sequence<OUString> ComponentContext::getElementNames()
 }
 
 
-sal_Bool ComponentContext::hasByName( OUString const & name )
+bool ComponentContext::hasByName( OUString const & name )
 {
     std::unique_lock guard( m_aMutex );
     return m_map.contains( name );
@@ -252,7 +252,7 @@ Type ComponentContext::getElementType()
 }
 
 
-sal_Bool ComponentContext::hasElements()
+bool ComponentContext::hasElements()
 {
     std::unique_lock guard( m_aMutex );
     return ! m_map.empty();

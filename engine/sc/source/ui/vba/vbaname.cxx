@@ -74,14 +74,14 @@ ScVbaName::setNameLocal( const OUString & rName )
     setName( rName );
 }
 
-sal_Bool
+bool
 ScVbaName::getVisible()
 {
     return true;
 }
 
 void
-ScVbaName::setVisible( sal_Bool /*bVisible*/ )
+ScVbaName::setVisible( bool /*bVisible*/ )
 {
 }
 

@@ -65,7 +65,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };

@@ -203,7 +203,7 @@ def make_uno_type(val):
     elif type_class == TypeClass.CHAR:
         uno_type = PrimitiveType(type_class, name, 'char')
     elif type_class == TypeClass.BOOLEAN:
-        uno_type = PrimitiveType(type_class, name, 'sal_Bool')
+        uno_type = PrimitiveType(type_class, name, 'bool')
     elif type_class == TypeClass.BYTE:
         uno_type = PrimitiveType(type_class, name, 'sal_Int8')
     elif type_class == TypeClass.SHORT:

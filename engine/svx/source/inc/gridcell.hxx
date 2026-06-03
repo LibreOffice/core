@@ -64,7 +64,7 @@ class DbGridColumn
                                         // cells of a column
     rtl::Reference<FmXGridCell>                           m_pCell;
     DbGridControl&      m_rParent;
-    sal_Int32               m_nLastVisibleWidth;    // only valid if m_bHidden == sal_True
+    sal_Int32               m_nLastVisibleWidth;    // only valid if m_bHidden == true
     sal_Int32               m_nFormatKey;
     sal_Int16               m_nFieldType;
     sal_Int16               m_nTypeId;
@@ -718,22 +718,22 @@ public:
     virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& /*Toolkit*/, const css::uno::Reference< css::awt::XWindowPeer >& /*Parent*/) override {}
 
     virtual css::uno::Reference< css::awt::XWindowPeer > SAL_CALL getPeer() override {return css::uno::Reference< css::awt::XWindowPeer > ();}
-    virtual sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& /*Model*/) override {return false;}
+    virtual bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& /*Model*/) override {return false;}
     virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
     virtual css::uno::Reference< css::awt::XView > SAL_CALL getView() override {return css::uno::Reference< css::awt::XView > ();}
-    virtual void SAL_CALL setDesignMode(sal_Bool /*bOn*/) override {}
-    virtual sal_Bool SAL_CALL isDesignMode() override {return false;}
-    virtual sal_Bool SAL_CALL isTransparent() override {return false;}
+    virtual void SAL_CALL setDesignMode(bool /*bOn*/) override {}
+    virtual bool SAL_CALL isDesignMode() override {return false;}
+    virtual bool SAL_CALL isTransparent() override {return false;}
 
 // css::form::XBoundControl
-    virtual sal_Bool SAL_CALL getLock() override;
-    virtual void SAL_CALL setLock(sal_Bool _bLock) override;
+    virtual bool SAL_CALL getLock() override;
+    virtual void SAL_CALL setLock(bool _bLock) override;
 
     // XWindow
     virtual void SAL_CALL setPosSize( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height, ::sal_Int16 Flags ) override;
     virtual css::awt::Rectangle SAL_CALL getPosSize(  ) override;
-    virtual void SAL_CALL setVisible( sal_Bool Visible ) override;
-    virtual void SAL_CALL setEnable( sal_Bool Enable ) override;
+    virtual void SAL_CALL setVisible( bool Visible ) override;
+    virtual void SAL_CALL setEnable( bool Enable ) override;
     virtual void SAL_CALL setFocus(  ) override;
     virtual void SAL_CALL addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
     virtual void SAL_CALL removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
@@ -843,8 +843,8 @@ public:
     virtual OUString SAL_CALL getSelectedText() override;
     virtual void SAL_CALL setSelection(const css::awt::Selection& aSelection) override;
     virtual css::awt::Selection SAL_CALL getSelection() override;
-    virtual sal_Bool SAL_CALL isEditable() override;
-    virtual void SAL_CALL setEditable(sal_Bool bEditable) override;
+    virtual bool SAL_CALL isEditable() override;
+    virtual void SAL_CALL setEditable(bool bEditable) override;
     virtual void SAL_CALL setMaxTextLen(sal_Int16 nLen) override;
     virtual sal_Int16 SAL_CALL getMaxTextLen() override;
 
@@ -902,7 +902,7 @@ public:
     virtual sal_Int16 SAL_CALL getState() override;
     virtual void SAL_CALL setState(sal_Int16 n) override;
     virtual void SAL_CALL setLabel(const OUString& Label) override;
-    virtual void SAL_CALL enableTriState(sal_Bool b) override;
+    virtual void SAL_CALL enableTriState(bool b) override;
 
     // XButton
     virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
@@ -942,11 +942,11 @@ public:
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos() override;
     virtual OUString SAL_CALL getSelectedItem() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSelectedItems() override;
-    virtual void SAL_CALL selectItemPos(sal_Int16 nPos, sal_Bool bSelect) override;
-    virtual void SAL_CALL selectItemsPos(const css::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect) override;
-    virtual void SAL_CALL selectItem(const OUString& aItem, sal_Bool bSelect) override;
-    virtual sal_Bool SAL_CALL isMutipleMode() override;
-    virtual void SAL_CALL setMultipleMode(sal_Bool bMulti) override;
+    virtual void SAL_CALL selectItemPos(sal_Int16 nPos, bool bSelect) override;
+    virtual void SAL_CALL selectItemsPos(const css::uno::Sequence< sal_Int16 >& aPositions, bool bSelect) override;
+    virtual void SAL_CALL selectItem(const OUString& aItem, bool bSelect) override;
+    virtual bool SAL_CALL isMutipleMode() override;
+    virtual void SAL_CALL setMultipleMode(bool bMulti) override;
     virtual sal_Int16 SAL_CALL getDropDownLineCount() override;
     virtual void SAL_CALL setDropDownLineCount(sal_Int16 nLines) override;
     virtual void SAL_CALL makeVisible(sal_Int16 nEntry) override;
@@ -1037,8 +1037,8 @@ public:
     virtual OUString SAL_CALL getSelectedText() override;
     virtual void SAL_CALL setSelection(const css::awt::Selection& aSelection) override;
     virtual css::awt::Selection SAL_CALL getSelection() override;
-    virtual sal_Bool SAL_CALL isEditable() override;
-    virtual void SAL_CALL setEditable(sal_Bool bEditable) override;
+    virtual bool SAL_CALL isEditable() override;
+    virtual void SAL_CALL setEditable(bool bEditable) override;
     virtual void SAL_CALL setMaxTextLen(sal_Int16 nLen) override;
     virtual sal_Int16 SAL_CALL getMaxTextLen() override;
 

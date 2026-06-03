@@ -153,7 +153,7 @@ void SAL_CALL MacabPreparedStatement::close()
     // list
 }
 
-sal_Bool SAL_CALL MacabPreparedStatement::execute()
+bool SAL_CALL MacabPreparedStatement::execute()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -205,7 +205,7 @@ void SAL_CALL MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const 
     ::dbtools::throwFunctionNotSupportedSQLException("setObjectNull", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setBoolean(sal_Int32, sal_Bool)
+void SAL_CALL MacabPreparedStatement::setBoolean(sal_Int32, bool)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setBoolean", nullptr);
 }

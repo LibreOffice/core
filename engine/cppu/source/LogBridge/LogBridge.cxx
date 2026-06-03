@@ -133,7 +133,7 @@ bool LogBridge::v_isValid(OUString * pReason)
                 SAL_INFO("cppu.log", "" << *static_cast< OUString*>(pArg));
                 break;
             case typelib_TypeClass_BOOLEAN:
-               SAL_INFO("cppu.log", "" << *static_cast<sal_Bool*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<bool*>(pArg));
                 break;
             case typelib_TypeClass_BYTE:
                SAL_INFO("cppu.log", "" << *static_cast<sal_Int8*>(pArg));

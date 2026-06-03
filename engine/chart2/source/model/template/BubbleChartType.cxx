@@ -157,7 +157,7 @@ OUString SAL_CALL BubbleChartType::getImplementationName()
     return u"com.sun.star.comp.chart.BubbleChartType"_ustr;
 }
 
-sal_Bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -188,7 +188,7 @@ void ScatterChartTypeTemplate::applyStyle2(
 }
 
 // ____ XChartTypeTemplate ____
-sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
+bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
 {
     return false;
 }

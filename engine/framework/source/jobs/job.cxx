@@ -735,14 +735,14 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& )
                 describes the broadcaster and must be the frame instance
 
     @param  bGetsOwnership
-                If it's set to <sal_True> and we throw the right veto exception, we have to close this frame later
+                If it's set to <true> and we throw the right veto exception, we have to close this frame later
                 if our internal processes will be finished. If it's set to <FALSE/> we can ignore it.
 
     @throw  CloseVetoException
                 if our internal wrapped job is still running.
  */
 void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
-                                       sal_Bool                bGetsOwnership )
+                                       bool                bGetsOwnership )
 {
     SolarMutexGuard g;
 

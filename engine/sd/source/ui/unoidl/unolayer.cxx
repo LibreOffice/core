@@ -94,7 +94,7 @@ OUString SAL_CALL SdLayer::getImplementationName()
     return u"SdUnoLayer"_ustr;
 }
 
-sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -403,7 +403,7 @@ OUString SAL_CALL SdLayerManager::getImplementationName()
     return u"SdUnoLayerManager"_ustr;
 }
 
-sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
 {
  return cppu::supportsService( this, ServiceName );
 }
@@ -587,7 +587,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName )
+bool SAL_CALL SdLayerManager::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -605,7 +605,7 @@ uno::Type SAL_CALL SdLayerManager::getElementType()
     return cppu::UnoType<drawing::XLayer>::get();
 }
 
-sal_Bool SAL_CALL SdLayerManager::hasElements()
+bool SAL_CALL SdLayerManager::hasElements()
 {
     return getCount() > 0;
 }

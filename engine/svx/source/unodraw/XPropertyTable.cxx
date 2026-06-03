@@ -62,7 +62,7 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const = 0;
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) override;
@@ -74,10 +74,10 @@ public:
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const  OUString& aName ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 };
 
 }
@@ -93,7 +93,7 @@ const XPropertyEntry* SvxUnoXPropertyTable::get(tools::Long index) const
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL SvxUnoXPropertyTable::supportsService( const  OUString& ServiceName )
+bool SAL_CALL SvxUnoXPropertyTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -201,7 +201,7 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
+bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -220,7 +220,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 }
 
 // XElementAccess
-sal_Bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
+bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
 {
     SolarMutexGuard aGuard;
 

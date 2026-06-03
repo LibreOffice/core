@@ -282,8 +282,8 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
         // create an XProperty set to configure the exporter for pretty printing
         static const PropertyMapEntry aImportInfoMap[] =
          {
-             { u"UsePrettyPrinting"_ustr, 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
-             { u"ExportTextNumberElement"_ustr, 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { u"UsePrettyPrinting"_ustr, 0, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { u"ExportTextNumberElement"_ustr, 0, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID, 0},
              { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
          };
 
@@ -330,7 +330,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
     return true;
 }
 
-sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     return meType == FILTER_EXPORT ? exportImpl ( aDescriptor ) : importImpl ( aDescriptor );
 }
@@ -372,7 +372,7 @@ OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
     return u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr;
 }
 
-sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
+bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

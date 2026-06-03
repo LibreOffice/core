@@ -101,11 +101,11 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
         /*-****************************************************************************************************
             @short      get state of componentlist of enumeration.
             @seealso    interface XElementAccess
-            @return     sal_True  ,if more than 0 elements exist.
-            @return     sal_False ,otherwise.
+            @return     true  ,if more than 0 elements exist.
+            @return     false ,otherwise.
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
     //  protected methods
 

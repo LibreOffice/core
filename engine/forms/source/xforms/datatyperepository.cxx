@@ -177,7 +177,7 @@ namespace xforms
     }
 
 
-    sal_Bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName )
+    bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aRepository.find( aName ) != m_aRepository.end();
@@ -190,7 +190,7 @@ namespace xforms
     }
 
 
-    sal_Bool SAL_CALL ODataTypeRepository::hasElements(  )
+    bool SAL_CALL ODataTypeRepository::hasElements(  )
     {
         return !m_aRepository.empty();
     }

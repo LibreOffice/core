@@ -54,7 +54,7 @@ OUString SAL_CALL Manager::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
+bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
 {
     return ServiceName == "com.sun.star.media.Manager_MacAVF";
 }

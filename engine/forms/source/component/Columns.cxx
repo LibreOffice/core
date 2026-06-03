@@ -375,7 +375,7 @@ void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 }
 
 
-sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
+bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue )
 {
     bool bModified(false);

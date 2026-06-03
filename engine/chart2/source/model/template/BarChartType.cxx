@@ -66,7 +66,7 @@ OUString SAL_CALL BarChartType::getImplementationName()
     return u"com.sun.star.comp.chart.BarChartType"_ustr;
 }
 
-sal_Bool SAL_CALL BarChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL BarChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

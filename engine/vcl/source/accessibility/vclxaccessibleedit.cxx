@@ -238,7 +238,7 @@ sal_Int32 VCLXAccessibleEdit::getAccessibleActionCount( )
 }
 
 
-sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex )
+bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -288,7 +288,7 @@ sal_Int32 VCLXAccessibleEdit::getCaretPosition(  )
 }
 
 
-sal_Bool VCLXAccessibleEdit::setCaretPosition( sal_Int32 nIndex )
+bool VCLXAccessibleEdit::setCaretPosition( sal_Int32 nIndex )
 {
     return setSelection( nIndex, nIndex );
 }
@@ -419,7 +419,7 @@ sal_Int32 VCLXAccessibleEdit::getSelectionEnd(  )
 }
 
 
-sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -485,12 +485,12 @@ css::accessibility::TextSegment VCLXAccessibleEdit::getTextBehindIndex( sal_Int3
 }
 
 
-sal_Bool VCLXAccessibleEdit::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleEdit::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     return VCLXAccessibleTextComponent::copyText( nStartIndex, nEndIndex );
 }
 
-sal_Bool VCLXAccessibleEdit::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool VCLXAccessibleEdit::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
@@ -498,13 +498,13 @@ sal_Bool VCLXAccessibleEdit::scrollSubstringTo( sal_Int32, sal_Int32, Accessible
 // XAccessibleEditableText
 
 
-sal_Bool VCLXAccessibleEdit::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleEdit::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     return copyText( nStartIndex, nEndIndex ) && deleteText( nStartIndex, nEndIndex );
 }
 
 
-sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex )
+bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -539,19 +539,19 @@ sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex )
 }
 
 
-sal_Bool VCLXAccessibleEdit::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleEdit::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     return replaceText( nStartIndex, nEndIndex, OUString() );
 }
 
 
-sal_Bool VCLXAccessibleEdit::insertText( const OUString& sText, sal_Int32 nIndex )
+bool VCLXAccessibleEdit::insertText( const OUString& sText, sal_Int32 nIndex )
 {
     return replaceText( nIndex, nIndex, sText );
 }
 
 
-sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement )
+bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement )
 {
     OExternalLockGuard aGuard( this );
 
@@ -579,7 +579,7 @@ sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndI
 }
 
 
-sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const Sequence<PropertyValue>& )
+bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const Sequence<PropertyValue>& )
 {
     OExternalLockGuard aGuard( this );
 
@@ -590,7 +590,7 @@ sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEn
 }
 
 
-sal_Bool VCLXAccessibleEdit::setText( const OUString& sText )
+bool VCLXAccessibleEdit::setText( const OUString& sText )
 {
     OExternalLockGuard aGuard( this );
 

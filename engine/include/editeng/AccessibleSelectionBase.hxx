@@ -48,7 +48,7 @@ public:
 
     // XAccessibleSelection - default implementations
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override final;
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override final;
+    virtual bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override final;
     virtual void SAL_CALL clearAccessibleSelection(  ) override final;
     virtual void SAL_CALL selectAllAccessibleChildren(  ) override final;
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override final;

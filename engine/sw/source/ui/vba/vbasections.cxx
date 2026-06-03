@@ -41,7 +41,7 @@ class SectionEnumeration : public ::cppu::WeakImplHelper< container::XEnumeratio
 
 public:
     explicit SectionEnumeration( XSectionVec&& rVec ) : mxSections( std::move(rVec) ), mIt( mxSections.begin() ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mIt != mxSections.end() );
     }
@@ -120,7 +120,7 @@ public:
     {
         return cppu::UnoType<word::XSection>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return true;
     }

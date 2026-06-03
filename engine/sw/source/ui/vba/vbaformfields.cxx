@@ -88,7 +88,7 @@ public:
         , mnIndex(0)
     {
     }
-    sal_Bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
+    bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
     uno::Any SAL_CALL nextElement() override
     {
@@ -158,7 +158,7 @@ public:
             new SwVbaFormField(mxParent, mxContext, mxTextDocument, *m_pCache)));
     }
 
-    sal_Bool SAL_CALL hasByName(const OUString& aName) override
+    bool SAL_CALL hasByName(const OUString& aName) override
     {
         sal_Int32 nCount = -1;
         m_pCache = lcl_getFieldmark(aName.toUtf8(), nCount, mxTextDocument);
@@ -168,7 +168,7 @@ public:
     // XElementAccess
     uno::Type SAL_CALL getElementType() override { return cppu::UnoType<word::XFormField>::get(); }
 
-    sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
+    bool SAL_CALL hasElements() override { return getCount() != 0; }
 
     // XEnumerationAccess
     uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override
@@ -187,13 +187,13 @@ SwVbaFormFields::SwVbaFormFields(const uno::Reference<XHelperInterface>& xParent
 {
 }
 
-sal_Bool SwVbaFormFields::getShaded()
+bool SwVbaFormFields::getShaded()
 {
     SAL_INFO("sw.vba", "SwVbaFormFields::getShaded stub");
     return false;
 }
 
-void SwVbaFormFields::setShaded(sal_Bool /*bSet*/)
+void SwVbaFormFields::setShaded(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaFormFields::setShaded stub");
 }

@@ -301,7 +301,7 @@ TextConversion_ko::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     return getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TextConversion_ko::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
 {
     return true;

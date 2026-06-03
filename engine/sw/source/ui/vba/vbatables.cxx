@@ -95,7 +95,7 @@ public:
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextTable>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return getCount() > 0 ; }
+    virtual bool SAL_CALL hasElements(  ) override { return getCount() > 0 ; }
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
@@ -115,7 +115,7 @@ public:
         }
         return sNames;
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         m_cachePos = mxTables.begin();
         auto it_end = mxTables.end();
@@ -144,7 +144,7 @@ public:
       mxDocument(std::move( xDocument )), mxIndexAccess(std::move( xIndexAccess )), mnCurIndex(0)
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mnCurIndex < mxIndexAccess->getCount() );
     }

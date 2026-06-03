@@ -751,7 +751,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int64 nChildIndex )
         UpdateSelection_Impl();
 }
 
-sal_Bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

@@ -331,7 +331,7 @@ CalendarImpl::getPartitiveMonths2()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 CalendarImpl::isValid()
 {
     if (!xCalendar.is())
@@ -353,7 +353,7 @@ CalendarImpl::getImplementationName()
     return u"com.sun.star.i18n.CalendarImpl"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 CalendarImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

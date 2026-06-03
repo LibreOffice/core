@@ -93,21 +93,21 @@ public:
                                                         getElementNames() override;
 
     // XNameAccess (via XNameReplace)
-    virtual sal_Bool SAL_CALL hasByName(
+    virtual bool SAL_CALL hasByName(
         const OUString& rName ) override;
 
     // XElementAccess (via XNameReplace)
     virtual css::uno::Type SAL_CALL getElementType() override;
 
     // XElementAccess (via XNameReplace)
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XServiceInfo
     /// must be implemented in subclass
     virtual OUString SAL_CALL getImplementationName() override = 0;
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL

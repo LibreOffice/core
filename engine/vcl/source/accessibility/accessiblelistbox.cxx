@@ -362,7 +362,7 @@ void SAL_CALL AccessibleListBox::selectAccessibleChild( sal_Int64 nChildIndex )
     getListBox()->Select( pEntry );
 }
 
-sal_Bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 

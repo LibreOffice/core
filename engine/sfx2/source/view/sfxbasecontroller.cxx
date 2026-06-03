@@ -305,7 +305,7 @@ class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper
 public:
     explicit IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController ) ;
 
-    virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) override ;
+    virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, bool bDeliverOwnership ) override ;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) override ;
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override ;
 
@@ -326,7 +326,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::disposing( const lang:
 {
 }
 
-void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const lang::EventObject& /*aEvent*/, sal_Bool /*bDeliverOwnership*/ )
+void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const lang::EventObject& /*aEvent*/, bool /*bDeliverOwnership*/ )
 {
     SolarMutexGuard aGuard;
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
@@ -541,7 +541,7 @@ void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& 
 //  SfxBaseController -> XController
 
 
-sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel >& xModel )
+bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel >& xModel )
 {
     if ( m_pData->m_pViewShell && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
     {
@@ -560,7 +560,7 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel
 //  SfxBaseController -> XController
 
 
-sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend )
+bool SAL_CALL SfxBaseController::suspend( bool bSuspend )
 {
     SolarMutexGuard aGuard;
 
@@ -1343,7 +1343,7 @@ void SfxBaseController::ShowInfoBars( )
     for ( const auto& rCmisProp : aCmisProperties )
     {
         if ( rCmisProp.Id == "cmis:isVersionSeriesCheckedOut" ) {
-            uno::Sequence< sal_Bool > bTmp;
+            uno::Sequence< bool > bTmp;
             rCmisProp.Value >>= bTmp;
             bCheckedOut = bTmp[0];
         }
@@ -1431,7 +1431,7 @@ void SAL_CALL SfxBaseController::appendInfobar(const OUString& sId, const OUStri
                                                const OUString& sSecondaryMessage,
                                                sal_Int32 aInfobarType,
                                                const Sequence<StringPair>& actionButtons,
-                                               sal_Bool bShowCloseButton)
+                                               bool bShowCloseButton)
 {
     SolarMutexGuard aGuard;
 
@@ -1489,7 +1489,7 @@ void SAL_CALL SfxBaseController::removeInfobar(const OUString& sId)
     pViewFrame->RemoveInfoBar(sId);
 }
 
-sal_Bool SAL_CALL SfxBaseController::hasInfobar(const OUString& sId)
+bool SAL_CALL SfxBaseController::hasInfobar(const OUString& sId)
 {
     SolarMutexGuard aGuard;
     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();

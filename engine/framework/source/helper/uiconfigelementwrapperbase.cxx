@@ -161,12 +161,12 @@ void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const css::ui::Config
 }
 
 // XPropertySet helper
-sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       aConvertedValue ,
+bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       aConvertedValue ,
                                                                         Any&       aOldValue       ,
                                                                         sal_Int32  nHandle         ,
                                                                         const Any& aValue             )
 {
-    //  Initialize state with sal_False !!!
+    //  Initialize state with false !!!
     //  (Handle can be invalid)
     bool bReturn = false;
 
@@ -398,11 +398,11 @@ css::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::impl_getS
 
     return
     {
-        css::beans::Property( UIELEMENT_PROPNAME_CONFIGLISTENER, UIELEMENT_PROPHANDLE_CONFIGLISTENER , cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
+        css::beans::Property( UIELEMENT_PROPNAME_CONFIGLISTENER, UIELEMENT_PROPHANDLE_CONFIGLISTENER , cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
         css::beans::Property( UIELEMENT_PROPNAME_CONFIGSOURCE, UIELEMENT_PROPHANDLE_CONFIGSOURCE   , cppu::UnoType<css::ui::XUIConfigurationManager>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
         css::beans::Property( UIELEMENT_PROPNAME_FRAME, UIELEMENT_PROPHANDLE_FRAME          , cppu::UnoType<css::frame::XFrame>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( UIELEMENT_PROPNAME_NOCLOSE, UIELEMENT_PROPHANDLE_NOCLOSE        , cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( UIELEMENT_PROPNAME_PERSISTENT, UIELEMENT_PROPHANDLE_PERSISTENT     , cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
+        css::beans::Property( UIELEMENT_PROPNAME_NOCLOSE, UIELEMENT_PROPHANDLE_NOCLOSE        , cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( UIELEMENT_PROPNAME_PERSISTENT, UIELEMENT_PROPHANDLE_PERSISTENT     , cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::TRANSIENT  ),
         css::beans::Property( UIELEMENT_PROPNAME_RESOURCEURL, UIELEMENT_PROPHANDLE_RESOURCEURL    , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( UIELEMENT_PROPNAME_TYPE, UIELEMENT_PROPHANDLE_TYPE           , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( UIELEMENT_PROPNAME_XMENUBAR, UIELEMENT_PROPHANDLE_XMENUBAR       , cppu::UnoType<css::awt::XMenuBar>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY )
@@ -447,7 +447,7 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
 void UIConfigElementWrapperBase::impl_fillNewData()
 {
 }
-Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_Bool bWriteable )
+Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( bool bWriteable )
 {
     SolarMutexGuard g;
 

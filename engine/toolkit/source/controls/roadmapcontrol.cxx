@@ -318,7 +318,7 @@ namespace toolkit
     }
 
 
-    sal_Bool SAL_CALL UnoControlRoadmapModel::hasElements()
+    bool SAL_CALL UnoControlRoadmapModel::hasElements()
     {
         return !maRoadmapItems.empty();
     }
@@ -354,7 +354,7 @@ css::uno::Any UnoRoadmapControl::queryAggregation(css::uno::Type const & aType) 
 }
 
 
-sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel)
+bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel)
     {
         Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )

@@ -235,7 +235,7 @@ void SAL_CALL OStatement::release() noexcept
 }
 
 
-sal_Bool SAL_CALL OStatement::execute( const OUString& sql )
+bool SAL_CALL OStatement::execute( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

@@ -1638,7 +1638,7 @@ static bool CompareSortingData_Impl( std::unique_ptr<SortingData_Impl> const & a
         }
     }
 
-    // when the two elements are equal, we must not return sal_True (which would
+    // when the two elements are equal, we must not return true (which would
     // happen if we just return ! ( a < b ) when not sorting ascending )
     if ( bEqual )
         return false;

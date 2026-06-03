@@ -41,7 +41,7 @@ public:
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::lang::XInitialization:
@@ -73,7 +73,7 @@ OUString SAL_CALL CLiteral::getImplementationName()
     return u"CLiteral"_ustr;
 }
 
-sal_Bool SAL_CALL CLiteral::supportsService(OUString const & serviceName)
+bool SAL_CALL CLiteral::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

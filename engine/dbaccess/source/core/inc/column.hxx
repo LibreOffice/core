@@ -78,7 +78,7 @@ namespace dbaccess
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XNamed
@@ -197,7 +197,7 @@ namespace dbaccess
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // css::container::XChild

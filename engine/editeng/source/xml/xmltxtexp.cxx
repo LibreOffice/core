@@ -164,7 +164,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SvxSimpleUnoModel::getStyleFam
 }
 
 // XModel
-sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString&, const css::uno::Sequence< css::beans::PropertyValue >& )
+bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString&, const css::uno::Sequence< css::beans::PropertyValue >& )
 {
     return false;
 }
@@ -196,7 +196,7 @@ void SAL_CALL SvxSimpleUnoModel::unlockControllers(  )
 {
 }
 
-sal_Bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  )
+bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  )
 {
     return true;
 }

@@ -58,12 +58,12 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
         // container.XContainerListener
         virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
@@ -144,7 +144,7 @@ Sequence< OUString > SAL_CALL ConfigurationAccess_UICategory::getElementNames()
     return getAllIds();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
+bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
 {
     return getByName( rId ).hasValue();
 }
@@ -155,7 +155,7 @@ Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
     return cppu::UnoType<OUString>::get();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
+bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
 {
     // There must be global categories!
     return true;
@@ -344,7 +344,7 @@ public:
         return u"com.sun.star.comp.framework.UICategoryDescription"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }

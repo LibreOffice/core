@@ -66,7 +66,7 @@ public:
     virtual OUString SAL_CALL getUriReference() override
     { return base_.getUriReference(); }
 
-    virtual sal_Bool SAL_CALL isAbsolute() override
+    virtual bool SAL_CALL isAbsolute() override
     { return base_.isAbsolute(); }
 
     virtual OUString SAL_CALL getScheme() override
@@ -75,10 +75,10 @@ public:
     virtual OUString SAL_CALL getSchemeSpecificPart() override
     { return base_.getSchemeSpecificPart(); }
 
-    virtual sal_Bool SAL_CALL isHierarchical() override
+    virtual bool SAL_CALL isHierarchical() override
     { return base_.isHierarchical(); }
 
-    virtual sal_Bool SAL_CALL hasAuthority() override
+    virtual bool SAL_CALL hasAuthority() override
     { return base_.hasAuthority(); }
 
     virtual OUString SAL_CALL getAuthority() override
@@ -87,7 +87,7 @@ public:
     virtual OUString SAL_CALL getPath() override
     { return base_.getPath(); }
 
-    virtual sal_Bool SAL_CALL hasRelativePath() override
+    virtual bool SAL_CALL hasRelativePath() override
     { return base_.hasRelativePath(); }
 
     virtual ::sal_Int32 SAL_CALL getPathSegmentCount() override
@@ -96,13 +96,13 @@ public:
     virtual OUString SAL_CALL getPathSegment(sal_Int32 index) override
     { return base_.getPathSegment(index); }
 
-    virtual sal_Bool SAL_CALL hasQuery() override
+    virtual bool SAL_CALL hasQuery() override
     { return base_.hasQuery(); }
 
     virtual OUString SAL_CALL getQuery() override
     { return base_.getQuery(); }
 
-    virtual sal_Bool SAL_CALL hasFragment() override
+    virtual bool SAL_CALL hasFragment() override
     { return base_.hasFragment(); }
 
     virtual OUString SAL_CALL getFragment() override
@@ -146,7 +146,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
         OUString const & serviceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -166,7 +166,7 @@ OUString Parser::getImplementationName()
     return u"com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand"_ustr;
 }
 
-sal_Bool Parser::supportsService(OUString const & serviceName)
+bool Parser::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

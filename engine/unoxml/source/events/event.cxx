@@ -63,13 +63,13 @@ namespace DOM::events
         return m_phase;
     }
 
-    sal_Bool SAL_CALL CEvent::getBubbles()
+    bool SAL_CALL CEvent::getBubbles()
     {
         std::unique_lock const g(m_Mutex);
         return m_bubbles;
     }
 
-    sal_Bool SAL_CALL CEvent::getCancelable()
+    bool SAL_CALL CEvent::getCancelable()
     {
         std::unique_lock const g(m_Mutex);
         return m_cancelable;
@@ -93,8 +93,8 @@ namespace DOM::events
     }
 
     void SAL_CALL
-    CEvent::initEvent(OUString const& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)
+    CEvent::initEvent(OUString const& eventTypeArg, bool canBubbleArg,
+        bool cancelableArg)
     {
         std::unique_lock const g(m_Mutex);
 

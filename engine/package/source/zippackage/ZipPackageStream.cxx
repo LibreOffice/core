@@ -1375,7 +1375,7 @@ Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
     return { u"com.sun.star.packages.PackageStream"_ustr };
 }
 
-sal_Bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceName )
+bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

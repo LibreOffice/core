@@ -168,7 +168,7 @@ namespace toolkit
             pThrobber->stop();
     }
 
-    sal_Bool SAL_CALL AnimatedImagesPeer::isAnimationRunning()
+    bool SAL_CALL AnimatedImagesPeer::isAnimationRunning()
     {
         SolarMutexGuard aGuard;
         VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();

@@ -139,7 +139,7 @@ public:
     void insertIndentation(sal_uInt32 m_nLevel);
 
     // returns whether it works correct or invalid characters were in the string
-    // If there are invalid characters in the string it returns sal_False.
+    // If there are invalid characters in the string it returns false.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
     bool writeString(const OUString& rWriteOutString, bool bDoNormalization,
@@ -154,7 +154,7 @@ public:
     void startDocument();
 
     // returns whether it works correct or invalid characters were in the strings
-    // If there are invalid characters in one of the strings it returns sal_False.
+    // If there are invalid characters in one of the strings it returns false.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
     SaxInvalidCharacterError startElement(const OUString& rName,
@@ -163,7 +163,7 @@ public:
     bool FinishEmptyElement();
 
     // returns whether it works correct or invalid characters were in the string
-    // If there are invalid characters in the string it returns sal_False.
+    // If there are invalid characters in the string it returns false.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
     bool endElement(const OUString& rName);
@@ -171,7 +171,7 @@ public:
     void endDocument();
 
     // returns whether it works correct or invalid characters were in the strings
-    // If there are invalid characters in the string it returns sal_False.
+    // If there are invalid characters in the string it returns false.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
     bool processingInstruction(const OUString& rTarget, const OUString& rData);
@@ -181,7 +181,7 @@ public:
     void endCDATA();
 
     // returns whether it works correct or invalid characters were in the strings
-    // If there are invalid characters in the string it returns sal_False.
+    // If there are invalid characters in the string it returns false.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
     bool comment(const OUString& rComment);
@@ -1069,7 +1069,7 @@ public: // XExtendedDocumentHandler
 public: // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
     sal_Int32 getIndentPrefixLength(sal_Int32 nFirstLineBreakOccurrence) noexcept;
@@ -1110,7 +1110,7 @@ OUString SAXWriter::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool SAXWriter::supportsService(const OUString& ServiceName)
+bool SAXWriter::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

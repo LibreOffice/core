@@ -55,7 +55,7 @@ public:
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference<ChartModel> getChartModel() const;
@@ -97,7 +97,7 @@ private:
     virtual void SAL_CALL addChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual void SAL_CALL removeChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double SAL_CALL getNotANumber() override;
-    virtual sal_Bool SAL_CALL isNotANumber( double nNumber ) override;
+    virtual bool SAL_CALL isNotANumber( double nNumber ) override;
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose() override;

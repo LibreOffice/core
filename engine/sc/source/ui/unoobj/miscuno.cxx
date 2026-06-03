@@ -201,7 +201,7 @@ ScIndexEnumeration::~ScIndexEnumeration()
 
 // XEnumeration
 
-sal_Bool SAL_CALL ScIndexEnumeration::hasMoreElements()
+bool SAL_CALL ScIndexEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     return ( nPos < xIndex->getCount() );
@@ -227,7 +227,7 @@ OUString SAL_CALL ScIndexEnumeration::getImplementationName()
     return u"ScIndexEnumeration"_ustr;
 }
 
-sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )
+bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -277,7 +277,7 @@ css::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
         return uno::Type();
 }
 
-sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  )
+bool SAL_CALL ScNameToIndexAccess::hasElements(  )
 {
     return getCount() > 0;
 }

@@ -283,7 +283,7 @@ void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     }
 }
 
-sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
+bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue )
 {
     bool bModified(false);

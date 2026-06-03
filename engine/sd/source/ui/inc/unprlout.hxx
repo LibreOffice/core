@@ -32,7 +32,7 @@ class SdPresentationLayoutUndoAction final : public SdUndoAction
     OUString        aNewLayoutName;
     AutoLayout      eOldAutoLayout;
     AutoLayout      eNewAutoLayout;
-    bool        bSetAutoLayout;     // sal_True: change AutoLayout
+    bool        bSetAutoLayout;     // true: change AutoLayout
     SdPage*         pPage;
     OUString        aComment;
 

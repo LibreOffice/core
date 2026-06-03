@@ -114,7 +114,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -134,7 +134,7 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
@@ -163,16 +163,16 @@ public:
             const css::uno::Reference< css::text::XTextRange > & xTextPosition) override;
     virtual void SAL_CALL insertString(
             const css::uno::Reference< css::text::XTextRange > & xRange,
-            const OUString& aString, sal_Bool bAbsorb) override;
+            const OUString& aString, bool bAbsorb) override;
     virtual void SAL_CALL insertControlCharacter(
             const css::uno::Reference< css::text::XTextRange > & xRange,
-            sal_Int16 nControlCharacter, sal_Bool bAbsorb) override;
+            sal_Int16 nControlCharacter, bool bAbsorb) override;
 
     // XText
     virtual void SAL_CALL insertTextContent(
             const css::uno::Reference< css::text::XTextRange > & xRange,
             const css::uno::Reference< css::text::XTextContent > & xContent,
-            sal_Bool bAbsorb) override;
+            bool bAbsorb) override;
     virtual void SAL_CALL removeTextContent(
             const css::uno::Reference< css::text::XTextContent > & xContent) override;
 
@@ -210,7 +210,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames( ) override;
@@ -249,7 +249,7 @@ public:
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
 
     // XTextField
-    virtual OUString SAL_CALL getPresentation(sal_Bool bShowCommand) override;
+    virtual OUString SAL_CALL getPresentation(bool bShowCommand) override;
 
 };
 

@@ -114,7 +114,7 @@ public:
         sal_Int32 hTestHandle)
         throw  (    IllegalArgumentException,RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed()
+    virtual bool SAL_CALL testPassed()
         throw  (    RuntimeException);
     virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException);
     virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
@@ -382,7 +382,7 @@ sal_Int32 OSaxWriterTest::test(
 }
 
 
-sal_Bool OSaxWriterTest::testPassed()                   throw  (RuntimeException)
+bool OSaxWriterTest::testPassed()                   throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
@@ -521,11 +521,11 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
     source->setOutputStream( ref );
 
     { // startDocument must be called before start element
-        sal_Bool bException = sal_True;
+        bool bException = true;
         try
         {
             r->startElement( OUString( "huhu") , rList );
-            bException = sal_False;
+            bException = false;
         }
         catch( SAXException &e )
         {
@@ -540,10 +540,10 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
     r->startCDATA();
 
     {
-        sal_Bool bException = sal_True;
+        bool bException = true;
         try{
             r->startElement( OUString( "huhu") , rList );
-            bException = sal_False;
+            bException = false;
         }
         catch( SAXException &e ) {
 

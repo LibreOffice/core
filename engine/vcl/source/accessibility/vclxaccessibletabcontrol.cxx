@@ -374,7 +374,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int64 nChildIndex )
 }
 
 
-sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

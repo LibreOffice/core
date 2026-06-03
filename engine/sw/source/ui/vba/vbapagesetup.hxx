@@ -53,8 +53,8 @@ public:
     virtual void SAL_CALL setHeaderDistance( double _headerdistance ) override;
     virtual double SAL_CALL getFooterDistance() override;
     virtual void SAL_CALL setFooterDistance( double _footerdistance ) override;
-    virtual sal_Bool SAL_CALL getDifferentFirstPageHeaderFooter() override;
-    virtual void SAL_CALL setDifferentFirstPageHeaderFooter( sal_Bool status ) override;
+    virtual bool SAL_CALL getDifferentFirstPageHeaderFooter() override;
+    virtual void SAL_CALL setDifferentFirstPageHeaderFooter( bool status ) override;
     virtual ::sal_Int32 SAL_CALL getSectionStart() override;
     virtual void SAL_CALL setSectionStart( ::sal_Int32 _sectionstart ) override;
 

@@ -474,7 +474,7 @@ public:
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle() override;
 
-    virtual void SAL_CALL setDeterministicScheduling(sal_Bool bDeterministicMode) override;
+    virtual void SAL_CALL setDeterministicScheduling(bool bDeterministicMode) override;
 
     virtual void SAL_CALL pause(sal_Int32 nMilliseconds) override;
 
@@ -508,7 +508,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // css::awt::XExtendedToolkit:
@@ -1495,7 +1495,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 else
                     pNewWindow = VclPtr<toolkit::ScrollableDialog>::Create( pParent, nWinBits );
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
-                // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
+                // GetComponentInterface( true ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.
                 css::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( false );
                 if ( xWinPeer.is() )
@@ -1543,7 +1543,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 // Since the VCLXRadioButton really cares for its RadioCheck settings, this is important:
                 // if we enable it, the VCLXRadioButton will use RadioButton::Check instead of RadioButton::SetState
                 // This leads to a strange behaviour if the control is newly created: when settings the initial
-                // state to "checked", the RadioButton::Check (called because RadioCheck=sal_True) will uncheck
+                // state to "checked", the RadioButton::Check (called because RadioCheck=true) will uncheck
                 // _all_other_ radio buttons in the same group. However, at this moment the grouping of the controls
                 // is not really valid: the controls are grouped after they have been created, but we're still in
                 // the creation process, so the RadioButton::Check relies on invalid grouping information.
@@ -2083,7 +2083,7 @@ OUString VCLXToolkit::getImplementationName()
     return u"stardiv.Toolkit.VCLXToolkit"_ustr;
 }
 
-sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName )
+bool VCLXToolkit::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2457,7 +2457,7 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
     Scheduler::ProcessEventsToIdle();
 }
 
-void SAL_CALL VCLXToolkit::setDeterministicScheduling(sal_Bool bDeterministicMode)
+void SAL_CALL VCLXToolkit::setDeterministicScheduling(bool bDeterministicMode)
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::SetDeterministicMode(bDeterministicMode);

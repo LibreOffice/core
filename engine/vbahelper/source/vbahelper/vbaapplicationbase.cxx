@@ -169,7 +169,7 @@ VbaApplicationBase::~VbaApplicationBase()
 {
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 VbaApplicationBase::getScreenUpdating()
 {
     uno::Reference< frame::XModel > xModel = getCurrentDocument();
@@ -179,14 +179,14 @@ VbaApplicationBase::getScreenUpdating()
 }
 
 void SAL_CALL
-VbaApplicationBase::setScreenUpdating(sal_Bool bUpdate)
+VbaApplicationBase::setScreenUpdating(bool bUpdate)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     // #163808# use helper from module "basic" to lock all documents of this application
     ::basic::vba::lockControllersOfAllDocuments( xModel, !bUpdate );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 VbaApplicationBase::getDisplayStatusBar()
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
@@ -201,7 +201,7 @@ VbaApplicationBase::getDisplayStatusBar()
 }
 
 void SAL_CALL
-VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar)
+VbaApplicationBase::setDisplayStatusBar(bool bDisplayStatusBar)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
@@ -220,7 +220,7 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar)
     }
 }
 
-sal_Bool SAL_CALL VbaApplicationBase::getInteractive()
+bool SAL_CALL VbaApplicationBase::getInteractive()
 {
     uno::Reference< frame::XModel > xModel = getCurrentDocument();
     if (!xModel.is())
@@ -241,19 +241,19 @@ sal_Bool SAL_CALL VbaApplicationBase::getInteractive()
     return xWindow->isEnabled();
 }
 
-void SAL_CALL VbaApplicationBase::setInteractive( sal_Bool bInteractive )
+void SAL_CALL VbaApplicationBase::setInteractive( bool bInteractive )
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     // #163808# use helper from module "basic" to enable/disable all container windows of all documents of this application
     ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, bInteractive );
 }
 
-sal_Bool SAL_CALL VbaApplicationBase::getVisible()
+bool SAL_CALL VbaApplicationBase::getVisible()
 {
     return m_pImpl->mbVisible;    // dummy implementation
 }
 
-void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible )
+void SAL_CALL VbaApplicationBase::setVisible( bool bVisible )
 {
     m_pImpl->mbVisible = bVisible;  // dummy implementation
 }

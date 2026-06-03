@@ -346,7 +346,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
             some information (e.g. for updating her configuration ...). We must know
             if such request is valid or not then.
 
-    @return sal_True if the represented job is part of the underlying configuration package.
+    @return true if the represented job is part of the underlying configuration package.
  */
 bool JobData::hasConfig() const
 {

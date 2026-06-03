@@ -407,7 +407,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     }
     else
     {
-        bool bInit = false;     // set to sal_True for debug test
+        bool bInit = false;     // set to true for debug test
         m_xCbSourceFormat->set_active( bInit );
         m_xCbSourceFormat->set_sensitive( bInit );
         m_xCbSourceFormat->set_visible( bInit );
@@ -614,7 +614,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 #*
 #*  Class:      SvxNumberFormatTabPage
 #*  Function:   Hides the Languages and Locales:
-#*  Input:      sal_Bool nFlag
+#*  Input:      bool nFlag
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -814,7 +814,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_False*/ )
+void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= false*/ )
 {
     OUString    theFormat           = m_xEdFormat->get_text();
     sal_Int32   nCurCategory        = m_xLbCategory->get_selected_index();

@@ -145,7 +145,7 @@ oslModule osl_loadModuleRelativeAscii(
 /* osl_getModuleHandle */
 /*****************************************************************************/
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 {
 #if HAVE_UNIX_DLAPI
@@ -247,7 +247,7 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 /*****************************************************************************/
 /* osl_getModuleURLFromAddress */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
+bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     bool result = false;
     rtl_String * path = nullptr;
@@ -284,7 +284,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 /*****************************************************************************/
 /* osl_getModuleURLFromFunctionAddress */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, rtl_uString ** ppLibraryUrl)
+bool SAL_CALL osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, rtl_uString ** ppLibraryUrl)
 {
     return osl_getModuleURLFromAddress(
         reinterpret_cast<void*>(addr), ppLibraryUrl);

@@ -122,7 +122,7 @@ public:
     startExecuteModal(const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>&) override;
 
     // XFilePicker functions
-    virtual void SAL_CALL setMultiSelectionMode(sal_Bool bMode) override;
+    virtual void SAL_CALL setMultiSelectionMode(bool bMode) override;
     virtual void SAL_CALL setDefaultName(const OUString& rName) override;
     virtual void SAL_CALL setDisplayDirectory(const OUString& rDirectory) override;
     virtual OUString SAL_CALL getDisplayDirectory() override;
@@ -133,7 +133,7 @@ public:
                                    const css::uno::Any& rValue) override;
     virtual css::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
                                             sal_Int16 nControlAction) override;
-    virtual void SAL_CALL enableControl(sal_Int16 nControlId, sal_Bool bEnable) override;
+    virtual void SAL_CALL enableControl(sal_Int16 nControlId, bool bEnable) override;
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
 
@@ -149,7 +149,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XFolderPicker functions

@@ -78,12 +78,12 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
         { return BaseContainer::getByName(aName); }
       virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override
         { return BaseContainer::getElementNames(); }
-      virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+      virtual bool SAL_CALL hasByName( const OUString& aName ) override
         { return BaseContainer::hasByName(aName); }
 
       virtual css::uno::Type SAL_CALL getElementType() override
         { return BaseContainer::getElementType(); }
-      virtual sal_Bool SAL_CALL hasElements() override
+      virtual bool SAL_CALL hasElements() override
         { return BaseContainer::hasElements(); }
 
       virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const OUString& Query ) override

@@ -576,7 +576,7 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
     return ret;
 }
 
-sal_Bool SAL_CALL IUnknownWrapper::hasMethod( const OUString& aName )
+bool SAL_CALL IUnknownWrapper::hasMethod( const OUString& aName )
 {
     if ( ! m_spDispatch )
     {
@@ -626,7 +626,7 @@ sal_Bool SAL_CALL IUnknownWrapper::hasMethod( const OUString& aName )
     return ret;
 }
 
-sal_Bool SAL_CALL IUnknownWrapper::hasProperty( const OUString& aName )
+bool SAL_CALL IUnknownWrapper::hasProperty( const OUString& aName )
 {
     if ( ! m_spDispatch )
     {
@@ -1486,7 +1486,7 @@ uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const un
     return aResult;
 }
 
-sal_Bool SAL_CALL IUnknownWrapper::hasMember( const OUString& aName )
+bool SAL_CALL IUnknownWrapper::hasMember( const OUString& aName )
 {
     if ( ! m_spDispatch )
     {
@@ -2011,7 +2011,7 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                        & PARAMFLAG_FOUT))
                     continue;
                 Any outAny;
-                // variantToAny is called with the "reduce range" parameter set to sal_False.
+                // variantToAny is called with the "reduce range" parameter set to false.
                 // That causes VT_I4 values not to be converted down to a "lower" type. That
                 // feature exist for JScript only because it only uses VT_I4 for integer types.
                 try

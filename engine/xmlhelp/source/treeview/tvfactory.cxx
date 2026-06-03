@@ -51,7 +51,7 @@ TVFactory::getImplementationName()
     return u"com.sun.star.help.TreeViewImpl"_ustr;
 }
 
-sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

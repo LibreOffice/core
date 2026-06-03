@@ -97,7 +97,7 @@ OUString SAL_CALL MWAWImportFilter::getImplementationName()
     return u"com.sun.star.comp.Writer.MWAWImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL MWAWImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL MWAWImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

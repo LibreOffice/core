@@ -58,7 +58,7 @@ class WorkSheetsEnumeration : public ::cppu::WeakImplHelper< container::XEnumera
     SheetMap::iterator mIt;
 public:
     explicit WorkSheetsEnumeration( SheetMap&& sMap ) : mSheetMap( std::move(sMap) ), mIt( mSheetMap.begin() ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mIt != mSheetMap.end() );
     }
@@ -81,7 +81,7 @@ public:
     explicit SheetCollectionHelper( SheetMap&& sMap ) : mSheetMap( std::move(sMap) ), cachePos(mSheetMap.begin()) {}
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return ( !mSheetMap.empty() ); }
+    virtual bool SAL_CALL hasElements(  ) override { return ( !mSheetMap.empty() ); }
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
@@ -102,7 +102,7 @@ public:
         }
         return sNames;
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         cachePos = mSheetMap.begin();
         SheetMap::iterator it_end = mSheetMap.end();

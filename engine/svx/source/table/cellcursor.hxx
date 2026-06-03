@@ -53,7 +53,7 @@ public:
     // XMergeableCellRange
     virtual void SAL_CALL merge(  ) override;
     virtual void SAL_CALL split( ::sal_Int32 Columns, ::sal_Int32 Rows ) override;
-    virtual sal_Bool SAL_CALL isMergeable(  ) override;
+    virtual bool SAL_CALL isMergeable(  ) override;
 
 private:
     bool GetMergedSelection( CellPos& rStart, CellPos& rEnd );

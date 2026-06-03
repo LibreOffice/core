@@ -113,14 +113,14 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 
     int     nDfltFont;
 
-    bool    bNewDoc : 1;            // sal_False - Reading in an existing
-    bool    bNewGroup : 1;          // sal_True - there was an opening parenthesis
-    bool    bIsSetDfltTab : 1;      // sal_True - DefTab was loaded
-    bool    bChkStyleAttr : 1;      // sal_True - StyleSheets are evaluated
-    bool    bCalcValue : 1;         // sal_True - Twip values adapt to App
-    bool    bIsLeftToRightDef : 1;  // sal_True - in LeftToRight char run def.
-                                        // sal_False - in RightToLeft char run def.
-    bool    bIsInReadStyleTab : 1;  // sal_True - in ReadStyleTable
+    bool    bNewDoc : 1;            // false - Reading in an existing
+    bool    bNewGroup : 1;          // true - there was an opening parenthesis
+    bool    bIsSetDfltTab : 1;      // true - DefTab was loaded
+    bool    bChkStyleAttr : 1;      // true - StyleSheets are evaluated
+    bool    bCalcValue : 1;         // true - Twip values adapt to App
+    bool    bIsLeftToRightDef : 1;  // true - in LeftToRight char run def.
+                                        // false - in RightToLeft char run def.
+    bool    bIsInReadStyleTab : 1;  // true - in ReadStyleTable
 
     SvxRTFParser(SvxRTFParser const&) = delete;
     void operator=(SvxRTFParser const&) = delete;

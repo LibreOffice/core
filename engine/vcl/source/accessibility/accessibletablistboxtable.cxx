@@ -262,7 +262,7 @@ void SAL_CALL AccessibleTabListBoxTable::selectAccessibleChild( sal_Int64 nChild
     implSelectRow( implGetRow( nChildIndex ), true );
 }
 
-sal_Bool SAL_CALL AccessibleTabListBoxTable::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL AccessibleTabListBoxTable::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );

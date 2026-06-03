@@ -102,8 +102,8 @@ public:
     virtual void SAL_CALL setName( const OUString& rName ) override;
     virtual sal_Int32 SAL_CALL getPlacement() override;
     virtual void SAL_CALL setPlacement( sal_Int32 nPlacement ) override;
-    virtual sal_Bool SAL_CALL getPrintObject() override;
-    virtual void SAL_CALL setPrintObject( sal_Bool bPrintObject ) override;
+    virtual bool SAL_CALL getPrintObject() override;
+    virtual void SAL_CALL setPrintObject( bool bPrintObject ) override;
 
     /** Sets default properties after a new object has been created.
 
@@ -145,12 +145,12 @@ public:
     virtual void SAL_CALL setName( const OUString& rName ) override;
     virtual OUString SAL_CALL getOnAction() override;
     virtual void SAL_CALL setOnAction( const OUString& rMacroName ) override;
-    virtual sal_Bool SAL_CALL getPrintObject() override;
-    virtual void SAL_CALL setPrintObject( sal_Bool bPrintObject ) override;
+    virtual bool SAL_CALL getPrintObject() override;
+    virtual void SAL_CALL setPrintObject( bool bPrintObject ) override;
 
     // XControlObject attributes
-    virtual sal_Bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
+    virtual bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
 
     /// Notify that the document contains a macro event handler
     void NotifyMacroEventRead();

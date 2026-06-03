@@ -127,7 +127,7 @@ OUString SAL_CALL ODocumentContainer::getImplementationName()
     {
         return u"com.sun.star.comp.dba.ODocumentContainer"_ustr;
     };
-sal_Bool SAL_CALL ODocumentContainer::supportsService(const OUString& _rServiceName)
+bool SAL_CALL ODocumentContainer::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -574,7 +574,7 @@ Any SAL_CALL ODocumentContainer::getByHierarchicalName( const OUString& _sName )
     throw NoSuchElementException(_sName,*this);
 }
 
-sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sName )
+bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sName )
 {
     MutexGuard aGuard(m_aMutex);
     Any aContent;

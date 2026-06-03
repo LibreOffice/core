@@ -144,7 +144,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalc
     double /*min*/, double /*max*/, sal_Int32 /*nPointCount*/,
     const uno::Reference< chart2::XScaling >& /*xScalingX*/,
     const uno::Reference< chart2::XScaling >& /*xScalingY*/,
-    sal_Bool /*bMaySkipPointsInCalculation*/ )
+    bool /*bMaySkipPointsInCalculation*/ )
 {
     size_t nSize = std::min(aXList.size(), aYList.size());
     uno::Sequence< geometry::RealPoint2D > aResult( nSize );

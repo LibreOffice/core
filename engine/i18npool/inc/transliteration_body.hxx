@@ -43,7 +43,7 @@ public:
     OUString foldingImpl(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         css::uno::Sequence< sal_Int32 >* pOffset) override;
 
-    sal_Bool SAL_CALL equals(
+    bool SAL_CALL equals(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
 

@@ -37,7 +37,7 @@ OUString SAL_CALL FreehandImportFilter::getImplementationName()
     return u"com.sun.star.comp.Draw.FreehandImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL FreehandImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL FreehandImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

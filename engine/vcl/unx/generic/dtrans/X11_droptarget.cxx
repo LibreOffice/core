@@ -57,7 +57,7 @@ OUString X11DropTarget::getImplementationName()
     return u"com.sun.star.datatransfer.dnd.XdndDropTarget"_ustr;
 }
 
-sal_Bool X11DropTarget::supportsService(const OUString& ServiceName)
+bool X11DropTarget::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

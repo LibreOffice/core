@@ -2471,7 +2471,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testHTMLClipboardImport)
         {
             return { getHTMLFlavor() };
         }
-        sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
+        bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
         {
             return aFlavor.MimeType.equalsIgnoreAsciiCase(getHTMLFlavor().MimeType);
         }

@@ -454,7 +454,7 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< css::ui::dialog
 }
 
 // XFilePicker functions
-void SAL_CALL SvtFilePicker::setMultiSelectionMode( sal_Bool bMode )
+void SAL_CALL SvtFilePicker::setMultiSelectionMode( bool bMode )
 {
     checkAlive();
 
@@ -667,7 +667,7 @@ OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
 }
 
 
-void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnable )
+void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, bool bEnable )
 {
     checkAlive();
 
@@ -771,7 +771,7 @@ void SAL_CALL SvtFilePicker::setImage(sal_Int16 /*aImageFormat*/, const Any& rIm
         m_xDlg->setImage(rImage);
 }
 
-sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool )
+bool SAL_CALL SvtFilePicker::setShowState( bool )
 {
     checkAlive();
 
@@ -799,7 +799,7 @@ sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool )
 }
 
 
-sal_Bool SAL_CALL SvtFilePicker::getShowState()
+bool SAL_CALL SvtFilePicker::getShowState()
 {
     checkAlive();
 
@@ -963,7 +963,7 @@ OUString SAL_CALL SvtFilePicker::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName )
+bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -1008,7 +1008,7 @@ OUString SAL_CALL SvtRemoteFilePicker::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sServiceName )
+bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

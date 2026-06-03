@@ -55,7 +55,7 @@ sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount()
 }
 
 
-sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
+bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
 {
     throw lang::IndexOutOfBoundsException();
 }

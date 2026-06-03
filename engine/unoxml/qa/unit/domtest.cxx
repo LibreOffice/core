@@ -550,7 +550,7 @@ public:
             uno::Reference<xml::xpath::XXPathObject> xResult = xXPathAPI->eval(xRoot, u"count(//foo) = 2"_ustr);
             CPPUNIT_ASSERT(xResult);
             CPPUNIT_ASSERT_EQUAL(xml::xpath::XPathObjectType_XPATH_BOOLEAN, xResult->getObjectType());
-            CPPUNIT_ASSERT_EQUAL(sal_True, xResult->getBoolean());
+            CPPUNIT_ASSERT_EQUAL(true, xResult->getBoolean());
             CPPUNIT_ASSERT_EQUAL(u"true"_ustr, xResult->getString());
         }
         {

@@ -115,7 +115,7 @@ namespace toolkit { class ScriptEventContainer; }
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // OPropertySetHelper overridables
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        virtual bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue,
                 sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 

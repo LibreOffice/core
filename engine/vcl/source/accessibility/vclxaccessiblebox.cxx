@@ -339,7 +339,7 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount()
     return m_bIsDropDownBox ? 1 : 0;
 }
 
-sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
+bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
 {
     bool bNotify = false;
 
@@ -437,7 +437,7 @@ Any VCLXAccessibleBox::getCurrentValue( )
     return aAny;
 }
 
-sal_Bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
+bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

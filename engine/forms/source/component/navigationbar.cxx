@@ -126,7 +126,7 @@ namespace frm
                           &m_nContextWritingMode, cppu::UnoType<decltype(m_nContextWritingMode)>::get() );
 
         registerMayBeVoidProperty( PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID,
-            &m_aTabStop, cppu::UnoType<sal_Bool>::get() );
+            &m_aTabStop, cppu::UnoType<bool>::get() );
 
         registerMayBeVoidProperty( PROPERTY_BACKGROUNDCOLOR, PROPERTY_ID_BACKGROUNDCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID,
             &m_aBackgroundColor, cppu::UnoType<sal_Int32>::get() );
@@ -353,7 +353,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
+    bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;

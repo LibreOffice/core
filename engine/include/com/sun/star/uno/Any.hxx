@@ -68,9 +68,8 @@ inline Any::Any( T const & value )
 
 inline Any::Any( bool value )
 {
-    sal_Bool b = value;
     ::uno_type_any_construct(
-        this, &b, cppu::UnoType<bool>::get().getTypeLibType(),
+        this, &value, cppu::UnoType<bool>::get().getTypeLibType(),
         cpp_acquire );
 }
 
@@ -243,16 +242,6 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
     rAny.setValue(static_cast< const void * >( &value ), rType);
 }
 
-// additionally for C++ bool:
-
-template<>
-inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
-{
-    // [-loplugin:fakebool] false positive:
-    rAny <<= sal_Bool(value);
-}
-
-
 template< class C1, class C2 >
 inline void operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& value )
 {
@@ -284,42 +273,23 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value )
 // bool
 
 template<>
-inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Bool & value )
+inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, bool & value )
 {
     if (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass)
     {
-        value = bool(* static_cast< const sal_Bool * >( rAny.pData ));
+        value = *static_cast< const bool * >( rAny.pData );
         return true;
     }
     return false;
 }
 
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value )
-{
-    return rAny == bool(value);
-}
-
-
-template<>
-inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
-{
-    if (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN)
-    {
-        value = *static_cast< sal_Bool const * >( rAny.pData );
-        return true;
-    }
-    return false;
-}
-
-
-template<>
-inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
+inline bool SAL_CALL operator == ( const Any & rAny, const bool & value )
 {
     return (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN &&
-            (value ==
-             bool(*static_cast< sal_Bool const * >( rAny.pData ))));
+            (value == *static_cast< bool const * >( rAny.pData )));
 }
+
 
 // byte
 

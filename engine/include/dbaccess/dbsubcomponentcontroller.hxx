@@ -142,15 +142,15 @@ namespace dbaui
         css::uno::Reference< css::util::XNumberFormatter > const & getNumberFormatter() const;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) override;
-        virtual sal_Bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) override;
+        virtual bool SAL_CALL suspend(bool bSuspend) override;
+        virtual bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) override;
 
         // XScriptInvocationContext
         virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() override;
 
         // XModifiable
-        virtual sal_Bool SAL_CALL isModified(  ) override;
-        virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+        virtual bool SAL_CALL isModified(  ) override;
+        virtual void SAL_CALL setModified( bool bModified ) override;
 
         // XModifyBroadcaster
         virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;

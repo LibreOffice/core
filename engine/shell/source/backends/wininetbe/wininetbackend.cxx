@@ -317,7 +317,7 @@ OUString SAL_CALL WinInetBackend::getImplementationName()
     return "com.sun.star.comp.configuration.backend.WinInetBackend" ;
 }
 
-sal_Bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
+bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }

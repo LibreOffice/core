@@ -82,7 +82,7 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
 /*
     --> structure size  MUST - alignment of 4!
     int     iSize;              // size of all data, including variable length strings
-    sal_Bool    bIsMap;             // For server side maps
+    bool    bIsMap;             // For server side maps
     sal_Int32   iWidth;             // Fixed size data correspond to fields in LO_ImageDataStruct
     sal_Int32   iHeight;            //   and EDT_ImageData
     sal_Int32   iHSpace;
@@ -99,7 +99,7 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             sal_uInt64 nFilePos;
 
             nFilePos = rIStm.Tell();
-            // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
+            // skip over iSize (int), bIsMao ( bool ) alignment of 4 !!!!
             rIStm.SeekRel( 8 );
             rIStm.ReadInt32( nVal );  aSizePixel.setWidth( nVal );
             rIStm.ReadInt32( nVal );  aSizePixel.setHeight( nVal );

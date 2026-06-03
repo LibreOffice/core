@@ -47,7 +47,7 @@ namespace DOM
         return u"com.sun.star.comp.xml.dom.SAXDocumentBuilder"_ustr;
     }
 
-    sal_Bool SAL_CALL CSAXDocumentBuilder::supportsService(const OUString& aServiceName)
+    bool SAL_CALL CSAXDocumentBuilder::supportsService(const OUString& aServiceName)
     {
         return cppu::supportsService(this, aServiceName);
     }

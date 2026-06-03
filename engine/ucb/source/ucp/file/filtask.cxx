@@ -160,7 +160,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
 
           { /* Name    */ u"delete"_ustr,
             /* Handle  */ -1,
-            /* ArgType */ cppu::UnoType<sal_Bool>::get() },
+            /* ArgType */ cppu::UnoType<bool>::get() },
 
           { /* Name    */ u"insert"_ustr,
             /* Handle  */ -1,
@@ -197,7 +197,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsFolder,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -209,7 +209,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsDocument,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -220,7 +220,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsVolume,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -232,7 +232,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsRemoveable,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -243,7 +243,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsRemote,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -254,7 +254,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsCompactDisc,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -265,7 +265,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsFloppy,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -278,7 +278,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
             true,
             IsHidden,
             -1 ,
-            cppu::UnoType<sal_Bool>::get(),
+            cppu::UnoType<bool>::get(),
             uno::Any(),
             beans::PropertyState_DEFAULT_VALUE,
             beans::PropertyAttribute::MAYBEVOID
@@ -326,7 +326,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsReadOnly,
                                              -1 ,
-                                             cppu::UnoType<sal_Bool>::get(),
+                                             cppu::UnoType<bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -1388,7 +1388,7 @@ TaskManager::copy(
         }
         case NameClash::OVERWRITE:
         {
-            // remove (..., MustExist = sal_False).
+            // remove (..., MustExist = false).
             remove( CommandId, dstUnqPath, IsWhat, false );
 
             // copy.
@@ -2088,7 +2088,7 @@ bool TaskManager::ensuredir( sal_Int32 CommandId,
     if( osl::FileBase::getSystemPathFromFileURL( aPath, aDirName ) == osl::FileBase::E_None &&
         stat(OUStringToOString( aDirName, RTL_TEXTENCODING_UTF8).getStr(), &s ) == 0 &&
         S_ISDIR( s.st_mode ) )
-        return sal_True;
+        return true;
 #endif
 
     // HACK: create directory on a mount point with nobrowse option

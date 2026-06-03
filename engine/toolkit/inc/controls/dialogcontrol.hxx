@@ -70,7 +70,7 @@ public:
     void SAL_CALL endExecute() override;
 
     // css::awt::XControl
-    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& Model ) override;
+    bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& Model ) override;
 
     // XModifyListener
     virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
@@ -92,19 +92,19 @@ public:
         { return UnoDialogControl_Base::ControlContainerBase::getContext(); }
     virtual css::uno::Reference<css::awt::XView> SAL_CALL getView() override
         { return UnoDialogControl_Base::ControlContainerBase::getView(); }
-    virtual void SAL_CALL setDesignMode(sal_Bool p1) override
+    virtual void SAL_CALL setDesignMode(bool p1) override
         { UnoDialogControl_Base::ControlContainerBase::setDesignMode(p1); }
-    virtual sal_Bool SAL_CALL isDesignMode() override
+    virtual bool SAL_CALL isDesignMode() override
         { return UnoDialogControl_Base::ControlContainerBase::isDesignMode(); }
-    virtual sal_Bool SAL_CALL isTransparent() override
+    virtual bool SAL_CALL isTransparent() override
         { return UnoDialogControl_Base::ControlContainerBase::isTransparent(); }
     virtual void SAL_CALL setPosSize(sal_Int32 p1, sal_Int32 p2, sal_Int32 p3, sal_Int32 p4, sal_Int16 p5) override
         { UnoDialogControl_Base::ControlContainerBase::setPosSize(p1, p2, p3, p4, p5); }
     virtual css::awt::Rectangle SAL_CALL getPosSize() override
         { return UnoDialogControl_Base::ControlContainerBase::getPosSize(); }
-    virtual void SAL_CALL setVisible(sal_Bool p1) override
+    virtual void SAL_CALL setVisible(bool p1) override
         { UnoDialogControl_Base::ControlContainerBase::setVisible(p1); }
-    virtual void SAL_CALL setEnable(sal_Bool p1) override
+    virtual void SAL_CALL setEnable(bool p1) override
         { UnoDialogControl_Base::ControlContainerBase::setEnable(p1); }
     virtual void SAL_CALL setFocus() override
         { UnoDialogControl_Base::ControlContainerBase::setFocus(); }
@@ -145,7 +145,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -171,7 +171,7 @@ public:
     void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
 
     // Override the method of parent class
-    virtual sal_Bool SAL_CALL getGroupControl(  ) override;
+    virtual bool SAL_CALL getGroupControl(  ) override;
 private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
@@ -244,7 +244,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
     // Override the method of parent class
-    virtual sal_Bool SAL_CALL getGroupControl(  ) override;
+    virtual bool SAL_CALL getGroupControl(  ) override;
 private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;

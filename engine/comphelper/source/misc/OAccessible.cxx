@@ -203,7 +203,7 @@ Reference<XAccessibleContext> OAccessible::implGetParentContext()
     return xParentContext;
 }
 
-sal_Bool SAL_CALL OAccessible::containsPoint(const awt::Point& _rPoint)
+bool SAL_CALL OAccessible::containsPoint(const awt::Point& _rPoint)
 {
     OExternalLockGuard aGuard( this );
     awt::Rectangle aBounds( implGetBounds() );

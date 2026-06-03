@@ -569,7 +569,7 @@ void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
     // if edit line is empty (caused by document switching) -> string is empty
     // -> don't delete old formula
     if ( aStrItem.GetValue().isEmpty() )
-        aRetItem.SetValue( false );     // sal_False = Cancel
+        aRetItem.SetValue( false );     // false = Cancel
 
     m_aHelper.SetDispatcherLock( false ); // turn off modal-mode
 

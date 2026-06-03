@@ -73,7 +73,7 @@ public:
 
     /** Sets the ReferencePageSize according to the internal settings of this
         class at the XPropertySet, and the adapted font sizes if bAdaptFontSizes
-        is </sal_True>.
+        is </true>.
      */
     void setValuesAtPropertySet(
         const css::uno::Reference< css::beans::XPropertySet > & xProp,

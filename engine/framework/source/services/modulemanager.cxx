@@ -70,7 +70,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
         OUString const & ServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -88,12 +88,12 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-    virtual sal_Bool SAL_CALL hasByName(const OUString& sName) override;
+    virtual bool SAL_CALL hasByName(const OUString& sName) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
 
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XContainerQuery
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery) override;
@@ -142,7 +142,7 @@ OUString ModuleManager::getImplementationName()
     return u"com.sun.star.comp.framework.ModuleManager"_ustr;
 }
 
-sal_Bool ModuleManager::supportsService(OUString const & ServiceName)
+bool ModuleManager::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -275,7 +275,7 @@ css::uno::Sequence< OUString > SAL_CALL ModuleManager::getElementNames()
     return m_xCFG ? m_xCFG->getElementNames() : css::uno::Sequence<OUString>();
 }
 
-sal_Bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
+bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
 {
     return m_xCFG && m_xCFG->hasByName(sName);
 }
@@ -285,7 +285,7 @@ css::uno::Type SAL_CALL ModuleManager::getElementType()
     return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
 }
 
-sal_Bool SAL_CALL ModuleManager::hasElements()
+bool SAL_CALL ModuleManager::hasElements()
 {
     return m_xCFG && m_xCFG->hasElements();
 }

@@ -167,7 +167,7 @@ OUString OResultSet::getImplementationName(  )
     return u"com.sun.star.sdb.OResultSet"_ustr;
 }
 
-sal_Bool OResultSet::supportsService( const OUString& _rServiceName )
+bool OResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -205,7 +205,7 @@ Reference< XPropertySetInfo > OResultSet::getPropertySetInfo()
     return *getArrayHelper();
 }
 
-sal_Bool OResultSet::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+bool OResultSet::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
     // be lazy ...
     rConvertedValue = rValue;
@@ -379,7 +379,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
 }
 
 // css::sdbc::XRow
-sal_Bool OResultSet::wasNull()
+bool OResultSet::wasNull()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -395,7 +395,7 @@ OUString OResultSet::getString(sal_Int32 columnIndex)
     return m_xDelegatorRow->getString(columnIndex);
 }
 
-sal_Bool OResultSet::getBoolean(sal_Int32 columnIndex)
+bool OResultSet::getBoolean(sal_Int32 columnIndex)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -550,7 +550,7 @@ void OResultSet::updateNull(sal_Int32 columnIndex)
     m_xDelegatorRowUpdate->updateNull(columnIndex);
 }
 
-void OResultSet::updateBoolean(sal_Int32 columnIndex, sal_Bool x)
+void OResultSet::updateBoolean(sal_Int32 columnIndex, bool x)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -711,7 +711,7 @@ void OResultSet::updateObject(sal_Int32 columnIndex, const Any& x)
 }
 
 // css::sdbc::XResultSet
-sal_Bool OResultSet::next()
+bool OResultSet::next()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -719,7 +719,7 @@ sal_Bool OResultSet::next()
     return m_xDelegatorResultSet->next();
 }
 
-sal_Bool OResultSet::isBeforeFirst()
+bool OResultSet::isBeforeFirst()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -727,7 +727,7 @@ sal_Bool OResultSet::isBeforeFirst()
     return m_xDelegatorResultSet->isBeforeFirst();
 }
 
-sal_Bool OResultSet::isAfterLast()
+bool OResultSet::isAfterLast()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -735,7 +735,7 @@ sal_Bool OResultSet::isAfterLast()
     return m_xDelegatorResultSet->isAfterLast();
 }
 
-sal_Bool OResultSet::isFirst()
+bool OResultSet::isFirst()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -743,7 +743,7 @@ sal_Bool OResultSet::isFirst()
     return m_xDelegatorResultSet->isFirst();
 }
 
-sal_Bool OResultSet::isLast()
+bool OResultSet::isLast()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -767,7 +767,7 @@ void OResultSet::afterLast()
     m_xDelegatorResultSet->afterLast();
 }
 
-sal_Bool OResultSet::first()
+bool OResultSet::first()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -775,7 +775,7 @@ sal_Bool OResultSet::first()
     return m_xDelegatorResultSet->first();
 }
 
-sal_Bool OResultSet::last()
+bool OResultSet::last()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -791,7 +791,7 @@ sal_Int32 OResultSet::getRow()
     return m_xDelegatorResultSet->getRow();
 }
 
-sal_Bool OResultSet::absolute(sal_Int32 row)
+bool OResultSet::absolute(sal_Int32 row)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -799,7 +799,7 @@ sal_Bool OResultSet::absolute(sal_Int32 row)
     return m_xDelegatorResultSet->absolute(row);
 }
 
-sal_Bool OResultSet::relative(sal_Int32 rows)
+bool OResultSet::relative(sal_Int32 rows)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -807,7 +807,7 @@ sal_Bool OResultSet::relative(sal_Int32 rows)
     return m_xDelegatorResultSet->relative(rows);
 }
 
-sal_Bool OResultSet::previous()
+bool OResultSet::previous()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -823,7 +823,7 @@ void OResultSet::refreshRow()
     m_xDelegatorResultSet->refreshRow();
 }
 
-sal_Bool OResultSet::rowUpdated()
+bool OResultSet::rowUpdated()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -831,7 +831,7 @@ sal_Bool OResultSet::rowUpdated()
     return m_xDelegatorResultSet->rowUpdated();
 }
 
-sal_Bool OResultSet::rowInserted()
+bool OResultSet::rowInserted()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -839,7 +839,7 @@ sal_Bool OResultSet::rowInserted()
     return m_xDelegatorResultSet->rowInserted();
 }
 
-sal_Bool OResultSet::rowDeleted()
+bool OResultSet::rowDeleted()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -866,7 +866,7 @@ Any OResultSet::getBookmark()
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->getBookmark();
 }
 
-sal_Bool OResultSet::moveToBookmark(const Any& bookmark)
+bool OResultSet::moveToBookmark(const Any& bookmark)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -876,7 +876,7 @@ sal_Bool OResultSet::moveToBookmark(const Any& bookmark)
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->moveToBookmark(bookmark);
 }
 
-sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
+bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -896,7 +896,7 @@ sal_Int32 OResultSet::compareBookmarks(const Any& _first, const Any& _second)
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->compareBookmarks(_first, _second);
 }
 
-sal_Bool OResultSet::hasOrderedBookmarks()
+bool OResultSet::hasOrderedBookmarks()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);

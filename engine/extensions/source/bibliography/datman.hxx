@@ -111,7 +111,7 @@ public:
         virtual void SAL_CALL load(  ) override;
         virtual void SAL_CALL unload(  ) override;
         virtual void SAL_CALL reload(  ) override;
-        virtual sal_Bool SAL_CALL isLoaded(  ) override;
+        virtual bool SAL_CALL isLoaded(  ) override;
         virtual void SAL_CALL addLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
         virtual void SAL_CALL removeLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
 

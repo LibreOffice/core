@@ -126,7 +126,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
 
 // XServiceInfo
 
-sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
+bool SAL_CALL AccessibleGridControlBase::supportsService(
         const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);

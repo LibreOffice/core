@@ -1740,7 +1740,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
     //  MouseEvent buttons must only be checked if bAction==TRUE
     //  to allow changing the mouse pointer in MouseMove,
     //  but not start AutoFill with right button (#74229#).
-    //  with bAction==sal_True, SetFillMode / SetDragMode is called
+    //  with bAction==true, SetFillMode / SetDragMode is called
 
     if ( bAction && !rMEvt.IsLeft() )
         return false;
@@ -2836,7 +2836,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             //      Gridwin - SelectionEngine
 
     //  SelMouseButtonDown is called only for left button, but SelMouseButtonUp would return
-    //  sal_True for any call, so IsLeft must be checked here, too.
+    //  true for any call, so IsLeft must be checked here, too.
 
     if ( !(rMEvt.IsLeft() && mrViewData.GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt )) )
         return;
@@ -4511,7 +4511,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                     // Simple check for protection: It's not known here if the drop will result
                     // in cells or drawing objects (some formats can be both) and how many cells
                     // the result will be. But if IsFormatEditable for the drop cell position
-                    // is sal_False (ignores matrix formulas), nothing can be pasted, so the drop
+                    // is false (ignores matrix formulas), nothing can be pasted, so the drop
                     // can already be rejected here.
 
                     Point aPos = rEvt.maPosPixel;
@@ -4783,7 +4783,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 bDone = true;
                 if ( meDragInsertMode != INS_NONE )
                 {
-                    // call with bApi = sal_True to avoid error messages in drop handler
+                    // call with bApi = true to avoid error messages in drop handler
                     bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                     if ( bDone )
                     {
@@ -4836,7 +4836,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     if ( ( eCmd == DelCellCmd::CellsUp  && nDestPosX == aSource.aStart.Col() ) ||
                          ( eCmd == DelCellCmd::CellsLeft && nDestPosY == aSource.aStart.Row() ) )
                     {
-                        // call with bApi = sal_True to avoid error messages in drop handler
+                        // call with bApi = true to avoid error messages in drop handler
                         bDone = pDocSh->GetDocFunc().DeleteCells( aSource, nullptr, eCmd, true /*bApi*/ );
                         if ( bDone )
                         {
@@ -4934,7 +4934,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 bDone = true;
                 if ( meDragInsertMode != INS_NONE )
                 {
-                    // call with bApi = sal_True to avoid error messages in drop handler
+                    // call with bApi = true to avoid error messages in drop handler
                     bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                     if ( bDone )
                     {
@@ -4994,7 +4994,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             bDone = true;
             if ( meDragInsertMode != INS_NONE )
             {
-                // call with bApi = sal_True to avoid error messages in drop handler
+                // call with bApi = true to avoid error messages in drop handler
                 bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                 if ( bDone )
                 {
@@ -5241,7 +5241,7 @@ void ScGridWindow::UpdateEditViewPos()
     }
     else
     {
-        // bForceToTop = sal_True for editing
+        // bForceToTop = true for editing
         tools::Rectangle aPixRect = mrViewData.GetEditArea( eWhich, nCol, nRow, this, nullptr, true );
 
         if (comphelper::COKit::isActive() &&
@@ -6084,7 +6084,7 @@ bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl
         *pnCol = nPosX;
 
     const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
-    // bForceToTop = sal_False, use the cell's real position
+    // bForceToTop = false, use the cell's real position
     tools::Rectangle aEditRect = mrViewData.GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
     if (rPos.Y() < aEditRect.Top())
         return false;

@@ -151,7 +151,7 @@ Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getChara
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getBool();
 }
@@ -274,7 +274,7 @@ css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast()
+bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast()
 {
     return m_bEOF;
 }
@@ -284,12 +284,12 @@ bool ODatabaseMetaDataResultSet::isAfterLast( std::unique_lock<std::mutex>& /*rG
     return m_bEOF;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
@@ -314,27 +314,27 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  )
     dispose();
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ )
+bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ )
+bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
@@ -344,22 +344,22 @@ Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  )
     return nullptr;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst()
+bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst()
 {
     return m_bBOF;
 }
@@ -369,7 +369,7 @@ bool ODatabaseMetaDataResultSet::isBeforeFirst(std::unique_lock<std::mutex>& /*r
     return m_bBOF;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
 {
     std::unique_lock aGuard( m_aMutex );
     return next(aGuard);
@@ -403,7 +403,7 @@ bool ODatabaseMetaDataResultSet::next( std::unique_lock<std::mutex>& rGuard )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
+bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
 {
     std::unique_lock aGuard( m_aMutex );
     throwIfDisposed(aGuard);
@@ -750,7 +750,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
         return u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr;
     }
 
-    sal_Bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }

@@ -672,7 +672,7 @@ public:
         : mxContext(std::move(context)), maURL(std::move(url)) {}
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
-    virtual sal_Bool SAL_CALL hasElements() override { return true; }
+    virtual bool SAL_CALL hasElements() override { return true; }
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
@@ -683,7 +683,7 @@ public:
     {
         return {};
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         osl::File aBaseFile(maURL + "/" + aName);
         return osl::File::E_None == aBaseFile.open(osl_File_OpenFlag_Read);

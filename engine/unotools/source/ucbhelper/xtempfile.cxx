@@ -54,7 +54,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 
 //  XTempFile
 
-sal_Bool SAL_CALL OTempFileService::getRemoveFile()
+bool SAL_CALL OTempFileService::getRemoveFile()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -66,7 +66,7 @@ sal_Bool SAL_CALL OTempFileService::getRemoveFile()
 
     return mbRemoveFile;
 };
-void SAL_CALL OTempFileService::setRemoveFile( sal_Bool _removefile )
+void SAL_CALL OTempFileService::setRemoveFile( bool _removefile )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -426,7 +426,7 @@ void OTempFileService::setPropertyValues( const ::css::uno::Sequence< ::css::bea
 }
 
 //  XServiceInfo
-sal_Bool OTempFileService::supportsService(const OUString& sServiceName)
+bool OTempFileService::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

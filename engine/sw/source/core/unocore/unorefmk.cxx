@@ -143,7 +143,7 @@ OUString SAL_CALL SwXReferenceMark::getImplementationName()
     return u"SwXReferenceMark"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXReferenceMark::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -805,7 +805,7 @@ SwXMeta::getImplementationName()
     return u"SwXMeta"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXMeta::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -1045,7 +1045,7 @@ SwXMeta::createTextCursorByRange(
 
 void SAL_CALL
 SwXMeta::insertString(const uno::Reference<text::XTextRange> & xRange,
-        const OUString& rString, sal_Bool bAbsorb)
+        const OUString& rString, bool bAbsorb)
 {
     SolarMutexGuard g;
     return m_pImpl->m_xText->insertString(xRange, rString, bAbsorb);
@@ -1053,7 +1053,7 @@ SwXMeta::insertString(const uno::Reference<text::XTextRange> & xRange,
 
 void SAL_CALL
 SwXMeta::insertControlCharacter(const uno::Reference<text::XTextRange> & xRange,
-        sal_Int16 nControlCharacter, sal_Bool bAbsorb)
+        sal_Int16 nControlCharacter, bool bAbsorb)
 {
     SolarMutexGuard g;
     return m_pImpl->m_xText->insertControlCharacter(xRange, nControlCharacter,
@@ -1063,7 +1063,7 @@ SwXMeta::insertControlCharacter(const uno::Reference<text::XTextRange> & xRange,
 // XText
 void SAL_CALL
 SwXMeta::insertTextContent( const uno::Reference<text::XTextRange> & xRange,
-        const uno::Reference<text::XTextContent> & xContent, sal_Bool bAbsorb)
+        const uno::Reference<text::XTextContent> & xContent, bool bAbsorb)
 {
     SolarMutexGuard g;
     return m_pImpl->m_xText->insertTextContent(xRange, xContent, bAbsorb);
@@ -1110,7 +1110,7 @@ SwXMeta::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SwXMeta::hasElements()
+bool SAL_CALL SwXMeta::hasElements()
 {
     SolarMutexGuard g;
     return m_pImpl->m_pMeta != nullptr;
@@ -1204,7 +1204,7 @@ SwXMetaField::getImplementationName()
     return u"SwXMetaField"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXMetaField::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -1444,7 +1444,7 @@ getPrefixAndSuffix(
 
 // XTextField
 OUString SAL_CALL
-SwXMetaField::getPresentation(sal_Bool bShowCommand)
+SwXMetaField::getPresentation(bool bShowCommand)
 {
     SolarMutexGuard g;
 

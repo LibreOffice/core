@@ -290,8 +290,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150267)
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
-        CPPUNIT_ASSERT_EQUAL(sal_True, xTextFieldMasters->hasByName(
-                                           u"com.sun.star.text.fieldmaster.User.Unused"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            true, xTextFieldMasters->hasByName(u"com.sun.star.text.fieldmaster.User.Unused"_ustr));
 
         auto xFieldMaster
             = xTextFieldMasters->getByName(u"com.sun.star.text.fieldmaster.User.Unused"_ustr);
@@ -315,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151370)
             u"com.sun.star.text.fieldmaster.User."
             "LocalChars\u00c1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0054"
             "\u00fc\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"_ustr);
-        CPPUNIT_ASSERT_EQUAL(sal_True, xTextFieldMasters->hasByName(sFieldName));
+        CPPUNIT_ASSERT_EQUAL(true, xTextFieldMasters->hasByName(sFieldName));
 
         auto xFieldMaster = xTextFieldMasters->getByName(sFieldName);
         CPPUNIT_ASSERT_EQUAL(u"\u00e1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0074\u00fc"

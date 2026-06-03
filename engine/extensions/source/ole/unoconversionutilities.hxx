@@ -324,7 +324,7 @@ Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFacto
 }
 
 template<class T>
-void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny, const Type& ptype, bool bReduceValueRange /* = sal_True */)
+void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny, const Type& ptype, bool bReduceValueRange /* = true */)
 {
     try
     {
@@ -1040,7 +1040,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
 
 // Creates an SAFEARRAY of the specified element and if necessary
 // creates a SAFEARRAY with multiple dimensions.
-// Used by sal_Bool anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type);
+// Used by bool anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type);
 template<class T>
 SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq, VARTYPE elemtype)
 {
@@ -1187,7 +1187,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
 // False is also returned if an overflow of the most significant dimension occurs. E.g.
 // assume an array with the dimensions (2,2), then the lowest index is (0,0) and the highest
 // index is (1,1). If the function is being called with the index (1,1) then the overflow would
-// occur, with the result (0,0) and a sal_False as return value.
+// occur, with the result (0,0) and a false as return value.
 // Param dimensions - number of dimensions
 // Param parDimensionsLength - The array contains the size of each dimension, that is the
 //                              size of the array equals the parameter dimensions.
@@ -1218,7 +1218,7 @@ bool UnoConversionUtilities<T>::incrementMultidimensionalIndex(sal_Int32 dimensi
 
         currentDimension --;
         // if dimensions drops below 1 and carry is set than then all indices are 0 again
-        // this is signalled by returning sal_False
+        // this is signalled by returning false
         if( currentDimension < 1 && carry)
         {
             carry= false;
@@ -1481,7 +1481,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
 
 template<class T>
 void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny,
-                                                  bool bReduceValueRange /* = sal_True */)
+                                                  bool bReduceValueRange /* = true */)
 {
     HRESULT hr = S_OK;
     try

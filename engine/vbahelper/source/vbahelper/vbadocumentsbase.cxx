@@ -80,7 +80,7 @@ public:
         m_it = m_documents.begin();
     }
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return m_it != m_documents.end();
     }
@@ -161,7 +161,7 @@ public:
         return cppu::UnoType<frame::XModel>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return (!m_documents.empty());
     }
@@ -181,7 +181,7 @@ public:
         return comphelper::mapKeysToSequence( namesToIndices );
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());

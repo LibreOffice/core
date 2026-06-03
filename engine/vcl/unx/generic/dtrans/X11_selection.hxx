@@ -77,7 +77,7 @@ namespace x11 {
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() override;
     };
@@ -97,14 +97,14 @@ namespace x11 {
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() override;
 
         void initialize();
 
         // XDragSource
-        virtual sal_Bool    SAL_CALL isDragImageSupported() override;
+        virtual bool    SAL_CALL isDragImageSupported() override;
         virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) override;
         virtual void        SAL_CALL startDrag(
             const css::datatransfer::dnd::DragGestureEvent& trigger,
@@ -424,7 +424,7 @@ namespace x11 {
         void shutdown() noexcept override;
 
         // XDragSource
-        virtual sal_Bool    SAL_CALL isDragImageSupported() override;
+        virtual bool    SAL_CALL isDragImageSupported() override;
         virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) override;
         virtual void        SAL_CALL startDrag(
             const css::datatransfer::dnd::DragGestureEvent& trigger,

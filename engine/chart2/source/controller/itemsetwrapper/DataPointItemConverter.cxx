@@ -331,7 +331,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             chart2::DataPointLabel aLabel;
             if( aOldValue >>= aLabel )
             {
-                sal_Bool& rValue = (nWhichId==SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
+                bool& rValue = (nWhichId==SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
                     (nWhichId==SCHATTR_DATADESCR_SHOW_PERCENTAGE) ? aLabel.ShowNumberInPercent : (
                     (nWhichId==SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : (
                     (nWhichId==SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME) ? aLabel.ShowSeriesName : aLabel.ShowLegendSymbol )));

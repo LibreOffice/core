@@ -131,7 +131,7 @@ namespace toolkit
 
     virtual css::uno::Type SAL_CALL getElementType() override;
 
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     };
 
@@ -152,7 +152,7 @@ namespace toolkit
     void SAL_CALL   dispose(  ) override;
 
 
-    sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 
     void SAL_CALL elementInserted( const css::container::ContainerEvent& rEvent ) override;
     void SAL_CALL elementRemoved( const css::container::ContainerEvent& rEvent ) override;

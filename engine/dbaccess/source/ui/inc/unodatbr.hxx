@@ -97,7 +97,7 @@ namespace dbaui
         ImplSVEvent *           m_nAsyncDrop;
 
         bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
-        bool                m_bShowMenu;            // if sal_True the menu should be visible otherwise not
+        bool                m_bShowMenu;            // if true the menu should be visible otherwise not
         bool                m_bInSuspend;
         bool                m_bEnableBrowser;
         ::std::optional< bool >
@@ -141,7 +141,7 @@ namespace dbaui
         virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) override;
+        virtual bool SAL_CALL suspend(bool bSuspend) override;
         virtual void SAL_CALL attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) override;
 
         // css::lang::XComponent
@@ -154,7 +154,7 @@ namespace dbaui
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XSelectionSupplier
-        virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) override;
+        virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
         virtual css::uno::Any SAL_CALL getSelection(  ) override;
         virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
         virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;

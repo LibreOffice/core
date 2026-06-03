@@ -261,7 +261,7 @@ bool SdrCreateView::CheckEdgeMode()
     }
     else
     {
-        // sal_True, if MouseMove should check Connect
+        // true, if MouseMove should check Connect
         return !IsAction();
     }
 }
@@ -474,7 +474,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
                 mpDragWin=pOut;
                 if (mpCurrentCreate->BegCreate(maDragStat))
                 {
-                    ShowCreateObj(/*pOut,sal_True*/);
+                    ShowCreateObj(/*pOut,true*/);
                     bRet=true;
                 }
                 else
@@ -594,7 +594,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
         if (nCount<=1 && eCmd==SdrCreateCmd::ForceEnd)
         {
             BrkCreateObj(); // objects with only a single point don't exist (at least today)
-            return false; // sal_False = event not interpreted
+            return false; // false = event not interpreted
         }
 
         bool bPntsEq=nCount>1;
@@ -662,7 +662,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 }
 
                 mpCreatePV = nullptr;
-                bRet=true; // sal_True = event interpreted
+                bRet=true; // true = event interpreted
             }
             else
             {
@@ -724,7 +724,7 @@ void SdrCreateView::BrkCreateObj()
     }
 }
 
-void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
+void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, bool bFull*/)
 {
     if(!IsCreateObj() || maDragStat.IsShown())
         return;

@@ -195,8 +195,8 @@ void ODBTable::construct()
     registerProperty(PROPERTY_FONTUNDERLINE,    PROPERTY_ID_FONTUNDERLINE,   PropertyAttribute::BOUND,&m_aFont.Underline, cppu::UnoType<sal_Int16>::get());
     registerProperty(PROPERTY_FONTSTRIKEOUT,    PROPERTY_ID_FONTSTRIKEOUT,   PropertyAttribute::BOUND,&m_aFont.Strikeout, cppu::UnoType<sal_Int16>::get());
     registerProperty(PROPERTY_FONTORIENTATION,  PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&m_aFont.Orientation, cppu::UnoType<float>::get());
-    registerProperty(PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,     PropertyAttribute::BOUND,&m_aFont.Kerning, cppu::UnoType<sal_Bool>::get());
-    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&m_aFont.WordLineMode, cppu::UnoType<sal_Bool>::get());
+    registerProperty(PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,     PropertyAttribute::BOUND,&m_aFont.Kerning, cppu::UnoType<bool>::get());
+    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&m_aFont.WordLineMode, cppu::UnoType<bool>::get());
     registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&m_aFont.Type, cppu::UnoType<sal_Int16>::get());
 
     refreshColumns();
@@ -234,7 +234,7 @@ OUString SAL_CALL ODBTable::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.ODBTable"_ustr;
     }
-sal_Bool SAL_CALL ODBTable::supportsService(const OUString& _rServiceName)
+bool SAL_CALL ODBTable::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

@@ -142,7 +142,7 @@ Type SAL_CALL RootActionTriggerContainer::getElementType()
     return cppu::UnoType<XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL RootActionTriggerContainer::hasElements()
+bool SAL_CALL RootActionTriggerContainer::hasElements()
 {
     if (m_xMenu)
         return m_xMenu->getItemCount() > 0;
@@ -155,7 +155,7 @@ OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
     return IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER;
 }
 
-sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& ServiceName )
+bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -381,7 +381,7 @@ void SAL_CALL MacabCommonStatement::close(  )
     dispose();
 }
 
-sal_Bool SAL_CALL MacabCommonStatement::execute(
+bool SAL_CALL MacabCommonStatement::execute(
         const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -559,7 +559,7 @@ void SAL_CALL MacabCommonStatement::clearWarnings(  )
     return *getArrayHelper();
 }
 
-sal_Bool MacabCommonStatement::convertFastPropertyValue(
+bool MacabCommonStatement::convertFastPropertyValue(
         Any &,
         Any &,
         sal_Int32,

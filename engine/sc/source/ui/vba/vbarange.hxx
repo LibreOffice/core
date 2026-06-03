@@ -256,7 +256,7 @@ public:
     /// @throws css::uno::RuntimeException
     static css::uno::Any getCellRange( const css::uno::Reference< ov::excel::XRange >& rxRange );
     virtual void SAL_CALL PasteSpecial( const css::uno::Any& Paste, const css::uno::Any& Operation, const css::uno::Any& SkipBlanks, const css::uno::Any& Transpose ) override;
-    virtual sal_Bool SAL_CALL Replace( const OUString& What, const OUString& Replacement, const css::uno::Any& LookAt, const css::uno::Any& SearchOrder, const css::uno::Any& MatchCase, const css::uno::Any& MatchByte, const css::uno::Any& SearchFormat, const css::uno::Any& ReplaceFormat ) override;
+    virtual bool SAL_CALL Replace( const OUString& What, const OUString& Replacement, const css::uno::Any& LookAt, const css::uno::Any& SearchOrder, const css::uno::Any& MatchCase, const css::uno::Any& MatchByte, const css::uno::Any& SearchFormat, const css::uno::Any& ReplaceFormat ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Find( const css::uno::Any& What, const css::uno::Any& After, const css::uno::Any& LookIn, const css::uno::Any& LookAt, const css::uno::Any& SearchOrder, const css::uno::Any& SearchDirection, const css::uno::Any& MatchCase, const css::uno::Any& MatchByte, const css::uno::Any& SearchFormat ) override;
     virtual void SAL_CALL Sort( const css::uno::Any& Key1, const css::uno::Any& Order1, const css::uno::Any& Key2, const css::uno::Any& Type, const css::uno::Any& Order2, const css::uno::Any& Key3, const css::uno::Any& Order3, const css::uno::Any& Header, const css::uno::Any& OrderCustom, const css::uno::Any& MatchCase, const css::uno::Any& Orientation, const css::uno::Any& SortMethod,  const css::uno::Any& DataOption1, const css::uno::Any& DataOption2, const css::uno::Any& DataOption3 ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL End( ::sal_Int32 Direction ) override;
@@ -300,7 +300,7 @@ public:
         return cppu::UnoType<ov::excel::XRange>::get();
 
     }
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
     // XDefaultMethod
     OUString SAL_CALL getDefaultMethodName(  ) override;
         // XDefaultProperty
@@ -316,10 +316,10 @@ public:
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< ov::excel::XRange > ApplicationRange( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 );
     static bool getCellRangesForAddress(ScRefFlags &rResFlags, std::u16string_view sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention eConv, char cDelimiter );
-    virtual sal_Bool SAL_CALL GoalSeek( const css::uno::Any& Goal, const css::uno::Reference< ov::excel::XRange >& ChangingCell ) override;
+    virtual bool SAL_CALL GoalSeek( const css::uno::Any& Goal, const css::uno::Reference< ov::excel::XRange >& ChangingCell ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL SpecialCells( const css::uno::Any& _oType, const css::uno::Any& _oValue) override;
     // XErrorQuery
-    virtual sal_Bool SAL_CALL hasError(  ) override;
+    virtual bool SAL_CALL hasError(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

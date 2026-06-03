@@ -56,11 +56,11 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetShapeMap()
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
         { SC_UNONAME_ANCHOR, 0, cppu::UnoType<uno::XInterface>::get(), 0, 0 },
-        { SC_UNONAME_RESIZE_WITH_CELL, 0, cppu::UnoType<sal_Bool>::get(), 0, 0 },
+        { SC_UNONAME_RESIZE_WITH_CELL, 0, cppu::UnoType<bool>::get(), 0, 0 },
         { SC_UNONAME_HORIPOS, 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         { SC_UNONAME_IMAGEMAP, 0, cppu::UnoType<container::XIndexContainer>::get(), 0, 0 },
         { SC_UNONAME_VERTPOS, 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
-        { SC_UNONAME_MOVEPROTECT, 0, cppu::UnoType<sal_Bool>::get(), 0, 0 },
+        { SC_UNONAME_MOVEPROTECT, 0, cppu::UnoType<bool>::get(), 0, 0 },
         { SC_UNONAME_HYPERLINK, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNONAME_URL, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNONAME_STYLE, 0, cppu::UnoType<style::XStyle>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -1173,7 +1173,7 @@ static void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet
 
 void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRange>& xRange,
                                                 const uno::Reference<text::XTextContent>& xContent,
-                                                sal_Bool bAbsorb )
+                                                bool bAbsorb )
 {
     SolarMutexGuard aGuard;
 
@@ -1253,7 +1253,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursorByRange(
 }
 
 void SAL_CALL ScShapeObj::insertString( const uno::Reference<text::XTextRange>& xRange,
-                                        const OUString& aString, sal_Bool bAbsorb )
+                                        const OUString& aString, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
 
@@ -1265,7 +1265,7 @@ void SAL_CALL ScShapeObj::insertString( const uno::Reference<text::XTextRange>& 
 }
 
 void SAL_CALL ScShapeObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
-                                                sal_Int16 nControlCharacter, sal_Bool bAbsorb )
+                                                sal_Int16 nControlCharacter, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
 
@@ -1475,7 +1475,7 @@ public:
         return aSeq;
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         return aName == SC_EVENTACC_ONCLICK;
     }
@@ -1486,7 +1486,7 @@ public:
         return cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
     {
         // elements are always present (but contained property sequences may be empty)
         return true;
@@ -1504,7 +1504,7 @@ OUString SAL_CALL ScShapeObj::getImplementationName(  )
     return u"com.sun.star.comp.sc.ScShapeObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScShapeObj::supportsService( const OUString& ServiceName )
+bool SAL_CALL ScShapeObj::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

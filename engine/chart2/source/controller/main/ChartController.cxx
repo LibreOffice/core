@@ -183,7 +183,7 @@ void ChartController::TheModel::tryTermination()
         {
             try
             {
-                //@todo ? are we allowed to use sal_True here if we have the explicit ownership?
+                //@todo ? are we allowed to use true here if we have the explicit ownership?
                 //I think yes, because there might be other CloseListeners later in the list which might be interested still
                 //but make sure that we do not throw the CloseVetoException here ourselves
                 //so stop listening before trying to terminate or check the source of queryclosing event
@@ -520,7 +520,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     }
 }
 
-sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XModel > & xModel )
+bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XModel > & xModel )
 {
     impl_invalidateAccessible();
 
@@ -669,7 +669,7 @@ void SAL_CALL ChartController::restoreViewData(
     //// @todo integrate specialized implementation
 }
 
-sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
+bool SAL_CALL ChartController::suspend( bool bSuspend )
 {
     //is called to prepare the controller for closing the view
     //bSuspend==true: force the controller to suspend his work
@@ -887,7 +887,7 @@ void SAL_CALL ChartController::removeEventListener(
 // util::XCloseListener
 void SAL_CALL ChartController::queryClosing(
     const lang::EventObject& rSource,
-    sal_Bool /*bGetsOwnership*/ )
+    bool /*bGetsOwnership*/ )
 {
     //do not use the m_aControllerMutex here because this call is not allowed to block
 

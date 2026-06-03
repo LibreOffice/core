@@ -54,7 +54,7 @@ OEnumerationByName::~OEnumerationByName()
 }
 
 
-sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  )
+bool SAL_CALL OEnumerationByName::hasMoreElements(  )
 {
     std::lock_guard aLock(m_aLock);
 
@@ -165,7 +165,7 @@ OEnumerationByIndex::~OEnumerationByIndex()
 }
 
 
-sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  )
+bool SAL_CALL OEnumerationByIndex::hasMoreElements(  )
 {
     std::lock_guard aLock(m_aLock);
 
@@ -254,7 +254,7 @@ OAnyEnumeration::~OAnyEnumeration()
 }
 
 
-sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  )
+bool SAL_CALL OAnyEnumeration::hasMoreElements(  )
 {
     std::lock_guard aLock(m_aLock);
 

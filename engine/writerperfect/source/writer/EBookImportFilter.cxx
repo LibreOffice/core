@@ -97,7 +97,7 @@ OUString SAL_CALL EBookImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Writer.EBookImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL EBookImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL EBookImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

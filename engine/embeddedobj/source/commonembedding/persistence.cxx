@@ -1443,7 +1443,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
+void SAL_CALL OCommonEmbeddedObject::saveCompleted( bool bUseNew )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1518,7 +1518,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 }
 
 
-sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
+bool SAL_CALL OCommonEmbeddedObject::hasEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1647,7 +1647,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 }
 
 
-sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
+bool SAL_CALL OCommonEmbeddedObject::isReadonly()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1784,7 +1784,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     m_xObjectStorage = m_xParentStorage->openStorageElement( m_aEntryName, nStorageMode );
 }
 
-sal_Bool SAL_CALL OCommonEmbeddedObject::isStored()
+bool SAL_CALL OCommonEmbeddedObject::isStored()
 {
     if (!m_xObjectStorage.is())
         return false;
@@ -1878,7 +1878,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
 }
 
 
-sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
+bool SAL_CALL  OCommonEmbeddedObject::isLink()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

@@ -39,7 +39,7 @@ RtfExportFilter::RtfExportFilter(uno::Reference<uno::XComponentContext> xCtx)
 
 RtfExportFilter::~RtfExportFilter() = default;
 
-sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
+bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
 {
     comphelper::SequenceAsHashMap aMediaDesc = aDescriptor;
     uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(
@@ -102,7 +102,7 @@ OUString RtfExportFilter::getImplementationName()
     return u"com.sun.star.comp.Writer.RtfExport"_ustr;
 }
 
-sal_Bool RtfExportFilter::supportsService(OUString const& ServiceName)
+bool RtfExportFilter::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

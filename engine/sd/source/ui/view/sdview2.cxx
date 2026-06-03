@@ -895,7 +895,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
 
         /* In order t ensure unique page names, we test the ones we want to
            insert. If necessary. we put them into and replacement list (bNameOK
-           == sal_False -> User canceled).  */
+           == false -> User canceled).  */
         bool    bLink = pPageObjsTransferable->GetDragType() == NAVIGATOR_DRAGTYPE_LINK;
         bool    bNameOK = GetExchangeList( aExchangeList, aBookmarkList, 2 );
 

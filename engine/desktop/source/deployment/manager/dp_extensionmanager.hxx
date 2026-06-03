@@ -52,7 +52,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 //    XModifyBroadcaster
@@ -123,11 +123,11 @@ public:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void SAL_CALL reinstallDeployedExtensions(
-        sal_Bool force, OUString const & repository,
+        bool force, OUString const & repository,
         css::uno::Reference< css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual sal_Bool SAL_CALL synchronize(
+    virtual bool SAL_CALL synchronize(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
@@ -136,7 +136,7 @@ public:
         OUString const & repository,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
 
-    virtual sal_Bool SAL_CALL isReadOnlyRepository(OUString const & repository) override;
+    virtual bool SAL_CALL isReadOnlyRepository(OUString const & repository) override;
 
 private:
 

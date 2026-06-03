@@ -203,7 +203,7 @@ void PersistentMap::readAll()
         // insert key-value pair into map
         add( aKeyName, aValName );
         // check end-of-file status
-        sal_Bool bIsEOF = true;
+        bool bIsEOF = true;
         if( m_MapFile.isEndOfFile( &bIsEOF) != osl::File::E_None )
             return;
         if( bIsEOF )

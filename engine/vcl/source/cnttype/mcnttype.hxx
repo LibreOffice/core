@@ -41,7 +41,7 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getParameters(  ) override;
 
-    virtual sal_Bool SAL_CALL hasParameter( const OUString& aName ) override;
+    virtual bool SAL_CALL hasParameter( const OUString& aName ) override;
 
     virtual OUString SAL_CALL getParameterValue( const OUString& aName ) override;
 

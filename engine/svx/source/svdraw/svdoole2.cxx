@@ -143,13 +143,13 @@ private:
 
     // XEmbeddedClient
     virtual void SAL_CALL saveObject() override;
-    virtual void SAL_CALL visibilityChanged( sal_Bool bVisible ) override;
+    virtual void SAL_CALL visibilityChanged( bool bVisible ) override;
 
     // XComponentSupplier
     virtual uno::Reference< util::XCloseable > SAL_CALL getComponent() override;
 
     // XInplaceClient
-    virtual sal_Bool SAL_CALL canInplaceActivate() override;
+    virtual bool SAL_CALL canInplaceActivate() override;
     virtual void SAL_CALL activatingInplace() override;
     virtual void SAL_CALL activatingUI() override;
     virtual void SAL_CALL deactivatedInplace() override;
@@ -306,7 +306,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
         xModifiable->setModified( true );
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( sal_Bool /*bVisible*/ )
+void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( bool /*bVisible*/ )
 {
     // nothing to do currently
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
@@ -336,7 +336,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
 }
 // XInplaceClient
 
-sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
+bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
 {
     bool bRet = false;
     SolarMutexGuard aGuard;

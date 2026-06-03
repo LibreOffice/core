@@ -79,7 +79,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     return aFlavorList;
 }
 
-sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
 {
     if( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
     {

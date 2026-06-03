@@ -71,7 +71,7 @@ protected:
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel );
 
     // @@@ to be implemented by specific backend:
-    virtual css::beans::Optional< css::beans::Ambiguous<sal_Bool> >
+    virtual css::beans::Optional< css::beans::Ambiguous<bool> >
     isRegistered_(
         ::osl::ResettableMutexGuard & guard,
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
@@ -115,8 +115,8 @@ public:
         virtual OUString SAL_CALL getDescription() override;
         virtual OUString SAL_CALL getShortDescription() override;
         virtual OUString SAL_CALL getFileFilter() override;
-        virtual css::uno::Any SAL_CALL getIcon( sal_Bool highContrast,
-                                                sal_Bool smallIcon ) override;
+        virtual css::uno::Any SAL_CALL getIcon( bool highContrast,
+                                                bool smallIcon ) override;
     };
 
     // XComponent
@@ -135,7 +135,7 @@ public:
     // XPackage
     virtual css::uno::Reference<css::task::XAbortChannel> SAL_CALL
     createAbortChannel() override;
-    virtual css::beans::Optional< css::beans::Ambiguous<sal_Bool> >
+    virtual css::beans::Optional< css::beans::Ambiguous<bool> >
     SAL_CALL isRegistered(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -143,20 +143,20 @@ public:
     virtual ::sal_Int32 SAL_CALL checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
-        sal_Bool noLicenseChecking) override;
+        bool noLicenseChecking) override;
 
-    virtual ::sal_Bool SAL_CALL checkDependencies(
+    virtual bool SAL_CALL checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv ) override;
 
     virtual void SAL_CALL registerPackage(
-        sal_Bool startup,
+        bool startup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
     virtual void SAL_CALL revokePackage(
-        sal_Bool startup,
+        bool startup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
-    virtual sal_Bool SAL_CALL isBundle() override;
+    virtual bool SAL_CALL isBundle() override;
     virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
     SAL_CALL getBundle(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
@@ -172,7 +172,7 @@ public:
     getUpdateInformationURLs() override;
     virtual css::beans::StringPair SAL_CALL getPublisherInfo() override;
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL
-    getIcon( sal_Bool bHighContrast ) override;
+    getIcon( bool bHighContrast ) override;
     virtual css::uno::Reference<css::deployment::XPackageTypeInfo> SAL_CALL
     getPackageType() override;
     virtual void SAL_CALL exportTo(
@@ -182,7 +182,7 @@ public:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
     virtual OUString SAL_CALL getRepositoryName() override;
     virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL() override;
-    virtual sal_Bool SAL_CALL isRemoved() override;
+    virtual bool SAL_CALL isRemoved() override;
 
 };
 
@@ -271,7 +271,7 @@ public:
     // XPackageRegistry
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL bindPackage(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bRemoved, OUString const & identifier,
+        bool bRemoved, OUString const & identifier,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
 //     virtual void SAL_CALL packageRemoved(

@@ -38,7 +38,7 @@ public:
     }
 
     // container::XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Any SAL_CALL nextElement() override;
 };
 

@@ -128,7 +128,7 @@ OUString SAL_CALL WallFloorWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.WallOrFloor"_ustr;
 }
 
-sal_Bool SAL_CALL WallFloorWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL WallFloorWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

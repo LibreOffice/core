@@ -86,17 +86,17 @@ public:
     virtual ::sal_Int16 SAL_CALL getCount(  ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary > > SAL_CALL getDictionaries(  ) override;
     virtual css::uno::Reference< css::linguistic2::XDictionary > SAL_CALL getDictionaryByName( const OUString& aDictionaryName ) override;
-    virtual sal_Bool SAL_CALL addDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
-    virtual sal_Bool SAL_CALL removeDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
-    virtual sal_Bool SAL_CALL addDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener, sal_Bool bReceiveVerbose ) override;
-    virtual sal_Bool SAL_CALL removeDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener ) override;
+    virtual bool SAL_CALL addDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
+    virtual bool SAL_CALL removeDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
+    virtual bool SAL_CALL addDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener, bool bReceiveVerbose ) override;
+    virtual bool SAL_CALL removeDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener ) override;
     virtual ::sal_Int16 SAL_CALL beginCollectEvents(  ) override;
     virtual ::sal_Int16 SAL_CALL endCollectEvents(  ) override;
     virtual ::sal_Int16 SAL_CALL flushEvents(  ) override;
     virtual css::uno::Reference< css::linguistic2::XDictionary > SAL_CALL createDictionary( const OUString& aName, const css::lang::Locale& aLocale, css::linguistic2::DictionaryType eDicType, const OUString& aURL ) override;
 
     // XSearchableDictionaryList
-    virtual css::uno::Reference< css::linguistic2::XDictionaryEntry > SAL_CALL queryDictionaryEntry( const OUString& aWord, const css::lang::Locale& aLocale, sal_Bool bSearchPosDics, sal_Bool bSpellEntry ) override;
+    virtual css::uno::Reference< css::linguistic2::XDictionaryEntry > SAL_CALL queryDictionaryEntry( const OUString& aWord, const css::lang::Locale& aLocale, bool bSearchPosDics, bool bSpellEntry ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
@@ -105,7 +105,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization

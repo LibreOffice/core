@@ -38,7 +38,7 @@ OUString SAL_CALL FooterMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.FooterMenuController"_ustr;
 }
 
-sal_Bool SAL_CALL FooterMenuController::supportsService( const OUString& sServiceName )
+bool SAL_CALL FooterMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

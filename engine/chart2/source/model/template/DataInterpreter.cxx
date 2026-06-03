@@ -365,7 +365,7 @@ OUString SAL_CALL DataInterpreter::getImplementationName()
     return u"com.sun.star.comp.chart2.DataInterpreter"_ustr;
 }
 
-sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )
+bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

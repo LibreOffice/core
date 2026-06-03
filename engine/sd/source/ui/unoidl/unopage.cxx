@@ -155,7 +155,7 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"DateTimeFormat"_ustr,               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},
         { u"TransitionType"_ustr,               WID_TRANSITION_TYPE, ::cppu::UnoType<sal_Int16>::get(),           0,  0},
         { u"TransitionSubtype"_ustr,            WID_TRANSITION_SUBTYPE, ::cppu::UnoType<sal_Int16>::get(),            0,  0},
-        { u"TransitionDirection"_ustr,          WID_TRANSITION_DIRECTION, ::cppu::UnoType<sal_Bool>::get(),           0,  0},
+        { u"TransitionDirection"_ustr,          WID_TRANSITION_DIRECTION, ::cppu::UnoType<bool>::get(),           0,  0},
         { u"TransitionFadeColor"_ustr,          WID_TRANSITION_FADE_COLOR, ::cppu::UnoType<sal_Int32>::get(),         0,  0},
         { u"" UNO_NAME_PAGE_TRANSITION_DURATION ""_ustr, WID_TRANSITION_DURATION, ::cppu::UnoType<double>::get(),          0,  0},
         { u"LoopSound"_ustr,                    WID_LOOP_SOUND, cppu::UnoType<bool>::get(),                    0, 0},
@@ -1929,7 +1929,7 @@ uno::Type SAL_CALL SdPageLinkTargets::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
+bool SAL_CALL SdPageLinkTargets::hasElements()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2017,7 +2017,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
+bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
 {
     ::SolarMutexGuard aGuard;
 
@@ -2052,7 +2052,7 @@ OUString SAL_CALL SdPageLinkTargets::getImplementationName()
     return u"SdPageLinkTargets"_ustr;
 }
 
-sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -2254,7 +2254,7 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames()
     return comphelper::concatSequences(SdGenericDrawPage::getSupportedServiceNames(), aAdd);
 }
 
-sal_Bool SAL_CALL SdDrawPage::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdDrawPage::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -2442,7 +2442,7 @@ uno::Type SAL_CALL SdDrawPage::getElementType()
     return SdGenericDrawPage::getElementType();
 }
 
-sal_Bool SAL_CALL SdDrawPage::hasElements()
+bool SAL_CALL SdDrawPage::hasElements()
 {
     return SdGenericDrawPage::hasElements();
 }
@@ -2604,7 +2604,7 @@ public:
 
     // XElementAccess
     virtual Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
 private:
     std::vector< Reference< XShape > > maShapes;
@@ -2646,7 +2646,7 @@ Type SAL_CALL SdNavigationOrderAccess::getElementType(  )
     return cppu::UnoType<XShape>::get();
 }
 
-sal_Bool SAL_CALL SdNavigationOrderAccess::hasElements(  )
+bool SAL_CALL SdNavigationOrderAccess::hasElements(  )
 {
     return !maShapes.empty();
 }
@@ -2774,13 +2774,13 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames()
     return comphelper::concatSequences(SdGenericDrawPage::getSupportedServiceNames(), aAdd);
 }
 
-sal_Bool SAL_CALL SdMasterPage::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdMasterPage::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 // XElementAccess
-sal_Bool SAL_CALL SdMasterPage::hasElements()
+bool SAL_CALL SdMasterPage::hasElements()
 {
     ::SolarMutexGuard aGuard;
 

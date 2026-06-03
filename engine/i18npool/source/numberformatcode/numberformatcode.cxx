@@ -243,7 +243,7 @@ NumberFormatCodeMapper::getImplementationName()
     return u"com.sun.star.i18n.NumberFormatCodeMapper"_ustr;
 }
 
-sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
+bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

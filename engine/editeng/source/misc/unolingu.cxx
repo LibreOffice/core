@@ -82,7 +82,7 @@ public:
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XThesaurus
@@ -140,7 +140,7 @@ uno::Sequence< lang::Locale > SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
         ThesDummy_Impl::hasLocale( const lang::Locale& rLocale )
 {
     GetThes_Impl();
@@ -183,10 +183,10 @@ public:
     // XSupportedLocales (for XSpellChecker)
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
                 const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL
@@ -217,7 +217,7 @@ uno::Sequence< css::lang::Locale > SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     SpellDummy_Impl::hasLocale( const css::lang::Locale& nLanguage )
 {
     GetSpell_Impl();
@@ -228,7 +228,7 @@ sal_Bool SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     SpellDummy_Impl::isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
             const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
@@ -269,7 +269,7 @@ public:
     virtual css::uno::Sequence<
             css::lang::Locale > SAL_CALL
         getLocales() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XHyphenator
@@ -316,7 +316,7 @@ uno::Sequence< lang::Locale > SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     HyphDummy_Impl::hasLocale( const lang::Locale& rLocale )
 {
     GetHyph_Impl();

@@ -42,7 +42,7 @@ void SAL_CALL TargetDropContext::rejectDrop()
     m_pDropTarget->_rejectDrop(static_cast<XDropTargetDropContext*>(this));
 }
 
-void SAL_CALL TargetDropContext::dropComplete(sal_Bool success)
+void SAL_CALL TargetDropContext::dropComplete(bool success)
 {
     m_pDropTarget->_dropComplete(success, static_cast<XDropTargetDropContext*>(this));
 }

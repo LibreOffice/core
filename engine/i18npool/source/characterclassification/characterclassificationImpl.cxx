@@ -193,7 +193,7 @@ CharacterClassificationImpl::getImplementationName()
     return u"com.sun.star.i18n.CharacterClassification"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 CharacterClassificationImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

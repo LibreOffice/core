@@ -381,7 +381,7 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
 }
 
 OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
-                                                              sal_Bool                                         bAllowDeep )
+                                                              bool                                         bAllowDeep )
 {
     // make the descriptor more usable :-)
     comphelper::SequenceAsHashMap stlDescriptor(lDescriptor);
@@ -432,7 +432,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // by calling its registered deep detection service.
         // But break this loop if a type match to the given descriptor
         // by a URL pattern(!) or if deep detection isn't allowed from
-        // outside (bAllowDeep=sal_False) or break the whole detection by
+        // outside (bAllowDeep=false) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
         if (!lFlatTypes.empty())

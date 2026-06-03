@@ -36,7 +36,7 @@ protected:
     {
         return u"com.sun.star.comp.graphic.GraphicMapper"_ustr;
     }
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
+    bool SAL_CALL supportsService(const OUString& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }

@@ -104,7 +104,7 @@ public:
     virtual void SAL_CALL slideTransitionStarted() override;
     virtual void SAL_CALL slideTransitionEnded() override;
     virtual void SAL_CALL slideAnimationsEnded() override;
-    virtual void SAL_CALL slideEnded(sal_Bool bReverse) override;
+    virtual void SAL_CALL slideEnded(bool bReverse) override;
     virtual void SAL_CALL hyperLinkClicked(const OUString & hyperLink) override;
 
     // css::presentation::XSlideShowNavigationListener:
@@ -134,19 +134,19 @@ public:
     explicit SlideshowImpl( const css::uno::Reference< css::presentation::XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow);
 
     // css::presentation::XSlideShowController:
-    virtual sal_Bool SAL_CALL getAlwaysOnTop() override;
-    virtual void SAL_CALL setAlwaysOnTop( sal_Bool _alwaysontop ) override;
-    virtual sal_Bool SAL_CALL getMouseVisible() override;
-    virtual void SAL_CALL setMouseVisible( sal_Bool _mousevisible ) override;
-    virtual sal_Bool SAL_CALL getUsePen() override;
-    virtual void SAL_CALL setUsePen( sal_Bool _usepen ) override;
+    virtual bool SAL_CALL getAlwaysOnTop() override;
+    virtual void SAL_CALL setAlwaysOnTop( bool _alwaysontop ) override;
+    virtual bool SAL_CALL getMouseVisible() override;
+    virtual void SAL_CALL setMouseVisible( bool _mousevisible ) override;
+    virtual bool SAL_CALL getUsePen() override;
+    virtual void SAL_CALL setUsePen( bool _usepen ) override;
     virtual ::sal_Int32 SAL_CALL getPenColor() override;
     virtual void SAL_CALL setPenColor( ::sal_Int32 _pencolor ) override;
     virtual double SAL_CALL getPenWidth() override;
     virtual void SAL_CALL setPenWidth( double dStrokeWidth ) override;
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL setEraseAllInk( sal_Bool bEraseAllInk ) override;
-    virtual sal_Bool SAL_CALL isRunning(  ) override;
+    virtual void SAL_CALL setEraseAllInk( bool bEraseAllInk ) override;
+    virtual bool SAL_CALL isRunning(  ) override;
     virtual ::sal_Int32 SAL_CALL getSlideCount(  ) override;
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getSlideByIndex( ::sal_Int32 Index ) override;
     virtual void SAL_CALL addSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& Listener ) override;
@@ -163,23 +163,23 @@ public:
     virtual void SAL_CALL stopSound(  ) override;
     virtual void SAL_CALL pause(  ) override;
     virtual void SAL_CALL resume(  ) override;
-    virtual sal_Bool SAL_CALL isPaused(  ) override;
+    virtual bool SAL_CALL isPaused(  ) override;
     virtual void SAL_CALL blankScreen( ::sal_Int32 Color ) override;
     virtual void SAL_CALL activate(  ) override;
     virtual void SAL_CALL deactivate(  ) override;
-    virtual sal_Bool SAL_CALL isActive(  ) override;
+    virtual bool SAL_CALL isActive(  ) override;
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getCurrentSlide(  ) override;
     virtual ::sal_Int32 SAL_CALL getCurrentSlideIndex(  ) override;
     virtual ::sal_Int32 SAL_CALL getNextSlideIndex(  ) override;
-    virtual sal_Bool SAL_CALL isEndless(  ) override;
-    virtual sal_Bool SAL_CALL isFullScreen(  ) override;
+    virtual bool SAL_CALL isEndless(  ) override;
+    virtual bool SAL_CALL isFullScreen(  ) override;
     virtual css::uno::Reference< css::presentation::XSlideShow > SAL_CALL getSlideShow(  ) override;
 
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override;
     virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //  SfxListener
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;

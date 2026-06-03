@@ -44,7 +44,7 @@ namespace connectivity
                 @param
                     IResultSetHelper::Movement  _eCursorPosition        in which direction the resultset should be moved
                     sal_Int32                   _nOffset                the position relative to the movement
-                    sal_Bool                    _bRetrieveData          is true when the current row should be filled which data
+                    bool                    _bRetrieveData          is true when the current row should be filled which data
                 @return
                     true when the movement was successful otherwise false
         */

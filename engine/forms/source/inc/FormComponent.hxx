@@ -212,7 +212,7 @@ protected:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
     virtual OUString SAL_CALL    getImplementationName() override = 0;
 
@@ -221,12 +221,12 @@ protected:
     virtual css::uno::Reference<css::uno::XInterface>   SAL_CALL getContext() override;
     virtual void                                        SAL_CALL createPeer(const css::uno::Reference<css::awt::XToolkit>& Toolkit, const css::uno::Reference<css::awt::XWindowPeer>& Parent) override;
     virtual css::uno::Reference<css::awt::XWindowPeer>  SAL_CALL getPeer() override;
-    virtual sal_Bool                                    SAL_CALL setModel(const css::uno::Reference<css::awt::XControlModel>& Model) override;
+    virtual bool                                    SAL_CALL setModel(const css::uno::Reference<css::awt::XControlModel>& Model) override;
     virtual css::uno::Reference<css::awt::XControlModel> SAL_CALL getModel() override;
     virtual css::uno::Reference<css::awt::XView>        SAL_CALL getView() override;
-    virtual void                                        SAL_CALL setDesignMode(sal_Bool bOn) override;
-    virtual sal_Bool                                    SAL_CALL isDesignMode() override;
-    virtual sal_Bool                                    SAL_CALL isTransparent() override;
+    virtual void                                        SAL_CALL setDesignMode(bool bOn) override;
+    virtual bool                                    SAL_CALL isDesignMode() override;
+    virtual bool                                    SAL_CALL isTransparent() override;
 
 protected:
     virtual css::uno::Sequence< css::uno::Type>   _getTypes();
@@ -259,12 +259,12 @@ public:
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // XBoundControl
-    virtual sal_Bool SAL_CALL   getLock() override;
-    virtual void SAL_CALL       setLock(sal_Bool _bLock) override;
+    virtual bool SAL_CALL   getLock() override;
+    virtual void SAL_CALL       setLock(bool _bLock) override;
         // default implementation just disables the controls, overwrite _setLock to change this behaviour
 
     // XControl
-    virtual sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    virtual bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -332,13 +332,13 @@ protected:
         const css::uno::Reference< css::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
         const OUString& rDefault = OUString(),                    // service name of the default control
-        const bool _bSetDelegator = true                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
+        const bool _bSetDelegator = true                                // set to false if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
         const OControlModel* _pOriginal,                                        // the original object to clone
         const css::uno::Reference< css::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const bool _bCloneAggregate = true,                             // should the aggregate of the original be cloned, too?
-        const bool _bSetDelegator = true                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
+        const bool _bSetDelegator = true                                // set to false if you want to call setDelegator later (after returning from this ctor)
     );
     virtual ~OControlModel() override;
 
@@ -378,7 +378,7 @@ public:
     virtual void SAL_CALL               setName(const OUString& aName) override;
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
     virtual OUString SAL_CALL    getImplementationName() override = 0;
 
@@ -402,7 +402,7 @@ public:
 
 // XPropertySet
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
@@ -600,8 +600,8 @@ protected:
         const OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const OUString& _rDefault,                   // service name of the default control
         const bool _bCommitable,                        // is the control (model) committable?
-        const bool _bSupportExternalBinding,            // set to sal_True if you want to support XBindableValue
-        const bool _bSupportsValidation                 // set to sal_True if you want to support XValidatable
+        const bool _bSupportExternalBinding,            // set to true if you want to support XBindableValue
+        const bool _bSupportsValidation                 // set to true if you want to support XValidatable
     );
     OBoundControlModel(
         const OBoundControlModel* _pOriginal,               // the original object to clone
@@ -840,7 +840,7 @@ protected:
     void                    onDisconnectedValidator( );
 
     /** nFieldType is the type of the field, on which the model will be linked.
-        The linking happens when sal_True is returned.
+        The linking happens when true is returned.
         The default-implementation allows everything but the three binary types
         and FieldType_OTHER.
     */
@@ -944,7 +944,7 @@ public:
     virtual void SAL_CALL read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
     // XBoundComponent
-    virtual sal_Bool SAL_CALL commit() override;
+    virtual bool SAL_CALL commit() override;
 
     // XUpdateBroadcaster (base of XBoundComponent)
     virtual void SAL_CALL addUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
@@ -952,7 +952,7 @@ public:
 
     // XPropertySet
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
@@ -992,7 +992,7 @@ protected:
     virtual void SAL_CALL validityConstraintChanged( const css::lang::EventObject& Source ) override;
 
     // XValidatableFormComponent
-    virtual sal_Bool SAL_CALL isValid(  ) override;
+    virtual bool SAL_CALL isValid(  ) override;
     virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
     virtual void SAL_CALL addFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
     virtual void SAL_CALL removeFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;

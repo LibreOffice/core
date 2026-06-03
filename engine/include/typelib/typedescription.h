@@ -99,7 +99,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _typelib_TypeDescription
         interfaces lack of members and table init.
         Call typelib_typedescription_complete() if false.
     */
-    sal_Bool                            bComplete;
+    bool                            bComplete;
     /** size of type
     */
     sal_Int32                           nSize;
@@ -111,7 +111,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _typelib_TypeDescription
     typelib_TypeDescriptionReference *  pWeakRef;
     /** determines, if type can be unloaded (and it is possible to reloaded it)
     */
-    sal_Bool                            bOnDemand;
+    bool                            bOnDemand;
 } typelib_TypeDescription;
 
 /** Type description for exception types.
@@ -160,7 +160,7 @@ typedef struct _typelib_StructTypeDescription
 
        For a plain struct type, this is a null pointer.
      */
-    sal_Bool * pParameterizedTypes;
+    bool * pParameterizedTypes;
 } typelib_StructTypeDescription;
 
 /** Type description of a sequence.
@@ -211,11 +211,11 @@ typedef struct _typelib_MethodParameter
     /** true: the call type of this parameter is [in] or [inout]
         false: the call type of this parameter is [out]
     */
-    sal_Bool                            bIn;
+    bool                            bIn;
     /** true: the call type of this parameter is [out] or [inout]
         false: the call type of this parameter is [in]
     */
-    sal_Bool                            bOut;
+    bool                            bOut;
 } typelib_MethodParameter;
 
 /** Common base type description of typelib_InterfaceMethodTypeDescription and
@@ -262,7 +262,7 @@ typedef struct _typelib_InterfaceMethodTypeDescription
     typelib_TypeDescriptionReference **         ppExceptions;
     /** determines whether method is declared oneway
     */
-    sal_Bool                                    bOneWay;
+    bool                                    bOneWay;
 
     /** the interface description this method is a member of
     */
@@ -290,7 +290,7 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
 
     /** determines whether attribute is read only
     */
-    sal_Bool                                    bReadOnly;
+    bool                                    bReadOnly;
     /** type of the attribute
     */
     typelib_TypeDescriptionReference *          pAttributeTypeRef;
@@ -423,7 +423,7 @@ typedef struct _typelib_StructMember_Init
        Flag specifying whether the member is of parameterized type (true) or
        explicit type (false).
      */
-    sal_Bool bParameterizedType;
+    bool bParameterizedType;
 } typelib_StructMember_Init;
 
 /** Init struct of interface methods for typelib_typedescription_new().
@@ -441,10 +441,10 @@ typedef struct _typelib_Parameter_Init
     rtl_uString *       pParamName;
     /** true, if parameter is [in] or [inout]
     */
-    sal_Bool            bIn;
+    bool            bIn;
     /** true, if parameter is [out] or [inout]
     */
-    sal_Bool            bOut;
+    bool            bOut;
 } typelib_Parameter_Init;
 
 #if defined( _WIN32)
@@ -562,7 +562,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceMethod(
     typelib_InterfaceMethodTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
-    sal_Bool bOneWay,
+    bool bOneWay,
     rtl_uString * pMethodName,
     typelib_TypeClass eReturnTypeClass,
     rtl_uString * pReturnTypeName,
@@ -593,7 +593,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribu
     rtl_uString * pAttributeName,
     typelib_TypeClass eAttributeTypeClass,
     rtl_uString * pAttributeTypeName,
-    sal_Bool bReadOnly,
+    bool bReadOnly,
     sal_Int32 nGetExceptions, rtl_uString ** ppGetExceptionNames,
     sal_Int32 nSetExceptions, rtl_uString ** ppSetExceptionNames )
     SAL_THROW_EXTERN_C();
@@ -630,7 +630,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
     @param p2 another type description
     @return true, if type descriptions are equal
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_equals(
+CPPU_DLLPUBLIC bool SAL_CALL typelib_typedescription_equals(
     const typelib_TypeDescription * p1, const typelib_TypeDescription * p2 )
     SAL_THROW_EXTERN_C();
 
@@ -735,7 +735,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDescription(
     @param p2 another type description reference
     @return true, if type description references are equal
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
+CPPU_DLLPUBLIC bool SAL_CALL typelib_typedescriptionreference_equals(
     const typelib_TypeDescriptionReference * p1, const typelib_TypeDescriptionReference * p2 )
     SAL_THROW_EXTERN_C();
 
@@ -755,7 +755,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_assign(
     @param pAssignable type description of value to be assigned
     @param pFrom type description of value
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
+CPPU_DLLPUBLIC bool SAL_CALL typelib_typedescription_isAssignableFrom(
     typelib_TypeDescription * pAssignable,
     typelib_TypeDescription * pFrom )
     SAL_THROW_EXTERN_C();
@@ -766,7 +766,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
     @param pAssignable type of value to be assigned
     @param pFrom type of value
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
+CPPU_DLLPUBLIC bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     typelib_TypeDescriptionReference * pAssignable,
     typelib_TypeDescriptionReference * pFrom )
     SAL_THROW_EXTERN_C();
@@ -842,7 +842,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
-    sal_Bool const * pParameterizedTypes )
+    bool const * pParameterizedTypes )
     SAL_THROW_EXTERN_C();
 
 /** Inits incomplete static interface type reference. Thread synchronizes on typelib init mutex.
@@ -892,7 +892,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
     @param ppTypeDescr [inout] type description to be completed (may be exchanged!)
     @return true, if type description is complete
 */
-CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_complete(
+CPPU_DLLPUBLIC bool SAL_CALL typelib_typedescription_complete(
     typelib_TypeDescription ** ppTypeDescr )
     SAL_THROW_EXTERN_C();
 

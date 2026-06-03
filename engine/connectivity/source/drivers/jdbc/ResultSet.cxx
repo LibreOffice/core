@@ -156,7 +156,7 @@ Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStre
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "getBoolean", mID,columnIndex );
@@ -381,19 +381,19 @@ css::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnI
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::isAfterLast(  )
+bool SAL_CALL java_sql_ResultSet::isAfterLast(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isAfterLast", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::isFirst(  )
+bool SAL_CALL java_sql_ResultSet::isFirst(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isFirst", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::isLast(  )
+bool SAL_CALL java_sql_ResultSet::isLast(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isLast", mID );
@@ -418,32 +418,32 @@ void SAL_CALL java_sql_ResultSet::close(  )
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::first(  )
+bool SAL_CALL java_sql_ResultSet::first(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "first", mID );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::last(  )
+bool SAL_CALL java_sql_ResultSet::last(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "last", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row )
+bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "absolute", mID,row );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row )
+bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "relative", mID,row );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::previous(  )
+bool SAL_CALL java_sql_ResultSet::previous(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "previous", mID );
@@ -455,39 +455,39 @@ Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  )
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::rowDeleted(  )
+bool SAL_CALL java_sql_ResultSet::rowDeleted(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "rowDeleted", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::rowInserted(  )
+bool SAL_CALL java_sql_ResultSet::rowInserted(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "rowInserted", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::rowUpdated(  )
+bool SAL_CALL java_sql_ResultSet::rowUpdated(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "rowUpdated", mID );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  )
+bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isBeforeFirst", mID );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::next(  )
+bool SAL_CALL java_sql_ResultSet::next(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "next", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  )
+bool SAL_CALL java_sql_ResultSet::wasNull(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "wasNull", mID );
@@ -570,7 +570,7 @@ void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex )
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x )
+void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, bool x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateBoolean", "(IZ)V", mID, columnIndex, x);
@@ -915,7 +915,7 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0)
     return *getArrayHelper();
 }
 
-sal_Bool java_sql_ResultSet::convertFastPropertyValue(
+bool java_sql_ResultSet::convertFastPropertyValue(
                             css::uno::Any & rConvertedValue,
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,

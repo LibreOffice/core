@@ -145,8 +145,7 @@ void SAL_CALL rtl_math_doubleToString(rtl_String** pResult, sal_Int32* pResultCa
                                       sal_Int32 nResultOffset, double fValue,
                                       rtl_math_StringFormat eFormat, sal_Int32 nDecPlaces,
                                       char cDecSeparator, sal_Int32 const* pGroups,
-                                      char cGroupSeparator,
-                                      sal_Bool bEraseTrailingDecZeros) noexcept
+                                      char cGroupSeparator, bool bEraseTrailingDecZeros) noexcept
 {
     rtl::str::doubleToString(pResult, pResultCapacity, nResultOffset, fValue, eFormat, nDecPlaces,
                              cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
@@ -157,7 +156,7 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString** pResult, sal_Int32* pResult
                                        rtl_math_StringFormat eFormat, sal_Int32 nDecPlaces,
                                        sal_Unicode cDecSeparator, sal_Int32 const* pGroups,
                                        sal_Unicode cGroupSeparator,
-                                       sal_Bool bEraseTrailingDecZeros) noexcept
+                                       bool bEraseTrailingDecZeros) noexcept
 {
     rtl::str::doubleToString(pResult, pResultCapacity, nResultOffset, fValue, eFormat, nDecPlaces,
                              cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);

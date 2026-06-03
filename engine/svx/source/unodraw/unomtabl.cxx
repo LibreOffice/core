@@ -78,7 +78,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XCancellable
@@ -94,11 +94,11 @@ public:
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const  OUString& aName ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 };
 
 }
@@ -136,7 +136,7 @@ void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     }
 }
 
-sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceName )
+bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -360,7 +360,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
     return comphelper::containerToSequence(aNameSet);
 }
 
-sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
+bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -406,7 +406,7 @@ uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
     return cppu::UnoType<drawing::PointSequence>::get();
 }
 
-sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
+bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
 {
     SolarMutexGuard aGuard;
 

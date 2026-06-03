@@ -74,7 +74,7 @@ OUString SwVbaEventsHelper::getImplementationName()
 {
     return u"SwVbaEventsHelper"_ustr;
 }
-sal_Bool SwVbaEventsHelper::supportsService( const OUString& ServiceName )
+bool SwVbaEventsHelper::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

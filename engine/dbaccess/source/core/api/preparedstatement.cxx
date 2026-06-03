@@ -109,7 +109,7 @@ OUString OPreparedStatement::getImplementationName(  )
     return u"com.sun.star.sdb.OPreparedStatement"_ustr;
 }
 
-sal_Bool OPreparedStatement::supportsService( const OUString& _rServiceName )
+bool OPreparedStatement::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -208,7 +208,7 @@ sal_Int32 OPreparedStatement::executeUpdate()
     return Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->executeUpdate();
 }
 
-sal_Bool OPreparedStatement::execute()
+bool OPreparedStatement::execute()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -240,7 +240,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
     m_xAggregateAsParameters->setObjectNull(parameterIndex, sqlType, typeName);
 }
 
-void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
+void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, bool x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);

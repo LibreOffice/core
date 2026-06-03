@@ -90,7 +90,7 @@ public:
         return u"com.sun.star.comp.framework.ModuleUIConfigurationManager"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -113,8 +113,8 @@ public:
     virtual void SAL_CALL reset() override;
     virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL createSettings(  ) override;
-    virtual sal_Bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, sal_Bool bWriteable ) override;
+    virtual bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
+    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, bool bWriteable ) override;
     virtual void SAL_CALL replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
     virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) override;
     virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
@@ -124,15 +124,15 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getEventsManager() override;
 
     // XModuleUIConfigurationManager
-    virtual sal_Bool SAL_CALL isDefaultSettings( const OUString& ResourceURL ) override;
+    virtual bool SAL_CALL isDefaultSettings( const OUString& ResourceURL ) override;
     virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getDefaultSettings( const OUString& ResourceURL ) override;
 
     // XUIConfigurationPersistence
     virtual void SAL_CALL reload() override;
     virtual void SAL_CALL store() override;
     virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual sal_Bool SAL_CALL isModified() override;
-    virtual sal_Bool SAL_CALL isReadOnly() override;
+    virtual bool SAL_CALL isModified() override;
+    virtual bool SAL_CALL isReadOnly() override;
 
 private:
     // private data types
@@ -1103,7 +1103,7 @@ Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettin
     return Reference< XIndexContainer >( new RootItemContainer() );
 }
 
-sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& ResourceURL )
+bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1123,7 +1123,7 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& Res
     return false;
 }
 
-Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( const OUString& ResourceURL, sal_Bool bWriteable )
+Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( const OUString& ResourceURL, bool bWriteable )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1446,7 +1446,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getEventsManager(
 }
 
 // XModuleUIConfigurationManager
-sal_Bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const OUString& ResourceURL )
+bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const OUString& ResourceURL )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
@@ -1605,14 +1605,14 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
         xTransactedObject->commit();
 }
 
-sal_Bool SAL_CALL ModuleUIConfigurationManager::isModified()
+bool SAL_CALL ModuleUIConfigurationManager::isModified()
 {
     SolarMutexGuard g;
 
     return m_bModified;
 }
 
-sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly()
+bool SAL_CALL ModuleUIConfigurationManager::isReadOnly()
 {
     SolarMutexGuard g;
 

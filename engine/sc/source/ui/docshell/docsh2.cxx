@@ -44,7 +44,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
     m_pDocument->MakeTable(0);
 
-    //  Additional tables are created by the first View, if bIsEmpty is still sal_True
+    //  Additional tables are created by the first View, if bIsEmpty is still true
     if( bRet )
     {
         Size aSize(

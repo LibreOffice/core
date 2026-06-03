@@ -700,7 +700,7 @@ bool ImportContext::importBooleanProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
 {
-    sal_Bool bBool;
+    bool bBool;
     if (getBoolAttr(
             &bBool, rAttrName, xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
@@ -1569,13 +1569,13 @@ void ImportContext::importDefaults(
 
     importShortProperty( u"TabIndex"_ustr, u"tab-index"_ustr, xAttributes );
 
-    sal_Bool bDisable = false;
+    bool bDisable = false;
     if (getBoolAttr( &bDisable,u"disabled"_ustr, xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bDisable)
     {
         _xControlModel->setPropertyValue( u"Enabled"_ustr, Any( false ) );
     }
 
-    sal_Bool bVisible = true;
+    bool bVisible = true;
     if (getBoolAttr( &bVisible, u"visible"_ustr, xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !bVisible)
     {
         try

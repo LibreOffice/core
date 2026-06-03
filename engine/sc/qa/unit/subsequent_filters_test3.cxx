@@ -534,7 +534,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testActiveXCheckboxXLSX)
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+        true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
 
     // Check custom label
     OUString sLabel;

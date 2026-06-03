@@ -32,19 +32,19 @@ public:
     OUString SAL_CALL getDefaultPropertyName() override;
 
     // Default member: True if the specified form field object is a valid check box form field
-    sal_Bool SAL_CALL getValid() override;
+    bool SAL_CALL getValid() override;
 
-    sal_Bool SAL_CALL getAutoSize() override;
-    void SAL_CALL setAutoSize(sal_Bool bSet) override;
+    bool SAL_CALL getAutoSize() override;
+    void SAL_CALL setAutoSize(bool bSet) override;
     // Returns the default check box value
-    sal_Bool SAL_CALL getDefault() override;
-    void SAL_CALL setDefault(sal_Bool bSet) override;
+    bool SAL_CALL getDefault() override;
+    void SAL_CALL setDefault(bool bSet) override;
     // Returns the size of a check box, in points
     sal_Int32 SAL_CALL getSize() override;
     void SAL_CALL setSize(sal_Int32 nSet) override;
 
-    sal_Bool SAL_CALL getValue() override;
-    void SAL_CALL setValue(sal_Bool bSet) override;
+    bool SAL_CALL getValue() override;
+    void SAL_CALL setValue(bool bSet) override;
 
     // XHelperInterface
     OUString getServiceImplName() override;

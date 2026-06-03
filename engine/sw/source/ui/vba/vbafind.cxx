@@ -221,14 +221,14 @@ void SAL_CALL SwVbaFind::setReplacement( const uno::Any& /*_replacement */ )
     throw uno::RuntimeException(u"Not implemented"_ustr );
 }
 
-sal_Bool SAL_CALL SwVbaFind::getForward()
+bool SAL_CALL SwVbaFind::getForward()
 {
     bool bBackward = false;
     mxPropertyReplace->getPropertyValue(u"SearchBackwards"_ustr) >>= bBackward;
     return !bBackward;
 }
 
-void SAL_CALL SwVbaFind::setForward( sal_Bool _forward )
+void SAL_CALL SwVbaFind::setForward( bool _forward )
 {
     bool bBackward = !_forward;
     mxPropertyReplace->setPropertyValue(u"SearchBackwards"_ustr, uno::Any( bBackward ) );
@@ -246,66 +246,66 @@ void SAL_CALL SwVbaFind::setWrap( ::sal_Int32 _wrap )
     mnWrap = _wrap;
 }
 
-sal_Bool SAL_CALL SwVbaFind::getFormat()
+bool SAL_CALL SwVbaFind::getFormat()
 {
     return mxPropertyReplace->getValueSearch();
 }
 
-void SAL_CALL SwVbaFind::setFormat( sal_Bool _format )
+void SAL_CALL SwVbaFind::setFormat( bool _format )
 {
     mxPropertyReplace->setValueSearch( _format );
 }
 
-sal_Bool SAL_CALL SwVbaFind::getMatchCase()
+bool SAL_CALL SwVbaFind::getMatchCase()
 {
     bool value = false;
     mxPropertyReplace->getPropertyValue(u"SearchCaseSensitive"_ustr) >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchCase( sal_Bool _matchcase )
+void SAL_CALL SwVbaFind::setMatchCase( bool _matchcase )
 {
     mxPropertyReplace->setPropertyValue(u"SearchCaseSensitive"_ustr, uno::Any( _matchcase ) );
 }
 
-sal_Bool SAL_CALL SwVbaFind::getMatchWholeWord()
+bool SAL_CALL SwVbaFind::getMatchWholeWord()
 {
     bool value = false;
     mxPropertyReplace->getPropertyValue(u"SearchWords"_ustr) >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchWholeWord( sal_Bool _matchwholeword )
+void SAL_CALL SwVbaFind::setMatchWholeWord( bool _matchwholeword )
 {
     mxPropertyReplace->setPropertyValue(u"SearchWords"_ustr, uno::Any( _matchwholeword ) );
 }
 
-sal_Bool SAL_CALL SwVbaFind::getMatchWildcards()
+bool SAL_CALL SwVbaFind::getMatchWildcards()
 {
     bool value = false;
     mxPropertyReplace->getPropertyValue(u"SearchRegularExpression"_ustr) >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchWildcards( sal_Bool _matchwildcards )
+void SAL_CALL SwVbaFind::setMatchWildcards( bool _matchwildcards )
 {
     mxPropertyReplace->setPropertyValue(u"SearchRegularExpression"_ustr, uno::Any( _matchwildcards ) );
 }
 
-sal_Bool SAL_CALL SwVbaFind::getMatchSoundsLike()
+bool SAL_CALL SwVbaFind::getMatchSoundsLike()
 {
     bool value = false;
     mxPropertyReplace->getPropertyValue(u"SearchSimilarity"_ustr) >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchSoundsLike( sal_Bool _matchsoundslike )
+void SAL_CALL SwVbaFind::setMatchSoundsLike( bool _matchsoundslike )
 {
     // seems not accurate
     mxPropertyReplace->setPropertyValue(u"SearchSimilarity"_ustr, uno::Any( _matchsoundslike ) );
 }
 
-sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms()
+bool SAL_CALL SwVbaFind::getMatchAllWordForms()
 {
     bool value = false;
     mxPropertyReplace->getPropertyValue(u"SearchSimilarity"_ustr) >>= value;
@@ -314,7 +314,7 @@ sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms()
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchAllWordForms( sal_Bool _matchallwordforms )
+void SAL_CALL SwVbaFind::setMatchAllWordForms( bool _matchallwordforms )
 {
     // seems not accurate
     mxPropertyReplace->setPropertyValue(u"SearchSimilarity"_ustr, uno::Any( _matchallwordforms ) );
@@ -331,7 +331,7 @@ void SAL_CALL SwVbaFind::setStyle( const uno::Any& /*_style */ )
     throw uno::RuntimeException(u"Not implemented"_ustr );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const uno::Any& MatchWholeWord, const uno::Any& MatchWildcards, const uno::Any& MatchSoundsLike, const uno::Any& MatchAllWordForms, const uno::Any& Forward, const uno::Any& Wrap, const uno::Any& Format, const uno::Any& ReplaceWith, const uno::Any& Replace, const uno::Any& /*MatchKashida*/, const uno::Any& /*MatchDiacritics*/, const uno::Any& /*MatchAlefHamza*/, const uno::Any& /*MatchControl*/, const uno::Any& /*MatchPrefix*/, const uno::Any& /*MatchSuffix*/, const uno::Any& /*MatchPhrase*/, const uno::Any& /*IgnoreSpace*/, const uno::Any& /*IgnorePunct*/ )
 {
     bool result = false;

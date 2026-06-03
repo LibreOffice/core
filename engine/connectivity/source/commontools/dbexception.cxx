@@ -118,7 +118,7 @@ SQLExceptionInfo::SQLExceptionInfo(const css::uno::Any& _rError)
     bool bValid = isAssignableFrom(aSQLExceptionType, _rError.getValueType());
     if (bValid)
         m_aContent = _rError;
-    // no assertion here : if used with the NextException member of an SQLException bValid==sal_False is allowed.
+    // no assertion here : if used with the NextException member of an SQLException bValid==false is allowed.
 
     implDetermineType();
 }

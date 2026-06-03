@@ -24,7 +24,7 @@ using namespace css;
 
 namespace sw
 {
-sal_Bool IndexingExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
+bool IndexingExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
 {
     bool bReturn = false;
 

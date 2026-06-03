@@ -322,7 +322,7 @@ namespace svxform
             // send a RequestSelectHint with the currently selected objects
         bool InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject);
             // is a helper for previous, manages the ... in SdrObjGroups;
-            // returns sal_True if the object is a FormComponent (or recursively consists only of such)
+            // returns true if the object is a FormComponent (or recursively consists only of such)
 
     public:
         NavigatorTreeModel();

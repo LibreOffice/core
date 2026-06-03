@@ -160,7 +160,7 @@ void SAL_CALL AccessibleIconChoiceCtrl::selectAccessibleChild( sal_Int64 nChildI
     pCtrl->SetCursor( pEntry );
 }
 
-sal_Bool SAL_CALL AccessibleIconChoiceCtrl::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL AccessibleIconChoiceCtrl::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 

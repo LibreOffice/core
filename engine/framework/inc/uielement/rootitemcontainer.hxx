@@ -84,7 +84,7 @@ class RootItemContainer final : private cppu::BaseMutex,
             return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
         // XSingleComponentFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
@@ -92,7 +92,7 @@ class RootItemContainer final : private cppu::BaseMutex,
 
     private:
         //  OPropertySetHelper
-        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
+        virtual bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
                                                                                                                css::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,
                                                                                                                const css::uno::Any&  aValue          ) override;

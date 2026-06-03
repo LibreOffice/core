@@ -128,14 +128,14 @@ public:
     bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
         // Attempt to transform a circle (in xy plane) so that it results
         // in an aligned ellipse. If the does not work because an ellipse of
-        // arbitrary position would be created, sal_False is returned.
+        // arbitrary position would be created, false is returned.
         // (The center point will not be transformed, use Transform(..))
 
     double CalcRotAngle() const;
         // Calculates the rotation angle around z-axis (in degrees)
 
     bool Mirror() const;
-        // Returns sal_True, if the matrice represents a left-handed coordinate system
+        // Returns true, if the matrice represents a left-handed coordinate system
 
     LineInfo Transform(const DXFLineInfo& aDXFLineInfo) const;
         // Transform to LineInfo

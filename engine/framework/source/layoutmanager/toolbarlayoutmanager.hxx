@@ -141,7 +141,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         virtual void SAL_CALL startDocking( const css::awt::DockingEvent& e ) override;
         virtual css::awt::DockingData SAL_CALL docking( const css::awt::DockingEvent& e ) override;
         virtual void SAL_CALL endDocking( const css::awt::EndDockingEvent& e ) override;
-        virtual sal_Bool SAL_CALL prepareToggleFloatingMode( const css::lang::EventObject& e ) override;
+        virtual bool SAL_CALL prepareToggleFloatingMode( const css::lang::EventObject& e ) override;
         virtual void SAL_CALL toggleFloatingMode( const css::lang::EventObject& e ) override;
         virtual void SAL_CALL closed( const css::lang::EventObject& e ) override;
         virtual void SAL_CALL endPopupMode( const css::awt::EndPopupModeEvent& e ) override;

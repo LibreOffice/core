@@ -146,9 +146,7 @@ void TempFile::writeString(std::string_view text) {
 
 namespace {
 
-void writeValueContent_(TempFile &, bool) = delete;
-    // silence loplugin:salbool
-void writeValueContent_(TempFile &handle, sal_Bool value) {
+void writeValueContent_(TempFile &handle, bool value) {
     if (value) {
         handle.writeString("true");
     } else {
@@ -231,7 +229,7 @@ template< typename T > void writeItemListValue(
 void writeValue(TempFile &handle, Type type, css::uno::Any const & value) {
     switch (type) {
     case TYPE_BOOLEAN:
-        writeSingleValue< sal_Bool >(handle, value);
+        writeSingleValue< bool >(handle, value);
         break;
     case TYPE_SHORT:
         writeSingleValue< sal_Int16 >(handle, value);
@@ -252,7 +250,7 @@ void writeValue(TempFile &handle, Type type, css::uno::Any const & value) {
         writeSingleValue< css::uno::Sequence< sal_Int8 > >(handle, value);
         break;
     case TYPE_BOOLEAN_LIST:
-        writeListValue< sal_Bool >(handle, value);
+        writeListValue< bool >(handle, value);
         break;
     case TYPE_SHORT_LIST:
         writeListValue< sal_Int16 >(handle, value);

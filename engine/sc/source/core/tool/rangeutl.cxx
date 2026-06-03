@@ -100,7 +100,7 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
     /*
      * Expects strings like:
      *      "$Tabelle1.$A$1:$Tabelle3.$D$17"
-     * If bAcceptCellRef == sal_True then also accept strings like:
+     * If bAcceptCellRef == true then also accept strings like:
      *      "$Tabelle1.$A$1"
      *
      * as result a ScArea-Array is created,

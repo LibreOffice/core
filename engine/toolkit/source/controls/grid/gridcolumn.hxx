@@ -49,8 +49,8 @@ public:
     virtual void SAL_CALL setMaxWidth(::sal_Int32 the_value) override;
     virtual ::sal_Int32 SAL_CALL getMinWidth() override;
     virtual void SAL_CALL setMinWidth(::sal_Int32 the_value) override;
-    virtual sal_Bool SAL_CALL getResizeable() override;
-    virtual void SAL_CALL setResizeable(sal_Bool the_value) override;
+    virtual bool SAL_CALL getResizeable() override;
+    virtual void SAL_CALL setResizeable(bool the_value) override;
     virtual ::sal_Int32 SAL_CALL getFlexibility() override;
     virtual void SAL_CALL setFlexibility( ::sal_Int32 _flexibility ) override;
     virtual OUString SAL_CALL getTitle() override;
@@ -73,7 +73,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // attribute access

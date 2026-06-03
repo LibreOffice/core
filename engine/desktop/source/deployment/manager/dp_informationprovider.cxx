@@ -58,7 +58,7 @@ class PackageInformationProvider :
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageInformationProvider
@@ -86,7 +86,7 @@ OUString PackageInformationProvider::getImplementationName()
     return u"com.sun.star.comp.deployment.PackageInformationProvider"_ustr;
 }
 
-sal_Bool PackageInformationProvider::supportsService( const OUString& ServiceName )
+bool PackageInformationProvider::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

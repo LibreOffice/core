@@ -511,7 +511,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         {
             try
             {
-                // if inserting marks, bAbsorb==sal_False will cause
+                // if inserting marks, bAbsorb==false will cause
                 // collapsing of the given XTextRange.
                 rImport.GetTextImport()->GetText()->insertTextContent(rRange,
                     xTextContent, true);

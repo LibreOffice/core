@@ -263,7 +263,7 @@ void SAL_CALL rtl_uString2String( rtl_String** ppThis,
                                     nCvtFlags, false);
 }
 
-sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
+bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
                                              sal_Unicode const * pSource,
                                              sal_Int32 nLength,
                                              rtl_TextEncoding nEncoding,
@@ -457,7 +457,7 @@ sal_Int32 SAL_CALL rtl_str_trim_WithLength(char* pStr, sal_Int32 nLen) noexcept
     return rtl::str::trim_WithLength(pStr, nLen);
 }
 
-sal_Int32 SAL_CALL rtl_str_valueOfBoolean(char* pStr, sal_Bool b) noexcept
+sal_Int32 SAL_CALL rtl_str_valueOfBoolean(char* pStr, bool b) noexcept
 {
     return rtl::str::valueOfBoolean(pStr, b);
 }
@@ -482,7 +482,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfUInt64(char* pStr, sal_uInt64 n, sal_Int16 nRa
     return rtl::str::valueOfInt<RTL_STR_MAX_VALUEOFUINT64>(pStr, n, nRadix);
 }
 
-sal_Bool SAL_CALL rtl_str_toBoolean(const char* pStr) noexcept
+bool SAL_CALL rtl_str_toBoolean(const char* pStr) noexcept
 {
     return rtl::str::toBoolean(pStr);
 }

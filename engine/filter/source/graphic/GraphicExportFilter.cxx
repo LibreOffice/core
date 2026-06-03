@@ -47,7 +47,7 @@ GraphicExportFilter::~GraphicExportFilter()
 {}
 
 //  XServiceInfo
-sal_Bool GraphicExportFilter::supportsService(const OUString& sServiceName)
+bool GraphicExportFilter::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -145,7 +145,7 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
     }
 }
 
-sal_Bool SAL_CALL GraphicExportFilter::filter( const uno::Sequence< beans::PropertyValue > & rDescriptor )
+bool SAL_CALL GraphicExportFilter::filter( const uno::Sequence< beans::PropertyValue > & rDescriptor )
 {
     gatherProperties(rDescriptor);
 

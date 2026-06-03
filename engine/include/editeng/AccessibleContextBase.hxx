@@ -207,7 +207,7 @@ public:
 
     /** Return whether the specified service is supported by this class.
     */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         supportsService (const OUString& sServiceName) override final;
 
     virtual css::uno::Sequence< OUString> SAL_CALL

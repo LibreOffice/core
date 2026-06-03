@@ -61,7 +61,7 @@ public:
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties(  ) override;
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 };
 
 }
@@ -214,7 +214,7 @@ Property SAL_CALL PropertySetMergerImpl::getPropertyByName( const OUString& aNam
     return mxPropSet2Info->getPropertyByName( aName );
 }
 
-sal_Bool SAL_CALL PropertySetMergerImpl::hasPropertyByName( const OUString& Name )
+bool SAL_CALL PropertySetMergerImpl::hasPropertyByName( const OUString& Name )
 {
     if(mxPropSet1Info->hasPropertyByName( Name ) )
         return true;

@@ -65,7 +65,7 @@ private:
     virtual OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.comp.configuration.backend.DesktopBackend"_ustr; }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return ServiceName == getSupportedServiceNames()[0]; }
 
     virtual css::uno::Sequence< OUString > SAL_CALL

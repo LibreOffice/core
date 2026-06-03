@@ -80,7 +80,7 @@ public:
         @descr      Lookup if a command URL is inside a given lst
         @param      "eOption" select right command list
         @param      "aCommandURL" a command URL that is used for the look up
-        @return     "sal_True" if the command is inside the list otherwise "sal_False"
+        @return     "true" if the command is inside the list otherwise "false"
     **-***************************************************************************************************/
 
     bool LookupDisabled(const OUString& aCommandURL) const;

@@ -120,8 +120,8 @@ public:
         getSelectedAccessibleRows(  ) override;
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL
         getSelectedAccessibleColumns(  ) override;
-    virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow ) override;
-    virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn ) override;
+    virtual bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow ) override;
+    virtual bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn ) override;
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
         getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
@@ -131,17 +131,17 @@ public:
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
         getAccessibleSummary(  ) override;
-    virtual sal_Bool SAL_CALL isAccessibleSelected(
+    virtual bool SAL_CALL isAccessibleSelected(
             sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int64 SAL_CALL getAccessibleIndex(
             sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int64 nChildIndex ) override;
     virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int64 nChildIndex ) override;
     // XAccessibleTableSelection
-    virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override ;
-    virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override ;
-    virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
+    virtual bool SAL_CALL selectRow( sal_Int32 row ) override ;
+    virtual bool SAL_CALL selectColumn( sal_Int32 column ) override ;
+    virtual bool SAL_CALL unselectRow( sal_Int32 row ) override;
+    virtual bool SAL_CALL unselectColumn( sal_Int32 column ) override;
 
     // C++ interface
 
@@ -161,7 +161,7 @@ public:
     virtual void SAL_CALL selectAccessibleChild(
         sal_Int64 nChildIndex ) override;
 
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected(
+    virtual bool SAL_CALL isAccessibleChildSelected(
         sal_Int64 nChildIndex ) override;
 
     virtual void SAL_CALL clearAccessibleSelection(  ) override;

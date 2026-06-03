@@ -33,14 +33,14 @@ SwVbaFormFieldCheckBox::~SwVbaFormFieldCheckBox() {}
 
 OUString SwVbaFormFieldCheckBox::getDefaultPropertyName() { return u"Valid"_ustr; }
 
-sal_Bool SwVbaFormFieldCheckBox::getValid()
+bool SwVbaFormFieldCheckBox::getValid()
 {
     return m_pCheckBox
            && IDocumentMarkAccess::GetType(*m_pCheckBox)
                   == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK;
 }
 
-sal_Bool SwVbaFormFieldCheckBox::getAutoSize()
+bool SwVbaFormFieldCheckBox::getAutoSize()
 {
     if (!getValid())
         return false;
@@ -49,7 +49,7 @@ sal_Bool SwVbaFormFieldCheckBox::getAutoSize()
     return true;
 }
 
-void SwVbaFormFieldCheckBox::setAutoSize(sal_Bool /*bSet*/)
+void SwVbaFormFieldCheckBox::setAutoSize(bool /*bSet*/)
 {
     if (!getValid())
         return;
@@ -57,7 +57,7 @@ void SwVbaFormFieldCheckBox::setAutoSize(sal_Bool /*bSet*/)
     SAL_INFO("sw.vba", "SwVbaFormFieldCheckBox::setAutoSize stub");
 }
 
-sal_Bool SwVbaFormFieldCheckBox::getDefault()
+bool SwVbaFormFieldCheckBox::getDefault()
 {
     if (!getValid())
         return false;
@@ -65,7 +65,7 @@ sal_Bool SwVbaFormFieldCheckBox::getDefault()
     return getValue();
 }
 
-void SwVbaFormFieldCheckBox::setDefault(sal_Bool bSet)
+void SwVbaFormFieldCheckBox::setDefault(bool bSet)
 {
     if (!getValid())
         return;
@@ -96,9 +96,9 @@ void SwVbaFormFieldCheckBox::setSize(sal_Int32 nSet)
     SAL_INFO("sw.vba", "SwVbaFormFieldCheckBox::setSize[" << nSet << "] stub");
 }
 
-sal_Bool SwVbaFormFieldCheckBox::getValue() { return getValid() && m_pCheckBox->IsChecked(); }
+bool SwVbaFormFieldCheckBox::getValue() { return getValid() && m_pCheckBox->IsChecked(); }
 
-void SwVbaFormFieldCheckBox::setValue(sal_Bool bSet)
+void SwVbaFormFieldCheckBox::setValue(bool bSet)
 {
     if (!getValid() || !getValue() == !bSet)
         return;

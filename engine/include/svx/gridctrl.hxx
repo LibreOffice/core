@@ -298,7 +298,7 @@ private:
     sal_uInt16          m_nLastColId;
     sal_Int32           m_nLastRowId;
 
-    bool                m_bDesignMode : 1;      // default = sal_False
+    bool                m_bDesignMode : 1;      // default = false
     bool                m_bRecordCountFinal : 1;
 
     bool                m_bSynchDisplay : 1;
@@ -480,7 +480,7 @@ public:
 
     bool getDisplaySynchron() const { return m_bSynchDisplay; }
     void setDisplaySynchron(bool bSync);
-        // when set to sal_False, the display is no longer in sync with the current cursor position
+        // when set to false, the display is no longer in sync with the current cursor position
         // (means that in AdjustDataSource we are jumping to a row not belonging to CursorPosition)
         // when using this, you should know what you are doing, because for example entering data
         // in a row in the display that is not in sync with the position of the cursor can be very critical

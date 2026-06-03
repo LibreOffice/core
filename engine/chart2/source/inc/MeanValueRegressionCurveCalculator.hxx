@@ -48,7 +48,7 @@ private:
         sal_Int32 nPointCount,
         const css::uno::Reference<css::chart2::XScaling>& xScalingX,
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
-        sal_Bool bMaySkipPointsInCalculation ) override;
+        bool bMaySkipPointsInCalculation ) override;
 
     // formula is: f(x) = m_fMeanValue
     double m_fMeanValue;

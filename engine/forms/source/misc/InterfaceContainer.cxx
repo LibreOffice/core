@@ -654,7 +654,7 @@ void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt) {
 
 // XElementAccess
 
-sal_Bool SAL_CALL OInterfaceContainer::hasElements()
+bool SAL_CALL OInterfaceContainer::hasElements()
 {
     return !m_aMap.empty();
 }
@@ -693,7 +693,7 @@ css::uno::Sequence<OUString> SAL_CALL OInterfaceContainer::getElementNames()
 }
 
 
-sal_Bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName )
+bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName )
 {
     ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);

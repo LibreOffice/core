@@ -128,7 +128,7 @@ OUString SAL_CALL FunnelChartType::getImplementationName()
     return u"com.sun.star.comp.chart.FunnelChartType"_ustr;
 }
 
-sal_Bool SAL_CALL FunnelChartType::supportsService(const OUString& rServiceName)
+bool SAL_CALL FunnelChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

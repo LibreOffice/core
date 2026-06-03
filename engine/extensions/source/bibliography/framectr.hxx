@@ -84,13 +84,13 @@ public:
 
                                 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                                 // css::frame::XController
     virtual void                SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame > & xFrame ) override;
-    virtual sal_Bool            SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel > & xModel ) override;
-    virtual sal_Bool            SAL_CALL suspend( sal_Bool bSuspend ) override;
+    virtual bool            SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel > & xModel ) override;
+    virtual bool            SAL_CALL suspend( bool bSuspend ) override;
     virtual css::uno::Any       SAL_CALL getViewData() override;
     virtual void                SAL_CALL restoreViewData( const css::uno::Any& Value ) override;
     virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() override;

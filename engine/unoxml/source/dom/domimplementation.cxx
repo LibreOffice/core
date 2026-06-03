@@ -68,7 +68,7 @@ namespace DOM
     /**
     Test if the DOM implementation implements a specific feature.
     */
-    sal_Bool SAL_CALL
+    bool SAL_CALL
     CDOMImplementation::hasFeature(OUString const& /*feature*/, OUString const& /*ver*/)
     {
         OSL_ENSURE(false,

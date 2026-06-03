@@ -182,13 +182,13 @@ private:
 
     /**
      * If this section is an index, the index is written in the
-     * rIndex parameter. The return value is sal_True for all "special"
+     * rIndex parameter. The return value is true for all "special"
      * sections.
      *
      * Thus we have:
-     * return sal_False: regular section
-     * return sal_True, xIndex is empty: index header section
-     * return sal_True, xIndex is set: index section */
+     * return false: regular section
+     * return true, xIndex is empty: index header section
+     * return true, xIndex is set: index section */
     static bool GetIndex(
         const css::uno::Reference < css::text::XTextSection > & rSection,
         css::uno::Reference < css::text::XDocumentIndex > & rIndex);

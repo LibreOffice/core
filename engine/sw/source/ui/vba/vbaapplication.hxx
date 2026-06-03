@@ -75,8 +75,8 @@ public:
     virtual css::uno::Any SAL_CALL Addins( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL ListGalleries( const css::uno::Any& aIndex ) override;
-    virtual sal_Bool SAL_CALL getDisplayAutoCompleteTips() override;
-    virtual void SAL_CALL setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips ) override;
+    virtual bool SAL_CALL getDisplayAutoCompleteTips() override;
+    virtual void SAL_CALL setDisplayAutoCompleteTips( bool _displayAutoCompleteTips ) override;
     virtual sal_Int32 SAL_CALL getEnableCancelKey() override;
     virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) override;
     virtual sal_Int32 SAL_CALL getWindowState() override;
@@ -95,8 +95,8 @@ public:
     virtual void SAL_CALL setCustomizationContext( const css::uno::Any& _customizationcontext ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual float SAL_CALL PointsToCentimeters( float Points ) override;
-    virtual float SAL_CALL PixelsToPoints( float Pixels, ::sal_Bool fVertical ) override;
-    virtual float SAL_CALL PointsToPixels( float Pixels, ::sal_Bool fVertical ) override;
+    virtual float SAL_CALL PixelsToPoints( float Pixels, bool fVertical ) override;
+    virtual float SAL_CALL PointsToPixels( float Pixels, bool fVertical ) override;
     virtual float SAL_CALL InchesToPoints( float Inches ) override;
     virtual float SAL_CALL PointsToInches( float Points ) override;
     virtual float SAL_CALL MillimetersToPoints( float Millimeters ) override;

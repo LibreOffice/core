@@ -387,7 +387,7 @@ uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
     return cppu::UnoType<sheet::XSheetConditionalEntry>::get();
 }
 
-sal_Bool SAL_CALL ScTableConditionalFormat::hasElements()
+bool SAL_CALL ScTableConditionalFormat::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -434,7 +434,7 @@ uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
+bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 

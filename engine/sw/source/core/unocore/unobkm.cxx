@@ -335,7 +335,7 @@ SwXBookmark::getImplementationName()
     return u"SwXBookmark"_ustr;
 }
 
-sal_Bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -538,7 +538,7 @@ uno::Sequence<OUString> SwXFieldmarkParameters::getElementNames()
     return comphelper::mapKeysToSequence(*pParameters);
 }
 
-sal_Bool SwXFieldmarkParameters::hasByName(const OUString& aName)
+bool SwXFieldmarkParameters::hasByName(const OUString& aName)
 {
     SolarMutexGuard aGuard;
     Fieldmark::parameter_map_t* pParameters = getCoreParameters();
@@ -550,7 +550,7 @@ uno::Type SwXFieldmarkParameters::getElementType()
     return ::cppu::UnoType<void>::get();
 }
 
-sal_Bool SwXFieldmarkParameters::hasElements()
+bool SwXFieldmarkParameters::hasElements()
 {
     SolarMutexGuard aGuard;
     return !getCoreParameters()->empty();
@@ -821,7 +821,7 @@ SwXFieldmark::GetResult(Fieldmark const& rMark)
 
 // XTextField
 OUString SAL_CALL
-SwXFieldmark::getPresentation(sal_Bool const bShowCommand)
+SwXFieldmark::getPresentation(bool const bShowCommand)
 {
     SolarMutexGuard g;
 

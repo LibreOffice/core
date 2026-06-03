@@ -55,7 +55,7 @@ public:
     void SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, bool bOn);
 
     // check/set, if the GluePoints are relative to the
-    // object size (Percent=sal_True) or not (Percent=sal_False)
+    // object size (Percent=true) or not (Percent=false)
     TriState IsMarkedGluePointsPercent() const;
     void SetMarkedGluePointsPercent(bool bOn);
 

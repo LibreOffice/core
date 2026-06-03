@@ -136,7 +136,7 @@ namespace DOM
     If this attribute was explicitly given a value in the original
     document, this is true; otherwise, it is false.
     */
-    sal_Bool SAL_CALL CAttr::getSpecified()
+    bool SAL_CALL CAttr::getSpecified()
     {
         // FIXME if this DOM implementation supported DTDs it would need
         // to check that this attribute is not default or something

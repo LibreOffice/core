@@ -225,7 +225,6 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
-        ORowSetValue(sal_Bool) = delete; // aka sal_uInt8
 
         ORowSetValue(const css::util::Date& _rRH)
             :m_eTypeKind(css::sdbc::DataType::DATE)
@@ -284,7 +283,6 @@ namespace connectivity
 
         // simple types
         ORowSetValue& operator=(bool _rRH);
-        void operator =(sal_Bool) = delete; // aka sal_uInt8
 
         ORowSetValue& operator=(sal_Int8 _rRH);
 

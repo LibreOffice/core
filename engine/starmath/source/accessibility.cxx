@@ -227,7 +227,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
     return 0;
 }
 
-sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
+bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -408,7 +408,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionEnd()
     return -1;
 }
 
-sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
+bool SAL_CALL SmGraphicAccessible::setSelection(
         sal_Int32 nStartIndex,
         sal_Int32 nEndIndex )
 {
@@ -515,7 +515,7 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex
     return aResult;
 }
 
-sal_Bool SAL_CALL SmGraphicAccessible::copyText(
+bool SAL_CALL SmGraphicAccessible::copyText(
         sal_Int32 nStartIndex,
         sal_Int32 nEndIndex )
 {
@@ -545,7 +545,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     return bReturn;
 }
 
-sal_Bool SAL_CALL SmGraphicAccessible::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool SAL_CALL SmGraphicAccessible::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
@@ -555,7 +555,7 @@ OUString SAL_CALL SmGraphicAccessible::getImplementationName()
     return u"SmGraphicAccessible"_ustr;
 }
 
-sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
+bool SAL_CALL SmGraphicAccessible::supportsService(
         const OUString& rServiceName )
 {
     return  cppu::supportsService(this, rServiceName);

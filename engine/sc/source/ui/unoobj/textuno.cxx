@@ -345,7 +345,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText )
 }
 
 void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XTextRange>& xRange,
-                                            const OUString& aString, sal_Bool bAbsorb )
+                                            const OUString& aString, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -355,7 +355,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XT
 
 void SAL_CALL ScHeaderFooterTextObj::insertControlCharacter(
                                             const uno::Reference<text::XTextRange>& xRange,
-                                            sal_Int16 nControlCharacter, sal_Bool bAbsorb )
+                                            sal_Int16 nControlCharacter, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -366,7 +366,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertControlCharacter(
 void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
                                             const uno::Reference<text::XTextRange >& xRange,
                                             const uno::Reference<text::XTextContent >& xContent,
-                                            sal_Bool bAbsorb )
+                                            bool bAbsorb )
 {
     SolarMutexGuard aGuard;
     if ( xContent.is() && xRange.is() )
@@ -521,7 +521,7 @@ uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType()
     return mxUnoText->getElementType();
 }
 
-sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements()
+bool SAL_CALL ScHeaderFooterTextObj::hasElements()
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -775,9 +775,9 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
             pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), true) );
         }
-        //  currently, GetPortions doesn't work if UpdateMode is sal_False,
+        //  currently, GetPortions doesn't work if UpdateMode is false,
         //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( sal_False );
+//      pEditEngine->SetUpdateMode( false );
         pEditEngine->EnableUndo( false );
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());

@@ -23,7 +23,7 @@
 namespace com::sun::star::xforms {
 
 void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,
-    sal_Bool canBubbleArg, sal_Bool cancelableArg)
+    bool canBubbleArg, bool cancelableArg)
 {
     initEvent(typeArg, canBubbleArg, cancelableArg);
 }
@@ -48,12 +48,12 @@ css::xml::dom::events::PhaseType SAL_CALL XFormsEventConcrete::getEventPhase()
     return css::xml::dom::events::PhaseType_CAPTURING_PHASE;
 }
 
-sal_Bool SAL_CALL XFormsEventConcrete::getBubbles()
+bool SAL_CALL XFormsEventConcrete::getBubbles()
 {
     return m_bubbles;
 }
 
-sal_Bool SAL_CALL XFormsEventConcrete::getCancelable()
+bool SAL_CALL XFormsEventConcrete::getCancelable()
 {
     return m_cancelable;
 }
@@ -70,8 +70,8 @@ void SAL_CALL XFormsEventConcrete::preventDefault()
 {
 }
 
-void SAL_CALL XFormsEventConcrete::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-    sal_Bool cancelableArg)
+void SAL_CALL XFormsEventConcrete::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+    bool cancelableArg)
 {
     m_eventType = eventTypeArg;
     m_bubbles = canBubbleArg;

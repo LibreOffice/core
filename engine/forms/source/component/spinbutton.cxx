@@ -134,7 +134,7 @@ namespace frm
     }
 
 
-    sal_Bool OSpinButtonModel::convertFastPropertyValue(
+    bool OSpinButtonModel::convertFastPropertyValue(
                 Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified( false );

@@ -2631,7 +2631,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
     }
 }
 
-sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
+bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2689,7 +2689,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
     return !pElement->m_bIsStorage;
 }
 
-sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
+bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -3677,7 +3677,7 @@ void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::
 //        I do not want to remove it now since it is still possible that it will be inserted
 //        to the service back.
 
-sal_Bool SAL_CALL OStorage::isModified()
+bool SAL_CALL OStorage::isModified()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -3690,7 +3690,7 @@ sal_Bool SAL_CALL OStorage::isModified()
     return m_pImpl->m_bIsModified;
 }
 
-void SAL_CALL OStorage::setModified( sal_Bool bModified )
+void SAL_CALL OStorage::setModified( bool bModified )
 {
     {
         osl::MutexGuard aGuard(m_xSharedMutex->GetMutex());
@@ -3835,7 +3835,7 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
     }
 }
 
-sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
+bool SAL_CALL OStorage::hasByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -3888,7 +3888,7 @@ uno::Type SAL_CALL OStorage::getElementType()
     return uno::Type();
 }
 
-sal_Bool SAL_CALL OStorage::hasElements()
+bool SAL_CALL OStorage::hasElements()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4103,7 +4103,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
     }
 }
 
-sal_Bool SAL_CALL OStorage::hasEncryptionData()
+bool SAL_CALL OStorage::hasEncryptionData()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4564,7 +4564,7 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
 
 // TODO/LATER: the storage and stream implementations of this interface are very similar, they could use a helper class
 
-sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
+bool SAL_CALL OStorage::hasByID(  const OUString& sID )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4734,7 +4734,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
     return aRet;
 }
 
-void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, sal_Bool bReplace  )
+void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4818,7 +4818,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
     throw container::NoSuchElementException();
 }
 
-void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, sal_Bool bReplace  )
+void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -5115,7 +5115,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
 }
 
 void SAL_CALL OStorage::attachToURL( const OUString& sURL,
-                                    sal_Bool bReadOnly )
+                                    bool bReadOnly )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 

@@ -289,7 +289,7 @@ Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
 // returns true if we find a DataFlavor with the same MimeType and
 // DataType
 
-sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
 {
     OSL_ASSERT( isValidFlavor( aFlavor ) );
 

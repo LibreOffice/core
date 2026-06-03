@@ -132,7 +132,7 @@ public:
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // com.sun.star.document.XExtendedFilterDetection interface ---------------

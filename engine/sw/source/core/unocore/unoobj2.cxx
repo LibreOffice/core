@@ -431,13 +431,13 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
         { return u"SwXParagraphEnumeration"_ustr; }
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) override
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         { return {u"com.sun.star.text.ParagraphEnumeration"_ustr}; };
 
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Any SAL_CALL nextElement() override;
 
     SwUnoCursor& GetCursor()
@@ -487,7 +487,7 @@ rtl::Reference<SwXParagraphEnumeration> SwXParagraphEnumeration::Create(
     return new SwXParagraphEnumerationImpl(xParent, pCursor, eType, pStartNode, pTable);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXParagraphEnumerationImpl::hasMoreElements()
 {
     SolarMutexGuard aGuard;
@@ -891,7 +891,7 @@ SwXTextRange::getImplementationName()
     return u"SwXTextRange"_ustr;
 }
 
-sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1450,7 +1450,7 @@ uno::Type SAL_CALL SwXTextRange::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SwXTextRange::hasElements()
+bool SAL_CALL SwXTextRange::hasElements()
 {
     return true;
 }
@@ -1618,7 +1618,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
         { return u"SwXTextRanges"_ustr; };
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) override
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         { return { u"com.sun.star.text.TextRanges"_ustr }; };
@@ -1626,7 +1626,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override
         { return cppu::UnoType<text::XTextRange>::get(); };
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
         { return getCount() > 0; };
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -1725,13 +1725,13 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
         { return u"SwXParaFrameEnumeration"_ustr; };
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         { return {u"com.sun.star.util.ContentEnumeration"_ustr}; };
 
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Any SAL_CALL nextElement() override;
 
     SwXParaFrameEnumerationImpl(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat);
@@ -1874,7 +1874,7 @@ uno::Reference<text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pC
     return xRet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXParaFrameEnumerationImpl::hasMoreElements()
 {
     SolarMutexGuard aGuard;

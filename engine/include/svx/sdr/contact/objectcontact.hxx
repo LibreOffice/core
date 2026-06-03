@@ -106,7 +106,7 @@ public:
     virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
 
     // test if visualizing of entered groups is switched on at all. Default
-    // implementation returns sal_False.
+    // implementation returns false.
     virtual bool DoVisualizeEnteredGroup() const;
 
     // get active group's (the entered group) ViewContact
@@ -156,7 +156,7 @@ public:
     // high contrast display mode
     virtual bool isDrawModeHighContrast() const;
 
-    // check if this is a preview renderer. Default is sal_False.
+    // check if this is a preview renderer. Default is false.
     bool IsPreviewRenderer() const { return mbIsPreviewRenderer; }
 
     // get Primitive2DParameters for this view

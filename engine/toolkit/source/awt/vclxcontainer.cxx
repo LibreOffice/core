@@ -86,7 +86,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::ge
 
 
 // css::awt::XVclContainerPeer
-void VCLXContainer::enableDialogControl( sal_Bool bEnable )
+void VCLXContainer::enableDialogControl( bool bEnable )
 {
     SolarMutexGuard aGuard;
 
@@ -102,7 +102,7 @@ void VCLXContainer::enableDialogControl( sal_Bool bEnable )
     }
 }
 
-void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const css::uno::Sequence< css::uno::Any >& Tabs, sal_Bool bGroupControl )
+void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const css::uno::Sequence< css::uno::Any >& Tabs, bool bGroupControl )
 {
     SolarMutexGuard aGuard;
 

@@ -76,7 +76,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  )
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isCaseSensitive", mID,column );
@@ -126,7 +126,7 @@ OUString SAL_CALL java_sql_ResultSetMetaData::getColumnServiceName( sal_Int32 co
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column )
 {
     if ( m_pConnection->isIgnoreCurrencyEnabled() )
         return false;
@@ -135,14 +135,14 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column )
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isAutoIncrement", mID,column );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isSigned", mID,column );
@@ -167,27 +167,27 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column )
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isSearchable", mID,column );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isReadOnly", mID,column );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isDefinitelyWritable", mID,column );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column )
+bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isWritable", mID,column );

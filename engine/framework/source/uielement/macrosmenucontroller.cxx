@@ -45,7 +45,7 @@ OUString SAL_CALL MacrosMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.MacrosMenuController"_ustr;
 }
 
-sal_Bool SAL_CALL MacrosMenuController::supportsService( const OUString& sServiceName )
+bool SAL_CALL MacrosMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

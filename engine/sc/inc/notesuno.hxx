@@ -60,9 +60,9 @@ public:
                             createTextCursorByRange( const css::uno::Reference< css::text::XTextRange >& aTextPosition ) override;
     virtual void SAL_CALL   insertString( const css::uno::Reference<
                                         css::text::XTextRange >& xRange,
-                                        const OUString& aString, sal_Bool bAbsorb ) override;
+                                        const OUString& aString, bool bAbsorb ) override;
     virtual void SAL_CALL   insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange,
-                                        sal_Int16 nControlCharacter, sal_Bool bAbsorb ) override;
+                                        sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
                             /// XTextRange
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -78,8 +78,8 @@ public:
     virtual css::table::CellAddress SAL_CALL getPosition() override;
     virtual OUString SAL_CALL getAuthor() override;
     virtual OUString SAL_CALL getDate() override;
-    virtual sal_Bool SAL_CALL getIsVisible() override;
-    virtual void SAL_CALL setIsVisible( sal_Bool bIsVisible ) override;
+    virtual bool SAL_CALL getIsVisible() override;
+    virtual void SAL_CALL setIsVisible( bool bIsVisible ) override;
 
                             /// XSheetAnnotationShapeSupplier
     virtual css::uno::Reference < css::drawing::XShape > SAL_CALL
@@ -87,7 +87,7 @@ public:
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:

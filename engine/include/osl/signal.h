@@ -79,7 +79,7 @@ typedef oslSignalAction (SAL_CALL *oslSignalHandlerFunction)(void* pData, oslSig
 SAL_DLLPUBLIC oslSignalHandler SAL_CALL osl_addSignalHandler(
         oslSignalHandlerFunction Handler, void* pData);
 
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeSignalHandler(
+SAL_DLLPUBLIC bool SAL_CALL osl_removeSignalHandler(
         oslSignalHandler hHandler);
 
 SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
@@ -91,12 +91,12 @@ SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
 
     @param[in]  bEnable Enables or disables error reporting.
 
-    @retval sal_True if previous state of error reporting was enabled
-    @retval sal_False if previous state of error reporting was disabled
+    @retval true if previous state of error reporting was enabled
+    @retval false if previous state of error reporting was disabled
 */
 
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setErrorReporting(
-        sal_Bool bEnable );
+SAL_DLLPUBLIC bool SAL_CALL osl_setErrorReporting(
+        bool bEnable );
 
 #ifdef __cplusplus
 }

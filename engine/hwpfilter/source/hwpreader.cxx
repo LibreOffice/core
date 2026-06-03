@@ -160,7 +160,7 @@ bool HwpReader::importHStream(std::unique_ptr<HStream> stream)
     return true;
 }
 
-sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
+bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
 {
     comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
     utl::MediaDescriptor::addInputStream(aDescriptor);
@@ -4746,7 +4746,7 @@ public:
 
 public:
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel() override;
 
     // XImporter
@@ -4755,7 +4755,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
@@ -4776,7 +4776,7 @@ HwpImportFilter::HwpImportFilter(const Reference< XComponentContext >& rxContext
     rImporter.set(xHandler, UNO_QUERY);
 }
 
-sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
+bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
 {
     // delegate to IchitaroImporter
     return rFilter->filter( aDescriptor );
@@ -4798,7 +4798,7 @@ OUString HwpImportFilter::getImplementationName()
     return u"com.sun.comp.hwpimport.HwpImportFilter"_ustr;
 }
 
-sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName )
+bool HwpImportFilter::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

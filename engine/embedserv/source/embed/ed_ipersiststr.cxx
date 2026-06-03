@@ -171,7 +171,7 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_bIsDirty( false )
 , m_nAdviseNum( 0 )
 , m_bIsInVerbHandling( false )
-//, m_bLoadedFromFile( sal_False )
+//, m_bLoadedFromFile( false )
 {
     m_xOwnAccess = new EmbeddedDocumentInstanceAccess_Impl( this );
     m_pDocHolder = new DocumentHolder( xFactory, m_xOwnAccess );
@@ -227,7 +227,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     }
 
     // aArgs[].Name = "ReadOnly";
-    // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
+    // aArgs[].Value <<= false; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? true : false );
 
     return aArgs;
 }

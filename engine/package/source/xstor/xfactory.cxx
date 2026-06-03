@@ -264,7 +264,7 @@ OUString SAL_CALL OStorageFactory::getImplementationName()
     return u"com.sun.star.comp.embed.StorageFactory"_ustr;
 }
 
-sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

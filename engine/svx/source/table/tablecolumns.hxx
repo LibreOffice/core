@@ -48,7 +48,7 @@ public:
 
     // Methods
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
 private:
     TableModelRef   mxTableModel;

@@ -269,7 +269,7 @@ Property SAL_CALL SfxItemPropertySetInfo::getPropertyByName( const OUString& rNa
     return m_aOwnMap.getPropertyByName( rName );
 }
 
-sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
+bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
 {
     return m_aOwnMap.hasPropertyByName( rName );
 }
@@ -333,7 +333,7 @@ Property SAL_CALL SfxExtItemPropertySetInfo::getPropertyByName( const OUString& 
     return aProp;
 }
 
-sal_Bool SAL_CALL SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
+bool SAL_CALL SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
 {
     return getByName(rPropertyName) != nullptr;
 }

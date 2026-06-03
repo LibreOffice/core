@@ -205,7 +205,7 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo()
     return *getArrayHelper();
 }
 
-sal_Bool OStatementBase::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+bool OStatementBase::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
     bool bModified(false);
     switch (nHandle)
@@ -347,7 +347,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY_THROW)->getUpdateCount();
 }
 
-sal_Bool SAL_CALL OStatementBase::getMoreResults(  )
+bool SAL_CALL OStatementBase::getMoreResults(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -436,7 +436,7 @@ OUString OStatement::getImplementationName(  )
     return u"com.sun.star.sdb.OStatement"_ustr;
 }
 
-sal_Bool OStatement::supportsService( const OUString& _rServiceName )
+bool OStatement::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -484,7 +484,7 @@ sal_Int32 OStatement::executeUpdate( const OUString& _rSQL )
     return m_xAggregateStatement->executeUpdate( sSQL );
 }
 
-sal_Bool OStatement::execute( const OUString& _rSQL )
+bool OStatement::execute( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);

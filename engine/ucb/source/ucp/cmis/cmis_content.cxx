@@ -136,8 +136,8 @@ namespace
             case libcmis::PropertyType::Bool:
                 {
                     auto aCmisBools = pProperty->getBools( );
-                    uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
-                    sal_Bool* aBoolsArr = aBools.getArray( );
+                    uno::Sequence< bool > aBools( aCmisBools.size( ) );
+                    bool* aBoolsArr = aBools.getArray( );
                     sal_Int32 i = 0;
                     for ( bool bCmisBool : aCmisBools )
                     {
@@ -187,7 +187,7 @@ namespace
         }
         else if ( prop.Type == CMIS_TYPE_BOOL )
         {
-            uno::Sequence< sal_Bool > seqValue;
+            uno::Sequence< bool > seqValue;
             value >>= seqValue;
             std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
                 [](const bool nValue) -> std::string { return std::string( OString::boolean( nValue ) ); });

@@ -1548,7 +1548,7 @@ void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
         if ( pWin )
         {
             pWin->SetFuncString( *pStrFormula, false );
-            // SetSumAssignMode due to sal_False not necessary
+            // SetSumAssignMode due to false not necessary
         }
         ScEnterMode nMode = bMatrix ? ScEnterMode::MATRIX : ScEnterMode::NORMAL;
         pHdl->EnterHandler( nMode );
@@ -1563,7 +1563,7 @@ void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
         if ( pWin )
         {
             pWin->SetFuncString( OUString(), false );
-            // SetSumAssignMode due to sal_False no necessary
+            // SetSumAssignMode due to false no necessary
         }
         pHdl->CancelHandler();
     }
@@ -1827,7 +1827,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument& rDoc,
                 if(pRefDlg)
                 {
                     // hide the (color) selection now instead of later from LoseFocus,
-                    // don't abort the ref input that causes this call (bDoneRefMode = sal_False)
+                    // don't abort the ref input that causes this call (bDoneRefMode = false)
                     pRefDlg->HideReference( false );
                     pRefDlg->SetReference( aNew, rDoc );
                 }

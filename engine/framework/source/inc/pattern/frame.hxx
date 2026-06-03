@@ -44,7 +44,7 @@ namespace framework::pattern::frame{
             the object, which should be closed here.
 
     @return [bool]
-            sal_True if closing failed.
+            true if closing failed.
  */
 inline bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource)
 {

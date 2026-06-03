@@ -497,7 +497,7 @@ namespace dlgprov
         return u"com.sun.star.comp.scripting.DialogProvider"_ustr;
     }
 
-    sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName )
+    bool DialogProviderImpl::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }

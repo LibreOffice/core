@@ -57,7 +57,7 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getCurrentValue()
     return css::uno::Any(dValue);
 }
 
-sal_Bool SVTXAccessibleNumericField::setCurrentValue(const css::uno::Any& aNumber)
+bool SVTXAccessibleNumericField::setCurrentValue(const css::uno::Any& aNumber)
 {
     OExternalLockGuard aGuard(this);
 

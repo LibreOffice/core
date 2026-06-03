@@ -49,7 +49,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
         virtual ~SanExtensionImpl() override;
 
         //Methods from XCertificateExtension
-        virtual sal_Bool SAL_CALL isCritical() override;
+        virtual bool SAL_CALL isCritical() override;
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() override;
 

@@ -129,8 +129,8 @@ public:
     virtual css::uno::Reference< css::linguistic2::XSpellChecker > SAL_CALL getSpellChecker(  ) override;
     virtual css::uno::Reference< css::linguistic2::XHyphenator > SAL_CALL getHyphenator(  ) override;
     virtual css::uno::Reference< css::linguistic2::XThesaurus > SAL_CALL getThesaurus(  ) override;
-    virtual sal_Bool SAL_CALL addLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual sal_Bool SAL_CALL removeLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual bool SAL_CALL addLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual bool SAL_CALL removeLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
     virtual void SAL_CALL setConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale, const css::uno::Sequence< OUString >& aServiceImplNames ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
@@ -145,7 +145,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XEventListener

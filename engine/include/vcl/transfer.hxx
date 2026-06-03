@@ -150,7 +150,7 @@ private:
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     public:
@@ -181,12 +181,12 @@ public:
     // XTransferable
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 
     // Transferable2
     virtual css::uno::Any SAL_CALL getTransferData2(
         const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-    virtual sal_Bool SAL_CALL isComplex() override;
+    virtual bool SAL_CALL isComplex() override;
 
 private:
 

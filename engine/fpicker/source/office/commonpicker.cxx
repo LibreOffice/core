@@ -290,7 +290,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName )
+    bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName )
     {
         checkAlive();
 
@@ -317,7 +317,7 @@ namespace svt
         return Sequence< OUString >();
     }
 
-    sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty )
+    bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty )
     {
         checkAlive();
 

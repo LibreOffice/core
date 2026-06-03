@@ -48,14 +48,14 @@ public:
     virtual ~SwVbaView() override;
 
    // XView
-    sal_Bool SAL_CALL getShowAll() override;
-    void SAL_CALL setShowAll(sal_Bool bSet) override;
+    bool SAL_CALL getShowAll() override;
+    void SAL_CALL setShowAll(bool bSet) override;
     virtual ::sal_Int32 SAL_CALL getSeekView() override;
     virtual void SAL_CALL setSeekView( ::sal_Int32 _seekview ) override;
     virtual ::sal_Int32 SAL_CALL getSplitSpecial() override;
     virtual void SAL_CALL setSplitSpecial( ::sal_Int32 _splitspecial ) override;
-    virtual sal_Bool SAL_CALL getTableGridLines() override;
-    virtual void SAL_CALL setTableGridLines( sal_Bool _tablegridlines ) override;
+    virtual bool SAL_CALL getTableGridLines() override;
+    virtual void SAL_CALL setTableGridLines( bool _tablegridlines ) override;
     virtual ::sal_Int32 SAL_CALL getType() override;
     virtual void SAL_CALL setType( ::sal_Int32 _type ) override;
 

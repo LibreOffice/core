@@ -73,7 +73,7 @@ namespace logging
         virtual void SAL_CALL setLevel( ::sal_Int32 _level ) override;
         virtual void SAL_CALL addLogHandler( const Reference< XLogHandler >& LogHandler ) override;
         virtual void SAL_CALL removeLogHandler( const Reference< XLogHandler >& LogHandler ) override;
-        virtual sal_Bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) override;
+        virtual bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) override;
         virtual void SAL_CALL log( ::sal_Int32 Level, const OUString& Message ) override;
         virtual void SAL_CALL logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) override;
 
@@ -105,7 +105,7 @@ namespace logging
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XLoggerPool
@@ -185,7 +185,7 @@ namespace logging
             m_aHandlers.removeInterface( _rxLogHandler );
     }
 
-    sal_Bool SAL_CALL EventLogger::isLoggable( ::sal_Int32 _nLevel )
+    bool SAL_CALL EventLogger::isLoggable( ::sal_Int32 _nLevel )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_nts_isLoggable_nothrow( _nLevel );
@@ -223,7 +223,7 @@ namespace logging
         return u"com.sun.star.comp.extensions.LoggerPool"_ustr;
     }
 
-    sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }

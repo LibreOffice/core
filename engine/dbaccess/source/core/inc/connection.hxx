@@ -143,7 +143,7 @@ public:
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // XConnection
@@ -151,14 +151,14 @@ public:
     virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
     virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
     virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-    virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
-    virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+    virtual void SAL_CALL setAutoCommit( bool autoCommit ) override;
+    virtual bool SAL_CALL getAutoCommit(  ) override;
     virtual void SAL_CALL commit(  ) override;
     virtual void SAL_CALL rollback(  ) override;
-    virtual sal_Bool SAL_CALL isClosed(  ) override;
+    virtual bool SAL_CALL isClosed(  ) override;
     virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-    virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
-    virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+    virtual void SAL_CALL setReadOnly( bool readOnly ) override;
+    virtual bool SAL_CALL isReadOnly(  ) override;
     virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
     virtual OUString SAL_CALL getCatalog(  ) override;
     virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;

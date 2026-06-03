@@ -343,7 +343,7 @@ public:
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel(  ) override final;
 
     // XInitialization
@@ -351,7 +351,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) final override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
 
     // may be called by certain subclasses that handle document meta-data

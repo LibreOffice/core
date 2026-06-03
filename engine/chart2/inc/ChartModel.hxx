@@ -252,7 +252,7 @@ public:
     // css::lang::XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::lang::XInitialization
@@ -260,7 +260,7 @@ public:
 
     // css::frame::XModel (required interface)
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         attachResource( const OUString& rURL,
                         const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
@@ -282,7 +282,7 @@ public:
     virtual void SAL_CALL
         unlockControllers() override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasControllersLocked() override;
 
     virtual css::uno::Reference< css::frame::XController > SAL_CALL
@@ -306,7 +306,7 @@ public:
 
     // css::util::XCloseable
     virtual void SAL_CALL
-        close( sal_Bool bDeliverOwnership ) override;
+        close( bool bDeliverOwnership ) override;
 
     // css::util::XCloseBroadcaster (base of XCloseable)
     virtual void SAL_CALL
@@ -320,13 +320,13 @@ public:
         const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     // css::frame::XStorable (required interface)
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasLocation() override;
 
     virtual OUString SAL_CALL
         getLocation() override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isReadonly() override;
 
     virtual void SAL_CALL
@@ -341,11 +341,11 @@ public:
                     const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     // css::util::XModifiable (required interface)
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isModified() override;
 
     virtual void SAL_CALL
-        setModified( sal_Bool bModified ) override;
+        setModified( bool bModified ) override;
 
     // css::util::XModifyBroadcaster (base of XModifiable)
     virtual void SAL_CALL
@@ -366,7 +366,7 @@ public:
     virtual css::uno::Any SAL_CALL getTransferData(
         const css::datatransfer::DataFlavor& aFlavor ) override;
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported(
+    virtual bool SAL_CALL isDataFlavorSupported(
         const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // lang::XTypeProvider (override method of WeakImplHelper)
@@ -387,8 +387,8 @@ public:
     virtual void SAL_CALL setFirstDiagram(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
     virtual void SAL_CALL
-        createInternalDataProvider( sal_Bool bCloneExistingData ) override;
-    virtual sal_Bool SAL_CALL hasInternalDataProvider() override;
+        createInternalDataProvider( bool bCloneExistingData ) override;
+    virtual bool SAL_CALL hasInternalDataProvider() override;
     virtual css::uno::Reference< css::chart2::data::XDataProvider > SAL_CALL
         getDataProvider() override;
     virtual void SAL_CALL

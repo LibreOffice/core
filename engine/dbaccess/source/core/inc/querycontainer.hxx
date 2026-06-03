@@ -137,7 +137,7 @@ namespace dbaccess
         virtual void SAL_CALL dropByIndex( sal_Int32 index ) override;
 
     // css::container::XElementAccess
-        virtual sal_Bool SAL_CALL hasElements(  ) override;
+        virtual bool SAL_CALL hasElements(  ) override;
     // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) override;
     // css::container::XNameAccess

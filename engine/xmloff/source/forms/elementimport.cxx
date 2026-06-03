@@ -1426,7 +1426,7 @@ namespace xmloff
             }
         }
 
-        // additionally, we need to set the "RichText" property of our element to sal_True
+        // additionally, we need to set the "RichText" property of our element to true
         // (the presence of the text:p is used as indicator for the value of the RichText property)
         bool bHasRichTextProperty = false;
         if ( m_xInfo.is() )
@@ -1434,7 +1434,7 @@ namespace xmloff
         OSL_ENSURE( bHasRichTextProperty, "OTextLikeImport::EndElement: text:p, but no rich text control?" );
         if ( bHasRichTextProperty )
             m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, Any( true ) );
-        // Note that we do *not* set the RichText property (in case our element has one) to sal_False here
+        // Note that we do *not* set the RichText property (in case our element has one) to false here
         // since this is the default of this property, anyway.
     }
 

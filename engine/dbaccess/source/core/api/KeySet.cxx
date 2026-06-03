@@ -1218,7 +1218,7 @@ bool OKeySet::fillAllRows()
 }
 
 // XRow
-sal_Bool SAL_CALL OKeySet::wasNull(  )
+bool SAL_CALL OKeySet::wasNull(  )
 {
     if ( ! m_xRow.is() )
         throwGenericSQLException(u"Must call getFOO() for some FOO before wasNull()"_ustr, *this);
@@ -1243,7 +1243,7 @@ OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex )
     return m_xRow->getString(columnIndex);
 }
 
-sal_Bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBoolean(columnIndex);

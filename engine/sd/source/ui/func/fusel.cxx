@@ -161,7 +161,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     // clicks in order to modify the selection for the right button as a
     // preparation for the context menu.  The functions BegMarkObject() and
     // BegDragObject(), however, are not called for right clicks because a)
-    // it makes no sense and b) to have IsAction() return sal_False when called
+    // it makes no sense and b) to have IsAction() return false when called
     // from Command() which is a prerequisite for the context menu.
     if ((rMEvt.IsLeft() || rMEvt.IsRight())
         && !mpView->IsAction()
@@ -1013,7 +1013,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
 /**
  * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ * @returns true if a KeyEvent is being processed, false otherwise
  */
 bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 {

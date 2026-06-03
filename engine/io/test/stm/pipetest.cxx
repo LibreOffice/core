@@ -106,7 +106,7 @@ public:
         throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed()                              throw  (    RuntimeException) ;
+    virtual bool SAL_CALL testPassed()                              throw  (    RuntimeException) ;
     virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException) ;
     virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getWarnings()                 throw  (RuntimeException);
@@ -198,7 +198,7 @@ sal_Int32 OPipeTest::test(
 }
 
 
-sal_Bool OPipeTest::testPassed()        throw  (RuntimeException)
+bool OPipeTest::testPassed()        throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
@@ -369,7 +369,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 
     p->create();
 
-    for(  i = 0 ; sal_True ; i ++ ) {
+    for(  i = 0 ; true ; i ++ ) {
         if( 0 == input->readBytes( seqRead, createIntSeq(i).getLength() ) ) {
             // eof reached !
             break;

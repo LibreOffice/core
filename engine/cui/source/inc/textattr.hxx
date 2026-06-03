@@ -64,8 +64,8 @@ private:
     DECL_LINK(ClickFullWidthHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(ClickHdl_Impl, weld::Toggleable&, void);
 
-    /** Return whether the text direction is from left to right (</sal_True>) or
-        top to bottom (</sal_False>).
+    /** Return whether the text direction is from left to right (</true>) or
+        top to bottom (</false>).
     */
     bool IsTextDirectionLeftToRight() const;
 

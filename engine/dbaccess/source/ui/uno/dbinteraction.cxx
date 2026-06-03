@@ -72,7 +72,7 @@ namespace dbaui
         m_xParentWindow.set(aMap.getValue(u"Parent"_ustr), UNO_QUERY);
     }
 
-    sal_Bool SAL_CALL BasicInteractionHandler::handleInteractionRequest( const Reference< XInteractionRequest >& i_rRequest )
+    bool SAL_CALL BasicInteractionHandler::handleInteractionRequest( const Reference< XInteractionRequest >& i_rRequest )
     {
         return impl_handle_throw( i_rRequest );
     }
@@ -346,7 +346,7 @@ namespace dbaui
     {
         return u"com.sun.star.comp.dbaccess.DatabaseInteractionHandler"_ustr;
     }
-    sal_Bool SAL_CALL SQLExceptionInteractionHandler::supportsService(const OUString& _rServiceName)
+    bool SAL_CALL SQLExceptionInteractionHandler::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -365,7 +365,7 @@ namespace dbaui
     {
         return u"com.sun.star.comp.dbaccess.LegacyInteractionHandler"_ustr;
     }
-    sal_Bool SAL_CALL LegacyInteractionHandler::supportsService(const OUString& _rServiceName)
+    bool SAL_CALL LegacyInteractionHandler::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

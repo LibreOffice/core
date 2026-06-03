@@ -553,8 +553,8 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     //some more shape properties apart from character properties, position-matrix and label string
     aValueMap.emplace( "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) ); // drawing::TextHorizontalAdjust - needs to be overwritten
     aValueMap.emplace( "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) ); //drawing::TextVerticalAdjust - needs to be overwritten
-    aValueMap.emplace( "TextAutoGrowHeight", uno::Any(true) ); // sal_Bool
-    aValueMap.emplace( "TextAutoGrowWidth", uno::Any(true) ); // sal_Bool
+    aValueMap.emplace( "TextAutoGrowHeight", uno::Any(true) ); // bool
+    aValueMap.emplace( "TextAutoGrowWidth", uno::Any(true) ); // bool
     aValueMap.emplace( "ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER) ); // style::ParagraphAdjust_CENTER - needs to be overwritten
     if( bName )
         aValueMap.emplace( "Name", uno::Any( OUString() ) ); //CID OUString - needs to be overwritten for each point

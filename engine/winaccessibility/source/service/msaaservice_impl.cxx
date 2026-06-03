@@ -72,7 +72,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName ) override;
+    virtual bool SAL_CALL supportsService( OUString const & serviceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -125,7 +125,7 @@ OUString MSAAServiceImpl::getImplementationName()
    * @param Service name.
    * @return If the service name is supported.
    */
-sal_Bool MSAAServiceImpl::supportsService( OUString const & serviceName )
+bool MSAAServiceImpl::supportsService( OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }

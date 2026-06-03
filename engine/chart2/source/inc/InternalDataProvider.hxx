@@ -80,11 +80,11 @@ public:
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ XInternalDataProvider ____
-    virtual sal_Bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange ) override;
+    virtual bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange ) override;
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL
         getDataByRangeRepresentation( const OUString& aRange ) override;
     virtual void SAL_CALL setDataByRangeRepresentation(
@@ -103,13 +103,13 @@ public:
     virtual void SAL_CALL insertDataSeries( ::sal_Int32 nAfterIndex ) override;
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
-    virtual sal_Bool SAL_CALL createDataSourcePossible(
+    virtual bool SAL_CALL createDataSourcePossible(
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource(
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
-    virtual sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+    virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
         const OUString& aRangeRepresentation ) override;
@@ -167,7 +167,7 @@ public:
     virtual void SAL_CALL removeChartDataChangeEventListener(
         const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double SAL_CALL getNotANumber() override;
-    virtual sal_Bool SAL_CALL isNotANumber(
+    virtual bool SAL_CALL isNotANumber(
         double nNumber ) override;
 
     // ____ XCloneable ____

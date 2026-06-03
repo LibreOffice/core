@@ -478,7 +478,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
             if (aType == cppu::UnoType<void>::get() && sDynamicType != "void")
             {
                 if (sDynamicType == "boolean")
-                    aType = cppu::UnoType<sal_Bool>::get();
+                    aType = cppu::UnoType<bool>::get();
                 else if (sDynamicType == "short")
                     aType = cppu::UnoType<sal_Int16>::get();
                 else if (sDynamicType == "long")
@@ -492,7 +492,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 else if (sDynamicType == "[]byte")
                     aType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
                 else if (sDynamicType == "[]boolean")
-                    aType = cppu::UnoType<css::uno::Sequence<sal_Bool>>::get();
+                    aType = cppu::UnoType<css::uno::Sequence<bool>>::get();
                 else if (sDynamicType == "[]short")
                     aType = cppu::UnoType<css::uno::Sequence<sal_Int16>>::get();
                 else if (sDynamicType == "[]long")
@@ -512,7 +512,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
             else
             {
                 bool bHasValue = sDynamicType != "void";
-                if (aType == cppu::UnoType<sal_Bool>::get())
+                if (aType == cppu::UnoType<bool>::get())
                 {
                     if (bHasValue)
                         sValue = OUString::boolean(aNode.get<bool>());
@@ -565,11 +565,11 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = u"hexBinary"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Bool>>::get())
+                else if (aType == cppu::UnoType<css::uno::Sequence<bool>>::get())
                 {
                     if (bHasValue)
                     {
-                        uno::Sequence<sal_Bool> seq = aNode.get<uno::Sequence<sal_Bool>>();
+                        uno::Sequence<bool> seq = aNode.get<uno::Sequence<bool>>();
                         for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                         {
                             if (j != 0)

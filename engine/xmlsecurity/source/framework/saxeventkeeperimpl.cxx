@@ -826,7 +826,7 @@ void SAL_CALL SAXEventKeeperImpl::removeBlocker( sal_Int32 id )
     markElementMarkBuffer(id);
 }
 
-sal_Bool SAL_CALL SAXEventKeeperImpl::isBlocking(  )
+bool SAL_CALL SAXEventKeeperImpl::isBlocking(  )
 {
     return (m_pCurrentBlockingBufferNode != nullptr);
 }
@@ -911,7 +911,7 @@ css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL SAXEventKe
 /* XSecuritySAXEventKeeper */
 sal_Int32 SAL_CALL SAXEventKeeperImpl::addSecurityElementCollector(
     css::xml::crypto::sax::ElementMarkPriority priority,
-    sal_Bool modifyElement )
+    bool modifyElement )
 {
     return createElementCollector(
         priority,
@@ -1141,7 +1141,7 @@ OUString SAL_CALL SAXEventKeeperImpl::getImplementationName(  )
     return SAXEventKeeperImpl_getImplementationName();
 }
 
-sal_Bool SAL_CALL SAXEventKeeperImpl::supportsService( const OUString& rServiceName )
+bool SAL_CALL SAXEventKeeperImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -133,7 +133,7 @@ protected:
 
     sal_uInt32              nHelpId;        // help ID
 
-    bool                    bMySet;         // sal_True: delete Set in dtor
+    bool                    bMySet;         // true: delete Set in dtor
     bool                    bHidden;
 
     SfxStyleSheetBase( const OUString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam,

@@ -230,7 +230,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     @param pInfo
         [in]  the JavaInfo object with information about the JRE.
     @param pp_exist
-        [out] the parameter is set to either sal_True or sal_False. The value is
+        [out] the parameter is set to either true or false. The value is
         only valid if the function returns JFW_E_NONE.
 
    @return

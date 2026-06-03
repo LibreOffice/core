@@ -138,7 +138,7 @@ OUString SAL_CALL AreaWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.Area"_ustr;
 }
 
-sal_Bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

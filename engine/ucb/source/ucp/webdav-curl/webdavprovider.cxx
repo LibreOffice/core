@@ -93,7 +93,7 @@ ContentProvider::getSupportedServiceNames()
     return { WEBDAV_CONTENT_PROVIDER_SERVICE_NAME };
 }
 
-sal_Bool
+bool
 ContentProvider::supportsService(const OUString& s)
 {
     return cppu::supportsService(this, s);

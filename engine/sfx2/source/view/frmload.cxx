@@ -107,14 +107,14 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 
     // XSynchronousFrameLoader
 
-    virtual sal_Bool SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
+    virtual bool SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
     virtual void SAL_CALL cancel() override;
 
 protected:
@@ -625,7 +625,7 @@ std::shared_ptr<const SfxFilter> getEmptyURLFilter(std::u16string_view sURL)
     return pFilter;
 }
 
-sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
+bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
                                              const Reference< XFrame >& _rTargetFrame )
 {
     ENSURE_OR_THROW( _rTargetFrame.is(), "illegal NULL frame" );
@@ -866,7 +866,7 @@ OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sServiceName )
+bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

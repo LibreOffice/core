@@ -344,7 +344,7 @@ OUString SAL_CALL AquaClipboard::getImplementationName()
     return clipboard_getImplementationName();
 }
 
-sal_Bool SAL_CALL AquaClipboard::supportsService(OUString const & rServiceName)
+bool SAL_CALL AquaClipboard::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

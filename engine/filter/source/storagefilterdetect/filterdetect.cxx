@@ -180,7 +180,7 @@ OUString SAL_CALL StorageFilterDetect::getImplementationName()
     return u"com.sun.star.comp.filters.StorageFilterDetect"_ustr;
 }
 
-sal_Bool SAL_CALL StorageFilterDetect::supportsService(const OUString& rServiceName)
+bool SAL_CALL StorageFilterDetect::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

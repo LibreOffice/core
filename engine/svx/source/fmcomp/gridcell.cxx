@@ -1476,7 +1476,7 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
             // The IsNumeric at the column says nothing about the class of the used format, but
             // about the class of the field bound to the column. So when you bind a FormattedField
             // column to a double field and format it as text, m_rColumn.IsNumeric() returns
-            // sal_True. So that simply means that I can query the contents of the variant using
+            // true. So that simply means that I can query the contents of the variant using
             // getDouble, and then I can leave the rest (the formatting) to the FormattedField.
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
@@ -1523,7 +1523,7 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
             // The IsNumeric at the column says nothing about the class of the used format, but
             // about the class of the field bound to the column. So when you bind a FormattedField
             // column to a double field and format it as text, m_rColumn.IsNumeric() returns
-            // sal_True. So that simply means that I can query the contents of the variant using
+            // true. So that simply means that I can query the contents of the variant using
             // getDouble, and then I can leave the rest (the formatting) to the FormattedField.
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
@@ -3316,14 +3316,14 @@ Reference< css::awt::XControlModel >  FmXGridCell::getModel()
 
 // css::form::XBoundControl
 
-sal_Bool FmXGridCell::getLock()
+bool FmXGridCell::getLock()
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     return m_pColumn->isLocked();
 }
 
 
-void FmXGridCell::setLock(sal_Bool _bLock)
+void FmXGridCell::setLock(bool _bLock)
 {
     checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     if (getLock() == _bLock)
@@ -3350,14 +3350,14 @@ awt::Rectangle SAL_CALL FmXGridCell::getPosSize(  )
 }
 
 
-void SAL_CALL FmXGridCell::setVisible( sal_Bool )
+void SAL_CALL FmXGridCell::setVisible( bool )
 {
     OSL_FAIL( "FmXGridCell::setVisible: not implemented" );
     // not allowed to tamper with this for a grid cell
 }
 
 
-void SAL_CALL FmXGridCell::setEnable( sal_Bool )
+void SAL_CALL FmXGridCell::setEnable( bool )
 {
     OSL_FAIL( "FmXGridCell::setEnable: not implemented" );
     // not allowed to tamper with this for a grid cell
@@ -3768,14 +3768,14 @@ css::awt::Selection SAL_CALL FmXEditCell::getSelection()
     return css::awt::Selection(aSel.Min(), aSel.Max());
 }
 
-sal_Bool SAL_CALL FmXEditCell::isEditable()
+bool SAL_CALL FmXEditCell::isEditable()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_pEditImplementation && !m_pEditImplementation->IsReadOnly() && m_pEditImplementation->GetControl().IsEnabled();
 }
 
-void SAL_CALL FmXEditCell::setEditable( sal_Bool bEditable )
+void SAL_CALL FmXEditCell::setEditable( bool bEditable )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3925,7 +3925,7 @@ sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
     return TRISTATE_INDET;
 }
 
-void SAL_CALL FmXCheckBoxCell::enableTriState(sal_Bool b)
+void SAL_CALL FmXCheckBoxCell::enableTriState(bool b)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4198,7 +4198,7 @@ css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
     return {};
 }
 
-void SAL_CALL FmXListBoxCell::selectItemPos(sal_Int16 nPos, sal_Bool bSelect)
+void SAL_CALL FmXListBoxCell::selectItemPos(sal_Int16 nPos, bool bSelect)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4212,7 +4212,7 @@ void SAL_CALL FmXListBoxCell::selectItemPos(sal_Int16 nPos, sal_Bool bSelect)
     }
 }
 
-void SAL_CALL FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPositions, sal_Bool bSelect)
+void SAL_CALL FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPositions, bool bSelect)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4230,7 +4230,7 @@ void SAL_CALL FmXListBoxCell::selectItemsPos(const Sequence< sal_Int16 >& aPosit
     }
 }
 
-void SAL_CALL FmXListBoxCell::selectItem(const OUString& aItem, sal_Bool bSelect)
+void SAL_CALL FmXListBoxCell::selectItem(const OUString& aItem, bool bSelect)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4245,14 +4245,14 @@ void SAL_CALL FmXListBoxCell::selectItem(const OUString& aItem, sal_Bool bSelect
     }
 }
 
-sal_Bool SAL_CALL FmXListBoxCell::isMutipleMode()
+bool SAL_CALL FmXListBoxCell::isMutipleMode()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_bMulti;
 }
 
-void SAL_CALL FmXListBoxCell::setMultipleMode(sal_Bool bMulti)
+void SAL_CALL FmXListBoxCell::setMultipleMode(bool bMulti)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4584,12 +4584,12 @@ css::awt::Selection SAL_CALL FmXFilterCell::getSelection()
     return css::awt::Selection();
 }
 
-sal_Bool SAL_CALL FmXFilterCell::isEditable()
+bool SAL_CALL FmXFilterCell::isEditable()
 {
     return true;
 }
 
-void SAL_CALL FmXFilterCell::setEditable( sal_Bool /*bEditable*/ )
+void SAL_CALL FmXFilterCell::setEditable( bool /*bEditable*/ )
 {
 }
 

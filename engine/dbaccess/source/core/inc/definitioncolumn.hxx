@@ -197,7 +197,7 @@ namespace dbaccess
                                 css::uno::Any& rValue,
                                 sal_Int32 nHandle
                                  ) const override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        virtual bool SAL_CALL convertFastPropertyValue(
                                 css::uno::Any & rConvertedValue,
                                 css::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
@@ -245,7 +245,7 @@ namespace dbaccess
                                     css::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        virtual bool SAL_CALL convertFastPropertyValue(
                                 css::uno::Any & rConvertedValue,
                                 css::uno::Any & rOldValue,
                                 sal_Int32 nHandle,

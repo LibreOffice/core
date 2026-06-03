@@ -390,7 +390,7 @@ namespace dbaui
         showError( m_pImpl->m_aCurrentError );
     }
 
-    sal_Bool SAL_CALL DBSubComponentController::suspend(sal_Bool bSuspend)
+    bool SAL_CALL DBSubComponentController::suspend(bool bSuspend)
     {
         m_pImpl->m_bSuspended = bSuspend;
         if ( !bSuspend && !isConnected() )
@@ -399,7 +399,7 @@ namespace dbaui
         return true;
     }
 
-    sal_Bool SAL_CALL DBSubComponentController::attachModel( const Reference< XModel > & _rxModel)
+    bool SAL_CALL DBSubComponentController::attachModel( const Reference< XModel > & _rxModel)
     {
         if ( !_rxModel.is() )
             return false;
@@ -564,13 +564,13 @@ namespace dbaui
         m_pImpl->m_aModifyListeners.removeInterface( i_Listener );
     }
 
-    sal_Bool SAL_CALL DBSubComponentController::isModified(  )
+    bool SAL_CALL DBSubComponentController::isModified(  )
     {
         ::osl::MutexGuard aGuard( getMutex() );
         return impl_isModified();
     }
 
-    void SAL_CALL DBSubComponentController::setModified( sal_Bool i_bModified )
+    void SAL_CALL DBSubComponentController::setModified( bool i_bModified )
     {
         ::osl::ClearableMutexGuard aGuard( getMutex() );
 

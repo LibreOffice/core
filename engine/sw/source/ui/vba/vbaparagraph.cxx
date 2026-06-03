@@ -96,7 +96,7 @@ public:
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextRange>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return true; }
+    virtual bool SAL_CALL hasElements(  ) override { return true; }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {

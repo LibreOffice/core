@@ -72,9 +72,9 @@ private:
     virtual OUString SAL_CALL getURL() override;
 
     virtual void SAL_CALL open(
-        OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate) override;
+        OUString const & rURL, bool bReadOnly, bool bCreate) override;
 
-    virtual sal_Bool SAL_CALL isValid() override;
+    virtual bool SAL_CALL isValid() override;
 
     virtual void SAL_CALL close() override;
 
@@ -83,7 +83,7 @@ private:
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
     getRootKey() override;
 
-    virtual sal_Bool SAL_CALL isReadOnly() override;
+    virtual bool SAL_CALL isReadOnly() override;
 
     virtual void SAL_CALL mergeKey(
         OUString const & aKeyName, OUString const & aUrl) override;
@@ -91,7 +91,7 @@ private:
     virtual OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.comp.stoc.SimpleRegistry"_ustr; }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -119,9 +119,9 @@ public:
 private:
     virtual OUString SAL_CALL getKeyName() override;
 
-    virtual sal_Bool SAL_CALL isReadOnly() override;
+    virtual bool SAL_CALL isReadOnly() override;
 
-    virtual sal_Bool SAL_CALL isValid() override;
+    virtual bool SAL_CALL isValid() override;
 
     virtual css::registry::RegistryKeyType SAL_CALL getKeyType(
         OUString const & rKeyName) override;
@@ -176,7 +176,7 @@ private:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
 
-    virtual sal_Bool SAL_CALL createLink(
+    virtual bool SAL_CALL createLink(
         OUString const & aLinkName, OUString const & aLinkTarget) override;
 
     virtual void SAL_CALL deleteLink(OUString const & rLinkName) override;
@@ -194,13 +194,13 @@ OUString Key::getKeyName() {
     return key_->getName();
 }
 
-sal_Bool Key::isReadOnly()
+bool Key::isReadOnly()
 {
     std::scoped_lock guard(registry_->mutex_);
     return key_->isReadOnly();
 }
 
-sal_Bool Key::isValid() {
+bool Key::isValid() {
     std::scoped_lock guard(registry_->mutex_);
     return key_->isValid();
 }
@@ -805,7 +805,7 @@ css::uno::Sequence< OUString > Key::getKeyNames()
     return names;
 }
 
-sal_Bool Key::createLink(
+bool Key::createLink(
     OUString const & /*aLinkName*/, OUString const & /*aLinkTarget*/)
 {
     throw css::registry::InvalidRegistryException(
@@ -847,7 +847,7 @@ OUString SimpleRegistry::getURL() {
 }
 
 void SimpleRegistry::open(
-    OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
+    OUString const & rURL, bool bReadOnly, bool bCreate)
 {
     std::scoped_lock guard(mutex_);
     RegError err = (rURL.isEmpty() && bCreate)
@@ -864,7 +864,7 @@ void SimpleRegistry::open(
     }
 }
 
-sal_Bool SimpleRegistry::isValid() {
+bool SimpleRegistry::isValid() {
     std::scoped_lock guard(mutex_);
     return registry_->isValid();
 }
@@ -907,7 +907,7 @@ css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
     return new Key(this, root);
 }
 
-sal_Bool SimpleRegistry::isReadOnly()
+bool SimpleRegistry::isReadOnly()
 {
     std::scoped_lock guard(mutex_);
     return registry_->isReadOnly();

@@ -250,7 +250,7 @@ typedef XclExpValueRecord< sal_uInt16 >     XclExpUInt16Record;
 typedef XclExpValueRecord< double >         XclExpDoubleRecord;
 
 /** Record which contains a Boolean value.
-    @descr  The value is stored as 16-bit value: 0x0000 = sal_False, 0x0001 = TRUE. */
+    @descr  The value is stored as 16-bit value: 0x0000 = false, 0x0001 = TRUE. */
 class XclExpBoolRecord : public XclExpRecord
 {
 public:

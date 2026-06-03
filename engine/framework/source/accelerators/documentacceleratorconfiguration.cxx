@@ -67,7 +67,7 @@ public:
         return u"com.sun.star.comp.framework.DocumentAcceleratorConfiguration"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -80,7 +80,7 @@ public:
     // XUIConfigurationStorage
     virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-    virtual sal_Bool SAL_CALL hasStorage() override;
+    virtual bool SAL_CALL hasStorage() override;
 
     /** read all data into the cache. */
     void fillCache();
@@ -130,7 +130,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
         fillCache();
 }
 
-sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
+bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
 {
     SolarMutexGuard g;
     return m_xDocumentRoot.is();

@@ -155,7 +155,7 @@ sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength( const sal_Unicode*
 
 /* ----------------------------------------------------------------------- */
 
-sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength( const sal_Unicode* pStr1,
+bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength( const sal_Unicode* pStr1,
                                                               const char* pStr2,
                                                               sal_Int32 nStrLen ) noexcept
 {
@@ -745,7 +745,7 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     return cp;
 }
 
-sal_Bool rtl_convertStringToUString(
+bool rtl_convertStringToUString(
     rtl_uString ** target, char const * source, sal_Int32 length,
     rtl_TextEncoding encoding, sal_uInt32 flags) noexcept
 {
@@ -1048,7 +1048,7 @@ sal_Int32 SAL_CALL rtl_ustr_trim_WithLength(sal_Unicode* pStr, sal_Int32 nLen) n
     return rtl::str::trim_WithLength(pStr, nLen);
 }
 
-sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean(sal_Unicode* pStr, sal_Bool b) noexcept
+sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean(sal_Unicode* pStr, bool b) noexcept
 {
     return rtl::str::valueOfBoolean(pStr, b);
 }
@@ -1073,7 +1073,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfUInt64(sal_Unicode* pStr, sal_uInt64 n, sal_I
     return rtl::str::valueOfInt<RTL_USTR_MAX_VALUEOFUINT64>(pStr, n, nRadix);
 }
 
-sal_Bool SAL_CALL rtl_ustr_toBoolean(const sal_Unicode* pStr) noexcept
+bool SAL_CALL rtl_ustr_toBoolean(const sal_Unicode* pStr) noexcept
 {
     return rtl::str::toBoolean(pStr);
 }

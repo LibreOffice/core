@@ -69,7 +69,7 @@ namespace basprov
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XInitialization
@@ -82,7 +82,7 @@ namespace basprov
         // XBrowseNode
         virtual OUString SAL_CALL getName(  ) override;
         virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
-        virtual sal_Bool SAL_CALL hasChildNodes(  ) override;
+        virtual bool SAL_CALL hasChildNodes(  ) override;
         virtual sal_Int16 SAL_CALL getType(  ) override;
 
     protected:

@@ -30,7 +30,7 @@ public:
     MenuEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< container::XEnumeration > xEnumeration) : m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xEnumeration(std::move( xEnumeration ))
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         return m_xEnumeration->hasMoreElements();
     }

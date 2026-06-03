@@ -135,8 +135,8 @@ public:
     // css::awt::XWindow
     void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) override;
     css::awt::Rectangle SAL_CALL getPosSize(  ) override;
-    void SAL_CALL setVisible( sal_Bool Visible ) override;
-    void SAL_CALL setEnable( sal_Bool Enable ) override;
+    void SAL_CALL setVisible( bool Visible ) override;
+    void SAL_CALL setEnable( bool Enable ) override;
     void SAL_CALL setFocus(  ) override;
     void SAL_CALL addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rrxListener ) override;
     void SAL_CALL removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rrxListener ) override;
@@ -159,10 +159,10 @@ public:
     void SAL_CALL invalidateRect( const css::awt::Rectangle& Rect, sal_Int16 Flags ) override;
 
     // css::awt::XVclWindowPeer
-    sal_Bool SAL_CALL isChild( const css::uno::Reference< css::awt::XWindowPeer >& Peer ) override;
-    void SAL_CALL setDesignMode( sal_Bool bOn ) override;
-    sal_Bool SAL_CALL isDesignMode(  ) override;
-    void SAL_CALL enableClipSiblings( sal_Bool bClip ) override;
+    bool SAL_CALL isChild( const css::uno::Reference< css::awt::XWindowPeer >& Peer ) override;
+    void SAL_CALL setDesignMode( bool bOn ) override;
+    bool SAL_CALL isDesignMode(  ) override;
+    void SAL_CALL enableClipSiblings( bool bClip ) override;
     void SAL_CALL setForeground( sal_Int32 Color ) override;
     void SAL_CALL setControlFont( const css::awt::FontDescriptor& aFont ) override;
     void SAL_CALL getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) override;
@@ -175,7 +175,7 @@ public:
     css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::awt::XView
-    sal_Bool SAL_CALL setGraphics( const css::uno::Reference< css::awt::XGraphics >& aDevice ) override;
+    bool SAL_CALL setGraphics( const css::uno::Reference< css::awt::XGraphics >& aDevice ) override;
     css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics(  ) override;
     css::awt::Size SAL_CALL getSize(  ) override;
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
@@ -184,27 +184,27 @@ public:
     // css::awt::XDockableWindow
     void SAL_CALL addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) override;
     void SAL_CALL removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) override;
-    void SAL_CALL enableDocking( sal_Bool bEnable ) override;
-    sal_Bool SAL_CALL isFloating(  ) override;
-    void SAL_CALL setFloatingMode( sal_Bool bFloating ) override;
+    void SAL_CALL enableDocking( bool bEnable ) override;
+    bool SAL_CALL isFloating(  ) override;
+    void SAL_CALL setFloatingMode( bool bFloating ) override;
     void SAL_CALL lock(  ) override;
     void SAL_CALL unlock(  ) override;
-    sal_Bool SAL_CALL isLocked(  ) override;
+    bool SAL_CALL isLocked(  ) override;
     void SAL_CALL startPopupMode( const css::awt::Rectangle& WindowRect ) override;
-    sal_Bool SAL_CALL isInPopupMode(  ) override;
+    bool SAL_CALL isInPopupMode(  ) override;
 
     // css::awt::XWindow2
     void SAL_CALL setOutputSize( const css::awt::Size& aSize ) override;
     css::awt::Size SAL_CALL getOutputSize(  ) override;
-    sal_Bool SAL_CALL isVisible(  ) override;
-    sal_Bool SAL_CALL isActive(  ) override;
-    sal_Bool SAL_CALL isEnabled(  ) override;
-    sal_Bool SAL_CALL hasFocus(  ) override;
+    bool SAL_CALL isVisible(  ) override;
+    bool SAL_CALL isActive(  ) override;
+    bool SAL_CALL isEnabled(  ) override;
+    bool SAL_CALL hasFocus(  ) override;
 
     // css::beans::XPropertySetInfo
     css::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) override;
     css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
     // XStyleSettingsSupplier
     virtual css::uno::Reference< css::awt::XStyleSettings > SAL_CALL getStyleSettings() override;

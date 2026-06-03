@@ -601,7 +601,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
                     Bitmap aPaint(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                    xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
+                    xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( true ) here!
 
                     // create alpha mask from gradient
                     xVDev->SetDrawMode( DrawModeFlags::GrayGradient );

@@ -118,7 +118,7 @@ OUString SAL_CALL OPoolCollection::getImplementationName(  )
     return u"com.sun.star.sdbc.OConnectionPool"_ustr;
 }
 
-sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

@@ -74,7 +74,7 @@ public:
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 };
 
 }
@@ -506,7 +506,7 @@ uno::Type SAL_CALL SvxUnoGluePointAccess::getElementType()
     return cppu::UnoType<drawing::GluePoint2>::get();
 }
 
-sal_Bool SAL_CALL SvxUnoGluePointAccess::hasElements()
+bool SAL_CALL SvxUnoGluePointAccess::hasElements()
 {
     return bool(mpObject.get());
 }

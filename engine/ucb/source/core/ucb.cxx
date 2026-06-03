@@ -283,7 +283,7 @@ OUString SAL_CALL UniversalContentBroker::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UniversalContentBroker"_ustr;
 }
-sal_Bool SAL_CALL UniversalContentBroker::supportsService( const OUString& ServiceName )
+bool SAL_CALL UniversalContentBroker::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -344,7 +344,7 @@ Reference< XContentProvider > SAL_CALL
 UniversalContentBroker::registerContentProvider(
                             const Reference< XContentProvider >& Provider,
                             const OUString& Scheme,
-                            sal_Bool ReplaceExisting )
+                            bool ReplaceExisting )
 {
     osl::MutexGuard aGuard(m_aMutex);
 

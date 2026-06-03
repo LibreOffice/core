@@ -69,7 +69,7 @@ SchAxisDlg::SchAxisDlg(weld::Window* pWindow,
 
 void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 {
-    sal_Bool* pExistenceList = rOutput.aExistenceList.getArray();
+    bool* pExistenceList = rOutput.aExistenceList.getArray();
     pExistenceList[0]=m_xCbPrimaryX->get_active();
     pExistenceList[1]=m_xCbPrimaryY->get_active();
     pExistenceList[2]=m_xCbPrimaryZ->get_active();

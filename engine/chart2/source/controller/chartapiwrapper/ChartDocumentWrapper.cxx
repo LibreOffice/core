@@ -863,7 +863,7 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
 }
 
 // ____ XModel ____
-sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
+bool SAL_CALL ChartDocumentWrapper::attachResource(
     const OUString& URL,
     const Sequence< beans::PropertyValue >& Arguments )
 {
@@ -918,7 +918,7 @@ void SAL_CALL ChartDocumentWrapper::unlockControllers()
         xModel->unlockControllers();
 }
 
-sal_Bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
+bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -1537,7 +1537,7 @@ OUString SAL_CALL ChartDocumentWrapper::getImplementationName()
     return u"com.sun.star.comp.chart2.ChartDocumentWrapper"_ustr;
 }
 
-sal_Bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

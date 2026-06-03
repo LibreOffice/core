@@ -507,7 +507,7 @@ OUString AccessibleDialogWindow::getImplementationName()
     return u"com.sun.star.comp.basctl.AccessibleWindow"_ustr;
 }
 
-sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName )
+bool AccessibleDialogWindow::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -769,7 +769,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int64 nChildIndex )
 }
 
 
-sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 

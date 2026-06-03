@@ -66,8 +66,8 @@ COMPHELPER_DLLPUBLIC void copyProperties(const css::uno::Reference<css::beans::X
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
     @param          _rValueToSet        the new value which is about to be set
     @param          _rCurrentValue      the current value of the property
-    @return         sal_True, if the value could be converted and has changed
-                    sal_False, if the value could be converted and has not changed
+    @return         true, if the value could be converted and has changed
+                    false, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <typename T>
@@ -90,8 +90,8 @@ bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*o
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
     @param          _rValueToSet        the new value which is about to be set
     @param          _rCurrentValue      the current value of the property
-    @return         sal_True, if the value could be converted and has changed
-                    sal_False, if the value could be converted and has not changed
+    @return         true, if the value could be converted and has changed
+                    false, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <class ENUMTYPE>
@@ -118,8 +118,8 @@ tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*ou
     @param          _rValueToSet        the new value which is about to be set
     @param          _rCurrentValue      the current value of the property
     @param          _rExpectedType      the type which the property should have (if not void)
-    @return         sal_True, if the value could be converted and has changed
-                    sal_False, if the value could be converted and has not changed
+    @return         true, if the value could be converted and has changed
+                    false, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 COMPHELPER_DLLPUBLIC bool tryPropertyValue(css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, const css::uno::Any& _rValueToSet, const css::uno::Any& _rCurrentValue, const css::uno::Type& _rExpectedType);

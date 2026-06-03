@@ -346,24 +346,24 @@ namespace osl
             Valid values (depending on the Level) are:
             <ul>
             <li> <code>osl_Socket_Option_Debug</code><br>
-                 (sal_Bool) Socket debug flag 1 = enabled, 0 = disabled.
+                 (bool) Socket debug flag 1 = enabled, 0 = disabled.
 
             <li> <code>osl_Socket_OptionAcceptConn</code><br>
             <li> <code>osl_Socket_OptionReuseAddr</code><br>
-              (sal_Bool) Allows the socket to be bound to an address that is
+              (bool) Allows the socket to be bound to an address that is
               already in use.
               1 = multiple bound allowed, 0 = no multiple bounds allowed
 
             <li><code>osl_Socket_OptionKeepAlive</code><br>
-               (sal_Bool) Keepalive packets are sent by the underlying socket.
+               (bool) Keepalive packets are sent by the underlying socket.
                1 = enabled, 0 = disabled
 
             <li><code>osl_Socket_OptionDontRoute</code><br>
-               (sal_Bool) Do not route: send directly to interface.
+               (bool) Do not route: send directly to interface.
                   1 = do not route , 0 = routing possible
 
             <li><code>osl_Socket_OptionBroadcast</code><br>
-               (sal_Bool) Transmission of broadcast messages are allowed on the socket.
+               (bool) Transmission of broadcast messages are allowed on the socket.
                1 = transmission allowed, 0 = transmission disallowed
 
             <li><code>osl_Socket_OptionUseLoopback</code><br>
@@ -474,12 +474,12 @@ namespace osl
                                             sal_uInt32 BufferLen,
                                             oslSocketOptionLevel Level= osl_Socket_LevelSocket ) const;
 
-        /** Convenience function for setting sal_Bool and sal_Int32 option values.
+        /** Convenience function for setting bool and sal_Int32 option values.
             @see setOption()
          */
         inline bool setOption( oslSocketOption option, sal_Int32 nValue  );
 
-        /** Convenience function for retrieving sal_Bool and sal_Int32 option values.
+        /** Convenience function for retrieving bool and sal_Int32 option values.
             @see setOption()
          */
         inline sal_Int32 getOption( oslSocketOption option ) const;

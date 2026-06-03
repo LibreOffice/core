@@ -58,22 +58,22 @@ namespace DOM::events
         std::unique_lock const g(m_Mutex);
         return m_clientY;
     }
-    sal_Bool SAL_CALL CMouseEvent::getCtrlKey()
+    bool SAL_CALL CMouseEvent::getCtrlKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_ctrlKey;
     }
-    sal_Bool SAL_CALL CMouseEvent::getShiftKey()
+    bool SAL_CALL CMouseEvent::getShiftKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_shiftKey;
     }
-    sal_Bool SAL_CALL CMouseEvent::getAltKey()
+    bool SAL_CALL CMouseEvent::getAltKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_altKey;
     }
-    sal_Bool SAL_CALL CMouseEvent::getMetaKey()
+    bool SAL_CALL CMouseEvent::getMetaKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_metaKey;
@@ -90,18 +90,18 @@ namespace DOM::events
 
     void SAL_CALL CMouseEvent::initMouseEvent(
                         const OUString& typeArg,
-                        sal_Bool canBubbleArg,
-                        sal_Bool cancelableArg,
+                        bool canBubbleArg,
+                        bool cancelableArg,
                         const Reference< XAbstractView >& viewArg,
                         sal_Int32 detailArg,
                         sal_Int32 screenXArg,
                         sal_Int32 screenYArg,
                         sal_Int32 clientXArg,
                         sal_Int32 clientYArg,
-                        sal_Bool ctrlKeyArg,
-                        sal_Bool altKeyArg,
-                        sal_Bool shiftKeyArg,
-                        sal_Bool metaKeyArg,
+                        bool ctrlKeyArg,
+                        bool altKeyArg,
+                        bool shiftKeyArg,
+                        bool metaKeyArg,
                         sal_Int16 buttonArg,
                         const Reference< XEventTarget >& /*relatedTargetArg*/)
     {
@@ -130,8 +130,8 @@ namespace DOM::events
     }
 
     void SAL_CALL CMouseEvent::initUIEvent(const OUString& typeArg,
-                     sal_Bool canBubbleArg,
-                     sal_Bool cancelableArg,
+                     bool canBubbleArg,
+                     bool cancelableArg,
                      const Reference< XAbstractView >& viewArg,
                      sal_Int32 detailArg)
     {
@@ -158,12 +158,12 @@ namespace DOM::events
         return CUIEvent::getEventPhase();
     }
 
-    sal_Bool SAL_CALL CMouseEvent::getBubbles()
+    bool SAL_CALL CMouseEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    sal_Bool SAL_CALL CMouseEvent::getCancelable()
+    bool SAL_CALL CMouseEvent::getCancelable()
     {
         return CUIEvent::getCancelable();
     }
@@ -183,8 +183,8 @@ namespace DOM::events
         CUIEvent::preventDefault();
     }
 
-    void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)
+    void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+        bool cancelableArg)
     {
         // base initializer
         CUIEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);

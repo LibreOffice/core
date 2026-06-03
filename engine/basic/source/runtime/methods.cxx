@@ -179,8 +179,8 @@ static uno::Reference< ucb::XSimpleFileAccess3 > const & getFileAccess()
 }
 
 
-// Properties and methods lie down the return value at the Get (bPut = sal_False) in the
-// element 0 of the Argv; the value of element 0 is saved at Put (bPut = sal_True)
+// Properties and methods lie down the return value at the Get (bPut = false) in the
+// element 0 of the Argv; the value of element 0 is saved at Put (bPut = true)
 
 // CreateObject( class )
 
@@ -2181,7 +2181,7 @@ void SbRtl_IsDate(StarBASIC *, SbxArray & rPar, bool)
     if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-    // #46134 only string is converted, all other types result in sal_False
+    // #46134 only string is converted, all other types result in false
     SbxVariableRef xArg = rPar.Get(1);
     SbxDataType eType = xArg->GetType();
     bool bDate = false;
@@ -3268,7 +3268,7 @@ void SbRtl_Rnd(StarBASIC *, SbxArray & rPar, bool)
 }
 
 
-//  Syntax: Shell("Path",[ Window-Style,[ "Params", [ bSync = sal_False ]]])
+//  Syntax: Shell("Path",[ Window-Style,[ "Params", [ bSync = false ]]])
 //  WindowStyles (VBA compatible):
 //      2 == Minimized
 //      3 == Maximized

@@ -43,7 +43,7 @@ protected:
     // ____ XPropertySetInfo ____
     virtual Sequence< Property > SAL_CALL getProperties() override;
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
     OUString m_aColorPropName;
@@ -70,7 +70,7 @@ Property SAL_CALL lcl_ColorPropertySetInfo::getPropertyByName( const OUString& a
     throw UnknownPropertyException( m_aColorPropName, getXWeak());
 }
 
-sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
+bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
 {
     return Name == m_aColorPropName;
 }

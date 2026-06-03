@@ -120,7 +120,7 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
     return uno::Any(fValue);
 }
 
-sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& /* aNumber */ )
+bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& /* aNumber */ )
 {
     //  it is not possible to set a value
     return false;

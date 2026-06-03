@@ -256,7 +256,7 @@ Sequence<OUString> SvBaseEventDescriptor::getElementNames()
     return aSequence;
 }
 
-sal_Bool SvBaseEventDescriptor::hasByName(
+bool SvBaseEventDescriptor::hasByName(
     const OUString& rName )
 {
     SvMacroItemId nMacroID = getMacroID(rName);
@@ -268,12 +268,12 @@ Type SvBaseEventDescriptor::getElementType()
     return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
-sal_Bool SvBaseEventDescriptor::hasElements()
+bool SvBaseEventDescriptor::hasElements()
 {
     return mnMacroItems != 0;
 }
 
-sal_Bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
+bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -4248,7 +4248,7 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
 }
 
 //  XServiceInfo
-sal_Bool SVGWriter::supportsService(const OUString& sServiceName)
+bool SVGWriter::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

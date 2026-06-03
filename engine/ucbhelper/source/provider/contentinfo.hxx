@@ -64,7 +64,7 @@ public:
     // XPropertySetInfo
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
     virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
     // Non-Interface methods.
     void reset();
@@ -104,8 +104,8 @@ public:
     virtual css::uno::Sequence< css::ucb::CommandInfo > SAL_CALL getCommands() override;
     virtual css::ucb::CommandInfo SAL_CALL getCommandInfoByName( const OUString& Name ) override;
     virtual css::ucb::CommandInfo SAL_CALL getCommandInfoByHandle( sal_Int32 Handle ) override;
-    virtual sal_Bool SAL_CALL hasCommandByName( const OUString& Name ) override;
-    virtual sal_Bool SAL_CALL hasCommandByHandle( sal_Int32 Handle ) override;
+    virtual bool SAL_CALL hasCommandByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasCommandByHandle( sal_Int32 Handle ) override;
 
     // Non-Interface methods.
     void reset();

@@ -447,12 +447,12 @@ public:
     // XNameAccess
     virtual Any SAL_CALL getByName( const OUString& aName ) override;
     virtual Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
     virtual Type SAL_CALL getElementType(  ) override
     { return cppu::UnoType<OUString>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     { return !m_hEvents.empty(); }
 private:
 
@@ -491,7 +491,7 @@ ReadOnlyEventsNameContainer::getElementNames(  )
     return comphelper::mapKeysToSequence(m_hEvents);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ReadOnlyEventsNameContainer::hasByName( const OUString& aName )
 {
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
@@ -535,7 +535,7 @@ public:
     virtual void SAL_CALL firing(const ScriptEvent& evt) override;
     virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) override;
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) override;
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, bool GetsOwnership ) override;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) override;
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
@@ -570,7 +570,7 @@ public:
         return u"ooo.vba.EventListener"_ustr;
     }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -644,7 +644,7 @@ EventListener::approveFiring(const ScriptEvent& evt)
 
 // XCloseListener
 void SAL_CALL
-EventListener::queryClosing( const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ )
+EventListener::queryClosing( const lang::EventObject& /*Source*/, bool /*GetsOwnership*/ )
 {
     //Nothing to do
 }
@@ -890,7 +890,7 @@ public:
         return u"ooo.vba.VBAToOOEventDesc"_ustr;
     }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }

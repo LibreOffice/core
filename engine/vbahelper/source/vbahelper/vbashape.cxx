@@ -320,7 +320,7 @@ ScVbaShape::setTop( double _top )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaShape::getVisible()
 {
     // #STUB
@@ -329,7 +329,7 @@ ScVbaShape::getVisible()
 }
 
 void SAL_CALL
-ScVbaShape::setVisible( sal_Bool /*_visible*/ )
+ScVbaShape::setVisible( bool /*_visible*/ )
 {
     // #STUB
     //UNO Shapes are always visible
@@ -467,7 +467,7 @@ ScVbaShape::IncrementTop( double Increment )
 }
 
 void SAL_CALL
-ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_Int32 Scale )
+ScVbaShape::ScaleHeight( double Factor, bool /*RelativeToOriginalSize*/, sal_Int32 Scale )
 {
     double nHeight = getHeight();
     double nNewHeight = nHeight * Factor;
@@ -496,7 +496,7 @@ ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal
 }
 
 void SAL_CALL
-ScVbaShape::ScaleWidth( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_Int32 Scale )
+ScVbaShape::ScaleWidth( double Factor, bool /*RelativeToOriginalSize*/, sal_Int32 Scale )
 {
     double nWidth = getWidth();
     double nNewWidth = nWidth * Factor;
@@ -553,7 +553,7 @@ ScVbaShape::ShapeRange( const uno::Any& index )
     return uno::Any( xShapeRange );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaShape::getLockAspectRatio()
 {
     // #STUB
@@ -561,12 +561,12 @@ ScVbaShape::getLockAspectRatio()
 }
 
 void SAL_CALL
-ScVbaShape::setLockAspectRatio( sal_Bool /*_lockaspectratio*/ )
+ScVbaShape::setLockAspectRatio( bool /*_lockaspectratio*/ )
 {
     // #STUB
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaShape::getLockAnchor()
 {
     // #STUB
@@ -574,7 +574,7 @@ ScVbaShape::getLockAnchor()
 }
 
 void SAL_CALL
-ScVbaShape::setLockAnchor( sal_Bool /*_lockanchor*/ )
+ScVbaShape::setLockAnchor( bool /*_lockanchor*/ )
 {
     // #STUB
 }

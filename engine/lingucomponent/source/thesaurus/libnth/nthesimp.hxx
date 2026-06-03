@@ -97,7 +97,7 @@ public:
 
     // XSupportedLocales (for XThesaurus)
     virtual Sequence< Locale > SAL_CALL getLocales() override;
-    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) override;
+    virtual bool SAL_CALL hasLocale( const Locale& rLocale ) override;
 
     // XThesaurus
     virtual Sequence< Reference < css::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
@@ -115,7 +115,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:

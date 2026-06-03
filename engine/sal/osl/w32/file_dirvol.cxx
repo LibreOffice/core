@@ -1013,7 +1013,7 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
     return osl_File_E_None;
 }
 
-sal_Bool
+bool
 SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 {
     DirectoryItem_Impl *pA = static_cast<DirectoryItem_Impl *>(a);

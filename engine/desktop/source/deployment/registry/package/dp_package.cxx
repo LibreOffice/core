@@ -148,7 +148,7 @@ class BackendImpl : public ImplBaseT
         DescriptionInfoset getDescriptionInfoset() const;
 
         // Package
-        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+        virtual beans::Optional< beans::Ambiguous<bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -173,7 +173,7 @@ class BackendImpl : public ImplBaseT
             OUString const & identifier);
 
         // XPackage
-        virtual sal_Bool SAL_CALL isBundle() override;
+        virtual bool SAL_CALL isBundle() override;
 
         virtual Sequence< Reference<deployment::XPackage> > SAL_CALL getBundle(
             Reference<task::XAbortChannel> const & xAbortChannel,
@@ -190,9 +190,9 @@ class BackendImpl : public ImplBaseT
         virtual ::sal_Int32 SAL_CALL checkPrerequisites(
             const Reference< task::XAbortChannel >& xAbortChannel,
             const Reference< ucb::XCommandEnvironment >& xCmdEnv,
-            sal_Bool noLicenseChecking) override;
+            bool noLicenseChecking) override;
 
-        virtual sal_Bool SAL_CALL checkDependencies(
+        virtual bool SAL_CALL checkDependencies(
             const Reference< ucb::XCommandEnvironment >& xCmdEnv ) override;
 
         virtual beans::Optional<OUString> SAL_CALL getIdentifier() override;
@@ -206,7 +206,7 @@ class BackendImpl : public ImplBaseT
         virtual OUString SAL_CALL getDisplayName() override;
 
         virtual Reference< graphic::XGraphic > SAL_CALL
-        getIcon( sal_Bool bHighContrast ) override;
+        getIcon( bool bHighContrast ) override;
     };
     friend class PackageImpl;
 
@@ -237,7 +237,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const& name ) override;
+    virtual bool SAL_CALL supportsService( OUString const& name ) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XPackageRegistry
@@ -301,7 +301,7 @@ OUString BackendImpl::getImplementationName()
     return u"com.sun.star.comp.deployment.bundle.PackageRegistryBackend"_ustr;
 }
 
-sal_Bool BackendImpl::supportsService(OUString const & ServiceName)
+bool BackendImpl::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -476,7 +476,7 @@ void BackendImpl::PackageImpl::disposing()
 
 // Package
 
-beans::Optional< beans::Ambiguous<sal_Bool> >
+beans::Optional< beans::Ambiguous<bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -500,7 +500,7 @@ BackendImpl::PackageImpl::isRegistered_(
         Reference<task::XAbortChannel> xSubAbortChannel(
             xPackage->createAbortChannel() );
         AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
-        beans::Optional< beans::Ambiguous<sal_Bool> > option(
+        beans::Optional< beans::Ambiguous<bool> > option(
             xPackage->isRegistered( xSubAbortChannel, xCmdEnv ) );
 
         //present = true if at least one bundle item has this value.
@@ -509,7 +509,7 @@ BackendImpl::PackageImpl::isRegistered_(
         //If not, then the bundle has the status of not registered and ambiguous.
         if (option.IsPresent)
         {
-            beans::Ambiguous<sal_Bool> const & status = option.Value;
+            beans::Ambiguous<bool> const & status = option.Value;
             if (present)
             {
                 //we never come here in the first iteration
@@ -528,8 +528,8 @@ BackendImpl::PackageImpl::isRegistered_(
             }
         }
     }
-    return beans::Optional< beans::Ambiguous<sal_Bool> >(
-        present, beans::Ambiguous<sal_Bool>(reg, ambig) );
+    return beans::Optional< beans::Ambiguous<bool> >(
+        present, beans::Ambiguous<bool>(reg, ambig) );
 }
 
 OUString BackendImpl::PackageImpl::getTextFromURL(
@@ -681,7 +681,7 @@ bool BackendImpl::PackageImpl::checkLicense(
 ::sal_Int32 BackendImpl::PackageImpl::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
-        sal_Bool alreadyInstalled)
+        bool alreadyInstalled)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -704,7 +704,7 @@ bool BackendImpl::PackageImpl::checkLicense(
         return 0;
 }
 
-sal_Bool BackendImpl::PackageImpl::checkDependencies(
+bool BackendImpl::PackageImpl::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
 {
     if (m_bRemoved)
@@ -753,7 +753,7 @@ beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
 }
 
 
-uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool bHighContrast )
+uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( bool bHighContrast )
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -1147,7 +1147,7 @@ void BackendImpl::PackageImpl::exportTo(
 }
 
 
-sal_Bool BackendImpl::PackageImpl::isBundle()
+bool BackendImpl::PackageImpl::isBundle()
 {
     return true;
 }

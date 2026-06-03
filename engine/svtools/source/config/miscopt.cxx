@@ -145,7 +145,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
     Load( seqNames );
     Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
-    Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
+    Sequence< bool >    seqRO       = GetReadOnlyStates ( seqNames  );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.

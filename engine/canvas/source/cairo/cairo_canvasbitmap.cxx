@@ -148,7 +148,7 @@ namespace cairocanvas
         return u"CairoCanvas.CanvasBitmap"_ustr;
     }
 
-    sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
+    bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

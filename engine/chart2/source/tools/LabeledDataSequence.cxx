@@ -155,7 +155,7 @@ OUString SAL_CALL LabeledDataSequence::getImplementationName()
     return u"com.sun.star.comp.chart2.LabeledDataSequence"_ustr;
 }
 
-sal_Bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName )
+bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -73,7 +73,7 @@ Renderable::Renderable (BaseWindow* pWin)
                                                         u"EvenOdd"_ustr,
                                                         uno::Sequence<OUString>(),
                                                         0,
-                                                        uno::Sequence< sal_Bool >(),
+                                                        uno::Sequence< bool >(),
                                                         aEvenOddOpt);
 }
 

@@ -51,7 +51,7 @@ namespace dxcanvas
                        const ::basegfx::B2ISize&               rOutputOffset,
                        const css::rendering::StringContext&    rText,
                        const css::uno::Sequence< double >&     rLogicalAdvancements,
-                       const css::uno::Sequence< sal_Bool >&   rKashidaPositions,
+                       const css::uno::Sequence< bool >&   rKashidaPositions,
                        const css::uno::Reference<
                                css::rendering::XCanvasFont >&  rCanvasFont,
                        const css::geometry::Matrix2D&          rFontMatrix,

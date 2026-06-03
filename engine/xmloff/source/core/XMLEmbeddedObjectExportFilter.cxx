@@ -129,7 +129,7 @@ OUString SAL_CALL XMLEmbeddedObjectExportFilter::getImplementationName()
     return OUString();
 }
 
-sal_Bool SAL_CALL XMLEmbeddedObjectExportFilter::supportsService( const OUString& ServiceName )
+bool SAL_CALL XMLEmbeddedObjectExportFilter::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

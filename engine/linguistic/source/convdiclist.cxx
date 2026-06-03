@@ -84,12 +84,12 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
@@ -166,7 +166,7 @@ uno::Type SAL_CALL ConvDicNameContainer::getElementType(  )
     return cppu::UnoType<XConversionDictionary>::get();
 }
 
-sal_Bool SAL_CALL ConvDicNameContainer::hasElements(  )
+bool SAL_CALL ConvDicNameContainer::hasElements(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return !aConvDics.empty();
@@ -194,7 +194,7 @@ uno::Sequence< OUString > SAL_CALL ConvDicNameContainer::getElementNames(  )
     return comphelper::containerToSequence(aRes);
 }
 
-sal_Bool SAL_CALL ConvDicNameContainer::hasByName( const OUString& rName )
+bool SAL_CALL ConvDicNameContainer::hasByName( const OUString& rName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return GetByName( rName ).is();
@@ -518,7 +518,7 @@ OUString SAL_CALL ConvDicList::getImplementationName()
     return u"com.sun.star.lingu2.ConvDicList"_ustr;
 }
 
-sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
+bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

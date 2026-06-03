@@ -210,7 +210,7 @@ inline constexpr sal_uInt16                             SDRATTR_CAPTION_LAST    
 inline constexpr sal_uInt16                               SDRATTR_MISC_FIRST              (SDRATTR_CAPTION_LAST + 1);   // 1069
 inline constexpr TypedWhichId<SdrMetricItem>              SDRATTR_CORNER_RADIUS           (SDRATTR_MISC_FIRST + 0);     // 1069 long, def=0
 inline constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MINFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 1);     // 1070 long, def=0
-inline constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2);     // 1071 sal_Bool, def=sal_True
+inline constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2);     // 1071 bool, def=true
 inline constexpr TypedWhichId<SdrTextFitToSizeTypeItem>   SDRATTR_TEXT_FITTOSIZE          (SDRATTR_MISC_FIRST + 3);     // 1072 enum, def=css::drawing::TextFitToSizeType_NONE
 inline constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_LEFTDIST           (SDRATTR_MISC_FIRST + 4);     // 1073 long, def=0
 inline constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_RIGHTDIST          (SDRATTR_MISC_FIRST + 5);     // 1074 long, def=0
@@ -220,12 +220,12 @@ inline constexpr TypedWhichId<SdrTextVertAdjustItem>      SDRATTR_TEXT_VERTADJUS
 inline constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MAXFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 9);     // 1078 long, def=0
 inline constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MINFRAMEWIDTH      (SDRATTR_MISC_FIRST +10);     // 1079 long, def=0
 inline constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MAXFRAMEWIDTH      (SDRATTR_MISC_FIRST +11);     // 1080 long, def=0
-inline constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWWIDTH      (SDRATTR_MISC_FIRST +12);     // 1081 sal_Bool, def=sal_False
+inline constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWWIDTH      (SDRATTR_MISC_FIRST +12);     // 1081 bool, def=false
 inline constexpr TypedWhichId<SdrTextHorzAdjustItem>      SDRATTR_TEXT_HORZADJUST         (SDRATTR_MISC_FIRST +13);     // 1082 enum, def=SDRTEXTHORZADJUST_LEFT
 inline constexpr TypedWhichId<SdrTextAniKindItem>         SDRATTR_TEXT_ANIKIND            (SDRATTR_MISC_FIRST +14);     // 1083 enum, def=SdrTextAniKind::NONE - Pool V2/V4
 inline constexpr TypedWhichId<SdrTextAniDirectionItem>    SDRATTR_TEXT_ANIDIRECTION       (SDRATTR_MISC_FIRST +15);     // 1084 enum, def=SdrTextAniDirection::Left - Pool V2/V4
-inline constexpr TypedWhichId<SdrTextAniStartInsideItem>  SDRATTR_TEXT_ANISTARTINSIDE     (SDRATTR_MISC_FIRST +16);     // 1085 sal_Bool, def=sal_False - Pool V2/V4
-inline constexpr TypedWhichId<SdrTextAniStopInsideItem>   SDRATTR_TEXT_ANISTOPINSIDE      (SDRATTR_MISC_FIRST +17);     // 1086 sal_Bool, def=sal_False - Pool V2/V4
+inline constexpr TypedWhichId<SdrTextAniStartInsideItem>  SDRATTR_TEXT_ANISTARTINSIDE     (SDRATTR_MISC_FIRST +16);     // 1085 bool, def=false - Pool V2/V4
+inline constexpr TypedWhichId<SdrTextAniStopInsideItem>   SDRATTR_TEXT_ANISTOPINSIDE      (SDRATTR_MISC_FIRST +17);     // 1086 bool, def=false - Pool V2/V4
 inline constexpr TypedWhichId<SdrTextAniCountItem>        SDRATTR_TEXT_ANICOUNT           (SDRATTR_MISC_FIRST +18);     // 1087 sal_uInt16, def=0   - Pool V2/V4
 inline constexpr TypedWhichId<SdrTextAniDelayItem>        SDRATTR_TEXT_ANIDELAY           (SDRATTR_MISC_FIRST +19);     // 1088 sal_uInt16, def=0   - Pool V2/V4
 inline constexpr TypedWhichId<SdrTextAniAmountItem>       SDRATTR_TEXT_ANIAMOUNT          (SDRATTR_MISC_FIRST +20);     // 1089 sal_uInt16, def=0   - Pool V2/V4
@@ -283,9 +283,9 @@ inline constexpr sal_uInt16                    SDRATTR_CIRC_LAST      (SDRATTR_C
 
 // Only for Interfacing, not yet implemented. / * + * V4 /
 inline constexpr sal_uInt16                           SDRATTR_NOTPERSIST_FIRST (SDRATTR_CIRC_LAST + 1);      // 1131
-inline constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJMOVEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 0); // 1131  sal_Bool,   def=sal_False
-inline constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJSIZEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 1); // 1132  sal_Bool,   def=sal_False
-inline constexpr TypedWhichId<SdrObjPrintableItem>    SDRATTR_OBJPRINTABLE    (SDRATTR_NOTPERSIST_FIRST+ 2); // 1133  sal_Bool,   def=sal_True
+inline constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJMOVEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 0); // 1131  bool,   def=false
+inline constexpr TypedWhichId<SdrYesNoItem>           SDRATTR_OBJSIZEPROTECT  (SDRATTR_NOTPERSIST_FIRST+ 1); // 1132  bool,   def=false
+inline constexpr TypedWhichId<SdrObjPrintableItem>    SDRATTR_OBJPRINTABLE    (SDRATTR_NOTPERSIST_FIRST+ 2); // 1133  bool,   def=true
 inline constexpr TypedWhichId<SdrLayerIdItem>         SDRATTR_LAYERID         (SDRATTR_NOTPERSIST_FIRST+ 3); // 1134  sal_uInt16, def=0
 inline constexpr TypedWhichId<SdrLayerNameItem>       SDRATTR_LAYERNAME       (SDRATTR_NOTPERSIST_FIRST+ 4); // 1135  String, def=""
 inline constexpr TypedWhichId<SfxStringItem>          SDRATTR_OBJECTNAME      (SDRATTR_NOTPERSIST_FIRST+ 5); // 1136  String, def=""

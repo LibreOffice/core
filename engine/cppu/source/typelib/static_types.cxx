@@ -324,7 +324,7 @@ void init(
     typelib_TypeClass eTypeClass, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
-    sal_Bool const * pParameterizedTypes)
+    bool const * pParameterizedTypes)
 {
     assert( eTypeClass == typelib_TypeClass_STRUCT || eTypeClass == typelib_TypeClass_EXCEPTION );
 
@@ -362,7 +362,7 @@ void init(
             if (pParameterizedTypes != nullptr) {
                 reinterpret_cast< typelib_StructTypeDescription * >(
                     pComp)->pParameterizedTypes
-                    = new sal_Bool[nMembers];
+                    = new bool[nMembers];
             }
             for ( sal_Int32 i = 0 ; i < nMembers; ++i )
             {
@@ -415,7 +415,7 @@ void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
-    sal_Bool const * pParameterizedTypes ) noexcept
+    bool const * pParameterizedTypes ) noexcept
 {
     init(
         ppRef, typelib_TypeClass_STRUCT, pTypeName, pBaseType, nMembers,

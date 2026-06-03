@@ -157,7 +157,7 @@ Any OXMLDataSourceSetting::convertString(const css::uno::Type& _rExpectedType, c
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:     // bool
         {
             bool bValue(false);
             bool const bSuccess =

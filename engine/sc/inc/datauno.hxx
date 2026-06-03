@@ -135,7 +135,7 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
@@ -155,7 +155,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -216,7 +216,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -243,16 +243,16 @@ public:
     virtual css::table::CellAddress SAL_CALL getStartOutputPosition() override;
     virtual void SAL_CALL   setStartOutputPosition(
                                 const css::table::CellAddress& aStartOutputPosition ) override;
-    virtual sal_Bool SAL_CALL getUseColumnHeaders() override;
-    virtual void SAL_CALL   setUseColumnHeaders( sal_Bool bUseColumnHeaders ) override;
-    virtual sal_Bool SAL_CALL getUseRowHeaders() override;
-    virtual void SAL_CALL   setUseRowHeaders( sal_Bool bUseRowHeaders ) override;
-    virtual sal_Bool SAL_CALL getInsertLinks() override;
-    virtual void SAL_CALL   setInsertLinks( sal_Bool bInsertLinks ) override;
+    virtual bool SAL_CALL getUseColumnHeaders() override;
+    virtual void SAL_CALL   setUseColumnHeaders( bool bUseColumnHeaders ) override;
+    virtual bool SAL_CALL getUseRowHeaders() override;
+    virtual void SAL_CALL   setUseRowHeaders( bool bUseRowHeaders ) override;
+    virtual bool SAL_CALL getInsertLinks() override;
+    virtual void SAL_CALL   setInsertLinks( bool bInsertLinks ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -324,7 +324,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -464,7 +464,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -502,16 +502,16 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -531,7 +531,7 @@ public:
                             // XUnnamedDatabaseRanges
     virtual void SAL_CALL setByTable( const css::table::CellRangeAddress& aRange ) override;
     virtual css::uno::Any SAL_CALL getByTable( sal_Int32 nTab ) override;
-    virtual sal_Bool SAL_CALL hasByTable( sal_Int32 nTab ) override;
+    virtual bool SAL_CALL hasByTable( sal_Int32 nTab ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

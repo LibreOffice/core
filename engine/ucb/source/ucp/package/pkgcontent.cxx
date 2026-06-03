@@ -2362,7 +2362,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
     if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
     {
 //        if ( !bCreate )
-//            return sal_True;
+//            return true;
 
         try
         {

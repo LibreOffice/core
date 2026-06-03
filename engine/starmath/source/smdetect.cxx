@@ -127,7 +127,7 @@ OUString SAL_CALL SmFilterDetect::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName )
+bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

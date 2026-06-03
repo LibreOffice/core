@@ -43,21 +43,21 @@ public:
 
     // Decryption
 
-    virtual sal_Bool SAL_CALL generateEncryptionKey(const OUString& rPassword) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL generateEncryptionKey(const OUString& rPassword) override;
+    virtual bool SAL_CALL
     readEncryptionInfo(const css::uno::Sequence<css::beans::NamedValue>& aStreams) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     decrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
             css::uno::Reference<css::io::XOutputStream>& rxOutputStream) override;
 
-    virtual sal_Bool SAL_CALL checkDataIntegrity() override;
+    virtual bool SAL_CALL checkDataIntegrity() override;
 
     // Encryption
 
     virtual css::uno::Sequence<css::beans::NamedValue>
         SAL_CALL encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
 
     virtual css::uno::Sequence<css::beans::NamedValue>
@@ -65,7 +65,7 @@ public:
 
     // com.sun.star.lang.XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 

@@ -373,7 +373,7 @@ extern "C" void writeInfo(va_list * args) {
     component_writeInfoFunc fn = va_arg(*args, component_writeInfoFunc);
     void * smgr = va_arg(*args, void *);
     void * key = va_arg(*args, void *);
-    sal_Bool * ok = va_arg(*args, sal_Bool *);
+    bool * ok = va_arg(*args, bool *);
     *ok = (*fn)(smgr, key);
 }
 
@@ -413,7 +413,7 @@ void cppu::writeSharedLibComponentInfo(
         xMgr.get(), cppu::UnoType<css::lang::XMultiServiceFactory>::get());
     void * key = map.mapInterface(
         xKey.get(), cppu::UnoType<css::registry::XRegistryKey>::get());
-    sal_Bool ok;
+    bool ok;
     env.invoke(writeInfo, fp, smgr, key, &ok);
     (*env.get()->pExtEnv->releaseInterface)(env.get()->pExtEnv, key);
     if (smgr != nullptr) {

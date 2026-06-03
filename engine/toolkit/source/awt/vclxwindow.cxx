@@ -808,7 +808,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                sal_Bool *p_bFloating = static_cast<sal_Bool*>(rVclWindowEvent.GetData());
+                bool *p_bFloating = static_cast<bool*>(rVclWindowEvent.GetData());
 
                 css::lang::EventObject aEvent;
                 aEvent.Source = getXWeak();
@@ -956,7 +956,7 @@ css::awt::Rectangle VCLXWindow::getPosSize(  )
     return aBounds;
 }
 
-void VCLXWindow::setVisible( sal_Bool bVisible )
+void VCLXWindow::setVisible( bool bVisible )
 {
     SolarMutexGuard aGuard;
 
@@ -968,7 +968,7 @@ void VCLXWindow::setVisible( sal_Bool bVisible )
     }
 }
 
-void VCLXWindow::setEnable( sal_Bool bEnable )
+void VCLXWindow::setEnable( bool bEnable )
 {
     SolarMutexGuard aGuard;
 
@@ -1155,7 +1155,7 @@ void VCLXWindow::invalidateRect( const css::awt::Rectangle& rRect, sal_Int16 nIn
 
 
 // css::awt::XVclWindowPeer
-sal_Bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >& rxPeer )
+bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >& rxPeer )
 {
     SolarMutexGuard aGuard;
 
@@ -1170,20 +1170,20 @@ sal_Bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >
     return bIsChild;
 }
 
-void VCLXWindow::setDesignMode( sal_Bool bOn )
+void VCLXWindow::setDesignMode( bool bOn )
 {
     SolarMutexGuard aGuard;
 
     mpImpl->mbDesignMode = bOn;
 }
 
-sal_Bool VCLXWindow::isDesignMode(  )
+bool VCLXWindow::isDesignMode(  )
 {
     SolarMutexGuard aGuard;
     return mpImpl->mbDesignMode;
 }
 
-void VCLXWindow::enableClipSiblings( sal_Bool bClip )
+void VCLXWindow::enableClipSiblings( bool bClip )
 {
     SolarMutexGuard aGuard;
 
@@ -2224,7 +2224,7 @@ css::awt::Size VCLXWindow::calcAdjustedSize( const css::awt::Size& rNewSize )
 
 
 // css::awt::XView
-sal_Bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics >& rxDevice )
+bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics >& rxDevice )
 {
     SolarMutexGuard aGuard;
 
@@ -2367,7 +2367,7 @@ void SAL_CALL VCLXWindow::removeDockableWindowListener( const css::uno::Referenc
         mpImpl->getDockableWindowListeners().removeInterface( xListener );
 }
 
-void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable )
+void SAL_CALL VCLXWindow::enableDocking( bool bEnable )
 {
     SolarMutexGuard aGuard;
 
@@ -2376,7 +2376,7 @@ void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable )
         pWindow->EnableDocking( bEnable );
 }
 
-sal_Bool SAL_CALL VCLXWindow::isFloating(  )
+bool SAL_CALL VCLXWindow::isFloating(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2387,7 +2387,7 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  )
         return false;
 }
 
-void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating )
+void SAL_CALL VCLXWindow::setFloatingMode( bool bFloating )
 {
     SolarMutexGuard aGuard;
 
@@ -2396,7 +2396,7 @@ void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating )
         vcl::Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
 }
 
-sal_Bool SAL_CALL VCLXWindow::isLocked(  )
+bool SAL_CALL VCLXWindow::isLocked(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2430,7 +2430,7 @@ void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& )
     // deprecated
 }
 
-sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  )
+bool SAL_CALL VCLXWindow::isInPopupMode(  )
 {
     // deprecated
     return false;
@@ -2455,7 +2455,7 @@ css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
         return css::awt::Size();
 }
 
-sal_Bool SAL_CALL VCLXWindow::isVisible(  )
+bool SAL_CALL VCLXWindow::isVisible(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2464,7 +2464,7 @@ sal_Bool SAL_CALL VCLXWindow::isVisible(  )
         return false;
 }
 
-sal_Bool SAL_CALL VCLXWindow::isActive(  )
+bool SAL_CALL VCLXWindow::isActive(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2474,7 +2474,7 @@ sal_Bool SAL_CALL VCLXWindow::isActive(  )
 
 }
 
-sal_Bool SAL_CALL VCLXWindow::isEnabled(  )
+bool SAL_CALL VCLXWindow::isEnabled(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2483,7 +2483,7 @@ sal_Bool SAL_CALL VCLXWindow::isEnabled(  )
         return false;
 }
 
-sal_Bool SAL_CALL VCLXWindow::hasFocus(  )
+bool SAL_CALL VCLXWindow::hasFocus(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2518,7 +2518,7 @@ VCLXWindow::getPropertyByName( const OUString& rName )
     return GetPropHelper()->getPropertyByName( rName );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 VCLXWindow::hasPropertyByName( const OUString& rName )
 {
     return GetPropHelper()->hasPropertyByName( rName );

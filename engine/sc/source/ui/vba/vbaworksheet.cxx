@@ -371,7 +371,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection )
     }
 }
 
-sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode()
+bool SAL_CALL ScVbaWorksheet::getAutoFilterMode()
 {
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
@@ -383,7 +383,7 @@ sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode()
     return false;
 }
 
-void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode )
+void SAL_CALL ScVbaWorksheet::setAutoFilterMode( bool bAutoFilterMode )
 {
     ScDocShell* pDocShell = excel::getDocShell( getModel() );
     if (!pDocShell)
@@ -465,20 +465,20 @@ ScVbaWorksheet::getStandardHeight()
     return STANDARDHEIGHT;
 }
 
-sal_Bool
+bool
 ScVbaWorksheet::getProtectionMode()
 {
     return false;
 }
 
-sal_Bool
+bool
 ScVbaWorksheet::getProtectContents()
 {
     uno::Reference<util::XProtectable > xProtectable(getSheet(), uno::UNO_QUERY_THROW);
     return xProtectable->isProtected();
 }
 
-sal_Bool
+bool
 ScVbaWorksheet::getProtectDrawingObjects()
 {
     SCTAB nTab = 0;
@@ -498,7 +498,7 @@ ScVbaWorksheet::getProtectDrawingObjects()
     return false;
 }
 
-sal_Bool
+bool
 ScVbaWorksheet::getProtectScenarios()
 {
     return false;
@@ -914,7 +914,7 @@ ScVbaWorksheet::getValue( const OUString& aPropertyName )
     return uno::Any( xControl );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaWorksheet::hasMethod( const OUString& /*aName*/ )
 {
     return false;
@@ -943,7 +943,7 @@ ScVbaWorksheet::getFormControls() const
     return xFormControls;
 
                 }
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaWorksheet::hasProperty( const OUString& aName )
 {
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
@@ -992,12 +992,12 @@ ScVbaWorksheet::getServiceImplName()
 }
 
 void SAL_CALL
-ScVbaWorksheet::setEnableCalculation( sal_Bool bEnableCalculation )
+ScVbaWorksheet::setEnableCalculation( bool bEnableCalculation )
 {
     uno::Reference <sheet::XCalculatable> xCalculatable(getModel(), uno::UNO_QUERY_THROW);
     xCalculatable->enableAutomaticCalculation( bEnableCalculation);
 }
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaWorksheet::getEnableCalculation(  )
 {
     uno::Reference <sheet::XCalculatable> xCalculatable(getModel(), uno::UNO_QUERY_THROW);

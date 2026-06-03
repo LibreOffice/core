@@ -643,7 +643,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -688,7 +688,7 @@ OUString SAL_CALL FindTextToolbarController::getImplementationName()
     return u"com.sun.star.svx.FindTextToolboxController"_ustr;
 }
 
-sal_Bool SAL_CALL FindTextToolbarController::supportsService( const OUString& ServiceName )
+bool SAL_CALL FindTextToolbarController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -798,7 +798,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -834,7 +834,7 @@ OUString SAL_CALL UpDownSearchToolboxController::getImplementationName()
         u"com.sun.star.svx.DownSearchToolboxController"_ustr;
 }
 
-sal_Bool SAL_CALL UpDownSearchToolboxController::supportsService( const OUString& ServiceName )
+bool SAL_CALL UpDownSearchToolboxController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -893,7 +893,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -929,7 +929,7 @@ OUString SAL_CALL MatchCaseToolboxController::getImplementationName()
     return u"com.sun.star.svx.MatchCaseToolboxController"_ustr;
 }
 
-sal_Bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& ServiceName )
+bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -997,7 +997,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -1033,7 +1033,7 @@ OUString SAL_CALL MatchDiacriticsToolboxController::getImplementationName()
     return u"com.sun.star.svx.MatchDiacriticsToolboxController"_ustr;
 }
 
-sal_Bool SAL_CALL MatchDiacriticsToolboxController::supportsService( const OUString& ServiceName )
+bool SAL_CALL MatchDiacriticsToolboxController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1101,7 +1101,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -1135,7 +1135,7 @@ OUString SAL_CALL SearchFormattedToolboxController::getImplementationName()
     return u"com.sun.star.svx.SearchFormattedToolboxController"_ustr;
 }
 
-sal_Bool SAL_CALL SearchFormattedToolboxController::supportsService( const OUString& ServiceName )
+bool SAL_CALL SearchFormattedToolboxController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1194,7 +1194,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -1225,7 +1225,7 @@ OUString SAL_CALL FindAllToolboxController::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL FindAllToolboxController::supportsService( const OUString& ServiceName )
+bool SAL_CALL FindAllToolboxController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1278,7 +1278,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -1309,7 +1309,7 @@ OUString SAL_CALL ExitSearchToolboxController::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL ExitSearchToolboxController::supportsService( const OUString& ServiceName )
+bool SAL_CALL ExitSearchToolboxController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1373,7 +1373,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -1407,7 +1407,7 @@ OUString SAL_CALL SearchLabelToolboxController::getImplementationName()
 }
 
 
-sal_Bool SAL_CALL SearchLabelToolboxController::supportsService( const OUString& ServiceName )
+bool SAL_CALL SearchLabelToolboxController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1482,7 +1482,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
@@ -1543,7 +1543,7 @@ OUString SAL_CALL FindbarDispatcher::getImplementationName()
     return u"com.sun.star.comp.svx.Impl.FindbarDispatcher"_ustr;
 }
 
-sal_Bool SAL_CALL FindbarDispatcher::supportsService( const OUString& ServiceName )
+bool SAL_CALL FindbarDispatcher::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

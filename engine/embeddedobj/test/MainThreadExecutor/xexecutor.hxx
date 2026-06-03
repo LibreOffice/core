@@ -52,7 +52,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };
@@ -62,7 +62,7 @@ class MainThreadExecutor_Impl
     css::uno::Reference< css::task::XJob > m_xJob;
     css::uno::Sequence< css::beans::NamedValue > m_aArgs;
 
-    sal_Bool m_bExecuted;
+    bool m_bExecuted;
 public:
     MainThreadExecutor_Impl( const css::uno::Reference< css::task::XJob >& xJob,
                              const css::uno::Sequence< css::beans::NamedValue >& aArguments );
@@ -71,7 +71,7 @@ public:
 
     DECL_LINK( executor, void* );
 
-    sal_Bool isExecuted() const { return m_bExecuted; }
+    bool isExecuted() const { return m_bExecuted; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

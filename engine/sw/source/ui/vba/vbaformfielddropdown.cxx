@@ -34,7 +34,7 @@ SwVbaFormFieldDropDown::~SwVbaFormFieldDropDown() {}
 
 OUString SwVbaFormFieldDropDown::getDefaultPropertyName() { return u"Valid"_ustr; }
 
-sal_Bool SwVbaFormFieldDropDown::getValid()
+bool SwVbaFormFieldDropDown::getValid()
 {
     return m_pDropDown
            && IDocumentMarkAccess::GetType(*m_pDropDown)

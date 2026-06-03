@@ -180,7 +180,7 @@ namespace connectivity::sdbcx
 
         // css::container::XElementAccess
         virtual css::uno::Type SAL_CALL getElementType(  ) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) override;
+        virtual bool SAL_CALL hasElements(  ) override;
         // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) override;
         virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
@@ -188,7 +188,7 @@ namespace connectivity::sdbcx
             // css::container::XNameAccess
         virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
         // XEnumerationAccess
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
                     // css::util::XRefreshable

@@ -305,12 +305,12 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
     @param[in]  pItemB
     A directory handle to compare with pItemA
 
-    @retval sal_True if the items point to an identical resource
-    @retval sal_False if the items point to a different resource, or a fatal error occurred
+    @retval true if the items point to an identical resource
+    @retval false if the items point to a different resource, or a fatal error occurred
 
     @see osl_getDirectoryItem()
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(
+SAL_DLLPUBLIC bool SAL_CALL osl_identicalDirectoryItem(
                                         oslDirectoryItem pItemA,
                                         oslDirectoryItem pItemB );
 
@@ -942,7 +942,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFile(
     @see osl_setFilePos()
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_isEndOfFile(
-        oslFileHandle Handle, sal_Bool *pIsEOF );
+        oslFileHandle Handle, bool *pIsEOF );
 
 /** Write a number of bytes to a file.
 

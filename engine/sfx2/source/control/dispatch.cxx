@@ -119,7 +119,7 @@ struct SfxDispatcher_Impl
     SfxViewFrame*        pFrame;        // NULL or associated Frame
     tools::SvRef<SfxHintPoster>
                          xPoster;       // Execute asynchronous
-    bool                 bFlushing;     // sal_True during Flush //?
+    bool                 bFlushing;     // true during Flush //?
     bool                 bUpdated;      // Update_Impl has run
     bool                 bLocked;       // No Execute
     bool                 bInvalidateOnUnlock;   // because someone asked
@@ -151,8 +151,8 @@ bool SfxDispatcher::IsFlushed() const
 
 /** This method performs outstanding push- and pop- commands. For <SfxShell>s,
     which are new on the stack, the <SfxShell::Activate(bool)> is invoked
-    with bMDI == sal_True, for SfxShells that are removed from the stack, the
-    <SfxShell::Deactivate(bool)> is invoked with bMDI == sal_True
+    with bMDI == true, for SfxShells that are removed from the stack, the
+    <SfxShell::Deactivate(bool)> is invoked with bMDI == true
 */
 void SfxDispatcher::Flush()
 {
@@ -689,10 +689,10 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame const * pNew)
     @param ppShell the SfxShell, which are currently handled the nSlot
     @param ppSlot the SfxSlot, which are currently handled the nSlot
 
-    @return int      sal_True
+    @return int      true
                      The SfxShell was found, ppShell and ppSlot are valid.
 
-                     sal_False
+                     false
                      The SfxShell was not found, ppShell and ppSlot are invalid.
 */
 bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
@@ -922,7 +922,7 @@ SfxPoolItemHolder SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     pDispatcher->Execute( SID_OPENDOCUMENT, SfxCallMode::SYNCHRON,
         {   &SfxStringItem( SID_FILE_NAME, "\\tmp\\temp.sdd" ),
             &SfxStringItem( SID_FILTER_NAME, "StarDraw Presentation" ),
-            &SfxBoolItem( SID_DOC_READONLY, sal_False ),
+            &SfxBoolItem( SID_DOC_READONLY, false ),
         });
 */
 SfxPoolItemHolder SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall,
@@ -1465,12 +1465,12 @@ void SfxDispatcher::FlushImpl()
     Targeted disabling of Slots 1, 2 and 3:
 
         static sal_uInt16 const pSIDs[] = { 1, 2, 3 };
-        pDisp->SetSlotFilter( sal_False, sizeof(pSIDs)/sizeof(sal_uInt16), pSIDs );
+        pDisp->SetSlotFilter( false, sizeof(pSIDs)/sizeof(sal_uInt16), pSIDs );
 
     only permit Slots 5, 6 and 7:
 
         static sal_uInt16 const pSIDs[] = { 5, 6, 7 };
-        pDisp->SetSlotFilter( sal_True, sizeof(pSIDs)/sizeof(sal_uInt16), pSIDs );
+        pDisp->SetSlotFilter( true, sizeof(pSIDs)/sizeof(sal_uInt16), pSIDs );
 
     Turn-off Filter:
 
@@ -1501,7 +1501,7 @@ static int SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
 }
 
 /** Searches for 'nSID' in the Filter set by <SetSlotFilter()> and
-    returns sal_True, if the SIDis allowed, or sal_False, if it is
+    returns true, if the SIDis allowed, or false, if it is
     disabled by the Filter.
 
     @return             0       =>      disabled

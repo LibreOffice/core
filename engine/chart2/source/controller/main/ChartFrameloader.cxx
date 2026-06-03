@@ -63,7 +63,7 @@ OUString SAL_CALL ChartFrameLoader::getImplementationName()
     return u"com.sun.star.comp.chart2.ChartFrameLoader"_ustr;
 }
 
-sal_Bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )
+bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -75,7 +75,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNam
 
 // frame::XFrameLoader
 
-sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyValue >& rMediaDescriptor, const uno::Reference<frame::XFrame >& xFrame )
+bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyValue >& rMediaDescriptor, const uno::Reference<frame::XFrame >& xFrame )
 {
     //@todo ? need to add as terminate listener to desktop?
 

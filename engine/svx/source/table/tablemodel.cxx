@@ -313,14 +313,14 @@ std::vector<sal_Int32> TableModel::getColumnWidths()
 // XModifiable
 
 
-sal_Bool SAL_CALL TableModel::isModified(  )
+bool SAL_CALL TableModel::isModified(  )
 {
     ::SolarMutexGuard aGuard;
     return mbModified;
 }
 
 
-void SAL_CALL TableModel::setModified( sal_Bool bModified )
+void SAL_CALL TableModel::setModified( bool bModified )
 {
     {
         ::SolarMutexGuard aGuard;

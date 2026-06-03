@@ -73,7 +73,7 @@ OUString OConnection::getImplementationName(  )
     return u"com.sun.star.comp.dbaccess.Connection"_ustr;
 }
 
-sal_Bool OConnection::supportsService( const OUString& _rServiceName )
+bool OConnection::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -99,7 +99,7 @@ void OConnection::close()
     dispose();
 }
 
-sal_Bool OConnection::isClosed()
+bool OConnection::isClosed()
 {
     MutexGuard aGuard(m_aMutex);
     return !m_xMasterConnection.is();
@@ -159,14 +159,14 @@ OUString OConnection::nativeSQL(const OUString& sql)
     return m_xMasterConnection->nativeSQL(sql);
 }
 
-void OConnection::setAutoCommit(sal_Bool autoCommit)
+void OConnection::setAutoCommit(bool autoCommit)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->setAutoCommit(autoCommit);
 }
 
-sal_Bool OConnection::getAutoCommit()
+bool OConnection::getAutoCommit()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -194,14 +194,14 @@ Reference< XDatabaseMetaData >  OConnection::getMetaData()
     return m_xMasterConnection->getMetaData();
 }
 
-void OConnection::setReadOnly(sal_Bool readOnly)
+void OConnection::setReadOnly(bool readOnly)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->setReadOnly(readOnly);
 }
 
-sal_Bool OConnection::isReadOnly()
+bool OConnection::isReadOnly()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();

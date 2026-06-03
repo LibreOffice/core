@@ -102,7 +102,7 @@ enum DFF_TextHeader {
 // Transform
 #define DFF_Prop_Rotation                      4  //  Fixed Point 16.16 degrees
 // Protection
-#define DFF_Prop_LockAgainstGrouping         127  //  sal_Bool              Do not group this shape
+#define DFF_Prop_LockAgainstGrouping         127  //  bool              Do not group this shape
 // Text
 #define DFF_Prop_lTxid                       128  //  LONG                  id for the text, value determined by the host
 #define DFF_Prop_dxTextLeft                  129  //  LONG                  margins relative to shape's inscribed text rectangle (in EMUs)
@@ -114,19 +114,19 @@ enum DFF_TextHeader {
 #define DFF_Prop_txflTextFlow                136  //  MSO_TXFL              Text flow
 #define DFF_Prop_cdirFont                    137  //  MSO_CDIR              Font rotation
 #define DFF_Prop_hspNext                     138  //  MSO_HSP               ID of the next shape (used by Word for linked textboxes)
-#define DFF_Prop_AutoTextMargin              188  //  sal_Bool              use host's margin calculations
-#define DFF_Prop_RotateText                  189  //  sal_Bool              Rotate text with shape
-#define DFF_Prop_FitTextToShape              191  //  sal_Bool              Size text to fit shape size
+#define DFF_Prop_AutoTextMargin              188  //  bool              use host's margin calculations
+#define DFF_Prop_RotateText                  189  //  bool              Rotate text with shape
+#define DFF_Prop_FitTextToShape              191  //  bool              Size text to fit shape size
 // GeoText
 #define DFF_Prop_gtextUNICODE                192  //  WCHAR*                UNICODE text string
 #define DFF_Prop_gtextAlign                  194  //  MSO_GEOTEXTALIGN      alignment on curve
 #define DFF_Prop_gtextSize                   195  //  LONG                  default point size
 #define DFF_Prop_gtextSpacing                196  //  LONG                  fixed point 16.16
 #define DFF_Prop_gtextFont                   197  //  WCHAR*                font family name
-#define DFF_Prop_gtextFStretch               245  //  sal_Bool   400        Stretch to fit shape
-#define DFF_Prop_gtextFBold                  250  //  sal_Bool    20        Bold font
-#define DFF_Prop_gtextFItalic                251  //  sal_Bool    10        Italic font
-#define DFF_Prop_gtextFStrikethrough         255  //  sal_Bool     1        Strike through font
+#define DFF_Prop_gtextFStretch               245  //  bool   400        Stretch to fit shape
+#define DFF_Prop_gtextFBold                  250  //  bool    20        Bold font
+#define DFF_Prop_gtextFItalic                251  //  bool    10        Italic font
+#define DFF_Prop_gtextFStrikethrough         255  //  bool     1        Strike through font
 // Blip
 #define DFF_Prop_cropFromTop                 256  //  LONG                  16.16 fraction times total image width or height, as appropriate.
 #define DFF_Prop_cropFromBottom              257  //  LONG
@@ -140,7 +140,7 @@ enum DFF_TextHeader {
 #define DFF_Prop_pictureBrightness           265  //  LONG                  brightness setting
 #define DFF_Prop_pictureGamma                266  //  LONG                  16.16 gamma
 #define DFF_Prop_pictureId                   267  //  LONG                  Host-defined ID for OLE objects (usually a pointer)
-#define DFF_Prop_pictureActive               319  //  sal_Bool              Server is active (OLE objects only)
+#define DFF_Prop_pictureActive               319  //  bool              Server is active (OLE objects only)
 // Geometry
 #define DFF_Prop_geoLeft                     320  //  LONG                  Defines the G (geometry) coordinate space.
 #define DFF_Prop_geoTop                      321  //  LONG
@@ -165,10 +165,10 @@ enum DFF_TextHeader {
 #define DFF_Prop_pFormulas                   342  //  LONG
 #define DFF_Prop_textRectangles              343  //  LONG
 #define DFF_Prop_connectorType               344  //  LONG                  ->0=none, 1=segments, 2=custom, 3=rect
-#define DFF_Prop_f3DOK                       379  //  sal_Bool              3D may be set
-#define DFF_Prop_fGtextOK                    381  //  sal_Bool              Text effect (FontWork) supported
+#define DFF_Prop_f3DOK                       379  //  bool              3D may be set
+#define DFF_Prop_fGtextOK                    381  //  bool              Text effect (FontWork) supported
 #define DFF_Prop_fFillShadeShapeOK           382  //  BOOL
-#define DFF_Prop_fFillOK                     383  //  sal_Bool              OK to fill the shape through the UI or VBA?
+#define DFF_Prop_fFillOK                     383  //  bool              OK to fill the shape through the UI or VBA?
 // FillStyle
 #define DFF_Prop_fillType                    384  //  MSO_FILLTYPE          Type of fill
 #define DFF_Prop_fillColor                   385  //  MSO_CLR               Foreground color
@@ -183,8 +183,8 @@ enum DFF_TextHeader {
 #define DFF_Prop_fillToRight                 399  //  LONG                  Fraction 16.16
 #define DFF_Prop_fillToBottom                400  //  LONG                  Fraction 16.16
 #define DFF_Prop_fillShadeColors             407  //  IMsoArray             a preset array of colors
-#define DFF_Prop_fFilled                     443  //  sal_Bool              Is shape filled?
-#define DFF_Prop_fNoFillHitTest              447  //  sal_Bool              Hit test a shape as though filled
+#define DFF_Prop_fFilled                     443  //  bool              Is shape filled?
+#define DFF_Prop_fNoFillHitTest              447  //  bool              Hit test a shape as though filled
 // LineStyle
 #define DFF_Prop_lineColor                   448  //  MSO_CLR               Color of line
 #define DFF_Prop_lineOpacity                 449  //  LONG                  Not implemented
@@ -201,17 +201,17 @@ enum DFF_TextHeader {
 #define DFF_Prop_lineEndArrowLength          469  //  MSO_LINEENDLENGTH     Arrow at end
 #define DFF_Prop_lineJoinStyle               470  //  MSO_LINEJOIN          How to join lines
 #define DFF_Prop_lineEndCapStyle             471  //  MSO_LINECAP           How to end lines
-#define DFF_Prop_fLine                       508  //  sal_Bool              Any line?
-#define DFF_Prop_fNoLineDrawDash             511  //  sal_Bool              Draw a dashed line if no line
+#define DFF_Prop_fLine                       508  //  bool              Any line?
+#define DFF_Prop_fNoLineDrawDash             511  //  bool              Draw a dashed line if no line
 // ShadowStyle
 #define DFF_Prop_shadowType                  512  //  MSO_SHADOWTYPE        Type of effect
 #define DFF_Prop_shadowColor                 513  //  MSO_CLR               Foreground color
 #define DFF_Prop_shadowOpacity               516  //  LONG                  Fixed 16.16
 #define DFF_Prop_shadowOffsetX               517  //  LONG                  Offset shadow
 #define DFF_Prop_shadowOffsetY               518  //  LONG                  Offset shadow
-#define DFF_Prop_fshadowObscured             575  //  sal_Bool              Excel5-style shadow
+#define DFF_Prop_fshadowObscured             575  //  bool              Excel5-style shadow
 // PerspectiveStyle
-#define DFF_Prop_fPerspective                639  //  sal_Bool              On/off
+#define DFF_Prop_fPerspective                639  //  bool              On/off
 // 3D Object
 #define DFF_Prop_c3DSpecularAmt              640  //  LONG                  Fixed-point 16.16
 #define DFF_Prop_c3DDiffuseAmt               641  //  LONG                  Fixed-point 16.16
@@ -244,14 +244,14 @@ enum DFF_TextHeader {
 #define DFF_Prop_c3DFillY                    728  //  LONG                  tion; only their relative
 #define DFF_Prop_c3DFillZ                    729  //  LONG                  magnitudes matter
 #define DFF_Prop_c3DFillIntensity            730  //  LONG                  Fixed point intensity
-#define DFF_Prop_fc3DFillHarsh               767  //  sal_Bool              Is fill lighting harsh?
+#define DFF_Prop_fc3DFillHarsh               767  //  bool              Is fill lighting harsh?
 // Shape
 #define DFF_Prop_hspMaster                   769  //  MSO_HSP               master shape
 #define DFF_Prop_cxstyle                     771  //  MSO_CXSTYLE           Type of connector
-#define DFF_Prop_fBackground                 831  //  sal_Bool              If sal_True, this is the background shape.
+#define DFF_Prop_fBackground                 831  //  bool              If true, this is the background shape.
 
 // Callout
-#define DFF_Prop_fCalloutLengthSpecified     895  //  sal_Bool              if true, we look at dxyCalloutLengthSpecified
+#define DFF_Prop_fCalloutLengthSpecified     895  //  bool              if true, we look at dxyCalloutLengthSpecified
 
 // GroupShape
 #define DFF_Prop_wzName                      896  //  WCHAR*                Shape Name (present only if explicitly set)
@@ -264,8 +264,8 @@ enum DFF_TextHeader {
 #define DFF_Prop_dyWrapDistBottom            903  //  LONG                  Bottom wrapping distance from text (Word)
 #define DFF_Prop_tableProperties             927  //  LONG
 #define DFF_Prop_tableRowProperties          928  //  LONG*
-#define DFF_Prop_fHidden                     958  //  sal_Bool              Do not display
-#define DFF_Prop_fPrint                      959  //  sal_Bool              Print this shape
+#define DFF_Prop_fHidden                     958  //  bool              Do not display
+#define DFF_Prop_fPrint                      959  //  bool              Print this shape
 
 // properties of the second property set
 #define DFF_Prop_metroBlob                   937  // XML ZipPackage*

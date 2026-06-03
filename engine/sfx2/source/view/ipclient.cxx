@@ -141,10 +141,10 @@ public:
 
     // XEmbeddedClient
     virtual void SAL_CALL saveObject() override;
-    virtual void SAL_CALL visibilityChanged( sal_Bool bVisible ) override;
+    virtual void SAL_CALL visibilityChanged( bool bVisible ) override;
 
     // XInplaceClient
-    virtual sal_Bool SAL_CALL canInplaceActivate() override;
+    virtual bool SAL_CALL canInplaceActivate() override;
     virtual void SAL_CALL activatingInplace() override;
     virtual void SAL_CALL activatingUI() override;
     virtual void SAL_CALL deactivatedInplace() override;
@@ -312,7 +312,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
+void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( bool bVisible )
 {
     SolarMutexGuard aGuard;
 
@@ -327,7 +327,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
 
 // XInplaceClient
 
-sal_Bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
+bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
 {
     if ( !m_xObject.is() )
         throw uno::RuntimeException();
@@ -526,7 +526,7 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
     tools::Rectangle aNewLogicRect = m_pClient->GetEditWin()->PixelToLogic( aNewPixelRect );
 
     // all the size changes in this method should happen without scaling
-    // SfxBooleanFlagGuard aGuard( m_bResizeNoScale, sal_True );
+    // SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
     // allow container to apply restrictions on the requested new area;
     // the container might change the object view during size calculation;

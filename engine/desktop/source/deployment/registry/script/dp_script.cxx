@@ -56,7 +56,7 @@ class BackendImpl : public t_helper
         OUString m_dialogName;
 
         // Package
-        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+        virtual beans::Optional< beans::Ambiguous<bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
@@ -97,7 +97,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XUpdatable
@@ -173,7 +173,7 @@ OUString BackendImpl::getImplementationName()
     return u"com.sun.star.comp.deployment.script.PackageRegistryBackend"_ustr;
 }
 
-sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
+bool BackendImpl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -311,7 +311,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     return pBackend;
 }
 
-beans::Optional< beans::Ambiguous<sal_Bool> >
+beans::Optional< beans::Ambiguous<bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & /* guard */,
     ::rtl::Reference<AbortChannel> const & /* abortChannel */,
@@ -321,9 +321,9 @@ BackendImpl::PackageImpl::isRegistered_(
     Reference< deployment::XPackage > xThisPackage( this );
 
     bool registered = that->hasActiveEntry(getURL());
-    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+    return beans::Optional< beans::Ambiguous<bool> >(
         true /* IsPresent */,
-        beans::Ambiguous<sal_Bool>( registered, false /* IsAmbiguous */ ) );
+        beans::Ambiguous<bool>( registered, false /* IsAmbiguous */ ) );
 }
 
 void

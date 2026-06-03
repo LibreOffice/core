@@ -147,7 +147,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XModifyBroadcaster
@@ -158,8 +158,8 @@ public:
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
-    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
+    virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
@@ -169,8 +169,8 @@ public:
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
-    virtual sal_Bool SAL_CALL isReadOnly() override;
-    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, sal_Bool FindClosestMatch ) override;
+    virtual bool SAL_CALL isReadOnly() override;
+    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, bool FindClosestMatch ) override;
     virtual void SAL_CALL setDefaultLocale( const css::lang::Locale& locale ) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str ) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
@@ -275,7 +275,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XModifyBroadcaster
@@ -286,8 +286,8 @@ public:
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
-    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
+    virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
@@ -297,8 +297,8 @@ public:
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
-    virtual sal_Bool SAL_CALL isReadOnly() override;
-    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, sal_Bool FindClosestMatch ) override;
+    virtual bool SAL_CALL isReadOnly() override;
+    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, bool FindClosestMatch ) override;
     virtual void SAL_CALL setDefaultLocale( const css::lang::Locale& locale ) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str ) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
@@ -312,7 +312,7 @@ public:
 
     // XStringResourcePersistence
     virtual void SAL_CALL store(  ) override;
-    virtual sal_Bool SAL_CALL isModified(  ) override;
+    virtual bool SAL_CALL isModified(  ) override;
     virtual void SAL_CALL setComment( const OUString& Comment ) override;
     virtual void SAL_CALL storeToStorage
         ( const css::uno::Reference< css::embed::XStorage >& Storage,
@@ -344,7 +344,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
@@ -358,8 +358,8 @@ public:
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
-    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
+    virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
@@ -369,8 +369,8 @@ public:
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
-    virtual sal_Bool SAL_CALL isReadOnly() override;
-    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, sal_Bool FindClosestMatch ) override;
+    virtual bool SAL_CALL isReadOnly() override;
+    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, bool FindClosestMatch ) override;
     virtual void SAL_CALL setDefaultLocale( const css::lang::Locale& locale ) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str ) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
@@ -384,7 +384,7 @@ public:
 
     // XStringResourcePersistence
     virtual void SAL_CALL store(  ) override;
-    virtual sal_Bool SAL_CALL isModified(  ) override;
+    virtual bool SAL_CALL isModified(  ) override;
     virtual void SAL_CALL setComment( const OUString& Comment ) override;
     virtual void SAL_CALL storeToStorage
         ( const css::uno::Reference< css::embed::XStorage >& Storage,
@@ -426,7 +426,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
@@ -440,8 +440,8 @@ public:
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
     virtual OUString SAL_CALL resolveStringForLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
-    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
+    virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
@@ -451,8 +451,8 @@ public:
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
-    virtual sal_Bool SAL_CALL isReadOnly() override;
-    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, sal_Bool FindClosestMatch ) override;
+    virtual bool SAL_CALL isReadOnly() override;
+    virtual void SAL_CALL setCurrentLocale( const css::lang::Locale& locale, bool FindClosestMatch ) override;
     virtual void SAL_CALL setDefaultLocale( const css::lang::Locale& locale ) override;
     virtual void SAL_CALL setString( const OUString& ResourceID, const OUString& Str ) override;
     virtual void SAL_CALL setStringForLocale( const OUString& ResourceID, const OUString& Str,
@@ -466,7 +466,7 @@ public:
 
     // XStringResourcePersistence
     virtual void SAL_CALL store(  ) override;
-    virtual sal_Bool SAL_CALL isModified(  ) override;
+    virtual bool SAL_CALL isModified(  ) override;
     virtual void SAL_CALL setComment( const OUString& Comment ) override;
     virtual void SAL_CALL storeToStorage
         ( const css::uno::Reference< css::embed::XStorage >& Storage,

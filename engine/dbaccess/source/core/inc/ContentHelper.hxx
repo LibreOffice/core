@@ -127,7 +127,7 @@ namespace dbaccess
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
         // css::lang::XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         virtual OUString SAL_CALL getImplementationName(  ) override;
 

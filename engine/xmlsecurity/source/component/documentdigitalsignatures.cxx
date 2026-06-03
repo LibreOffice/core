@@ -118,12 +118,12 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
+    bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XDocumentDigitalSignatures
-    sal_Bool SAL_CALL signSignatureLine(
+    bool SAL_CALL signSignatureLine(
         const css::uno::Reference<css::embed::XStorage>& Storage,
         const css::uno::Reference<css::io::XStream>& xSignStream, const OUString& aSignatureLineId,
         const Reference<css::security::XCertificate>& xCertificate,
@@ -149,9 +149,9 @@ public:
     void SAL_CALL
     showCertificate(const css::uno::Reference<css::security::XCertificate>& Certificate) override;
     void SAL_CALL manageTrustedSources() override;
-    sal_Bool SAL_CALL
+    bool SAL_CALL
     isAuthorTrusted(const css::uno::Reference<css::security::XCertificate>& Author) override;
-    sal_Bool SAL_CALL isLocationTrusted(const OUString& Location) override;
+    bool SAL_CALL isLocationTrusted(const OUString& Location) override;
     void SAL_CALL addAuthorToTrustedSources(
         const css::uno::Reference<css::security::XCertificate>& Author) override;
     void SAL_CALL addLocationToTrustedSources(const OUString& Location) override;
@@ -170,15 +170,15 @@ public:
     css::uno::Reference<css::security::XCertificate> SAL_CALL chooseCertificateWithProps(
         css::uno::Sequence<css::beans::PropertyValue>& Properties) override;
 
-    sal_Bool SAL_CALL signDocumentWithCertificate(
+    bool SAL_CALL signDocumentWithCertificate(
                             css::uno::Reference<css::security::XCertificate> const & xCertificate,
                             css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const & xStream) override;
 
-    sal_Bool SAL_CALL trustUntrustedCertificate(
+    bool SAL_CALL trustUntrustedCertificate(
                             css::uno::Reference<css::security::XCertificate> const& xCertificate) override;
 
-    sal_Bool SAL_CALL signScriptingContentWithCertificate(
+    bool SAL_CALL signScriptingContentWithCertificate(
                             css::uno::Reference<css::security::XCertificate> const& xCertificate,
                             css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const& xStream) override;
@@ -260,7 +260,7 @@ OUString DocumentDigitalSignatures::getImplementationName()
     return u"com.sun.star.security.DocumentDigitalSignatures"_ustr;
 }
 
-sal_Bool DocumentDigitalSignatures::supportsService(
+bool DocumentDigitalSignatures::supportsService(
     OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
@@ -273,7 +273,7 @@ DocumentDigitalSignatures::getSupportedServiceNames()
     return aRet;
 }
 
-sal_Bool DocumentDigitalSignatures::signSignatureLine(
+bool DocumentDigitalSignatures::signSignatureLine(
     const Reference<css::embed::XStorage>& rxStorage,
     const Reference<css::io::XStream>& xSignStream,
     const OUString& aSignatureLineId,
@@ -612,7 +612,7 @@ void DocumentDigitalSignatures::showCertificate(
     }
 }
 
-sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
+bool DocumentDigitalSignatures::isAuthorTrusted(
     const Reference<css::security::XCertificate>& xAuthor)
 {
     if (!xAuthor.is())
@@ -747,7 +747,7 @@ css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::ch
     return xCert;
 }
 
-sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location )
+bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location )
 {
     return SvtSecurityOptions::isTrustedLocationUri(Location);
 }
@@ -776,7 +776,7 @@ void DocumentDigitalSignatures::addLocationToTrustedSources( const OUString& Loc
     SvtSecurityOptions::SetSecureURLs( std::move(aSecURLs) );
 }
 
-sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
+bool DocumentDigitalSignatures::signDocumentWithCertificate(
             css::uno::Reference<css::security::XCertificate> const & xCertificate,
             css::uno::Reference<css::embed::XStorage> const & xStorage,
             css::uno::Reference<css::io::XStream> const & xStream)
@@ -822,7 +822,7 @@ void DocumentDigitalSignatures::SetSignScriptingContent(
     mxScriptingSignStream = xScriptingSignStream;
 }
 
-sal_Bool DocumentDigitalSignatures::trustUntrustedCertificate(
+bool DocumentDigitalSignatures::trustUntrustedCertificate(
     css::uno::Reference<css::security::XCertificate> const& xCertificate)
 {
     OUString aSubjectName(comphelper::xmlsec::GetContentPart(xCertificate->getSubjectName(), xCertificate->getCertificateKind()));
@@ -833,7 +833,7 @@ sal_Bool DocumentDigitalSignatures::trustUntrustedCertificate(
     return m_xQueryBox->run() == RET_YES;
 }
 
-sal_Bool DocumentDigitalSignatures::signScriptingContentWithCertificate(
+bool DocumentDigitalSignatures::signScriptingContentWithCertificate(
     css::uno::Reference<css::security::XCertificate> const& xCertificate,
     css::uno::Reference<css::embed::XStorage> const& xStorage,
     css::uno::Reference<css::io::XStream> const& xStream)

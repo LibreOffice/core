@@ -221,7 +221,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
                                       char cDecSeparator,
                                       sal_Int32 const * pGroups,
                                       char cGroupSeparator,
-                                      sal_Bool bEraseTrailingDecZeros)
+                                      bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C();
 
 /** Conversions analogous to sprintf() using internal rounding.
@@ -296,7 +296,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
                                        sal_Unicode cDecSeparator,
                                        sal_Int32 const * pGroups,
                                        sal_Unicode cGroupSeparator,
-                                       sal_Bool bEraseTrailingDecZeros)
+                                       bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C();
 
 /** Conversion analogous to strtod(), convert a string representing a

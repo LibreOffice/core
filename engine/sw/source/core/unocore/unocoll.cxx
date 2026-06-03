@@ -177,7 +177,7 @@ public:
     SwVbaProjectNameProvider()
     {
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         return ( mTemplateToProject.find( aName ) != mTemplateToProject.end() );
     }
@@ -219,7 +219,7 @@ public:
     {
         return ::cppu::UnoType<OUString>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
 
         return ( !mTemplateToProject.empty() );
@@ -236,7 +236,7 @@ public:
         // #FIXME #TODO is the code name for ThisDocument read anywhere?
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         // #FIXME #TODO we really need to be checking against the codename for
         // ThisDocument
@@ -263,7 +263,7 @@ public:
     }
     // XElemenAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override { return uno::Type(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return true; }
+    virtual bool SAL_CALL hasElements(  ) override { return true; }
 
 };
 
@@ -941,7 +941,7 @@ uno::Sequence< OUString > SwXTextTables::getElementNames()
     return aSeq;
 }
 
-sal_Bool SwXTextTables::hasByName(const OUString& rName)
+bool SwXTextTables::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     bool bRet= false;
@@ -965,7 +965,7 @@ uno::Type SAL_CALL
     return cppu::UnoType<XTextTable>::get();
 }
 
-sal_Bool SwXTextTables::hasElements()
+bool SwXTextTables::hasElements()
 {
     SolarMutexGuard aGuard;
     return 0 != GetDoc().GetTableFrameFormatCount(true);
@@ -976,7 +976,7 @@ OUString SwXTextTables::getImplementationName()
     return u"SwXTextTables"_ustr;
 }
 
-sal_Bool SwXTextTables::supportsService(const OUString& rServiceName)
+bool SwXTextTables::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1061,12 +1061,12 @@ namespace
             SwXFrameEnumeration(const SwDoc& rDoc);
 
             //XEnumeration
-            virtual sal_Bool SAL_CALL hasMoreElements() override;
+            virtual bool SAL_CALL hasMoreElements() override;
             virtual Any SAL_CALL nextElement() override;
 
             //XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+            virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
             virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     };
 }
@@ -1090,7 +1090,7 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc& rDoc)
 }
 
 template<FlyCntType T>
-sal_Bool SwXFrameEnumeration<T>::hasMoreElements()
+bool SwXFrameEnumeration<T>::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     return !m_aFrames.empty();
@@ -1115,7 +1115,7 @@ OUString SwXFrameEnumeration<T>::getImplementationName()
 }
 
 template<FlyCntType T>
-sal_Bool SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName)
+bool SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1131,7 +1131,7 @@ OUString SwXFrames::getImplementationName()
     return u"SwXFrames"_ustr;
 }
 
-sal_Bool SwXFrames::supportsService(const OUString& rServiceName)
+bool SwXFrames::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1223,7 +1223,7 @@ uno::Sequence<OUString> SwXFrames::getElementNames()
     return ::comphelper::containerToSequence(vNames);
 }
 
-sal_Bool SwXFrames::hasByName(const OUString& rName)
+bool SwXFrames::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     switch(m_eType)
@@ -1253,7 +1253,7 @@ uno::Type SAL_CALL SwXFrames::getElementType()
     }
 }
 
-sal_Bool SwXFrames::hasElements()
+bool SwXFrames::hasElements()
 {
     SolarMutexGuard aGuard;
     return GetDoc().GetFlyCount(m_eType) > 0;
@@ -1265,7 +1265,7 @@ OUString SwXTextFrames::getImplementationName()
     return u"SwXTextFrames"_ustr;
 }
 
-sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName)
+bool SwXTextFrames::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1289,7 +1289,7 @@ OUString SwXTextGraphicObjects::getImplementationName()
     return u"SwXTextGraphicObjects"_ustr;
 }
 
-sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName)
+bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1313,7 +1313,7 @@ OUString SwXTextEmbeddedObjects::getImplementationName()
     return u"SwXTextEmbeddedObjects"_ustr;
 }
 
-sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName)
+bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1337,7 +1337,7 @@ OUString SwXTextSections::getImplementationName()
     return u"SwXTextSections"_ustr;
 }
 
-sal_Bool SwXTextSections::supportsService(const OUString& rServiceName)
+bool SwXTextSections::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1452,7 +1452,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames()
     return aSeq;
 }
 
-sal_Bool SwXTextSections::hasByName(const OUString& rName)
+bool SwXTextSections::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -1483,7 +1483,7 @@ uno::Type SAL_CALL SwXTextSections::getElementType()
     return cppu::UnoType<XTextSection>::get();
 }
 
-sal_Bool SwXTextSections::hasElements()
+bool SwXTextSections::hasElements()
 {
     SolarMutexGuard aGuard;
     size_t nCount = 0;
@@ -1499,7 +1499,7 @@ OUString SwXBookmarks::getImplementationName()
     return u"SwXBookmarks"_ustr;
 }
 
-sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName)
+bool SwXBookmarks::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1600,7 +1600,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames()
     return comphelper::containerToSequence(ret);
 }
 
-sal_Bool SwXBookmarks::hasByName(const OUString& rName)
+bool SwXBookmarks::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
 
@@ -1613,7 +1613,7 @@ uno::Type SAL_CALL SwXBookmarks::getElementType()
     return cppu::UnoType<XTextContent>::get();
 }
 
-sal_Bool SwXBookmarks::hasElements()
+bool SwXBookmarks::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -1668,7 +1668,7 @@ uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType()
     return cppu::UnoType<XIndexReplace>::get();
 }
 
-sal_Bool SwXNumberingRulesCollection::hasElements()
+bool SwXNumberingRulesCollection::hasElements()
 {
     SolarMutexGuard aGuard;
     return !GetDoc().GetNumRuleTable().empty();
@@ -1679,7 +1679,7 @@ OUString SwXFootnotes::getImplementationName()
     return u"SwXFootnotes"_ustr;
 }
 
-sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName)
+bool SwXFootnotes::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1744,7 +1744,7 @@ uno::Type SAL_CALL SwXFootnotes::getElementType()
     return cppu::UnoType<XFootnote>::get();
 }
 
-sal_Bool SwXFootnotes::hasElements()
+bool SwXFootnotes::hasElements()
 {
     SolarMutexGuard aGuard;
     return !GetDoc().GetFootnoteIdxs().empty();
@@ -1755,7 +1755,7 @@ OUString SwXReferenceMarks::getImplementationName()
     return u"SwXReferenceMarks"_ustr;
 }
 
-sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName)
+bool SwXReferenceMarks::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1814,7 +1814,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames()
     return comphelper::containerToSequence(aStrings);
 }
 
-sal_Bool SwXReferenceMarks::hasByName(const OUString& rName)
+bool SwXReferenceMarks::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     return nullptr != GetDoc().GetRefMark( SwMarkName(rName) );
@@ -1825,7 +1825,7 @@ uno::Type SAL_CALL SwXReferenceMarks::getElementType()
     return cppu::UnoType<XTextContent>::get();
 }
 
-sal_Bool SwXReferenceMarks::hasElements()
+bool SwXReferenceMarks::hasElements()
 {
     SolarMutexGuard aGuard;
     return 0 != GetDoc().GetRefMarks();

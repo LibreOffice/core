@@ -57,7 +57,7 @@ class VbShapeEnumHelper : public EnumerationHelper_BASE
         sal_Int32 nIndex;
 public:
     VbShapeEnumHelper( rtl::Reference< ScVbaShapes > xParent, uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
-        virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+        virtual bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
@@ -395,7 +395,7 @@ ScVbaShapes::setDefaultShapeProperties( const uno::Reference< drawing::XShape >&
     xPropertySet->setPropertyValue( u"FillColor"_ustr, uno::Any( sal_Int32(0xFFFFFF) )  );
     xPropertySet->setPropertyValue( u"TextWordWrap"_ustr, uno::Any( text::WrapTextMode_THROUGH )  );
     //not find in OOo2.3
-    //xPropertySet->setPropertyValue("Opaque", uno::makeAny( sal_True )  );
+    //xPropertySet->setPropertyValue("Opaque", uno::makeAny( true )  );
 }
 
 void

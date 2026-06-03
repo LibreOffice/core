@@ -63,7 +63,7 @@ class ItemContainer final : public ::cppu::WeakImplHelper< css::container::XInde
             return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
     private:
         void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );

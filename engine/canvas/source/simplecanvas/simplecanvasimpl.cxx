@@ -165,8 +165,8 @@ namespace
         // Ifc XSimpleCanvas
         virtual void SAL_CALL selectFont( const OUString& sFontName,
                                           double                 size,
-                                          sal_Bool             bold,
-                                          sal_Bool             italic ) override
+                                          bool             bold,
+                                          bool             italic ) override
         {
             std::unique_lock aGuard( m_aMutex );
 
@@ -332,7 +332,7 @@ namespace
             return maViewState;
         }
 
-        virtual rendering::RenderState SAL_CALL getCurrentRenderState( sal_Bool bUseFillColor ) override
+        virtual rendering::RenderState SAL_CALL getCurrentRenderState( bool bUseFillColor ) override
         {
             std::unique_lock aGuard( m_aMutex );
             if( bUseFillColor )

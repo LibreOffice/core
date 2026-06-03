@@ -68,7 +68,7 @@ public:
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
-    virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
+    virtual bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
     /** The returned string is associated with resource
         RID_STR_ACC_ACTION_TOGGLEPOPUP.
     */
@@ -82,7 +82,7 @@ public:
 
     virtual css::uno::Any SAL_CALL getCurrentValue( ) override;
 
-    virtual sal_Bool SAL_CALL setCurrentValue(
+    virtual bool SAL_CALL setCurrentValue(
         const css::uno::Any& aNumber ) override;
 
     virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;

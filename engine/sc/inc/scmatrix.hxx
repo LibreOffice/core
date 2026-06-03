@@ -266,7 +266,7 @@ public:
     void PutEmpty(SCSIZE nIndex);
     void PutEmptyTrans( SCSIZE nIndex );
 
-    /// Jump sal_False without path
+    /// Jump false without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR) ;
     SC_DLLPUBLIC void PutError( FormulaError nErrorCode, SCSIZE nC, SCSIZE nR ) ;
     SC_DLLPUBLIC void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR) ;

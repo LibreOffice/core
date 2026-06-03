@@ -138,13 +138,13 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
     // XHierarchicalNameAccess
     virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByHierarchicalName( const OUString& aName ) override;
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
     // XChangesBatch
     virtual void SAL_CALL commitChanges(  ) override;
-    virtual sal_Bool SAL_CALL hasPendingChanges(  ) override;
+    virtual bool SAL_CALL hasPendingChanges(  ) override;
     virtual css::uno::Sequence< css::util::ElementChange > SAL_CALL getPendingChanges(  ) override;
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -157,7 +157,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 #endif

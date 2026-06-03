@@ -67,7 +67,7 @@ Sequence< OUString > SAL_CALL MasterScriptProviderFactory::getSupportedServiceNa
     return { u"com.sun.star.script.provider.MasterScriptProviderFactory"_ustr };
 }
 
-sal_Bool MasterScriptProviderFactory::supportsService(
+bool MasterScriptProviderFactory::supportsService(
     OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);

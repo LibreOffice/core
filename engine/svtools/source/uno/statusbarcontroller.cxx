@@ -281,19 +281,19 @@ void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event
 }
 
 // XStatusbarController
-sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
+bool SAL_CALL StatusbarController::mouseButtonDown(
     const css::awt::MouseEvent& )
 {
     return false;
 }
 
-sal_Bool SAL_CALL StatusbarController::mouseMove(
+bool SAL_CALL StatusbarController::mouseMove(
     const css::awt::MouseEvent& )
 {
     return false;
 }
 
-sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
+bool SAL_CALL StatusbarController::mouseButtonUp(
     const css::awt::MouseEvent& )
 {
     return false;
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
 void SAL_CALL StatusbarController::command(
     const css::awt::Point&,
     ::sal_Int32,
-    sal_Bool,
+    bool,
     const css::uno::Any& )
 {
 }

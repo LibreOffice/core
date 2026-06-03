@@ -148,7 +148,7 @@ inline sal_Int32 idestructElements(
     case typelib_TypeClass_CHAR:
         return sal_Int32(sizeof(sal_Unicode));
     case typelib_TypeClass_BOOLEAN:
-        return sal_Int32(sizeof(sal_Bool));
+        return sal_Int32(sizeof(bool));
     case typelib_TypeClass_BYTE:
         return sal_Int32(sizeof(sal_Int8));
     case typelib_TypeClass_SHORT:

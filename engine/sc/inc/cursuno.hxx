@@ -43,8 +43,8 @@ public:
     virtual void SAL_CALL   collapseToSize( sal_Int32 nColumns, sal_Int32 nRows ) override;
 
                             // XUsedAreaCursor
-    virtual void SAL_CALL   gotoStartOfUsedArea( sal_Bool bExpand ) override;
-    virtual void SAL_CALL   gotoEndOfUsedArea( sal_Bool bExpand ) override;
+    virtual void SAL_CALL   gotoStartOfUsedArea( bool bExpand ) override;
+    virtual void SAL_CALL   gotoEndOfUsedArea( bool bExpand ) override;
 
                             // XCellCursor
     virtual void SAL_CALL   gotoStart() override;
@@ -69,7 +69,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

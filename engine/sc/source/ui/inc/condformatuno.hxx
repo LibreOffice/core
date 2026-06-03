@@ -81,7 +81,7 @@ public:
 
     virtual uno::Type SAL_CALL getElementType() override;
 
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     virtual sal_Int32 SAL_CALL getCount() override;
 

@@ -113,7 +113,7 @@ css::uno::Sequence< css::datatransfer::DataFlavor > TETextDataObject::getTransfe
     return aDataFlavors;
 }
 
-sal_Bool TETextDataObject::isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor )
+bool TETextDataObject::isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor )
 {
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
     return ( nT == SotClipboardFormatId::STRING );

@@ -343,7 +343,7 @@ namespace
 }
 
 
-sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_model )
+bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_model )
 {
     lcl_setEventForwarding( getModel(), m_pEventForwarder, false );
     if ( !UnoGridControl_Base::setModel( i_model ) )
@@ -418,13 +418,13 @@ css::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows()
 }
 
 
-sal_Bool SAL_CALL UnoGridControl::hasSelectedRows()
+bool SAL_CALL UnoGridControl::hasSelectedRows()
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->hasSelectedRows();
 }
 
 
-sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index)
+bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->isRowSelected( index );
 }

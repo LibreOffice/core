@@ -49,7 +49,7 @@ public:
       mnCurrentPos(0)
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mnCurrentPos < mxIndexAccess->getCount() );
     }

@@ -664,7 +664,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
 }
 
 // ____ XDataProvider ____
-sal_Bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
+bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
 {
     return true;
 }
@@ -797,7 +797,7 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     return aArguments;
 }
 
-sal_Bool SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
+bool SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
 {
     return true;
 }
@@ -848,7 +848,7 @@ Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelec
 }
 
 // ____ XInternalDataProvider ____
-sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
+bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
 {
     bool bResult = false;
 
@@ -1469,7 +1469,7 @@ double SAL_CALL InternalDataProvider::getNotANumber()
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
+bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
 {
     return std::isnan( nNumber )
         || std::isinf( nNumber );
@@ -1494,7 +1494,7 @@ OUString SAL_CALL InternalDataProvider::getImplementationName()
     return u"com.sun.star.comp.chart.InternalDataProvider"_ustr;
 }
 
-sal_Bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceName )
+bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

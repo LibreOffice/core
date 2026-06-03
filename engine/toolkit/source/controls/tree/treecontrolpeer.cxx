@@ -283,7 +283,7 @@ void TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
         }
     }
 
-    if( bool(pEntry->mxNode->hasChildrenOnDemand()) != pEntry->HasChildrenOnDemand() )
+    if( pEntry->mxNode->hasChildrenOnDemand() != pEntry->HasChildrenOnDemand() )
     {
         pEntry->EnableChildrenOnDemand( pEntry->mxNode->hasChildrenOnDemand() );
         bChanged = true;
@@ -487,7 +487,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
 // css::view::XSelectionSupplier
 
 
-sal_Bool SAL_CALL TreeControlPeer::select( const Any& rSelection )
+bool SAL_CALL TreeControlPeer::select( const Any& rSelection )
 {
     SolarMutexGuard aGuard;
     ChangeNodesSelection( rSelection, true, true );
@@ -545,7 +545,7 @@ void SAL_CALL TreeControlPeer::removeSelectionChangeListener( const Reference< X
 // css::view::XMultiSelectionSupplier
 
 
-sal_Bool SAL_CALL TreeControlPeer::addSelection( const Any& rSelection )
+bool SAL_CALL TreeControlPeer::addSelection( const Any& rSelection )
 {
     ChangeNodesSelection( rSelection, true, false );
     return true;
@@ -577,7 +577,7 @@ class TreeSelectionEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
     explicit TreeSelectionEnumeration( std::list< Any >& rSelection );
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual Any SAL_CALL nextElement() override;
 
     std::list< Any > maSelection;
@@ -593,7 +593,7 @@ TreeSelectionEnumeration::TreeSelectionEnumeration( std::list< Any >& rSelection
 }
 
 
-sal_Bool SAL_CALL TreeSelectionEnumeration::hasMoreElements()
+bool SAL_CALL TreeSelectionEnumeration::hasMoreElements()
 {
     return maIter != maSelection.end();
 }
@@ -729,7 +729,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sD
 }
 
 
-sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNode )
+bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >&
 }
 
 
-sal_Bool SAL_CALL TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >& xNode )
+bool SAL_CALL TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
     return !isNodeExpanded( xNode );
@@ -757,7 +757,7 @@ void SAL_CALL TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xN
 }
 
 
-sal_Bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& xNode )
+bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& xNode )
 {
     SolarMutexGuard aGuard;
 
@@ -847,7 +847,7 @@ awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode
 }
 
 
-sal_Bool SAL_CALL TreeControlPeer::isEditing(  )
+bool SAL_CALL TreeControlPeer::isEditing(  )
 {
     SolarMutexGuard aGuard;
 
@@ -856,7 +856,7 @@ sal_Bool SAL_CALL TreeControlPeer::isEditing(  )
 }
 
 
-sal_Bool SAL_CALL TreeControlPeer::stopEditing()
+bool SAL_CALL TreeControlPeer::stopEditing()
 {
     SolarMutexGuard aGuard;
 

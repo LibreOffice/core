@@ -146,7 +146,7 @@ public:
         return cppu::UnoType<T>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
     {
         return hasItems();
     }
@@ -184,7 +184,7 @@ public:
 
 
     // XSet : XEnumerationAccess
-    virtual sal_Bool SAL_CALL has( const css::uno::Any& aElement ) override
+    virtual bool SAL_CALL has( const css::uno::Any& aElement ) override
     {
         T t;
         return ( aElement >>= t ) && hasItem( t );

@@ -237,7 +237,7 @@ namespace pcr
         virtual void                        SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void                        SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual Sequence< OUString >        SAL_CALL getActuatingProperties( ) override;
-        virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) override;
+        virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
 
         // OComponentHandler overridables
         virtual void SAL_CALL disposing() override;
@@ -521,7 +521,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormGeometryHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ )
+    void SAL_CALL FormGeometryHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool /*_bFirstTimeInit*/ )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();

@@ -83,7 +83,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
 // TODO: This code could be moved to a more central place.
 //       Currently it's used only for simple data types.
 
-OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference< XMultiServiceFactory > & xMgr )
+OUString AnyToString( const Any& aValue, bool bIncludeType, const Reference< XMultiServiceFactory > & xMgr )
 {
     Type aValType = aValue.getValueType();
     TypeClass eType = aValType.getTypeClass();
@@ -105,7 +105,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
         case TypeClass_UNKNOWN:         aRetStr = "TYPE unknown";        break;
         case TypeClass_BOOLEAN:
         {
-            sal_Bool b = *(sal_Bool*)aValue.getValue();
+            bool b = *(bool*)aValue.getValue();
             aRetStr = OUString::valueOf( b );
             break;
         }
@@ -185,7 +185,7 @@ public:
         throw(RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName )
         throw(UnknownPropertyException, RuntimeException);
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name )
         throw(RuntimeException);
 };
 
@@ -235,7 +235,7 @@ Property ImplPropertySetInfo::getPropertyByName(const OUString& Name)
     return Property();
 }
 
-sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
+bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
     throw( RuntimeException )
 {
     Sequence<Property> aSeq = getProperties();
@@ -244,10 +244,10 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
     for( sal_Int32 i = aSeq.getLength(); i--; )
     {
         if( pAry[i].Name == Name )
-            return sal_True;
+            return true;
     }
     // Property unknown, also return empty ones
-    return sal_False;
+    return false;
 }
 
 
@@ -394,7 +394,7 @@ public:
     // Methods of XElementAccess
     virtual Type SAL_CALL getElementType(  )
         throw(RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  )
+    virtual bool SAL_CALL hasElements(  )
         throw(RuntimeException);
 
     // XNameAccess methods
@@ -403,7 +403,7 @@ public:
         throw(NoSuchElementException, WrappedTargetException, RuntimeException);
     virtual Sequence< OUString > SAL_CALL getElementNames(  )
         throw(RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
+    virtual bool SAL_CALL hasByName( const OUString& aName )
         throw(RuntimeException);
 
     // XIndexAccess methods
@@ -550,10 +550,10 @@ Type ImplIntroTest::getElementType(  )
     return aRetType;
 }
 
-sal_Bool ImplIntroTest::hasElements(  )
+bool ImplIntroTest::hasElements(  )
     throw(RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 // XNameAccess methods
@@ -609,7 +609,7 @@ Sequence< OUString > ImplIntroTest::getElementNames(  )
     return aStrSeq;
 }
 
-sal_Bool ImplIntroTest::hasByName( const OUString& aName )
+bool ImplIntroTest::hasByName( const OUString& aName )
     throw(RuntimeException)
 {
     return ( getIndexForName( aName ) != -1 );
@@ -678,7 +678,7 @@ Any getIntrospectionTestObject( const Reference< XMultiServiceFactory > & xMgr )
     return aObjAny;
 }
 
-static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
+static bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                               Reference< XIdlReflection > /*xRefl*/, Reference< XIntrospection > xIntrospection )
 {
     DefItem pPropertyDefs[] =
@@ -847,7 +847,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     OSL_ENSURE( xAccess.is(), "introspection failed, no XIntrospectionAccess returned" );
     if( !xAccess.is() )
-        return sal_False;
+        return false;
 
     // check result of introspection
 
@@ -932,7 +932,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 // read and report value of property
                 aPropVal = xPropSet->getPropertyValue( aPropName );
 
-                OString aValStr = OUStringToOString( AnyToString( aPropVal, sal_False, xMgr ), RTL_TEXTENCODING_ASCII_US );
+                OString aValStr = OUStringToOString( AnyToString( aPropVal, false, xMgr ), RTL_TEXTENCODING_ASCII_US );
                 OString aDemandedValStr = pDemandedPropVals[ iDemanded ];
                 aErrorStr = "Property \""
                           + aDemandedName
@@ -946,7 +946,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 // check value and modify it according to its type
                 TypeClass eType = aPropVal.getValueTypeClass();
                 Any aNewVal;
-                sal_Bool bModify = sal_True;
+                bool bModify = true;
                 switch( eType )
                 {
                     case TypeClass_STRING:
@@ -979,7 +979,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                         break;
                     }
                     default:
-                        bModify = sal_False;
+                        bModify = false;
                         break;
                 }
 
@@ -997,12 +997,12 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                                   + "\", not found as \""
                                   + OUStringToOString(aUpperUStr, RTL_TEXTENCODING_ASCII_US )
                                   + "\" using XExactName";
-                        OSL_ENSURE( sal_False, aErrorStr.getStr() );
+                        OSL_ENSURE( false, aErrorStr.getStr() );
                     }
                 }
                 else
                 {
-                    bModify = sal_False;
+                    bModify = false;
                 }
 
                 // set new value, then read and return value
@@ -1019,7 +1019,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
                     aPropVal = xPropSet->getPropertyValue( aPropName );
 
-                    OUString aStr = AnyToString( aPropVal, sal_False, xMgr );
+                    OUString aStr = AnyToString( aPropVal, false, xMgr );
                     OString aModifiedValStr = OUStringToOString( aStr, RTL_TEXTENCODING_ASCII_US );
                     OString aDemandedModifiedValStr = pDemandedModifiedPropVals[ i ];
                     aErrorStr = "Property \""
@@ -1037,7 +1037,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                           + aDemandedName
                           + "\" not found with hasProperty()";
                 OUString aWDemandedName = OStringToOUString(aDemandedName, RTL_TEXTENCODING_ASCII_US );
-                sal_Bool bProperty = xAccess->hasProperty( aWDemandedName, nConcepts );
+                bool bProperty = xAccess->hasProperty( aWDemandedName, nConcepts );
                 OSL_ENSURE( bProperty, aErrorStr.getStr() );
 
                 aErrorStr = "property \""
@@ -1052,7 +1052,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     aErrorStr = "property \""
                               + aDemandedName
                               + "\", exception was thrown when trying getProperty()";
-                    OSL_ENSURE( sal_False, aErrorStr.getStr() );
+                    OSL_ENSURE( false, aErrorStr.getStr() );
                 }
 
             }
@@ -1120,7 +1120,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                       + aDemandedName
                       + "\" not found with hasMethod()";
             OUString aWDemandedName = OStringToOUString(aDemandedName, RTL_TEXTENCODING_ASCII_US );
-            sal_Bool bMethod = xAccess->hasMethod( aWDemandedName, nRealConcepts );
+            bool bMethod = xAccess->hasMethod( aWDemandedName, nRealConcepts );
             OSL_ENSURE( bMethod, aErrorStr.getStr() );
 
             aErrorStr = "method \""
@@ -1136,7 +1136,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr = "method \""
                           + aDemandedName
                           + "\", exception was thrown when trying getMethod()";
-                OSL_ENSURE( sal_False, aErrorStr.getStr() );
+                OSL_ENSURE( false, aErrorStr.getStr() );
             }
         }
     }
@@ -1152,7 +1152,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         OUString aListenerClassName = aListenerType.getTypeName();
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1160,7 +1160,7 @@ SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString("stoctest.rdb") ) );
 
-    sal_Bool bSucc = sal_False;
+    bool bSucc = false;
     try
     {
         Reference< XImplementationRegistration > xImplReg(

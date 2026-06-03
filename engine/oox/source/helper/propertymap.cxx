@@ -103,7 +103,7 @@ public:
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties() override;
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
     std::mutex mMutex;
@@ -169,7 +169,7 @@ Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rProper
     return aProperty;
 }
 
-sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rPropertyName )
+bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rPropertyName )
 {
     return maPropMap.contains(rPropertyName);
 }
@@ -813,9 +813,9 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         fprintf (stderr,"%f\n", floatValue);
     else if( value >>= boolValue ) {
         if (boolValue)
-            return "(sal_Bool) sal_True";
+            return "(bool) true";
         else
-            return "(sal_Bool) sal_False";
+            return "(bool) false";
     }
     else if( value >>= xNumRule ) {
         fprintf (stderr, "XIndexReplace\n");

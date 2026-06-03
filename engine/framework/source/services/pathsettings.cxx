@@ -172,7 +172,7 @@ public:
         return u"com.sun.star.comp.framework.PathSettings"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -1206,7 +1206,7 @@ bool PathSettings::impl_isValidPath(std::u16string_view sPath)
 // idea by LLA to support empty paths
 //    if (sPath.getLength() == 0)
 //    {
-//        return sal_True;
+//        return true;
 //    }
 
     return (! INetURLObject(sPath).HasError());

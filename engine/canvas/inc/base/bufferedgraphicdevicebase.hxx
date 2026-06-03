@@ -106,14 +106,14 @@ namespace canvas
         {
         }
 
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override
+        virtual bool SAL_CALL showBuffer( bool bUpdateAll ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maDeviceHelper.showBuffer( mbIsVisible, bUpdateAll );
         }
 
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) override
+        virtual bool SAL_CALL switchBuffer( bool bUpdateAll ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 

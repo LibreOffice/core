@@ -106,7 +106,7 @@ namespace osl_Module
     }; // class ctors
 
     /** testing the methods:
-        static sal_Bool getUrlFromAddress(void * addr, OUString & libraryUrl)
+        static bool getUrlFromAddress(void * addr, OUString & libraryUrl)
     */
     class getUrlFromAddress : public CppUnit::TestFixture
     {
@@ -165,7 +165,7 @@ namespace osl_Module
     }; // class getUrlFromAddress
 
     /** testing the method:
-        sal_Bool SAL_CALL load( const OUString& strModuleName,
+        bool SAL_CALL load( const OUString& strModuleName,
                                                  sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     */
     class load : public CppUnit::TestFixture
@@ -217,7 +217,7 @@ namespace osl_Module
     }; // class unload
 
     /** testing the methods:
-        sal_Bool SAL_CALL is() const
+        bool SAL_CALL is() const
     */
     class is : public CppUnit::TestFixture
     {

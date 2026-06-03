@@ -122,7 +122,7 @@ OUString SAL_CALL OTableContainer::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.OTableContainer"_ustr;
     }
-sal_Bool SAL_CALL OTableContainer::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OTableContainer::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

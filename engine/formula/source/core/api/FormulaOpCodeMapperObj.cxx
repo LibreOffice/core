@@ -34,7 +34,7 @@ namespace formula
 {
     using namespace ::com::sun::star;
 
-sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const OUString& _rServiceName )
+bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

@@ -79,9 +79,9 @@ struct SAL_WARN_UNUSED ImplementationEntry
     @param entries         Each element of the entries-array must contains a function pointer
                            table for registering an implementation. The end of the array
                            must be marked with a 0 entry in the create-function.
-    @return sal_True, if all implementations could be registered, otherwise sal_False.
+    @return true, if all implementations could be registered, otherwise false.
  */
-CPPUHELPER_DLLPUBLIC sal_Bool component_writeInfoHelper(
+CPPUHELPER_DLLPUBLIC bool component_writeInfoHelper(
     void *pServiceManager, void *pRegistryKey , const struct ImplementationEntry entries[] );
 
 /** Helper function for implementation of the component_getFactory()-function,

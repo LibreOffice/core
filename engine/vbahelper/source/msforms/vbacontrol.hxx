@@ -64,10 +64,10 @@ public:
     void setLibraryAndCodeName( const OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
 
     // XControl
-    virtual sal_Bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual bool SAL_CALL getEnabled() override;
+    virtual void SAL_CALL setEnabled( bool _enabled ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
     virtual double SAL_CALL getHeight() override;
     virtual void SAL_CALL setHeight( double _height ) override;
     virtual double SAL_CALL getWidth() override;

@@ -65,7 +65,7 @@ OUString SAL_CALL OEvoabResultSet::getImplementationName(  )
     return { u"com.sun.star.sdbc.ResultSet"_ustr };
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -638,7 +638,7 @@ OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum )
     return aResult;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum )
+bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -772,7 +772,7 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  )
 
 
 // XResultSet Interface
-sal_Bool SAL_CALL OEvoabResultSet::next(  )
+bool SAL_CALL OEvoabResultSet::next(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -784,7 +784,7 @@ sal_Bool SAL_CALL OEvoabResultSet::next(  )
         return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::wasNull(  )
+bool SAL_CALL OEvoabResultSet::wasNull(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -792,7 +792,7 @@ sal_Bool SAL_CALL OEvoabResultSet::wasNull(  )
     return m_bWasNull;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isBeforeFirst(  )
+bool SAL_CALL OEvoabResultSet::isBeforeFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -808,7 +808,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::getRow(  )
     return m_nIndex;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isAfterLast(  )
+bool SAL_CALL OEvoabResultSet::isAfterLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -816,7 +816,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isAfterLast(  )
     return m_nIndex >= m_nLength;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isFirst(  )
+bool SAL_CALL OEvoabResultSet::isFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -824,7 +824,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isFirst(  )
     return m_nIndex == 0;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isLast(  )
+bool SAL_CALL OEvoabResultSet::isLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -849,7 +849,7 @@ void SAL_CALL OEvoabResultSet::afterLast(  )
 }
 
 
-sal_Bool SAL_CALL OEvoabResultSet::first(  )
+bool SAL_CALL OEvoabResultSet::first(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -859,7 +859,7 @@ sal_Bool SAL_CALL OEvoabResultSet::first(  )
 }
 
 
-sal_Bool SAL_CALL OEvoabResultSet::last(  )
+bool SAL_CALL OEvoabResultSet::last(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -868,7 +868,7 @@ sal_Bool SAL_CALL OEvoabResultSet::last(  )
     return true;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row )
+bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -880,7 +880,7 @@ sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row )
         return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row )
+bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -893,7 +893,7 @@ sal_Bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row )
         return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::previous(  )
+bool SAL_CALL OEvoabResultSet::previous(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -914,7 +914,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  )
 }
 
 
-sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  )
+bool SAL_CALL OEvoabResultSet::rowDeleted(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -922,7 +922,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  )
     return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  )
+bool SAL_CALL OEvoabResultSet::rowInserted(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -930,7 +930,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  )
     return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  )
+bool SAL_CALL OEvoabResultSet::rowUpdated(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

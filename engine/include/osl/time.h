@@ -126,7 +126,7 @@ typedef struct _oslDateTime
 /** Get the current system time as TimeValue.
     @retval false if any error occurs.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTime(
+SAL_DLLPUBLIC bool SAL_CALL osl_getSystemTime(
         TimeValue* pTimeVal );
 
 
@@ -134,9 +134,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTime(
     @param[in] pTimeVal TimeValue
     @param[out] pDateTime On success it receives a struct oslDateTime
 
-    @return sal_False if any error occurs else sal_True.
+    @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getDateTimeFromTimeValue(
+SAL_DLLPUBLIC bool SAL_CALL osl_getDateTimeFromTimeValue(
         const TimeValue* pTimeVal, oslDateTime* pDateTime );
 
 
@@ -144,9 +144,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getDateTimeFromTimeValue(
     @param[in] pDateTime oslDateTime
     @param[out] pTimeVal On success it receives a TimeValue
 
-    @return sal_False if any error occurs else sal_True.
+    @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getTimeValueFromDateTime(
+SAL_DLLPUBLIC bool SAL_CALL osl_getTimeValueFromDateTime(
         const oslDateTime* pDateTime, TimeValue* pTimeVal );
 
 
@@ -154,9 +154,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getTimeValueFromDateTime(
     @param[in] pSystemTimeVal system time to convert
     @param[out] pLocalTimeVal On success it receives the local time
 
-    @return sal_False if any error occurs else sal_True.
+    @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime(
+SAL_DLLPUBLIC bool SAL_CALL osl_getLocalTimeFromSystemTime(
         const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal );
 
 
@@ -164,9 +164,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime(
     @param[in] pLocalTimeVal local time to convert
     @param[out] pSystemTimeVal On success it receives the system time
 
-    @return sal_False if any error occurs else sal_True.
+    @return false if any error occurs else true.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime(
+SAL_DLLPUBLIC bool SAL_CALL osl_getSystemTimeFromLocalTime(
         const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
 
 /** Set the timezone used by osl_getLocalTimeFromSystemTime and

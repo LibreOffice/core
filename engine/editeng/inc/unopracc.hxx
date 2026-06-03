@@ -46,7 +46,7 @@ public:
 
     // lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
+    virtual bool SAL_CALL supportsService(const OUString&) override;
 
     // lang::XTypeProvider
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;

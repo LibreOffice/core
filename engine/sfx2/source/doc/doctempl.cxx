@@ -566,8 +566,8 @@ bool SfxDocumentTemplates::CopyOrMove
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
@@ -669,12 +669,12 @@ bool SfxDocumentTemplates::Move
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
-    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,sal_Bool)>
+    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,bool)>
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -698,12 +698,12 @@ bool SfxDocumentTemplates::Copy
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
-    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,sal_Bool)>
+    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,bool)>
 */
 
 {
@@ -728,8 +728,8 @@ bool SfxDocumentTemplates::CopyTo
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
@@ -798,10 +798,10 @@ bool SfxDocumentTemplates::CopyFrom
 
     Import a template from the file system
 
-    [Return value]                 Success (sal_True) or serfpTargetDirectory->GetContent());
+    [Return value]                 Success (true) or serfpTargetDirectory->GetContent());
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
@@ -935,8 +935,8 @@ bool SfxDocumentTemplates::Delete
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
@@ -997,8 +997,8 @@ bool SfxDocumentTemplates::InsertDir
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
@@ -1107,8 +1107,8 @@ bool SfxDocumentTemplates::GetFull
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 
@@ -1162,8 +1162,8 @@ bool SfxDocumentTemplates::GetLogicNames
 
     [Return value]
 
-    sal_Bool            sal_True,   Action could be performed
-                        sal_False,  Action could not be performed
+    bool            true,   Action could be performed
+                        false,  Action could not be performed
 
     [Cross-references]
 

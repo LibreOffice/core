@@ -81,7 +81,7 @@ OUString ManifestReader::getImplementationName()
     return u"com.sun.star.packages.manifest.comp.ManifestReader"_ustr;
 }
 
-sal_Bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
+bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName );
 }

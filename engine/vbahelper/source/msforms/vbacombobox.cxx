@@ -263,22 +263,22 @@ void SAL_CALL ScVbaComboBox::setBackColor( sal_Int32 nBackColor )
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Bool SAL_CALL ScVbaComboBox::getAutoSize()
+bool SAL_CALL ScVbaComboBox::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaComboBox::setAutoSize( sal_Bool bAutoSize )
+void SAL_CALL ScVbaComboBox::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaComboBox::getLocked()
+bool SAL_CALL ScVbaComboBox::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaComboBox::setLocked( sal_Bool bLocked )
+void SAL_CALL ScVbaComboBox::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }

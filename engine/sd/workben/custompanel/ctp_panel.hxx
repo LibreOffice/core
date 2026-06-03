@@ -56,7 +56,7 @@ namespace sd::colortoolpanel
 
         // XResource
         virtual css::uno::Reference< css::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isAnchorOnly(  ) throw (css::uno::RuntimeException);
+        virtual bool SAL_CALL isAnchorOnly(  ) throw (css::uno::RuntimeException);
 
         // XPaintListener
         virtual void SAL_CALL windowPaint( const css::awt::PaintEvent& e ) throw (css::uno::RuntimeException);

@@ -184,7 +184,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ONavigationBarControl::setDesignMode( sal_Bool _bOn )
+    void SAL_CALL ONavigationBarControl::setDesignMode( bool _bOn )
     {
         UnoControl::setDesignMode( _bOn );
         Reference< XVclWindowPeer > xTypedPeer(getPeer(), UNO_QUERY);
@@ -444,7 +444,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ONavigationBarPeer::setDesignMode( sal_Bool _bOn )
+    void SAL_CALL ONavigationBarPeer::setDesignMode( bool _bOn )
     {
         VCLXWindow::setDesignMode( _bOn  );
 

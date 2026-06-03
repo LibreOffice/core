@@ -230,7 +230,7 @@ ScVbaAxis::getType(  )
 }
 
 void SAL_CALL
-ScVbaAxis::setHasTitle( sal_Bool _bHasTitle )
+ScVbaAxis::setHasTitle( bool _bHasTitle )
 {
     try
     {
@@ -255,7 +255,7 @@ ScVbaAxis::setHasTitle( sal_Bool _bHasTitle )
     }
 }
 
- sal_Bool SAL_CALL
+ bool SAL_CALL
 ScVbaAxis::getHasTitle(  )
 {
     bool bHasTitle = false;
@@ -313,7 +313,7 @@ ScVbaAxis::getMinorUnit(  )
 }
 
 void SAL_CALL
-ScVbaAxis::setMinorUnitIsAuto( sal_Bool _bMinorUnitIsAuto )
+ScVbaAxis::setMinorUnitIsAuto( bool _bMinorUnitIsAuto )
 {
     try
     {
@@ -326,7 +326,7 @@ ScVbaAxis::setMinorUnitIsAuto( sal_Bool _bMinorUnitIsAuto )
     }
 }
 
- sal_Bool SAL_CALL
+ bool SAL_CALL
 ScVbaAxis::getMinorUnitIsAuto(  )
 {
     bool bIsAuto = false;
@@ -345,12 +345,12 @@ ScVbaAxis::getMinorUnitIsAuto(  )
 }
 
 void SAL_CALL
-ScVbaAxis::setReversePlotOrder( sal_Bool /*ReversePlotOrder*/ )
+ScVbaAxis::setReversePlotOrder( bool /*ReversePlotOrder*/ )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaAxis::getReversePlotOrder(  )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
@@ -390,7 +390,7 @@ ScVbaAxis::getMajorUnit(  )
 }
 
 void SAL_CALL
-ScVbaAxis::setMajorUnitIsAuto( sal_Bool _bMajorUnitIsAuto )
+ScVbaAxis::setMajorUnitIsAuto( bool _bMajorUnitIsAuto )
 {
     try
     {
@@ -405,7 +405,7 @@ ScVbaAxis::setMajorUnitIsAuto( sal_Bool _bMajorUnitIsAuto )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaAxis::getMajorUnitIsAuto(  )
 {
     bool bIsAuto = false;
@@ -459,7 +459,7 @@ ScVbaAxis::getMaximumScale(  )
 }
 
 void SAL_CALL
-ScVbaAxis::setMaximumScaleIsAuto( sal_Bool _bMaximumScaleIsAuto )
+ScVbaAxis::setMaximumScaleIsAuto( bool _bMaximumScaleIsAuto )
 {
     try
     {
@@ -473,7 +473,7 @@ ScVbaAxis::setMaximumScaleIsAuto( sal_Bool _bMaximumScaleIsAuto )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaAxis::getMaximumScaleIsAuto(  )
 {
     bool bIsAuto = false;
@@ -520,7 +520,7 @@ ScVbaAxis::getMinimumScale(  )
 }
 
 void SAL_CALL
-ScVbaAxis::setMinimumScaleIsAuto( sal_Bool _bMinimumScaleIsAuto )
+ScVbaAxis::setMinimumScaleIsAuto( bool _bMinimumScaleIsAuto )
 {
     try
     {
@@ -535,7 +535,7 @@ ScVbaAxis::setMinimumScaleIsAuto( sal_Bool _bMinimumScaleIsAuto )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaAxis::getMinimumScaleIsAuto(  )
 {
     bool bIsAuto = false;

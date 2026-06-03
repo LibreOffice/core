@@ -46,7 +46,7 @@ public:
     virtual void SAL_CALL slideTransitionStarted(  ) override;
     virtual void SAL_CALL slideTransitionEnded(  ) override;
     virtual void SAL_CALL slideAnimationsEnded(  ) override;
-    virtual void SAL_CALL slideEnded(sal_Bool bReverse) override;
+    virtual void SAL_CALL slideEnded(bool bReverse) override;
     virtual void SAL_CALL hyperLinkClicked( const OUString& hyperLink ) override;
 
     // XEventListener

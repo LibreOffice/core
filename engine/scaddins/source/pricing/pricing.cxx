@@ -144,7 +144,7 @@ OUString SAL_CALL ScaPricingAddIn::getImplementationName()
     return u"com.sun.star.sheet.addin.PricingFunctionsImpl"_ustr;
 }
 
-sal_Bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName )
+bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }

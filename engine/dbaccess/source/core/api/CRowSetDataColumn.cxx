@@ -142,7 +142,7 @@ void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHan
     }
 }
 
-sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedValue,
+bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedValue,
                                                             Any & rOldValue,
                                                             sal_Int32 nHandle,
                                                             const Any& rValue )

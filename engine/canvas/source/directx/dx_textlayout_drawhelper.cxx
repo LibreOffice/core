@@ -68,7 +68,7 @@ namespace dxcanvas
         const ::basegfx::B2ISize&              rOutputOffset,
         const css::rendering::StringContext&   rText,
         const css::uno::Sequence< double >&    rLogicalAdvancements,
-        const css::uno::Sequence< sal_Bool >&  rKashidaPositions,
+        const css::uno::Sequence< bool >&  rKashidaPositions,
         const css::uno::Reference<
             css::rendering::XCanvasFont >&     rCanvasFont,
         const css::geometry::Matrix2D&         rFontMatrix,
@@ -209,8 +209,7 @@ namespace dxcanvas
             {
                 // create the DXArray
                 KernArraySpan DXArray( rLogicalAdvancements.getConstArray(), rLogicalAdvancements.getLength() );
-                static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
-                std::span<const bool> aKashidaArray(reinterpret_cast<const bool*>(rKashidaPositions.getConstArray()), rKashidaPositions.getLength());
+                std::span<const bool> aKashidaArray(rKashidaPositions.getConstArray(), rKashidaPositions.getLength());
 
                 // draw the String
                 xVirtualDevice->DrawTextArray( aEmptyPoint,

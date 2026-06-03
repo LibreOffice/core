@@ -82,7 +82,7 @@ OUString SAL_CALL StarOfficeDrawImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Draw.StarOfficeDrawImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

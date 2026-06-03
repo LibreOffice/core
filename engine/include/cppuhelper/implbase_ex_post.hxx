@@ -24,7 +24,7 @@
 
 #define __DEF_CLASS_DATA_INIT_EX( N, class_cast ) \
 { \
-N +1, sal_False, sal_False, \
+N +1, false, false, \
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
 { \
 __IFC_EX_TYPE_INIT##N( class_cast ), \
@@ -38,8 +38,8 @@ namespace cppu \
 struct class_data##N \
 { \
     sal_Int16 m_nTypes; \
-    sal_Bool m_storedTypeRefs; \
-    sal_Bool m_storedId; \
+    bool m_storedTypeRefs; \
+    bool m_storedId; \
     sal_Int8 m_id[ 16 ]; \
     type_entry m_typeEntries[ N + 1 ]; \
 }; \

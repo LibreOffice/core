@@ -54,7 +54,7 @@ static inline ::System::Object ^ to_cli_constant( Any const & value )
                 value.getValue() ));
     case TypeClass_BOOLEAN:
         return ((::System::Boolean)
-             sal_False != *reinterpret_cast< sal_Bool const * >(
+             false != *reinterpret_cast< bool const * >(
                  value.getValue() ));
     case TypeClass_BYTE:
         return ((::System::Byte) *reinterpret_cast< sal_Int8 const * >(
@@ -754,7 +754,7 @@ Assembly ^ TypeEmitter::type_resolve(
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XServiceTypeDescription2 > const & xType )
 {
-    if (xType->isSingleInterfaceBased() == sal_False)
+    if (xType->isSingleInterfaceBased() == false)
         return nullptr;
 
     System::String ^ cts_name = to_cts_name( xType->getName() );
@@ -783,7 +783,7 @@ Assembly ^ TypeEmitter::type_resolve(
 ::System::Type ^ TypeEmitter::get_type(
     Reference<reflection::XSingletonTypeDescription2 > const & xType )
 {
-    if (xType->isInterfaceBased() == sal_False)
+    if (xType->isInterfaceBased() == false)
         return nullptr;
 
     ::System::String^ cts_name = to_cts_name( xType->getName() );
@@ -1472,7 +1472,7 @@ Assembly ^ TypeEmitter::type_resolve(
     //type of the constructor functions
     Reference<reflection::XInterfaceTypeDescription2> xIfaceType(
         xServiceType->getInterface(), UNO_QUERY);
-    if (xIfaceType.is () == sal_False)
+    if (xIfaceType.is () == false)
         xIfaceType = resolveInterfaceTypedef(xServiceType->getInterface());
     System::Type ^ retType = get_type(xIfaceType);
 
@@ -1944,7 +1944,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     //type of the constructor functions
     Reference<reflection::XInterfaceTypeDescription2> xIfaceType(
         xSingletonType->getInterface(), UNO_QUERY);
-    if (xIfaceType.is () == sal_False)
+    if (xIfaceType.is () == false)
         xIfaceType = resolveInterfaceTypedef(xSingletonType->getInterface());
     System::Type ^ retType = get_type(xIfaceType);
 

@@ -86,7 +86,7 @@ OUString SAL_CALL OFormsCollection::getImplementationName()
     return u"com.sun.star.form.OFormsCollection"_ustr;
 }
 
-sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

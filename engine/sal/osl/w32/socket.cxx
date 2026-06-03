@@ -327,7 +327,7 @@ oslSocketAddr SAL_CALL osl_copySocketAddr(oslSocketAddr Addr)
     return pCopy;
 }
 
-sal_Bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2)
+bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2)
 {
     assert(Addr1);
     assert(Addr2);
@@ -707,7 +707,7 @@ sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(oslSocketAddr pAddr)
     return OSL_INVALID_PORT;
 }
 
-sal_Bool SAL_CALL osl_setInetPortOfSocketAddr (
+bool SAL_CALL osl_setInetPortOfSocketAddr (
     oslSocketAddr pAddr,
     sal_Int32     Port)
 {
@@ -866,7 +866,7 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
     return pAddr;
 }
 
-sal_Bool SAL_CALL osl_bindAddrToSocket ( oslSocket pSocket, oslSocketAddr pAddr)
+bool SAL_CALL osl_bindAddrToSocket ( oslSocket pSocket, oslSocketAddr pAddr)
 {
     assert(pAddr);
 
@@ -1007,7 +1007,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
     }
 }
 
-sal_Bool SAL_CALL osl_listenOnSocket (
+bool SAL_CALL osl_listenOnSocket (
     oslSocket  pSocket,
     sal_Int32  MaxPendingConnections)
 {
@@ -1207,7 +1207,7 @@ sal_Int32 SAL_CALL osl_writeSocket( oslSocket pSocket, const void *pBuffer, sal_
     return BytesSend;
 }
 
-sal_Bool SAL_CALL osl_isReceiveReady (
+bool SAL_CALL osl_isReceiveReady (
     oslSocket        pSocket,
     const TimeValue* pTimeout)
 {
@@ -1236,7 +1236,7 @@ sal_Bool SAL_CALL osl_isReceiveReady (
 /*****************************************************************************/
 /* osl_isSendReady  */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_isSendReady (
+bool SAL_CALL osl_isSendReady (
     oslSocket        pSocket,
     const TimeValue* pTimeout)
 {
@@ -1262,7 +1262,7 @@ sal_Bool SAL_CALL osl_isSendReady (
                    pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 
-sal_Bool SAL_CALL osl_isExceptionPending (
+bool SAL_CALL osl_isExceptionPending (
     oslSocket        pSocket,
     const TimeValue* pTimeout)
 {
@@ -1288,7 +1288,7 @@ sal_Bool SAL_CALL osl_isExceptionPending (
                    pTimeout ? &tv : nullptr)==1); /* use timeout? */
 }
 
-sal_Bool SAL_CALL osl_shutdownSocket (
+bool SAL_CALL osl_shutdownSocket (
     oslSocket          pSocket,
     oslSocketDirection Direction)
 {
@@ -1321,7 +1321,7 @@ sal_Int32 SAL_CALL osl_getSocketOption (
     return len;
 }
 
-sal_Bool SAL_CALL osl_setSocketOption (
+bool SAL_CALL osl_setSocketOption (
     oslSocket            pSocket,
     oslSocketOptionLevel Level,
     oslSocketOption      Option,
@@ -1338,7 +1338,7 @@ sal_Bool SAL_CALL osl_setSocketOption (
                       BufferLen) == 0);
 }
 
-sal_Bool SAL_CALL osl_enableNonBlockingMode ( oslSocket pSocket, sal_Bool  On)
+bool SAL_CALL osl_enableNonBlockingMode ( oslSocket pSocket, bool  On)
 {
     unsigned long  Param= On ? 1 : 0;
 
@@ -1353,7 +1353,7 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode ( oslSocket pSocket, sal_Bool  On)
         ioctlsocket(pSocket->m_Socket, FIONBIO, &Param) != OSL_SOCKET_ERROR);
 }
 
-sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
+bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
 {
     if (pSocket == nullptr) /* ENOTSOCK */
         return false;

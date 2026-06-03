@@ -4626,7 +4626,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                             }
                         }
                         SfxItemSet* pPreviewFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, mnTab );
-                        lcl_ClearEdit( *mxOutputEditEngine );      // also calls SetUpdateMode(sal_False)
+                        lcl_ClearEdit( *mxOutputEditEngine );      // also calls SetUpdateMode(false)
 
                         // fdo#32530: Check if the first character is RTL.
                         OUString aStr = mpDoc->GetString(nCellX, nCellY, mnTab);
@@ -4753,7 +4753,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                     if (!bHidden)
                     {
-                        lcl_ClearEdit( *mxOutputEditEngine );      // also calls SetUpdateMode(sal_False)
+                        lcl_ClearEdit( *mxOutputEditEngine );      // also calls SetUpdateMode(false)
 
                         tools::Long nPosY = nRowPosY;
 
@@ -5057,7 +5057,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             mxOutputEditEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                                         else
                                             mxOutputEditEngine->SetPaperSize(aPaperSize);  // Scale is always 1
-                                        //mxOutputEditEngine->QuickFormatDoc( sal_True );
+                                        //mxOutputEditEngine->QuickFormatDoc( true );
 
                                         nEngineWidth  = static_cast<tools::Long>(mxOutputEditEngine->CalcTextWidth());
                                         nEngineHeight = mxOutputEditEngine->GetTextHeight();

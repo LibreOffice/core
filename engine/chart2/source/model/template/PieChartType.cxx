@@ -194,7 +194,7 @@ OUString SAL_CALL PieChartType::getImplementationName()
     return u"com.sun.star.comp.chart.PieChartType"_ustr;
 }
 
-sal_Bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

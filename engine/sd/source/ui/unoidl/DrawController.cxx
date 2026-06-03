@@ -184,7 +184,7 @@ void SAL_CALL DrawController::removeEventListener (
 }
 
 // XController
-sal_Bool SAL_CALL DrawController::suspend( sal_Bool Suspend )
+bool SAL_CALL DrawController::suspend( bool Suspend )
 {
     if( Suspend )
     {
@@ -231,7 +231,7 @@ OUString SAL_CALL DrawController::getImplementationName(  )
 
 constexpr OUString ssServiceName = u"com.sun.star.drawing.DrawingDocumentDrawView"_ustr;
 
-sal_Bool SAL_CALL DrawController::supportsService (const OUString& rsServiceName)
+bool SAL_CALL DrawController::supportsService (const OUString& rsServiceName)
 {
     return cppu::supportsService(this, rsServiceName);
 }
@@ -244,7 +244,7 @@ Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames()
 }
 
 //------ XSelectionSupplier --------------------------------------------
-sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
+bool SAL_CALL DrawController::select (const Any& aSelection)
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
@@ -698,7 +698,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
     return xController;
 }
 
-sal_Bool SAL_CALL DrawController::isFormDesignMode(  )
+bool SAL_CALL DrawController::isFormDesignMode(  )
 {
     SolarMutexGuard aGuard;
 
@@ -711,7 +711,7 @@ sal_Bool SAL_CALL DrawController::isFormDesignMode(  )
     return bIsDesignMode;
 }
 
-void SAL_CALL DrawController::setFormDesignMode( sal_Bool DesignMode )
+void SAL_CALL DrawController::setFormDesignMode( bool DesignMode )
 {
     SolarMutexGuard aGuard;
 
@@ -735,7 +735,7 @@ uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::
     return xControl;
 }
 
-sal_Bool DrawController::convertFastPropertyValue (
+bool DrawController::convertFastPropertyValue (
     Any & rConvertedValue,
     Any & rOldValue,
     sal_Int32 nHandle,

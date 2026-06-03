@@ -39,17 +39,17 @@ using namespace ::cppu;
 using namespace ::com::sun::star::registry;
 
 
-sal_Bool test1();
-sal_Bool test2();
-sal_Bool test3();
-sal_Bool test4();
+bool test1();
+bool test2();
+bool test3();
+bool test4();
 
 int main(int, char**)
 {
-       sal_Bool bTest1= test1();
-       sal_Bool bTest2= test2();
-    sal_Bool bTest3= test3();
-    sal_Bool bTest4= test4();
+       bool bTest1= test1();
+       bool bTest2= test2();
+    bool bTest3= test3();
+    bool bTest4= test4();
 
     if( bTest1 && bTest2 && bTest3 && bTest4)
         printf("\n#########################\n Test was successful\n#######################\n");
@@ -57,12 +57,12 @@ int main(int, char**)
     return 0;
 }
 
-sal_Bool test1()
+bool test1()
 {
     printf("\n Test1:  com.sun.star.bridge.oleautomation.BridgeSupplier\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString("services.rdb"),
-                               sal_False, sal_False );
+                               false, false );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
@@ -78,12 +78,12 @@ sal_Bool test1()
     OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
-    sal_Bool bTest1= pSymbol ? sal_True : sal_False;
+    bool bTest1= pSymbol ? true : false;
 
     xint1=0;
     rtl_unloadUnusedModules( NULL);
     pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    sal_Bool bTest2= pSymbol ? sal_False : sal_True;
+    bool bTest2= pSymbol ? false : true;
 
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
@@ -91,12 +91,12 @@ sal_Bool test1()
     return bTest2 && bTest1;
 }
 
-sal_Bool test2()
+bool test2()
 {
     printf("Test2:  com.sun.star.bridge.OleBridgeSupplierVar1\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString("services.rdb"),
-                               sal_False, sal_False );
+                               false, false );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
@@ -111,24 +111,24 @@ sal_Bool test2()
     OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
-    sal_Bool bTest1= pSymbol ? sal_True : sal_False;
+    bool bTest1= pSymbol ? true : false;
 
     xint=0;
     rtl_unloadUnusedModules( NULL);
     pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    sal_Bool bTest2= pSymbol ? sal_False : sal_True;
+    bool bTest2= pSymbol ? false : true;
 
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
     return bTest1 && bTest2;
 }
 
-sal_Bool test3()
+bool test3()
 {
     printf("Test3:  com.sun.star.bridge.oleautomation.Factory\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString("services.rdb"),
-                sal_False, sal_False );
+                false, false );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
 
@@ -145,12 +145,12 @@ sal_Bool test3()
     OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
-    sal_Bool bTest1= pSymbol ? sal_True : sal_False;
+    bool bTest1= pSymbol ? true : false;
 
     xint=0;
     rtl_unloadUnusedModules( NULL);
     pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    sal_Bool bTest2= pSymbol ? sal_False : sal_True;
+    bool bTest2= pSymbol ? false : true;
 
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
@@ -158,11 +158,11 @@ sal_Bool test3()
     return bTest1 && bTest2;
 }
 
-sal_Bool test4()
+bool test4()
 {
     void* pSymbol= NULL;
-    sal_Bool bTest1= sal_False;
-    sal_Bool bTest2= sal_False;
+    bool bTest1= false;
+    bool bTest2= false;
     oslModule hMod= NULL;
     OUString sModule("oleautobridge.uno" SAL_DLLEXTENSION);
     OUString sFactoryFunc("component_getFactory");
@@ -170,7 +170,7 @@ sal_Bool test4()
     printf("Test4:  com.sun.star.bridge.oleautomation.ApplicationRegistration\n");
        Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString("services.rdb"),
-                               sal_False, sal_False );
+                               false, false );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
@@ -183,7 +183,7 @@ sal_Bool test4()
     rtl_unloadUnusedModules( NULL);
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
-    bTest1= pSymbol ? sal_True : sal_False;
+    bTest1= pSymbol ? true : false;
     // ApplicationRegistration is a one-instance-service, therefore kill service manager first
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
@@ -191,7 +191,7 @@ sal_Bool test4()
     }
     rtl_unloadUnusedModules( NULL);
     pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    bTest2= pSymbol ? sal_False : sal_True;
+    bTest2= pSymbol ? false : true;
 
     return bTest1 && bTest2;
 }

@@ -202,7 +202,7 @@ void Test::testParse() {
                 uriRef->getUriReference());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].scheme != nullptr, bool(uriRef->isAbsolute()));
+                data[i].scheme != nullptr, uriRef->isAbsolute());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
@@ -215,10 +215,10 @@ void Test::testParse() {
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].isHierarchical,
-                static_cast< bool >(uriRef->isHierarchical()));
+                uriRef->isHierarchical());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].authority != nullptr, bool(uriRef->hasAuthority()));
+                data[i].authority != nullptr, uriRef->hasAuthority());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
@@ -231,7 +231,7 @@ void Test::testParse() {
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].hasRelativePath,
-                static_cast< bool >(uriRef->hasRelativePath()));
+                uriRef->hasRelativePath());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].pathSegmentCount, uriRef->getPathSegmentCount());
@@ -263,7 +263,7 @@ void Test::testParse() {
                 OUString(), uriRef->getPathSegment(5));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].query != nullptr, bool(uriRef->hasQuery()));
+                data[i].query != nullptr, uriRef->hasQuery());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
@@ -271,7 +271,7 @@ void Test::testParse() {
                 uriRef->getQuery());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                data[i].fragment != nullptr, bool(uriRef->hasFragment()));
+                data[i].fragment != nullptr, uriRef->hasFragment());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 OUString::createFromAscii(
@@ -1234,10 +1234,9 @@ void Test::testVndSunStarScript() {
                         + static_cast< double >(j) / 10.0,
                         data[i].uriReference,
                         data[i].parameters[j].value != nullptr,
-                        bool(
-                            scriptUrl->hasParameter(
-                                OUString::createFromAscii(
-                                    data[i].parameters[j].key))));
+                        scriptUrl->hasParameter(
+                            OUString::createFromAscii(
+                                data[i].parameters[j].key)));
                     TEST_ASSERT_EQUAL(
                         "testVndSunStarScript",
                         static_cast< double >(i)

@@ -78,7 +78,7 @@ namespace rtl_string
                 rtl_string_newFromString( &pStr, aStr.pData );
 
                 OString aNewStr(pStr);
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", aStr.equals(aNewStr) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", aStr.equals(aNewStr) == true);
 
                 rtl_string_release(pStr);
             }
@@ -106,9 +106,9 @@ namespace rtl_string
             {
                 OUString suString("Hello");
                 OString sString;
-                sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS);
+                bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("Hello")) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == true && sString.equals(OString("Hello")) == true);
             }
 
         void convertUStringToString_002()
@@ -117,9 +117,9 @@ namespace rtl_string
                 OUString suString = OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
                 OString sString;
-                sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
+                bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("H\xE4llo")) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == true && sString.equals(OString("H\xE4llo")) == true);
             }
 
         void convertUStringToString_003()
@@ -128,9 +128,9 @@ namespace rtl_string
                 OUString suString = OStringToOUString(sStr, RTL_TEXTENCODING_UTF8);
 
                 OString sString;
-                sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
+                bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("H\xE4llo")) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == true && sString.equals(OString("H\xE4llo")) == true);
             }
 
         void convertUStringToString_004()
@@ -139,9 +139,9 @@ namespace rtl_string
                 OUString suString = OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
                 OString sString;
 
-                sal_Bool       bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-                /* sal_Bool */ bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(OString("Tsch\xFC\xDF")) == sal_True);
+                bool       bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+                /* bool */ bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ISO_8859_15, OUSTRING_TO_OSTRING_CVTFLAGS);
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == true && sString.equals(OString("Tsch\xFC\xDF")) == true);
             }
 
         // Change the following lines only, if you add, remove or rename

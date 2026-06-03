@@ -123,7 +123,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XPropertySet
@@ -142,7 +142,7 @@ public:
 
     // XPresentation2
     virtual void SAL_CALL startWithArguments(const css::uno::Sequence< css::beans::PropertyValue >& Arguments) override;
-    virtual sal_Bool SAL_CALL isRunning(  ) override;
+    virtual bool SAL_CALL isRunning(  ) override;
     virtual css::uno::Reference< css::presentation::XSlideShowController > SAL_CALL getController(  ) override;
 
     // legacy api

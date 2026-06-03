@@ -39,7 +39,7 @@ OUString SAL_CALL ConfigFlush::getImplementationName()
     // <- SAFE
 }
 
-sal_Bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
+bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

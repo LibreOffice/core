@@ -452,7 +452,7 @@ TransliterationImpl::transliterateChar2Char( sal_Unicode inChar )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TransliterationImpl::equals(
     const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
     const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)
@@ -657,7 +657,7 @@ TransliterationImpl::getImplementationName()
     return u"com.sun.star.i18n.Transliteration"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TransliterationImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

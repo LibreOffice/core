@@ -43,7 +43,7 @@ public:
         an array of 128 booleans as char class.
      */
     static inline rtl::OUString encode(rtl::OUString const & rText,
-                                       sal_Bool const * pCharClass,
+                                       bool const * pCharClass,
                                        rtl_UriEncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset);
 
@@ -81,7 +81,7 @@ private:
 };
 
 inline rtl::OUString Uri::encode(rtl::OUString const & rText,
-                                 sal_Bool const * pCharClass,
+                                 bool const * pCharClass,
                                  rtl_UriEncodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset)
 {
@@ -148,7 +148,7 @@ constexpr
 #endif
 auto createUriCharClass(std::u8string_view unencoded)
 {
-    std::array<sal_Bool, UriCharClassSize> a = {};
+    std::array<bool, UriCharClassSize> a = {};
     for (auto c: unencoded) {
         assert(!a[c]); // would presumably indicate a typo in the `unencoded` argument
         a[c] = true;

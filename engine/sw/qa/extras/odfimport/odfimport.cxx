@@ -1304,13 +1304,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133459)
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
     const OUString sPresentation(xField->getPresentation(false));
     const sal_Int32 nFormat(getProperty<sal_Int32>(xField, u"NumberFormat"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xField, u"IsFixedLanguage"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, u"IsFixedLanguage"_ustr));
 
     // Second field
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sPresentation, xField->getPresentation(false));
     CPPUNIT_ASSERT_EQUAL(nFormat, getProperty<sal_Int32>(xField, u"NumberFormat"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xField, u"IsFixedLanguage"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, u"IsFixedLanguage"_ustr));
 
     // Test the number format itself
     uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxComponent, uno::UNO_QUERY);

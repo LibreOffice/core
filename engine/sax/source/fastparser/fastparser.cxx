@@ -1543,7 +1543,7 @@ void FastSaxParser::setCustomEntityNames(
     mpImpl->setCustomEntityNames(replacements);
 }
 
-sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
+bool FastSaxParser::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -267,7 +267,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                     eIndexTableOffset = NF_TEXT;
                     break;
                 case 0x06:  // hidden
-                    //wFlag |= paHideAll;bSetFormat = sal_False;
+                    //wFlag |= paHideAll;bSetFormat = false;
                     eType = SvNumFormatType::NUMBER;
                     aFormString = u"\"\""_ustr;
                     break;

@@ -130,14 +130,14 @@ public:
     void OnClose_Impl();
 
     // XCloseable
-    virtual void SAL_CALL close( sal_Bool DeliverOwnership ) override;
+    virtual void SAL_CALL close( bool DeliverOwnership ) override;
     virtual void SAL_CALL addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
     virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     // XTransferable
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
@@ -148,8 +148,8 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XModifiable
-    virtual sal_Bool SAL_CALL isModified() override;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual bool SAL_CALL isModified() override;
+    virtual void SAL_CALL setModified( bool bModified ) override;
     virtual void SAL_CALL addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener ) override;
     virtual void SAL_CALL removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener) override;
 };

@@ -267,7 +267,7 @@ OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
     return u"com.sun.star.comp.system.SimpleCommandMail"_ustr;
 }
 
-sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
+bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

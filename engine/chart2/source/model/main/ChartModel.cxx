@@ -365,7 +365,7 @@ OUString SAL_CALL ChartModel::getImplementationName()
     return u"com.sun.star.comp.chart2.ChartModel"_ustr;
 }
 
-sal_Bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )
+bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -381,7 +381,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
 
 // frame::XModel (required interface)
 
-sal_Bool SAL_CALL ChartModel::attachResource( const OUString& rURL
+bool SAL_CALL ChartModel::attachResource( const OUString& rURL
         , const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     /*
@@ -509,7 +509,7 @@ void SAL_CALL ChartModel::unlockControllers()
     }
 }
 
-sal_Bool SAL_CALL ChartModel::hasControllersLocked()
+bool SAL_CALL ChartModel::hasControllersLocked()
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
@@ -676,7 +676,7 @@ void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XClos
 }
 
 // util::XCloseable
-void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
+void SAL_CALL ChartModel::close( bool bDeliverOwnership )
 {
     //hold no mutex
 
@@ -791,7 +791,7 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
     return xDataSource;
 }
 
-void SAL_CALL ChartModel::createInternalDataProvider( sal_Bool bCloneExistingData )
+void SAL_CALL ChartModel::createInternalDataProvider( bool bCloneExistingData )
 {
     // don't lock the mutex, because this call calls out to code that tries to
     // lock the solar mutex. On the other hand, a paint locks the solar mutex
@@ -832,7 +832,7 @@ void ChartModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
+bool SAL_CALL ChartModel::hasInternalDataProvider()
 {
     return m_xDataProvider.is() && m_xInternalDataProvider.is();
 }
@@ -1186,7 +1186,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
         cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ) };
 }
 
-sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
     return aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast;
 }

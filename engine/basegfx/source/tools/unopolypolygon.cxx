@@ -147,7 +147,7 @@ namespace basegfx::unotools
         meFillRule = fillRule;
     }
 
-    sal_Bool SAL_CALL UnoPolyPolygon::isClosed(
+    bool SAL_CALL UnoPolyPolygon::isClosed(
         sal_Int32 index )
     {
         std::unique_lock const guard( m_aMutex );
@@ -158,7 +158,7 @@ namespace basegfx::unotools
 
     void SAL_CALL UnoPolyPolygon::setClosed(
         sal_Int32 index,
-        sal_Bool closedState )
+        bool closedState )
     {
         std::unique_lock const guard( m_aMutex );
         modifying();
@@ -421,7 +421,7 @@ namespace basegfx::unotools
         return u"gfx::internal::UnoPolyPolygon"_ustr;
     }
 
-    sal_Bool SAL_CALL UnoPolyPolygon::supportsService( const OUString& ServiceName )
+    bool SAL_CALL UnoPolyPolygon::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

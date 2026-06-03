@@ -491,7 +491,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber)
     }
 }
 
-sal_Bool SAL_CALL ScVbaPageSetup::getCenterVertically()
+bool SAL_CALL ScVbaPageSetup::getCenterVertically()
 {
     bool centerVertically = false;
     try
@@ -505,7 +505,7 @@ sal_Bool SAL_CALL ScVbaPageSetup::getCenterVertically()
     return centerVertically;
 }
 
-void SAL_CALL ScVbaPageSetup::setCenterVertically( sal_Bool centerVertically)
+void SAL_CALL ScVbaPageSetup::setCenterVertically( bool centerVertically)
 {
     try
     {
@@ -516,7 +516,7 @@ void SAL_CALL ScVbaPageSetup::setCenterVertically( sal_Bool centerVertically)
     }
 }
 
-sal_Bool SAL_CALL ScVbaPageSetup::getCenterHorizontally()
+bool SAL_CALL ScVbaPageSetup::getCenterHorizontally()
 {
     bool centerHorizontally = false;
     try
@@ -530,7 +530,7 @@ sal_Bool SAL_CALL ScVbaPageSetup::getCenterHorizontally()
     return centerHorizontally;
 }
 
-void SAL_CALL ScVbaPageSetup::setCenterHorizontally( sal_Bool centerHorizontally)
+void SAL_CALL ScVbaPageSetup::setCenterHorizontally( bool centerHorizontally)
 {
     try
     {
@@ -541,7 +541,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHorizontally( sal_Bool centerHorizontally
     }
 }
 
-sal_Bool SAL_CALL ScVbaPageSetup::getPrintHeadings()
+bool SAL_CALL ScVbaPageSetup::getPrintHeadings()
 {
     bool printHeadings = false;
     try
@@ -555,7 +555,7 @@ sal_Bool SAL_CALL ScVbaPageSetup::getPrintHeadings()
     return printHeadings;
 }
 
-void SAL_CALL ScVbaPageSetup::setPrintHeadings( sal_Bool printHeadings)
+void SAL_CALL ScVbaPageSetup::setPrintHeadings( bool printHeadings)
 {
     try
     {
@@ -566,12 +566,12 @@ void SAL_CALL ScVbaPageSetup::setPrintHeadings( sal_Bool printHeadings)
     }
 }
 
-sal_Bool SAL_CALL ScVbaPageSetup::getPrintGridlines()
+bool SAL_CALL ScVbaPageSetup::getPrintGridlines()
 {
     return false;
 }
 
-void SAL_CALL ScVbaPageSetup::setPrintGridlines( sal_Bool /*_printgridlines*/ )
+void SAL_CALL ScVbaPageSetup::setPrintGridlines( bool /*_printgridlines*/ )
 {
 }
 

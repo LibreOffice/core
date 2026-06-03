@@ -112,14 +112,14 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
         virtual void SAL_CALL storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual sal_Bool SAL_CALL isModified() override;
+        virtual bool SAL_CALL isModified() override;
 
-        virtual sal_Bool SAL_CALL isReadOnly() override;
+        virtual bool SAL_CALL isReadOnly() override;
 
         // XUIConfigurationStorage
         virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual sal_Bool SAL_CALL hasStorage() override;
+        virtual bool SAL_CALL hasStorage() override;
 
         // XUIConfiguration
         virtual void SAL_CALL addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
@@ -181,7 +181,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
         @param  bWriteAccessRequested
         if the outside code wish to change the container
-        it must call this method with "sal_True". So the internal
+        it must call this method with "true". So the internal
         cache can be prepared for that (means copy-on-write ...).
 
         @return [AcceleratorCache]
@@ -250,14 +250,14 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         virtual void SAL_CALL storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual sal_Bool SAL_CALL isModified() override;
+        virtual bool SAL_CALL isModified() override;
 
-        virtual sal_Bool SAL_CALL isReadOnly() override;
+        virtual bool SAL_CALL isReadOnly() override;
 
         // XUIConfigurationStorage
         virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-        virtual sal_Bool SAL_CALL hasStorage() override;
+        virtual bool SAL_CALL hasStorage() override;
 
         // XUIConfiguration
         virtual void SAL_CALL addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;

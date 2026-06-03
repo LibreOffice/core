@@ -125,10 +125,10 @@ public:
 
     virtual void SAL_CALL removeCurrentElement(  ) override;
 
-    virtual sal_Bool SAL_CALL isCurrent( const css::uno::Reference<
+    virtual bool SAL_CALL isCurrent( const css::uno::Reference<
         css::xml::wrapper::XXMLElementWrapper >& node ) override;
 
-    virtual sal_Bool SAL_CALL isCurrentElementEmpty(  ) override;
+    virtual bool SAL_CALL isCurrentElementEmpty(  ) override;
 
     virtual OUString SAL_CALL getNodeName( const css::uno::Reference<
         css::xml::wrapper::XXMLElementWrapper >& node ) override;
@@ -198,7 +198,7 @@ public:
     /* css::lang::XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };

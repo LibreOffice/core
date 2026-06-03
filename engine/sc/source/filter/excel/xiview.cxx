@@ -221,7 +221,7 @@ void XclImpTabViewSettings::Finalize()
 
     // sheet flags
     if( maData.mbMirrored )
-        // do not call this function with sal_False, it would mirror away all drawing objects
+        // do not call this function with false, it would mirror away all drawing objects
         rDoc.SetLayoutRTL( nScTab, true );
     rTabSett.mbSelected = maData.mbSelected || bDisplayed;
 

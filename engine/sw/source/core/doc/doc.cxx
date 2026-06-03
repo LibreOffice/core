@@ -1188,7 +1188,7 @@ void SwDoc::DeleteFormatRefMark(const SwFormatRefMark* pFormatRefMark)
 static bool lcl_SpellAndGrammarAgain( SwNode* pNd, void* pArgs )
 {
     SwTextNode *pTextNode = pNd->GetTextNode();
-    bool bOnlyWrong = *static_cast<sal_Bool*>(pArgs);
+    bool bOnlyWrong = *static_cast<bool*>(pArgs);
     if( pTextNode )
     {
         if( bOnlyWrong )

@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName)
         chart2::DataPointLabel aDataPointLabel;
         xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
         xPropertySet->getPropertyValue(u"Label"_ustr) >>= aDataPointLabel;
-        CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
+        CPPUNIT_ASSERT_EQUAL(true, aDataPointLabel.ShowSeriesName);
     }
 
     // OOXML
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName)
         chart2::DataPointLabel aDataPointLabel;
         xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
         xPropertySet->getPropertyValue(u"Label"_ustr) >>= aDataPointLabel;
-        CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
+        CPPUNIT_ASSERT_EQUAL(true, aDataPointLabel.ShowSeriesName);
     }
 }
 

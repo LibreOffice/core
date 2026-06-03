@@ -137,7 +137,7 @@ void SAL_CALL DragSource::initialize( const Sequence< Any >& aArguments )
 }
 
 /** XDragSource */
-sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
+bool SAL_CALL DragSource::isDragImageSupported(  )
 {
     return false;
 }
@@ -282,7 +282,7 @@ OUString SAL_CALL DragSource::getImplementationName(  )
     return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
 }
 // XServiceInfo
-sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
+bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

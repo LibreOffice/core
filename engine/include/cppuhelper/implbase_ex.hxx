@@ -84,11 +84,11 @@ struct SAL_WARN_UNUSED class_data
 
     /** determines whether m_typeEntries is initialized and carries unacquired type refs
     */
-    sal_Bool m_storedTypeRefs;
+    bool m_storedTypeRefs;
 
     /** determines whether an implementation id was created in m_id
     */
-    sal_Bool m_createdId;
+    bool m_createdId;
 
     /** implementation id
      */

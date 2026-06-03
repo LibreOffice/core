@@ -64,7 +64,7 @@ class JavaMigration : public ::cppu::WeakImplHelper<
 public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XInitialization
@@ -82,7 +82,7 @@ public:
     virtual void SAL_CALL overrideNode(
             const OUString& aName,
             sal_Int16 aAttributes,
-            sal_Bool bClear) override;
+            bool bClear) override;
 
     virtual void SAL_CALL addOrReplaceNode(
             const OUString& aName,
@@ -102,7 +102,7 @@ public:
             const OUString& aName,
             sal_Int16 aAttributes,
             const css::uno::Type& aType,
-            sal_Bool bClear ) override;
+            bool bClear ) override;
 
     virtual void SAL_CALL  setPropertyValue(
             const css::uno::Any& aValue ) override;
@@ -160,7 +160,7 @@ OUString SAL_CALL JavaMigration::getImplementationName()
     return jvmfwk_getImplementationName();
 }
 
-sal_Bool JavaMigration::supportsService(OUString const & ServiceName)
+bool JavaMigration::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -267,7 +267,7 @@ void SAL_CALL JavaMigration::endLayer()
 void SAL_CALL JavaMigration::overrideNode(
         const OUString&,
         sal_Int16,
-        sal_Bool)
+        bool)
 
 {
 
@@ -295,7 +295,7 @@ void SAL_CALL  JavaMigration::overrideProperty(
         const OUString& aName,
         sal_Int16,
         const Type&,
-        sal_Bool )
+        bool )
 {
     if ( aName == "Enable" )
         m_aStack.push(TElementStack::value_type(aName,ENABLE_JAVA));

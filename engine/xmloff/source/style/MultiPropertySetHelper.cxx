@@ -155,6 +155,6 @@ const Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex,
 
 // inline methods defined in header:
 // inline Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex )
-// inline sal_Bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
+// inline bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

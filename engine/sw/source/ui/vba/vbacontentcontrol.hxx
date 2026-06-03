@@ -35,8 +35,8 @@ public:
     ~SwVbaContentControl() override;
 
     // XContentControl Properties
-    sal_Bool SAL_CALL getAllowInsertDeleteSection() override;
-    void SAL_CALL setAllowInsertDeleteSection(sal_Bool bSet) override;
+    bool SAL_CALL getAllowInsertDeleteSection() override;
+    void SAL_CALL setAllowInsertDeleteSection(bool bSet) override;
 
     sal_Int32 SAL_CALL getAppearance() override;
     void SAL_CALL setAppearance(sal_Int32 nSet) override;
@@ -47,8 +47,8 @@ public:
     sal_Int32 SAL_CALL getBuildingBlockType() override;
     void SAL_CALL setBuildingBlockType(sal_Int32 nSet) override;
 
-    sal_Bool SAL_CALL getChecked() override;
-    void SAL_CALL setChecked(sal_Bool bSet) override;
+    bool SAL_CALL getChecked() override;
+    void SAL_CALL setChecked(bool bSet) override;
 
     // returns or sets a WdColor (@since after 2010 I assume)
     sal_Int32 SAL_CALL getColor() override;
@@ -73,20 +73,20 @@ public:
     sal_Int32 SAL_CALL getLevel() override;
 
     // returns or sets if the user can delete the control
-    sal_Bool SAL_CALL getLockContentControl() override;
-    void SAL_CALL setLockContentControl(sal_Bool bSet) override;
+    bool SAL_CALL getLockContentControl() override;
+    void SAL_CALL setLockContentControl(bool bSet) override;
 
     // returns or sets if the user can edit the contents (i.e. read-only flag)
-    sal_Bool SAL_CALL getLockContents() override;
-    void SAL_CALL setLockContents(sal_Bool bSet) override;
+    bool SAL_CALL getLockContents() override;
+    void SAL_CALL setLockContents(bool bSet) override;
 
-    sal_Bool SAL_CALL getMultiLine() override;
-    void SAL_CALL setMultiLine(sal_Bool bSet) override;
+    bool SAL_CALL getMultiLine() override;
+    void SAL_CALL setMultiLine(bool bSet) override;
 
     // WRONG- THIS SHOULD RETURN XBUILDINGBLOCK
     OUString SAL_CALL getPlaceholderText() override;
 
-    sal_Bool SAL_CALL getShowingPlaceholderText() override;
+    bool SAL_CALL getShowingPlaceholderText() override;
 
     OUString SAL_CALL getRepeatingSectionItemTitle() override;
     void SAL_CALL setRepeatingSectionItemTitle(const OUString& rSet) override;
@@ -97,8 +97,8 @@ public:
     void SAL_CALL setTag(const OUString& rSet) override;
 
     // returns or sets if the control is removed after accepting user change (i.e. control -> text)
-    sal_Bool SAL_CALL getTemporary() override;
-    void SAL_CALL setTemporary(sal_Bool bSet) override;
+    bool SAL_CALL getTemporary() override;
+    void SAL_CALL setTemporary(bool bSet) override;
 
     OUString SAL_CALL getTitle() override;
     void SAL_CALL setTitle(const OUString& rSet) override;

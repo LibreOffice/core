@@ -384,10 +384,10 @@ public:
     /*
      * XSAXEventKeeperStatusChangeListener
      */
-    virtual void SAL_CALL blockingStatusChanged( sal_Bool isBlocking ) override;
+    virtual void SAL_CALL blockingStatusChanged( bool isBlocking ) override;
     virtual void SAL_CALL collectionStatusChanged(
-        sal_Bool isInsideCollectedElement ) override;
-    virtual void SAL_CALL bufferStatusChanged( sal_Bool isBufferEmpty ) override;
+        bool isInsideCollectedElement ) override;
+    virtual void SAL_CALL bufferStatusChanged( bool isBufferEmpty ) override;
 
     /*
      * XSignatureCreationResultListener

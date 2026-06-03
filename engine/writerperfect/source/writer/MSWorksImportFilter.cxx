@@ -138,7 +138,7 @@ OUString SAL_CALL MSWorksImportFilter::getImplementationName()
     return u"com.sun.star.comp.Writer.MSWorksImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL MSWorksImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL MSWorksImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

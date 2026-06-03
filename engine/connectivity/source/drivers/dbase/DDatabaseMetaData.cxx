@@ -239,7 +239,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     const Any& /*catalog*/, const OUString& /*schema*/, const OUString& table,
-        sal_Bool unique, sal_Bool /*approximate*/ )
+        bool unique, bool /*approximate*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -332,17 +332,17 @@ sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  )
     return 128;
 }
 
-sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  )
+bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  )
+bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  )
+bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

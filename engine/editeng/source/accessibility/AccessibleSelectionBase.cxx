@@ -46,7 +46,7 @@ void SAL_CALL AccessibleSelectionBase::selectAccessibleChild( sal_Int64 nChildIn
 }
 
 
-sal_Bool SAL_CALL AccessibleSelectionBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL AccessibleSelectionBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );

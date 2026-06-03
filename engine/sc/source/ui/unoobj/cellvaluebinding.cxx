@@ -139,7 +139,7 @@ namespace calc
                 // an XTextRange can be used to set/get "string" values
                 pTypes[1] = ::cppu::UnoType<OUString>::get();
                 // and additionally, we use it to handle booleans
-                pTypes[2] = ::cppu::UnoType<sal_Bool>::get();
+                pTypes[2] = ::cppu::UnoType<bool>::get();
             }
 
             // add sal_Int32 only if constructed as ListPositionCellBinding
@@ -150,7 +150,7 @@ namespace calc
         return aTypes;
     }
 
-    sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType )
+    bool SAL_CALL OCellValueBinding::supportsType( const Type& aType )
     {
         std::unique_lock<std::mutex> aGuard(m_aMutex);
         throwIfDisposed(aGuard);
@@ -430,7 +430,7 @@ namespace calc
         return u"com.sun.star.comp.sheet.OCellValueBinding"_ustr;
     }
 
-    sal_Bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }

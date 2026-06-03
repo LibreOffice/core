@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro(void* pParent, void* pOnlyInDocument_AsXModel, void* pDocFrame_AsXFrame, sal_Bool bChooseOnly )
+    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro(void* pParent, void* pOnlyInDocument_AsXModel, void* pDocFrame_AsXFrame, bool bChooseOnly )
     {
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
         Reference< frame::XFrame > aDocFrame( static_cast< frame::XFrame* >( pDocFrame_AsXFrame ) );

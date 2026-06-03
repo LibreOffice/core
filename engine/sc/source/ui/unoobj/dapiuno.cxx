@@ -501,7 +501,7 @@ uno::Type SAL_CALL ScDataPilotTablesObj::getElementType()
     return cppu::UnoType<XDataPilotTable2>::get();
 }
 
-sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements()
+bool SAL_CALL ScDataPilotTablesObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -555,7 +555,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
     return {};
 }
 
-sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
+bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -1602,7 +1602,7 @@ uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType()
     return cppu::UnoType<XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldsObj::hasElements()
+bool SAL_CALL ScDataPilotFieldsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -1650,7 +1650,7 @@ Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
     return Sequence<OUString>();
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldsObj::hasByName( const OUString& aName )
+bool SAL_CALL ScDataPilotFieldsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -2787,7 +2787,7 @@ Sequence< OUString > SAL_CALL ScDataPilotFieldGroupsObj::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasByName( const OUString& rName )
+bool SAL_CALL ScDataPilotFieldGroupsObj::hasByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
     return implFindByName( rName ) != maGroups.end();
@@ -2885,7 +2885,7 @@ uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType()
     return cppu::UnoType<XNameAccess>::get();
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasElements()
+bool SAL_CALL ScDataPilotFieldGroupsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return !maGroups.empty();
@@ -2965,7 +2965,7 @@ Sequence< OUString > SAL_CALL ScDataPilotFieldGroupObj::getElementNames()
     return ::comphelper::containerToSequence( mxParent->getFieldGroup( maGroupName ).maMembers );
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName )
+bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
@@ -3057,7 +3057,7 @@ uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType()
     return cppu::UnoType<XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements()
+bool SAL_CALL ScDataPilotFieldGroupObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return !mxParent->getFieldGroup( maGroupName ).maMembers.empty();
@@ -3156,7 +3156,7 @@ Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
+bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     bool bFound = false;
@@ -3208,7 +3208,7 @@ uno::Type SAL_CALL ScDataPilotItemsObj::getElementType()
     return cppu::UnoType<XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements()
+bool SAL_CALL ScDataPilotItemsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );

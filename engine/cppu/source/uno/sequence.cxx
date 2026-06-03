@@ -89,13 +89,13 @@ static bool idefaultConstructElements(
         break;
     case typelib_TypeClass_BOOLEAN:
         if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
+            pSeq = reallocSeq( pSeq, sizeof(bool), nAlloc );
         if (pSeq != nullptr)
         {
             memset(
-                pSeq->elements + (sizeof(sal_Bool) * nStartIndex),
+                pSeq->elements + (sizeof(bool) * nStartIndex),
                 0,
-                sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
+                sizeof(bool) * (nStopIndex - nStartIndex) );
         }
         break;
     case typelib_TypeClass_BYTE:
@@ -335,13 +335,13 @@ static bool icopyConstructFromElements(
         }
         break;
     case typelib_TypeClass_BOOLEAN:
-        pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(bool), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
                 pSeq->elements,
                 pSourceElements,
-                sizeof(sal_Bool) * nStopIndex );
+                sizeof(bool) * nStopIndex );
         }
         break;
     case typelib_TypeClass_BYTE:
@@ -661,7 +661,7 @@ static bool ireallocSequence(
 extern "C"
 {
 
-sal_Bool SAL_CALL uno_type_sequence_construct(
+bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire ) noexcept
@@ -708,7 +708,7 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
 }
 
 
-sal_Bool SAL_CALL uno_sequence_construct(
+bool SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire ) noexcept
@@ -746,7 +746,7 @@ sal_Bool SAL_CALL uno_sequence_construct(
 }
 
 
-sal_Bool SAL_CALL uno_type_sequence_realloc(
+bool SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
@@ -767,7 +767,7 @@ sal_Bool SAL_CALL uno_type_sequence_realloc(
 }
 
 
-sal_Bool SAL_CALL uno_sequence_realloc(
+bool SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
@@ -785,7 +785,7 @@ sal_Bool SAL_CALL uno_sequence_realloc(
 }
 
 
-sal_Bool SAL_CALL uno_type_sequence_reference2One(
+bool SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
@@ -831,7 +831,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
 }
 
 
-sal_Bool SAL_CALL uno_sequence_reference2One(
+bool SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept

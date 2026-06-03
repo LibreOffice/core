@@ -31,7 +31,7 @@ public:
     explicit BaseColorScheme();
 
     /// declare XServiceInfo methods
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 protected:

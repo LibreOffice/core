@@ -44,7 +44,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     static Sequence<OUString> getSupportedServiceNames_static();
 
@@ -86,7 +86,7 @@ public:
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
 
-    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
 /// Theoretically to hook into the (horrible) vcl dtranscomp.cxx code.

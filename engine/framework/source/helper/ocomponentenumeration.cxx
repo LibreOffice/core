@@ -58,7 +58,7 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent )
 }
 
 //  XEnumeration
-sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements()
+bool SAL_CALL OComponentEnumeration::hasMoreElements()
 {
     SolarMutexGuard g;
 

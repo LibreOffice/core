@@ -54,7 +54,7 @@ OUString SAL_CALL UNOMemoryStream::getImplementationName()
     return u"com.sun.star.comp.MemoryStream"_ustr;
 }
 
-sal_Bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
+bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

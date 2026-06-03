@@ -75,7 +75,7 @@ public:
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
     {
         return true;
     }

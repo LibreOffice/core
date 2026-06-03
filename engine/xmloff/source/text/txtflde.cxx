@@ -2504,7 +2504,7 @@ void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
         return;
 
     // write attribute (if different than default)
-    // negate to force 0/1 values (and make sal_Bool comparable)
+    // negate to force 0/1 values (and make bool comparable)
     if ((!bBool) != (!bDefault)) {
         GetExport().AddAttribute(nPrefix, eName,
                                  (bBool ? XML_TRUE : XML_FALSE) );

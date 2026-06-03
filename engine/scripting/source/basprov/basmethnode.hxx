@@ -61,7 +61,7 @@ namespace basprov
         // XBrowseNode
         virtual OUString SAL_CALL getName(  ) override;
         virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
-        virtual sal_Bool SAL_CALL hasChildNodes(  ) override;
+        virtual bool SAL_CALL hasChildNodes(  ) override;
         virtual sal_Int16 SAL_CALL getType(  ) override;
 
         // XInvocation
@@ -73,8 +73,8 @@ namespace basprov
             css::uno::Sequence< css::uno::Any >& aOutParam ) override;
         virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
         virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-        virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
-        virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+        virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
+        virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
     };
 
 

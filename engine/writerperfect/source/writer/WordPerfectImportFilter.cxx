@@ -149,7 +149,7 @@ bool WordPerfectImportFilter::importImpl(
                                         aUtf8Passwd.isEmpty() ? nullptr : aUtf8Passwd.getStr());
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 WordPerfectImportFilter::filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor)
 {
     return importImpl(aDescriptor);
@@ -213,7 +213,7 @@ OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
     return u"com.sun.star.comp.Writer.WordPerfectImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

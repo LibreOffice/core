@@ -1019,7 +1019,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             aList.push_back(aStr);
                             rDoc.GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
                             aList.push_back(aStr);
-                            // Protection is sal_True if both Sheet and Scenario are protected
+                            // Protection is true if both Sheet and Scenario are protected
                             aList.push_back((bSheetProtected && (nFlags & ScScenarioFlags::Protected)) ? u"1"_ustr : u"0"_ustr);
                             ++nScTab;
                         }

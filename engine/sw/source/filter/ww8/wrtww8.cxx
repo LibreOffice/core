@@ -4056,7 +4056,7 @@ SwWW8Writer::~SwWW8Writer()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, bool bSaveInto, const OUString& rStorageName )
 {
     SvxImportMSVBasic aTmp( rDoc, rStor );
     return sal_uInt32(aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName ));

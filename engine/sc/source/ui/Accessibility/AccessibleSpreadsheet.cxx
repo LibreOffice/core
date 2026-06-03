@@ -510,7 +510,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 bool bIsMark =refScMarkData.IsMarked();
                 bool bIsMultMark = refScMarkData.IsMultiMarked();
                 bool bNewMarked = refScMarkData.GetTableSelect(aNewCell.Tab()) && ( bIsMark || bIsMultMark );
-//              sal_Bool bNewCellSelected = isAccessibleSelected(aNewCell.Row(), aNewCell.Col());
+//              bool bNewCellSelected = isAccessibleSelected(aNewCell.Row(), aNewCell.Col());
                 sal_uInt16 nTab = rViewData.CurrentTabForData();
                 const ScRange& aMarkRange = refScMarkData.GetMarkArea();
                 ScDocument* pDoc= GetDocument(mpViewShell);
@@ -863,7 +863,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
     return aSequence;
 }
 
-sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
+bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -884,7 +884,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
     return bResult;
 }
 
-sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -966,7 +966,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
     return pAccessibleCell;
 }
 
-sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1373,7 +1373,7 @@ ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
-sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
+bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
 {
     SolarMutexGuard g;
 
@@ -1391,7 +1391,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
     return true;
 }
 
-sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
+bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
 {
     SolarMutexGuard g;
 
@@ -1409,7 +1409,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
     return true;
 }
 
-sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
+bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
 {
     SolarMutexGuard g;
 
@@ -1428,7 +1428,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
     return true;
 }
 
-sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
+bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
 {
     SolarMutexGuard g;
 

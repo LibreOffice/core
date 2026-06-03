@@ -72,7 +72,7 @@ public:
     */
     void AddRequest(const rtl::Reference<sd::framework::ConfigurationChangeRequest>& rxRequest);
 
-    /** Returns </sal_True> when the queue is empty.
+    /** Returns </true> when the queue is empty.
     */
     bool IsEmpty() const;
 

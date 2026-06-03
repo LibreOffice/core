@@ -407,7 +407,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, weld::Toggleable&, rBox, void)
         m_pSearchEngine->SetWildcard(m_pcbWildCard->get_sensitive() && m_pcbWildCard->get_active());
         m_pSearchEngine->SetRegular(m_pcbRegular->get_sensitive() && m_pcbRegular->get_active());
         m_pSearchEngine->SetLevenshtein(m_pcbApprox->get_sensitive() && m_pcbApprox->get_active());
-            // (disabled boxes have to be passed to the engine as sal_False)
+            // (disabled boxes have to be passed to the engine as false)
 
         // adjust the Position-Listbox (which is not allowed during Wildcard-search)
         if (&rBox == m_pcbWildCard.get())

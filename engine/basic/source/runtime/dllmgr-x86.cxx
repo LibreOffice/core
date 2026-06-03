@@ -427,7 +427,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
                 break;
             }
         case SbxBOOL:
-            variable->PutBool(read< sal_Bool >(&data));
+            variable->PutBool(read< bool >(&data));
             break;
         case SbxBYTE:
             variable->PutByte(read< sal_uInt8 >(&data));

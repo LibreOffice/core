@@ -847,7 +847,7 @@ void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
         {
             if (GetImport().GetTextImport()->GetCursor().is())
             {
-                //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+                //GetImport().GetTextImport()->GetCursor()->gotoEnd(false);
                 if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, true ) )
                 {
                     GetImport().GetTextImport()->GetText()->insertString(

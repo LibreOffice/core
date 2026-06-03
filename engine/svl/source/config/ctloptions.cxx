@@ -241,9 +241,9 @@ void SvtCTLOptions_Impl::Load()
         EnableNotification( rPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( rPropertyNames );
-    Sequence< sal_Bool > aROStates = GetReadOnlyStates( rPropertyNames );
+    Sequence< bool > aROStates = GetReadOnlyStates( rPropertyNames );
     const Any* pValues = aValues.getConstArray();
-    const sal_Bool* pROStates = aROStates.getConstArray();
+    const bool* pROStates = aROStates.getConstArray();
     assert(aValues.getLength() == rPropertyNames.getLength() && "GetProperties failed");
     assert(aROStates.getLength() == rPropertyNames.getLength() && "GetReadOnlyStates failed");
     if ( aValues.getLength() == rPropertyNames.getLength() && aROStates.getLength() == rPropertyNames.getLength() )

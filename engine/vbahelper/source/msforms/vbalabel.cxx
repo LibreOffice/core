@@ -89,12 +89,12 @@ void SAL_CALL ScVbaLabel::setBackColor( sal_Int32 nBackColor )
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Bool SAL_CALL ScVbaLabel::getAutoSize()
+bool SAL_CALL ScVbaLabel::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaLabel::setAutoSize( sal_Bool bAutoSize )
+void SAL_CALL ScVbaLabel::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }

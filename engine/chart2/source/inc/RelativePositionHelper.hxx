@@ -72,7 +72,7 @@ public:
         The resize is only done, if after
         transformation, the position and size are within the bounds [0,1].
 
-        @return </sal_True>, if changes were applied.
+        @return </true>, if changes were applied.
 
         <p>That means, if the position's alignment is center, the position will
         not change at all.</p>
@@ -89,7 +89,7 @@ public:
         rInOutPosition and its size rObjectSize the position and size are
         within the bounds [0,1].
 
-        @return </sal_True>, if changes were applied.
+        @return </true>, if changes were applied.
      */
     static bool moveObject(
         css::chart2::RelativePosition & rInOutPosition,

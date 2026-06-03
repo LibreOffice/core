@@ -172,7 +172,7 @@ IMPL_LINK_NOARG(FuPoor, ScrollHdl, Timer *, void)
 
 /**
  * handle keyboard events
- * @returns sal_True if the event was handled, sal_False otherwise
+ * @returns true if the event was handled, false otherwise
  */
 bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 {

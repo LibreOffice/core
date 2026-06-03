@@ -150,7 +150,7 @@ sal_Int32 VCLXAccessibleTextComponent::getCaretPosition()
 }
 
 
-sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex )
+bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex )
 {
     return setSelection( nIndex, nIndex );
 }
@@ -300,7 +300,7 @@ sal_Int32 VCLXAccessibleTextComponent::getSelectionEnd()
 }
 
 
-sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -351,7 +351,7 @@ css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBehindIndex(
 }
 
 
-sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -381,7 +381,7 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
     return bReturn;
 }
 
-sal_Bool VCLXAccessibleTextComponent::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool VCLXAccessibleTextComponent::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }

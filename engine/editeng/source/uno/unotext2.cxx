@@ -92,7 +92,7 @@ SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() noexcept
 }
 
 // container::XEnumeration
-sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
+bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     if( mpEditSource && !maContents.empty() )
@@ -272,7 +272,7 @@ uno::Type SAL_CALL SvxUnoTextContent::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
+bool SAL_CALL SvxUnoTextContent::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -418,7 +418,7 @@ SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() noexcept
 
 // container::XEnumeration
 
-sal_Bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
+bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
 
@@ -458,7 +458,7 @@ SvxUnoTextCursor::~SvxUnoTextCursor() noexcept
 
 // Comment out automatically - [getIdlClass(es) or queryInterface]
 // Please use the XTypeProvider!
-//sal_Bool SvxUnoTextCursor::queryInterface( uno::Uik aUIK, Reference< uno::XInterface > & xRef)
+//bool SvxUnoTextCursor::queryInterface( uno::Uik aUIK, Reference< uno::XInterface > & xRef)
 uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
 {
     if( rType == cppu::UnoType<text::XTextRange>::get())
@@ -526,37 +526,37 @@ void SAL_CALL SvxUnoTextCursor::collapseToEnd()
     CollapseToEnd();
 }
 
-sal_Bool SAL_CALL SvxUnoTextCursor::isCollapsed()
+bool SAL_CALL SvxUnoTextCursor::isCollapsed()
 {
     SolarMutexGuard aGuard;
     return IsCollapsed();
 }
 
-sal_Bool SAL_CALL SvxUnoTextCursor::goLeft( sal_Int16 nCount, sal_Bool bExpand )
+bool SAL_CALL SvxUnoTextCursor::goLeft( sal_Int16 nCount, bool bExpand )
 {
     SolarMutexGuard aGuard;
     return GoLeft( nCount, bExpand );
 }
 
-sal_Bool SAL_CALL SvxUnoTextCursor::goRight( sal_Int16 nCount, sal_Bool bExpand )
+bool SAL_CALL SvxUnoTextCursor::goRight( sal_Int16 nCount, bool bExpand )
 {
     SolarMutexGuard aGuard;
     return GoRight( nCount, bExpand );
 }
 
-void SAL_CALL SvxUnoTextCursor::gotoStart( sal_Bool bExpand )
+void SAL_CALL SvxUnoTextCursor::gotoStart( bool bExpand )
 {
     SolarMutexGuard aGuard;
     GotoStart( bExpand );
 }
 
-void SAL_CALL SvxUnoTextCursor::gotoEnd( sal_Bool bExpand )
+void SAL_CALL SvxUnoTextCursor::gotoEnd( bool bExpand )
 {
     SolarMutexGuard aGuard;
     GotoEnd( bExpand );
 }
 
-void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRange >& xRange, sal_Bool bExpand )
+void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRange >& xRange, bool bExpand )
 {
     if( !xRange.is() )
         return;
@@ -608,7 +608,7 @@ OUString SAL_CALL SvxUnoTextCursor::getImplementationName()
     return u"SvxUnoTextCursor"_ustr;
 }
 
-sal_Bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

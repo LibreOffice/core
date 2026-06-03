@@ -391,7 +391,7 @@ namespace DOM
     Returns a duplicate of this node, i.e., serves as a generic copy
     constructor for nodes.
     */
-    Reference< XNode > SAL_CALL CNode::cloneNode(sal_Bool bDeep)
+    Reference< XNode > SAL_CALL CNode::cloneNode(bool bDeep)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -603,7 +603,7 @@ namespace DOM
     /**
     Returns whether this node (if it is an element) has any attributes.
     */
-    sal_Bool SAL_CALL CNode::hasAttributes()
+    bool SAL_CALL CNode::hasAttributes()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -613,7 +613,7 @@ namespace DOM
     /**
     Returns whether this node has any children.
     */
-    sal_Bool SAL_CALL CNode::hasChildNodes()
+    bool SAL_CALL CNode::hasChildNodes()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -695,7 +695,7 @@ namespace DOM
     Tests whether the DOM implementation implements a specific feature and
     that feature is supported by this node.
     */
-  sal_Bool SAL_CALL CNode::isSupported(const OUString& /*feature*/, const OUString& /*ver*/)
+  bool SAL_CALL CNode::isSupported(const OUString& /*feature*/, const OUString& /*ver*/)
     {
         OSL_ENSURE(false, "CNode::isSupported: not implemented (#i113683#)");
         return false;
@@ -941,7 +941,7 @@ namespace DOM
         // --- XEventTarget
     void SAL_CALL CNode::addEventListener(const OUString& eventType,
         const Reference< css::xml::dom::events::XEventListener >& listener,
-        sal_Bool useCapture)
+        bool useCapture)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -952,7 +952,7 @@ namespace DOM
 
     void SAL_CALL CNode::removeEventListener(const OUString& eventType,
         const Reference< css::xml::dom::events::XEventListener >& listener,
-        sal_Bool useCapture)
+        bool useCapture)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -961,7 +961,7 @@ namespace DOM
         rDispatcher.removeListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
-    sal_Bool SAL_CALL CNode::dispatchEvent(const Reference< XEvent >& evt)
+    bool SAL_CALL CNode::dispatchEvent(const Reference< XEvent >& evt)
     {
         CDocument * pDocument;
         events::CEventDispatcher * pDispatcher;

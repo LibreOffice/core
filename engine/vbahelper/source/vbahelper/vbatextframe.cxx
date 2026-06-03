@@ -56,7 +56,7 @@ void VbaTextFrame::setMargin( const OUString& sMarginType, float fMargin )
 }
 
 // Attributes
-sal_Bool SAL_CALL
+bool SAL_CALL
 VbaTextFrame::getAutoSize()
 {
     // I don't know why, but in OOo, TextAutoGrowHeight is the property control autosize. not TextFitToSize.
@@ -69,7 +69,7 @@ VbaTextFrame::getAutoSize()
 }
 
 void SAL_CALL
-VbaTextFrame::setAutoSize( sal_Bool _autosize )
+VbaTextFrame::setAutoSize( bool _autosize )
 {
     setAsMSObehavior();
     m_xPropertySet->setPropertyValue( u"TextAutoGrowHeight"_ustr, uno::Any( _autosize ) );

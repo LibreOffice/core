@@ -421,7 +421,7 @@ OUString SAL_CALL CDataFormatTranslatorUNO::getImplementationName(  )
     return "com.sun.star.datatransfer.DataFormatTranslator";
 }
 
-sal_Bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
+bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

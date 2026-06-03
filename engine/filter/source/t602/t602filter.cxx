@@ -170,7 +170,7 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
 }
 
 // XFilter
-sal_Bool SAL_CALL T602ImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL T602ImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     return importImpl ( aDescriptor );
 }
@@ -839,7 +839,7 @@ OUString SAL_CALL T602ImportFilter::getImplementationName(  )
     return u"com.sun.star.comp.Writer.T602ImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceName )
+bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
@@ -1067,7 +1067,7 @@ OUString SAL_CALL T602ImportFilterDialog::getImplementationName(  )
     return u"com.sun.star.comp.Writer.T602ImportFilterDialog"_ustr;
 }
 
-sal_Bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServiceName )
+bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

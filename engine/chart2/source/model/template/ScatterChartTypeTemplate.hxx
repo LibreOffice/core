@@ -53,7 +53,7 @@ protected:
         getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
-    virtual sal_Bool SAL_CALL supportsCategories() override;
+    virtual bool SAL_CALL supportsCategories() override;
     virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties ) override;

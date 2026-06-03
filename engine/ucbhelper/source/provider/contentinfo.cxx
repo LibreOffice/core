@@ -121,7 +121,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
 
 
 // virtual
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
+bool SAL_CALL PropertySetInfo::hasPropertyByName(
         const OUString& Name )
 {
     beans::Property aProp;
@@ -239,7 +239,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 
 
 // virtual
-sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
+bool SAL_CALL CommandProcessorInfo::hasCommandByName(
        const OUString& Name )
 {
     css::ucb::CommandInfo aInfo;
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 
 
 // virtual
-sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
+bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 {
     css::ucb::CommandInfo aInfo;
     return queryCommand( Handle, aInfo );

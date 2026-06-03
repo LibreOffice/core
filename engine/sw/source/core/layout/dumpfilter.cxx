@@ -78,7 +78,7 @@ namespace sw
     }
 
     // XFilter
-    sal_Bool LayoutDumpFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
+    bool LayoutDumpFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
     {
         bool bRet = false;
 
@@ -144,7 +144,7 @@ namespace sw
         return u"com.sun.star.comp.Writer.LayoutDump"_ustr;
     }
 
-    sal_Bool LayoutDumpFilter::supportsService( const OUString& rServiceName )
+    bool LayoutDumpFilter::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }

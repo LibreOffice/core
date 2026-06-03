@@ -314,7 +314,7 @@ namespace
         {
         }
 
-        virtual sal_Bool SAL_CALL select( const Any& xSelection ) override;
+        virtual bool SAL_CALL select( const Any& xSelection ) override;
         virtual Any SAL_CALL getSelection(  ) override;
         virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) override;
         virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) override;
@@ -328,7 +328,7 @@ namespace
         Any m_aSelection;
     };
 
-    sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ )
+    bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ )
     {
         throw IllegalArgumentException();
         // API bug: this should be a NoSupportException

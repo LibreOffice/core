@@ -52,7 +52,7 @@ struct splash
     Window win;
     GC gc;
     //true when intro-highres loaded successfully
-    sal_Bool bHasHiDpiImage;
+    bool bHasHiDpiImage;
 
 // Progress bar values
 // taken from desktop/source/splash/splash.cxx
@@ -540,7 +540,7 @@ static rtl_String* ustr_to_str( rtl_uString* pStr )
     return pOut;
 }
 
-static sal_Bool isHiDPI(struct splash* splash)
+static bool isHiDPI(struct splash* splash)
 {
     const char* pValStr;
     double nDPI;
@@ -551,18 +551,18 @@ static sal_Bool isHiDPI(struct splash* splash)
      */
 
     if (splash->display_height < 1200)
-        return sal_False;
+        return false;
 
     pValStr = XGetDefault(splash->display, "Xft", "dpi");
     /* if it's too old to have this, assume it's not hidpi */
     if (!pValStr)
-        return sal_False;
+        return false;
 
     nDPI = strtod(pValStr, NULL);
     if (nDPI < 192)
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 #define IMG_SUFFIX           ".png"
@@ -605,13 +605,13 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
         goto cleanup; /* success */
 
     /* load high resolution splash image */
-    splash->bHasHiDpiImage = sal_False;
+    splash->bHasHiDpiImage = false;
     if (isHiDPI(splash))
     {
         strcpy (pSuffix, "intro-highres" IMG_SUFFIX);
         if ( splash_load_bmp( splash, pBuffer ) )
         {
-            splash->bHasHiDpiImage = sal_True;
+            splash->bHasHiDpiImage = true;
             goto cleanup; /* success */
         }
     }
@@ -628,7 +628,7 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
 }
 
 /* Load the colors and size of the splash. */
-static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, sal_Bool* bNoDefaults )
+static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, bool* bNoDefaults )
 {
     rtl_uString *pSettings = NULL, *pTmp = NULL;
     rtlBootstrapHandle handle;
@@ -665,7 +665,7 @@ static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, 
 
     if ( logo[0] == 0 )
     {
-        *bNoDefaults = sal_True;
+        *bNoDefaults = true;
     }
 
     splash_setup( splash, bar, frame, pos[0], pos[1], size[0], size[1] );
@@ -739,7 +739,7 @@ void splash_destroy(struct splash* splash)
 struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
 {
     struct splash* splash;
-    sal_Bool bNoDefaults = sal_False;
+    bool bNoDefaults = false;
 
     splash = calloc(1, sizeof(struct splash));
     if (splash && !splash_init_display(splash, argc, argv))

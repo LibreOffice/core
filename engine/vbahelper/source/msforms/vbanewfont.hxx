@@ -39,14 +39,14 @@ public:
     virtual void SAL_CALL setCharset(sal_Int16 nCharset) override;
     virtual sal_Int16 SAL_CALL getWeight() override;
     virtual void SAL_CALL setWeight(sal_Int16 nWeight) override;
-    virtual sal_Bool SAL_CALL getBold() override;
-    virtual void SAL_CALL setBold(sal_Bool bBold) override;
-    virtual sal_Bool SAL_CALL getItalic() override;
-    virtual void SAL_CALL setItalic(sal_Bool bItalic) override;
-    virtual sal_Bool SAL_CALL getUnderline() override;
-    virtual void SAL_CALL setUnderline(sal_Bool bUnderline) override;
-    virtual sal_Bool SAL_CALL getStrikethrough() override;
-    virtual void SAL_CALL setStrikethrough(sal_Bool bStrikethrough) override;
+    virtual bool SAL_CALL getBold() override;
+    virtual void SAL_CALL setBold(bool bBold) override;
+    virtual bool SAL_CALL getItalic() override;
+    virtual void SAL_CALL setItalic(bool bItalic) override;
+    virtual bool SAL_CALL getUnderline() override;
+    virtual void SAL_CALL setUnderline(bool bUnderline) override;
+    virtual bool SAL_CALL getStrikethrough() override;
+    virtual void SAL_CALL setStrikethrough(bool bStrikethrough) override;
 
 private:
     css::uno::Reference<css::beans::XPropertySet> mxProps;

@@ -263,7 +263,7 @@ namespace dbaccess
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // OComponentHelper
@@ -291,9 +291,9 @@ namespace dbaccess
         virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getParameters(  ) override;
 
     // css::sdbc::XRow
-        virtual sal_Bool SAL_CALL wasNull(  ) override;
+        virtual bool SAL_CALL wasNull(  ) override;
         virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
-        virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
+        virtual bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
         virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) override;
         virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) override;
         virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) override;
@@ -314,7 +314,7 @@ namespace dbaccess
 
     // css::sdbc::XRowUpdate
         virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) override;
-        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) override;
+        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, bool x ) override;
         virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) override;
         virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) override;
         virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) override;
@@ -364,7 +364,7 @@ namespace dbaccess
     // XParameters
         virtual void SAL_CALL setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) override;
         virtual void SAL_CALL setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) override;
-        virtual void SAL_CALL setBoolean( sal_Int32 parameterIndex, sal_Bool x ) override;
+        virtual void SAL_CALL setBoolean( sal_Int32 parameterIndex, bool x ) override;
         virtual void SAL_CALL setByte( sal_Int32 parameterIndex, sal_Int8 x ) override;
         virtual void SAL_CALL setShort( sal_Int32 parameterIndex, sal_Int16 x ) override;
         virtual void SAL_CALL setInt( sal_Int32 parameterIndex, sal_Int32 x ) override;
@@ -483,7 +483,7 @@ namespace dbaccess
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // OComponentHelper

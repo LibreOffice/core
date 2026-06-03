@@ -74,7 +74,7 @@ OUString SAL_CALL BaseControl::getImplementationName()
 
 //  XServiceInfo
 
-sal_Bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName )
+bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -213,7 +213,7 @@ void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext )
 
 //  XControl
 
-void SAL_CALL BaseControl::setDesignMode( sal_Bool bOn )
+void SAL_CALL BaseControl::setDesignMode( bool bOn )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -249,7 +249,7 @@ Reference< XView > SAL_CALL BaseControl::getView()
 
 //  XControl
 
-sal_Bool SAL_CALL BaseControl::isDesignMode()
+bool SAL_CALL BaseControl::isDesignMode()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -258,7 +258,7 @@ sal_Bool SAL_CALL BaseControl::isDesignMode()
 
 //  XControl
 
-sal_Bool SAL_CALL BaseControl::isTransparent()
+bool SAL_CALL BaseControl::isTransparent()
 {
     return false;
 }
@@ -310,7 +310,7 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
 
 //  XWindow
 
-void SAL_CALL BaseControl::setVisible( sal_Bool bVisible )
+void SAL_CALL BaseControl::setVisible( bool bVisible )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -327,7 +327,7 @@ void SAL_CALL BaseControl::setVisible( sal_Bool bVisible )
 
 //  XWindow
 
-void SAL_CALL BaseControl::setEnable( sal_Bool bEnable )
+void SAL_CALL BaseControl::setEnable( bool bEnable )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -464,7 +464,7 @@ void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
 
 //  XView
 
-sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice )
+bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice )
 {
     // - set the graphics for a view
     // - in this class exist 2 graphics-member ... one for peer[_xGraphicsPeer] and one for view[_xGraphicsView]

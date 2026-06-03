@@ -42,8 +42,8 @@ public:
     // SwVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
 
-    virtual sal_Bool SAL_CALL getShadow() override;
-    virtual void SAL_CALL setShadow( sal_Bool _shadow ) override;
+    virtual bool SAL_CALL getShadow() override;
+    virtual void SAL_CALL setShadow( bool _shadow ) override;
 
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

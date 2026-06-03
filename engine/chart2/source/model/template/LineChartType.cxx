@@ -158,7 +158,7 @@ OUString SAL_CALL LineChartType::getImplementationName()
     return u"com.sun.star.comp.chart.LineChartType"_ustr;
 }
 
-sal_Bool SAL_CALL LineChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL LineChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

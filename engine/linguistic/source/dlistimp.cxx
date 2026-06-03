@@ -405,7 +405,7 @@ uno::Reference< XDictionary > SAL_CALL
     return xDic;
 }
 
-sal_Bool SAL_CALL DicList::addDictionary(
+bool SAL_CALL DicList::addDictionary(
             const uno::Reference< XDictionary >& xDictionary )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -426,7 +426,7 @@ sal_Bool SAL_CALL DicList::addDictionary(
     return bRes;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     DicList::removeDictionary( const uno::Reference< XDictionary >& xDictionary )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -457,9 +457,9 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
-sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
+bool SAL_CALL DicList::addDictionaryListEventListener(
             const uno::Reference< XDictionaryListEventListener >& xListener,
-            sal_Bool bReceiveVerbose )
+            bool bReceiveVerbose )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -476,7 +476,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
     return bRes;
 }
 
-sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
+bool SAL_CALL DicList::removeDictionaryListEventListener(
             const uno::Reference< XDictionaryListEventListener >& xListener )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -524,7 +524,7 @@ uno::Reference< XDictionary > SAL_CALL
 
 uno::Reference< XDictionaryEntry > SAL_CALL
     DicList::queryDictionaryEntry( const OUString& rWord, const Locale& rLocale,
-            sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
+            bool bSearchPosDics, bool bSearchSpellEntry )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>> aDictionaryMap;
@@ -699,7 +699,7 @@ OUString SAL_CALL DicList::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
+bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -62,7 +62,7 @@ class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // WeakComponentImplHelperBase
@@ -358,7 +358,7 @@ FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::X
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const OUString& ServiceName )
+bool SAL_CALL FontHeightToolBoxControl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

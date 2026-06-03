@@ -38,8 +38,8 @@ enum class SdrTextAniKind {
 //   Just blink.  Direction and Amount don't effect things.
 //   Frequency delay: 0 = 0.5Hz (Delay = 250).
 //   Count = number of blinks. (0 = forever)
-//   start inside: sal_False = begin with the blinker off, sal_True  = begin with the blinker on
-//   stop inside: sal_False = end with the blinker off, sal_True = end with the blinker on
+//   start inside: false = begin with the blinker off, true  = begin with the blinker on
+//   stop inside: false = end with the blinker off, true = end with the blinker on
 //                (Only if count! = 0)
 // - SdrTextAniKind::Scroll:
 //   Text just scrolls all the way through, and starts over when it is done.
@@ -47,11 +47,11 @@ enum class SdrTextAniKind {
 //   Delay in ms: (except delay = 0 means 50ms (20Hz) default)
 //   Count = number of passes (0 = go forever)
 //   Direction: the direction to scroll
-//   StartInside: sal_False = on the first pass, scroll the text in (not initially visible)
-//                sal_True = on the first pass, the left part of the text is already visible
+//   StartInside: false = on the first pass, scroll the text in (not initially visible)
+//                true = on the first pass, the left part of the text is already visible
 //                           in the scroll area before starting.
-//   StopInside: sal_False = on the last pass, scroll the text all the way out.
-//                sal_True = on the last pass, keep the right part of the text visible.
+//   StopInside: false = on the last pass, scroll the text all the way out.
+//                true = on the last pass, keep the right part of the text visible.
 //                (Only if count! = 0)
 //   Amount: Step size in logical units. Negative values = use Pixels instead
 //           of logical units. If Amount = 0, then default to 1 Pixel.
@@ -65,14 +65,14 @@ enum class SdrTextAniKind {
 //   All Other Parameters: just like SdrTextAniKind::Scroll
 // - SdrTextAniKind::Slide:
 //   Text will slide into the original position.
-//   -> same as SCROLL with StartInside = sal_False, StopInside = sal_True
+//   -> same as SCROLL with StartInside = false, StopInside = true
 //   and Count = 1 (Count = 0 is interpreted as count = 1).
 //   For each count > 1, the text, will be slid out backwards
 //   (much like ALTERNATE) and then slid back in again.
 //   StopInside is not evaluated, because inside is always stopped.
 //   StartInside is not evaluated, because outside is always started.
 //   All other parameters are like SdrTextAniKind::Scroll
-// StartInside, StopInside: When sal_True, the starting / final position
+// StartInside, StopInside: When true, the starting / final position
 //   of the text depends on the anchor of the drawing object.  This
 //   corresponds to the position of the text in normal Paint (without scrolling).
 

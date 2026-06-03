@@ -41,7 +41,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySetInfo
@@ -49,7 +49,7 @@ public:
     getProperties() override;
     virtual css::beans::Property SAL_CALL
     getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasPropertyByName( const OUString& Name ) override;
 };
 

@@ -150,24 +150,24 @@ namespace XSLT
         explicit XSLTFilter(css::uno::Reference<XComponentContext> x);
 
         //  XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XImportFilter
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XDocumentHandler>& xHandler,
                 const Sequence<OUString>& msUserData) override;
 
         // XImportFilter2
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XFastParser>& xFastParser,
                 const Sequence<OUString>& msUserData) override;
 
         // XExportFilter
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         exporter(const Sequence<PropertyValue>& aSourceData, const Sequence<
                 OUString>& msUserData) override;
 
@@ -190,7 +190,7 @@ namespace XSLT
     }
 
     //  XServiceInfo
-    sal_Bool XSLTFilter::supportsService(const OUString& sServiceName)
+    bool XSLTFilter::supportsService(const OUString& sServiceName)
     {
         return cppu::supportsService(this, sServiceName);
     }
@@ -293,7 +293,7 @@ namespace XSLT
         return aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
 
-    sal_Bool
+    bool
     XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
             const css::uno::Reference<XDocumentHandler>& xHandler, const Sequence<
                     OUString>& msUserData)
@@ -421,7 +421,7 @@ namespace XSLT
         }
     }
 
-    sal_Bool
+    bool
     XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
             const css::uno::Reference<XFastParser>& xFastParser, const Sequence<
                     OUString>& msUserData)
@@ -536,7 +536,7 @@ namespace XSLT
         }
     }
 
-    sal_Bool
+    bool
     XSLTFilter::exporter(const Sequence<PropertyValue>& aSourceData,
             const Sequence<OUString>& msUserData)
     {

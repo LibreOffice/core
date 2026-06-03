@@ -134,7 +134,7 @@ bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
     return false;
 }
 
-// If we handle a KeyEvent, then the return value is sal_True else FALSE.
+// If we handle a KeyEvent, then the return value is true else FALSE.
 bool FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
 {
     return false;
@@ -145,7 +145,7 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
     if ( CommandEventId::StartDrag == rCEvt.GetCommand() )
     {
         // Only if a selection is in Outliner, then Command is allowed
-        // to return sal_True
+        // to return true
 
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 

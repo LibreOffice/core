@@ -48,7 +48,7 @@ private:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& _rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& _rServiceName) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 }
@@ -71,7 +71,7 @@ OUString SAL_CALL SimpleTextFormatter::format(const LogRecord& _rRecord)
 
 OUString SAL_CALL SimpleTextFormatter::getTail() { return OUString(); }
 
-sal_Bool SAL_CALL SimpleTextFormatter::supportsService(const OUString& _rServiceName)
+bool SAL_CALL SimpleTextFormatter::supportsService(const OUString& _rServiceName)
 {
     return cppu::supportsService(this, _rServiceName);
 }

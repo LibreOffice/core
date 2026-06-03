@@ -214,7 +214,7 @@ void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence
 
 }
 
-sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence *pSequence2 ) noexcept
+bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence *pSequence2 ) noexcept
 {
     assert(pSequence1 && pSequence2);
     if (pSequence1 == pSequence2)

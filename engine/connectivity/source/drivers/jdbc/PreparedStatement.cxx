@@ -91,7 +91,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_PreparedStatement::getTyp
 }
 
 
-sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  )
+bool SAL_CALL java_sql_PreparedStatement::execute(  )
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTING_PREPARED );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -160,7 +160,7 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_PreparedStatement
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
+void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, bool x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_BOOLEAN_PARAMETER, parameterIndex, bool(x) );
     ::osl::MutexGuard aGuard( m_aMutex );

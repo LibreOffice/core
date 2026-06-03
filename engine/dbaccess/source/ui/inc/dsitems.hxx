@@ -54,7 +54,7 @@ typedef sal_Int32   ItemID;
 #define DSID_TEXTFILEHEADER         TypedWhichId<SfxBoolItem>(21) // the text file contains a header?, SfxBoolItem
 #define DSID_PARAMETERNAMESUBST     TypedWhichId<SfxBoolItem>(22)
 #define DSID_CONN_PORTNUMBER        TypedWhichId<SfxInt32Item>(23)
-#define DSID_SUPPRESSVERSIONCL      TypedWhichId<SfxBoolItem>(24) // meta data: sal_True if the data source described by the set is to-be-deleted
+#define DSID_SUPPRESSVERSIONCL      TypedWhichId<SfxBoolItem>(24) // meta data: true if the data source described by the set is to-be-deleted
 #define DSID_CONN_SHUTSERVICE       TypedWhichId<SfxBoolItem>(25)
 #define DSID_CONN_DATAINC           TypedWhichId<SfxInt32Item>(26)
 #define DSID_CONN_CACHESIZE         TypedWhichId<SfxInt32Item>(27)

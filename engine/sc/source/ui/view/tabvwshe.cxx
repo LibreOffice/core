@@ -134,7 +134,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
         {
             //  if the view is not active, InsertURLField doesn't work
             //  -> use InsertBookmark to directly manipulate cell content
-            //  bTryReplace=sal_True -> if cell contains only one URL, replace it
+            //  bTryReplace=true -> if cell contains only one URL, replace it
 
             SCCOL nPosX = GetViewData().GetCurX();
             SCROW nPosY = GetViewData().GetCurY();

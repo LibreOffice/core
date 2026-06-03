@@ -265,7 +265,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
 }
 
 // XStatusbarController
-sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
+bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     const awt::MouseEvent& rMouseEvent )
 {
     SolarMutexGuard aGuard;
@@ -280,7 +280,7 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     return MouseButtonDown( aMouseEvent );
 }
 
-sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
+bool SAL_CALL SfxStatusBarControl::mouseMove(
     const awt::MouseEvent& rMouseEvent )
 {
     SolarMutexGuard aGuard;
@@ -294,7 +294,7 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
     return MouseMove( aMouseEvent );
 }
 
-sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
+bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     const ::awt::MouseEvent& rMouseEvent )
 {
     SolarMutexGuard aGuard;
@@ -311,7 +311,7 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
 void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
-    sal_Bool /*bMouseEvent*/,
+    bool /*bMouseEvent*/,
     const css::uno::Any& /*aData*/ )
 {
     SolarMutexGuard aGuard;
@@ -395,7 +395,7 @@ bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
     [Return value]
 
-    sal_Bool                TRUE
+    bool                TRUE
            The event has been processed and is not intended to
            be forwarded to StatusBar
 
@@ -421,7 +421,7 @@ bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 
     [Return value]
 
-    sal_Bool                TRUE
+    bool                TRUE
            The event has been processed and is not intended to
            be forwarded to StatusBar
 
@@ -447,7 +447,7 @@ bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
     [Return value]
 
-    sal_Bool                TRUE
+    bool                TRUE
            The event has been processed and is not intended to
            be forwarded to StatusBar
 

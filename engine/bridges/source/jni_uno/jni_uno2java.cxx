@@ -242,7 +242,7 @@ void Bridge::call_java(
             jni->CallCharMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_BOOLEAN:
-        *static_cast<sal_Bool *>(uno_ret) =
+        *static_cast<bool *>(uno_ret) =
             jni->CallBooleanMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_BYTE:

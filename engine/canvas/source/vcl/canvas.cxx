@@ -101,7 +101,7 @@ namespace vclcanvas
         return u"com.sun.star.comp.rendering.Canvas.VCL"_ustr;
     }
 
-    sal_Bool Canvas::supportsService(OUString const & ServiceName) {
+    bool Canvas::supportsService(OUString const & ServiceName) {
         return cppu::supportsService(this, ServiceName);
     }
 

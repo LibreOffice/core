@@ -1422,7 +1422,7 @@ void E3dView::MovAction(const Point& rPnt)
 }
 
 // The End. Create object and any child objects through ImpCreate3DLathe.
-// With the parameter value sal_True (SDefault: sal_False) is simply a
+// With the parameter value true (SDefault: false) is simply a
 // rotation body  created, without letting the user set the position of the
 // axis. It is sufficient with this call, if an object is selected.
 // (No initialization necessary)

@@ -70,7 +70,7 @@ OUString BridgeFactory::getImplementationName()
     return u"com.sun.star.comp.bridge.BridgeFactory"_ustr;
 }
 
-sal_Bool BridgeFactory::supportsService(OUString const & ServiceName)
+bool BridgeFactory::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

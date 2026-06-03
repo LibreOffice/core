@@ -1072,7 +1072,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
 
         const Any aValue( pSet->getPropertyValue( nHandleSoundURL ) );
 
-        if( aValue.getValueType() == ::cppu::UnoType<sal_Bool>::get() )
+        if( aValue.getValueType() == ::cppu::UnoType<bool>::get() )
         {
             nPos = 1;
         }

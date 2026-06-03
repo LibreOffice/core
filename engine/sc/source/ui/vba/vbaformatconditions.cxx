@@ -91,7 +91,7 @@ class EnumWrapper : public EnumerationHelper_BASE
         sal_Int32 nIndex;
 public:
         EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess, uno::Reference<excel::XRange > xRange, uno::Reference<uno::XComponentContext > xContext, uno::Reference<excel::XStyles > xStyles, uno::Reference< excel::XFormatConditions > xCollection, uno::Reference<beans::XPropertySet > xProps  ) : m_xIndexAccess(std::move( xIndexAccess )), m_xParentRange(std::move( xRange )), m_xContext(std::move( xContext )), m_xStyles(std::move( xStyles )), m_xParentCollection(std::move( xCollection )), m_xProps(std::move( xProps )), nIndex( 0 ) {}
-        virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+        virtual bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }

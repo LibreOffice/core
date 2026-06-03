@@ -1251,9 +1251,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952_multiple_OLEs)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject1.bin"_ustr)));
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject2.bin"_ustr)));
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject3.bin"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"ppt/embeddings/oleObject1.bin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"ppt/embeddings/oleObject2.bin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"ppt/embeddings/oleObject3.bin"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

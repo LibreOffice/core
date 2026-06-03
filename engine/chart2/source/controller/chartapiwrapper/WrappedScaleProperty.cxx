@@ -310,7 +310,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             {
                 bool bWasLogarithm = AxisHelper::isLogarithmic( aScaleData.Scaling );
 
-                // safe comparison between sal_Bool and bool
+                // safe comparison between bool and bool
                 if( (!bBool) != (!bWasLogarithm) )
                 {
                     if( bBool )
@@ -327,7 +327,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             if( rOuterValue >>= bBool )
             {
                 bool bWasReverse = ( aScaleData.Orientation == AxisOrientation_REVERSE );
-                if( (!bBool) != (!bWasReverse) ) // safe comparison between sal_Bool and bool
+                if( (!bBool) != (!bWasReverse) ) // safe comparison between bool and bool
                 {
                     aScaleData.Orientation = bBool ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
                     bSetScaleData = true;

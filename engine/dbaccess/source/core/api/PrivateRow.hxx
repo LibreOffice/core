@@ -32,9 +32,9 @@ namespace dbaccess
         explicit OPrivateRow(ORowSetValueVector::Vector&& i_aRow) : m_aRow(std::move(i_aRow)),m_nPos(0)
         {
         }
-        virtual sal_Bool SAL_CALL wasNull(  ) override;
+        virtual bool SAL_CALL wasNull(  ) override;
         virtual OUString SAL_CALL getString( ::sal_Int32 columnIndex ) override;
-        virtual sal_Bool SAL_CALL getBoolean( ::sal_Int32 columnIndex ) override;
+        virtual bool SAL_CALL getBoolean( ::sal_Int32 columnIndex ) override;
         virtual ::sal_Int8 SAL_CALL getByte( ::sal_Int32 columnIndex ) override;
         virtual ::sal_Int16 SAL_CALL getShort( ::sal_Int32 columnIndex ) override;
         virtual ::sal_Int32 SAL_CALL getInt( ::sal_Int32 columnIndex ) override;

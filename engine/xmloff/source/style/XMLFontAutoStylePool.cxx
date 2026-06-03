@@ -610,7 +610,7 @@ static OString getFileHash(OUString const & rFileUrl)
     {
         sal_Int8 aBuffer[4096];
         sal_uInt64 nReadSize;
-        sal_Bool bEof;
+        bool bEof;
         if (aFile.isEndOfFile(&bEof) != osl::File::E_None)
         {
             SAL_WARN("xmloff", "Error reading font file " << rFileUrl);
@@ -660,7 +660,7 @@ OUString SvXMLExport::embedFontFile(OUString const& fileUrl, OUString const& rFa
         {
             sal_Int8 buffer[ 4096 ];
             sal_uInt64 readSize;
-            sal_Bool eof;
+            bool eof;
             if( file.isEndOfFile( &eof ) != osl::File::E_None )
             {
                 SAL_WARN( "xmloff", "Error reading font file " << fileUrl );

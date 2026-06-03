@@ -136,12 +136,12 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @short      get fill state of current container
             @descr      Call these to get information about, if items exist in container or not.
                         (container-lock is ignored)
-            @return     sal_True, if container contains some items.
-            @return     sal_False, otherwise.
+            @return     true, if container contains some items.
+            @return     false, otherwise.
 
-            @onerror    We return sal_False.
+            @onerror    We return false.
         */
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
     private:
 

@@ -63,7 +63,7 @@ OUString SAL_CALL FilledNetChartType::getImplementationName()
     return u"com.sun.star.comp.chart.FilledNetChartType"_ustr;
 }
 
-sal_Bool SAL_CALL FilledNetChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL FilledNetChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

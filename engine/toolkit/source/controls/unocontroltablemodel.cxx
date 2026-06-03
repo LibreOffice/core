@@ -733,7 +733,7 @@ namespace svt::table
         try
         {
             Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY_THROW );
-            Pair< ::sal_Int32, sal_Bool > const aCurrentSortOrder( xSortAccess->getCurrentSortOrder() );
+            Pair< ::sal_Int32, bool > const aCurrentSortOrder( xSortAccess->getCurrentSortOrder() );
             currentSort.nColumnPos = aCurrentSortOrder.First;
             currentSort.eSortDirection = aCurrentSortOrder.Second ? ColumnSortAscending : ColumnSortDescending;
         }

@@ -142,24 +142,24 @@ sal_Int32 SwVbaFormField::getType()
     return ooo::vba::word::WdFieldType::wdFieldFormDropDown;
 }
 
-sal_Bool SwVbaFormField::getCalculateOnExit()
+bool SwVbaFormField::getCalculateOnExit()
 {
     SAL_INFO("sw.vba", "SwVbaFormField::getCalculateOnExit stub");
     return false;
 }
 
-void SwVbaFormField::setCalculateOnExit(sal_Bool /*bSet*/)
+void SwVbaFormField::setCalculateOnExit(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaFormField::setCalculateOnExit stub");
 }
 
-sal_Bool SwVbaFormField::getEnabled()
+bool SwVbaFormField::getEnabled()
 {
     SAL_INFO("sw.vba", "SwVbaFormField::getEnabled stub");
     return true;
 }
 
-void SwVbaFormField::setEnabled(sal_Bool /*bSet*/)
+void SwVbaFormField::setEnabled(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaFormField::setEnabled stub");
 }
@@ -192,13 +192,13 @@ OUString SwVbaFormField::getHelpText() { return m_rFormField.GetFieldHelptext();
 
 void SwVbaFormField::setHelpText(const OUString& rSet) { m_rFormField.SetFieldHelptext(rSet); }
 
-sal_Bool SwVbaFormField::getOwnHelp()
+bool SwVbaFormField::getOwnHelp()
 {
     SAL_INFO("sw.vba", "SwVbaFormField::getOwnHelp stub");
     return true;
 }
 
-void SwVbaFormField::setOwnHelp(sal_Bool /*bSet*/)
+void SwVbaFormField::setOwnHelp(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaFormField::setOwnHelp stub");
 }
@@ -231,13 +231,13 @@ void SwVbaFormField::setStatusText(const OUString& rSet)
     SAL_INFO("sw.vba", "SwVbaFormField::setStatusText[" << rSet << "] stub");
 }
 
-sal_Bool SwVbaFormField::getOwnStatus()
+bool SwVbaFormField::getOwnStatus()
 {
     SAL_INFO("sw.vba", "SwVbaFormField::getOwnStatus stub");
     return true;
 }
 
-void SwVbaFormField::setOwnStatus(sal_Bool /*bSet*/)
+void SwVbaFormField::setOwnStatus(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaFormField::setOwnStatus stub");
 }

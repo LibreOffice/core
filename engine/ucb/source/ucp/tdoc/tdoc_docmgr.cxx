@@ -52,7 +52,7 @@ using namespace tdoc_ucp;
 
 // virtual
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing(
-         const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ )
+         const lang::EventObject& /*Source*/, bool /*GetsOwnership*/ )
 {
 }
 

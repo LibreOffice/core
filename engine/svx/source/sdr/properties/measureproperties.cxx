@@ -106,7 +106,7 @@ namespace sdr::properties
             TextProperties::ForceDefaultAttributes();
 
             //#71958# by default, the show units Bool-Item is set as hard
-            // attribute to sal_True to avoid confusion when copying SdrMeasureObj's
+            // attribute to true to avoid confusion when copying SdrMeasureObj's
             // from one application to another
             moItemSet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
 

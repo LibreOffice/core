@@ -54,7 +54,7 @@ public:
 
     sal_Int32 SAL_CALL getAccessibleActionCount() override;
 
-    sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
+    bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
 
     OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex) override;
 

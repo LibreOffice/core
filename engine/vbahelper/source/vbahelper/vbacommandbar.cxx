@@ -77,7 +77,7 @@ ScVbaCommandBar::setName( const OUString& _name )
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaCommandBar::getVisible()
 {
     // menu bar is always visible in OOo
@@ -101,7 +101,7 @@ ScVbaCommandBar::getVisible()
     return bVisible;
 }
 void SAL_CALL
-ScVbaCommandBar::setVisible( sal_Bool _visible )
+ScVbaCommandBar::setVisible( bool _visible )
 {
     try
     {
@@ -123,7 +123,7 @@ ScVbaCommandBar::setVisible( sal_Bool _visible )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaCommandBar::getEnabled()
 {
     // emulated with Visible
@@ -131,7 +131,7 @@ ScVbaCommandBar::getEnabled()
 }
 
 void SAL_CALL
-ScVbaCommandBar::setEnabled( sal_Bool _enabled )
+ScVbaCommandBar::setEnabled( bool _enabled )
 {
     // emulated with Visible
     setVisible( _enabled );
@@ -210,24 +210,24 @@ void SAL_CALL VbaDummyCommandBar::setName( const OUString& _name )
     maName = _name;
 }
 
-sal_Bool SAL_CALL VbaDummyCommandBar::getVisible()
+bool SAL_CALL VbaDummyCommandBar::getVisible()
 {
     // #STUB
     return true;
 }
 
-void SAL_CALL VbaDummyCommandBar::setVisible( sal_Bool /*_visible*/ )
+void SAL_CALL VbaDummyCommandBar::setVisible( bool /*_visible*/ )
 {
     // #STUB
 }
 
-sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled()
+bool SAL_CALL VbaDummyCommandBar::getEnabled()
 {
     // emulated with Visible
     return getVisible();
 }
 
-void SAL_CALL VbaDummyCommandBar::setEnabled( sal_Bool _enabled )
+void SAL_CALL VbaDummyCommandBar::setEnabled( bool _enabled )
 {
     // emulated with Visible
     setVisible( _enabled );

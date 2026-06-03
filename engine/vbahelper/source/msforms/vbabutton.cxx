@@ -43,43 +43,43 @@ VbaButton::setCaption( const OUString& _caption )
     m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
 }
 
-sal_Bool SAL_CALL VbaButton::getAutoSize()
+bool SAL_CALL VbaButton::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL VbaButton::setAutoSize( sal_Bool bAutoSize )
+void SAL_CALL VbaButton::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL VbaButton::getLocked()
+bool SAL_CALL VbaButton::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL VbaButton::setLocked( sal_Bool bLocked )
+void SAL_CALL VbaButton::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }
 
-sal_Bool SAL_CALL VbaButton::getCancel()
+bool SAL_CALL VbaButton::getCancel()
 {
     return false;
 }
 
-void SAL_CALL VbaButton::setCancel( sal_Bool /*bCancel*/ )
+void SAL_CALL VbaButton::setCancel( bool /*bCancel*/ )
 {
     // #STUB
 }
 
-sal_Bool SAL_CALL VbaButton::getDefault()
+bool SAL_CALL VbaButton::getDefault()
 {
     // #STUB
     return false;
 }
 
-void SAL_CALL VbaButton::setDefault( sal_Bool /*bDefault*/ )
+void SAL_CALL VbaButton::setDefault( bool /*bDefault*/ )
 {
     // #STUB
 }

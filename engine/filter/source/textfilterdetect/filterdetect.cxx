@@ -241,7 +241,7 @@ OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
     return PlainTextFilterDetect_getImplementationName();
 }
 
-sal_Bool SAL_CALL PlainTextFilterDetect::supportsService(const OUString& rServiceName)
+bool SAL_CALL PlainTextFilterDetect::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

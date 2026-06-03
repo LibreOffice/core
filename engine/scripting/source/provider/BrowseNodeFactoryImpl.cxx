@@ -114,7 +114,7 @@ public:
         return result;
     }
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasChildNodes() override
     {
         for (Reference<XBrowseNode> & xNode : m_Nodes)
@@ -195,7 +195,7 @@ public:
         return children;
     }
 
-    virtual sal_Bool SAL_CALL hasChildNodes() override
+    virtual bool SAL_CALL hasChildNodes() override
     {
         return true;
     }
@@ -435,7 +435,7 @@ public:
         return m_xWrappedBrowseNode->getName();
     }
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasChildNodes() override
     {
         return m_xWrappedBrowseNode->hasChildNodes();
@@ -519,7 +519,7 @@ public:
         return m_Name;
     }
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasChildNodes() override
     {
         bool result = true;
@@ -567,7 +567,7 @@ public:
         return children;
     }
 
-    virtual sal_Bool SAL_CALL hasChildNodes() override
+    virtual bool SAL_CALL hasChildNodes() override
     {
         return true; // will always be user and share
     }
@@ -634,7 +634,7 @@ BrowseNodeFactoryImpl::getSupportedServiceNames()
     return { u"com.sun.star.script.browse.BrowseNodeFactory"_ustr };
 }
 
-sal_Bool BrowseNodeFactoryImpl::supportsService(OUString const & serviceName )
+bool BrowseNodeFactoryImpl::supportsService(OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }

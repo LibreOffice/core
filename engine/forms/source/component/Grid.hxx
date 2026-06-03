@@ -123,7 +123,7 @@ public:
     virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
 
     // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select(const css::uno::Any& aElement) override;
+    virtual bool SAL_CALL select(const css::uno::Any& aElement) override;
     virtual css::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
     virtual void SAL_CALL removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
@@ -139,7 +139,7 @@ public:
 
     // XPropertySet
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
+    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const css::uno::Any& rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
 

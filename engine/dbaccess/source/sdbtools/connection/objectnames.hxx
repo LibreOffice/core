@@ -57,8 +57,8 @@ namespace sdbtools
         // XObjectNames
         virtual OUString SAL_CALL suggestName( ::sal_Int32 CommandType, const OUString& BaseName ) override;
         virtual OUString SAL_CALL convertToSQLName( const OUString& Name ) override;
-        virtual sal_Bool SAL_CALL isNameUsed( ::sal_Int32 CommandType, const OUString& Name ) override;
-        virtual sal_Bool SAL_CALL isNameValid( ::sal_Int32 CommandType, const OUString& Name ) override;
+        virtual bool SAL_CALL isNameUsed( ::sal_Int32 CommandType, const OUString& Name ) override;
+        virtual bool SAL_CALL isNameValid( ::sal_Int32 CommandType, const OUString& Name ) override;
         virtual void SAL_CALL checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name ) override;
 
     protected:

@@ -50,7 +50,7 @@ private:
         sal_Int32 nPointCount,
         const css::uno::Reference<css::chart2::XScaling>& xScalingX,
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
-        sal_Bool bMaySkipPointsInCalculation ) override;
+        bool bMaySkipPointsInCalculation ) override;
 
     void calculateValues(const RegressionCalculationHelper::tDoubleVectorPair& aValues, bool bUseXAvg);
     void calculateValuesCentral(const RegressionCalculationHelper::tDoubleVectorPair& aValues);

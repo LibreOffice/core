@@ -24,7 +24,7 @@ namespace
 size_t net_sizeof(typelib_TypeClass eTypeClass)
 {
     static constexpr auto s_sizes = frozen::make_unordered_map<typelib_TypeClass, size_t>({
-        { typelib_TypeClass_BOOLEAN, sizeof(sal_Bool) },
+        { typelib_TypeClass_BOOLEAN, sizeof(bool) },
         { typelib_TypeClass_BYTE, sizeof(sal_Int8) },
         { typelib_TypeClass_CHAR, sizeof(sal_Unicode) },
         { typelib_TypeClass_SHORT, sizeof(sal_Int16) },

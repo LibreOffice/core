@@ -81,7 +81,7 @@ private:
         return static_getImplementationName();
     }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override
+    virtual bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -173,7 +173,7 @@ private:
         return static_getImplementationName();
     }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override
+    virtual bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }

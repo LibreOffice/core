@@ -120,7 +120,7 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-sal_Bool SAL_CALL PropertySetContainer::hasElements()
+bool SAL_CALL PropertySetContainer::hasElements()
 {
     std::unique_lock g(m_aMutex);
 

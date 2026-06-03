@@ -51,7 +51,7 @@ OUString SAL_CALL java_sql_Driver::getImplementationName(  )
         // Please take care when changing it.
 }
 
-sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceName )
+bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -79,7 +79,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url,
     return xOut;
 }
 
-sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url )
+bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url )
 {
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's

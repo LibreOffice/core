@@ -137,7 +137,7 @@ Type SAL_CALL SvxUnoNumberingRules::getElementType()
     return cppu::UnoType<Sequence< beans::PropertyValue >>::get();
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements()
+bool SAL_CALL SvxUnoNumberingRules::hasElements()
 {
     return true;
 }
@@ -159,7 +159,7 @@ OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  )
     return u"SvxUnoNumberingRules"_ustr;
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

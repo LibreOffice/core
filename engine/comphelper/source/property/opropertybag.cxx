@@ -107,7 +107,7 @@ namespace comphelper
         return u"com.sun.star.comp.comphelper.OPropertyBag"_ustr;
     }
 
-    sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName )
+    bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -120,7 +120,7 @@ namespace comphelper
     void OPropertyBag::fireEvents(
             sal_Int32 * /*pnHandles*/,
             sal_Int32 nCount,
-            sal_Bool bVetoable,
+            bool bVetoable,
             bool bIgnoreRuntimeExceptionsWhileFiring)
     {
         if (nCount && !bVetoable) {
@@ -153,13 +153,13 @@ namespace comphelper
     }
 
 
-    sal_Bool SAL_CALL OPropertyBag::isModified()
+    bool SAL_CALL OPropertyBag::isModified()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_isModified;
     }
 
-    void SAL_CALL OPropertyBag::setModified( sal_Bool bModified )
+    void SAL_CALL OPropertyBag::setModified( bool bModified )
     {
         setModifiedImpl(bModified, false);
     }
@@ -183,7 +183,7 @@ namespace comphelper
     }
 
 
-    sal_Bool SAL_CALL OPropertyBag::has( const Any& /*aElement*/ )
+    bool SAL_CALL OPropertyBag::has( const Any& /*aElement*/ )
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -242,7 +242,7 @@ namespace comphelper
     }
 
 
-    sal_Bool SAL_CALL OPropertyBag::hasElements(  )
+    bool SAL_CALL OPropertyBag::hasElements(  )
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -255,7 +255,7 @@ namespace comphelper
         m_aDynamicProperties.getFastPropertyValue( _nHandle, _rValue );
     }
 
-    sal_Bool SAL_CALL OPropertyBag::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+    bool SAL_CALL OPropertyBag::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         return m_aDynamicProperties.convertFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
     }

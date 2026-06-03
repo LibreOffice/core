@@ -75,8 +75,8 @@ public:
     virtual void SAL_CALL setValue( const OUString& aPropertyName,
                                     const Any& aValue ) override;
     virtual Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
 
     // XBridgeSupplier2
     // This interface is implemented to provide a safe way to obtain the original
@@ -102,7 +102,7 @@ public:
 
     // XDirectInvocation
     virtual css::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< css::uno::Any >& aParams ) override;
-    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) override;
+    virtual bool SAL_CALL hasMember( const OUString& aName ) override;
 
 
     Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,

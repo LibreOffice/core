@@ -147,7 +147,7 @@ public:
 // OPropertySetHelper
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 
 private:
@@ -308,11 +308,11 @@ public:
     virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
     virtual OUString SAL_CALL getSelectedItem(  ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
-    virtual void SAL_CALL selectItemPos( ::sal_Int16 nPos, sal_Bool bSelect ) override;
-    virtual void SAL_CALL selectItemsPos( const css::uno::Sequence< ::sal_Int16 >& aPositions, sal_Bool bSelect ) override;
-    virtual void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) override;
-    virtual sal_Bool SAL_CALL isMutipleMode(  ) override;
-    virtual void SAL_CALL setMultipleMode( sal_Bool bMulti ) override;
+    virtual void SAL_CALL selectItemPos( ::sal_Int16 nPos, bool bSelect ) override;
+    virtual void SAL_CALL selectItemsPos( const css::uno::Sequence< ::sal_Int16 >& aPositions, bool bSelect ) override;
+    virtual void SAL_CALL selectItem( const OUString& aItem, bool bSelect ) override;
+    virtual bool SAL_CALL isMutipleMode(  ) override;
+    virtual void SAL_CALL setMultipleMode( bool bMulti ) override;
     virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 nLines ) override;
     virtual void SAL_CALL makeVisible( ::sal_Int16 nEntry ) override;

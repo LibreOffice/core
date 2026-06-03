@@ -103,7 +103,7 @@ namespace connectivity::ado
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        virtual bool SAL_CALL convertFastPropertyValue(
                                                             css::uno::Any & rConvertedValue,
                                                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
@@ -127,7 +127,7 @@ namespace connectivity::ado
         void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // ::cppu::OComponentHelper
@@ -141,28 +141,28 @@ namespace connectivity::ado
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
         // XResultSet
-        virtual sal_Bool SAL_CALL next(  ) override;
-        virtual sal_Bool SAL_CALL isBeforeFirst(  ) override;
-        virtual sal_Bool SAL_CALL isAfterLast(  ) override;
-        virtual sal_Bool SAL_CALL isFirst(  ) override;
-        virtual sal_Bool SAL_CALL isLast(  ) override;
+        virtual bool SAL_CALL next(  ) override;
+        virtual bool SAL_CALL isBeforeFirst(  ) override;
+        virtual bool SAL_CALL isAfterLast(  ) override;
+        virtual bool SAL_CALL isFirst(  ) override;
+        virtual bool SAL_CALL isLast(  ) override;
         virtual void SAL_CALL beforeFirst(  ) override;
         virtual void SAL_CALL afterLast(  ) override;
-        virtual sal_Bool SAL_CALL first(  ) override;
-        virtual sal_Bool SAL_CALL last(  ) override;
+        virtual bool SAL_CALL first(  ) override;
+        virtual bool SAL_CALL last(  ) override;
         virtual sal_Int32 SAL_CALL getRow(  ) override;
-        virtual sal_Bool SAL_CALL absolute( sal_Int32 row ) override;
-        virtual sal_Bool SAL_CALL relative( sal_Int32 rows ) override;
-        virtual sal_Bool SAL_CALL previous(  ) override;
+        virtual bool SAL_CALL absolute( sal_Int32 row ) override;
+        virtual bool SAL_CALL relative( sal_Int32 rows ) override;
+        virtual bool SAL_CALL previous(  ) override;
         virtual void SAL_CALL refreshRow(  ) override;
-        virtual sal_Bool SAL_CALL rowUpdated(  ) override;
-        virtual sal_Bool SAL_CALL rowInserted(  ) override;
-        virtual sal_Bool SAL_CALL rowDeleted(  ) override;
+        virtual bool SAL_CALL rowUpdated(  ) override;
+        virtual bool SAL_CALL rowInserted(  ) override;
+        virtual bool SAL_CALL rowDeleted(  ) override;
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement(  ) override;
         // XRow
-        virtual sal_Bool SAL_CALL wasNull(  ) override;
+        virtual bool SAL_CALL wasNull(  ) override;
         virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
-        virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
+        virtual bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
         virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) override;
         virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) override;
         virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) override;
@@ -198,7 +198,7 @@ namespace connectivity::ado
         virtual void SAL_CALL moveToCurrentRow(  ) override;
         // XRowUpdate
         virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) override;
-        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) override;
+        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, bool x ) override;
         virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) override;
         virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) override;
         virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) override;
@@ -218,10 +218,10 @@ namespace connectivity::ado
         virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
         // XRowLocate
         virtual css::uno::Any SAL_CALL getBookmark(  ) override;
-        virtual sal_Bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
-        virtual sal_Bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
+        virtual bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
+        virtual bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
         virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
-        virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) override;
+        virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
         virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
         // XDeleteRows
         virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) override;

@@ -23,8 +23,8 @@
 #include <errobject.hxx>
 
 
-// Properties and methods lay the return value down at Get (bWrite = sal_False)
-// at the element 0 of the Argv; at Put (bWrite = sal_True) the value from
+// Properties and methods lay the return value down at Get (bWrite = false)
+// at the element 0 of the Argv; at Put (bWrite = true) the value from
 // element 0 is stored.
 
 void SbRtl_Erl(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutLong(StarBASIC::GetErl()); }

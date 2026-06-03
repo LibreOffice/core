@@ -110,7 +110,7 @@ Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
     return Property( aName, pEntry->mnHandle, pEntry->maType, pEntry->mnAttributes );
 }
 
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& aName )
+bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& aName )
 {
     return maPropertyMap.contains( aName );
 }

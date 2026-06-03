@@ -43,7 +43,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -66,7 +66,7 @@ OUString SAL_CALL OHatchWindowFactory::getImplementationName()
     return u"com.sun.star.comp.embed.HatchWindowFactory"_ustr;
 }
 
-sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

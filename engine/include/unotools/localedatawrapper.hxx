@@ -328,9 +328,9 @@ public:
                             @param nNumber
                                 value * 10**nDecimals
                             @param bTrailingZeros
-                            </sal_True>  := always display trailing zeros in
+                            </true>  := always display trailing zeros in
                                 decimal places, even if integer value.
-                            </sal_False> := trailing zeros are only displayed
+                            </false> := trailing zeros are only displayed
                                 if the value is not an integer value.
                          */
     OUString       getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,

@@ -55,7 +55,7 @@ namespace {
     public: // XServiceInfo
                 virtual OUString              SAL_CALL getImplementationName() override;
                 virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
+                virtual bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 
     private:
         std::unique_ptr<io_acceptor::PipeAcceptor> m_pPipe;
@@ -233,7 +233,7 @@ OUString OAcceptor::getImplementationName()
     return u"com.sun.star.comp.io.Acceptor"_ustr;
 }
 
-sal_Bool OAcceptor::supportsService(const OUString& ServiceName)
+bool OAcceptor::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

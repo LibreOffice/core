@@ -235,7 +235,7 @@ OUString SAL_CALL ScFunctionAccess::getImplementationName()
     return u"stardiv.StarCalc.ScFunctionAccess"_ustr;
 }
 
-sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

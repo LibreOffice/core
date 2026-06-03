@@ -53,7 +53,7 @@ namespace toolkit
         // XAnimation
         virtual void SAL_CALL startAnimation(  ) override;
         virtual void SAL_CALL stopAnimation(  ) override;
-        virtual sal_Bool SAL_CALL isAnimationRunning(  ) override;
+        virtual bool SAL_CALL isAnimationRunning(  ) override;
 
         // VclWindowPeer
         virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;

@@ -146,7 +146,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL FormController::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+    bool SAL_CALL FormController::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
     {
         switch ( static_cast<OwnPropertyId>(nHandle) )
         {

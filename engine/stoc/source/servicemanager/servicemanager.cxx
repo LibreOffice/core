@@ -136,7 +136,7 @@ public:
         {}
 
     // XEnumeration
-    sal_Bool SAL_CALL hasMoreElements() override;
+    bool SAL_CALL hasMoreElements() override;
     Any SAL_CALL nextElement() override;
 private:
     std::mutex                          aMutex;
@@ -145,7 +145,7 @@ private:
 };
 
 // XEnumeration
-sal_Bool ServiceEnumeration_Impl::hasMoreElements()
+bool ServiceEnumeration_Impl::hasMoreElements()
 {
     std::scoped_lock aGuard( aMutex );
     return nIt != aFactories.getLength();
@@ -174,7 +174,7 @@ public:
     // XPropertySetInfo impl
     virtual Sequence< beans::Property > SAL_CALL getProperties() override;
     virtual beans::Property SAL_CALL getPropertyByName( OUString const & name ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( OUString const & name ) override;
+    virtual bool SAL_CALL hasPropertyByName( OUString const & name ) override;
 };
 
 Sequence< beans::Property > PropertySetInfo_Impl::getProperties()
@@ -193,7 +193,7 @@ beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
         "unknown property: " + name );
 }
 
-sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
+bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
 {
     return std::any_of(std::cbegin(m_properties), std::cend(m_properties),
         [&name](const beans::Property& rProp) { return rProp.Name == name; });
@@ -212,7 +212,7 @@ public:
         {}
 
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual Any SAL_CALL nextElement() override;
 
 private:
@@ -222,7 +222,7 @@ private:
 };
 
 // XEnumeration
-sal_Bool ImplementationEnumeration_Impl::hasMoreElements()
+bool ImplementationEnumeration_Impl::hasMoreElements()
 {
     std::scoped_lock aGuard( aMutex );
     return aIt != aImplementationMap.end();
@@ -320,7 +320,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XMultiComponentFactory
@@ -344,13 +344,13 @@ public:
 
     // XElementAccess
     virtual Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual Reference<XEnumeration > SAL_CALL createEnumeration() override;
 
     // XSet
-    virtual sal_Bool SAL_CALL has( const Any & Element ) override;
+    virtual bool SAL_CALL has( const Any & Element ) override;
     virtual void SAL_CALL insert( const Any & Element ) override;
     virtual void SAL_CALL remove( const Any & Element ) override;
 
@@ -447,7 +447,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->getImplementationName(); }
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->supportsService( ServiceName ); }
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->getSupportedServiceNames(); }
@@ -475,7 +475,7 @@ public:
     // XElementAccess
     virtual Type SAL_CALL getElementType() override
         { return Reference< XElementAccess >(getRoot(), UNO_QUERY_THROW)->getElementType(); }
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
         { return Reference< XElementAccess >(getRoot(), UNO_QUERY_THROW)->hasElements(); }
 
     // XEnumerationAccess
@@ -483,7 +483,7 @@ public:
         { return Reference< XEnumerationAccess >(getRoot(), UNO_QUERY_THROW)->createEnumeration(); }
 
     // XSet
-    virtual sal_Bool SAL_CALL has( const Any & Element ) override
+    virtual bool SAL_CALL has( const Any & Element ) override
         { return Reference< XSet >(getRoot(), UNO_QUERY_THROW)->has( Element ); }
     virtual void SAL_CALL insert( const Any & Element ) override
         { Reference< XSet >(getRoot(), UNO_QUERY_THROW)->insert( Element ); }
@@ -893,7 +893,7 @@ OUString OServiceManager::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
+bool OServiceManager::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -971,7 +971,7 @@ Type OServiceManager::getElementType()
 }
 
 // XElementAccess
-sal_Bool OServiceManager::hasElements()
+bool OServiceManager::hasElements()
 {
     check_undisposed();
     MutexGuard aGuard( m_aMutex );
@@ -979,7 +979,7 @@ sal_Bool OServiceManager::hasElements()
 }
 
 // XSet
-sal_Bool OServiceManager::has( const Any & Element )
+bool OServiceManager::has( const Any & Element )
 {
     check_undisposed();
     if( Element.getValueTypeClass() == TypeClass_INTERFACE )

@@ -56,7 +56,7 @@ public:
     }
 
     // XFilter
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     filter(const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override
     {
         comphelper::SequenceAsHashMap aDescriptor(rDescriptor);

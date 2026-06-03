@@ -118,7 +118,7 @@ public:
         return u"lo.writer.MMCurrentEntryController"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -211,7 +211,7 @@ public:
         return u"lo.writer.MMExcludeEntryController"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }

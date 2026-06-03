@@ -56,15 +56,15 @@ namespace svx
         // XNameAccess
         virtual Any SAL_CALL getByName( const OUString& aName ) override;
         virtual Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
         virtual Type SAL_CALL getElementType(  ) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) override;
+        virtual bool SAL_CALL hasElements(  ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
     };
 
@@ -224,7 +224,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames()
     return comphelper::containerToSequence(aPrefixSet);
 }
 
-sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName )
+bool SAL_CALL NamespaceMap::hasByName( const OUString& aName )
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -248,7 +248,7 @@ Type SAL_CALL NamespaceMap::getElementType()
     return ::cppu::UnoType<OUString>::get();
 }
 
-sal_Bool SAL_CALL NamespaceMap::hasElements()
+bool SAL_CALL NamespaceMap::hasElements()
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -264,7 +264,7 @@ OUString SAL_CALL NamespaceMap::getImplementationName(  )
     return NamespaceMap_getImplementationName();
 }
 
-sal_Bool SAL_CALL NamespaceMap::supportsService( const OUString& serviceName )
+bool SAL_CALL NamespaceMap::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService( this, serviceName );
 }

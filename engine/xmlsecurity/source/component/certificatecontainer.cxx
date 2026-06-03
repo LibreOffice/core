@@ -52,14 +52,14 @@ private:
 
 public:
     explicit CertificateContainer(const uno::Reference<uno::XComponentContext>&) {}
-    virtual sal_Bool SAL_CALL addCertificate(const OUString& url, const OUString& certificate_name,
-                                             sal_Bool trust) override;
+    virtual bool SAL_CALL addCertificate(const OUString& url, const OUString& certificate_name,
+                                             bool trust) override;
     virtual css::security::CertificateContainerStatus SAL_CALL
     hasCertificate(const OUString& url, const OUString& certificate_name) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
@@ -96,8 +96,8 @@ CertificateContainer::isCertificateTrust ( const OUString & url, std::u16string_
     return searchMap( url, certificate_name, certTrustMap);
 }
 
-sal_Bool
-CertificateContainer::addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust )
+bool
+CertificateContainer::addCertificate( const OUString & url, const OUString & certificate_name, bool trust )
 {
     certMap.emplace( url, certificate_name );
 
@@ -129,7 +129,7 @@ CertificateContainer::getImplementationName( )
     return u"com.sun.star.security.CertificateContainer"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 CertificateContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );

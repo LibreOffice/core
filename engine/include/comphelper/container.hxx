@@ -59,7 +59,7 @@ protected:
     virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& /*rElement*/) { return true; }
 
         // This can be used to exclude certain elements; elements for which
-        // this function returns sal_True will be simply skipped.
+        // this function returns true will be simply skipped.
         // If this element is returned from Next(), then one can get
         // here get a little more information on the element.
         // That's why this method is not const.

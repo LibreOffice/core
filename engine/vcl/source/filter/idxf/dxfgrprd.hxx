@@ -36,7 +36,7 @@ public:
 
     sal_uInt16 Read();
         // Reads next group and returns the group code.
-        // In case of an error GetStatus() returns sal_False, group code will be set
+        // In case of an error GetStatus() returns false, group code will be set
         // to 0 and SetS(0,"EOF") will be executed.
     bool Read(sal_uInt16 nExpectedG) { return Read() == nExpectedG; }
 

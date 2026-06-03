@@ -235,7 +235,7 @@ OUString SAL_CALL DataPoint::getImplementationName()
     return u"com.sun.star.comp.chart.DataPoint"_ustr ;
 }
 
-sal_Bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
+bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

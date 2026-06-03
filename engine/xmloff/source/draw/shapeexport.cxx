@@ -185,7 +185,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 :   mrExport( rExp ),
     maCurrentShapesIter(maShapesInfos.end()),
     mbExportLayer( false ),
-    // #88546# init to sal_False
+    // #88546# init to false
     mbHandleProgressBar( false )
 {
     // construct PropertySetMapper

@@ -1685,7 +1685,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
 
     // Attention: This check boy knows two states:
     // 1) Reading of the config key fails with an exception or by getting an empty Any (!) => check box must be hidden
-    // 2) We read sal_True/sal_False => check box must be shown and enabled/disabled
+    // 2) We read true/false => check box must be shown and enabled/disabled
 
     bool bHideBox = true;
     bool bHelpAtStartup = false;

@@ -83,7 +83,7 @@ protected:
 
         Override this method to take influence in modification of properties.
 
-        If the conversion changed , </sal_True> is returned and the converted value
+        If the conversion changed , </true> is returned and the converted value
         is in <code>rConvertedValue</code>.  The former value is contained in
         <code>rOldValue</code>.
 
@@ -102,7 +102,7 @@ protected:
 
         @see ::cppu::OPropertySetHelper
      */
-    virtual sal_Bool SAL_CALL convertFastPropertyValue
+    virtual bool SAL_CALL convertFastPropertyValue
         ( css::uno::Any & rConvertedValue,
           css::uno::Any & rOldValue,
           sal_Int32 nHandle,

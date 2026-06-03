@@ -43,7 +43,7 @@ namespace x11 {
         // XDropTargetDropContext
         virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) override;
         virtual void SAL_CALL rejectDrop() override;
-        virtual void SAL_CALL dropComplete( sal_Bool success ) override;
+        virtual void SAL_CALL dropComplete( bool success ) override;
     };
 
     class DropTargetDragContext :

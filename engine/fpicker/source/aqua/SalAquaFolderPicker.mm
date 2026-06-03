@@ -143,7 +143,7 @@ OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
     return "com.sun.star.ui.dialogs.SalAquaFolderPicker";
 }
 
-sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName )
+bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

@@ -174,7 +174,7 @@ OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  )
     return m_implementationName;
 }
 
-sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OFormattedFieldWrapper::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

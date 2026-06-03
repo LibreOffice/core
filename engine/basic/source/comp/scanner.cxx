@@ -141,7 +141,7 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 }
 
 // reading the next symbol into the variables aSym, nVal and eType
-// return value is sal_False at EOF or errors
+// return value is false at EOF or errors
 
 void SbiScanner::scanAlphanumeric()
 {

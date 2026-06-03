@@ -124,7 +124,7 @@ public:
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() override;
     css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
     std::unique_ptr<SaxExpatParser_Impl>   m_pImpl;
@@ -519,7 +519,7 @@ OUString SaxExpatParser::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName)
+bool SaxExpatParser::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

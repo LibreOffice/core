@@ -39,15 +39,15 @@ extern "C" {
 #endif
 
 /*
- Clang warns about 'sal_True && sal_True' (those being integers and not booleans)
+ Clang warns about 'true && true' (those being integers and not booleans)
  when it sees preprocessed source (-save-temps or using icecream)
 */
 #if defined __cplusplus
 #define SAL_LOG_TRUE true
 #define SAL_LOG_FALSE false
 #else
-#define SAL_LOG_TRUE sal_True
-#define SAL_LOG_FALSE sal_False
+#define SAL_LOG_TRUE true
+#define SAL_LOG_FALSE false
 #endif
 
 enum sal_detail_LogLevel {

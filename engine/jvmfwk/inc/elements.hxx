@@ -159,7 +159,7 @@ private:
         If /java/enabled@xsi:nil == true then the value will be uninitialized
         after a call to load().
     */
-    std::optional<sal_Bool> m_enabled;
+    std::optional<bool> m_enabled;
 
     /** User configurable option. /java/userClassPath
         If /java/userClassPath@xsi:nil == true then the value is uninitialized
@@ -224,7 +224,7 @@ public:
 
     /** returns the value of the element /java/enabled
      */
-    const std::optional<sal_Bool>& getEnabled() const { return m_enabled; }
+    const std::optional<bool>& getEnabled() const { return m_enabled; }
     /** returns the value of the element /java/userClassPath.
      */
     const std::optional<OUString>& getUserClassPath() const { return m_userClassPath; }

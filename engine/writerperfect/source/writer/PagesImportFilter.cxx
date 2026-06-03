@@ -43,7 +43,7 @@ OUString SAL_CALL PagesImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Writer.PagesImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL PagesImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL PagesImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

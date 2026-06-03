@@ -512,7 +512,7 @@ SfxStyleFamily SwXStyle::GetFamily() const
 OUString SwXStyle::getImplementationName()
 { return {u"SwXStyle"_ustr}; };
 
-sal_Bool SwXStyle::supportsService(const OUString& rServiceName)
+bool SwXStyle::supportsService(const OUString& rServiceName)
 { return cppu::supportsService(this, rServiceName); };
 
 
@@ -633,7 +633,7 @@ uno::Type SAL_CALL SwXStyleFamily::getElementType()
     return cppu::UnoType<style::XStyle>::get();
 };
 
-sal_Bool SAL_CALL SwXStyleFamily::hasElements()
+bool SAL_CALL SwXStyleFamily::hasElements()
 {
     if(!m_pBasePool)
         throw uno::RuntimeException();
@@ -674,7 +674,7 @@ void SwXStyleFamily::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 OUString SAL_CALL SwXStyleFamily::getImplementationName()
 { return {u"XStyleFamily"_ustr}; };
 
-sal_Bool SAL_CALL SwXStyleFamily::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXStyleFamily::supportsService(const OUString& rServiceName)
 { return cppu::supportsService(this, rServiceName); };
 
 uno::Sequence< OUString > SAL_CALL SwXStyleFamily::getSupportedServiceNames()
@@ -683,7 +683,7 @@ uno::Sequence< OUString > SAL_CALL SwXStyleFamily::getSupportedServiceNames()
 OUString SwXStyleFamilies::getImplementationName()
 { return {u"SwXStyleFamilies"_ustr}; }
 
-sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName)
+bool SwXStyleFamilies::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -746,7 +746,7 @@ uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
     return aNames;
 }
 
-sal_Bool SwXStyleFamilies::hasByName(const OUString& Name)
+bool SwXStyleFamilies::hasByName(const OUString& Name)
 {
     auto& entries(lcl_GetStyleFamilyEntries());
     return std::any_of(entries.begin(), entries.end(),
@@ -784,7 +784,7 @@ uno::Type SwXStyleFamilies::getElementType()
     return cppu::UnoType<container::XNameContainer>::get();
 }
 
-sal_Bool SwXStyleFamilies::hasElements()
+bool SwXStyleFamilies::hasElements()
     { return true; }
 
 void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
@@ -1024,7 +1024,7 @@ uno::Sequence<OUString> SwXStyleFamily::getElementNames()
     return comphelper::containerToSequence(vRet);
 }
 
-sal_Bool SwXStyleFamily::hasByName(const OUString& rProgName)
+bool SwXStyleFamily::hasByName(const OUString& rProgName)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -1434,7 +1434,7 @@ void SwXStyle::setName(const OUString& rProgName)
     m_sStyleUIName = std::move(sUIName);
 }
 
-sal_Bool SwXStyle::isUserDefined()
+bool SwXStyle::isUserDefined()
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -1444,7 +1444,7 @@ sal_Bool SwXStyle::isUserDefined()
     return pBase && pBase->IsUserDefined();
 }
 
-sal_Bool SwXStyle::isInUse()
+bool SwXStyle::isInUse()
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -3611,7 +3611,7 @@ uno::Type SwXAutoStyles::getElementType(  )
     return cppu::UnoType<style::XAutoStyleFamily>::get();
 }
 
-sal_Bool SwXAutoStyles::hasElements(  )
+bool SwXAutoStyles::hasElements(  )
 {
     return true;
 }
@@ -3640,7 +3640,7 @@ uno::Sequence< OUString > SwXAutoStyles::getElementNames()
     return aNames;
 }
 
-sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
+bool SwXAutoStyles::hasByName(const OUString& Name)
 {
     if( Name == "CharacterStyles" ||
         Name == "RubyStyles" ||
@@ -3920,7 +3920,7 @@ uno::Type SwXAutoStyleFamily::getElementType(  )
     return cppu::UnoType<style::XAutoStyle>::get();
 }
 
-sal_Bool SwXAutoStyleFamily::hasElements(  )
+bool SwXAutoStyleFamily::hasElements(  )
 {
     return false;
 }
@@ -3985,7 +3985,7 @@ void SwXAutoStylesEnumerator::Notify( const SfxHint& rHint)
         m_pImpl.reset();
 }
 
-sal_Bool SwXAutoStylesEnumerator::hasMoreElements(  )
+bool SwXAutoStylesEnumerator::hasMoreElements(  )
 {
     if( !m_pImpl )
         throw uno::RuntimeException();
@@ -4571,7 +4571,7 @@ void SwXTextTableStyle::SetPhysical()
 }
 
 // XStyle
-sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined()
+bool SAL_CALL SwXTextTableStyle::isUserDefined()
 {
     SolarMutexGuard aGuard;
     // only first style is not user defined
@@ -4581,7 +4581,7 @@ sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined()
     return true;
 }
 
-sal_Bool SAL_CALL SwXTextTableStyle::isInUse()
+bool SAL_CALL SwXTextTableStyle::isInUse()
 {
     SolarMutexGuard aGuard;
     if (!m_bPhysical)
@@ -4695,7 +4695,7 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getElementNames()
     return comphelper::mapKeysToSequence(GetCellStyleNameMap());
 }
 
-sal_Bool SAL_CALL SwXTextTableStyle::hasByName(const OUString& rName)
+bool SAL_CALL SwXTextTableStyle::hasByName(const OUString& rName)
 {
     const CellStyleNameMap& rMap = GetCellStyleNameMap();
     CellStyleNameMap::const_iterator iter = rMap.find(rName);
@@ -4750,7 +4750,7 @@ uno::Type SAL_CALL SAL_CALL SwXTextTableStyle::getElementType()
     return cppu::UnoType<style::XStyle>::get();
 }
 
-sal_Bool SAL_CALL SAL_CALL SwXTextTableStyle::hasElements()
+bool SAL_CALL SAL_CALL SwXTextTableStyle::hasElements()
 {
     return true;
 }
@@ -4761,7 +4761,7 @@ OUString SAL_CALL SwXTextTableStyle::getImplementationName()
     return {u"SwXTextTableStyle"_ustr};
 }
 
-sal_Bool SAL_CALL SwXTextTableStyle::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXTextTableStyle::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -4896,7 +4896,7 @@ rtl::Reference<SwXTextCellStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShe
 }
 
 // XStyle
-sal_Bool SAL_CALL SwXTextCellStyle::isUserDefined()
+bool SAL_CALL SwXTextCellStyle::isUserDefined()
 {
     SolarMutexGuard aGuard;
     // if this cell belong to first table style then its default style
@@ -4906,7 +4906,7 @@ sal_Bool SAL_CALL SwXTextCellStyle::isUserDefined()
     return true;
 }
 
-sal_Bool SAL_CALL SwXTextCellStyle::isInUse()
+bool SAL_CALL SwXTextCellStyle::isInUse()
 {
     SolarMutexGuard aGuard;
     uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
@@ -5740,7 +5740,7 @@ OUString SAL_CALL SwXTextCellStyle::getImplementationName()
     return {u"SwXTextCellStyle"_ustr};
 }
 
-sal_Bool SAL_CALL SwXTextCellStyle::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXTextCellStyle::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

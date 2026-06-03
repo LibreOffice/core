@@ -171,7 +171,7 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource2(
     return xDia;
 }
 
-sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
+bool SAL_CALL ChartTypeTemplate::supportsCategories()
 {
     return true;
 }
@@ -847,11 +847,11 @@ void ChartTypeTemplate::changeDiagramData(
 {
     changeDiagramData(rtl::Reference<Diagram>(dynamic_cast<Diagram*>(xDiagram.get())), xDataSource, aArguments);
 }
-sal_Bool ChartTypeTemplate::matchesTemplate(
+bool ChartTypeTemplate::matchesTemplate(
     const css::uno::Reference<css::chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    bool bAdaptProperties )
 {
-    return matchesTemplate2(dynamic_cast<Diagram*>(xDiagram.get()), static_cast<bool>(bAdaptProperties));
+    return matchesTemplate2(dynamic_cast<Diagram*>(xDiagram.get()), bAdaptProperties);
 }
 css::uno::Reference< ::css::chart2::XChartType > ChartTypeTemplate::getChartTypeForNewSeries(
     const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes )

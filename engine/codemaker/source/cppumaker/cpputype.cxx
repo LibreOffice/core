@@ -728,7 +728,7 @@ void CppuType::dumpType(
         out << "void";
         break;
     case codemaker::UnoType::Sort::Boolean:
-        out << "::sal_Bool";
+        out << "bool";
         break;
     case codemaker::UnoType::Sort::Byte:
         out << "::sal_Int8";
@@ -1435,7 +1435,7 @@ void InterfaceType::dumpCppuAttributes(FileStream & out, sal_uInt32 & index)
         out << indent() << index++ << ", sAttributeName" << n
             << ".pData,\n" << indent() << "(typelib_TypeClass)"
             << getTypeClass(type) << ", sAttributeType" << n << ".pData,\n"
-            << indent() << "sal_" << (attr.readOnly ? "True" : "False")
+            << indent() << (attr.readOnly ? "true" : "false")
             << ", " << getExcn << ", "
             << (getExcn == 0 ? "0" : "the_getExceptions") << ", " << setExcn
             << ", " << (setExcn == 0 ? "0" : "the_setExceptions")
@@ -1485,11 +1485,11 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
                 << indent() << "aParameters[" << m << "].bIn = "
                 << ((param.direction
                      == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT)
-                    ? "sal_False" : "sal_True")
+                    ? "false" : "true")
                 << ";\n" << indent() << "aParameters[" << m << "].bOut = "
                 << ((param.direction
                      == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
-                    ? "sal_False" : "sal_True")
+                    ? "false" : "true")
                 << ";\n";
             ++m;
         }
@@ -1502,7 +1502,7 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
             << method.name << "\" );\n" << indent()
             << "typelib_typedescription_newInterfaceMethod( &pMethod,\n";
         inc();
-        out << indent() << index++ << ", sal_False,\n" << indent()
+        out << indent() << index++ << ", false,\n" << indent()
             << "sMethodName" << n << ".pData,\n" << indent()
             << "(typelib_TypeClass)" << getTypeClass(returnType)
             << ", sReturnType" << n << ".pData,\n" << indent()
@@ -1649,7 +1649,7 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
         out << "static const ";
         switch (member.value.type) {
         case unoidl::ConstantValue::TYPE_BOOLEAN:
-            out << "::sal_Bool";
+            out << "bool";
             break;
         case unoidl::ConstantValue::TYPE_BYTE:
             out << "::sal_Int8";
@@ -1686,7 +1686,7 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
             << " = ";
         switch (member.value.type) {
         case unoidl::ConstantValue::TYPE_BOOLEAN:
-            out << (member.value.booleanValue ? "sal_True" : "sal_False");
+            out << (member.value.booleanValue ? "true" : "false");
             break;
         case unoidl::ConstantValue::TYPE_BYTE:
             out << "(sal_Int8)" << OUString::number(member.value.byteValue);
@@ -2448,7 +2448,7 @@ void PolyStructType::dumpNormalGetCppuType(FileStream & out)
             << (i == entity_->getMembers().end() ? " };" : ",") << "\n";
     }
     dec();
-    out << indent() << "static ::sal_Bool const the_parameterizedTypes[] = { ";
+    out << indent() << "static bool const the_parameterizedTypes[] = { ";
     for (std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::
          const_iterator i(entity_->getMembers().begin());
          i != entity_->getMembers().end(); ++i) {

@@ -66,13 +66,13 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     //  XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //  XTempFile
-    virtual sal_Bool SAL_CALL getRemoveFile() override;
-    virtual void SAL_CALL setRemoveFile( sal_Bool _removefile ) override;
+    virtual bool SAL_CALL getRemoveFile() override;
+    virtual void SAL_CALL setRemoveFile( bool _removefile ) override;
     virtual OUString SAL_CALL getUri() override;
     virtual OUString SAL_CALL getResourceName() override;
 

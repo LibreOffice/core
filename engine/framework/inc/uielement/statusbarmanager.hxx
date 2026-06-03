@@ -82,7 +82,7 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
         void RemoveControllers();
         void CreateControllers();
         void UpdateControllers();
-        void MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL css::frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&));
+        void MouseButton( const MouseEvent& rMEvt ,bool ( SAL_CALL css::frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&));
 
         typedef std::map< sal_uInt16, css::uno::Reference< css::frame::XStatusbarController > > StatusBarControllerMap;
 

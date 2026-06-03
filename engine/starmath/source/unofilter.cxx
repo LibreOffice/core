@@ -32,7 +32,7 @@ public:
     MathTypeFilter();
 
     // XFilter
-    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XImporter
@@ -40,14 +40,14 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 }
 
 MathTypeFilter::MathTypeFilter() = default;
 
-sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     bool bSuccess = false;
     try
@@ -100,7 +100,7 @@ OUString MathTypeFilter::getImplementationName()
     return u"com.sun.star.comp.Math.MathTypeFilter"_ustr;
 }
 
-sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)
+bool MathTypeFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

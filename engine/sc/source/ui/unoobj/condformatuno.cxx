@@ -515,7 +515,7 @@ uno::Type ScCondFormatObj::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool ScCondFormatObj::hasElements()
+bool ScCondFormatObj::hasElements()
 {
     SolarMutexGuard aGuard;
     ScConditionalFormat* pFormat = getCoreObject();

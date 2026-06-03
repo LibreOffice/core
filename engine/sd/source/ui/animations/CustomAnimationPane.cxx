@@ -1383,7 +1383,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
         {
             const Any aSoundSource( pResultSet->getPropertyValue( nHandleSoundURL ) );
 
-            if( aSoundSource.getValueType() == ::cppu::UnoType<sal_Bool>::get() )
+            if( aSoundSource.getValueType() == ::cppu::UnoType<bool>::get() )
             {
                 pEffect->setStopAudio();
                 bChanged = true;

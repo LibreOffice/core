@@ -111,13 +111,13 @@ public:
     getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasByName( const OUString& aName ) override;
 
     // XElementAccess (base of XNameAccess)
     virtual css::uno::Type SAL_CALL
     getElementType() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasElements() override;
 
     // XStorage
@@ -146,9 +146,9 @@ public:
                                     const css::uno::Reference<
                                         css::embed::XStorage > &
                                             xTargetStorage ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isStreamElement( const OUString& aElementName ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isStorageElement( const OUString& aElementName ) override;
     virtual void SAL_CALL
     removeElement( const OUString& aElementName ) override;

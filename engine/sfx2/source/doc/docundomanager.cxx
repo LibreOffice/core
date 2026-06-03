@@ -296,14 +296,14 @@ namespace sfx2
     }
 
 
-    sal_Bool SAL_CALL DocumentUndoManager::isUndoPossible(  )
+    bool SAL_CALL DocumentUndoManager::isUndoPossible(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isUndoPossible();
     }
 
 
-    sal_Bool SAL_CALL DocumentUndoManager::isRedoPossible(  )
+    bool SAL_CALL DocumentUndoManager::isRedoPossible(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isRedoPossible();
@@ -382,7 +382,7 @@ namespace sfx2
     }
 
 
-    sal_Bool SAL_CALL DocumentUndoManager::isLocked(  )
+    bool SAL_CALL DocumentUndoManager::isLocked(  )
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isLocked();

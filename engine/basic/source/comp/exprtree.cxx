@@ -819,7 +819,7 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
     }
     else
     {
-        // #40204 special treatment for sal_Bool-constants
+        // #40204 special treatment for bool-constants
         bool bIsBool = false;
         if( pExpr->eNodeType == SbxVARVAL )
         {
@@ -916,7 +916,7 @@ void SbiExprList::addExpression( std::unique_ptr<SbiExpression>&& pExpr )
 
 // #i79918/#i80532: bConst has never been set to true
 // -> reused as bStandaloneExpression
-//SbiParameters::SbiParameters( SbiParser* p, sal_Bool bConst, sal_Bool bPar) :
+//SbiParameters::SbiParameters( SbiParser* p, bool bConst, bool bPar) :
 SbiExprListPtr SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneExpression, bool bPar)
 {
     auto pExprList = std::make_unique<SbiExprList>();

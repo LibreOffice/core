@@ -348,7 +348,7 @@ public:
     {
         return  cppu::UnoType<excel::XBorder>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return true;
     }
@@ -370,7 +370,7 @@ class RangeBorderEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 m_nIndex;
 public:
     explicit RangeBorderEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), m_nIndex( 0 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( m_nIndex < m_xIndexAccess->getCount() );
     }

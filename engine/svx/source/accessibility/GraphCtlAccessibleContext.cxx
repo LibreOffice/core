@@ -309,7 +309,7 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName()
     return u"com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext"_ustr;
 }
 
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName )
+bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -344,7 +344,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int64 nI
 }
 
 
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int64 nIndex )
+bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int64 nIndex )
 {
     ::SolarMutexGuard aGuard;
 

@@ -507,7 +507,7 @@ OUString getServiceName(const SwFieldIds aId)
 
 }
 
-sal_Bool SAL_CALL SwXFieldMaster::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXFieldMaster::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1332,7 +1332,7 @@ SwXTextField::getTextFieldMaster()
     return xRet;
 }
 
-OUString SAL_CALL SwXTextField::getPresentation(sal_Bool bShowCommand)
+OUString SAL_CALL SwXTextField::getPresentation(bool bShowCommand)
 {
     SolarMutexGuard aGuard;
 
@@ -2616,7 +2616,7 @@ static OUString OldNameToNewName_Impl( const OUString &rOld )
     return sServiceNameCC;
 }
 
-sal_Bool SAL_CALL SwXTextField::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXTextField::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2680,7 +2680,7 @@ OUString SwXTextFieldMasters::getImplementationName()
     return u"SwXTextFieldMasters"_ustr;
 }
 
-sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName)
+bool SwXTextFieldMasters::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2834,7 +2834,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
     return comphelper::containerToSequence(aFieldNames);
 }
 
-sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName)
+bool SwXTextFieldMasters::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
 
@@ -2855,7 +2855,7 @@ uno::Type  SwXTextFieldMasters::getElementType()
 
 }
 
-sal_Bool SwXTextFieldMasters::hasElements()
+bool SwXTextFieldMasters::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -2875,7 +2875,7 @@ OUString SwXTextFieldTypes::getImplementationName()
     return u"SwXTextFieldTypes"_ustr;
 }
 
-sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName)
+bool SwXTextFieldTypes::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2921,7 +2921,7 @@ uno::Type  SwXTextFieldTypes::getElementType()
     return cppu::UnoType<text::XDependentTextField>::get();
 }
 
-sal_Bool SwXTextFieldTypes::hasElements()
+bool SwXTextFieldTypes::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -3031,7 +3031,7 @@ SwXFieldEnumeration::getImplementationName()
     return u"SwXFieldEnumeration"_ustr;
 }
 
-sal_Bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -3077,7 +3077,7 @@ SwXFieldEnumeration::~SwXFieldEnumeration()
 {
 }
 
-sal_Bool SAL_CALL SwXFieldEnumeration::hasMoreElements()
+bool SAL_CALL SwXFieldEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
 

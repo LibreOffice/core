@@ -41,8 +41,8 @@ void osl_systemPathRemoveSeparator(rtl_String* pstrPath);
 
    @param  pustrPath [in]       a system path - must not be NULL
 
-   @retval  sal_True    the given path doesn't start with a separator
-   @retval  sal_False   the given path starts with a separator
+   @retval  true    the given path doesn't start with a separator
+   @retval  false   the given path starts with a separator
 
 */
 bool osl_systemPathIsRelativePath(
@@ -70,8 +70,8 @@ void osl_systemPathGetFileNameOrLastDirectoryPart(
 /**
    @param   pustrPath [in] a system path, must not be NULL
 
-   @retval  sal_True the last part of the given system path starts with '.'
-   @retval  sal_False the last part of the given system path is '.' or '..'
+   @retval  true the last part of the given system path starts with '.'
+   @retval  false the last part of the given system path is '.' or '..'
                 alone or doesn't start with a dot
 
 */
@@ -80,16 +80,16 @@ bool osl_systemPathIsHiddenFileOrDirectoryEntry(
 
 /************************************************
    osl_systemPathIsLocalOrParentDirectoryEntry
-   Returns sal_True if the last part of the given
+   Returns true if the last part of the given
    system path is the local directory entry '.'
    or the parent directory entry '..'
 
    @param   pstrPath [in] a system path,
             must not be NULL
 
-   @returns sal_True if the last part of the
+   @returns true if the last part of the
             given system path is '.' or '..'
-            else sal_False
+            else false
 
 ************************************************/
 
@@ -115,8 +115,8 @@ bool osl_systemPathIsLocalOrParentDirectoryEntry(
             complete path of the file or directory found
             as a system path
 
-   @returns sal_True if the specified file or
-   directory was found else sal_False
+   @returns true if the specified file or
+   directory was found else false
  ***********************************************/
 
 bool osl_searchPath(
@@ -157,9 +157,9 @@ namespace osl
     @param  pustrPath [in] a system path
             pustrPath must not be NULL
 
-    @returns sal_True if the given path
+    @returns true if the given path
              doesn't start with a separator
-             else sal_False will be returned
+             else false will be returned
 
   ******************************************/
 
@@ -206,16 +206,16 @@ namespace osl
 
  /********************************************
      systemPathIsHiddenFileOrDirectoryEntry
-    Returns sal_True if the last part of
+    Returns true if the last part of
     given system path is not '.' or '..'
     alone and starts with a '.'
 
     @param pustrPath [in] a system path,
            must not be NULL
 
-    @returns sal_True if the last part of
+    @returns true if the last part of
              the given system path starts
-             with '.' or sal_False the last
+             with '.' or false the last
              part is '.' or '..' alone or
              doesn't start with a dot
 

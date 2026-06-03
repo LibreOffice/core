@@ -65,7 +65,7 @@ public:
 
     // lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // inspection::XStringRepresentation:
@@ -139,7 +139,7 @@ OUString  SAL_CALL StringRepresentation::getImplementationName()
     return u"StringRepresentation"_ustr;
 }
 
-sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName)
+bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

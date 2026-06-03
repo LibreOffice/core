@@ -102,7 +102,7 @@ public:
     virtual void SAL_CALL setStart( ::sal_Int32 _start ) override;
     virtual ::sal_Int32 SAL_CALL getEnd() override;
     virtual void SAL_CALL setEnd( ::sal_Int32 _end ) override;
-    virtual sal_Bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
+    virtual bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
     virtual css::uno::Any SAL_CALL Revisions( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Sections( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Fields( const css::uno::Any& aIndex ) override;

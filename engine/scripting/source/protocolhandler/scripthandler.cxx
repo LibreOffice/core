@@ -404,7 +404,7 @@ OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(const OUString& sServiceName )
+bool SAL_CALL ScriptProtocolHandler::supportsService(const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

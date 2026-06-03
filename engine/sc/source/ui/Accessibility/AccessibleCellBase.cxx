@@ -198,7 +198,7 @@ uno::Any SAL_CALL
     return aAny;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
 {
     SolarMutexGuard aGuard;

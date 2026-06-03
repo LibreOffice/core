@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     // Check whether we have the right control
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService( u"com.sun.star.form.component.CheckBox"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService( u"com.sun.star.form.component.CheckBox"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Floating Checkbox"_ustr, getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
@@ -599,7 +599,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     // Check whether we have the right control
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
     xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Inline Checkbox"_ustr, getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type

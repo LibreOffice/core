@@ -83,7 +83,7 @@ public:
         const cpo::uno::Reference< cpo::awt::XWindowPeer >&   xParent
     ) override;
 
-    virtual sal_Bool SAL_CALL setModel(
+    virtual bool SAL_CALL setModel(
         const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
     ) override;
 
@@ -95,7 +95,7 @@ public:
 
     //  XView
 
-    virtual sal_Bool SAL_CALL setGraphics(
+    virtual bool SAL_CALL setGraphics(
         const cpo::uno::Reference< cpo::awt::XGraphics >& xDevice
     ) override;
 
@@ -125,7 +125,7 @@ private:
 
     //  OPropertySetHelper
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
         cpo::uno::Any&       rConvertedValue   ,
         cpo::uno::Any&       rOldValue         ,
         sal_Int32           nHandle           ,

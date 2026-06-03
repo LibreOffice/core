@@ -482,7 +482,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartInFooter)
     CPPUNIT_ASSERT(xNameAccess->hasByName(u"word/charts/chart2.xml"_ustr)); // first page footer
     // without the fix, this was true; both charts referred to the same 'Microsoft_Excel_Worksheet1'
     CPPUNIT_ASSERT_EQUAL(false,
-                         bool(xNameAccess->hasByName(u"word/charts/_rels/chart2.xml.rels"_ustr)));
+                         xNameAccess->hasByName(u"word/charts/_rels/chart2.xml.rels"_ustr));
 
 }
 
@@ -1163,9 +1163,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83227)
     saveAndReload(TestFilter::DOCX);
     // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"word/media/image1.png"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"word/media/image1.png"_ustr));
     // This was also true, image was written twice.
-    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName(u"word/media/image2.png"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/media/image2.png"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103001)

@@ -955,7 +955,7 @@ void FilterCache::impl_validateAndOptimize()
 
     sal_Int32             nWarnings = 0;
 
-//  sal_Bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
+//  bool bAllTypesShouldExist    = ((m_eFillState & E_CONTAINS_TYPES          ) == E_CONTAINS_TYPES          );
     bool bAllLoadersShouldExist  = ((m_eFillState & E_CONTAINS_FRAMELOADERS   ) == E_CONTAINS_FRAMELOADERS   );
     bool bAllHandlersShouldExist = ((m_eFillState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS);
 #endif

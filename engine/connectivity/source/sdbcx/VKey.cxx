@@ -46,7 +46,7 @@ css::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  )
     return { isNew()?u"com.sun.star.sdbcx.KeyDescriptor"_ustr:u"com.sun.star.sdbcx.Key"_ustr };
 }
 
-sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OKey::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -69,7 +69,7 @@ OKey::OKey(const OUString& Name,std::shared_ptr<KeyProperties> _xProps, bool _bC
 //          sal_Int32       _Type,
 //          sal_Int32       _UpdateRule,
 //          sal_Int32       _DeleteRule,
-//          sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
+//          bool _bCase) :  ODescriptor_BASE(m_aMutex)
 //                      ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
 //                      ,m_ReferencedTable(_ReferencedTable)
 //                      ,m_Type(_Type)

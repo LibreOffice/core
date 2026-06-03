@@ -100,7 +100,7 @@ public:
         @param bWithContent
             true = Tries to detect the filter by looking at the file contents.
             false = Detects filter by file name extension only (should be used in filter code only).
-        @return sal_True if a filter could be found, sal_False otherwise. */
+        @return true if a filter could be found, false otherwise. */
 
     static bool         GetFilterName( const OUString& rFileName,
                                        OUString& rFilter, OUString& rOptions,

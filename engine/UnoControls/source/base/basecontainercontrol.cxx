@@ -71,7 +71,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
 
 //  XControl
 
-sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& )
+bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& )
 {
     // This object has NO model.
     return false;
@@ -284,7 +284,7 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls ()
 
 //  XWindow
 
-void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible )
+void SAL_CALL BaseContainerControl::setVisible ( bool bVisible )
 {
     // override baseclass definition
     BaseControl::setVisible ( bVisible );

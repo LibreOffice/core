@@ -285,7 +285,7 @@ OUString SAL_CALL cclass_Unicode::getImplementationName()
     return u"com.sun.star.i18n.CharacterClassification_Unicode"_ustr;
 }
 
-sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName)
+bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

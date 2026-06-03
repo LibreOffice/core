@@ -581,7 +581,7 @@ css::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners
     return aRet;
 }
 
-sal_Bool SAL_CALL ScannerManager::configureScannerAndScan(
+bool SAL_CALL ScannerManager::configureScannerAndScan(
     ScannerContext& rContext, const css::uno::Reference<css::lang::XEventListener>& rxListener)
 {
     osl::MutexGuard aGuard(maProtector);

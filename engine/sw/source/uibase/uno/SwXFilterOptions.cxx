@@ -122,7 +122,7 @@ OUString SwXFilterOptions::getImplementationName()
     return u"com.sun.star.comp.Writer.FilterOptionsDialog"_ustr;
 }
 
-sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
+bool SwXFilterOptions::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -43,7 +43,7 @@ IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode()
 {
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier_Unicode::loadAlgorithm( const lang::Locale& rLocale,
+bool SAL_CALL IndexEntrySupplier_Unicode::loadAlgorithm( const lang::Locale& rLocale,
     const OUString& rAlgorithm, sal_Int32 collatorOptions )
 {
     index->init(rLocale, rAlgorithm);

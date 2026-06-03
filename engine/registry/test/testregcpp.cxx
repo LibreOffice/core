@@ -59,7 +59,7 @@ void test_coreReflection()
         writer.setFileName(OUString("DummyFile"));
 
         aConst.m_type = RT_TYPE_BOOL;
-        aConst.m_value.aBool = sal_True;
+        aConst.m_value.aBool = true;
         writer.setFieldData(0, OUString("aConstBool"),
                             OUString("boolean"),
                             OUString("I am a boolean"),
@@ -134,7 +134,7 @@ void test_coreReflection()
         sal_uInt8* readBlop = (sal_uInt8*)std::malloc(aBlopSize);
         REG_ENSURE(!key2.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9a");
 
-        RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
+        RegistryTypeReader reader(readBlop, aBlopSize, true);
 
         if (reader.isValid())
         {
@@ -249,7 +249,7 @@ void test_coreReflection()
         sal_uInt8* readBlop = (sal_uInt8*)std::malloc(aBlopSize);
         REG_ENSURE(!key5.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9c1");
 
-        RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
+        RegistryTypeReader reader(readBlop, aBlopSize, true);
 
         if (reader.isValid())
         {
@@ -314,7 +314,7 @@ void test_coreReflection()
         sal_uInt8* readBlop = (sal_uInt8*)std::malloc(aBlopSize);
         REG_ENSURE(!key7.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9e2");
 
-        RegistryTypeReader reader(readBlop, aBlopSize, sal_True);
+        RegistryTypeReader reader(readBlop, aBlopSize, true);
 
         if (reader.isValid())
         {
@@ -339,7 +339,7 @@ void test_coreReflection()
         writer.setFileName(OUString("DummyFile"));
 
         aConst.m_type = RT_TYPE_BOOL;
-        aConst.m_value.aBool = sal_True;
+        aConst.m_value.aBool = true;
         writer.setFieldData(0, OUString("ConstantsA_aConstBool"),
                             OUString("boolean"),
                             OUString("I am a boolean"),
@@ -632,9 +632,9 @@ void test_registry_CppApi()
     REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString("allFromTest3"),
                     OUString("test3.rdb")), "test_registry_CppApi error 40");
     REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString("allFromTest3"),
-                    OUString("ucrtest.rdb"), sal_True), "test_registry_CppApi error 40.a)");
+                    OUString("ucrtest.rdb"), true), "test_registry_CppApi error 40.a)");
 
-//     REG_ENSURE(myRegistry->mergeKey(rootKey, OUString("allFromTest3"), OUString("ucrtest.rdb"), sal_True)
+//     REG_ENSURE(myRegistry->mergeKey(rootKey, OUString("allFromTest3"), OUString("ucrtest.rdb"), true)
 //                  == REG_NO_ERROR/*REG_MERGE_CONFLICT*/, "test_registry_CppApi error 40.b)");
 
     REG_ENSURE(!key1.closeKey() &&

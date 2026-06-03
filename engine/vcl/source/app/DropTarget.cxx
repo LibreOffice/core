@@ -46,9 +46,9 @@ void DropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListen
     std::erase(m_aListeners, xListener);
 }
 
-sal_Bool DropTarget::isActive() { return m_bActive; }
+bool DropTarget::isActive() { return m_bActive; }
 
-void DropTarget::setActive(sal_Bool active)
+void DropTarget::setActive(bool active)
 {
     ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
 

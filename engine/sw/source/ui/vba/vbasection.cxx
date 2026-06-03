@@ -40,12 +40,12 @@ SwVbaSection::~SwVbaSection()
 {
 }
 
-sal_Bool SAL_CALL SwVbaSection::getProtectedForForms()
+bool SAL_CALL SwVbaSection::getProtectedForForms()
 {
     return false;
 }
 
-void SAL_CALL SwVbaSection::setProtectedForForms( sal_Bool /*_protectedforforms*/ )
+void SAL_CALL SwVbaSection::setProtectedForForms( bool /*_protectedforforms*/ )
 {
 }
 

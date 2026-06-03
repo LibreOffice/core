@@ -167,7 +167,7 @@ public:
 
 // css::container::XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
 // css::container::XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
@@ -186,7 +186,7 @@ public:
 // css::container::XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
 // css::container::XContainer
     virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
@@ -217,7 +217,7 @@ protected:
 
     /** get the object specified by the given name. If desired, the object will be read if not already done so.<BR>
         @param      _rName              the object name
-        @param      _bReadIfNecessary  if sal_True, the object will be created if necessary
+        @param      _bReadIfNecessary  if true, the object will be created if necessary
         @return                         the property set interface of the object. Usually the return value is not NULL, but
                                         if so, then the object could not be read from the configuration
         @throws                         NoSuchElementException if there is no object with the given name.
@@ -229,7 +229,7 @@ protected:
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
         @param      _rName      the object name to check
-        @return                 sal_True if there already exists such an object
+        @return                 true if there already exists such an object
     */
     virtual bool checkExistence(const OUString& _rName);
 

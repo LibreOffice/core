@@ -129,7 +129,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if column is automatically numbered.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isAutoIncrement( sal_Int32 column ) override;
     /**
       * Checks whether column is case sensitive.
@@ -138,7 +138,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if column is case sensitive.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isCaseSensitive( sal_Int32 column ) override;
     /**
       * Checks whether the value stored in column can be used in a
@@ -148,7 +148,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the column is searchable.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isSearchable( sal_Int32 column ) override;
     /**
       * Checks whether column is a cash value.
@@ -157,7 +157,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the column is a cash value.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isCurrency( sal_Int32 column ) override;
     /**
       * Checks whether a NULL can be stored in column.
@@ -178,7 +178,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the value stored in column is a signed number.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isSigned( sal_Int32 column ) override;
     /**
       * Gets the normal maximum width in characters for column.
@@ -299,7 +299,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the column is definitely not writable.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isReadOnly( sal_Int32 column ) override;
     /**
       * Indicates whether it is possible for a write on the column to succeed.
@@ -308,7 +308,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if it is possible for a write to succeed.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isWritable( sal_Int32 column ) override;
     /**
       * Indicates whether a write on the column will definitely succeed.
@@ -317,7 +317,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if a write on the column will definitely succeed.
       */
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isDefinitelyWritable( sal_Int32 column ) override;
     /**
       * Returns the fully-qualified name of the service whose instances

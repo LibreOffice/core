@@ -233,7 +233,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pOutlineObj->SetOutlinerParaObject( std::move(pOPO) );
                     pOutlineObj->SetEmptyPresObj(false);
 
-                    // remove hard attributes (Flag to sal_True)
+                    // remove hard attributes (Flag to true)
                     SfxItemSet aAttr(mrDoc.GetPool());
                     aAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
                     aAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));

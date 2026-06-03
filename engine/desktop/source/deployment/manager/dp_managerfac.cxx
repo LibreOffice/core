@@ -60,7 +60,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageManagerFactory
@@ -83,7 +83,7 @@ OUString PackageManagerFactoryImpl::getImplementationName()
     return u"com.sun.star.comp.deployment.PackageManagerFactory"_ustr;
 }
 
-sal_Bool PackageManagerFactoryImpl::supportsService( const OUString& ServiceName )
+bool PackageManagerFactoryImpl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

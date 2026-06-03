@@ -38,7 +38,7 @@ IMPL_LINK_NOARG( MainThreadExecutor_Impl, executor, void*, void )
         } catch( uno::Exception& ) {}
     }
 
-    m_bExecuted = sal_True;
+    m_bExecuted = true;
     delete this;
 }
 
@@ -46,7 +46,7 @@ MainThreadExecutor_Impl::MainThreadExecutor_Impl( const uno::Reference< task::XJ
                                                   const uno::Sequence< beans::NamedValue >& aArguments )
 : m_xJob( xJob )
 , m_aArgs( aArguments )
-, m_bExecuted( sal_False )
+, m_bExecuted( false )
 {
 }
 
@@ -107,7 +107,7 @@ OUString SAL_CALL UNOMainThreadExecutor::getImplementationName()
     return impl_staticGetImplementationName();
 }
 
-sal_Bool SAL_CALL UNOMainThreadExecutor::supportsService( const OUString& ServiceName )
+bool SAL_CALL UNOMainThreadExecutor::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

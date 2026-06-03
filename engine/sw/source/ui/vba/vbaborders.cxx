@@ -268,7 +268,7 @@ public:
     {
         return  cppu::UnoType<word::XBorder>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return true;
     }
@@ -290,7 +290,7 @@ class RangeBorderEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 m_nIndex;
 public:
     explicit RangeBorderEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), m_nIndex( 0 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( m_nIndex < m_xIndexAccess->getCount() );
     }
@@ -335,13 +335,13 @@ SwVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )
     return createCollectionObject( m_xIndexAccess->getByIndex( nIndex ) );
 }
 
-sal_Bool SAL_CALL SwVbaBorders::getShadow()
+bool SAL_CALL SwVbaBorders::getShadow()
 {
     // always return False for table border in MS Word
     return false;
 }
 
-void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ )
+void SAL_CALL SwVbaBorders::setShadow( bool /*_shadow*/ )
 {
     // not support in Table border in Word
     // TODO:

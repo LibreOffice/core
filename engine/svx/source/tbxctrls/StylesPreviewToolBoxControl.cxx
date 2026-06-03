@@ -172,7 +172,7 @@ OUString StylesPreviewToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.StylesPreviewToolBoxControl"_ustr;
 }
 
-sal_Bool StylesPreviewToolBoxControl::supportsService(const OUString& rServiceName)
+bool StylesPreviewToolBoxControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

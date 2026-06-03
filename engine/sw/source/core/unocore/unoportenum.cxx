@@ -300,7 +300,7 @@ OUString SwXTextPortionEnumeration::getImplementationName()
     return u"SwXTextPortionEnumeration"_ustr;
 }
 
-sal_Bool
+bool
 SwXTextPortionEnumeration::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -347,7 +347,7 @@ SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
     }
 }
 
-sal_Bool SwXTextPortionEnumeration::hasMoreElements()
+bool SwXTextPortionEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
 

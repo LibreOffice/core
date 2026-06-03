@@ -2216,8 +2216,8 @@ rtl::Reference<SvxShapeText>
         {
             aValueMap.insert( { u"TextHorizontalAdjust"_ustr, uno::Any(drawing::TextHorizontalAdjust_CENTER) } ); // drawing::TextHorizontalAdjust
             aValueMap.insert( { u"TextVerticalAdjust"_ustr, uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
-            aValueMap.insert( { u"TextAutoGrowHeight"_ustr, uno::Any(true) } ); // sal_Bool
-            aValueMap.insert( { u"TextAutoGrowWidth"_ustr, uno::Any(true) } ); // sal_Bool
+            aValueMap.insert( { u"TextAutoGrowHeight"_ustr, uno::Any(true) } ); // bool
+            aValueMap.insert( { u"TextAutoGrowWidth"_ustr, uno::Any(true) } ); // bool
             aValueMap.insert( { u"TextMaximumFrameWidth"_ustr, uno::Any(nTextMaxWidth) } ); // sal_Int32
 
             //set name/classified ObjectID (CID)

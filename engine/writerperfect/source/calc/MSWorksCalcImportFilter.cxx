@@ -294,8 +294,8 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
 }
 
 //XExtendedFilterDetection
-sal_Bool
-MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor)
+bool MSWorksCalcImportFilter::filter(
+    const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor)
 {
     OUString sUrl;
     css::uno::Reference<css::io::XInputStream> xInputStream;
@@ -460,7 +460,7 @@ OUString SAL_CALL MSWorksCalcImportFilter::getImplementationName()
     return u"com.sun.star.comp.Calc.MSWorksCalcImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

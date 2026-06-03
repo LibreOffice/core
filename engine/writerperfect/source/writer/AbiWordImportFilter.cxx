@@ -38,7 +38,7 @@ OUString SAL_CALL AbiWordImportFilter::getImplementationName()
     return u"com.sun.star.comp.Writer.AbiWordImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL AbiWordImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

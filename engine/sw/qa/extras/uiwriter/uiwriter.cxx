@@ -843,8 +843,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo70807)
         if (styleName == "Right Page" || styleName == "pagestyle1" || styleName == "pagestyle2")
             expectedUsedStyle = true;
 
-        CPPUNIT_ASSERT_EQUAL(expectedUserDefined, bool(xStyle->isUserDefined()));
-        CPPUNIT_ASSERT_EQUAL(expectedUsedStyle, bool(xStyle->isInUse()));
+        CPPUNIT_ASSERT_EQUAL(expectedUserDefined, xStyle->isUserDefined());
+        CPPUNIT_ASSERT_EQUAL(expectedUsedStyle, xStyle->isInUse());
     }
 }
 

@@ -136,7 +136,7 @@ void PackageRegistryBackend::disposing()
 // XPackageRegistry
 
 Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
-    OUString const & url, OUString const & mediaType, sal_Bool  bRemoved,
+    OUString const & url, OUString const & mediaType, bool  bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     ::osl::ResettableMutexGuard guard( m_aMutex );
@@ -406,7 +406,7 @@ Reference<task::XAbortChannel> Package::createAbortChannel()
 }
 
 
-sal_Bool Package::isBundle()
+bool Package::isBundle()
 {
     return false; // default
 }
@@ -415,7 +415,7 @@ sal_Bool Package::isBundle()
 ::sal_Int32 Package::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
-        sal_Bool)
+        bool)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -423,7 +423,7 @@ sal_Bool Package::isBundle()
 }
 
 
-sal_Bool Package::checkDependencies(
+bool Package::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& )
 {
     if (m_bRemoved)
@@ -509,7 +509,7 @@ css::beans::StringPair Package::getPublisherInfo()
 }
 
 
-uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContrast*/ )
+uno::Reference< css::graphic::XGraphic > Package::getIcon( bool /*bHighContrast*/ )
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -569,7 +569,7 @@ void Package::fireModified()
 
 // XPackage
 
-beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
+beans::Optional< beans::Ambiguous<bool> > Package::isRegistered(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -612,7 +612,7 @@ void Package::processPackage_impl(
     try {
         try {
             ::osl::ResettableMutexGuard guard( m_aMutex );
-            beans::Optional< beans::Ambiguous<sal_Bool> > option(
+            beans::Optional< beans::Ambiguous<bool> > option(
                 isRegistered_( guard, AbortChannel::get(xAbortChannel),
                                xCmdEnv ) );
             action = (option.IsPresent &&
@@ -679,7 +679,7 @@ void Package::processPackage_impl(
 
 
 void Package::registerPackage(
-    sal_Bool startup,
+    bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -690,7 +690,7 @@ void Package::registerPackage(
 
 
 void Package::revokePackage(
-    sal_Bool startup,
+    bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -726,7 +726,7 @@ beans::Optional< OUString > Package::getRegistrationDataURL()
     return beans::Optional<OUString>();
 }
 
-sal_Bool Package::isRemoved()
+bool Package::isRemoved()
 {
     return m_bRemoved;
 }
@@ -759,7 +759,7 @@ OUString Package::TypeInfo::getFileFilter()
     return m_fileFilter;
 }
 
-Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool /*smallIcon*/ )
+Any Package::TypeInfo::getIcon( bool /*highContrast*/, bool /*smallIcon*/ )
 {
     return Any();
 }

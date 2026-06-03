@@ -334,7 +334,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     return xController;
 }
 
-sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  )
+bool SAL_CALL ScViewPaneBase::isFormDesignMode(  )
 {
     SolarMutexGuard aGuard;
 
@@ -347,7 +347,7 @@ sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  )
     return bIsFormDesignMode;
 }
 
-void SAL_CALL ScViewPaneBase::setFormDesignMode( sal_Bool DesignMode )
+void SAL_CALL ScViewPaneBase::setFormDesignMode( bool DesignMode )
 {
     SolarMutexGuard aGuard;
 
@@ -657,7 +657,7 @@ static void lcl_ShowObject( ScTabViewShell& rViewSh, const ScDrawView& rDrawView
     }
 }
 
-sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
+bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1026,7 +1026,7 @@ uno::Type SAL_CALL ScTabViewObj::getElementType()
     return cppu::UnoType<sheet::XViewPane>::get();
 }
 
-sal_Bool SAL_CALL ScTabViewObj::hasElements()
+bool SAL_CALL ScTabViewObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -1529,7 +1529,7 @@ void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
     SetZoom( nZoom );
 }
 
-sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit()
+bool SAL_CALL ScTabViewObj::getIsWindowSplit()
 {
     SolarMutexGuard aGuard;
     //  what menu slot SID_WINDOW_SPLIT does
@@ -1545,7 +1545,7 @@ sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit()
     return false;
 }
 
-sal_Bool SAL_CALL ScTabViewObj::hasFrozenPanes()
+bool SAL_CALL ScTabViewObj::hasFrozenPanes()
 {
     SolarMutexGuard aGuard;
     //  what menu slot SID_WINDOW_FIX does
@@ -2110,7 +2110,7 @@ OUString SAL_CALL ScTabViewObj::getImplementationName()
     return u"ScTabViewObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

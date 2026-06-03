@@ -50,14 +50,14 @@ public:
     virtual css::i18n::Boundary SAL_CALL getWordBoundary(const OUString& Text, sal_Int32 nPos,
                                                          const css::lang::Locale& nLocale,
                                                          sal_Int16 WordType,
-                                                         sal_Bool bDirection) override = 0;
+                                                         bool bDirection) override = 0;
 
-    virtual sal_Bool SAL_CALL isBeginWord(const OUString& Text, sal_Int32 nPos,
-                                          const css::lang::Locale& nLocale,
-                                          sal_Int16 WordType) override = 0;
-    virtual sal_Bool SAL_CALL isEndWord(const OUString& Text, sal_Int32 nPos,
-                                        const css::lang::Locale& nLocale,
-                                        sal_Int16 WordType) override = 0;
+    virtual bool SAL_CALL isBeginWord(const OUString& Text, sal_Int32 nPos,
+                                      const css::lang::Locale& nLocale,
+                                      sal_Int16 WordType) override = 0;
+    virtual bool SAL_CALL isEndWord(const OUString& Text, sal_Int32 nPos,
+                                    const css::lang::Locale& nLocale,
+                                    sal_Int16 WordType) override = 0;
     virtual sal_Int16 SAL_CALL getWordType(const OUString& Text, sal_Int32 nPos,
                                            const css::lang::Locale& nLocale) override = 0;
 
@@ -96,7 +96,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override = 0;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override = 0;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
     // optimised variants that do not require the call-site to allocate a temporary OUString

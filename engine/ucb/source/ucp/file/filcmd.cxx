@@ -97,7 +97,7 @@ XCommandInfo_impl::getCommandInfoByHandle(
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XCommandInfo_impl::hasCommandByName(
     const OUString& aName )
 {
@@ -106,7 +106,7 @@ XCommandInfo_impl::hasCommandByName(
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XCommandInfo_impl::hasCommandByHandle(
     sal_Int32 Handle )
 {

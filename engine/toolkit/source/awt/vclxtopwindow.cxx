@@ -135,7 +135,7 @@ void VCLXTopWindow::setMenuBar( const css::uno::Reference< css::awt::XMenuBar >&
 }
 
 
-sal_Bool SAL_CALL VCLXTopWindow::getIsMaximized()
+bool SAL_CALL VCLXTopWindow::getIsMaximized()
 {
     SolarMutexGuard aGuard;
 
@@ -147,7 +147,7 @@ sal_Bool SAL_CALL VCLXTopWindow::getIsMaximized()
 }
 
 
-void SAL_CALL VCLXTopWindow::setIsMaximized( sal_Bool _ismaximized )
+void SAL_CALL VCLXTopWindow::setIsMaximized( bool _ismaximized )
 {
     SolarMutexGuard aGuard;
 
@@ -159,7 +159,7 @@ void SAL_CALL VCLXTopWindow::setIsMaximized( sal_Bool _ismaximized )
 }
 
 
-sal_Bool SAL_CALL VCLXTopWindow::getIsMinimized()
+bool SAL_CALL VCLXTopWindow::getIsMinimized()
 {
     SolarMutexGuard aGuard;
 
@@ -171,7 +171,7 @@ sal_Bool SAL_CALL VCLXTopWindow::getIsMinimized()
 }
 
 
-void SAL_CALL VCLXTopWindow::setIsMinimized( sal_Bool _isMinimized )
+void SAL_CALL VCLXTopWindow::setIsMinimized( bool _isMinimized )
 {
     SolarMutexGuard aGuard;
 
@@ -209,7 +209,7 @@ void SAL_CALL VCLXTopWindow::setDisplay( ::sal_Int32 _display )
     pWindow->SetScreenNumber( _display );
 }
 
-sal_Bool VCLXTopWindow::getFullScreen() {
+bool VCLXTopWindow::getFullScreen() {
     SolarMutexGuard g;
     if (auto const win = VCLXContainer::GetAsDynamic<WorkWindow>()) {
         return win->IsFullScreenMode();
@@ -217,7 +217,7 @@ sal_Bool VCLXTopWindow::getFullScreen() {
     return false;
 }
 
-void VCLXTopWindow::setFullScreen(sal_Bool value) {
+void VCLXTopWindow::setFullScreen(bool value) {
     SolarMutexGuard g;
     if (auto const win = VCLXContainer::GetAsDynamic<WorkWindow>()) {
         return win->ShowFullScreenMode(value);

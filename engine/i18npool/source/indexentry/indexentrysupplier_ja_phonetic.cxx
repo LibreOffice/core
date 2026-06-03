@@ -62,13 +62,13 @@ sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(
 }
 
 constexpr OUString first = u"phonetic (alphanumeric first)"_ustr;
-sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable::loadAlgorithm(
+bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable::loadAlgorithm(
     const css::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions )
 {
     return collator->loadCollatorAlgorithm(first, rLocale, collatorOptions) == 0;
 }
-sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant::loadAlgorithm(
+bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant::loadAlgorithm(
     const css::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions )
 {
@@ -76,13 +76,13 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant
 }
 
 constexpr OUString last = u"phonetic (alphanumeric last)"_ustr;
-sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable::loadAlgorithm(
+bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable::loadAlgorithm(
     const css::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions )
 {
     return collator->loadCollatorAlgorithm(last, rLocale, collatorOptions) == 0;
 }
-sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant::loadAlgorithm(
+bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant::loadAlgorithm(
     const css::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions )
 {

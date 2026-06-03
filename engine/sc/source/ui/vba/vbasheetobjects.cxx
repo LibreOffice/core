@@ -131,7 +131,7 @@ public:
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
 protected:
     /** Derived classes return true, if the passed shape is supported by the instance. */
@@ -254,7 +254,7 @@ uno::Type SAL_CALL ScVbaObjectContainer::getElementType()
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SAL_CALL ScVbaObjectContainer::hasElements()
+bool SAL_CALL ScVbaObjectContainer::hasElements()
 {
     return !maShapes.empty();
 }

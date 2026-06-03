@@ -128,7 +128,7 @@ sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( )
 }
 
 
-sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex )
+bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -206,7 +206,7 @@ Any VCLXAccessibleRadioButton::getCurrentValue(  )
 }
 
 
-sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber )
+bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber )
 {
     OExternalLockGuard aGuard( this );
 

@@ -365,7 +365,7 @@ void SwAccessibleDocument::selectAccessibleChild(
     maSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
-sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
+bool SwAccessibleDocument::isAccessibleChildSelected(
     sal_Int64 nChildIndex )
 {
     return maSelectionHelper.isAccessibleChildSelected(nChildIndex);

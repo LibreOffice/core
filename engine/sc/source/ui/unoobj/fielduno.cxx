@@ -359,7 +359,7 @@ uno::Type SAL_CALL ScCellFieldsObj::getElementType()
     return cppu::UnoType<text::XTextField>::get();
 }
 
-sal_Bool SAL_CALL ScCellFieldsObj::hasElements()
+bool SAL_CALL ScCellFieldsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -506,7 +506,7 @@ uno::Type SAL_CALL ScHeaderFieldsObj::getElementType()
     return cppu::UnoType<text::XTextField>::get();
 }
 
-sal_Bool SAL_CALL ScHeaderFieldsObj::hasElements()
+bool SAL_CALL ScHeaderFieldsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -1118,7 +1118,7 @@ bool ScEditFieldObj::IsInserted() const
 
 // XTextField
 
-OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
+OUString SAL_CALL ScEditFieldObj::getPresentation( bool bShowCommand )
 {
     SolarMutexGuard aGuard;
 
@@ -1270,7 +1270,7 @@ OUString SAL_CALL ScEditFieldObj::getImplementationName()
     return u"ScEditFieldObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

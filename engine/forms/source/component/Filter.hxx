@@ -95,15 +95,15 @@ namespace frm
         virtual OUString SAL_CALL getSelectedText() override;
         virtual void            SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
         virtual css::awt::Selection SAL_CALL getSelection() override;
-        virtual sal_Bool        SAL_CALL isEditable() override;
-        virtual void            SAL_CALL setEditable( sal_Bool bEditable ) override;
+        virtual bool        SAL_CALL isEditable() override;
+        virtual void            SAL_CALL setEditable( bool bEditable ) override;
         virtual void            SAL_CALL setMaxTextLen( sal_Int16 nLength ) override;
         virtual sal_Int16       SAL_CALL getMaxTextLen() override;
 
     // css::form::XBoundComponent
         virtual void            SAL_CALL addUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
         virtual void            SAL_CALL removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
-        virtual sal_Bool        SAL_CALL commit() override;
+        virtual bool        SAL_CALL commit() override;
 
     // css::lang::XEventListener
         virtual void            SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -120,7 +120,7 @@ namespace frm
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     private:

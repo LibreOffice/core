@@ -53,7 +53,7 @@ void XMLControlOASISTransformerContext::StartElement(
     Reference< XAttributeList > xAttrList( rAttrList );
     rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
 //      GetTransformer().ProcessAttrList( xAttrList, OOO_SHAPE_ACTIONS,
-//                                        sal_True );
+//                                        true );
 
     XMLMutableAttributeList *pControlMutableAttrList =
         m_bCreateControl ? new XMLMutableAttributeList : nullptr;

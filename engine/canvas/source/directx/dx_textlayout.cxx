@@ -93,14 +93,14 @@ namespace dxcanvas
         maLogicalAdvancements = aAdvancements;
     }
 
-    uno::Sequence< sal_Bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    uno::Sequence< bool > SAL_CALL TextLayout::queryKashidaPositions(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         return maKashidaPositions;
     }
 
-    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< sal_Bool >& aPositions )
+    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< bool >& aPositions )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -151,7 +151,7 @@ namespace dxcanvas
     }
 
     rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/,
-                                                    sal_Bool /*bExcludeLigatures*/ )
+                                                    bool /*bExcludeLigatures*/ )
     {
         // TODO
         return rendering::Caret();
@@ -159,7 +159,7 @@ namespace dxcanvas
 
     sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/,
                                                           sal_Int32 /*nCaretAdvancement*/,
-                                                          sal_Bool /*bExcludeLigatures*/ )
+                                                          bool /*bExcludeLigatures*/ )
     {
         // TODO
         return 0;
@@ -239,7 +239,7 @@ namespace dxcanvas
         return "DXCanvas::TextLayout";
     }
 
-    sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
+    bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

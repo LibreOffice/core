@@ -69,9 +69,9 @@ public:
     sal_Int32 i,i2;
     for( i = 0 ; i < TEST_UUID ; i ++ )
     {
-        rtl_createUuid( aNode[i], pNode, sal_True );
+        rtl_createUuid( aNode[i], pNode, true );
     }
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     for( i = 0 ; i < TEST_UUID ; i ++ )
     {
         //printUuid( aNode[i] );
@@ -79,14 +79,14 @@ public:
         {
             if ( rtl_compareUuid( aNode[i] , aNode[i2] ) == 0  )
             {
-                bRes = sal_False;
+                bRes = false;
                 break;
             }
         }
-        if ( bRes == sal_False )
+        if ( bRes == false )
             break;
     }
-    CPPUNIT_ASSERT_MESSAGE("createUuid: every uuid must be different.", bRes == sal_True );
+    CPPUNIT_ASSERT_MESSAGE("createUuid: every uuid must be different.", bRes == true );
     }*/
 
     CPPUNIT_TEST_SUITE(createUuid);

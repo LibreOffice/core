@@ -81,7 +81,7 @@ XRow_impl::~XRow_impl()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XRow_impl::wasNull()
 {
   std::scoped_lock aGuard( m_aMutex );
@@ -98,7 +98,7 @@ XRow_impl::getString(
   return getValue<OUString>(columnIndex);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XRow_impl::getBoolean(
     sal_Int32 columnIndex )
 {

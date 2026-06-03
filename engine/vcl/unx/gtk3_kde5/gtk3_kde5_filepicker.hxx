@@ -61,7 +61,7 @@ public:
     virtual sal_Int16 SAL_CALL execute() override;
 
     // XFilePicker functions
-    virtual void SAL_CALL setMultiSelectionMode(sal_Bool bMode) override;
+    virtual void SAL_CALL setMultiSelectionMode(bool bMode) override;
     virtual void SAL_CALL setDefaultName(const OUString& rName) override;
     virtual void SAL_CALL setDisplayDirectory(const OUString& rDirectory) override;
     virtual OUString SAL_CALL getDisplayDirectory() override;
@@ -82,7 +82,7 @@ public:
                                    const css::uno::Any& rValue) override;
     virtual css::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
                                             sal_Int16 nControlAction) override;
-    virtual void SAL_CALL enableControl(sal_Int16 nControlId, sal_Bool bEnable) override;
+    virtual void SAL_CALL enableControl(sal_Int16 nControlId, bool bEnable) override;
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
 
@@ -93,8 +93,8 @@ public:
     virtual sal_Int32 SAL_CALL  getAvailableWidth(  );
     virtual sal_Int32 SAL_CALL  getAvailableHeight(  );
     virtual void SAL_CALL       setImage( sal_Int16 aImageFormat, const css::uno::Any &rImage );
-    virtual sal_Bool SAL_CALL   setShowState( sal_Bool bShowState );
-    virtual sal_Bool SAL_CALL   getShowState(  );
+    virtual bool SAL_CALL   setShowState( bool bShowState );
+    virtual bool SAL_CALL   getShowState(  );
     */
 
     // XFilePicker2 functions
@@ -112,7 +112,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:

@@ -36,7 +36,7 @@ private:
     SvStream&           mrPBM;              // the PBM file to read
 
     bool            mbStatus;
-    bool            mbRemark;           // sal_False if the stream is in a comment
+    bool            mbRemark;           // false if the stream is in a comment
     bool            mbRaw;              // RAW/ASCII MODE
     sal_uInt8           mnMode;             // 0->PBM, 1->PGM, 2->PPM
     std::unique_ptr<vcl::bitmap::RawBitmap> mpRawBmp;

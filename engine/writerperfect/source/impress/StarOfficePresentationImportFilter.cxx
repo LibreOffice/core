@@ -82,7 +82,7 @@ OUString SAL_CALL StarOfficePresentationImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Impress.StarOfficePresentationImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL StarOfficePresentationImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL StarOfficePresentationImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

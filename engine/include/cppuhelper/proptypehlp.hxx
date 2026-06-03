@@ -72,12 +72,6 @@ void convertPropertyValue(bool & b, const css::uno::Any & a)
     }
 }
 
-void convertPropertyValue(sal_Bool & target, css::uno::Any const & source) {
-    bool b;
-    convertPropertyValue(b, source);
-    target = b;
-}
-
 inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {

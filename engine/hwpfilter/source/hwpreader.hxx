@@ -84,7 +84,7 @@ public:
     /**
      * parseStream does Parser-startup initializations
      */
-    virtual sal_Bool SAL_CALL filter(const Sequence<PropertyValue>& aDescriptor) override;
+    virtual bool SAL_CALL filter(const Sequence<PropertyValue>& aDescriptor) override;
     virtual void SAL_CALL cancel() override {}
     void setDocumentHandler(Reference<XDocumentHandler> const& xHandler)
     {

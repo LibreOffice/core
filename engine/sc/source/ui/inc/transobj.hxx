@@ -71,7 +71,7 @@ public:
     virtual bool        WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
-    virtual sal_Bool SAL_CALL isComplex() override;
+    virtual bool SAL_CALL isComplex() override;
 
     ScDocument*         GetDocument() const     { return m_pDoc.get(); }        // owned by ScTransferObj
     const ScRange&      GetRange() const        { return m_aBlock; }

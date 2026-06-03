@@ -67,19 +67,19 @@ namespace filter::odfflatxml {
             }
 
             // XImportFilter
-            virtual sal_Bool SAL_CALL
+            virtual bool SAL_CALL
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
                      const Sequence< OUString >& userData) override;
 
             // XImportFilter2
-            virtual sal_Bool SAL_CALL
+            virtual bool SAL_CALL
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XFastParser >& fastParser,
                      const Sequence< OUString >& userData) override;
 
             // XExportFilter
-            virtual sal_Bool SAL_CALL
+            virtual bool SAL_CALL
             exporter(
                      const Sequence< PropertyValue >& sourceData,
                      const Sequence< OUString >& userData) override;
@@ -87,7 +87,7 @@ namespace filter::odfflatxml {
             OUString SAL_CALL getImplementationName() override
             { return u"com.sun.star.comp.filter.OdfFlatXml"_ustr; }
 
-            sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+            bool SAL_CALL supportsService(OUString const & ServiceName) override
             { return cppu::supportsService(this, ServiceName); }
 
             css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
@@ -104,7 +104,7 @@ namespace filter::odfflatxml {
 
 using namespace ::filter::odfflatxml;
 
-sal_Bool
+bool
 OdfFlatXml::importer(
                      const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
@@ -163,7 +163,7 @@ OdfFlatXml::importer(
     return true;
 }
 
-sal_Bool
+bool
 OdfFlatXml::importer(
                      const Sequence< PropertyValue >& sourceData,
                      const Reference< XFastParser >& xFastParser,
@@ -214,7 +214,7 @@ OdfFlatXml::importer(
     return true;
 }
 
-sal_Bool
+bool
 OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
                      const Sequence< OUString >& /*msUserData*/)
 {

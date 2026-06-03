@@ -75,7 +75,7 @@ OUString SAL_CALL PolarCoordinateSystem::getImplementationName()
     return u"com.sun.star.comp.chart.PolarCoordinateSystem"_ustr;
 }
 
-sal_Bool SAL_CALL PolarCoordinateSystem::supportsService( const OUString& rServiceName )
+bool SAL_CALL PolarCoordinateSystem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -100,7 +100,7 @@ OUString SAL_CALL PolarCoordinateSystem2d::getImplementationName()
     return u"com.sun.star.comp.chart2.PolarCoordinateSystem2d"_ustr ;
 }
 
-sal_Bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
+bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -127,7 +127,7 @@ OUString SAL_CALL PolarCoordinateSystem3d::getImplementationName()
     return u"com.sun.star.comp.chart2.PolarCoordinateSystem3d"_ustr;
 }
 
-sal_Bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )
+bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

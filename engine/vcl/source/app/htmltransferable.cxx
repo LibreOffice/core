@@ -69,7 +69,7 @@ uno::Sequence<datatransfer::DataFlavor> HtmlTransferable::getTransferDataFlavors
     return aDataFlavors;
 }
 
-sal_Bool HtmlTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+bool HtmlTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     SotClipboardFormatId nT = SotExchange::GetFormat(rFlavor);
     return (nT == SotClipboardFormatId::HTML);

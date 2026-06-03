@@ -112,7 +112,7 @@ sal_Int32 SAL_CALL
             Returns <TRUE/> if there is a (at least one) relation of the
             given type and <FALSE/> if there is no such relation in the set.
     */
-sal_Bool SAL_CALL
+bool SAL_CALL
     AccessibleRelationSetHelper::containsRelation(AccessibleRelationType eRelationType)
 {
     std::scoped_lock aGuard (maMutex);

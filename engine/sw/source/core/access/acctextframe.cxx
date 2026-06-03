@@ -133,7 +133,7 @@ void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int64 )
     SAL_WARN("sw.a11y", "SwAccessibleTextFrame::selectAccessibleChild - missing implementation");
 }
 
-sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard g;
 

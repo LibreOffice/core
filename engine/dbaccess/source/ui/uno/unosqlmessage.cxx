@@ -90,7 +90,7 @@ void OSQLMessageDialog::initialize(Sequence<Any> const & args)
     }
 }
 
-sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
 {
     switch (_nHandle)
     {

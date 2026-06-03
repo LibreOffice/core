@@ -347,7 +347,7 @@ namespace pcr
         UpdateUI();
     }
 
-    sal_Bool SAL_CALL OPropertyBrowserController::attachModel( const Reference< XModel >& _rxModel )
+    bool SAL_CALL OPropertyBrowserController::attachModel( const Reference< XModel >& _rxModel )
     {
         Reference< XObjectInspectorModel > xModel( _rxModel, UNO_QUERY );
         if ( !xModel.is() )
@@ -404,7 +404,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL OPropertyBrowserController::suspend( sal_Bool _bSuspend )
+    bool SAL_CALL OPropertyBrowserController::suspend( bool _bSuspend )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( haveView(), "OPropertyBrowserController::suspend: don't have a view anymore!" );
@@ -500,7 +500,7 @@ namespace pcr
         return u"org.openoffice.comp.extensions.ObjectInspector"_ustr;
     }
 
-    sal_Bool SAL_CALL OPropertyBrowserController::supportsService( const OUString& ServiceName )
+    bool SAL_CALL OPropertyBrowserController::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -668,14 +668,14 @@ namespace pcr
             impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
     }
 
-    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, sal_Bool bCreateReadOnly )
+    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::createPropertyControl( ::sal_Int16 ControlType, bool bCreateReadOnly )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Reference< XPropertyControl > xControl;
 
         // read-only-ness
-        bCreateReadOnly |= impl_isReadOnlyModel_throw() ? 1 : 0;
+        bCreateReadOnly |= impl_isReadOnlyModel_throw();
 
         switch ( ControlType )
         {
@@ -1464,7 +1464,7 @@ namespace pcr
    }
 
 
-    void OPropertyBrowserController::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable )
+    void OPropertyBrowserController::enablePropertyUI( const OUString& _rPropertyName, bool _bEnable )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1477,7 +1477,7 @@ namespace pcr
     }
 
 
-    void OPropertyBrowserController::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable )
+    void OPropertyBrowserController::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, bool _bEnable )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1553,7 +1553,7 @@ namespace pcr
     }
 
 
-    void OPropertyBrowserController::showCategory( const OUString& rCategory, sal_Bool bShow )
+    void OPropertyBrowserController::showCategory( const OUString& rCategory, bool bShow )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )

@@ -220,7 +220,7 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
                     pushArgs(*static_cast<sal_uInt16*>(pCppArgs[nPos]), pStack, &sp, pGPR, &gCount);
                     break;
                 case typelib_TypeClass_BOOLEAN:
-                    pushArgs(static_cast<unsigned long>(*static_cast<sal_Bool*>(pCppArgs[nPos])),
+                    pushArgs(static_cast<unsigned long>(*static_cast<bool*>(pCppArgs[nPos])),
                              pStack, &sp, pGPR, &gCount);
                     break;
                 case typelib_TypeClass_BYTE:
@@ -394,8 +394,8 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                 typelib_MethodParameter aParam;
                 aParam.pTypeRef
                     = ((typelib_InterfaceAttributeTypeDescription*)pMemberDescr)->pAttributeTypeRef;
-                aParam.bIn = sal_True;
-                aParam.bOut = sal_False;
+                aParam.bIn = true;
+                aParam.bOut = false;
 
                 typelib_TypeDescriptionReference* pReturnTypeRef = 0;
                 OUString aVoidName("void");

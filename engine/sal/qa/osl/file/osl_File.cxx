@@ -664,8 +664,8 @@ namespace osl_FileBase
 
     };
 
-    // if bDirection==sal_True, check getSystemPathFromFileURL
-    // if bDirection==sal_False, check getFileURLFromSystemPath
+    // if bDirection==true, check getSystemPathFromFileURL
+    // if bDirection==false, check getFileURLFromSystemPath
     void SystemPath_FileURL::check_SystemPath_FileURL(
             OString const& _sSource,
             osl::FileBase::RC _nAssumeError,
@@ -1344,7 +1344,7 @@ namespace osl_FileStatus
     };
 
     //  testing the method
-    //  inline sal_Bool isValid(sal_uInt32 nMask) const
+    //  inline bool isValid(sal_uInt32 nMask) const
 
     class isValid : public CppUnit::TestFixture
     {
@@ -2468,7 +2468,7 @@ namespace osl_File
     };
 
     //  testing the method
-    //  inline RC isEndOfFile(sal_Bool *pIsEOF)
+    //  inline RC isEndOfFile(bool *pIsEOF)
 
     class isEndOfFile : public CppUnit::TestFixture
     {
@@ -2502,8 +2502,8 @@ namespace osl_File
         void isEndOfFile_001()
         {
             File testFile(aTmpName4);
-            sal_Bool bEOF  = false;
-            sal_Bool *pEOF = &bEOF;
+            bool bEOF  = false;
+            bool *pEOF = &bEOF;
 
             auto nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -2523,8 +2523,8 @@ namespace osl_File
         void isEndOfFile_002()
         {
             File testFile(aTmpName4);
-            sal_Bool bEOF  = false;
-            sal_Bool *pEOF = &bEOF;
+            bool bEOF  = false;
+            bool *pEOF = &bEOF;
             sal_uInt64 nFilePointer = 0;
 
             auto nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
@@ -2849,8 +2849,8 @@ namespace osl_File
         void readLine_002()
         {
             File testFile(aTmpName6);
-            sal_Bool bEOF  = false;
-            sal_Bool *pEOF = &bEOF;
+            bool bEOF  = false;
+            bool *pEOF = &bEOF;
 
             auto nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -3563,7 +3563,7 @@ namespace osl_DirectoryItem
     };
 
     //  testing the method
-    //  inline sal_Bool is()
+    //  inline bool is()
 
     class is : public CppUnit::TestFixture
     {
@@ -3911,7 +3911,7 @@ namespace osl_Directory
     };
 
     //  testing the method
-    //  inline sal_Bool isOpen() { return _pData != NULL; };
+    //  inline bool isOpen() { return _pData != NULL; };
 
     class isOpen : public CppUnit::TestFixture
     {
@@ -4382,7 +4382,7 @@ namespace osl_Directory
                 "test for getVolumeInfo function: getVolumeInfo of root directory.",
                 osl::FileBase::E_None, nError1);
             // LLA: IMHO it's not a bug, if VolumeInfo is not valid, it's a feature
-            // LLA: CPPUNIT_ASSERT_MESSAGE("mask is not valid", sal_True == aVolumeInfo.isValid(_nMask));
+            // LLA: CPPUNIT_ASSERT_MESSAGE("mask is not valid", true == aVolumeInfo.isValid(_nMask));
             if (aVolumeInfo.isValid(_nMask))
                 checkValidMask(aVolumeInfo, _nMask);
         }

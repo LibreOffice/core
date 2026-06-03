@@ -1088,7 +1088,7 @@ void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
 
         // copy number to buffer (excluding decimals)
         sal_uInt16 nNumLen2 = nNumLen-nDecimals;
-        uno::Sequence< sal_Bool > aGroupPos;
+        uno::Sequence< bool > aGroupPos;
         if (bUseThousandSep)
             aGroupPos = utl::DigitGroupingIterator::createForwardSequence(
                     nNumLen2, getDigitGrouping());

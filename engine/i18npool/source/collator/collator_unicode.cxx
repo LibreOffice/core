@@ -419,7 +419,7 @@ Collator_Unicode::getImplementationName()
     return implementationName;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 Collator_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

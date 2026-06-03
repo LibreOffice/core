@@ -275,7 +275,7 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TextConversion_zh::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
 {
     return false;

@@ -72,7 +72,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( u"stock properties require type sal_Bool"_ustr, nullptr, 0 );
+        throw lang::IllegalArgumentException( u"stock properties require type bool"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -259,13 +259,13 @@ void WrappedStockProperties::addProperties( std::vector< Property > & rOutProper
 {
     rOutProperties.emplace_back( "Volume",
                   PROP_CHART_STOCK_VOLUME,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
     rOutProperties.emplace_back( "UpDown",
                   PROP_CHART_STOCK_UPDOWN,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );

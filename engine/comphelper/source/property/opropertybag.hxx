@@ -101,12 +101,12 @@ namespace comphelper
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XModifiable:
-        virtual sal_Bool SAL_CALL isModified(  ) override;
-        virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+        virtual bool SAL_CALL isModified(  ) override;
+        virtual void SAL_CALL setModified( bool bModified ) override;
 
         // XModifyBroadcaster
         virtual void SAL_CALL addModifyListener(
@@ -140,7 +140,7 @@ namespace comphelper
            { OPropertyBag_PBase::removeVetoableChangeListener(p1, p2); }
 
         // XSet
-        virtual sal_Bool SAL_CALL has( const css::uno::Any& aElement ) override;
+        virtual bool SAL_CALL has( const css::uno::Any& aElement ) override;
         virtual void SAL_CALL insert( const css::uno::Any& aElement ) override;
         virtual void SAL_CALL remove( const css::uno::Any& aElement ) override;
 
@@ -149,7 +149,7 @@ namespace comphelper
 
         // XElementAccess (base of XEnumerationAccess)
         virtual css::uno::Type SAL_CALL getElementType(  ) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) override;
+        virtual bool SAL_CALL hasElements(  ) override;
         // UNO interface implementations
 
         // XPropertyState
@@ -160,7 +160,7 @@ namespace comphelper
 
         // OPropertySetHelper
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
@@ -168,7 +168,7 @@ namespace comphelper
         virtual void fireEvents(
             sal_Int32 * pnHandles,
             sal_Int32 nCount,
-            sal_Bool bVetoable,
+            bool bVetoable,
             bool bIgnoreRuntimeExceptionsWhileFiring) override;
 
         void setModifiedImpl( bool bModified,

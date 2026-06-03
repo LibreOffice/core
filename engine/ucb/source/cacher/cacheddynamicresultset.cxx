@@ -119,7 +119,7 @@ OUString SAL_CALL CachedDynamicResultSet::getImplementationName()
     return u"com.sun.star.comp.ucb.CachedDynamicResultSet"_ustr;
 }
 
-sal_Bool SAL_CALL CachedDynamicResultSet::supportsService( const OUString& ServiceName )
+bool SAL_CALL CachedDynamicResultSet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -160,7 +160,7 @@ OUString SAL_CALL CachedDynamicResultSetFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.CachedDynamicResultSetFactory"_ustr;
 }
-sal_Bool SAL_CALL CachedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL CachedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

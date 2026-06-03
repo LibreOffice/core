@@ -55,7 +55,7 @@ OUString SAL_CALL ToolbarModeMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.ToolbarModeMenuController"_ustr;
 }
 
-sal_Bool SAL_CALL ToolbarModeMenuController::supportsService( const OUString& sServiceName )
+bool SAL_CALL ToolbarModeMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

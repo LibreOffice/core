@@ -96,7 +96,7 @@ static const SfxItemPropertySet* lcl_GetGraphicStyleSet()
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
-        {SC_UNONAME_HIDDEN,   ATTR_HIDDEN,         cppu::UnoType<sal_Bool>::get(), 0, 0 },
+        {SC_UNONAME_HIDDEN,   ATTR_HIDDEN,         cppu::UnoType<bool>::get(), 0, 0 },
         {SC_UNONAME_DISPNAME, SC_WID_UNO_DISPNAME, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
     static SfxItemPropertySet aGraphicStyleSet_Impl( aGraphicStyleMap_Impl );
@@ -186,7 +186,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {SC_UNONAME_CELLVJUS, ATTR_VER_JUSTIFY,   ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         {SC_UNONAME_CELLVJUS_METHOD, ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {SC_UNONAME_WRITING,  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
-        {SC_UNONAME_HIDDEN,   ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get(),             0, 0 },
+        {SC_UNONAME_HIDDEN,   ATTR_HIDDEN,        cppu::UnoType<bool>::get(),             0, 0 },
         {SC_UNONAME_HYPERLINK,  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
     };
     static SfxItemPropertySet aCellStyleSet_Impl( aCellStyleMap_Impl );
@@ -314,7 +314,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {SC_UNONAME_USERDEF,      ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
         {SC_UNO_PAGE_WIDTH,       ATTR_PAGE_SIZE,     ::cppu::UnoType<sal_Int32>::get(),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
         {SC_UNONAME_WRITING,      ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
-        {SC_UNONAME_HIDDEN,       ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get(),             0, 0 },
+        {SC_UNONAME_HIDDEN,       ATTR_HIDDEN,        cppu::UnoType<bool>::get(),             0, 0 },
     };
     static SfxItemPropertySet aPageStyleSet_Impl( aPageStyleMap_Impl );
     return &aPageStyleSet_Impl;
@@ -515,7 +515,7 @@ uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
     return cppu::UnoType<container::XNameContainer>::get();    // has to fit to getByIndex
 }
 
-sal_Bool SAL_CALL ScStyleFamiliesObj::hasElements()
+bool SAL_CALL ScStyleFamiliesObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -538,7 +538,7 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
     return {SC_FAMILYNAME_CELL, SC_FAMILYNAME_PAGE, SC_FAMILYNAME_GRAPHIC};
 }
 
-sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
+bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
 {
     return aName == SC_FAMILYNAME_CELL || aName == SC_FAMILYNAME_PAGE || aName == SC_FAMILYNAME_GRAPHIC;
 }
@@ -839,7 +839,7 @@ uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
     return cppu::UnoType<style::XStyle>::get();    // has to fit to getByIndex
 }
 
-sal_Bool SAL_CALL ScStyleFamilyObj::hasElements()
+bool SAL_CALL ScStyleFamilyObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -886,7 +886,7 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
     return uno::Sequence<OUString>();
 }
 
-sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const OUString& aName )
+bool SAL_CALL ScStyleFamilyObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     if ( pDocShell )
@@ -1031,7 +1031,7 @@ SfxStyleSheetBase* ScStyleObj::GetStyle_Impl( bool bUseCachedValue )
 
 // style::XStyle
 
-sal_Bool SAL_CALL ScStyleObj::isUserDefined()
+bool SAL_CALL ScStyleObj::isUserDefined()
 {
     SolarMutexGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
@@ -1040,7 +1040,7 @@ sal_Bool SAL_CALL ScStyleObj::isUserDefined()
     return false;
 }
 
-sal_Bool SAL_CALL ScStyleObj::isInUse()
+bool SAL_CALL ScStyleObj::isInUse()
 {
     SolarMutexGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
@@ -1232,7 +1232,7 @@ beans::PropertyState ScStyleObj::getPropertyState_Impl( std::u16string_view aPro
 //           //  if no rotate value is set, look at orientation
 //           //! also for a fixed value of 0 (in case orientation is ambiguous)?
 //           if ( nWhich == ATTR_ROTATE_VALUE && eState == SfxItemState::DEFAULT )
-//               eState = pItemSet->GetItemState( ATTR_ORIENTATION, sal_False );
+//               eState = pItemSet->GetItemState( ATTR_ORIENTATION, false );
 
             if ( eState == SfxItemState::SET )
                 eRet = beans::PropertyState_DIRECT_VALUE;
@@ -1322,7 +1322,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName 
                 case ATTR_PAGE_CHARTS:
                 case ATTR_PAGE_OBJECTS:
                 case ATTR_PAGE_DRAWINGS:
-                    //! define sal_Bool-MID for ScViewObjectModeItem?
+                    //! define bool-MID for ScViewObjectModeItem?
                     aAny <<= static_cast<const ScViewObjectModeItem&>(pItemSet->Get(nWhich)).GetValue() == VOBJ_MODE_SHOW;
                     break;
                 case ATTR_PAGE_SCALETO:
@@ -1678,7 +1678,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                         {
                             bool bBool = false;
                             *pValue >>= bBool;
-                            //! need to define sal_Bool-MID for ScViewObjectModeItem?
+                            //! need to define bool-MID for ScViewObjectModeItem?
                             rSet.Put(ScViewObjectModeItem(
                                 pEntry->nWID, bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE));
                         }
@@ -1927,7 +1927,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
                     case ATTR_PAGE_CHARTS:
                     case ATTR_PAGE_OBJECTS:
                     case ATTR_PAGE_DRAWINGS:
-                        //! define sal_Bool-MID for ScViewObjectModeItem?
+                        //! define bool-MID for ScViewObjectModeItem?
                         aAny <<= static_cast<const ScViewObjectModeItem&>(pItemSet->Get(nWhich)).GetValue() == VOBJ_MODE_SHOW;
                         break;
                     case ATTR_PAGE_PAPERBIN:
@@ -2050,7 +2050,7 @@ OUString SAL_CALL ScStyleObj::getImplementationName()
     return u"ScStyleObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -318,7 +318,7 @@ public:
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getSupportedValueTypes() override;
 
-    virtual sal_Bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
+    virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
 
     virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
 
@@ -342,7 +342,7 @@ public:
     // XValidator:
 
 
-    virtual sal_Bool SAL_CALL isValid(
+    virtual bool SAL_CALL isValid(
         const css::uno::Any& ) override;
 
     virtual OUString SAL_CALL explainInvalid(

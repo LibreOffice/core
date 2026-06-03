@@ -79,7 +79,7 @@ OUString SAL_CALL OConnectionWeakWrapper::nativeSQL( const OUString& sql )
     return m_xConnection->nativeSQL(sql);
 }
 
-void SAL_CALL OConnectionWeakWrapper::setAutoCommit( sal_Bool autoCommit )
+void SAL_CALL OConnectionWeakWrapper::setAutoCommit( bool autoCommit )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -87,7 +87,7 @@ void SAL_CALL OConnectionWeakWrapper::setAutoCommit( sal_Bool autoCommit )
     m_xConnection->setAutoCommit(autoCommit);
 }
 
-sal_Bool SAL_CALL OConnectionWeakWrapper::getAutoCommit(  )
+bool SAL_CALL OConnectionWeakWrapper::getAutoCommit(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -114,7 +114,7 @@ void SAL_CALL OConnectionWeakWrapper::rollback(  )
     m_xConnection->rollback();
 }
 
-sal_Bool SAL_CALL OConnectionWeakWrapper::isClosed(  )
+bool SAL_CALL OConnectionWeakWrapper::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -130,7 +130,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnectionWeakWrapper::getMetaData(  )
     return m_xConnection->getMetaData();
 }
 
-void SAL_CALL OConnectionWeakWrapper::setReadOnly( sal_Bool readOnly )
+void SAL_CALL OConnectionWeakWrapper::setReadOnly( bool readOnly )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -139,7 +139,7 @@ void SAL_CALL OConnectionWeakWrapper::setReadOnly( sal_Bool readOnly )
     m_xConnection->setReadOnly(readOnly);
 }
 
-sal_Bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  )
+bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);

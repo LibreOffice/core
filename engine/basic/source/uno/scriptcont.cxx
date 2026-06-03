@@ -344,7 +344,7 @@ void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 // Storing with password encryption
 
 // Methods XLibraryContainerPassword
-sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordProtected( const OUString& Name )
+bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordProtected( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -352,7 +352,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordProtected( const O
     return bRet;
 }
 
-sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OUString& Name )
+bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -364,7 +364,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OU
     return bRet;
 }
 
-sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
+bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
     ( const OUString& Name, const OUString& Password )
 {
     LibraryContainerMethodGuard aGuard( *this );
@@ -606,7 +606,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                         throw uno::RuntimeException(u"null returned from openStreamElement"_ustr);
                     }
                     SvMemoryStream aMemStream;
-                    /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
+                    /*bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                     sal_Int32 const nSize = aMemStream.Tell();
                     if (nSize < 0) { abort(); }
@@ -729,7 +729,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         SvMemoryStream aMemStream;
-                        /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
+                        /*bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                         sal_Int32 const nSize = aMemStream.Tell();
                         if (nSize < 0) { abort(); }
@@ -892,7 +892,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                             uno::Reference< uno::XInterface >(), nError);
                     }
 
-                    /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
+                    /*bool bRet = */pMod->LoadBinaryData( *pStream );
                     // TODO: Check return value
                 }
                 catch(const uno::Exception& )
@@ -1003,7 +1003,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                     nError);
                             }
 
-                            /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
+                            /*bool bRet = */pMod->LoadBinaryData( *pStream );
                             // TODO: Check return value
                         }
                         catch(const uno::Exception& )
@@ -1076,7 +1076,7 @@ void SfxScriptLibraryContainer::onNewRootStorage()
 {
 }
 
-sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString& Library )
+bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString& Library )
 {
     BasicManager* pBasicMgr = getBasicManager();
     OSL_ENSURE( pBasicMgr, "we need a basicmanager, really we do" );
@@ -1176,7 +1176,7 @@ script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& Mod
     return mModuleInfo[ ModuleName ];
 }
 
-sal_Bool SAL_CALL SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
+bool SAL_CALL SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
 {
     return mModuleInfo.contains(ModuleName);
 }

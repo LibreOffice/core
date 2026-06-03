@@ -75,7 +75,7 @@ else
 xDestKey = xDestRoot;
 }
 Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
-xSimReg->open( rURL, sal_True, sal_False );
+xSimReg->open( rURL, true, false );
 OSL_ASSERT( xSimReg->isValid() );
 Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
 ::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
@@ -198,10 +198,10 @@ void test_SimpleRegistry(
 
     try
     {
-        xReg->open(testreg, sal_False, sal_True);
+        xReg->open(testreg, false, true);
 
-        OSL_ENSURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 7" );
-        OSL_ENSURE( xReg->isReadOnly() == sal_False, "test_SimpleRegistry error 8" );
+        OSL_ENSURE( xReg->isValid() != false, "test_SimpleRegistry error 7" );
+        OSL_ENSURE( xReg->isReadOnly() == false, "test_SimpleRegistry error 8" );
 
         Reference<XRegistryKey> xRootKey(xReg->getRootKey());
         OSL_ENSURE( xRootKey->isValid(), "test_SimpleRegistry error 9" );
@@ -306,8 +306,8 @@ void test_SimpleRegistry(
         OSL_ENSURE( seqUnicode2.getArray()[2] == "come as unicode", "test_SimpleRegistry error 25");
 
 
-        xReg->open(testreg2, sal_False, sal_True);
-        OSL_ENSURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 25" );
+        xReg->open(testreg2, false, true);
+        OSL_ENSURE( xReg->isValid() != false, "test_SimpleRegistry error 25" );
         xRootKey = xReg->getRootKey();
         xKey = xRootKey->createKey(OUString( "ThirdKey/FirstSubKey/WithSubSubKey" ));
         xKey->closeKey();
@@ -318,8 +318,8 @@ void test_SimpleRegistry(
         xRootKey->closeKey();
         xReg->close();
 
-        xReg->open(testreg, sal_False, sal_False);
-        OSL_ENSURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 26" );
+        xReg->open(testreg, false, false);
+        OSL_ENSURE( xReg->isValid() != false, "test_SimpleRegistry error 26" );
 
         if (bMergeDifferently)
         {
@@ -438,7 +438,7 @@ void test_DefaultRegistry(
     userRdb += "user.rdb";
     applicatRdb += "stoctest.rdb";
 
-    Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False, OUString());
+    Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, false, OUString());
                                                                                       //OUString("//./e:/src596/stoc/wntmsci3/bin") );
 
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
@@ -655,13 +655,13 @@ SAL_IMPLEMENT_MAIN()
       test_DefaultRegistry( areg1, areg2, true );
 
     Reference< XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
-    xSimReg->open( reg1, sal_False, sal_True );
+    xSimReg->open( reg1, false, true );
     xSimReg->destroy();
-    xSimReg->open( reg2, sal_False, sal_True );
+    xSimReg->open( reg2, false, true );
     xSimReg->destroy();
-    xSimReg->open( areg1, sal_False, sal_True );
+    xSimReg->open( areg1, false, true );
     xSimReg->destroy();
-    xSimReg->open( areg2, sal_False, sal_True );
+    xSimReg->open( areg2, false, true );
     xSimReg->destroy();
     return 0;
 }

@@ -56,11 +56,11 @@ public:
     // XBookmarks
     virtual sal_Int32 SAL_CALL getDefaultSorting() override;
     virtual void SAL_CALL setDefaultSorting( sal_Int32 _type ) override;
-    virtual sal_Bool SAL_CALL getShowHidden() override;
-    virtual void SAL_CALL setShowHidden( sal_Bool _hidden ) override;
+    virtual bool SAL_CALL getShowHidden() override;
+    virtual void SAL_CALL setShowHidden( bool _hidden ) override;
 
     virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rRange ) override;
-    virtual sal_Bool SAL_CALL Exists( const OUString& rName ) override;
+    virtual bool SAL_CALL Exists( const OUString& rName ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBABOOKMARKS_HXX

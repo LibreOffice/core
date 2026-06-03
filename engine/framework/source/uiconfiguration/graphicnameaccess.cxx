@@ -58,14 +58,14 @@ uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
     return m_aSeq;
 }
 
-sal_Bool SAL_CALL GraphicNameAccess::hasByName( const OUString& aName )
+bool SAL_CALL GraphicNameAccess::hasByName( const OUString& aName )
 {
     NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.find( aName );
     return ( pIter != m_aNameToElementMap.end() );
 }
 
 // XElementAccess
-sal_Bool SAL_CALL GraphicNameAccess::hasElements()
+bool SAL_CALL GraphicNameAccess::hasElements()
 {
     return ( !m_aNameToElementMap.empty() );
 }

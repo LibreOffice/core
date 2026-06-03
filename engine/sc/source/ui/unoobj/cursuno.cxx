@@ -179,7 +179,7 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
 
 // XUsedAreaCursor
 
-void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
+void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(bool bExpand)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -206,7 +206,7 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
     SetNewRange( aNewRange );
 }
 
-void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
+void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( bool bExpand )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -397,7 +397,7 @@ OUString SAL_CALL ScCellCursorObj::getImplementationName()
     return u"ScCellCursorObj"_ustr;
 }
 
-sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
+bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

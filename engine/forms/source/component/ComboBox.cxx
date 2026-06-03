@@ -254,7 +254,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
     }
 }
 
-sal_Bool OComboBoxModel::convertFastPropertyValue(
+bool OComboBoxModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
 {
     bool bModified(false);

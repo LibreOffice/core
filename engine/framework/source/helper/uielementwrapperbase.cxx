@@ -129,12 +129,12 @@ void SAL_CALL UIElementWrapperBase::update()
 }
 
 // XPropertySet helper
-sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConvertedValue*/ ,
+bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConvertedValue*/ ,
                                                                   Any&       /*aOldValue*/       ,
                                                                   sal_Int32  /*nHandle*/         ,
                                                                   const Any& /*aValue*/             )
 {
-    //  Initialize state with sal_False !!!
+    //  Initialize state with false !!!
     //  (Handle can be invalid)
     return false;
 }

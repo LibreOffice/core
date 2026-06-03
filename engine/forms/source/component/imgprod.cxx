@@ -336,7 +336,7 @@ OUString ImageProducer::getImplementationName() {
     return u"com.sun.star.form.ImageProducer"_ustr;
 }
 
-sal_Bool ImageProducer::supportsService(OUString const & ServiceName) {
+bool ImageProducer::supportsService(OUString const & ServiceName) {
     return cppu::supportsService(this, ServiceName);
 }
 

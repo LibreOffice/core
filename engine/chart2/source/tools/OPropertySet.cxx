@@ -209,7 +209,7 @@ Sequence< Any > SAL_CALL
     return aResult;
 }
 
-sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
+bool SAL_CALL OPropertySet::convertFastPropertyValue
     ( Any & rConvertedValue,
       Any & rOldValue,
       sal_Int32 nHandle,

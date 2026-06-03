@@ -1519,7 +1519,7 @@ bool SwFrame::IsInSplitButNotYetMovedFollow() const
 /** determine, if frame is moveable in given environment
 
     OD 08.08.2003 #110978#
-    method replaced 'old' method <sal_Bool IsMoveable() const>.
+    method replaced 'old' method <bool IsMoveable() const>.
     Determines, if frame is moveable in given environment. if no environment
     is given (parameter _pLayoutFrame == 0), the movability in the actual
     environment (<GetUpper()) is checked.

@@ -229,13 +229,13 @@ namespace dbaccess
         virtual void SAL_CALL setElementaryQuery( const OUString& _rElementary ) override;
         virtual void SAL_CALL setFilter( const OUString& filter ) override;
         virtual void SAL_CALL setStructuredFilter( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
-        virtual void SAL_CALL appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) override;
+        virtual void SAL_CALL appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
         virtual void SAL_CALL appendGroupByColumn( const css::uno::Reference< css::beans::XPropertySet >& column ) override;
         virtual void SAL_CALL setGroup( const OUString& group ) override;
         virtual void SAL_CALL setHavingClause( const OUString& filter ) override;
         virtual void SAL_CALL setStructuredHavingClause( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
-        virtual void SAL_CALL appendHavingClauseByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) override;
-        virtual void SAL_CALL appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, sal_Bool ascending ) override;
+        virtual void SAL_CALL appendHavingClauseByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
+        virtual void SAL_CALL appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;
         virtual void SAL_CALL setOrder( const OUString& order ) override;
 
         // XSingleSelectQueryAnalyzer

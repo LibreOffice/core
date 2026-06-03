@@ -65,7 +65,7 @@ OUString SAL_CALL OSharedConnection::nativeSQL(const OUString& sql)
     return m_xConnection->nativeSQL(sql);
 }
 
-sal_Bool SAL_CALL OSharedConnection::getAutoCommit()
+bool SAL_CALL OSharedConnection::getAutoCommit()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -89,7 +89,7 @@ void SAL_CALL OSharedConnection::rollback()
     m_xConnection->rollback();
 }
 
-sal_Bool SAL_CALL OSharedConnection::isClosed()
+bool SAL_CALL OSharedConnection::isClosed()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (!m_xConnection.is())
@@ -106,7 +106,7 @@ Reference<XDatabaseMetaData> SAL_CALL OSharedConnection::getMetaData()
     return m_xConnection->getMetaData();
 }
 
-sal_Bool SAL_CALL OSharedConnection::isReadOnly()
+bool SAL_CALL OSharedConnection::isReadOnly()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);

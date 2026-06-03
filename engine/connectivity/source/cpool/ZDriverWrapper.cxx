@@ -81,7 +81,7 @@ namespace connectivity
     }
 
 
-    sal_Bool SAL_CALL ODriverWrapper::acceptsURL( const OUString& url )
+    bool SAL_CALL ODriverWrapper::acceptsURL( const OUString& url )
     {
         return m_xDriver.is() && m_xDriver->acceptsURL(url);
     }

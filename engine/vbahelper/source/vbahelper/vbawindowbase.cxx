@@ -43,14 +43,14 @@ VbaWindowBase::VbaWindowBase( uno::Sequence< uno::Any > const & args,
     construct( getXSomethingFromArgs< frame::XController >( args, 2 ) );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 VbaWindowBase::getVisible()
 {
     return getWindow2()->isVisible();
 }
 
 void SAL_CALL
-VbaWindowBase::setVisible( sal_Bool _visible )
+VbaWindowBase::setVisible( bool _visible )
 {
     getWindow2()->setVisible( _visible );
 }

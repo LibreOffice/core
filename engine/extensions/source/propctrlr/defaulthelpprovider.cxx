@@ -70,7 +70,7 @@ namespace pcr
         return u"org.openoffice.comp.extensions.DefaultHelpProvider"_ustr;
     }
 
-    sal_Bool SAL_CALL DefaultHelpProvider::supportsService(const OUString& aServiceName)
+    bool SAL_CALL DefaultHelpProvider::supportsService(const OUString& aServiceName)
     {
         return cppu::supportsService(this, aServiceName);
     }

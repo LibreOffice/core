@@ -54,7 +54,7 @@ public:
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString & ServiceName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::io::XInputStream:
@@ -94,7 +94,7 @@ OUString SAL_CALL SequenceInputStreamService::getImplementationName()
     return u"com.sun.star.comp.SequenceInputStreamService"_ustr;
 }
 
-sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName )
+bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }

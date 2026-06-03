@@ -86,14 +86,14 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
                         Elements you have already gotten are not accessible!
 
             @seealso    interface XEnumeration
-            @return     sal_True  = if more elements accessible<BR>
-                        sal_False = other way
+            @return     true  = if more elements accessible<BR>
+                        false = other way
 
-            @onerror    sal_False<BR>
+            @onerror    false<BR>
                         (List is empty and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasMoreElements() override;
+        virtual bool SAL_CALL hasMoreElements() override;
 
         /*-****************************************************************************************************
             @short      give the next element, if some exist
@@ -146,8 +146,8 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
             @seealso    ASSERT in implementation!
 
             @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
+            @return     false on invalid parameter<BR>
+                        true  otherway
         *//*-*****************************************************************************************************/
 
         sal_uInt32                                                       m_nPosition;   /// current position in enumeration

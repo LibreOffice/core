@@ -90,7 +90,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XNamed
@@ -98,8 +98,8 @@ public:
     virtual void SAL_CALL setName( const OUString& aName ) override;
 
     // XStyle
-    virtual sal_Bool SAL_CALL isUserDefined(  ) override;
-    virtual sal_Bool SAL_CALL isInUse(  ) override;
+    virtual bool SAL_CALL isUserDefined(  ) override;
+    virtual bool SAL_CALL isInUse(  ) override;
     virtual OUString SAL_CALL getParentStyle(  ) override;
     virtual void SAL_CALL setParentStyle( const OUString& aParentStyle ) override;
 

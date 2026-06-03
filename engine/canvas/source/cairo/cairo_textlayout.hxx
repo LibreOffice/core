@@ -60,14 +60,14 @@ namespace cairocanvas
         virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) override;
         virtual css::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) override;
         virtual void SAL_CALL applyLogicalAdvancements( const css::uno::Sequence< double >& aAdvancements ) override;
-        virtual css::uno::Sequence< sal_Bool > SAL_CALL queryKashidaPositions(  ) override;
-        virtual void SAL_CALL applyKashidaPositions( const css::uno::Sequence< sal_Bool >& aPositions ) override;
+        virtual css::uno::Sequence< bool > SAL_CALL queryKashidaPositions(  ) override;
+        virtual void SAL_CALL applyKashidaPositions( const css::uno::Sequence< bool >& aPositions ) override;
         virtual css::geometry::RealRectangle2D SAL_CALL queryTextBounds(  ) override;
         virtual double SAL_CALL justify( double nSize ) override;
         virtual double SAL_CALL combinedJustify( const css::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
         virtual css::rendering::TextHit SAL_CALL getTextHit( const css::geometry::RealPoint2D& aHitPoint ) override;
-        virtual css::rendering::Caret SAL_CALL getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) override;
-        virtual sal_Int32 SAL_CALL getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures ) override;
+        virtual css::rendering::Caret SAL_CALL getCaret( sal_Int32 nInsertionIndex, bool bExcludeLigatures ) override;
+        virtual sal_Int32 SAL_CALL getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, bool bExcludeLigatures ) override;
         virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual double SAL_CALL getBaselineOffset(  ) override;
@@ -77,7 +77,7 @@ namespace cairocanvas
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         void draw( OutputDevice&                                   rOutDev,
@@ -96,7 +96,7 @@ namespace cairocanvas
     private:
         css::rendering::StringContext              maText;
         css::uno::Sequence< double >               maLogicalAdvancements;
-        css::uno::Sequence< sal_Bool >             maKashidaPositions;
+        css::uno::Sequence< bool >             maKashidaPositions;
         CanvasFont::Reference                      mpFont;
         SurfaceProviderRef                         mpRefDevice;
         sal_Int8                                   mnTextDirection;

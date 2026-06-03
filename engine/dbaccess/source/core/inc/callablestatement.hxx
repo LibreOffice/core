@@ -54,9 +54,9 @@ namespace dbaccess
         virtual void SAL_CALL registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) override;
 
     // css::sdbc::XRow
-        virtual sal_Bool SAL_CALL wasNull(  ) override;
+        virtual bool SAL_CALL wasNull(  ) override;
         virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
-        virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
+        virtual bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
         virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) override;
         virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) override;
         virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) override;

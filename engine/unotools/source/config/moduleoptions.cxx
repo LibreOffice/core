@@ -587,7 +587,7 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
     @short      helper to classify given factory by name
     @descr      Every factory has its own long and short name. So we can match right enum value for internal using.
 
-    @attention  We change in/out parameter "eFactory" in every case! But you should use it only, if return value is sal_True!
+    @attention  We change in/out parameter "eFactory" in every case! But you should use it only, if return value is true!
                 Algorithm:  Set out-parameter to probably value ... and check the longname.
                             If it matches with these factory - break operation and return true AND right set parameter.
                             Otherwise try next one and so on. If no factory was found return false. Out parameter eFactory
@@ -742,7 +742,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     for (OUString& rFactory : asNonConstRange(lFactories))
         rFactory += PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
 
-    css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);
+    css::uno::Sequence< bool > lReadonlyStates = GetReadOnlyStates(lFactories);
     sal_Int32 c = lFactories.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {

@@ -119,7 +119,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:     // bool
         {
             bool bValue;
             bool bSuccess =

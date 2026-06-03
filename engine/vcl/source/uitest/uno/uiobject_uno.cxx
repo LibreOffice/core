@@ -192,7 +192,7 @@ OUString SAL_CALL UIObjectUnoObj::getImplementationName()
     return u"org.libreoffice.uitest.UIObject"_ustr;
 }
 
-sal_Bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
+bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -208,7 +208,7 @@ OUString SAL_CALL UIObjectUnoObj::getHierarchy()
     return mpObj->dumpHierarchy();
 }
 
-sal_Bool SAL_CALL UIObjectUnoObj::equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther)
+bool SAL_CALL UIObjectUnoObj::equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther)
 {
     return mpObj->equals(*static_cast<UIObjectUnoObj&>(*rOther).mpObj);
 }

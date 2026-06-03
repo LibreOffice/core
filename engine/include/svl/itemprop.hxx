@@ -165,7 +165,7 @@ public:
     virtual css::beans::Property SAL_CALL
         getPropertyByName( const OUString& aName ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasPropertyByName( const OUString& Name ) override;
 
 };
@@ -195,7 +195,7 @@ public:
     virtual css::beans::Property SAL_CALL
         getPropertyByName( const OUString& aName ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         hasPropertyByName( const OUString& Name ) override;
 
 private:

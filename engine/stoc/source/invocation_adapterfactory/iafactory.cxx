@@ -93,7 +93,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInvocationAdapterFactory
@@ -854,7 +854,7 @@ OUString FactoryImpl::getImplementationName()
     return u"com.sun.star.comp.stoc.InvocationAdapterFactory"_ustr;
 }
 
-sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
+bool FactoryImpl::supportsService( const OUString & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

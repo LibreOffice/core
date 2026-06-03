@@ -70,7 +70,7 @@ public:
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  mxIndexAccess->getElementType(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override { return mxIndexAccess->hasElements(); }
+    virtual bool SAL_CALL hasElements(  ) override { return mxIndexAccess->hasElements(); }
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
@@ -82,7 +82,7 @@ public:
     {
         return mxNameAccess->getElementNames();
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         if( mxNameAccess->hasByName( aName ) )
         {
@@ -197,19 +197,19 @@ SwVbaBookmarks::setDefaultSorting( sal_Int32/* _type*/ )
     // not support in Writer
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwVbaBookmarks::getShowHidden()
 {
     return true;
 }
 
 void SAL_CALL
-SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ )
+SwVbaBookmarks::setShowHidden( bool /*_hidden*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwVbaBookmarks::Exists( const OUString& rName )
 {
     bool bExist = m_xNameAccess->hasByName( rName );

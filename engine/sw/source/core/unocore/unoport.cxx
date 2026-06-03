@@ -828,7 +828,7 @@ OUString SwXTextPortion::getImplementationName()
     return { u"SwXTextPortion"_ustr };
 }
 
-sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName)
+bool SwXTextPortion::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

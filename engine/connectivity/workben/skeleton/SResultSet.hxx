@@ -75,15 +75,15 @@ namespace connectivity::skeleton
         rtl_TextEncoding                            m_nTextEncoding;
         sal_Int32                                   m_nRowPos;
         sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
-        sal_Bool                                    m_bWasNull;
-        sal_Bool                                    m_bBOF;                 // before first record
-        sal_Bool                                    m_bEOF;                 // after last record
-        sal_Bool                                    m_bLastRecord;
-        sal_Bool                                    m_bFreeHandle;
-        sal_Bool                                    m_bInserting;
-        sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
+        bool                                    m_bWasNull;
+        bool                                    m_bBOF;                 // before first record
+        bool                                    m_bEOF;                 // after last record
+        bool                                    m_bLastRecord;
+        bool                                    m_bFreeHandle;
+        bool                                    m_bInserting;
+        bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
 
-        sal_Bool  isBookmarkable()          const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        bool  isBookmarkable()          const throw(css::sdbc::SQLException, css::uno::RuntimeException);
         sal_Int32 getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException);
         sal_Int32 getResultSetType()        const throw(css::sdbc::SQLException, css::uno::RuntimeException);
         sal_Int32 getFetchDirection()       const throw(css::sdbc::SQLException, css::uno::RuntimeException);
@@ -95,7 +95,7 @@ namespace connectivity::skeleton
 
 
         void fillRow(sal_Int32 _nToColumn);
-        void allocBuffer(sal_Bool _bAllocRow);
+        void allocBuffer(bool _bAllocRow);
         void releaseBuffer();
 
 
@@ -104,7 +104,7 @@ namespace connectivity::skeleton
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        virtual bool SAL_CALL convertFastPropertyValue(
                             css::uno::Any & rConvertedValue,
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
@@ -144,28 +144,28 @@ namespace connectivity::skeleton
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
         // XResultSet
-        virtual sal_Bool SAL_CALL next(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isBeforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isAfterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL next(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL isBeforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL isAfterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL isFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL isLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual void SAL_CALL beforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual void SAL_CALL afterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL first(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL last(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL first(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL last(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL absolute( sal_Int32 row ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL relative( sal_Int32 rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL previous(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL absolute( sal_Int32 row ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL relative( sal_Int32 rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL previous(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual void SAL_CALL refreshRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL rowUpdated(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL rowInserted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL rowDeleted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL rowUpdated(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL rowInserted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL rowDeleted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         // XRow
-        virtual sal_Bool SAL_CALL wasNull(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL wasNull(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
@@ -201,7 +201,7 @@ namespace connectivity::skeleton
         virtual void SAL_CALL moveToCurrentRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         // XRowUpdate
         virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, bool x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
@@ -221,10 +221,10 @@ namespace connectivity::skeleton
         virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         // XRowLocate
         virtual css::uno::Any SAL_CALL getBookmark(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        virtual bool SAL_CALL hasOrderedBookmarks(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         // XDeleteRows
         virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException);

@@ -630,7 +630,7 @@ Sequence< OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
    return {};
 }
 
-sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
+bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
 {
     std::unique_lock          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
@@ -661,7 +661,7 @@ Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
         return cppu::UnoType<XInputStream>::get();
 }
 
-sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
+bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
 {
     std::unique_lock          aGuard( m_aMutex );
     if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )

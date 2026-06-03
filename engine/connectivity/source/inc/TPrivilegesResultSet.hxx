@@ -39,7 +39,7 @@ namespace connectivity
         // ::comphelper::WeakComponentImplHelper
         virtual void disposing(std::unique_lock<std::mutex>&) override;
         // XResultSet
-        virtual sal_Bool SAL_CALL next(  ) override;
+        virtual bool SAL_CALL next(  ) override;
     };
 }
 

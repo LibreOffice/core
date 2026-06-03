@@ -55,15 +55,15 @@ public:
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;
     virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() override;
-    virtual sal_Bool SAL_CALL getBubbles() override;
-    virtual sal_Bool SAL_CALL getCancelable() override;
+    virtual bool SAL_CALL getBubbles() override;
+    virtual bool SAL_CALL getCancelable() override;
     virtual css::util::Time SAL_CALL getTimeStamp() override;
     virtual void SAL_CALL stopPropagation() override;
     virtual void SAL_CALL preventDefault() override;
     virtual void SAL_CALL initEvent(
         const OUString& eventTypeArg,
-        sal_Bool canBubbleArg,
-        sal_Bool cancelableArg) override;
+        bool canBubbleArg,
+        bool cancelableArg) override;
 };
 }
 

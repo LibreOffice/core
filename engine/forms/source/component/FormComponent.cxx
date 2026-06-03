@@ -212,7 +212,7 @@ void OControl::disposing()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName)
+bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName)
 {
     return cppu::supportsService(this, _rsServiceName);
 }
@@ -293,7 +293,7 @@ Reference<XWindowPeer> SAL_CALL OControl::getPeer()
     return m_xControl.is() ? m_xControl->getPeer() : Reference<XWindowPeer>();
 }
 
-sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model)
+bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model)
 {
     if ( !m_xControl.is() )
         return false;
@@ -313,18 +313,18 @@ Reference<XView> SAL_CALL OControl::getView()
     return m_xControl.is() ? m_xControl->getView() : Reference<XView>();
 }
 
-void SAL_CALL OControl::setDesignMode(sal_Bool bOn)
+void SAL_CALL OControl::setDesignMode(bool bOn)
 {
     if (m_xControl.is())
         m_xControl->setDesignMode(bOn);
 }
 
-sal_Bool SAL_CALL OControl::isDesignMode()
+bool SAL_CALL OControl::isDesignMode()
 {
     return !m_xControl.is() || m_xControl->isDesignMode();
 }
 
-sal_Bool SAL_CALL OControl::isTransparent()
+bool SAL_CALL OControl::isTransparent()
 {
     return !m_xControl.is() || m_xControl->isTransparent();
 }
@@ -365,12 +365,12 @@ Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType)
     return aReturn;
 }
 
-sal_Bool SAL_CALL OBoundControl::getLock()
+bool SAL_CALL OBoundControl::getLock()
 {
     return m_bLocked;
 }
 
-void SAL_CALL OBoundControl::setLock(sal_Bool _bLock)
+void SAL_CALL OBoundControl::setLock(bool _bLock)
 {
     if (m_bLocked == bool(_bLock))
         return;
@@ -397,7 +397,7 @@ void OBoundControl::_setLock(bool _bLock)
     }
 }
 
-sal_Bool SAL_CALL OBoundControl::setModel( const Reference< XControlModel >& _rxModel )
+bool SAL_CALL OBoundControl::setModel( const Reference< XControlModel >& _rxModel )
 {
     return OControl::setModel( _rxModel );
 }
@@ -668,7 +668,7 @@ void SAL_CALL OControlModel::setName(const OUString& _rName)
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -936,7 +936,7 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
     }
 }
 
-sal_Bool OControlModel::convertFastPropertyValue(
+bool OControlModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
 {
     bool bModified(false);
@@ -1032,7 +1032,7 @@ void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) con
     *pProperties++ = css::beans::Property(PROPERTY_STANDARD_THEME, PROPERTY_ID_STANDARD_THEME, cppu::UnoType<bool>::get(),
                                           css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_TAG, PROPERTY_ID_TAG, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
-    *pProperties++ = css::beans::Property(PROPERTY_GENERATEVBAEVENTS, PROPERTY_ID_GENERATEVBAEVENTS, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::TRANSIENT);
+    *pProperties++ = css::beans::Property(PROPERTY_GENERATEVBAEVENTS, PROPERTY_ID_GENERATEVBAEVENTS, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::TRANSIENT);
     *pProperties++ = css::beans::Property(PROPERTY_CONTROL_TYPE_IN_MSO, PROPERTY_ID_CONTROL_TYPE_IN_MSO, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_OBJ_ID_IN_MSO, PROPERTY_ID_OBJ_ID_IN_MSO, cppu::UnoType<cppu::UnoUnsignedShortType>::get(), css::beans::PropertyAttribute::BOUND);
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");
@@ -1650,7 +1650,7 @@ void OBoundControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
     }
 }
 
-sal_Bool OBoundControlModel::convertFastPropertyValue(
+bool OBoundControlModel::convertFastPropertyValue(
                                 Any& _rConvertedValue, Any& _rOldValue,
                 sal_Int32 _nHandle,
                                 const Any& _rValue)
@@ -1862,7 +1862,7 @@ void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateL
     m_aUpdateListeners.removeInterface(_rxListener);
 }
 
-sal_Bool SAL_CALL OBoundControlModel::commit()
+bool SAL_CALL OBoundControlModel::commit()
 {
     ControlModelLock aLock( *this );
     OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not committable!) " );
@@ -2752,7 +2752,7 @@ void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& 
     recheckValidity( false );
 }
 
-sal_Bool SAL_CALL OBoundControlModel::isValid(  )
+bool SAL_CALL OBoundControlModel::isValid(  )
 {
     return m_bIsCurrentValueValid;
 }

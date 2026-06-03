@@ -88,7 +88,7 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
     returned by component_getImplementationEnvironment)
     @return true if everything went fine
 */
-typedef sal_Bool (SAL_CALL * component_writeInfoFunc)(
+typedef bool (SAL_CALL * component_writeInfoFunc)(
     void * pServiceManager, void * pRegistryKey );
 
 /** Function pointer declaration.

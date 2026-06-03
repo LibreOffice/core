@@ -146,7 +146,7 @@ public:
         return u"com.sun.star.comp.framework.PathSubstitution"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -157,7 +157,7 @@ public:
     }
 
     // XStringSubstitution
-    virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired ) override;
+    virtual OUString SAL_CALL substituteVariables( const OUString& aText, bool bSubstRequired ) override;
     virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) override;
     virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) override;
 
@@ -240,7 +240,7 @@ void SAL_CALL SubstitutePathVariables::initialize(const css::uno::Sequence<css::
 }
 
 // XStringSubstitution
-OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
+OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, bool bSubstRequired )
 {
     std::unique_lock g(m_aMutex);
     return impl_substituteVariable( aText, bSubstRequired );

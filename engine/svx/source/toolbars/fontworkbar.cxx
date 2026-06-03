@@ -296,7 +296,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
         {
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_KERN_CHARACTER_PAIRS ) == SfxItemState::SET ) )
             {
-                // sal_Bool bKernCharacterPairs = ((const SfxBoolItem*)rReq.GetArgs()->GetItem(SID_FONTWORK_KERN_CHARACTER_PAIRS))->GetValue();
+                // bool bKernCharacterPairs = ((const SfxBoolItem*)rReq.GetArgs()->GetItem(SID_FONTWORK_KERN_CHARACTER_PAIRS))->GetValue();
 //TODO:             pObj->SetMergedItem( SvxCharScaleWidthItem( (sal_uInt16)nCharSpacing, EE_CHAR_FONTWIDTH ) );
                 pObj->BroadcastObjectChange();
             }
@@ -464,7 +464,7 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
                         pObj->BroadcastObjectChange();
                         if (bUndo)
                             rSdrView.EndUndo();
-                        rSdrView.AdjustMarkHdl(); //HMH sal_True );
+                        rSdrView.AdjustMarkHdl(); //HMH true );
                         rBindings.Invalidate( SID_FONTWORK_SHAPE_TYPE );
                     }
                 }

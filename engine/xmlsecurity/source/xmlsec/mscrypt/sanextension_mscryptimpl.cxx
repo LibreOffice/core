@@ -48,7 +48,7 @@ SanExtensionImpl::~SanExtensionImpl() {
 
 
 //Methods from XCertificateExtension
-sal_Bool SAL_CALL SanExtensionImpl::isCritical() {
+bool SAL_CALL SanExtensionImpl::isCritical() {
     return m_critical ;
 }
 

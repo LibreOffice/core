@@ -121,10 +121,10 @@ public:
     virtual css::uno::Sequence< css::sheet::SolverConstraint > SAL_CALL getConstraints() override;
     virtual void SAL_CALL   setConstraints( const css::uno::Sequence<
                                     css::sheet::SolverConstraint >& _constraints ) override;
-    virtual sal_Bool SAL_CALL getMaximize() override;
-    virtual void SAL_CALL   setMaximize( sal_Bool _maximize ) override;
+    virtual bool SAL_CALL getMaximize() override;
+    virtual void SAL_CALL   setMaximize( bool _maximize ) override;
 
-    virtual sal_Bool SAL_CALL getSuccess() override;
+    virtual bool SAL_CALL getSuccess() override;
     virtual double SAL_CALL getResultValue() override;
     virtual css::uno::Sequence< double > SAL_CALL getSolution() override;
 
@@ -137,7 +137,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

@@ -41,9 +41,9 @@ class VCLXDevice;
 
 // relevant properties for the printer:
 /*
-     sal_Bool   Horizontal
+     bool   Horizontal
      sal_uInt16 CopyCount;
-     sal_Bool   Collate;
+     bool   Collate;
      String FormDescriptor;
      sal_uInt16 Orientation;    // PORTRAIT, LANDSCAPE
 */
@@ -87,13 +87,13 @@ public:
 
     // ::cppu::OPropertySetHelper
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-    sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
     using cppu::OPropertySetHelper::getFastPropertyValue;
     void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // css::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) override;
+    void SAL_CALL setHorizontal( bool bHorizontal ) override;
     css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override;
     void SAL_CALL selectForm( const OUString& aFormDescription ) override;
     css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override;
@@ -124,14 +124,14 @@ public:
     void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // css::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
+    void SAL_CALL setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
     css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
     void SAL_CALL selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
     css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
     void SAL_CALL setBinarySetup( const css::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
     // css::awt::XPrinter
-    sal_Bool SAL_CALL start( const OUString& nJobName, sal_Int16 nCopies, sal_Bool nCollate ) override;
+    bool SAL_CALL start( const OUString& nJobName, sal_Int16 nCopies, bool nCollate ) override;
     void SAL_CALL end(  ) override;
     void SAL_CALL terminate(  ) override;
     css::uno::Reference< css::awt::XDevice > SAL_CALL startPage(  ) override;
@@ -160,7 +160,7 @@ public:
     void SAL_CALL removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // css::awt::XPrinterPropertySet
-    void SAL_CALL setHorizontal( sal_Bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
+    void SAL_CALL setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
     css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
     void SAL_CALL selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
     css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
@@ -187,7 +187,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

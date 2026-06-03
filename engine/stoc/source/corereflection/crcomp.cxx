@@ -211,7 +211,7 @@ CompoundIdlClassImpl::~CompoundIdlClassImpl()
 }
 
 
-sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
+bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
 {
     if (xType.is())
     {

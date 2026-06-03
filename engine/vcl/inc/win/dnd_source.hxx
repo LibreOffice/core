@@ -89,7 +89,7 @@ public:
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
     // XDragSource
-    virtual sal_Bool SAL_CALL isDragImageSupported(  ) override;
+    virtual bool SAL_CALL isDragImageSupported(  ) override;
     virtual sal_Int32 SAL_CALL getDefaultCursor( sal_Int8 dragAction ) override;
     virtual void SAL_CALL startDrag( const DragGestureEvent& trigger,
                                      sal_Int8 sourceActions,
@@ -100,7 +100,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(

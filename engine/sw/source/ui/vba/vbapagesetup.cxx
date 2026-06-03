@@ -133,7 +133,7 @@ void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance )
     mxPageProps->setPropertyValue(u"FooterHeight"_ustr, uno::Any( newFooterHeight ) );
 }
 
-sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter()
+bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter()
 {
     OUString pageStyle = getStyleOfFirstPage();
     if ( pageStyle == "First Page" )
@@ -142,7 +142,7 @@ sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter()
     return false;
 }
 
-void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status )
+void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( bool status )
 {
     if( status == getDifferentFirstPageHeaderFooter() )
         return;

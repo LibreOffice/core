@@ -571,7 +571,7 @@ bool ScAccessibleCell::IsDropdown() const
                 ScRange aRange = aRanges[i];
                 mpDoc->ExtendTotalMerge( aRange );
                 bool bTextBelow = ( aRange.aStart.Row() == 0 );
-                // MT IA2: Not used: sal_Bool bIsInScen = sal_False;
+                // MT IA2: Not used: bool bIsInScen = false;
                 if ( bTextBelow )
                 {
                     bHasScenario = (aRange.aStart.Col() == nPosX && aRange.aEnd.Row() == nPosY-1);

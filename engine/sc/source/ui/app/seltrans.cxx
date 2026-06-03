@@ -275,8 +275,8 @@ void ScSelectionTransferObj::CreateCellData()
             ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
 
             ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
-            // bApi = sal_True -> no error messages
-            // #i18364# bStopEdit = sal_False -> don't end edit mode
+            // bApi = true -> no error messages
+            // #i18364# bStopEdit = false -> don't end edit mode
             // (this may be called from pasting into the edit line)
             bool bCopied = rViewData.GetView()->CopyToClip( pClipDoc.get(), false, true, true, false );
 
@@ -413,7 +413,7 @@ void ScSelectionTransferObj::ObjectReleased()
     TransferableHelper::ObjectReleased();
 }
 
-sal_Bool SAL_CALL ScSelectionTransferObj::isComplex()
+bool SAL_CALL ScSelectionTransferObj::isComplex()
 {
     switch (eMode)
     {

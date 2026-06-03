@@ -121,7 +121,7 @@ QtDragSource::QtDragSource(QtFrame* pFrame)
 
 QtDragSource::~QtDragSource() {}
 
-sal_Bool QtDragSource::isDragImageSupported() { return true; }
+bool QtDragSource::isDragImageSupported() { return true; }
 
 sal_Int32 QtDragSource::getDefaultCursor(sal_Int8) { return 0; }
 
@@ -168,7 +168,7 @@ OUString SAL_CALL QtDragSource::getImplementationName()
     return u"com.sun.star.datatransfer.dnd.VclQtDragSource"_ustr;
 }
 
-sal_Bool SAL_CALL QtDragSource::supportsService(OUString const& ServiceName)
+bool SAL_CALL QtDragSource::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -188,7 +188,7 @@ OUString SAL_CALL QtDropTarget::getImplementationName()
     return u"com.sun.star.datatransfer.dnd.VclQtDropTarget"_ustr;
 }
 
-sal_Bool SAL_CALL QtDropTarget::supportsService(OUString const& ServiceName)
+bool SAL_CALL QtDropTarget::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -258,7 +258,7 @@ void QtDropTarget::acceptDrop(sal_Int8 dropOperation) { m_nDropAction = dropOper
 
 void QtDropTarget::rejectDrop() { m_nDropAction = 0; }
 
-void QtDropTarget::dropComplete(sal_Bool success)
+void QtDropTarget::dropComplete(bool success)
 {
     m_bDropSuccessful = (m_bDropSuccessful && success);
 }

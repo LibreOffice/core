@@ -91,17 +91,17 @@ public:
 
     // XServiceInfo
     OUString               SAL_CALL getImplementationName() override;
-    sal_Bool               SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool               SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >   SAL_CALL getSupportedServiceNames() override;
 
     //XNameAccess
     virtual Any SAL_CALL getByName(const OUString& aName) override;
     virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) override;
+    virtual bool SAL_CALL hasByName(const OUString& aName) override;
 
     //XElementAccess
     virtual Type  SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     //XPropertySet
     virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() override;
@@ -143,7 +143,7 @@ OUString BibliographyLoader::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool BibliographyLoader::supportsService(const OUString& ServiceName)
+bool BibliographyLoader::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -471,7 +471,7 @@ Sequence< OUString > BibliographyLoader::getElementNames()
     return aRet;
 }
 
-sal_Bool BibliographyLoader::hasByName(const OUString& rName)
+bool BibliographyLoader::hasByName(const OUString& rName)
 {
     bool bRet = false;
     try
@@ -505,7 +505,7 @@ Type  BibliographyLoader::getElementType()
     return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
-sal_Bool BibliographyLoader::hasElements()
+bool BibliographyLoader::hasElements()
 {
     Reference< XNameAccess >  xColumns = GetDataColumns();
     return xColumns.is() && xColumns->getElementNames().hasElements();

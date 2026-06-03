@@ -83,7 +83,7 @@ Type SAL_CALL OComponentAccess::getElementType()
 }
 
 //  XElementAccess
-sal_Bool SAL_CALL OComponentAccess::hasElements()
+bool SAL_CALL OComponentAccess::hasElements()
 {
     SolarMutexGuard g;
 

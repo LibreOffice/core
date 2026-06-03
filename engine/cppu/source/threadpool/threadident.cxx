@@ -84,7 +84,7 @@ extern "C" void SAL_CALL uno_releaseIdFromCurrentThread() noexcept
     }
 }
 
-extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId ) noexcept
+extern "C" bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId ) noexcept
 {
     IdContainer& id = getIdContainer();
     if (!id.bInit)

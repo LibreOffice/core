@@ -176,7 +176,7 @@ OUString SAL_CALL UnoControlTabPage::getImplementationName()
     return u"stardiv.Toolkit.UnoControlTabPage"_ustr;
 }
 
-sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)
+bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

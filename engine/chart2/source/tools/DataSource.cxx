@@ -66,7 +66,7 @@ OUString SAL_CALL DataSource::getImplementationName()
     return u"com.sun.star.comp.chart.DataSource"_ustr;
 }
 
-sal_Bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
+bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

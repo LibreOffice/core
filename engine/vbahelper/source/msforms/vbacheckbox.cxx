@@ -108,22 +108,22 @@ void SAL_CALL ScVbaCheckbox::setBackColor( sal_Int32 nBackColor )
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Bool SAL_CALL ScVbaCheckbox::getAutoSize()
+bool SAL_CALL ScVbaCheckbox::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaCheckbox::setAutoSize( sal_Bool bAutoSize )
+void SAL_CALL ScVbaCheckbox::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaCheckbox::getLocked()
+bool SAL_CALL ScVbaCheckbox::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaCheckbox::setLocked( sal_Bool bLocked )
+void SAL_CALL ScVbaCheckbox::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }

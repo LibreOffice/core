@@ -34,18 +34,18 @@ public:
    // Attributes
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;
-    virtual sal_Bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
-    virtual sal_Bool SAL_CALL getCancel() override;
-    virtual void SAL_CALL setCancel( sal_Bool bCancel ) override;
-    virtual sal_Bool SAL_CALL getDefault() override;
-    virtual void SAL_CALL setDefault( sal_Bool bDefault ) override;
+    virtual bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
+    virtual bool SAL_CALL getCancel() override;
+    virtual void SAL_CALL setCancel( bool bCancel ) override;
+    virtual bool SAL_CALL getDefault() override;
+    virtual void SAL_CALL setDefault( bool bDefault ) override;
     virtual sal_Int32 SAL_CALL getBackColor() override;
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
     virtual sal_Int32 SAL_CALL getForeColor() override;
     virtual void SAL_CALL setForeColor( sal_Int32 nForeColor ) override;
-    virtual sal_Bool SAL_CALL getLocked() override;
-    virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) override;
+    virtual bool SAL_CALL getLocked() override;
+    virtual void SAL_CALL setLocked( bool bAutoSize ) override;
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;

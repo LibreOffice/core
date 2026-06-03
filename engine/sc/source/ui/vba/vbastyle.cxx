@@ -92,7 +92,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaStyle::BuiltIn()
 {
     return !mxStyle->isUserDefined();

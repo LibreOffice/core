@@ -76,27 +76,27 @@ public:
     virtual void SAL_CALL setText( const OUString& _text ) override;
     virtual css::uno::Any SAL_CALL getReplacement() override;
     virtual void SAL_CALL setReplacement( const css::uno::Any& _replacement ) override;
-    virtual sal_Bool SAL_CALL getForward() override;
-    virtual void SAL_CALL setForward( sal_Bool _forward ) override;
+    virtual bool SAL_CALL getForward() override;
+    virtual void SAL_CALL setForward( bool _forward ) override;
     virtual ::sal_Int32 SAL_CALL getWrap() override;
     virtual void SAL_CALL setWrap( ::sal_Int32 _wrap ) override;
-    virtual sal_Bool SAL_CALL getFormat() override;
-    virtual void SAL_CALL setFormat( sal_Bool _format ) override;
-    virtual sal_Bool SAL_CALL getMatchCase() override;
-    virtual void SAL_CALL setMatchCase( sal_Bool _matchcase ) override;
-    virtual sal_Bool SAL_CALL getMatchWholeWord() override;
-    virtual void SAL_CALL setMatchWholeWord( sal_Bool _matchwholeword ) override;
-    virtual sal_Bool SAL_CALL getMatchWildcards() override;
-    virtual void SAL_CALL setMatchWildcards( sal_Bool _matchwildcards ) override;
-    virtual sal_Bool SAL_CALL getMatchSoundsLike() override;
-    virtual void SAL_CALL setMatchSoundsLike( sal_Bool _matchsoundslike ) override;
-    virtual sal_Bool SAL_CALL getMatchAllWordForms() override;
-    virtual void SAL_CALL setMatchAllWordForms( sal_Bool _matchallwordforms ) override;
+    virtual bool SAL_CALL getFormat() override;
+    virtual void SAL_CALL setFormat( bool _format ) override;
+    virtual bool SAL_CALL getMatchCase() override;
+    virtual void SAL_CALL setMatchCase( bool _matchcase ) override;
+    virtual bool SAL_CALL getMatchWholeWord() override;
+    virtual void SAL_CALL setMatchWholeWord( bool _matchwholeword ) override;
+    virtual bool SAL_CALL getMatchWildcards() override;
+    virtual void SAL_CALL setMatchWildcards( bool _matchwildcards ) override;
+    virtual bool SAL_CALL getMatchSoundsLike() override;
+    virtual void SAL_CALL setMatchSoundsLike( bool _matchsoundslike ) override;
+    virtual bool SAL_CALL getMatchAllWordForms() override;
+    virtual void SAL_CALL setMatchAllWordForms( bool _matchallwordforms ) override;
     virtual css::uno::Any SAL_CALL getStyle() override;
     virtual void SAL_CALL setStyle( const css::uno::Any& _style ) override;
 
     // Methods
-    virtual sal_Bool SAL_CALL Execute( const css::uno::Any& FindText, const css::uno::Any& MatchCase, const css::uno::Any& MatchWholeWord, const css::uno::Any& MatchWildcards, const css::uno::Any& MatchSoundsLike, const css::uno::Any& MatchAllWordForms, const css::uno::Any& Forward, const css::uno::Any& Wrap, const css::uno::Any& Format, const css::uno::Any& ReplaceWith, const css::uno::Any& Replace, const css::uno::Any& MatchKashida, const css::uno::Any& MatchDiacritics, const css::uno::Any& MatchAlefHamza, const css::uno::Any& MatchControl, const css::uno::Any& MatchPrefix, const css::uno::Any& MatchSuffix, const css::uno::Any& MatchPhrase, const css::uno::Any& IgnoreSpace, const css::uno::Any& IgnorePunct ) override;
+    virtual bool SAL_CALL Execute( const css::uno::Any& FindText, const css::uno::Any& MatchCase, const css::uno::Any& MatchWholeWord, const css::uno::Any& MatchWildcards, const css::uno::Any& MatchSoundsLike, const css::uno::Any& MatchAllWordForms, const css::uno::Any& Forward, const css::uno::Any& Wrap, const css::uno::Any& Format, const css::uno::Any& ReplaceWith, const css::uno::Any& Replace, const css::uno::Any& MatchKashida, const css::uno::Any& MatchDiacritics, const css::uno::Any& MatchAlefHamza, const css::uno::Any& MatchControl, const css::uno::Any& MatchPrefix, const css::uno::Any& MatchSuffix, const css::uno::Any& MatchPhrase, const css::uno::Any& IgnoreSpace, const css::uno::Any& IgnorePunct ) override;
     virtual void SAL_CALL ClearFormatting(  ) override;
 
     // XHelperInterface

@@ -42,7 +42,7 @@ public:
     virtual ~QtDragSource() override;
 
     // XDragSource
-    virtual sal_Bool SAL_CALL isDragImageSupported() override;
+    virtual bool SAL_CALL isDragImageSupported() override;
     virtual sal_Int32 SAL_CALL getDefaultCursor(sal_Int8 dragAction) override;
     virtual void SAL_CALL startDrag(
         const css::datatransfer::dnd::DragGestureEvent& trigger, sal_Int8 sourceActions,
@@ -52,7 +52,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
+    bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -81,11 +81,11 @@ public:
     // XDropTargetDropContext
     virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) override;
     virtual void SAL_CALL rejectDrop() override;
-    virtual void SAL_CALL dropComplete(sal_Bool success) override;
+    virtual void SAL_CALL dropComplete(bool success) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
+    bool SAL_CALL supportsService(OUString const& ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void handleDragEnterEvent(QDragEnterEvent& rEvent, qreal fScaleFactor = 1.0);

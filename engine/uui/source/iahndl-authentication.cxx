@@ -237,7 +237,7 @@ handleAuthenticationRequest_(
     }
 
     bool bCanUseSystemCredentials;
-    sal_Bool bDefaultUseSystemCredentials;
+    bool bDefaultUseSystemCredentials;
     if (xSupplyAuthentication2.is())
     {
         bCanUseSystemCredentials

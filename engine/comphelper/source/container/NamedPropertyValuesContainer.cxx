@@ -49,15 +49,15 @@ public:
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
@@ -124,7 +124,7 @@ css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElement
     return comphelper::mapKeysToSequence(maProperties);
 }
 
-sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )
+bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     return aIter != maProperties.end();
@@ -136,7 +136,7 @@ css::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
-sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
+bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
 {
     return !maProperties.empty();
 }
@@ -147,7 +147,7 @@ OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  )
     return u"NamedPropertyValuesContainer"_ustr;
 }
 
-sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName )
+bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

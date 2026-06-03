@@ -44,7 +44,7 @@ public:
         uno::Reference< container::XNameAccess > xNameAccess = m_pCBarHelper->getPersistentWindowState();
         m_sNames = xNameAccess->getElementNames();
     }
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     {
         return m_nCurrentPosition < m_sNames.getLength();
     }
@@ -156,7 +156,7 @@ uno::Reference< XCommandBar > SAL_CALL
 ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Position*/, const css::uno::Any& /*MenuBar*/, const css::uno::Any& /*Temporary*/ )
 {
     // FIXME: only support to add Toolbar
-    // Position - MsoBar MenuBar - sal_Bool
+    // Position - MsoBar MenuBar - bool
     // Currently only the Name is supported.
     OUString sName;
     if( Name.hasValue() )

@@ -46,7 +46,7 @@ bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
 }
 
 // ::cppu::IPropertyArrayHelper
-sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nPropId )
+bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nPropId )
 {
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >(nPropId);
     bool bValid = ImplHasProperty( id );
@@ -111,7 +111,7 @@ css::beans::Property UnoPropertyArrayHelper::getPropertyByName(const OUString& r
     return aProp;
 }
 
-sal_Bool UnoPropertyArrayHelper::hasPropertyByName(const OUString& rPropertyName)
+bool UnoPropertyArrayHelper::hasPropertyByName(const OUString& rPropertyName)
 {
     return ImplHasProperty( GetPropertyId( rPropertyName ) );
 }

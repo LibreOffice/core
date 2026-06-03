@@ -252,7 +252,7 @@ bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 
 /**
  * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ * @returns true if a KeyEvent is being processed, false otherwise
  */
 bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {

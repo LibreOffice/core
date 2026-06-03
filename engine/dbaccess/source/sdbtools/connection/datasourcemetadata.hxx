@@ -54,7 +54,7 @@ namespace sdbtools
         );
 
         // XDataSourceMetaData
-        virtual sal_Bool SAL_CALL supportsQueriesInFrom() override;
+        virtual bool SAL_CALL supportsQueriesInFrom() override;
 
     protected:
         virtual ~DataSourceMetaData() override;

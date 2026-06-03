@@ -220,7 +220,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
     return aSuppLocales;
 }
 
-sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
+bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     ensureLocales();
@@ -762,7 +762,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     return nullptr;
 }
 
-sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
+bool SAL_CALL Hyphenator::addLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -775,7 +775,7 @@ sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
     return bRes;
 }
 
-sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
+bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -859,7 +859,7 @@ OUString SAL_CALL Hyphenator::getImplementationName()
     return u"org.openoffice.lingu.LibHnjHyphenator"_ustr;
 }
 
-sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
+bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

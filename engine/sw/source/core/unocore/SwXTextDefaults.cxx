@@ -217,7 +217,7 @@ OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
     return u"SwXTextDefaults"_ustr;
 }
 
-sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName )
+bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

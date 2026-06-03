@@ -239,39 +239,39 @@ public:
 
     // XResultSet
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     next() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isBeforeFirst() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isAfterLast() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isFirst() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     isLast() override;
     virtual void SAL_CALL
     beforeFirst() override;
     virtual void SAL_CALL
     afterLast() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     first() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     last() override;
     virtual sal_Int32 SAL_CALL
     getRow() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     absolute( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     relative( sal_Int32 rows ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     previous() override;
     virtual void SAL_CALL
     refreshRow() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     rowUpdated() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     rowInserted() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     rowDeleted() override;
     virtual css::uno::Reference<
                 css::uno::XInterface > SAL_CALL
@@ -280,13 +280,13 @@ public:
 
     // XRow
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     wasNull() override;
 
     virtual OUString SAL_CALL
     getString( sal_Int32 columnIndex ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     getBoolean( sal_Int32 columnIndex ) override;
 
     virtual sal_Int8 SAL_CALL

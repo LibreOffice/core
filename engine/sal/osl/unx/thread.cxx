@@ -420,7 +420,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
     pthread_mutex_unlock (&(pImpl->m_Lock));
 }
 
-sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
+bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
 {
     bool active;
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
@@ -492,7 +492,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
     pthread_mutex_unlock (&(pImpl->m_Lock));
 }
 
-sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
+bool SAL_CALL osl_scheduleThread(oslThread Thread)
 {
     bool terminate;
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
@@ -1021,7 +1021,7 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
     return pKey ? pthread_getspecific(pKey->m_key) : nullptr;
 }
 
-sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
+bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     bool bRet;
     void *pOldData = nullptr;

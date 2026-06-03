@@ -127,7 +127,7 @@ PropertyAccessorBase& PropertySetBase::locatePropertyHandler( sal_Int32 nHandle 
     return *aPropertyPos->second;
 }
 
-sal_Bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle,
+bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle,
     const Any& rValue )
 {
     PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );

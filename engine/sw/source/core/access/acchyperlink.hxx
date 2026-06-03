@@ -53,7 +53,7 @@ class SwAccessibleHyperlink
 public:
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount() override;
-    virtual sal_Bool SAL_CALL doAccessibleAction( sal_Int32 nIndex ) override;
+    virtual bool SAL_CALL doAccessibleAction( sal_Int32 nIndex ) override;
     virtual OUString SAL_CALL getAccessibleActionDescription(
                 sal_Int32 nIndex ) override;
     virtual css::uno::Reference<
@@ -67,7 +67,7 @@ public:
             sal_Int32 nIndex ) override;
     virtual sal_Int32 SAL_CALL getStartIndex() override;
     virtual sal_Int32 SAL_CALL getEndIndex() override;
-    virtual sal_Bool SAL_CALL isValid(  ) override;
+    virtual bool SAL_CALL isValid(  ) override;
 };
 
 #endif

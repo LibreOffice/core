@@ -130,7 +130,7 @@ template<typename T> inline std::optional<T const> tryGetConverted(
 
     @tparam T  the C++ representation of a UNO type that can be contained in a
     UNO ANY (i.e., any UNO type other than ANY itself).  The legacy C++
-    representations sal_Bool, cppu::UnoVoidType, cppu::UnoUnsignedShortType,
+    representations bool, cppu::UnoVoidType, cppu::UnoUnsignedShortType,
     cppu::UnoCharType, and cppu::UnoSequenceType are not supported.  Must be a
     complete type or void.
 
@@ -221,9 +221,6 @@ template<> inline detail::Optional<double>::type tryAccess<double>(
 }
 
 template<> detail::Optional<css::uno::Any>::type tryAccess<css::uno::Any>(
-    css::uno::Any const &) = delete;
-
-template<> detail::Optional<sal_Bool>::type tryAccess<sal_Bool>(
     css::uno::Any const &) = delete;
 
 /*

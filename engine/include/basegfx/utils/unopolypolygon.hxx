@@ -49,8 +49,8 @@ namespace basegfx::unotools
         SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getNumberOfPolygonPoints( ::sal_Int32 polygon ) override final;
         SAL_DLLPRIVATE virtual css::rendering::FillRule SAL_CALL getFillRule(  ) override final;
         SAL_DLLPRIVATE virtual void SAL_CALL setFillRule( css::rendering::FillRule fillRule ) override final;
-        SAL_DLLPRIVATE virtual sal_Bool SAL_CALL isClosed( ::sal_Int32 index ) override final;
-        SAL_DLLPRIVATE virtual void SAL_CALL setClosed( ::sal_Int32 index, sal_Bool closedState ) override final;
+        SAL_DLLPRIVATE virtual bool SAL_CALL isClosed( ::sal_Int32 index ) override final;
+        SAL_DLLPRIVATE virtual void SAL_CALL setClosed( ::sal_Int32 index, bool closedState ) override final;
 
         // XLinePolyPolygon2D
         SAL_DLLPRIVATE virtual css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > > SAL_CALL getPoints( ::sal_Int32 nPolygonIndex, ::sal_Int32 nNumberOfPolygons, ::sal_Int32 nPointIndex, ::sal_Int32 nNumberOfPoints ) override final;
@@ -66,7 +66,7 @@ namespace basegfx::unotools
 
         // XServiceInfo
         SAL_DLLPRIVATE virtual OUString SAL_CALL getImplementationName() override final;
-        SAL_DLLPRIVATE virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override final;
+        SAL_DLLPRIVATE virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override final;
         SAL_DLLPRIVATE virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override final;
 
         SAL_DLLPRIVATE B2DPolyPolygon getPolyPolygon() const;

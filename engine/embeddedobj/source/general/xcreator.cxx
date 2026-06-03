@@ -406,7 +406,7 @@ OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
     return u"com.sun.star.comp.embed.EmbeddedObjectCreator"_ustr;
 }
 
-sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
+bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

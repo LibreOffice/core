@@ -93,8 +93,8 @@ public:
 
     // Methods XTextInputStream
     virtual OUString SAL_CALL readLine(  ) override;
-    virtual OUString SAL_CALL readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter ) override;
-    virtual sal_Bool SAL_CALL isEOF(  ) override;
+    virtual OUString SAL_CALL readString( const Sequence< sal_Unicode >& Delimiters, bool bRemoveDelimiter ) override;
+    virtual bool SAL_CALL isEOF(  ) override;
     virtual void SAL_CALL setEncoding( const OUString& Encoding ) override;
 
     // Methods XInputStream
@@ -111,7 +111,7 @@ public:
     // Methods XServiceInfo
         virtual OUString              SAL_CALL getImplementationName() override;
         virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 };
 
 }
@@ -142,13 +142,13 @@ OUString OTextInputStream::readLine(  )
     return implReadString( aDummySeq, true, true );
 }
 
-OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
+OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, bool bRemoveDelimiter )
 {
     checkNull();
     return implReadString( Delimiters, bRemoveDelimiter, false );
 }
 
-sal_Bool OTextInputStream::isEOF()
+bool OTextInputStream::isEOF()
 {
     checkNull();
     bool bRet = false;
@@ -365,7 +365,7 @@ OUString OTextInputStream::getImplementationName()
     return u"com.sun.star.comp.io.TextInputStream"_ustr;
 }
 
-sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
+bool OTextInputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

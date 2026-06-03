@@ -52,8 +52,8 @@ public:
 
     // XScannerManager
     virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() override;
-    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) override;
-    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) override;
+    virtual bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) override;
     virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) override;
     virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) override;
     virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) override;
@@ -65,7 +65,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 

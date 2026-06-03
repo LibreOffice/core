@@ -295,7 +295,7 @@ OUString SAL_CALL UpDownBarWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.ChartArea"_ustr;
 }
 
-sal_Bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

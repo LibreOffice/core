@@ -43,7 +43,7 @@ public:
     SwDBTreeList(std::unique_ptr<weld::TreeView> xTreeView);
     ~SwDBTreeList();
 
-    OUString GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = nullptr);
+    OUString GetDBName(OUString& rTableName, OUString& rColumnName, bool* pbIsTable = nullptr);
 
     void    Select( std::u16string_view rDBName, std::u16string_view rTableName,
                     std::u16string_view rColumnName );

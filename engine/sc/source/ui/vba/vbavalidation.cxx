@@ -51,7 +51,7 @@ lcl_getValidationProps( const uno::Reference< table::XCellRange >& xRange )
     return xValProps;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaValidation::getIgnoreBlank()
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -61,14 +61,14 @@ ScVbaValidation::getIgnoreBlank()
 }
 
 void SAL_CALL
-ScVbaValidation::setIgnoreBlank( sal_Bool _ignoreblank )
+ScVbaValidation::setIgnoreBlank( bool _ignoreblank )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::Any( _ignoreblank ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaValidation::getCaseSensitive()
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -78,14 +78,14 @@ ScVbaValidation::getCaseSensitive()
 }
 
 void SAL_CALL
-ScVbaValidation::setCaseSensitive( sal_Bool _bCase )
+ScVbaValidation::setCaseSensitive( bool _bCase )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_ISCASE, uno::Any( _bCase ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaValidation::getInCellDropdown()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -95,7 +95,7 @@ ScVbaValidation::getInCellDropdown()
 }
 
 void SAL_CALL
-ScVbaValidation::setInCellDropdown( sal_Bool  _incelldropdown  )
+ScVbaValidation::setInCellDropdown( bool  _incelldropdown  )
 {
     sal_Int32 nDropDown = 0;
     if ( _incelldropdown )
@@ -105,7 +105,7 @@ ScVbaValidation::setInCellDropdown( sal_Bool  _incelldropdown  )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaValidation::getShowInput()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -115,14 +115,14 @@ ScVbaValidation::getShowInput()
 }
 
 void SAL_CALL
-ScVbaValidation:: setShowInput( sal_Bool _showinput )
+ScVbaValidation:: setShowInput( bool _showinput )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps(m_xRange) );
     xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::Any( _showinput ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaValidation::getShowError()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -132,7 +132,7 @@ ScVbaValidation::getShowError()
 }
 
 void SAL_CALL
-ScVbaValidation::setShowError( sal_Bool _showerror )
+ScVbaValidation::setShowError( bool _showerror )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_SHOWERR, uno::Any( _showerror ) );

@@ -153,7 +153,7 @@ OUString SAL_CALL SvtFolderPicker::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SvtFolderPicker::supportsService( const OUString& sServiceName )
+bool SAL_CALL SvtFolderPicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

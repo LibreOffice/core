@@ -87,7 +87,7 @@ OUString OQueryComposer::getImplementationName(  )
     return u"com.sun.star.sdb.dbaccess.OQueryComposer"_ustr;
 }
 
-sal_Bool OQueryComposer::supportsService( const OUString& _rServiceName )
+bool OQueryComposer::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -173,7 +173,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     setFilter( aFilterCreator.getComposedAndClear() );
 }
 
-void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending )
+void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, bool ascending )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );

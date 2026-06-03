@@ -90,7 +90,7 @@ public:
         m_it = m_components.begin();
     }
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return m_it != m_components.end();
     }
@@ -200,7 +200,7 @@ public:
         return cppu::UnoType<sheet::XSpreadsheetDocument>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return ( !m_windows.empty() );
     }
@@ -220,7 +220,7 @@ public:
         return comphelper::mapKeysToSequence( namesToIndices );
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());

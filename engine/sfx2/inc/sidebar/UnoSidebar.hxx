@@ -32,12 +32,12 @@ public:
 
     SfxUnoSidebar(css::uno::Reference<css::frame::XFrame> );
 
-    virtual void SAL_CALL showDecks (const sal_Bool bVisible) override;
+    virtual void SAL_CALL showDecks (const bool bVisible) override;
 
 
-    virtual void SAL_CALL setVisible (const sal_Bool bVisible) override;
+    virtual void SAL_CALL setVisible (const bool bVisible) override;
 
-    virtual sal_Bool SAL_CALL isVisible() override;
+    virtual bool SAL_CALL isVisible() override;
 
     virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame() override;
 

@@ -101,20 +101,20 @@ public:
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
     virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value) override;
     virtual Any SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) override;
-    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) override;
+    virtual bool SAL_CALL hasMethod(const OUString& Name) override;
+    virtual bool SAL_CALL hasProperty(const OUString& Name) override;
 
     // XInvocation2
     virtual Sequence< OUString > SAL_CALL getMemberNames(  ) override;
     virtual Sequence< InvocationInfo > SAL_CALL getInfo(  ) override;
-    virtual InvocationInfo SAL_CALL getInfoForName( const OUString& aName, sal_Bool bExact ) override;
+    virtual InvocationInfo SAL_CALL getInfoForName( const OUString& aName, bool bExact ) override;
 
     // All Access and Container methods are not thread safe
     // XElementAccess
     virtual Type SAL_CALL getElementType() override
         { return _xElementAccess->getElementType(); }
 
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
         { return _xElementAccess->hasElements(); }
 
     // XNameContainer
@@ -135,7 +135,7 @@ public:
     virtual Sequence<OUString> SAL_CALL getElementNames() override
         { return _xNameAccess->getElementNames(); }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& Name ) override
+    virtual bool SAL_CALL hasByName( const OUString& Name ) override
         { return _xNameAccess->hasByName( Name ); }
 
     // XIndexContainer
@@ -428,7 +428,7 @@ Reference<XIntrospectionAccess> Invocation_Impl::getIntrospection()
 }
 
 
-sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
+bool Invocation_Impl::hasMethod( const OUString& Name )
 {
     if (!mbFromOLE && _xDirect.is())
         return _xDirect->hasMethod( Name );
@@ -438,7 +438,7 @@ sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
 }
 
 
-sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
+bool Invocation_Impl::hasProperty( const OUString& Name )
 {
     if (_xDirect.is())
     {
@@ -825,7 +825,7 @@ Sequence< InvocationInfo > SAL_CALL Invocation_Impl::getInfo(  )
     return aRetSeq;
 }
 
-InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, sal_Bool bExact )
+InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, bool bExact )
 {
     if( _xDirect2.is() )
     {
@@ -987,7 +987,7 @@ public:
 
     // XServiceInfo
     OUString                    SAL_CALL getImplementationName() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >        SAL_CALL getSupportedServiceNames() override;
 
     // XSingleServiceFactory
@@ -1022,7 +1022,7 @@ OUString InvocationService::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool InvocationService::supportsService(const OUString& ServiceName)
+bool InvocationService::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

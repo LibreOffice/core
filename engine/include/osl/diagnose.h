@@ -77,7 +77,7 @@
 /** If cond is false, reports an error with message msg. */
 #define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "%s", m)
 /** Reports an error with message msg unconditionally. */
-#define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
+#define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.osl", "%s", m)
 
 /** Evaluates the expression and if it is false, reports an error. The
     expression is evaluated once without regard of the value of

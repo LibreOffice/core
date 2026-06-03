@@ -601,7 +601,7 @@ void SAL_CALL OCommonEmbeddedObject::removeStateChangeListener(
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
+void SAL_CALL OCommonEmbeddedObject::close( bool bDeliverOwnership )
 {
     SolarMutexGuard aGuard;
     if ( m_bClosed )
@@ -745,7 +745,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getImplementationName()
     return u"com.sun.star.comp.embed.OCommonEmbeddedObject"_ustr;
 }
 
-sal_Bool SAL_CALL OCommonEmbeddedObject::supportsService(const OUString& ServiceName)
+bool SAL_CALL OCommonEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

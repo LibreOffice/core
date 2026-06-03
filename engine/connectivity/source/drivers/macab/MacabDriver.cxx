@@ -218,7 +218,7 @@ OUString SAL_CALL MacabDriver::getImplementationName(  )
     return "com.sun.star.comp.sdbc.macab.Driver";
 }
 
-sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName )
+bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -253,7 +253,7 @@ Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, con
     return xConnection;
 }
 
-sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
+bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 

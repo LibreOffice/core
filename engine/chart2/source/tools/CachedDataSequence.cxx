@@ -157,7 +157,7 @@ OUString SAL_CALL CachedDataSequence::getImplementationName()
     return lcl_aServiceName;
 }
 
-sal_Bool SAL_CALL CachedDataSequence::supportsService( const OUString& rServiceName )
+bool SAL_CALL CachedDataSequence::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

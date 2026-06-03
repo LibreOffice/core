@@ -273,7 +273,7 @@ void SAL_CALL OInputCompStream::removeEventListener( const uno::Reference< lang:
         m_pInterfaceContainer->removeInterface( xListener );
 }
 
-sal_Bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
+bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -427,7 +427,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     throw io::IOException(u"relations info could not be read"_ustr); // the relations info could not be read
 }
 
-void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, sal_Bool /*bReplace*/  )
+void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, bool /*bReplace*/  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -459,7 +459,7 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/
     throw io::IOException(); // TODO: Access denied
 }
 
-void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, sal_Bool /*bReplace*/  )
+void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, bool /*bReplace*/  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 

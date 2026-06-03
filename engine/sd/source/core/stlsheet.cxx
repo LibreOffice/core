@@ -545,8 +545,8 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
  * their font height. The new values are calculated that the ratio to the font
  * height is as in the style sheet.
  *
- * @param bOnlyMissingItems If sal_True, only not set items are completed. With
- * sal_False, are items are overwritten.
+ * @param bOnlyMissingItems If true, only not set items are completed. With
+ * false, are items are overwritten.
  */
 void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 {
@@ -859,7 +859,7 @@ OUString SAL_CALL SdStyleSheet::getImplementationName()
     return u"SdStyleSheet"_ustr;
 }
 
-sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -907,14 +907,14 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  )
 
 // XStyle
 
-sal_Bool SAL_CALL SdStyleSheet::isUserDefined()
+bool SAL_CALL SdStyleSheet::isUserDefined()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
     return IsUserDefined();
 }
 
-sal_Bool SAL_CALL SdStyleSheet::isInUse()
+bool SAL_CALL SdStyleSheet::isInUse()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();

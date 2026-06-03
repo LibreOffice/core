@@ -1635,7 +1635,7 @@ void SAL_CALL OOo2OasisTransformer::setTargetDocument(
 }
 
 // XFilter
-sal_Bool SAL_CALL OOo2OasisTransformer::filter(
+bool SAL_CALL OOo2OasisTransformer::filter(
         const Sequence< PropertyValue >& aDescriptor )
 {
     Reference< XFilter> xFilter( GetDocHandler(), UNO_QUERY );
@@ -1714,7 +1714,7 @@ OUString SAL_CALL OOo2OasisTransformer::getImplementationName()
     return m_aImplName;
 }
 
-sal_Bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& ServiceName )
+bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

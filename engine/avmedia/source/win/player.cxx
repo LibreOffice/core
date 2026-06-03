@@ -471,7 +471,7 @@ void SAL_CALL Player::stop(  )
     }
 }
 
-sal_Bool SAL_CALL Player::isPlaying()
+bool SAL_CALL Player::isPlaying()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -557,21 +557,21 @@ double SAL_CALL Player::getMediaTime(  )
     return aRefTime;
 }
 
-void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
+void SAL_CALL Player::setPlaybackLoop( bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     mbLooping = bSet;
 }
 
-sal_Bool SAL_CALL Player::isPlaybackLoop(  )
+bool SAL_CALL Player::isPlaybackLoop(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     return mbLooping;
 }
 
-void SAL_CALL Player::setMute( sal_Bool bSet )
+void SAL_CALL Player::setMute( bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -587,7 +587,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     }
 }
 
-sal_Bool SAL_CALL Player::isMute(  )
+bool SAL_CALL Player::isMute(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -695,7 +695,7 @@ OUString SAL_CALL Player::getImplementationName(  )
     return AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME;
 }
 
-sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
+bool SAL_CALL Player::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

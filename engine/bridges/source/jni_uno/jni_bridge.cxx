@@ -518,7 +518,7 @@ SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
 
     static_assert(int(JNI_FALSE) == int(false), "must be equal");
     static_assert(int(JNI_TRUE) == int(true), "must be equal");
-    static_assert(sizeof (jboolean) == sizeof (sal_Bool), "must be the same size");
+    static_assert(sizeof (jboolean) == sizeof (bool), "must be the same size");
     static_assert(sizeof (jchar) == sizeof (sal_Unicode), "must be the same size");
     static_assert(sizeof (jdouble) == sizeof (double), "must be the same size");
     static_assert(sizeof (jfloat) == sizeof (float), "must be the same size");

@@ -886,7 +886,7 @@ namespace DOM
     }
 
     Reference< XNode > SAL_CALL CDocument::importNode(
-            Reference< XNode > const& xImportedNode, sal_Bool deep)
+            Reference< XNode > const& xImportedNode, bool deep)
     {
         if (!xImportedNode.is()) { throw RuntimeException(); }
 
@@ -927,7 +927,7 @@ namespace DOM
         return OUString();
     }
 
-    Reference< XNode > SAL_CALL CDocument::cloneNode(sal_Bool bDeep)
+    Reference< XNode > SAL_CALL CDocument::cloneNode(bool bDeep)
     {
         ::osl::MutexGuard const g(m_rMutex);
 

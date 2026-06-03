@@ -55,12 +55,12 @@ OUString SAL_CALL IndexEntrySupplier_Common::getPhoneticCandidate( const OUStrin
     return OUString();
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& )
+bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& )
 {
     throw RuntimeException();
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& rLocale,
+bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& rLocale,
     const OUString& rAlgorithm, sal_Int32 collatorOptions )
 {
     usePhonetic = LocaleDataImpl::get()->isPhonetic(rLocale, rAlgorithm);
@@ -92,7 +92,7 @@ OUString SAL_CALL IndexEntrySupplier_Common::getIndexCharacter( const OUString& 
     return getIndexKey(rIndexEntry, rIndexEntry, rLocale);
 }
 
-OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool,
+OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( bool,
     const lang::Locale& )
 {
     throw RuntimeException();
@@ -120,7 +120,7 @@ IndexEntrySupplier_Common::getImplementationName()
     return OUString::createFromAscii( implementationName );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 IndexEntrySupplier_Common::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

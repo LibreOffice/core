@@ -273,7 +273,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     return Priority;
 }
 
-sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
+bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -324,7 +324,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
     osl_atomic_increment(&(pThreadImpl->m_nTerminationRequested));
 }
 
-sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
+bool SAL_CALL osl_scheduleThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(Thread);
 
@@ -499,7 +499,7 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
     return nullptr;
 }
 
-sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
+bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     if (Key != nullptr)
     {

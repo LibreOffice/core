@@ -2227,7 +2227,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 // For every presentation object a SfxItemSet of hard attributes
                 // and the UserCall is stored in this list. This is because
-                // at the following mpDrawView->SetAttributes( *pSet, sal_True )
+                // at the following mpDrawView->SetAttributes( *pSet, true )
                 // they get lost and have to be restored.
                 std::vector<std::pair<std::unique_ptr<SfxItemSet>,SdrObjUserCall*> > aAttrList;
                 SdPage* pPresPage = static_cast<SdPage*>( mpDrawView->GetSdrPageView()->GetPage() );
@@ -4498,7 +4498,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             /* The call is enough. The initialization via Start3DCreation and
                CreateMirrorPolygons is no longer needed if the parameter
-               sal_True is provided. Then a tilted rotary body with an axis left
+               true is provided. Then a tilted rotary body with an axis left
                besides the bounding rectangle of the selected objects is drawn
                immediately and without user interaction.  */
             mpDrawView->SdrEndTextEdit();
@@ -4777,7 +4777,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     // and use old attr to update all the attributes
 //  SfxItemSet aNewAttr( GetPool(),
 //  EE_ITEMS_START, EE_ITEMS_END );
-//  aNewAttr.Put( aEditAttr, sal_False );
+//  aNewAttr.Put( aEditAttr, false );
     SfxItemSet aNewAttr( pDoc->GetPool() );
     //modified end
 

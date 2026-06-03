@@ -76,7 +76,7 @@ namespace treeview {
             return cppu::UnoType<void>::get();
         }
 
-        virtual sal_Bool SAL_CALL hasElements() override
+        virtual bool SAL_CALL hasElements() override
         {
             return true;
         }
@@ -121,7 +121,7 @@ namespace treeview {
         virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames( ) override = 0;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasByName( const OUString& aName ) override = 0;
 
         // XHierarchicalNameAccess
@@ -129,7 +129,7 @@ namespace treeview {
         virtual css::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName ) override = 0;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasByHierarchicalName( const OUString& aName ) override = 0;
 
     }; // end class TVBase
@@ -152,7 +152,7 @@ namespace treeview {
         virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames( ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasByName( const OUString& aName ) override;
 
         // XHierarchicalNameAccess
@@ -160,7 +160,7 @@ namespace treeview {
         virtual css::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasByHierarchicalName( const OUString& aName ) override;
 
     private:
@@ -188,7 +188,7 @@ namespace treeview {
         virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames( ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasByName( const OUString& aName ) override;
 
         // XHierarchicalNameAccess
@@ -196,7 +196,7 @@ namespace treeview {
         virtual css::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName ) override;
 
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         hasByHierarchicalName( const OUString& aName ) override;
 
     private:

@@ -68,7 +68,7 @@ namespace svgio::svgreader
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
+            virtual bool SAL_CALL supportsService(const OUString&) override;
             virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
 
@@ -180,7 +180,7 @@ namespace svgio::svgreader
             return u"svgio::svgreader::XSvgParser"_ustr;
         }
 
-        sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName)
+        bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName)
         {
             return cppu::supportsService(this, rServiceName);
         }

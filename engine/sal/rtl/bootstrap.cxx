@@ -731,7 +731,7 @@ void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle) noexcept
     }
 }
 
-sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
+bool SAL_CALL rtl_bootstrap_get_from_handle(
     rtlBootstrapHandle handle,
     rtl_uString      * pName,
     rtl_uString     ** ppValue,
@@ -782,7 +782,7 @@ void SAL_CALL rtl_bootstrap_setIniFileName (
     file = pName;
 }
 
-sal_Bool SAL_CALL rtl_bootstrap_get (
+bool SAL_CALL rtl_bootstrap_get (
     rtl_uString  * pName,
     rtl_uString ** ppValue,
     rtl_uString  * pDefault

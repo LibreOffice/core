@@ -39,7 +39,7 @@ TextConversionService::getImplementationName()
     return OUString::createFromAscii(implementationName);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TextConversionService::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

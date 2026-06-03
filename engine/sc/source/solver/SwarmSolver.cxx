@@ -246,10 +246,10 @@ public:
         maConstraints = rConstraints;
     }
 
-    virtual sal_Bool SAL_CALL getMaximize() override { return mbMaximize; }
-    virtual void SAL_CALL setMaximize(sal_Bool bMaximize) override { mbMaximize = bMaximize; }
+    virtual bool SAL_CALL getMaximize() override { return mbMaximize; }
+    virtual void SAL_CALL setMaximize(bool bMaximize) override { mbMaximize = bMaximize; }
 
-    virtual sal_Bool SAL_CALL getSuccess() override { return mbSuccess; }
+    virtual bool SAL_CALL getSuccess() override { return mbSuccess; }
     virtual double SAL_CALL getResultValue() override { return mfResultValue; }
 
     virtual uno::Sequence<double> SAL_CALL getSolution() override { return maSolution; }
@@ -293,7 +293,7 @@ public:
         return u"com.sun.star.comp.Calc.SwarmSolver"_ustr;
     }
 
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
+    bool SAL_CALL supportsService(const OUString& rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }

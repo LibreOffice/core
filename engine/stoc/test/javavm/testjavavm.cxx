@@ -43,19 +43,19 @@ using namespace css::registry;
 using namespace css::java;
 
 
-sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
+bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 {
 
       OUString sVMService("com.sun.star.java.JavaVirtualMachine");
     Reference<XInterface> xXInt= xMgr->createInstance(sVMService);
     if( ! xXInt.is())
-        return sal_False;
+        return false;
     Reference<XJavaVM> xVM( xXInt, UNO_QUERY);
     if( ! xVM.is())
-        return sal_False;
+        return false;
     Reference<XJavaThreadRegister_11> xreg11(xVM, UNO_QUERY);
     if( ! xreg11.is())
-        return sal_False;
+        return false;
 
 
     sal_Int8 arId[16];
@@ -64,10 +64,10 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     if ( ! anyVM.hasValue())
     {
         OSL_FAIL("could not get Java VM");
-        return sal_False;
+        return false;
     }
 
-    sal_Bool b= xreg11->isThreadAttached();
+    bool b= xreg11->isThreadAttached();
     xreg11->registerThread();
     b= xreg11->isThreadAttached();
     xreg11->revokeThread();
@@ -85,7 +85,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     JavaVM* _jvm= *(JavaVM**) anyVM.getValue();
     JNIEnv *p_env;
     if( _jvm->AttachCurrentThread((void**) &p_env, 0))
-        return sal_False;
+        return false;
 
     jclass cls = p_env->FindClass( "TestJavaVM");
     if (cls == 0) {
@@ -106,20 +106,20 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 
 
     _jvm->DetachCurrentThread();
-    return sal_True;
+    return true;
 }
 
 SAL_IMPLEMENT_MAIN()
 {
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString("applicat.rdb"),
-                               sal_False, sal_False );
+                               false, false );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
     Reference<XMultiServiceFactory> xMgr( fac, UNO_QUERY);
 
-    sal_Bool bSucc = sal_False;
+    bool bSucc = false;
     try
     {
         OUString sImplReg(

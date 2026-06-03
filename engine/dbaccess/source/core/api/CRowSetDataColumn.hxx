@@ -62,7 +62,7 @@ namespace dbaccess
         // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue,
+        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue,
                                                             css::uno::Any & rOldValue,
                                                             sal_Int32 nHandle,
                                                             const css::uno::Any& rValue ) override;

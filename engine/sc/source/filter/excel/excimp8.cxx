@@ -78,7 +78,7 @@ private:
 public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<container::XIndexContainer>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         std::unique_lock aGuard( m_aMutex );
         return ( !IdToOleNameHash.empty() );
@@ -97,7 +97,7 @@ public:
         std::unique_lock aGuard( m_aMutex );
         return comphelper::mapKeysToSequence( IdToOleNameHash);
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         std::unique_lock aGuard( m_aMutex );
         return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );

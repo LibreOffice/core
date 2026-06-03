@@ -106,7 +106,7 @@ namespace dxcanvas
         SpriteCanvasBaseT::disposeThis();
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::showBuffer( sal_Bool bUpdateAll )
+    bool SAL_CALL SpriteCanvas::showBuffer( bool bUpdateAll )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -116,7 +116,7 @@ namespace dxcanvas
         return mbIsVisible && SpriteCanvasBaseT::showBuffer( bUpdateAll );
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::switchBuffer( sal_Bool bUpdateAll )
+    bool SAL_CALL SpriteCanvas::switchBuffer( bool bUpdateAll )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -126,7 +126,7 @@ namespace dxcanvas
         return mbIsVisible && SpriteCanvasBaseT::switchBuffer( bUpdateAll );
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll )
+    bool SAL_CALL SpriteCanvas::updateScreen( bool bUpdateAll )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -153,7 +153,7 @@ namespace dxcanvas
     {
         return "com.sun.star.comp.rendering.SpriteCanvas.DX9";
     }
-    sal_Bool SpriteCanvas::supportsService( const OUString& sServiceName )
+    bool SpriteCanvas::supportsService( const OUString& sServiceName )
     {
         return cppu::supportsService(this, sServiceName);
     }

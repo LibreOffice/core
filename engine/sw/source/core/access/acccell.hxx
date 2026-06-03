@@ -77,7 +77,7 @@ private:
 public:
     // XAccessibleValue
     virtual css::uno::Any SAL_CALL getCurrentValue( ) override;
-    virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
+    virtual bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
     virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
     virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
@@ -88,7 +88,7 @@ public:
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    virtual bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
     virtual void SAL_CALL clearAccessibleSelection(  ) override;
     virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;

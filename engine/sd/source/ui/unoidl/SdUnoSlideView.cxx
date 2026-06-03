@@ -49,7 +49,7 @@ SdUnoSlideView::~SdUnoSlideView() noexcept
 
 //----- XSelectionSupplier ----------------------------------------------------
 
-sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
+bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
 {
     slidesorter::controller::SlideSorterController& rSlideSorterController
         = mrSlideSorter.GetController();
@@ -157,7 +157,7 @@ OUString SAL_CALL SdUnoSlideView::getImplementationName(  )
     return u"com.sun.star.comp.sd.SdUnoSlideView"_ustr;
 }
 
-sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

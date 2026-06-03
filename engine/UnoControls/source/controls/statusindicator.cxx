@@ -193,7 +193,7 @@ void SAL_CALL StatusIndicator::createPeer (
 
 //  XControl
 
-sal_Bool SAL_CALL StatusIndicator::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
+bool SAL_CALL StatusIndicator::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;

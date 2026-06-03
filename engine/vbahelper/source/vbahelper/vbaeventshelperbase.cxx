@@ -56,7 +56,7 @@ VbaEventsHelperBase::~VbaEventsHelperBase()
 {
 }
 
-sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
 {
     /*  Derived classes may add new event identifiers to be processed while
         processing the original event. All unprocessed events are collected in
@@ -193,7 +193,7 @@ void SAL_CALL VbaEventsHelperBase::disposing()
     mxModuleInfos.clear();
 }
 
-sal_Bool VbaEventsHelperBase::supportsService(OUString const & ServiceName)
+bool VbaEventsHelperBase::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -248,7 +248,7 @@ void VbaEventsHelperBase::stopListening()
     maEventInfos.clear();
 }
 
-sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
 {
     EventHandlerInfoMap::const_iterator aIt = maEventInfos.find( nEventId );
     if( aIt == maEventInfos.end() )

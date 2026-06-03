@@ -63,7 +63,7 @@ css::uno::Type const & mapType(Type type) {
     case TYPE_ANY:
         return cppu::UnoType< css::uno::Any >::get();
     case TYPE_BOOLEAN:
-        return cppu::UnoType< sal_Bool >::get();
+        return cppu::UnoType< bool >::get();
     case TYPE_SHORT:
         return cppu::UnoType< sal_Int16 >::get();
     case TYPE_INT:
@@ -77,7 +77,7 @@ css::uno::Type const & mapType(Type type) {
     case TYPE_HEXBINARY:
         return cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get();
     case TYPE_BOOLEAN_LIST:
-        return cppu::UnoType< css::uno::Sequence< sal_Bool > >::get();
+        return cppu::UnoType< css::uno::Sequence< bool > >::get();
     case TYPE_SHORT_LIST:
         return cppu::UnoType< css::uno::Sequence< sal_Int16 > >::get();
     case TYPE_INT_LIST:

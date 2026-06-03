@@ -81,7 +81,7 @@ public:
 
     // css::container::XStringKeyMap:
     virtual css::uno::Any SAL_CALL getValue(const OUString & aKey) override;
-    virtual sal_Bool SAL_CALL hasValue(const OUString & aKey) override;
+    virtual bool SAL_CALL hasValue(const OUString & aKey) override;
     virtual void SAL_CALL insertValue(const OUString & aKey, const css::uno::Any & aValue) override;
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) override;

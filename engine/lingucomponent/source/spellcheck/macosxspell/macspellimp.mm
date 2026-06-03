@@ -345,7 +345,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
 
 
 
-sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
+bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -426,7 +426,7 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
 
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     MacSpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const css::uno::Sequence<PropertyValue>& rProperties )
 {
@@ -551,7 +551,7 @@ Reference< XSpellAlternatives > SAL_CALL
     return xAlt;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     MacSpellChecker::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
 {
@@ -566,7 +566,7 @@ sal_Bool SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     MacSpellChecker::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
 {
@@ -657,7 +657,7 @@ OUString SAL_CALL MacSpellChecker::getImplementationName()
     return "org.openoffice.lingu.MacOSXSpellChecker";
 }
 
-sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName )
+bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

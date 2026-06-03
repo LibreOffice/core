@@ -160,12 +160,12 @@ void Timer::stop()
     getTimerManager().unregisterTimer(this);
 }
 
-sal_Bool Timer::isTicking() const
+bool Timer::isTicking() const
 {
     return getTimerManager().lookupTimer(this);
 }
 
-sal_Bool Timer::isExpired() const
+bool Timer::isExpired() const
 {
     TTimeValue Now;
 
@@ -174,7 +174,7 @@ sal_Bool Timer::isExpired() const
     return !(Now < m_aExpired);
 }
 
-sal_Bool Timer::expiresBefore(const Timer* pTimer) const
+bool Timer::expiresBefore(const Timer* pTimer) const
 {
     if (pTimer)
         return m_aExpired < pTimer->m_aExpired;

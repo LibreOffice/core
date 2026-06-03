@@ -403,7 +403,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 
 
 Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
-        sal_Int16 rWordType, sal_Bool bDirection )
+        sal_Int16 rWordType, bool bDirection )
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
     sal_Int32 len = Text.getLength();
@@ -588,7 +588,7 @@ BreakIterator_Unicode::getImplementationName()
     return cBreakIterator;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 BreakIterator_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

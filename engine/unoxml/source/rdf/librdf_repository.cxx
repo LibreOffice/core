@@ -286,7 +286,7 @@ public:
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString & ServiceName) override;
     virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -318,7 +318,7 @@ public:
             querySelect(const OUString & i_rQuery) override;
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         queryConstruct(const OUString & i_rQuery) override;
-    virtual sal_Bool SAL_CALL queryAsk(const OUString & i_rQuery) override;
+    virtual bool SAL_CALL queryAsk(const OUString & i_rQuery) override;
 
     // css::rdf::XDocumentRepository:
     virtual void SAL_CALL setStatementRDFa(
@@ -329,7 +329,7 @@ public:
             const uno::Reference< rdf::XURI > & i_xRDFaDatatype) override;
     virtual void SAL_CALL removeStatementRDFa(
             const uno::Reference< rdf::XMetadatable > & i_xElement) override;
-    virtual beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
+    virtual beans::Pair< uno::Sequence<rdf::Statement>, bool > SAL_CALL
         getStatementRDFa(uno::Reference< rdf::XMetadatable > const& i_xElement) override;
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         getStatementsRDFa(
@@ -450,7 +450,7 @@ public:
     }
 
     // css::container::XEnumeration:
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual uno::Any SAL_CALL nextElement() override;
 
 private:
@@ -476,7 +476,7 @@ private:
 
 
 // css::container::XEnumeration:
-sal_Bool SAL_CALL
+bool SAL_CALL
 librdf_GraphResult::hasMoreElements()
 {
     std::scoped_lock g(m_rMutex);
@@ -543,7 +543,7 @@ public:
     { };
 
     // css::container::XEnumeration:
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual uno::Any SAL_CALL nextElement() override;
 
 private:
@@ -554,7 +554,7 @@ private:
 
 
 // css::container::XEnumeration:
-sal_Bool SAL_CALL
+bool SAL_CALL
 librdf_GraphResult2::hasMoreElements()
 {
     return m_nIndex < m_vStatements.size();
@@ -601,7 +601,7 @@ public:
     }
 
     // css::container::XEnumeration:
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
     virtual uno::Any SAL_CALL nextElement() override;
 
     // css::rdf::XQuerySelectResult:
@@ -627,7 +627,7 @@ private:
 
 
 // css::container::XEnumeration:
-sal_Bool SAL_CALL
+bool SAL_CALL
 librdf_QuerySelectResult::hasMoreElements()
 {
     std::scoped_lock g(m_rMutex);
@@ -912,7 +912,7 @@ OUString SAL_CALL librdf_Repository::getImplementationName()
     return u"librdf_Repository"_ustr;
 }
 
-sal_Bool SAL_CALL librdf_Repository::supportsService(
+bool SAL_CALL librdf_Repository::supportsService(
     OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
@@ -1460,7 +1460,7 @@ librdf_Repository::queryConstruct(const OUString & i_rQuery)
                                   std::move(pQuery));
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 librdf_Repository::queryAsk(const OUString & i_rQuery)
 {
     std::scoped_lock g(m_aMutex);
@@ -1623,7 +1623,7 @@ void SAL_CALL librdf_Repository::removeStatementRDFa(
     clearGraph_NoLock(sXmlId, true);
 }
 
-beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
+beans::Pair< uno::Sequence<rdf::Statement>, bool > SAL_CALL
 librdf_Repository::getStatementRDFa(
     const uno::Reference< rdf::XMetadatable > & i_xElement)
 {
@@ -1633,7 +1633,7 @@ librdf_Repository::getStatementRDFa(
     }
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
     if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
-        return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >();
+        return beans::Pair< uno::Sequence<rdf::Statement>, bool >();
     }
     OUString const sXmlId(mdref.First + "#" + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
@@ -1662,7 +1662,7 @@ librdf_Repository::getStatementRDFa(
 
     std::scoped_lock g(m_aMutex); // don't call i_x* with mutex locked
 
-    return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >(
+    return beans::Pair< uno::Sequence<rdf::Statement>, bool >(
             comphelper::containerToSequence(ret), 0 != m_RDFaXHTMLContentSet.count(sXmlId));
 }
 

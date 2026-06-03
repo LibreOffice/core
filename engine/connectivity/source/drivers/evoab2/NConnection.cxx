@@ -150,7 +150,7 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OU
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
     return nullptr;
 }
-sal_Bool SAL_CALL OEvoabConnection::isClosed(  )
+bool SAL_CALL OEvoabConnection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return OConnection_BASE::rBHelper.bDisposed;
@@ -187,11 +187,11 @@ void OEvoabConnection::disposing()
 }
 
 // -------------------------------- stubbed methods ------------------------------------------------
-void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ )
+void SAL_CALL OEvoabConnection::setAutoCommit( bool /*autoCommit*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setAutoCommit"_ustr, *this );
 }
-sal_Bool SAL_CALL OEvoabConnection::getAutoCommit(  )
+bool SAL_CALL OEvoabConnection::getAutoCommit(  )
 {
     return true;
 }
@@ -201,11 +201,11 @@ void SAL_CALL OEvoabConnection::commit(  )
 void SAL_CALL OEvoabConnection::rollback(  )
 {
 }
-void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool /*readOnly*/ )
+void SAL_CALL OEvoabConnection::setReadOnly( bool /*readOnly*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setReadOnly"_ustr, *this );
 }
-sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  )
+bool SAL_CALL OEvoabConnection::isReadOnly(  )
 {
     return false;
 }

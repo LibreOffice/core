@@ -178,7 +178,7 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
 
 
 Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_Int32 nPos, const Locale& rLocale,
-        sal_Int16 rWordType, sal_Bool bDirection )
+        sal_Int16 rWordType, bool bDirection )
 {
     sal_Int32 len = Text.getLength();
     if( nPos < 0 || len == 0 )
@@ -210,7 +210,7 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
     return result;
 }
 
-sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int32 nPos,
+bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale, sal_Int16 rWordType )
 {
     sal_Int32 len = Text.getLength();
@@ -226,7 +226,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int3
     return result.startPos == nPos;
 }
 
-sal_Bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 nPos,
+bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale, sal_Int16 rWordType )
 {
     sal_Int32 len = Text.getLength();
@@ -567,7 +567,7 @@ BreakIteratorImpl::getImplementationName()
     return u"com.sun.star.i18n.BreakIterator"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 BreakIteratorImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

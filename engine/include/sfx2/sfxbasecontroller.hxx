@@ -103,9 +103,9 @@ public:
 
     virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override ;
 
-    virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override ;
+    virtual bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override ;
 
-    virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) override ;
+    virtual bool SAL_CALL suspend( bool bSuspend ) override ;
 
     css::uno::Any SAL_CALL getViewData() override ;
 
@@ -172,12 +172,12 @@ public:
     appendInfobar(const OUString& sId, const OUString& sPrimaryMessage,
                   const OUString& sSecondaryMessage, sal_Int32 aInfobarType,
                   const css::uno::Sequence<css::beans::StringPair>& actionButtons,
-                  sal_Bool bShowCloseButton) override;
+                  bool bShowCloseButton) override;
     virtual void SAL_CALL updateInfobar(const OUString& sId, const OUString& sPrimaryMessage,
                                         const OUString& sSecondaryMessage,
                                         sal_Int32 aInfobarType) override;
     virtual void SAL_CALL removeInfobar(const OUString& sId) override;
-    virtual sal_Bool SAL_CALL hasInfobar(const OUString& sId) override;
+    virtual bool SAL_CALL hasInfobar(const OUString& sId) override;
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API

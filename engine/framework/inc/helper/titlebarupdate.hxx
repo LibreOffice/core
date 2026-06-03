@@ -99,9 +99,9 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
                     describe the module in its details.
                     Is set only if return value is true.
 
-            @return [sal_Bool]
-                    sal_True in case module could be identified and all needed values could be read.
-                    sal_False otherwise.
+            @return [bool]
+                    true in case module could be identified and all needed values could be read.
+                    false otherwise.
          */
         bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                               TModuleInfo&                               rInfo );

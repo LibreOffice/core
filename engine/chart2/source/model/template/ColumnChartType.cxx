@@ -144,7 +144,7 @@ OUString SAL_CALL ColumnChartType::getImplementationName()
     return u"com.sun.star.comp.chart.ColumnChartType"_ustr;
 }
 
-sal_Bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )
+bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

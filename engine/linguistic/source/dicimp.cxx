@@ -259,7 +259,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // counter check that it is safe to set bIsModified to sal_False at
+    // counter check that it is safe to set bIsModified to false at
     // the end of the function
     DBG_ASSERT(!bIsModified, "lng : dictionary already modified!");
 
@@ -610,7 +610,7 @@ bool DictionaryNeo::seekEntry(std::u16string_view rWord,
                               sal_Int32 *pPos, bool bSimilarOnly)
 {
     // look for entry with binary search.
-    // return sal_True if found sal_False else.
+    // return true if found false else.
     // if pPos != NULL it will become the position of the found entry, or
     // if that was not found the position where it has to be inserted
     // to keep the entries sorted
@@ -754,7 +754,7 @@ DictionaryType SAL_CALL DictionaryNeo::getDictionaryType(  )
     return eDicType;
 }
 
-void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
+void SAL_CALL DictionaryNeo::setActive( bool bActivate )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -785,7 +785,7 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
     launchEvent(nEvent, nullptr);
 }
 
-sal_Bool SAL_CALL DictionaryNeo::isActive(  )
+bool SAL_CALL DictionaryNeo::isActive(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return bIsActive;
@@ -846,7 +846,7 @@ uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
                     : uno::Reference< XDictionaryEntry >();
 }
 
-sal_Bool SAL_CALL DictionaryNeo::addEntry(
+bool SAL_CALL DictionaryNeo::addEntry(
             const uno::Reference< XDictionaryEntry >& xDicEntry )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -863,8 +863,8 @@ sal_Bool SAL_CALL DictionaryNeo::addEntry(
     return bRes;
 }
 
-sal_Bool SAL_CALL
-    DictionaryNeo::add( const OUString& rWord, sal_Bool bIsNegative,
+bool SAL_CALL
+    DictionaryNeo::add( const OUString& rWord, bool bIsNegative,
             const OUString& rRplcText )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -881,7 +881,7 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
-sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
+bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -915,7 +915,7 @@ sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
     return bRemoved;
 }
 
-sal_Bool SAL_CALL DictionaryNeo::isFull(  )
+bool SAL_CALL DictionaryNeo::isFull(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -951,7 +951,7 @@ void SAL_CALL DictionaryNeo::clear(  )
     }
 }
 
-sal_Bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
+bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
             const uno::Reference< XDictionaryEventListener >& xListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -965,7 +965,7 @@ sal_Bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
     return bRes;
 }
 
-sal_Bool SAL_CALL DictionaryNeo::removeDictionaryEventListener(
+bool SAL_CALL DictionaryNeo::removeDictionaryEventListener(
             const uno::Reference< XDictionaryEventListener >& xListener )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -980,7 +980,7 @@ sal_Bool SAL_CALL DictionaryNeo::removeDictionaryEventListener(
 }
 
 
-sal_Bool SAL_CALL DictionaryNeo::hasLocation()
+bool SAL_CALL DictionaryNeo::hasLocation()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return !aMainURL.isEmpty();
@@ -992,7 +992,7 @@ OUString SAL_CALL DictionaryNeo::getLocation()
     return aMainURL;
 }
 
-sal_Bool SAL_CALL DictionaryNeo::isReadonly()
+bool SAL_CALL DictionaryNeo::isReadonly()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -1079,7 +1079,7 @@ OUString SAL_CALL DicEntry::getDictionaryWord(  )
     return aDicWord;
 }
 
-sal_Bool SAL_CALL DicEntry::isNegative(  )
+bool SAL_CALL DicEntry::isNegative(  )
 {
     return bIsNegativ;
 }

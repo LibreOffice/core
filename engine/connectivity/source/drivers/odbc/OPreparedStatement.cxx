@@ -125,7 +125,7 @@ void SAL_CALL OPreparedStatement::close(  )
 }
 
 
-sal_Bool SAL_CALL OPreparedStatement::execute(  )
+bool SAL_CALL OPreparedStatement::execute(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  )
     sal_Int32 numRows = -1;
 
     prepareStatement();
-    // Execute the statement.  If execute returns sal_False, a
+    // Execute the statement.  If execute returns false, a
     // row count exists.
 
     if (!execute())
@@ -246,7 +246,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  )
 }
 
 
-void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
+void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, bool x )
 {
     // Set the parameter as if it were an integer
     setInt (parameterIndex, x ? 1 : 0 );

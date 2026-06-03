@@ -254,7 +254,7 @@ OUString SwXFootnoteProperties::getImplementationName()
     return u"SwXFootnoteProperties"_ustr;
 }
 
-sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName)
+bool SwXFootnoteProperties::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -535,7 +535,7 @@ OUString SwXEndnoteProperties::getImplementationName()
     return u"SwXEndnoteProperties"_ustr;
 }
 
-sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName)
+bool SwXEndnoteProperties::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -738,7 +738,7 @@ OUString SwXLineNumberingProperties::getImplementationName()
     return u"SwXLineNumberingProperties"_ustr;
 }
 
-sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName)
+bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1006,7 +1006,7 @@ OUString SwXNumberingRules::getImplementationName()
     return u"SwXNumberingRules"_ustr;
 }
 
-sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName)
+bool SwXNumberingRules::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1207,7 +1207,7 @@ uno::Type SwXNumberingRules::getElementType()
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
-sal_Bool SwXNumberingRules::hasElements()
+bool SwXNumberingRules::hasElements()
 {
     return true;
 }
@@ -2362,7 +2362,7 @@ OUString SwXChapterNumbering::getImplementationName()
     return u"SwXChapterNumbering"_ustr;
 }
 
-sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName)
+bool SwXChapterNumbering::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

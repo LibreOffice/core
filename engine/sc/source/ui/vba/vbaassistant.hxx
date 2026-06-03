@@ -37,10 +37,10 @@ public:
     ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext );
     virtual ~ScVbaAssistant() override;
     // XAssistant
-    virtual sal_Bool SAL_CALL getOn() override;
-    virtual void SAL_CALL setOn( sal_Bool _on ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual bool SAL_CALL getOn() override;
+    virtual void SAL_CALL setOn( bool _on ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
     virtual ::sal_Int32 SAL_CALL getTop() override;
     virtual void SAL_CALL setTop( ::sal_Int32 _top ) override;
     virtual ::sal_Int32 SAL_CALL getLeft() override;

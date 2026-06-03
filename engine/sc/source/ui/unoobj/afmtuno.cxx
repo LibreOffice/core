@@ -286,7 +286,7 @@ uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
     return cppu::UnoType<container::XNamed>::get();    // must match getByIndex
 }
 
-sal_Bool SAL_CALL ScAutoFormatsObj::hasElements()
+bool SAL_CALL ScAutoFormatsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -318,7 +318,7 @@ uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const OUString& aName )
+bool SAL_CALL ScAutoFormatsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nDummy;
@@ -399,7 +399,7 @@ uno::Type SAL_CALL ScAutoFormatObj::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();  // must match getByIndex
 }
 
-sal_Bool SAL_CALL ScAutoFormatObj::hasElements()
+bool SAL_CALL ScAutoFormatObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );

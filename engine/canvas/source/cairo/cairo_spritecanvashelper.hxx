@@ -71,7 +71,7 @@ namespace cairocanvas
             Current window area in absolute screen coordinates
 
             @param bUpdateAll
-            sal_True, if everything must be updated, not only changed
+            true, if everything must be updated, not only changed
             sprites
 
             @param io_bSurfaceDirty

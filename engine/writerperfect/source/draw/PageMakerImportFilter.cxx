@@ -37,7 +37,7 @@ OUString SAL_CALL PageMakerImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Draw.PageMakerImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL PageMakerImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

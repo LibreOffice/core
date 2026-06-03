@@ -34,16 +34,16 @@ public:
 
     UITestUnoObj();
 
-    sal_Bool SAL_CALL executeCommand(const OUString& rCommand) override;
+    bool SAL_CALL executeCommand(const OUString& rCommand) override;
 
-    sal_Bool SAL_CALL executeCommandWithParameters(const OUString& rCommand,
+    bool SAL_CALL executeCommandWithParameters(const OUString& rCommand,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs) override;
 
-    sal_Bool SAL_CALL executeCommandForProvider(
+    bool SAL_CALL executeCommandForProvider(
         const OUString& rCommand,
         const css::uno::Reference<css::frame::XDispatchProvider>& xProvider) override;
 
-    sal_Bool SAL_CALL executeDialog(const OUString& rCommand) override;
+    bool SAL_CALL executeDialog(const OUString& rCommand) override;
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
 
@@ -56,7 +56,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
@@ -67,20 +67,20 @@ UITestUnoObj::UITestUnoObj()
 {
 }
 
-sal_Bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
+bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
 {
     SolarMutexGuard aGuard;
     return UITest::executeCommand(rCommand);
 }
 
-sal_Bool SAL_CALL UITestUnoObj::executeCommandWithParameters(const OUString& rCommand,
+bool SAL_CALL UITestUnoObj::executeCommandWithParameters(const OUString& rCommand,
     const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     SolarMutexGuard aGuard;
     return UITest::executeCommandWithParameters(rCommand,rArgs);
 }
 
-sal_Bool SAL_CALL UITestUnoObj::executeCommandForProvider(
+bool SAL_CALL UITestUnoObj::executeCommandForProvider(
     const OUString& rCommand,
     const css::uno::Reference<css::frame::XDispatchProvider>& xProvider)
 {
@@ -88,7 +88,7 @@ sal_Bool SAL_CALL UITestUnoObj::executeCommandForProvider(
     return UITest::executeCommandForProvider(rCommand, xProvider);
 }
 
-sal_Bool SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)
+bool SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)
 {
     SolarMutexGuard aGuard;
     return UITest::executeDialog(rCommand);
@@ -140,7 +140,7 @@ OUString SAL_CALL UITestUnoObj::getImplementationName()
     return u"org.libreoffice.uitest.UITest"_ustr;
 }
 
-sal_Bool UITestUnoObj::supportsService(OUString const & ServiceName)
+bool UITestUnoObj::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

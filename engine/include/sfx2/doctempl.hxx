@@ -89,7 +89,7 @@ public:
             The id of the template to rename or USHRT_MAX to rename the region.
 
         \return
-            sal_True if the action could be performed, sal_False otherwise
+            true if the action could be performed, false otherwise
 
     */
     bool            SetName(const OUString &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);

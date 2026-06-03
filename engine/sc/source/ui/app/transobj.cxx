@@ -761,7 +761,7 @@ bool ScTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 
     return bRet;
 }
 
-sal_Bool SAL_CALL ScTransferObj::isComplex()
+bool SAL_CALL ScTransferObj::isComplex()
 {
     ScRange aReduced = lcl_reduceBlock(*m_pDoc, m_aBlock);
     size_t nCells = (aReduced.aEnd.Col() - aReduced.aStart.Col() + 1) *

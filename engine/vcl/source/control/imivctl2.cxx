@@ -266,7 +266,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
 
 /*
     Searches, starting from the passed value, the next entry to the left/to the
-    right. Example for bRight = sal_True:
+    right. Example for bRight = true:
 
                   c
                 b c

@@ -53,7 +53,7 @@ OUString SAL_CALL TreemapChartType::getImplementationName()
     return u"com.sun.star.comp.chart.TreemapChartType"_ustr;
 }
 
-sal_Bool SAL_CALL TreemapChartType::supportsService(const OUString& rServiceName)
+bool SAL_CALL TreemapChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

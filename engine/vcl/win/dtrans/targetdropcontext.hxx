@@ -46,7 +46,7 @@ public:
     virtual void SAL_CALL rejectDrop() override;
 
     // XDropTargetDropContext (inherits XDropTargetDragContext)
-    virtual void SAL_CALL dropComplete(sal_Bool success) override;
+    virtual void SAL_CALL dropComplete(bool success) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

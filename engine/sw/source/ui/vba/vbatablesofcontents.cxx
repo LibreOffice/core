@@ -41,7 +41,7 @@ public:
     explicit TablesOfContentsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), m_nIndex( 0 )
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( m_nIndex < mxIndexAccess->getCount() );
     }
@@ -98,7 +98,7 @@ public:
     {
         return cppu::UnoType<word::XTableOfContents>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return true;
     }

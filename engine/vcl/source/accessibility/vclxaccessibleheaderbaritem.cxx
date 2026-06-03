@@ -88,7 +88,7 @@ OUString VCLXAccessibleHeaderBarItem::getImplementationName()
     return u"com.sun.star.comp.svtools.AccessibleHeaderBarItem"_ustr;
 }
 
-sal_Bool VCLXAccessibleHeaderBarItem::supportsService( const OUString& rServiceName )
+bool VCLXAccessibleHeaderBarItem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

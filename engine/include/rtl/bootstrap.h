@@ -129,13 +129,13 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pFileUri 
            default value, even when called with different
            defaults.
 
-   @retval sal_True when a value could be retrieved successfully.
+   @retval true when a value could be retrieved successfully.
            When a <code>pDefault</code> value is given,
-           the function always returns <code>sal_True</code>.
-   @retval sal_False when none of the 4 methods gave a value.
+           the function always returns <code>true</code>.
+   @retval false when none of the 4 methods gave a value.
            <code>ppValue</code> then contains an empty string.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_bootstrap_get(
+SAL_DLLPUBLIC bool SAL_CALL rtl_bootstrap_get(
         rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault );
 
 /** Sets a bootstrap parameter.
@@ -172,9 +172,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
    @param[out] ppValue      The result of the retrieval. *ppValue may be null in case of failure.
    @param[in]  pDefault     The default value for the retrieval, may be <code>NULL</code>
 
-   @return                  The status of the retrieval, <code>sal_True</code> on success.
+   @return                  The status of the retrieval, <code>true</code> on success.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
+SAL_DLLPUBLIC bool SAL_CALL rtl_bootstrap_get_from_handle(
         rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault);
 
 

@@ -62,8 +62,8 @@ public:
     virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) override { maModifyPassword = rPass; }
     virtual OUString SAL_CALL getPasswordToModify() override { return maModifyPassword; }
 
-    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) override { mbReadOnly = bReadOnly; }
-    virtual sal_Bool SAL_CALL getRecommendReadOnly() override { return mbReadOnly; }
+    virtual void SAL_CALL setRecommendReadOnly( bool bReadOnly ) override { mbReadOnly = bReadOnly; }
+    virtual bool SAL_CALL getRecommendReadOnly() override { return mbReadOnly; }
 
 private:
     OUString            maPassword;

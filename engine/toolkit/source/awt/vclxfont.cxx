@@ -161,7 +161,7 @@ void VCLXFont::getKernPairs( css::uno::Sequence< sal_Unicode >& /*rnChars1*/, cs
 }
 
 // css::awt::XFont2
-sal_Bool VCLXFont::hasGlyphs( const OUString& aText )
+bool VCLXFont::hasGlyphs( const OUString& aText )
 {
     std::unique_lock aGuard( maMutex );
     SolarMutexGuard aSolarGuard;

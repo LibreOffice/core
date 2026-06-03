@@ -80,7 +80,7 @@ public:
 
     // css::container::XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     // css::awt::XControlContainer
     void SAL_CALL setStatusText( const OUString& StatusText ) override;
@@ -99,7 +99,7 @@ public:
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::awt::XWindow
-    void SAL_CALL setVisible( sal_Bool Visible ) override;
+    void SAL_CALL setVisible( bool Visible ) override;
 
     OUString SAL_CALL getImplementationName() override;
 

@@ -66,7 +66,7 @@ namespace dbaccess
         virtual void SAL_CALL release() noexcept override;
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         // XSQLQueryComposer
         virtual OUString SAL_CALL getQuery(  ) override;
@@ -76,7 +76,7 @@ namespace dbaccess
         virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) override;
         virtual OUString SAL_CALL getOrder(  ) override;
         virtual void SAL_CALL appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column ) override;
-        virtual void SAL_CALL appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, sal_Bool ascending ) override;
+        virtual void SAL_CALL appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;
         virtual void SAL_CALL setFilter( const OUString& filter ) override;
         virtual void SAL_CALL setOrder( const OUString& order ) override;
         // XTablesSupplier

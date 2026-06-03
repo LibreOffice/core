@@ -48,7 +48,7 @@ public:
         bool needsPropertyValue = false; // TODO: implement PropertyValue handling
 
         // Basic types
-        bool needsSalTypes = false; // For sal_Int32, sal_Bool, etc.
+        bool needsSalTypes = false; // For sal_Int32, bool, etc.
         bool needsRtlUstring = false; // For rtl_uString*
         bool needsUnoInterface = false; // For XInterface base type
         bool needsEnum = false; // For enum type handling

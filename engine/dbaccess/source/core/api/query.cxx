@@ -217,7 +217,7 @@ OUString SAL_CALL OQuery::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.OQuery"_ustr;
     }
-sal_Bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

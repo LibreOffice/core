@@ -704,7 +704,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                 xTextShape->setPosition(aRelPos);
                 if( !m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) &&
                     // "ShowCustomLeaderLines"
-                    rDataSeries.getModel()->getFastPropertyValue( PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES ).get<sal_Bool>())
+                    rDataSeries.getModel()->getFastPropertyValue( PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES ).get<bool>())
                 {
                     const basegfx::B2IRectangle aRect(
                         BaseGFXHelper::makeRectangle(aRelPos, xTextShape->getSize()));
@@ -2414,7 +2414,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                         continue;
 
                     // "ShowLegendEntry"
-                    if (!pSeries->getModel()->getFastPropertyValue(PROP_DATASERIES_SHOW_LEGEND_ENTRY).get<sal_Bool>())
+                    if (!pSeries->getModel()->getFastPropertyValue(PROP_DATASERIES_SHOW_LEGEND_ENTRY).get<bool>())
                     {
                         continue;
                     }

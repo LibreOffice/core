@@ -18,7 +18,7 @@ using String = const sal_Unicode*;
 
 union Value {
     // bool
-    sal_Bool boolData;
+    bool boolData;
 
     // byte
     sal_Int8 byteData;

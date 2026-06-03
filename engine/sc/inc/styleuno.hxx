@@ -69,11 +69,11 @@ public:
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XStyleLoader
     virtual void SAL_CALL   loadStylesFromURL( const OUString& URL,
@@ -86,7 +86,7 @@ public:
                                 const css::uno::Sequence< css::beans::PropertyValue >& aOptions ) override;
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 private:
     /// @throws css::io::IOException
@@ -127,7 +127,7 @@ public:
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -135,7 +135,7 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
@@ -148,7 +148,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -203,8 +203,8 @@ public:
                             CreateEmptyNumberingRules();
 
                             // XStyle
-    virtual sal_Bool SAL_CALL isUserDefined() override;
-    virtual sal_Bool SAL_CALL isInUse() override;
+    virtual bool SAL_CALL isUserDefined() override;
+    virtual bool SAL_CALL isInUse() override;
     virtual OUString SAL_CALL getParentStyle() override;
     virtual void SAL_CALL   setParentStyle( const OUString& aParentStyle ) override;
 
@@ -256,7 +256,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

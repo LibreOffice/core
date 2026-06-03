@@ -63,7 +63,7 @@ OUString SAL_CALL ThemeColorsToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.ThemeColorsToolBoxControl"_ustr;
 }
 
-sal_Bool SAL_CALL ThemeColorsToolBoxControl::supportsService(const OUString& rServiceName)
+bool SAL_CALL ThemeColorsToolBoxControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

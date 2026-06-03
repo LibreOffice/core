@@ -513,9 +513,9 @@ CPPUNIT_TEST_FIXTURE(Test, testN775899)
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xFrame->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<lang::XServiceInfo> xServiceInfo(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_True, xServiceInfo->supportsService(u"com.sun.star.text.TextTable"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService(u"com.sun.star.text.TextTable"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
+    CPPUNIT_ASSERT_EQUAL(false, xParaEnum->hasMoreElements());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testN777345)

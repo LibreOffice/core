@@ -1147,7 +1147,7 @@ IMPL_LINK(FmFilterNavigator, EditedEntryHdl, const IterString&, rIterString, boo
         }
         else
         {
-            // display the error and return sal_False
+            // display the error and return false
             SQLContext aError(SvxResId(RID_STR_SYNTAXERROR), {}, {}, 0, {}, aErrorMsg);
             displayException(aError, VCLUnoHelper::GetInterface(m_xTopLevel));
 

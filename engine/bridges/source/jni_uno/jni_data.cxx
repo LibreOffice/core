@@ -53,7 +53,7 @@ void createDefaultUnoValue(
 {
     switch (type->eTypeClass) {
     case typelib_TypeClass_BOOLEAN:
-        *static_cast< sal_Bool * >(uno_data) = false;
+        *static_cast< bool * >(uno_data) = false;
         break;
 
     case typelib_TypeClass_BYTE:
@@ -981,7 +981,7 @@ void Bridge::map_to_uno(
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_BOOLEAN:
-            seq = seq_allocate( nElements, sizeof (sal_Bool) );
+            seq = seq_allocate( nElements, sizeof (bool) );
             jni->GetBooleanArrayRegion(
                 static_cast<jbooleanArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jboolean *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );

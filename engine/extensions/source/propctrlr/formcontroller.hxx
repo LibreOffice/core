@@ -72,7 +72,7 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        virtual bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue
             ) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(

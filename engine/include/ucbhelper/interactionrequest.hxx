@@ -302,17 +302,17 @@ public:
     virtual void SAL_CALL select() override;
 
     // XInteractionSupplyAuthentication
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     canSetRealm() override;
     virtual void SAL_CALL
     setRealm( const OUString& Realm ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     canSetUserName() override;
     virtual void SAL_CALL
     setUserName( const OUString& UserName ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     canSetPassword() override;
     virtual void SAL_CALL
     setPassword( const OUString& Password ) override;
@@ -324,7 +324,7 @@ public:
     virtual void SAL_CALL
     setRememberPassword( css::ucb::RememberAuthentication Remember ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     canSetAccount() override;
     virtual void SAL_CALL
     setAccount( const OUString& Account ) override;
@@ -336,8 +336,8 @@ public:
     setRememberAccount( css::ucb::RememberAuthentication Remember ) override;
 
     // XInteractionSupplyAuthentication2
-    virtual sal_Bool SAL_CALL canUseSystemCredentials( sal_Bool& Default ) override;
-    virtual void SAL_CALL setUseSystemCredentials( sal_Bool UseSystemCredentials ) override;
+    virtual bool SAL_CALL canUseSystemCredentials( bool& Default ) override;
+    virtual void SAL_CALL setUseSystemCredentials( bool UseSystemCredentials ) override;
 
     // Non-interface methods.
 

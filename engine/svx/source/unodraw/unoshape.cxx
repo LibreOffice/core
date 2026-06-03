@@ -3125,7 +3125,7 @@ void SvxShape::setAllPropertiesToDefault()
     }
 
     // #i68523# special handling for Svx3DCharacterModeItem, this is not saved
-    // but needs to be sal_True in svx, pool default (false) in sch. Since sch
+    // but needs to be true in svx, pool default (false) in sch. Since sch
     // does not load lathe or extrude objects, it is possible to set the items
     // here.
     // For other solution possibilities, see task description.
@@ -3642,7 +3642,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL SvxShape::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxShape::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -3729,7 +3729,7 @@ void SvxShape::unlock()
 
 
 // XActionLockable
-sal_Bool SAL_CALL SvxShape::isActionLocked(  )
+bool SAL_CALL SvxShape::isActionLocked(  )
 {
     ::SolarMutexGuard aGuard;
 
@@ -3883,7 +3883,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeText::getSupportedServiceNames()
 }
 
 
-sal_Bool SAL_CALL SvxShapeText::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxShapeText::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(static_cast<SvxShape*>(this), ServiceName);
 }

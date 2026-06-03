@@ -48,26 +48,26 @@ ScVbaOLEObject::getObject()
     return uno::Reference< uno::XInterface >( m_xControl, uno::UNO_QUERY_THROW );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaOLEObject::getEnabled()
 {
     return m_xControl->getEnabled();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setEnabled( sal_Bool _enabled )
+ScVbaOLEObject::setEnabled( bool _enabled )
 {
     m_xControl->setEnabled( _enabled );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaOLEObject::getVisible()
 {
     return m_xControl->getVisible();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setVisible( sal_Bool _visible )
+ScVbaOLEObject::setVisible( bool _visible )
 {
     m_xControl->setVisible( _visible );
 }

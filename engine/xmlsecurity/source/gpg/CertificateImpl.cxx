@@ -240,7 +240,7 @@ OUString SAL_CALL CertificateImpl::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL CertificateImpl::supportsService(const OUString& serviceName)
+bool SAL_CALL CertificateImpl::supportsService(const OUString& serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

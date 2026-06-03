@@ -251,7 +251,7 @@ sal_Int32 SAL_CALL Paragraph::getBackground()
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
+bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
 {
     ensureAlive();
     m_xDocument->changeParagraphSelection(this, nIndex, nIndex);
@@ -327,7 +327,7 @@ OUString SAL_CALL Paragraph::getSelectedText()
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
+bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
                                                 ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -372,7 +372,7 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextBehindIndex( sal_Int3
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
+bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
                                             ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -381,13 +381,13 @@ sal_Bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::scrollSubstringTo( sal_Int32, sal_Int32, css::accessibility::AccessibleScrollType )
+bool SAL_CALL Paragraph::scrollSubstringTo( sal_Int32, sal_Int32, css::accessibility::AccessibleScrollType )
 {
     return false;
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
+bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -397,7 +397,7 @@ sal_Bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
+bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
 {
     ensureAlive();
     m_xDocument->changeParagraphText(this, nIndex, nIndex, false, true,
@@ -406,7 +406,7 @@ sal_Bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
+bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
                                           ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -416,7 +416,7 @@ sal_Bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::insertText(OUString const & rText,
+bool SAL_CALL Paragraph::insertText(OUString const & rText,
                                               ::sal_Int32 nIndex)
 {
     ensureAlive();
@@ -425,7 +425,7 @@ sal_Bool SAL_CALL Paragraph::insertText(OUString const & rText,
 }
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
                            OUString const & rReplacement)
 {
@@ -436,7 +436,7 @@ Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::setAttributes(
+bool SAL_CALL Paragraph::setAttributes(
     ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
     css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
 {
@@ -447,7 +447,7 @@ sal_Bool SAL_CALL Paragraph::setAttributes(
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::setText(OUString const & rText)
+bool SAL_CALL Paragraph::setText(OUString const & rText)
 {
     ensureAlive();
     m_xDocument->changeParagraphText(this, rText);

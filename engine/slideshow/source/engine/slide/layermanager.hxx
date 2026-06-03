@@ -337,10 +337,10 @@ namespace slideshow::internal
             /// Number of shape sprites currently active on this LayerManager
             sal_Int32                mnActiveSprites;
 
-            /// sal_True, if shapes might need to move to different layer
+            /// true, if shapes might need to move to different layer
             bool                     mbLayerAssociationDirty;
 
-            /// sal_False when deactivated
+            /// false when deactivated
             bool                     mbActive;
 
             /** When true, all sprite animations run in the foreground.  That

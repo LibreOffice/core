@@ -63,7 +63,7 @@ OUString SAL_CALL SdXCustomPresentation::getImplementationName()
     return u"SdXCustomPresentation"_ustr ;
 }
 
-sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -152,7 +152,7 @@ uno::Type SAL_CALL SdXCustomPresentation::getElementType()
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL SdXCustomPresentation::hasElements()
+bool SAL_CALL SdXCustomPresentation::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -277,7 +277,7 @@ OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()
     return u"SdXCustomPresentationAccess"_ustr;
 }
 
-sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& ServiceName )
+bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -411,7 +411,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames(
     return aSequence;
 }
 
-sal_Bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName )
+bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     return getSdCustomShow(aName) != nullptr;
@@ -423,7 +423,7 @@ uno::Type SAL_CALL SdXCustomPresentationAccess::getElementType()
     return cppu::UnoType<container::XIndexContainer>::get();
 }
 
-sal_Bool SAL_CALL SdXCustomPresentationAccess::hasElements()
+bool SAL_CALL SdXCustomPresentationAccess::hasElements()
 {
     SolarMutexGuard aGuard;
 

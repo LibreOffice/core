@@ -86,7 +86,7 @@ Property SAL_CALL FastPropertySetInfo::getPropertyByName( const OUString& aName 
 }
 
 
-sal_Bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName )
+bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName )
 {
     return hasProperty( aName ) != nullptr;
 }

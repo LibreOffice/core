@@ -60,7 +60,7 @@ OUString SAL_CALL DocumentContentFactory::getImplementationName()
 }
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 DocumentContentFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

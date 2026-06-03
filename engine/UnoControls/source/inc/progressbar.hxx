@@ -80,7 +80,7 @@ public:
 
     //  XControl
 
-    virtual sal_Bool SAL_CALL setModel(
+    virtual bool SAL_CALL setModel(
         const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
     ) override;
 

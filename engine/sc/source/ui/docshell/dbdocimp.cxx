@@ -144,7 +144,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     SCROW nEndRow = nRow;
 
     bool bDoSelection = false;
-    bool bRealSelection = false;            // sal_True if not everything is selected
+    bool bRealSelection = false;            // true if not everything is selected
     bool bBookmarkSelection = false;
     sal_Int32 nListPos = 0;
     sal_Int32 nRowsRead = 0;
@@ -258,9 +258,9 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 nEndCol = static_cast<SCCOL>( rParam.nCol1 + nColCount - 1 );
 
                 uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
-                uno::Sequence<sal_Bool> aColCurr( nColCount );      // currency flag is not in types
+                uno::Sequence<bool> aColCurr( nColCount );      // currency flag is not in types
                 sal_Int32* pTypeArr = aColTypes.getArray();
-                sal_Bool* pCurrArr = aColCurr.getArray();
+                bool* pCurrArr = aColCurr.getArray();
                 for (tools::Long i=0; i<nColCount; i++)
                 {
                     pTypeArr[i] = xMeta->getColumnType( i+1 );

@@ -45,7 +45,7 @@ typedef struct timeval osl_time_t;
 #endif
 static osl_time_t startTime;
 
-sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
+bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
 #ifdef __MACH__
     clock_serv_t cclock;
@@ -81,7 +81,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
     return true;
 }
 
-sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
+bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     osl::tz::BrokenDown bd;
     if (!osl::tz::epochToUtc(static_cast<std::int64_t>(pTimeVal->Seconds), bd))
@@ -99,7 +99,7 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
     return true;
 }
 
-sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
+bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
     /* The API says pDateTime is in GMT, so this is a pure UTC-to-epoch conversion. */
     osl::tz::BrokenDown bd;
@@ -121,7 +121,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
     return true;
 }
 
-sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
+bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     std::int64_t utcEpoch = static_cast<std::int64_t>(pSystemTimeVal->Seconds);
     std::int32_t offset = osl::tz::getUtcOffsetForUtcTime(utcEpoch);
@@ -136,7 +136,7 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVa
     return true;
 }
 
-sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
+bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
     std::int64_t localEpoch = static_cast<std::int64_t>(pLocalTimeVal->Seconds);
     std::int32_t offset = osl::tz::getUtcOffsetForLocalTime(localEpoch);

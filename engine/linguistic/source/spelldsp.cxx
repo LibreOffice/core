@@ -181,7 +181,7 @@ Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
 }
 
 
-sal_Bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
+bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     SpellSvcByLangMap_t::const_iterator aIt( m_aSvcMap.find( LinguLocaleToLanguage( rLocale ) ) );
@@ -189,7 +189,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     SpellCheckerDispatcher::isValid( const OUString& rWord, const Locale& rLocale,
             const css::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
 {

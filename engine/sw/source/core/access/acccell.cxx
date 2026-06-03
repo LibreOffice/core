@@ -269,7 +269,7 @@ uno::Any SwAccessibleCell::getCurrentValue( )
     return uno::Any( GetTableBoxFormat()->GetTableBoxValue().GetValue() );
 }
 
-sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
+bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
 {
     SolarMutexGuard aGuard;
 
@@ -347,7 +347,7 @@ void SwAccessibleCell::selectAccessibleChild(
     m_aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
-sal_Bool SwAccessibleCell::isAccessibleChildSelected(
+bool SwAccessibleCell::isAccessibleChildSelected(
     sal_Int64 nChildIndex )
 {
     return m_aSelectionHelper.isAccessibleChildSelected(nChildIndex);

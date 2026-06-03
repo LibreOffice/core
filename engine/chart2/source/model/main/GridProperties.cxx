@@ -170,7 +170,7 @@ OUString SAL_CALL GridProperties::getImplementationName()
     return u"com.sun.star.comp.chart2.GridProperties"_ustr;
 }
 
-sal_Bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName )
+bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

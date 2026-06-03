@@ -32,7 +32,7 @@ OUString ScExcelBiffDetect::getImplementationName()
     return u"com.sun.star.comp.calc.ExcelBiffFormatDetector"_ustr;
 }
 
-sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName )
+bool ScExcelBiffDetect::supportsService( const OUString& aName )
 {
     return cppu::supportsService(this, aName);
 }

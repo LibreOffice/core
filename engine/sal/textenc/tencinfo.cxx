@@ -29,7 +29,7 @@
 #include "gettextencodingdata.hxx"
 #include "tenchelp.hxx"
 
-sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
+bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return
         nEncoding > RTL_TEXTENCODING_DONTKNOW
@@ -57,7 +57,7 @@ struct ImplStrFirstPartCharsetDef
 
 /* ======================================================================= */
 
-sal_Bool SAL_CALL rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_TextEncodingInfo* pEncInfo )
+bool SAL_CALL rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_TextEncodingInfo* pEncInfo )
 {
     const ImplTextEncodingData* pData;
 

@@ -155,8 +155,8 @@ public:
     OUString SAL_CALL getSelectedText(  ) override;
     void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
     css::awt::Selection SAL_CALL getSelection(  ) override;
-    sal_Bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) override;
+    bool SAL_CALL isEditable(  ) override;
+    void SAL_CALL setEditable( bool bEditable ) override;
     void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
     sal_Int16 SAL_CALL getMaxTextLen(  ) override;
 
@@ -173,7 +173,7 @@ public:
     OUString SAL_CALL getImplementationName(  ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 };
 
 
@@ -367,7 +367,7 @@ public:
     void SAL_CALL dispose(  ) override;
 
     // css::awt::XControl
-    sal_Bool SAL_CALL isTransparent(  ) override;
+    bool SAL_CALL isTransparent(  ) override;
 
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize(  ) override;
@@ -430,7 +430,7 @@ public:
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
 
     // css::awt::XControl
-    sal_Bool SAL_CALL isTransparent(  ) override;
+    bool SAL_CALL isTransparent(  ) override;
 
     // css::awt::XButton
     void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
@@ -440,8 +440,8 @@ public:
     // css::awt::XRadioButton
     void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
     void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    sal_Bool SAL_CALL getState(  ) override;
-    void SAL_CALL setState( sal_Bool b ) override;
+    bool SAL_CALL getState(  ) override;
+    void SAL_CALL setState( bool b ) override;
     void SAL_CALL setLabel( const OUString& Label ) override;
 
     // css::awt::XItemListener
@@ -508,7 +508,7 @@ public:
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
 
     // css::awt::XControl
-    sal_Bool SAL_CALL isTransparent(  ) override;
+    bool SAL_CALL isTransparent(  ) override;
 
     // css::awt::XButton
     void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
@@ -522,7 +522,7 @@ public:
     sal_Int16 SAL_CALL getState(  ) override;
     void SAL_CALL setState( sal_Int16 n ) override;
     void SAL_CALL setLabel( const OUString& Label ) override;
-    void SAL_CALL enableTriState( sal_Bool b ) override;
+    void SAL_CALL enableTriState( bool b ) override;
 
     // css::awt::XItemListener
     void SAL_CALL itemStateChanged( const css::awt::ItemEvent& rEvent ) override;
@@ -588,7 +588,7 @@ public:
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XControl
-    sal_Bool SAL_CALL isTransparent(  ) override;
+    bool SAL_CALL isTransparent(  ) override;
 
     // css::awt::XFixedHyperlink
     void SAL_CALL setText( const OUString& Text ) override;
@@ -654,7 +654,7 @@ public:
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XControl
-    sal_Bool SAL_CALL isTransparent(  ) override;
+    bool SAL_CALL isTransparent(  ) override;
 
     // css::awt::XFixedText
     void SAL_CALL setText( const OUString& Text ) override;
@@ -706,7 +706,7 @@ public:
                         UnoGroupBoxControl();
     OUString     GetComponentServiceName() const override;
 
-    sal_Bool SAL_CALL isTransparent(  ) override;
+    bool SAL_CALL isTransparent(  ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -852,11 +852,11 @@ public:
     css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
     OUString SAL_CALL getSelectedItem(  ) override;
     css::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
-    void SAL_CALL selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) override;
-    void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect ) override;
-    void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) override;
-    sal_Bool SAL_CALL isMutipleMode(  ) override;
-    void SAL_CALL setMultipleMode( sal_Bool bMulti ) override;
+    void SAL_CALL selectItemPos( sal_Int16 nPos, bool bSelect ) override;
+    void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
+    void SAL_CALL selectItem( const OUString& aItem, bool bSelect ) override;
+    bool SAL_CALL isMutipleMode(  ) override;
+    void SAL_CALL setMultipleMode( bool bMulti ) override;
     sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;
     void SAL_CALL makeVisible( sal_Int16 nEntry ) override;
@@ -874,7 +874,7 @@ public:
     void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
     // XUnoControl
-    sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 
     // XItemListListener
     virtual void SAL_CALL listItemInserted( const css::awt::ItemListEvent& Event ) override;
@@ -968,7 +968,7 @@ public:
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;
 
     // XUnoControl
-    virtual sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    virtual bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 
     // XItemListListener
     virtual void SAL_CALL listItemInserted( const css::awt::ItemListEvent& Event ) override;
@@ -1019,7 +1019,7 @@ public:
     void SAL_CALL down() override;
     void SAL_CALL first() override;
     void SAL_CALL last() override;
-    void SAL_CALL enableRepeat( sal_Bool bRepeat ) override;
+    void SAL_CALL enableRepeat( bool bRepeat ) override;
 
 
     // css::lang::XServiceInfo
@@ -1089,12 +1089,12 @@ public:
     css::util::Date SAL_CALL getFirst(  ) override;
     void SAL_CALL setLast( const css::util::Date& Date ) override;
     css::util::Date SAL_CALL getLast(  ) override;
-    void SAL_CALL setLongFormat( sal_Bool bLong ) override;
-    sal_Bool SAL_CALL isLongFormat(  ) override;
+    void SAL_CALL setLongFormat( bool bLong ) override;
+    bool SAL_CALL isLongFormat(  ) override;
     void SAL_CALL setEmpty(  ) override;
-    sal_Bool SAL_CALL isEmpty(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    bool SAL_CALL isEmpty(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -1166,9 +1166,9 @@ public:
     void SAL_CALL setLast( const css::util::Time& Time ) override;
     css::util::Time SAL_CALL getLast(  ) override;
     void SAL_CALL setEmpty(  ) override;
-    sal_Bool SAL_CALL isEmpty(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    bool SAL_CALL isEmpty(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -1243,8 +1243,8 @@ public:
     double SAL_CALL getSpinSize(  ) override;
     void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -1319,8 +1319,8 @@ public:
     double SAL_CALL getSpinSize(  ) override;
     void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -1378,8 +1378,8 @@ public:
     void SAL_CALL getMasks( OUString& EditMask, OUString& LiteralMask ) override;
     void SAL_CALL setString( const OUString& Str ) override;
     OUString SAL_CALL getString(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
+    void SAL_CALL setStrictFormat( bool bStrict ) override;
+    bool SAL_CALL isStrictFormat(  ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -1476,7 +1476,7 @@ public:
                         UnoFixedLineControl();
     OUString     GetComponentServiceName() const override;
 
-    sal_Bool SAL_CALL isTransparent(  ) override;
+    bool SAL_CALL isTransparent(  ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;

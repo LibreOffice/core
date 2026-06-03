@@ -109,7 +109,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnCount()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
+bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
 {
     /*
         Checks whether column is automatically numbered, which makes it
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
         return false;
@@ -130,14 +130,14 @@ sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
+bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 /*column*/ )
+bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 /*column*/ )
 {
     return false;
 }
@@ -151,7 +151,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 /*column*/ )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 /*column*/ )
+bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 /*column*/ )
 {
     return false;
 }
@@ -361,21 +361,21 @@ OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
+bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
 {
     return true;
 }
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 /*column*/ )
+bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
+bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
 {
     return false;
 }

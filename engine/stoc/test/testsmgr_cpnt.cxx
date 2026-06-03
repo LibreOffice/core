@@ -65,7 +65,7 @@ using namespace cppu;
 Reference<XMultiServiceFactory> getProcessServiceManager()
 {
     static Reference<XMultiServiceFactory> s_x(
-        createRegistryServiceFactory(OUString("stoctest.rdb"), sal_False));
+        createRegistryServiceFactory(OUString("stoctest.rdb"), false));
     return s_x;
 }
 
@@ -90,7 +90,7 @@ public:
 
     // XServiceInfo
     OUString                    SAL_CALL getImplementationName() throw();
-    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
+    bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
     Sequence< OUString >        SAL_CALL getSupportedServiceNames() throw();
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static() throw();
 
@@ -130,7 +130,7 @@ OUString Test_Manager_Impl::getImplementationName() throw()
 }
 
 // Test_Manager_Impl::supportsService
-sal_Bool Test_Manager_Impl::supportsService( const OUString& ServiceName ) throw()
+bool Test_Manager_Impl::supportsService( const OUString& ServiceName ) throw()
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -247,7 +247,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 extern "C"
 {
 
-sal_Bool SAL_CALL component_writeInfo(
+bool SAL_CALL component_writeInfo(
     void * /*pServiceManager*/, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -264,14 +264,14 @@ sal_Bool SAL_CALL component_writeInfo(
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
 
-            return sal_True;
+            return true;
         }
         catch (InvalidRegistryException &)
         {
             OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

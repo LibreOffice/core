@@ -190,7 +190,7 @@ OUString ODatabaseContext::getImplementationName(  )
     return u"com.sun.star.comp.dba.ODatabaseContext"_ustr;
 }
 
-sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName )
+bool ODatabaseContext::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -522,7 +522,7 @@ void ODatabaseContext::revokeObject(const OUString& _rName)
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
 
-sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& Name )
+bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& Name )
 {
     return m_xDatabaseRegistrations->hasRegisteredDatabase( Name );
 }
@@ -552,7 +552,7 @@ void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& Name, co
     m_xDatabaseRegistrations->changeDatabaseLocation( Name, NewLocation );
 }
 
-sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& Name )
+bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& Name )
 {
     return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( Name );
 }
@@ -573,7 +573,7 @@ Type ODatabaseContext::getElementType(  )
     return cppu::UnoType<XDataSource>::get();
 }
 
-sal_Bool ODatabaseContext::hasElements()
+bool ODatabaseContext::hasElements()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -646,7 +646,7 @@ Sequence< OUString > ODatabaseContext::getElementNames()
     return getRegistrationNames();
 }
 
-sal_Bool ODatabaseContext::hasByName(const OUString& _rName)
+bool ODatabaseContext::hasByName(const OUString& _rName)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);

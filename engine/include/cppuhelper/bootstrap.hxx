@@ -39,7 +39,7 @@ namespace cppu
     @param xTDMgr manager instance
     @return true, if successfully registered
 */
-CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
+CPPUHELPER_DLLPUBLIC bool SAL_CALL installTypeDescriptionManager(
     css::uno::Reference< css::container::XHierarchicalNameAccess > const & xTDMgr );
 
 /** Bootstraps an initial component context with service manager upon

@@ -65,7 +65,7 @@ namespace DOM::events
     }
 
     void SAL_CALL CMutationEvent::initMutationEvent(const OUString& typeArg,
-        sal_Bool canBubbleArg, sal_Bool cancelableArg,
+        bool canBubbleArg, bool cancelableArg,
         const Reference< XNode >& relatedNodeArg, const OUString& prevValueArg,
         const OUString& newValueArg, const OUString& attrNameArg,
         AttrChangeType attrChangeArg)
@@ -102,12 +102,12 @@ namespace DOM::events
         return CEvent::getEventPhase();
     }
 
-    sal_Bool SAL_CALL CMutationEvent::getBubbles()
+    bool SAL_CALL CMutationEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    sal_Bool SAL_CALL CMutationEvent::getCancelable()
+    bool SAL_CALL CMutationEvent::getCancelable()
     {
         return CEvent::getCancelable();
     }
@@ -126,8 +126,8 @@ namespace DOM::events
         CEvent::preventDefault();
     }
 
-    void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)
+    void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+        bool cancelableArg)
     {
         // base initializer
         CEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);

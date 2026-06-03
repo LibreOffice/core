@@ -514,7 +514,7 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getCurrentValue()
     return aRet;
 }
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::setCurrentValue( const Any& /*aNumber*/ )
+bool SAL_CALL SvxRectCtlChildAccessibleContext::setCurrentValue( const Any& /*aNumber*/ )
 {
     return false;
 }
@@ -550,7 +550,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( )
 }
 
 
-sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex )
+bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 

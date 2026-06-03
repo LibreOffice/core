@@ -220,8 +220,8 @@ class SbiInstance
     ErrCode         nErr;
     OUString        aErrorMsg;      // last error message for $ARG
     sal_Int32       nErl;           // current error line
-    bool        bReschedule;    // Flag: sal_True = Reschedule in main loop
-    bool        bCompatibility; // Flag: sal_True = VBA runtime compatibility mode
+    bool        bReschedule;    // Flag: true = Reschedule in main loop
+    bool        bCompatibility; // Flag: true = VBA runtime compatibility mode
 
     ComponentVector_t ComponentVector;
 public:

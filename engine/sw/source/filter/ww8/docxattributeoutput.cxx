@@ -7929,7 +7929,7 @@ bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, Font
         xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), 32 ));
         for(;;)
         {
-            sal_Bool eof;
+            bool eof;
             if( file.isEndOfFile( &eof ) != osl::File::E_None )
             {
                 SAL_WARN( "sw.ww8", "Error reading font file " << fontUrl );

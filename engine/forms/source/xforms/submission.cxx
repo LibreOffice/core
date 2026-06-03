@@ -369,7 +369,7 @@ void Submission::initializePropertySet()
     initializePropertyValueCache( HANDLE_Standalone );
 }
 
-sal_Bool SAL_CALL Submission::convertFastPropertyValue(
+bool SAL_CALL Submission::convertFastPropertyValue(
     Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
     if ( nHandle == HANDLE_IncludeNamespacePrefixes )

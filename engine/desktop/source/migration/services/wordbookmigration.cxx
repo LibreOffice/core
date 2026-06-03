@@ -169,7 +169,7 @@ static bool IsUserWordbook( const OUString& rFile )
     }
 
 
-    sal_Bool WordbookMigration::supportsService(OUString const & ServiceName)
+    bool WordbookMigration::supportsService(OUString const & ServiceName)
     {
         return cppu::supportsService(this, ServiceName);
     }

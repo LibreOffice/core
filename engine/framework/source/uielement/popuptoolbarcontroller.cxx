@@ -269,7 +269,7 @@ OUString GenericPopupToolbarController::getImplementationName()
     return u"com.sun.star.comp.framework.GenericPopupToolbarController"_ustr;
 }
 
-sal_Bool GenericPopupToolbarController::supportsService(OUString const & rServiceName)
+bool GenericPopupToolbarController::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService( this, rServiceName );
 }
@@ -362,7 +362,7 @@ public:
 
     // XSubToolbarController
     // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
-    virtual sal_Bool SAL_CALL opensSubToolbar() override;
+    virtual bool SAL_CALL opensSubToolbar() override;
     virtual OUString SAL_CALL getSubToolbarName() override;
     virtual void SAL_CALL functionSelected( const OUString& aCommand ) override;
     virtual void SAL_CALL updateImage() override;
@@ -381,7 +381,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const & rServiceName ) override;
+    virtual bool SAL_CALL supportsService( OUString const & rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
@@ -433,7 +433,7 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
     }
 }
 
-sal_Bool SaveToolbarController::opensSubToolbar()
+bool SaveToolbarController::opensSubToolbar()
 {
     return true;
 }
@@ -541,7 +541,7 @@ OUString SaveToolbarController::getImplementationName()
     return u"com.sun.star.comp.framework.SaveToolbarController"_ustr;
 }
 
-sal_Bool SaveToolbarController::supportsService( OUString const & rServiceName )
+bool SaveToolbarController::supportsService( OUString const & rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
@@ -561,7 +561,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & rServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -569,7 +569,7 @@ public:
 
     // XSubToolbarController
     // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
-    sal_Bool SAL_CALL opensSubToolbar() override { return true; }
+    bool SAL_CALL opensSubToolbar() override { return true; }
     OUString SAL_CALL getSubToolbarName() override { return OUString(); }
     void SAL_CALL functionSelected( const OUString& ) override {}
     void SAL_CALL updateImage() override;
@@ -597,7 +597,7 @@ OUString NewToolbarController::getImplementationName()
     return u"org.apache.openoffice.comp.framework.NewToolbarController"_ustr;
 }
 
-sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
+bool NewToolbarController::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService( this, rServiceName );
 }

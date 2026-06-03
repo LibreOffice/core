@@ -56,28 +56,12 @@ void f()
     bool b2 = true;
     b2 &= g();
     (void)b2;
-    Sequence<sal_Bool> s1{ false };
-    (void)s1;
-    Sequence<Sequence<sal_Bool>> s2{ { false } };
-    (void)s2;
     // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'const int' [loplugin:implicitboolconversion]}}
     Sequence<int> s3{ false };
     (void)s3;
     // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'const int' [loplugin:implicitboolconversion]}}
     Sequence<Sequence<int>> s4{ { false } };
     (void)s4;
-    Wrap1<sal_Bool> w1{ false };
-    Sequence<Wrap1<sal_Bool>> s5{ { false } };
-    (void)s5;
-    Wrap2<sal_Bool> w2{ false };
-    (void)w2;
-    Sequence<Wrap2<sal_Bool>> s6{ { false } };
-    (void)s6;
-    h(w1.element);
-    css::uno::Sequence<sal_Bool> s7(1);
-    h(s7[0]);
-    std::array<sal_Bool, 1> s8;
-    s8[0] = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

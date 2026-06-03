@@ -64,7 +64,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -108,7 +108,7 @@ OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName()
     return u"com.sun.star.comp.sfx2.SfxTerminateListener"_ustr;
 }
 
-sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName )
+bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

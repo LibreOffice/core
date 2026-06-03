@@ -1158,7 +1158,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
 #if defined( DEL_ONLY_EMPTY_LINES )
         nWidth = pFirstBox->GetFrameFormat()->GetFrameSize().GetWidth();
-        bool bEmptyLine = sal_True;
+        bool bEmptyLine = true;
         sal_uInt16 n, nSttPos = 0;
 
         for( n = 0; n < aPosArr.Count(); ++n )
@@ -1167,7 +1167,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // same Y level?
             {
                 if( bEmptyLine && !IsEmptyBox( *rPt.pSelBox, aPam ))
-                    bEmptyLine = sal_False;
+                    bEmptyLine = false;
                 if( bCalcWidth )
                     nWidth += rPt.pSelBox->GetFrameFormat()->GetFrameSize().GetWidth();
             }

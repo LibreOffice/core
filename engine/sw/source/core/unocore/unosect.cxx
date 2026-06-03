@@ -1699,7 +1699,7 @@ SwXTextSection::getImplementationName()
     return u"SwXTextSection"_ustr;
 }
 
-sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

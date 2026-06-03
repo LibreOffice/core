@@ -99,7 +99,7 @@ public:
              return cppu::UnoType<excel::XVPageBreak>::get();
         return  cppu::UnoType<excel::XHPageBreak>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return true;
     }
@@ -197,7 +197,7 @@ class RangePageBreaksEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     explicit RangePageBreaksEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );
     }

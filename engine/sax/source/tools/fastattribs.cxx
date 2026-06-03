@@ -159,7 +159,7 @@ void FastAttributeList::add( const FastAttributeList& rOther )
 }
 
 // XFastAttributeList
-sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token )
+bool FastAttributeList::hasAttribute( ::sal_Int32 Token )
 {
     for (sal_Int32 i : maAttributeTokens)
         if (i == Token)

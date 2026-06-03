@@ -154,9 +154,9 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
 {
     const Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
-    Sequence< sal_Bool > aROStates = GetReadOnlyStates( aNames );
+    Sequence< bool > aROStates = GetReadOnlyStates( aNames );
     const Any* pValues = aValues.getConstArray();
-    const sal_Bool* pROStates = aROStates.getConstArray();
+    const bool* pROStates = aROStates.getConstArray();
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     DBG_ASSERT( aROStates.getLength() == aNames.getLength(), "GetReadOnlyStates failed" );
     if ( aValues.getLength() == aNames.getLength() && aROStates.getLength() == aNames.getLength() )
@@ -491,7 +491,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
 {
     ConfigurationHints nHint = ConfigurationHints::NONE;
     Sequence< Any > seqValues = GetProperties( seqPropertyNames );
-    Sequence< sal_Bool > seqROStates = GetReadOnlyStates( seqPropertyNames );
+    Sequence< bool > seqROStates = GetReadOnlyStates( seqPropertyNames );
     sal_Int32 nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProp = 0; nProp < nCount; ++nProp )
     {

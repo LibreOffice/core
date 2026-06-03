@@ -228,7 +228,7 @@ ScriptingFrameworkURIHelper::getImplementationName()
         u"com.sun.star.script.provider.ScriptURIHelper"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService( this, serviceName );

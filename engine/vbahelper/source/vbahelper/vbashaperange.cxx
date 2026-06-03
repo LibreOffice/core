@@ -40,7 +40,7 @@ class VbShapeRangeEnumHelper : public EnumerationHelper_BASE
         sal_Int32 nIndex;
 public:
     VbShapeRangeEnumHelper( rtl::Reference< ScVbaShapeRange > xParent, uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
-        virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+        virtual bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
@@ -259,7 +259,7 @@ uno::Reference< ov::msforms::XFillFormat > SAL_CALL ScVbaShapeRange::getFill()
     throw uno::RuntimeException();
 }
 
-sal_Bool SAL_CALL ScVbaShapeRange::getLockAspectRatio()
+bool SAL_CALL ScVbaShapeRange::getLockAspectRatio()
 {
     sal_Int32 nLen = getCount();
     sal_Int32 index = 1;
@@ -271,7 +271,7 @@ sal_Bool SAL_CALL ScVbaShapeRange::getLockAspectRatio()
     throw uno::RuntimeException();
 }
 
-void SAL_CALL ScVbaShapeRange::setLockAspectRatio( sal_Bool _lockaspectratio )
+void SAL_CALL ScVbaShapeRange::setLockAspectRatio( bool _lockaspectratio )
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; ++index )
@@ -281,7 +281,7 @@ void SAL_CALL ScVbaShapeRange::setLockAspectRatio( sal_Bool _lockaspectratio )
     }
 }
 
-sal_Bool SAL_CALL ScVbaShapeRange::getLockAnchor()
+bool SAL_CALL ScVbaShapeRange::getLockAnchor()
 {
     sal_Int32 nLen = getCount();
     sal_Int32 index = 1;
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL ScVbaShapeRange::getLockAnchor()
     throw uno::RuntimeException();
 }
 
-void SAL_CALL ScVbaShapeRange::setLockAnchor( sal_Bool _lockanchor )
+void SAL_CALL ScVbaShapeRange::setLockAnchor( bool _lockanchor )
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; ++index )

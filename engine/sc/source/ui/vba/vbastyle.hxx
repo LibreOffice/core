@@ -47,7 +47,7 @@ public:
     static css::uno::Reference< css::container::XNameAccess > getStylesNameContainer( const rtl::Reference<ScModelObj>& xModel );
     virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() override { return this; };
     // XStyle Methods
-    virtual sal_Bool SAL_CALL BuiltIn() override;
+    virtual bool SAL_CALL BuiltIn() override;
     virtual void SAL_CALL setName( const OUString& Name ) override;
     virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL setNameLocal( const OUString& NameLocal ) override;

@@ -107,15 +107,15 @@ namespace {
         virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) override;
         virtual css::uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() override;
         virtual css::uno::Reference< ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) override;
-        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, sal_Bool Enable ) override;
+        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, bool Enable ) override;
         virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) override;
-        virtual sal_Bool SAL_CALL travelNext(  ) override;
-        virtual sal_Bool SAL_CALL travelPrevious(  ) override;
-        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, sal_Bool Enable ) override;
+        virtual bool SAL_CALL travelNext(  ) override;
+        virtual bool SAL_CALL travelPrevious(  ) override;
+        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, bool Enable ) override;
         virtual void SAL_CALL updateTravelUI(  ) override;
-        virtual sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) override;
-        virtual sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) override;
-        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, sal_Bool Final ) override;
+        virtual bool SAL_CALL advanceTo( ::sal_Int16 PageId ) override;
+        virtual bool SAL_CALL goBackTo( ::sal_Int16 PageId ) override;
+        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, bool Final ) override;
 
         // ui::dialogs::XExecutableDialog
         virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
@@ -308,7 +308,7 @@ namespace {
         return m_xDialog->getDialog()->GetXWindow();
     }
 
-    void SAL_CALL Wizard::enableButton( ::sal_Int16 i_WizardButton, sal_Bool i_Enable )
+    void SAL_CALL Wizard::enableButton( ::sal_Int16 i_WizardButton, bool i_Enable )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -330,7 +330,7 @@ namespace {
         pWizardImpl->defaultButton( lcl_convertWizardButtonToWZB( i_WizardButton ) );
     }
 
-    sal_Bool SAL_CALL Wizard::travelNext(  )
+    bool SAL_CALL Wizard::travelNext(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -341,7 +341,7 @@ namespace {
         return pWizardImpl->travelNext();
     }
 
-    sal_Bool SAL_CALL Wizard::travelPrevious(  )
+    bool SAL_CALL Wizard::travelPrevious(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -352,7 +352,7 @@ namespace {
         return pWizardImpl->travelPrevious();
     }
 
-    void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, sal_Bool i_Enable )
+    void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, bool i_Enable )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -380,7 +380,7 @@ namespace {
         pWizardImpl->updateTravelUI();
     }
 
-    sal_Bool SAL_CALL Wizard::advanceTo( ::sal_Int16 i_PageId )
+    bool SAL_CALL Wizard::advanceTo( ::sal_Int16 i_PageId )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -391,7 +391,7 @@ namespace {
         return pWizardImpl->advanceTo( i_PageId );
     }
 
-    sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId )
+    bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -413,7 +413,7 @@ namespace {
         return pWizardImpl->getCurrentWizardPage();
     }
 
-    void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, sal_Bool i_Final )
+    void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, bool i_Final )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );

@@ -86,7 +86,7 @@ FileProvider::getImplementationName()
     return u"com.sun.star.comp.ucb.FileProvider"_ustr;
 }
 
-sal_Bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
+bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -212,7 +212,7 @@ public:
     virtual Property SAL_CALL
     getPropertyByName( const OUString& aName ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasPropertyByName( const OUString& Name ) override;
 
 
@@ -282,7 +282,7 @@ XPropertySetInfoImpl2::getProperties()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XPropertySetInfoImpl2::hasPropertyByName(
     const OUString& aName )
 {

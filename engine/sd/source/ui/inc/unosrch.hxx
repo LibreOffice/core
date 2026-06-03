@@ -124,7 +124,7 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

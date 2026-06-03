@@ -182,7 +182,7 @@ OUString SAL_CALL OSpecialEmbeddedObject::getImplementationName()
     return u"com.sun.star.comp.embed.OSpecialEmbeddedObject"_ustr;
 }
 
-sal_Bool SAL_CALL OSpecialEmbeddedObject::supportsService(const OUString& ServiceName)
+bool SAL_CALL OSpecialEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

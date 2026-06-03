@@ -99,7 +99,7 @@ namespace dbtools::param
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OPropertySetHelper
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
+        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
@@ -150,7 +150,7 @@ namespace dbtools::param
 
         // css::container::XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
         // css::container::XEnumerationAccess
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;

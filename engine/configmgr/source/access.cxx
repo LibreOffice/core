@@ -247,7 +247,7 @@ OUString Access::getImplementationName()
     return u"org.openoffice-configmgr::Access"_ustr;
 }
 
-sal_Bool Access::supportsService(OUString const & ServiceName)
+bool Access::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -360,7 +360,7 @@ css::uno::Type Access::getElementType() {
     }
 }
 
-sal_Bool Access::hasElements() {
+bool Access::hasElements() {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
@@ -429,7 +429,7 @@ css::uno::Sequence< OUString > Access::getElementNames()
     return comphelper::containerToSequence(childNames);
 }
 
-sal_Bool Access::hasByName(OUString const & aName)
+bool Access::hasByName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -485,7 +485,7 @@ css::uno::Type Access::getTypeByHierarchicalName(OUString const & aName)
     }
 }
 
-sal_Bool Access::getModifiedByHierarchicalName(OUString const & aName)
+bool Access::getModifiedByHierarchicalName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -507,7 +507,7 @@ sal_Bool Access::getModifiedByHierarchicalName(OUString const & aName)
     }
 }
 
-sal_Bool Access::hasByHierarchicalName(OUString const & aName)
+bool Access::hasByHierarchicalName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -624,7 +624,7 @@ css::beans::Property Access::getPropertyByName(OUString const & aName)
     return child->asProperty();
 }
 
-sal_Bool Access::hasPropertyByName(OUString const & Name)
+bool Access::hasPropertyByName(OUString const & Name)
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
@@ -1107,7 +1107,7 @@ css::beans::Property Access::getPropertyByHierarchicalName(
     return child->asProperty();
 }
 
-sal_Bool Access::hasPropertyByHierarchicalName(
+bool Access::hasPropertyByHierarchicalName(
     OUString const & aHierarchicalName)
 {
     assert(thisIs(IS_GROUP));

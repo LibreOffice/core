@@ -145,7 +145,7 @@ protected:
 
 public:
     // XAccessibleComponent - default implementations which can be implemented using <method>implGetBounds</method>
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
+    virtual bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
     virtual css::awt::Point SAL_CALL getLocation(  ) override final;
     /* note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
        which itself implements XAccessibleComponent

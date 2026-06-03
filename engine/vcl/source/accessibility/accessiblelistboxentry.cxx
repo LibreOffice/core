@@ -201,7 +201,7 @@ Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames()
     return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
-sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
+bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -555,7 +555,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aP
     return nIndex;
 }
 
-sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -576,7 +576,7 @@ sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_I
     return true;
 }
 
-sal_Bool SAL_CALL AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool SAL_CALL AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
@@ -603,7 +603,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleActionCount(  )
     return 0;
 }
 
-sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
+bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -706,7 +706,7 @@ void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildInd
     m_pTreeListBox->Select( pEntry );
 }
 
-sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -841,7 +841,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getCaretPosition(  )
 {
     return -1;
 }
-sal_Bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
+bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -901,7 +901,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionEnd(  )
     ensureAlive();
     return 0;
 }
-sal_Bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -963,7 +963,7 @@ Any AccessibleListBoxEntry::getCurrentValue(  )
 }
 
 
-sal_Bool AccessibleListBoxEntry::setCurrentValue( const Any& aNumber )
+bool AccessibleListBoxEntry::setCurrentValue( const Any& aNumber )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

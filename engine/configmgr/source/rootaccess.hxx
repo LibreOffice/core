@@ -78,7 +78,7 @@ public:
 
     virtual void SAL_CALL commitChanges() override;
 
-    virtual sal_Bool SAL_CALL hasPendingChanges() override;
+    virtual bool SAL_CALL hasPendingChanges() override;
 
     virtual css::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override;
 

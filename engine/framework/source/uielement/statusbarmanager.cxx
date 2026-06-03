@@ -557,7 +557,7 @@ void StatusBarManager::MouseMove( const MouseEvent& rMEvt )
     MouseButton(rMEvt,&frame::XStatusbarController::mouseMove);
 }
 
-void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&))
+void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,bool ( SAL_CALL frame::XStatusbarController::*_pMethod )(const css::awt::MouseEvent&))
 {
     SolarMutexGuard g;
 

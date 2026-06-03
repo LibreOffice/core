@@ -147,7 +147,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ::cppu::OPropertySetHelper

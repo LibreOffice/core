@@ -36,7 +36,7 @@ void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRep
     else assert(false);
 }
 
-void UndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg /* = sal_False */ )
+void UndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg /* = false */ )
 {
     if( !IsDoing() )
     {

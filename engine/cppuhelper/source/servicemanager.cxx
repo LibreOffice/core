@@ -458,7 +458,7 @@ public:
 private:
     virtual ~ContentEnumeration() override {}
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual bool SAL_CALL hasMoreElements() override;
 
     virtual css::uno::Any SAL_CALL nextElement() override;
 
@@ -467,7 +467,7 @@ private:
     std::vector< css::uno::Any >::const_iterator iterator_;
 };
 
-sal_Bool ContentEnumeration::hasMoreElements()
+bool ContentEnumeration::hasMoreElements()
 {
     std::scoped_lock g(mutex_);
     return iterator_ != factories_.end();
@@ -579,7 +579,7 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
@@ -632,7 +632,7 @@ OUString ImplementationWrapper::getImplementationName()
     return impl->name;
 }
 
-sal_Bool ImplementationWrapper::supportsService(OUString const & ServiceName)
+bool ImplementationWrapper::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -947,7 +947,7 @@ OUString cppuhelper::ServiceManager::getImplementationName()
         u"com.sun.star.comp.cppuhelper.bootstrap.ServiceManager"_ustr;
 }
 
-sal_Bool cppuhelper::ServiceManager::supportsService(
+bool cppuhelper::ServiceManager::supportsService(
     OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
@@ -1020,7 +1020,7 @@ css::uno::Type cppuhelper::ServiceManager::getElementType()
     return css::uno::Type();
 }
 
-sal_Bool cppuhelper::ServiceManager::hasElements()
+bool cppuhelper::ServiceManager::hasElements()
 {
     std::unique_lock g(m_aMutex);
     return
@@ -1036,7 +1036,7 @@ cppuhelper::ServiceManager::createEnumeration()
         static_cast< cppu::OWeakObject * >(this));
 }
 
-sal_Bool cppuhelper::ServiceManager::has(css::uno::Any const &)
+bool cppuhelper::ServiceManager::has(css::uno::Any const &)
 {
     throw css::uno::RuntimeException(
         u"ServiceManager has: method not supported"_ustr,
@@ -1273,7 +1273,7 @@ css::beans::Property cppuhelper::ServiceManager::getPropertyByName(
     return getDefaultContextProperty();
 }
 
-sal_Bool cppuhelper::ServiceManager::hasPropertyByName(
+bool cppuhelper::ServiceManager::hasPropertyByName(
     OUString const & Name)
 {
     return Name == "DefaultContext";

@@ -55,7 +55,7 @@ sal_Int32 SAL_CALL AccessibleHyperlink::getAccessibleActionCount()
      return isValid() ? 1 : 0;
 }
 
-sal_Bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  )
+bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  )
 {
     bool bRet = false;
     if ( isValid() && ( nIndex == 0 ) )
@@ -114,7 +114,7 @@ sal_Int32 SAL_CALL AccessibleHyperlink::getEndIndex()
     return nEndIdx;
 }
 
-sal_Bool SAL_CALL AccessibleHyperlink::isValid(  )
+bool SAL_CALL AccessibleHyperlink::isValid(  )
 {
     return rTA.IsValid();
 }

@@ -26,9 +26,6 @@ extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount*) {}
 
 extern "C" void rtl_moduleCount_release(rtl_ModuleCount*) {}
 
-extern "C" sal_Bool rtl_moduleCount_canUnload(rtl_StandardModuleCount*, TimeValue*)
-{
-    return false;
-}
+extern "C" bool rtl_moduleCount_canUnload(rtl_StandardModuleCount*, TimeValue*) { return false; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

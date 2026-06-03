@@ -1244,7 +1244,7 @@ sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumbering
     throw RuntimeException();
 }
 
-sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
+bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
 {
     auto it = maSupportedTypesCache.find(rNumberingIdentifier);
     if (it != maSupportedTypesCache.end())
@@ -1271,7 +1271,7 @@ OUString DefaultNumberingProvider::getImplementationName()
     return u"com.sun.star.text.DefaultNumberingProvider"_ustr;
 }
 
-sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
+bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

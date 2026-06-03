@@ -193,7 +193,7 @@ Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrlEntry::getSupportedService
             u"com.sun.star.awt.AccessibleIconChoiceControlEntry"_ustr};
 }
 
-sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::supportsService( const OUString& _rServiceName )
+bool SAL_CALL AccessibleIconChoiceCtrlEntry::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -392,7 +392,7 @@ sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getIndexAtPoint( const awt::Po
     return nIndex;
 }
 
-sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleIconChoiceCtrlEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -413,7 +413,7 @@ sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::copyText( sal_Int32 nStartIndex
     return true;
 }
 
-sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool SAL_CALL AccessibleIconChoiceCtrlEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
@@ -422,7 +422,7 @@ sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getCaretPosition(  )
 {
     return -1;
 }
-sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::setCaretPosition ( sal_Int32 nIndex )
+bool SAL_CALL AccessibleIconChoiceCtrlEntry::setCaretPosition ( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -482,7 +482,7 @@ sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getSelectionEnd(  )
     EnsureIsAlive();
     return 0;
 }
-sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleIconChoiceCtrlEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -539,7 +539,7 @@ sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleActionCount(  )
     return ACCESSIBLE_ACTION_COUNT;
 }
 
-sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::doAccessibleAction( sal_Int32 nIndex )
+bool SAL_CALL AccessibleIconChoiceCtrlEntry::doAccessibleAction( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );

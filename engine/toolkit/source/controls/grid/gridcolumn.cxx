@@ -164,14 +164,14 @@ namespace toolkit
     }
 
 
-    sal_Bool SAL_CALL GridColumn::getResizeable()
+    bool SAL_CALL GridColumn::getResizeable()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_bResizeable;
     }
 
 
-    void SAL_CALL GridColumn::setResizeable(sal_Bool value)
+    void SAL_CALL GridColumn::setResizeable(bool value)
     {
         impl_set( m_bResizeable, bool(value), u"Resizeable"_ustr );
     }
@@ -259,7 +259,7 @@ namespace toolkit
         return u"org.openoffice.comp.toolkit.GridColumn"_ustr;
     }
 
-    sal_Bool SAL_CALL GridColumn::supportsService( const OUString& i_serviceName )
+    bool SAL_CALL GridColumn::supportsService( const OUString& i_serviceName )
     {
         return cppu::supportsService(this, i_serviceName);
     }

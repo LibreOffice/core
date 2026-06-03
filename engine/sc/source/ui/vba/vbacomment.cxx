@@ -134,14 +134,14 @@ ScVbaComment::getShape()
     return new ScVbaShape( this, mxContext, xAnnoShape, xShapes, mxModel, office::MsoShapeType::msoComment );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaComment::getVisible()
 {
     return getAnnotation()->getIsVisible();
 }
 
 void SAL_CALL
-ScVbaComment::setVisible( sal_Bool _visible )
+ScVbaComment::setVisible( bool _visible )
 {
     getAnnotation()->setIsVisible( _visible );
 }

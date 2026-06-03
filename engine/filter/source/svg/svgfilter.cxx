@@ -86,7 +86,7 @@ SVGFilter::~SVGFilter()
     DBG_ASSERT( mpObjects == nullptr, "mpObjects not destroyed" );
 }
 
-sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     mbWriterFilter = false;
     mbCalcFilter = false;
@@ -808,7 +808,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 }
 
 //  XServiceInfo
-sal_Bool SVGFilter::supportsService(const OUString& sServiceName)
+bool SVGFilter::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

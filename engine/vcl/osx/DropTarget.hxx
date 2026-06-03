@@ -96,8 +96,8 @@ public:
   virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference<  css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
 
   // Default is not active
-  virtual sal_Bool SAL_CALL isActive() override;
-  virtual void SAL_CALL setActive(sal_Bool isActive) override;
+  virtual bool SAL_CALL isActive() override;
+  virtual void SAL_CALL setActive(bool isActive) override;
   virtual sal_Int8 SAL_CALL getDefaultActions() override;
   virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
 
@@ -108,11 +108,11 @@ public:
   // XDropTargetDragContext
   virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) override;
   virtual void SAL_CALL rejectDrop() override;
-  virtual void SAL_CALL dropComplete(sal_Bool success) override;
+  virtual void SAL_CALL dropComplete(bool success) override;
 
   // XServiceInfo
   virtual OUString SAL_CALL getImplementationName() override;
-  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+  virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
   virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
   // NSDraggingDestination protocol functions

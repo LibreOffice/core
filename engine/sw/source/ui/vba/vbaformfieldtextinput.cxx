@@ -35,7 +35,7 @@ SwVbaFormFieldTextInput::~SwVbaFormFieldTextInput() {}
 
 OUString SwVbaFormFieldTextInput::getDefaultPropertyName() { return u"Valid"_ustr; }
 
-sal_Bool SwVbaFormFieldTextInput::getValid()
+bool SwVbaFormFieldTextInput::getValid()
 {
     return IDocumentMarkAccess::GetType(m_rTextInput)
            == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK;

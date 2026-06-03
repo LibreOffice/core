@@ -156,7 +156,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
         /** provides parts of our own title and we listen there for changes too. */
         css::uno::WeakReference< css::frame::XTitle > m_xSubTitle;
 
-        /** if it's set to sal_True the member m_sTitle has not to be changed internally.
+        /** if it's set to true the member m_sTitle has not to be changed internally.
             It was set from outside and so outside code has to make sure it will be
             updated.
          */

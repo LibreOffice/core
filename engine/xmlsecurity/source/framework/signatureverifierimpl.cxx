@@ -117,7 +117,7 @@ OUString SAL_CALL SignatureVerifierImpl::getImplementationName(  )
     return SignatureVerifierImpl_getImplementationName();
 }
 
-sal_Bool SAL_CALL SignatureVerifierImpl::supportsService( const OUString& rServiceName )
+bool SAL_CALL SignatureVerifierImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

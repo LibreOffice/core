@@ -84,7 +84,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    bool SAL_CALL supportsService(const OUString& rServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
@@ -96,7 +96,7 @@ public:
 
     // XElementAccess
     css::uno::Type SAL_CALL getElementType() override;
-    sal_Bool SAL_CALL hasElements() override;
+    bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
@@ -117,14 +117,14 @@ public:
     css::uno::Reference<css::text::XTextCursor> SAL_CALL createTextCursorByRange(
         const css::uno::Reference<css::text::XTextRange>& xTextPosition) override;
     void SAL_CALL insertString(const css::uno::Reference<css::text::XTextRange>& xRange,
-                               const OUString& aString, sal_Bool bAbsorb) override;
+                               const OUString& aString, bool bAbsorb) override;
     void SAL_CALL insertControlCharacter(const css::uno::Reference<css::text::XTextRange>& xRange,
-                                         sal_Int16 nControlCharacter, sal_Bool bAbsorb) override;
+                                         sal_Int16 nControlCharacter, bool bAbsorb) override;
 
     // XText
     void SAL_CALL insertTextContent(const css::uno::Reference<css::text::XTextRange>& xRange,
                                     const css::uno::Reference<css::text::XTextContent>& xContent,
-                                    sal_Bool bAbsorb) override;
+                                    bool bAbsorb) override;
     void SAL_CALL
     removeTextContent(const css::uno::Reference<css::text::XTextContent>& xContent) override;
 
@@ -162,7 +162,7 @@ public:
 
     // XElementAccess
     css::uno::Type SAL_CALL getElementType() override;
-    sal_Bool SAL_CALL hasElements() override;
+    bool SAL_CALL hasElements() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,7 +75,7 @@ public:
         throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed()                              throw  (    RuntimeException) ;
+    virtual bool SAL_CALL testPassed()                              throw  (    RuntimeException) ;
     virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException) ;
     virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getWarnings()                 throw  (RuntimeException);
@@ -183,7 +183,7 @@ sal_Int32 OPumpTest::test(
 }
 
 
-sal_Bool OPumpTest::testPassed()        throw  (RuntimeException)
+bool OPumpTest::testPassed()        throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
@@ -222,43 +222,43 @@ void OPumpTest::testSimple( const Reference < XInterface > &r )
 class TestListener: public WeakImplHelper< XStreamListener >
 {
 public:
-    sal_Bool m_bStarted;
-    sal_Bool m_bClosed;
-    sal_Bool m_bTerminated;
-    sal_Bool m_bError;
-    sal_Bool m_bDisposed;
-    TestListener() : m_bStarted (sal_False),
-                     m_bClosed (sal_False),
-                     m_bTerminated ( sal_False ),
-                     m_bError( sal_False ),
-                     m_bDisposed( sal_False )
+    bool m_bStarted;
+    bool m_bClosed;
+    bool m_bTerminated;
+    bool m_bError;
+    bool m_bDisposed;
+    TestListener() : m_bStarted (false),
+                     m_bClosed (false),
+                     m_bTerminated ( false ),
+                     m_bError( false ),
+                     m_bDisposed( false )
     {}
 
     virtual void SAL_CALL disposing( const EventObject &obj  ) throw (css::uno::RuntimeException)
     {
-        m_bDisposed = sal_True;
+        m_bDisposed = true;
 //         printf( "disposing called\n");
     }
 
     virtual void SAL_CALL started(  ) throw (css::uno::RuntimeException)
     {
-        m_bStarted = sal_True;
+        m_bStarted = true;
 //         printf( "started called\n");
     }
     virtual void SAL_CALL closed(  ) throw (css::uno::RuntimeException)
     {
-        m_bClosed = sal_True;
+        m_bClosed = true;
 //         printf( "closed called\n");
     }
     virtual void SAL_CALL terminated(  ) throw (css::uno::RuntimeException)
     {
-        m_bTerminated = sal_True;
+        m_bTerminated = true;
 //         printf( "terminated called\n");
     }
     virtual void SAL_CALL error( const css::uno::Any& aException )
         throw (css::uno::RuntimeException)
     {
-        m_bError = sal_True;
+        m_bError = true;
         Exception e;
         aException >>= e;
 //         printf( "error called %s\n", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );

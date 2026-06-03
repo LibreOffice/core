@@ -373,7 +373,7 @@ namespace dbaui
         // ('handle') then if xListener is NULL the change will be forwarded
         // to all listeners to the given css::util::URL
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
-        // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
+        // if _bForceBroadcast is true, the current feature state is broadcasted no matter if it is the same as the cached state
         void InvalidateFeature(sal_uInt16 nId, const css::uno::Reference< css::frame::XStatusListener > & xListener = nullptr, bool _bForceBroadcast = false);
 
         /** InvalidateAll invalidates all features currently known
@@ -419,8 +419,8 @@ namespace dbaui
 
         // css::frame::XController
         virtual void SAL_CALL attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) override;
-        virtual sal_Bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) override;
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) override = 0;
+        virtual bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) override;
+        virtual bool SAL_CALL suspend(bool bSuspend) override = 0;
         virtual css::uno::Any SAL_CALL getViewData() override;
         virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) override;
         virtual css::uno::Reference< css::frame::XModel >  SAL_CALL getModel() override;
@@ -454,7 +454,7 @@ namespace dbaui
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override = 0;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
         // XDispatchInformationProvider

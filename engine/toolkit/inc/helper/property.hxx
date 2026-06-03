@@ -39,12 +39,12 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_BORDER                          6  // sal_Int16
 #define BASEPROPERTY_ALIGN                           7  // sal_Int16
 #define BASEPROPERTY_FONTDESCRIPTOR                  8  // css::awt::FontDescriptor
-#define BASEPROPERTY_DROPDOWN                        9  // sal_Bool
-#define BASEPROPERTY_MULTILINE                       10 // sal_Bool
+#define BASEPROPERTY_DROPDOWN                        9  // bool
+#define BASEPROPERTY_MULTILINE                       10 // bool
 #define BASEPROPERTY_STRINGITEMLIST                  11 // UStringSequence
-#define BASEPROPERTY_HSCROLL                         12 // sal_Bool
-#define BASEPROPERTY_VSCROLL                         13 // sal_Bool
-#define BASEPROPERTY_TABSTOP                         14 // sal_Bool
+#define BASEPROPERTY_HSCROLL                         12 // bool
+#define BASEPROPERTY_VSCROLL                         13 // bool
+#define BASEPROPERTY_TABSTOP                         14 // bool
 #define BASEPROPERTY_STATE                           15 // sal_Int16
 #define BASEPROPERTY_FONT_TYPE                       16 // OLD: Font_Type
 #define BASEPROPERTY_FONT_SIZE                       17 // OLD: Font_Size
@@ -53,12 +53,12 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_LABEL                           20 // OUString
 #define BASEPROPERTY_LINECOUNT                       21 // sal_Int16
 #define BASEPROPERTY_EXTDATEFORMAT                   22 // sal_Int16
-#define BASEPROPERTY_DATESHOWCENTURY                 23 // sal_Bool
+#define BASEPROPERTY_DATESHOWCENTURY                 23 // bool
 #define BASEPROPERTY_EXTTIMEFORMAT                   24 // sal_Int16
-#define BASEPROPERTY_NUMSHOWTHOUSANDSEP              25 // sal_Bool
+#define BASEPROPERTY_NUMSHOWTHOUSANDSEP              25 // bool
 #define BASEPROPERTY_CURRENCYSYMBOL                  26 // OUString
-#define BASEPROPERTY_SPIN                            27 // sal_Bool
-#define BASEPROPERTY_STRICTFORMAT                    28 // sal_Bool
+#define BASEPROPERTY_SPIN                            27 // bool
+#define BASEPROPERTY_STRICTFORMAT                    28 // bool
 #define BASEPROPERTY_DECIMALACCURACY                 29 // sal_Int16
 #define BASEPROPERTY_DATE                            30 // css::util::Date
 #define BASEPROPERTY_DATEMIN                         31 // css::util::Date
@@ -73,36 +73,36 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_EDITMASK                        40 // OUString
 #define BASEPROPERTY_LITERALMASK                     41 // OUString
 #define BASEPROPERTY_IMAGEURL                        42 // OUString
-#define BASEPROPERTY_READONLY                        43 // sal_Bool
-#define BASEPROPERTY_ENABLED                         44 // sal_Bool
-#define BASEPROPERTY_PRINTABLE                       45 // sal_Bool
+#define BASEPROPERTY_READONLY                        43 // bool
+#define BASEPROPERTY_ENABLED                         44 // bool
+#define BASEPROPERTY_PRINTABLE                       45 // bool
 #define BASEPROPERTY_ECHOCHAR                        46 // sal_Int16
 #define BASEPROPERTY_MAXTEXTLEN                      47 // sal_Int16
 #define BASEPROPERTY_HARDLINEBREAKS                  48 // sal_Int16
-#define BASEPROPERTY_AUTOCOMPLETE                    49 // sal_Bool
-#define BASEPROPERTY_MULTISELECTION                  50 // sal_Bool
+#define BASEPROPERTY_AUTOCOMPLETE                    49 // bool
+#define BASEPROPERTY_MULTISELECTION                  50 // bool
 #define BASEPROPERTY_SELECTEDITEMS                   51 // INT16Sequence
 #define BASEPROPERTY_VALUE_DOUBLE                    52 // DOUBLE
 #define BASEPROPERTY_VALUEMIN_DOUBLE                 53 // DOUBLE
 #define BASEPROPERTY_VALUEMAX_DOUBLE                 54 // DOUBLE
 #define BASEPROPERTY_VALUESTEP_DOUBLE                55 // DOUBLE
-#define BASEPROPERTY_TRISTATE                        56 // sal_Bool
-#define BASEPROPERTY_DEFAULTBUTTON                   57 // sal_Bool
+#define BASEPROPERTY_TRISTATE                        56 // bool
+#define BASEPROPERTY_DEFAULTBUTTON                   57 // bool
 #define BASEPROPERTY_HELPURL                         58 // OUString
-#define BASEPROPERTY_AUTOTOGGLE                      59 // sal_Bool
-//#define BASEPROPERTY_FOCUSSELECTIONHIDE            60 // sal_Bool
-#define BASEPROPERTY_FORMATKEY                       61 // sal_Bool
+#define BASEPROPERTY_AUTOTOGGLE                      59 // bool
+//#define BASEPROPERTY_FOCUSSELECTIONHIDE            60 // bool
+#define BASEPROPERTY_FORMATKEY                       61 // bool
 #define BASEPROPERTY_FORMATSSUPPLIER                 62 // css::util::XNumberFormatsSupplier
 #define BASEPROPERTY_EFFECTIVE_VALUE                 63 // Any (double or string)
-#define BASEPROPERTY_TREATASNUMBER                   64 // sal_Bool
+#define BASEPROPERTY_TREATASNUMBER                   64 // bool
 #define BASEPROPERTY_EFFECTIVE_DEFAULT               65 // Any (double or string)
 #define BASEPROPERTY_EFFECTIVE_MIN                   66 // Double
 #define BASEPROPERTY_EFFECTIVE_MAX                   67 // Double
-#define BASEPROPERTY_CURSYM_POSITION                 68 // sal_Bool
+#define BASEPROPERTY_CURSYM_POSITION                 68 // bool
 #define BASEPROPERTY_TITLE                           69 // OUString
-#define BASEPROPERTY_MOVEABLE                        70 // sal_Bool
-#define BASEPROPERTY_CLOSEABLE                       71 // sal_Bool
-#define BASEPROPERTY_SIZEABLE                        72 // sal_Bool
+#define BASEPROPERTY_MOVEABLE                        70 // bool
+#define BASEPROPERTY_CLOSEABLE                       71 // bool
+#define BASEPROPERTY_SIZEABLE                        72 // bool
 #define BASEPROPERTY_HELPTEXT                        73 // OUString
 #define BASEPROPERTY_PROGRESSVALUE                   74 // sal_Int32
 #define BASEPROPERTY_PROGRESSVALUE_MIN               75 // sal_Int32
@@ -117,11 +117,11 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_FONTEMPHASISMARK                84 // sal_Int16
 #define BASEPROPERTY_TEXTLINECOLOR                   85 // sal_Int32
 #define BASEPROPERTY_IMAGEALIGN                      86 // sal_Int16
-#define BASEPROPERTY_SCALEIMAGE                      87 // sal_Bool
+#define BASEPROPERTY_SCALEIMAGE                      87 // bool
 #define BASEPROPERTY_PUSHBUTTONTYPE                  88 // sal_Int16
 #define BASEPROPERTY_DISPLAYBACKGROUNDCOLOR          89 // sal_Int32
-#define BASEPROPERTY_AUTOMNEMONICS                   90 // sal_Bool
-#define BASEPROPERTY_MOUSETRANSPARENT                91 // sal_Bool
+#define BASEPROPERTY_AUTOMNEMONICS                   90 // bool
+#define BASEPROPERTY_MOUSETRANSPARENT                91 // bool
 #define BASEPROPERTY_ACCESSIBLENAME                  92  // OUString
 #define BASEPROPERTY_PLUGINPARENT                    93  // sal_Int64
 #define BASEPROPERTY_SCROLLVALUE_MIN                 94  // sal_Int32
@@ -131,29 +131,29 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_SPINVALUE_MIN                   98  // sal_Int32
 #define BASEPROPERTY_SPINVALUE_MAX                   99  // sal_Int32
 #define BASEPROPERTY_SPININCREMENT                  100  // sal_Int32
-#define BASEPROPERTY_REPEAT                         101  // sal_Bool
-#define BASEPROPERTY_ENFORCE_FORMAT                 102  // sal_Bool
-#define BASEPROPERTY_LIVE_SCROLL                    103  // sal_Bool
+#define BASEPROPERTY_REPEAT                         101  // bool
+#define BASEPROPERTY_ENFORCE_FORMAT                 102  // bool
+#define BASEPROPERTY_LIVE_SCROLL                    103  // bool
 #define BASEPROPERTY_LINE_END_FORMAT                104  // sal_Int16
 #define BASEPROPERTY_ACTIVATED                      105  // sal Bool
-#define BASEPROPERTY_COMPLETE                       106  // sal_Bool
+#define BASEPROPERTY_COMPLETE                       106  // bool
 #define BASEPROPERTY_CURRENTITEMID                  107  // sal_Int16
-#define BASEPROPERTY_TOGGLE                         108  // sal_Bool
-#define BASEPROPERTY_FOCUSONCLICK                   109  // sal_Bool
-#define BASEPROPERTY_HIDEINACTIVESELECTION          110  // sal_Bool
+#define BASEPROPERTY_TOGGLE                         108  // bool
+#define BASEPROPERTY_FOCUSONCLICK                   109  // bool
+#define BASEPROPERTY_HIDEINACTIVESELECTION          110  // bool
 #define BASEPROPERTY_VISUALEFFECT                   111  // sal_Int16
 #define BASEPROPERTY_BORDERCOLOR                    112  // sal_Int32
 #define BASEPROPERTY_IMAGEPOSITION                  113  // sal_Int16
-#define BASEPROPERTY_NATIVE_WIDGET_LOOK             114  // sal_Bool
+#define BASEPROPERTY_NATIVE_WIDGET_LOOK             114  // bool
 #define BASEPROPERTY_VERTICALALIGN                  115  // VerticalAlignment
 #define BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR          116  // sal_Int16
 #define BASEPROPERTY_GRAPHIC                        117  // css.graphic.XGraphic
 #define BASEPROPERTY_STEP_TIME                      118  // sal_Int32
-#define BASEPROPERTY_DECORATION                     119  // sal_Bool
-#define BASEPROPERTY_PAINTTRANSPARENT               120  // sal_Bool
-#define BASEPROPERTY_AUTOHSCROLL                    121 // sal_Bool
-#define BASEPROPERTY_AUTOVSCROLL                    122  // sal_Bool
-#define BASEPROPERTY_DESKTOP_AS_PARENT              123  // sal_Bool
+#define BASEPROPERTY_DECORATION                     119  // bool
+#define BASEPROPERTY_PAINTTRANSPARENT               120  // bool
+#define BASEPROPERTY_AUTOHSCROLL                    121 // bool
+#define BASEPROPERTY_AUTOVSCROLL                    122  // bool
+#define BASEPROPERTY_DESKTOP_AS_PARENT              123  // bool
 #define BASEPROPERTY_TREE_START                     124
 #define BASEPROPERTY_TREE_SELECTIONTYPE             124
 #define BASEPROPERTY_TREE_EDITABLE                  125
@@ -177,7 +177,7 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_GRID_DATAMODEL                 142
 #define BASEPROPERTY_GRID_COLUMNMODEL               143
 #define BASEPROPERTY_GRID_SELECTIONMODE             144
-#define BASEPROPERTY_ENABLEVISIBLE                  145  // sal_Bool
+#define BASEPROPERTY_ENABLEVISIBLE                  145  // bool
 #define BASEPROPERTY_REFERENCE_DEVICE               146
 
 #define BASEPROPERTY_HIGHCONTRASTMODE               147
@@ -223,8 +223,8 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_FONTDESCRIPTORPART_PITCH           1010    // sal_Int16, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_CHARWIDTH       1011    // Float, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_ORIENTATION     1012    // Float, not bound
-#define BASEPROPERTY_FONTDESCRIPTORPART_KERNING         1013    // sal_Bool, not bound
-#define BASEPROPERTY_FONTDESCRIPTORPART_WORDLINEMODE    1014    // sal_Bool, not bound
+#define BASEPROPERTY_FONTDESCRIPTORPART_KERNING         1013    // bool, not bound
+#define BASEPROPERTY_FONTDESCRIPTORPART_WORDLINEMODE    1014    // bool, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_TYPE            1015    // sal_Int16, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_END             1015
 

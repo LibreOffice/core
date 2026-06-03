@@ -174,7 +174,7 @@ void PivotTableDataProvider::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxH
     }
 }
 
-sal_Bool SAL_CALL PivotTableDataProvider::createDataSourcePossible(const uno::Sequence<beans::PropertyValue>& /*aArguments*/)
+bool SAL_CALL PivotTableDataProvider::createDataSourcePossible(const uno::Sequence<beans::PropertyValue>& /*aArguments*/)
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
@@ -686,7 +686,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detectArgum
     });
 }
 
-sal_Bool SAL_CALL PivotTableDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString& /*aRangeRepresentation*/)
+bool SAL_CALL PivotTableDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString& /*aRangeRepresentation*/)
 {
     return false;
 }

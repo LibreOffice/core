@@ -58,8 +58,8 @@ class ChartModel;
         virtual void SAL_CALL addUndoAction( const css::uno::Reference< css::document::XUndoAction >& i_action ) override;
         virtual void SAL_CALL undo(  ) override;
         virtual void SAL_CALL redo(  ) override;
-        virtual sal_Bool SAL_CALL isUndoPossible(  ) override;
-        virtual sal_Bool SAL_CALL isRedoPossible(  ) override;
+        virtual bool SAL_CALL isUndoPossible(  ) override;
+        virtual bool SAL_CALL isRedoPossible(  ) override;
         virtual OUString SAL_CALL getCurrentUndoActionTitle(  ) override;
         virtual OUString SAL_CALL getCurrentRedoActionTitle(  ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getAllUndoActionTitles(  ) override;
@@ -73,7 +73,7 @@ class ChartModel;
         // XLockable (base of XUndoManager)
         virtual void SAL_CALL lock(  ) override;
         virtual void SAL_CALL unlock(  ) override;
-        virtual sal_Bool SAL_CALL isLocked(  ) override;
+        virtual bool SAL_CALL isLocked(  ) override;
 
         // XChild (base of XUndoManager)
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;

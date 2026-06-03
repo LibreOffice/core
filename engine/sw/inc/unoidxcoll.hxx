@@ -38,14 +38,14 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -56,7 +56,7 @@ public:
             const OUString& rName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& rName) override;
+    virtual bool SAL_CALL hasByName(const OUString& rName) override;
 
     rtl::Reference< SwXDocumentIndex > getDocumentIndexByIndex(sal_Int32 nIndex);
 };

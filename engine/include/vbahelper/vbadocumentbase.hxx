@@ -56,8 +56,8 @@ public:
     virtual OUString SAL_CALL getName() override;
     virtual OUString SAL_CALL getPath() override;
     virtual OUString SAL_CALL getFullName() override;
-    virtual sal_Bool SAL_CALL getSaved() override;
-    virtual void SAL_CALL setSaved( sal_Bool bSave ) override;
+    virtual bool SAL_CALL getSaved() override;
+    virtual void SAL_CALL setSaved( bool bSave ) override;
     virtual css::uno::Any SAL_CALL getVBProject() override;
 
     // Methods

@@ -87,7 +87,7 @@ public:
 // cppu::OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
                             css::uno::Any & rConvertedValue,
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
@@ -111,7 +111,7 @@ public:
 // css::sdbc::XMultipleResults
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
     virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
-    virtual sal_Bool SAL_CALL getMoreResults(  ) override;
+    virtual bool SAL_CALL getMoreResults(  ) override;
 
 // css::sdbc::XPreparedBatchExecution
     virtual void SAL_CALL addBatch(  ) override;
@@ -151,13 +151,13 @@ public:
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // css::sdbc::XStatement
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override;
     virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override;
-    virtual sal_Bool SAL_CALL execute( const OUString& sql ) override;
+    virtual bool SAL_CALL execute( const OUString& sql ) override;
     virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
 
     // OComponentHelper

@@ -129,7 +129,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
         OUString const & servicename ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
@@ -356,7 +356,7 @@ OUString DocumentHandlerImpl::getImplementationName()
     return u"com.sun.star.comp.xml.input.SaxDocumentHandler"_ustr;
 }
 
-sal_Bool DocumentHandlerImpl::supportsService( OUString const & servicename )
+bool DocumentHandlerImpl::supportsService( OUString const & servicename )
 {
     return cppu::supportsService(this, servicename);
 }

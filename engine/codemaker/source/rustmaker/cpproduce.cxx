@@ -1179,7 +1179,7 @@ OString CppProducer::getMethodDefaultReturn(std::u16string_view returnType) cons
              || resolvedType == u"unsigned short" || resolvedType == u"unsigned long"
              || resolvedType == u"unsigned hyper" || resolvedType == u"hyper")
         return "0"_ostr;
-    else if (resolvedType == u"sal_Bool" || resolvedType == u"boolean")
+    else if (resolvedType == u"bool" || resolvedType == u"boolean")
         return "false"_ostr;
     else
     {
@@ -1249,7 +1249,7 @@ OString CppProducer::convertUnoTypeToCpp(std::u16string_view unoType) const
     if (result.find('<') == std::string::npos)
     {
         if (result == "boolean")
-            result = "sal_Bool";
+            result = "bool";
         else if (result == "byte")
             result = "sal_Int8";
         else if (result == "short")
@@ -1348,7 +1348,7 @@ std::string CppProducer::convertTemplateArguments(const std::string& unoType) co
         if (arg == "string")
             arg = "OUString";
         else if (arg == "boolean")
-            arg = "sal_Bool";
+            arg = "bool";
         else if (arg == "byte")
             arg = "sal_Int8";
         else if (arg == "short")
@@ -1937,10 +1937,10 @@ void CppProducer::generateActualMethodCall(CppFile& file,
             {
                 // Typed parameter approach - direct value for input, dereference pointer for input/output
                 if (isInputOnly)
-                    file.append(param.name); // Direct value (sal_Bool, sal_Int32, double, etc.)
+                    file.append(param.name); // Direct value (bool, sal_Int32, double, etc.)
                 else
                     file.append("*").append(
-                        param.name); // Dereference pointer (sal_Bool*, sal_Int32*, double*, etc.)
+                        param.name); // Dereference pointer (bool*, sal_Int32*, double*, etc.)
             }
             else
             {
@@ -2078,7 +2078,7 @@ void CppProducer::generateReturnValueConversion(CppFile& file,
     }
     else if (returnType == u"boolean")
     {
-        file.beginLine().append("return new sal_Bool(result);").endLine();
+        file.beginLine().append("return new bool(result);").endLine();
     }
     else if (returnType == u"byte")
     {
@@ -2226,7 +2226,7 @@ OString CppProducer::mapUnoPrimitiveToSal(std::u16string_view unoType)
 {
     // Common primitive type mappings from UNO to SAL types
     if (unoType == u"boolean")
-        return "sal_Bool"_ostr;
+        return "bool"_ostr;
     else if (unoType == u"byte")
         return "sal_Int8"_ostr;
     else if (unoType == u"short")
@@ -2361,12 +2361,12 @@ OString CppProducer::getTypedParameterType(
                 = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
             if (isInputOnly)
             {
-                // Input parameters: pass by value (sal_Bool, sal_Int32, etc.)
+                // Input parameters: pass by value (bool, sal_Int32, etc.)
                 return primitiveType;
             }
             else
             {
-                // Input/output parameters: pass by pointer (sal_Bool*, sal_Int32*, etc.)
+                // Input/output parameters: pass by pointer (bool*, sal_Int32*, etc.)
                 return primitiveType + "*";
             }
         }
@@ -2457,7 +2457,7 @@ OString CppProducer::convertBasicType(const OString& typeName)
     else if (result == "byte")
         result = "sal_Int8"_ostr;
     else if (result == "boolean")
-        result = "sal_Bool"_ostr;
+        result = "bool"_ostr;
     else if (result == "double")
         result = "double"_ostr;
     else if (result == "float")

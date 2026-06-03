@@ -194,7 +194,7 @@ public:
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                         supportsService( const OUString& rServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -227,7 +227,7 @@ public:
 
     // com.sun.star.document.XFilter interface --------------------------------
 
-    virtual sal_Bool SAL_CALL filter(
+    virtual bool SAL_CALL filter(
                             const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
 
     virtual void SAL_CALL cancel() override;

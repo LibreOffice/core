@@ -356,10 +356,10 @@ public:
             sal_Int32 nIndex = 0;
 
             OString sToken = sTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == true);
 
             /* OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == true);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
@@ -370,13 +370,13 @@ public:
             sal_Int32 nIndex = 0;
 
             OString sToken = sTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == true);
 
             /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == true);
 
             /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", sToken.equals("c") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", sToken.equals("c") == true);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
@@ -387,13 +387,13 @@ public:
             sal_Int32 nIndex = 0;
 
             OString sToken = sTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == true);
 
             /* OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.isEmpty());
 
             /* OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == true);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
@@ -404,13 +404,13 @@ public:
             sal_Int32 nIndex = 0;
 
             OString sToken = sTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", sToken.equals("longer") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", sToken.equals("longer") == true);
 
             /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", sToken.equals("then") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", sToken.equals("then") == true);
 
             /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", sToken.equals("ever") == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", sToken.equals("ever") == true);
 
             /* OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.isEmpty());
@@ -437,7 +437,7 @@ class replaceAt : public CppUnit::TestFixture
 {
 
 public:
-    sal_Bool check_replaceAt( const OString* expVal, const OString* input,
+    bool check_replaceAt( const OString* expVal, const OString* input,
         const OString* newStr, sal_Int32  index, sal_Int32 count)
     {
          OString aStr1;
@@ -445,44 +445,44 @@ public:
 
         printf("the result OString is %s#\n", aStr1.getStr() );
 
-        sal_Bool bRes = ( expVal->compareTo(aStr1) == 0 );
+        bool bRes = ( expVal->compareTo(aStr1) == 0 );
         return bRes;
     }
 
    void replaceAt_001()
         {
-        sal_Bool bRes = check_replaceAt(new OString("Java@Sun"),
+        bool bRes = check_replaceAt(new OString("Java@Sun"),
             new OString("Sun java"), new OString("Java@Sun"), 0, 8 );
-            CPPUNIT_ASSERT_MESSAGE("string differs, replace whole string", bRes == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("string differs, replace whole string", bRes == true);
         }
 
     void replaceAt_002()
         {
-            sal_Bool bRes = check_replaceAt(new OString("Sun Java desktop system"),
+            bool bRes = check_replaceAt(new OString("Sun Java desktop system"),
             new OString("Sun "), new OString("Java desktop system"), 10, 8 );
-            CPPUNIT_ASSERT_MESSAGE("index > length of input string", bRes == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("index > length of input string", bRes == true);
         }
 
     void replaceAt_003()
         {
-            sal_Bool bRes = check_replaceAt(new OString("SuJava desktop system"),
+            bool bRes = check_replaceAt(new OString("SuJava desktop system"),
             new OString("Sun "), new OString("Java desktop system"), 2, 64 );
-            CPPUNIT_ASSERT_MESSAGE("larger count", bRes == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("larger count", bRes == true);
         }
 
     void replaceAt_004()
         {
 
-            sal_Bool bRes = check_replaceAt(new OString("Java desktop system"),
+            bool bRes = check_replaceAt(new OString("Java desktop system"),
             new OString("Sun "), new OString("Java desktop system"), -4, 8 );
-            CPPUNIT_ASSERT_MESSAGE("navigate index", bRes == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("navigate index", bRes == true);
         }
     void replaceAt_005()
         {
 
-            sal_Bool bRes = check_replaceAt(new OString("Sun Jesktop System"),
+            bool bRes = check_replaceAt(new OString("Sun Jesktop System"),
             new OString("Sun Java Desktop System"), new OString(""), 5, 5 );
-            CPPUNIT_ASSERT_MESSAGE("replace with null string", bRes == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("replace with null string", bRes == true);
         }
 
     CPPUNIT_TEST_SUITE(replaceAt);

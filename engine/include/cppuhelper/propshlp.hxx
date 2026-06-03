@@ -62,7 +62,7 @@ public:
                               handle nHandle. May be NULL.
        @return True, if the handle exist, otherwise false.
      */
-    virtual sal_Bool SAL_CALL fillPropertyMembersByHandle(
+    virtual bool SAL_CALL fillPropertyMembersByHandle(
         ::rtl::OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle ) = 0;
     /**
        Return the sequence of properties. The sequence is sorted by name.
@@ -79,7 +79,7 @@ public:
        Return true if the property with the name rPropertyName exist, otherwise false.
        @param rPropertyName the name of the property.
      */
-    virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& rPropertyName) = 0;
+    virtual bool SAL_CALL hasPropertyByName(const ::rtl::OUString& rPropertyName) = 0;
     /**
        Return the handle of the property with the name rPropertyName.
        If the property does not exist -1 is returned.
@@ -113,7 +113,7 @@ public:
     OPropertyArrayHelper(
         css::beans::Property *pProps,
         sal_Int32 nElements ,
-        sal_Bool bSorted = true );
+        bool bSorted = true );
 
      /**
        Create an object which supports the common property interfaces.
@@ -123,7 +123,7 @@ public:
      */
     OPropertyArrayHelper(
         const css::uno::Sequence< css::beans::Property > & aProps,
-        sal_Bool bSorted = true );
+        bool bSorted = true );
 
     /**
        Return the number of properties.
@@ -141,7 +141,7 @@ public:
                               handle nHandle. May be NULL.
        @return True, if the handle exist, otherwise false.
      */
-    virtual sal_Bool SAL_CALL fillPropertyMembersByHandle(
+    virtual bool SAL_CALL fillPropertyMembersByHandle(
         ::rtl::OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle ) SAL_OVERRIDE;
     /**
        Return the sequence of properties. The sequence is sorted by name.
@@ -158,7 +158,7 @@ public:
        Return true if the property with the name rPropertyName exist, otherwise false.
        @param rPropertyName the name of the property.
      */
-    virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& rPropertyName) SAL_OVERRIDE;
+    virtual bool SAL_CALL hasPropertyByName(const ::rtl::OUString& rPropertyName) SAL_OVERRIDE;
     /**
        Return the handle of the property with the name rPropertyName.
        If the property does not exist -1 is returned.
@@ -179,7 +179,7 @@ protected:
     void * m_pReserved;
 
 private:
-    void init( sal_Bool bSorted );
+    void init( bool bSorted );
 
     /** The sequence generated from the pProperties array. */
     css::uno::Sequence< css::beans::Property > aInfos;
@@ -188,7 +188,7 @@ private:
        True, If the values of the handles are sorted in the same way as the names
        and the highest handle value is getCount() -1, otherwise false.
      */
-    sal_Bool                    bRightOrdered;
+    bool                    bRightOrdered;
 };
 
 
@@ -306,7 +306,7 @@ public:
     virtual void fireEvents(
         sal_Int32 * pnHandles,
         sal_Int32 nCount,
-        sal_Bool bVetoable,
+        bool bVetoable,
         bool bIgnoreRuntimeExceptionsWhileFiring) = 0;
 
 #if !defined _MSC_VER // public -> protected changes mangled names there
@@ -495,7 +495,7 @@ protected:
         const css::uno::Any * pNewValues,
         const css::uno::Any * pOldValues,
         sal_Int32 nCount,
-        sal_Bool bVetoable );
+        bool bVetoable );
 
     /**
        Set multiple properties with the handles.
@@ -533,7 +533,7 @@ protected:
        @throws css::beans::UnknownPropertyException
        @throws css::uno::RuntimeException
      */
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
         css::uno::Any & rConvertedValue,
         css::uno::Any & rOldValue,
         sal_Int32 nHandle,
@@ -660,7 +660,7 @@ public:
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
 
     // XPropertySetOption
-    virtual void SAL_CALL enableChangeListenerNotification( sal_Bool bEnable ) SAL_OVERRIDE;
+    virtual void SAL_CALL enableChangeListenerNotification( bool bEnable ) SAL_OVERRIDE;
 
 
 private:

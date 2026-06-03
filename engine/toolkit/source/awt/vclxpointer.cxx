@@ -48,7 +48,7 @@ OUString VCLXPointer::getImplementationName()
     return u"stardiv.Toolkit.VCLXPointer"_ustr;
 }
 
-sal_Bool VCLXPointer::supportsService(OUString const & ServiceName)
+bool VCLXPointer::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

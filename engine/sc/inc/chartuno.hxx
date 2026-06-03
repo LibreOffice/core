@@ -61,13 +61,13 @@ public:
     virtual void SAL_CALL   addNewByName( const OUString& aName,
                                     const css::awt::Rectangle& aRect,
                                     const css::uno::Sequence< css::table::CellRangeAddress >& aRanges,
-                                    sal_Bool bColumnHeaders, sal_Bool bRowHeaders ) override;
+                                    bool bColumnHeaders, bool bRowHeaders ) override;
     virtual void SAL_CALL   removeByName( const OUString& aName ) override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -79,11 +79,11 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
@@ -119,10 +119,10 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XTableChart
-    virtual sal_Bool SAL_CALL getHasColumnHeaders() override;
-    virtual void SAL_CALL   setHasColumnHeaders( sal_Bool bHasColumnHeaders ) override;
-    virtual sal_Bool SAL_CALL getHasRowHeaders() override;
-    virtual void SAL_CALL   setHasRowHeaders( sal_Bool bHasRowHeaders ) override;
+    virtual bool SAL_CALL getHasColumnHeaders() override;
+    virtual void SAL_CALL   setHasColumnHeaders( bool bHasColumnHeaders ) override;
+    virtual bool SAL_CALL getHasRowHeaders() override;
+    virtual void SAL_CALL   setHasRowHeaders( bool bHasRowHeaders ) override;
     virtual css::uno::Sequence< css::table::CellRangeAddress > SAL_CALL
                             getRanges(  ) override;
     virtual void SAL_CALL   setRanges( const css::uno::Sequence< css::table::CellRangeAddress >& aRanges ) override;
@@ -137,7 +137,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

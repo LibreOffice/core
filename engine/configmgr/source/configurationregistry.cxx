@@ -76,7 +76,7 @@ private:
     virtual OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.comp.configuration.ConfigurationRegistry"_ustr; }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -86,9 +86,9 @@ private:
     virtual OUString SAL_CALL getURL() override;
 
     virtual void SAL_CALL open(
-        OUString const & rURL, sal_Bool bReadOnly, sal_Bool) override;
+        OUString const & rURL, bool bReadOnly, bool) override;
 
-    virtual sal_Bool SAL_CALL isValid() override;
+    virtual bool SAL_CALL isValid() override;
 
     virtual void SAL_CALL close() override;
 
@@ -97,7 +97,7 @@ private:
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
     getRootKey() override;
 
-    virtual sal_Bool SAL_CALL isReadOnly() override;
+    virtual bool SAL_CALL isReadOnly() override;
 
     virtual void SAL_CALL mergeKey(OUString const &, OUString const &) override;
 
@@ -139,9 +139,9 @@ private:
 
     virtual OUString SAL_CALL getKeyName() override;
 
-    virtual sal_Bool SAL_CALL isReadOnly() override;
+    virtual bool SAL_CALL isReadOnly() override;
 
-    virtual sal_Bool SAL_CALL isValid() override;
+    virtual bool SAL_CALL isValid() override;
 
     virtual css::registry::RegistryKeyType SAL_CALL getKeyType(
         OUString const &) override;
@@ -195,7 +195,7 @@ private:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
 
-    virtual sal_Bool SAL_CALL createLink(
+    virtual bool SAL_CALL createLink(
         OUString const &, OUString const &) override;
 
     virtual void SAL_CALL deleteLink(OUString const &) override;
@@ -236,7 +236,7 @@ OUString Service::getURL() {
     return url_;
 }
 
-void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
+void Service::open(OUString const & rURL, bool bReadOnly, bool)
 {
     //TODO: bCreate
     std::unique_lock g(mutex_);
@@ -264,7 +264,7 @@ void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
     readOnly_ = bReadOnly;
 }
 
-sal_Bool Service::isValid() {
+bool Service::isValid() {
     std::unique_lock g(mutex_);
     return access_.is();
 }
@@ -290,7 +290,7 @@ css::uno::Reference< css::registry::XRegistryKey > Service::getRootKey()
     return new RegistryKey(*this, css::uno::Any(access_));
 }
 
-sal_Bool Service::isReadOnly() {
+bool Service::isReadOnly() {
     std::unique_lock g(mutex_);
     checkValid_RuntimeException();
     return readOnly_;
@@ -358,14 +358,14 @@ OUString RegistryKey::getKeyName() {
         getXWeak());
 }
 
-sal_Bool RegistryKey::isReadOnly()
+bool RegistryKey::isReadOnly()
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
     return service_.readOnly_; //TODO: read-only sub-nodes in update access?
 }
 
-sal_Bool RegistryKey::isValid() {
+bool RegistryKey::isValid() {
     return service_.isValid();
 }
 
@@ -599,7 +599,7 @@ css::uno::Sequence< OUString > RegistryKey::getKeyNames()
         getXWeak());
 }
 
-sal_Bool RegistryKey::createLink(OUString const &, OUString const &)
+bool RegistryKey::createLink(OUString const &, OUString const &)
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();

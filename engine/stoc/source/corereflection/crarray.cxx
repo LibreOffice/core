@@ -142,7 +142,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
 
 // ArrayIdlClassImpl
 
-sal_Bool ArrayIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
+bool ArrayIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
 {
     return (xType.is() &&
             (equals( xType ) ||

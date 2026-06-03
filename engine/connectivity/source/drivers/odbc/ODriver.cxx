@@ -74,7 +74,7 @@ Sequence< OUString > ODBCDriver::getSupportedServiceNames(  )
 }
 
 
-sal_Bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName )
+bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -92,7 +92,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
     return pCon;
 }
 
-sal_Bool SAL_CALL ODBCDriver::acceptsURL( const OUString& url )
+bool SAL_CALL ODBCDriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:odbc:");
 }
@@ -280,7 +280,7 @@ bool LoadFunctions(oslModule pODBCso)
 }
 
 // Take care of Dynamically loading of the DLL/shared lib and Addresses:
-// Returns sal_True at success
+// Returns true at success
 bool LoadLibrary_ODBC3(OUString &_rPath)
 {
     static bool bLoaded = false;

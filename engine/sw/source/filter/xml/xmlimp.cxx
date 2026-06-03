@@ -1183,7 +1183,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 
     //TODO/LATER: why that cast?!
     bool bTwip = pShell->GetMapUnit ( ) == MapUnit::MapTwip;
-    //sal_Bool bTwip = pShell->SfxInPlaceObject::GetMapUnit ( ) == MapUnit::MapTwip;
+    //bool bTwip = pShell->SfxInPlaceObject::GetMapUnit ( ) == MapUnit::MapTwip;
 
     for (const PropertyValue& rValue : aViewProps)
     {

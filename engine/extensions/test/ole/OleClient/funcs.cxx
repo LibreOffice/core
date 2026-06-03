@@ -181,7 +181,7 @@ bool equalSequences(const Any& orig, const Any& returned)
             }
         case TypeClass_BOOLEAN:
             {
-                Sequence<sal_Bool> seq;
+                Sequence<bool> seq;
                 orig >>= seq;
                 Sequence<Any> seq2;
                 returned >>= seq2;

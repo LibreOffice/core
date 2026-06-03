@@ -29,7 +29,7 @@ BaseColorScheme::BaseColorScheme()
 {
 }
 
-sal_Bool SAL_CALL BaseColorScheme::supportsService(const OUString& rServiceName)
+bool SAL_CALL BaseColorScheme::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

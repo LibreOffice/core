@@ -839,11 +839,11 @@ std::vector< rtl::Reference< GridProperties > > AxisHelper::getAllGrids( const r
     return aGridVector;
 }
 
-void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList
+void AxisHelper::getAxisOrGridPossibilities( Sequence< bool >& rPossibilityList
         , const rtl::Reference< Diagram>& xDiagram, bool bAxis )
 {
     rPossibilityList.realloc(6);
-    sal_Bool* pPossibilityList = rPossibilityList.getArray();
+    bool* pPossibilityList = rPossibilityList.getArray();
 
     sal_Int32 nDimensionCount = -1;
     if (xDiagram)
@@ -908,11 +908,11 @@ bool AxisHelper::shouldAxisBeDisplayed( const rtl::Reference< Axis >& xAxis
     return bRet;
 }
 
-void AxisHelper::getAxisOrGridExistence( Sequence< sal_Bool >& rExistenceList
+void AxisHelper::getAxisOrGridExistence( Sequence< bool >& rExistenceList
         , const rtl::Reference< Diagram>& xDiagram, bool bAxis )
 {
     rExistenceList.realloc(6);
-    sal_Bool* pExistenceList = rExistenceList.getArray();
+    bool* pExistenceList = rExistenceList.getArray();
 
     if(bAxis)
     {
@@ -934,8 +934,8 @@ void AxisHelper::getAxisOrGridExistence( Sequence< sal_Bool >& rExistenceList
 }
 
 bool AxisHelper::changeVisibilityOfAxes( const rtl::Reference< Diagram >& xDiagram
-                        , const Sequence< sal_Bool >& rOldExistenceList
-                        , const Sequence< sal_Bool >& rNewExistenceList
+                        , const Sequence< bool >& rOldExistenceList
+                        , const Sequence< bool >& rNewExistenceList
                         , const Reference< uno::XComponentContext >& xContext
                         , ReferenceSizeProvider * pRefSizeProvider )
 {
@@ -957,8 +957,8 @@ bool AxisHelper::changeVisibilityOfAxes( const rtl::Reference< Diagram >& xDiagr
 }
 
 bool AxisHelper::changeVisibilityOfGrids( const rtl::Reference< Diagram >& xDiagram
-                        , const Sequence< sal_Bool >& rOldExistenceList
-                        , const Sequence< sal_Bool >& rNewExistenceList )
+                        , const Sequence< bool >& rOldExistenceList
+                        , const Sequence< bool >& rNewExistenceList )
 {
     bool bChanged = false;
     for(sal_Int32 nN=0;nN<6;nN++)

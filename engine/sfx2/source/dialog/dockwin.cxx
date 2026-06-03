@@ -497,7 +497,7 @@ bool SfxDockingWindow::PrepareToggleFloatingMode()
         if ( pImpl->pSplitWin )
         {
             // The DockingWindow is inside a SplitWindow and will be teared of.
-            pImpl->pSplitWin->RemoveWindow(this/*, sal_False*/);
+            pImpl->pSplitWin->RemoveWindow(this/*, false*/);
             pImpl->pSplitWin = nullptr;
         }
     }
@@ -1404,7 +1404,7 @@ SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
 /** The window is closed when the ChildWindow is destroyed by running the
     ChildWindow-slots. If this is method is overridden by a derived class
     method, then the SfxDockingDialogWindow: Close() must be called afterwards
-    if the Close() was not cancelled with "return sal_False".
+    if the Close() was not cancelled with "return false".
 */
 bool SfxDockingWindow::Close()
 {

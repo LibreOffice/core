@@ -67,7 +67,7 @@ void unotools::misc::ServiceDocumenter::showServiceDocs(const Reference<XService
 }
 
 //  XServiceInfo
-sal_Bool unotools::misc::ServiceDocumenter::supportsService(const OUString& sServiceName)
+bool unotools::misc::ServiceDocumenter::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

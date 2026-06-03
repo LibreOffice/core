@@ -113,7 +113,7 @@ OUString SAL_CALL SyncDbusSessionHelper::getImplementationName()
     return u"org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper"_ustr;
 }
 
-sal_Bool SAL_CALL SyncDbusSessionHelper::supportsService(const OUString& aServiceName)
+bool SAL_CALL SyncDbusSessionHelper::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }
@@ -181,7 +181,7 @@ void SyncDbusSessionHelper::InstallPrinterDrivers(
     request("InstallPrinterDrivers", files, interaction);
 }
 
-void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled )
+void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, bool& o_isInstalled )
 {
     const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
     const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);

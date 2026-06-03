@@ -60,7 +60,7 @@ OUString SAL_CALL ContentProvider::getImplementationName()
     return u"CHelpContentProvider"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ContentProvider::supportsService(const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

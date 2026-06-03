@@ -810,14 +810,14 @@ void SbaGridControl::Select()
         m_pMasterListener->SelectionChanged();
 }
 
-void SbaGridControl::ActivateCell(sal_Int32 nRow, sal_uInt16 nCol, bool bSetCellFocus /*= sal_True*/ )
+void SbaGridControl::ActivateCell(sal_Int32 nRow, sal_uInt16 nCol, bool bSetCellFocus /*= true*/ )
 {
     FmGridControl::ActivateCell(nRow, nCol, bSetCellFocus);
     if (m_pMasterListener)
         m_pMasterListener->CellActivated();
 }
 
-void SbaGridControl::DeactivateCell(bool bUpdate /*= sal_True*/)
+void SbaGridControl::DeactivateCell(bool bUpdate /*= true*/)
 {
     FmGridControl::DeactivateCell(bUpdate);
     if (m_pMasterListener)
@@ -1090,7 +1090,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     {
         OUString sCellText;
         Reference< XGridFieldDataSupplier >  xFieldData(GetPeer());
-        Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(cppu::UnoType<decltype(sCellText)>::get());
+        Sequence<bool> aSupportingText = xFieldData->queryFieldDataType(cppu::UnoType<decltype(sCellText)>::get());
         if (aSupportingText[nColumnPos])
         {
             Sequence< Any> aCellContents = xFieldData->queryFieldData(nRowPos, cppu::UnoType<decltype(sCellText)>::get());

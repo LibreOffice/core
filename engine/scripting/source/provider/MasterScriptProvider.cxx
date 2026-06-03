@@ -410,7 +410,7 @@ MasterScriptProvider::getChildNodes()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
 {
     return true;
@@ -580,7 +580,7 @@ MasterScriptProvider::getByName( const OUString& /*aName*/ )
     throw RuntimeException( u"getByName not implemented!!!!"_ustr );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 MasterScriptProvider::hasByName( const OUString& aName )
 {
     bool result = false;
@@ -634,7 +634,7 @@ MasterScriptProvider::getElementType(  )
     return t;
 }
 
-sal_Bool SAL_CALL MasterScriptProvider::hasElements(  )
+bool SAL_CALL MasterScriptProvider::hasElements(  )
 {
     // TODO needs implementing
     throw RuntimeException( u"hasElements not implemented!!!!"_ustr );
@@ -646,7 +646,7 @@ OUString SAL_CALL MasterScriptProvider::getImplementationName( )
     return u"com.sun.star.script.provider.MasterScriptProvider"_ustr;
 }
 
-sal_Bool SAL_CALL MasterScriptProvider::supportsService( const OUString& serviceName )
+bool SAL_CALL MasterScriptProvider::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }

@@ -46,7 +46,7 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override;
     virtual void useInternalChartDataTable( bool bInternal ) override;
 
-    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const override;

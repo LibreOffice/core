@@ -101,7 +101,7 @@ bool PCDReader::ReadPCD(ImportOutput& rImportOutput, FilterConfigItem* pConfigIt
 {
     bStatus      = true;
 
-    // is it a PCD file with a picture? ( sets bStatus == sal_False, if that's not the case):
+    // is it a PCD file with a picture? ( sets bStatus == false, if that's not the case):
     CheckPCDImagePacFile();
 
     // read orientation of the picture:

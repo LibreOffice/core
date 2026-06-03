@@ -68,7 +68,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override;
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
 
     // XCancellable
     virtual void SAL_CALL cancel() override;
@@ -83,10 +83,10 @@ public:
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
     virtual css::uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 };
 
 #endif // INCLUDED_SVX_SOURCE_UNODRAW_UNONAMEITEMTABLE_HXX

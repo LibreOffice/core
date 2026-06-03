@@ -226,7 +226,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual sal_Bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) override;
+        virtual bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) override;
 
 
         /**

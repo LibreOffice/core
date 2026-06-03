@@ -79,7 +79,7 @@ Transliteration_caseignore::transliterateRange( const OUString& str1, const OUSt
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 Transliteration_caseignore::equals(
     const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
     const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)

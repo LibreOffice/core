@@ -113,7 +113,7 @@ public:
     virtual css::uno::Reference< css::lang::XComponent > SAL_CALL open(  ) override;
     virtual css::uno::Reference< css::lang::XComponent > SAL_CALL openDesign(  ) override;
     virtual void SAL_CALL store(  ) override;
-    virtual sal_Bool SAL_CALL close(  ) override;
+    virtual bool SAL_CALL close(  ) override;
 
     // XHierarchicalName
     virtual OUString SAL_CALL getHierarchicalName(  ) override;
@@ -129,7 +129,7 @@ public:
     virtual void SAL_CALL rename( const OUString& newName ) override;
 
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, sal_Bool GetsOwnership ) override;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
     virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) override;
 
     // XEventListener

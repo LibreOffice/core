@@ -112,7 +112,7 @@ static CloseResult CloseModelAndDocSh(
     {
         try
         {
-            //! 'sal_True' -> transfer ownership to vetoing object if vetoed!
+            //! 'true' -> transfer ownership to vetoing object if vetoed!
             //! I.e. now that object is responsible for closing the model and doc shell.
             xClose->close( true );
         }
@@ -197,7 +197,7 @@ namespace
         virtual ~DelayedFileDeletion( ) override;
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) override;
+        virtual void SAL_CALL queryClosing( const EventObject& _rSource, bool _bGetsOwnership ) override;
         virtual void SAL_CALL notifyClosing( const EventObject& _rSource ) override;
 
         // XEventListener
@@ -293,7 +293,7 @@ namespace
         m_aDeleteTimer.Start( );
     }
 
-    void SAL_CALL DelayedFileDeletion::queryClosing( const EventObject& , sal_Bool _bGetsOwnership )
+    void SAL_CALL DelayedFileDeletion::queryClosing( const EventObject& , bool _bGetsOwnership )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( _bGetsOwnership )
@@ -1143,7 +1143,7 @@ OUString SAL_CALL SwXMailMerge::getImplementationName()
     return u"SwXMailMerge"_ustr;
 }
 
-sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
+bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

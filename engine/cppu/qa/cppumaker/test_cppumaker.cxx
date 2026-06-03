@@ -419,7 +419,7 @@ void Test::testBigStruct() {
         buffer[i] = '\x56';
     }
     Guard guard(buffer.get());
-    CPPUNIT_ASSERT_EQUAL(sal_False, guard.p->m1);
+    CPPUNIT_ASSERT_EQUAL(false, guard.p->m1);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int8 >(0), guard.p->m2);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int16 >(0), guard.p->m3);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt16 >(0), guard.p->m4);
@@ -435,7 +435,7 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(false, guard.p->m14.hasValue());
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m15.getLength());
     CPPUNIT_ASSERT_EQUAL(int(test::codemaker::cppumaker::HelperEnum_ZERO), static_cast<int>(guard.p->m16));
-    CPPUNIT_ASSERT_EQUAL(sal_False, guard.p->m17.m1);
+    CPPUNIT_ASSERT_EQUAL(false, guard.p->m17.m1);
     CPPUNIT_ASSERT_EQUAL(false, guard.p->m17.m2.is());
     CPPUNIT_ASSERT_EQUAL(false, guard.p->m18.is());
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int8 >(0), guard.p->m19);
@@ -484,7 +484,7 @@ void Test::testPolyStruct() {
 
     CPPUNIT_ASSERT_EQUAL(
         static_cast< sal_uInt32 >(5),
-        (test::codemaker::cppumaker::make_Struct< sal_uInt32, sal_Bool >(5,
+        (test::codemaker::cppumaker::make_Struct< sal_uInt32, bool >(5,
             aEmptySequence).member1));
 }
 

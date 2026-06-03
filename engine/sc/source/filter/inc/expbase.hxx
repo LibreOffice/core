@@ -43,14 +43,14 @@ public:
     virtual             ~ScExportBase();
 
                         // Trim borders of hidden Cols/Rows,
-                        // return: sal_True if range exists
+                        // return: true if range exists
                         // Start/End/Col/Row must have valid starting values
     bool                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Get Data Area of a table,
                         // adjust borders of hidden Cols/Rows,
-                        // return: sal_True if range exists
+                        // return: true if range exists
     bool                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 

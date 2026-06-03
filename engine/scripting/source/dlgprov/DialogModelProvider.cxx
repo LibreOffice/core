@@ -75,7 +75,7 @@ uno::Type SAL_CALL DialogModelProvider::getElementType()
     return m_xDialogModel->getElementType();
 }
 
-sal_Bool SAL_CALL DialogModelProvider::hasElements()
+bool SAL_CALL DialogModelProvider::hasElements()
 {
     return m_xDialogModel->hasElements();
 }
@@ -91,7 +91,7 @@ css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getElementNames()
     return m_xDialogModel->getElementNames();
 }
 
-sal_Bool SAL_CALL DialogModelProvider::hasByName(const OUString & aName)
+bool SAL_CALL DialogModelProvider::hasByName(const OUString & aName)
 {
     return m_xDialogModel->hasByName(aName);
 }
@@ -142,7 +142,7 @@ OUString SAL_CALL DialogModelProvider::getImplementationName()
     return u"com.sun.star.comp.scripting.DialogModelProvider"_ustr;
 }
 
-sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName)
+bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

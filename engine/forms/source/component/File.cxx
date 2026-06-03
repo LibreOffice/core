@@ -160,7 +160,7 @@ void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 }
 
 
-sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
+bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
 {
     switch (nHandle)
     {

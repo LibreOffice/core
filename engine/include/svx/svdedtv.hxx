@@ -368,7 +368,7 @@ public:
     bool IsGroupEnterPossible() const { ForcePossibilities(); return m_bGrpEnterPossible; }
 
     // Convert marked objects to polygons/Beziercurves. The bool-functions
-    // return sal_True, if at least one marked object could be converted.
+    // return true, if at least one marked object could be converted.
     // Also member objects of group objects are converted.
     // For a better description see: SdrObj.HXX
     bool IsConvertToPathObjPossible() const { ForcePossibilities(); return m_bCanConvToPath; }
@@ -406,7 +406,7 @@ public:
 
     // Check if forward, backward is possible.
     // GetMaxToBtmObj() is only partly taken into account by these methods.
-    // Which means it can happen that IsToTopPossible() returns sal_True,
+    // Which means it can happen that IsToTopPossible() returns true,
     // but MovMarkedToTop() changes nothing (e.g. for multiple selections),
     // as restriction derived via a view by GetMaxToTopObj() prevents this.
     bool IsToTopPossible() const { ForcePossibilities(); return m_bToTopPossible; }

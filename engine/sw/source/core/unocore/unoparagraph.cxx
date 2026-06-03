@@ -237,7 +237,7 @@ SwXParagraph::getImplementationName()
     return u"SwXParagraph"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXParagraph::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -1250,7 +1250,7 @@ uno::Type SAL_CALL SwXParagraph::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SwXParagraph::hasElements()
+bool SAL_CALL SwXParagraph::hasElements()
 {
     SolarMutexGuard aGuard;
     return GetTextNode() != nullptr;

@@ -91,7 +91,7 @@ public:
 
     // XServiceInfo
     virtual OUString                       SAL_CALL getImplementationName   (                                     ) override;
-    virtual sal_Bool                              SAL_CALL supportsService         ( const OUString& sServiceName ) override;
+    virtual bool                              SAL_CALL supportsService         ( const OUString& sServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(                                     ) override;
 
     // XInitialization
@@ -99,8 +99,8 @@ public:
 
     // XController
     virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-    virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
-    virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) override;
+    virtual bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
+    virtual bool SAL_CALL suspend( bool bSuspend ) override;
     virtual css::uno::Any SAL_CALL getViewData() override;
     virtual void SAL_CALL restoreViewData( const css::uno::Any& aData ) override;
     virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel() override;
@@ -256,7 +256,7 @@ OUString SAL_CALL BackingComp::getImplementationName()
     return u"com.sun.star.comp.sfx2.BackingComp"_ustr;
 }
 
-sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
+bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
@@ -408,7 +408,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     return  <FALSE/> every time.
  */
 
-sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
+bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
 {
     return false;
 }
@@ -474,13 +474,13 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     UI user.
 
     @param  bSuspend
-                If it's set to sal_True this controller should be suspended.
-                sal_False will resuspend it.
+                If it's set to true this controller should be suspended.
+                false will resuspend it.
 
-    @return sal_True if the request could be finished successfully; sal_False otherwise.
+    @return true if the request could be finished successfully; false otherwise.
  */
 
-sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
+bool SAL_CALL BackingComp::suspend( /*IN*/ bool )
 {
     /* FIXME ... implemented by using default :-( */
     return true;

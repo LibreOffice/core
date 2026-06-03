@@ -623,7 +623,7 @@ public:
     TestTransferable(const std::vector<OString>& rContent, const std::vector<OUString>& rMimeType);
     uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override;
     uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override;
+    bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override;
 };
 
 TestTransferable::TestTransferable(const std::vector<OString>& rContent, const std::vector<OUString>& rMimeType)
@@ -665,7 +665,7 @@ uno::Sequence<datatransfer::DataFlavor> TestTransferable::getTransferDataFlavors
     return aFlavors;
 }
 
-sal_Bool TestTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+bool TestTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     for (size_t nType = 0; nType < m_aMimeType.size(); ++nType)
     {

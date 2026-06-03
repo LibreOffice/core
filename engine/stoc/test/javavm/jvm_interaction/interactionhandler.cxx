@@ -115,18 +115,18 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
          retry->select();
 }
 
-sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
+bool test1(const Reference< XMultiServiceFactory > & xMgr )
 {
-    sal_Bool retVal= sal_True;
+    bool retVal= true;
     setCurrentContext(Reference<XCurrentContext>(new Context());
 
       OUString sVMService("com.sun.star.java.JavaVirtualMachine");
     Reference<XInterface> xXInt= xMgr->createInstance(sVMService);
     if( ! xXInt.is())
-        return sal_False;
+        return false;
     Reference<XJavaVM> xVM( xXInt, UNO_QUERY);
     if( ! xVM.is())
-        return sal_False;
+        return false;
 
 
     sal_Int8 arId[16];
@@ -161,7 +161,7 @@ sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
     {
         OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
         printf("###RuntimeException: %s\n", msg.getStr());
-        retVal= sal_False;
+        retVal= false;
     }
     return retVal;
 }
@@ -170,13 +170,13 @@ SAL_IMPLEMENT_MAIN()
 {
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString("applicat.rdb"),
-                               sal_False, sal_False );
+                               false, false );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
     Reference<XMultiServiceFactory> xMgr( fac, UNO_QUERY);
 
-    sal_Bool bSucc = test1(xMgr);
+    bool bSucc = test1(xMgr);
     Reference< XComponent > xCompContext( context, UNO_QUERY );
     xCompContext->dispose();
     return (bSucc ? 0 : -1);

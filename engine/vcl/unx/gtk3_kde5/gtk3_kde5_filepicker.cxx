@@ -83,7 +83,7 @@ sal_Int16 SAL_CALL Gtk3KDE5FilePicker::execute()
     return m_ipc.execute();
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
+void SAL_CALL Gtk3KDE5FilePicker::setMultiSelectionMode(bool multiSelect)
 {
     m_ipc.sendCommand(Commands::SetMultiSelectionMode, bool(multiSelect));
 }
@@ -182,7 +182,7 @@ uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nC
     return uno::Any(value);
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
+void SAL_CALL Gtk3KDE5FilePicker::enableControl(sal_Int16 controlId, bool enable)
 {
     m_ipc.sendCommand(Commands::EnableControl, controlId, bool(enable));
 }
@@ -422,7 +422,7 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getImplementationName()
     return u"" FILE_PICKER_IMPL_NAME ""_ustr;
 }
 
-sal_Bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceName)
+bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

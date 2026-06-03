@@ -245,7 +245,7 @@ ScVbaWSFunction::getValue(const OUString& /*PropertyName*/)
     throw beans::UnknownPropertyException();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaWSFunction::hasMethod(const OUString& Name)
 {
     bool bIsFound = false;
@@ -264,7 +264,7 @@ ScVbaWSFunction::hasMethod(const OUString& Name)
     return bIsFound;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaWSFunction::hasProperty(const OUString& /*Name*/)
 {
      return false;

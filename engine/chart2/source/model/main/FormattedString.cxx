@@ -147,13 +147,13 @@ void SAL_CALL FormattedString::setGuid( const OUString& guid )
 
 }
 
-sal_Bool SAL_CALL FormattedString::getDataLabelsRange()
+bool SAL_CALL FormattedString::getDataLabelsRange()
 {
     MutexGuard aGuard( m_aMutex);
     return m_bDataLabelsRange;
 }
 
-void SAL_CALL FormattedString::setDataLabelsRange( sal_Bool dataLabelsRange )
+void SAL_CALL FormattedString::setDataLabelsRange( bool dataLabelsRange )
 {
     {
         MutexGuard aGuard( m_aMutex);
@@ -251,7 +251,7 @@ OUString SAL_CALL FormattedString::getImplementationName()
     return u"com.sun.star.comp.chart.FormattedString"_ustr;
 }
 
-sal_Bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName )
+bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

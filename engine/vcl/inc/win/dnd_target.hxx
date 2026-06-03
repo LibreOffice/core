@@ -79,8 +79,8 @@ private:
     IDropTarget* m_pDropTarget;
 
     Reference<XComponentContext> m_xContext;
-    // If m_bActive == sal_True then events are fired to XDropTargetListener s,
-    // none otherwise. The default value is sal_True.
+    // If m_bActive == true then events are fired to XDropTargetListener s,
+    // none otherwise. The default value is true.
     bool m_bActive;
     sal_Int8 m_nDefaultActions;
 
@@ -118,14 +118,14 @@ public:
     virtual void SAL_CALL
     removeDropTargetListener(const Reference<XDropTargetListener>& dtl) override;
     // Default is not active
-    virtual sal_Bool SAL_CALL isActive() override;
-    virtual void SAL_CALL setActive(sal_Bool isActive) override;
+    virtual bool SAL_CALL isActive() override;
+    virtual void SAL_CALL setActive(bool isActive) override;
     virtual sal_Int8 SAL_CALL getDefaultActions() override;
     virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // Functions called from the IDropTarget implementation ( m_pDropTarget)

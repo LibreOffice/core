@@ -82,11 +82,11 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 //-
@@ -286,7 +286,7 @@ void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
     }
 }
 
-sal_Bool SAL_CALL SvxUnoDrawingModel::hasControllersLocked(  )
+bool SAL_CALL SvxUnoDrawingModel::hasControllersLocked(  )
 {
     return mpDoc && mpDoc->isLocked();
 }
@@ -504,7 +504,7 @@ OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
     return u"SvxUnoDrawingModel"_ustr;
 }
 
-sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -572,7 +572,7 @@ uno::Type SAL_CALL SvxUnoDrawPagesAccess::getElementType()
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
+bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
 {
     return getCount() > 0;
 }
@@ -631,7 +631,7 @@ OUString SAL_CALL SvxUnoDrawPagesAccess::getImplementationName(  )
     return u"SvxUnoDrawPagesAccess"_ustr;
 }
 
-sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

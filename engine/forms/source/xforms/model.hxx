@@ -262,15 +262,15 @@ public:
         const EvaluationContext& );
 
     virtual OUString SAL_CALL getNodeDisplayName( const css::uno::Reference<css::xml::dom::XNode>&,
-                                                       sal_Bool bDetail ) override;
+                                                       bool bDetail ) override;
 
     virtual OUString SAL_CALL getNodeName( const css::uno::Reference<css::xml::dom::XNode>& ) override;
 
     virtual OUString SAL_CALL getBindingName( const css::uno::Reference< ::css::beans::XPropertySet >&,
-                                                   sal_Bool bDetail ) override;
+                                                   bool bDetail ) override;
 
     virtual OUString SAL_CALL getSubmissionName( const css::uno::Reference< ::css::beans::XPropertySet >&,
-                                                      sal_Bool bDetail ) override;
+                                                      bool bDetail ) override;
 
     virtual css::uno::Reference< ::css::beans::XPropertySet > SAL_CALL cloneBindingAsGhost( const css::uno::Reference< ::css::beans::XPropertySet >& ) override;
 
@@ -278,12 +278,12 @@ public:
 
     virtual css::uno::Reference<css::xml::dom::XDocument> SAL_CALL newInstance( const OUString& sName,
                                               const OUString& sURL,
-                                              sal_Bool bURLOnce ) override;
+                                              bool bURLOnce ) override;
 
     virtual void SAL_CALL renameInstance( const OUString& sFrom,
                                           const OUString& sTo,
                                           const OUString& sURL,
-                                          sal_Bool bURLOnce ) override;
+                                          bool bURLOnce ) override;
 
     virtual void SAL_CALL removeInstance( const OUString& sName ) override;
 
@@ -312,18 +312,18 @@ public:
 
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getBindingForNode( const
                                          css::uno::Reference<css::xml::dom::XNode>&,
-                                         sal_Bool bCreate ) override;
+                                         bool bCreate ) override;
 
     virtual void SAL_CALL removeBindingForNode( const css::uno::Reference< ::css::xml::dom::XNode >& ) override;
 
     virtual OUString SAL_CALL getResultForExpression(
         const css::uno::Reference< css::beans::XPropertySet >& xBinding,
-        sal_Bool bIsBindingExpression,
+        bool bIsBindingExpression,
         const OUString& sExpression ) override;
 
-    virtual sal_Bool SAL_CALL isValidXMLName( const OUString& sName ) override;
+    virtual bool SAL_CALL isValidXMLName( const OUString& sName ) override;
 
-    virtual sal_Bool SAL_CALL isValidPrefixName( const OUString& sName ) override;
+    virtual bool SAL_CALL isValidPrefixName( const OUString& sName ) override;
 
     virtual void SAL_CALL setNodeValue(
         const css::uno::Reference< ::css::xml::dom::XNode >& xNode,
@@ -345,7 +345,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

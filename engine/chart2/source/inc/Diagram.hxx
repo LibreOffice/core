@@ -79,7 +79,7 @@ public:
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
@@ -193,7 +193,7 @@ public:
     * @param bForward
     *  Direction in which the series should be moved.
     *
-    * @returns </sal_True> if the series was moved successfully.
+    * @returns </true> if the series was moved successfully.
     *
     */
     bool moveSeries(
@@ -212,7 +212,7 @@ public:
     * @param bForward
     *  Direction of the move to be checked.
     *
-    * @returns </sal_True> if the series can be moved.
+    * @returns </true> if the series can be moved.
     *
     */
     bool isSeriesMoveable(

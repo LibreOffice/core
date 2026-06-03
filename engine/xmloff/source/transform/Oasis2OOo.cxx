@@ -1870,7 +1870,7 @@ OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
     return u"com.sun.star.comp.Oasis2OOoTransformer"_ustr;
 }
 
-sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
+bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

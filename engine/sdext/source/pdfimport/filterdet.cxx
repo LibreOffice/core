@@ -591,7 +591,7 @@ OUString PDFDetector::getImplementationName()
     return u"org.libreoffice.comp.documents.PDFDetector"_ustr;
 }
 
-sal_Bool PDFDetector::supportsService(OUString const & ServiceName)
+bool PDFDetector::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

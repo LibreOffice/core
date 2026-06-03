@@ -187,7 +187,7 @@ void ScUndoInsertTab::Undo()
 
     }
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    //  SetTabNo(...,true) for all views to sync with drawing layer pages
     rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 
@@ -299,7 +299,7 @@ void ScUndoInsertTables::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    //  SetTabNo(...,true) for all views to sync with drawing layer pages
     rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 
@@ -465,7 +465,7 @@ void ScUndoDeleteTab::Undo()
 
     rDocShell.PostPaint(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All );  // incl. extras
 
-    // not ShowTable due to SetTabNo(..., sal_True):
+    // not ShowTable due to SetTabNo(..., true):
     if (pViewShell)
         pViewShell->SetTabNo( lcl_GetVisibleTabBefore( rDoc, theTabs[0] ), true );
 }
@@ -495,7 +495,7 @@ void ScUndoDeleteTab::Redo()
         lcl_UndoCommandResult(*pViewShell, ".uno:Redo", "ScUndoDeleteTab", &theTabs);
     }
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    //  SetTabNo(...,true) for all views to sync with drawing layer pages
     rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 
@@ -939,7 +939,7 @@ void ScUndoMakeScenario::Undo()
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    //  SetTabNo(...,true) for all views to sync with drawing layer pages
     rDocShell.Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
 

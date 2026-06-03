@@ -39,7 +39,7 @@ namespace sdbtools
     {
     }
 
-    sal_Bool SAL_CALL DataSourceMetaData::supportsQueriesInFrom(  )
+    bool SAL_CALL DataSourceMetaData::supportsQueriesInFrom(  )
     {
         EntryGuard aGuard( *this );
         ::dbtools::DatabaseMetaData aMeta( getConnection() );

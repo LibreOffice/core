@@ -78,7 +78,7 @@ public:
         return u"com.sun.star.comp.sfx2.IFrameObject"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -89,10 +89,10 @@ public:
         return aSeq;
     }
 
-    virtual sal_Bool SAL_CALL load( const css::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
+    virtual bool SAL_CALL load( const css::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
             const css::uno::Reference < css::frame::XFrame >& xFrame ) override;
     virtual void SAL_CALL cancel() override;
-    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) override;
+    virtual void SAL_CALL close( bool bDeliverOwnership ) override;
     virtual void SAL_CALL addCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) override;
     virtual void SAL_CALL removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) override;
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override ;
@@ -157,7 +157,7 @@ IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext > xContext, c
         aArguments[0] >>= mxObj;
 }
 
-sal_Bool SAL_CALL IFrameObject::load(
+bool SAL_CALL IFrameObject::load(
     const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
 {
@@ -252,7 +252,7 @@ void SAL_CALL IFrameObject::cancel()
     }
 }
 
-void SAL_CALL IFrameObject::close( sal_Bool /*bDeliverOwnership*/ )
+void SAL_CALL IFrameObject::close( bool /*bDeliverOwnership*/ )
 {
 }
 

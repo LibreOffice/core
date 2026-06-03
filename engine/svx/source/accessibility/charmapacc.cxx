@@ -293,14 +293,14 @@ Sequence< sal_Int32 > SAL_CALL SvxShowCharSetAcc::getSelectedAccessibleColumns( 
     return { SvxShowCharSet::GetColumnPos(m_pParent->GetSelectIndexId()) };
 }
 
-sal_Bool SAL_CALL SvxShowCharSetAcc::isAccessibleRowSelected( sal_Int32 nRow )
+bool SAL_CALL SvxShowCharSetAcc::isAccessibleRowSelected( sal_Int32 nRow )
 {
     OExternalLockGuard aGuard( this );
 
     return SvxShowCharSet::GetRowPos(m_pParent->GetSelectIndexId()) == nRow;
 }
 
-sal_Bool SAL_CALL SvxShowCharSetAcc::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool SAL_CALL SvxShowCharSetAcc::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
@@ -328,7 +328,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleSummary(  )
     return Reference< XAccessible >();
 }
 
-sal_Bool SAL_CALL SvxShowCharSetAcc::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+bool SAL_CALL SvxShowCharSetAcc::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     OExternalLockGuard aGuard( this );
 
@@ -491,7 +491,7 @@ sal_Int32 SvxShowCharSetItemAcc::getAccessibleActionCount()
 }
 
 
-sal_Bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex )
+bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 

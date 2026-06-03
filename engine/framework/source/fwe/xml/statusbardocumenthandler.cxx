@@ -557,14 +557,14 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
                              ATTRIBUTE_STYLE_OUT );
     }
 
-    // autosize (default sal_False)
+    // autosize (default false)
     if ( nStyle & ItemStyle::AUTO_SIZE )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_AUTOSIZE,
                              ATTRIBUTE_BOOLEAN_TRUE );
     }
 
-    // ownerdraw (default sal_False)
+    // ownerdraw (default false)
     if ( nStyle & ItemStyle::OWNER_DRAW )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_OWNERDRAW,
@@ -585,7 +585,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
                              OUString::number( nOffset ) );
     }
 
-    // mandatory (default sal_True)
+    // mandatory (default true)
     if ( !( nStyle & ItemStyle::MANDATORY ) )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_MANDATORY,

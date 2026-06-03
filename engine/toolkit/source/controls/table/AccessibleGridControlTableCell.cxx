@@ -175,7 +175,7 @@ sal_Int64 SAL_CALL AccessibleGridControlTableCell::getAccessibleIndexInParent()
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTableCell::getCaretPosition() { return -1; }
-sal_Bool SAL_CALL AccessibleGridControlTableCell::setCaretPosition(sal_Int32 nIndex)
+bool SAL_CALL AccessibleGridControlTableCell::setCaretPosition(sal_Int32 nIndex)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -213,8 +213,8 @@ sal_Int32 SAL_CALL AccessibleGridControlTableCell::getCharacterCount()
 OUString SAL_CALL AccessibleGridControlTableCell::getSelectedText() { return OUString(); }
 sal_Int32 SAL_CALL AccessibleGridControlTableCell::getSelectionStart() { return 0; }
 sal_Int32 SAL_CALL AccessibleGridControlTableCell::getSelectionEnd() { return 0; }
-sal_Bool SAL_CALL AccessibleGridControlTableCell::setSelection(sal_Int32 nStartIndex,
-                                                               sal_Int32 nEndIndex)
+bool SAL_CALL AccessibleGridControlTableCell::setSelection(sal_Int32 nStartIndex,
+                                                           sal_Int32 nEndIndex)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -257,8 +257,7 @@ AccessibleGridControlTableCell::getTextBehindIndex(sal_Int32 nIndex, sal_Int16 a
 
     return OCommonAccessibleText::getTextBehindIndex(nIndex, aTextType);
 }
-sal_Bool SAL_CALL AccessibleGridControlTableCell::copyText(sal_Int32 nStartIndex,
-                                                           sal_Int32 nEndIndex)
+bool SAL_CALL AccessibleGridControlTableCell::copyText(sal_Int32 nStartIndex, sal_Int32 nEndIndex)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -269,8 +268,8 @@ sal_Bool SAL_CALL AccessibleGridControlTableCell::copyText(sal_Int32 nStartIndex
     //!!! don't know how to put a string into the clipboard
     return false;
 }
-sal_Bool SAL_CALL AccessibleGridControlTableCell::scrollSubstringTo(sal_Int32, sal_Int32,
-                                                                    AccessibleScrollType)
+bool SAL_CALL AccessibleGridControlTableCell::scrollSubstringTo(sal_Int32, sal_Int32,
+                                                                AccessibleScrollType)
 {
     return false;
 }

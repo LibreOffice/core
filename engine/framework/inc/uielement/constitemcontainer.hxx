@@ -60,7 +60,7 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
             return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

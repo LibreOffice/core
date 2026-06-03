@@ -409,7 +409,7 @@ protected:
     // for display in VScrollBar set it e.g. on  "?"
     void            SetRealRowCount( const OUString &rRealRowCount );
 
-    // Return Value has to be sal_True always - SeekRow *has* to work!
+    // Return Value has to be true always - SeekRow *has* to work!
     // (else ASSERT) MI: who integrated that? It must not be like that!
 
     /** seeks for the given row position

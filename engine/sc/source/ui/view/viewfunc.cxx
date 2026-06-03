@@ -2455,7 +2455,7 @@ void ScViewFunc::SetWidthOrHeight(
                     if (bFiltered)
                         ShowFilteredRows(rDoc, nTab, nStartNo, nEndNo, bShow);
 
-                    //  Manual-Flag already (re)set in SetOptimalHeight in case of bAll=sal_True
+                    //  Manual-Flag already (re)set in SetOptimalHeight in case of bAll=true
                     //  (set for Extra-Height, else reset).
                 }
                 else if ( eMode==SC_SIZE_DIRECT )

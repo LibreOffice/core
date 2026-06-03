@@ -113,7 +113,7 @@ public:
     // XMergeableCell
     virtual ::sal_Int32 SAL_CALL getRowSpan() override;
     virtual ::sal_Int32 SAL_CALL getColumnSpan() override;
-    virtual sal_Bool SAL_CALL isMerged() override;
+    virtual bool SAL_CALL isMerged() override;
 
     // XCell
     SVX_DLLPRIVATE virtual OUString SAL_CALL getFormula() override;
@@ -151,12 +151,12 @@ public:
     SVX_DLLPRIVATE virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     // XText
-    SVX_DLLPRIVATE virtual void SAL_CALL insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, sal_Bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, bool bAbsorb ) override;
     SVX_DLLPRIVATE virtual void SAL_CALL removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) override;
 
     // XSimpleText
-    SVX_DLLPRIVATE virtual void SAL_CALL insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, sal_Bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
     // XTextRange
     SVX_DLLPRIVATE virtual OUString SAL_CALL getString(  ) override;

@@ -51,7 +51,7 @@ namespace vcl::unohelper {
         // css::datatransfer::XTransferable
         SAL_DLLPRIVATE css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
         SAL_DLLPRIVATE css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
-        SAL_DLLPRIVATE sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
+        SAL_DLLPRIVATE bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
         /// copies a given string to a given clipboard
         static  void    CopyStringTo(

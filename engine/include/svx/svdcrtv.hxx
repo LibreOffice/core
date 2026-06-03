@@ -145,7 +145,7 @@ public:
 
     // This flag should be regarded as temporary. The affected applications should
     // be changed soon.
-    // Default = sal_False;
+    // Default = false;
     bool IsUseIncompatiblePathCreateInterface() const { return mbUseIncompatiblePathCreateInterface; }
     void SetUseIncompatiblePathCreateInterface(bool bOn) { mbUseIncompatiblePathCreateInterface = bOn; }
     SAL_DLLPRIVATE void SetConnectMarker(const SdrObjConnection& rCon);

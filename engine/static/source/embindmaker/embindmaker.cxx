@@ -275,7 +275,7 @@ OUString cppName(OUString const& name)
     }
     if (n == "boolean")
     {
-        buf.append("::sal_Bool");
+        buf.append("bool");
     }
     else if (n == "byte")
     {
@@ -444,7 +444,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
             out << "void";
             break;
         case codemaker::UnoType::Sort::Boolean:
-            out << "::sal_Bool";
+            out << "bool";
             break;
         case codemaker::UnoType::Sort::Byte:
             out << "::sal_Int8";

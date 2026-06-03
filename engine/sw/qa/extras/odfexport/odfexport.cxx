@@ -1061,7 +1061,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
         // Shadow
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,u"ParaShadowFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aShadow.Color));
-        CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(aShadow.IsTransparent));
+        CPPUNIT_ASSERT_EQUAL(false, aShadow.IsTransparent);
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation(0), aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aShadow.ShadowWidth);
     }
@@ -1091,7 +1091,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
         // Shadow
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,u"CharShadowFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(Color(0xFF3333), Color(ColorTransparency, aShadow.Color));
-        CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(aShadow.IsTransparent));
+        CPPUNIT_ASSERT_EQUAL(false, aShadow.IsTransparent);
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation(2), aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(280), aShadow.ShadowWidth);
 
@@ -1099,7 +1099,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
         {
             uno::Reference< style::XAutoStyleFamily > xAutoStyleFamily(getAutoStyles(u"ParagraphStyles"_ustr));
             uno::Reference < container::XEnumeration > xAutoStylesEnum( xAutoStyleFamily->createEnumeration() );
-            CPPUNIT_ASSERT_EQUAL(true, static_cast<bool>(xAutoStylesEnum->hasMoreElements()));
+            CPPUNIT_ASSERT_EQUAL(true, xAutoStylesEnum->hasMoreElements());
 
             // Top border
             CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,u"CharTopBorder"_ustr));
@@ -1155,7 +1155,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
         // Shadow
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,u"CharShadowFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aShadow.Color));
-        CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(aShadow.IsTransparent));
+        CPPUNIT_ASSERT_EQUAL(false, aShadow.IsTransparent);
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation(3), aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(79), aShadow.ShadowWidth);
 

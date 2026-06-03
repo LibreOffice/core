@@ -1211,7 +1211,7 @@ static bool lcl_DoDragCells( ScDocShell& rSrcShell, const ScRange& rRange, ScDra
         ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
         ScClipParam aClipParam(rRange, false);
         rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aMark, false, false);
-        // pClipDoc->ExtendMerge( rRange, sal_True );
+        // pClipDoc->ExtendMerge( rRange, true );
 
         TransferableObjectDescriptor aObjDesc;
         rSrcShell.FillTransferableObjectDescriptor( aObjDesc );

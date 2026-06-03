@@ -1680,7 +1680,7 @@ void SAL_CALL SlideshowImpl::resume()
 #endif
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isPaused()
+bool SAL_CALL SlideshowImpl::isPaused()
 {
     SolarMutexGuard aSolarGuard;
     return mbIsPaused;
@@ -1906,7 +1906,7 @@ sal_Int32 SlideshowImpl::getCurrentSlideNumber() const
     return mpSlideController ? mpSlideController->getCurrentSlideNumber() : -1;
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isEndless()
+bool SAL_CALL SlideshowImpl::isEndless()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbEndless;
@@ -2773,7 +2773,7 @@ IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl, Timer *, void)
     }
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isActive()
+bool SAL_CALL SlideshowImpl::isActive()
 {
     SolarMutexGuard aSolarGuard;
     return mbActive;
@@ -2851,13 +2851,13 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index
     return mpSlideController->getSlideByNumber( mpSlideController->getSlideNumber( Index ) );
 }
 
-sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop()
+bool SAL_CALL SlideshowImpl::getAlwaysOnTop()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbAlwaysOnTop;
 }
 
-void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways )
+void SAL_CALL SlideshowImpl::setAlwaysOnTop( bool bAlways )
 {
     SolarMutexGuard aSolarGuard;
     if( maPresSettings.mbAlwaysOnTop != bool(bAlways) )
@@ -2867,19 +2867,19 @@ void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways )
     }
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isFullScreen()
+bool SAL_CALL SlideshowImpl::isFullScreen()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbFullScreen;
 }
 
-sal_Bool SAL_CALL SlideshowImpl::getMouseVisible()
+bool SAL_CALL SlideshowImpl::getMouseVisible()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbMouseVisible;
 }
 
-void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible )
+void SAL_CALL SlideshowImpl::setMouseVisible( bool bVisible )
 {
     SolarMutexGuard aSolarGuard;
     if( maPresSettings.mbMouseVisible != bool(bVisible) )
@@ -2890,13 +2890,13 @@ void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible )
     }
 }
 
-sal_Bool SAL_CALL SlideshowImpl::getUsePen()
+bool SAL_CALL SlideshowImpl::getUsePen()
 {
     SolarMutexGuard aSolarGuard;
     return mbUsePen;
 }
 
-void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen )
+void SAL_CALL SlideshowImpl::setUsePen( bool bMouseAsPen )
 {
     SolarMutexGuard aSolarGuard;
     mbUsePen = bMouseAsPen;
@@ -2959,7 +2959,7 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor )
     setUsePen( true ); // enable pen mode, update color
 }
 
-void SAL_CALL SlideshowImpl::setEraseAllInk(sal_Bool bEraseAllInk)
+void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk)
 {
     if( !bEraseAllInk )
         return;
@@ -2982,7 +2982,7 @@ void SAL_CALL SlideshowImpl::setEraseAllInk(sal_Bool bEraseAllInk)
 }
 
 // XSlideShowController Methods
-sal_Bool SAL_CALL SlideshowImpl::isRunning(  )
+bool SAL_CALL SlideshowImpl::isRunning(  )
 {
     SolarMutexGuard aSolarGuard;
     return mxShow.is();
@@ -3278,7 +3278,7 @@ css::uno::Type SAL_CALL SlideshowImpl::getElementType(  )
     return cppu::UnoType<XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL SlideshowImpl::hasElements(  )
+bool SAL_CALL SlideshowImpl::hasElements(  )
 {
     return getSlideCount() != 0;
 }
@@ -3823,7 +3823,7 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  )
         });
 }
 
-void SlideShowListenerProxy::slideEnded(sal_Bool bReverse)
+void SlideShowListenerProxy::slideEnded(bool bReverse)
 {
     {
         std::unique_lock aGuard( m_aMutex );

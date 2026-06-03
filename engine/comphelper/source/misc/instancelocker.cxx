@@ -176,7 +176,7 @@ OUString SAL_CALL OInstanceLocker::getImplementationName(  )
     return u"com.sun.star.comp.embed.InstanceLocker"_ustr;
 }
 
-sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
+bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -276,7 +276,7 @@ void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
 
 // XCloseListener
 
-void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, sal_Bool )
+void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, bool )
 {
     // GetsOwnership parameter is always ignored, the user of the service must close the object always
     std::unique_lock aGuard( m_aMutex );

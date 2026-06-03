@@ -105,7 +105,7 @@ public:
         return cppu::UnoType<awt::XControl>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         return ( !mControls.empty() );
     }
@@ -123,7 +123,7 @@ public:
         return msNames;
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         ControlIndexMap::iterator it = mIndices.find( aName );
         return it != mIndices.end();
@@ -170,7 +170,7 @@ public:
     mfOffsetY( fOffsetY ),
     nIndex( 0 ) {}
 
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
+    virtual bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );
     }

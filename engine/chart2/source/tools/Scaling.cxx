@@ -79,7 +79,7 @@ OUString SAL_CALL LogarithmicScaling::getImplementationName()
     return lcl_aServiceName_Logarithmic;
 }
 
-sal_Bool SAL_CALL LogarithmicScaling::supportsService( const OUString& rServiceName )
+bool SAL_CALL LogarithmicScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -125,7 +125,7 @@ OUString SAL_CALL ExponentialScaling::getImplementationName()
     return lcl_aServiceName_Exponential;
 }
 
-sal_Bool SAL_CALL ExponentialScaling::supportsService( const OUString& rServiceName )
+bool SAL_CALL ExponentialScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -175,7 +175,7 @@ OUString SAL_CALL LinearScaling::getImplementationName()
     return lcl_aServiceName_Linear ;
 }
 
-sal_Bool SAL_CALL LinearScaling::supportsService( const OUString& rServiceName )
+bool SAL_CALL LinearScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -224,7 +224,7 @@ OUString SAL_CALL PowerScaling::getImplementationName()
     return lcl_aServiceName_Power;
 }
 
-sal_Bool SAL_CALL PowerScaling::supportsService( const OUString& rServiceName )
+bool SAL_CALL PowerScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

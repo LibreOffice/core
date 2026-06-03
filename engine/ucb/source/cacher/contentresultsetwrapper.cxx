@@ -706,7 +706,7 @@ Reference<XContent> ContentResultSetWrapper::queryContentImpl(std::unique_lock<s
 
 //virtual
 
-sal_Bool SAL_CALL ContentResultSetWrapper::next()
+bool SAL_CALL ContentResultSetWrapper::next()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -720,7 +720,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::next()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::previous()
+bool SAL_CALL ContentResultSetWrapper::previous()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -734,7 +734,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::previous()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
+bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -748,7 +748,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
+bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -763,7 +763,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
 
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::first()
+bool SAL_CALL ContentResultSetWrapper::first()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -777,7 +777,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::first()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::last()
+bool SAL_CALL ContentResultSetWrapper::last()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -819,7 +819,7 @@ void SAL_CALL ContentResultSetWrapper::afterLast()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::isAfterLast()
+bool SAL_CALL ContentResultSetWrapper::isAfterLast()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -833,7 +833,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::isAfterLast()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
+bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -847,7 +847,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::isFirst()
+bool SAL_CALL ContentResultSetWrapper::isFirst()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -861,7 +861,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::isFirst()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::isLast()
+bool SAL_CALL ContentResultSetWrapper::isLast()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -904,7 +904,7 @@ void SAL_CALL ContentResultSetWrapper::refreshRow()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::rowUpdated()
+bool SAL_CALL ContentResultSetWrapper::rowUpdated()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -918,7 +918,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::rowUpdated()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::rowInserted()
+bool SAL_CALL ContentResultSetWrapper::rowInserted()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -932,7 +932,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper::rowInserted()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::rowDeleted()
+bool SAL_CALL ContentResultSetWrapper::rowDeleted()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -971,7 +971,7 @@ void ContentResultSetWrapper::verifyGet()
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::wasNull()
+bool SAL_CALL ContentResultSetWrapper::wasNull()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -992,7 +992,7 @@ OUString SAL_CALL ContentResultSetWrapper::getString( sal_Int32 columnIndex )
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL ContentResultSetWrapper::getBoolean( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getBoolean( columnIndex );

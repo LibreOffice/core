@@ -149,7 +149,7 @@ namespace DOM
         Returns a duplicate of this node, i.e., serves as a generic copy
         constructor for nodes.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(sal_Bool deep) override;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override;
 
         /**
         A NamedNodeMap containing the attributes of this node
@@ -227,12 +227,12 @@ namespace DOM
         /**
         Returns whether this node (if it is an element) has any attributes.
         */
-        virtual sal_Bool SAL_CALL hasAttributes() override;
+        virtual bool SAL_CALL hasAttributes() override;
 
         /**
         Returns whether this node has any children.
         */
-        virtual sal_Bool SAL_CALL hasChildNodes() override;
+        virtual bool SAL_CALL hasChildNodes() override;
 
         /**
         Inserts the node newChild before the existing child node refChild.
@@ -244,7 +244,7 @@ namespace DOM
         Tests whether the DOM implementation implements a specific feature and
         that feature is supported by this node.
         */
-        virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver) override;
+        virtual bool SAL_CALL isSupported(const OUString& feature, const OUString& ver) override;
 
         /**
         Puts all Text nodes in the full depth of the sub-tree underneath this
@@ -282,13 +282,13 @@ namespace DOM
         // --- XEventTarget
         virtual void SAL_CALL addEventListener(const OUString& eventType,
             const css::uno::Reference< css::xml::dom::events::XEventListener >& listener,
-            sal_Bool useCapture) override;
+            bool useCapture) override;
 
         virtual void SAL_CALL removeEventListener(const OUString& eventType,
             const css::uno::Reference< css::xml::dom::events::XEventListener >& listener,
-            sal_Bool useCapture) override;
+            bool useCapture) override;
 
-        virtual sal_Bool SAL_CALL dispatchEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
+        virtual bool SAL_CALL dispatchEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
     };
 
     /// eliminate redundant namespace declarations

@@ -838,7 +838,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89791)
     CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
-    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName(u"docProps/custom.xml"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"docProps/custom.xml"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")

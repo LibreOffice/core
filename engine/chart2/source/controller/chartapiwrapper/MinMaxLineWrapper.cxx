@@ -331,7 +331,7 @@ OUString SAL_CALL MinMaxLineWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.ChartLine"_ustr;
 }
 
-sal_Bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

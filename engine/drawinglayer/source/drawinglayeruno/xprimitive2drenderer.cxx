@@ -62,7 +62,7 @@ namespace drawinglayer::unorenderer
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
+            virtual bool SAL_CALL supportsService(const OUString&) override;
             virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
 
@@ -167,7 +167,7 @@ namespace drawinglayer::unorenderer
             return u"drawinglayer::unorenderer::XPrimitive2DRenderer"_ustr;
         }
 
-        sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName)
+        bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName)
         {
             return cppu::supportsService(this, rServiceName);
         }

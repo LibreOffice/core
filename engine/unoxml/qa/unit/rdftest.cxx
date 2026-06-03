@@ -112,8 +112,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     CPPUNIT_ASSERT(xDocRepo);
 
     // 1. RDFa: get: not empty (initial)
-    ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
-        = xDocRepo->getStatementRDFa(xMeta);
+    ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult = xDocRepo->getStatementRDFa(xMeta);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), xResult.First.size());
     CPPUNIT_ASSERT(!xResult.Second);
 
@@ -731,7 +730,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 1
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -744,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 2
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -761,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 3
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -774,7 +773,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 4
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -787,7 +786,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 5
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -804,7 +803,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 6
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             std::vector<rdf::Statement> aStatements = sortStatements(xResult.First);
             CPPUNIT_ASSERT_EQUAL(size_t(2), aStatements.size());
@@ -820,7 +819,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 7
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             std::vector<rdf::Statement> aStatements = sortStatements(xResult.First);
             CPPUNIT_ASSERT_EQUAL(size_t(3), aStatements.size());
@@ -845,7 +844,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 8
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -856,7 +855,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 9
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -867,7 +866,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 10
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -878,7 +877,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 11
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -892,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 12
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -912,7 +911,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 13
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -923,7 +922,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 14
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
@@ -936,7 +935,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         do
         {
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aStatements.getLength());

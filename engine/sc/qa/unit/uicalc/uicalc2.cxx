@@ -1944,7 +1944,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf170567_paste_Biff12_and_save_ODS)
         {
             return { getBiff12Flavor() };
         }
-        sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
+        bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
         {
             return aFlavor.MimeType.equalsIgnoreAsciiCase(getBiff12Flavor().MimeType);
         }

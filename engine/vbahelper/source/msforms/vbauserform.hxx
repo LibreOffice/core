@@ -56,13 +56,13 @@ public:
     virtual void SAL_CALL Hide(  ) override;
     virtual void SAL_CALL UnloadObject(  ) override;
     virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& index ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool bVis ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool bVis ) override;
     // XIntrospection
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
     virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

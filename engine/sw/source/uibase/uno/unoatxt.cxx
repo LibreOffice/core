@@ -91,7 +91,7 @@ uno::Type SwXAutoTextContainer::getElementType()
 
 }
 
-sal_Bool SwXAutoTextContainer::hasElements()
+bool SwXAutoTextContainer::hasElements()
 {
     // At least standard should always exists!
     return true;
@@ -130,7 +130,7 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames()
     return aGroupNames;
 }
 // Finds group names with or without path index.
-sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
+bool SwXAutoTextContainer::hasByName(const OUString& Name)
 {
     SolarMutexGuard aGuard;
     OUString sGroupName( m_pGlossaries->GetCompleteGroupName( Name ) );
@@ -191,7 +191,7 @@ OUString SwXAutoTextContainer::getImplementationName()
     return u"SwXAutoTextContainer"_ustr;
 }
 
-sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName)
+bool SwXAutoTextContainer::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -482,7 +482,7 @@ uno::Type SwXAutoTextGroup::getElementType()
 
 }
 
-sal_Bool SwXAutoTextGroup::hasElements()
+bool SwXAutoTextGroup::hasElements()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<SwTextBlocks> pGlosGroup(m_pGlossaries ? m_pGlossaries->GetGroupDoc(m_sGroupName) : nullptr);
@@ -517,7 +517,7 @@ uno::Sequence< OUString > SwXAutoTextGroup::getElementNames()
     return aEntryNames;
 }
 
-sal_Bool SwXAutoTextGroup::hasByName(const OUString& rName)
+bool SwXAutoTextGroup::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     bool bRet = false;
@@ -629,7 +629,7 @@ OUString SwXAutoTextGroup::getImplementationName()
     return u"SwXAutoTextGroup"_ustr;
 }
 
-sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName)
+bool SwXAutoTextGroup::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -739,7 +739,7 @@ uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
     return mxBodyText->createTextCursorByRange ( aTextPosition );
 }
 
-void SwXAutoTextEntry::insertString(const uno::Reference< text::XTextRange > & xRange, const OUString& aString, sal_Bool bAbsorb)
+void SwXAutoTextEntry::insertString(const uno::Reference< text::XTextRange > & xRange, const OUString& aString, bool bAbsorb)
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
@@ -747,7 +747,7 @@ void SwXAutoTextEntry::insertString(const uno::Reference< text::XTextRange > & x
 }
 
 void SwXAutoTextEntry::insertControlCharacter(const uno::Reference< text::XTextRange > & xRange,
-    sal_Int16 nControlCharacter, sal_Bool bAbsorb)
+    sal_Int16 nControlCharacter, bool bAbsorb)
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
@@ -756,7 +756,7 @@ void SwXAutoTextEntry::insertControlCharacter(const uno::Reference< text::XTextR
 
 void SwXAutoTextEntry::insertTextContent(
     const uno::Reference< text::XTextRange > & xRange,
-    const uno::Reference< text::XTextContent > & xContent, sal_Bool bAbsorb)
+    const uno::Reference< text::XTextContent > & xContent, bool bAbsorb)
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
@@ -871,7 +871,7 @@ OUString SwXAutoTextEntry::getImplementationName()
     return u"SwXAutoTextEntry"_ustr;
 }
 
-sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName)
+bool SwXAutoTextEntry::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

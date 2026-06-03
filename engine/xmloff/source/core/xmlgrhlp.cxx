@@ -1062,7 +1062,7 @@ protected:
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
@@ -1150,7 +1150,7 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
     return u"com.sun.star.comp.Svx.GraphicExportHelper"_ustr;
 }
 
-sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1172,7 +1172,7 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServic
 
     You should call dispose after you no longer need this component.
 
-    uses eCreateMode == SvXMLGraphicHelperMode::Read, bDirect == sal_True in
+    uses eCreateMode == SvXMLGraphicHelperMode::Read, bDirect == true in
     SvXMLGraphicHelper
  */
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1192,7 +1192,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     To write the Pictures stream, you have to call dispose at this component.
     Make sure you call dispose before you commit the parent storage.
 
-    uses eCreateMode == SvXMLGraphicHelperMode::Write, bDirect == sal_True in
+    uses eCreateMode == SvXMLGraphicHelperMode::Write, bDirect == true in
     SvXMLGraphicHelper
  */
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

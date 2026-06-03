@@ -237,7 +237,7 @@ SwXText::getTypes()
 // belongs the range in the text ? insert it then.
 void SAL_CALL
 SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
-    const OUString& rString, sal_Bool bAbsorb)
+    const OUString& rString, bool bAbsorb)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SwXText::insertString");
@@ -342,7 +342,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
 void SAL_CALL
 SwXText::insertControlCharacter(
         const uno::Reference< text::XTextRange > & xTextRange,
-        sal_Int16 nControlCharacter, sal_Bool bAbsorb)
+        sal_Int16 nControlCharacter, bool bAbsorb)
 {
     SolarMutexGuard aGuard;
 
@@ -449,7 +449,7 @@ void SAL_CALL
 SwXText::insertTextContent(
         const uno::Reference< text::XTextRange > & xRange,
         const uno::Reference< text::XTextContent > & xContent,
-        sal_Bool bAbsorb)
+        bool bAbsorb)
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SwXText::insertTextContent");
@@ -2416,7 +2416,7 @@ SwXBodyText::getImplementationName()
     return u"SwXBodyText"_ustr;
 }
 
-sal_Bool SAL_CALL SwXBodyText::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXBodyText::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2544,7 +2544,7 @@ SwXBodyText::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwXBodyText::hasElements()
 {
     SolarMutexGuard aGuard;
@@ -2619,7 +2619,7 @@ SwXHeadFootText::getImplementationName()
   return {u"SwXHeadFootText"_ustr};
 }
 
-sal_Bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -2764,7 +2764,7 @@ uno::Reference<container::XEnumeration> SAL_CALL SwXHeadFootText::createEnumerat
 uno::Type SAL_CALL SwXHeadFootText::getElementType()
     { return cppu::UnoType<text::XTextRange>::get(); }
 
-sal_Bool SAL_CALL SwXHeadFootText::hasElements()
+bool SAL_CALL SwXHeadFootText::hasElements()
     { return true; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

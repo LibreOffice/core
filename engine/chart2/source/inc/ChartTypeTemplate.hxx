@@ -90,16 +90,16 @@ public:
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
     /// denotes if the chart needs categories at the first scale
-    virtual sal_Bool SAL_CALL supportsCategories() override;
+    virtual bool SAL_CALL supportsCategories() override;
     virtual void SAL_CALL changeDiagram(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
     virtual void SAL_CALL changeDiagramData(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
-    virtual sal_Bool SAL_CALL matchesTemplate(
+    virtual bool SAL_CALL matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
-        sal_Bool bAdaptProperties ) override final;
+        bool bAdaptProperties ) override final;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getDataInterpreter() override final;
     virtual css::uno::Reference< ::css::chart2::XChartType > SAL_CALL getChartTypeForNewSeries(
         const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;

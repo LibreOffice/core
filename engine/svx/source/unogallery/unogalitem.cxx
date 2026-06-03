@@ -112,7 +112,7 @@ OUString SAL_CALL GalleryItem::getImplementationName()
     return u"com.sun.star.comp.gallery.GalleryItem"_ustr;
 }
 
-sal_Bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
+bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

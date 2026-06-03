@@ -129,7 +129,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     bool bCanUseSystemCredentials = false;
     if (xSupplyAuthentication2.is())
     {
-        sal_Bool bDefaultUseSystemCredentials;
+        bool bDefaultUseSystemCredentials;
         bCanUseSystemCredentials
             =  xSupplyAuthentication2->canUseSystemCredentials(
                 bDefaultUseSystemCredentials );
@@ -295,7 +295,7 @@ PasswordContainerInteractionHandler::getImplementationName()
 
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 PasswordContainerInteractionHandler::supportsService(
         const OUString& ServiceName )
 {
@@ -323,7 +323,7 @@ PasswordContainerInteractionHandler::handle(
 }
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 PasswordContainerInteractionHandler::handleInteractionRequest(
         const uno::Reference< task::XInteractionRequest >& rRequest )
 {

@@ -5598,7 +5598,7 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 }
 
 // XFilter
-sal_Bool SAL_CALL ScXMLExport::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL ScXMLExport::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     SolarMutexGuard aGuard;
     ScDocument* pDoc = GetDocument();

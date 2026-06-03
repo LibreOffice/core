@@ -1534,12 +1534,12 @@ namespace
             std::erase(m_aListeners, xListener);
         }
 
-        virtual sal_Bool SAL_CALL isActive() override
+        virtual bool SAL_CALL isActive() override
         {
             return m_xRealDropTarget->isActive();
         }
 
-        virtual void SAL_CALL setActive(sal_Bool active) override
+        virtual void SAL_CALL setActive(bool active) override
         {
             m_xRealDropTarget->setActive(active);
         }

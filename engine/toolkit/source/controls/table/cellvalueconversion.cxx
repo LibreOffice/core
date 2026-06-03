@@ -320,7 +320,7 @@ const StandardFormatNormalizer* CellValueConversion::getValueNormalizer(Type con
         {
             pos->second = std::make_unique<TimeNormalization>(xNumberFormatter);
         }
-        else if (sTypeName == ::cppu::UnoType<sal_Bool>::get().getTypeName())
+        else if (sTypeName == ::cppu::UnoType<bool>::get().getTypeName())
         {
             pos->second = std::make_unique<BooleanNormalization>(xNumberFormatter);
         }

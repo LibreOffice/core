@@ -122,7 +122,7 @@ public:
 
 
     /// inherited from IPropertyArrayHelper
-    virtual sal_Bool SAL_CALL fillPropertyMembersByHandle( OUString* _pPropName, sal_Int16* _pAttributes,
+    virtual bool SAL_CALL fillPropertyMembersByHandle( OUString* _pPropName, sal_Int16* _pAttributes,
                                             sal_Int32 _nHandle) override ;
 
     /// inherited from IPropertyArrayHelper
@@ -131,7 +131,7 @@ public:
     virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& _rPropertyName) override;
 
     /// inherited from IPropertyArrayHelper
-    virtual sal_Bool  SAL_CALL hasPropertyByName(const OUString& _rPropertyName) override ;
+    virtual bool  SAL_CALL hasPropertyByName(const OUString& _rPropertyName) override ;
     /// inherited from IPropertyArrayHelper
     virtual sal_Int32 SAL_CALL getHandleByName(const OUString & _rPropertyName) override;
     /// inherited from IPropertyArrayHelper
@@ -143,7 +143,7 @@ public:
                                     if this is NULL.
         @param  _nHandle            the handle of the property as got by, for instance, fillHandles
 
-        @return sal_True, if _nHandle marks an aggregate property, otherwise sal_False
+        @return true, if _nHandle marks an aggregate property, otherwise false
     */
     bool fillAggregatePropertyInfoByHandle(OUString* _pPropName, sal_Int32* _pOriginalHandle,
                                                    sal_Int32 _nHandle) const;
@@ -244,7 +244,7 @@ public:
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+    virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein

@@ -70,9 +70,9 @@ protected:
 
 public:
     // XSortableGridData
-    virtual void SAL_CALL sortByColumn( ::sal_Int32 ColumnIndex, sal_Bool SortAscending ) override;
+    virtual void SAL_CALL sortByColumn( ::sal_Int32 ColumnIndex, bool SortAscending ) override;
     virtual void SAL_CALL removeColumnSort(  ) override;
-    virtual css::beans::Pair< ::sal_Int32, sal_Bool > SAL_CALL getCurrentSortOrder(  ) override;
+    virtual css::beans::Pair< ::sal_Int32, bool > SAL_CALL getCurrentSortOrder(  ) override;
 
     // XMutableGridDataModel
     virtual void SAL_CALL addRow( const css::uno::Any& Heading, const css::uno::Sequence< css::uno::Any >& Data ) override;
@@ -105,7 +105,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
@@ -514,7 +514,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, sal_Bool i_sortAscending )
+    void SAL_CALL SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, bool i_sortAscending )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
@@ -569,12 +569,12 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    css::beans::Pair< ::sal_Int32, sal_Bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  )
+    css::beans::Pair< ::sal_Int32, bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  )
     {
         std::unique_lock aGuard(m_aMutex);
         throwIfNotInitialized();
 
-        return css::beans::Pair< ::sal_Int32, sal_Bool >( m_currentSortColumn, m_sortAscending );
+        return css::beans::Pair< ::sal_Int32, bool >( m_currentSortColumn, m_sortAscending );
     }
 
 
@@ -846,7 +846,7 @@ void lcl_clear( STLCONTAINER& i_container )
         return u"org.openoffice.comp.toolkit.SortableGridDataModel"_ustr;
     }
 
-    sal_Bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName )
+    bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName )
     {
         return cppu::supportsService(this, i_serviceName);
     }

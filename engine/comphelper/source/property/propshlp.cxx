@@ -60,7 +60,7 @@ public:
     // XPropertySetInfo-methods
     virtual Sequence<Property> SAL_CALL getProperties() override;
     virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) override;
+    virtual bool SAL_CALL hasPropertyByName(const OUString& PropertyName) override;
 };
 }
 
@@ -94,7 +94,7 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName(const OUString& Property
 /**
  * Return the sequence of properties, which are provided through the constructor.
  */
-sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName(const OUString& PropertyName)
+bool OPropertySetHelperInfo_Impl::hasPropertyByName(const OUString& PropertyName)
 {
     Property* pR
         = static_cast<Property*>(bsearch(&PropertyName, aInfos.getConstArray(), aInfos.getLength(),

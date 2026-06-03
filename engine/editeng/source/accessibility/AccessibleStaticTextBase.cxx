@@ -368,7 +368,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getCaretPosition()
     return nPos;
 }
 
-sal_Bool SAL_CALL AccessibleStaticTextBase::setCaretPosition( sal_Int32 nIndex )
+bool SAL_CALL AccessibleStaticTextBase::setCaretPosition( sal_Int32 nIndex )
 {
     return setSelection(nIndex, nIndex);
 }
@@ -493,7 +493,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionEnd()
     return nPos;
 }
 
-sal_Bool SAL_CALL AccessibleStaticTextBase::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleStaticTextBase::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -736,7 +736,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehind
     return aResult;
 }
 
-sal_Bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -749,7 +749,7 @@ sal_Bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal
     return CopyText(aStartIndex.nPara, aStartIndex.nIndex, aEndIndex.nPara, aEndIndex.nIndex);
 }
 
-sal_Bool SAL_CALL AccessibleStaticTextBase::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool SAL_CALL AccessibleStaticTextBase::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }

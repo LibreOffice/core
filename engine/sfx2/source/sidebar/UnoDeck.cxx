@@ -79,7 +79,7 @@ void SAL_CALL SfxUnoDeck::setTitle( const OUString& newTitle )
     }
 }
 
-sal_Bool SAL_CALL SfxUnoDeck::isActive()
+bool SAL_CALL SfxUnoDeck::isActive()
 {
     SolarMutexGuard aGuard;
 
@@ -88,7 +88,7 @@ sal_Bool SAL_CALL SfxUnoDeck::isActive()
 }
 
 
-void SAL_CALL SfxUnoDeck::activate( const sal_Bool bActivate )
+void SAL_CALL SfxUnoDeck::activate( const bool bActivate )
 {
     SolarMutexGuard aGuard;
 

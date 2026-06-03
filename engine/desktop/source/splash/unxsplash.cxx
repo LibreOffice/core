@@ -106,7 +106,7 @@ OUString UnxSplashScreen::getImplementationName()
     return u"com.sun.star.office.comp.PipeSplashScreen"_ustr;
 }
 
-sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
+bool UnxSplashScreen::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

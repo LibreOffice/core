@@ -84,7 +84,7 @@ OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName()
     return u"SvxAccessibleTextPropertySet"_ustr;
 }
 
-sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName)
+bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

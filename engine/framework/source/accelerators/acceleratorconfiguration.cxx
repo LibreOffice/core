@@ -132,7 +132,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
             1);
 
     SolarMutexGuard g;
-    AcceleratorCache& rCache = impl_getCFG(true); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rCache = impl_getCFG(true); // true => force getting of a writeable cache!
     rCache.setKeyCommandPair(aKeyEvent, sCommand);
 }
 
@@ -208,7 +208,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
                 0);
 
     SolarMutexGuard g;
-    AcceleratorCache& rCache = impl_getCFG(true); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rCache = impl_getCFG(true); // true => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
                 u"Command does not exists inside this container."_ustr,
@@ -302,13 +302,13 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     // TODO inform listener about success, so it can flush the root and sub storage of this stream!
 }
 
-sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
+bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
 {
     SolarMutexGuard g;
     return (m_pWriteCache != nullptr);
 }
 
-sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
+bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
 {
     return m_aPresetHandler.isReadOnly();
 }
@@ -318,7 +318,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
-sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
+bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
     return false;
@@ -537,8 +537,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
 
     SolarMutexGuard g;
 
-    AcceleratorCache& rPrimaryCache   = impl_getCFG(true, true ); // sal_True => force getting of a writeable cache!
-    AcceleratorCache& rSecondaryCache = impl_getCFG(false, true); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rPrimaryCache   = impl_getCFG(true, true ); // true => force getting of a writeable cache!
+    AcceleratorCache& rSecondaryCache = impl_getCFG(false, true); // true => force getting of a writeable cache!
 
     if ( rPrimaryCache.hasKey(aKeyEvent) )
     {
@@ -824,12 +824,12 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     aWriter.flush();
 }
 
-sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isModified()
+bool SAL_CALL XCUBasedAcceleratorConfiguration::isModified()
 {
     return false;
 }
 
-sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
+bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
 {
     return false;
 }
@@ -839,7 +839,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
-sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
+bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
     return false;

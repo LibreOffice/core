@@ -277,13 +277,13 @@ void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ )
 #endif
 }
 
-sal_Bool SAL_CALL ScVbaSheetObjectBase::getPrintObject()
+bool SAL_CALL ScVbaSheetObjectBase::getPrintObject()
 {
     // not supported
     return true;
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setPrintObject( sal_Bool /*bPrintObject*/ )
+void SAL_CALL ScVbaSheetObjectBase::setPrintObject( bool /*bPrintObject*/ )
 {
     // not supported
 }
@@ -377,25 +377,25 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
     xEventMgr->registerScriptEvent( nIndex, aDescriptor );
 }
 
-sal_Bool SAL_CALL ScVbaControlObjectBase::getPrintObject()
+bool SAL_CALL ScVbaControlObjectBase::getPrintObject()
 {
     return mxControlProps->getPropertyValue( u"Printable"_ustr ).get<bool>();
 }
 
-void SAL_CALL ScVbaControlObjectBase::setPrintObject( sal_Bool bPrintObject )
+void SAL_CALL ScVbaControlObjectBase::setPrintObject( bool bPrintObject )
 {
     mxControlProps->setPropertyValue( u"Printable"_ustr, uno::Any( bPrintObject ) );
 }
 
 // XControlObject attributes
 
-sal_Bool SAL_CALL ScVbaControlObjectBase::getAutoSize()
+bool SAL_CALL ScVbaControlObjectBase::getAutoSize()
 {
     // not supported
     return false;
 }
 
-void SAL_CALL ScVbaControlObjectBase::setAutoSize( sal_Bool /*bAutoSize*/ )
+void SAL_CALL ScVbaControlObjectBase::setAutoSize( bool /*bAutoSize*/ )
 {
     // not supported
 }

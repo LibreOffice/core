@@ -86,7 +86,7 @@ Sequence< DataFlavor > SAL_CALL DlgEdTransferableImpl::getTransferDataFlavors(  
 
     return m_SeqFlavors;
 }
-sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rFlavor )
+bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rFlavor )
 {
     const SolarMutexGuard aGuard;
 

@@ -1385,7 +1385,7 @@ Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  )
 void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any* pOldValues, sal_Int32 nCount )
 {
     // same as in getFastPropertyValue(sal_Int32) : if we're resetting currently don't fire any changes of the
-    // IsModified property from sal_False to sal_True, as this is only temporary 'til the reset is done
+    // IsModified property from false to true, as this is only temporary 'til the reset is done
     if (m_nResetsPending > 0)
     {
         // look for the PROPERTY_ID_ISMODIFIED
@@ -1514,7 +1514,7 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     }
 }
 
-sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
+bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                                 sal_Int32 nHandle, const Any& rValue )
 {
     bool bModified(false);
@@ -2443,7 +2443,7 @@ void SAL_CALL ODatabaseForm::setParent(const css::uno::Reference<css::uno::XInte
 
 // smartXTabControllerModel
 
-sal_Bool SAL_CALL ODatabaseForm::getGroupControl()
+bool SAL_CALL ODatabaseForm::getGroupControl()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -3026,7 +3026,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::isLoaded()
+bool SAL_CALL ODatabaseForm::isLoaded()
 {
     return m_bLoaded;
 }
@@ -3125,7 +3125,7 @@ bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, con
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event)
+bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event)
 {
     // is our aggregate calling?
     if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
@@ -3171,7 +3171,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event)
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event)
+bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event)
 {
     // is our aggregate calling?
     if (event.Source != css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
@@ -3207,7 +3207,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event)
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event)
+bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event)
 {
     if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this))) // ignore our aggregate as we handle this approve ourself
     {
@@ -3360,31 +3360,31 @@ void SAL_CALL ODatabaseForm::removeRowSetListener(const Reference<XRowSetListene
 
 // css::sdbc::XResultSet
 
-sal_Bool SAL_CALL ODatabaseForm::next()
+bool SAL_CALL ODatabaseForm::next()
 {
     return m_xAggregateAsRowSet->next();
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::isBeforeFirst()
+bool SAL_CALL ODatabaseForm::isBeforeFirst()
 {
     return m_xAggregateAsRowSet->isBeforeFirst();
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::isAfterLast()
+bool SAL_CALL ODatabaseForm::isAfterLast()
 {
     return m_xAggregateAsRowSet->isAfterLast();
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::isFirst()
+bool SAL_CALL ODatabaseForm::isFirst()
 {
     return m_xAggregateAsRowSet->isFirst();
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::isLast()
+bool SAL_CALL ODatabaseForm::isLast()
 {
     return m_xAggregateAsRowSet->isLast();
 }
@@ -3402,13 +3402,13 @@ void SAL_CALL ODatabaseForm::afterLast()
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::first()
+bool SAL_CALL ODatabaseForm::first()
 {
     return m_xAggregateAsRowSet->first();
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::last()
+bool SAL_CALL ODatabaseForm::last()
 {
     return m_xAggregateAsRowSet->last();
 }
@@ -3420,19 +3420,19 @@ sal_Int32 SAL_CALL ODatabaseForm::getRow()
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::absolute(sal_Int32 row)
+bool SAL_CALL ODatabaseForm::absolute(sal_Int32 row)
 {
     return m_xAggregateAsRowSet->absolute(row);
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::relative(sal_Int32 rows)
+bool SAL_CALL ODatabaseForm::relative(sal_Int32 rows)
 {
     return m_xAggregateAsRowSet->relative(rows);
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::previous()
+bool SAL_CALL ODatabaseForm::previous()
 {
     return m_xAggregateAsRowSet->previous();
 }
@@ -3444,19 +3444,19 @@ void SAL_CALL ODatabaseForm::refreshRow()
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::rowUpdated()
+bool SAL_CALL ODatabaseForm::rowUpdated()
 {
     return m_xAggregateAsRowSet->rowUpdated();
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::rowInserted()
+bool SAL_CALL ODatabaseForm::rowInserted()
 {
     return m_xAggregateAsRowSet->rowInserted();
 }
 
 
-sal_Bool SAL_CALL ODatabaseForm::rowDeleted()
+bool SAL_CALL ODatabaseForm::rowDeleted()
 {
     return m_xAggregateAsRowSet->rowDeleted();
 }
@@ -3623,7 +3623,7 @@ void SAL_CALL ODatabaseForm::setObjectNull(sal_Int32 parameterIndex, sal_Int32 s
 }
 
 
-void SAL_CALL ODatabaseForm::setBoolean(sal_Int32 parameterIndex, sal_Bool x)
+void SAL_CALL ODatabaseForm::setBoolean(sal_Int32 parameterIndex, bool x)
 {
     m_aParameterManager.setBoolean(parameterIndex, x);
 }
@@ -3790,7 +3790,7 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames()
     );
 }
 
-sal_Bool SAL_CALL ODatabaseForm::supportsService(const OUString& ServiceName)
+bool SAL_CALL ODatabaseForm::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -3970,7 +3970,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     _rxInStream->readShort();
 
     // navigation mode was a boolean in version 1
-    // was a sal_Bool in version 1
+    // was a bool in version 1
     bool bNavigation = _rxInStream->readBoolean();
     if (nVersion == 1)
         m_eNavigation = bNavigation ? NavigationBarMode_CURRENT : NavigationBarMode_NONE;

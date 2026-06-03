@@ -77,7 +77,7 @@ public:
         return u"com.sun.star.comp.sfx2.GlobalEventBroadcaster"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -107,7 +107,7 @@ public:
     virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) override;
 
     // css.container.XSet
-    virtual sal_Bool SAL_CALL has(const css::uno::Any& aElement) override;
+    virtual bool SAL_CALL has(const css::uno::Any& aElement) override;
 
     virtual void SAL_CALL insert(const css::uno::Any& aElement) override;
 
@@ -119,7 +119,7 @@ public:
     // css.container.XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
 
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // css.lang.XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
@@ -294,7 +294,7 @@ void SfxGlobalEvents_Impl::removeEventListener(
     }
 }
 
-sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
+bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
 {
     uno::Reference< frame::XModel > xDoc;
     aElement >>= xDoc;
@@ -414,7 +414,7 @@ uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
 }
 
 
-sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
+bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
 {
     // SAFE ->
     std::scoped_lock g(m_aLock);

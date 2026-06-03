@@ -188,7 +188,7 @@ namespace connectivity::file
         // XStatement
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override ;
         virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override ;
-        virtual sal_Bool SAL_CALL execute( const OUString& sql ) override ;
+        virtual bool SAL_CALL execute( const OUString& sql ) override ;
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
     };
 

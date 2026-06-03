@@ -171,7 +171,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
 
 // XServiceInfo
 
-sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
+bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
         const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);

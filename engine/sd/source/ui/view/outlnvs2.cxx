@@ -431,7 +431,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
         case SID_SET_DEFAULT:
         {
-            pOutlinerView->RemoveAttribs(true); // sal_True = also paragraph attributes
+            pOutlinerView->RemoveAttribs(true); // true = also paragraph attributes
             Cancel();
             rReq.Done();
         }

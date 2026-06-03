@@ -389,7 +389,7 @@ OUString SmModel::getImplementationName()
     return u"com.sun.star.comp.Math.FormulaDocument"_ustr;
 }
 
-sal_Bool SmModel::supportsService(const OUString& rServiceName)
+bool SmModel::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

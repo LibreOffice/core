@@ -799,7 +799,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     {
                         // Here the code used to pass the value 42 and it used
                         // to "work" without warnings because the SfxBoolItem
-                        // was based on 'sal_Bool', which is actually 'unsigned
+                        // was based on 'bool', which is actually 'unsigned
                         // char'. But now it uses actual 'bool', and passing 42
                         // for a 'bool' parameter causes a warning at least with
                         // MSVC.  So use 'true'. I really really hope there is

@@ -61,13 +61,13 @@ using namespace ::com::sun::star::uno;
 |*                - The corresponding style sheets have to be in the style sheet
 |*                  pool.
 |*
-|*  bReplaceStyleSheets = sal_True : Named style sheets are replaced
-|*                        sal_False: All style sheets are reassigned
+|*  bReplaceStyleSheets = true : Named style sheets are replaced
+|*                        false: All style sheets are reassigned
 |*
-|*  bSetMasterPage      = sal_True : search and assign master page
+|*  bSetMasterPage      = true : search and assign master page
 |*
-|*  bReverseOrder       = sal_False: search master page from head to tail
-|*                        sal_True : search master page from tail to head
+|*  bReverseOrder       = false: search master page from head to tail
+|*                        true : search master page from tail to head
 |*                                   (for undo operations)
 |*
 \************************************************************************/

@@ -792,7 +792,7 @@ void PowerPointExport::WriteEmbeddedFontList()
             // Read file
             for(;;)
             {
-                sal_Bool eof;
+                bool eof;
 
                 if (aFile.isEndOfFile(&eof) != osl::File::E_None)
                 {

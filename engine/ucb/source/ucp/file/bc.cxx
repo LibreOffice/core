@@ -189,7 +189,7 @@ BaseContent::getImplementationName()
     return u"com.sun.star.comp.ucb.FileContent"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 BaseContent::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
@@ -302,7 +302,7 @@ BaseContent::execute( const Command& aCommand,
     }
     else if ( aCommand.Name == "getCasePreservingURL" )
     {
-        Reference< sdbc::XRow > xRow = getPropertyValues( CommandId, { { u"CasePreservingURL"_ustr, -1, cppu::UnoType<sal_Bool>::get(), 0 } });
+        Reference< sdbc::XRow > xRow = getPropertyValues( CommandId, { { u"CasePreservingURL"_ustr, -1, cppu::UnoType<bool>::get(), 0 } });
         OUString CasePreservingURL = xRow->getString(1);
         if(!xRow->wasNull())
             aAny <<= CasePreservingURL;
@@ -400,7 +400,7 @@ BaseContent::getContentType()
             try
             {
                 // Who am I ?
-                Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { u"IsDocument"_ustr, -1, cppu::UnoType<sal_Bool>::get(), 0 } });
+                Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { u"IsDocument"_ustr, -1, cppu::UnoType<bool>::get(), 0 } });
                 bool IsDocument = xRow->getBoolean( 1 );
 
                 if ( !xRow->wasNull() )
@@ -506,7 +506,7 @@ BaseContent::createNewContent( const ContentInfo& Info )
 
     try
     {
-        Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { u"IsDocument"_ustr, -1, cppu::UnoType<sal_Bool>::get(), 0 } });
+        Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { u"IsDocument"_ustr, -1, cppu::UnoType<bool>::get(), 0 } });
         IsDocument = xRow->getBoolean( 1 );
 
         if ( xRow->wasNull() )
@@ -925,7 +925,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         NewTitle = srcUncPath.copy( 1 + srcUncPath.lastIndexOf( '/' ) );
 
     // Is destination a document or a folder ?
-    Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,{ { u"IsDocument"_ustr, -1, cppu::UnoType<sal_Bool>::get(), 0 } } );
+    Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,{ { u"IsDocument"_ustr, -1, cppu::UnoType<bool>::get(), 0 } } );
     bool IsDocument = xRow->getBoolean( 1 );
     if( xRow->wasNull() )
     {   // Destination file type could not be determined
@@ -986,7 +986,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     // Inserting a document or a file?
     bool bDocument = false;
 
-    Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { u"IsDocument"_ustr, -1, cppu::UnoType<sal_Bool>::get(), 0 } });
+    Reference< sdbc::XRow > xRow = getPropertyValues( -1, { { u"IsDocument"_ustr, -1, cppu::UnoType<bool>::get(), 0 } });
 
     bool contentTypeSet = true;  // is set to false, if contentType not set
     try

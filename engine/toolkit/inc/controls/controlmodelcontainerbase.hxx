@@ -114,13 +114,13 @@ public:
 
     // css::container::XElementAccess
     css::uno::Type SAL_CALL getElementType(  ) override;
-    sal_Bool SAL_CALL hasElements(  ) override;
+    bool SAL_CALL hasElements(  ) override;
 
     // css::container::XNameContainer, XNameReplace, XNameAccess
     void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
     css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    bool SAL_CALL hasByName( const OUString& aName ) override;
     void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
     void SAL_CALL removeByName( const OUString& Name ) override;
 
@@ -136,8 +136,8 @@ public:
     void SAL_CALL dispose(  ) override;
 
     // XTabControllerModel
-    virtual sal_Bool SAL_CALL getGroupControl(  ) override;
-    virtual void SAL_CALL setGroupControl( sal_Bool GroupControl ) override;
+    virtual bool SAL_CALL getGroupControl(  ) override;
+    virtual void SAL_CALL setGroupControl( bool GroupControl ) override;
     virtual void SAL_CALL setControlModels( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels(  ) override;
     virtual void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
@@ -164,8 +164,8 @@ public:
 
     // css::awt::tab::XTabPageModel
     virtual ::sal_Int16 SAL_CALL getTabPageID() override;
-    virtual sal_Bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) override;
+    virtual bool SAL_CALL getEnabled() override;
+    virtual void SAL_CALL setEnabled( bool _enabled ) override;
     virtual OUString SAL_CALL getTitle() override;
     virtual void SAL_CALL setTitle( const OUString& _title ) override;
     virtual OUString SAL_CALL getImageURL() override;
@@ -256,8 +256,8 @@ public:
     virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
 
     // css::awt::XControl
-    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& Model ) override;
-    void SAL_CALL setDesignMode( sal_Bool bOn ) override;
+    bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& Model ) override;
+    void SAL_CALL setDesignMode( bool bOn ) override;
     // XModifyListener
     // Using a dummy/no-op implementation here, not sure if every container control needs
     // to implement this, certainly Dialog does, let's see about others

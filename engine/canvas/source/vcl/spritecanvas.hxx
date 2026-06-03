@@ -124,11 +124,11 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) override;
+        virtual bool SAL_CALL showBuffer( bool bUpdateAll ) override;
+        virtual bool SAL_CALL switchBuffer( bool bUpdateAll ) override;
 
         // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) override;
+        virtual bool SAL_CALL updateScreen( bool bUpdateAll ) override;
 
         // XServiceName
         virtual OUString SAL_CALL getServiceName(  ) override;
@@ -136,7 +136,7 @@ namespace vclcanvas
         // XServiceInfo
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
+        virtual bool SAL_CALL supportsService(const OUString&) override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,

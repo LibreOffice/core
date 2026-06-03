@@ -551,7 +551,7 @@ void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
     xSourceStor->copyToStorage( xTargetStorage );
 }
 
-sal_Bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
+bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -561,7 +561,7 @@ sal_Bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
     return !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
-sal_Bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
+bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -841,7 +841,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     return aResult;
 }
 
-sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
+bool SAL_CALL FSStorage::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -861,7 +861,7 @@ uno::Type SAL_CALL FSStorage::getElementType()
     return uno::Type();
 }
 
-sal_Bool SAL_CALL FSStorage::hasElements()
+bool SAL_CALL FSStorage::hasElements()
 {
     std::unique_lock aGuard( m_aMutex );
 

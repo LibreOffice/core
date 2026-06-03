@@ -49,12 +49,12 @@ public:
 
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::frame::XFrameLoader
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         load( const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor
                 ,const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
 

@@ -418,7 +418,7 @@ oslFileError SAL_CALL osl_setFileTime (
     return osl_psz_setFileTime( path, pLastAccessTime, pLastWriteTime );
 }
 
-sal_Bool
+bool
 SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 {
     DirectoryItem_Impl *pA = static_cast<DirectoryItem_Impl *>(a);

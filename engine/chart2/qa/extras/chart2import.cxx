@@ -471,29 +471,29 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXPercentageNumberFormats)
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimal, nNumberFormat);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(false, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatSimple, nNumberFormat);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(false, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimal, nNumberFormat);
 
@@ -528,7 +528,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartLabelsNumFormat)
     Reference<beans::XPropertySet> xDataPointPropSet(xChartDoc->getDiagram()->getDataPointProperties(0, 0), uno::UNO_SET_THROW);
     chart2::DataPointLabel aLabel;
     xDataPointPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumber);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXStackedNonStackedYAxis)
@@ -1139,8 +1139,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsXLSX)
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
     bool bSuccess = xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
@@ -1151,8 +1151,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsXLSX)
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(false, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
     bSuccess = xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
@@ -1163,8 +1163,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsXLSX)
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(false, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumberInPercent);
     xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
     bSuccess = xPropertySet->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nNumberFormat;
@@ -1264,8 +1264,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPercentageNumberFormatsDOCX)
     bool bLinkNumberFormatToSource = false;
     chart2::DataPointLabel aLabel;
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
-    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    CPPUNIT_ASSERT_EQUAL(false, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(true, aLabel.ShowNumberInPercent);
     bool bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);

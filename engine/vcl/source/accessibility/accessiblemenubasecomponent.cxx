@@ -627,7 +627,7 @@ void OAccessibleMenuBaseComponent::disposing()
 // XServiceInfo
 
 
-sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rServiceName )
+bool OAccessibleMenuBaseComponent::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

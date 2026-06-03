@@ -62,7 +62,7 @@ public:
         sal_Int32 hTestHandle)
         throw ( IllegalArgumentException,RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed() throw (RuntimeException);
+    virtual bool SAL_CALL testPassed() throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getErrors() throw (RuntimeException);
     virtual Sequence< Any > SAL_CALL getErrorExceptions() throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getWarnings() throw (RuntimeException);
@@ -169,7 +169,7 @@ sal_Int32 OSaxParserTest::test(
     return hTestHandle;
 }
 
-sal_Bool OSaxParserTest::testPassed() throw (RuntimeException)
+bool OSaxParserTest::testPassed() throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
@@ -234,7 +234,7 @@ class TestDocumentHandler :
     public WeakImplHelper< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
 public:
-    TestDocumentHandler( const Reference < XMultiServiceFactory >  &r , sal_Bool bPrint )
+    TestDocumentHandler( const Reference < XMultiServiceFactory >  &r , bool bPrint )
       : m_bPrint(bPrint), m_xSMgr(r)
     {
     }
@@ -411,7 +411,7 @@ public:
     int m_iAttributeCount;
     int m_iWhitespaceCount;
     int m_iCharCount;
-    sal_Bool m_bPrint;
+    bool m_bPrint;
 
     Reference < XMultiServiceFactory > m_xSMgr;
     Reference < XLocator > m_rLocator;
@@ -453,7 +453,7 @@ void OSaxParserTest::testSimple(    const Reference < XParser > &rParser )
         source.aInputStream = rInStream;
         source.sSystemId    = sInput;
 
-        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , sal_False );
+        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , false );
         Reference < XDocumentHandler > rDocHandler( (XDocumentHandler *) pDocHandler , UNO_QUERY );
         Reference< XEntityResolver >
             rEntityResolver( (XEntityResolver *) pDocHandler , UNO_QUERY );
@@ -518,7 +518,7 @@ void OSaxParserTest::testNamespaces( const Reference < XParser > &rParser )
         source.aInputStream = rInStream;
         source.sSystemId    = sInput;
 
-        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , sal_False );
+        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , false );
         Reference < XDocumentHandler > rDocHandler( (XDocumentHandler *) pDocHandler , UNO_QUERY );
         Reference< XEntityResolver >    rEntityResolver(
             (XEntityResolver *) pDocHandler , UNO_QUERY );
@@ -571,7 +571,7 @@ void OSaxParserTest::testEncoding( const Reference < XParser > &rParser )
         source.aInputStream = rInStream;
         source.sSystemId    = sInput;
 
-        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , sal_False );
+        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , false );
         Reference < XDocumentHandler > rDocHandler( (XDocumentHandler *) pDocHandler , UNO_QUERY );
         Reference< XEntityResolver >  rEntityResolver( (XEntityResolver *) pDocHandler , UNO_QUERY );
 
@@ -605,7 +605,7 @@ void OSaxParserTest::testFile( const Reference < XParser > & rParser )
         source.aInputStream = rInStream;
         source.sSystemId    = sInput;
 
-        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , sal_True );
+        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , true );
         Reference < XDocumentHandler > rDocHandler( (XDocumentHandler *) pDocHandler , UNO_QUERY );
         Reference < XEntityResolver >   rEntityResolver( (XEntityResolver *) pDocHandler , UNO_QUERY );
         Reference < XErrorHandler > rErrorHandler( ( XErrorHandler * )pDocHandler , UNO_QUERY );
@@ -663,7 +663,7 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
         source.aInputStream = rInStream;
         source.sSystemId    = sInput;
 
-        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , sal_False );
+        TestDocumentHandler *pDocHandler = new TestDocumentHandler( m_rFactory , false );
         Reference < XDocumentHandler > rDocHandler( (XDocumentHandler *) pDocHandler , UNO_QUERY );
         Reference < XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler , UNO_QUERY );
         Reference < XErrorHandler > rErrorHandler( ( XErrorHandler * )pDocHandler , UNO_QUERY );
@@ -719,7 +719,7 @@ using namespace sax_test;
 extern "C"
 {
 
-sal_Bool SAL_CALL component_writeInfo(
+bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -744,14 +744,14 @@ sal_Bool SAL_CALL component_writeInfo(
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OSaxWriterTest_getServiceName() );
 
-            return sal_True;
+            return true;
         }
         catch (InvalidRegistryException &)
         {
             OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

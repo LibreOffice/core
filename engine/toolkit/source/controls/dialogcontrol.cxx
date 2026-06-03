@@ -98,7 +98,7 @@ public:
         std::scoped_lock aGuard( m_aMutex );
         return comphelper::mapKeysToSequence( things );
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         std::scoped_lock aGuard( m_aMutex );
         return ( things.find( aName ) != things.end() );
@@ -124,7 +124,7 @@ public:
     {
         return cppu::UnoType<T>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) override
+    virtual bool SAL_CALL hasElements(  ) override
     {
         std::scoped_lock aGuard( m_aMutex );
         return !things.empty();
@@ -341,7 +341,7 @@ void SAL_CALL UnoDialogControl::disposing(
     ControlContainerBase::disposing( Source );
 }
 
-sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
+bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
 {
         // #Can we move all the Resource stuff to the ControlContainerBase ?
     SolarMutexGuard aGuard;
@@ -383,7 +383,7 @@ OUString UnoDialogControl::getImplementationName()
     return u"stardiv.Toolkit.UnoDialogControl"_ustr;
 }
 
-sal_Bool UnoDialogControl::supportsService(OUString const & ServiceName)
+bool UnoDialogControl::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -928,7 +928,7 @@ void UnoMultiPageModel::insertByName( const OUString& aName, const Any& aElement
 }
 
 
-sal_Bool SAL_CALL UnoMultiPageModel::getGroupControl(  )
+bool SAL_CALL UnoMultiPageModel::getGroupControl(  )
 {
     return true;
 }
@@ -1019,7 +1019,7 @@ uno::Reference< beans::XPropertySetInfo > UnoPageModel::getPropertySetInfo(  )
 }
 
 
-sal_Bool SAL_CALL UnoPageModel::getGroupControl(  )
+bool SAL_CALL UnoPageModel::getGroupControl(  )
 {
     return false;
 }

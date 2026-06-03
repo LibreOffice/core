@@ -56,7 +56,7 @@ OUString SAL_CALL FontSizeMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.FontSizeMenuController"_ustr;
 }
 
-sal_Bool SAL_CALL FontSizeMenuController::supportsService( const OUString& sServiceName )
+bool SAL_CALL FontSizeMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

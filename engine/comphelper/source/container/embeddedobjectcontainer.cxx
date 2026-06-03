@@ -902,7 +902,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject(
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
-    sal_Bool bIsNotEmbedded = !xPersist.is() || ( xLink.is() && xLink->isLink() );
+    bool bIsNotEmbedded = !xPersist.is() || ( xLink.is() && xLink->isLink() );
 
     // if the object has a persistence and the object is not a link than it must have persistence entry in the storage
     OSL_ENSURE( bIsNotEmbedded || xAccess->hasByName(aName), "Removing element not present in storage!" );

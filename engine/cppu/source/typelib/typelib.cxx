@@ -687,7 +687,7 @@ void newTypeDescription(
                 assert(!polymorphic || pStructMembers != nullptr);
                 if (polymorphic) {
                     reinterpret_cast< typelib_StructTypeDescription * >(pTmp)->
-                        pParameterizedTypes = new sal_Bool[nMembers];
+                        pParameterizedTypes = new bool[nMembers];
                 }
                 for( sal_Int32 i = 0 ; i < nMembers; i++ )
                 {
@@ -1019,7 +1019,7 @@ typelib_TypeDescriptionReference ** copyExceptions(
 extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     typelib_InterfaceMethodTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
-    sal_Bool bOneWay,
+    bool bOneWay,
     rtl_uString * pTypeName,
     typelib_TypeClass eReturnTypeClass,
     rtl_uString * pReturnTypeName,
@@ -1099,7 +1099,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     rtl_uString * pTypeName,
     typelib_TypeClass eAttributeTypeClass,
     rtl_uString * pAttributeTypeName,
-    sal_Bool bReadOnly,
+    bool bReadOnly,
     sal_Int32 nGetExceptions, rtl_uString ** ppGetExceptionNames,
     sal_Int32 nSetExceptions, rtl_uString ** ppSetExceptionNames ) noexcept
 {
@@ -1562,7 +1562,7 @@ static bool type_equals(
              p1->pTypeName->length == p2->pTypeName->length &&
              rtl_ustr_compare( p1->pTypeName->buffer, p2->pTypeName->buffer ) == 0));
 }
-extern "C" sal_Bool SAL_CALL typelib_typedescription_equals(
+extern "C" bool SAL_CALL typelib_typedescription_equals(
     const typelib_TypeDescription * p1, const typelib_TypeDescription * p2 ) noexcept
 {
     return type_equals(
@@ -1658,7 +1658,7 @@ extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
                 nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( typelib_TypeDescriptionReference * ));
                 break;
             case typelib_TypeClass_BOOLEAN:
-                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Bool ));
+                nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( bool ));
                 break;
             case typelib_TypeClass_CHAR:
                 nSize = rMaxIntegralTypeSize = sal_Int32(sizeof( sal_Unicode ));
@@ -2196,7 +2196,7 @@ extern "C" void typelib_typedescriptionreference_getByName(
 }
 
 
-extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
+extern "C" bool SAL_CALL typelib_typedescriptionreference_equals(
     const typelib_TypeDescriptionReference * p1,
     const typelib_TypeDescriptionReference * p2 ) noexcept
 {
@@ -2237,7 +2237,7 @@ const bool s_aAssignableFromTab[11][11] =
 };
 
 
-extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
+extern "C" bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     typelib_TypeDescriptionReference * pAssignable,
     typelib_TypeDescriptionReference * pFrom ) noexcept
 {
@@ -2304,7 +2304,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
             s_aAssignableFromTab[eAssignable-1][eFrom-1]);
 }
 
-extern "C" sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
+extern "C" bool SAL_CALL typelib_typedescription_isAssignableFrom(
     typelib_TypeDescription * pAssignable,
     typelib_TypeDescription * pFrom ) noexcept
 {
@@ -2313,7 +2313,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
 }
 
 
-extern "C" sal_Bool SAL_CALL typelib_typedescription_complete(
+extern "C" bool SAL_CALL typelib_typedescription_complete(
     typelib_TypeDescription ** ppTypeDescr ) noexcept
 {
     return complete(ppTypeDescr, true);

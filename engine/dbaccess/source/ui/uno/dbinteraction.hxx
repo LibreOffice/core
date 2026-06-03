@@ -73,7 +73,7 @@ namespace dbaui
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArgs ) override;
 
         // XInteractionHandler2
-        virtual sal_Bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+        virtual bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
         // XInteractionHandler
         virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;

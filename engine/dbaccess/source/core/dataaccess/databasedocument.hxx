@@ -295,7 +295,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInterface
@@ -311,14 +311,14 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XModel
-    virtual sal_Bool SAL_CALL attachResource( const OUString& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override ;
+    virtual bool SAL_CALL attachResource( const OUString& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override ;
     virtual OUString SAL_CALL getURL(  ) override ;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override ;
     virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
     virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
     virtual void SAL_CALL lockControllers(  ) override ;
     virtual void SAL_CALL unlockControllers(  ) override ;
-    virtual sal_Bool SAL_CALL hasControllersLocked(  ) override ;
+    virtual bool SAL_CALL hasControllersLocked(  ) override ;
     virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) override ;
     virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection(  ) override ;
@@ -334,9 +334,9 @@ public:
     virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getArgs2( const ::css::uno::Sequence< ::rtl::OUString >& requestedArgs ) override;
 
     // XStorable
-    virtual sal_Bool SAL_CALL hasLocation(  ) override ;
+    virtual bool SAL_CALL hasLocation(  ) override ;
     virtual OUString SAL_CALL getLocation(  ) override ;
-    virtual sal_Bool SAL_CALL isReadonly(  ) override ;
+    virtual bool SAL_CALL isReadonly(  ) override ;
     virtual void SAL_CALL store(  ) override ;
     virtual void SAL_CALL storeAsURL( const OUString& sURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override ;
     virtual void SAL_CALL storeToURL( const OUString& sURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override ;
@@ -346,8 +346,8 @@ public:
     virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // css::util::XModifiable
-    virtual sal_Bool SAL_CALL isModified(  ) override ;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override ;
+    virtual bool SAL_CALL isModified(  ) override ;
+    virtual void SAL_CALL setModified( bool bModified ) override ;
 
     // XEventBroadcaster
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& aListener ) override;
@@ -370,7 +370,7 @@ public:
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getReportDocuments(  ) override;
 
     // XCloseable
-    virtual void SAL_CALL close( sal_Bool DeliverOwnership ) override;
+    virtual void SAL_CALL close( bool DeliverOwnership ) override;
     virtual void SAL_CALL addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
     virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
@@ -395,7 +395,7 @@ public:
     // XEmbeddedScripts
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() override;
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() override;
-    virtual sal_Bool SAL_CALL getAllowMacroExecution() override;
+    virtual bool SAL_CALL getAllowMacroExecution() override;
 
     // XScriptInvocationContext
     virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() override;
@@ -411,7 +411,7 @@ public:
     virtual void SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     // css.document.XDocumentRecovery
-    virtual sal_Bool SAL_CALL wasModifiedSinceLastSave() override;
+    virtual bool SAL_CALL wasModifiedSinceLastSave() override;
     virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
     virtual void SAL_CALL recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
 

@@ -77,7 +77,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaCommandBarControl::getVisible()
 {
     bool bVisible = true;
@@ -87,7 +87,7 @@ ScVbaCommandBarControl::getVisible()
     return bVisible;
 }
 void SAL_CALL
-ScVbaCommandBarControl::setVisible( sal_Bool _visible )
+ScVbaCommandBarControl::setVisible( bool _visible )
 {
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
     if( aValue.hasValue() )
@@ -97,7 +97,7 @@ ScVbaCommandBarControl::setVisible( sal_Bool _visible )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaCommandBarControl::getEnabled()
 {
     bool bEnabled = true;
@@ -116,7 +116,7 @@ ScVbaCommandBarControl::getEnabled()
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::setEnabled( sal_Bool _enabled )
+ScVbaCommandBarControl::setEnabled( bool _enabled )
 {
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
     if( aValue.hasValue() )
@@ -131,7 +131,7 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaCommandBarControl::getBeginGroup()
 {
     // TODO: need to check if the item before this item is of type 'separator'
@@ -140,7 +140,7 @@ ScVbaCommandBarControl::getBeginGroup()
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::setBeginGroup( sal_Bool _begin )
+ScVbaCommandBarControl::setBeginGroup( bool _begin )
 {
     if( getBeginGroup() != _begin )
     {

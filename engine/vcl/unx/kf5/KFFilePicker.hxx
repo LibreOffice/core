@@ -41,13 +41,13 @@ public:
                                    const css::uno::Any& rValue) override;
     virtual css::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
                                             sal_Int16 nControlAction) override;
-    virtual void SAL_CALL enableControl(sal_Int16 nControlId, sal_Bool bEnable) override;
+    virtual void SAL_CALL enableControl(sal_Int16 nControlId, bool bEnable) override;
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:

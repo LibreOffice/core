@@ -27,7 +27,7 @@ using namespace com::sun::star::registry;
 
 // declaration of external RegEntry-functions defined by the service objects
 
-extern sal_Bool SAL_CALL SpellChecker_writeInfo(
+extern bool SAL_CALL SpellChecker_writeInfo(
     void * /*pServiceManager*/, XRegistryKey * pRegistryKey );
 
 extern void * SAL_CALL SpellChecker_getFactory(
@@ -40,7 +40,7 @@ extern void * SAL_CALL SpellChecker_getFactory(
 extern "C"
 {
 
-sal_Bool SAL_CALL component_writeInfo(
+bool SAL_CALL component_writeInfo(
     void * pServiceManager, XRegistryKey * pRegistryKey )
 {
     return SpellChecker_writeInfo( pServiceManager, pRegistryKey );

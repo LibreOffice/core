@@ -164,7 +164,7 @@ PopupWindowController::~PopupWindowController()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName )
+bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

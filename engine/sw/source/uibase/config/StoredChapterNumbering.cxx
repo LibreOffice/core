@@ -96,7 +96,7 @@ public:
         return ::cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
     }
 
-    virtual ::sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
     {
         return true;
     }

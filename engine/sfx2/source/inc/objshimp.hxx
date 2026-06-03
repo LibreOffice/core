@@ -62,7 +62,7 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     sal_uInt16          nVisualDocumentNumber;
     SignatureState      nDocumentSignatureState;
     SignatureState      nScriptingSignatureState;
-    bool                bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
+    bool                bClosing:1,         // true while Close(), to prevent recurrences Notification
                         bIsSaving:1,
                         bIsNamedVisible:1,
                         bIsAbortingImport:1,  // Import operation should be canceled.

@@ -55,7 +55,7 @@ private:
     virtual OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.comp.configuration.ReadWriteAccess"_ustr; }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -69,7 +69,7 @@ private:
         OUString const & aName) override
     { return getRoot()->getByHierarchicalName(aName); }
 
-    virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName) override
+    virtual bool SAL_CALL hasByHierarchicalName(OUString const & aName) override
     { return getRoot()->hasByHierarchicalName(aName); }
 
     virtual void SAL_CALL replaceByHierarchicalName(
@@ -79,7 +79,7 @@ private:
     virtual void SAL_CALL commitChanges() override
     { getRoot()->commitChanges(); }
 
-    virtual sal_Bool SAL_CALL hasPendingChanges() override
+    virtual bool SAL_CALL hasPendingChanges() override
     { return getRoot()->hasPendingChanges(); }
 
     virtual css::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override
@@ -90,7 +90,7 @@ private:
         override
     { return getRoot()->getPropertyByHierarchicalName(aHierarchicalName); }
 
-    sal_Bool SAL_CALL hasPropertyByHierarchicalName(
+    bool SAL_CALL hasPropertyByHierarchicalName(
         OUString const & aHierarchicalName) override
     { return getRoot()->hasPropertyByHierarchicalName(aHierarchicalName); }
 

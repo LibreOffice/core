@@ -52,7 +52,7 @@ public:
     virtual css::i18n::Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
     virtual css::i18n::Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
-        const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection ) override;
+        const css::lang::Locale& nLocale, sal_Int16 WordType, bool bDirection ) override;
 
     virtual sal_Int32 SAL_CALL beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale ) override;
@@ -66,7 +66,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:

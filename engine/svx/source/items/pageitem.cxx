@@ -176,7 +176,7 @@ bool SvxPageItem::GetPresentation
 
 bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+//    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {

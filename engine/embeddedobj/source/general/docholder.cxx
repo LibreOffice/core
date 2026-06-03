@@ -462,7 +462,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
             // TODO/LATER: error handling?
         }
 
-        // m_bIsInplace = sal_True; TODO: ?
+        // m_bIsInplace = true; TODO: ?
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
         if ( xCloseBroadcaster.is() )
@@ -1106,7 +1106,7 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
 }
 
 
-void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool /*bGetsOwnership*/ )
+void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, bool /*bGetsOwnership*/ )
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source && !m_bAllowClosing )
         throw util::CloseVetoException(u"To close an embedded document, close the document holder (document definition), not the document itself."_ustr, static_cast< ::cppu::OWeakObject*>(this));

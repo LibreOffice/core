@@ -52,7 +52,7 @@ public:
         const cpo::uno::Reference< cpo::awt::XWindowPeer >&   xParent
     ) override;
 
-    virtual sal_Bool SAL_CALL setModel(
+    virtual bool SAL_CALL setModel(
         const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
     ) override;
 
@@ -89,7 +89,7 @@ public:
 
     //  XWindow
 
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
+    virtual void SAL_CALL setVisible( bool bVisible ) override;
 
 protected:
     using WeakComponentImplHelperBase::disposing;

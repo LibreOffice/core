@@ -243,7 +243,7 @@ css::uno::Any SAL_CALL LngXStringKeyMap::getValue(const OUString& aKey)
     return (*aIter).second;
 }
 
-sal_Bool SAL_CALL LngXStringKeyMap::hasValue(const OUString& aKey)
+bool SAL_CALL LngXStringKeyMap::hasValue(const OUString& aKey)
 {
     return maMap.contains(aKey);
 }
@@ -959,7 +959,7 @@ void SAL_CALL GrammarCheckingIterator::resetIgnoreRules(  )
 }
 
 
-sal_Bool SAL_CALL GrammarCheckingIterator::isProofreading(
+bool SAL_CALL GrammarCheckingIterator::isProofreading(
     const uno::Reference< uno::XInterface >& xDoc )
 {
     // ---- THREAD SAFE START ----
@@ -1030,7 +1030,7 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
 }
 
 
-sal_Bool SAL_CALL GrammarCheckingIterator::addLinguServiceEventListener(
+bool SAL_CALL GrammarCheckingIterator::addLinguServiceEventListener(
     const uno::Reference< linguistic2::XLinguServiceEventListener >& xListener )
 {
     if (xListener.is())
@@ -1041,7 +1041,7 @@ sal_Bool SAL_CALL GrammarCheckingIterator::addLinguServiceEventListener(
 }
 
 
-sal_Bool SAL_CALL GrammarCheckingIterator::removeLinguServiceEventListener(
+bool SAL_CALL GrammarCheckingIterator::removeLinguServiceEventListener(
     const uno::Reference< linguistic2::XLinguServiceEventListener >& xListener )
 {
     if (xListener.is())
@@ -1200,7 +1200,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
 }
 
 
-sal_Bool SAL_CALL GrammarCheckingIterator::supportsService(
+bool SAL_CALL GrammarCheckingIterator::supportsService(
     const OUString & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);

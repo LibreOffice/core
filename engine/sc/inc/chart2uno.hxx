@@ -69,7 +69,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataProvider
-    virtual sal_Bool SAL_CALL createDataSourcePossible(
+    virtual bool SAL_CALL createDataSourcePossible(
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
     virtual css::uno::Reference<
@@ -80,7 +80,7 @@ public:
         css::beans::PropertyValue > SAL_CALL detectArguments(
             const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
 
-    virtual sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+    virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation ) override;
 
     virtual css::uno::Reference<
@@ -94,7 +94,7 @@ public:
     virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
 
     // XSheetDataProvider
-    virtual sal_Bool SAL_CALL createDataSequenceByFormulaTokensPossible(
+    virtual bool SAL_CALL createDataSequenceByFormulaTokensPossible(
         const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
     virtual css::uno::Reference< css::chart2::data::XDataSequence >
@@ -136,7 +136,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString&
+    virtual bool SAL_CALL supportsService( const OUString&
             rServiceName) override;
 
     virtual css::uno::Sequence< OUString> SAL_CALL
@@ -170,7 +170,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString&
+    virtual bool SAL_CALL supportsService( const OUString&
             rServiceName) override;
 
     virtual css::uno::Sequence< OUString> SAL_CALL
@@ -232,8 +232,8 @@ public:
         SAL_CALL getTextualData() override;
 
     // XTimeBased
-    virtual sal_Bool SAL_CALL switchToNext(sal_Bool bWrap) override;
-    virtual sal_Bool SAL_CALL setToPointInTime(sal_Int32 nPoint) override;
+    virtual bool SAL_CALL switchToNext(bool bWrap) override;
+    virtual bool SAL_CALL setToPointInTime(sal_Int32 nPoint) override;
 
     virtual void SAL_CALL setRange(sal_Int32 nStart, sal_Int32 nEnd) override;
 
@@ -277,7 +277,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString&
+    virtual bool SAL_CALL supportsService( const OUString&
             rServiceName) override;
 
     virtual css::uno::Sequence< OUString> SAL_CALL

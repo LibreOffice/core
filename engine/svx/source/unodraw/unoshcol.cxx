@@ -169,7 +169,7 @@ uno::Type SAL_CALL SvxShapeCollection::getElementType()
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SAL_CALL SvxShapeCollection::hasElements()
+bool SAL_CALL SvxShapeCollection::hasElements()
 {
     return getCount() != 0;
 }
@@ -180,7 +180,7 @@ OUString SAL_CALL SvxShapeCollection::getImplementationName()
     return u"com.sun.star.drawing.SvxShapeCollection"_ustr;
 }
 
-sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
+bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName);
 }

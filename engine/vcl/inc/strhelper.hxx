@@ -35,7 +35,7 @@ namespace psp
     OUString WhitespaceToSpace(std::u16string_view);
     OString WhitespaceToSpace(std::string_view);
     // returns a string with multiple adjacent occurrences of whitespace
-    // converted to a single space. if bProtect is sal_True (nonzero), then
+    // converted to a single space. if bProtect is true (nonzero), then
     // doublequote, singlequote and singleleftquote protect their respective
     // contents
 

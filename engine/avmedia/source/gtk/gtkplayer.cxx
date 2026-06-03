@@ -182,7 +182,7 @@ void SAL_CALL GtkPlayer::stop()
         gtk_media_stream_pause(m_pStream);
 }
 
-sal_Bool SAL_CALL GtkPlayer::isPlaying()
+bool SAL_CALL GtkPlayer::isPlaying()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -236,13 +236,13 @@ double SAL_CALL GtkPlayer::getMediaTime()
     return position;
 }
 
-void SAL_CALL GtkPlayer::setPlaybackLoop(sal_Bool bSet)
+void SAL_CALL GtkPlayer::setPlaybackLoop(bool bSet)
 {
     osl::MutexGuard aGuard(m_aMutex);
     gtk_media_stream_set_loop(m_pStream, bSet);
 }
 
-sal_Bool SAL_CALL GtkPlayer::isPlaybackLoop()
+bool SAL_CALL GtkPlayer::isPlaybackLoop()
 {
     osl::MutexGuard aGuard(m_aMutex);
     return gtk_media_stream_get_loop(m_pStream);
@@ -252,7 +252,7 @@ sal_Bool SAL_CALL GtkPlayer::isPlaybackLoop()
 // it does not modify the volume. This means that muting and then unmuting the
 // stream will restore the volume settings." but that doesn't seem to be my
 // experience at all
-void SAL_CALL GtkPlayer::setMute(sal_Bool bSet)
+void SAL_CALL GtkPlayer::setMute(bool bSet)
 {
     osl::MutexGuard aGuard(m_aMutex);
     bool bMuted = gtk_media_stream_get_muted(m_pStream);
@@ -263,7 +263,7 @@ void SAL_CALL GtkPlayer::setMute(sal_Bool bSet)
         setVolumeDB(m_nUnmutedVolume);
 }
 
-sal_Bool SAL_CALL GtkPlayer::isMute()
+bool SAL_CALL GtkPlayer::isMute()
 {
     osl::MutexGuard aGuard(m_aMutex);
     return gtk_media_stream_get_muted(m_pStream);
@@ -438,7 +438,7 @@ OUString SAL_CALL GtkPlayer::getImplementationName()
     return u"com.sun.star.comp.avmedia.Player_Gtk"_ustr;
 }
 
-sal_Bool SAL_CALL GtkPlayer::supportsService(const OUString& ServiceName)
+bool SAL_CALL GtkPlayer::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

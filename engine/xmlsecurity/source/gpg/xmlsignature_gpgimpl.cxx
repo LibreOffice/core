@@ -509,7 +509,7 @@ OUString SAL_CALL XMLSignature_GpgImpl::getImplementationName() {
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_GpgImpl::supportsService( const OUString& serviceName) {
+bool SAL_CALL XMLSignature_GpgImpl::supportsService( const OUString& serviceName) {
     return cppu::supportsService(this, serviceName);
 }
 

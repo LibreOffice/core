@@ -65,7 +65,7 @@ testtools::bridgetest::CurrentContextChecker::CurrentContextChecker() {}
 
 testtools::bridgetest::CurrentContextChecker::~CurrentContextChecker() {}
 
-sal_Bool testtools::bridgetest::CurrentContextChecker::perform(
+bool testtools::bridgetest::CurrentContextChecker::perform(
     css::uno::Reference<
         ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
     ::sal_Int32 setSteps, ::sal_Int32 checkSteps)

@@ -102,10 +102,10 @@ public:
         propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         removeLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
 

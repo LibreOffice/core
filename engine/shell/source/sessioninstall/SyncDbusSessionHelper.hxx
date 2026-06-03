@@ -24,7 +24,7 @@ namespace shell::sessioninstall
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+            virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
             virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
             // XModify Methods
@@ -50,9 +50,9 @@ namespace shell::sessioninstall
             virtual void SAL_CALL InstallPrinterDrivers( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
             // XQuery Methods
-            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) override;
+            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, bool& /* installed */ ) override;
 
-            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, sal_Bool& /* installed */, OUString& /* package_name */ ) override
+            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, bool& /* installed */, OUString& /* package_name */ ) override
                 { throw css::uno::RuntimeException(u"SearchFile is not implemented"_ustr); } // not implemented
 
         private:

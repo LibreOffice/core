@@ -656,7 +656,7 @@ Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value )
     getValue();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 Calendar_gregorian::isValid()
 {
     if (fieldSet) {
@@ -1064,7 +1064,7 @@ Calendar_gregorian::getImplementationName()
     return cCalendar;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 Calendar_gregorian::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);

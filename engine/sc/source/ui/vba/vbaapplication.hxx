@@ -71,8 +71,8 @@ public:
     virtual css::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const css::uno::Sequence< css::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< css::uno::Any >& OutParam) override;
     virtual void  SAL_CALL setValue(const OUString& PropertyName, const css::uno::Any& Value) override;
     virtual css::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual sal_Bool  SAL_CALL hasMethod(const OUString& Name) override;
-    virtual sal_Bool  SAL_CALL hasProperty(const OUString& Name) override;
+    virtual bool  SAL_CALL hasMethod(const OUString& Name) override;
+    virtual bool  SAL_CALL hasProperty(const OUString& Name) override;
 
     // XApplication
     virtual void SAL_CALL setDefaultFilePath( const OUString& DefaultFilePath ) override;
@@ -83,8 +83,8 @@ public:
     virtual OUString SAL_CALL getOperatingSystem() override;
 
     virtual OUString SAL_CALL getName() override;
-    virtual sal_Bool SAL_CALL getDisplayAlerts() override;
-    virtual void SAL_CALL setDisplayAlerts( sal_Bool displayAlerts ) override;
+    virtual bool SAL_CALL getDisplayAlerts() override;
+    virtual void SAL_CALL setDisplayAlerts( bool displayAlerts ) override;
     virtual ::sal_Int32 SAL_CALL getCalculation() override;
     virtual void SAL_CALL setCalculation( ::sal_Int32 _calculation ) override;
     virtual css::uno::Any SAL_CALL getSelection() override;
@@ -92,8 +92,8 @@ public:
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() override;
     virtual css::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() override;
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
-    virtual sal_Bool SAL_CALL getDisplayFormulaBar() override;
-    virtual void SAL_CALL setDisplayFormulaBar(sal_Bool _displayformulabar) override;
+    virtual bool SAL_CALL getDisplayFormulaBar() override;
+    virtual void SAL_CALL setDisplayFormulaBar(bool _displayformulabar) override;
 
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() override;
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() override;
@@ -115,25 +115,25 @@ public:
     virtual ::sal_Int32 SAL_CALL getCursor() override;
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) override;
     virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) override;
-    virtual void SAL_CALL setScreenUpdating( sal_Bool bUpdate ) override;
-    virtual sal_Bool SAL_CALL getEnableEvents() override;
-    virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) override;
-    virtual sal_Bool SAL_CALL getEnableCancelKey() override;
-    virtual void SAL_CALL setEnableCancelKey( sal_Bool bEnable ) override;
+    virtual void SAL_CALL setScreenUpdating( bool bUpdate ) override;
+    virtual bool SAL_CALL getEnableEvents() override;
+    virtual void SAL_CALL setEnableEvents( bool bEnable ) override;
+    virtual bool SAL_CALL getEnableCancelKey() override;
+    virtual void SAL_CALL setEnableCancelKey( bool bEnable ) override;
 
-    virtual sal_Bool SAL_CALL getDisplayFullScreen() override;
-    virtual void SAL_CALL setDisplayFullScreen( sal_Bool bSet ) override;
-    virtual sal_Bool SAL_CALL getDisplayScrollBars() override;
-    virtual void SAL_CALL setDisplayScrollBars( sal_Bool bSet ) override;
-    virtual sal_Bool SAL_CALL getDisplayExcel4Menus() override;
-    virtual void SAL_CALL setDisplayExcel4Menus( sal_Bool bSet ) override;
+    virtual bool SAL_CALL getDisplayFullScreen() override;
+    virtual void SAL_CALL setDisplayFullScreen( bool bSet ) override;
+    virtual bool SAL_CALL getDisplayScrollBars() override;
+    virtual void SAL_CALL setDisplayScrollBars( bool bSet ) override;
+    virtual bool SAL_CALL getDisplayExcel4Menus() override;
+    virtual void SAL_CALL setDisplayExcel4Menus( bool bSet ) override;
 
-    virtual sal_Bool SAL_CALL getDisplayNoteIndicator() override;
-    virtual void SAL_CALL setDisplayNoteIndicator( sal_Bool bSet ) override;
-    virtual sal_Bool SAL_CALL getShowWindowsInTaskbar() override;
-    virtual void SAL_CALL setShowWindowsInTaskbar( sal_Bool bSet ) override;
-    virtual sal_Bool SAL_CALL getIteration() override;
-    virtual void SAL_CALL setIteration( sal_Bool bSet ) override;
+    virtual bool SAL_CALL getDisplayNoteIndicator() override;
+    virtual void SAL_CALL setDisplayNoteIndicator( bool bSet ) override;
+    virtual bool SAL_CALL getShowWindowsInTaskbar() override;
+    virtual void SAL_CALL setShowWindowsInTaskbar( bool bSet ) override;
+    virtual bool SAL_CALL getIteration() override;
+    virtual void SAL_CALL setIteration( bool bSet ) override;
 
     virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) override;
     virtual void SAL_CALL wait( double time ) override;

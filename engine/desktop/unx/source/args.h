@@ -16,10 +16,10 @@ extern "C" {
 typedef struct {
   rtl_uString *pAppPath;
   const char  *pPageinType;     // @pagein-writer for - writer etc. else NULL
-  sal_Bool     bInhibitSplash;  // should we show a splash screen
-  sal_Bool     bInhibitPagein;  // should we run pagein ?
-  sal_Bool     bInhibitJavaLdx; // should we run javaldx ?
-  sal_Bool     bInhibitPipe;    // for --help and --version
+  bool     bInhibitSplash;  // should we show a splash screen
+  bool     bInhibitPagein;  // should we run pagein ?
+  bool     bInhibitJavaLdx; // should we run javaldx ?
+  bool     bInhibitPipe;    // for --help and --version
 
   sal_uInt32   nArgsEnv;        // number of -env: style args
   sal_uInt32   nArgsTotal;      // number of -env: as well as -writer style args

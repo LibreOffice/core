@@ -71,8 +71,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which must exist at this item.
 
-            @return sal_True if all given properties exists
-                    at this item; sal_False otherwise.
+            @return true if all given properties exists
+                    at this item; false otherwise.
          */
         bool haveProps(std::span< const css::beans::NamedValue > lProps) const;
 
@@ -87,8 +87,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which should not exist at this item.
 
-            @return sal_False if at least on property exists at this item(!);
-                    sal_True otherwise.
+            @return false if at least on property exists at this item(!);
+                    true otherwise.
          */
         bool dontHaveProps(std::span< const css::beans::NamedValue > lProps) const;
 

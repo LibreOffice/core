@@ -455,16 +455,16 @@ public:
 
     /** Mirrors the entire control including position of buttons and splitter.
         Mirroring is done relative to the current direction of the GUI.
-        @param bMirrored  sal_True = the control will draw itself RTL in LTR GUI,
-            and vice versa; sal_False = the control behaves according to the
+        @param bMirrored  true = the control will draw itself RTL in LTR GUI,
+            and vice versa; false = the control behaves according to the
             current direction of the GUI. */
     void            SetMirrored(bool bMirrored);
     /** Returns true, if the control is set to mirrored mode (see SetMirrored()). */
     bool            IsMirrored() const { return mbMirrored; }
 
     /** Sets the control to LTR or RTL mode regardless of the GUI direction.
-        @param bRTL  sal_False = the control will draw from left to right;
-            sal_True = the control will draw from right to left. */
+        @param bRTL  false = the control will draw from left to right;
+            true = the control will draw from right to left. */
     void            SetEffectiveRTL( bool bRTL );
     /** Returns true, if the control draws from right to left (see SetEffectiveRTL()). */
     bool            IsEffectiveRTL() const;

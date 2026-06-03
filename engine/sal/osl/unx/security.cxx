@@ -194,7 +194,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     return osl_Security_E_UserUnknown;
 }
 
-sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
+bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
 {
     bool     bRet = false;
     char pszIdent[1024];
@@ -228,7 +228,7 @@ bool osl_psz_getUserIdent(oslSecurity Security, char *pszIdent, sal_uInt32 nMax)
     return true;
 }
 
-sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
+bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     bool     bRet = false;
     char * pszName;
@@ -256,12 +256,12 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     return bRet;
 }
 
-sal_Bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **ustrName)
+bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     return osl_getUserName(Security, ustrName); // No domain name on unix
 }
 
-sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     bool     bRet = false;
     OString pszDirectory;
@@ -326,7 +326,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
         if (len <= std::numeric_limits<sal_Int32>::max())
         {
             *pszDirectory = OString([userDirectory UTF8String], len);
-            return sal_True;
+            return true;
         }
     }
 #endif
@@ -378,7 +378,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
     return true;
 }
 
-sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     bool     bRet = false;
     OString pszDirectory;
@@ -510,7 +510,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
 
 #endif
 
-sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
+bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
@@ -528,7 +528,7 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
     deleteSecurityImpl(static_cast<oslSecurityImpl *>(Security));
 }
 
-sal_Bool SAL_CALL osl_loadUserProfile(SAL_UNUSED_PARAMETER oslSecurity)
+bool SAL_CALL osl_loadUserProfile(SAL_UNUSED_PARAMETER oslSecurity)
 {
     return false;
 }

@@ -46,7 +46,7 @@ namespace connectivity
         return u"org.openoffice.comp.helper.ParameterSubstitution"_ustr;
     }
 
-    sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName )
+    bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
@@ -57,7 +57,7 @@ namespace connectivity
     }
 
 
-    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, sal_Bool /*bSubstRequired*/ )
+    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, bool /*bSubstRequired*/ )
     {
         OUString sRet = _sText;
         uno::Reference< sdbc::XConnection > xConnection = m_xConnection;

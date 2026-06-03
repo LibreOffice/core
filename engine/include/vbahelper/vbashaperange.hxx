@@ -76,10 +76,10 @@ public:
     virtual void SAL_CALL setTop( double _top ) override;
     virtual css::uno::Reference< ov::msforms::XLineFormat > SAL_CALL getLine() override;
     virtual css::uno::Reference< ov::msforms::XFillFormat > SAL_CALL getFill() override;
-    virtual sal_Bool SAL_CALL getLockAspectRatio() override;
-    virtual void SAL_CALL setLockAspectRatio( sal_Bool _lockaspectratio ) override;
-    virtual sal_Bool SAL_CALL getLockAnchor() override;
-    virtual void SAL_CALL setLockAnchor( sal_Bool _lockanchor ) override;
+    virtual bool SAL_CALL getLockAspectRatio() override;
+    virtual void SAL_CALL setLockAspectRatio( bool _lockaspectratio ) override;
+    virtual bool SAL_CALL getLockAnchor() override;
+    virtual void SAL_CALL setLockAnchor( bool _lockanchor ) override;
     virtual ::sal_Int32 SAL_CALL getRelativeHorizontalPosition() override;
     virtual void SAL_CALL setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition ) override;
     virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() override;

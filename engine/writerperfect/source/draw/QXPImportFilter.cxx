@@ -40,7 +40,7 @@ OUString SAL_CALL QXPImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Draw.QXPImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL QXPImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL QXPImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

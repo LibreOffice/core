@@ -80,7 +80,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
@@ -158,7 +158,7 @@ OUString ClassificationCategoriesController::getImplementationName()
     return u"com.sun.star.comp.sfx2.ClassificationCategoriesController"_ustr;
 }
 
-sal_Bool ClassificationCategoriesController::supportsService(const OUString& rServiceName)
+bool ClassificationCategoriesController::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

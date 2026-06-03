@@ -53,7 +53,7 @@ OUString EPUBExportUIComponent::getImplementationName()
     return u"com.sun.star.comp.Writer.EPUBExportUIComponent"_ustr;
 }
 
-sal_Bool EPUBExportUIComponent::supportsService(const OUString& rServiceName)
+bool EPUBExportUIComponent::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

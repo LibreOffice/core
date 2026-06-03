@@ -134,7 +134,7 @@ public:
     virtual void SAL_CALL setKeyId( sal_Int32 id ) override;
 
         /* XMissionTaker */
-        virtual sal_Bool SAL_CALL endMission(  ) override;
+        virtual bool SAL_CALL endMission(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

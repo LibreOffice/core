@@ -60,7 +60,7 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
 {
 }
 
-sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
+bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
 {
     if( aName == gsDocName )
         return !mpDoc->GetCodeName().isEmpty();
@@ -132,7 +132,7 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
-sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
+bool SAL_CALL XMLCodeNameProvider::hasElements()
 {
     if( !mpDoc->GetCodeName().isEmpty() )
         return true;

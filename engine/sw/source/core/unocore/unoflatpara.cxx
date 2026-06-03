@@ -191,7 +191,7 @@ OUString SAL_CALL SwXFlatParagraph::getText()
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal )
+void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, bool bVal )
 {
     SolarMutexGuard aGuard;
 
@@ -214,7 +214,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal )
 }
 
 // text::XFlatParagraph:
-sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType )
+bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType )
 {
     SolarMutexGuard aGuard;
     if (GetTextNode())
@@ -231,7 +231,7 @@ sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType )
 }
 
 // text::XFlatParagraph:
-sal_Bool SAL_CALL SwXFlatParagraph::isModified()
+bool SAL_CALL SwXFlatParagraph::isModified()
 {
     SolarMutexGuard aGuard;
     return !GetTextNode() || GetTextNode()->GetText() != maOrigText;

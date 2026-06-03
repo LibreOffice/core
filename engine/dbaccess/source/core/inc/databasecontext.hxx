@@ -106,12 +106,12 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
@@ -119,7 +119,7 @@ public:
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XNamingService
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
@@ -127,13 +127,13 @@ public:
     virtual void SAL_CALL revokeObject( const OUString& Name ) override;
 
     // XDatabaseRegistrations
-    virtual sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) override;
+    virtual bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getRegistrationNames() override;
     virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) override;
     virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) override;
     virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) override;
     virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) override;
-    virtual sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) override;
+    virtual bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) override;
     virtual void SAL_CALL addDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
     virtual void SAL_CALL removeDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
 

@@ -66,7 +66,7 @@ UnoScriptTypeDetector::getImplementationName()
     return u"com.sun.star.i18n.ScriptTypeDetector"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 UnoScriptTypeDetector::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);

@@ -429,7 +429,7 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
 void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                             const ScSortParam* pForceNewSort )
 {
-    bool bDo = !rParam.bRemoveOnly;                         // sal_False = only delete
+    bool bDo = !rParam.bRemoveOnly;                         // false = only delete
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();

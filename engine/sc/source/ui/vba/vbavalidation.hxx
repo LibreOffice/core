@@ -34,16 +34,16 @@ class ScVbaValidation : public ValidationImpl_BASE
 public:
     ScVbaValidation( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::table::XCellRange > xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange(std::move( xRange)) {}
     // Attributes
-    virtual sal_Bool SAL_CALL getIgnoreBlank() override;
-    virtual void SAL_CALL setIgnoreBlank( sal_Bool _ignoreblank ) override;
-    virtual sal_Bool SAL_CALL getCaseSensitive() override;
-    virtual void SAL_CALL setCaseSensitive( sal_Bool _bCase ) override;
-    virtual sal_Bool SAL_CALL getInCellDropdown() override;
-    virtual void SAL_CALL setInCellDropdown( sal_Bool _incelldropdown ) override;
-    virtual sal_Bool SAL_CALL getShowInput() override;
-    virtual void SAL_CALL setShowInput( sal_Bool _showinput ) override;
-    virtual sal_Bool SAL_CALL getShowError() override;
-    virtual void SAL_CALL setShowError( sal_Bool _showerror ) override;
+    virtual bool SAL_CALL getIgnoreBlank() override;
+    virtual void SAL_CALL setIgnoreBlank( bool _ignoreblank ) override;
+    virtual bool SAL_CALL getCaseSensitive() override;
+    virtual void SAL_CALL setCaseSensitive( bool _bCase ) override;
+    virtual bool SAL_CALL getInCellDropdown() override;
+    virtual void SAL_CALL setInCellDropdown( bool _incelldropdown ) override;
+    virtual bool SAL_CALL getShowInput() override;
+    virtual void SAL_CALL setShowInput( bool _showinput ) override;
+    virtual bool SAL_CALL getShowError() override;
+    virtual void SAL_CALL setShowError( bool _showerror ) override;
     virtual OUString SAL_CALL getInputTitle() override;
     virtual void SAL_CALL setInputTitle( const OUString& _inputtitle ) override;
     virtual OUString SAL_CALL getErrorTitle() override;

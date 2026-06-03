@@ -170,7 +170,7 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
 
 /* testcode
             static constexpr OUStringLiteral aURL( u"file:///e:/test.xml" );
-            SfxMedium aMedium( aURL, StreamMode::READ | STREAM_NOCREATE, sal_True );
+            SfxMedium aMedium( aURL, StreamMode::READ | STREAM_NOCREATE, true );
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
 
             aMedium.GetInStream()->Seek( 0 );

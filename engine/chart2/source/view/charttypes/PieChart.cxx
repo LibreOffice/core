@@ -677,7 +677,7 @@ void PieChart::createTextLabelShape(
 
     bool bShowLeaderLine = rSeries.getModel()
                                    ->getFastPropertyValue(PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES) // "ShowCustomLeaderLines"
-                                   .get<sal_Bool>();
+                                   .get<bool>();
     if (m_bPieLabelsAllowToMove)
     {
         ::basegfx::B2IRectangle aRect(lcl_getRect(aPieLabelInfo.xLabelGroupShape));

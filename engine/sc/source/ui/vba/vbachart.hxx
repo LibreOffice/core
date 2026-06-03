@@ -86,10 +86,10 @@ public:
     virtual ::sal_Int32 SAL_CALL Location(  ) override;
     virtual ::sal_Int32 SAL_CALL getLocation(  ) override;
     virtual void SAL_CALL setLocation( ::sal_Int32 where, const css::uno::Any& Name ) override;
-    virtual sal_Bool SAL_CALL getHasTitle(  ) override;
-    virtual void SAL_CALL setHasTitle( sal_Bool bTitle ) override;
-    virtual sal_Bool SAL_CALL getHasLegend(  ) override;
-    virtual void SAL_CALL setHasLegend( sal_Bool bLegend ) override;
+    virtual bool SAL_CALL getHasTitle(  ) override;
+    virtual void SAL_CALL setHasTitle( bool bTitle ) override;
+    virtual bool SAL_CALL getHasLegend(  ) override;
+    virtual void SAL_CALL setHasLegend( bool bLegend ) override;
     virtual void SAL_CALL setPlotBy( ::sal_Int32 xlRowCol ) override;
     virtual ::sal_Int32 SAL_CALL getPlotBy(  ) override;
     virtual css::uno::Reference< ov::excel::XChartTitle > SAL_CALL getChartTitle(  ) override;

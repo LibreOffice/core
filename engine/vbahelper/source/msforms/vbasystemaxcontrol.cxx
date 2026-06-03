@@ -53,13 +53,13 @@ uno::Any SAL_CALL VbaSystemAXControl::getValue( const OUString& aPropertyName )
 }
 
 
-sal_Bool SAL_CALL VbaSystemAXControl::hasMethod( const OUString& aName )
+bool SAL_CALL VbaSystemAXControl::hasMethod( const OUString& aName )
 {
     return m_xControlInvocation->hasMethod( aName );
 }
 
 
-sal_Bool SAL_CALL VbaSystemAXControl::hasProperty( const OUString& aName )
+bool SAL_CALL VbaSystemAXControl::hasProperty( const OUString& aName )
 {
     return m_xControlInvocation->hasProperty( aName );
 }

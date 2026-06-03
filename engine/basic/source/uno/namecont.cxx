@@ -102,7 +102,7 @@ const Type & NameContainer::getElementType()
     return mType;
 }
 
-sal_Bool NameContainer::hasElements()
+bool NameContainer::hasElements()
 {
     return !maMap.empty();
 }
@@ -123,7 +123,7 @@ Sequence< OUString > NameContainer::getElementNames()
     return comphelper::mapKeysToSequence(maMap);
 }
 
-sal_Bool NameContainer::hasByName( const OUString& aName )
+bool NameContainer::hasByName( const OUString& aName )
 {
     return maMap.contains(aName);
 }
@@ -417,7 +417,7 @@ void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XSt
 
 
 // Methods XModifiable
-sal_Bool SfxLibraryContainer::isModified()
+bool SfxLibraryContainer::isModified()
 {
     LibraryContainerMethodGuard aGuard( *this );
     if ( maModifiable.isModified() )
@@ -454,7 +454,7 @@ sal_Bool SfxLibraryContainer::isModified()
     return false;
 }
 
-void SAL_CALL SfxLibraryContainer::setModified( sal_Bool _bModified )
+void SAL_CALL SfxLibraryContainer::setModified( bool _bModified )
 {
     LibraryContainerMethodGuard aGuard( *this );
     maModifiable.setModified(_bModified, o3tl::temporary(std::unique_lock(m_aMutex)));
@@ -1823,7 +1823,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 // reflect whether the library ( in-memory ) model
 // is in sync with the library container's own storage. Currently
 // whenever the library model is written to *any* storage
-// pImplLib->implSetModified( sal_False ) is called
+// pImplLib->implSetModified( false ) is called
 // The way the code works, especially the way that sfx uses
 // temp storage when saving ( and later sets the root storage of the
 // library container ) and similar madness in dbaccess means some surgery
@@ -2063,7 +2063,7 @@ Type SAL_CALL SfxLibraryContainer::getElementType()
     return maNameContainer.getElementType();
 }
 
-sal_Bool SfxLibraryContainer::hasElements()
+bool SfxLibraryContainer::hasElements()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maNameContainer.hasElements();
@@ -2082,7 +2082,7 @@ Sequence< OUString > SfxLibraryContainer::getElementNames()
     return maNameContainer.getElementNames();
 }
 
-sal_Bool SfxLibraryContainer::hasByName( const OUString& aName )
+bool SfxLibraryContainer::hasByName( const OUString& aName )
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maNameContainer.hasByName( aName ) ;
@@ -2114,7 +2114,7 @@ SfxLibraryContainer::createLibrary_Impl(const OUString& Name, std::unique_lock<s
 }
 
 Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
-    ( const OUString& Name, const OUString& StorageURL, sal_Bool ReadOnly )
+    ( const OUString& Name, const OUString& StorageURL, bool ReadOnly )
 {
     LibraryContainerMethodGuard aGuard( *this );
     return createLibraryLink_Impl(Name, StorageURL, ReadOnly, o3tl::temporary(std::unique_lock(m_aMutex)));
@@ -2122,7 +2122,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
 
 css::uno::Reference<css::container::XNameAccess>
 SfxLibraryContainer::createLibraryLink_Impl(const OUString& Name, const OUString& StorageURL,
-                                            sal_Bool ReadOnly, std::unique_lock<std::mutex>& guard)
+                                            bool ReadOnly, std::unique_lock<std::mutex>& guard)
 {
     // TODO: Check other reasons to force ReadOnly status
     //if( !ReadOnly )
@@ -2227,7 +2227,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     }
 }
 
-sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
+bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2383,7 +2383,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
 }
 
 // Methods XLibraryContainer2
-sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLink( const OUString& Name )
+bool SAL_CALL SfxLibraryContainer::isLibraryLink( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2404,7 +2404,7 @@ OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
     return aRetStr;
 }
 
-sal_Bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
+bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2412,7 +2412,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
     return bRet;
 }
 
-void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal_Bool bReadOnly )
+void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, bool bReadOnly )
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
@@ -2642,17 +2642,17 @@ void SfxLibraryContainer::disposing(std::unique_lock<std::mutex>& guard)
 }
 
 // Methods XLibraryContainerPassword
-sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordProtected( const OUString& )
+bool SAL_CALL SfxLibraryContainer::isLibraryPasswordProtected( const OUString& )
 {
     return false;
 }
 
-sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordVerified( const OUString& )
+bool SAL_CALL SfxLibraryContainer::isLibraryPasswordVerified( const OUString& )
 {
     throw IllegalArgumentException();
 }
 
-sal_Bool SAL_CALL SfxLibraryContainer::verifyLibraryPassword( const OUString&, const OUString& )
+bool SAL_CALL SfxLibraryContainer::verifyLibraryPassword( const OUString&, const OUString& )
 {
     throw IllegalArgumentException();
 }
@@ -2749,12 +2749,12 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
 
 
 // XVBACompatibility
-sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode()
+bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode()
 {
     return mbVBACompat;
 }
 
-void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( sal_Bool _vbacompatmodeon )
+void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( bool _vbacompatmodeon )
 {
     /*  The member variable mbVBACompat must be set first, the following call
         to getBasicManager() may call getVBACompatibilityMode() which returns
@@ -2890,7 +2890,7 @@ void SAL_CALL SfxLibraryContainer::removeVetoableChangeListener(
 }
 
 // Methods XServiceInfo
-sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServiceName )
+bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -2965,7 +2965,7 @@ Type SfxLibrary::getElementType()
     return maNameContainer.getElementType();
 }
 
-sal_Bool SfxLibrary::hasElements()
+bool SfxLibrary::hasElements()
 {
     return maNameContainer.hasElements();
 }
@@ -2983,7 +2983,7 @@ Sequence< OUString > SfxLibrary::getElementNames()
     return maNameContainer.getElementNames();
 }
 
-sal_Bool SfxLibrary::hasByName( const OUString& aName )
+bool SfxLibrary::hasByName( const OUString& aName )
 {
     bool bRet = maNameContainer.hasByName( aName );
     return bRet;
@@ -3189,12 +3189,12 @@ ScriptSubPackageIterator::ScriptSubPackageIterator( Reference< deployment::XPack
         return;
     }
     // Check if parent package is registered
-    beans::Optional< beans::Ambiguous<sal_Bool> > option( m_xMainPackage->isRegistered
+    beans::Optional< beans::Ambiguous<bool> > option( m_xMainPackage->isRegistered
         ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
     bool bRegistered = false;
     if( option.IsPresent )
     {
-        beans::Ambiguous<sal_Bool> const & reg = option.Value;
+        beans::Ambiguous<bool> const & reg = option.Value;
         if( !reg.IsAmbiguous && reg.Value )
         {
             bRegistered = true;

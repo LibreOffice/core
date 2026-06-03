@@ -65,7 +65,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
@@ -131,7 +131,7 @@ OUString SAL_CALL XMLSecurityContext_NssImpl::getImplementationName() {
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSecurityContext_NssImpl::supportsService( const OUString& serviceName) {
+bool SAL_CALL XMLSecurityContext_NssImpl::supportsService( const OUString& serviceName) {
     return cppu::supportsService(this, serviceName);
 }
 

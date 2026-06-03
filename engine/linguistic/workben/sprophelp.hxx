@@ -78,11 +78,11 @@ public:
             throw(RuntimeException) = 0;
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         addLinguServiceEventListener(
                 const Reference< XLinguServiceEventListener >& rxListener )
             throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         removeLinguServiceEventListener(
                 const Reference< XLinguServiceEventListener >& rxListener )
             throw(RuntimeException);
@@ -105,18 +105,18 @@ class PropertyHelper_Spell :
     public PropertyChgHelper
 {
     // default values
-    sal_Bool    bIsIgnoreControlCharacters;
-    sal_Bool    bIsUseDictionaryList;
-    sal_Bool    bIsSpellUpperCase;
-    sal_Bool    bIsSpellWithDigits;
-    sal_Bool    bIsSpellCapitalization;
+    bool    bIsIgnoreControlCharacters;
+    bool    bIsUseDictionaryList;
+    bool    bIsSpellUpperCase;
+    bool    bIsSpellWithDigits;
+    bool    bIsSpellCapitalization;
 
     // return values, will be set to default value or current temporary value
-    sal_Bool    bResIsIgnoreControlCharacters;
-    sal_Bool    bResIsUseDictionaryList;
-    sal_Bool    bResIsSpellUpperCase;
-    sal_Bool    bResIsSpellWithDigits;
-    sal_Bool    bResIsSpellCapitalization;
+    bool    bResIsIgnoreControlCharacters;
+    bool    bResIsUseDictionaryList;
+    bool    bResIsSpellUpperCase;
+    bool    bResIsSpellWithDigits;
+    bool    bResIsSpellCapitalization;
 
 
     // disallow use of copy-constructor and assignment-operator
@@ -138,11 +138,11 @@ public:
 
     void    SetTmpPropVals( const PropertyValues &rPropVals );
 
-    sal_Bool    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
-    sal_Bool    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
-    sal_Bool    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
-    sal_Bool    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
-    sal_Bool    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
+    bool    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
+    bool    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
+    bool    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
+    bool    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
+    bool    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
 };
 
 

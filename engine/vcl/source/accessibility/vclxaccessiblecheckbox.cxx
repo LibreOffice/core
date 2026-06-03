@@ -156,7 +156,7 @@ sal_Int32 VCLXAccessibleCheckBox::getAccessibleActionCount( )
 }
 
 
-sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex )
+bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -253,7 +253,7 @@ Any VCLXAccessibleCheckBox::getCurrentValue(  )
 }
 
 
-sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber )
+bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber )
 {
     OExternalLockGuard aGuard( this );
 

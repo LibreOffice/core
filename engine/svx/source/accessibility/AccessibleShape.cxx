@@ -693,7 +693,7 @@ void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int64 )
 }
 
 
-sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     uno::Reference<XAccessible> xAcc = getAccessibleChild( nChildIndex );
     uno::Reference<XAccessibleContext> xContext;
@@ -1198,7 +1198,7 @@ sal_Int32 SAL_CALL AccessibleShape::getHyperLinkIndex( sal_Int32 )
 }
 // XAccessibleText
 sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ){return 0;}
-sal_Bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ){return false;}
+bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ){return false;}
 sal_Unicode SAL_CALL AccessibleShape::getCharacter( sal_Int32 ){return 0;}
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleShape::getCharacterAttributes( sal_Int32, const css::uno::Sequence< OUString >& )
 {
@@ -1214,7 +1214,7 @@ sal_Int32 SAL_CALL AccessibleShape::getIndexAtPoint( const css::awt::Point& ){re
 OUString SAL_CALL AccessibleShape::getSelectedText(  ){return OUString();}
 sal_Int32 SAL_CALL AccessibleShape::getSelectionStart(  ){return 0;}
 sal_Int32 SAL_CALL AccessibleShape::getSelectionEnd(  ){return 0;}
-sal_Bool SAL_CALL AccessibleShape::setSelection( sal_Int32, sal_Int32 ){return true;}
+bool SAL_CALL AccessibleShape::setSelection( sal_Int32, sal_Int32 ){return true;}
 OUString SAL_CALL AccessibleShape::getText(  ){return OUString();}
 OUString SAL_CALL AccessibleShape::getTextRange( sal_Int32, sal_Int32 ){return OUString();}
 css::accessibility::TextSegment SAL_CALL AccessibleShape::getTextAtIndex( sal_Int32, sal_Int16 )
@@ -1232,8 +1232,8 @@ css::accessibility::TextSegment SAL_CALL AccessibleShape::getTextBehindIndex( sa
     css::accessibility::TextSegment aResult;
     return aResult;
 }
-sal_Bool SAL_CALL AccessibleShape::copyText( sal_Int32, sal_Int32 ){return true;}
-sal_Bool SAL_CALL AccessibleShape::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType ){return false;}
+bool SAL_CALL AccessibleShape::copyText( sal_Int32, sal_Int32 ){return true;}
+bool SAL_CALL AccessibleShape::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType ){return false;}
 
 } // end of namespace accessibility
 

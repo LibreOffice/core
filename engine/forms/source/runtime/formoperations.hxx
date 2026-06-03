@@ -106,7 +106,7 @@ namespace frm
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XFormOperations
@@ -116,13 +116,13 @@ namespace frm
         virtual css::uno::Reference< css::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() override;
         virtual void SAL_CALL setFeatureInvalidation(const css::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) override;
         virtual css::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) override;
-        virtual sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) override;
+        virtual bool SAL_CALL isEnabled(::sal_Int16 Feature) override;
         virtual void SAL_CALL execute(::sal_Int16 Feature) override;
         virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const css::uno::Sequence< css::beans::NamedValue >& Arguments) override;
-        virtual sal_Bool SAL_CALL commitCurrentRecord(sal_Bool & RecordInserted) override;
-        virtual sal_Bool SAL_CALL commitCurrentControl() override;
-        virtual sal_Bool SAL_CALL isInsertionRow() override;
-        virtual sal_Bool SAL_CALL isModifiedRow() override;
+        virtual bool SAL_CALL commitCurrentRecord(bool & RecordInserted) override;
+        virtual bool SAL_CALL commitCurrentControl() override;
+        virtual bool SAL_CALL isInsertionRow() override;
+        virtual bool SAL_CALL isModifiedRow() override;
 
         // XRowSetListener
         virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) override;
@@ -264,7 +264,7 @@ namespace frm
             @precond
                 our mutex is locked
         */
-        bool        impl_commitCurrentRecord_throw( sal_Bool* _pRecordInserted = nullptr ) const;
+        bool        impl_commitCurrentRecord_throw( bool* _pRecordInserted = nullptr ) const;
 
         /** impl-version of commitCurrentControl, which can be called in const-contexts
 

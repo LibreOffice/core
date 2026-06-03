@@ -310,7 +310,7 @@ FmSearchEngine::SearchResult FmSearchEngine::SearchSpecial(bool _bSearchForNull,
 
         // the content to be compared currently
         iterFieldLoop->xContents->getString();  // needed for wasNull
-        bFound = _bSearchForNull == bool(iterFieldLoop->xContents->wasNull());
+        bFound = _bSearchForNull == iterFieldLoop->xContents->wasNull();
         if (bFound)
             break;
 

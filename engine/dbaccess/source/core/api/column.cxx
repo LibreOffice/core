@@ -80,7 +80,7 @@ OUString OColumn::getImplementationName(  )
     return u"com.sun.star.sdb.OColumn"_ustr;
 }
 
-sal_Bool OColumn::supportsService( const OUString& _rServiceName )
+bool OColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -171,7 +171,7 @@ OUString OColumns::getImplementationName(  )
     return u"com.sun.star.sdb.OColumns"_ustr;
 }
 
-sal_Bool OColumns::supportsService( const OUString& _rServiceName )
+bool OColumns::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

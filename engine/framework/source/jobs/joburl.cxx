@@ -215,8 +215,8 @@ bool JobURL::implst_split( /*IN*/  std::u16string_view sPart           ,
     // first search for the given identifier
     bool bPartFound = o3tl::matchIgnoreAsciiCase(sPart, std::string_view(pPartIdentifier,nPartLength));
 
-    // If it exist - we can split the part and return sal_True.
-    // Otherwise we do nothing and return sal_False.
+    // If it exist - we can split the part and return true.
+    // Otherwise we do nothing and return false.
     if (bPartFound)
     {
         // But may the part has optional arguments - separated by a "?".

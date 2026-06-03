@@ -93,9 +93,9 @@ public:
                             // XFormLayerAccess
     virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL
                             getFormController( const css::uno::Reference< css::form::XForm >& Form ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                             isFormDesignMode(  ) override;
-    virtual void SAL_CALL   setFormDesignMode( sal_Bool DesignMode ) override;
+    virtual void SAL_CALL   setFormDesignMode( bool DesignMode ) override;
 
                             // XControlAccess
     virtual css::uno::Reference< css::awt::XControl > SAL_CALL
@@ -103,7 +103,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XTypeProvider
@@ -195,7 +195,7 @@ public:
     void                    RangeSelChanged( const OUString& rText );
 
                             // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) override;
+    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
     virtual css::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL   addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL   removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
@@ -231,7 +231,7 @@ public:
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
                             // XSpreadsheetView
     virtual css::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
@@ -250,7 +250,7 @@ public:
     virtual void SAL_CALL removeActivationEventListener( const css::uno::Reference< css::sheet::XActivationEventListener >& aListener ) override;
 
                             // XViewSplitable
-    virtual sal_Bool SAL_CALL getIsWindowSplit() override;
+    virtual bool SAL_CALL getIsWindowSplit() override;
     virtual sal_Int32 SAL_CALL getSplitHorizontal() override;
     virtual sal_Int32 SAL_CALL getSplitVertical() override;
     virtual sal_Int32 SAL_CALL getSplitColumn() override;
@@ -258,7 +258,7 @@ public:
     virtual void SAL_CALL   splitAtPosition( sal_Int32 nPixelX, sal_Int32 nPixelY ) override;
 
                             // XViewFreezable
-    virtual sal_Bool SAL_CALL hasFrozenPanes() override;
+    virtual bool SAL_CALL hasFrozenPanes() override;
     virtual void SAL_CALL   freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRows ) override;
 
                             // XRangeSelection
@@ -271,7 +271,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XTypeProvider

@@ -368,9 +368,9 @@ LanguageToolGrammarChecker::LanguageToolGrammarChecker(
 
 LanguageToolGrammarChecker::~LanguageToolGrammarChecker() {}
 
-sal_Bool SAL_CALL LanguageToolGrammarChecker::isSpellChecker() { return false; }
+bool SAL_CALL LanguageToolGrammarChecker::isSpellChecker() { return false; }
 
-sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
+bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
 {
     if (!m_aSuppLocales.hasElements())
         getLocales();
@@ -568,7 +568,7 @@ OUString SAL_CALL LanguageToolGrammarChecker::getImplementationName()
     return u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr;
 }
 
-sal_Bool SAL_CALL LanguageToolGrammarChecker::supportsService(const OUString& ServiceName)
+bool SAL_CALL LanguageToolGrammarChecker::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -120,7 +120,7 @@ public:
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
     virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() = 0;
     virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+    virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
 class GtkDnDTransferable;
@@ -141,7 +141,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
@@ -194,7 +194,7 @@ public:
     virtual ~GtkInstDragSource() override;
 
     // XDragSource
-    virtual sal_Bool    SAL_CALL isDragImageSupported() override;
+    virtual bool    SAL_CALL isDragImageSupported() override;
     virtual sal_Int32   SAL_CALL getDefaultCursor(sal_Int8 dragAction) override;
     virtual void        SAL_CALL startDrag(
         const css::datatransfer::dnd::DragGestureEvent& trigger, sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
@@ -205,7 +205,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 

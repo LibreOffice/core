@@ -274,7 +274,7 @@ namespace pcr
         return u"com.sun.star.comp.extensions.GenericPropertyHandler"_ustr;
     }
 
-    sal_Bool SAL_CALL GenericPropertyHandler::supportsService( const OUString& ServiceName )
+    bool SAL_CALL GenericPropertyHandler::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -577,23 +577,23 @@ namespace pcr
         return aDescriptor;
     }
 
-    sal_Bool SAL_CALL GenericPropertyHandler::isComposable( const OUString& /*_rPropertyName*/ )
+    bool SAL_CALL GenericPropertyHandler::isComposable( const OUString& /*_rPropertyName*/ )
     {
         return false;
     }
 
-    InteractiveSelectionResult SAL_CALL GenericPropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
+    InteractiveSelectionResult SAL_CALL GenericPropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
     {
         OSL_FAIL( "GenericPropertyHandler::onInteractivePropertySelection: I'm too dumb to know anything about property browse buttons!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
-    void SAL_CALL GenericPropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ )
+    void SAL_CALL GenericPropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )
     {
         OSL_FAIL( "GenericPropertyHandler::actuatingPropertyChanged: no no no, I did not register for any actuating properties!" );
     }
 
-    sal_Bool SAL_CALL GenericPropertyHandler::suspend( sal_Bool /*_bSuspend*/ )
+    bool SAL_CALL GenericPropertyHandler::suspend( bool /*_bSuspend*/ )
     {
         return true;
     }

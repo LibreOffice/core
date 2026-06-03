@@ -73,7 +73,7 @@ OUString IdlReflectionServiceImpl::getImplementationName()
     return u"com.sun.star.comp.stoc.CoreReflection"_ustr;
 }
 
-sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
+bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -216,7 +216,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
     return aRet;
 }
 
-sal_Bool IdlReflectionServiceImpl::hasByHierarchicalName( const OUString & rName )
+bool IdlReflectionServiceImpl::hasByHierarchicalName( const OUString & rName )
 {
     try
     {

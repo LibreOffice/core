@@ -1345,9 +1345,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf159931_slideLayouts)
     OUString sSlideLayoutName2 = sRelativeLayoutPath2.getToken(2, '/');
 
     CPPUNIT_ASSERT_EQUAL(true,
-                         bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName1)));
+                         xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName1));
     CPPUNIT_ASSERT_EQUAL(true,
-                         bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName2)));
+                         xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName2));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf163483_export_math_fallback)
@@ -1550,7 +1550,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConvertWithMasterDeduplication)
         // i.e. the referenced slideLayout file was missing on export.
         OUString sSlideLayoutName = sRelativeLayoutPath.getToken(2, '/');
         CPPUNIT_ASSERT_EQUAL(true,
-                             bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName)));
+                             xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName));
     }
 }
 

@@ -71,12 +71,12 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XStyle
-    virtual sal_Bool SAL_CALL isUserDefined() override;
-    virtual sal_Bool SAL_CALL isInUse() override;
+    virtual bool SAL_CALL isUserDefined() override;
+    virtual bool SAL_CALL isInUse() override;
     virtual OUString SAL_CALL getParentStyle() override;
     virtual void SAL_CALL setParentStyle( const OUString& aParentStyle ) override;
 
@@ -87,11 +87,11 @@ public:
     // XNameAccess
     virtual Any SAL_CALL getByName( const OUString& aName ) override;
     virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
@@ -113,8 +113,8 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) override;
 
     // XModifiable
-    virtual sal_Bool SAL_CALL isModified() override;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual bool SAL_CALL isModified() override;
+    virtual void SAL_CALL setModified( bool bModified ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const Reference< XModifyListener >& aListener ) override;
@@ -149,7 +149,7 @@ class TableDesignFamily : public ::cppu::WeakImplHelper< XNameContainer, XNamed,
 public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XNamed
@@ -159,11 +159,11 @@ public:
     // XNameAccess
     virtual Any SAL_CALL getByName( const OUString& aName ) override;
     virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
     virtual Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
@@ -235,7 +235,7 @@ OUString SAL_CALL TableDesignStyle::getImplementationName()
     return u"TableDesignStyle"_ustr;
 }
 
-sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName )
+bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -246,7 +246,7 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames()
 }
 
 // XStyle
-sal_Bool SAL_CALL TableDesignStyle::isUserDefined()
+bool SAL_CALL TableDesignStyle::isUserDefined()
 {
     return mbUserDefined;
 }
@@ -256,7 +256,7 @@ void TableDesignStyle::resetUserDefined()
     mbUserDefined = false;
 }
 
-sal_Bool SAL_CALL TableDesignStyle::isInUse()
+bool SAL_CALL TableDesignStyle::isInUse()
 {
     std::unique_lock aGuard( m_aMutex );
     if (maModifyListeners.getLength(aGuard))
@@ -320,7 +320,7 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames()
 }
 
 
-sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )
+bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )
 {
     const CellStyleNameMap& rMap = getCellStyleNameMap();
 
@@ -338,7 +338,7 @@ Type SAL_CALL TableDesignStyle::getElementType()
 }
 
 
-sal_Bool SAL_CALL TableDesignStyle::hasElements()
+bool SAL_CALL TableDesignStyle::hasElements()
 {
     return true;
 }
@@ -474,12 +474,12 @@ void TableDesignStyle::removeVetoableChangeListener( const OUString&,const Refer
 
 // XModifiable
 
-sal_Bool TableDesignStyle::isModified()
+bool TableDesignStyle::isModified()
 {
     return mbModified;
 }
 
-void TableDesignStyle::setModified( sal_Bool bModified )
+void TableDesignStyle::setModified( bool bModified )
 {
     mbModified = bModified;
     notifyModifyListener();
@@ -550,7 +550,7 @@ OUString SAL_CALL TableDesignFamily::getImplementationName()
     return u"TableDesignFamily"_ustr;
 }
 
-sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceName )
+bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -598,7 +598,7 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames()
 }
 
 
-sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName )
+bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -616,7 +616,7 @@ Type SAL_CALL TableDesignFamily::getElementType()
 }
 
 
-sal_Bool SAL_CALL TableDesignFamily::hasElements()
+bool SAL_CALL TableDesignFamily::hasElements()
 {
     SolarMutexGuard aGuard;
 

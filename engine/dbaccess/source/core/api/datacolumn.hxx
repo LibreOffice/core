@@ -62,9 +62,9 @@ namespace dbaccess
         virtual void SAL_CALL disposing() override;
 
     // css::sdb::XColumn
-        virtual sal_Bool SAL_CALL wasNull(  ) override;
+        virtual bool SAL_CALL wasNull(  ) override;
         virtual OUString SAL_CALL getString(  ) override;
-        virtual sal_Bool SAL_CALL getBoolean(  ) override;
+        virtual bool SAL_CALL getBoolean(  ) override;
         virtual sal_Int8 SAL_CALL getByte(  ) override;
         virtual sal_Int16 SAL_CALL getShort(  ) override;
         virtual sal_Int32 SAL_CALL getInt(  ) override;
@@ -85,7 +85,7 @@ namespace dbaccess
 
     // css::sdb::XColumnUpdate
         virtual void SAL_CALL updateNull(  ) override;
-        virtual void SAL_CALL updateBoolean( sal_Bool x ) override;
+        virtual void SAL_CALL updateBoolean( bool x ) override;
         virtual void SAL_CALL updateByte( sal_Int8 x ) override;
         virtual void SAL_CALL updateShort( sal_Int16 x ) override;
         virtual void SAL_CALL updateInt( sal_Int32 x ) override;

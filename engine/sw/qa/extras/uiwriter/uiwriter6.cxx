@@ -2494,7 +2494,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
             LinguMgr::GetLinguPropertySet());
 
         // Spell with digits is disabled by default
-        CPPUNIT_ASSERT_EQUAL(sal_False, xLinguProperties->getIsSpellWithDigits());
+        CPPUNIT_ASSERT_EQUAL(false, xLinguProperties->getIsSpellWithDigits());
 
         emulateTyping(u"ErrorError Treee2 ");
         SwCursorShell* pShell(pDoc->GetEditShell());

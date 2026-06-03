@@ -142,7 +142,7 @@ public:
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(
+    virtual bool SAL_CALL supportsService(
         const OUString & ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -236,8 +236,8 @@ public:
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
 
     // css::util::XModifiable:
-    virtual sal_Bool SAL_CALL isModified(  ) override;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual bool SAL_CALL isModified(  ) override;
+    virtual void SAL_CALL setModified( bool bModified ) override;
 
     // css::util::XModifyBroadcaster:
     virtual void SAL_CALL addModifyListener(
@@ -347,7 +347,7 @@ public:
         return u"CompatWriterDocPropsImpl"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -1348,7 +1348,7 @@ SfxDocumentMetaData::getImplementationName()
     return u"SfxDocumentMetaData"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SfxDocumentMetaData::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
@@ -2196,7 +2196,7 @@ SfxDocumentMetaData::createClone()
 }
 
 // css::util::XModifiable:
-sal_Bool SAL_CALL SfxDocumentMetaData::isModified(  )
+bool SAL_CALL SfxDocumentMetaData::isModified(  )
 {
     std::unique_lock g(m_aMutex);
     checkInit(g);
@@ -2205,7 +2205,7 @@ sal_Bool SAL_CALL SfxDocumentMetaData::isModified(  )
     return m_isModified || (xMB.is() && xMB->isModified());
 }
 
-void SAL_CALL SfxDocumentMetaData::setModified( sal_Bool bModified )
+void SAL_CALL SfxDocumentMetaData::setModified( bool bModified )
 {
     css::uno::Reference<css::util::XModifiable> xMB;
     { // do not lock mutex while notifying (#i93514#) to prevent deadlock

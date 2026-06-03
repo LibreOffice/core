@@ -1278,7 +1278,7 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
 
     if ( nFix16Angle )
     {
-        bool bRotateWithShape = true;   // sal_True seems to be default
+        bool bRotateWithShape = true;   // true seems to be default
         sal_uInt64 nPos = rIn.Tell();
         if ( const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.SeekToContent( rIn, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART ) )
         {
@@ -7263,12 +7263,12 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 
                 // don't modify the object
                 //TODO/LATER: remove those hacks, that needs to be done differently!
-                //xIPObj->EnableSetModified( sal_False );
+                //xIPObj->EnableSetModified( false );
                 awt::Size aSize;
                 aSize.Width = aSz.Width();
                 aSize.Height = aSz.Height();
                 xObj->setVisualAreaSize( nViewAspect, aSize );
-                //xIPObj->EnableSetModified( sal_True );
+                //xIPObj->EnableSetModified( true );
             }
             else if ( sStarName == "smath" )
             {   // SJ: force the object to recalc its visarea
@@ -7446,9 +7446,9 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
                             aAwtSz.Width = rVisArea.GetWidth();
                             aAwtSz.Height = rVisArea.GetHeight();
                         }
-                        //xInplaceObj->EnableSetModified( sal_False );
+                        //xInplaceObj->EnableSetModified( false );
                         xObj->setVisualAreaSize( nAspect, aAwtSz );
-                        //xInplaceObj->EnableSetModified( sal_True );
+                        //xInplaceObj->EnableSetModified( true );
                     }
                     catch( const uno::Exception& )
                     {

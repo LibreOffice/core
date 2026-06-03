@@ -469,7 +469,7 @@ namespace frm
 
             case StateChangedType::Mirroring:
             {
-                sal_Bool bIsRTLEnabled( IsRTLEnabled() );
+                bool bIsRTLEnabled( IsRTLEnabled() );
                 m_pToolbar->EnableRTL( bIsRTLEnabled );
                 forEachItemWindow( &NavigationToolBar::enableItemRTL, &bIsRTLEnabled );
                 Resize();
@@ -615,7 +615,7 @@ namespace frm
 
     void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled )
     {
-        _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
+        _pItemWindow->EnableRTL( *static_cast< const bool* >( _pIsRTLEnabled ) );
     }
 
     RecordPositionInput::RecordPositionInput(vcl::Window* pParent)

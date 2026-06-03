@@ -112,8 +112,8 @@ public:
     virtual Any SAL_CALL invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName, const Any& aValue ) override;
     virtual Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
     virtual  Any SAL_CALL queryInterface( const Type& aType ) override;
 
     virtual Sequence< Type > SAL_CALL getTypes() override;
@@ -319,7 +319,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName )
     return aRet;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 DocObjectWrapper::hasMethod( const OUString& aName )
 {
     if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
@@ -327,7 +327,7 @@ DocObjectWrapper::hasMethod( const OUString& aName )
     return getMethod( aName ).is();
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 DocObjectWrapper::hasProperty( const OUString& aName )
 {
     bool bRes = false;

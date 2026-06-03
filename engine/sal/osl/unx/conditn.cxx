@@ -61,7 +61,7 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
         delete pCond;
 }
 
-sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
+bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
    oslConditionImpl* pCond;
 
@@ -80,7 +80,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 
 }
 
-sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
+bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
 
@@ -130,7 +130,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     return osl_cond_result_ok;
 }
 
-sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
+bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
     bool State;
     oslConditionImpl* pCond;

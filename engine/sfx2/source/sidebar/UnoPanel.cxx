@@ -78,7 +78,7 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
     }
 }
 
-sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
+bool SAL_CALL SfxUnoPanel::isExpanded()
 {
     SolarMutexGuard aGuard;
 
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
 }
 
 
-void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
+void SAL_CALL SfxUnoPanel::expand( const bool bCollapseOther )
 {
 
     SolarMutexGuard aGuard;

@@ -124,7 +124,7 @@ namespace sd::colortoolpanel
             {
                 const Rectangle aPanelAnchorSize( xParentWindow->getPosSize() );
                 m_xWindow->setPosSize( 0, 0, aPanelAnchorSize.Width, aPanelAnchorSize.Height, PosSize::POSSIZE );
-                m_xWindow->setVisible( sal_True );
+                m_xWindow->setVisible( true );
             }
         }
         osl_atomic_decrement( &m_refCount );
@@ -158,12 +158,12 @@ namespace sd::colortoolpanel
         return m_xResourceId;
     }
 
-    sal_Bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
+    bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
             throw DisposedException( OUString(), *this );
-        return sal_False;
+        return false;
     }
 
     void SAL_CALL SingleColorPanel::windowPaint( const PaintEvent& i_rEvent ) throw (RuntimeException)

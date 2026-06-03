@@ -235,7 +235,7 @@ void EscherPropertyContainer::AddOpt(
     if ( bBlib )                // bBlib is only valid when fComplex = 0
         nPropID |= 0x4000;
     if ( !rProp.empty() )
-        nPropID |= 0x8000;      // fComplex = sal_True;
+        nPropID |= 0x8000;      // fComplex = true;
 
     for( size_t i = 0; i < pSortStruct.size(); i++ )
     {
@@ -710,7 +710,7 @@ void EscherPropertyContainer::CreateTextProperties(
 // i63936 not setting autogrowheight, because otherwise
 // the minframeheight of the text will be ignored
 //
-//      if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextAutoGrowHeight", sal_True ) )
+//      if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextAutoGrowHeight", true ) )
 //          aAny >>= bAutoGrowHeight;
     }
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, u"TextLeftDistance"_ustr ) )

@@ -41,7 +41,7 @@ css::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  )
     return { isNew()?u"com.sun.star.sdbcx.KeyColumnDescriptor"_ustr:u"com.sun.star.sdbcx.KeyColumn"_ustr };
 }
 
-sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

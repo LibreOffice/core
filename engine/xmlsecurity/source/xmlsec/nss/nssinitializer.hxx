@@ -50,18 +50,18 @@ public:
 
     /* XNSSInitializer */
     virtual OUString SAL_CALL getNSSPath() override;
-    virtual sal_Bool SAL_CALL getIsNSSinitialized() override;
+    virtual bool SAL_CALL getIsNSSinitialized() override;
     virtual css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL getNSSProfiles() override;
 
     /* XDigestContextSupplier */
     virtual css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams ) override;
 
     /* XCipherContextSupplier */
-    virtual css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, sal_Bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams ) override;
+    virtual css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams ) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

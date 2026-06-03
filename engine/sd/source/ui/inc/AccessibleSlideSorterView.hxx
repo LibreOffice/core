@@ -124,7 +124,7 @@ public:
     virtual void SAL_CALL
         selectAccessibleChild (sal_Int64 nChildIndex) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
 
     virtual void SAL_CALL
@@ -148,7 +148,7 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         supportsService (const OUString& sServiceName) override;
 
     virtual css::uno::Sequence< OUString> SAL_CALL

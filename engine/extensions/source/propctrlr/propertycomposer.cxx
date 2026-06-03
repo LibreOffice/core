@@ -296,14 +296,14 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL PropertyComposer::isComposable( const OUString& _rPropertyName )
+    bool SAL_CALL PropertyComposer::isComposable( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->isComposable( _rPropertyName );
     }
 
 
-    InteractiveSelectionResult SAL_CALL PropertyComposer::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult SAL_CALL PropertyComposer::onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -366,7 +366,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL PropertyComposer::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit )
+    void SAL_CALL PropertyComposer::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -444,7 +444,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL PropertyComposer::suspend( sal_Bool _bSuspend )
+    bool SAL_CALL PropertyComposer::suspend( bool _bSuspend )
     {
         MethodGuard aGuard( *this );
         for ( PropertyComposer::HandlerArray::const_iterator loop = m_aSlaveHandlers.begin();

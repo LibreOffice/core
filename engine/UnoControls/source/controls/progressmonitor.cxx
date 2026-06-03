@@ -102,7 +102,7 @@ ProgressMonitor::~ProgressMonitor()
 void SAL_CALL ProgressMonitor::addText(
     const OUString& rTopic,
     const OUString& rText,
-    sal_Bool bbeforeProgress
+    bool bbeforeProgress
 )
 {
     // Ready for multithreading
@@ -142,7 +142,7 @@ void SAL_CALL ProgressMonitor::addText(
 }
 
 //  XProgressMonitor
-void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbeforeProgress )
+void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, bool bbeforeProgress )
 {
     // Safe impossible cases
     // Check valid call of this method.
@@ -184,7 +184,7 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
 void SAL_CALL ProgressMonitor::updateText (
     const OUString& rTopic,
     const OUString& rText,
-    sal_Bool bbeforeProgress
+    bool bbeforeProgress
 )
 {
     // Safe impossible cases
@@ -370,7 +370,7 @@ void SAL_CALL ProgressMonitor::createPeer ( const cpo::uno::Reference< XToolkit 
 }
 
 //  XControl
-sal_Bool SAL_CALL ProgressMonitor::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
+bool SAL_CALL ProgressMonitor::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;

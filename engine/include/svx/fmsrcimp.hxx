@@ -88,7 +88,7 @@ public:
     virtual ~FmRecordCountListener() override;
 
     //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject)
-    //  virtual sal_Bool queryInterface(css::uno::Uik aUik, css::uno::Reference< css::uno::XInterface >& rOut);
+    //  virtual bool queryInterface(css::uno::Uik aUik, css::uno::Reference< css::uno::XInterface >& rOut);
 
     // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -251,7 +251,7 @@ public:
     sal_uInt16  GetLevShorter() const               { return m_nLevShorter; }
     void        SetLevLonger(sal_uInt16 nHowMuch)   { m_nLevLonger = nHowMuch; }
     sal_uInt16  GetLevLonger() const                { return m_nLevLonger; }
-    // all Lev. values will only be considered in case of m_bLevenshtein==sal_True
+    // all Lev. values will only be considered in case of m_bLevenshtein==true
 
     void        SetTransliterationFlags(TransliterationFlags _nFlags)  { m_nTransliterationFlags = _nFlags; }
     TransliterationFlags
@@ -259,7 +259,7 @@ public:
 
     void    SetPosition(sal_uInt16 nValue)      { m_nPosition = nValue; }
     sal_uInt16  GetPosition() const             { return m_nPosition; }
-    // position will be ignored in case of m_bWildCard==sal_True
+    // position will be ignored in case of m_bWildCard==true
 
 public:
     /** two constructs, both analogical to FmSearchDialog, therefore look this up for explanations...
@@ -284,11 +284,11 @@ public:
 
     /// search for the next appearance (for nDirection values check DIRECTION_*-defines)
     void SearchNext(const OUString& strExpression);
-    /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
+    /// analogous, search for "NULL" (_bSearchForNull==true) or "not NULL"
     void SearchNextSpecial(bool _bSearchForNull);
     /// search for the next appearance, dependent on nDirection from the start or end
     void StartOver(const OUString& strExpression);
-    /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
+    /// analogous, search for "NULL" (_bSearchForNull==true) or "not NULL"
     void StartOverSpecial(bool _bSearchForNull);
     /// invalidate previous search reference
     void InvalidatePreviousLoc();

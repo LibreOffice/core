@@ -96,7 +96,7 @@ OUString PromptEdit(sal_IntPtr hWnd, OUString const & connstr)
             IDispatch* piDispatch = piTmpConnection.get();
             VARIANT_BOOL pbSuccess;
             sal::systools::ThrowIfFailed(dlPrompt->PromptEdit(&piDispatch, &pbSuccess));
-            if (!pbSuccess) //if user press cancel then sal_False == pbSuccess
+            if (!pbSuccess) //if user press cancel then false == pbSuccess
                 return connstr;
         }
         catch (const sal::systools::ComError&)

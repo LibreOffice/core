@@ -63,7 +63,7 @@ public:
     explicit ODriverEnumeration(DriverArray&& _rDriverSequence);
 
 // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements( ) override;
+    virtual bool SAL_CALL hasMoreElements( ) override;
     virtual Any SAL_CALL nextElement( ) override;
 };
 
@@ -80,7 +80,7 @@ ODriverEnumeration::~ODriverEnumeration()
 }
 
 
-sal_Bool SAL_CALL ODriverEnumeration::hasMoreElements(  )
+bool SAL_CALL ODriverEnumeration::hasMoreElements(  )
 {
     return m_aPos != m_aDrivers.end();
 }
@@ -443,7 +443,7 @@ css::uno::Type SAL_CALL OSDBCDriverManager::getElementType(  )
 }
 
 
-sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  )
+bool SAL_CALL OSDBCDriverManager::hasElements(  )
 {
     MutexGuard aGuard(m_aMutex);
     return !(m_aDriversBS.empty() && m_aDriversRT.empty());
@@ -455,7 +455,7 @@ OUString SAL_CALL OSDBCDriverManager::getImplementationName(  )
     return u"com.sun.star.comp.sdbc.OSDBCDriverManager"_ustr;
 }
 
-sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

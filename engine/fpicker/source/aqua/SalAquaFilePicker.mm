@@ -182,7 +182,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute()
 
 #pragma mark XFilePicker
 
-void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( sal_Bool /* bMode */ )
+void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( bool /* bMode */ )
 {
     SolarMutexGuard aGuard;
 
@@ -348,7 +348,7 @@ uno::Any SAL_CALL SalAquaFilePicker::getValue( sal_Int16 nControlId, sal_Int16 n
     return aValue;
 }
 
-void SAL_CALL SalAquaFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnable )
+void SAL_CALL SalAquaFilePicker::enableControl( sal_Int16 nControlId, bool bEnable )
 {
     m_pControlHelper->enableControl(nControlId, bEnable);
 }
@@ -476,7 +476,7 @@ OUString SAL_CALL SalAquaFilePicker::getImplementationName()
     return "com.sun.star.ui.dialogs.SalAquaFilePicker";
 }
 
-sal_Bool SAL_CALL SalAquaFilePicker::supportsService( const OUString& sServiceName )
+bool SAL_CALL SalAquaFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

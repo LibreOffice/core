@@ -172,7 +172,7 @@ public:
     virtual OUString SAL_CALL getUriReference() override
     { return m_base.getUriReference(); }
 
-    virtual sal_Bool SAL_CALL isAbsolute() override
+    virtual bool SAL_CALL isAbsolute() override
     { return m_base.isAbsolute(); }
 
     virtual OUString SAL_CALL getScheme() override
@@ -181,10 +181,10 @@ public:
     virtual OUString SAL_CALL getSchemeSpecificPart() override
     { return m_base.getSchemeSpecificPart(); }
 
-    virtual sal_Bool SAL_CALL isHierarchical() override
+    virtual bool SAL_CALL isHierarchical() override
     { return m_base.isHierarchical(); }
 
-    virtual sal_Bool SAL_CALL hasAuthority() override
+    virtual bool SAL_CALL hasAuthority() override
     { return m_base.hasAuthority(); }
 
     virtual OUString SAL_CALL getAuthority() override
@@ -193,7 +193,7 @@ public:
     virtual OUString SAL_CALL getPath() override
     { return m_base.getPath(); }
 
-    virtual sal_Bool SAL_CALL hasRelativePath() override
+    virtual bool SAL_CALL hasRelativePath() override
     { return m_base.hasRelativePath(); }
 
     virtual sal_Int32 SAL_CALL getPathSegmentCount() override
@@ -202,13 +202,13 @@ public:
     virtual OUString SAL_CALL getPathSegment(sal_Int32 index) override
     { return m_base.getPathSegment(index); }
 
-    virtual sal_Bool SAL_CALL hasQuery() override
+    virtual bool SAL_CALL hasQuery() override
     { return m_base.hasQuery(); }
 
     virtual OUString SAL_CALL getQuery() override
     { return m_base.getQuery(); }
 
-    virtual sal_Bool SAL_CALL hasFragment() override
+    virtual bool SAL_CALL hasFragment() override
     { return m_base.hasFragment(); }
 
     virtual OUString SAL_CALL getFragment() override
@@ -224,7 +224,7 @@ public:
 
     virtual void SAL_CALL setName(OUString const & name) override;
 
-    virtual sal_Bool SAL_CALL hasParameter(OUString const & key) override;
+    virtual bool SAL_CALL hasParameter(OUString const & key) override;
 
     virtual OUString SAL_CALL getParameter(OUString const & key) override;
 
@@ -257,7 +257,7 @@ void SAL_CALL UrlReference::setName(OUString const & name)
     m_base.m_path = encodeNameOrParamFragment(name) + m_base.m_path.subView(i);
 }
 
-sal_Bool UrlReference::hasParameter(OUString const & key)
+bool UrlReference::hasParameter(OUString const & key)
 {
     std::lock_guard g(m_base.m_mutex);
     return findParameter(key) >= 0;
@@ -328,7 +328,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName) override;
+    virtual bool SAL_CALL supportsService(OUString const & serviceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
@@ -346,7 +346,7 @@ OUString Parser::getImplementationName()
     return u"com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"_ustr;
 }
 
-sal_Bool Parser::supportsService(OUString const & serviceName)
+bool Parser::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }

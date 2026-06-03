@@ -45,7 +45,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProviderFactory
@@ -88,7 +88,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProviderSupplier
@@ -108,7 +108,7 @@ public:
     virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     registerInstance( const OUString& Template,
                       const OUString& Arguments,
-                      sal_Bool ReplaceExisting ) override;
+                      bool ReplaceExisting ) override;
     virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     deregisterInstance( const OUString& Template,
                         const OUString& Arguments ) override;

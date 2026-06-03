@@ -27,13 +27,13 @@
 #include "sal/macros.h"
 #include "sal/typesizes.h"
 
+#if !defined __cplusplus
+#include <stdbool.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef unsigned char sal_Bool;
-#   define sal_False ((sal_Bool)0)
-#   define sal_True  ((sal_Bool)1)
 
 /* char is assumed to always be 1 byte long */
 typedef signed char         sal_Int8;

@@ -1254,7 +1254,7 @@ void ScViewFunc::MergeCells( bool bApi, bool bDoContents, bool bCenter,
                                              bApi, bNowEmptyMergedCells))
         {
             SetCursor( nStartCol, nStartRow );
-            // DoneBlockMode( sal_False);
+            // DoneBlockMode( false);
             Unmark();
 
             pDocSh->UpdateOle(GetViewData());

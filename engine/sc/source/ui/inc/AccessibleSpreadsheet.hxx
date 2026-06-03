@@ -120,11 +120,11 @@ private:
                 getSelectedAccessibleColumns(  ) override;
 
     /// Returns a boolean value indicating whether the specified row is selected.
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                 isAccessibleRowSelected( sal_Int32 nRow ) override;
 
     /// Returns a boolean value indicating whether the specified column is selected.
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                 isAccessibleColumnSelected( sal_Int32 nColumn ) override;
 
     /// Returns the Accessible at a specified row and column in the table.
@@ -134,7 +134,7 @@ private:
     rtl::Reference<ScAccessibleCell> GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
 
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
                 isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     ///=====  XAccessibleComponent  ============================================
@@ -181,10 +181,10 @@ private:
 
     //=====  XAccessibleTableSelection  ============================================
 
-    virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override;
-    virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
+    virtual bool SAL_CALL selectRow( sal_Int32 row ) override;
+    virtual bool SAL_CALL selectColumn( sal_Int32 column ) override;
+    virtual bool SAL_CALL unselectRow( sal_Int32 row ) override;
+    virtual bool SAL_CALL unselectColumn( sal_Int32 column ) override;
 
     /// Return the object's current bounding box relative to the desktop.
     virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;

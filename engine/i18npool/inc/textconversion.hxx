@@ -52,14 +52,14 @@ public:
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override = 0;
-        virtual sal_Bool SAL_CALL
+        virtual bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) override = 0;
 
     //XServiceInfo
     OUString SAL_CALL
         getImplementationName() override;
-    sal_Bool SAL_CALL
+    bool SAL_CALL
         supportsService(const OUString& ServiceName) override;
     css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
@@ -94,7 +94,7 @@ public:
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override;
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;
@@ -131,7 +131,7 @@ public:
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override;
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions ) override;

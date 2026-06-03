@@ -48,7 +48,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
@@ -148,7 +148,7 @@ OUString SAL_CALL FontIdentificator::getImplementationName()
     return u"vcl::FontIdentificator"_ustr;
 }
 
-sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName )
+bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName )
 {
     return cppu::supportsService(this, i_rServiceName);
 }

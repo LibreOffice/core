@@ -231,12 +231,12 @@ namespace canvas
             return this;
         }
 
-        virtual sal_Bool SAL_CALL hasFullScreenMode(  ) override
+        virtual bool SAL_CALL hasFullScreenMode(  ) override
         {
             return false;
         }
 
-        virtual sal_Bool SAL_CALL enterFullScreenMode( sal_Bool ) override
+        virtual bool SAL_CALL enterFullScreenMode( bool ) override
         {
             return false;
         }

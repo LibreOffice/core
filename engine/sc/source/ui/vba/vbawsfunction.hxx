@@ -34,8 +34,8 @@ public:
     virtual css::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const css::uno::Sequence< css::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< css::uno::Any >& OutParam) override;
     virtual void  SAL_CALL setValue(const OUString& PropertyName, const css::uno::Any& Value) override;
     virtual css::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual sal_Bool  SAL_CALL hasMethod(const OUString& Name) override;
-    virtual sal_Bool  SAL_CALL hasProperty(const OUString& Name) override;
+    virtual bool  SAL_CALL hasMethod(const OUString& Name) override;
+    virtual bool  SAL_CALL hasProperty(const OUString& Name) override;
     virtual OUString SAL_CALL getExactName( const OUString& aApproximateName ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;

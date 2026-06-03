@@ -55,8 +55,8 @@ public:
     virtual void SAL_CALL setQuickHelpText( const OUString& rQuickHelpText ) override;
     virtual OUString SAL_CALL getAccessibleName() override;
     virtual void SAL_CALL setAccessibleName( const OUString& rAccessibleName ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool bVisible ) override;
 
     // css::ui::XStatusbarItem Methods
     virtual void SAL_CALL repaint(  ) override;

@@ -60,7 +60,7 @@ class CGM
         sal_uInt32          mnAct4PostReset;
         int                 mnBitmapInserts;
         std::unique_ptr<CGMBitmap> mpBitmapInUse;
-        std::unique_ptr<CGMChart> mpChart;          // if sal_True->"SHWSLIDEREC"
+        std::unique_ptr<CGMChart> mpChart;          // if true->"SHWSLIDEREC"
                                                     //  otherwise "BEGINPIC" commands
                                                     // controls page inserting
         std::unique_ptr<CGMElements> pElement;

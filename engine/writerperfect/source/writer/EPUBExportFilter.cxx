@@ -56,7 +56,7 @@ sal_Int32 EPUBExportFilter::GetDefaultLayoutMethod()
     return libepubgen::EPUB_LAYOUT_METHOD_REFLOWABLE;
 }
 
-sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     sal_Int32 nVersion = EPUBExportFilter::GetDefaultVersion();
     sal_Int32 nSplitMethod = EPUBExportFilter::GetDefaultSplitMethod();
@@ -195,7 +195,7 @@ OUString EPUBExportFilter::getImplementationName()
     return u"com.sun.star.comp.Writer.EPUBExportFilter"_ustr;
 }
 
-sal_Bool EPUBExportFilter::supportsService(const OUString& rServiceName)
+bool EPUBExportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

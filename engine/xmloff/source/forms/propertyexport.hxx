@@ -44,7 +44,7 @@ namespace o3tl {
 namespace xmloff
 {
 
-    // if sal_True, indicates that the semantic of the property referred by <arg>_pPropertyName</arg>
+    // if true, indicates that the semantic of the property referred by <arg>_pPropertyName</arg>
     // is inverse to the semantic of the XML attribute.<br/>
     // I.e. if the property value is <TRUE/>, <FALSE/> has to be written and vice versa.
     // <p>Be careful with <arg>_bDefault</arg> and <arg>_bInverseSemantics</arg>: if <arg>_bInverseSemantics</arg>
@@ -377,7 +377,7 @@ namespace xmloff
                 the name of the property to ask the control model for
             @param _pType
                 the expected type of the property. May be NULL, in this case no type check is made.
-            @return sal_True, if the property exists and is of the correct type
+            @return true, if the property exists and is of the correct type
         */
         void dbg_implCheckProperty(
             const OUString& _rPropertyName,

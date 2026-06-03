@@ -135,7 +135,7 @@ inline bool _assignData(
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BOOLEAN:
-            *static_cast<sal_Bool *>(pDest) = bool(*static_cast<sal_Bool *>(pSource));
+            *static_cast<bool *>(pDest) = *static_cast<bool *>(pSource);
             return true;
         default:
             return false;

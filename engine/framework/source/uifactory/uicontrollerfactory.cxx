@@ -54,7 +54,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     // XUIControllerRegistration
-    virtual sal_Bool SAL_CALL hasController( const OUString& aCommandURL, const OUString& aModuleName ) override;
+    virtual bool SAL_CALL hasController( const OUString& aCommandURL, const OUString& aModuleName ) override;
     virtual void SAL_CALL registerController( const OUString& aCommandURL, const OUString& aModuleName, const OUString& aControllerImplementationName ) override;
     virtual void SAL_CALL deregisterController( const OUString& aCommandURL, const OUString& aModuleName ) override;
 
@@ -178,7 +178,7 @@ Sequence< OUString > SAL_CALL UIControllerFactory::getAvailableServiceNames()
 }
 
 // XUIControllerRegistration
-sal_Bool SAL_CALL UIControllerFactory::hasController(
+bool SAL_CALL UIControllerFactory::hasController(
     const OUString& aCommandURL,
     const OUString& aModuleName )
 {
@@ -238,7 +238,7 @@ public:
         return u"com.sun.star.comp.framework.PopupMenuControllerFactory"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -265,7 +265,7 @@ public:
         return u"com.sun.star.comp.framework.ToolBarControllerFactory"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -292,7 +292,7 @@ public:
         return u"com.sun.star.comp.framework.StatusBarControllerFactory"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }

@@ -286,8 +286,8 @@ public:
         const css::uno::Any& aValue ) override;
 
     virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(

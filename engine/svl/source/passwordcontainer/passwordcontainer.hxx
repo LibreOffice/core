@@ -338,7 +338,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL    getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL            supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL            supportsService( const OUString& ServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
                                         getSupportedServiceNames(  ) override;
@@ -347,22 +347,22 @@ public:
     virtual void SAL_CALL        disposing( const css::lang::EventObject& Source ) override;
 
     // XMasterPasswordHandling
-    virtual sal_Bool SAL_CALL authorizateWithMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
-    virtual sal_Bool SAL_CALL changeMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
+    virtual bool SAL_CALL authorizateWithMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
+    virtual bool SAL_CALL changeMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
     virtual void SAL_CALL removeMasterPassword() override;
-    virtual sal_Bool SAL_CALL hasMasterPassword(  ) override;
-    virtual sal_Bool SAL_CALL allowPersistentStoring( sal_Bool bAllow ) override;
-    virtual sal_Bool SAL_CALL isPersistentStoringAllowed(  ) override;
+    virtual bool SAL_CALL hasMasterPassword(  ) override;
+    virtual bool SAL_CALL allowPersistentStoring( bool bAllow ) override;
+    virtual bool SAL_CALL isPersistentStoringAllowed(  ) override;
 
     // XMasterPasswordHandling2
-    virtual sal_Bool SAL_CALL useDefaultMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
-    virtual sal_Bool SAL_CALL isDefaultMasterPasswordUsed(  ) override;
+    virtual bool SAL_CALL useDefaultMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
+    virtual bool SAL_CALL isDefaultMasterPasswordUsed(  ) override;
 
     // XUrlContainer
-    virtual void SAL_CALL addUrl( const OUString& Url, sal_Bool MakePersistent ) override;
+    virtual void SAL_CALL addUrl( const OUString& Url, bool MakePersistent ) override;
     virtual OUString SAL_CALL findUrl( const OUString& Url ) override;
     virtual void SAL_CALL removeUrl( const OUString& Url ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getUrls( sal_Bool OnlyPersistent ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getUrls( bool OnlyPersistent ) override;
 
     void            Notify();
 private:

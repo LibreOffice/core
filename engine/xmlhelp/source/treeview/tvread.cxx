@@ -266,7 +266,7 @@ TVRead::getElementNames( )
     return { u"Title"_ustr, u"TargetURL"_ustr, u"Children"_ustr };
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TVRead::hasByName( const OUString& aName )
 {
     if( aName == "Title"     ||
@@ -289,7 +289,7 @@ TVRead::getByHierarchicalName( const OUString& aName )
     return getByName( aName );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TVRead::hasByHierarchicalName( const OUString& aName )
 {
     OUString aRest;
@@ -524,7 +524,7 @@ TVChildTarget::getElementNames( )
     return seq;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TVChildTarget::hasByName( const OUString& aName )
 {
     std::u16string_view num( aName.subView( 2, aName.getLength()-4 ) );
@@ -556,7 +556,7 @@ TVChildTarget::getByHierarchicalName( const OUString& aName )
         return getByName( aName );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 TVChildTarget::hasByHierarchicalName( const OUString& aName )
 {
     sal_Int32 idx;
@@ -742,12 +742,12 @@ Reference< deployment::XPackage > TreeFileIterator::implGetHelpPackageFromPackag
         return xHelpPackage;
 
     // Check if parent package is registered
-    beans::Optional< beans::Ambiguous<sal_Bool> > option( xPackage->isRegistered
+    beans::Optional< beans::Ambiguous<bool> > option( xPackage->isRegistered
         ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
     bool bRegistered = false;
     if( option.IsPresent )
     {
-        beans::Ambiguous<sal_Bool> const & reg = option.Value;
+        beans::Ambiguous<bool> const & reg = option.Value;
         if( !reg.IsAmbiguous && reg.Value )
             bRegistered = true;
     }

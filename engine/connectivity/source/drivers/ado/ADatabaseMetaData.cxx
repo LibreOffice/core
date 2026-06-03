@@ -289,7 +289,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     const Any& catalog, const OUString& schema, const OUString& table,
-    sal_Bool unique, sal_Bool approximate )
+    bool unique, bool approximate )
 {
     ADORecordset *pRecordset = m_rADOConnection.getIndexInfo(catalog,schema,table,unique,approximate);
     ADOS::ThrowException(m_rADOConnection,*this);
@@ -367,17 +367,17 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     return pResult;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
+bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
 {
     return getBoolProperty("Maximum Row Size Includes BLOB");
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
+bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
 {
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_LOWER) == DBPROPVAL_IC_LOWER ;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  )
+bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  )
 {
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_LOWER) == DBPROPVAL_IC_LOWER ;
 }
@@ -387,17 +387,17 @@ bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED ;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  )
+bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  )
 {
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED ;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
+bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
 {
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_UPPER) == DBPROPVAL_IC_UPPER ;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  )
+bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  )
 {
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_UPPER) == DBPROPVAL_IC_UPPER ;
 }
@@ -417,7 +417,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  )
     return getInt32Property("Maximum Index Size");
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  )
+bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  )
 {
     return getInt32Property("NULL Concatenation Behavior") == DBPROPVAL_CB_NON_NULL;
 }
@@ -438,7 +438,7 @@ OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  )
     return OUString();
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  )
+bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  )
 {
     return isCapable(DBLITERAL_CORRELATION_NAME);
 }
@@ -448,57 +448,57 @@ bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
     return getInt32Property("Catalog Location") == DBPROPVAL_CL_START;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
+bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
 {
     return getInt32Property("Transaction DDL") == DBPROPVAL_TC_DDL_IGNORE;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
+bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
 {
     return getInt32Property("Transaction DDL") == DBPROPVAL_TC_DDL_COMMIT;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
+bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
 {
     return getInt32Property("Transaction DDL") == DBPROPVAL_TC_DML;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
+bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
 {
     return getInt32Property("Transaction DDL") == DBPROPVAL_TC_ALL;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete(  )
+bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate(  )
+bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
+bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
 {
     return getInt32Property("Prepare Abort Behavior") == DBPROPVAL_CB_PRESERVE;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
+bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
 {
     return getInt32Property("Prepare Commit Behavior") == DBPROPVAL_CB_PRESERVE;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
+bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
 {
     return (getInt32Property("Isolation Retention") & DBPROPVAL_TR_COMMIT) == DBPROPVAL_TR_COMMIT;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
+bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
 {
     return (getInt32Property("Isolation Retention") & DBPROPVAL_TR_ABORT) == DBPROPVAL_TR_ABORT;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level )
+bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level )
 {
     bool bValue(false);
 
@@ -522,25 +522,25 @@ bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
     return (getInt32Property("Schema Usage") & DBPROPVAL_SU_DML_STATEMENTS) == DBPROPVAL_SU_DML_STATEMENTS;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  )
+bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  )
 {
     sal_Int32 nProp = getInt32Property("SQL Support");
     return (nProp == 512) || ((nProp & DBPROPVAL_SQL_ANSI92_FULL) == DBPROPVAL_SQL_ANSI92_FULL);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL(  )
+bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL(  )
 {
     sal_Int32 nProp = getInt32Property("SQL Support");
     return (nProp == 512) || ((nProp & DBPROPVAL_SQL_ANSI92_ENTRY) == DBPROPVAL_SQL_ANSI92_ENTRY);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  )
+bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  )
 {
     sal_Int32 nProp = getInt32Property("SQL Support");
     return (nProp == 512) || ((nProp & DBPROPVAL_SQL_ANSI89_IEF) == DBPROPVAL_SQL_ANSI89_IEF);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  )
+bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  )
 {
     return (getInt32Property("Schema Usage") & DBPROPVAL_SU_INDEX_DEFINITION) == DBPROPVAL_SU_INDEX_DEFINITION;
 }
@@ -555,7 +555,7 @@ bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
+bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
 {
     return false;
 }
@@ -565,7 +565,7 @@ bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  )
+bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  )
 {
     if ( ADOS::isJetEngine(m_pConnection->getEngineType()) )
         return true;
@@ -592,122 +592,122 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  )
     return getMaxSize(DBLITERAL_SCHEMA_NAME);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions(  )
+bool SAL_CALL ODatabaseMetaData::supportsTransactions(  )
 {
     return getInt32Property("Transaction DDL") == DBPROPVAL_TC_NONE;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  )
+bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures(  )
+bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate(  )
+bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  )
+bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  )
+bool SAL_CALL ODatabaseMetaData::isReadOnly(  )
 {
     return getBoolProperty("Read-Only Data Source");
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  )
+bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable(  )
+bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion(  )
+bool SAL_CALL ODatabaseMetaData::supportsTypeConversion(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull(  )
+bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull(  )
 {
     return getInt32Property("NULL Concatenation Behavior") == DBPROPVAL_CB_NULL;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing(  )
+bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing(  )
 {
     return isCapable(DBLITERAL_COLUMN_ALIAS);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  )
+bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  )
 {
     return isCapable(DBLITERAL_CORRELATION_NAME);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 /*fromType*/, sal_Int32 /*toType*/ )
+bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 /*fromType*/, sal_Int32 /*toType*/ )
 {
     return getBoolProperty("Rowset Conversions on Command");
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy(  )
+bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy(  )
 {
     return getBoolProperty("ORDER BY Columns in Select List");
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupBy(  )
+bool SAL_CALL ODatabaseMetaData::supportsGroupBy(  )
 {
     return getInt32Property("GROUP BY Support") != DBPROPVAL_GB_NOT_SUPPORTED;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect(  )
+bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect(  )
 {
     return getInt32Property("GROUP BY Support") != DBPROPVAL_GB_CONTAINS_SELECT;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated(  )
+bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated(  )
 {
     return getInt32Property("GROUP BY Support") == DBPROPVAL_GB_NO_RELATION;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions(  )
+bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets(  )
+bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause(  )
+bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause(  )
 {
     return isCapable(DBLITERAL_ESCAPE_PERCENT);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated(  )
+bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated(  )
 {
     return getBoolProperty("ORDER BY Columns in Select List");
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion(  )
+bool SAL_CALL ODatabaseMetaData::supportsUnion(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll(  )
+bool SAL_CALL ODatabaseMetaData::supportsUnionAll(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  )
+bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  )
 {
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED;
 }
@@ -717,72 +717,72 @@ bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  )
+bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  )
 {
     return (getInt32Property("NULL Collation Order") & DBPROPVAL_NC_END) == DBPROPVAL_NC_END;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtStart(  )
+bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtStart(  )
 {
     return (getInt32Property("NULL Collation Order") & DBPROPVAL_NC_START) == DBPROPVAL_NC_START;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedHigh(  )
+bool SAL_CALL ODatabaseMetaData::nullsAreSortedHigh(  )
 {
     return (getInt32Property("NULL Collation Order") & DBPROPVAL_NC_HIGH) == DBPROPVAL_NC_HIGH;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow(  )
+bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow(  )
 {
     return (getInt32Property("NULL Collation Order") & DBPROPVAL_NC_LOW) == DBPROPVAL_NC_LOW;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls(  )
+bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
+bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
 {
     return (getInt32Property("Schema Usage") & DBPROPVAL_SU_PRIVILEGE_DEFINITION) == DBPROPVAL_SU_PRIVILEGE_DEFINITION;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  )
+bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
+bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  )
+bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  )
 {
     return (getInt32Property("Subquery Support") & DBPROPVAL_SQ_CORRELATEDSUBQUERIES) == DBPROPVAL_SQ_CORRELATEDSUBQUERIES;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInComparisons(  )
+bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInComparisons(  )
 {
     return (getInt32Property("Subquery Support") & DBPROPVAL_SQ_COMPARISON) == DBPROPVAL_SQ_COMPARISON;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInExists(  )
+bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInExists(  )
 {
     return (getInt32Property("Subquery Support") & DBPROPVAL_SQ_EXISTS) == DBPROPVAL_SQ_EXISTS;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInIns(  )
+bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInIns(  )
 {
     return (getInt32Property("Subquery Support") & DBPROPVAL_SQ_IN) == DBPROPVAL_SQ_IN;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds(  )
+bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds(  )
 {
     return (getInt32Property("Subquery Support") & DBPROPVAL_SQ_QUANTIFIED) == DBPROPVAL_SQ_QUANTIFIED;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  )
+bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  )
 {
     sal_Int32 nProp = getInt32Property("SQL Support");
     return (nProp == 512) || ((nProp & DBPROPVAL_SQL_ANSI92_INTERMEDIATE) == DBPROPVAL_SQL_ANSI92_INTERMEDIATE);
@@ -914,32 +914,32 @@ OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  )
     return OUString();
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )
+bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )
 {
     sal_Int32 nProp = getInt32Property("SQL Support");
     return (nProp == 512) || ((nProp & DBPROPVAL_SQL_ODBC_EXTENDED) == DBPROPVAL_SQL_ODBC_EXTENDED);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  )
+bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  )
 {
     sal_Int32 nProp = getInt32Property("SQL Support");
     return (nProp == 512) || ((nProp & DBPROPVAL_SQL_ODBC_CORE) == DBPROPVAL_SQL_ODBC_CORE);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  )
+bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  )
 {
     sal_Int32 nProp = getInt32Property("SQL Support");
     return (nProp == 512) || ((nProp & DBPROPVAL_SQL_ODBC_MINIMUM) == DBPROPVAL_SQL_ODBC_MINIMUM);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  )
+bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  )
 {
     if ( ADOS::isJetEngine(m_pConnection->getEngineType()) )
         return true;
     return (getInt32Property("Outer Join Capabilities") & 0x00000004L) == 0x00000004L;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  )
+bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  )
 {
     return supportsFullOuterJoins(  );
 }
@@ -964,62 +964,62 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  )
     return getMaxSize(DBLITERAL_USER_NAME);
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ )
+bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 /*setType*/, sal_Int32 /*concurrency*/ )
+bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 /*setType*/, sal_Int32 /*concurrency*/ )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 setType )
+bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 setType )
 {
     return ResultSetType::FORWARD_ONLY != setType;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  )
+bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  )
 {
     return true;
 }

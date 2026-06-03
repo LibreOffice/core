@@ -127,7 +127,7 @@ namespace connectivity
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        virtual bool SAL_CALL convertFastPropertyValue(
                                     css::uno::Any & rConvertedValue,
                                     css::uno::Any & rOldValue,
                                     sal_Int32 nHandle,
@@ -173,7 +173,7 @@ namespace connectivity
         // XStatement
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override ;
         virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override ;
-        virtual sal_Bool SAL_CALL execute( const OUString& sql ) override ;
+        virtual bool SAL_CALL execute( const OUString& sql ) override ;
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
         // XWarningsSupplier
         virtual css::uno::Any SAL_CALL getWarnings(  ) override;
@@ -185,7 +185,7 @@ namespace connectivity
         // XMultipleResults
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
         virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
-        virtual sal_Bool SAL_CALL getMoreResults(  ) override;
+        virtual bool SAL_CALL getMoreResults(  ) override;
         //XGeneratedResultSet
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getGeneratedValues(  ) override;
 

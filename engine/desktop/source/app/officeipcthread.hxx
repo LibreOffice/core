@@ -123,7 +123,7 @@ class RequestHandler: public salhelper::SimpleReferenceObject
     static bool                 ExecuteCmdLineRequests(
         ProcessDocumentsRequest&, bool noTerminate);
 
-    // return sal_False if second office
+    // return false if second office
     static Status               Enable(bool ipc);
     static void                 Disable();
     // start dispatching events...
@@ -143,7 +143,7 @@ class RequestHandlerController : public ::cppu::WeakImplHelper<
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XEventListener

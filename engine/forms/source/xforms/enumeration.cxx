@@ -38,7 +38,7 @@ Enumeration::Enumeration(XIndexAccess* pContainer)
     OSL_ENSURE(mxContainer.is(), "no container?");
 }
 
-sal_Bool Enumeration::hasMoreElements()
+bool Enumeration::hasMoreElements()
 {
     if (!mxContainer.is())
         throw RuntimeException();

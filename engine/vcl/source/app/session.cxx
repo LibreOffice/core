@@ -83,13 +83,13 @@ class VCLSession:
     virtual void SAL_CALL queryInteraction( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
     virtual void SAL_CALL interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
     virtual void SAL_CALL saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual sal_Bool SAL_CALL cancelShutdown() override;
+    virtual bool SAL_CALL cancelShutdown() override;
 
     OUString SAL_CALL getImplementationName() override {
         return u"com.sun.star.frame.VCLSessionManagerClient"_ustr;
     }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override {
+    bool SAL_CALL supportsService(OUString const & ServiceName) override {
         return cppu::supportsService(this, ServiceName);
     }
 
@@ -379,7 +379,7 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
     }
 }
 
-sal_Bool SAL_CALL VCLSession::cancelShutdown()
+bool SAL_CALL VCLSession::cancelShutdown()
 {
     SAL_INFO("vcl.se", "VCLSession::cancelShutdown");
 

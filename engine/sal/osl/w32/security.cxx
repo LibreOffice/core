@@ -297,7 +297,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     return osl_Security_E_UserUnknown;
 }
 
-sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
+bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     if (!Security)
         return false;
@@ -360,7 +360,7 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
     free (pSecImpl);
 }
 
-sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
+bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 {
     if (!Security)
        return false;
@@ -398,17 +398,17 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
     return false;
 }
 
-sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
+bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
 {
     return getUserNameImpl(Security, strName, true);
 }
 
-sal_Bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **strName)
+bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **strName)
 {
     return getUserNameImpl(Security, strName, false);
 }
 
-sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     if (!Security)
         return false;
@@ -423,7 +423,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
            && osl_File_E_None == osl_getFileURLFromSystemPath(aSysDir.pData, pustrDirectory);
 }
 
-sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
+bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     if (!Security)
         return false;
@@ -457,7 +457,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     return false;
 }
 
-sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
+bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 {
     /*  CreateProcessAsUser does not load the specified user's profile
         into the HKEY_USERS registry key. This means that access to information

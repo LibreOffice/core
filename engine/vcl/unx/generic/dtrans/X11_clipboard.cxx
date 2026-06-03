@@ -217,7 +217,7 @@ OUString SAL_CALL X11Clipboard::getImplementationName(  )
     return X11_CLIPBOARD_IMPLEMENTATION_NAME;
 }
 
-sal_Bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
+bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

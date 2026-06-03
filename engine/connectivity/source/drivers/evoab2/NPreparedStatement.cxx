@@ -116,7 +116,7 @@ void SAL_CALL OEvoabPreparedStatement::close(  )
 }
 
 
-sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  )
+bool SAL_CALL OEvoabPreparedStatement::execute(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -159,7 +159,7 @@ Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  )
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, sal_Bool /*x*/ )
+void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, bool /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setBoolean"_ustr, *this );
 
@@ -306,7 +306,7 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  )
     return 0;
 }
 
-sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  )
+bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  )
 {
     return false;
 }

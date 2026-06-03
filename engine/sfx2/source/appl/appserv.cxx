@@ -417,7 +417,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                    if this dialog is closed by the user ...
                    So we ignore this request now and wait for a new user decision.
                 */
-                SAL_INFO("sfx.appl", "QueryExit => sal_False, DispatchLevel == " << Application::GetDispatchLevel() );
+                SAL_INFO("sfx.appl", "QueryExit => false, DispatchLevel == " << Application::GetDispatchLevel() );
                 return;
             }
 
@@ -427,7 +427,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             rReq.ForgetAllArgs();
 
-            // if terminate() failed, pImpl->bInQuit will now be sal_False, allowing further calls of SID_QUITAPP
+            // if terminate() failed, pImpl->bInQuit will now be false, allowing further calls of SID_QUITAPP
             bool bTerminated = xDesktop->terminate();
             if (!bTerminated)
                 // if terminate() was successful, SfxApplication is now dead!
@@ -1459,11 +1459,11 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 #ifndef DISABLE_DYNLOADING
 
-typedef rtl_uString* (*basicide_choose_macro)(void*, void*, void*, sal_Bool);
+typedef rtl_uString* (*basicide_choose_macro)(void*, void*, void*, bool);
 
 #else
 
-extern "C" rtl_uString* basicide_choose_macro(void*, void*, void*, sal_Bool);
+extern "C" rtl_uString* basicide_choose_macro(void*, void*, void*, bool);
 
 #endif
 

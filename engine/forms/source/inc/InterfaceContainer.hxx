@@ -128,7 +128,7 @@ public:
 
 // css::container::XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override ;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
 // css::container::XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration> SAL_CALL createEnumeration() override;
@@ -136,7 +136,7 @@ public:
 // css::container::XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
 // css::container::XNameReplace
     virtual void SAL_CALL replaceByName(const OUString& Name, const css::uno::Any& _rElement) override;
@@ -206,9 +206,9 @@ protected:
             void implInsert(
                 sal_Int32 _nIndex,
                 const css::uno::Reference< css::beans::XPropertySet >& _rxObject,
-                bool _bEvents /* = sal_True */,
+                bool _bEvents /* = true */,
                 ElementDescription* _pApprovalResult /* = NULL */ ,
-                bool _bFire /* = sal_True */
+                bool _bFire /* = true */
             );
 
     // called after the object is inserted, but before the "real listeners" are notified

@@ -58,7 +58,7 @@ public:
     explicit RtfFilter(uno::Reference<uno::XComponentContext> xContext);
 
     // XFilter
-    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XImporter
@@ -72,7 +72,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 }
@@ -82,7 +82,7 @@ RtfFilter::RtfFilter(uno::Reference<uno::XComponentContext> xContext)
 {
 }
 
-sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     if (m_xSrcDoc.is())
     {
@@ -201,7 +201,7 @@ void RtfFilter::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
 
 OUString RtfFilter::getImplementationName() { return u"com.sun.star.comp.Writer.RtfFilter"_ustr; }
 
-sal_Bool RtfFilter::supportsService(const OUString& rServiceName)
+bool RtfFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

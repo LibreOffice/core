@@ -197,7 +197,7 @@ OUString SAL_CALL AccessibleImageBullet::getImplementationName()
     return u"AccessibleImageBullet"_ustr;
 }
 
-sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceName)
+bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceName)
 {
 
     return cppu::supportsService(this, sServiceName);

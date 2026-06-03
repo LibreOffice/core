@@ -149,7 +149,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
 {
     // the selection is valid if and only if we have a datasource now
     GetInputSetImpl()->Put(SfxBoolItem(DSID_INVALID_SELECTION, !_rxDatasource.is()));
-        // (sal_False tells the tab pages to disable and reset all their controls, which is different
+        // (false tells the tab pages to disable and reset all their controls, which is different
         // from "just set them to readonly")
 
     // reset the pages

@@ -63,7 +63,7 @@ namespace frm
         DECLARE_XTYPEPROVIDER()
 
         // XVclWindowPeer
-        virtual void SAL_CALL setDesignMode( sal_Bool _bOn ) override;
+        virtual void SAL_CALL setDesignMode( bool _bOn ) override;
 
         // XDispatchProviderInterception
         virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
@@ -87,7 +87,7 @@ namespace frm
         DECLARE_XINTERFACE( )
 
         // XVclWindowPeer
-        virtual void SAL_CALL setDesignMode( sal_Bool _bOn ) override;
+        virtual void SAL_CALL setDesignMode( bool _bOn ) override;
 
         // XWindow2
         using VCLXWindow::isEnabled;

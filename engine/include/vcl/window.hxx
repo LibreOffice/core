@@ -899,7 +899,7 @@ public:
     /** A window is in modal mode if one of its children or subchildren
         is a running modal window (a modal dialog)
 
-        @returns sal_True if a child or subchild is a running modal window
+        @returns true if a child or subchild is a running modal window
     */
     bool                                IsInModalMode() const;
 

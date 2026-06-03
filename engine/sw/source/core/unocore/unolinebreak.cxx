@@ -126,7 +126,7 @@ rtl::Reference<SwXLineBreak> SwXLineBreak::CreateXLineBreak(SwFormatLineBreak* p
 
 OUString SAL_CALL SwXLineBreak::getImplementationName() { return u"SwXLineBreak"_ustr; }
 
-sal_Bool SAL_CALL SwXLineBreak::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXLineBreak::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

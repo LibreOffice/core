@@ -75,7 +75,7 @@ namespace
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     protected:
@@ -149,7 +149,7 @@ namespace
         return u"com.sun.star.comp.dba.DataAccessDescriptor"_ustr;
     }
 
-    sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName )
+    bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -183,7 +183,7 @@ namespace
     public:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XDataAccessDescriptorFactory
@@ -201,7 +201,7 @@ namespace
         return u"com.sun.star.comp.dba.DataAccessDescriptorFactory"_ustr;
     }
 
-    sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName )
+    bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }

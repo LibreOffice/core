@@ -117,11 +117,11 @@ private:
 
                                 /** Minimum number of parameters, or fix number
                                     of parameters if HasRepeatParameters()
-                                    returns sal_False. For opcodes not specified in
+                                    returns false. For opcodes not specified in
                                     the implementation a parameter count of 1
                                     is assumed, for opcodes out of range 0 is
                                     assumed. If HasRepeatParameters() returns
-                                    sal_True, information is NOT related to whether
+                                    true, information is NOT related to whether
                                     any parameters are optional, only the type
                                     of parameters is significant. */
     static  inline  sal_uInt8        GetMinimumParameters( OpCode eOp)

@@ -103,25 +103,25 @@ class LinguProps :
 public:
     LinguProps();
 
-    virtual sal_Bool SAL_CALL getIsUseDictionaryList() override
+    virtual bool SAL_CALL getIsUseDictionaryList() override
         { return getPropertyBool(UPN_IS_USE_DICTIONARY_LIST); }
-    virtual void SAL_CALL setIsUseDictionaryList(sal_Bool p1) override
-        { setProperty(UPN_IS_USE_DICTIONARY_LIST, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsIgnoreControlCharacters() override
+    virtual void SAL_CALL setIsUseDictionaryList(bool p1) override
+        { setProperty(UPN_IS_USE_DICTIONARY_LIST, p1); }
+    virtual bool SAL_CALL getIsIgnoreControlCharacters() override
         { return getPropertyBool(UPN_IS_IGNORE_CONTROL_CHARACTERS); }
-    virtual void SAL_CALL setIsIgnoreControlCharacters(sal_Bool p1) override
-        { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsSpellUpperCase() override
+    virtual void SAL_CALL setIsIgnoreControlCharacters(bool p1) override
+        { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, p1); }
+    virtual bool SAL_CALL getIsSpellUpperCase() override
         { return getPropertyBool(UPN_IS_SPELL_UPPER_CASE); }
-    virtual void SAL_CALL setIsSpellUpperCase(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_UPPER_CASE, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsSpellWithDigits() override
+    virtual void SAL_CALL setIsSpellUpperCase(bool p1) override
+        { setProperty(UPN_IS_SPELL_UPPER_CASE, p1); }
+    virtual bool SAL_CALL getIsSpellWithDigits() override
         { return getPropertyBool(UPN_IS_SPELL_WITH_DIGITS); }
-    virtual void SAL_CALL setIsSpellWithDigits(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_WITH_DIGITS, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsSpellCapitalization() override
+    virtual void SAL_CALL setIsSpellWithDigits(bool p1) override
+        { setProperty(UPN_IS_SPELL_WITH_DIGITS, p1); }
+    virtual bool SAL_CALL getIsSpellCapitalization() override
         { return false; }
-    virtual void SAL_CALL setIsSpellCapitalization(sal_Bool /*p1*/) override
+    virtual void SAL_CALL setIsSpellCapitalization(bool /*p1*/) override
         { throw new css::beans::UnknownPropertyException( u"this deprecated property has been removed"_ustr); }
     virtual sal_Int16 SAL_CALL getHyphMinLeading() override
         { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
@@ -139,26 +139,26 @@ public:
         { return getPropertyLocale(UPN_DEFAULT_LOCALE); }
     virtual void SAL_CALL setDefaultLocale(const css::lang::Locale& p1) override
         { setProperty(UPN_DEFAULT_LOCALE, p1); }
-    virtual sal_Bool SAL_CALL getIsHyphAuto() override
+    virtual bool SAL_CALL getIsHyphAuto() override
         { return getPropertyBool(UPN_IS_HYPH_AUTO); }
-    virtual void SAL_CALL setIsHyphAuto(sal_Bool p1) override
-        { setProperty(UPN_IS_HYPH_AUTO, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsHyphSpecial() override
+    virtual void SAL_CALL setIsHyphAuto(bool p1) override
+        { setProperty(UPN_IS_HYPH_AUTO, p1); }
+    virtual bool SAL_CALL getIsHyphSpecial() override
         { return getPropertyBool(UPN_IS_HYPH_SPECIAL); }
-    virtual void SAL_CALL setIsHyphSpecial(sal_Bool p1) override
-        { setProperty(UPN_IS_HYPH_SPECIAL, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsSpellAuto() override
+    virtual void SAL_CALL setIsHyphSpecial(bool p1) override
+        { setProperty(UPN_IS_HYPH_SPECIAL, p1); }
+    virtual bool SAL_CALL getIsSpellAuto() override
         { return getPropertyBool(UPN_IS_SPELL_AUTO); }
-    virtual void SAL_CALL setIsSpellAuto(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_AUTO, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsSpellSpecial() override
+    virtual void SAL_CALL setIsSpellAuto(bool p1) override
+        { setProperty(UPN_IS_SPELL_AUTO, p1); }
+    virtual bool SAL_CALL getIsSpellSpecial() override
         { return getPropertyBool(UPN_IS_SPELL_SPECIAL); }
-    virtual void SAL_CALL setIsSpellSpecial(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_SPECIAL, static_cast<bool>(p1)); }
-    virtual sal_Bool SAL_CALL getIsWrapReverse() override
+    virtual void SAL_CALL setIsSpellSpecial(bool p1) override
+        { setProperty(UPN_IS_SPELL_SPECIAL, p1); }
+    virtual bool SAL_CALL getIsWrapReverse() override
         { return getPropertyBool(UPN_IS_WRAP_REVERSE); }
-    virtual void SAL_CALL setIsWrapReverse(sal_Bool p1) override
-        { setProperty(UPN_IS_WRAP_REVERSE, static_cast<bool>(p1)); }
+    virtual void SAL_CALL setIsWrapReverse(bool p1) override
+        { setProperty(UPN_IS_WRAP_REVERSE, p1); }
     virtual css::lang::Locale SAL_CALL getDefaultLocale_CJK() override
         { return getPropertyLocale(UPN_DEFAULT_LOCALE_CJK); }
     virtual void SAL_CALL setDefaultLocale_CJK(const css::lang::Locale& p1) override
@@ -192,7 +192,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 

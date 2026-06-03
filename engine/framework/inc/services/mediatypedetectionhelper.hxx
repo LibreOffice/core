@@ -50,7 +50,7 @@ class MediaTypeDetectionHelper final : public ::cppu::WeakImplHelper< css::util:
 
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         //  XStringMapping
@@ -58,7 +58,7 @@ class MediaTypeDetectionHelper final : public ::cppu::WeakImplHelper< css::util:
         /*-****************************************************************************************************
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL mapStrings(css::uno::Sequence< OUString >& seqParameter) override;
+        virtual bool SAL_CALL mapStrings(css::uno::Sequence< OUString >& seqParameter) override;
 
 };
 

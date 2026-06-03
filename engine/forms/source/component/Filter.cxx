@@ -482,7 +482,7 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL OFilterControl::commit()
+    bool SAL_CALL OFilterControl::commit()
     {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         if ( !ensureInitialized( ) )
@@ -686,14 +686,14 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL OFilterControl::isEditable()
+    bool SAL_CALL OFilterControl::isEditable()
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         return xText.is() && xText->isEditable();
     }
 
 
-    void SAL_CALL OFilterControl::setEditable( sal_Bool bEditable )
+    void SAL_CALL OFilterControl::setEditable( bool bEditable )
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -855,7 +855,7 @@ namespace frm
         return u"com.sun.star.comp.forms.OFilterControl"_ustr;
     }
 
-    sal_Bool SAL_CALL OFilterControl::supportsService( const OUString& ServiceName )
+    bool SAL_CALL OFilterControl::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

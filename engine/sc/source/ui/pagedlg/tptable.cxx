@@ -139,7 +139,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 {
     bool    bTopDown = rCoreSet->Get(SID_SCATTR_PAGE_TOPDOWN).GetValue();
 
-    // sal_Bool flags
+    // bool flags
     m_xBtnNotes->set_active( rCoreSet->Get(SID_SCATTR_PAGE_NOTES).GetValue() );
     m_xBtnGrid->set_active( rCoreSet->Get(SID_SCATTR_PAGE_GRID).GetValue() );
     m_xBtnHeaders->set_active( rCoreSet->Get(SID_SCATTR_PAGE_HEADERS).GetValue() );
@@ -246,7 +246,7 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     constexpr TypedWhichId<SfxUInt16Item> nWhichPageNo = SID_SCATTR_PAGE_FIRSTPAGENO;
     bool                bDataChanged = false;
 
-    // sal_Bool flags
+    // bool flags
     bDataChanged |= lcl_PutBoolItem( SID_SCATTR_PAGE_NOTES,
                                      *rCoreSet, rOldSet,
                                      m_xBtnNotes->get_active(),

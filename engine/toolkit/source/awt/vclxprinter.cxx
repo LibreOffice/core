@@ -89,7 +89,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getP
     return s_PropertyArrayHelper;
 }
 
-sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
+bool VCLXPrinterPropertySet::convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -169,7 +169,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( css::uno::Any& rValue, sal_In
 }
 
 // css::awt::XPrinterPropertySet
-void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal )
+void VCLXPrinterPropertySet::setHorizontal( bool bHorizontal )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -241,7 +241,7 @@ VCLXPrinter::~VCLXPrinter()
 {
 }
 
-sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ )
+bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/, bool /*bCollate*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -354,7 +354,7 @@ OUString VCLXPrinterServer::getImplementationName()
     return u"stardiv.Toolkit.VCLXPrinterServer"_ustr;
 }
 
-sal_Bool VCLXPrinterServer::supportsService(OUString const & ServiceName)
+bool VCLXPrinterServer::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

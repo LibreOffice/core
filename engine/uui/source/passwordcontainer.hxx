@@ -132,7 +132,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     supportsService( const OUString& ServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -142,7 +142,7 @@ public:
     virtual void SAL_CALL
     handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
 private:

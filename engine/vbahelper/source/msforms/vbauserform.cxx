@@ -116,7 +116,7 @@ ScVbaUserForm::setCaption( const OUString& _caption )
     m_xProps->setPropertyValue( u"Title"_ustr, uno::Any( _caption ) );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaUserForm::getVisible()
 {
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
@@ -125,7 +125,7 @@ ScVbaUserForm::getVisible()
 }
 
 void SAL_CALL
-ScVbaUserForm::setVisible( sal_Bool bVis )
+ScVbaUserForm::setVisible( bool bVis )
 {
     if ( bVis )
         Show();
@@ -267,7 +267,7 @@ ScVbaUserForm::getValue( const OUString& aPropertyName )
     return aResult;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaUserForm::hasMethod( const OUString& /*aName*/ )
 {
     return false;
@@ -284,7 +284,7 @@ ScVbaUserForm::Controls( const uno::Any& index )
     return uno::Any( xControls );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaUserForm::hasProperty( const OUString& aName )
 {
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY );

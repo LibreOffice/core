@@ -67,12 +67,12 @@ public:
     //XNumberingTypeInfo
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  ) override;
     virtual sal_Int16 SAL_CALL getNumberingType( const OUString& NumberingIdentifier ) override;
-    virtual sal_Bool SAL_CALL hasNumberingType( const OUString& NumberingIdentifier ) override;
+    virtual bool SAL_CALL hasNumberingType( const OUString& NumberingIdentifier ) override;
     virtual OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;

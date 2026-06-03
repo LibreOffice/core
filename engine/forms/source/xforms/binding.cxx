@@ -937,7 +937,7 @@ css::uno::Sequence<css::uno::Type> Binding::getSupportedValueTypes()
     return Convert::get().getTypes();
 }
 
-sal_Bool Binding::supportsType( const css::uno::Type& rType )
+bool Binding::supportsType( const css::uno::Type& rType )
 {
     return Convert::get().hasType( rType );
 }
@@ -1076,7 +1076,7 @@ void Binding::removeListEntryListener( const css::uno::Reference<css::form::bind
 // XValidator
 
 
-sal_Bool Binding::isValid( const css::uno::Any& )
+bool Binding::isValid( const css::uno::Any& )
 {
     // first, check for model
     checkLive();
@@ -1223,7 +1223,7 @@ void Binding::initializePropertySet()
     registerProperty( css::beans::Property(u"Relevant"_ustr, HANDLE_Relevant, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new DirectPropertyAccessor< Binding, bool >(this, nullptr, &Binding::getRelevant));
 
-    registerProperty( css::beans::Property(u"ExternalData"_ustr, HANDLE_ExternalData, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    registerProperty( css::beans::Property(u"ExternalData"_ustr, HANDLE_ExternalData, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new BooleanPropertyAccessor< Binding >(this, nullptr, &Binding::getExternalData));
 
     initializePropertyValueCache( HANDLE_ReadOnly );

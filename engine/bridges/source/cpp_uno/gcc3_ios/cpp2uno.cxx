@@ -348,8 +348,8 @@ namespace
                 typelib_MethodParameter aParam;
                 aParam.pTypeRef =
                     ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-                aParam.bIn      = sal_True;
-                aParam.bOut     = sal_False;
+                aParam.bIn      = true;
+                aParam.bOut     = false;
 
                 eRet = cpp2uno_call(
                     pCppI, aMemberDescr.get(),

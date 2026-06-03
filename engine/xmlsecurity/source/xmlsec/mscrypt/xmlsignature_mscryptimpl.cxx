@@ -70,7 +70,7 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Methods from XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
 
-        virtual sal_Bool SAL_CALL supportsService(
+        virtual bool SAL_CALL supportsService(
             const OUString& ServiceName
         ) override;
 
@@ -288,7 +288,7 @@ OUString SAL_CALL XMLSignature_MSCryptImpl::getImplementationName() {
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_MSCryptImpl::supportsService( const OUString& serviceName) {
+bool SAL_CALL XMLSignature_MSCryptImpl::supportsService( const OUString& serviceName) {
 return cppu::supportsService(this, serviceName);
 }
 

@@ -101,8 +101,8 @@ public:
 
     /** Query whether all text in given selection is editable
 
-        @return sal_True if every character in the given selection can
-        be changed, and sal_False if e.g. a field or a bullet is
+        @return true if every character in the given selection can
+        be changed, and false if e.g. a field or a bullet is
         contained therein.
      */
     bool                IsEditable( const ESelection& rSelection ) const;

@@ -189,7 +189,7 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
             const char * pEnvTypeName = 0;
             (*((component_getImplementationEnvironmentFunc)pSym))( &pEnvTypeName, &pEnv );
 
-            sal_Bool bNeedsMapping =
+            bool bNeedsMapping =
                 (pEnv || 0 != rtl_str_compare( pEnvTypeName, CPPU_CURRENT_LANGUAGE_BINDING_NAME ));
 
             OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
@@ -326,7 +326,7 @@ static void createInstance( Reference< T > & rxOut,
 
     if (! x.is())
     {
-        static sal_Bool s_bSet = sal_False;
+        static bool s_bSet = false;
         if (! s_bSet)
         {
             MutexGuard aGuard( Mutex::getGlobalMutex() );
@@ -366,7 +366,7 @@ static void createInstance( Reference< T > & rxOut,
 //                          OUString("com.sun.star.comp.stoc.JavaComponentLoader"),
 //                          xMgr, Reference< XRegistryKey >() ) ) );
                 }
-                s_bSet = sal_True;
+                s_bSet = true;
             }
         }
         x = xMgr->createInstance( rServiceName );
@@ -406,7 +406,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
+    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
     // XMain
@@ -437,7 +437,7 @@ OUString TestImpl::getImplementationName()
     return OUString( IMPLNAME );
 }
 
-sal_Bool TestImpl::supportsService( const OUString & rServiceName )
+bool TestImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
@@ -1226,7 +1226,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 extern "C"
 {
 
-sal_Bool SAL_CALL component_writeInfo(
+bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -1238,14 +1238,14 @@ sal_Bool SAL_CALL component_writeInfo(
                     OUString( "/" IMPLNAME "/UNO/SERVICES" ) ) );
             xNewKey->createKey( OUString( SERVICENAME ) );
 
-            return sal_True;
+            return true;
         }
         catch (InvalidRegistryException &)
         {
             OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

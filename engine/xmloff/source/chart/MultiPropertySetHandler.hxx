@@ -144,7 +144,7 @@ public:
             (i.e. for an UnknownPropertyExcption) or if the interface is not
             supported it uses the XPropertySet interface.
         @return If none of the two interfaces is supported or using them both
-            fails then sal_False is returned.  Else True is returned.
+            fails then false is returned.  Else True is returned.
     */
     inline  bool    GetProperties();
 

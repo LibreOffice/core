@@ -57,7 +57,7 @@ class PropertySetContainer : public comphelper::WeakImplHelper<css::container::X
             return cppu::UnoType<css::beans::XPropertySet>::get();
         }
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
     private:
         typedef std::vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetVector;

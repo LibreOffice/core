@@ -657,7 +657,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     assert(GetParaPortions().exists(nPara) && "Portion paragraph index is not valid");
     ParaPortion& rParaPortion = GetParaPortions().getRef(nPara);
 
-    // sal_Bool: Changes in the height of paragraph Yes / No - sal_True/sal_False
+    // bool: Changes in the height of paragraph Yes / No - true/false
     assert(rParaPortion.GetNode() && "Portion without Node in CreateLines" );
     DBG_ASSERT( rParaPortion.IsVisible(), "Invisible paragraphs not formatted!" );
     DBG_ASSERT( rParaPortion.IsInvalid(), "CreateLines: Portion not invalid!" );
@@ -3761,17 +3761,17 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                 if ( rTextPortion.GetKind() == PortionKind::HYPHENATOR )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );
-                                    aTmpFont.SetTransparent( sal_False );
+                                    aTmpFont.SetTransparent( false );
                                 }
                                 if ( rTextPortion.IsRightToLeft()  )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );
-                                    aTmpFont.SetTransparent( sal_False );
+                                    aTmpFont.SetTransparent( false );
                                 }
                                 else if (GetI18NScriptType(EditPaM(rParaPortion.GetNode(), nIndex + 1)) == i18n::ScriptType::COMPLEX)
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTCYAN );
-                                    aTmpFont.SetTransparent( sal_False );
+                                    aTmpFont.SetTransparent( false );
                                 }
 #endif
                                 aTmpFont.SetPhysFont(rOutDev);
@@ -4390,8 +4390,8 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
         // this paragraph...
         maDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pPPortion->GetNode(), nParagraph ));
         UpdateSelections();
-        // The region below will not be invalidated if UpdateMode = sal_False!
-        // If anyway, then save as sal_False before SetVisible !
+        // The region below will not be invalidated if UpdateMode = false!
+        // If anyway, then save as false before SetVisible !
     }
 
     if (bShow && (pPPortion->IsInvalid() || !pPPortion->GetHeight()))

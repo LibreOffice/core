@@ -114,7 +114,7 @@ RDFaExportHelper::AddRDFa(
 {
     try
     {
-        beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > const
+        beans::Pair< uno::Sequence<rdf::Statement>, bool > const
             RDFaResult( m_xRepository->getStatementRDFa(i_xMetadatable) );
 
         uno::Sequence<rdf::Statement> const & rStatements( RDFaResult.First );

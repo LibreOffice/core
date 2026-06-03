@@ -3547,7 +3547,7 @@ void SAL_CALL ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
         m_pParentLayouter->requestLayout();
 }
 
-sal_Bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::EventObject& e )
+bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::EventObject& e )
 {
     SolarMutexClearableGuard aReadLock;
     bool bDockingInProgress = m_bDockingInProgress;

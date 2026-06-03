@@ -56,7 +56,7 @@ OUString SAL_CALL HeaderMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.HeaderMenuController"_ustr;
 }
 
-sal_Bool SAL_CALL HeaderMenuController::supportsService( const OUString& sServiceName )
+bool SAL_CALL HeaderMenuController::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }

@@ -35,7 +35,7 @@ public:
     {
     }
 
-    sal_Bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
+    bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
     uno::Any SAL_CALL nextElement() override
     {
@@ -79,7 +79,7 @@ public:
 
     uno::Type SAL_CALL getElementType() override { return cppu::UnoType<word::XListEntry>::get(); }
 
-    sal_Bool SAL_CALL hasElements() override { return getCount() != 0; }
+    bool SAL_CALL hasElements() override { return getCount() != 0; }
 
     // XEnumerationAccess
     uno::Reference<container::XEnumeration> SAL_CALL createEnumeration() override

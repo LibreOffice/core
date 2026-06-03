@@ -987,7 +987,7 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
         aTypes.push_back(cppu::UnoType< OUString >::get() );
         break;
     case NumberFormat::LOGICAL:
-        aTypes.push_back(cppu::UnoType< sal_Bool >::get() );
+        aTypes.push_back(cppu::UnoType< bool >::get() );
         break;
     }
     aTypes.push_back( cppu::UnoType< double >::get() );

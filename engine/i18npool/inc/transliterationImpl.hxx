@@ -66,7 +66,7 @@ public:
     virtual OUString SAL_CALL transliterateChar2String( sal_Unicode inChar ) override ;
     virtual sal_Unicode SAL_CALL transliterateChar2Char( sal_Unicode inChar ) override ;
 
-    virtual sal_Bool SAL_CALL equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
+    virtual bool SAL_CALL equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
         sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
         const OUString& str2 ) override ;
@@ -78,7 +78,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:

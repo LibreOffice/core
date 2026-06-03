@@ -292,7 +292,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
 }
 
 
-sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
+bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
 {
     switch (nHandle)
     {
@@ -809,7 +809,7 @@ bool OImageControlControl::implInsertGraphics()
             implClearGraphics( false );
             bool bIsLink = false;
             xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
-            // Force bIsLink to be sal_True if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
+            // Force bIsLink to be true if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
             // in this case, and disabled the respective control, there might be picker implementations which do not
             // respect this, and return IsLink=FALSE here. In this case, "normalize" the flag.
             // #i112659#

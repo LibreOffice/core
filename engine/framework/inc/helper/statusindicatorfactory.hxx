@@ -155,7 +155,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
         std::unique_ptr<WakeUpThread> m_pWakeUp;
 
         /** Our WakeUpThread calls us in our interface method "XUpdatable::update().
-            There we set this member m_bAllowReschedule to sal_True. Next time if our impl_reschedule()
+            There we set this member m_bAllowReschedule to true. Next time if our impl_reschedule()
             method is called, we know, that an Application::Reschedule() should be made.
             Because the last made Reschedule can be was taken long time ago ... may be.*/
         bool m_bAllowReschedule;
@@ -179,7 +179,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
             return u"com.sun.star.comp.framework.StatusIndicatorFactory"_ustr;
         }
 
-        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+        virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
         {
             return cppu::supportsService(this, ServiceName);
         }

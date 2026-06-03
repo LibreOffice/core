@@ -84,7 +84,7 @@ public:
 
     virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
     virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) override;
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, bool GetsOwnership ) override;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) override;
     virtual void SAL_CALL notifyEvent( const document::EventObject& aEvent ) override;
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override;
@@ -207,7 +207,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, sal_Bool )
+void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, bool )
 {
     // An embedded object can be shared between several objects (f.e. for undo purposes)
     // the object will not be closed before the last "customer" is destroyed

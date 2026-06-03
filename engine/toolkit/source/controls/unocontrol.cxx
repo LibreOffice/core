@@ -692,22 +692,22 @@ awt::Size SAL_CALL UnoControl::getOutputSize(  )
     return lcl_askPeer( getPeer(), &XWindow2::getOutputSize, awt::Size() );
 }
 
-sal_Bool SAL_CALL UnoControl::isVisible(  )
+bool SAL_CALL UnoControl::isVisible(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::isVisible, maComponentInfos.bVisible );
 }
 
-sal_Bool SAL_CALL UnoControl::isActive(  )
+bool SAL_CALL UnoControl::isActive(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::isActive, false );
 }
 
-sal_Bool SAL_CALL UnoControl::isEnabled(  )
+bool SAL_CALL UnoControl::isEnabled(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::isEnabled, maComponentInfos.bEnable );
 }
 
-sal_Bool SAL_CALL UnoControl::hasFocus(  )
+bool SAL_CALL UnoControl::hasFocus(  )
 {
     return lcl_askPeer( getPeer(), &XWindow2::hasFocus, false );
 }
@@ -751,7 +751,7 @@ awt::Rectangle UnoControl::getPosSize(  )
     return aRect;
 }
 
-void UnoControl::setVisible( sal_Bool bVisible )
+void UnoControl::setVisible( bool bVisible )
 {
     Reference< XWindow > xWindow;
     {
@@ -765,7 +765,7 @@ void UnoControl::setVisible( sal_Bool bVisible )
         xWindow->setVisible( bVisible );
 }
 
-void UnoControl::setEnable( sal_Bool bEnable )
+void UnoControl::setEnable( bool bEnable )
 {
     Reference< XWindow > xWindow;
     {
@@ -947,7 +947,7 @@ void UnoControl::removePaintListener( const Reference< XPaintListener >& rxListe
 }
 
 // XView
-sal_Bool UnoControl::setGraphics( const Reference< XGraphics >& rDevice )
+bool UnoControl::setGraphics( const Reference< XGraphics >& rDevice )
 {
     Reference< XView > xView;
     {
@@ -1349,7 +1349,7 @@ Reference< XVclWindowPeer > UnoControl::getVclWindowPeer()
     return mxVclWindowPeer;
 }
 
-sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel )
+bool UnoControl::setModel( const Reference< XControlModel >& rxModel )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -1397,7 +1397,7 @@ Reference< XView > UnoControl::getView(  )
     return  static_cast< XView* >( this );
 }
 
-void UnoControl::setDesignMode( sal_Bool bOn )
+void UnoControl::setDesignMode( bool bOn )
 {
     ModeChangeEvent aModeChangeEvent;
 
@@ -1432,12 +1432,12 @@ void UnoControl::setDesignMode( sal_Bool bOn )
     maModeChangeListeners.notifyEach( &XModeChangeListener::modeChanged, aModeChangeEvent );
 }
 
-sal_Bool UnoControl::isDesignMode(  )
+bool UnoControl::isDesignMode(  )
 {
     return mbDesignMode;
 }
 
-sal_Bool UnoControl::isTransparent(  )
+bool UnoControl::isTransparent(  )
 {
     return false;
 }
@@ -1449,7 +1449,7 @@ OUString UnoControl::getImplementationName(  )
     return OUString();
 }
 
-sal_Bool UnoControl::supportsService( const OUString& rServiceName )
+bool UnoControl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

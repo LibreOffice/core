@@ -87,7 +87,7 @@ OUString SAL_CALL XMLSignatureTemplateImpl::getImplementationName() {
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignatureTemplateImpl::supportsService( const OUString& serviceName) {
+bool SAL_CALL XMLSignatureTemplateImpl::supportsService( const OUString& serviceName) {
     return cppu::supportsService(this, serviceName);
 }
 

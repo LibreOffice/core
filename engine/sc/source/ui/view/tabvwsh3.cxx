@@ -633,7 +633,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        //  remove old selection, unless bUnmark argument is sal_False (from navigator)
+                        //  remove old selection, unless bUnmark argument is false (from navigator)
                         if( bUnmark )
                         {
                             MoveCursorAbs( nCol, nRow,
@@ -1467,7 +1467,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 sal_uInt16          nId  = ScAcceptChgDlgWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = rThisFrame.GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? sal_False : sal_True );
+                pScMod->SetRefDialog( nId, pWnd ? false : true );
                 */
             }
             break;

@@ -68,7 +68,7 @@ namespace calc
 
         // XValueBinding
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
-        virtual sal_Bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
+        virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
         virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
         virtual void SAL_CALL setValue( const css::uno::Any& aValue ) override;
 
@@ -77,7 +77,7 @@ namespace calc
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // OPropertyImplHelper

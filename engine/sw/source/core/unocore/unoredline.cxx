@@ -413,7 +413,7 @@ uno::Type SwXRedlineText::getElementType(  )
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SwXRedlineText::hasElements(  )
+bool SwXRedlineText::hasElements(  )
 {
     return true;    // we always have a content index
 }
@@ -720,7 +720,7 @@ uno::Type SwXRedline::getElementType(  )
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SwXRedline::hasElements(  )
+bool SwXRedline::hasElements(  )
 {
     if (!GetDoc())
         throw uno::RuntimeException();

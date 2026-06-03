@@ -1020,7 +1020,7 @@ OUString UnoControlModel::getImplementationName(  )
 
 }
 
-sal_Bool UnoControlModel::supportsService( const OUString& rServiceName )
+bool UnoControlModel::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

@@ -220,7 +220,7 @@ public:
     virtual void SAL_CALL removeElementCollector( sal_Int32 id ) override;
     virtual sal_Int32 SAL_CALL addBlocker(  ) override;
     virtual void SAL_CALL removeBlocker( sal_Int32 id ) override;
-    virtual sal_Bool SAL_CALL isBlocking(  ) override;
+    virtual bool SAL_CALL isBlocking(  ) override;
     virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL
         getElement( sal_Int32 id ) override;
     virtual void SAL_CALL setElement(
@@ -237,7 +237,7 @@ public:
     /* XSecuritySAXEventKeeper */
     virtual sal_Int32 SAL_CALL addSecurityElementCollector(
         css::xml::crypto::sax::ElementMarkPriority priority,
-        sal_Bool modifyElement ) override;
+        bool modifyElement ) override;
     virtual void SAL_CALL setSecurityId( sal_Int32 id, sal_Int32 securityId ) override;
 
     /* XReferenceResolvedBroadcaster */
@@ -275,7 +275,7 @@ public:
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 

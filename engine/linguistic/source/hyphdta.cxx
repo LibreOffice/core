@@ -97,7 +97,7 @@ sal_Int16 SAL_CALL HyphenatedWord::getHyphenPos()
 }
 
 
-sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
+bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 {
     return bIsAltSpelling;
 }

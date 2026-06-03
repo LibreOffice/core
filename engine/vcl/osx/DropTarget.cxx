@@ -391,12 +391,12 @@ void SAL_CALL DropTarget::removeDropTargetListener(const uno::Reference<XDropTar
     rBHelper.removeListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
-sal_Bool SAL_CALL DropTarget::isActive(  )
+bool SAL_CALL DropTarget::isActive(  )
 {
     return mbActive;
 }
 
-void SAL_CALL DropTarget::setActive(sal_Bool active)
+void SAL_CALL DropTarget::setActive(bool active)
 {
     mbActive = active;
 }
@@ -432,7 +432,7 @@ void SAL_CALL DropTarget::rejectDrop()
     mSelectedDropAction = DNDConstants::ACTION_NONE;
 }
 
-void SAL_CALL DropTarget::dropComplete(sal_Bool success)
+void SAL_CALL DropTarget::dropComplete(bool success)
 {
     // Reset the internal transferable used as shortcut in case this is
     // an internal D&D operation
@@ -527,7 +527,7 @@ OUString SAL_CALL DropTarget::getImplementationName()
     return dropTarget_getImplementationName();
 }
 
-sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
+bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

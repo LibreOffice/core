@@ -385,7 +385,7 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     }
 }
 
-sal_Bool SAL_CALL OCacheSet::wasNull(  )
+bool SAL_CALL OCacheSet::wasNull(  )
 {
     return m_xDriverRow->wasNull();
 }
@@ -395,7 +395,7 @@ OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex )
     return m_xDriverRow->getString(columnIndex);
 }
 
-sal_Bool SAL_CALL OCacheSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL OCacheSet::getBoolean( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getBoolean(columnIndex);
 }

@@ -111,8 +111,8 @@ public:
     virtual void SAL_CALL setName(const OUString& Name_) override;
 
     //XStyle
-    virtual sal_Bool SAL_CALL isUserDefined() override;
-    virtual sal_Bool SAL_CALL isInUse() override;
+    virtual bool SAL_CALL isUserDefined() override;
+    virtual bool SAL_CALL isInUse() override;
     virtual OUString SAL_CALL getParentStyle() override;
     virtual void SAL_CALL setParentStyle(const OUString& aParentStyle) override;
 
@@ -175,7 +175,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     //SfxListener

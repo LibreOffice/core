@@ -437,18 +437,18 @@ void SAL_CALL SwVbaDocument::setProtectionType( ::sal_Int32 /*_protectiontype*/ 
     //TODO
 }
 
-sal_Bool SAL_CALL SwVbaDocument::getUpdateStylesOnOpen()
+bool SAL_CALL SwVbaDocument::getUpdateStylesOnOpen()
 {
     //TODO
     return false;
 }
 
-void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( sal_Bool /*_updatestylesonopen*/ )
+void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( bool /*_updatestylesonopen*/ )
 {
     //TODO
 }
 
-sal_Bool SAL_CALL SwVbaDocument::getAutoHyphenation()
+bool SAL_CALL SwVbaDocument::getAutoHyphenation()
 {
     // check this property only in default paragraph style
     bool IsAutoHyphenation = false;
@@ -457,7 +457,7 @@ sal_Bool SAL_CALL SwVbaDocument::getAutoHyphenation()
     return IsAutoHyphenation;
 }
 
-void SAL_CALL SwVbaDocument::setAutoHyphenation( sal_Bool _autohyphenation )
+void SAL_CALL SwVbaDocument::setAutoHyphenation( bool _autohyphenation )
 {
     //TODO
     rtl::Reference< SwXBaseStyle > xParaProps( word::getDefaultParagraphStyle( mxTextDocument ) );
@@ -670,13 +670,13 @@ SwVbaDocument::getValue( const OUString& aPropertyName )
     return uno::Any( xControl );
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwVbaDocument::hasMethod( const OUString& /*aName*/ )
 {
     return false;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 SwVbaDocument::hasProperty( const OUString& aName )
 {
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );

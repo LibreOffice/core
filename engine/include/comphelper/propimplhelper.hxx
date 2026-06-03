@@ -90,7 +90,7 @@ public:
         return *it;
     }
 
-    sal_Bool SAL_CALL hasPropertyByName(const OUString& rName) override
+    bool SAL_CALL hasPropertyByName(const OUString& rName) override
     {
         auto it = findByName(rName);
         return it != m_aProperties.end() && it->Name == rName;

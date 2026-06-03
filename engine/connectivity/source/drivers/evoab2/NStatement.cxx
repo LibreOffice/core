@@ -648,7 +648,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OCommonStatement, OStatement_IBase )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OCommonStatement, OStatement_IBase )
 
 
-sal_Bool SAL_CALL OStatement::execute( const OUString& _sql )
+bool SAL_CALL OStatement::execute( const OUString& _sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);

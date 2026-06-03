@@ -136,12 +136,12 @@ namespace pcr
         void dispose();
 
         // XObjectInspectorUI overridables
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) override;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) override;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, bool _bEnable ) override;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, bool _bEnable ) override;
         virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) override;
         virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) override;
         virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) override;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, bool _bShow ) override;
         virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) override;
         virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
         virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
@@ -229,7 +229,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable )
+    void CachedInspectorUI::enablePropertyUI( const OUString& _rPropertyName, bool _bEnable )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -260,7 +260,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable )
+    void CachedInspectorUI::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, bool _bEnable )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -311,7 +311,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::showCategory( const OUString& _rCategory, sal_Bool _bShow )
+    void CachedInspectorUI::showCategory( const OUString& _rCategory, bool _bShow )
     {
         MethodGuard aGuard( *this );
 
@@ -512,7 +512,7 @@ namespace pcr
 
 
         // a ->XObjectInspectorUI method taking a string and a boolean
-        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, sal_Bool );
+        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, bool );
 
 
         // an implementation of the ->IStringKeyBooleanUIUpdate interface which calls

@@ -123,13 +123,13 @@ namespace pcr
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XController
         virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-        virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
-        virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) override;
+        virtual bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
+        virtual bool SAL_CALL suspend( bool bSuspend ) override;
         virtual css::uno::Any SAL_CALL getViewData(  ) override;
         virtual void SAL_CALL restoreViewData( const css::uno::Any& Data ) override;
         virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel(  ) override;
@@ -157,7 +157,7 @@ namespace pcr
 
         /** XPropertyControlFactory
         */
-        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) override;
+        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, bool CreateReadOnly ) override;
 
     public:
         explicit OPropertyBrowserController(
@@ -178,12 +178,12 @@ namespace pcr
         virtual bool hasPropertyByName( const OUString& _rName ) override;
 
         // XObjectInspectorUI
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) override;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) override;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, bool _bEnable ) override;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, bool _bEnable ) override;
         virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) override;
         virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) override;
         virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) override;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) override;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, bool _bShow ) override;
         virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) override;
         virtual void SAL_CALL registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
         virtual void SAL_CALL revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;

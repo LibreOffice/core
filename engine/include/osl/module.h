@@ -122,13 +122,13 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelativeAscii(
     @param[out] pResult     a pointer to a oslModule that is updated with the
                             requested module handle on success.
 
-    @retval sal_True if the module handle could be retrieved and has been copied to *pResult.
-    @retval sal_False if the module has not been loaded yet.
+    @retval true if the module handle could be retrieved and has been copied to *pResult.
+    @retval false if the module has not been loaded yet.
 
     @see osl_getFunctionSymbol
     @see osl_getAsciiFunctionSymbol
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult);
+SAL_DLLPUBLIC bool SAL_CALL osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult);
 
 #ifndef DISABLE_DYNLOADING
 
@@ -190,9 +190,9 @@ SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(
 
     @param[in] pv       specifies an address in the process memory space.
     @param[out] pustrURL receives the URL of the module that is mapped at pv.
-    @return sal_True on success, sal_False if no module can be found at the specified address.
+    @return true on success, false if no module can be found at the specified address.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromAddress(
+SAL_DLLPUBLIC bool SAL_CALL osl_getModuleURLFromAddress(
         void *pv, rtl_uString **pustrURL );
 
 /** Lookup URL of module which is mapped at the specified function address.
@@ -203,12 +203,12 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromAddress(
     @param[in] pf       function address in oslGenericFunction format.
     @param[out] pustrFunctionURL receives the URL of the module that is mapped at pf.
 
-    @retval sal_True on success
-    @retval sal_False no module can be found at the specified function address or parameter is somewhat invalid
+    @retval true on success
+    @retval false no module can be found at the specified function address or parameter is somewhat invalid
 
     @see osl_getModuleURLFromAddress
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(
+SAL_DLLPUBLIC bool SAL_CALL osl_getModuleURLFromFunctionAddress(
         oslGenericFunction pf, rtl_uString **pustrFunctionURL );
 
 #ifdef __cplusplus

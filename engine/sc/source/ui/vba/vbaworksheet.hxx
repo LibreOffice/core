@@ -84,10 +84,10 @@ public:
     virtual void SAL_CALL setVisible( sal_Int32 nVisible ) override;
     virtual ::sal_Int32 SAL_CALL getStandardWidth() override;
     virtual ::sal_Int32 SAL_CALL getStandardHeight() override;
-    virtual sal_Bool SAL_CALL getProtectionMode() override;
-    virtual sal_Bool SAL_CALL getProtectContents() override;
-    virtual sal_Bool SAL_CALL getProtectDrawingObjects() override;
-    virtual sal_Bool SAL_CALL getProtectScenarios() override;
+    virtual bool SAL_CALL getProtectionMode() override;
+    virtual bool SAL_CALL getProtectContents() override;
+    virtual bool SAL_CALL getProtectDrawingObjects() override;
+    virtual bool SAL_CALL getProtectScenarios() override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() override ;
     virtual css::uno::Any SAL_CALL ChartObjects( const css::uno::Any& Index ) override;
     virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) override;
@@ -99,8 +99,8 @@ public:
      virtual sal_Int16 SAL_CALL getIndex() override;
      virtual sal_Int32 SAL_CALL getEnableSelection() override;
      virtual void SAL_CALL setEnableSelection( sal_Int32 nSelection ) override;
-    virtual sal_Bool SAL_CALL getAutoFilterMode() override;
-    virtual void SAL_CALL setAutoFilterMode( sal_Bool bAutoFilterMode ) override;
+    virtual bool SAL_CALL getAutoFilterMode() override;
+    virtual void SAL_CALL setAutoFilterMode( bool bAutoFilterMode ) override;
 
     // Methods
     virtual void SAL_CALL Activate() override;
@@ -139,16 +139,16 @@ public:
     virtual css::uno::Any SAL_CALL ScrollBars( const css::uno::Any& rIndex ) override;
     virtual css::uno::Any SAL_CALL Spinners( const css::uno::Any& rIndex ) override;
 
-    virtual void SAL_CALL setEnableCalculation( sal_Bool EnableCalculation ) override;
-    virtual sal_Bool SAL_CALL getEnableCalculation(  ) override;
+    virtual void SAL_CALL setEnableCalculation( bool EnableCalculation ) override;
+    virtual bool SAL_CALL getEnableCalculation(  ) override;
     virtual void SAL_CALL ShowDataForm(  ) override;
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
     virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
     // CodeName
     virtual OUString SAL_CALL getCodeName() override;
     /// @throws css::uno::RuntimeException

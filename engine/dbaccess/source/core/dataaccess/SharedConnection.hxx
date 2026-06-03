@@ -51,11 +51,11 @@ namespace dbaccess
         }
 
         // XConnection
-        virtual void SAL_CALL setAutoCommit( sal_Bool /*autoCommit*/ ) override
+        virtual void SAL_CALL setAutoCommit( bool /*autoCommit*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,css::uno::Any());
         }
-        virtual void SAL_CALL setReadOnly( sal_Bool /*readOnly*/ ) override
+        virtual void SAL_CALL setReadOnly( bool /*readOnly*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,css::uno::Any());
         }
@@ -76,12 +76,12 @@ namespace dbaccess
         virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
         virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
         virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-        virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+        virtual bool SAL_CALL getAutoCommit(  ) override;
         virtual void SAL_CALL commit(  ) override;
         virtual void SAL_CALL rollback(  ) override;
-        virtual sal_Bool SAL_CALL isClosed(  ) override;
+        virtual bool SAL_CALL isClosed(  ) override;
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-        virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+        virtual bool SAL_CALL isReadOnly(  ) override;
         virtual OUString SAL_CALL getCatalog(  ) override;
         virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
         virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;

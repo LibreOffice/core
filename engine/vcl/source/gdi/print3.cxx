@@ -151,7 +151,7 @@ public:
 
     typedef std::unordered_map< OUString, size_t > PropertyToIndexMap;
     typedef std::unordered_map< OUString, ControlDependency > ControlDependencyMap;
-    typedef std::unordered_map< OUString, css::uno::Sequence< sal_Bool > > ChoiceDisableMap;
+    typedef std::unordered_map< OUString, css::uno::Sequence< bool > > ChoiceDisableMap;
 
     VclPtr< Printer >                                           mxPrinter;
     weld::Window*                                               mpWindow;
@@ -1625,7 +1625,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
         bool bHaveProperty = false;
         OUString aPropName;
         vcl::ImplPrinterControllerData::ControlDependency aDep;
-        css::uno::Sequence< sal_Bool > aChoicesDisabled;
+        css::uno::Sequence< bool > aChoicesDisabled;
         for (const css::beans::PropertyValue& rEntry : aOptProp)
         {
             if ( rEntry.Name == "Property" )
@@ -1728,7 +1728,7 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
     return bEnabled;
 }
 
-void PrinterController::setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<sal_Bool>& rChoicesDisabled)
+void PrinterController::setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<bool>& rChoicesDisabled)
 {
     mpImplData->maChoiceDisableMap[rPropName] = std::move(rChoicesDisabled);
 }
@@ -1740,7 +1740,7 @@ bool PrinterController::isUIChoiceEnabled( const OUString& i_rProperty, sal_Int3
         mpImplData->maChoiceDisableMap.find( i_rProperty );
     if(it != mpImplData->maChoiceDisableMap.end() )
     {
-        const css::uno::Sequence< sal_Bool >& rDisabled( it->second );
+        const css::uno::Sequence< bool >& rDisabled( it->second );
         if( i_nValue >= 0 && i_nValue < rDisabled.getLength() )
             bEnabled = ! rDisabled[i_nValue];
     }
@@ -2110,7 +2110,7 @@ css::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Se
                                               const OUString& i_rProperty,
                                               const css::uno::Sequence< OUString >& i_rChoices,
                                               sal_Int32 i_nValue,
-                                              const css::uno::Sequence< sal_Bool >& i_rDisabledChoices,
+                                              const css::uno::Sequence< bool >& i_rDisabledChoices,
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
@@ -2136,7 +2136,7 @@ css::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rI
                                               const OUString& i_rProperty,
                                               const css::uno::Sequence< OUString >& i_rChoices,
                                               sal_Int32 i_nValue,
-                                              const css::uno::Sequence< sal_Bool >& i_rDisabledChoices,
+                                              const css::uno::Sequence< bool >& i_rDisabledChoices,
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );

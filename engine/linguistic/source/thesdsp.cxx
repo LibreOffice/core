@@ -84,7 +84,7 @@ Sequence< Locale > SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     ThesaurusDispatcher::hasLocale( const Locale& rLocale )
 {
     MutexGuard  aGuard( GetLinguMutex() );

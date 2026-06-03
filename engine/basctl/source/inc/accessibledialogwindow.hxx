@@ -96,7 +96,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
@@ -122,7 +122,7 @@ public:
 
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    virtual bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
     virtual void SAL_CALL clearAccessibleSelection() override;
     virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;

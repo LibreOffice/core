@@ -51,7 +51,7 @@ public:
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
 
-    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
+    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 
     // Helper functions not part of the XTransferable interface
 

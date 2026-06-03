@@ -224,7 +224,7 @@ uno::Type SAL_CALL Svx3DSceneObject::getElementType()
 }
 
 
-sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
+bool SAL_CALL Svx3DSceneObject::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -472,7 +472,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItem
     case OWN_ATTR_3D_VALUE_POS_IS_CENTER:
     {
         bool bNew = false;
-        // pack sal_Bool bPosIsCenter to the object
+        // pack bool bPosIsCenter to the object
         if( rValue >>= bNew )
         {
             static_cast< E3dCubeObj* >( GetSdrObject() )->SetPosIsCenter(bNew);

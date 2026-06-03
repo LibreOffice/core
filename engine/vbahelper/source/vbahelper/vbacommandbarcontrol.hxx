@@ -54,12 +54,12 @@ public:
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;
     virtual OUString SAL_CALL getOnAction() override;
     virtual void SAL_CALL setOnAction( const OUString& _onaction ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
-    virtual sal_Bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) override;
-    virtual sal_Bool SAL_CALL getBeginGroup() override;
-    virtual void SAL_CALL setBeginGroup( sal_Bool _begin ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool _visible ) override;
+    virtual bool SAL_CALL getEnabled() override;
+    virtual void SAL_CALL setEnabled( bool _enabled ) override;
+    virtual bool SAL_CALL getBeginGroup() override;
+    virtual void SAL_CALL setBeginGroup( bool _begin ) override;
     virtual sal_Int32 SAL_CALL getType() override
     {
         return ov::office::MsoControlType::msoControlButton;

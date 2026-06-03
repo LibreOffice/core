@@ -176,10 +176,10 @@ bool incrementMultidimensionalIndex(
     sal_Int32 * parMultidimensionalIndex)
 {
     if( dimensions < 1)
-        return sal_False;
+        return false;
 
-    bool ret= sal_True;
-    bool carry= sal_True; // to get into the while loop
+    bool ret= true;
+    bool carry= true; // to get into the while loop
 
     sal_Int32 currentDimension= 0; //most significant is 1
     while( carry)
@@ -189,15 +189,15 @@ bool incrementMultidimensionalIndex(
         if( parMultidimensionalIndex[ currentDimension] > (parDimensionLengths[ currentDimension] - 1))
             parMultidimensionalIndex[ currentDimension]= 0;
         else
-            carry= sal_False;
+            carry= false;
 
         currentDimension ++;
         // if dimensions drops below 1 and carry is set than then all indices are 0 again
-        // this is signalled by returning sal_False
+        // this is signalled by returning false
         if( currentDimension > dimensions - 1 && carry)
         {
-            carry= sal_False;
-            ret= sal_False;
+            carry= false;
+            ret= false;
         }
     }
     return ret;

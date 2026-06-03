@@ -111,7 +111,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XServiceInfo,
                       css::ucb::XContentProvider );
 
-sal_Bool ContentProvider::supportsService(const OUString& sServiceName)
+bool ContentProvider::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

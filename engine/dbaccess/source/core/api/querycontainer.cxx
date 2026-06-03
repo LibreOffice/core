@@ -139,7 +139,7 @@ OUString SAL_CALL OQueryContainer::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.OQueryContainer"_ustr;
     }
-sal_Bool SAL_CALL OQueryContainer::supportsService(const OUString& _rServiceName)
+bool SAL_CALL OQueryContainer::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -409,7 +409,7 @@ bool OQueryContainer::checkExistence(const OUString& _rName)
     return bRet;
 }
 
-sal_Bool SAL_CALL OQueryContainer::hasElements( )
+bool SAL_CALL OQueryContainer::hasElements( )
 {
     MutexGuard aGuard(m_aMutex);
     return m_xCommandDefinitions->hasElements();

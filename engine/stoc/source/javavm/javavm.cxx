@@ -560,7 +560,7 @@ OUString SAL_CALL JavaVirtualMachine::getImplementationName()
     return u"com.sun.star.comp.stoc.JavaVirtualMachine"_ustr;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 JavaVirtualMachine::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
@@ -794,7 +794,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     }
 }
 
-sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
+bool SAL_CALL JavaVirtualMachine::isVMStarted()
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -803,7 +803,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
     return m_xUnoVirtualMachine.is();
 }
 
-sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
+bool SAL_CALL JavaVirtualMachine::isVMEnabled()
 {
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -821,7 +821,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
     return bEnabled;
 }
 
-sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
+bool SAL_CALL JavaVirtualMachine::isThreadAttached()
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)

@@ -51,7 +51,7 @@ css::uno::Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
     return comphelper::mapKeysToSequence(m_ParameterMap);
 }
 
-sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )
+bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )
 {
     return m_ParameterMap.contains( aName.toAsciiLowerCase() );
 }

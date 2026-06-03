@@ -4996,7 +4996,7 @@ public:
 #endif
     }
 
-    virtual void SAL_CALL dropComplete(sal_Bool bSuccess) override
+    virtual void SAL_CALL dropComplete(bool bSuccess) override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_drag_finish(m_pContext, bSuccess, false, m_nTime);

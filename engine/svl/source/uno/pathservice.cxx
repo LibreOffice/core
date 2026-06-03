@@ -45,7 +45,7 @@ public:
             return u"com.sun.star.comp.svl.PathService"_ustr;
         }
 
-    virtual sal_Bool SAL_CALL supportsService (
+    virtual bool SAL_CALL supportsService (
         const OUString & rName) override
         {
             return cppu::supportsService(this, rName);

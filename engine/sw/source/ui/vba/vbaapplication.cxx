@@ -214,12 +214,12 @@ SwVbaApplication::ListGalleries( const uno::Any& index )
     return uno::Any( xCol );
 }
 
-sal_Bool SAL_CALL SwVbaApplication::getDisplayAutoCompleteTips()
+bool SAL_CALL SwVbaApplication::getDisplayAutoCompleteTips()
 {
     return SvxAutoCorrCfg::Get().IsAutoTextTip();
 }
 
-void SAL_CALL SwVbaApplication::setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips )
+void SAL_CALL SwVbaApplication::setDisplayAutoCompleteTips( bool _displayAutoCompleteTips )
 {
     SvxAutoCorrCfg::Get().SetAutoTextTip( _displayAutoCompleteTips );
 }
@@ -364,7 +364,7 @@ float SAL_CALL SwVbaApplication::PointsToCentimeters( float Points )
     return o3tl::convert(Points, o3tl::Length::pt, o3tl::Length::cm);
 }
 
-float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, ::sal_Bool fVertical )
+float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, bool fVertical )
 {
     //Set up xDevice
     rtl::Reference< SwXTextDocument > xModel( getCurrentSwDocument() );
@@ -376,7 +376,7 @@ float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, ::sal_Bool fVerti
     return ooo::vba::PixelsToPoints(xDevice, Pixels, fVertical);
 }
 
-float SAL_CALL SwVbaApplication::PointsToPixels( float Pixels, ::sal_Bool fVertical )
+float SAL_CALL SwVbaApplication::PointsToPixels( float Pixels, bool fVertical )
 {
     rtl::Reference< SwXTextDocument > xModel( getCurrentSwDocument() );
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );

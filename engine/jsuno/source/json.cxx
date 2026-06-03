@@ -431,7 +431,7 @@ void appendUnoAsJson(OStringBuffer& buf, css::uno::Type const& type, void const*
             buf.append("null");
             return;
         case css::uno::TypeClass_BOOLEAN:
-            buf.append(*static_cast<sal_Bool const*>(value) ? "true" : "false");
+            buf.append(*static_cast<bool const*>(value) ? "true" : "false");
             return;
         case css::uno::TypeClass_BYTE:
             buf.append(static_cast<sal_Int32>(*static_cast<sal_Int8 const*>(value)));

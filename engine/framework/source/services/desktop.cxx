@@ -74,7 +74,7 @@ OUString SAL_CALL Desktop::getImplementationName()
     return u"com.sun.star.comp.framework.Desktop"_ustr;
 }
 
-sal_Bool SAL_CALL Desktop::supportsService(OUString const & ServiceName)
+bool SAL_CALL Desktop::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -182,7 +182,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  )
     );
 }
 
-sal_Bool SAL_CALL Desktop::terminate()
+bool SAL_CALL Desktop::terminate()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     SolarMutexResettableGuard aGuard;
@@ -829,7 +829,7 @@ void SAL_CALL Desktop::setName( const OUString& sName )
     m_sName = sName;
 }
 
-sal_Bool SAL_CALL Desktop::isTop()
+bool SAL_CALL Desktop::isTop()
 {
     return true;
 }
@@ -848,12 +848,12 @@ void SAL_CALL Desktop::deactivate()
     // So - please don't show any assertions here. Do nothing!
 }
 
-sal_Bool SAL_CALL Desktop::isActive()
+bool SAL_CALL Desktop::isActive()
 {
     return true;
 }
 
-sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
+bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
                                          const css::uno::Reference< css::frame::XController >& /*xController*/      )
 {
     return false;
@@ -1302,12 +1302,12 @@ OUString SAL_CALL Desktop::getUntitledPrefix()
     @param      "aOldValue"         old value of property
     @param      "nHandle"           handle of property
     @param      "aValue"            new value of property
-    @return     sal_True if value will be changed, sal_FALSE otherwise
+    @return     true if value will be changed, sal_FALSE otherwise
 
     @onerror    IllegalArgumentException, if you call this with an invalid argument
     @threadsafe yes
 *//*-*************************************************************************************************************/
-sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aConvertedValue ,
+bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aConvertedValue ,
                                                            css::uno::Any&   aOldValue       ,
                                                            sal_Int32        nHandle         ,
                                                      const css::uno::Any&   aValue          )
@@ -1316,7 +1316,7 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    //  Initialize state with sal_False !!!
+    //  Initialize state with false !!!
     //  (Handle can be invalid)
     bool bReturn = false;
 

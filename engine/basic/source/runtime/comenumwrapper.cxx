@@ -21,7 +21,7 @@
 
 using namespace ::com::sun::star;
 
-sal_Bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
+bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
 {
     bool bResult = false;
 

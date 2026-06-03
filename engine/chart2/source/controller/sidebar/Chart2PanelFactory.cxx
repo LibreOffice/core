@@ -146,7 +146,7 @@ OUString ChartPanelFactory::getImplementationName()
     return u"org.libreoffice.comp.chart2.sidebar.ChartPanelFactory"_ustr;
 }
 
-sal_Bool ChartPanelFactory::supportsService(OUString const & ServiceName)
+bool ChartPanelFactory::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

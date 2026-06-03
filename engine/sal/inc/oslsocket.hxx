@@ -16,8 +16,8 @@
     Note that this might be slower than calling osl_getLocalHostname
     since DNS needs to be queried to determine the FQDN.
     @param  strLocalHostname out-parameter. The string that receives the local host name.
-    @retval sal_True upon success
-    @retval sal_False
+    @retval true upon success
+    @retval false
 */
 oslSocketResult osl_getLocalHostnameFQDN(rtl_uString** strLocalHostname);
 

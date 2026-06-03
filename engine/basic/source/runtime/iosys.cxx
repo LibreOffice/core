@@ -126,7 +126,7 @@ void SbiStream::MapError()
         nError = ERRCODE_BASIC_IO_ERROR;
 }
 
-// Returns sal_True if UNO is available, otherwise the old file
+// Returns true if UNO is available, otherwise the old file
 // system implementation has to be used
 // #89378 New semantic: Don't just ask for UNO but for UCB
 bool hasUno()

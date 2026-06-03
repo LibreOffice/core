@@ -222,7 +222,7 @@ enum class PrepareHint
     FootnoteInvalidation,      // Invalidation of footnotes.
     FramePositionChanged,      // Position of Frame has changed.
                                // (Check for Fly-break). In void* of Prepare()
-                               // a sal_Bool& is passed. If this is sal_True,
+                               // a bool& is passed. If this is true,
                                // it indicates that a format has been executed.
     ULSpaceChanged,            // UL-Space has changed, TextFrames have to
                                // re-calculate line space.

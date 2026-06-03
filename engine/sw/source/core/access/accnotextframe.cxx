@@ -174,7 +174,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
 
 // XAccessibleText
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getCaretPosition(  ){return 0;}
-sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ){return false;}
+bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ){return false;}
 sal_Unicode SAL_CALL SwAccessibleNoTextFrame::getCharacter( sal_Int32 ){return 0;}
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL SwAccessibleNoTextFrame::getCharacterAttributes( sal_Int32 , const css::uno::Sequence< OUString >& )
 {
@@ -189,7 +189,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getIndexAtPoint( const css::awt::Poi
 OUString SAL_CALL SwAccessibleNoTextFrame::getSelectedText(  ){return OUString();}
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getSelectionStart(  ){return 0;}
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getSelectionEnd(  ){return 0;}
-sal_Bool SAL_CALL SwAccessibleNoTextFrame::setSelection( sal_Int32 , sal_Int32 ){return true;}
+bool SAL_CALL SwAccessibleNoTextFrame::setSelection( sal_Int32 , sal_Int32 ){return true;}
 OUString SAL_CALL SwAccessibleNoTextFrame::getText(  ){return OUString();}
 OUString SAL_CALL SwAccessibleNoTextFrame::getTextRange( sal_Int32 , sal_Int32 ){return OUString();}
 css::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextAtIndex( sal_Int32 , sal_Int16 )
@@ -208,8 +208,8 @@ css::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextBehindI
     return aResult;
 }
 
-sal_Bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ){return true;}
-sal_Bool SAL_CALL SwAccessibleNoTextFrame::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType ){return false;}
+bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ){return true;}
+bool SAL_CALL SwAccessibleNoTextFrame::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType ){return false;}
 
 //  XAccessibleHyperText
 

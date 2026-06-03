@@ -344,7 +344,7 @@ bool SwXContentControl::SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart,
 // XServiceInfo
 OUString SAL_CALL SwXContentControl::getImplementationName() { return u"SwXContentControl"_ustr; }
 
-sal_Bool SAL_CALL SwXContentControl::supportsService(const OUString& rServiceName)
+bool SAL_CALL SwXContentControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -581,14 +581,14 @@ SwXContentControl::createTextCursorByRange(const uno::Reference<text::XTextRange
 }
 
 void SAL_CALL SwXContentControl::insertString(const uno::Reference<text::XTextRange>& xRange,
-                                              const OUString& rString, sal_Bool bAbsorb)
+                                              const OUString& rString, bool bAbsorb)
 {
     SolarMutexGuard g;
     return m_pImpl->m_xText->insertString(xRange, rString, bAbsorb);
 }
 
 void SAL_CALL SwXContentControl::insertControlCharacter(
-    const uno::Reference<text::XTextRange>& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb)
+    const uno::Reference<text::XTextRange>& xRange, sal_Int16 nControlCharacter, bool bAbsorb)
 {
     SolarMutexGuard g;
     return m_pImpl->m_xText->insertControlCharacter(xRange, nControlCharacter, bAbsorb);
@@ -597,7 +597,7 @@ void SAL_CALL SwXContentControl::insertControlCharacter(
 // XText
 void SAL_CALL SwXContentControl::insertTextContent(
     const uno::Reference<text::XTextRange>& xRange,
-    const uno::Reference<text::XTextContent>& xContent, sal_Bool bAbsorb)
+    const uno::Reference<text::XTextContent>& xContent, bool bAbsorb)
 {
     SolarMutexGuard g;
     return m_pImpl->m_xText->insertTextContent(xRange, xContent, bAbsorb);
@@ -1383,7 +1383,7 @@ uno::Type SAL_CALL SwXContentControl::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SwXContentControl::hasElements()
+bool SAL_CALL SwXContentControl::hasElements()
 {
     SolarMutexGuard g;
     return m_pImpl->m_pContentControl != nullptr;
@@ -1461,7 +1461,7 @@ uno::Any SwXContentControls::getByIndex(sal_Int32 nIndex)
 
 uno::Type SwXContentControls::getElementType() { return cppu::UnoType<text::XTextContent>::get(); }
 
-sal_Bool SwXContentControls::hasElements()
+bool SwXContentControls::hasElements()
 {
     SolarMutexGuard aGuard;
 

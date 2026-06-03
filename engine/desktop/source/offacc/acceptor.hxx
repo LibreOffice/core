@@ -70,7 +70,7 @@ public:
     // XService info
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& aName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& aName ) override;
 
     // XInitialize
     virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments ) override;

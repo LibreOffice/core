@@ -115,7 +115,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XNameContainer
         virtual void SAL_CALL removeByName( const OUString& sName ) override;
@@ -128,7 +128,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
         // container.XContainerListener
         virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
@@ -273,7 +273,7 @@ Sequence< OUString > SAL_CALL ConfigurationAccess_WindowState::getElementNames()
         return Sequence< OUString > ();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rResourceURL )
+bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rResourceURL )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -297,7 +297,7 @@ Type SAL_CALL ConfigurationAccess_WindowState::getElementType()
     return cppu::UnoType<Sequence< PropertyValue >>::get();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
+bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -1239,7 +1239,7 @@ public:
         return u"com.sun.star.comp.framework.WindowStateConfiguration"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -1254,11 +1254,11 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     typedef std::unordered_map< OUString,
                                 OUString > ModuleToWindowStateFileMap;
@@ -1359,7 +1359,7 @@ Sequence< OUString > SAL_CALL WindowStateConfiguration::getElementNames()
     return comphelper::mapKeysToSequence( m_aModuleToFileHashMap );
 }
 
-sal_Bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
+bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
 {
     std::unique_lock g(m_aMutex);
 
@@ -1373,7 +1373,7 @@ Type SAL_CALL WindowStateConfiguration::getElementType()
     return cppu::UnoType<XNameAccess>::get();
 }
 
-sal_Bool SAL_CALL WindowStateConfiguration::hasElements()
+bool SAL_CALL WindowStateConfiguration::hasElements()
 {
     // We always have at least one module. So it is valid to return true!
     return true;

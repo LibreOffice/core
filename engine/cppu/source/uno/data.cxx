@@ -226,7 +226,7 @@ void SAL_CALL uno_copyAndConvertData(
     _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, nullptr, mapping );
 }
 
-sal_Bool SAL_CALL uno_type_equalData(
+bool SAL_CALL uno_type_equalData(
     void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release ) noexcept
@@ -237,7 +237,7 @@ sal_Bool SAL_CALL uno_type_equalData(
         queryInterface, release );
 }
 
-sal_Bool SAL_CALL uno_equalData(
+bool SAL_CALL uno_equalData(
     void * pVal1, typelib_TypeDescription * pVal1TD,
     void * pVal2, typelib_TypeDescription * pVal2TD,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release ) noexcept
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL uno_equalData(
         queryInterface, release );
 }
 
-sal_Bool SAL_CALL uno_type_assignData(
+bool SAL_CALL uno_type_assignData(
     void * pDest, typelib_TypeDescriptionReference * pDestType,
     void * pSource, typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
@@ -259,7 +259,7 @@ sal_Bool SAL_CALL uno_type_assignData(
         queryInterface, acquire, release );
 }
 
-sal_Bool SAL_CALL uno_assignData(
+bool SAL_CALL uno_assignData(
     void * pDest, typelib_TypeDescription * pDestTD,
     void * pSource, typelib_TypeDescription * pSourceTD,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
@@ -270,7 +270,7 @@ sal_Bool SAL_CALL uno_assignData(
         queryInterface, acquire, release );
 }
 
-sal_Bool SAL_CALL uno_type_isAssignableFromData(
+bool SAL_CALL uno_type_isAssignableFromData(
     typelib_TypeDescriptionReference * pAssignable,
     void * pFrom, typelib_TypeDescriptionReference * pFromType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release ) noexcept

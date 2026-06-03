@@ -4544,7 +4544,7 @@ public:
         return { m_aFlavor };
     }
 
-    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override
+    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override
     {
         return rFlavor.MimeType == m_aFlavor.MimeType && rFlavor.DataType == m_aFlavor.DataType;
     }

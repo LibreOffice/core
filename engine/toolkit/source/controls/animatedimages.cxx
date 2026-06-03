@@ -60,14 +60,14 @@ public:
     // XAnimation
     virtual void SAL_CALL startAnimation(  ) override;
     virtual void SAL_CALL stopAnimation(  ) override;
-    virtual sal_Bool SAL_CALL isAnimationRunning(  ) override;
+    virtual bool SAL_CALL isAnimationRunning(  ) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XControl
-    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& i_rModel ) override;
+    bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& i_rModel ) override;
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& i_toolkit, const css::uno::Reference< css::awt::XWindowPeer >& i_parentPeer ) override;
 
 
@@ -107,7 +107,7 @@ public:
     }
 
 
-    sal_Bool SAL_CALL AnimatedImagesControl::isAnimationRunning(  )
+    bool SAL_CALL AnimatedImagesControl::isAnimationRunning(  )
     {
         Reference< XAnimation > xAnimation( getPeer(), UNO_QUERY );
         if ( xAnimation.is() )
@@ -141,7 +141,7 @@ public:
         }
     }
 
-    sal_Bool SAL_CALL AnimatedImagesControl::setModel( const Reference< XControlModel >& i_rModel )
+    bool SAL_CALL AnimatedImagesControl::setModel( const Reference< XControlModel >& i_rModel )
     {
         const Reference< XAnimatedImages > xOldContainer( getModel(), UNO_QUERY );
         const Reference< XAnimatedImages > xNewContainer( i_rModel, UNO_QUERY );
@@ -355,7 +355,7 @@ namespace toolkit {
     }
 
 
-    sal_Bool SAL_CALL AnimatedImagesControlModel::getAutoRepeat()
+    bool SAL_CALL AnimatedImagesControlModel::getAutoRepeat()
     {
         bool bAutoRepeat( true );
         OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ) ) >>= bAutoRepeat );
@@ -363,7 +363,7 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::setAutoRepeat( sal_Bool i_autoRepeat )
+    void SAL_CALL AnimatedImagesControlModel::setAutoRepeat( bool i_autoRepeat )
     {
         setPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ), Any( i_autoRepeat ) );
     }

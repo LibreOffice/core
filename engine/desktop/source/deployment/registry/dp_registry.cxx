@@ -113,7 +113,7 @@ public:
 
     // XPackageRegistry
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
-        OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+        OUString const & url, OUString const & mediaType, bool bRemoved,
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv ) override;
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() override;
@@ -423,7 +423,7 @@ void PackageRegistryImpl::update()
 // XPackageRegistry
 
 Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
-    OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
+    OUString const & url, OUString const & mediaType_, bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     check();

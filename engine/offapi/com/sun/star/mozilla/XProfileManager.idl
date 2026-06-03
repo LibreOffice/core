@@ -70,7 +70,7 @@ published interface XProfileManager: com::sun::star::uno::XInterface
     /** attempts to check whether the current profile locked or not
 
         @returns
-            return sal_True is current profile is locked
+            return true is current profile is locked
 
      */
     boolean isCurrentProfileLocked();

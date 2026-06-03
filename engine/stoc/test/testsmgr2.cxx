@@ -44,8 +44,8 @@ SAL_IMPLEMENT_MAIN()
 
         Reference< XSimpleRegistry > r1 =  createSimpleRegistry();
         Reference< XSimpleRegistry > r2 =  createSimpleRegistry();
-        r1->open( OUString( "test1.rdb" ), sal_True, sal_False );
-        r2->open( OUString( "test2.rdb" ), sal_True, sal_False );
+        r1->open( OUString( "test1.rdb" ), true, false );
+        r2->open( OUString( "test2.rdb" ), true, false );
         Reference< XSimpleRegistry > r = createNestedRegistry( );
         Reference< XInitialization > rInit( r, UNO_QUERY );
         Sequence< Any > seq( 2 );

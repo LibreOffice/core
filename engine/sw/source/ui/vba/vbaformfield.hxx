@@ -48,10 +48,10 @@ public:
     sal_Int32 SAL_CALL getType() override;
     // True if references to the specified form field
     // are automatically updated whenever the field is exited
-    sal_Bool SAL_CALL getCalculateOnExit() override;
-    void SAL_CALL setCalculateOnExit(sal_Bool bSet) override;
-    sal_Bool SAL_CALL getEnabled() override;
-    void SAL_CALL setEnabled(sal_Bool bSet) override;
+    bool SAL_CALL getCalculateOnExit() override;
+    void SAL_CALL setCalculateOnExit(bool bSet) override;
+    bool SAL_CALL getEnabled() override;
+    void SAL_CALL setEnabled(bool bSet) override;
     OUString SAL_CALL getEntryMacro() override;
     void SAL_CALL setEntryMacro(const OUString& rSet) override;
     OUString SAL_CALL getExitMacro() override;
@@ -64,8 +64,8 @@ public:
      */
     OUString SAL_CALL getHelpText() override;
     void SAL_CALL setHelpText(const OUString& rSet) override;
-    sal_Bool SAL_CALL getOwnHelp() override;
-    void SAL_CALL setOwnHelp(sal_Bool bSet) override;
+    bool SAL_CALL getOwnHelp() override;
+    void SAL_CALL setOwnHelp(bool bSet) override;
 
     OUString SAL_CALL getName() override;
     void SAL_CALL setName(const OUString& rSet) override;
@@ -79,8 +79,8 @@ public:
      */
     OUString SAL_CALL getStatusText() override;
     void SAL_CALL setStatusText(const OUString& rSet) override;
-    sal_Bool SAL_CALL getOwnStatus() override;
-    void SAL_CALL setOwnStatus(sal_Bool bSet) override;
+    bool SAL_CALL getOwnStatus() override;
+    void SAL_CALL setOwnStatus(bool bSet) override;
 
     // XHelperInterface
     OUString getServiceImplName() override;

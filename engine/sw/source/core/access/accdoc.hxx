@@ -104,7 +104,7 @@ public:
     virtual void SAL_CALL selectAccessibleChild(
         sal_Int64 nChildIndex ) override;
 
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected(
+    virtual bool SAL_CALL isAccessibleChildSelected(
         sal_Int64 nChildIndex ) override;
     virtual void SAL_CALL clearAccessibleSelection(  ) override;
     virtual void SAL_CALL selectAllAccessibleChildren(  ) override;

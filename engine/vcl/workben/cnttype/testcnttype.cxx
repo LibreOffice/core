@@ -59,13 +59,13 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
     SrvMgr.clear();
 }
 
-sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData )
+bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData )
 {
     FILE* fstream;
 
     fstream = fopen( fname, "r+" );
     if ( !fstream )
-        return sal_False;
+        return false;
 
     // set pointer to file start
     fseek( fstream, 0, SEEK_SET );
@@ -79,16 +79,16 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
 
     fclose( fstream );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& vecData, Reference< XMimeContentTypeFactory > cnttypeFactory )
+bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& vecData, Reference< XMimeContentTypeFactory > cnttypeFactory )
 {
     FILE* fstream;
 
     fstream = fopen( fname, "w" );
     if ( !fstream )
-        return sal_False;
+        return false;
 
     // set pointer to file start
     fseek( fstream, 0, SEEK_SET );
@@ -131,7 +131,7 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
 
     fclose( fstream );
 
-    return sal_True;
+    return true;
 }
 
 //  main

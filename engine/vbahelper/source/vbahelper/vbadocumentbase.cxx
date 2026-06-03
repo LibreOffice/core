@@ -236,7 +236,7 @@ VbaDocumentBase::Unprotect( const uno::Any &aPassword )
 }
 
 void
-VbaDocumentBase::setSaved( sal_Bool bSave )
+VbaDocumentBase::setSaved( bool bSave )
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
     try
@@ -257,7 +257,7 @@ VbaDocumentBase::setSaved( sal_Bool bSave )
     }
 }
 
-sal_Bool
+bool
 VbaDocumentBase::getSaved()
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );

@@ -45,13 +45,13 @@ SwVbaContentControl::SwVbaContentControl(const uno::Reference<XHelperInterface>&
 
 SwVbaContentControl::~SwVbaContentControl() {}
 
-sal_Bool SwVbaContentControl::getAllowInsertDeleteSection()
+bool SwVbaContentControl::getAllowInsertDeleteSection()
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::getAllowInsertDeleteSection stub");
     return false;
 }
 
-void SwVbaContentControl::setAllowInsertDeleteSection(sal_Bool /*bSet*/)
+void SwVbaContentControl::setAllowInsertDeleteSection(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::setAllowInsertDeleteSection stub");
 }
@@ -91,9 +91,9 @@ void SwVbaContentControl::setBuildingBlockType(sal_Int32 nSet)
     SAL_INFO("sw.vba", "SwVbaContentControl::setBuildingBlockType[" << nSet << "] stub");
 }
 
-sal_Bool SwVbaContentControl::getChecked() { return m_pCC->GetCheckbox() && m_pCC->GetChecked(); }
+bool SwVbaContentControl::getChecked() { return m_pCC->GetCheckbox() && m_pCC->GetChecked(); }
 
-void SwVbaContentControl::setChecked(sal_Bool bSet)
+void SwVbaContentControl::setChecked(bool bSet)
 {
     // Word 2010: if locked, then the checked status is changed, but not the underlying text.
     // Do we really want to do that? That is pretty bizarre behaviour...
@@ -102,7 +102,7 @@ void SwVbaContentControl::setChecked(sal_Bool bSet)
     if (getLockContents())
         return;
 
-    if (m_pCC->GetCheckbox() && m_pCC->GetChecked() != static_cast<bool>(bSet))
+    if (m_pCC->GetCheckbox() && m_pCC->GetChecked() != bSet)
     {
         m_pCC->SetChecked(bSet);
         m_pCC->SetShowingPlaceHolder(false);
@@ -479,19 +479,19 @@ sal_Int32 SwVbaContentControl::getLevel()
     return 0;
 }
 
-sal_Bool SwVbaContentControl::getLockContentControl()
+bool SwVbaContentControl::getLockContentControl()
 {
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/true);
     return oLock.has_value() && *oLock;
 }
 
-void SwVbaContentControl::setLockContentControl(sal_Bool bSet)
+void SwVbaContentControl::setLockContentControl(bool bSet)
 {
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/false);
     m_pCC->SetLock(/*bContents=*/oLock.has_value() && *oLock, /*bControl=*/bSet);
 }
 
-sal_Bool SwVbaContentControl::getLockContents()
+bool SwVbaContentControl::getLockContents()
 {
     // If the theoretical design model says it is locked, then report as locked.
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/false);
@@ -510,7 +510,7 @@ sal_Bool SwVbaContentControl::getLockContents()
     return m_pCC->GetReadWrite();
 }
 
-void SwVbaContentControl::setLockContents(sal_Bool bSet)
+void SwVbaContentControl::setLockContents(bool bSet)
 {
     // Set the lock both theoretically and actually.
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/true);
@@ -526,13 +526,13 @@ void SwVbaContentControl::setLockContents(sal_Bool bSet)
     m_pCC->SetReadWrite(bSet);
 }
 
-sal_Bool SwVbaContentControl::getMultiLine()
+bool SwVbaContentControl::getMultiLine()
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::getMultiLine stub");
     return false;
 }
 
-void SwVbaContentControl::setMultiLine(sal_Bool /*bSet*/)
+void SwVbaContentControl::setMultiLine(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::setMultiLine stub");
 }
@@ -544,7 +544,7 @@ OUString SwVbaContentControl::getPlaceholderText()
     return OUString();
 }
 
-sal_Bool SwVbaContentControl::getShowingPlaceholderText() { return m_pCC->GetShowingPlaceHolder(); }
+bool SwVbaContentControl::getShowingPlaceholderText() { return m_pCC->GetShowingPlaceHolder(); }
 
 uno::Reference<word::XRange> SwVbaContentControl::getRange()
 {
@@ -578,14 +578,14 @@ OUString SwVbaContentControl::getTag() { return m_pCC->GetTag(); }
 
 void SwVbaContentControl::setTag(const OUString& rSet) { return m_pCC->SetTag(rSet); }
 
-sal_Bool SwVbaContentControl::getTemporary()
+bool SwVbaContentControl::getTemporary()
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::getTemporary stub");
     // Is content control removed when user edits (one time use)? Not implemented in LO.
     return false;
 }
 
-void SwVbaContentControl::setTemporary(sal_Bool /*bSet*/)
+void SwVbaContentControl::setTemporary(bool /*bSet*/)
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::setTemporary stub");
 }

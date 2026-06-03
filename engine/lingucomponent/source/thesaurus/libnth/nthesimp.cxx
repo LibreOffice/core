@@ -198,7 +198,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
     return aSuppLocales;
 }
 
-sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
+bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -547,7 +547,7 @@ OUString SAL_CALL Thesaurus::getImplementationName()
     return u"org.openoffice.lingu.new.Thesaurus"_ustr;
 }
 
-sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
+bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -97,7 +97,7 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rNam
     return aProperty;
 }
 
-sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const OUString& rName )
+bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const OUString& rName )
 {
     return maMap.contains( rName );
 }

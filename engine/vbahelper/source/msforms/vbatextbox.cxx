@@ -88,7 +88,7 @@ ScVbaTextBox::setMaxLength( sal_Int32 _maxlength )
     m_xProps->setPropertyValue( u"MaxTextLen"_ustr , aValue);
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaTextBox::getMultiline()
 {
     uno::Any aValue = m_xProps->getPropertyValue( u"MultiLine"_ustr );
@@ -98,7 +98,7 @@ ScVbaTextBox::getMultiline()
 }
 
 void SAL_CALL
-ScVbaTextBox::setMultiline( sal_Bool _multiline )
+ScVbaTextBox::setMultiline( bool _multiline )
 {
     uno::Any aValue( _multiline );
     m_xProps->setPropertyValue( u"MultiLine"_ustr , aValue);
@@ -144,22 +144,22 @@ void SAL_CALL ScVbaTextBox::setBackColor( sal_Int32 nBackColor )
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Bool SAL_CALL ScVbaTextBox::getAutoSize()
+bool SAL_CALL ScVbaTextBox::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaTextBox::setAutoSize( sal_Bool bAutoSize )
+void SAL_CALL ScVbaTextBox::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaTextBox::getLocked()
+bool SAL_CALL ScVbaTextBox::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked )
+void SAL_CALL ScVbaTextBox::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }

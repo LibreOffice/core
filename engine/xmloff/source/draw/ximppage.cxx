@@ -538,7 +538,7 @@ public:
 
     // XElementAccess
     virtual Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
 private:
     std::vector< Reference< XShape > > maShapes;
@@ -571,7 +571,7 @@ Type SAL_CALL XoNavigationOrderAccess::getElementType(  )
     return cppu::UnoType<XShape>::get();
 }
 
-sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  )
+bool SAL_CALL XoNavigationOrderAccess::hasElements(  )
 {
     return !maShapes.empty();
 }

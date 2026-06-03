@@ -138,7 +138,7 @@ OUString SAL_CALL OResultSet::getImplementationName(  )
     return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
-sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -373,7 +373,7 @@ template < typename T > T OResultSet::impl_getValue( const sal_Int32 _nColumnInd
     return val;
 }
 
-// this function exists for the implicit conversion to sal_Bool (compared to a direct call to impl_getValue)
+// this function exists for the implicit conversion to bool (compared to a direct call to impl_getValue)
 bool OResultSet::impl_getBoolean( sal_Int32 columnIndex )
 {
     return impl_getValue<sal_Int8>(columnIndex, SQL_C_BIT);
@@ -412,7 +412,7 @@ template < typename T > T OResultSet::getValue( sal_Int32 columnIndex )
         return row;
 }
 
-sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex )
+bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex )
 {
     return getValue<bool>( columnIndex );
 }
@@ -604,14 +604,14 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex )
     return getValue<DateTime>( columnIndex );
 }
 
-sal_Bool SAL_CALL OResultSet::isBeforeFirst(  )
+bool SAL_CALL OResultSet::isBeforeFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return m_nRowPos == 0;
 }
 
-sal_Bool SAL_CALL OResultSet::isAfterLast(  )
+bool SAL_CALL OResultSet::isAfterLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -619,7 +619,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  )
     return m_nRowPos != 0 && m_nCurrentFetchState == SQL_NO_DATA;
 }
 
-sal_Bool SAL_CALL OResultSet::isFirst(  )
+bool SAL_CALL OResultSet::isFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -627,7 +627,7 @@ sal_Bool SAL_CALL OResultSet::isFirst(  )
     return m_nRowPos == 1;
 }
 
-sal_Bool SAL_CALL OResultSet::isLast(  )
+bool SAL_CALL OResultSet::isLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -669,28 +669,28 @@ void SAL_CALL OResultSet::close(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::first(  )
+bool SAL_CALL OResultSet::first(  )
 {
     return moveImpl(IResultSetHelper::FIRST,0);
 }
 
 
-sal_Bool SAL_CALL OResultSet::last(  )
+bool SAL_CALL OResultSet::last(  )
 {
     return moveImpl(IResultSetHelper::LAST,0);
 }
 
-sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row )
+bool SAL_CALL OResultSet::absolute( sal_Int32 row )
 {
     return moveImpl(IResultSetHelper::ABSOLUTE1,row);
 }
 
-sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row )
+bool SAL_CALL OResultSet::relative( sal_Int32 row )
 {
     return moveImpl(IResultSetHelper::RELATIVE1,row);
 }
 
-sal_Bool SAL_CALL OResultSet::previous(  )
+bool SAL_CALL OResultSet::previous(  )
 {
     return moveImpl(IResultSetHelper::PRIOR,0);
 }
@@ -703,7 +703,7 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::rowDeleted()
+bool SAL_CALL OResultSet::rowDeleted()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -714,7 +714,7 @@ sal_Bool SAL_CALL OResultSet::rowDeleted()
     return bRet;
 }
 
-sal_Bool SAL_CALL OResultSet::rowInserted(  )
+bool SAL_CALL OResultSet::rowInserted(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -725,7 +725,7 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  )
     return bInserted;
 }
 
-sal_Bool SAL_CALL OResultSet::rowUpdated(  )
+bool SAL_CALL OResultSet::rowUpdated(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -735,13 +735,13 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  )
 }
 
 
-sal_Bool SAL_CALL OResultSet::next(  )
+bool SAL_CALL OResultSet::next(  )
 {
     return moveImpl(IResultSetHelper::NEXT,1);
 }
 
 
-sal_Bool SAL_CALL OResultSet::wasNull(  )
+bool SAL_CALL OResultSet::wasNull(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1049,7 +1049,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex )
 }
 
 
-void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x )
+void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, bool x )
 {
     updateValue(columnIndex,SQL_BIT,&x);
 }
@@ -1203,7 +1203,7 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  )
     }
 }
 
-sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark )
+bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1231,7 +1231,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark )
     return false;
 }
 
-sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
+bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1255,7 +1255,7 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& lhs, const  Any& rhs
     return (lhs == rhs) ? CompareBookmark::EQUAL : CompareBookmark::NOT_EQUAL;
 }
 
-sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  )
+bool SAL_CALL OResultSet::hasOrderedBookmarks(  )
 {
     return false;
 }
@@ -1462,7 +1462,7 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
     return *getArrayHelper();
 }
 
-sal_Bool OResultSet::convertFastPropertyValue(
+bool OResultSet::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
                             sal_Int32 nHandle,

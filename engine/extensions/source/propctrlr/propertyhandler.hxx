@@ -96,12 +96,12 @@ namespace pcr
         virtual css::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState  SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual css::inspection::LineDescriptor SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
-        virtual sal_Bool SAL_CALL isComposable( const OUString& _rPropertyName ) override;
-        virtual css::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) override;
+        virtual bool SAL_CALL isComposable( const OUString& _rPropertyName ) override;
+        virtual css::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
         virtual void SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual sal_Bool SAL_CALL suspend( sal_Bool _bSuspend ) override;
+        virtual bool SAL_CALL suspend( bool _bSuspend ) override;
 
         // XComponent
         DECLARE_XCOMPONENT()
@@ -349,7 +349,7 @@ namespace pcr
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override = 0;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
+        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
     };
 

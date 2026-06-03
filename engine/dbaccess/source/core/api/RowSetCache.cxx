@@ -62,7 +62,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::cppu;
 
-// This class calls m_pCacheSet->FOO_checked(..., sal_False)
+// This class calls m_pCacheSet->FOO_checked(..., false)
 // (where FOO is absolute, last, previous)
 // when it does not immediately care about the values in the row's columns.
 // As a corollary, m_pCacheSet may be left in an inconsistent state,

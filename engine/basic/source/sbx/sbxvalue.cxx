@@ -522,7 +522,7 @@ static OUString ImpConvStringExt(const OUString& rSrc, SbxDataType eTargetType)
             return rSrc.replaceAll(".", OUStringChar(cDecimalSep));
         }
 
-        // check as string in case of sal_Bool sal_True and sal_False
+        // check as string in case of bool true and false
         case SbxBOOL:
             if (rSrc.equalsIgnoreAsciiCase("true"))
                 return OUString::number(SbxTRUE);

@@ -35,7 +35,7 @@ namespace framework
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
 /*DEPRECATEME
-        , m_bAsyncQuit   ( sal_False                                      ) // default must be "disabled"!
+        , m_bAsyncQuit   ( false                                      ) // default must be "disabled"!
         , m_aAsyncCall   ( LINK( this, FrameContainer, implts_asyncQuit ) )
 */
 {

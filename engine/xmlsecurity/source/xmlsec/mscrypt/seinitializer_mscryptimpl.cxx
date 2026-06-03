@@ -151,7 +151,7 @@ OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName()
     return "com.sun.star.xml.crypto.SEInitializer";
 }
 
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )
+bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

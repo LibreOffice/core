@@ -1117,7 +1117,7 @@ PackageManagerImpl::getDeployedPackages(
 //ToDo: the function must not call registerPackage, do this in
 //XExtensionManager.reinstallDeployedExtensions
 void PackageManagerImpl::reinstallDeployedPackages(
-    sal_Bool force, Reference<task::XAbortChannel> const &  /*xAbortChannel*/,
+    bool force, Reference<task::XAbortChannel> const &  /*xAbortChannel*/,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
 {
     check();
@@ -1172,7 +1172,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
 }
 
 
-sal_Bool SAL_CALL PackageManagerImpl::isReadOnly(  )
+bool SAL_CALL PackageManagerImpl::isReadOnly(  )
 {
     return m_readOnly;
 }
@@ -1402,7 +1402,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     return bModified;
 }
 
-sal_Bool PackageManagerImpl::synchronize(
+bool PackageManagerImpl::synchronize(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {

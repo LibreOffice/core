@@ -59,7 +59,7 @@ using namespace com::sun::star;
  *
  * In the meantime the class SfxTabPage offers the following method:
  *
- * virtual sal_Bool HasExchangeSupport() const; -> return sal_True;
+ * virtual bool HasExchangeSupport() const; -> return true;
  * virtual void ActivatePage(const SfxItemSet &);
  * virtual int  DeactivatePage(SfxItemSet * = 0);
  *

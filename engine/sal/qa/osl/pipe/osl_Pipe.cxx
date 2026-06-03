@@ -212,7 +212,7 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline sal_Bool SAL_CALL is() const;
+        inline bool SAL_CALL is() const;
     */
     class is : public CppUnit::TestFixture
     {
@@ -255,9 +255,9 @@ namespace osl_Pipe
     };
 
     /** testing the methods:
-        inline sal_Bool create( const OUString & strName,
+        inline bool create( const OUString & strName,
         oslPipeOptions Options, const Security &rSec );
-        nline sal_Bool create( const OUString & strName,
+        nline bool create( const OUString & strName,
         oslPipeOptions Options = osl_Pipe_OPEN );
     */
     class create : public CppUnit::TestFixture
@@ -416,12 +416,12 @@ namespace osl_Pipe
     };
 
     /** testing the method:
-        inline sal_Bool SAL_CALL isValid() const;
+        inline bool SAL_CALL isValid() const;
         isValid( ) has not been implemented under the following platforms, please refer to osl/pipe.hxx
     */
 
     /** testing the method:
-        inline sal_Bool SAL_CALL operator==( const Pipe& rPipe ) const;
+        inline bool SAL_CALL operator==( const Pipe& rPipe ) const;
     */
     class isEqual : public CppUnit::TestFixture
     {

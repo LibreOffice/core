@@ -281,7 +281,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
     // XGluePointsSupplier
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL getGluePoints(  ) override;
@@ -295,7 +295,7 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XActionLockable
-    virtual sal_Bool SAL_CALL isActionLocked(  ) override;
+    virtual bool SAL_CALL isActionLocked(  ) override;
     virtual void SAL_CALL addActionLock(  ) override;
     virtual void SAL_CALL removeActionLock(  ) override;
     virtual void SAL_CALL setActionLocks( sal_Int16 nLock ) override;
@@ -360,7 +360,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
     // css::text::XTextRange
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
@@ -448,7 +448,7 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
@@ -689,7 +689,7 @@ public:
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override ;

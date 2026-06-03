@@ -77,34 +77,34 @@ ScVbaToggleButton::setValue( const uno::Any& _value )
     m_xProps->setPropertyValue( u"State"_ustr, uno::Any(   nState ) );
 }
 
-sal_Bool SAL_CALL ScVbaToggleButton::getAutoSize()
+bool SAL_CALL ScVbaToggleButton::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaToggleButton::setAutoSize( sal_Bool bAutoSize )
+void SAL_CALL ScVbaToggleButton::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaToggleButton::getCancel()
+bool SAL_CALL ScVbaToggleButton::getCancel()
 {
     // #STUB
     return false;
 }
 
-void SAL_CALL ScVbaToggleButton::setCancel( sal_Bool /*bCancel*/ )
+void SAL_CALL ScVbaToggleButton::setCancel( bool /*bCancel*/ )
 {
     // #STUB
 }
 
-sal_Bool SAL_CALL ScVbaToggleButton::getDefault()
+bool SAL_CALL ScVbaToggleButton::getDefault()
 {
     // #STUB
     return false;
 }
 
-void SAL_CALL ScVbaToggleButton::setDefault( sal_Bool /*bDefault*/ )
+void SAL_CALL ScVbaToggleButton::setDefault( bool /*bDefault*/ )
 {
     // #STUB
 }
@@ -135,12 +135,12 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaToggleButton::getFont()
     return new VbaNewFont( m_xProps );
 }
 
-sal_Bool SAL_CALL ScVbaToggleButton::getLocked()
+bool SAL_CALL ScVbaToggleButton::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaToggleButton::setLocked( sal_Bool bLocked )
+void SAL_CALL ScVbaToggleButton::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }

@@ -1382,7 +1382,7 @@ namespace pcr
         return aDescriptor;
     }
 
-    InteractiveSelectionResult SAL_CALL FormComponentPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    InteractiveSelectionResult SAL_CALL FormComponentPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -1485,7 +1485,7 @@ namespace pcr
         }
     }
 
-    void SAL_CALL FormComponentPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit )
+    void SAL_CALL FormComponentPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -1999,7 +1999,7 @@ namespace pcr
         }
     }
 
-    sal_Bool SAL_CALL FormComponentPropertyHandler::suspend( sal_Bool /*_bSuspend*/ )
+    bool SAL_CALL FormComponentPropertyHandler::suspend( bool /*_bSuspend*/ )
     {
         return true;
     }

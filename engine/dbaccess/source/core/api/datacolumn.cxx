@@ -93,7 +93,7 @@ void ODataColumn::disposing()
 }
 
 // css::sdb::XColumn
-sal_Bool ODataColumn::wasNull()
+bool ODataColumn::wasNull()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(!m_xRow.is());
@@ -109,7 +109,7 @@ OUString ODataColumn::getString()
     return m_xRow->getString(m_nPos);
 }
 
-sal_Bool ODataColumn::getBoolean()
+bool ODataColumn::getBoolean()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(!m_xRow.is());
@@ -262,7 +262,7 @@ void ODataColumn::updateNull()
     m_xRowUpdate->updateNull(m_nPos);
 }
 
-void ODataColumn::updateBoolean(sal_Bool x)
+void ODataColumn::updateBoolean(bool x)
 {
     MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed(!m_xRowUpdate.is());

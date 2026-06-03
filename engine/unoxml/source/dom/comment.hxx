@@ -86,7 +86,7 @@ namespace DOM
     {
         return CCharacterData::appendChild(newChild);
     }
-    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(sal_Bool deep) override
+    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override
     {
         return CCharacterData::cloneNode(deep);
     }
@@ -138,11 +138,11 @@ namespace DOM
     {
         return CCharacterData::getPreviousSibling();
     }
-    virtual sal_Bool SAL_CALL hasAttributes() override
+    virtual bool SAL_CALL hasAttributes() override
     {
         return CCharacterData::hasAttributes();
     }
-    virtual sal_Bool SAL_CALL hasChildNodes() override
+    virtual bool SAL_CALL hasChildNodes() override
     {
         return CCharacterData::hasChildNodes();
     }
@@ -151,7 +151,7 @@ namespace DOM
     {
         return CCharacterData::insertBefore(newChild, refChild);
     }
-    virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver) override
+    virtual bool SAL_CALL isSupported(const OUString& feature, const OUString& ver) override
     {
         return CCharacterData::isSupported(feature, ver);
     }

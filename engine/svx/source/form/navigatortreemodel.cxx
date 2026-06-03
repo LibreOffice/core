@@ -781,7 +781,7 @@ namespace svxform
         {
             SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetMarkedSdrObj();
             bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);
-                // if Not-Form-Control, InsertFormComponent returns sal_False !
+                // if Not-Form-Control, InsertFormComponent returns false !
         }
 
         rshRequestSelection.SetMixedSelection(bIsMixedSelection);

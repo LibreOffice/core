@@ -150,7 +150,7 @@ std::optional<size_t> hashValue( size_t hash,
         break;
     }
     case typelib_TypeClass_BOOLEAN:
-        if (*static_cast< sal_Bool const * >(val))
+        if (*static_cast< bool const * >(val))
             o3tl::hash_combine( hash, true );
         else
             o3tl::hash_combine( hash, false );

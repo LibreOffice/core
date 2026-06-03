@@ -827,12 +827,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118535)
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"word/media/image1.jpeg"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"word/media/image1.jpeg"_ustr));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: false
     // - Actual  : true
     // i.e. the embedded picture would have been saved twice.
-    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName(u"word/media/image2.jpeg"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/media/image2.jpeg"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")

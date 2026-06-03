@@ -1116,7 +1116,7 @@ uno::Type SAL_CALL SwXCell::getElementType()
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SwXCell::hasElements()
+bool SwXCell::hasElements()
 {
     return true;
 }
@@ -1230,7 +1230,7 @@ uno::Any SwXCell::GetAny() const
 OUString SwXCell::getImplementationName()
     { return u"SwXCell"_ustr; }
 
-sal_Bool SwXCell::supportsService(const OUString& rServiceName)
+bool SwXCell::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXCell::getSupportedServiceNames()
@@ -1239,7 +1239,7 @@ uno::Sequence< OUString > SwXCell::getSupportedServiceNames()
 OUString SwXTextTableRow::getImplementationName()
     { return u"SwXTextTableRow"_ustr; }
 
-sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName)
+bool SwXTextTableRow::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames()
@@ -1427,7 +1427,7 @@ SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine const * pLin
 OUString SwXTextTableCursor::getImplementationName()
     { return u"SwXTextTableCursor"_ustr; }
 
-sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName)
+bool SwXTextTableCursor::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 void SwXTextTableCursor::release() noexcept
@@ -1514,7 +1514,7 @@ OUString SwXTextTableCursor::getRangeName()
     return pEndBox->GetName();
 }
 
-sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool bExpand)
+bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, bool bExpand)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1523,7 +1523,7 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool 
     return rTableCursor.GotoTableBox(sCellName);
 }
 
-sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool bExpand)
+bool SwXTextTableCursor::goLeft(sal_Int16 Count, bool bExpand)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1532,7 +1532,7 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool bExpand)
     return rTableCursor.Left(Count);
 }
 
-sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool bExpand)
+bool SwXTextTableCursor::goRight(sal_Int16 Count, bool bExpand)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1541,7 +1541,7 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool bExpand)
     return rTableCursor.Right(Count);
 }
 
-sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool bExpand)
+bool SwXTextTableCursor::goUp(sal_Int16 Count, bool bExpand)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1551,7 +1551,7 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool bExpand)
         *rUnoCursor.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
 }
 
-sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand)
+bool SwXTextTableCursor::goDown(sal_Int16 Count, bool bExpand)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1561,7 +1561,7 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand)
         *rUnoCursor.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
 }
 
-void SwXTextTableCursor::gotoStart(sal_Bool bExpand)
+void SwXTextTableCursor::gotoStart(bool bExpand)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1570,7 +1570,7 @@ void SwXTextTableCursor::gotoStart(sal_Bool bExpand)
     rTableCursor.MoveTable(GotoCurrTable, fnTableStart);
 }
 
-void SwXTextTableCursor::gotoEnd(sal_Bool bExpand)
+void SwXTextTableCursor::gotoEnd(bool bExpand)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1579,7 +1579,7 @@ void SwXTextTableCursor::gotoEnd(sal_Bool bExpand)
     rTableCursor.MoveTable(GotoCurrTable, fnTableEnd);
 }
 
-sal_Bool SwXTextTableCursor::mergeRange()
+bool SwXTextTableCursor::mergeRange()
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1605,7 +1605,7 @@ sal_Bool SwXTextTableCursor::mergeRange()
     return bResult;
 }
 
-sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
+bool SwXTextTableCursor::splitRange(sal_Int16 Count, bool Horizontal)
 {
     SolarMutexGuard aGuard;
     if (Count <= 0)
@@ -2411,7 +2411,7 @@ void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
     m_pImpl->m_ChartListeners.removeInterface(aGuard, xListener);
 }
 
-sal_Bool SwXTextTable::isNotANumber(double nNumber)
+bool SwXTextTable::isNotANumber(double nNumber)
 {
     // We use DBL_MIN because starcalc does (which uses it because chart
     // wants it that way!)
@@ -3085,7 +3085,7 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
 OUString SAL_CALL SwXTextTable::getImplementationName()
     { return u"SwXTextTable"_ustr; }
 
-sal_Bool SwXTextTable::supportsService(const OUString& rServiceName)
+bool SwXTextTable::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence<OUString> SwXTextTable::getSupportedServiceNames()
@@ -3151,7 +3151,7 @@ public:
 OUString SwXCellRange::getImplementationName()
     { return u"SwXCellRange"_ustr; }
 
-sal_Bool SwXCellRange::supportsService(const OUString& rServiceName)
+bool SwXCellRange::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames()
@@ -3746,7 +3746,7 @@ void SAL_CALL SwXCellRange::removeChartDataChangeEventListener(
     m_pImpl->m_ChartListeners.removeInterface(aGuard, xListener);
 }
 
-sal_Bool SwXCellRange::isNotANumber(double /*fNumber*/)
+bool SwXCellRange::isNotANumber(double /*fNumber*/)
     { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 double SwXCellRange::getNotANumber()
@@ -3830,7 +3830,7 @@ public:
 OUString SwXTableRows::getImplementationName()
     { return u"SwXTableRows"_ustr; }
 
-sal_Bool SwXTableRows::supportsService(const OUString& rServiceName)
+bool SwXTableRows::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames()
@@ -3883,7 +3883,7 @@ uno::Type SAL_CALL SwXTableRows::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SwXTableRows::hasElements()
+bool SwXTableRows::hasElements()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFrameFormat = GetFrameFormat();
@@ -3998,7 +3998,7 @@ class SwXTableColumns::Impl : public SvtListener
 OUString SwXTableColumns::getImplementationName()
     { return u"SwXTableColumns"_ustr; }
 
-sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName)
+bool SwXTableColumns::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames()
@@ -4042,7 +4042,7 @@ uno::Type SAL_CALL SwXTableColumns::getElementType()
     return cppu::UnoType<uno::XInterface>::get();
 }
 
-sal_Bool SwXTableColumns::hasElements()
+bool SwXTableColumns::hasElements()
 {
     SolarMutexGuard aGuard;
     lcl_EnsureCoreConnected(GetFrameFormat(), this);

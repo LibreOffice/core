@@ -1129,12 +1129,12 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
         return xHelpPackage;
 
     // Check if parent package is registered
-    beans::Optional< beans::Ambiguous<sal_Bool> > option( xPackage->isRegistered
+    beans::Optional< beans::Ambiguous<bool> > option( xPackage->isRegistered
         ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
     bool bRegistered = false;
     if( option.IsPresent )
     {
-        beans::Ambiguous<sal_Bool> const & reg = option.Value;
+        beans::Ambiguous<bool> const & reg = option.Value;
         if( !reg.IsAmbiguous && reg.Value )
             bRegistered = true;
     }

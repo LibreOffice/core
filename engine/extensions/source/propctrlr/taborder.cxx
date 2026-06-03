@@ -100,8 +100,8 @@ namespace pcr
         virtual sal_Int32 SAL_CALL getGroupCount() override {return 0;}
         virtual void SAL_CALL getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< XControlModel > >& /*Group*/, OUString& /*Name*/) override {}
         virtual void SAL_CALL getGroupByName(const OUString& /*Name*/, Sequence< Reference< XControlModel > >& /*Group*/) override {}
-        virtual sal_Bool SAL_CALL getGroupControl() override {return false;} ;
-        virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) override {};
+        virtual bool SAL_CALL getGroupControl() override {return false;} ;
+        virtual void SAL_CALL setGroupControl(bool /*GroupControl*/) override {};
     };
 
     //= TabOrderDialog

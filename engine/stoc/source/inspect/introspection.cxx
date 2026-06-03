@@ -695,10 +695,10 @@ public:
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts() override;
     virtual sal_Int32 SAL_CALL getSuppliedPropertyConcepts() override;
     virtual Property SAL_CALL getProperty(const OUString& Name, sal_Int32 PropertyConcepts) override;
-    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name, sal_Int32 PropertyConcepts) override;
+    virtual bool SAL_CALL hasProperty(const OUString& Name, sal_Int32 PropertyConcepts) override;
     virtual Sequence< Property > SAL_CALL getProperties(sal_Int32 PropertyConcepts) override;
     virtual Reference<XIdlMethod> SAL_CALL getMethod(const OUString& Name, sal_Int32 MethodConcepts) override;
-    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name, sal_Int32 MethodConcepts) override;
+    virtual bool SAL_CALL hasMethod(const OUString& Name, sal_Int32 MethodConcepts) override;
     virtual Sequence< Reference<XIdlMethod> > SAL_CALL getMethods(sal_Int32 MethodConcepts) override;
     virtual Sequence< Type > SAL_CALL getSupportedListeners() override;
     using OWeakObject::queryAdapter;
@@ -731,16 +731,16 @@ public:
     // Methods from XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties() override;
     virtual Property SAL_CALL getPropertyByName(const OUString& Name) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& Name) override;
+    virtual bool SAL_CALL hasPropertyByName(const OUString& Name) override;
 
     // Methods from XElementAccess
     virtual Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // Methods from XNameAccess
     virtual Any SAL_CALL getByName(const OUString& Name) override;
     virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
+    virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
     // Methods from XNameReplace
     virtual void SAL_CALL replaceByName(const OUString& Name, const Any& Element) override;
@@ -1049,7 +1049,7 @@ Property ImplIntrospectionAccess::getPropertyByName(const OUString& Name)
     return getProperty( Name, PropertyConcept::ALL );
 }
 
-sal_Bool ImplIntrospectionAccess::hasPropertyByName(const OUString& Name)
+bool ImplIntrospectionAccess::hasPropertyByName(const OUString& Name)
 {
     return hasProperty( Name, PropertyConcept::ALL );
 }
@@ -1060,7 +1060,7 @@ Type ImplIntrospectionAccess::getElementType()
     return getXElementAccess()->getElementType();
 }
 
-sal_Bool ImplIntrospectionAccess::hasElements()
+bool ImplIntrospectionAccess::hasElements()
 {
     return getXElementAccess()->hasElements();
 }
@@ -1076,7 +1076,7 @@ Sequence< OUString > ImplIntrospectionAccess::getElementNames()
     return getXNameAccess()->getElementNames();
 }
 
-sal_Bool ImplIntrospectionAccess::hasByName(const OUString& Name)
+bool ImplIntrospectionAccess::hasByName(const OUString& Name)
 {
     return getXNameAccess()->hasByName( Name );
 }
@@ -1202,7 +1202,7 @@ Property ImplIntrospectionAccess::getProperty(const OUString& Name, sal_Int32 Pr
     return aRet;
 }
 
-sal_Bool ImplIntrospectionAccess::hasProperty(const OUString& Name, sal_Int32 PropertyConcepts)
+bool ImplIntrospectionAccess::hasProperty(const OUString& Name, sal_Int32 PropertyConcepts)
 {
     sal_Int32 i = mpStaticImpl->getPropertyIndex( Name );
     bool bRet = false;
@@ -1287,7 +1287,7 @@ Reference<XIdlMethod> ImplIntrospectionAccess::getMethod(const OUString& Name, s
     return xRet;
 }
 
-sal_Bool ImplIntrospectionAccess::hasMethod(const OUString& Name, sal_Int32 MethodConcepts)
+bool ImplIntrospectionAccess::hasMethod(const OUString& Name, sal_Int32 MethodConcepts)
 {
     sal_Int32 i = mpStaticImpl->getMethodIndex( Name );
     bool bRet = false;
@@ -1503,7 +1503,7 @@ private:
     virtual OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.comp.stoc.Introspection"_ustr; }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL
@@ -1702,7 +1702,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         bool bXInterfaceIsInvalid = false;
 
         // Flag whether the XInterface methods have already been recorded. If
-        // sal_True, bXInterfaceIsInvalid is activated at the end of the interface
+        // true, bXInterfaceIsInvalid is activated at the end of the interface
         // loop, and XInterface methods are cut off thereafter.
         bool bFoundXInterface = false;
 

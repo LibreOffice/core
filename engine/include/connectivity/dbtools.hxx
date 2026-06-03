@@ -388,7 +388,7 @@ namespace dbtools
         @param      _bAllowDefault  if the connection (and related components, such as its parent) cannot supply
                                     a formatter, we can ask the DatabaseEnvironment for a default one. This parameter
                                     states if this is allowed.
-        @param      _rxFactory      required (only of _bAllowDefault is sal_True) for creating the DatabaseEnvironment.
+        @param      _rxFactory      required (only of _bAllowDefault is true) for creating the DatabaseEnvironment.
         @return     the formatter all object related to the given connection should work with.
     */
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::util::XNumberFormatsSupplier> getNumberFormats(

@@ -47,7 +47,7 @@ public:
 private:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
@@ -72,7 +72,7 @@ private:
 
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL applyBrightnessContrast(
         const css::uno::Reference< css::graphic::XGraphic >& rxGraphic,
-        sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso ) override;
+        sal_Int32 nBrightness, sal_Int32 nContrast, bool mso ) override;
 
     ::Graphic maGraphic;
 };

@@ -272,7 +272,7 @@ class SingleRangeEnumeration : public EnumerationHelper_BASE
 public:
     /// @throws uno::RuntimeException
     explicit SingleRangeEnumeration( uno::Reference< table::XCellRange > xRange ) : m_xRange(std::move( xRange )), bHasMore( true ) { }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override { return bHasMore; }
+    virtual bool SAL_CALL hasMoreElements(  ) override { return bHasMore; }
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !bHasMore )
@@ -303,7 +303,7 @@ public:
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override { return cppu::UnoType<table::XCellRange>::get(); }
-    virtual sal_Bool SAL_CALL hasElements() override { return true; }
+    virtual bool SAL_CALL hasElements() override { return true; }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() override { return new SingleRangeEnumeration( m_xRange ); }
 
@@ -599,7 +599,7 @@ public:
     {
     }
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override { return mCurElem < mMaxElems; }
+    virtual bool SAL_CALL hasMoreElements() override { return mCurElem < mMaxElems; }
 
     virtual uno::Any SAL_CALL nextElement() override
     {
@@ -650,7 +650,7 @@ public:
         }
         m_it = m_CellPositions.begin();
     }
-    virtual sal_Bool SAL_CALL hasMoreElements() override { return m_it != m_CellPositions.end(); }
+    virtual bool SAL_CALL hasMoreElements() override { return m_it != m_CellPositions.end(); }
 
     virtual uno::Any SAL_CALL nextElement() override
     {
@@ -3085,7 +3085,7 @@ ScVbaRange::setHidden( const uno::Any& _hidden )
     }
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& MatchCase, const uno::Any& MatchByte, const uno::Any& SearchFormat, const uno::Any& ReplaceFormat  )
 {
     if ( m_Areas->getCount() > 1 )
@@ -3762,7 +3762,7 @@ ScVbaRange::Delete( const uno::Any& Shift )
 }
 
 //XElementAccess
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaRange::hasElements()
 {
     uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY );
@@ -5197,7 +5197,7 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
     pDocSh->GetDocFunc().FillAuto( aSourceRange, nullptr, eDir, eCmd, eDateCmd,
                                    nCount, fStep, MAXDOUBLE/*fEndValue*/, true, true );
 }
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell )
 {
     ScDocShell* pDocShell = getScDocShell();
@@ -5745,7 +5745,7 @@ ScVbaRange::getServiceNames()
     return { u"ooo.vba.excel.Range"_ustr };
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaRange::hasError()
 {
     double dResult = 0.0;

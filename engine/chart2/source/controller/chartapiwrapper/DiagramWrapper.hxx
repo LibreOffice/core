@@ -71,7 +71,7 @@ public:
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ XComponent ____
@@ -168,9 +168,9 @@ public:
 
     // ____ XDiagramPositioning ____
     virtual void SAL_CALL setAutomaticDiagramPositioning(  ) override;
-    virtual sal_Bool SAL_CALL isAutomaticDiagramPositioning(  ) override;
+    virtual bool SAL_CALL isAutomaticDiagramPositioning(  ) override;
     virtual void SAL_CALL setDiagramPositionExcludingAxes( const css::awt::Rectangle& PositionRect ) override;
-    virtual sal_Bool SAL_CALL isExcludingDiagramPositioning(  ) override;
+    virtual bool SAL_CALL isExcludingDiagramPositioning(  ) override;
     virtual css::awt::Rectangle SAL_CALL calculateDiagramPositionExcludingAxes(  ) override;
     virtual void SAL_CALL setDiagramPositionIncludingAxes( const css::awt::Rectangle& PositionRect ) override;
     virtual css::awt::Rectangle SAL_CALL calculateDiagramPositionIncludingAxes(  ) override;

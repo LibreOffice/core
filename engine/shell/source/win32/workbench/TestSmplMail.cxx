@@ -66,7 +66,7 @@ int SAL_CALL main(int , char*, char* )
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
     // Print a message if an error occurred.
-    if ( g_xFactory.is() == sal_False )
+    if ( g_xFactory.is() == false )
     {
         OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
@@ -143,7 +143,7 @@ int SAL_CALL main(int , char*, char* )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     // Print a message if an error occurred.
-    if ( xComponent.is() == sal_False )
+    if ( xComponent.is() == false )
     {
         OSL_FAIL("Error shutting down");
     }

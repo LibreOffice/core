@@ -44,13 +44,13 @@ public:
 
     // XForbiddenCharacters
     virtual css::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) override final;
-    virtual sal_Bool SAL_CALL hasForbiddenCharacters( const css::lang::Locale& rLocale ) override final;
+    virtual bool SAL_CALL hasForbiddenCharacters( const css::lang::Locale& rLocale ) override final;
     virtual void SAL_CALL setForbiddenCharacters( const css::lang::Locale& rLocale, const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) override final;
     virtual void SAL_CALL removeForbiddenCharacters( const css::lang::Locale& rLocale ) override final;
 
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override final;
-    virtual sal_Bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) override final;
+    virtual bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) override final;
 };
 
 #endif // INCLUDED_EDITENG_UNOFORBIDDENCHARSTABLE_HXX

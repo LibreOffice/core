@@ -399,7 +399,7 @@ namespace frm
     }
 
 
-    sal_Bool OListBoxModel::convertFastPropertyValue(
+    bool OListBoxModel::convertFastPropertyValue(
         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
     {
         bool bModified(false);
@@ -2113,28 +2113,28 @@ namespace frm
     }
 
 
-    void SAL_CALL OListBoxControl::selectItemPos( ::sal_Int16 nPos, sal_Bool bSelect )
+    void SAL_CALL OListBoxControl::selectItemPos( ::sal_Int16 nPos, bool bSelect )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemPos( nPos, bSelect );
     }
 
 
-    void SAL_CALL OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, sal_Bool bSelect )
+    void SAL_CALL OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, bool bSelect )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemsPos( aPositions, bSelect );
     }
 
 
-    void SAL_CALL OListBoxControl::selectItem( const OUString& aItem, sal_Bool bSelect )
+    void SAL_CALL OListBoxControl::selectItem( const OUString& aItem, bool bSelect )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItem( aItem, bSelect );
     }
 
 
-    sal_Bool SAL_CALL OListBoxControl::isMutipleMode(  )
+    bool SAL_CALL OListBoxControl::isMutipleMode(  )
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->isMutipleMode();
@@ -2142,7 +2142,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OListBoxControl::setMultipleMode( sal_Bool bMulti )
+    void SAL_CALL OListBoxControl::setMultipleMode( bool bMulti )
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->setMultipleMode( bMulti );

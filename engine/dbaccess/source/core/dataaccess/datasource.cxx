@@ -177,7 +177,7 @@ OAuthenticationContinuation::OAuthenticationContinuation()
 {
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  )
+bool SAL_CALL OAuthenticationContinuation::canSetRealm(  )
 {
     return false;
 }
@@ -187,7 +187,7 @@ void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ )
     SAL_WARN("dbaccess","OAuthenticationContinuation::setRealm: not supported!");
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  )
+bool SAL_CALL OAuthenticationContinuation::canSetUserName(  )
 {
     // we always allow this, even if the database document is read-only. In this case,
     // it's simply that the user cannot store the new user name.
@@ -199,7 +199,7 @@ void SAL_CALL OAuthenticationContinuation::setUserName( const OUString& _rUser )
     m_sUser = _rUser;
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetPassword(  )
+bool SAL_CALL OAuthenticationContinuation::canSetPassword(  )
 {
     return true;
 }
@@ -220,7 +220,7 @@ void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthenti
     m_bRememberPassword = (RememberAuthentication_NO != _eRemember);
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  )
+bool SAL_CALL OAuthenticationContinuation::canSetAccount(  )
 {
     return false;
 }
@@ -471,7 +471,7 @@ Sequence< OUString > ODatabaseSource::getSupportedServiceNames(  )
     return { SERVICE_SDB_DATASOURCE, u"com.sun.star.sdb.DocumentDataSource"_ustr };
 }
 
-sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName )
+bool ODatabaseSource::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -649,7 +649,7 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
     return *getArrayHelper();
 }
 
-sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
     if ( m_pImpl.is() )
     {

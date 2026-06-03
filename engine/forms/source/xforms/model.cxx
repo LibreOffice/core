@@ -565,7 +565,7 @@ void Model::initializePropertySet()
     registerProperty( css::beans::Property(u"Namespaces"_ustr, HANDLE_Namespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Model, css::uno::Reference<css::container::XNameContainer> >( this, &Model::setNamespaces, &Model::getNamespaces) );
 
-    registerProperty( css::beans::Property(u"ExternalData"_ustr, HANDLE_ExternalData, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND ),
+    registerProperty( css::beans::Property(u"ExternalData"_ustr, HANDLE_ExternalData, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
     new BooleanPropertyAccessor< Model >( this, &Model::setExternalData, &Model::getExternalData ) );
 }
 
@@ -585,7 +585,7 @@ OUString Model::getImplementationName()
     return u"com.sun.star.form.Model"_ustr;
 }
 
-sal_Bool Model::supportsService(OUString const & ServiceName)
+bool Model::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -49,7 +49,7 @@ css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  )
     return { isNew()?u"com.sun.star.sdbcx.IndexDescriptor"_ustr:u"com.sun.star.sdbcx.Index"_ustr };
 }
 
-sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName )
+bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

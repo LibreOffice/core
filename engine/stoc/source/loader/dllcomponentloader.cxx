@@ -53,7 +53,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
@@ -61,7 +61,7 @@ public:
 
     // XImplementationLoader
     virtual Reference<XInterface> SAL_CALL activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) override;
-    virtual sal_Bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) override;
+    virtual bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) override;
 
 private:
     Reference<XMultiServiceFactory> m_xSMgr;
@@ -78,7 +78,7 @@ OUString SAL_CALL DllComponentLoader::getImplementationName(  )
     return u"com.sun.star.comp.stoc.DLLComponentLoader"_ustr;
 }
 
-sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
+bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -122,14 +122,14 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 }
 
 
-sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
+bool SAL_CALL DllComponentLoader::writeRegistryInfo(
     const Reference< XRegistryKey > & xKey, const OUString &, const OUString & rLibName )
 {
 #ifdef DISABLE_DYNLOADING
     (void) xKey;
     (void) rLibName;
     OSL_FAIL( "DllComponentLoader::writeRegistryInfo() should not be called I think?" );
-    return sal_False;
+    return false;
 #else
     writeSharedLibComponentInfo(
         cppu::bootstrap_expandUri(rLibName), m_xSMgr, xKey );

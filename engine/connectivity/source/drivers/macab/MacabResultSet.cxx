@@ -240,7 +240,7 @@ OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex)
     return aRet;
 }
 
-sal_Bool SAL_CALL MacabResultSet::getBoolean(sal_Int32)
+bool SAL_CALL MacabResultSet::getBoolean(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -525,7 +525,7 @@ Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData()
     return xMetaData;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isBeforeFirst()
+bool SAL_CALL MacabResultSet::isBeforeFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -536,7 +536,7 @@ sal_Bool SAL_CALL MacabResultSet::isBeforeFirst()
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isAfterLast()
+bool SAL_CALL MacabResultSet::isAfterLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -548,7 +548,7 @@ sal_Bool SAL_CALL MacabResultSet::isAfterLast()
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isFirst()
+bool SAL_CALL MacabResultSet::isFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -559,7 +559,7 @@ sal_Bool SAL_CALL MacabResultSet::isFirst()
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isLast()
+bool SAL_CALL MacabResultSet::isLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -599,7 +599,7 @@ void SAL_CALL MacabResultSet::close()
     dispose();
 }
 
-sal_Bool SAL_CALL MacabResultSet::first()
+bool SAL_CALL MacabResultSet::first()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -612,7 +612,7 @@ sal_Bool SAL_CALL MacabResultSet::first()
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSet::last()
+bool SAL_CALL MacabResultSet::last()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -633,7 +633,7 @@ sal_Int32 SAL_CALL MacabResultSet::getRow()
     return m_nRowPos;
 }
 
-sal_Bool SAL_CALL MacabResultSet::absolute(sal_Int32 row)
+bool SAL_CALL MacabResultSet::absolute(sal_Int32 row)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -647,7 +647,7 @@ sal_Bool SAL_CALL MacabResultSet::absolute(sal_Int32 row)
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSet::relative(sal_Int32 row)
+bool SAL_CALL MacabResultSet::relative(sal_Int32 row)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -655,7 +655,7 @@ sal_Bool SAL_CALL MacabResultSet::relative(sal_Int32 row)
     return absolute(m_nRowPos + row);
 }
 
-sal_Bool SAL_CALL MacabResultSet::next()
+bool SAL_CALL MacabResultSet::next()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -663,7 +663,7 @@ sal_Bool SAL_CALL MacabResultSet::next()
     return absolute(m_nRowPos + 1);
 }
 
-sal_Bool SAL_CALL MacabResultSet::previous()
+bool SAL_CALL MacabResultSet::previous()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -680,7 +680,7 @@ Reference< XInterface > SAL_CALL MacabResultSet::getStatement()
     return xStatement;
 }
 
-sal_Bool SAL_CALL MacabResultSet::rowDeleted()
+bool SAL_CALL MacabResultSet::rowDeleted()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -688,7 +688,7 @@ sal_Bool SAL_CALL MacabResultSet::rowDeleted()
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::rowInserted()
+bool SAL_CALL MacabResultSet::rowInserted()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -696,7 +696,7 @@ sal_Bool SAL_CALL MacabResultSet::rowInserted()
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::rowUpdated()
+bool SAL_CALL MacabResultSet::rowUpdated()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -704,7 +704,7 @@ sal_Bool SAL_CALL MacabResultSet::rowUpdated()
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::wasNull()
+bool SAL_CALL MacabResultSet::wasNull()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -775,7 +775,7 @@ void SAL_CALL MacabResultSet::updateNull(sal_Int32)
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateBoolean(sal_Int32, sal_Bool)
+void SAL_CALL MacabResultSet::updateBoolean(sal_Int32, bool)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -899,7 +899,7 @@ Any SAL_CALL MacabResultSet::getBookmark()
     return Any();
 }
 
-sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark)
+bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -926,7 +926,7 @@ sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark)
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_Int32 rows)
+bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_Int32 rows)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -962,7 +962,7 @@ sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const
     return CompareBookmark::EQUAL;
 }
 
-sal_Bool SAL_CALL MacabResultSet::hasOrderedBookmarks()
+bool SAL_CALL MacabResultSet::hasOrderedBookmarks()
 {
     return false;
 }
@@ -1036,7 +1036,7 @@ IPropertyArrayHelper & MacabResultSet::getInfoHelper()
     return *getArrayHelper();
 }
 
-sal_Bool MacabResultSet::convertFastPropertyValue(
+bool MacabResultSet::convertFastPropertyValue(
             Any &,
             Any &,
             sal_Int32 nHandle,

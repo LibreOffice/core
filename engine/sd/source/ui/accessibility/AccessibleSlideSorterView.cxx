@@ -354,7 +354,7 @@ void SAL_CALL AccessibleSlideSorterView::selectAccessibleChild (sal_Int64 nChild
     mrSlideSorter.GetController().GetPageSelector().SelectPage(pChild->GetPageNumber());
 }
 
-sal_Bool SAL_CALL AccessibleSlideSorterView::isAccessibleChildSelected (sal_Int64 nChildIndex)
+bool SAL_CALL AccessibleSlideSorterView::isAccessibleChildSelected (sal_Int64 nChildIndex)
 {
     ThrowIfDisposed();
     bool bIsSelected = false;
@@ -450,7 +450,7 @@ OUString SAL_CALL
     return u"AccessibleSlideSorterView"_ustr;
 }
 
-sal_Bool SAL_CALL AccessibleSlideSorterView::supportsService (const OUString& sServiceName)
+bool SAL_CALL AccessibleSlideSorterView::supportsService (const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

@@ -187,7 +187,7 @@ void SAL_CALL ProgressBar::setPosSize (
 
 //  XControl
 
-sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ )
+bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ )
 {
     // A model is not possible for this control.
     return false;

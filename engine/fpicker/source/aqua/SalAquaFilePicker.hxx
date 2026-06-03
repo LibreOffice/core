@@ -62,7 +62,7 @@ public:
 
     // XFilePicker functions
 
-    virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode ) override;
+    virtual void SAL_CALL setMultiSelectionMode( bool bMode ) override;
 
     virtual void SAL_CALL setDefaultName( const OUString& aName ) override;
 
@@ -92,7 +92,7 @@ public:
 
     virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
 
-    virtual void SAL_CALL enableControl( sal_Int16 nControlId, sal_Bool bEnable ) override;
+    virtual void SAL_CALL enableControl( sal_Int16 nControlId, bool bEnable ) override;
 
     virtual void SAL_CALL setLabel( sal_Int16 nControlId, const OUString& aLabel ) override;
 
@@ -116,7 +116,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName(  ) override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 

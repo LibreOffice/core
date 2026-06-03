@@ -279,7 +279,7 @@ public:
     virtual css::beans::Property SAL_CALL getPropertyByName(
         OUString const & name) override;
 
-    virtual sal_Bool SAL_CALL hasPropertyByName(OUString const & name) override;
+    virtual bool SAL_CALL hasPropertyByName(OUString const & name) override;
 
 private:
     rtl::Reference< Data > m_data;
@@ -308,7 +308,7 @@ css::beans::Property Info::getPropertyByName(OUString const & name)
         second.property;
 }
 
-sal_Bool Info::hasPropertyByName(OUString const & name)
+bool Info::hasPropertyByName(OUString const & name)
 {
     Data::PropertyMap::iterator i(m_data->properties.find(name));
     return i != m_data->properties.end() && i->second.present;

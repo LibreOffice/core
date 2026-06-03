@@ -566,7 +566,7 @@ uno::Type SAL_CALL ScFunctionListObj::getElementType()
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
-sal_Bool SAL_CALL ScFunctionListObj::hasElements()
+bool SAL_CALL ScFunctionListObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() > 0 );
@@ -592,7 +592,7 @@ uno::Sequence<OUString> SAL_CALL ScFunctionListObj::getElementNames()
     return {};
 }
 
-sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
+bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();

@@ -179,8 +179,8 @@ void checkDataLabelProperties(const Reference<chart2::XDataSeries>& xDataSeries,
         xDataSeries->getDataPointByIndex(nDataPointIndex), uno::UNO_SET_THROW);
     chart2::DataPointLabel aLabel;
     xPropertySet->getPropertyValue(u"Label"_ustr) >>= aLabel;
-    CPPUNIT_ASSERT_EQUAL(bValueVisible, static_cast<bool>(aLabel.ShowNumber));
-    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(aLabel.ShowNumberInPercent));
+    CPPUNIT_ASSERT_EQUAL(bValueVisible, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(false, aLabel.ShowNumberInPercent);
 }
 }
 

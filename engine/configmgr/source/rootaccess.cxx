@@ -169,7 +169,7 @@ void RootAccess::commitChanges()
     bc.send();
 }
 
-sal_Bool RootAccess::hasPendingChanges() {
+bool RootAccess::hasPendingChanges() {
     assert(thisIs(IS_UPDATE));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();

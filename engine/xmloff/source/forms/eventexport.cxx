@@ -105,7 +105,7 @@ namespace xmloff
         return comphelper::mapKeysToSequence(m_aMappedEvents);
     }
 
-    sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName )
+    bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName )
     {
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         return m_aMappedEvents.end() != aPos;
@@ -116,7 +116,7 @@ namespace xmloff
         return ::cppu::UnoType<PropertyValue>::get();
     }
 
-    sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  )
+    bool SAL_CALL OEventDescriptorMapper::hasElements(  )
     {
         return !m_aMappedEvents.empty();
     }

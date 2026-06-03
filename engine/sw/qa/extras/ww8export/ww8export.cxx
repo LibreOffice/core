@@ -326,7 +326,7 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     // It wasn't possible to fill out this form.
-    CPPUNIT_ASSERT_EQUAL(false, bool(xStorable->isReadonly()));
+    CPPUNIT_ASSERT_EQUAL(false, xStorable->isReadonly());
 
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
@@ -837,7 +837,7 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
     // No RDF statement on the first paragraph.
     uno::Reference<rdf::XResource> xParagraph(getParagraph(1), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
-    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(xStatements->hasMoreElements()));
+    CPPUNIT_ASSERT_EQUAL(false, xStatements->hasMoreElements());
 
     // 3 RDF statements on the second paragraph.
     xParagraph.set(getParagraph(2), uno::UNO_QUERY);
@@ -859,7 +859,7 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
     // No RDF statement on the third paragraph.
     xParagraph.set(getParagraph(3), uno::UNO_QUERY);
     xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
-    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(xStatements->hasMoreElements()));
+    CPPUNIT_ASSERT_EQUAL(false, xStatements->hasMoreElements());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo45724)

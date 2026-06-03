@@ -246,13 +246,13 @@ namespace
             }
 
             // check mbEnabled
-            const beans::Optional< beans::Ambiguous< sal_Bool > > option(
+            const beans::Optional< beans::Ambiguous< bool > > option(
                 rxPackage->isRegistered(uno::Reference< task::XAbortChannel >(),
                 uno::Reference< ucb::XCommandEnvironment >()));
 
             if (option.IsPresent)
             {
-                ::beans::Ambiguous< sal_Bool > const& reg = option.Value;
+                ::beans::Ambiguous< bool > const& reg = option.Value;
 
                 if (!reg.IsAmbiguous)
                 {

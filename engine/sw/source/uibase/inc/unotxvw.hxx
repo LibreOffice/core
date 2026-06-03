@@ -85,14 +85,14 @@ public:
 
     //XSelectionSupplier
     virtual css::uno::Any SAL_CALL getSelection() override;
-    virtual sal_Bool SAL_CALL select(const css::uno::Any& rInterface) override;
+    virtual bool SAL_CALL select(const css::uno::Any& rInterface) override;
     virtual void SAL_CALL addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener > & xListener) override;
     virtual void SAL_CALL removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener > & xListener) override;
 
     // XFormLayerAccess
     virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const css::uno::Reference< css::form::XForm >& Form ) override;
-    virtual sal_Bool SAL_CALL isFormDesignMode(  ) override;
-    virtual void SAL_CALL setFormDesignMode( sal_Bool DesignMode ) override;
+    virtual bool SAL_CALL isFormDesignMode(  ) override;
+    virtual void SAL_CALL setFormDesignMode( bool DesignMode ) override;
 
     // XControlAccess
     virtual css::uno::Reference< css::awt::XControl >  SAL_CALL getControl(const css::uno::Reference< css::awt::XControlModel > & Model) override;
@@ -109,11 +109,11 @@ public:
 
     //XRubySelection
     virtual css::uno::Sequence<
-            css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRubyList( sal_Bool bAutomatic ) override;
+            css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRubyList( bool bAutomatic ) override;
 
     virtual void SAL_CALL setRubyList(
         const css::uno::Sequence<
-        css::uno::Sequence< css::beans::PropertyValue > >& RubyList, sal_Bool bAutomatic ) override;
+        css::uno::Sequence< css::beans::PropertyValue > >& RubyList, bool bAutomatic ) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -126,7 +126,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XTransferableSupplier
@@ -171,28 +171,28 @@ public:
     SwXTextViewCursor(SwView* pVw);
 
     //XTextViewCursor
-    virtual sal_Bool SAL_CALL isVisible() override;
-    virtual void SAL_CALL setVisible(sal_Bool bVisible) override;
+    virtual bool SAL_CALL isVisible() override;
+    virtual void SAL_CALL setVisible(bool bVisible) override;
     virtual css::awt::Point SAL_CALL getPosition() override;
 
     //XTextCursor - new
     virtual void SAL_CALL collapseToStart() override;
     virtual void SAL_CALL collapseToEnd() override;
-    virtual sal_Bool SAL_CALL isCollapsed() override;
-    virtual sal_Bool SAL_CALL goLeft( sal_Int16 nCount, sal_Bool bExpand ) override;
-    virtual sal_Bool SAL_CALL goRight( sal_Int16 nCount, sal_Bool bExpand ) override;
-    virtual void SAL_CALL gotoStart( sal_Bool bExpand ) override;
-    virtual void SAL_CALL gotoEnd( sal_Bool bExpand ) override;
-    virtual void SAL_CALL gotoRange( const css::uno::Reference< css::text::XTextRange >& xRange, sal_Bool bExpand ) override;
+    virtual bool SAL_CALL isCollapsed() override;
+    virtual bool SAL_CALL goLeft( sal_Int16 nCount, bool bExpand ) override;
+    virtual bool SAL_CALL goRight( sal_Int16 nCount, bool bExpand ) override;
+    virtual void SAL_CALL gotoStart( bool bExpand ) override;
+    virtual void SAL_CALL gotoEnd( bool bExpand ) override;
+    virtual void SAL_CALL gotoRange( const css::uno::Reference< css::text::XTextRange >& xRange, bool bExpand ) override;
 
     //XPageCursor
-    virtual sal_Bool SAL_CALL jumpToFirstPage() override;
-    virtual sal_Bool SAL_CALL jumpToLastPage() override;
-    virtual sal_Bool SAL_CALL jumpToPage(sal_Int16 nPage) override;
-    virtual sal_Bool SAL_CALL jumpToNextPage() override;
-    virtual sal_Bool SAL_CALL jumpToPreviousPage() override;
-    virtual sal_Bool SAL_CALL jumpToEndOfPage() override;
-    virtual sal_Bool SAL_CALL jumpToStartOfPage() override;
+    virtual bool SAL_CALL jumpToFirstPage() override;
+    virtual bool SAL_CALL jumpToLastPage() override;
+    virtual bool SAL_CALL jumpToPage(sal_Int16 nPage) override;
+    virtual bool SAL_CALL jumpToNextPage() override;
+    virtual bool SAL_CALL jumpToPreviousPage() override;
+    virtual bool SAL_CALL jumpToEndOfPage() override;
+    virtual bool SAL_CALL jumpToStartOfPage() override;
     virtual sal_Int16 SAL_CALL getPage() override;
 
     //XTextRange
@@ -203,18 +203,18 @@ public:
     virtual void SAL_CALL  setString(const OUString& aString) override;
 
     //XScreenCursor
-    virtual sal_Bool SAL_CALL screenDown() override;
-    virtual sal_Bool SAL_CALL screenUp() override;
+    virtual bool SAL_CALL screenDown() override;
+    virtual bool SAL_CALL screenUp() override;
 
     //XViewCursor
-    virtual sal_Bool SAL_CALL goDown(sal_Int16 nCount, sal_Bool bExpand) override;
-    virtual sal_Bool SAL_CALL goUp(sal_Int16 nCount, sal_Bool bExpand) override;
+    virtual bool SAL_CALL goDown(sal_Int16 nCount, bool bExpand) override;
+    virtual bool SAL_CALL goUp(sal_Int16 nCount, bool bExpand) override;
 
     //XLineCursor
-    virtual sal_Bool SAL_CALL isAtStartOfLine() override;
-    virtual sal_Bool SAL_CALL isAtEndOfLine() override;
-    virtual void SAL_CALL gotoEndOfLine(sal_Bool bExpand) override;
-    virtual void SAL_CALL gotoStartOfLine(sal_Bool bExpand) override;
+    virtual bool SAL_CALL isAtStartOfLine() override;
+    virtual bool SAL_CALL isAtEndOfLine() override;
+    virtual void SAL_CALL gotoEndOfLine(bool bExpand) override;
+    virtual void SAL_CALL gotoStartOfLine(bool bExpand) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -233,7 +233,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void    Invalidate(){m_pView = nullptr;}

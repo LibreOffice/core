@@ -48,7 +48,7 @@ public:
     // XPropertySetInfo
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) override;
     virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
     PropertyVector maProperties;

@@ -469,7 +469,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         { u"ProgressRange"_ustr,   0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"ProgressMax"_ustr,     0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"ProgressCurrent"_ustr, 0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { u"Preview"_ustr,         0, cppu::UnoType<sal_Bool>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"Preview"_ustr,         0, cppu::UnoType<bool>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"PageLayouts"_ustr,     0, cppu::UnoType<container::XNameAccess>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"PrivateData"_ustr,     0, cppu::UnoType<XInterface>::get(),              css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"BaseURI"_ustr,         0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },

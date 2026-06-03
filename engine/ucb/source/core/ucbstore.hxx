@@ -57,7 +57,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySetRegistryFactory
@@ -111,19 +111,19 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySetRegistry
     virtual css::uno::Reference< css::ucb::XPersistentPropertySet > SAL_CALL
-    openPropertySet( const OUString& key, sal_Bool create ) override;
+    openPropertySet( const OUString& key, bool create ) override;
     virtual void SAL_CALL
     removePropertySet( const OUString& key ) override;
 
     // XElementAccess ( XNameAccess is derived from it )
     virtual css::uno::Type SAL_CALL
     getElementType() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasElements() override;
 
     // XNameAccess
@@ -131,7 +131,7 @@ public:
     getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasByName( const OUString& aName ) override;
 
     // Non-interface methods
@@ -185,7 +185,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent

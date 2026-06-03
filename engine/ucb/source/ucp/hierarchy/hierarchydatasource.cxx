@@ -102,7 +102,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
@@ -127,7 +127,7 @@ public:
     // XHierarchicalNameAccess
     virtual uno::Any SAL_CALL
     getByHierarchicalName( const OUString & aName ) override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasByHierarchicalName( const OUString & aName ) override;
 
     // XNameContainer
@@ -145,13 +145,13 @@ public:
     getByName( const OUString & aName ) override;
     virtual uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasByName( const OUString & aName ) override;
 
     // XElementAccess ( base of XNameAccess )
     virtual uno::Type SAL_CALL
     getElementType() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasElements() override;
 
     // XChangesNotifier
@@ -165,7 +165,7 @@ public:
     // XChangesBatch
     virtual void SAL_CALL
     commitChanges() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
     hasPendingChanges() override;
     virtual uno::Sequence< util::ElementChange > SAL_CALL
     getPendingChanges() override;
@@ -201,7 +201,7 @@ OUString SAL_CALL HierarchyDataSource::getImplementationName()                  
 {
     return u"com.sun.star.comp.ucb.HierarchyDataSource"_ustr;
 }
-sal_Bool SAL_CALL HierarchyDataSource::supportsService( const OUString& ServiceName )
+bool SAL_CALL HierarchyDataSource::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -565,7 +565,7 @@ OUString SAL_CALL HierarchyDataAccess::getImplementationName()
     return u"com.sun.star.comp.ucb.HierarchyDataAccess"_ustr;
 }
 
-sal_Bool SAL_CALL HierarchyDataAccess::supportsService( const OUString& ServiceName )
+bool SAL_CALL HierarchyDataAccess::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -635,7 +635,7 @@ uno::Any SAL_CALL HierarchyDataAccess::getByHierarchicalName(
 
 
 // virtual
-sal_Bool SAL_CALL HierarchyDataAccess::hasByHierarchicalName(
+bool SAL_CALL HierarchyDataAccess::hasByHierarchicalName(
                                                 const OUString & aName )
 {
     uno::Reference< container::XHierarchicalNameAccess > xOrig
@@ -676,7 +676,7 @@ uno::Sequence< OUString > SAL_CALL HierarchyDataAccess::getElementNames()
 
 
 // virtual
-sal_Bool SAL_CALL HierarchyDataAccess::hasByName( const OUString & aName )
+bool SAL_CALL HierarchyDataAccess::hasByName( const OUString & aName )
 {
     uno::Reference< container::XNameAccess > xOrig
         = ensureOrigInterface( m_xCfgNA );
@@ -703,7 +703,7 @@ uno::Type SAL_CALL HierarchyDataAccess::getElementType()
 
 
 // virtual
-sal_Bool SAL_CALL HierarchyDataAccess::hasElements()
+bool SAL_CALL HierarchyDataAccess::hasElements()
 {
     uno::Reference< container::XElementAccess > xOrig
         = ensureOrigInterface( m_xCfgEA );
@@ -834,7 +834,7 @@ void SAL_CALL HierarchyDataAccess::commitChanges()
 
 
 // virtual
-sal_Bool SAL_CALL HierarchyDataAccess::hasPendingChanges()
+bool SAL_CALL HierarchyDataAccess::hasPendingChanges()
 {
     uno::Reference< util::XChangesBatch > xOrig
         = ensureOrigInterface( m_xCfgCB );

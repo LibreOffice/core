@@ -94,7 +94,7 @@ public: // XConnectable
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() override;
     Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
 
 protected:
 
@@ -392,7 +392,7 @@ OUString ODataInputStream::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool ODataInputStream::supportsService(const OUString& ServiceName)
+bool ODataInputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -431,7 +431,7 @@ public: // XOutputStream
     virtual void SAL_CALL closeOutput() override;
 
 public: // XDataOutputStream
-    virtual void SAL_CALL writeBoolean(sal_Bool Value) override;
+    virtual void SAL_CALL writeBoolean(bool Value) override;
     virtual void SAL_CALL writeByte(sal_Int8 Value) override;
     virtual void SAL_CALL writeChar(sal_Unicode Value) override;
     virtual void SAL_CALL writeShort(sal_Int16 Value) override;
@@ -454,7 +454,7 @@ public: // XConnectable
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() override;
     Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
 
 protected:
     Reference < XConnectable >  m_succ;
@@ -492,7 +492,7 @@ void ODataOutputStream::closeOutput()
 }
 
 // XDataOutputStream
-void ODataOutputStream::writeBoolean(sal_Bool Value)
+void ODataOutputStream::writeBoolean(bool Value)
 {
     if( Value )
     {
@@ -686,7 +686,7 @@ OUString ODataOutputStream::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool ODataOutputStream::supportsService(const OUString& ServiceName)
+bool ODataOutputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -761,7 +761,7 @@ public:
 
 public:
     // XDataOutputStream
-    virtual void SAL_CALL writeBoolean(sal_Bool Value) override
+    virtual void SAL_CALL writeBoolean(bool Value) override
                 { ODataOutputStream::writeBoolean( Value ); }
     virtual void SAL_CALL writeByte(sal_Int8 Value) override
                 { ODataOutputStream::writeByte( Value ); }
@@ -793,7 +793,7 @@ public: // XMarkableStream
 public: // XServiceInfo
     OUString                   SAL_CALL   getImplementationName() override;
     Sequence< OUString >       SAL_CALL   getSupportedServiceNames() override;
-    sal_Bool                   SAL_CALL   supportsService(const OUString& ServiceName) override;
+    bool                   SAL_CALL   supportsService(const OUString& ServiceName) override;
 
 private:
     void connectToMarkable();
@@ -946,7 +946,7 @@ OUString OObjectOutputStream::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool OObjectOutputStream::supportsService(const OUString& ServiceName)
+bool OObjectOutputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1028,7 +1028,7 @@ public: // XMarkableStream
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() override;
     Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
     void connectToMarkable();
@@ -1204,7 +1204,7 @@ OUString OObjectInputStream::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool OObjectInputStream::supportsService(const OUString& ServiceName)
+bool OObjectInputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

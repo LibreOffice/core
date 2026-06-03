@@ -133,7 +133,7 @@ namespace pcr
             { CommonBehaviourControlHelper::setControlContext( controlcontext ); }
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() override
             { return new weld::TransportAsXWindow(getWidget()); }
-        virtual sal_Bool SAL_CALL isModified(  ) override
+        virtual bool SAL_CALL isModified(  ) override
             { return CommonBehaviourControlHelper::isModified(); }
         virtual void SAL_CALL notifyModifiedValue(  ) override
             { CommonBehaviourControlHelper::notifyModifiedValue(); }

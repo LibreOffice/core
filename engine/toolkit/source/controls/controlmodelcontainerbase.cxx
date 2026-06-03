@@ -391,7 +391,7 @@ Type ControlModelContainerBase::getElementType()
     return aType;
 }
 
-sal_Bool ControlModelContainerBase::hasElements()
+bool ControlModelContainerBase::hasElements()
 {
     return !maModels.empty();
 }
@@ -466,7 +466,7 @@ Sequence< OUString > ControlModelContainerBase::getElementNames()
     return aNames;
 }
 
-sal_Bool ControlModelContainerBase::hasByName( const OUString& aName )
+bool ControlModelContainerBase::hasByName( const OUString& aName )
 {
     return maModels.end() != ImplFindElement( aName );
 }
@@ -579,13 +579,13 @@ void ControlModelContainerBase::removeByName( const OUString& aName )
 }
 
 
-sal_Bool SAL_CALL ControlModelContainerBase::getGroupControl(  )
+bool SAL_CALL ControlModelContainerBase::getGroupControl(  )
 {
     return true;
 }
 
 
-void SAL_CALL ControlModelContainerBase::setGroupControl( sal_Bool )
+void SAL_CALL ControlModelContainerBase::setGroupControl( bool )
 {
     SAL_WARN("toolkit", "explicit grouping not supported" );
 }
@@ -700,14 +700,14 @@ void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArgum
 {
     return m_nTabPageId;
 }
-sal_Bool SAL_CALL ControlModelContainerBase::getEnabled()
+bool SAL_CALL ControlModelContainerBase::getEnabled()
 {
     SolarMutexGuard aGuard;
     bool bEnabled = false;
     getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)) >>= bEnabled;
     return bEnabled;
 }
-void SAL_CALL ControlModelContainerBase::setEnabled( sal_Bool _enabled )
+void SAL_CALL ControlModelContainerBase::setEnabled( bool _enabled )
 {
     SolarMutexGuard aGuard;
     setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED), Any(_enabled));
@@ -1361,7 +1361,7 @@ void SAL_CALL ControlContainerBase::disposing(
     UnoControlContainer::disposing( Source );
 }
 
-sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxModel )
+bool ControlContainerBase::setModel( const Reference< XControlModel >& rxModel )
 {
     SolarMutexGuard aGuard;
 
@@ -1429,7 +1429,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
 
     return bRet;
 }
-void ControlContainerBase::setDesignMode( sal_Bool bOn )
+void ControlContainerBase::setDesignMode( bool bOn )
 {
     SolarMutexGuard aGuard;
 

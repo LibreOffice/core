@@ -481,7 +481,7 @@ uno::Type SAL_CALL ScSheetLinksObj::getElementType()
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-sal_Bool SAL_CALL ScSheetLinksObj::hasElements()
+bool SAL_CALL ScSheetLinksObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -497,7 +497,7 @@ uno::Any SAL_CALL ScSheetLinksObj::getByName( const OUString& aName )
     return uno::Any(uno::Reference<beans::XPropertySet>(xLink));
 }
 
-sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
+bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     //  Name is the same as file name
@@ -980,7 +980,7 @@ uno::Type SAL_CALL ScAreaLinksObj::getElementType()
     return cppu::UnoType<sheet::XAreaLink>::get();
 }
 
-sal_Bool SAL_CALL ScAreaLinksObj::hasElements()
+bool SAL_CALL ScAreaLinksObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -1263,7 +1263,7 @@ uno::Type SAL_CALL ScDDELinksObj::getElementType()
     return cppu::UnoType<sheet::XDDELink>::get();
 }
 
-sal_Bool SAL_CALL ScDDELinksObj::hasElements()
+bool SAL_CALL ScDDELinksObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -1301,7 +1301,7 @@ uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()
     return uno::Sequence<OUString>();
 }
 
-sal_Bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
+bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -1484,7 +1484,7 @@ ScExternalDocLinkObj::~ScExternalDocLinkObj()
 }
 
 uno::Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetCache(
-    const OUString& aSheetName, sal_Bool bDynamicCache )
+    const OUString& aSheetName, bool bDynamicCache )
 {
     SolarMutexGuard aGuard;
     size_t nIndex = 0;
@@ -1529,7 +1529,7 @@ Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScExternalDocLinkObj::hasByName(const OUString &aName)
+bool SAL_CALL ScExternalDocLinkObj::hasByName(const OUString &aName)
 {
     SolarMutexGuard aGuard;
 
@@ -1579,7 +1579,7 @@ uno::Type SAL_CALL ScExternalDocLinkObj::getElementType()
     return cppu::UnoType<sheet::XExternalDocLink>::get();
 }
 
-sal_Bool SAL_CALL ScExternalDocLinkObj::hasElements()
+bool SAL_CALL ScExternalDocLinkObj::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -1656,7 +1656,7 @@ Sequence< OUString > SAL_CALL ScExternalDocLinksObj::getElementNames()
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScExternalDocLinksObj::hasByName(const OUString &aName)
+bool SAL_CALL ScExternalDocLinksObj::hasByName(const OUString &aName)
 {
     SolarMutexGuard aGuard;
     return mpRefMgr->hasExternalFile(aName);
@@ -1696,7 +1696,7 @@ uno::Type SAL_CALL ScExternalDocLinksObj::getElementType()
     return cppu::UnoType<sheet::XExternalDocLinks>::get();
 }
 
-sal_Bool SAL_CALL ScExternalDocLinksObj::hasElements()
+bool SAL_CALL ScExternalDocLinksObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return mpRefMgr->getExternalFileCount() > 0;

@@ -155,102 +155,102 @@ void SAL_CALL SwVbaOptions::setDefaultBorderColorIndex( ::sal_Int32 /*_defaultbo
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getReplaceSelection()
+bool SAL_CALL SwVbaOptions::getReplaceSelection()
 {
     return true;
 }
 
-void SAL_CALL SwVbaOptions::setReplaceSelection( sal_Bool /*_replaceselection*/ )
+void SAL_CALL SwVbaOptions::setReplaceSelection( bool /*_replaceselection*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getMapPaperSize()
+bool SAL_CALL SwVbaOptions::getMapPaperSize()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setMapPaperSize( sal_Bool /*_mappapersize*/ )
+void SAL_CALL SwVbaOptions::setMapPaperSize( bool /*_mappapersize*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyHeadings()
+bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyHeadings()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( sal_Bool /*_autoformatasyoutypeapplyheadings*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( bool /*_autoformatasyoutypeapplyheadings*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyBulletedLists()
+bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyBulletedLists()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( sal_Bool /*_autoformatasyoutypeapplybulletedlists*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( bool /*_autoformatasyoutypeapplybulletedlists*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyNumberedLists()
+bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyNumberedLists()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( sal_Bool /*_autoformatasyoutypeapplynumberedlists*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( bool /*_autoformatasyoutypeapplynumberedlists*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeFormatListItemBeginning()
+bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeFormatListItemBeginning()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( sal_Bool /*_autoformatasyoutypeformatlistitembeginning*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( bool /*_autoformatasyoutypeformatlistitembeginning*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeDefineStyles()
+bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeDefineStyles()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( sal_Bool /*_autoformatasyoutypedefinestyles*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( bool /*_autoformatasyoutypedefinestyles*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyHeadings()
+bool SAL_CALL SwVbaOptions::getAutoFormatApplyHeadings()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( sal_Bool /*_autoformatapplyheadings*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( bool /*_autoformatapplyheadings*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyLists()
+bool SAL_CALL SwVbaOptions::getAutoFormatApplyLists()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( sal_Bool /*_autoformatapplylists*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( bool /*_autoformatapplylists*/ )
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyBulletedLists()
+bool SAL_CALL SwVbaOptions::getAutoFormatApplyBulletedLists()
 {
     return false;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( sal_Bool /*_autoformatapplybulletedlists*/ )
+void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( bool /*_autoformatapplybulletedlists*/ )
 {
     // not support in Writer
 }

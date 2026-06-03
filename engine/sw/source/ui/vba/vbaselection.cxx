@@ -1114,7 +1114,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  )
     mxTextViewCursor->gotoRange( xEnd, true );
 }
 
-sal_Bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range )
+bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range )
 {
     return getRange()->InRange( Range );
 }

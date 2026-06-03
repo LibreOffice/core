@@ -43,7 +43,7 @@ namespace framework
                 return u"com.sun.star.comp.framework.ImageManager"_ustr;
             }
 
-            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+            virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
             {
                 return cppu::supportsService(this, ServiceName);
             }
@@ -65,7 +65,7 @@ namespace framework
             // XImageManager
             virtual void SAL_CALL reset() override;
             virtual css::uno::Sequence< OUString > SAL_CALL getAllImageNames( ::sal_Int16 nImageType ) override;
-            virtual sal_Bool SAL_CALL hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) override;
+            virtual bool SAL_CALL hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) override;
             virtual css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > SAL_CALL getImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence ) override;
             virtual void SAL_CALL replaceImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence ) override;
             virtual void SAL_CALL removeImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aResourceURLSequence ) override;
@@ -79,8 +79,8 @@ namespace framework
             virtual void SAL_CALL reload() override;
             virtual void SAL_CALL store() override;
             virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-            virtual sal_Bool SAL_CALL isModified() override;
-            virtual sal_Bool SAL_CALL isReadOnly() override;
+            virtual bool SAL_CALL isModified() override;
+            virtual bool SAL_CALL isReadOnly() override;
 
             // Non-UNO methods
             /// @throws css::uno::RuntimeException

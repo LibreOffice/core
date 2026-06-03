@@ -50,7 +50,7 @@ public:
         return u"com.sun.star.comp.uui.TestInteractionHandler"_ustr;
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) override
+    virtual bool SAL_CALL supportsService(OUString const & rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -72,7 +72,7 @@ public:
         handleInteractionRequest(rRequest);
     }
 
-    virtual sal_Bool SAL_CALL handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& rRequest) override
+    virtual bool SAL_CALL handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& rRequest) override
     {
         mbPasswordRequested = false;
 

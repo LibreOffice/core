@@ -349,7 +349,7 @@ namespace osl_Mutex
 
             ThreadHelper::thread_sleep_tenth_sec( 2 );
             // if acquire in myThread does not work, 2 secs is long enough,
-            // myThread should terminate now, and bRes1 should be sal_False
+            // myThread should terminate now, and bRes1 should be false
             bool bRes1 = myThread.isRunning( );
 
             aMutex.release( );
@@ -663,7 +663,7 @@ namespace osl_ClearableGuard
             /// now, the aMutex has been guarded.
             ClearableMutexGuard myMutexGuard( &aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            /// it will return false if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initialized.",
@@ -677,7 +677,7 @@ namespace osl_ClearableGuard
             /// now, the aMutex has been guarded, this time, we use reference constructor.
             ClearableMutexGuard myMutexGuard( aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            /// it will return false if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initialized, we use reference constructor this time.",
@@ -805,7 +805,7 @@ namespace osl_ResettableGuard
             /// now, the aMutex has been guarded.
             ResettableMutexGuard myMutexGuard( &aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            /// it will return false if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the acquire operation when initialized.",
@@ -821,7 +821,7 @@ namespace osl_ResettableGuard
             /// now, the aMutex has been guarded, this time, we use reference constructor.
             ResettableMutexGuard myMutexGuard( aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            /// it will return false if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initialized, we use reference constructor this time.",
@@ -851,7 +851,7 @@ namespace osl_ResettableGuard
             myMutexGuard.clear( );
             ThreadHelper::thread_sleep_tenth_sec( 1 );
 
-            /// if reset is not success, the release will return sal_False
+            /// if reset is not success, the release will return false
             myMutexGuard.reset( );
             bool bRes1 = aMutex.release( );
             myThread.join( );

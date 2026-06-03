@@ -44,8 +44,8 @@ namespace DOM::events
     }
 
     void SAL_CALL CUIEvent::initUIEvent(const OUString& typeArg,
-                     sal_Bool canBubbleArg,
-                     sal_Bool cancelableArg,
+                     bool canBubbleArg,
+                     bool cancelableArg,
                      const Reference< XAbstractView >& viewArg,
                      sal_Int32 detailArg)
     {
@@ -77,12 +77,12 @@ namespace DOM::events
         return CEvent::getEventPhase();
     }
 
-    sal_Bool SAL_CALL CUIEvent::getBubbles()
+    bool SAL_CALL CUIEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    sal_Bool SAL_CALL CUIEvent::getCancelable()
+    bool SAL_CALL CUIEvent::getCancelable()
     {
         // mutation events cannot be canceled
         return false;
@@ -102,8 +102,8 @@ namespace DOM::events
         CEvent::preventDefault();
     }
 
-    void SAL_CALL CUIEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)
+    void SAL_CALL CUIEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+        bool cancelableArg)
     {
         // base initializer
         CEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);

@@ -155,12 +155,12 @@ protected:
     bool mbAnimationPause : 1;
 
     // Flag which decides if buffered output for this view is allowed. When
-    // set, PreRendering for PageView rendering will be used. Default is sal_False
+    // set, PreRendering for PageView rendering will be used. Default is false
     bool mbBufferedOutputAllowed : 1;
 
     // Flag which decides if buffered overlay for this view is allowed. When
     // set, the output will be buffered in an overlay vdev. When not, overlay is
-    // directly painted to OutDev. Default is sal_False.
+    // directly painted to OutDev. Default is false.
     bool mbBufferedOverlayAllowed : 1;
 
     // Allow page decorations? Quick way to switch on/off all of page's decoration features,
@@ -278,7 +278,7 @@ public:
     virtual void BrkAction(); // Cancel all Actions (e.g. cancel dragging)
     virtual void TakeActionRect(tools::Rectangle& rRect) const;
 
-    // Info about TextEdit. Default is sal_False.
+    // Info about TextEdit. Default is false.
     virtual bool IsTextEdit() const;
 
     // Must be called for every Window change as well as MapMode (Scaling) change:

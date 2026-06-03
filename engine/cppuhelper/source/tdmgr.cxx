@@ -619,7 +619,7 @@ void EventListenerImpl::disposing( lang::EventObject const & rEvt )
 }
 
 
-sal_Bool SAL_CALL installTypeDescriptionManager(
+bool SAL_CALL installTypeDescriptionManager(
     Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
 {
     uno::Environment curr_env(Environment::getCurrent());

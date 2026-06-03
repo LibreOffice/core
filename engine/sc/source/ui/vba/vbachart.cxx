@@ -798,7 +798,7 @@ ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ )
 
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaChart::getHasTitle(  )
 {
     bool bHasTitle = false;
@@ -814,7 +814,7 @@ ScVbaChart::getHasTitle(  )
 }
 
 void SAL_CALL
-ScVbaChart::setHasTitle( sal_Bool bTitle )
+ScVbaChart::setHasTitle( bool bTitle )
 {
     try
     {
@@ -827,7 +827,7 @@ ScVbaChart::setHasTitle( sal_Bool bTitle )
 
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ScVbaChart::getHasLegend(  )
 {
     bool bHasLegend = false;
@@ -843,7 +843,7 @@ ScVbaChart::getHasLegend(  )
 }
 
 void SAL_CALL
-ScVbaChart::setHasLegend( sal_Bool bLegend )
+ScVbaChart::setHasLegend( bool bLegend )
 {
     try
     {

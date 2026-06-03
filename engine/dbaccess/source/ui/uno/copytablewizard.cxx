@@ -157,8 +157,8 @@ namespace dbaui
         virtual void SAL_CALL setDestinationTableName( const OUString& _destinationTableName ) override;
         virtual Optional< OUString > SAL_CALL getCreatePrimaryKey() override;
         virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) override;
-        virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() override;
-        virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) override;
+        virtual bool SAL_CALL getUseHeaderLineAsColumnNames() override;
+        virtual void SAL_CALL setUseHeaderLineAsColumnNames( bool _bUseHeaderLineAsColumnNames ) override;
         virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) override;
         virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) override;
 
@@ -473,13 +473,13 @@ void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& 
     m_aPrimaryKeyName = _newPrimaryKey;
 }
 
-sal_Bool SAL_CALL CopyTableWizard::getUseHeaderLineAsColumnNames()
+bool SAL_CALL CopyTableWizard::getUseHeaderLineAsColumnNames()
 {
     CopyTableAccessGuard aGuard( *this );
     return m_bUseHeaderLineAsColumnNames;
 }
 
-void SAL_CALL CopyTableWizard::setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames )
+void SAL_CALL CopyTableWizard::setUseHeaderLineAsColumnNames( bool _bUseHeaderLineAsColumnNames )
 {
     CopyTableAccessGuard aGuard( *this );
     m_bUseHeaderLineAsColumnNames = _bUseHeaderLineAsColumnNames;

@@ -128,7 +128,7 @@ OUString SAL_CALL AnalysisAddIn::getImplementationName()
     return u"com.sun.star.sheet.addin.AnalysisImpl"_ustr;
 }
 
-sal_Bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName )
+bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName )
 {
     return cppu::supportsService(this, aName);
 }

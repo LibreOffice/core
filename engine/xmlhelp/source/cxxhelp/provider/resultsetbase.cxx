@@ -124,7 +124,7 @@ ResultSetBase::dispose()
 
 //  XResultSet
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::next()
 {
     m_nRow++;
@@ -132,28 +132,28 @@ ResultSetBase::next()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::isBeforeFirst()
 {
     return m_nRow == -1;
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::isAfterLast()
 {
     return sal::static_int_cast<sal_uInt32>( m_nRow ) >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::isFirst()
 {
     return m_nRow == 0;
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::isLast()
 {
     if( sal::static_int_cast<sal_uInt32>( m_nRow ) ==  m_aItems.size() - 1 )
@@ -177,7 +177,7 @@ ResultSetBase::afterLast()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::first()
 {
     m_nRow = -1;
@@ -185,7 +185,7 @@ ResultSetBase::first()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::last()
 {
     m_nRow = m_aItems.size() - 1;
@@ -204,7 +204,7 @@ ResultSetBase::getRow()
 }
 
 
-sal_Bool SAL_CALL ResultSetBase::absolute( sal_Int32 row )
+bool SAL_CALL ResultSetBase::absolute( sal_Int32 row )
 {
     if( row >= 0 )
         m_nRow = row - 1;
@@ -220,7 +220,7 @@ sal_Bool SAL_CALL ResultSetBase::absolute( sal_Int32 row )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::relative( sal_Int32 row )
 {
     if( isAfterLast() || isBeforeFirst() )
@@ -237,7 +237,7 @@ ResultSetBase::relative( sal_Int32 row )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::previous()
 {
     if( sal::static_int_cast<sal_uInt32>( m_nRow ) > m_aItems.size() )
@@ -254,19 +254,19 @@ ResultSetBase::refreshRow()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::rowUpdated()
 {
     return false;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::rowInserted()
 {
     return false;
 }
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 ResultSetBase::rowDeleted()
 {
     return false;
@@ -369,7 +369,7 @@ public:
         throw beans::UnknownPropertyException(aName);
     }
 
-    sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override
+    bool SAL_CALL hasPropertyByName( const OUString& Name ) override
     {
         return std::any_of(std::cbegin(m_aSeq), std::cend(m_aSeq),
             [&Name](const beans::Property& rProp) { return Name == rProp.Name; });
@@ -389,7 +389,7 @@ ResultSetBase::getPropertySetInfo()
     uno::Sequence< beans::Property > seq
     {
         { u"RowCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY },
-        { u"IsRowCountFinal"_ustr, -1, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY }
+        { u"IsRowCountFinal"_ustr, -1, cppu::UnoType<bool>::get(), beans::PropertyAttribute::READONLY }
     };
 
     //t

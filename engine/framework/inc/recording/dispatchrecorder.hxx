@@ -56,7 +56,7 @@ class DispatchRecorder final
 
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XDispatchRecorder
@@ -68,7 +68,7 @@ class DispatchRecorder final
 
         virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements() override;
+        virtual bool SAL_CALL hasElements() override;
 
         virtual sal_Int32 SAL_CALL getCount() override;
 

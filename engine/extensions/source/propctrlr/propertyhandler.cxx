@@ -205,19 +205,19 @@ namespace pcr
         return aDescriptor;
     }
 
-    sal_Bool SAL_CALL PropertyHandler::isComposable( const OUString& _rPropertyName )
+    bool SAL_CALL PropertyHandler::isComposable( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pInfoService->isComposeable( _rPropertyName );
     }
 
-    InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
+    InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ )
     {
         OSL_FAIL( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
-    void SAL_CALL PropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ )
+    void SAL_CALL PropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )
     {
         OSL_FAIL( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
     }
@@ -236,7 +236,7 @@ namespace pcr
         m_aPropertyListeners.removeInterface( _rxListener );
     }
 
-    sal_Bool SAL_CALL PropertyHandler::suspend( sal_Bool /*_bSuspend*/ )
+    bool SAL_CALL PropertyHandler::suspend( bool /*_bSuspend*/ )
     {
         return true;
     }
@@ -425,7 +425,7 @@ namespace pcr
     IMPLEMENT_FORWARD_XINTERFACE2( PropertyHandlerComponent, PropertyHandler, PropertyHandlerComponent_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( PropertyHandlerComponent, PropertyHandler, PropertyHandlerComponent_Base )
 
-    sal_Bool SAL_CALL PropertyHandlerComponent::supportsService( const OUString& ServiceName )
+    bool SAL_CALL PropertyHandlerComponent::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

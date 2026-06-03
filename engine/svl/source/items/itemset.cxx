@@ -1033,73 +1033,73 @@ void SfxItemSet::Differentiate(const SfxItemSet& rSet)
  *
  * 1st Item    2nd Item    Values  bIgnoreDefs       Remove      Assign       Add
  *
- * set         set         ==      sal_False           -           -           -
- * default     set         ==      sal_False           -           -           -
- * dontcare    set         ==      sal_False           -           -           -
- * unknown     set         ==      sal_False           -           -           -
- * set         default     ==      sal_False           -           -           -
- * default     default     ==      sal_False           -           -           -
- * dontcare    default     ==      sal_False           -           -           -
- * unknown     default     ==      sal_False           -           -           -
- * set         dontcare    ==      sal_False        1st Item       -1          -
- * default     dontcare    ==      sal_False           -           -1          -
- * dontcare    dontcare    ==      sal_False           -           -           -
- * unknown     dontcare    ==      sal_False           -           -           -
- * set         unknown     ==      sal_False        1st Item       -1          -
- * default     unknown     ==      sal_False           -           -           -
- * dontcare    unknown     ==      sal_False           -           -           -
- * unknown     unknown     ==      sal_False           -           -           -
+ * set         set         ==      false           -           -           -
+ * default     set         ==      false           -           -           -
+ * dontcare    set         ==      false           -           -           -
+ * unknown     set         ==      false           -           -           -
+ * set         default     ==      false           -           -           -
+ * default     default     ==      false           -           -           -
+ * dontcare    default     ==      false           -           -           -
+ * unknown     default     ==      false           -           -           -
+ * set         dontcare    ==      false        1st Item       -1          -
+ * default     dontcare    ==      false           -           -1          -
+ * dontcare    dontcare    ==      false           -           -           -
+ * unknown     dontcare    ==      false           -           -           -
+ * set         unknown     ==      false        1st Item       -1          -
+ * default     unknown     ==      false           -           -           -
+ * dontcare    unknown     ==      false           -           -           -
+ * unknown     unknown     ==      false           -           -           -
  *
- * set         set         !=      sal_False        1st Item       -1          -
- * default     set         !=      sal_False           -           -1          -
- * dontcare    set         !=      sal_False           -           -           -
- * unknown     set         !=      sal_False           -           -           -
- * set         default     !=      sal_False        1st Item       -1          -
- * default     default     !=      sal_False           -           -           -
- * dontcare    default     !=      sal_False           -           -           -
- * unknown     default     !=      sal_False           -           -           -
- * set         dontcare    !=      sal_False        1st Item       -1          -
- * default     dontcare    !=      sal_False           -           -1          -
- * dontcare    dontcare    !=      sal_False           -           -           -
- * unknown     dontcare    !=      sal_False           -           -           -
- * set         unknown     !=      sal_False        1st Item       -1          -
- * default     unknown     !=      sal_False           -           -           -
- * dontcare    unknown     !=      sal_False           -           -           -
- * unknown     unknown     !=      sal_False           -           -           -
+ * set         set         !=      false        1st Item       -1          -
+ * default     set         !=      false           -           -1          -
+ * dontcare    set         !=      false           -           -           -
+ * unknown     set         !=      false           -           -           -
+ * set         default     !=      false        1st Item       -1          -
+ * default     default     !=      false           -           -           -
+ * dontcare    default     !=      false           -           -           -
+ * unknown     default     !=      false           -           -           -
+ * set         dontcare    !=      false        1st Item       -1          -
+ * default     dontcare    !=      false           -           -1          -
+ * dontcare    dontcare    !=      false           -           -           -
+ * unknown     dontcare    !=      false           -           -           -
+ * set         unknown     !=      false        1st Item       -1          -
+ * default     unknown     !=      false           -           -           -
+ * dontcare    unknown     !=      false           -           -           -
+ * unknown     unknown     !=      false           -           -           -
  *
- * set         set         ==      sal_True            -           -           -
- * default     set         ==      sal_True            -       2nd Item     2nd Item
- * dontcare    set         ==      sal_True            -           -           -
- * unknown     set         ==      sal_True            -           -           -
- * set         default     ==      sal_True            -           -           -
- * default     default     ==      sal_True            -           -           -
- * dontcare    default     ==      sal_True            -           -           -
- * unknown     default     ==      sal_True            -           -           -
- * set         dontcare    ==      sal_True            -           -           -
- * default     dontcare    ==      sal_True            -           -1          -
- * dontcare    dontcare    ==      sal_True            -           -           -
- * unknown     dontcare    ==      sal_True            -           -           -
- * set         unknown     ==      sal_True            -           -           -
- * default     unknown     ==      sal_True            -           -           -
- * dontcare    unknown     ==      sal_True            -           -           -
- * unknown     unknown     ==      sal_True            -           -           -
+ * set         set         ==      true            -           -           -
+ * default     set         ==      true            -       2nd Item     2nd Item
+ * dontcare    set         ==      true            -           -           -
+ * unknown     set         ==      true            -           -           -
+ * set         default     ==      true            -           -           -
+ * default     default     ==      true            -           -           -
+ * dontcare    default     ==      true            -           -           -
+ * unknown     default     ==      true            -           -           -
+ * set         dontcare    ==      true            -           -           -
+ * default     dontcare    ==      true            -           -1          -
+ * dontcare    dontcare    ==      true            -           -           -
+ * unknown     dontcare    ==      true            -           -           -
+ * set         unknown     ==      true            -           -           -
+ * default     unknown     ==      true            -           -           -
+ * dontcare    unknown     ==      true            -           -           -
+ * unknown     unknown     ==      true            -           -           -
  *
- * set         set         !=      sal_True         1st Item       -1          -
- * default     set         !=      sal_True            -        2nd Item    2nd Item
- * dontcare    set         !=      sal_True            -           -           -
- * unknown     set         !=      sal_True            -           -           -
- * set         default     !=      sal_True            -           -           -
- * default     default     !=      sal_True            -           -           -
- * dontcare    default     !=      sal_True            -           -           -
- * unknown     default     !=      sal_True            -           -           -
- * set         dontcare    !=      sal_True         1st Item       -1          -
- * default     dontcare    !=      sal_True            -           -1          -
- * dontcare    dontcare    !=      sal_True            -           -           -
- * unknown     dontcare    !=      sal_True            -           -           -
- * set         unknown     !=      sal_True            -           -           -
- * default     unknown     !=      sal_True            -           -           -
- * dontcare    unknown     !=      sal_True            -           -           -
- * unknown     unknown     !=      sal_True            -           -           -
+ * set         set         !=      true         1st Item       -1          -
+ * default     set         !=      true            -        2nd Item    2nd Item
+ * dontcare    set         !=      true            -           -           -
+ * unknown     set         !=      true            -           -           -
+ * set         default     !=      true            -           -           -
+ * default     default     !=      true            -           -           -
+ * dontcare    default     !=      true            -           -           -
+ * unknown     default     !=      true            -           -           -
+ * set         dontcare    !=      true         1st Item       -1          -
+ * default     dontcare    !=      true            -           -1          -
+ * dontcare    dontcare    !=      true            -           -           -
+ * unknown     dontcare    !=      true            -           -           -
+ * set         unknown     !=      true            -           -           -
+ * default     unknown     !=      true            -           -           -
+ * dontcare    unknown     !=      true            -           -           -
+ * unknown     unknown     !=      true            -           -           -
  */
 
 void SfxItemSet::MergeItem_Impl(sal_uInt16 nWhich, const SfxPoolItem *pFnd2, bool bIgnoreDefaults)
@@ -1118,11 +1118,11 @@ void SfxItemSet::MergeItem_Impl(sal_uInt16 nWhich, const SfxPoolItem *pFnd2, boo
             pNew = INVALID_POOL_ITEM;
 
         else if (pFnd2 && !bIgnoreDefaults && GetPool()->GetUserOrPoolDefaultItem(nWhich) != *pFnd2)
-            // Decision table: default, set, !=, sal_False
+            // Decision table: default, set, !=, false
             pNew = INVALID_POOL_ITEM;
 
         else if (pFnd2 && bIgnoreDefaults)
-            // Decision table: default, set, doesn't matter, sal_True
+            // Decision table: default, set, doesn't matter, true
             pNew = implCreateItemEntry(*GetPool(), pFnd2, false);
 
         if (pNew)
@@ -1152,7 +1152,7 @@ void SfxItemSet::MergeItem_Impl(sal_uInt16 nWhich, const SfxPoolItem *pFnd2, boo
         // 2nd Item is not set (Default)
         if (!bIgnoreDefaults && *pFnd1 != GetPool()->GetUserOrPoolDefaultItem(nWhich))
         {
-            // Decision table: set, default, !=, sal_False
+            // Decision table: set, default, !=, false
             bDoChange = true;
         }
     }
@@ -1161,8 +1161,8 @@ void SfxItemSet::MergeItem_Impl(sal_uInt16 nWhich, const SfxPoolItem *pFnd2, boo
         // 2nd Item is invalid (dontcare)
         if (!bIgnoreDefaults || *pFnd1 != GetPool()->GetUserOrPoolDefaultItem(nWhich))
         {
-            // Decision table: set, dontcare, doesn't matter, sal_False
-            // or:             set, dontcare, !=, sal_True
+            // Decision table: set, dontcare, doesn't matter, false
+            // or:             set, dontcare, !=, true
             bDoChange = true;
         }
     }

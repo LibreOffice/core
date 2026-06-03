@@ -136,7 +136,7 @@ protected:
     virtual ~PublishableDescription() override {}
 
 private:
-    virtual sal_Bool SAL_CALL isPublished() override
+    virtual bool SAL_CALL isPublished() override
     { return published_; }
 
     bool published_;
@@ -641,14 +641,14 @@ private:
     virtual sal_Int32 SAL_CALL getPosition() override
     { return position_; }
 
-    virtual sal_Bool SAL_CALL isReadOnly() override
+    virtual bool SAL_CALL isReadOnly() override
     { return attribute_.readOnly; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
     getType() override
     { return manager_->resolve(attribute_.type); }
 
-    virtual sal_Bool SAL_CALL isBound() override
+    virtual bool SAL_CALL isBound() override
     { return attribute_.bound; }
 
     virtual
@@ -720,7 +720,7 @@ private:
     getType() override
     { return manager_->resolve(parameter_.type); }
 
-    virtual sal_Bool SAL_CALL isIn() override {
+    virtual bool SAL_CALL isIn() override {
         return
             (parameter_.direction
              == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
@@ -729,7 +729,7 @@ private:
                     DIRECTION_IN_OUT);
     }
 
-    virtual sal_Bool SAL_CALL isOut() override {
+    virtual bool SAL_CALL isOut() override {
         return
             (parameter_.direction
              == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT)
@@ -777,7 +777,7 @@ private:
     getReturnType() override
     { return manager_->resolve(method_.returnType); }
 
-    virtual sal_Bool SAL_CALL isOneway() override
+    virtual bool SAL_CALL isOneway() override
     { return false; }
 
     virtual
@@ -1150,16 +1150,16 @@ private:
     getType() override
     { return manager_->resolve(parameter_.type); }
 
-    virtual sal_Bool SAL_CALL isIn() override
+    virtual bool SAL_CALL isIn() override
     { return true; }
 
-    virtual sal_Bool SAL_CALL isOut() override
+    virtual bool SAL_CALL isOut() override
     { return false; }
 
     virtual sal_Int32 SAL_CALL getPosition() override
     { return position_; }
 
-    virtual sal_Bool SAL_CALL isRestParameter() override
+    virtual bool SAL_CALL isRestParameter() override
     { return parameter_.rest; }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -1182,7 +1182,7 @@ public:
 private:
     virtual ~ConstructorDescription() override {}
 
-    virtual sal_Bool SAL_CALL isDefaultConstructor() override
+    virtual bool SAL_CALL isDefaultConstructor() override
     { return constructor_.defaultConstructor; }
 
     virtual OUString SAL_CALL getName() override
@@ -1306,7 +1306,7 @@ private:
                 css::reflection::XPropertyTypeDescription > >();
     }
 
-    virtual sal_Bool SAL_CALL isSingleInterfaceBased() override
+    virtual bool SAL_CALL isSingleInterfaceBased() override
     { return true; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -1421,7 +1421,7 @@ private:
         css::uno::Reference< css::reflection::XPropertyTypeDescription > >
     SAL_CALL getProperties() override;
 
-    virtual sal_Bool SAL_CALL isSingleInterfaceBased() override
+    virtual bool SAL_CALL isSingleInterfaceBased() override
     { return false; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -1571,7 +1571,7 @@ private:
             css::uno::Reference< css::reflection::XServiceTypeDescription >();
     }
 
-    virtual sal_Bool SAL_CALL isInterfaceBased() override
+    virtual bool SAL_CALL isInterfaceBased() override
     { return true; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription >
@@ -1615,7 +1615,7 @@ private:
             manager_->resolve(entity_->getBase()), css::uno::UNO_QUERY_THROW);
     }
 
-    virtual sal_Bool SAL_CALL isInterfaceBased() override
+    virtual bool SAL_CALL isInterfaceBased() override
     { return false; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription >
@@ -1646,7 +1646,7 @@ public:
 private:
     virtual ~Enumeration() override {}
 
-    virtual sal_Bool SAL_CALL hasMoreElements() override
+    virtual bool SAL_CALL hasMoreElements() override
     { return !positions_.empty(); }
 
     virtual css::uno::Any SAL_CALL nextElement() override
@@ -1904,7 +1904,7 @@ OUString cppuhelper::TypeManager::getImplementationName()
         u"com.sun.star.comp.cppuhelper.bootstrap.TypeManager"_ustr;
 }
 
-sal_Bool cppuhelper::TypeManager::supportsService(
+bool cppuhelper::TypeManager::supportsService(
     OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
@@ -1927,7 +1927,7 @@ css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
     return desc;
 }
 
-sal_Bool cppuhelper::TypeManager::hasByHierarchicalName(
+bool cppuhelper::TypeManager::hasByHierarchicalName(
     OUString const & aName)
 {
     return find(aName).hasValue();
@@ -1938,7 +1938,7 @@ css::uno::Type cppuhelper::TypeManager::getElementType()
     return cppu::UnoType< OUString >::get();
 }
 
-sal_Bool cppuhelper::TypeManager::hasElements()
+bool cppuhelper::TypeManager::hasElements()
 {
     throw css::uno::RuntimeException(
         u"TypeManager hasElements: method not supported"_ustr,
@@ -1953,7 +1953,7 @@ cppuhelper::TypeManager::createEnumeration()
         static_cast< cppu::OWeakObject * >(this));
 }
 
-sal_Bool cppuhelper::TypeManager::has(css::uno::Any const &)
+bool cppuhelper::TypeManager::has(css::uno::Any const &)
 {
     throw css::uno::RuntimeException(
         u"TypeManager has: method not supported"_ustr,

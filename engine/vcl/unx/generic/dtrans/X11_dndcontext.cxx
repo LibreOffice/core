@@ -49,7 +49,7 @@ void DropTargetDropContext::rejectDrop()
     m_xManager->reject( m_aDropWindow );
 }
 
-void DropTargetDropContext::dropComplete( sal_Bool success )
+void DropTargetDropContext::dropComplete( bool success )
 {
     m_xManager->dropComplete( success, m_aDropWindow );
 }

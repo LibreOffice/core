@@ -64,9 +64,9 @@ public:
     static OUString  getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    sal_Bool getLogicalPosition( css::uno::Reference< css::drawing::XShape >& xAxis,
+    bool getLogicalPosition( css::uno::Reference< css::drawing::XShape >& xAxis,
                                  double fValue,
-                                 sal_Bool bVertical,
+                                 bool bVertical,
                                  css::awt::Point& aOutPosition );
 
     // XInitialization
@@ -130,7 +130,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName )
         throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( css::uno::RuntimeException );

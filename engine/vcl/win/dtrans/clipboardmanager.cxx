@@ -56,7 +56,7 @@ OUString SAL_CALL ClipboardManager::getImplementationName(  )
     return "com.sun.star.comp.datatransfer.ClipboardManager";
 }
 
-sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
+bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -50,8 +50,8 @@ namespace detail {
 
 template<std::size_t N> struct class_dataN {
     sal_Int16 m_nTypes;
-    sal_Bool m_storedTypeRefs;
-    sal_Bool m_storedId;
+    bool m_storedTypeRefs;
+    bool m_storedId;
     sal_Int8 m_id[16];
     type_entry m_typeEntries[N + 1];
 };

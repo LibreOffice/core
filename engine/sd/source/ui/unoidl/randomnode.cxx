@@ -85,7 +85,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     // XAnimationNode
     ::sal_Int16 SAL_CALL getType() override;
@@ -113,14 +113,14 @@ public:
     void SAL_CALL setAcceleration( double _acceleration ) override;
     double SAL_CALL getDecelerate() override;
     void SAL_CALL setDecelerate( double _decelerate ) override;
-    sal_Bool SAL_CALL getAutoReverse() override;
-    void SAL_CALL setAutoReverse( sal_Bool _autoreverse ) override;
+    bool SAL_CALL getAutoReverse() override;
+    void SAL_CALL setAutoReverse( bool _autoreverse ) override;
     Sequence< NamedValue > SAL_CALL getUserData() override;
     void SAL_CALL setUserData( const Sequence< NamedValue >& _userdata ) override;
 
     // XElementAccess
     virtual Type SAL_CALL getElementType() override;
-    virtual sal_Bool SAL_CALL hasElements() override;
+    virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual Reference< XEnumeration > SAL_CALL createEnumeration() override;
@@ -389,14 +389,14 @@ void SAL_CALL RandomAnimationNode::setDecelerate( double _decelerate )
 }
 
 // XAnimationNode
-sal_Bool SAL_CALL RandomAnimationNode::getAutoReverse()
+bool SAL_CALL RandomAnimationNode::getAutoReverse()
 {
     std::unique_lock aGuard( maMutex );
     return mbAutoReverse;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setAutoReverse( sal_Bool _autoreverse )
+void SAL_CALL RandomAnimationNode::setAutoReverse( bool _autoreverse )
 {
     std::unique_lock aGuard( maMutex );
     mbAutoReverse = _autoreverse;
@@ -443,7 +443,7 @@ Type SAL_CALL RandomAnimationNode::getElementType()
 }
 
 // XElementAccess
-sal_Bool SAL_CALL RandomAnimationNode::hasElements()
+bool SAL_CALL RandomAnimationNode::hasElements()
 {
     return true;
 }
@@ -539,7 +539,7 @@ OUString RandomAnimationNode::getImplementationName()
 }
 
 // XServiceInfo
-sal_Bool RandomAnimationNode::supportsService(const OUString& ServiceName)
+bool RandomAnimationNode::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

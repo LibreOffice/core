@@ -138,7 +138,7 @@ namespace migration
     }
 
 
-    sal_Bool BasicMigration::supportsService(OUString const & ServiceName)
+    bool BasicMigration::supportsService(OUString const & ServiceName)
     {
         return cppu::supportsService(this, ServiceName);
     }

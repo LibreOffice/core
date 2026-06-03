@@ -224,7 +224,7 @@ uno::Type SAL_CALL TablePivotCharts::getElementType()
     return cppu::UnoType<table::XTablePivotChart>::get();
 }
 
-sal_Bool SAL_CALL TablePivotCharts::hasElements()
+bool SAL_CALL TablePivotCharts::hasElements()
 {
     SolarMutexGuard aGuard;
     return getCount() != 0;
@@ -265,7 +265,7 @@ uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()
     return comphelper::containerToSequence(aElements);
 }
 
-sal_Bool SAL_CALL TablePivotCharts::hasByName(OUString const & rName)
+bool SAL_CALL TablePivotCharts::hasByName(OUString const & rName)
 {
     SolarMutexGuard aGuard;
 

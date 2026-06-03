@@ -50,7 +50,7 @@ int getHexWeight(sal_uInt32 nUtf32)
                -1; // not a hex digit
 }
 
-bool isValid(sal_Bool const * pCharClass, sal_uInt32 nUtf32)
+bool isValid(bool const * pCharClass, sal_uInt32 nUtf32)
 {
     return nUtf32 < rtl::UriCharClassSize && pCharClass[nUtf32];
 }
@@ -461,9 +461,9 @@ void appendPath(
 
 }
 
-sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass) noexcept
+bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass) noexcept
 {
-    static constexpr std::array<sal_Bool, rtl::UriCharClassSize> aCharClass[] = {
+    static constexpr std::array<bool, rtl::UriCharClassSize> aCharClass[] = {
         rtl::createUriCharClass(u8""), // None
         rtl::createUriCharClass(
             u8"!$&'()*+,-./:;=?@[]_~"
@@ -494,7 +494,7 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass) noexc
     return aCharClass[eCharClass].data();
 }
 
-void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
+void SAL_CALL rtl_uriEncode(rtl_uString * pText, bool const * pCharClass,
                             rtl_UriEncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset, rtl_uString ** pResult) noexcept
 {
@@ -614,7 +614,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
     }
 }
 
-sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
+bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
                                          rtl_uString * pRelUriRef,
                                          rtl_uString ** pResult,
                                          rtl_uString ** pException) noexcept

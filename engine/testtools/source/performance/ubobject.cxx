@@ -100,7 +100,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
+    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
     // Attributes
@@ -206,7 +206,7 @@ OUString ServiceImpl::getImplementationName()
     return OUString( IMPLNAME );
 }
 
-sal_Bool ServiceImpl::supportsService( const OUString & rServiceName )
+bool ServiceImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
@@ -229,7 +229,7 @@ static Reference< XInterface > SAL_CALL ServiceImpl_create( const Reference< XMu
 
 extern "C"
 {
-sal_Bool SAL_CALL component_writeInfo(
+bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -241,14 +241,14 @@ sal_Bool SAL_CALL component_writeInfo(
                     OUString( ("/" IMPLNAME "/UNO/SERVICES") ) ) );
             xNewKey->createKey( OUString( SERVICENAME ) );
 
-            return sal_True;
+            return true;
         }
         catch (InvalidRegistryException &)
         {
             OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

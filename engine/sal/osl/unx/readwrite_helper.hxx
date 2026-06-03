@@ -17,7 +17,7 @@ bool safeWrite(int fd, void* data, std::size_t dataSize);
 
 // This function *will* read |count| bytes from |fd|, busy looping
 // if needed. Don't use it when you don't know if you can request enough
-// data. It will return sal_False for any partial transfer or error.
+// data. It will return false for any partial transfer or error.
 bool safeRead(int fd, void* buffer, std::size_t count);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -83,10 +83,10 @@ public:
     virtual css::uno::Any SAL_CALL FormFields( const css::uno::Any& aIndex ) override;
     virtual ::sal_Int32 SAL_CALL getProtectionType() override;
     virtual void SAL_CALL setProtectionType( ::sal_Int32 _protectiontype ) override;
-    virtual sal_Bool SAL_CALL getUpdateStylesOnOpen() override;
-    virtual void SAL_CALL setUpdateStylesOnOpen( sal_Bool _updatestylesonopen ) override;
-    virtual sal_Bool SAL_CALL getAutoHyphenation() override;
-    virtual void SAL_CALL setAutoHyphenation( sal_Bool _autohyphenation ) override;
+    virtual bool SAL_CALL getUpdateStylesOnOpen() override;
+    virtual void SAL_CALL setUpdateStylesOnOpen( bool _updatestylesonopen ) override;
+    virtual bool SAL_CALL getAutoHyphenation() override;
+    virtual void SAL_CALL setAutoHyphenation( bool _autohyphenation ) override;
     virtual ::sal_Int32 SAL_CALL getHyphenationZone() override;
     virtual void SAL_CALL setHyphenationZone( ::sal_Int32 _hyphenationzone ) override;
     virtual ::sal_Int32 SAL_CALL getConsecutiveHyphensLimit() override;
@@ -110,8 +110,8 @@ public:
     virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
 
     // XInterfaceWithIID
     virtual OUString SAL_CALL getIID() override;

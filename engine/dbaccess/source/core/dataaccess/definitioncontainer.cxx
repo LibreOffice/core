@@ -348,7 +348,7 @@ Type SAL_CALL ODefinitionContainer::getElementType( )
     return cppu::UnoType<XContent>::get();
 }
 
-sal_Bool SAL_CALL ODefinitionContainer::hasElements( )
+bool SAL_CALL ODefinitionContainer::hasElements( )
 {
     MutexGuard aGuard(m_aMutex);
     return !m_aDocuments.empty();
@@ -431,7 +431,7 @@ Sequence< OUString > SAL_CALL ODefinitionContainer::getElementNames(  )
     return aNames;
 }
 
-sal_Bool SAL_CALL ODefinitionContainer::hasByName( const OUString& _rName )
+bool SAL_CALL ODefinitionContainer::hasByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
 

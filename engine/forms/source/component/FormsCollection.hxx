@@ -63,7 +63,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
 
     // XCloneable
@@ -82,13 +82,13 @@ public:
     // inheritance ambiguity
     virtual css::uno::Type SAL_CALL getElementType() override
         { return OInterfaceContainer::getElementType(); }
-    virtual sal_Bool SAL_CALL hasElements() override
+    virtual bool SAL_CALL hasElements() override
         { return OInterfaceContainer::hasElements(); }
     virtual css::uno::Any SAL_CALL getByName(const OUString& p1) override
         { return OInterfaceContainer::getByName(p1); }
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
         { return OInterfaceContainer::getElementNames(); }
-    virtual sal_Bool SAL_CALL hasByName(const OUString& p1) override
+    virtual bool SAL_CALL hasByName(const OUString& p1) override
         { return OInterfaceContainer::hasByName(p1); }
     virtual void SAL_CALL replaceByName(const OUString& p1, const css::uno::Any& p2) override
         { OInterfaceContainer::replaceByName(p1, p2); }

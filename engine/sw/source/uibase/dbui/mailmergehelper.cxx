@@ -688,7 +688,7 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
     return { std::move(aRet) };
 }
 
-sal_Bool SwMailTransferable::isDataFlavorSupported(
+bool SwMailTransferable::isDataFlavorSupported(
             const datatransfer::DataFlavor& aFlavor )
 {
     return (aFlavor.MimeType == m_aMimeType);

@@ -53,8 +53,8 @@ protected:
 public:
     VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
     // Attributes
-    virtual sal_Bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( sal_Bool _autosize ) override;
+    virtual bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( bool _autosize ) override;
     virtual float SAL_CALL getMarginBottom() override;
     virtual void SAL_CALL setMarginBottom( float _marginbottom ) override;
     virtual float SAL_CALL getMarginTop() override;

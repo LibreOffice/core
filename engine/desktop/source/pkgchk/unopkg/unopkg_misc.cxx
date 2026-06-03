@@ -247,11 +247,11 @@ void printf_package(
         printf_line( u"Version", version, level + 1 );
     printf_line( u"URL", xPackage->getURL(), level + 1 );
 
-    beans::Optional< beans::Ambiguous<sal_Bool> > option(
+    beans::Optional< beans::Ambiguous<bool> > option(
         xPackage->isRegistered( Reference<task::XAbortChannel>(), xCmdEnv ) );
     OUString value;
     if (option.IsPresent) {
-        beans::Ambiguous<sal_Bool> const & reg = option.Value;
+        beans::Ambiguous<bool> const & reg = option.Value;
         if (reg.IsAmbiguous)
             value = u"unknown"_ustr;
         else

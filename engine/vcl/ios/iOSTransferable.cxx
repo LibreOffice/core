@@ -132,7 +132,7 @@ Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
 
 Sequence<DataFlavor> SAL_CALL iOSTransferable::getTransferDataFlavors() { return mFlavorList; }
 
-sal_Bool SAL_CALL iOSTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
+bool SAL_CALL iOSTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
 {
     for (sal_Int32 i = 0; i < mFlavorList.getLength(); i++)
         if (compareDataFlavors(aFlavor, mFlavorList[i]))

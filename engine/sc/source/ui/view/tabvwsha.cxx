@@ -717,7 +717,7 @@ void ScTabViewShell::ExecuteInputDirect()
     }
 }
 
-void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bStopEditing /* = sal_True */ )
+void ScTabViewShell::UpdateInputHandler( bool bForce /* = false */, bool bStopEditing /* = true */ )
 {
     ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : ScModule::get()->GetInputHdl();
 
@@ -1587,7 +1587,7 @@ void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyl
                 pDocSh->PutItem( *pNumberInfoItem );
                 bPage = false;
 
-                // Definitely a SvxBoxInfoItem with Table = sal_False in set:
+                // Definitely a SvxBoxInfoItem with Table = false in set:
                 // (If there is no item, the dialogue will also delete the
                 // BORDER_OUTER SvxBoxItem from the Template Set)
                 if ( rSet.GetItemState( ATTR_BORDER_INNER, false ) != SfxItemState::SET )

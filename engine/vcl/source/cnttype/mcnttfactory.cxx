@@ -43,7 +43,7 @@ OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     return u"com.sun.star.datatransfer.MimeCntTypeFactory"_ustr;
 }
 
-sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

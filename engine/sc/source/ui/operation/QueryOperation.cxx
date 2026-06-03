@@ -245,7 +245,7 @@ bool QueryOperation::runImplementation()
 
             ScRange aNewDest(aLocalParam.nCol1, aLocalParam.nRow1, nDestTab, aLocalParam.nCol2,
                              aLocalParam.nRow2, nDestTab);
-            rDoc.FitBlock(aDestTotal, aNewDest, false); // sal_False - don't delete
+            rDoc.FitBlock(aDestTotal, aNewDest, false); // false - don't delete
 
             if (nFormulaCols > 0)
             {

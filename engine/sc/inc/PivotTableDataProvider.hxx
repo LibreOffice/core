@@ -53,7 +53,7 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // XDataProvider
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         createDataSourcePossible(const css::uno::Sequence<css::beans::PropertyValue>& aArguments) override;
 
     virtual css::uno::Reference<css::chart2::data::XDataSource> SAL_CALL
@@ -62,7 +62,7 @@ public:
     virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL
         detectArguments(const css::uno::Reference<css::chart2::data::XDataSource>& xDataSource) override;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         createDataSequenceByRangeRepresentationPossible(const OUString& aRangeRepresentation) override;
 
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
@@ -134,7 +134,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 

@@ -52,14 +52,14 @@ public:
     // XHelperInterface ( parent is itself )
     virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) override { return this; }
 
-    virtual sal_Bool SAL_CALL getScreenUpdating() override;
-    virtual void SAL_CALL setScreenUpdating(sal_Bool bUpdate) override;
-    virtual sal_Bool SAL_CALL getDisplayStatusBar() override;
-    virtual void SAL_CALL setDisplayStatusBar(sal_Bool bDisplayStatusBar) override;
-    virtual sal_Bool SAL_CALL getInteractive() override;
-    virtual void SAL_CALL setInteractive( sal_Bool bInteractive ) override;
-    virtual sal_Bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
+    virtual bool SAL_CALL getScreenUpdating() override;
+    virtual void SAL_CALL setScreenUpdating(bool bUpdate) override;
+    virtual bool SAL_CALL getDisplayStatusBar() override;
+    virtual void SAL_CALL setDisplayStatusBar(bool bDisplayStatusBar) override;
+    virtual bool SAL_CALL getInteractive() override;
+    virtual void SAL_CALL setInteractive( bool bInteractive ) override;
+    virtual bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( bool bVisible ) override;
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& sCaption ) override;
     virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) override;

@@ -1732,7 +1732,7 @@ void DbGridControl::AdjustRows()
         m_xCurrentRow->IsNew())
         ++nRecordCount;
     // ensured with !m_bUpdating: otherwise the edited data set (that SaveRow added and why this
-    // method was called) would be called twice (if m_bUpdating == sal_True): once in RecordCount
+    // method was called) would be called twice (if m_bUpdating == true): once in RecordCount
     // and a second time here (60787 - FS)
 
     if (nRecordCount != GetRowCount())
@@ -2502,7 +2502,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt)
         sal_Int32 nRecordCount = 0;
         xSource->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
         if (::comphelper::getBOOL(evt.NewValue))
-        {   // modified state changed from sal_False to sal_True and we're on an insert row
+        {   // modified state changed from false to true and we're on an insert row
             // -> we've to add a new grid row
             if ((nRecordCount == GetRowCount() - 1)  && m_xCurrentRow->IsNew())
             {
@@ -2512,7 +2512,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt)
             }
         }
         else
-        {   // modified state changed from sal_True to sal_False and we're on an insert row
+        {   // modified state changed from true to false and we're on an insert row
             // we have two "new row"s at the moment : the one we're editing currently (where the current
             // column is the only dirty element) and a "new new" row which is completely clean. As the first
             // one is about to be cleaned, too, the second one is obsolete now.
@@ -2831,7 +2831,7 @@ void DbGridControl::resetCurrentRow()
     {
         // scenario : we're on the insert row, the row is dirty, and thus there exists a "second" insert row (which
         // is clean). Normally in DataSourcePropertyChanged we would remove this second row if the modified state of
-        // the insert row changes from sal_True to sal_False. But if our current cell is the only modified element (means the
+        // the insert row changes from true to false. But if our current cell is the only modified element (means the
         // data source isn't modified) and we're reset this DataSourcePropertyChanged would never be called, so we
         // would never delete the obsolete "second insert row". Thus in this special case this method here
         // is the only possibility to determine the redundance of the row (resetCurrentRow is called when the
@@ -2998,7 +2998,7 @@ bool DbGridControl::SaveRow()
 
     // The old code returned (nRecords != 0) here.
     // Me thinks this is wrong : If something goes wrong while update the record, an exception will be thrown,
-    // which results in a "return sal_False" (see above). If no exception is thrown, everything is fine. If nRecords
+    // which results in a "return false" (see above). If no exception is thrown, everything is fine. If nRecords
     // is zero, this simply means all fields had their original values.
     // FS - 06.12.99 - 70502
     return true;

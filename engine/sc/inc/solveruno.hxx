@@ -84,8 +84,8 @@ public:
     setEngineOptions(const css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
     virtual sal_Int8 SAL_CALL getStatus() override;
     virtual OUString SAL_CALL getErrorMessage() override;
-    virtual sal_Bool SAL_CALL getSuppressDialog() override;
-    virtual void SAL_CALL setSuppressDialog(sal_Bool bSuppress) override;
+    virtual bool SAL_CALL getSuppressDialog() override;
+    virtual void SAL_CALL setSuppressDialog(bool bSuppress) override;
 
     // XSolverSettings methods
     virtual void SAL_CALL reset() override;
@@ -94,6 +94,6 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

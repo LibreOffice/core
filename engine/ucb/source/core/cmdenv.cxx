@@ -71,7 +71,7 @@ OUString SAL_CALL UcbCommandEnvironment::getImplementationName()
 
 
 // virtual
-sal_Bool SAL_CALL
+bool SAL_CALL
 UcbCommandEnvironment::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

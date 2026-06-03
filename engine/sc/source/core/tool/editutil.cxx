@@ -337,7 +337,7 @@ void ScEditUtil::GetMargins(const ScPatternAttr* pPattern, tools::Long& nLeftMar
 tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop )
 {
     // bForceToTop = always align to top, for editing
-    // (sal_False for querying URLs etc.)
+    // (false for querying URLs etc.)
 
     if (!pPattern)
         pPattern = rDoc.GetPattern( nCol, nRow, nTab );

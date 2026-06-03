@@ -179,7 +179,7 @@ void lcl_AddPropertiesToVector_PointProperties(
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_BACKGROUND,
                   PROP_SERIES_DATAPOINT_LABEL_FILL_BACKGROUND,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_HATCH_NAME,
@@ -218,7 +218,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
 
     rOutProperties.emplace_back( "ShowCustomLeaderLines",
                   PROP_SERIES_SHOW_CUSTOM_LEADERLINES,
-                  cppu::UnoType<sal_Bool>::get(),
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
@@ -785,7 +785,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
     if(rPropertyName == "Lines")
     {
         if( ! (rValue >>= m_bLinesAllowed) )
-            throw lang::IllegalArgumentException(u"Property Lines requires value of type sal_Bool"_ustr, nullptr, 0 );
+            throw lang::IllegalArgumentException(u"Property Lines requires value of type bool"_ustr, nullptr, 0 );
     }
 
     sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
@@ -874,7 +874,7 @@ OUString SAL_CALL DataSeriesPointWrapper::getImplementationName()
     return u"com.sun.star.comp.chart.DataSeries"_ustr;
 }
 
-sal_Bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceName )
+bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

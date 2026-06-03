@@ -89,7 +89,7 @@ void SAL_CALL ODBTableDecorator::disposing()
     m_xColumnMediator = nullptr;
 }
 
-sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
+bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
                             sal_Int32 nHandle,
@@ -354,7 +354,7 @@ OUString SAL_CALL ODBTableDecorator::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.ODBTableDecorator"_ustr;
     }
-sal_Bool SAL_CALL ODBTableDecorator::supportsService(const OUString& _rServiceName)
+bool SAL_CALL ODBTableDecorator::supportsService(const OUString& _rServiceName)
     {
         const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)

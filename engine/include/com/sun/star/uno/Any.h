@@ -105,9 +105,6 @@ public:
     Any(bool const *, Type const &) = delete;
     Any(bool const *, typelib_TypeDescription *) = delete;
     Any(bool const *, typelib_TypeDescriptionReference *) = delete;
-    Any(sal_Bool const *, Type const &) = delete;
-    Any(sal_Bool const *, typelib_TypeDescription *) = delete;
-    Any(sal_Bool const *, typelib_TypeDescriptionReference *) = delete;
     Any(std::nullptr_t, Type const & type):
         Any(static_cast<void *>(nullptr), type) {}
     Any(std::nullptr_t, typelib_TypeDescription * type):
@@ -219,10 +216,6 @@ public:
     void setValue(bool const *, Type const &) = delete;
     void setValue(bool const *, typelib_TypeDescriptionReference *) = delete;
     void setValue(bool const *, typelib_TypeDescription *) = delete;
-    void setValue(sal_Bool const *, Type const &) = delete;
-    void setValue(sal_Bool const *, typelib_TypeDescriptionReference *)
-        = delete;
-    void setValue(sal_Bool const *, typelib_TypeDescription *) = delete;
     void setValue(std::nullptr_t, Type const & type)
     { setValue(static_cast<void *>(nullptr), type); }
     void setValue(std::nullptr_t, typelib_TypeDescriptionReference * type)
@@ -313,10 +306,6 @@ class BaseReference;
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value );
 
-// additionally for C++ bool:
-template<>
-inline void SAL_CALL operator <<= ( Any & rAny, bool const & value );
-
 /** Template binary >>= operator to assign a value from an any.
     If the any does not contain a value that can be assigned without data loss, then this
     operation will fail returning false.
@@ -356,10 +345,6 @@ inline bool SAL_CALL operator != ( const Any & rAny, const C & value );
 
 // additional specialized >>= and == operators
 // bool
-template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Bool & value );
-template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value );
 template<>
 inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value );
 template<>

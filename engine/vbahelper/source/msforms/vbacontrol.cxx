@@ -180,7 +180,7 @@ void ScVbaControl::removeResource()
 }
 
 //In design model has different behavior
-sal_Bool SAL_CALL ScVbaControl::getEnabled()
+bool SAL_CALL ScVbaControl::getEnabled()
 {
     uno::Any aValue = m_xProps->getPropertyValue ( u"Enabled"_ustr );
     bool bRet = false;
@@ -188,14 +188,14 @@ sal_Bool SAL_CALL ScVbaControl::getEnabled()
     return bRet;
 }
 
-void SAL_CALL ScVbaControl::setEnabled( sal_Bool bVisible )
+void SAL_CALL ScVbaControl::setEnabled( bool bVisible )
 {
     uno::Any aValue( bVisible );
     m_xProps->setPropertyValue(  u"Enabled"_ustr , aValue);
 
 }
 
-sal_Bool SAL_CALL ScVbaControl::getVisible()
+bool SAL_CALL ScVbaControl::getVisible()
 {
     bool bVisible( true );
     m_xProps->getPropertyValue ( u"EnableVisible"_ustr ) >>= bVisible;
@@ -212,7 +212,7 @@ sal_Bool SAL_CALL ScVbaControl::getVisible()
     return bVisible;
 }
 
-void SAL_CALL ScVbaControl::setVisible( sal_Bool bVisible )
+void SAL_CALL ScVbaControl::setVisible( bool bVisible )
 {
     uno::Any aValue( bVisible );
     m_xProps->setPropertyValue( u"EnableVisible"_ustr , aValue);
@@ -770,7 +770,7 @@ public:
     virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) override;
 
     //  XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
@@ -778,7 +778,7 @@ public:
 }
 
 //  XServiceInfo
-sal_Bool ControlProviderImpl::supportsService(const OUString& sServiceName)
+bool ControlProviderImpl::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

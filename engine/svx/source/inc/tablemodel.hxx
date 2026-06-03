@@ -106,8 +106,8 @@ public:
 //    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XModifiable
-    virtual sal_Bool SAL_CALL isModified(  ) override;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual bool SAL_CALL isModified(  ) override;
+    virtual void SAL_CALL setModified( bool bModified ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;

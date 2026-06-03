@@ -84,7 +84,7 @@ uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors
     return aDataFlavors;
 }
 
-sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor )
+bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor )
 {
     bool bSupported = false;
 

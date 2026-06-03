@@ -87,7 +87,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const OUString& r
     return aProperty;
 }
 
-sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const OUString& rName )
+bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const OUString& rName )
 {
     return maMap.contains( rName );
 }

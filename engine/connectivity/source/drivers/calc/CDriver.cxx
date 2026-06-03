@@ -75,7 +75,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
     return pCon;
 }
 
-sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
+bool SAL_CALL ODriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:calc:");
 }

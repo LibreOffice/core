@@ -80,7 +80,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler,
     return nullptr;
 }
 
-sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
+bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 {
     std::scoped_lock aGuard(getSignalMutex());
 
@@ -131,7 +131,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
     return action;
 }
 
-sal_Bool SAL_CALL osl_setErrorReporting(sal_Bool /*bEnable*/)
+bool SAL_CALL osl_setErrorReporting(bool /*bEnable*/)
 {
     // this is part of the stable API
     return false;

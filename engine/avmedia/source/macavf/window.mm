@@ -87,7 +87,7 @@ void SAL_CALL Window::update()
 {}
 
 
-sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel /* eZoomLevel */ )
+bool SAL_CALL Window::setZoomLevel( media::ZoomLevel /* eZoomLevel */ )
 {
     return false;
 }
@@ -135,12 +135,12 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 }
 
 
-void SAL_CALL Window::setVisible( sal_Bool /*bVisible*/ )
+void SAL_CALL Window::setVisible( bool /*bVisible*/ )
 {
 }
 
 
-void SAL_CALL Window::setEnable( sal_Bool /*bEnable*/ )
+void SAL_CALL Window::setEnable( bool /*bEnable*/ )
 {
 }
 
@@ -248,7 +248,7 @@ OUString SAL_CALL Window::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
+bool SAL_CALL Window::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_WINDOW_SERVICENAME;
 }

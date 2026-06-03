@@ -360,7 +360,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
                     sTarget = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                bool bIsNewArea = true;         // Default sal_True (no inquiry)
+                bool bIsNewArea = true;         // Default true (no inquiry)
                 if ( pReqArgs->GetItemState( FN_PARAM_2, true, &pItem ) == SfxItemState::SET )
                     bIsNewArea = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 

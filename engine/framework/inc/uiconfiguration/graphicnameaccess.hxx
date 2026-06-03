@@ -38,10 +38,10 @@ namespace framework
             // XNameAccess
             virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
             virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-            virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+            virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
             // XElementAccess
-            virtual sal_Bool SAL_CALL hasElements() override;
+            virtual bool SAL_CALL hasElements() override;
             virtual css::uno::Type SAL_CALL getElementType(  ) override;
 
         private:

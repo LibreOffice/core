@@ -121,8 +121,7 @@ namespace vclcanvas
             rendering::CompositeOperation::SOURCE);
 
         KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, aViewState, aRenderState));
-        static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
-        std::span<const bool> aKashidaArray(reinterpret_cast<const bool*>(maKashidaPositions.getArray()), maKashidaPositions.getLength());
+        std::span<const bool> aKashidaArray(maKashidaPositions.getArray(), maKashidaPositions.getLength());
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
         ::basegfx::B2DPolyPolygonVector aOutlines;
@@ -217,14 +216,14 @@ namespace vclcanvas
         maLogicalAdvancements = aAdvancements;
     }
 
-    uno::Sequence< sal_Bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    uno::Sequence< bool > SAL_CALL TextLayout::queryKashidaPositions(  )
     {
         SolarMutexGuard aGuard;
 
         return maKashidaPositions;
     }
 
-    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< sal_Bool >& aPositions )
+    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< bool >& aPositions )
     {
         SolarMutexGuard aGuard;
 
@@ -291,13 +290,13 @@ namespace vclcanvas
         return rendering::TextHit();
     }
 
-    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32, sal_Bool )
+    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32, bool )
     {
         // TODO(F1)
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32, sal_Int32, sal_Bool )
+    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32, sal_Int32, bool )
     {
         // TODO(F1)
         return 0;
@@ -359,8 +358,7 @@ namespace vclcanvas
         {
             // TODO(P2): cache that
             KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
-            static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
-            std::span<const bool> aKashidaArray(reinterpret_cast<const bool*>(maKashidaPositions.getConstArray()), maKashidaPositions.getLength());
+            std::span<const bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
 
             // TODO(F3): ensure correct length and termination for DX
             // array (last entry _must_ contain the overall width)
@@ -437,7 +435,7 @@ namespace vclcanvas
         return u"VCLCanvas::TextLayout"_ustr;
     }
 
-    sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
+    bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }

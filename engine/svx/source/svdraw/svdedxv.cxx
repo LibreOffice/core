@@ -2223,7 +2223,7 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin)
 
 bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
 {
-    // as long as OutlinerView returns a sal_Bool, it only gets CommandEventId::StartDrag
+    // as long as OutlinerView returns a bool, it only gets CommandEventId::StartDrag
     if (mpTextEditOutlinerView != nullptr)
     {
         if (rCEvt.GetCommand() == CommandEventId::StartDrag)

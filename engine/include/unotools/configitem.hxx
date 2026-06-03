@@ -98,7 +98,7 @@ class ConfigChangeListener_Impl;
             css::uno::Sequence< css::uno::Any>
                                     GetProperties(const css::uno::Sequence< OUString >& rNames);
 
-            css::uno::Sequence< sal_Bool >
+            css::uno::Sequence< bool >
                                     GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames);
 
             bool                PutProperties(

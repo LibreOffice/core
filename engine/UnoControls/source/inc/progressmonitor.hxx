@@ -83,18 +83,18 @@ public:
     virtual void SAL_CALL addText(
         const OUString& sTopic ,
         const OUString& sText ,
-        sal_Bool bbeforeProgress
+        bool bbeforeProgress
     ) override;
 
     virtual void SAL_CALL removeText(
         const OUString& sTopic ,
-        sal_Bool bbeforeProgress
+        bool bbeforeProgress
     ) override;
 
     virtual void SAL_CALL updateText(
         const OUString&  sTopic ,
         const OUString&  sText ,
-        sal_Bool bbeforeProgress
+        bool bbeforeProgress
     ) override;
 
     //  XProgressBar
@@ -139,7 +139,7 @@ public:
         const cpo::uno::Reference< cpo::awt::XWindowPeer  >& xParent
     ) override;
 
-    virtual sal_Bool SAL_CALL setModel( const cpo::uno::Reference< cpo::awt::XControlModel >& xModel ) override;
+    virtual bool SAL_CALL setModel( const cpo::uno::Reference< cpo::awt::XControlModel >& xModel ) override;
 
     virtual cpo::uno::Reference< cpo::awt::XControlModel > SAL_CALL getModel() override;
 

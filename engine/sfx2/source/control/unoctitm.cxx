@@ -453,7 +453,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BOOL], 4 ))
         {
-            // sal_Bool support
+            // bool support
             pArgs[nLen].Value <<= aValue.toBoolean();
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BYTE], 4 ))

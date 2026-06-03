@@ -112,7 +112,7 @@ public:
 // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
     Reference< XFastParser > m_xParser;
@@ -352,7 +352,7 @@ OUString SaxLegacyFastParser::getImplementationName()
     return u"com.sun.star.comp.extensions.xml.sax.LegacyFastParser"_ustr;
 }
 
-sal_Bool SaxLegacyFastParser::supportsService(const OUString& ServiceName)
+bool SaxLegacyFastParser::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }

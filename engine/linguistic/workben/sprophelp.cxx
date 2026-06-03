@@ -126,14 +126,14 @@ void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     PropertyChgHelper::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (rxListener.is())
     {
         sal_Int32   nCount = aLngSvcEvtListeners.getLength();
@@ -143,14 +143,14 @@ sal_Bool SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
     PropertyChgHelper::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (rxListener.is())
     {
         sal_Int32   nCount = aLngSvcEvtListeners.getLength();
@@ -184,7 +184,7 @@ PropertyHelper_Spell::PropertyHelper_Spell(
         const OUString *pPropName = GetPropNames().getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Bool *pbVal     = NULL,
+            bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
             if (OUString( UPN_IS_IGNORE_CONTROL_CHARACTERS ) == pPropName[i])
@@ -240,13 +240,13 @@ PropertyHelper_Spell::~PropertyHelper_Spell()
 
 void PropertyHelper_Spell::SetDefault()
 {
-    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = sal_True;
-    bResIsUseDictionaryList         = bIsUseDictionaryList          = sal_True;
-    bResIsSpellUpperCase            = bIsSpellUpperCase             = sal_False;
-    bResIsSpellWithDigits           = bIsSpellWithDigits            = sal_False;
-    bResIsSpellCapitalization       = bIsSpellCapitalization        = sal_True;
-    bResIsSpellClosedCompound       = bIsSpellClosedCompound        = sal_True;
-    bResIsSpellHyphenatedCompound   = bIsSpellHyphenatedCompound    = sal_True;
+    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = true;
+    bResIsUseDictionaryList         = bIsUseDictionaryList          = true;
+    bResIsSpellUpperCase            = bIsSpellUpperCase             = false;
+    bResIsSpellWithDigits           = bIsSpellWithDigits            = false;
+    bResIsSpellCapitalization       = bIsSpellCapitalization        = true;
+    bResIsSpellClosedCompound       = bIsSpellClosedCompound        = true;
+    bResIsSpellHyphenatedCompound   = bIsSpellHyphenatedCompound    = true;
 }
 
 
@@ -259,10 +259,10 @@ void SAL_CALL
     if (GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
         sal_Int16 nLngSvcFlags = 0;
-        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
+        bool bSCWA = false, // SPELL_CORRECT_WORDS_AGAIN ?
+             bSWWA = false; // SPELL_WRONG_WORDS_AGAIN ?
 
-        sal_Bool *pbVal = NULL;
+        bool *pbVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -273,42 +273,42 @@ void SAL_CALL
             case UPH_IS_USE_DICTIONARY_LIST       :
             {
                 pbVal = &bIsUseDictionaryList;
-                bSCWA = bSWWA = sal_True;
+                bSCWA = bSWWA = true;
                 break;
             }
             case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = false == *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = false == *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             case UPH_IS_SPELL_CAPITALIZATION      :
             {
                 pbVal = &bIsSpellCapitalization;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = false == *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             case UPH_IS_SPELL_CLOSED_COMPOUND     :
             {
                 pbVal = &bIsSpellClosedCompound;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = false == *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
             case UPH_IS_SPELL_HYPHENATED_COMPOUND     :
             {
                 pbVal = &bIsSpellHyphenatedCompound;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = false == *pbVal;    // false->true change?
+                bSWWA = !bSCWA;             // true->false change?
                 break;
             }
 
@@ -349,7 +349,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Bool *pbResVal = NULL;
+            bool *pbResVal = NULL;
             switch (pVal[i].Handle)
             {
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS : pbResVal = &bResIsIgnoreControlCharacters; break;

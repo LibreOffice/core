@@ -35,7 +35,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XPropertyAccess
@@ -72,7 +72,7 @@ OUString SAL_CALL ColorPicker::getImplementationName()
     return u"com.sun.star.cui.ColorPicker"_ustr;
 }
 
-sal_Bool SAL_CALL ColorPicker::supportsService(const OUString& rServiceName)
+bool SAL_CALL ColorPicker::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

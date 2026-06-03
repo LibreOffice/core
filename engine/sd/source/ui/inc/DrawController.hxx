@@ -168,15 +168,15 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XController
-    virtual sal_Bool SAL_CALL suspend( sal_Bool Suspend ) override;
+    virtual bool SAL_CALL suspend( bool Suspend ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) override;
+    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
     virtual css::uno::Any SAL_CALL getSelection(  ) override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
@@ -186,8 +186,8 @@ public:
 
     // XFormLayerAccess
     virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const css::uno::Reference< css::form::XForm >& Form ) override;
-    virtual sal_Bool SAL_CALL isFormDesignMode(  ) override;
-    virtual void SAL_CALL setFormDesignMode( sal_Bool DesignMode ) override;
+    virtual bool SAL_CALL isFormDesignMode(  ) override;
+    virtual void SAL_CALL setFormDesignMode( bool DesignMode ) override;
 
     // XControlAccess
     virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
@@ -248,7 +248,7 @@ private:
             <TRUE/> if the value is converted successfully.
         @throws IllegalArgumentException
      */
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+    virtual bool SAL_CALL convertFastPropertyValue(
         css::uno::Any & rConvertedValue,
         css::uno::Any & rOldValue,
         sal_Int32 nHandle,

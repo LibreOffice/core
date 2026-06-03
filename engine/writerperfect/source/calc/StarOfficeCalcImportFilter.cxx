@@ -80,7 +80,7 @@ OUString SAL_CALL StarOfficeCalcImportFilter::getImplementationName()
     return u"org.libreoffice.comp.Calc.StarOfficeCalcImportFilter"_ustr;
 }
 
-sal_Bool SAL_CALL StarOfficeCalcImportFilter::supportsService(const OUString& rServiceName)
+bool SAL_CALL StarOfficeCalcImportFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

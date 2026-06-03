@@ -59,7 +59,7 @@ public:
         getHyphenatedWord() override;
     virtual sal_Int16 SAL_CALL
         getHyphenPos() override;
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isAlternativeSpelling() override;
 
     static css::uno::Reference <css::linguistic2::XHyphenatedWord> UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateHyphenatedWord(

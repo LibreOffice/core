@@ -1333,7 +1333,7 @@ public:
 
     //XElementAccess
     virtual Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    virtual bool SAL_CALL hasElements(  ) override;
 };
 
 }
@@ -1538,7 +1538,7 @@ Type OutlineNumbering::getElementType(  )
     return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
-sal_Bool OutlineNumbering::hasElements(  )
+bool OutlineNumbering::hasElements(  )
 {
     return m_nCount > 0;
 }
@@ -1549,7 +1549,7 @@ LocaleDataImpl::getImplementationName()
     return u"com.sun.star.i18n.LocaleDataImpl"_ustr;
 }
 
-sal_Bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
+bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

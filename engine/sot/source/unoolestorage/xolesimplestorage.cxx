@@ -483,7 +483,7 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
 }
 
 
-sal_Bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
+bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -516,7 +516,7 @@ uno::Type SAL_CALL OLESimpleStorage::getElementType()
 }
 
 
-sal_Bool SAL_CALL OLESimpleStorage::hasElements()
+bool SAL_CALL OLESimpleStorage::hasElements()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -671,7 +671,7 @@ OUString SAL_CALL OLESimpleStorage::getImplementationName()
     return u"com.sun.star.comp.embed.OLESimpleStorage"_ustr;
 }
 
-sal_Bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
+bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

@@ -193,8 +193,8 @@ private:
     SfxMedium *                 pMedium;  // Description of the file for example
                                           // storage that contains the object
     SfxObjectCreateMode         eCreateMode;      // Purpose of the object
-    bool                        bHasName :1;      // sal_True  := existing object,
-                                                  // sal_False := new object
+    bool                        bHasName :1;      // true  := existing object,
+                                                  // false := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
     bool                        bRememberSignature; // Do we want to remember the signature.

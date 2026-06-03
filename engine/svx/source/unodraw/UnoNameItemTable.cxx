@@ -95,7 +95,7 @@ void SvxUnoNameItemTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexce
         dispose();
 }
 
-sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& ServiceName )
+bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -251,7 +251,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     return comphelper::containerToSequence(aNameSet);
 }
 
-sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
+bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
@@ -272,7 +272,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     return false;
 }
 
-sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
+bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
 {
     SolarMutexGuard aGuard;
 

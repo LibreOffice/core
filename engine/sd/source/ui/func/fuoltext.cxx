@@ -90,7 +90,7 @@ void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 
 /**
  * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ * @returns true if a KeyEvent is being processed, false otherwise
  */
 bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 {
@@ -231,7 +231,7 @@ bool FuSimpleOutlinerText::MouseButtonUp(const MouseEvent& rMEvt)
 
 /**
  * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ * @returns true if a KeyEvent is being processed, false otherwise
  */
 bool FuSimpleOutlinerText::KeyInput(const KeyEvent& rKEvt)
 {

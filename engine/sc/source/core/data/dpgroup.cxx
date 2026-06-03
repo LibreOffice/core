@@ -1032,7 +1032,7 @@ bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, sal_I
         const ScDPGroupItem* pSecondItem = pSecondDim->GetGroupForName( rSecondData );
         if ( pFirstItem && pSecondItem )
         {
-            // two existing groups -> sal_True if they have a common element
+            // two existing groups -> true if they have a common element
             return pFirstItem->HasCommonElement( *pSecondItem );
         }
         else if ( pFirstItem )
@@ -1047,7 +1047,7 @@ bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, sal_I
         }
         else
         {
-            // no groups -> sal_True if equal
+            // no groups -> true if equal
             return rFirstData.IsCaseInsEqual( rSecondData );
         }
     }

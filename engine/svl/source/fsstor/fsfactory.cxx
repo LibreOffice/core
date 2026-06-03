@@ -132,7 +132,7 @@ OUString SAL_CALL FSStorageFactory::getImplementationName()
     return u"com.sun.star.comp.embed.FileSystemStorageFactory"_ustr;
 }
 
-sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
+bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }

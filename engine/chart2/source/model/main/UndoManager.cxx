@@ -234,13 +234,13 @@ namespace chart
         ChartViewHelper::setViewToDirtyState( &m_pImpl->getParent() );
     }
 
-    sal_Bool SAL_CALL UndoManager::isUndoPossible(  )
+    bool SAL_CALL UndoManager::isUndoPossible(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isUndoPossible();
     }
 
-    sal_Bool SAL_CALL UndoManager::isRedoPossible(  )
+    bool SAL_CALL UndoManager::isRedoPossible(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isRedoPossible();
@@ -312,7 +312,7 @@ namespace chart
         m_pImpl->getUndoHelper().unlock();
     }
 
-    sal_Bool SAL_CALL UndoManager::isLocked(  )
+    bool SAL_CALL UndoManager::isLocked(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isLocked();

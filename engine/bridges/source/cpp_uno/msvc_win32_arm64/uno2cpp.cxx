@@ -93,7 +93,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* pProxy,
             switch (parameters[i].pTypeRef->eTypeClass)
             {
                 case typelib_TypeClass_BOOLEAN:
-                    pushArgument(*static_cast<sal_Bool*>(arguments[i]), stack, sp, gpr, nGPR);
+                    pushArgument(*static_cast<bool*>(arguments[i]), stack, sp, gpr, nGPR);
                     break;
                 case typelib_TypeClass_BYTE:
                     pushArgument(*static_cast<sal_Int8*>(arguments[i]), stack, sp, gpr, nGPR);

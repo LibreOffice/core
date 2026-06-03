@@ -81,7 +81,7 @@ public:
 
     // XHierarchicalNameAccess
     virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString& _sName ) override;
-    virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString& _sName ) override;
+    virtual bool SAL_CALL hasByHierarchicalName( const OUString& _sName ) override;
 
     // XHierarchicalNameContainer
     virtual void SAL_CALL insertByHierarchicalName( const OUString& aName, const css::uno::Any& aElement ) override;

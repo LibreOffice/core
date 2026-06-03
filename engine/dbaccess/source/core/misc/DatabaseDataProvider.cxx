@@ -100,7 +100,7 @@ OUString SAL_CALL DatabaseDataProvider::getImplementationName(  )
     return u"com.sun.star.comp.dbaccess.DatabaseDataProvider"_ustr;
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServiceName )
+bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -125,7 +125,7 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
 }
 
 // chart2::data::XDataProvider:
-sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments)
+bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments)
 {
     for (auto& arg : _aArguments)
     {
@@ -241,7 +241,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
     return aArguments.getPropertyValues();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/)
+bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/)
 {
     return true;
 }
@@ -341,7 +341,7 @@ double SAL_CALL DatabaseDataProvider::getNotANumber()
     return m_xComplexDescriptionAccess->getNotANumber();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::isNotANumber( double nNumber )
+bool SAL_CALL DatabaseDataProvider::isNotANumber( double nNumber )
 {
     return m_xComplexDescriptionAccess->isNotANumber(nNumber);
 }
@@ -475,19 +475,19 @@ void SAL_CALL DatabaseDataProvider::setFilter(const OUString & the_value)
     set(PROPERTY_FILTER,the_value,m_Filter);
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::getApplyFilter()
+bool SAL_CALL DatabaseDataProvider::getApplyFilter()
 {
     osl::MutexGuard g(m_aMutex);
     return m_ApplyFilter;
 }
 
-void SAL_CALL DatabaseDataProvider::setApplyFilter( sal_Bool the_value )
+void SAL_CALL DatabaseDataProvider::setApplyFilter( bool the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
         m_xAggregateSet->setPropertyValue( PROPERTY_APPLYFILTER,   uno::Any( the_value ) );
     }
-    set(PROPERTY_APPLYFILTER,static_cast<bool>(the_value),m_ApplyFilter);
+    set(PROPERTY_APPLYFILTER,the_value,m_ApplyFilter);
 }
 
 OUString SAL_CALL DatabaseDataProvider::getHavingClause()
@@ -535,15 +535,15 @@ void SAL_CALL DatabaseDataProvider::setOrder( const OUString& the_value )
     set(PROPERTY_ORDER,the_value,m_Order);
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::getEscapeProcessing()
+bool SAL_CALL DatabaseDataProvider::getEscapeProcessing()
 {
     osl::MutexGuard g(m_aMutex);
     return m_EscapeProcessing;
 }
 
-void SAL_CALL DatabaseDataProvider::setEscapeProcessing(sal_Bool the_value)
+void SAL_CALL DatabaseDataProvider::setEscapeProcessing(bool the_value)
 {
-    set(PROPERTY_ESCAPE_PROCESSING,static_cast<bool>(the_value),m_EscapeProcessing);
+    set(PROPERTY_ESCAPE_PROCESSING,the_value,m_EscapeProcessing);
 }
 
 ::sal_Int32 SAL_CALL DatabaseDataProvider::getRowLimit()
@@ -816,7 +816,7 @@ void SAL_CALL DatabaseDataProvider::setObjectNull(sal_Int32 parameterIndex, sal_
     m_aParameterManager.setObjectNull(parameterIndex, sqlType, typeName);
 }
 
-void SAL_CALL DatabaseDataProvider::setBoolean(sal_Int32 parameterIndex, sal_Bool x)
+void SAL_CALL DatabaseDataProvider::setBoolean(sal_Int32 parameterIndex, bool x)
 {
     m_aParameterManager.setBoolean(parameterIndex, x);
 }
@@ -941,27 +941,27 @@ void SAL_CALL DatabaseDataProvider::removeRowSetListener(const uno::Reference<sd
 }
 
 // css::sdbc::XResultSet
-sal_Bool SAL_CALL DatabaseDataProvider::next()
+bool SAL_CALL DatabaseDataProvider::next()
 {
     return m_xRowSet->next();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::isBeforeFirst()
+bool SAL_CALL DatabaseDataProvider::isBeforeFirst()
 {
     return m_xRowSet->isBeforeFirst();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::isAfterLast()
+bool SAL_CALL DatabaseDataProvider::isAfterLast()
 {
     return m_xRowSet->isAfterLast();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::isFirst()
+bool SAL_CALL DatabaseDataProvider::isFirst()
 {
     return m_xRowSet->isFirst();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::isLast()
+bool SAL_CALL DatabaseDataProvider::isLast()
 {
     return m_xRowSet->isLast();
 }
@@ -976,12 +976,12 @@ void SAL_CALL DatabaseDataProvider::afterLast()
     m_xRowSet->afterLast();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::first()
+bool SAL_CALL DatabaseDataProvider::first()
 {
     return m_xRowSet->first();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::last()
+bool SAL_CALL DatabaseDataProvider::last()
 {
     return m_xRowSet->last();
 }
@@ -991,17 +991,17 @@ sal_Int32 SAL_CALL DatabaseDataProvider::getRow()
     return m_xRowSet->getRow();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::absolute(sal_Int32 row)
+bool SAL_CALL DatabaseDataProvider::absolute(sal_Int32 row)
 {
     return m_xRowSet->absolute(row);
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::relative(sal_Int32 rows)
+bool SAL_CALL DatabaseDataProvider::relative(sal_Int32 rows)
 {
     return m_xRowSet->relative(rows);
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::previous()
+bool SAL_CALL DatabaseDataProvider::previous()
 {
     return m_xRowSet->previous();
 }
@@ -1011,17 +1011,17 @@ void SAL_CALL DatabaseDataProvider::refreshRow()
     m_xRowSet->refreshRow();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::rowUpdated()
+bool SAL_CALL DatabaseDataProvider::rowUpdated()
 {
     return m_xRowSet->rowUpdated();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::rowInserted()
+bool SAL_CALL DatabaseDataProvider::rowInserted()
 {
     return m_xRowSet->rowInserted();
 }
 
-sal_Bool SAL_CALL DatabaseDataProvider::rowDeleted()
+bool SAL_CALL DatabaseDataProvider::rowDeleted()
 {
     return m_xRowSet->rowDeleted();
 }

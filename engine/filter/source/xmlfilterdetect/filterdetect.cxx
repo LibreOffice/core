@@ -217,7 +217,7 @@ OUString SAL_CALL FilterDetect::getImplementationName(  )
     return u"com.sun.star.comp.filters.XMLFilterDetect"_ustr;
 }
 
-sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
+bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }

@@ -302,7 +302,7 @@ OUString SAL_CALL ONSSInitializer::getNSSPath()
     return m_sNSSPath;
 };
 
-sal_Bool SAL_CALL ONSSInitializer::getIsNSSinitialized()
+bool SAL_CALL ONSSInitializer::getIsNSSinitialized()
 {
     return m_bIsNSSinitialized;
 }
@@ -581,7 +581,7 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
     return new ODigestContext( pContext, nDigestLength, b1KData );
 }
 
-css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer::getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, sal_Bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams )
+css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer::getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams )
 {
     CK_MECHANISM_TYPE nNSSCipherID = 0;
     bool bW3CPadding = false;
@@ -623,7 +623,7 @@ OUString SAL_CALL ONSSInitializer::getImplementationName()
     return u"com.sun.star.xml.crypto.NSSInitializer"_ustr;
 }
 
-sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )
+bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }

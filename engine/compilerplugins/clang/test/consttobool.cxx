@@ -40,8 +40,6 @@ int main()
     bool b;
     // expected-error@+1 {{implicit conversion of constant 0 of type 'int' to 'bool'; use 'false' instead [loplugin:consttobool]}}
     b = 0;
-    // expected-error@+1 {{implicit conversion of constant 1 of type 'sal_Bool' (aka 'unsigned char') to 'bool'; use 'true' instead [loplugin:consttobool]}}
-    b = sal_True;
     // expected-error@+1 {{implicit conversion of constant 1.000000e+00 of type 'double' to 'bool'; use 'true' instead [loplugin:consttobool]}}
     b = 1.0;
     // expected-error@+1 {{implicit conversion of constant 2 of type 'E' to 'bool'; use 'true' instead [loplugin:consttobool]}}

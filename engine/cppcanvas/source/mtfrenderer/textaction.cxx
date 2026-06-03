@@ -229,7 +229,7 @@ namespace cppcanvas::internal
                                   sal_Int32                                 nStartPos,
                                   sal_Int32                                 nLen,
                                   const uno::Sequence< double >&            rOffsets,
-                                  const uno::Sequence< sal_Bool >&          rKashidas,
+                                  const uno::Sequence< bool >&          rKashidas,
                                   const CanvasSharedPtr&                    rCanvas,
                                   const OutDevState&                        rState,
                                   const ::basegfx::B2DHomMatrix*            pTextTransform )
@@ -459,8 +459,8 @@ namespace cppcanvas::internal
                                            io_rTextLayout,
                                            nLayoutWidth,
                                            rSubset ) );
-                    uno::Sequence< sal_Bool > aOrigKashidaPositions(io_rTextLayout->queryKashidaPositions());
-                    uno::Sequence< sal_Bool > aKashidaPositions(aOrigKashidaPositions.getArray() + rSubset.mnSubsetBegin,
+                    uno::Sequence< bool > aOrigKashidaPositions(io_rTextLayout->queryKashidaPositions());
+                    uno::Sequence< bool > aKashidaPositions(aOrigKashidaPositions.getArray() + rSubset.mnSubsetBegin,
                                                                 rSubset.mnSubsetEnd - rSubset.mnSubsetBegin);
                     xTextLayout->applyKashidaPositions(aKashidaPositions);
                 }
@@ -1023,7 +1023,7 @@ namespace cppcanvas::internal
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
-                                 const uno::Sequence< sal_Bool >& rKashidas,
+                                 const uno::Sequence< bool >& rKashidas,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState );
 
@@ -1032,7 +1032,7 @@ namespace cppcanvas::internal
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
-                                 const uno::Sequence< sal_Bool >& rKashidas,
+                                 const uno::Sequence< bool >& rKashidas,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState,
                                  const ::basegfx::B2DHomMatrix& rTextTransform );
@@ -1069,7 +1069,7 @@ namespace cppcanvas::internal
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
-                                              const uno::Sequence< sal_Bool >&  rKashidas,
+                                              const uno::Sequence< bool >&  rKashidas,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState ) :
                 mpCanvas( rCanvas )
@@ -1093,7 +1093,7 @@ namespace cppcanvas::internal
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
-                                              const uno::Sequence< sal_Bool >&  rKashidas,
+                                              const uno::Sequence< bool >&  rKashidas,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState,
                                               const ::basegfx::B2DHomMatrix&    rTextTransform ) :
@@ -1218,7 +1218,7 @@ namespace cppcanvas::internal
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
-                                       const uno::Sequence< sal_Bool >& rKashidas,
+                                       const uno::Sequence< bool >& rKashidas,
                                        VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState  );
@@ -1232,7 +1232,7 @@ namespace cppcanvas::internal
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
-                                       const uno::Sequence< sal_Bool >& rKashidas,
+                                       const uno::Sequence< bool >& rKashidas,
                                        VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState,
@@ -1287,7 +1287,7 @@ namespace cppcanvas::internal
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,
-                                                          const uno::Sequence< sal_Bool >&  rKashidas,
+                                                          const uno::Sequence< bool >&  rKashidas,
                                                           VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState  ) :
@@ -1326,7 +1326,7 @@ namespace cppcanvas::internal
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,
-                                                          const uno::Sequence< sal_Bool >&  rKashidas,
+                                                          const uno::Sequence< bool >&  rKashidas,
                                                           VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState,
@@ -2214,8 +2214,7 @@ namespace cppcanvas::internal
                               rVDev,
                               rState ));
 
-            static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
-            const uno::Sequence< sal_Bool > aKashidas(reinterpret_cast<const sal_Bool*>(pKashidaArray.data()), pKashidaArray.size());
+            const uno::Sequence< bool > aKashidas(pKashidaArray.data(), pKashidaArray.size());
 
             // determine type of text action to create
             // =======================================
