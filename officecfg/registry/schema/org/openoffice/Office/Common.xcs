@@ -6504,6 +6504,35 @@
         <value>true</value>
       </prop>
     </group>
+    <group oor:name="StyleToolBoxControl">
+      <info>
+        <desc>Contains settings for Styles drop down control.</desc>
+      </info>
+      <prop oor:name="ShowDefaultStyles" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the default styles are shown in the list.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowUsedStyles" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the used styles are shown in the list.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowFavouriteStyles" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the favourite styles are shown in the list.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowUserDefinedStyles" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the user defined styles are shown in the list.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
     <group oor:name="PackageKit">
       <info>
         <desc>Contains settings related to PackageKit (Unix only).</desc>

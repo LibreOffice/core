@@ -3259,12 +3259,16 @@ void SvxStyleToolBoxControl::FillStyleBox()
     // use a set to avoid O(n^2) performance problem in insert loop
     std::unordered_set<OUString> aStylesSet;
 
-    AppendStyles(aStyles, eFamily, SfxStyleSearchBits::Favourite);
-    AppendStyles(aStyles, eFamily, SfxStyleSearchBits::UserDefined);
-    AppendStyles(aStyles, eFamily, SfxStyleSearchBits::Used);
+    if (officecfg::Office::Common::StyleToolBoxControl::ShowUsedStyles::get())
+        AppendStyles(aStyles, eFamily, SfxStyleSearchBits::Used);
+    if (officecfg::Office::Common::StyleToolBoxControl::ShowFavouriteStyles::get())
+        AppendStyles(aStyles, eFamily, SfxStyleSearchBits::Favourite);
+    if (officecfg::Office::Common::StyleToolBoxControl::ShowUserDefinedStyles::get())
+        AppendStyles(aStyles, eFamily, SfxStyleSearchBits::UserDefined);
 
     // Add default styles on top first
-    if (m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc)
+    if (officecfg::Office::Common::StyleToolBoxControl::ShowDefaultStyles::get()
+        && (m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc))
     {
         for( const auto &rStyle : m_pImpl->aDefaultStyles )
         {
