@@ -2203,8 +2203,18 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 		if (focusedId) {
 			var found = container.querySelector('[id=\'' + focusedId + '\']');
-			if (found)
+			if (found) {
 				found.focus();
+			} else {
+				// Iconview builds its entries in a deferred layouting task, so
+				// the element is not present yet here. Retry after those tasks
+				// run to keep focus on the active item.
+				app.layoutingService.appendLayoutingTask(function () {
+					var deferred = container.querySelector('[id=\'' + focusedId + '\']');
+					if (deferred)
+						deferred.focus();
+				});
+			}
 		}
 	},
 
