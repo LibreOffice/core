@@ -717,39 +717,39 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             aValue >>= aMimeType;
 
             if (aMimeType == MIMETYPE_BMP)
-                sFilterShortName = "bmp";
+                sFilterShortName = u"bmp"_ustr;
             else if (aMimeType == MIMETYPE_EPS)
-                sFilterShortName = "eps";
+                sFilterShortName = u"eps"_ustr;
             else if (aMimeType == MIMETYPE_GIF)
-                sFilterShortName = "gif";
+                sFilterShortName = u"gif"_ustr;
             else if (aMimeType == MIMETYPE_JPG)
-                sFilterShortName = "jpg";
+                sFilterShortName = u"jpg"_ustr;
             else if (aMimeType == MIMETYPE_MET)
-                sFilterShortName = "met";
+                sFilterShortName = u"met"_ustr;
             else if (aMimeType == MIMETYPE_PNG)
-                sFilterShortName = "png";
+                sFilterShortName = u"png"_ustr;
             else if (aMimeType == MIMETYPE_PCT)
-                sFilterShortName = "pct";
+                sFilterShortName = u"pct"_ustr;
             else if (aMimeType == MIMETYPE_PBM)
-                sFilterShortName = "pbm";
+                sFilterShortName = u"pbm"_ustr;
             else if (aMimeType == MIMETYPE_PGM)
-                sFilterShortName = "pgm";
+                sFilterShortName = u"pgm"_ustr;
             else if (aMimeType == MIMETYPE_PPM)
-                sFilterShortName = "ppm";
+                sFilterShortName = u"ppm"_ustr;
             else if (aMimeType == MIMETYPE_RAS)
-                sFilterShortName = "ras";
+                sFilterShortName = u"ras"_ustr;
             else if (aMimeType == MIMETYPE_SVM)
-                sFilterShortName = "svm";
+                sFilterShortName = u"svm"_ustr;
             else if (aMimeType == MIMETYPE_TIF)
-                sFilterShortName = "tif";
+                sFilterShortName = u"tif"_ustr;
             else if (aMimeType == MIMETYPE_EMF)
-                sFilterShortName = "emf";
+                sFilterShortName = u"emf"_ustr;
             else if (aMimeType == MIMETYPE_WMF)
-                sFilterShortName = "wmf";
+                sFilterShortName = u"wmf"_ustr;
             else if (aMimeType == MIMETYPE_XPM)
-                sFilterShortName = "xpm";
+                sFilterShortName = u"xpm"_ustr;
             else if (aMimeType == MIMETYPE_SVG)
-                sFilterShortName = "svg";
+                sFilterShortName = u"svg"_ustr;
             else if (aMimeType == MIMETYPE_VCLGRAPHIC)
                 sFilterShortName = MIMETYPE_VCLGRAPHIC;
         }

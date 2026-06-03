@@ -98,11 +98,11 @@ void VbaCommandBarHelper::Init( )
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
     {
-        maModuleId = "com.sun.star.sheet.SpreadsheetDocument";
+        maModuleId = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
     }
     else if( xServiceInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ) )
     {
-        maModuleId = "com.sun.star.text.TextDocument";
+        maModuleId = u"com.sun.star.text.TextDocument"_ustr;
     }
 
     if( maModuleId.isEmpty() )

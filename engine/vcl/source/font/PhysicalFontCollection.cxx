@@ -975,7 +975,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         // Hard code the use of Liberation Sans and skip font search.
         sal_Int32 nIndex = 0;
         rFSD.maTargetName = GetNextFontToken(rFSD.GetFamilyName(), nIndex);
-        rFSD.maSearchName = "liberationsans";
+        rFSD.maSearchName = u"liberationsans"_ustr;
         PhysicalFontFamily* pFont = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
         assert(pFont);
         return pFont;
@@ -1022,17 +1022,17 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         {
             OUString aBoldName;
             if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hggothicb"))
-                aBoldName = "hggothice";
+                aBoldName = u"hggothice"_ustr;
             else if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hgpgothicb"))
-                aBoldName = "hgpgothice";
+                aBoldName = u"hgpgothice"_ustr;
             else if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hgminchol"))
-                aBoldName = "hgminchob";
+                aBoldName = u"hgminchob"_ustr;
             else if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hgpminchol"))
-                aBoldName = "hgpminchob";
+                aBoldName = u"hgpminchob"_ustr;
             else if (rFSD.maSearchName.equalsIgnoreAsciiCase("hgminchob"))
-                aBoldName = "hgminchoe";
+                aBoldName = u"hgminchoe"_ustr;
             else if (rFSD.maSearchName.equalsIgnoreAsciiCase("hgpminchob"))
-                aBoldName = "hgpminchoe";
+                aBoldName = u"hgpminchoe"_ustr;
 
             if( !aBoldName.isEmpty() && ImplFindFontFamilyBySearchName( aBoldName ) )
             {
@@ -1181,7 +1181,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     {
         LanguageTag aDefaultLanguageTag(u"en"_ustr);
         if (comphelper::IsFuzzing())
-            rFSD.maSearchName = "OpenSymbol";
+            rFSD.maSearchName = u"OpenSymbol"_ustr;
         else
             rFSD.maSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
         PhysicalFontFamily* pFoundData = FindFontFamilyByTokenNames(rFSD.maSearchName);

@@ -630,7 +630,7 @@ void Dialog::dispose()
             comphelper::getProcessComponentContext() );
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
     css::document::DocumentEvent aObject;
-    aObject.EventName = "DialogClosed";
+    aObject.EventName = u"DialogClosed"_ustr;
     aObject.Supplement <<= GetText(); // title
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log(u"Close Dialog");
@@ -1044,7 +1044,7 @@ bool Dialog::ImplStartExecute(bool async)
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(
         css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
     css::document::DocumentEvent aObject;
-    aObject.EventName = "DialogExecute";
+    aObject.EventName = u"DialogExecute"_ustr;
     aObject.Supplement <<= GetText(); // title
     xEventBroadcaster->documentEventOccured(aObject);
     if (bModal)
@@ -1661,7 +1661,7 @@ void Dialog::Activate()
                 comphelper::getProcessComponentContext() );
         css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
         css::document::DocumentEvent aObject;
-        aObject.EventName = "ModelessDialogVisible";
+        aObject.EventName = u"ModelessDialogVisible"_ustr;
         aObject.Supplement <<= GetText(); // title
         xEventBroadcaster->documentEventOccured(aObject);
     }

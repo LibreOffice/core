@@ -2838,7 +2838,7 @@ StyleSettings::DetermineIconTheme() const
     if (sTheme.isEmpty())
     {
         if (comphelper::IsFuzzing())
-            sTheme = "colibre";
+            sTheme = u"colibre"_ustr;
         else
         {
             // read from the configuration, or fallback to what the desktop wants

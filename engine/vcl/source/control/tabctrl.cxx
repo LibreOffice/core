@@ -269,7 +269,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
         while ( (aSize.Width()+4 >= nMaxWidth) && (pItem->maFormatText.getLength() > aAppendStr.getLength()) );
         if ( aSize.Width()+4 >= nMaxWidth )
         {
-            pItem->maFormatText = ".";
+            pItem->maFormatText = u"."_ustr;
             aSize.setWidth( 1 );
         }
     }

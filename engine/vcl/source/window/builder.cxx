@@ -1963,7 +1963,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         //full screen windows
         if (!pParent)
         {
-            rMap[u"visible"_ustr] = "false";
+            rMap[u"visible"_ustr] = u"false"_ustr;
         }
     }
     else if (name == "GtkSeparator")
@@ -2242,7 +2242,7 @@ namespace BuilderUtils
         OUString sWidthChars(u"width-chars"_ustr);
         VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
         if (aFind == rMap.end())
-            rMap[sWidthChars] = "20";
+            rMap[sWidthChars] = u"20"_ustr;
     }
 
     bool extractDropdown(VclBuilder::stringmap &rMap)

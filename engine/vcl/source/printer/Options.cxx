@@ -50,7 +50,7 @@ void Options::ReadFromConfig(bool i_bFile)
             xConfigProvider = css::configuration::theDefaultProvider::get(xContext);
 
             css::beans::PropertyValue aVal;
-            aVal.Name = "nodepath";
+            aVal.Name = u"nodepath"_ustr;
             if (i_bFile)
                 aVal.Value <<= u"/org.openoffice.Office.Common/Print/Option/File"_ustr;
             else

@@ -569,18 +569,18 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
 void ScVbaControl::fireChangeEvent()
 {
     script::ScriptEvent evt;
-    evt.ScriptType = "VBAInterop";
+    evt.ScriptType = u"VBAInterop"_ustr;
     evt.ListenerType = cppu::UnoType<form::XChangeListener>::get();
-    evt.MethodName = "changed";
+    evt.MethodName = u"changed"_ustr;
     fireEvent( evt );
 }
 
 void ScVbaControl::fireClickEvent()
 {
     script::ScriptEvent evt;
-    evt.ScriptType = "VBAInterop";
+    evt.ScriptType = u"VBAInterop"_ustr;
     evt.ListenerType = cppu::UnoType<awt::XActionListener>::get();
-    evt.MethodName = "actionPerformed";
+    evt.MethodName = u"actionPerformed"_ustr;
     fireEvent( evt );
 }
 

@@ -576,16 +576,16 @@ namespace toolkitform
                             switch ( nTimeFormat )
                             {
                                 case 0:
-                                    pEditWidget->TimeFormat = "HH:MM"; //13:45
+                                    pEditWidget->TimeFormat = u"HH:MM"_ustr; //13:45
                                     break;
                                 case 1:
-                                    pEditWidget->TimeFormat = "HH:MM:ss"; //13:45:00
+                                    pEditWidget->TimeFormat = u"HH:MM:ss"_ustr; //13:45:00
                                     break;
                                 case 2:
-                                    pEditWidget->TimeFormat = "h:MMtt"; //01:45 PM
+                                    pEditWidget->TimeFormat = u"h:MMtt"_ustr; //01:45 PM
                                     break;
                                 case 3:
-                                    pEditWidget->TimeFormat = "h:MM:sstt"; //01:45:00 PM
+                                    pEditWidget->TimeFormat = u"h:MM:sstt"_ustr; //01:45:00 PM
                                     break;
                             }
                         }
@@ -605,35 +605,35 @@ namespace toolkitform
                             {
                                 case 0:
                                 case 1:
-                                    pEditWidget->DateFormat = "mm/dd/yy"; // Standard (short)
+                                    pEditWidget->DateFormat = u"mm/dd/yy"_ustr; // Standard (short)
                                     break;
                                 case 2:
                                 case 3:
-                                    pEditWidget->DateFormat = "mm/dd/yyyy"; // Standard (long)
+                                    pEditWidget->DateFormat = u"mm/dd/yyyy"_ustr; // Standard (long)
                                     break;
                                 case 4:
-                                    pEditWidget->DateFormat = "dd/mm/yy"; // DD/MM/YY
+                                    pEditWidget->DateFormat = u"dd/mm/yy"_ustr; // DD/MM/YY
                                     break;
                                 case 5:
-                                    pEditWidget->DateFormat = "mm/dd/yy"; // MM/DD/YY
+                                    pEditWidget->DateFormat = u"mm/dd/yy"_ustr; // MM/DD/YY
                                     break;
                                 case 6:
-                                    pEditWidget->DateFormat = "yy/mm/dd"; // YY/MM/DD
+                                    pEditWidget->DateFormat = u"yy/mm/dd"_ustr; // YY/MM/DD
                                     break;
                                 case 7:
-                                    pEditWidget->DateFormat = "dd/mm/yyyy"; // DD/MM/YYYY
+                                    pEditWidget->DateFormat = u"dd/mm/yyyy"_ustr; // DD/MM/YYYY
                                     break;
                                 case 8:
-                                    pEditWidget->DateFormat = "mm/dd/yyyy"; // MM/DD/YYYY
+                                    pEditWidget->DateFormat = u"mm/dd/yyyy"_ustr; // MM/DD/YYYY
                                     break;
                                 case 9:
-                                    pEditWidget->DateFormat = "yyyy/mm/dd"; // YYYY/MM/DD
+                                    pEditWidget->DateFormat = u"yyyy/mm/dd"_ustr; // YYYY/MM/DD
                                     break;
                                 case 10:
-                                    pEditWidget->DateFormat = "yy-mm-dd"; // YY-MM-DD
+                                    pEditWidget->DateFormat = u"yy-mm-dd"_ustr; // YY-MM-DD
                                     break;
                                 case 11:
-                                    pEditWidget->DateFormat = "yyyy-mm-dd"; // YYYY-MM-DD
+                                    pEditWidget->DateFormat = u"yyyy-mm-dd"_ustr; // YYYY-MM-DD
                                     break;
                             }
                         }

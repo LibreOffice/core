@@ -658,7 +658,7 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
     if( aKeyCode != NoSymbol )
     {
         if( !nKeySym )
-            aRet = "???";
+            aRet = u"???"_ustr;
         else
         {
             aRet = ::vcl_sal::getKeysymReplacementName( aLang, nKeySym );
@@ -674,7 +674,7 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
                         aRet = OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
                 }
                 else
-                    aRet = "???";
+                    aRet = u"???"_ustr;
             }
         }
     }
@@ -848,10 +848,10 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             */
             break;
         case KEY_ADD:
-            aCustomKeyName = "+";
+            aCustomKeyName = u"+"_ustr;
             break;
         case KEY_SUBTRACT:
-            aCustomKeyName = "-";
+            aCustomKeyName = u"-"_ustr;
             break;
         case KEY_MULTIPLY:
             nKeySym = XK_asterisk;
@@ -860,7 +860,7 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = XK_slash;
             break;
         case KEY_POINT:
-            aCustomKeyName = ".";
+            aCustomKeyName = u"."_ustr;
             break;
         case KEY_COMMA:
             nKeySym = XK_comma;
@@ -887,31 +887,31 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = XK_grave;
             break;
         case KEY_BRACKETLEFT:
-            aCustomKeyName = "[";
+            aCustomKeyName = u"["_ustr;
             break;
         case KEY_BRACKETRIGHT:
-            aCustomKeyName = "]";
+            aCustomKeyName = u"]"_ustr;
             break;
         case KEY_SEMICOLON:
-            aCustomKeyName = ";";
+            aCustomKeyName = u";"_ustr;
             break;
         case KEY_QUOTERIGHT:
-            aCustomKeyName = "'";
+            aCustomKeyName = u"'"_ustr;
             break;
         case KEY_RIGHTCURLYBRACKET:
-            aCustomKeyName = "}";
+            aCustomKeyName = u"}"_ustr;
             break;
         case KEY_NUMBERSIGN:
-            aCustomKeyName = "#";
+            aCustomKeyName = u"#"_ustr;
             break;
         case KEY_XF86FORWARD:
-            aCustomKeyName = "XF86Forward";
+            aCustomKeyName = u"XF86Forward"_ustr;
             break;
         case KEY_XF86BACK:
-            aCustomKeyName = "XF86Back";
+            aCustomKeyName = u"XF86Back"_ustr;
             break;
         case KEY_COLON:
-            aCustomKeyName = ":";
+            aCustomKeyName = u":"_ustr;
             break;
         default:
             nKeySym = 0;

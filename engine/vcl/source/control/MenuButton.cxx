@@ -38,8 +38,8 @@ void collectUIInformation( const OUString& aID, const OUString& aevent , const O
     aDescription.aID = aID;
     aDescription.aParameters = {{ akey ,  avalue}};
     aDescription.aAction = aevent;
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "MenuButton";
+    aDescription.aParent = u"MainWindow"_ustr;
+    aDescription.aKeyWord = u"MenuButton"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
 }
 }

@@ -35,8 +35,8 @@ void collectUIInformation(const OUString& aID, const OUString& aPos)
     EventDescription aDescription;
     aDescription.aID = aID;
     aDescription.aParameters = { { "POS", aPos } };
-    aDescription.aAction = "SELECT";
-    aDescription.aKeyWord = "VerticalTab";
+    aDescription.aAction = u"SELECT"_ustr;
+    aDescription.aKeyWord = u"VerticalTab"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
 }
 }
@@ -160,7 +160,7 @@ void VerticalTabControl::SetCurPageId(const OUString& rId)
         pOldData->xPage->Hide();
     }
 
-    m_sCurrentPageId = "";
+    m_sCurrentPageId = u""_ustr;
 
     VerticalTabPageData* pNewData = GetPageData(rId);
     if (pNewData && pNewData->xPage)

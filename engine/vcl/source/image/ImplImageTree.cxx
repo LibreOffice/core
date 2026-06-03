@@ -341,9 +341,9 @@ OUString ImplImageTree::fallbackStyle(std::u16string_view rsStyle)
     OUString sResult;
 
     if (rsStyle == u"colibre" || rsStyle == u"helpimg")
-        sResult = "";
+        sResult = u""_ustr;
     else
-        sResult = "colibre";
+        sResult = u"colibre"_ustr;
 
     return sResult;
 }
@@ -494,7 +494,7 @@ void ImplImageTree::createStyle()
     if (isVclDemo())
     {
         if (maCurrentStyle == "default")
-            sThemeUrl = "file://" SRC_ROOT "/icon-themes/colibre-svg";
+            sThemeUrl = u"file://"_ustr SRC_ROOT "/icon-themes/colibre-svg";
         else
             sThemeUrl = "file://" SRC_ROOT "/icon-themes/" + maCurrentStyle;
     }

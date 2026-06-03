@@ -47,9 +47,9 @@ IconThemeSelectorTest::GetFakeInstalledThemes()
 {
     std::vector<vcl::IconThemeInfo> r;
     vcl::IconThemeInfo a;
-    a.mThemeId = "colibre";
+    a.mThemeId = u"colibre"_ustr;
     r.push_back(a);
-    a.mThemeId = "colibre_dark";
+    a.mThemeId = u"colibre_dark"_ustr;
     r.push_back(a);
     return r;
 }

@@ -1630,7 +1630,7 @@ void PrintDialog::setupOptionalUI()
 
         if (aCtrlType == "Group")
         {
-            aID = "custom";
+            aID = u"custom"_ustr;
 
             weld::Container* pPage = mxTabCtrl->get_page(aID);
             if (!pPage)

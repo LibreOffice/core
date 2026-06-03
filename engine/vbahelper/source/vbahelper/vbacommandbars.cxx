@@ -171,7 +171,7 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
     }
     else
     {
-        sName = "Custom1";
+        sName = u"Custom1"_ustr;
     }
 
     sResourceUrl = VbaCommandBarHelper::generateCustomURL();

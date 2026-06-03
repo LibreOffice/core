@@ -378,8 +378,8 @@ void SelectionManager::initialize()
     m_nXdndActionAsk    = getAtom( u"XdndActionAsk"_ustr );
 
     // initialize map with member none
-    m_aAtomToString[ 0 ]= "None";
-    m_aAtomToString[ XA_PRIMARY ] = "PRIMARY";
+    m_aAtomToString[ 0 ]= u"None"_ustr;
+    m_aAtomToString[ XA_PRIMARY ] = u"PRIMARY"_ustr;
 
     // create a (invisible) message window
     m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
@@ -633,7 +633,7 @@ bool SelectionManager::convertData(
                 aEncoding = getTextPlainEncoding( aFlavor.MimeType );
             if( aEncoding != RTL_TEXTENCODING_DONTKNOW || bCompoundText )
             {
-                aFlavor.MimeType = "text/plain;charset=utf-16";
+                aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
                 if( xTransferable->isDataFlavorSupported( aFlavor ) )
                 {
@@ -1349,7 +1349,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             Sequence< DataFlavor > aTemp( nNewFlavors );
             for( i = 0; i < nNewFlavors-1; i++ )
                 aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
-            aTemp.getArray()[0].MimeType = "text/plain;charset=utf-16";
+            aTemp.getArray()[0].MimeType = u"text/plain;charset=utf-16"_ustr;
             aTemp.getArray()[0].DataType = cppu::UnoType<OUString>::get();
             rTypes = std::move(aTemp);
 

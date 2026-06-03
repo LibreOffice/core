@@ -5052,7 +5052,7 @@ public:
     {
         css::datatransfer::DataFlavor aFlavor(rFlavor);
         if (aFlavor.MimeType == "text/plain;charset=utf-16")
-            aFlavor.MimeType = "text/plain;charset=utf-8";
+            aFlavor.MimeType = u"text/plain;charset=utf-8"_ustr;
 
         auto it = m_aMimeTypeToGtkType.find(aFlavor.MimeType);
         if (it == m_aMimeTypeToGtkType.end())

@@ -63,7 +63,7 @@ uno::Sequence<datatransfer::DataFlavor> HtmlTransferable::getTransferDataFlavors
 {
     uno::Sequence<datatransfer::DataFlavor> aDataFlavors(1);
     auto ref = aDataFlavors.getArray()[0];
-    ref.MimeType = "text/html";
+    ref.MimeType = u"text/html"_ustr;
     ref.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
     SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML, aDataFlavors.getArray()[0]);
     return aDataFlavors;

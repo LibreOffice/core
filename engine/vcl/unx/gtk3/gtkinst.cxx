@@ -707,7 +707,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
     if (bHaveText && !bHaveUTF16)
     {
         css::datatransfer::DataFlavor aFlavor;
-        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
         aFlavor.DataType = cppu::UnoType<OUString>::get();
         aVector.push_back(aFlavor);
     }
@@ -844,7 +844,7 @@ public:
 
         css::datatransfer::DataFlavor aFlavor(rFlavor);
         if (aFlavor.MimeType == "text/plain;charset=utf-16" || aFlavor.MimeType == "text/markdown")
-            aFlavor.MimeType = "text/plain;charset=utf-8";
+            aFlavor.MimeType = u"text/plain;charset=utf-8"_ustr;
 
         GdkClipboard* clipboard = clipboard_get(m_eSelection);
 
@@ -1319,7 +1319,7 @@ void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransf
 
     css::datatransfer::DataFlavor aFlavor(aInfoToFlavor[info]);
     if (aFlavor.MimeType == "UTF8_STRING" || aFlavor.MimeType == "STRING")
-        aFlavor.MimeType = "text/plain;charset=utf-8";
+        aFlavor.MimeType = u"text/plain;charset=utf-8"_ustr;
 
     Sequence<sal_Int8> aData;
     Any aValue;
@@ -1345,7 +1345,7 @@ void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransf
     else if (aFlavor.MimeType == "text/plain;charset=utf-8")
     {
         //didn't have utf-8, try utf-16 and convert
-        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
         aFlavor.DataType = cppu::UnoType<OUString>::get();
         try
         {
@@ -1454,12 +1454,12 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
         if (!bHaveUTF8)
         {
-            aFlavor.MimeType = "text/plain;charset=utf-8";
+            aFlavor.MimeType = u"text/plain;charset=utf-8"_ustr;
             aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
         }
-        aFlavor.MimeType = "UTF8_STRING";
+        aFlavor.MimeType = u"UTF8_STRING"_ustr;
         aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
-        aFlavor.MimeType = "STRING";
+        aFlavor.MimeType = u"STRING"_ustr;
         aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
     }
 
@@ -1601,7 +1601,7 @@ GtkInstance::CreateClipboard(const Sequence<Any>& arguments)
 
     OUString sel;
     if (!arguments.hasElements()) {
-        sel = "CLIPBOARD";
+        sel = u"CLIPBOARD"_ustr;
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(
             u"bad GtkInstance::CreateClipboard arguments"_ustr,
@@ -3473,7 +3473,7 @@ public:
     {
         OUString sRet = ::get_help_id(m_pWidget);
         if (sRet.isEmpty())
-            sRet = "null";
+            sRet = u"null"_ustr;
         return sRet;
     }
 

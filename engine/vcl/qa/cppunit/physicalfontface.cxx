@@ -278,7 +278,7 @@ void VclPhysicalFontFaceTest::testMatchStatusValue()
     aFSP.mnOrientation = Degree10(10);
     aFSP.SetWeight(WEIGHT_BOLD);
     aFSP.SetPitch(FontPitch::PITCH_VARIABLE);
-    aFSP.maTargetName = "DejaVu Sans";
+    aFSP.maTargetName = u"DejaVu Sans"_ustr;
 
     const int EXPECTED_FAMILY = 240'000;
     const int EXPECTED_STYLE = 120'000;

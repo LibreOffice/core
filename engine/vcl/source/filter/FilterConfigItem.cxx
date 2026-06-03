@@ -109,7 +109,7 @@ void FilterConfigItem::ImpInitTree( std::u16string_view rSubTree )
 
     // creation arguments: nodepath
     PropertyValue aPathArgument;
-    aPathArgument.Name = "nodepath";
+    aPathArgument.Name = u"nodepath"_ustr;
     aPathArgument.Value <<= sTree;
 
     Sequence< Any > aArguments{ Any(aPathArgument) };

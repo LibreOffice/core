@@ -3432,11 +3432,11 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     OUString sAccRole;
     sal_uInt16 nAccessibleRole = GetAccessibleRole();
     if (nAccessibleRole == css::accessibility::AccessibleRole::PAGE_TAB_LIST)
-        sAccRole = "tablist";
+        sAccRole = u"tablist"_ustr;
     else if (nAccessibleRole == css::accessibility::AccessibleRole::GROUP_BOX)
-        sAccRole = "group";
+        sAccRole = u"group"_ustr;
     else if (nAccessibleRole == css::accessibility::AccessibleRole::TEXT)
-        sAccRole = "textbox";
+        sAccRole = u"textbox"_ustr;
 
     vcl::Window* pAccLabelFor = getAccessibleRelationLabelFor();
     if (pAccLabelFor)

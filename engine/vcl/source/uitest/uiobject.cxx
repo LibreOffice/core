@@ -53,7 +53,7 @@ UIObject::~UIObject()
 StringMap UIObject::get_state()
 {
     StringMap aMap;
-    aMap[u"NotImplemented"_ustr] = "NotImplemented";
+    aMap[u"NotImplemented"_ustr] = u"NotImplemented"_ustr;
     return aMap;
 }
 
@@ -584,11 +584,11 @@ OUString WindowUIObject::get_action(VclEventId nEvent) const
 
         case VclEventId::ButtonClick:
         case VclEventId::CheckboxToggle:
-            aActionName = "CLICK";
+            aActionName = u"CLICK"_ustr;
         break;
 
         case VclEventId::EditModify:
-            aActionName = "TYPE";
+            aActionName = u"TYPE"_ustr;
         break;
         default:
             aActionName = OUString::number(static_cast<int>(nEvent));

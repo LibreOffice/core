@@ -278,7 +278,7 @@ public:
         OUStringBuffer aBuffer("data:image/png;base64,");
         ::comphelper::Base64::encode(aBuffer, aSeq);
 
-        rMap[ACTION_TYPE ""_ostr] = "rendered_entry";
+        rMap[ACTION_TYPE ""_ostr] = u"rendered_entry"_ustr;
         rMap["pos"_ostr] = OUString::number(nPos);
         rMap["image"_ostr] = aBuffer;
 
@@ -330,7 +330,7 @@ public:
         {
             std::unique_ptr<jsdialog::ActionDataMap> pMap
                 = std::make_unique<jsdialog::ActionDataMap>();
-            (*pMap)[ACTION_TYPE ""_ostr] = "show";
+            (*pMap)[ACTION_TYPE ""_ostr] = u"show"_ustr;
             sendAction(std::move(pMap));
         }
     }
@@ -343,7 +343,7 @@ public:
         {
             std::unique_ptr<jsdialog::ActionDataMap> pMap
                 = std::make_unique<jsdialog::ActionDataMap>();
-            (*pMap)[ACTION_TYPE ""_ostr] = "hide";
+            (*pMap)[ACTION_TYPE ""_ostr] = u"hide"_ustr;
             sendAction(std::move(pMap));
         }
     }
@@ -389,7 +389,7 @@ public:
     {
         BaseInstanceClass::grab_focus();
         std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-        (*pMap)[ACTION_TYPE ""_ostr] = "grab_focus";
+        (*pMap)[ACTION_TYPE ""_ostr] = u"grab_focus"_ustr;
         sendAction(std::move(pMap));
     }
 
@@ -437,7 +437,7 @@ public:
         {
             std::unique_ptr<jsdialog::ActionDataMap> pMap
                 = std::make_unique<jsdialog::ActionDataMap>();
-            (*pMap)[ACTION_TYPE ""_ostr] = "rename";
+            (*pMap)[ACTION_TYPE ""_ostr] = u"rename"_ustr;
             (*pMap)[NEW_ID ""_ostr] = rName;
             sendAction(std::move(pMap));
         }

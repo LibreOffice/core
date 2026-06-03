@@ -182,7 +182,7 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyE
     OUString aKeyCode;
     if (!aFound.isEmpty() || bShift || bMod1 || bMod2 || bMod3)
     {
-        aKeyCode = "{\"KEYCODE\": \"";
+        aKeyCode = u"{\"KEYCODE\": \""_ustr;
         if (bShift)
             aKeyCode += "SHIFT+";
 
@@ -369,19 +369,19 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         }
         else if (rDescription.aAction == "COPY")
         {
-            aLogLine = "Copy the Selected Text";
+            aLogLine = u"Copy the Selected Text"_ustr;
         }
         else if (rDescription.aAction == "CUT")
         {
-            aLogLine = "Cut the Selected Text";
+            aLogLine = u"Cut the Selected Text"_ustr;
         }
         else if (rDescription.aAction == "PASTE")
         {
-            aLogLine = "Paste in the Current Cursor Location";
+            aLogLine = u"Paste in the Current Cursor Location"_ustr;
         }
         else if (rDescription.aAction == "BREAK_PAGE")
         {
-            aLogLine = "Insert Break Page";
+            aLogLine = u"Insert Break Page"_ustr;
         }
     }
     else if (rDescription.aID == "grid_window")
@@ -444,18 +444,18 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         }
         else if (rDescription.aAction == "InsertTab")
         {
-            aLogLine = "Insert New Tab ";
+            aLogLine = u"Insert New Tab "_ustr;
         }
         else if (rDescription.aAction == "COMMENT")
         {
             OUString type = GetKeyInMapWithIndex(rDescription.aParameters, 0);
             if (type == "OPEN")
             {
-                aLogLine = "Open Comment";
+                aLogLine = u"Open Comment"_ustr;
             }
             else if (type == "CLOSE")
             {
-                aLogLine = "Close Comment";
+                aLogLine = u"Close Comment"_ustr;
             }
         }
     }
@@ -489,7 +489,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         }
         else if (rDescription.aAction == "Duplicate")
         {
-            aLogLine = "Duplicate The Selected Slide ";
+            aLogLine = u"Duplicate The Selected Slide "_ustr;
         }
         else if (rDescription.aAction == "RENAME")
         {

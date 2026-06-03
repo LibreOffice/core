@@ -155,13 +155,13 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
             // welded wrapper not found - use response code instead
             auto aWindowMap = JSInstanceBuilder::Widgets().Find(nWindowId);
             pWidget = aWindowMap ? aWindowMap->Find(u"__DIALOG__"_ustr) : nullptr;
-            sControlType = "dialog";
-            sAction = "response";
+            sControlType = u"dialog"_ustr;
+            sAction = u"response"_ustr;
         }
         else
         {
             // welded wrapper for button found - use it
-            sControlType = "pushbutton";
+            sControlType = u"pushbutton"_ustr;
         }
     }
 

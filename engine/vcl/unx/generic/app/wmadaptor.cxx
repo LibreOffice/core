@@ -262,7 +262,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                 &pProperty ) == 0 )
         {
             if( aRealType == aRwmRunning )
-                m_aWMName = "ReflectionX";
+                m_aWMName = u"ReflectionX"_ustr;
             XFree( pProperty );
         }
         else
@@ -282,7 +282,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                     &pProperty ) == 0 )
             {
                 if( aRealType == XA_STRING )
-                    m_aWMName = "ReflectionX Windows";
+                    m_aWMName = u"ReflectionX Windows"_ustr;
                 XFree( pProperty );
             }
         }
@@ -307,7 +307,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
 
     if( aRealType == XA_STRING )
     {
-        m_aWMName = "Tarantella";
+        m_aWMName = u"Tarantella"_ustr;
         // #i62319# pretend that AlwaysOnTop works since
         // the alwaysontop workaround in salframe.cxx results
         // in a raise/lower loop on a Windows tarantella client
@@ -663,7 +663,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     }
                     if( strncmp( "_ICEWM_TRAY", pAtomNames[i], 11 ) == 0 )
                     {
-                        m_aWMName = "IceWM";
+                        m_aWMName = u"IceWM"_ustr;
                         m_nWinGravity = NorthWestGravity;
                         m_nInitWinGravity = NorthWestGravity;
                     }

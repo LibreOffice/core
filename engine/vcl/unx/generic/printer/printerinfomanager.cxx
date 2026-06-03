@@ -477,8 +477,8 @@ void PrinterInfoManager::initialize()
     // add a default printer for every available print queue
     // merge paper default printer, all else from global defaults
     PrinterInfo aMergeInfo( m_aGlobalDefaults );
-    aMergeInfo.m_aDriverName    = "SGENPRT";
-    aMergeInfo.m_aFeatures      = "autoqueue";
+    aMergeInfo.m_aDriverName    = u"SGENPRT"_ustr;
+    aMergeInfo.m_aFeatures      = u"autoqueue"_ustr;
 
     if( !m_aDefaultPrinter.isEmpty() )
     {

@@ -52,9 +52,9 @@ ScVbaCommandBar::getName()
             if( m_sResourceUrl == ITEM_MENUBAR_URL )
             {
                 if( pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sName = "Worksheet Menu Bar";
+                    sName = u"Worksheet Menu Bar"_ustr;
                 else if( pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
-                    sName = "Menu Bar";
+                    sName = u"Menu Bar"_ustr;
                 return sName;
             }
         }

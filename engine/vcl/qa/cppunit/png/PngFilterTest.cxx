@@ -1726,10 +1726,10 @@ void PngFilterTest::testMsGifInPng()
         aGIFStream.ReadBytes(pSequence, nGIFSize);
         // Create msOG chunk
         beans::PropertyValue aChunkProperty, aFilterProperty;
-        aChunkProperty.Name = "msOG";
+        aChunkProperty.Name = u"msOG"_ustr;
         aChunkProperty.Value <<= aGIFSequence;
         uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ aChunkProperty };
-        aFilterProperty.Name = "AdditionalChunks";
+        aFilterProperty.Name = u"AdditionalChunks"_ustr;
         aFilterProperty.Value <<= aAdditionalChunkSequence;
         uno::Sequence<beans::PropertyValue> aPNGParameters{ aFilterProperty };
         // Export the png with the chunk

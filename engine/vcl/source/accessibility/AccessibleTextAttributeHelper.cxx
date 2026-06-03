@@ -53,19 +53,19 @@ OUString lcl_ConverCharStrikeout(sal_Int16 nStrikeout)
     switch (nStrikeout)
     {
         case css::awt::FontStrikeout::BOLD:
-            sTextLineThroughType = "single";
-            sTextLineThroughWidth = "bold";
+            sTextLineThroughType = u"single"_ustr;
+            sTextLineThroughWidth = u"bold"_ustr;
             break;
         case css::awt::FontStrikeout::DONTKNOW:
             break;
         case css::awt::FontStrikeout::DOUBLE:
-            sTextLineThroughType = "double";
+            sTextLineThroughType = u"double"_ustr;
             break;
         case css::awt::FontStrikeout::NONE:
-            sTextLineThroughStyle = "none";
+            sTextLineThroughStyle = u"none"_ustr;
             break;
         case css::awt::FontStrikeout::SINGLE:
-            sTextLineThroughType = "single";
+            sTextLineThroughType = u"single"_ustr;
             break;
         case css::awt::FontStrikeout::SLASH:
             sTextLineThroughText = u"/"_ustr;
@@ -256,35 +256,35 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
         {
             if (prop.Name == "CharBackColor")
             {
-                sAttribute = "background-color";
+                sAttribute = u"background-color"_ustr;
                 sValue = lcl_ConvertColor(
                     Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
             }
             else if (prop.Name == "CharColor")
             {
-                sAttribute = "color";
+                sAttribute = u"color"_ustr;
                 sValue = lcl_ConvertColor(
                     Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
             }
             else if (prop.Name == "CharEscapement")
             {
-                sAttribute = "text-position";
+                sAttribute = u"text-position"_ustr;
                 const sal_Int16 nEscapement = *o3tl::doAccess<sal_Int16>(prop.Value);
                 sValue = lcl_ConvertCharEscapement(nEscapement);
             }
             else if (prop.Name == "CharFontName")
             {
-                sAttribute = "font-family";
+                sAttribute = u"font-family"_ustr;
                 sValue = *o3tl::doAccess<OUString>(prop.Value);
             }
             else if (prop.Name == "CharHeight")
             {
-                sAttribute = "font-size";
+                sAttribute = u"font-size"_ustr;
                 sValue = OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt";
             }
             else if (prop.Name == "CharPosture")
             {
-                sAttribute = "font-style";
+                sAttribute = u"font-style"_ustr;
                 const css::awt::FontSlant eFontSlant
                     = *o3tl::doAccess<css::awt::FontSlant>(prop.Value);
                 sValue = lcl_ConvertFontSlant(eFontSlant);
@@ -313,7 +313,7 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
             }
             else if (prop.Name == "CharWeight")
             {
-                sAttribute = "font-weight";
+                sAttribute = u"font-weight"_ustr;
                 sValue = lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value));
             }
         }
@@ -324,7 +324,7 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
         {
             if (prop.Name == "ParaAdjust")
             {
-                sAttribute = "text-align";
+                sAttribute = u"text-align"_ustr;
                 const css::style::ParagraphAdjust eParaAdjust
                     = static_cast<css::style::ParagraphAdjust>(
                         *o3tl::doAccess<sal_Int16>(prop.Value));

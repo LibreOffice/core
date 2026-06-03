@@ -23,7 +23,7 @@ class MockErrorHandler : private ErrorHandler
 protected:
     virtual bool CreateString(const ErrCodeMsg&, OUString &rErrString) const override
     {
-        rErrString = "Non-dynamic error";
+        rErrString = u"Non-dynamic error"_ustr;
         return true;
     }
 };

@@ -107,7 +107,7 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
     SalInstance* pInst = nullptr;
     OUString aUsedModuleBase(rModuleBase);
     if (aUsedModuleBase == "kde5")
-        aUsedModuleBase = "kf5";
+        aUsedModuleBase = u"kf5"_ustr;
     OUString aModule(
 #ifdef SAL_DLLPREFIX
             SAL_DLLPREFIX
@@ -281,7 +281,7 @@ SalInstance *CreateSalInstance()
     SAL_INFO_IF(!aUsePlugin.isEmpty(), "vcl.plugadapt", "Requested VCL plugin: " << aUsePlugin);
 
     if (Application::IsBitmapRendering() || (aUsePlugin.isEmpty() && IsHeadlessModeRequested()))
-        aUsePlugin = "svp";
+        aUsePlugin = u"svp"_ustr;
 
     if (aUsePlugin == "svp")
     {

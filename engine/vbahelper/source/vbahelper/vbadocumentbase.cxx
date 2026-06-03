@@ -156,7 +156,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
                 uno::Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create(mxContext) );
 
                 util::URL aURL;
-                aURL.Complete = ".uno:CloseDoc";
+                aURL.Complete = u".uno:CloseDoc"_ustr;
                 xURLTransformer->parseStrict( aURL );
 
                 uno::Reference< css::frame::XDispatch > xDispatch(

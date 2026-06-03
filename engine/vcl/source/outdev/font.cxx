@@ -455,11 +455,11 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
         if (bAbortOnFontSubstitute)
         {
             if (eLang == LANGUAGE_HINDI || eLang == LANGUAGE_CHINESE_SIMPLIFIED)
-                aSearch = "DejaVu Sans";
+                aSearch = u"DejaVu Sans"_ustr;
         }
     }
     else
-        aSearch = "Liberation Serif";
+        aSearch = u"Liberation Serif"_ustr;
 
     vcl::Font aFont;
     aFont.SetPitch( PITCH_VARIABLE );

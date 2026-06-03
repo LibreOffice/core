@@ -250,9 +250,9 @@ uno::Any VbaDocumentsBase::createDocument()
     uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create(mxContext);
     OUString sURL;
     if( meDocType == WORD_DOCUMENT )
-        sURL = "private:factory/swriter";
+        sURL = u"private:factory/swriter"_ustr;
     else if( meDocType == EXCEL_DOCUMENT )
-        sURL = "private:factory/scalc";
+        sURL = u"private:factory/scalc"_ustr;
     else
         throw uno::RuntimeException( u"Not implemented"_ustr );
 
@@ -302,7 +302,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
     uno::Sequence< beans::PropertyValue > sProps( rProps );
     sProps.realloc( sProps.getLength() + 1 );
     auto pProps = sProps.getArray();
-    pProps[ sProps.getLength() - 1 ].Name = "MacroExecutionMode";
+    pProps[ sProps.getLength() - 1 ].Name = u"MacroExecutionMode"_ustr;
     pProps[ sProps.getLength() - 1 ].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
 
     if ( ReadOnly.hasValue()  )
@@ -313,7 +313,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
         {
             sProps.realloc( sProps.getLength() + 1 );
             pProps = sProps.getArray();
-            pProps[ sProps.getLength() - 1 ].Name = "ReadOnly";
+            pProps[ sProps.getLength() - 1 ].Name = u"ReadOnly"_ustr;
             pProps[ sProps.getLength() - 1 ].Value <<= true;
         }
     }

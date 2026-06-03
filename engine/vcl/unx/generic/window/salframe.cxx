@@ -2618,7 +2618,7 @@ void X11SalFrame::beginUnicodeSequence()
     if( !rSeq.isEmpty() )
         endUnicodeSequence();
 
-    rSeq = "u";
+    rSeq = u"u"_ustr;
 
     if( ! aDeleteWatch.isDeleted() )
     {

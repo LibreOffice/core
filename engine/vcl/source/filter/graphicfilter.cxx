@@ -1941,17 +1941,17 @@ ErrCode GraphicFilter::LoadGraphic(const OUString &rPath, const OUString &rFilte
     OUString aReturnString;
 
     if (nRes == ERRCODE_GRFILTER_OPENERROR)
-            aReturnString="open error";
+            aReturnString=u"open error"_ustr;
     else if (nRes == ERRCODE_GRFILTER_IOERROR)
-            aReturnString="IO error";
+            aReturnString=u"IO error"_ustr;
     else if (nRes == ERRCODE_GRFILTER_FORMATERROR)
-            aReturnString="format error";
+            aReturnString=u"format error"_ustr;
     else if (nRes == ERRCODE_GRFILTER_VERSIONERROR)
-            aReturnString="version error";
+            aReturnString=u"version error"_ustr;
     else if (nRes == ERRCODE_GRFILTER_FILTERERROR)
-            aReturnString="filter error";
+            aReturnString=u"filter error"_ustr;
     else if (nRes == ERRCODE_GRFILTER_TOOBIG)
-            aReturnString="graphic is too big";
+            aReturnString=u"graphic is too big"_ustr;
 
     SAL_INFO_IF( nRes, "vcl.filter", "Problem importing graphic " << rPath << ". Reason: " << aReturnString );
 #endif

@@ -5457,7 +5457,7 @@ bool PDFWriterImpl::emit()
     {
         // sign the document
         PDFWriter::SignatureWidget aSignature;
-        aSignature.Name = "Signature1";
+        aSignature.Name = u"Signature1"_ustr;
         createControl( aSignature, 0 );
     }
 #endif
@@ -11217,7 +11217,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rRadioButton.m_aKidsIndex.push_back( nNewWidget );
         rNewWidget.m_nParent = rRadioButton.m_nObject;
 
-        rNewWidget.m_aValue     = "Off";
+        rNewWidget.m_aValue     = u"Off"_ustr;
         rNewWidget.m_aOnValue   = rBtn.OnValue;
         rNewWidget.m_aOffValue   = rBtn.OffValue;
         if( rRadioButton.m_aValue.isEmpty() && rBtn.Selected )

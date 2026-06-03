@@ -155,7 +155,7 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
 
 void JSInstanceBuilder::initializeDialogSender()
 {
-    m_sTypeOfJSON = "dialog";
+    m_sTypeOfJSON = u"dialog"_ustr;
 
     // fragment builders (those that never call weld_dialog) must not send close
     // for the parent dialog - weld_dialog will set m_bCanClose back to true
@@ -177,7 +177,7 @@ void JSInstanceBuilder::initializeDialogSender()
 void JSInstanceBuilder::initializePopupSender()
 {
     // when it is a popup we initialize sender in weld_popover
-    m_sTypeOfJSON = "popup";
+    m_sTypeOfJSON = u"popup"_ustr;
 }
 
 void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nKitWindowId,
@@ -225,7 +225,7 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nKitWindowId,
 
 void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nKitWindowId)
 {
-    m_sTypeOfJSON = "notebookbar";
+    m_sTypeOfJSON = u"notebookbar"_ustr;
 
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     if (pRoot && pRoot->GetParent())
@@ -264,7 +264,7 @@ void JSInstanceBuilder::initializeFormulabarSender(sal_uInt64 nKitWindowId,
 
 void JSInstanceBuilder::initializeMenuSender(weld::Widget* pParent)
 {
-    m_sTypeOfJSON = "menu";
+    m_sTypeOfJSON = u"menu"_ustr;
     m_aParentDialog = extract_sal_widget(pParent)->GetParentWithKitNotifier();
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
@@ -1351,7 +1351,7 @@ void JSComboBox::set_entry_text(const OUString& rText)
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "setText";
+    (*pMap)[ACTION_TYPE ""_ostr] = u"setText"_ustr;
     (*pMap)["text"_ostr] = rText;
     sendAction(std::move(pMap));
 }
@@ -1364,7 +1364,7 @@ void JSComboBox::do_set_active(int pos)
     SalInstanceComboBoxWithEdit::do_set_active(pos);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)[ACTION_TYPE ""_ostr] = u"select"_ustr;
     (*pMap)["position"_ostr] = OUString::number(pos);
     sendAction(std::move(pMap));
 }
@@ -1445,7 +1445,7 @@ void JSSpinButton::set_floating_point_value(double fValue)
     SalInstanceSpinButton::set_floating_point_value(fValue);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "setText";
+    (*pMap)[ACTION_TYPE ""_ostr] = u"setText"_ustr;
     (*pMap)["text"_ostr] = OUString::number(m_rFormatter.GetValue());
     sendAction(std::move(pMap));
 }
@@ -1815,7 +1815,7 @@ void JSTreeView::do_select(int pos)
     }
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)[ACTION_TYPE ""_ostr] = u"select"_ustr;
     (*pMap)["position"_ostr] = OUString::number(nOrigPos);
     sendAction(std::move(pMap));
 }
@@ -1826,7 +1826,7 @@ void JSTreeView::do_select(const weld::TreeIter& rIter)
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)[ACTION_TYPE ""_ostr] = u"select"_ustr;
     (*pMap)["position"_ostr] = OUString::number(m_xTreeView->GetEntryPos(rVclIter.iter));
     sendAction(std::move(pMap));
 }
@@ -2058,7 +2058,7 @@ void JSIconView::do_select(int pos)
     SalInstanceIconView::do_select(pos);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)[ACTION_TYPE ""_ostr] = u"select"_ustr;
     (*pMap)["position"_ostr] = OUString::number(pos);
     sendAction(std::move(pMap));
 }
@@ -2076,7 +2076,7 @@ void JSIconView::render_entry(int pos, int dpiscale)
         return;
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-    (*pMap)[ACTION_TYPE ""_ostr] = "rendered_entry";
+    (*pMap)[ACTION_TYPE ""_ostr] = u"rendered_entry"_ustr;
     (*pMap)["pos"_ostr] = OUString::number(pos);
     (*pMap)["image"_ostr] = sImage;
     sendAction(std::move(pMap));

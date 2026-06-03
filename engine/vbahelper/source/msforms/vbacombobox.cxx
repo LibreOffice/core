@@ -48,7 +48,7 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
     {
     }
     if( sSourceName.isEmpty() )
-        sSourceName = "Text";
+        sSourceName = u"Text"_ustr;
 }
 
 // Attributes

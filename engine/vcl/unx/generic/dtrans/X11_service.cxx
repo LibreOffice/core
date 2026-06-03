@@ -60,7 +60,7 @@ X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
 
     OUString sel;
     if (!arguments.hasElements()) {
-        sel = "CLIPBOARD";
+        sel = u"CLIPBOARD"_ustr;
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(
             u"bad X11SalInstance::CreateClipboard arguments"_ustr,

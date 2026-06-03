@@ -233,10 +233,10 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     OUString checkboxtype;
     if (bCheckButtons)
     {
-        checkboxtype = "checkbox";
+        checkboxtype = u"checkbox"_ustr;
         if(isRadioButton)
         {
-            checkboxtype = "radio";
+            checkboxtype = u"radio"_ustr;
         }
     }
 
@@ -1058,7 +1058,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectName( AccessibleBrowseBoxObjType
 
         case AccessibleBrowseBoxObjType::RowHeaderBar:
         case AccessibleBrowseBoxObjType::RowHeaderCell:
-            aRetText = "error";
+            aRetText = u"error"_ustr;
             break;
 
         default:

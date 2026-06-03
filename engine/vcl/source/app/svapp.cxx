@@ -1214,7 +1214,7 @@ OUString Application::GetOSVersion()
     if (pSVData && pSVData->mpDefInst)
         aVersion = pSVData->mpDefInst->getOSVersion();
     else
-        aVersion = "-";
+        aVersion = u"-"_ustr;
     return aVersion;
 }
 

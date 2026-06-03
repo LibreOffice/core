@@ -1544,7 +1544,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
     if( aMergeSet.find( u"IsFirstPage"_ustr ) == aMergeSet.end() )
     {
         css::beans::PropertyValue aVal;
-        aVal.Name = "IsFirstPage";
+        aVal.Name = u"IsFirstPage"_ustr;
         aVal.Value <<= mpImplData->mbFirstPage;
         pResult[nCur++] = std::move(aVal);
     }
@@ -1552,7 +1552,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
     if( aMergeSet.find( u"IsLastPage"_ustr ) == aMergeSet.end() )
     {
         css::beans::PropertyValue aVal;
-        aVal.Name = "IsLastPage";
+        aVal.Name = u"IsLastPage"_ustr;
         aVal.Value <<= mpImplData->mbLastPage;
         pResult[nCur++] = std::move(aVal);
     }
@@ -1560,7 +1560,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
     if( aMergeSet.find( u"IsPrinter"_ustr ) == aMergeSet.end() )
     {
         css::beans::PropertyValue aVal;
-        aVal.Name = "IsPrinter";
+        aVal.Name = u"IsPrinter"_ustr;
         aVal.Value <<= true;
         pResult[nCur++] = std::move(aVal);
     }
@@ -1998,51 +1998,51 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
     sal_Int32 nUsed = 0;
     if( !i_rTitle.isEmpty() )
     {
-        pCtrl[nUsed  ].Name  = "Text";
+        pCtrl[nUsed  ].Name  = u"Text"_ustr;
         pCtrl[nUsed++].Value <<= i_rTitle;
     }
     if( i_rHelpIds.hasElements() )
     {
-        pCtrl[nUsed  ].Name = "HelpId";
+        pCtrl[nUsed  ].Name = u"HelpId"_ustr;
         pCtrl[nUsed++].Value <<= i_rHelpIds;
     }
-    pCtrl[nUsed  ].Name  = "ControlType";
+    pCtrl[nUsed  ].Name  = u"ControlType"_ustr;
     pCtrl[nUsed++].Value <<= i_rType;
-    pCtrl[nUsed  ].Name  = "ID";
+    pCtrl[nUsed  ].Name  = u"ID"_ustr;
     pCtrl[nUsed++].Value <<= i_rIDs;
     if( i_pVal )
     {
-        pCtrl[nUsed  ].Name  = "Property";
+        pCtrl[nUsed  ].Name  = u"Property"_ustr;
         pCtrl[nUsed++].Value <<= *i_pVal;
     }
     if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
-        pCtrl[nUsed  ].Name  = "DependsOnName";
+        pCtrl[nUsed  ].Name  = u"DependsOnName"_ustr;
         pCtrl[nUsed++].Value <<= i_rControlOptions.maDependsOnName;
         if( i_rControlOptions.mnDependsOnEntry != -1 )
         {
-            pCtrl[nUsed  ].Name  = "DependsOnEntry";
+            pCtrl[nUsed  ].Name  = u"DependsOnEntry"_ustr;
             pCtrl[nUsed++].Value <<= i_rControlOptions.mnDependsOnEntry;
         }
         if( i_rControlOptions.mbAttachToDependency )
         {
-            pCtrl[nUsed  ].Name  = "AttachToDependency";
+            pCtrl[nUsed  ].Name  = u"AttachToDependency"_ustr;
             pCtrl[nUsed++].Value <<= i_rControlOptions.mbAttachToDependency;
         }
     }
     if( !i_rControlOptions.maGroupHint.isEmpty() )
     {
-        pCtrl[nUsed  ].Name    = "GroupingHint";
+        pCtrl[nUsed  ].Name    = u"GroupingHint"_ustr;
         pCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
     }
     if( i_rControlOptions.mbInternalOnly )
     {
-        pCtrl[nUsed  ].Name    = "InternalUIOnly";
+        pCtrl[nUsed  ].Name    = u"InternalUIOnly"_ustr;
         pCtrl[nUsed++].Value <<= true;
     }
     if( ! i_rControlOptions.mbEnabled )
     {
-        pCtrl[nUsed  ].Name    = "Enabled";
+        pCtrl[nUsed  ].Name    = u"Enabled"_ustr;
         pCtrl[nUsed++].Value <<= false;
     }
 
@@ -2116,11 +2116,11 @@ css::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Se
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.size();
     aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.hasElements() ? 1 : 0) );
-    aOpt.maAddProps[nUsed].Name = "Choices";
+    aOpt.maAddProps[nUsed].Name = u"Choices"_ustr;
     aOpt.maAddProps[nUsed].Value <<= i_rChoices;
     if( i_rDisabledChoices.hasElements() )
     {
-        aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
+        aOpt.maAddProps[nUsed+1].Name = u"ChoicesDisabled"_ustr;
         aOpt.maAddProps[nUsed+1].Value <<= i_rDisabledChoices;
     }
 
@@ -2142,11 +2142,11 @@ css::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rI
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.size();
     aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.hasElements() ? 1 : 0) );
-    aOpt.maAddProps[nUsed].Name = "Choices";
+    aOpt.maAddProps[nUsed].Name = u"Choices"_ustr;
     aOpt.maAddProps[nUsed].Value <<= i_rChoices;
     if( i_rDisabledChoices.hasElements() )
     {
-        aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
+        aOpt.maAddProps[nUsed+1].Name = u"ChoicesDisabled"_ustr;
         aOpt.maAddProps[nUsed+1].Value <<= i_rDisabledChoices;
     }
 
@@ -2171,9 +2171,9 @@ css::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
     {
         sal_Int32 nUsed = aOpt.maAddProps.size();
         aOpt.maAddProps.resize( nUsed + 2 );
-        aOpt.maAddProps[nUsed  ].Name  = "MinValue";
+        aOpt.maAddProps[nUsed  ].Name  = u"MinValue"_ustr;
         aOpt.maAddProps[nUsed++].Value <<= i_nMinValue;
-        aOpt.maAddProps[nUsed  ].Name  = "MaxValue";
+        aOpt.maAddProps[nUsed  ].Name  = u"MaxValue"_ustr;
         aOpt.maAddProps[nUsed++].Value <<= i_nMaxValue;
     }
 

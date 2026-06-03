@@ -1988,7 +1988,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     {
                         if (nMaxItemTextWidth < rRenderContext.GetTextWidth(aItemText))
                         {
-                            aItemText = "";
+                            aItemText = u""_ustr;
                             pData->bHiddenOnGUI = true;
                             bHiddenItems = true;
                         }
