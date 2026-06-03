@@ -10,7 +10,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Invalidation tests.', func
 		// Turn off SpellChecking by default because grammar checking,
 		// when available, currently adds an extra empty update when
 		// grammar checking kicks in at server-side idle after a change.
-		localStorage.setItem('spellOnline', false);
+		localStorage.setItem('text.spellOnline', false);
 		cy.viewport(1920,1080);
 	});
 

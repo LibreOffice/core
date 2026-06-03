@@ -99,6 +99,10 @@ public:
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
 
+    /// The automatic spell checking setting Impress and Draw each keep separately.
+    SD_DLLPUBLIC static bool GetAutoSpellProperty(DocumentType eDocType);
+    SD_DLLPUBLIC static void SetAutoSpellProperty(bool bSet, DocumentType eDocType);
+
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
 

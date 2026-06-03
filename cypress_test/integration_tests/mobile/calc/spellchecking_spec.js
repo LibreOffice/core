@@ -7,6 +7,9 @@ var mobileHelper = require('../../common/mobile_helper');
 describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Calc spell checking menu.', function() {
 
 	beforeEach(function() {
+		// Calc starts with automatic spell checking off, so ask for it before
+		// the document loads - the suggestions below need the marked word.
+		localStorage.setItem('spreadsheet.spellOnline', true);
 		helper.setupAndLoadDocument('calc/spellchecking.ods');
 
 		// Click on edit button

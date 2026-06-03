@@ -1283,7 +1283,9 @@ void NotesPanelViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_AUTOSPELL_CHECK:
         {
-            GetDoc()->SetOnlineSpell(!GetDoc()->GetOnlineSpell());
+            const bool bOnlineSpell = !GetDoc()->GetOnlineSpell();
+            GetDoc()->SetOnlineSpell(bOnlineSpell);
+            SdModule::SetAutoSpellProperty(bOnlineSpell, GetDoc()->GetDocumentType());
             rReq.Done();
         }
         break;

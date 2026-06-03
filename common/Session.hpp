@@ -25,6 +25,7 @@
 #include <memory>
 #include <optional>
 #include <ostream>
+#include <string_view>
 #include <type_traits>
 
 class Session;
@@ -286,6 +287,16 @@ public:
     const std::string& getSpellOnline() const { return _spellOnline; }
 
     void setSpellOnline(const std::string& val) { _spellOnline = val; }
+
+    /// Picks the automatic spell checking choice that applies to one document
+    /// type out of the per-document-type value the client sends, which spells
+    /// out the types it has a choice for, as in "text:true,spreadsheet:false".
+    /// A value that names no document type comes from a client that kept one
+    /// choice for every application, so it stands for all of them. Returns an
+    /// empty string when nothing was chosen for this document type, leaving
+    /// the default to core.
+    static std::string spellOnlineForDocType(const std::string& spellOnline,
+                                             std::string_view docType);
 
     const std::string& getFormattingMarks() const { return _formattingMarks; }
 

@@ -1284,11 +1284,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     int nFirstViewId = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
 
-    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+    // No leading letters: Calc starts with automatic spell checking off, and the
+    // document background is the default white one
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
     // Create a second view
     KitHelper::createView();
     ScTestViewCallback aView2;
-    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
     // Set second view to dark scheme
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
@@ -1297,11 +1299,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
             });
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Dark"_ostr, pModelObj->getViewRenderState());
 
     // Switch back to first view and make sure it's the same
     KitHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
 }
 
 // Cell text with a dark color of its own is drawn in a light variant once the document background

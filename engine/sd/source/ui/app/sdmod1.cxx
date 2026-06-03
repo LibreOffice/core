@@ -107,6 +107,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 {
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
                     pDoc->SetOnlineSpell( bOnlineSpelling );
+                    SetAutoSpellProperty( bOnlineSpelling, pDoc->GetDocumentType() );
                 }
             }
         }

@@ -394,6 +394,7 @@ interface Window {
 		prefersDarkOS(): boolean;
 		hasExplicitDarkModePref(): boolean;
 		seedDarkModeDefault(): boolean;
+		spellOnlineForLoad(): string;
 	};
 	KeyboardShortcuts: KeyboardShortcuts;
 

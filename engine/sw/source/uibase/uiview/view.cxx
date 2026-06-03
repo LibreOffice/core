@@ -38,7 +38,6 @@
 #include <vcl/inputctx.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/lingucfg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -949,10 +948,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     const SwMasterUsrPref* pUsrPref = SwModule::get()->GetUsrPref(bWebDShell);
     SwViewOption aUsrPref( *pUsrPref);
 
-    //! get lingu options without loading lingu DLL
-    SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
-    aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
+    aUsrPref.SetOnlineSpell( SwModule::GetAutoSpellProperty() );
 
     // Inherit the per-view setting from the per-document one.
     aUsrPref.SetRedlineRecordingOn(rDocSh.GetDoc()->getIDocumentRedlineAccess().IsRedlineOn());

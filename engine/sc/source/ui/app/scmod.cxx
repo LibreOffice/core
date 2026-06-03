@@ -48,6 +48,8 @@
 #include <vcl/svapp.hxx>
 #include <svx/svxerr.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
@@ -1934,23 +1936,18 @@ void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang,
 
 void ScModule::SetAutoSpellProperty( bool bSet )
 {
-    // use SvtLinguConfig instead of service LinguProperties to avoid
-    // loading the linguistic component
-    SvtLinguConfig aConfig;
-
-    aConfig.SetProperty( u"IsSpellAuto", cpo::uno::Any(bSet) );
+    // Calc keeps its own automatic-spell-checking default, decoupled from the
+    // shared Linguistic/SpellChecking/IsSpellAuto that Writer and Impress read.
+    // Spreadsheets hold mostly data, codes and abbreviations, so checking every
+    // cell as it is typed yields mostly false positives.
+    auto pChange( comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Calc::Content::Display::AutomaticSpellChecking::set( bSet, pChange );
+    pChange->commit();
 }
 
 bool ScModule::GetAutoSpellProperty()
 {
-    // use SvtLinguConfig instead of service LinguProperties to avoid
-    // loading the linguistic component
-    SvtLinguConfig aConfig;
-
-    SvtLinguOptions aOptions;
-    aConfig.GetOptions( aOptions );
-
-    return aOptions.bIsSpellAuto;
+    return officecfg::Office::Calc::Content::Display::AutomaticSpellChecking::get();
 }
 
 bool ScModule::HasThesaurusLanguage( LanguageType nLang )

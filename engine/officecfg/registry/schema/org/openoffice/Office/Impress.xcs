@@ -285,6 +285,17 @@
         <info>
           <desc>Contains configuration items related to the display of Impress documents.</desc>
         </info>
+        <prop oor:name="AutomaticSpellChecking" oor:type="xs:boolean">
+          <!-- UIHints: Tools - Automatic Spell Checking -->
+          <info>
+            <desc>Indicates whether spelling is checked automatically while typing.
+            Each application has its own setting. The Tools - Automatic Spell
+            Checking entry turns this one off and on. Nil, the default, means no
+            choice was ever made here, and the shared linguistic option this
+            setting was split out of still answers for it.</desc>
+            <label>Automatic spell checking</label>
+          </info>
+        </prop>
         <prop oor:name="PicturePlaceholder" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Impress - Contents - [Section] Alternative display -->
           <info>

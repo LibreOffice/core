@@ -2265,8 +2265,7 @@ void ClientSession::overrideDocOption()
         return;
     }
 
-    std::string spellOnline, darkTheme, darkBackgroundForTheme, accessibilityState;
-    JsonUtil::findJSONValue(_browserSettingsJSON, "spellOnline", spellOnline);
+    std::string darkTheme, darkBackgroundForTheme, accessibilityState;
     JsonUtil::findJSONValue(_browserSettingsJSON, "darkTheme", darkTheme);
     JsonUtil::findJSONValue(_browserSettingsJSON, "accessibilityState", accessibilityState);
     Poco::JSON::Object::Ptr darkBackgroundObj =
@@ -2295,6 +2294,38 @@ void ClientSession::overrideDocOption()
         setDarkBackground(darkBackgroundForTheme);
         LOG_DBG("Overriding parsed docOption darkBackgroundForTheme[" << darkBackgroundForTheme
                                                                       << ']');
+    }
+
+    // The automatic spell checking choice is stored per document type, because a
+    // spreadsheet of codes and abbreviations wants a different default from a text
+    // document. Which one applies is only known once the document is loaded, so
+    // hand the kit every choice that was made and let it pick.
+    //
+    // A setting written before the choice became per document type names no type: it
+    // was whatever the user last chose in any application, so it still stands for the
+    // document types that shared its default. Calc no longer does, and is left to its
+    // own default of off. The browser migrates its own copy of that setting on
+    // startup, but this one lives in the integrator's store, which a client cannot
+    // rewrite, so the untyped value has to keep being read here.
+    std::string shared;
+    JsonUtil::findJSONValue(_browserSettingsJSON, "spellOnline", shared);
+
+    std::string spellOnline;
+    for (const std::string_view docType : { "text", "spreadsheet", "presentation", "drawing" })
+    {
+        std::string value;
+        if (Poco::JSON::Object::Ptr docTypeObj = _browserSettingsJSON->getObject(std::string(docType)))
+            JsonUtil::findJSONValue(docTypeObj, "spellOnline", value);
+        if (value.empty() && docType != "spreadsheet")
+            value = shared;
+        if (value.empty())
+            continue;
+
+        if (!spellOnline.empty())
+            spellOnline += ',';
+        spellOnline += docType;
+        spellOnline += ':';
+        spellOnline += value;
     }
 
     if (!spellOnline.empty())

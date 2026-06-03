@@ -94,6 +94,8 @@
 #include <unopage.hxx>
 #include <editeng/outlobj.hxx>
 #include <sdmod.hxx>
+#include <officecfg/Office/Impress.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/svdotext.hxx>
 #include <xmloff/autolayout.hxx>
 
@@ -3144,6 +3146,42 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Distance", 399.0, dash.GetDistance());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Dot length", 301.0, dash.GetDotLen());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Dash length", 1.0, dash.GetDashLen());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testAutomaticSpellCheckingIsPerApplication)
+{
+    SvtLinguConfig aLinguConfig;
+    SvtLinguOptions aLinguOptions;
+    aLinguConfig.GetOptions(aLinguOptions);
+    const bool bSharedSpellAuto = aLinguOptions.bIsSpellAuto;
+
+    // Nothing was ever chosen for Impress, so the shared linguistic option this
+    // setting was split out of still answers for it
+    CPPUNIT_ASSERT(!officecfg::Office::Impress::Content::Display::AutomaticSpellChecking::get()
+                        .has_value());
+    CPPUNIT_ASSERT_EQUAL(bSharedSpellAuto, SdModule::GetAutoSpellProperty(DocumentType::Impress));
+
+    SdModule::SetAutoSpellProperty(false, DocumentType::Impress);
+
+    // turning Impress off leaves Draw where it was
+    CPPUNIT_ASSERT(SdModule::GetAutoSpellProperty(DocumentType::Draw));
+
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    // a new presentation takes Impress's setting
+    CPPUNIT_ASSERT(!pImpressDocument->GetDoc()->GetOnlineSpell());
+
+    // Tools - Automatic Spell Checking turns it back on, and Impress keeps that
+    // choice for the next presentation
+    dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, {});
+    CPPUNIT_ASSERT(pImpressDocument->GetDoc()->GetOnlineSpell());
+    CPPUNIT_ASSERT(SdModule::GetAutoSpellProperty(DocumentType::Impress));
+
+    // none of which touches the shared linguistic option
+    aLinguConfig.GetOptions(aLinguOptions);
+    CPPUNIT_ASSERT_EQUAL(bSharedSpellAuto, aLinguOptions.bIsSpellAuto);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)

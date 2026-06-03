@@ -240,7 +240,6 @@ const defaultBrowserSetting: Record<string, any> = {
 	darkTheme: false,
 	accessibilityState: false,
 	lockAccessibilityOn: false,
-	spellOnline: true,
 	smartZoom: true,
 	defaultZoom: {
 		value: 9,
@@ -253,6 +252,9 @@ const defaultBrowserSetting: Record<string, any> = {
 		A11yCheckDeck: false,
 		ShowNavigator: false,
 		ShowSidebar: true,
+		// A spreadsheet of codes and abbreviations produces mostly false
+		// positives, so Calc is the one document type this starts off in.
+		spellOnline: false,
 	},
 	text: {
 		ShowRuler: false,
@@ -263,6 +265,7 @@ const defaultBrowserSetting: Record<string, any> = {
 		StyleListDeck: false,
 		ShowFormattingMarks: false,
 		ShowAnnotations: true,
+		spellOnline: true,
 	},
 	presentation: {
 		ShowRuler: false,
@@ -274,6 +277,7 @@ const defaultBrowserSetting: Record<string, any> = {
 		// SdMasterPagesDeck: false,
 		// SdSlideTransitionDeck: false,
 		ShowAnnotations: true,
+		spellOnline: true,
 	},
 	drawing: {
 		ShowRuler: false,
@@ -282,6 +286,7 @@ const defaultBrowserSetting: Record<string, any> = {
 		ShowNavigator: false,
 		ShowSidebar: true,
 		ShowAnnotations: true,
+		spellOnline: true,
 	},
 };
 

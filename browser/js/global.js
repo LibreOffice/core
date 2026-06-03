@@ -1232,6 +1232,22 @@ function showWelcomeSVG() {
 			}
 			return global.prefs.getBoolean('darkTheme');
 		},
+
+		// The automatic spell checking choice is kept per document type, because a
+		// spreadsheet of codes and abbreviations wants a different default from a
+		// text document. The document type is not known yet when the 'load' message
+		// goes out, so name every choice that was made and let the kit pick the one
+		// that applies. Returns an empty string when nothing was ever chosen, which
+		// leaves each document type to its own default in core.
+		spellOnlineForLoad: function() {
+			const parts = [];
+			for (const docType of ['text', 'spreadsheet', 'presentation', 'drawing']) {
+				const value = global.prefs.get(docType + '.spellOnline');
+				if (value)
+					parts.push(docType + ':' + value);
+			}
+			return parts.join(',');
+		},
 	};
 
 	global.getAccessibilityState = function () {
@@ -1276,6 +1292,15 @@ function showWelcomeSVG() {
 		}
 	}
 	// End 24.04.4.1 renames
+
+	// The automatic spell checking choice became one per document type. A value
+	// stored before that was whatever the user last chose in any application, so
+	// it still stands for the document types that shared its default. Calc is
+	// left out: it now starts with spell checking off, which is the whole point
+	// of the split.
+	for (const docType of ['text', 'presentation', 'drawing']) {
+		global.prefs._renameLocalStoragePref('spellOnline', `${docType}.spellOnline`);
+	}
 
 	global.keyboard = {
 		onscreenKeyboardHint: global.uiDefaults['onscreenKeyboardHint'],
@@ -2451,7 +2476,7 @@ function showWelcomeSVG() {
 				if (global.deviceFormFactor) {
 					msg += ' deviceFormFactor=' + global.deviceFormFactor;
 				}
-				var spellOnline = window.prefs.get('spellOnline');
+				var spellOnline = window.prefs.spellOnlineForLoad();
 				if (spellOnline) {
 					msg += ' spellOnline=' + spellOnline;
 				}

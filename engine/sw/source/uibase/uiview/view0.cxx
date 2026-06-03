@@ -42,7 +42,6 @@
 #include <unotxdoc.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <swmodule.hxx>
-#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 
@@ -401,7 +400,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     }
 
     bool bFlag = STATE_ON == eState;
-    uno::Reference< linguistic2::XLinguProperties >  xLngProp( ::GetLinguPropertySet() );
 
     switch ( nSlot )
     {
@@ -697,11 +695,9 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         pOpt->SetOnlineSpell(bSet);
         {
-            SvtLinguConfig  aCfg;
-            aCfg.SetProperty( UPN_IS_SPELL_AUTO, cpo::uno::Any( bSet ) );
-
-            if (xLngProp.is())
-                xLngProp->setIsSpellAuto( bSet );
+            // Writer keeps its own setting, and leaves the shared linguistic
+            // option it was split out of alone, as the other applications do.
+            SwModule::SetAutoSpellProperty(bSet);
 
             // for the time being we do not have a specific option for grammarchecking.
             // thus we'll use the one for spell checking...
@@ -712,7 +708,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
                 // right now we don't have view options for automatic grammar checking. Thus...
                 bool bIsAutoGrammar = false;
-                aCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
+                SvtLinguConfig().GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
 
                 if (pDoc && bIsAutoGrammar)
                     pDoc->StartGrammarChecking();

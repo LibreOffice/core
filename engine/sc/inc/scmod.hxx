@@ -174,8 +174,8 @@ public:
     void                InsertOrEraseFavouritesListEntry(sal_uInt16 nFIndex, bool bInsert);
 
     static void         GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang );
-    static void         SetAutoSpellProperty( bool bSet );
-    static bool         GetAutoSpellProperty();
+    SC_DLLPUBLIC static void SetAutoSpellProperty( bool bSet );
+    SC_DLLPUBLIC static bool GetAutoSpellProperty();
     static bool         HasThesaurusLanguage( LanguageType nLang );
 
     static LanguageType GetOptDigitLanguage();      // from CTL options

@@ -26,7 +26,7 @@ describe(['tagmultiuser'], 'Joining a document should not trigger an invalidatio
 		// Turn off SpellChecking by default because grammar checking,
 		// when available, currently adds an extra empty update when
 		// grammar checking kicks in at server-side idle after a change.
-		localStorage.setItem('spellOnline', false);
+		localStorage.setItem('text.spellOnline', false);
 		helper.setupAndLoadDocument('writer/invalidations.odt',
 																/* skipDocumentCheck */ true,
 																/* isMulti */ true);

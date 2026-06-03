@@ -65,6 +65,7 @@
 #include <strings.hrc>
 
 #include <Window.hxx>
+#include <sdmod.hxx>
 #include <drawdoc.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
@@ -567,7 +568,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_AUTOSPELL_CHECK:
         {
-            GetDoc()->SetOnlineSpell(!GetDoc()->GetOnlineSpell());
+            const bool bOnlineSpell = !GetDoc()->GetOnlineSpell();
+            GetDoc()->SetOnlineSpell(bOnlineSpell);
+            SdModule::SetAutoSpellProperty(bOnlineSpell, GetDoc()->GetDocumentType());
             rReq.Done ();
         }
         break;

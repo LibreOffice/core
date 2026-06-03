@@ -359,6 +359,22 @@ void Session::disableSpellCheckIfReadOnly()
     }
 }
 
+std::string Session::spellOnlineForDocType(const std::string& spellOnline,
+                                           std::string_view docType)
+{
+    if (spellOnline.find(':') == std::string::npos)
+        return spellOnline;
+
+    for (const auto& token : Util::splitStringToVector(spellOnline, ','))
+    {
+        const std::size_t colon = token.find(':');
+        if (colon != std::string::npos && std::string_view(token).substr(0, colon) == docType)
+            return token.substr(colon + 1);
+    }
+
+    return std::string();
+}
+
 void Session::disconnect()
 {
     if (!_disconnected)

@@ -154,6 +154,10 @@ public:
 
     SW_DLLPUBLIC void ExecOther(SfxRequest &);    // Fields, formula...
 
+    /// The automatic spell checking setting Writer keeps for itself.
+    SW_DLLPUBLIC static bool GetAutoSpellProperty();
+    SW_DLLPUBLIC static void SetAutoSpellProperty(bool bSet);
+
     // Modify user settings.
     SW_DLLPUBLIC const SwMasterUsrPref *GetUsrPref(bool bWeb) const;
     const SwViewOption* GetViewOption(bool bWeb);

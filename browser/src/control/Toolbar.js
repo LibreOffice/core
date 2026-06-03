@@ -364,7 +364,10 @@ window.L.Map.include({
 			if (val && (json === undefined || json === null)) {
 				 // because it is toggle, state has to be the opposite
 				var state = !(val === 'true');
-				window.prefs.set('spellOnline', state);
+				// Kept per document type, so turning it on in Writer leaves Calc alone
+				var docType = map.getDocType();
+				if (docType)
+					window.prefs.set(docType + '.spellOnline', state);
 			}
 		}
 

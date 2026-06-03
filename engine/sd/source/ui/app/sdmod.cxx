@@ -44,8 +44,11 @@
 #include <errhdl.hrc>
 #include <unotools/syslocale.hxx>
 
+#include <comphelper/configuration.hxx>
 #include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 
 #define ShellClass_SdModule
 #include <sdslots.hxx>
@@ -124,6 +127,33 @@ void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
         delete pDrawOptions;
         pDrawOptions = nullptr;
     }
+}
+
+bool SdModule::GetAutoSpellProperty(DocumentType eDocType)
+{
+    const std::optional<bool> oSet
+        = eDocType == DocumentType::Draw
+              ? officecfg::Office::Draw::Content::Display::AutomaticSpellChecking::get()
+              : officecfg::Office::Impress::Content::Display::AutomaticSpellChecking::get();
+    if (oSet)
+        return *oSet;
+
+    // Nothing was ever chosen here. Before the setting became one per application
+    // a single linguistic option answered for all of them, so a choice made then
+    // still stands until this application is told otherwise.
+    bool bShared = true;
+    SvtLinguConfig().GetProperty(UPN_IS_SPELL_AUTO) >>= bShared;
+    return bShared;
+}
+
+void SdModule::SetAutoSpellProperty(bool bSet, DocumentType eDocType)
+{
+    auto pChange(comphelper::ConfigurationChanges::create());
+    if (eDocType == DocumentType::Draw)
+        officecfg::Office::Draw::Content::Display::AutomaticSpellChecking::set(bSet, pChange);
+    else
+        officecfg::Office::Impress::Content::Display::AutomaticSpellChecking::set(bSet, pChange);
+    pChange->commit();
 }
 
 /// Return options

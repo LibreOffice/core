@@ -24,6 +24,10 @@
 #include <hintids.hxx>
 #include <sfx2/request.hxx>
 #include <unotools/useroptions.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -584,6 +588,28 @@ SwFieldUpdateFlags SwModule::GetFieldUpdateFlags() const
         GetUsrPref(false);
     assert(m_pUsrPref && "m_pUsrPref is set by here");
     return m_pUsrPref->GetFieldUpdateFlags();
+}
+
+bool SwModule::GetAutoSpellProperty()
+{
+    const std::optional<bool> oSet
+        = officecfg::Office::Writer::Content::Display::AutomaticSpellChecking::get();
+    if (oSet)
+        return *oSet;
+
+    // Nothing was ever chosen here. Before the setting became one per application
+    // a single linguistic option answered for all of them, so a choice made then
+    // still stands until Writer is told otherwise.
+    bool bShared = true;
+    SvtLinguConfig().GetProperty(UPN_IS_SPELL_AUTO) >>= bShared;
+    return bShared;
+}
+
+void SwModule::SetAutoSpellProperty(bool bSet)
+{
+    auto pChange(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Content::Display::AutomaticSpellChecking::set(bSet, pChange);
+    pChange->commit();
 }
 
 void SwModule::CheckSpellChanges( bool bOnlineSpelling,

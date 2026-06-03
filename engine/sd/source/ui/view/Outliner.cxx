@@ -34,8 +34,6 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <svx/srchdlg.hxx>
-#include <unotools/linguprops.hxx>
-#include <unotools/lingucfg.hxx>
 #include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
@@ -205,18 +203,9 @@ SdOutliner::SdOutliner( SdDrawDocument& rDoc, OutlinerMode nMode )
     }
     else
     {
-        bOnlineSpell = false;
-
-        try
-        {
-            const SvtLinguConfig    aLinguConfig;
-            Any aAny = aLinguConfig.GetProperty( UPN_IS_SPELL_AUTO );
-            aAny >>= bOnlineSpell;
-        }
-        catch( ... )
-        {
-            OSL_FAIL( "Ill. type in linguistic property" );
-        }
+        // A document without a shell has no state of its own to read, so take
+        // the setting this application starts documents with.
+        bOnlineSpell = SdModule::GetAutoSpellProperty(mrDrawDocument.GetDocumentType());
     }
 
     if (bOnlineSpell)

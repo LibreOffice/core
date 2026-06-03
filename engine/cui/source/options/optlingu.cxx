@@ -200,7 +200,6 @@ static const OUString & lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
     switch (eEntryId)
     {
-        case EID_SPELL_AUTO: return UPN_IS_SPELL_AUTO;
         case EID_GRAMMAR_AUTO: return UPN_IS_GRAMMAR_AUTO;
         case EID_CAPITAL_WORDS: return UPN_IS_SPELL_UPPER_CASE;
         case EID_SPELL_CLOSED_COMPOUND: return UPN_IS_SPELL_CLOSED_COMPOUND;
@@ -981,6 +980,10 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     for (int j = 0; j < nEntries; ++j)
     {
         OptionsUserData aData(m_xLinguOptionsCLB->get_id(j).toUInt32());
+        // Automatic spell checking belongs to the application, not to the shared
+        // linguistic options, and travels there as SID_AUTOSPELL_CHECK below.
+        if (aData.GetEntryId() == EID_SPELL_AUTO)
+            continue;
         OUString aPropName( lcl_GetPropertyName( static_cast<EID_OPTIONS>(aData.GetEntryId()) ) );
 
         Any aAny;
@@ -1010,13 +1013,16 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         rCoreSet->Put( aHyp );
     }
 
-    // automatic spell checking
-    bool bNewAutoCheck = m_xLinguOptionsCLB->get_toggle(EID_SPELL_AUTO) == TRISTATE_TRUE;
-    const SfxPoolItem* pOld = GetOldItem( *rCoreSet, SID_AUTOSPELL_CHECK );
-    if ( !pOld || static_cast<const SfxBoolItem*>(pOld)->GetValue() != bNewAutoCheck )
+    // automatic spell checking; only an application that told us its state has
+    // one to take back
+    if (const SfxPoolItem* pOld = GetOldItem( *rCoreSet, SID_AUTOSPELL_CHECK ))
     {
-        rCoreSet->Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bNewAutoCheck ) );
-        bModified = true;
+        const bool bNewAutoCheck = m_xLinguOptionsCLB->get_toggle(EID_SPELL_AUTO) == TRISTATE_TRUE;
+        if ( static_cast<const SfxBoolItem*>(pOld)->GetValue() != bNewAutoCheck )
+        {
+            rCoreSet->Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bNewAutoCheck ) );
+            bModified = true;
+        }
     }
 
     return bModified;
@@ -1130,14 +1136,15 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->append();
     int nEntry = 0;
 
-    aLngCfg.GetProperty( UPN_IS_SPELL_AUTO ) >>= bVal;
-    if (const SfxBoolItem* pItem = GetItem( *rSet, SID_AUTOSPELL_CHECK ))
-        bVal = pItem->GetValue();
+    // Automatic spell checking is the one setting here that each application keeps
+    // for itself, so it only has a state to show when an application supplied one.
+    const SfxBoolItem* pAutoSpell = GetItem( *rSet, SID_AUTOSPELL_CHECK );
+    bVal = pAutoSpell && pAutoSpell->GetValue();
     nUserData = OptionsUserData( EID_SPELL_AUTO, false, 0, true, bVal).GetUserData();
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sSpellAuto, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
-    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_SPELL_AUTO));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, pAutoSpell != nullptr);
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1550,11 +1557,10 @@ void SvxLinguTabPage::ApplyLanguageOptions(const SfxItemSet& rSet)
 
         if( SfxItemState::SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
         {
-            bool bOnlineSpelling = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            // The application this reaches keeps the choice for itself. The shared
+            // linguistic option it was split out of is left alone.
             pDispatch->ExecuteList(SID_AUTOSPELL_CHECK,
                 SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, { pItem });
-
-            xProp->setIsSpellAuto( bOnlineSpelling );
         }
 
         if( bSaveSpellCheck )

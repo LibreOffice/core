@@ -235,7 +235,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL,
             css::i18n::ScriptType::COMPLEX), EE_CHAR_LANGUAGE_CTL );
 
-        mbOnlineSpell = aOptions.bIsSpellAuto;
+        mbOnlineSpell = SdModule::GetAutoSpellProperty(meDocType);
     }
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );

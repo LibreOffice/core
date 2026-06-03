@@ -18,6 +18,7 @@
 #include <sot/exchange.hxx>
 #include <svx/svdpage.hxx>
 #include <tools/stream.hxx>
+#include <unotools/lingucfg.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 #include <stlsheet.hxx>
@@ -2583,6 +2584,38 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteToOtherSheetKeepsRefToUncopiedTable
 
     CPPUNIT_ASSERT_EQUAL(u"=SUM(Table1[Value])"_ustr, pDoc->GetFormula(2, 0, 1));
     CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 0, 1)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAutomaticSpellCheckingDefault)
+{
+    createScDoc();
+
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    SvtLinguConfig aLinguConfig;
+    SvtLinguOptions aLinguOptions;
+    aLinguConfig.GetOptions(aLinguOptions);
+    const bool bSharedSpellAuto = aLinguOptions.bIsSpellAuto;
+
+    // Each application keeps its own automatic spell checking setting, and Calc's
+    // starts off
+    CPPUNIT_ASSERT(!ScModule::GetAutoSpellProperty());
+    CPPUNIT_ASSERT(!pViewShell->IsAutoSpell());
+
+    // Tools - Automatic Spell Checking turns it on again
+    dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, {});
+    CPPUNIT_ASSERT(ScModule::GetAutoSpellProperty());
+    CPPUNIT_ASSERT(pViewShell->IsAutoSpell());
+
+    // and the same toggle turns it back off
+    dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, {});
+    CPPUNIT_ASSERT(!ScModule::GetAutoSpellProperty());
+    CPPUNIT_ASSERT(!pViewShell->IsAutoSpell());
+
+    // none of which touches the shared linguistic option
+    aLinguConfig.GetOptions(aLinguOptions);
+    CPPUNIT_ASSERT_EQUAL(bSharedSpellAuto, aLinguOptions.bIsSpellAuto);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

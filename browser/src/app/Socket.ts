@@ -466,7 +466,7 @@ class Socket {
 			};
 			msg += ' options=' + JSON.stringify(options);
 		}
-		const spellOnline = window.prefs.get('spellOnline');
+		const spellOnline = window.prefs.spellOnlineForLoad();
 		if (spellOnline) {
 			msg += ' spellOnline=' + spellOnline;
 		}

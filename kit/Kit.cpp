@@ -296,6 +296,24 @@ namespace
     std::string UserDirPath;
     std::string InstDirPath;
 
+    /// The name the client's per-document-type preferences are keyed by.
+    std::string_view docTypeName(COKitDocumentType type)
+    {
+        switch (type)
+        {
+            case COKitDocumentType::TEXT:
+                return "text";
+            case COKitDocumentType::SPREADSHEET:
+                return "spreadsheet";
+            case COKitDocumentType::PRESENTATION:
+                return "presentation";
+            case COKitDocumentType::DRAWING:
+                return "drawing";
+            default:
+                return std::string_view();
+        }
+    }
+
     std::string pathFromFileURL(const std::string &uri)
     {
         const std::string decoded = Uri::decode(uri);
@@ -2470,6 +2488,13 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
             break;
         }
     }
+
+    // Which document type's spell checking choice applies is only known now that
+    // the document is loaded. A choice already narrowed to the document's own
+    // state above names no document type, so it passes through untouched.
+    spellOnline = Session::spellOnlineForDocType(spellOnline,
+                                                 docTypeName(_loKitDocument->getDocumentType()));
+
     std::string theme = getDefaultTheme(session);
 
     std::string backgroundTheme = getDefaultBackgroundTheme(session);

@@ -1453,13 +1453,15 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             bool bOnlineSpell;
             const SfxPoolItem* pItem;
+            const SfxItemSet* pArgs = rReq.GetArgs();
 
-            if (rReq.GetArgs()->HasItem(FN_PARAM_1, &pItem))
+            if (pArgs && pArgs->HasItem(FN_PARAM_1, &pItem))
                 bOnlineSpell = static_cast<const SfxBoolItem*>(pItem)->GetValue();
             else // Toggle
                 bOnlineSpell = !GetDoc()->GetOnlineSpell();
 
             GetDoc()->SetOnlineSpell(bOnlineSpell);
+            SdModule::SetAutoSpellProperty(bOnlineSpell, GetDoc()->GetDocumentType());
 
             ::Outliner* pOL = mpDrawView->GetTextEditOutliner();
 
