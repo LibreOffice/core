@@ -155,7 +155,7 @@ public:
     SC_DLLPUBLIC bool InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
     std::pair<sc::SheetViewID, SCTAB> InsertSheetView( SCTAB nTab, bool bRecord );
     SC_DLLPUBLIC bool RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
-    bool            DeleteTable( SCTAB nTab, bool bRecord );
+    SC_DLLPUBLIC bool DeleteTable(SCTAB nTab, bool bRecord);
 
     bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
     bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bApi );

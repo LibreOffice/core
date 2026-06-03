@@ -1016,6 +1016,43 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoRedoPreservesSheetViewIdentity)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testDeleteDefaultTabViaDocFuncRemovesSheetViews)
+{
+    // Deleting a sheet that has sheet views must remove both the sheet
+    // itself and all its sheet view holder tabs. Otherwise the holders
+    // survive as invisible orphans with stale state.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    insertSheet(u"Sheet2"_ustr, 2);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+    pTabView1->SetTabNo(0);
+
+    // Create a sheet view of the first sheet. The new sheet view tab is
+    // inserted at index 1 (invisible holder).
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(3), rDocument.GetTableCount());
+
+    // Switch off the sheet view so the focused view is on a default tab
+    // (we do not want to delete the tab we are currently viewing on the
+    // sheet view side).
+    pTabView1->SetTabNo(2);
+
+    // Delete the default-view tab. The holder tab must be deleted along
+    // with it. Only the remaining unrelated sheet should survive.
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    pDocShell->GetDocFunc().DeleteTable(0, true);
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDocument.GetTableCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
 {
     // Delete the sheet view holder table directly

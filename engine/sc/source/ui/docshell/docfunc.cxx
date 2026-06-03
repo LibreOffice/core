@@ -98,7 +98,10 @@
 #include <validat.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineAttributes.hxx>
+#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 #include <SheetViewOperationsTester.hxx>
+#include <table.hxx>
 #include <config_features.h>
 
 #include <memory>
@@ -1328,6 +1331,21 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
         pUndoData.reset(new ScRefUndoData( rDoc ));
     }
 
+    // Sheet view holder tables for this default-view tab have to go with
+    // it. Collect them before the default tab is deleted, since deletion
+    // destroys the sheet view manager that knows about them. Their tab
+    // numbers may shift as a result of the default-tab delete, so we
+    // remember the table pointers and ask for the current tab number at
+    // delete time.
+    std::vector<ScTable*> aSheetViewHolderTablesToDelete;
+    if (auto pManager = rDoc.GetSheetViewManager(nTab))
+    {
+        for (auto const& rSheetView : pManager->iterateValidSheetViews())
+        {
+            aSheetViewHolderTablesToDelete.push_back(rSheetView.getTablePointer());
+        }
+    }
+
     if (rDoc.DeleteTab(nTab))
     {
         if (bRecord)
@@ -1367,6 +1385,17 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
 
         bSuccess = true;
     }
+
+    // Now that the default-view tab is gone, delete the sheet view holder
+    // tabs that used to back it. Use the current tab number on each table
+    // because the indices shift as we delete.
+    for (auto* pTable : aSheetViewHolderTablesToDelete)
+    {
+        SCTAB nHolderTab = pTable->GetTab();
+        if (rDoc.DeleteTab(nHolderTab))
+            rDocShell.Broadcast(ScTablesHint(SC_TAB_DELETED, nHolderTab));
+    }
+
     return bSuccess;
 }
 
