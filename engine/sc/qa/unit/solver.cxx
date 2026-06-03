@@ -30,6 +30,7 @@ class LpSolverTest: public test::BootstrapFixture
     void testCoinMPSolver();
     void testSLPSolver();
     void testSLPSolverNonlinear();
+    void testSLPSolverNonlinearConstraint();
 #endif
 
 #ifdef ENABLE_COINMP
@@ -45,6 +46,7 @@ public:
     CPPUNIT_TEST(testCoinMPSolver);
     CPPUNIT_TEST(testSLPSolver);
     CPPUNIT_TEST(testSLPSolverNonlinear);
+    CPPUNIT_TEST(testSLPSolverNonlinearConstraint);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -115,6 +117,56 @@ void LpSolverTest::testSLPSolverNonlinear()
     uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, aSolution[0], 1E-4);
+}
+
+// A nonlinear constraint: maximize x + y subject to x*x + y*y <= 1. The optimum
+// sits on the circle at x = y = 1/sqrt(2), about 0.7071. The solver linearizes
+// the curved boundary at each step and must converge to that tangent point.
+void LpSolverTest::testSLPSolverNonlinearConstraint()
+{
+    uno::Reference<container::XIndexAccess> xSheets(m_xDocument->getSheets(),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY_THROW);
+    // B1 holds the nonlinear constraint cell, B2 the objective
+    xSheet->getCellByPosition(1, 0)->setFormula(u"=A1*A1+A2*A2"_ustr);
+    xSheet->getCellByPosition(1, 1)->setFormula(u"=A1+A2"_ustr);
+    // start inside the circle, where the constraint already has a slope
+    xSheet->getCellByPosition(0, 0)->setValue(0.5);
+    xSheet->getCellByPosition(0, 1)->setValue(0.5);
+
+    uno::Reference<sheet::XSolver> xSolver(
+        m_xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.comp.Calc.SLPSolver"_ustr, m_xContext),
+        uno::UNO_QUERY_THROW);
+
+    table::CellAddress aObjective(0, 1, 1); // B2 = x + y
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 }, { 0, 0, 1 } };
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        // x*x + y*y <= 1 (cell B1)
+        { table::CellAddress(0, 1, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
+          uno::Any(1.0) },
+        { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
+          uno::Any(-2.0) },
+        { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
+          uno::Any(2.0) },
+        { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_GREATER_EQUAL,
+          uno::Any(-2.0) },
+        { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_LESS_EQUAL,
+          uno::Any(2.0) }
+    };
+
+    xSolver->setDocument(m_xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(true);
+
+    xSolver->solve();
+    CPPUNIT_ASSERT(xSolver->getSuccess());
+    uno::Sequence<double> aSolution = xSolver->getSolution();
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.70710678, aSolution[0], 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.70710678, aSolution[1], 1E-3);
 }
 #endif
 
