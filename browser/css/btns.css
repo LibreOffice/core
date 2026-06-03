@@ -218,9 +218,17 @@ button.jsdialog[disabled] img {
 }
 
 .button-primary {
-	background-color: var(--color-primary);
-	border: 1px solid var(--color-primary-dark);
+	background-color: var(--color-primary-dark);
+	border-color: var(--color-primary-darker);
 	color: var(--color-primary-text);
+}
+
+/* Primary hover: invert to a light fill with the primary color as text. */
+.button-primary:hover,
+.button-primary:focus-visible {
+	background-color: var(--color-btn-primary-hover-bg);
+	border-color: var(--color-primary-dark);
+	color: var(--color-primary-dark);
 }
 
 .button-danger {

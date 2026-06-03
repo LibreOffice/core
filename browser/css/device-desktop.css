@@ -18,9 +18,3 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 	background-color: var(--color-background-lighter) !important;
 	border: 1px solid var(--color-border-darker);
 }
-
-.button-primary:hover {
-	background-color: var(--color-primary-lighter);
-	color: var(--color-primary-dark);
-	cursor: pointer;
-}
