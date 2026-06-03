@@ -1,5 +1,3 @@
-<p align="right"><a href="#gitpod"><img alt="Open in Gitpod" src="https://gitpod.io/button/open-in-gitpod.svg"></a></p>
-
 # Collabora Online
 
 > [!IMPORTANT]
@@ -20,7 +18,6 @@
 [![Forum](https://img.shields.io/badge/Forum-Discourse-blue.svg)](https://forum.collaboraonline.com/)
 [![Website](https://img.shields.io/badge/Website-www.collaboraoffice.org-blueviolet.svg)](https://www.collaboraoffice.org/)
 [![L10n](https://img.shields.io/badge/L10n-Weblate-lightgrey.svg)](https://hosted.weblate.org/projects/collabora-online/)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/CollaboraOnline/online)
 
 
 **Secure Document Collaboration. Controlled by You.**
@@ -145,10 +142,6 @@ into `main`, you should make a backport pull request against
 `distro/collabora/co-25.04-mobile`. Please don't make pull requests directly
 against `distro/collabora/co-25.04-mobile` (i.e. without the change first being
 merged into `main`).
-
-## GitPod
-
-Head over to https://www.collaboraoffice.org/post/build-code/#build-code-on-gitpod and follow the steps.
 
 ## Admin Panel
 
