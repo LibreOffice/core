@@ -39,7 +39,7 @@ public:
     virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) override;
     virtual bool get_item_visible(const OUString& rIdent) const override;
     virtual void set_item_label(const OUString& rIdent, const OUString& rLabel) override;
-    virtual OUString get_item_label(const OUString& rIdent) const override;
+    virtual OUString get_item_label(const OUString& rIdent) const;
     virtual void set_item_tooltip_text(const OUString& rIdent, const OUString& rTip) override;
     virtual OUString get_item_tooltip_text(const OUString& rIdent) const override;
     virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) override;

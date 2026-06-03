@@ -78,11 +78,6 @@ void MessageDialogController::set_secondary_text(const OUString& rText)
     m_xDialog->set_secondary_text(rText);
 }
 
-OUString MessageDialogController::get_secondary_text() const
-{
-    return m_xDialog->get_secondary_text();
-}
-
 void MessageDialogController::set_default_response(int nResponse)
 {
     m_xDialog->set_default_response(nResponse);

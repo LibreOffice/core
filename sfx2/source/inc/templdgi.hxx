@@ -129,7 +129,6 @@ protected:
 
     DECL_LINK(ReadResource_Hdl, StyleList&, void);
     DECL_LINK(ClearResource_Hdl, void*, void);
-    DECL_LINK(SaveSelection_Hdl, StyleList&, SfxObjectShell*);
     DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
     DECL_LINK(UpdateStyleDependents_Hdl, void*, void);
 

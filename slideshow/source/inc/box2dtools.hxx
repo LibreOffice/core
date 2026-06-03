@@ -162,17 +162,6 @@ private:
     void setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                 const basegfx::B2DVector& rVelocity);
 
-    /** Sets rotation angle of the shape's corresponding Box2D body
-
-        @param xShape
-        Shape reference
-
-        @param fAngle
-        Angle of rotation in degrees.
-     */
-    void setShapeAngle(const css::uno::Reference<css::drawing::XShape>& xShape,
-                       const double fAngle);
-
     /** Rotates shape's corresponding Box2D body to specified angle
 
         Rotates the Box2D body to specified angle as if the body

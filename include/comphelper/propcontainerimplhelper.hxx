@@ -39,13 +39,6 @@ class SAL_DLLPUBLIC_TEMPLATE OPropertyContainerImplHelper
       public OPropertyContainerHelper,
       public OPropertyArrayUsageHelper<Derived>
 {
-public:
-    template <typename... Arg>
-    explicit OPropertyContainerImplHelper(Arg&&... arg)
-        : OPropertyImplHelper<BaseClass, Ifc...>(std::forward<Arg>(arg)...)
-    {
-    }
-
 protected:
     cppu::IPropertyArrayHelper& getInfoHelper() override { return *this->getArrayHelper(); }
 

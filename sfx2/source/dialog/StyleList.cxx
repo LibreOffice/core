@@ -405,11 +405,6 @@ bool StyleList::EnableExecute()
     return m_xTreeBox->get_visible() || m_xFmtLb->count_selected_rows() <= 1;
 }
 
-void StyleList::connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rLink)
-{
-    m_aSaveSelection = rLink;
-}
-
 /** Drop is enabled as long as it is allowed to create a new style by example, i.e. to
     create a style out of the current selection.
 */

@@ -50,7 +50,7 @@ public:
 
     virtual tools::Rectangle get_rect(const weld::TreeIter& rIter) const override;
 
-    virtual OUString get_text(const weld::TreeIter& rIter) const override;
+    virtual OUString get_text(const weld::TreeIter& rIter) const;
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override;
 
     virtual int n_children() const override;

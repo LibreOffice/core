@@ -517,15 +517,6 @@ public:
                      std::unique_ptr<SmNode> pThird = nullptr);
 
     /**
-     * Sets subnodes.
-     * @param pFirst
-     * @param pSecond
-     * @param pThird
-     * @return
-     */
-    void SetSubNodes(SmNode* pFirst, SmNode* pSecond, SmNode* pThird);
-
-    /**
      * Sets subnodes, used for operators.
      * The data is reordered so the items are correctly ordered.
      * @param pFirst

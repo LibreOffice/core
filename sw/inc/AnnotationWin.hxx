@@ -208,8 +208,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         bool IsRootNote() const;
         void SetAsRoot();
 
-        void queue_draw();
-
     private:
 
         virtual void    LoseFocus() override;

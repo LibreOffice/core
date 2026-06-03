@@ -117,8 +117,6 @@ private:
             : m_nShellId(0)
         {
         }
-
-        void Send();
     };
 
     SendFormulabarUpdate maSendFormulabarUpdate;

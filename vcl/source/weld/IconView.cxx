@@ -19,14 +19,6 @@ OUString IconView::get_item_tooltip_text(int pos) const
     return {};
 }
 
-tools::Rectangle IconView::get_rect(int pos) const
-{
-    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
-        return get_rect(*pIter);
-
-    return {};
-}
-
 std::unique_ptr<weld::TreeIter> IconView::get_item_at_pos(const Point& rPos)
 {
     std::unique_ptr<weld::TreeIter> pIter = make_iterator();

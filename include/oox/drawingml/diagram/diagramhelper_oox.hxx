@@ -75,7 +75,7 @@ public:
     virtual void reLayout() override;
 
     // get text representation of data tree
-    virtual OUString getDiagramString() const override;
+    virtual OUString getDiagramString() const;
 
     // get children of provided data node
     // use empty string for top-level nodes

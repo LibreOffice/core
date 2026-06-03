@@ -43,10 +43,7 @@ public:
 
     void SetupListener(bool bListen);
 
-    bool IsWelded() const { return m_bIsWelded; }
-    VclPtr<vcl::Window>& GetMainContainer() { return m_xVclContentArea; }
     const OUString & GetUIFilePath() const { return m_sUIXMLDescription; }
-    void SetDisposeCallback(const Link<const SfxViewShell*, void> rDisposeCallback, const SfxViewShell* pViewShell);
 
 private:
     VclPtr<SystemWindow> m_pSystemWindow;

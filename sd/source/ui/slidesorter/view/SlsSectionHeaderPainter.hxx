@@ -38,9 +38,6 @@ public:
     virtual void SetLayerInvalidator(std::unique_ptr<ILayerInvalidator> pInvalidator) override;
     virtual void Paint(OutputDevice& rDevice, const ::tools::Rectangle& rRepaintArea) override;
 
-    /// Call when system colors/fonts may have changed (e.g. theme switch).
-    void HandleDataChanged();
-
 private:
     SlideSorter& mrSlideSorter;
     std::unique_ptr<ILayerInvalidator> mpLayerInvalidator;

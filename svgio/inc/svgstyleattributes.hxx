@@ -392,9 +392,6 @@ namespace svgio::svgreader
             /// fill StrokeDasharray content
             const SvgNumberVector& getStrokeDasharray() const;
 
-            /// StrokeDashOffset content
-            SvgNumber getStrokeDashOffset() const;
-
             /// StrokeLinecap content
             StrokeLinecap getStrokeLinecap() const;
             void setStrokeLinecap(const StrokeLinecap aStrokeLinecap) { maStrokeLinecap = aStrokeLinecap; }
@@ -417,7 +414,6 @@ namespace svgio::svgreader
             SvgNumber getFontSizeNumber() const;
 
             /// FontStretch content
-            FontStretch getFontStretch() const;
             void setFontStretch(const FontStretch aFontStretch) { maFontStretch = aFontStretch; }
 
             /// FontStyle content

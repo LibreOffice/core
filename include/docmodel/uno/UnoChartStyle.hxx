@@ -31,11 +31,6 @@ private:
 public:
     UnoChartStyle() = default;
 
-    UnoChartStyle(model::StyleSet const& rStyle)
-        : maStyle(rStyle)
-    {
-    }
-
     model::StyleSet& getChartStyle() { return maStyle; }
 
     // XChartStyle

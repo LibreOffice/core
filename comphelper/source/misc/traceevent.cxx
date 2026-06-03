@@ -83,12 +83,6 @@ void TraceEvent::startRecording()
 
 void TraceEvent::stopRecording() { s_bRecording = false; }
 
-void TraceEvent::setBufferSizeAndCallback(std::size_t bufferSize, void (*bufferFullCallback)())
-{
-    s_nBufferSize = bufferSize;
-    s_pBufferFullCallback = bufferFullCallback;
-}
-
 std::vector<OUString> TraceEvent::getEventVectorAndClear()
 {
     bool bRecording;

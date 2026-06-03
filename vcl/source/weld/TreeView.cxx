@@ -31,14 +31,6 @@ void weld::TreeView::set_sensitive(int row, bool bSensitive, int col)
         set_sensitive(*pIter, bSensitive, col);
 }
 
-bool weld::TreeView::get_sensitive(int row, int col) const
-{
-    if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
-        return get_sensitive(*pIter, col);
-
-    return false;
-}
-
 void weld::TreeView::set_toggle(int row, TriState eState, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))

@@ -58,7 +58,6 @@ public:
     std::vector<int> get_selected_rows() const { return m_xControl->get_selected_rows(); }
     void clear() { m_xControl->clear(); }
     void remove(int nRow) { m_xControl->remove(nRow); }
-    void select(int nRow) { m_xControl->select(nRow); }
     OUString get_id(int nRow) const { return m_xControl->get_id(nRow); }
 
     // Sync data on the targets box with the data on the target

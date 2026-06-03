@@ -227,23 +227,6 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
     return bRet;
 }
 
-bool SwWrtShell::GotoFieldmark(::sw::mark::Fieldmark const * const pMark)
-{
-    (this->*m_fnKillSel)( nullptr, false, ScrollSizeMode::ScrollSizeDefault );
-    bool bRet = SwCursorShell::GotoFieldmark(pMark);
-    if( bRet && IsSelFrameMode() )
-    {
-        UnSelectFrame();
-        LeaveSelFrameMode();
-    }
-    if( IsSelection() )
-    {
-        m_fnKillSel = &SwWrtShell::ResetSelect;
-        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
-    }
-    return bRet;
-}
-
 // Invalidate FontWork-Slots
 
 void SwWrtShell::DrawSelChanged( )

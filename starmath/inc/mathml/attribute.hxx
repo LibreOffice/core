@@ -120,12 +120,6 @@ public:
         setDefaultAttributeValue();
     }
 
-    void setMlAttributeValue(const SmMlAttribute& aMlAttribute)
-    {
-        m_bSet = true;
-        setAttributeValue(&aMlAttribute);
-    }
-
     void setMlAttributeValue(const SmMlAttribute* aMlAttribute)
     {
         m_bSet = true;

@@ -81,7 +81,6 @@ public:
     void set_primary_text(const OUString& rText);
     OUString get_primary_text() const;
     void set_secondary_text(const OUString& rText);
-    OUString get_secondary_text() const;
     void set_default_response(int nResponse);
 };
 }

@@ -3478,12 +3478,6 @@ std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) cons
     return {};
 }
 
-const OUString* SalInstanceItemView::getEntryData(int index) const
-{
-    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, index);
-    return pEntry ? pEntry->GetUserData() : nullptr;
-}
-
 IMPL_LINK_NOARG(SalInstanceItemView, DoubleClickHdl, SvTreeListBox*, bool)
 {
     if (SvTreeListEntry* pCurEntry = m_pTreeListBox->GetCurEntry())
@@ -4442,13 +4436,6 @@ void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::Tre
     const SalInstanceTreeIter& rVclSource(static_cast<const SalInstanceTreeIter&>(rSource));
     SalInstanceTreeIter& rVclDest(static_cast<SalInstanceTreeIter&>(rDest));
     rVclDest.iter = rVclSource.iter;
-}
-
-bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter& rIter, int nAbsPos) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xTreeView->GetEntryAtAbsPos(nAbsPos);
-    return rVclIter.iter != nullptr;
 }
 
 bool SalInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const

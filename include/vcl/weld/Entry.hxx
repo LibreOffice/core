@@ -28,8 +28,6 @@ protected:
 
     void signal_changed();
 
-    void signal_activated();
-
 public:
     virtual void set_width_chars(int nChars) = 0;
     virtual int get_width_chars() const = 0;

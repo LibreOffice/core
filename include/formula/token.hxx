@@ -258,10 +258,6 @@ class FORMULA_DLLPUBLIC FormulaByteToken final : public FormulaToken
 private:
             sal_uInt8           mnByte;
             ParamClass          eInForceArray;
-protected:
-                                FormulaByteToken( OpCode e, sal_uInt8 n, StackVar v, ParamClass c ) :
-                                    FormulaToken( v,e ), mnByte( n ),
-                                    eInForceArray( c ) {}
 public:
                                 FormulaByteToken( OpCode e, sal_uInt8 n, ParamClass c ) :
                                     FormulaToken( svByte,e ), mnByte( n ),
@@ -301,7 +297,6 @@ public:
     virtual FormulaToken*       Clone() const override { return new FormulaFAPToken(*this); }
     FormulaToken*               GetFAPOrigToken() const;
     sal_uInt8                   GetByte() const { return mnByte; }
-    void                        SetByte( sal_uInt8 n ) { mnByte = n; }
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
@@ -387,7 +382,6 @@ public:
 
     virtual FormulaToken* Clone() const override;
     const svl::SharedString& GetString() const { return maString; }
-    void SetString(const svl::SharedString& rStr);
     virtual bool operator==(const FormulaToken& rToken) const override;
 };
 

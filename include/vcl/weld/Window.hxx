@@ -57,8 +57,6 @@ public:
 
     // render the widget to an output device
     virtual VclPtr<VirtualDevice> screenshot() = 0;
-
-    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() { return nullptr; };
 };
 }
 

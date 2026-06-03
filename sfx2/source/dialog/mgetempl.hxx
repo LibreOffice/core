@@ -62,10 +62,6 @@ public:
     PropertyChip(weld::Box* pParent, SfxManageStyleSheetPage* pPage,
                  sal_uInt16 nWhich, const OUString& rText);
     ~PropertyChip();
-
-    sal_uInt16 GetWhich() const { return m_nWhich; }
-    const OUString& GetText() const { return m_sText; }
-    SfxManageStyleSheetPage* GetPage() const { return m_pPage; }
 };
 /* expected:
     SID_TEMPLATE_NAME   :   In: StringItem, Name of Template

@@ -379,20 +379,6 @@ void SmStructureNode::SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_pt
     ClaimPaternity();
 }
 
-void SmStructureNode::SetSubNodes(SmNode* pFirst, SmNode* pSecond, SmNode* pThird)
-{
-    size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
-    maSubNodes.resize( nSize );
-    if (pFirst)
-        maSubNodes[0] = pFirst;
-    if (pSecond)
-        maSubNodes[1] = pSecond;
-    if (pThird)
-        maSubNodes[2] = pThird;
-
-    ClaimPaternity();
-}
-
 void SmStructureNode::SetSubNodesBinMo(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond, std::unique_ptr<SmNode> pThird)
 {
     if(GetType()==SmNodeType::BinDiagonal)

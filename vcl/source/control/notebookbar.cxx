@@ -128,12 +128,6 @@ NotebookBar::NotebookBar(Window* pParent, const OUString& rID, const OUString& r
     UpdateBackground();
 }
 
-void NotebookBar::SetDisposeCallback(const Link<const SfxViewShell*, void> rDisposeCallback, const SfxViewShell* pViewShell)
-{
-    m_rDisposeLink = rDisposeCallback;
-    m_pViewShell = pViewShell;
-}
-
 NotebookBar::~NotebookBar()
 {
     disposeOnce();

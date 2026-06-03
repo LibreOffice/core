@@ -45,7 +45,6 @@ public:
     virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) = 0;
     virtual bool get_item_visible(const OUString& rIdent) const = 0;
     virtual void set_item_label(const OUString& rIdent, const OUString& rLabel) = 0;
-    virtual OUString get_item_label(const OUString& rIdent) const = 0;
     virtual void set_item_tooltip_text(const OUString& rIdent, const OUString& rTip) = 0;
     virtual OUString get_item_tooltip_text(const OUString& rIdent) const = 0;
     virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) = 0;

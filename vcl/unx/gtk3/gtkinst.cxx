@@ -3586,7 +3586,7 @@ public:
         gtk_widget_set_hexpand(m_pWidget, bExpand);
     }
 
-    virtual bool get_hexpand() const override
+    virtual bool get_hexpand() const
     {
         return gtk_widget_get_hexpand(m_pWidget);
     }
@@ -3596,7 +3596,7 @@ public:
         gtk_widget_set_vexpand(m_pWidget, bExpand);
     }
 
-    virtual bool get_vexpand() const override
+    virtual bool get_vexpand() const
     {
         return gtk_widget_get_vexpand(m_pWidget);
     }
@@ -3621,12 +3621,12 @@ public:
         gtk_widget_set_margin_end(m_pWidget, nMargin);
     }
 
-    virtual int get_margin_top() const override
+    virtual int get_margin_top() const
     {
         return gtk_widget_get_margin_top(m_pWidget);
     }
 
-    virtual int get_margin_bottom() const override
+    virtual int get_margin_bottom() const
     {
         return gtk_widget_get_margin_bottom(m_pWidget);
     }
@@ -12022,16 +12022,6 @@ public:
 #endif
     }
 
-    OUString get_item_label(const OUString& rIdent) const override
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pText = gtk_tool_button_get_label(GTK_TOOL_BUTTON(m_aMap.find(rIdent)->second));
-#else
-        const gchar* pText = gtk_button_get_label(GTK_BUTTON(m_aMap.find(rIdent)->second));
-#endif
-        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
-    }
-
     virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) override
     {
         GtkWidget* pItem = m_aMap[rIdent];
@@ -16010,7 +16000,7 @@ public:
     }
 
     virtual tools::Rectangle get_cell_area(const weld::TreeIter& rIter,
-                                           const int nColumn) const override
+                                           const int nColumn) const
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreePath* pPath = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
@@ -16876,7 +16866,7 @@ public:
         return get(rGtkIter.iter, m_nIdCol);
     }
 
-    virtual OUString get_text(const weld::TreeIter& rIter) const override
+    virtual OUString get_text(const weld::TreeIter& rIter) const
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return get(rGtkIter.iter, m_nTextCol);
@@ -18372,7 +18362,7 @@ public:
         return signal_command(rCEvt);
     }
 
-    virtual void click(const Point& rPos) override
+    virtual void click(const Point& rPos)
     {
         MouseEvent aEvent(rPos);
         signal_mouse_press(aEvent);

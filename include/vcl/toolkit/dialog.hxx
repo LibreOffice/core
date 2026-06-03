@@ -153,7 +153,6 @@ public:
     void            Activate() override;
 
     void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink);
-    void            SetLOKTunnelingState(bool bEnabled);
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);
     void            set_default_response(int nResponse);

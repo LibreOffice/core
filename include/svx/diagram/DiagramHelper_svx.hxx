@@ -104,9 +104,6 @@ public:
     // re-create XShapes
     virtual void reLayout() = 0;
 
-    // get text representation of data tree
-    virtual OUString getDiagramString() const = 0;
-
     // get children of provided data node
     // use empty string for top-level nodes
     // returns vector of (id, text)
@@ -124,7 +121,6 @@ public:
     virtual void applyDiagramDataState(const std::shared_ptr<svx::diagram::DiagramDataState>& rState) = 0;
 
     bool UseDiagramThemeData() const { return mbUseDiagramThemeData; }
-    bool UseDiagramModelData() const { return mbUseDiagramModelData; }
     bool ForceThemePtrRecreation() const { return mbForceThemePtrRecreation; };
 
     // connect/disconnect to/from Group

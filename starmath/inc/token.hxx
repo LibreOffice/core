@@ -180,14 +180,6 @@ struct SmColorTokenTableEntry
     {
     }
 
-    explicit SmColorTokenTableEntry(
-        const std::unique_ptr<SmColorTokenTableEntry> amColorTokenTableEntry)
-        : aIdent(amColorTokenTableEntry->aIdent)
-        , eType(amColorTokenTableEntry->eType)
-        , cColor(amColorTokenTableEntry->cColor)
-    {
-    }
-
     SmColorTokenTableEntry(OUString name, SmTokenType ctype, Color ncolor)
         : aIdent(std::move(name))
         , eType(ctype)
@@ -202,14 +194,7 @@ struct SmColorTokenTableEntry
     {
     }
 
-    bool equals(std::u16string_view colorname) const
-    {
-        return o3tl::compareToIgnoreAsciiCase(colorname, aIdent) == 0;
-    }
-
     bool equals(sal_uInt32 colorcode) const { return colorcode == static_cast<sal_uInt32>(cColor); }
-
-    bool equals(Color colorcode) const { return colorcode == cColor; }
 };
 
 struct SmToken

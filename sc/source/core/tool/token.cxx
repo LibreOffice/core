@@ -887,14 +887,7 @@ ScMatrixCellResultToken::ScMatrixCellResultToken( ScConstMatrixRef pMat, const f
 
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& ) = default;
 
-double          ScMatrixCellResultToken::GetDouble() const  { return static_cast<const FormulaDoubleToken*>(xUpperLeft.get())->GetDouble(); }
-
 ScMatrixCellResultToken::~ScMatrixCellResultToken() {}
-
-const svl::SharedString & ScMatrixCellResultToken::GetString() const
-{
-    return static_cast<const FormulaStringToken*>(xUpperLeft.get())->GetString();
-}
 
 const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
 

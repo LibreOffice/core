@@ -58,16 +58,6 @@ private:
 
 public:
     void           Append( const OUString & rCommand, const OUString & rArg );
-
-    void FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& );
-    void FillSequence( css::uno::Sequence < css::beans::PropertyValue >& ) const;
-
-    size_t          size() const { return aCommandList.size(); }
-
-    SvCommand const & operator[]( size_t i) {
-                        return aCommandList[ i ];
-                    }
-
 };
 
 #endif // INCLUDED_SVL_OWNLIST_HXX

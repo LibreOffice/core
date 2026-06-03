@@ -16,23 +16,6 @@
 
 class SmMlElement final : public SmRect
 {
-    /* Technical stuff */
-
-public:
-    SmMlElement()
-        : m_aElementType(SmMlElementType::NMlEmpty)
-        , m_aText(u""_ustr)
-        , m_aESelection(0, 0, 0, 0)
-        , m_aAttributeList(0)
-        , m_aAttributePosList(0)
-        , m_aSubElements(0)
-        , m_aParentElement(nullptr)
-        , m_nSubElementId(0)
-    {
-        SmImplAttributeType();
-    };
-    /* Mathml stuff */
-
 public:
     explicit SmMlElement(SmMlElementType aElementType)
         : m_aElementType(aElementType)

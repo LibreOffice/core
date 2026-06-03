@@ -92,7 +92,6 @@ public:
     // Returns the Family Item at ith index
     // Used in Dialog's ReadResource_Hdl
     const SfxStyleFamilyItem& GetFamilyItemByIndex(size_t i) const;
-    bool IsHierarchical() const { return m_bHierarchical; }
 
     void Enabledel(bool candel) { m_bCanDel = candel; }
     void Enablehide(bool canhide) { m_bCanHide = canhide; }
@@ -108,7 +107,6 @@ public:
 
     void connect_ReadResource(const Link<StyleList&, void>& rLink) { m_aReadResource = rLink; }
     void connect_ClearResource(const Link<void*, void>& rLink) { m_aClearResource = rLink; }
-    void connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rLink);
     void connect_UpdateFamily(const Link<StyleList&, void> rLink) { m_aUpdateFamily = rLink; }
 
     void FamilySelect(sal_uInt16 nEntry, bool bFillTreeView);
@@ -142,10 +140,6 @@ private:
     void CreateContextMenu();
 
     void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-
-    // In which FamilyState do I have to look, in order to get the
-    // information of the ith Family in the pStyleFamilies.
-    sal_uInt16 StyleNrToInfoOffset(sal_uInt16 i);
 
     DECL_LINK(ReadResource, void*, size_t);
     DECL_LINK(Clear, void*, void);

@@ -39,32 +39,4 @@ void SvCommandList::Append
     aCommandList.emplace_back( rCommand, rArg );
 }
 
-void SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
-{
-    OUString aCommand, aArg;
-    OUString aApiArg;
-    for( const auto& rCommand : aCommandSequence )
-    {
-        aCommand = rCommand.Name;
-        if( !( rCommand.Value >>= aApiArg ) )
-            return;
-        aArg = aApiArg;
-        Append( aCommand, aArg );
-    }
-}
-
-void SvCommandList::FillSequence( css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence ) const
-{
-    const sal_Int32 nCount = aCommandList.size();
-    aCommandSequence.realloc( nCount );
-    auto pCommandSequence = aCommandSequence.getArray();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        pCommandSequence[nIndex].Name = aCommandList[ nIndex ].GetCommand();
-        pCommandSequence[nIndex].Handle = -1;
-        pCommandSequence[nIndex].Value <<= aCommandList[ nIndex ].GetArgument();
-        pCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

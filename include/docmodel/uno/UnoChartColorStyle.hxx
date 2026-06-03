@@ -26,11 +26,6 @@ private:
 public:
     UnoChartColorStyle() = default;
 
-    UnoChartColorStyle(model::ColorStyleSet const& rStyle)
-        : maColorStyle(rStyle)
-    {
-    }
-
     model::ColorStyleSet& getChartColorStyle() { return maColorStyle; }
 };
 

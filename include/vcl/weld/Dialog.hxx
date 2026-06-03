@@ -25,8 +25,6 @@ private:
                           const std::function<void(sal_Int32)>& func)
         = 0;
 
-    DECL_LINK(CommandHdl, const CommandEvent&, bool);
-
 protected:
     virtual bool signal_command(const CommandEvent& rCEvt);
 

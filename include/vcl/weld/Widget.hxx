@@ -174,17 +174,13 @@ public:
     virtual void set_help_id(const OUString& rName) = 0;
 
     virtual void set_hexpand(bool bExpand) = 0;
-    virtual bool get_hexpand() const = 0;
     virtual void set_vexpand(bool bExpand) = 0;
-    virtual bool get_vexpand() const = 0;
 
     virtual void set_margin_top(int nMargin) = 0;
     virtual void set_margin_bottom(int nMargin) = 0;
     virtual void set_margin_start(int nMargin) = 0;
     virtual void set_margin_end(int nMargin) = 0;
 
-    virtual int get_margin_top() const = 0;
-    virtual int get_margin_bottom() const = 0;
     virtual int get_margin_start() const = 0;
     virtual int get_margin_end() const = 0;
 

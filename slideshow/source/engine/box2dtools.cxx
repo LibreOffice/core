@@ -361,15 +361,6 @@ void box2DWorld::setShapeLinearVelocity(const css::uno::Reference<css::drawing::
     pBox2DBody->setLinearVelocity(rVelocity);
 }
 
-void box2DWorld::setShapeAngle(const css::uno::Reference<css::drawing::XShape>& xShape,
-                               const double fAngle)
-{
-    const auto iter = mpXShapeToBodyMap.find(xShape);
-    assert(iter != mpXShapeToBodyMap.end());
-    Box2DBodySharedPtr pBox2DBody = iter->second;
-    pBox2DBody->setAngle(fAngle);
-}
-
 void box2DWorld::setShapeAngleByAngularVelocity(
     const css::uno::Reference<css::drawing::XShape>& xShape, const double fAngle,
     const double fPassedTime)

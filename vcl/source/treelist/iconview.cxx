@@ -287,52 +287,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
 
-static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
-{
-    Bitmap aImage = pBmpItem->GetBitmap1().GetBitmap();
-    SvMemoryStream aOStm(65535, 65535);
-    // Use fastest compression "1"
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
-    };
-    vcl::PngImageWriter aPNGWriter(aOStm);
-    aPNGWriter.setParameters(aFilterData);
-    if (aPNGWriter.write(aImage))
-    {
-        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
-                                          aOStm.Tell());
-        OStringBuffer aBuffer("data:image/png;base64,");
-        ::comphelper::Base64::encode(aBuffer, aSeq);
-        return aBuffer.makeStringAndClear();
-    }
-
-    return ""_ostr;
-}
-
-OUString IconView::renderEntry(int pos, int /*dpix*/, int /*dpiy*/) const
-{
-    // TODO: support various DPI
-    SvTreeListEntry* pEntry = GetEntry(pos);
-    if (!pEntry)
-        return "";
-
-    OUString sResult;
-    const bool bHandled
-        = maDumpImageHdl.IsSet() && maDumpImageHdl.Call(encoded_image_query(sResult, pEntry));
-
-    if (!bHandled)
-    {
-        if (const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp))
-        {
-            const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
-            if (pBmpItem)
-                return OStringToOUString(extractPngString(pBmpItem), RTL_TEXTENCODING_ASCII_US);
-        }
-    }
-
-    return sResult;
-}
-
 void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry)
 {
     while (pEntry)

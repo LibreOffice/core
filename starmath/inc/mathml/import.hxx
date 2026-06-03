@@ -15,7 +15,6 @@
 #include <unomodel.hxx>
 
 // XML tools
-#include <utility>
 #include <comphelper/errcode.hxx>
 #include <xmloff/xmlimp.hxx>
 
@@ -32,32 +31,7 @@ class SmMLImportWrapper
     SmDocShell* m_pDocShell;
     SmMLImport* m_pMlImport;
 
-private:
-    // Use customized entities
-
 public:
-    /** Get the element tree when parsed from text
-    */
-    SmMlElement* getElementTree();
-
-public:
-    /** Constructor
-     */
-    explicit SmMLImportWrapper(rtl::Reference<SmModel> xRef)
-        : m_xModel(std::move(xRef))
-        , m_pDocShell(nullptr)
-        , m_pMlImport(nullptr)
-    {
-    }
-
-    /** Imports the mathml
-    */
-    ErrCode Import(SfxMedium& rMedium);
-
-    /** Imports the mathml
-    */
-    ErrCode Import(std::u16string_view aSource);
-
     /** read a component from input stream
      */
     ErrCode
@@ -137,14 +111,6 @@ public:
     */
     virtual void SetConfigurationSettings(
         const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
-
-    /** Set syntax version
-    */
-    void SetSmSyntaxVersion(sal_Int16 nSmSyntaxVersion) { m_nSmSyntaxVersion = nSmSyntaxVersion; }
-
-    /** Get syntax version
-    */
-    sal_Int16 GetSmSyntaxVersion() const { return m_nSmSyntaxVersion; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

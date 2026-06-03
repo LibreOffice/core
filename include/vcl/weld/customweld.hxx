@@ -65,7 +65,6 @@ public:
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
     virtual OUString RequestHelp(tools::Rectangle&) { return OUString(); }
-    OUString GetHelpText() const { return m_pDrawingArea->get_tooltip_text(); }
     Size const& GetOutputSizePixel() const { return m_aSize; }
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }
@@ -116,7 +115,6 @@ public:
     }
     void CaptureMouse() { m_pDrawingArea->grab_mouse(); }
     bool IsMouseCaptured() const { return m_pDrawingArea->has_mouse_grab(); }
-    Point GetPointerPosPixel() const { return m_pDrawingArea->get_pointer_position(); }
     void EnableRTL(bool bEnable) { m_pDrawingArea->set_direction(bEnable); }
     bool IsRTLEnabled() const { return m_pDrawingArea->get_direction(); }
     void ReleaseMouse() { m_pDrawingArea->release_mouse(); }
@@ -198,10 +196,6 @@ public:
     CustomWeld(weld::Builder& rBuilder, const OUString& rDrawingId,
                CustomWidgetController& rWidgetController);
     void queue_draw() { m_xDrawingArea->queue_draw(); }
-    void queue_draw_area(int x, int y, int width, int height)
-    {
-        m_xDrawingArea->queue_draw_area(x, y, width, height);
-    }
     void set_size_request(int nWidth, int nHeight)
     {
         m_xDrawingArea->set_size_request(nWidth, nHeight);
@@ -211,11 +205,9 @@ public:
     void set_margin_top(int nMargin) { m_xDrawingArea->set_margin_top(nMargin); }
     void set_margin_bottom(int nMargin) { m_xDrawingArea->set_margin_bottom(nMargin); }
     void set_sensitive(bool bSensitive) { m_xDrawingArea->set_sensitive(bSensitive); }
-    bool get_sensitive() const { return m_xDrawingArea->get_sensitive(); }
     bool get_visible() const { return m_xDrawingArea->get_visible(); }
     void set_visible(bool bVisible) { m_xDrawingArea->set_visible(bVisible); }
     void set_help_id(const OUString& rHelpId) { m_xDrawingArea->set_help_id(rHelpId); }
-    void set_tooltip_text(const OUString& rTip) { m_xDrawingArea->set_tooltip_text(rTip); }
 };
 }
 

@@ -17,13 +17,6 @@ void Entry::signal_changed()
         return;
     m_aChangeHdl.Call(*this);
 }
-
-void Entry::signal_activated()
-{
-    if (notify_events_disabled())
-        return;
-    m_aActivateHdl.Call(*this);
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

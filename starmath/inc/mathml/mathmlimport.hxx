@@ -108,7 +108,6 @@ public:
     bool TooDeep() const { return nParseDepth >= 2048; }
     void DecParseDepth() { --nParseDepth; }
     void SetSmSyntaxVersion(sal_Int16 nSmSyntaxVersion) { mnSmSyntaxVersion = nSmSyntaxVersion; }
-    sal_Int16 GetSmSyntaxVersion() const { return mnSmSyntaxVersion; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,9 +53,6 @@ public:
         maDumpImageHdl = rLink;
     }
 
-    /// returns string with encoded image for an entry
-    OUString renderEntry(int pos, int dpix, int dpiy) const;
-
     /// Update entry size based on the given entry's image size and text
     void UpdateEntrySize(const SvTreeListEntry& rEntry);
 

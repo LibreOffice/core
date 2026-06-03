@@ -101,7 +101,6 @@ public:
 
     static void startRecording();
     static void stopRecording();
-    static void setBufferSizeAndCallback(std::size_t bufferSize, void (*bufferFullCallback)());
 
     static std::vector<OUString> getEventVectorAndClear();
 

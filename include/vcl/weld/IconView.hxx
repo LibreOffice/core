@@ -68,11 +68,6 @@ public:
         insert(-1, &rStr, &rId, &rImage, nullptr);
     }
 
-    void append(const OUString& rId, const OUString& rStr, const Bitmap* pImage)
-    {
-        insert(-1, &rStr, &rId, pImage, nullptr);
-    }
-
     void append_separator(const OUString& rId) { insert_separator(-1, &rId); }
 
     virtual void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
@@ -96,12 +91,9 @@ public:
     OUString get_item_tooltip_text(int pos) const;
     virtual OUString get_item_tooltip_text(const TreeIter& rIter) const = 0;
 
-    tools::Rectangle get_rect(int pos) const;
     virtual tools::Rectangle get_rect(const TreeIter& rIter) const = 0;
 
     std::unique_ptr<weld::TreeIter> get_item_at_pos(const Point& rPos);
-
-    virtual OUString get_text(const TreeIter& rIter) const = 0;
 
     void scroll_to_item(const TreeIter& rIter)
     {

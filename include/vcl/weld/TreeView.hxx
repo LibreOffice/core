@@ -230,7 +230,6 @@ public:
     void set_sensitive(int row, bool bSensitive, int col = -1);
     virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
 
-    bool get_sensitive(int row, int col) const;
     virtual bool get_sensitive(const TreeIter& rIter, int col) const = 0;
 
     // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
@@ -518,8 +517,6 @@ public:
         = 0;
     virtual void unset_drag_dest_row() = 0;
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const = 0;
-    virtual tools::Rectangle get_cell_area(const weld::TreeIter& rIter,
-                                           const int nColumn) const = 0;
     // for dragging and dropping between TreeViews, return the active source
     virtual TreeView* get_drag_source() const = 0;
 

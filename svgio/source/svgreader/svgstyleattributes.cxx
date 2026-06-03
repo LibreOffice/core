@@ -2638,27 +2638,6 @@ namespace svgio::svgreader
             return maStrokeDasharray;
         }
 
-        SvgNumber SvgStyleAttributes::getStrokeDashOffset() const
-        {
-            if(maStrokeDashOffset.isSet())
-            {
-                return maStrokeDashOffset;
-            }
-
-            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
-
-            if (pSvgStyleAttributes && maResolvingParent[12] < nStyleDepthLimit)
-            {
-                ++maResolvingParent[12];
-                auto ret = pSvgStyleAttributes->getStrokeDashOffset();
-                --maResolvingParent[12];
-                return ret;
-            }
-
-            // default is 0
-            return SvgNumber(0.0);
-        }
-
         StrokeLinecap SvgStyleAttributes::getStrokeLinecap() const
         {
             if(maStrokeLinecap != StrokeLinecap::notset)
@@ -2877,40 +2856,6 @@ namespace svgio::svgreader
             }
 
             return SvgNumber(aDefaultSize);
-        }
-
-        FontStretch SvgStyleAttributes::getFontStretch() const
-        {
-            if(maFontStretch != FontStretch::notset)
-            {
-                if(FontStretch::wider != maFontStretch && FontStretch::narrower != maFontStretch)
-                {
-                    return maFontStretch;
-                }
-            }
-
-            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
-
-            if (pSvgStyleAttributes && maResolvingParent[18] < nStyleDepthLimit)
-            {
-                ++maResolvingParent[18];
-                FontStretch aInherited = pSvgStyleAttributes->getFontStretch();
-                --maResolvingParent[18];
-
-                if(FontStretch::wider == maFontStretch)
-                {
-                    aInherited = getWider(aInherited);
-                }
-                else if(FontStretch::narrower == maFontStretch)
-                {
-                    aInherited = getNarrower(aInherited);
-                }
-
-                return aInherited;
-            }
-
-            // default is FontStretch::normal
-            return FontStretch::normal;
         }
 
         FontStyle SvgStyleAttributes::getFontStyle() const

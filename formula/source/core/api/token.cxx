@@ -2019,11 +2019,6 @@ FormulaToken* FormulaStringNameToken::Clone() const
     return new FormulaStringNameToken(*this);
 }
 
-void FormulaStringNameToken::SetString( const svl::SharedString& rStr )
-{
-    maString = rStr;
-}
-
 bool FormulaStringNameToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r )

@@ -726,11 +726,6 @@ void Dialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNoti
     mpDialogImpl->m_aInstallLOKNotifierHdl = rLink;
 }
 
-void Dialog::SetLOKTunnelingState(bool bEnabled)
-{
-    mpDialogImpl->m_bLOKTunneling = bEnabled;
-}
-
 void Dialog::StateChanged( StateChangedType nType )
 {
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
