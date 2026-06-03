@@ -15,6 +15,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -993,6 +994,18 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSRoundtrip)
         = getDataSequenceFromDocByRole(xChartDoc, u"calculated-y");
     CPPUNIT_ASSERT(!xCalculatedY.is());
 
+    // After reload the series must carry a categories sequence with bin range
+    // labels, not just the raw values-y.
+    Reference<chart2::data::XDataSequence> xCategories
+        = getDataSequenceFromDocByRole(xChartDoc, u"categories");
+    CPPUNIT_ASSERT(xCategories.is());
+    Reference<chart2::data::XTextualDataSequence> xCategoriesText(xCategories, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCategoriesText.is());
+    const Sequence<OUString> aBinLabels = xCategoriesText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"[10-13.94]"_ustr, aBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.87]"_ustr, aBinLabels[1]);
+
     // Round trip 2: non-default binning parameters survive
     Reference<beans::XPropertySet> xProps(xChartType, uno::UNO_QUERY_THROW);
     xProps->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(1)));
@@ -1053,6 +1066,21 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.HistogramChartType"_ustr,
                          xChartType->getChartType());
 
+    // The X axis must carry the bin range labels from the histogram template,
+    // not the generic "1", "2", ... labels that the OOXML axis converter
+    // produces by default.
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+    chart2::ScaleData aScaleData = xXAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+    Reference<chart2::data::XTextualDataSequence> xAxisCatText(aScaleData.Categories->getValues(),
+                                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisCatText.is());
+    const Sequence<OUString> aAxisBinLabels = xAxisCatText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAxisBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"[10-13.94]"_ustr, aAxisBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.87]"_ustr, aAxisBinLabels[1]);
+
     // Round trip 2: non-default binning parameters survive save + reload.
     Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
     xProperties->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(1)));
@@ -1078,6 +1106,29 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     double fBinWidth = 0.0;
     CPPUNIT_ASSERT(xReloadedProperties->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
     CPPUNIT_ASSERT_EQUAL(2.5, fBinWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
+{
+    // Exporting an ODF-origin histogram to XLSX must write the raw
+    // cell range, not an _xlchart.v1.N alias with no matching definedName.
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim", "type", u"val");
+
+    OUString aFormula
+        = getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f");
+    OString aMessage = "got formula: " + OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), !aFormula.startsWith("_xlchart"));
+    // The FODS series points at Sheet1.A1:A5. After conversion to XLSX
+    // notation the range should look like Sheet1!$A$1:$A$5.
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.indexOf(u"Sheet1") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.indexOf(u"$A$1") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.indexOf(u"$A$5") >= 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf60316)
