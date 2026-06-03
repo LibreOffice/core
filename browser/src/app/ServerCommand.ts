@@ -45,6 +45,7 @@ class ServerCommand {
 	public lastcolumn?: number;
 	public lastrow?: number;
 	public readonly?: number;
+	public externallinksdisabled?: boolean;
 
 	public x?: number;
 	public y?: number;

@@ -242,6 +242,12 @@ void ScDocShell::PerformLinkUpdate()
     ReloadAllLinks();
 }
 
+bool ScDocShell::HasUpdatableLinks() const
+{
+    const sfx2::LinkManager* pLinkMgr = GetDocument().GetLinkManager();
+    return pLinkMgr && !pLinkMgr->GetLinks().empty();
+}
+
 IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, weld::Button&, void )
 {
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);

@@ -1097,6 +1097,28 @@ class Socket {
 			// has set the viewid
 			this._handleDelayedMessages(this._map._docLayer);
 		}
+
+		this._maybeOfferExternalLinks(command);
+	}
+
+	// Offer per-document consent for the document's disabled external links.
+	// Editors only; the choice lasts the session.
+	private _maybeOfferExternalLinks(command: ServerCommand): void {
+		const disabled =
+			command.externallinksdisabled === true ||
+			(command.externallinksdisabled as unknown) === 'true';
+		if (!disabled || this._map.isReadOnlyMode()) return;
+
+		this._map.uiManager.showSnackbar(
+			_('This document has links to external content.'),
+			_('Allow'),
+			() => {
+				this.sendMessage('allowlinkupdate');
+			},
+			-1 /* no timeout */,
+			false /* no progress */,
+			true /* dismissable - dismiss keeps links blocked */,
+		);
 	}
 
 	private _onJSDialog(

@@ -342,6 +342,8 @@ public:
     void                        SetPendingLinkUpdateInfobar() { bPendingLinkUpdateInfobar = true; }
     void                        CheckPendingLinkUpdateInfobar();
     void                        ShowLinkUpdateInfobar();
+    void                        AllowLinkUpdate();
+    virtual bool                HasUpdatableLinks() const;
     void                        AddDeferredFormControlImage(
                                     const css::uno::Reference<css::beans::XPropertySet>& rxControl,
                                     const OUString& rURL);

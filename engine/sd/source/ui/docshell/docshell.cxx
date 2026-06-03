@@ -381,6 +381,12 @@ void DrawDocShell::PerformLinkUpdate()
     }
 }
 
+bool DrawDocShell::HasUpdatableLinks() const
+{
+    sfx2::LinkManager* pLinkMgr = mpDoc ? mpDoc->GetLinkManager() : nullptr;
+    return pLinkMgr && !pLinkMgr->GetLinks().empty();
+}
+
 SfxUndoManager* DrawDocShell::GetUndoManager()
 {
     return mpUndoManager.get();

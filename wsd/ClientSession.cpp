@@ -1255,6 +1255,15 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             return false;
         return forwardToChild(firstLine, docBroker);
     }
+    else if (tokens.equals(0, "allowlinkupdate"))
+    {
+        // The browser only hides the prompt, this is the enforcement that only
+        // editors can update links. isWritable() is also true for comment-only
+        // sessions, so require !isReadOnly() too.
+        if (!isWritable() || isReadOnly())
+            return false;
+        return forwardToChild(firstLine, docBroker);
+    }
     else if (tokens.equals(0, "formfieldevent") ||
              tokens.equals(0, "sallogoverride") ||
              tokens.equals(0, "contentcontrolevent"))

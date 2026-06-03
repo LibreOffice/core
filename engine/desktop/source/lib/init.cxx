@@ -93,6 +93,7 @@
 #include <comphelper/random.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -5470,6 +5471,12 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
         else
             sal_detail_set_log_selector(pCurrentSalLogOverride);
     }
+    else if (strcmp(pOption, "allowlinkupdate") == 0)
+    {
+        SolarMutexGuard aGuard;
+        if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
+            pDocSh->AllowLinkUpdate();
+    }
     else if (strcmp(pOption, "addconfig") == 0)
     {
         updateConfig(OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8));
@@ -6593,6 +6600,33 @@ static char* getDocReadOnly(COKitDocument* pThis)
     return pJson;
 }
 
+static char* getExternalLinksDisabled(COKitDocument* pThis)
+{
+    SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
+    if (!pObjectShell)
+        return nullptr;
+
+    // True when the document has external links currently held back because
+    // link updates are not allowed for it yet.
+    const bool bDisabled
+        = !pObjectShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate()
+          && pObjectShell->HasUpdatableLinks();
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:ExternalLinksDisabled");
+    aTree.put("disabled", bDisabled);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
+    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    if (!pJson)
+        return nullptr;
+
+    strcpy(pJson, aStream.str().c_str());
+    pJson[aStream.str().size()] = '\0';
+    return pJson;
+}
+
 static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale const & rLocale)
 {
     boost::property_tree::ptree aChild;
@@ -7055,6 +7089,10 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
     if (aCommand == ".uno:ReadOnly")
     {
         return getDocReadOnly(pThis);
+    }
+    else if (aCommand == ".uno:ExternalLinksDisabled")
+    {
+        return getExternalLinksDisabled(pThis);
     }
     else if (aCommand == ".uno:LanguageStatus")
     {

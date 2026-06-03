@@ -1768,13 +1768,20 @@ void SfxObjectShell::ShowLinkUpdateInfobar()
     }
 }
 
-IMPL_LINK_NOARG(SfxObjectShell, AllowLinksUpdateHdl, weld::Button&, void)
+void SfxObjectShell::AllowLinkUpdate()
 {
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
     PerformLinkUpdate();
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(this);
     if (pViewFrame)
         pViewFrame->RemoveInfoBar(u"enablecontent");
+}
+
+bool SfxObjectShell::HasUpdatableLinks() const { return false; }
+
+IMPL_LINK_NOARG(SfxObjectShell, AllowLinksUpdateHdl, weld::Button&, void)
+{
+    AllowLinkUpdate();
 }
 
 void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)

@@ -179,6 +179,15 @@ namespace LOKitHelper
             resultInfo["readonly"] = readOnly ? "true": "false";
         }
 
+        ScopedString externalLinks(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:ExternalLinksDisabled"));
+        if (externalLinks)
+        {
+            const std::string isExternalLinksDisabled = std::string(externalLinks.get());
+
+            bool externalLinksDisabled = (isExternalLinksDisabled.find("true") != std::string::npos);
+            resultInfo["externallinksdisabled"] = externalLinksDisabled ? "true": "false";
+        }
+
         ScopedString values(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:AllPageSize"));
         if (values)
         {

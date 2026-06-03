@@ -93,6 +93,7 @@ public:
     virtual bool            LoadFrom( SfxMedium& rMedium ) override;
     virtual void            UpdateLinks() override;
     virtual void            PerformLinkUpdate() override;
+    virtual bool            HasUpdatableLinks() const override;
     virtual bool            SaveAs( SfxMedium &rMedium  ) override;
 
     virtual ::tools::Rectangle       GetVisArea(sal_uInt16 nAspect) const override;

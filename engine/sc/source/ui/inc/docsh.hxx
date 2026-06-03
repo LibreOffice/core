@@ -306,6 +306,7 @@ public:
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
     void            UpdateLinks() override;
     void            PerformLinkUpdate() override;
+    bool            HasUpdatableLinks() const override;
     SC_DLLPUBLIC void SetInitialLinkUpdate( const SfxMedium* pMedium );
     void            AllowLinkUpdate();
     SC_DLLPUBLIC void ReloadAllLinks();

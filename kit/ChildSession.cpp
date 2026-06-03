@@ -650,6 +650,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "formfieldevent") ||
                tokens.equals(0, "traceeventrecording") ||
                tokens.equals(0, "sallogoverride") ||
+               tokens.equals(0, "allowlinkupdate") ||
                tokens.equals(0, "setviewreadonly") ||
                tokens.equals(0, "rendersearchresult") ||
                tokens.equals(0, "contentcontrolevent") ||
@@ -929,6 +930,12 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             {
                 getLOKit()->setOption("sallogoverride", tokens[1].c_str());
             }
+        }
+        else if (tokens.equals(0, "allowlinkupdate"))
+        {
+            // The user accepted the per-document prompt to enable external
+            // links. Calls setUserAllowsLinkUpdate + link refresh in core.
+            getLOKit()->setOption("allowlinkupdate", "");
         }
         else if (tokens.equals(0, "setviewreadonly"))
         {

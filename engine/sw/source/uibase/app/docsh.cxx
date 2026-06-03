@@ -1325,6 +1325,13 @@ void SwDocShell::PerformLinkUpdate()
                             GetMedium() ? GetMedium()->GetName() : OUString());
 }
 
+bool SwDocShell::HasUpdatableLinks() const
+{
+    const SwDoc* pDoc = GetDoc();
+    return pDoc
+           && !pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().empty();
+}
+
 uno::Reference< frame::XController >
                                 SwDocShell::GetController()
 {

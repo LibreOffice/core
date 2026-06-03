@@ -313,6 +313,7 @@ public:
      read by the binary filter: */
     virtual void UpdateLinks() override;
     virtual void PerformLinkUpdate() override;
+    virtual bool HasUpdatableLinks() const override;
 
     css::uno::Reference< css::frame::XController >
                                 GetController();
