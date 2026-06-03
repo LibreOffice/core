@@ -2576,6 +2576,13 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'command': '.uno:GoalSeekDialog',
 								'accessibility': { focusBack: true,	combination: 'SG', de: null }
 							},
+							{
+								'id': 'data-solver-dialog',
+								'type': 'toolitem',
+								'text': _UNO('.uno:SolverDialog', 'spreadsheet'),
+								'command': '.uno:SolverDialog',
+								'accessibility': { focusBack: true,	combination: 'SV', de: null }
+							},
 						]
 					},
 					{

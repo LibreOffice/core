@@ -127,6 +127,7 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="solverdlg|targetlabel">_Target cell</property>
                     <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">targetedit</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -160,6 +161,7 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="solverdlg|changelabel">_By changing cells</property>
                     <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">changeedit</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -317,6 +319,7 @@
                         <property name="group">max</property>
                         <accessibility>
                           <relation type="labelled-by" target="result"/>
+                          <relation type="label-for" target="valueedit"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="value-atkobject">
@@ -343,6 +346,9 @@
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="value"/>
+                            </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="valueedit-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|valueedit">Enter the cell range that can be changed.</property>

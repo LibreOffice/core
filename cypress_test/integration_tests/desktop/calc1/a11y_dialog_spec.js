@@ -51,6 +51,7 @@ const allCalcDialogs = [
     '.uno:SelectSheetView',
     '.uno:SetOptimalColumnWidth',
     '.uno:SetOptimalRowHeight',
+    '.uno:SolverDialog',
     '.uno:TTestDialog',
     '.uno:Validation',
     '.uno:ZTestDialog',

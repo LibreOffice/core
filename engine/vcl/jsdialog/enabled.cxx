@@ -205,6 +205,10 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/selectsource.ui" },
         { u"modules/scalc/ui/sheetprintpage.ui" },
         { u"modules/scalc/ui/simplerefdialog.ui" },
+        { u"modules/scalc/ui/solverdlg.ui" },
+        { u"modules/scalc/ui/solveroptionsdialog.ui" },
+        { u"modules/scalc/ui/solverprogressdialog.ui" },
+        { u"modules/scalc/ui/solversuccessdialog.ui" },
         { u"modules/scalc/ui/sortcriteriapage.ui" },
         { u"modules/scalc/ui/sortdialog.ui" },
         { u"modules/scalc/ui/sortkey.ui" },
@@ -734,6 +738,13 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
         // Skip this one, I think it can only happen on loading
         // an archaic lotus 123 file
         else if (entry == u"modules/scalc/ui/imoptdialog.ui")
+            continue;
+        // Skip these Solver sub-dialogs. They only appear during a solve
+        // run (the Options button, the progress popup, or the success
+        // popup), so no single UNO command opens them.
+        else if (entry == u"modules/scalc/ui/solveroptionsdialog.ui" ||
+                 entry == u"modules/scalc/ui/solverprogressdialog.ui" ||
+                 entry == u"modules/scalc/ui/solversuccessdialog.ui")
             continue;
 
         OUString sEntry(entry);

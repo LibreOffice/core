@@ -25,7 +25,11 @@
 #include <SolverSettings.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/sheet/SolverConstraint.hpp>
+#include <com/sun/star/sheet/XSolver.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <memory>
 #include <string_view>
 #include <vector>
 
@@ -144,8 +148,26 @@ private:
     std::shared_ptr<ScSolverOptionsDialog> m_xOptDlg;
     std::shared_ptr<sc::SolverSettings> m_pSolverSettings;
 
+    // Snapshot of a single solver run: the variable cells and their
+    // pre-solve values, the objective cell, the constraints, the
+    // solver and its option set, and whether the solver reported
+    // success.
+    struct SolveState
+    {
+        css::uno::Sequence<css::table::CellAddress> aVariables;
+        css::uno::Sequence<double> aOldValues;
+        sal_Int32 nVarCount;
+        css::table::CellAddress aObjective;
+        css::uno::Sequence<css::sheet::SolverConstraint> aConstraints;
+        css::uno::Reference<css::sheet::XSolver> xSolver;
+        css::uno::Reference<css::beans::XPropertySet> xOptProp;
+        bool bSuccess;
+    };
+
     void    Init(const ScAddress& rCursorPos);
-    bool    CallSolver();
+    void    CallSolver();
+    void    ShowNoSolutionDialog(const std::shared_ptr<SolveState>& rState, const OUString& rError);
+    void    FinishSolve(bool bAccepted, const std::shared_ptr<SolveState>& rState);
     void    ReadConditions();
     void    ShowConditions();
     void    EnableButtons();

@@ -618,21 +618,16 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
         SetDispatcherLock( false );
         SwitchToDocument();
 
-        bool bClose = true;
-        if ( bSolve )
-            bClose = CallSolver();
-
-        if ( bClose )
+        if (bSolve)
+        {
+            CallSolver();
+        }
+        else
         {
             // Close: write dialog settings to DocShell for subsequent calls
             ReadConditions();
             SaveSolverSettings();
             response(RET_CLOSE);
-        }
-        else
-        {
-            // no solution -> dialog is kept open
-            SetDispatcherLock( true );
         }
     }
     else if (&rBtn == m_xBtnOpt.get())
@@ -874,15 +869,16 @@ sc::ConstraintOperator ScOptSolverDlg::OperatorIndexToConstraintOperator(sal_Int
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
     OUString aMessage = bCondition ? maConditionError : maInputError;
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+    std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                               VclMessageType::Warning, VclButtonsType::Ok,
                                               aMessage));
-    xBox->run();
-    if (pFocus)
-    {
-        mpEdActive = pFocus;
-        pFocus->GrabFocus();
-    }
+    xBox->runAsync(xBox, [this, pFocus](sal_Int32 /*nResult*/) {
+        if (pFocus)
+        {
+            mpEdActive = pFocus;
+            pFocus->GrabFocus();
+        }
+    });
 }
 
 bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange )
@@ -928,7 +924,7 @@ OUString ScOptSolverDlg::GetCellStrAddress(css::table::CellAddress aUnoAddress)
     return aRange.Format(mrDoc, ScRefFlags::RANGE_ABS);
 }
 
-bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after calling
+void ScOptSolverDlg::CallSolver()
 {
     // show progress dialog
 
@@ -954,7 +950,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     if ( !ParseRef( aObjRange, m_xEdObjectiveCell->GetText(), false ) )
     {
         ShowError( false, m_xEdObjectiveCell.get() );
-        return false;
+        return;
     }
     table::CellAddress aObjective( aObjRange.aStart.Tab(), aObjRange.aStart.Col(), aObjRange.aStart.Row() );
 
@@ -963,7 +959,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     if ( !ParseWithNames( aVarRanges, m_xEdVariableCells->GetText(), mrDoc ) )
     {
         ShowError( false, m_xEdVariableCells.get() );
-        return false;
+        return;
     }
     uno::Sequence<table::CellAddress> aVariables;
     sal_Int32 nVarPos = 0;
@@ -1002,7 +998,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             if ( !ParseRef( aLeftRange, rConstr.aLeftStr, true ) )
             {
                 ShowError( true, nullptr );
-                return false;
+                return;
             }
 
             bool bIsRange = false;
@@ -1018,7 +1014,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
                 else
                 {
                     ShowError( true, nullptr );
-                    return false;
+                    return;
                 }
             }
             else
@@ -1031,7 +1027,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
                           aConstraint.Operator != sheet::SolverConstraintOperator_BINARY )
                 {
                     ShowError( true, nullptr );
-                    return false;
+                    return;
                 }
             }
 
@@ -1079,7 +1075,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             else
             {
                 ShowError( false, m_xEdTargetValue.get() );
-                return false;
+                return;
             }
         }
 
@@ -1103,7 +1099,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     uno::Reference<sheet::XSolver> xSolver = ScSolverUtil::GetSolver( maEngine );
     OSL_ENSURE( xSolver.is(), "can't get solver component" );
     if ( !xSolver.is() )
-        return false;
+        return;
 
     xSolver->setDocument( xDocument );
     xSolver->setObjective( aObjective );
@@ -1130,6 +1126,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     // tdf#162760 The solver engine may crash unexpectedly, so we need a try...catch here
     bool bSuccess(false);
+    bool bEngineError(false);
     try
     {
         xSolver->solve();
@@ -1137,29 +1134,35 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     }
     catch (const uno::RuntimeException&)
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                  VclMessageType::Error, VclButtonsType::Ok,
-                                                  ScResId(STR_SOLVER_ENGINE_ERROR)));
-        xBox->run();
+        bEngineError = true;
     }
 
     xProgress->response(RET_CLOSE);
 
-    bool bClose = false;
-    bool bRestore = true;   // restore old values unless a solution is accepted
+    // Move the solver state into a shared_ptr so the lambdas below own it.
+    auto pState = std::make_shared<SolveState>();
+    pState->aVariables = std::move(aVariables);
+    pState->aOldValues = std::move(aOldValues);
+    pState->nVarCount = nVarCount;
+    pState->aObjective = aObjective;
+    pState->aConstraints = std::move(aConstraints);
+    pState->xSolver = xSolver;
+    pState->xOptProp = xOptProp;
+    pState->bSuccess = bSuccess;
+
     if ( bSuccess )
     {
         // put solution into document so it is visible when asking
-        uno::Sequence<double> aSolution = xSolver->getSolution();
-        if ( aSolution.getLength() == nVarCount )
+        uno::Sequence<double> aSolution = pState->xSolver->getSolution();
+        if ( aSolution.getLength() == pState->nVarCount )
         {
             mpDocShell->LockPaint();
             ScDocFunc &rFunc = mpDocShell->GetDocFunc();
-            for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
+            for (sal_Int32 i = 0; i < pState->nVarCount; ++i)
             {
                 ScAddress aCellPos;
-                ScUnoConversion::FillScAddress(aCellPos, aVariables[nVarPos]);
-                rFunc.SetValueCell(aCellPos, aSolution[nVarPos], false);
+                ScUnoConversion::FillScAddress(aCellPos, pState->aVariables[i]);
+                rFunc.SetValueCell(aCellPos, aSolution[i], false);
             }
             mpDocShell->UnlockPaint();
         }
@@ -1167,51 +1170,82 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
         // take formatted result from document (result value from component is ignored)
         OUString aResultStr = mrDoc.GetString(
-            static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
-            static_cast<SCTAB>(aObjective.Sheet));
+            static_cast<SCCOL>(pState->aObjective.Column), static_cast<SCROW>(pState->aObjective.Row),
+            static_cast<SCTAB>(pState->aObjective.Sheet));
 
-        ScSolverSuccessDialog aDialog(m_xDialog.get(), aResultStr);
-        if (aDialog.run() == RET_OK)
-        {
-            // keep results and close dialog
-            bRestore = false;
-            bClose = true;
-        }
+        auto xDlg = std::make_shared<ScSolverSuccessDialog>(m_xDialog.get(), aResultStr);
+        weld::DialogController::runAsync(xDlg, [this, pState](sal_Int32 nResult) {
+            FinishSolve(nResult == RET_OK, pState);
+        });
     }
     else
     {
+        // error description from the component, when available
         OUString aError;
-        uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
+        uno::Reference<sheet::XSolverDescription> xDesc( pState->xSolver, uno::UNO_QUERY );
         if ( xDesc.is() )
-            aError = xDesc->getStatusDescription();         // error description from component
-        ScSolverNoSolutionDialog aDialog(m_xDialog.get(), aError);
-        aDialog.run();
-    }
+            aError = xDesc->getStatusDescription();
 
-    if ( bRestore )         // restore old values
+        if ( bEngineError )
+        {
+            // The solver engine crashed: show the engine error first, then
+            // fall through to the no-solution dialog so the user still
+            // gets the standard prompt.
+            std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                      VclMessageType::Error, VclButtonsType::Ok,
+                                                      ScResId(STR_SOLVER_ENGINE_ERROR)));
+            xBox->runAsync(xBox, [this, pState, aError](sal_Int32 /*nResult*/) {
+                ShowNoSolutionDialog(pState, aError);
+            });
+        }
+        else
+        {
+            ShowNoSolutionDialog(pState, aError);
+        }
+    }
+}
+
+void ScOptSolverDlg::ShowNoSolutionDialog(const std::shared_ptr<SolveState>& rState, const OUString& rError)
+{
+    auto xDlg = std::make_shared<ScSolverNoSolutionDialog>(m_xDialog.get(), rError);
+    weld::DialogController::runAsync(xDlg, [this, rState](sal_Int32 /*nResult*/) {
+        FinishSolve(false, rState);
+    });
+}
+
+void ScOptSolverDlg::FinishSolve(bool bAccepted, const std::shared_ptr<SolveState>& rState)
+{
+    // The user accepts only when the solve succeeded and the success
+    // dialog was confirmed. In every other case (no solution, engine
+    // error, user declined the success dialog) restore the original
+    // cell values that we replaced before showing the solution.
+    const bool bRestore = !(bAccepted && rState->bSuccess);
+    const bool bClose = bAccepted && rState->bSuccess;
+
+    if ( bRestore )
     {
         mpDocShell->LockPaint();
         ScDocFunc &rFunc = mpDocShell->GetDocFunc();
-        for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
+        for (sal_Int32 i = 0; i < rState->nVarCount; ++i)
         {
             ScAddress aCellPos;
-            ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-            rFunc.SetValueCell(aCellPos, aOldValues[nVarPos], false);
+            ScUnoConversion::FillScAddress( aCellPos, rState->aVariables[i] );
+            rFunc.SetValueCell(aCellPos, rState->aOldValues[i], false);
         }
         mpDocShell->UnlockPaint();
     }
 
     // Generate sensitivity report if user wants it
-    uno::Reference<css::beans::XPropertySetInfo> xInfo = xOptProp->getPropertySetInfo();
+    uno::Reference<css::beans::XPropertySetInfo> xInfo = rState->xOptProp->getPropertySetInfo();
     bool bUserWantsReport = false;
     if (xInfo->hasPropertyByName("GenSensitivityReport"))
-        xOptProp->getPropertyValue("GenSensitivityReport") >>= bUserWantsReport;
+        rState->xOptProp->getPropertyValue("GenSensitivityReport") >>= bUserWantsReport;
 
-    if (bSuccess && bUserWantsReport)
+    if (rState->bSuccess && bUserWantsReport)
     {
         // Retrieve the sensitivity analysis report
         css::sheet::SensitivityReport aSensitivity;
-        bool bHasReportObj = xOptProp->getPropertyValue("SensitivityReport") >>= aSensitivity;
+        bool bHasReportObj = rState->xOptProp->getPropertyValue("SensitivityReport") >>= aSensitivity;
 
         if (bHasReportObj && aSensitivity.HasReport)
         {
@@ -1242,7 +1276,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             if (!mrDoc.GetTable(sNewTabName, nReportTab))
             {
                 SAL_WARN("sc", "Could not get the just inserted table!");
-                return false;
+                return;
             }
 
             // Used to input data in the new sheet
@@ -1265,9 +1299,9 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             aOutput.writeString(ScResId(STR_SENSITIVITY_FINALVALUE));
             aOutput.newLine();
             aOutput.formatTableBottom(2);
-            aOutput.writeString(GetCellStrAddress(xSolver->getObjective()));
+            aOutput.writeString(GetCellStrAddress(rState->xSolver->getObjective()));
             aOutput.nextColumn();
-            aOutput.writeValue(xSolver->getResultValue());
+            aOutput.writeValue(rState->xSolver->getResultValue());
             aOutput.newLine();
             aOutput.newLine();
 
@@ -1288,17 +1322,17 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             aOutput.writeString(ScResId(STR_SENSITIVITY_INCREASE));
             aOutput.newLine();
 
-            uno::Sequence<double> aSolution = xSolver->getSolution();
+            uno::Sequence<double> aSolution = rState->xSolver->getSolution();
             uno::Sequence<double> aObjCoefficients = aSensitivity.ObjCoefficients;
             uno::Sequence<double> aObjReducedCosts = aSensitivity.ObjReducedCosts;
             uno::Sequence<double> aObjAllowableDecreases = aSensitivity.ObjAllowableDecreases;
             uno::Sequence<double> aObjAllowableIncreases = aSensitivity.ObjAllowableIncreases;
-            sal_Int32 nRows = aVariables.getLength();
+            sal_Int32 nRows = rState->aVariables.getLength();
             for (sal_Int32 i = 0; i < nRows; i++)
             {
                 if (i == nRows - 1)
                     aOutput.formatTableBottom(6);
-                aOutput.writeString(GetCellStrAddress(aVariables[i]));
+                aOutput.writeString(GetCellStrAddress(rState->aVariables[i]));
                 aOutput.nextColumn();
                 aOutput.writeValue(aSolution[i]);
                 aOutput.nextColumn();
@@ -1335,12 +1369,12 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             uno::Sequence<double> aConstrShadowPrices = aSensitivity.ConstrShadowPrices;
             uno::Sequence<double> aConstrAllowableDecreases = aSensitivity.ConstrAllowableDecreases;
             uno::Sequence<double> aConstrAllowableIncreases = aSensitivity.ConstrAllowableIncreases;
-            nRows = aConstraints.getLength();
+            nRows = rState->aConstraints.getLength();
             for (sal_Int32 i = 0; i < nRows; i++)
             {
                 if (i == nRows - 1)
                     aOutput.formatTableBottom(6);
-                aOutput.writeString(GetCellStrAddress(aConstraints[i].Left));
+                aOutput.writeString(GetCellStrAddress(rState->aConstraints[i].Left));
                 aOutput.nextColumn();
                 aOutput.writeValue(aConstrValues[i]);
                 aOutput.nextColumn();
@@ -1365,7 +1399,17 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         }
     }
 
-    return bClose;
+    if (bClose)
+    {
+        ReadConditions();
+        SaveSolverSettings();
+        response(RET_CLOSE);
+    }
+    else
+    {
+        // Keep the dialog open and allow user interaction again.
+        SetDispatcherLock(true);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

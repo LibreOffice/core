@@ -607,6 +607,7 @@ var unoCommandsArray = {
 	'SlideMenu':{presentation:{menu:_('S~lide'),},},
 	'SlideSetup':{presentation:{menu:_('Slide Properties...'),},},
 	'SmallCaps':{global:{menu:_('Small capitals'),},},
+	'SolverDialog':{spreadsheet:{menu:_('Sol~ver...'),},},
 	'SortAscending':{spreadsheet:{menu:_('Sort Ascending'),},},
 	'SortDescending':{spreadsheet:{menu:_('Sort Descending'),},},
 	'SpacePara1':{global:{menu:_('Line Spacing: 1'),},},
