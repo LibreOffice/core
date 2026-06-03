@@ -10,7 +10,6 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/vclptr.hxx>
 #include <docmodel/theme/ColorSet.hxx>

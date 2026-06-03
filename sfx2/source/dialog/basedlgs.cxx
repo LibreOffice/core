@@ -22,6 +22,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/windowstate.hxx>
 

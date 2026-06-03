@@ -25,7 +25,6 @@
 #include <tools/UnitConversion.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
-#include <vcl/weld/weld.hxx>
 
 void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 {

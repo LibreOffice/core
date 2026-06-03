@@ -29,8 +29,6 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
-
 #include <svx/dialog/TableAutoFmtPreview.hxx>
 #include "wrtsh.hxx"
 #include <tblafmt.hxx>

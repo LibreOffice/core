@@ -21,7 +21,6 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/weld/Box.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <vector>

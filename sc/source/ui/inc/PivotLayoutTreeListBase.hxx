@@ -12,7 +12,7 @@
 
 #include <vcl/transfer.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <pivot.hxx>
 
 class ScPivotLayoutDialog;

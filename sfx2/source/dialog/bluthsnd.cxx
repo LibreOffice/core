@@ -18,7 +18,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 
 #if defined(LINUX) || defined(MACOSX)
 #include <sys/wait.h>

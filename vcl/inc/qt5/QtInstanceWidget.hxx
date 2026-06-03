@@ -17,7 +17,6 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMessageBox>

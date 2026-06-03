@@ -21,7 +21,6 @@
 
 #include "abspage.hxx"
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace abp
 {

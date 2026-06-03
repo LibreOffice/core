@@ -31,7 +31,6 @@
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <AppElementType.hxx>
 #include <ChildWindow.hxx>
 #include "DocumentInfoPreview.hxx"

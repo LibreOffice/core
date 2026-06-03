@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/Label.hxx>

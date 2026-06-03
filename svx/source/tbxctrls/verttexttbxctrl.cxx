@@ -23,7 +23,6 @@
 #include <svl/ctloptions.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 
 SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(

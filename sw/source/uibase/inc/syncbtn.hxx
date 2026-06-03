@@ -21,6 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
+#include <vcl/weld/Button.hxx>
 
 class SwSyncBtnDlg final : public SfxModelessDialogController
 {

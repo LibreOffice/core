@@ -19,10 +19,10 @@
 #pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 class filter_info_impl;
 class XMLFilterTabPageBasic;

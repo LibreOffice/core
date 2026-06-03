@@ -23,6 +23,7 @@
 #include <helpids.h>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Frame.hxx>
@@ -30,7 +31,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <ChartModel.hxx>
 
 #include <rtl/math.hxx>

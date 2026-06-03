@@ -20,6 +20,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/formatter.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
@@ -29,7 +30,6 @@
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 /// Dialog for editing a name
 class SVT_DLLPUBLIC SvxNameDialog final : public weld::GenericDialogController

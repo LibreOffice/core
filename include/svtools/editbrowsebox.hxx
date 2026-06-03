@@ -28,6 +28,7 @@
 #include <tools/lineend.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Calendar.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>

@@ -53,7 +53,6 @@
 #include <fusel.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
 using namespace ::com::sun::star;

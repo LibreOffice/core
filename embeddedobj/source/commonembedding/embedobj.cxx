@@ -60,7 +60,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <targetstatecontrol.hxx>
 

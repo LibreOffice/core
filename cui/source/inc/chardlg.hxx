@@ -23,6 +23,7 @@
 #include <svx/fntctrl.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
@@ -34,7 +35,7 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/TriStateEnabled.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <memory>
 
 // forward ---------------------------------------------------------------

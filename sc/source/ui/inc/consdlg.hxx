@@ -22,6 +22,8 @@
 #include <global.hxx>
 #include "anyrefdg.hxx"
 
+#include <vcl/weld/Button.hxx>
+
 class ScViewData;
 class ScDocument;
 class ScAreaData;

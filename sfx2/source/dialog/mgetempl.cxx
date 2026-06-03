@@ -29,7 +29,6 @@
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/ToggleButton.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>

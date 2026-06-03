@@ -18,9 +18,9 @@
 
 #include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <sfx2/templatedlglocalview.hxx>
 

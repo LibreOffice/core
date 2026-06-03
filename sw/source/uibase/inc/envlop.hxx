@@ -22,13 +22,14 @@
 #include <sfx2/tabdlg.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include "envimg.hxx"
 
 inline int getfieldval(const weld::MetricSpinButton& rField)

@@ -23,8 +23,8 @@
 #include <sfx2/progress.hxx>
 #include <svx/svdetc.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Label.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace sd
 {

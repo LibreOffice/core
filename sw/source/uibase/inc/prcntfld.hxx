@@ -21,7 +21,7 @@
 #include <svtools/unitconv.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <swdllapi.h>
 
 class SW_DLLPUBLIC SwPercentField

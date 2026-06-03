@@ -37,7 +37,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <vcl/weld/ColorChooserDialog.hxx>
 #include <vcl/weld/TransportAsXWindow.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <gtk/gtk.h>
 
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale);

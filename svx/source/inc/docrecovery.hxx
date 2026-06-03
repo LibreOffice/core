@@ -21,12 +21,12 @@
 #define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/ProgressBar.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <cppuhelper/implbase.hxx>

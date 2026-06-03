@@ -25,7 +25,6 @@
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>

@@ -26,7 +26,6 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 class ScDelimiterTable;
 class ScImportOptions;

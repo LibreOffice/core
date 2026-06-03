@@ -21,6 +21,7 @@
 #include "dbtree.hxx"
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Label.hxx>
 
 class SwView;

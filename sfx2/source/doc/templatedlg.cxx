@@ -41,7 +41,6 @@
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

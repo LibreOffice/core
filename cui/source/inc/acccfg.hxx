@@ -27,6 +27,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/RadioButton.hxx>

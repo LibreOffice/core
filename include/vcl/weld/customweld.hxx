@@ -14,7 +14,6 @@
 #include <vcl/weld/DrawingArea.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/uitest/factory.hxx>
-#include <vcl/weld/weld.hxx>
 
 class InputContext;
 

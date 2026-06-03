@@ -52,7 +52,6 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <svx/strings.hrc>

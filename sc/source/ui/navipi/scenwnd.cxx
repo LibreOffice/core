@@ -29,7 +29,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <navipi.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>

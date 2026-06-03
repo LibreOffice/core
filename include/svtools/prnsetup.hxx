@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/print.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>

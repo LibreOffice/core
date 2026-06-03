@@ -24,7 +24,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/vclenum.hxx>

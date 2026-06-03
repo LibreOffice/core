@@ -29,6 +29,7 @@
 #include <utility>
 #include <i18nutil/searchopt.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>

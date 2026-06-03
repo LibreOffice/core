@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/weld/Button.hxx>
 
 #include <map>
 #include <memory>

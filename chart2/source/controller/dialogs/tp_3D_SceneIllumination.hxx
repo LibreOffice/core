@@ -21,8 +21,8 @@
 #include <ModifyListenerCallBack.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Scale.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/dlgctl3d.hxx>
 #include <svx/float3d.hxx>
 

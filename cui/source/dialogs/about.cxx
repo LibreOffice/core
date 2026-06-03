@@ -32,7 +32,6 @@
 #include <vcl/settings.hxx> //GetSettings
 #include <vcl/svapp.hxx> //Application::
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
 #include <unotools/resmgr.hxx> //Translate
 
 #include <config_buildid.h> //EXTRA_BUILDID

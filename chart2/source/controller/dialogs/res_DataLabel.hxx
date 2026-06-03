@@ -21,6 +21,7 @@
 #include <svl/itemset.hxx>
 #include <svx/dialcontrol.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Label.hxx>

@@ -67,7 +67,6 @@
 #include <vcl/locktoplevels.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <openuriexternally.hxx>
 
 #include <comphelper/lok.hxx>

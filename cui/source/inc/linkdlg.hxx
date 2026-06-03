@@ -21,13 +21,13 @@
 
 #include <vcl/idle.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 /********************** SvUpdateLinksDialog ******************************
 *************************************************************************/

@@ -22,7 +22,6 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace dbaui
 {

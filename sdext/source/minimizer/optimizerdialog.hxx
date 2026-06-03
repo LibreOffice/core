@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/roadmapwizardmachine.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Label.hxx>

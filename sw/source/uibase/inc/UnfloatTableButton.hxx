@@ -13,6 +13,8 @@
 #include "edtwin.hxx"
 #include "FrameControl.hxx"
 
+#include <vcl/weld/Button.hxx>
+
 /** Class for unfloat table button
  *
  * This unfloat button is used to convert a floating table into a simple writer table embedded to the text body.

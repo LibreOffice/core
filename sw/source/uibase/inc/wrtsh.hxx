@@ -28,7 +28,6 @@
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/redlinerecordingmode.hxx>
 
 #include <doc.hxx>
@@ -37,6 +36,10 @@
 #include <reffldsubtype.hxx>
 
 namespace vcl { class Window; }
+namespace weld
+{
+class Widget;
+}
 class SbxArray;
 class SwFlyFrameAttrMgr;
 class SwField;

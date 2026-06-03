@@ -36,7 +36,6 @@
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/transfer.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

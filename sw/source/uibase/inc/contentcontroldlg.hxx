@@ -21,12 +21,12 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/weld/Box.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SwWrtShell;
 class SwContentControl;

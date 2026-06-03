@@ -27,7 +27,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/charclass.hxx>

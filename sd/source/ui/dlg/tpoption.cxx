@@ -32,7 +32,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <sdattr.hrc>

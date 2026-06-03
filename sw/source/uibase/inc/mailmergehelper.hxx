@@ -32,7 +32,6 @@
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 #include <swdllapi.h>
 

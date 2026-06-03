@@ -15,6 +15,7 @@
 #include <unotools/viewoptions.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ToggleButton.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>

@@ -32,7 +32,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <osl/file.h>
 #include <osl/process.h>

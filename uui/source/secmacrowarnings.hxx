@@ -22,11 +22,11 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star::security { class XCertificate; }
 

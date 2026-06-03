@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/textfilter.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>

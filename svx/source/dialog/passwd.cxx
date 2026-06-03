@@ -21,7 +21,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/passwd.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

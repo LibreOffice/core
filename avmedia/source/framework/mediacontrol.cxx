@@ -22,7 +22,6 @@
 #include <mediamisc.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <helpids.h>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <avmedia/MediaControlBase.hxx>
 

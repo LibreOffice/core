@@ -29,7 +29,6 @@
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/xtable.hxx>
 #include <rtl/ref.hxx>

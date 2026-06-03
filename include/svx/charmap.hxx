@@ -36,7 +36,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star {
     namespace accessibility { class XAccessible; }

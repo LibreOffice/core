@@ -22,6 +22,7 @@
 #include <ChartType.hxx>
 
 #include <vcl/wizardmachine.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/ItemView.hxx>
 #include <vcl/weld/Label.hxx>

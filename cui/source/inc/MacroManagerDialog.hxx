@@ -15,6 +15,7 @@
 #include <basctl/scriptdocument.hxx>
 #include <svx/passwd.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/TextView.hxx>

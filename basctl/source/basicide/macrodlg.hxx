@@ -23,10 +23,10 @@
 #include <bastype2.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace basctl
 {

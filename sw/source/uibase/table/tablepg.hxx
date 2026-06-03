@@ -22,6 +22,7 @@
 #include <prcntfld.hxx>
 #include <swtypes.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>

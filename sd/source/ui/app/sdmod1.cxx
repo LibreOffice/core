@@ -31,7 +31,6 @@
 #include <vcl/errinf.hxx>
 #include <editeng/langitem.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>

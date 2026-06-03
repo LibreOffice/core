@@ -24,6 +24,7 @@
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/Palette.hxx>
 #include <vcl/toolboxid.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/MenuButton.hxx>
 
 typedef std::function<weld::Window*()> TopLevelParentFunction;

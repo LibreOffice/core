@@ -21,12 +21,12 @@
 
 #include <svl/lstner.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/galctrl.hxx>
 #include <unotools/charclass.hxx>

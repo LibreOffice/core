@@ -21,6 +21,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/SpinButton.hxx>
 

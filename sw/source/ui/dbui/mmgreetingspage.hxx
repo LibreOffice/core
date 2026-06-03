@@ -23,11 +23,11 @@
 #include <sfx2/basedlgs.hxx>
 #include <mailmergehelper.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/TextView.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <mailmergewizard.hxx>
 

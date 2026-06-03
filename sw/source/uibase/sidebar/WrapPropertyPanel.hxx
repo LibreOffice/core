@@ -25,7 +25,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace sw::sidebar {
 

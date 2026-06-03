@@ -39,7 +39,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
-#include <vcl/weld/weld.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>

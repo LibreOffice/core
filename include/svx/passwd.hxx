@@ -22,6 +22,7 @@
 #include <config_options.h>
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 

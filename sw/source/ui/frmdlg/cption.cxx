@@ -40,7 +40,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Dialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <unotxdoc.hxx>

@@ -10,7 +10,7 @@
 #pragma once
 
 #include <tools/urlobj.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <sfx2/viewfrm.hxx>

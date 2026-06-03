@@ -23,7 +23,6 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Scale.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <avmedia/avmediadllapi.h>
 

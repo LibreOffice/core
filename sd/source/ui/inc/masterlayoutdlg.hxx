@@ -21,7 +21,6 @@
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <pres.hxx>
 

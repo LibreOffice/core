@@ -41,6 +41,7 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Calendar.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Dialog.hxx>
@@ -136,7 +137,7 @@
 #include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/IconView.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <vcl/wrkwin.hxx>
 #include "customcellrenderer.hxx"
 #include <strings.hrc>

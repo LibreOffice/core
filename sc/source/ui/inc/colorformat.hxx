@@ -9,12 +9,12 @@
 
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/colorbox.hxx>
 #include <address.hxx>
 

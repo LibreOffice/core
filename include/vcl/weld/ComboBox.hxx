@@ -11,7 +11,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/weld/EntryMessageType.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Widget.hxx>
 
 class OutputDevice;
 

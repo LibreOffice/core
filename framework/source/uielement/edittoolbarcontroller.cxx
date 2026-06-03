@@ -28,7 +28,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>

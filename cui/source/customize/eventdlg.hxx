@@ -20,7 +20,7 @@
 
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <macropg.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>

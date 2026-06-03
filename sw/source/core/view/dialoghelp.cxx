@@ -9,7 +9,6 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <dialoghelp.hxx>
 #include <doc.hxx>

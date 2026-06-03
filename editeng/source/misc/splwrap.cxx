@@ -25,7 +25,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svtools/langtab.hxx>
 
 #include <vcl/errinf.hxx>

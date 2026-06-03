@@ -28,7 +28,6 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/ToggleButton.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/viewfrm.hxx>

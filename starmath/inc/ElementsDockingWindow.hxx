@@ -22,7 +22,6 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <unotools/resmgr.hxx>
 
 #include "node.hxx"

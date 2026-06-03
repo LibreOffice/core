@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/TransportAsXWindow.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <algorithm>
 

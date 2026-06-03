@@ -34,7 +34,6 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/wintypes.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/exc_hlp.hxx>

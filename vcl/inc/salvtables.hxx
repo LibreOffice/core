@@ -13,6 +13,7 @@
 #include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Calendar.hxx>
 #include <vcl/weld/ColorChooserDialog.hxx>
@@ -48,7 +49,6 @@
 #include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/settings.hxx>

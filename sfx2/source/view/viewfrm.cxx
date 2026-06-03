@@ -56,8 +56,8 @@
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #if !ENABLE_WASM_STRIP_PINGUSER
 #include <unotools/VersionConfig.hxx>

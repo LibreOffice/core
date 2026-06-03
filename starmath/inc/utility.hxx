@@ -26,7 +26,6 @@
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 #include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
 #include <deque>

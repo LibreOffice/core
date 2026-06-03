@@ -35,7 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/svdpagv.hxx>

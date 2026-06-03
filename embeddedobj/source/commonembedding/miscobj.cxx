@@ -36,7 +36,6 @@
 
 #include <utility>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/vclenum.hxx>
 #include <strings.hrc>

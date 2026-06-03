@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>

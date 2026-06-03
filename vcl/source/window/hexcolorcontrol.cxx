@@ -21,7 +21,6 @@
 #include <rtl/character.hxx>
 #include <vcl/hexcolorcontrol.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace weld
 {

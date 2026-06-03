@@ -34,10 +34,10 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

@@ -19,9 +19,9 @@
 
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SwDropDownField;
 class SwField;

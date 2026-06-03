@@ -24,7 +24,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Notebook.hxx>
-#include <vcl/weld/weld.hxx>
 #include <tools/stream.hxx>
 
 

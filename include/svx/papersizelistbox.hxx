@@ -23,7 +23,6 @@
 #include <i18nutil/paper.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 
 enum class PaperSizeApp
 {

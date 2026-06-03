@@ -23,6 +23,7 @@
 #include <vcl/builderpage.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/AssistantController.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 
 struct WizPageData;

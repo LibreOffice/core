@@ -21,6 +21,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>

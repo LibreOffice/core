@@ -36,7 +36,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
@@ -26,7 +27,6 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <editeng/tstpitem.hxx>

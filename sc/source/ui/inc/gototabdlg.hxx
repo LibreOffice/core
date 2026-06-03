@@ -15,7 +15,6 @@
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 class ScGoToTabDlg : public weld::GenericDialogController
 {

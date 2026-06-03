@@ -19,7 +19,7 @@
 #pragma once
 
 #include <vcl/weld/TextView.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include "IClipBoardTest.hxx"
 
 namespace dbaui

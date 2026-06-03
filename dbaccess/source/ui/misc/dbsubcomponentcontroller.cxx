@@ -44,7 +44,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace dbaui
 {

@@ -24,7 +24,6 @@
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
-#include <vcl/weld/weld.hxx>
 #include <rtl/ref.hxx>
 
 namespace chart { class ControllerLockHelper; }

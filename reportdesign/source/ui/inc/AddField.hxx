@@ -34,8 +34,6 @@
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
-
 #include <rtl/ref.hxx>
 
 #include "ColumnInfo.hxx"

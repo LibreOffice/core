@@ -26,6 +26,7 @@
 #include <fmtftntx.hxx>
 #include <numberingtypelistbox.hxx>
 #include <svx/paraprev.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>

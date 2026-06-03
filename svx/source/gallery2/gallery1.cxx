@@ -45,7 +45,6 @@
 #include <svx/gallery1.hxx>
 #include <galleryfilestorageentry.hxx>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <memory>

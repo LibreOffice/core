@@ -21,6 +21,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
@@ -28,7 +29,7 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <types.hxx>
 
 class ScViewData;

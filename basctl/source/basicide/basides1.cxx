@@ -60,7 +60,6 @@
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <basegfx/utils/zoomtools.hxx>
 #include <officecfg/Office/BasicIDE.hxx>

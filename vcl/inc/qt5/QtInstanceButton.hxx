@@ -13,6 +13,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Button.hxx>
+
 #include <QtCore/QObject>
 #include <QtWidgets/QAbstractButton>
 

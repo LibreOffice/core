@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/Window.hxx>

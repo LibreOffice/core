@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 #include <swdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <editeng/svxenum.hxx>

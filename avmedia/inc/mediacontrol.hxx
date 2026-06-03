@@ -26,7 +26,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Label.hxx>
-#include <vcl/weld/weld.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
 constexpr sal_Int32 AVMEDIA_CONTROLOFFSET = 6;

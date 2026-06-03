@@ -27,8 +27,8 @@
 #include <vcl/dllapi.h>
 
 #include <vcl/toolkit/field.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Calendar.hxx>
-#include <vcl/weld/weld.hxx>
 
 class FloatingWindow;
 struct ImplCFieldFloatWin;

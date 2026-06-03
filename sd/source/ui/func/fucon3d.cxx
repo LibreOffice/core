@@ -32,7 +32,6 @@
 #include <svx/camera3d.hxx>
 #include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <app.hrc>
 

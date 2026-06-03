@@ -31,7 +31,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>

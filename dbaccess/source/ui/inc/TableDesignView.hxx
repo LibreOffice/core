@@ -23,7 +23,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Paned.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include "IClipBoardTest.hxx"
 
 namespace dbaui

@@ -21,6 +21,7 @@
 
 #include "abspage.hxx"
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Label.hxx>
 
 namespace abp

@@ -19,7 +19,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <memory>
 
 class ScreenshotAnnotationDlg_Impl;

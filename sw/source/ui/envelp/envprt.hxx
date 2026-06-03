@@ -21,10 +21,10 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/print.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <envimg.hxx>
 #include <envlop.hxx>

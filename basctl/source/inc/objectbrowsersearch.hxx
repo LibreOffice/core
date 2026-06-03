@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/timer.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
 
 namespace basctl

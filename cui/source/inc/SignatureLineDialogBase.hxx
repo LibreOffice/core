@@ -13,7 +13,6 @@
 #include <string_view>
 
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>

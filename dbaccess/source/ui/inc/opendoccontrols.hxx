@@ -19,8 +19,8 @@
 
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 
 namespace dbaui

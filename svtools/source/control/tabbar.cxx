@@ -34,6 +34,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/weld/weldutils.hxx>

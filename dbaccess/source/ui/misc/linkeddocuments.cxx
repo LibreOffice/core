@@ -39,8 +39,6 @@
 #include <utility>
 #include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
-
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>

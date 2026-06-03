@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>

@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/TreeIter.hxx>
 #include <vcl/weld/TreeView.hxx>
 

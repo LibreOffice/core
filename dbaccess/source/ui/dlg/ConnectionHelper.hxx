@@ -22,6 +22,7 @@
 #include "adminpages.hxx"
 #include <curledit.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <vcl/weld/Button.hxx>
 
 namespace dbaui
 {

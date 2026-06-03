@@ -22,6 +22,7 @@
 
 #include <i18nlangtag/lang.h>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>

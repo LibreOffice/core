@@ -30,7 +30,6 @@
 #include <vcl/transfer.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <sfx2/module.hxx>
 #include <unordered_map>

@@ -26,7 +26,6 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <strings.hrc>
 #include <componentmodule.hxx>

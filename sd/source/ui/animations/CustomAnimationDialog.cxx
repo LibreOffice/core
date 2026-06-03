@@ -45,7 +45,6 @@
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/RadioButton.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 
 #include <svtools/ctrltool.hxx>

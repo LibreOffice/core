@@ -16,7 +16,6 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>

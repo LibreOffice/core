@@ -23,6 +23,7 @@
 #include "anyrefdg.hxx"
 #include <dbdata.hxx>
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 
 class ScViewData;

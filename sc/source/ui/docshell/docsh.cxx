@@ -37,7 +37,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>

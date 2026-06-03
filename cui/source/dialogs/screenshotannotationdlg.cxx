@@ -47,12 +47,11 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/ScreenshotEntry.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
-
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <set>

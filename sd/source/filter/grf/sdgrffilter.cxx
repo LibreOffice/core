@@ -21,7 +21,6 @@
 
 #include <utility>
 #include <vcl/errinf.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

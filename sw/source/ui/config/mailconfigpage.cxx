@@ -32,7 +32,6 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/mail/MailServiceType.hpp>
 #include <com/sun/star/mail/XMailService.hpp>

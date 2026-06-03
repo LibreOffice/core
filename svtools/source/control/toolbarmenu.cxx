@@ -25,7 +25,6 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/Popover.hxx>
 
 #include <framestatuslistener.hxx>

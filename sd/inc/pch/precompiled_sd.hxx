@@ -118,7 +118,6 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wintypes.hxx>

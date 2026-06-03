@@ -25,7 +25,6 @@
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
 

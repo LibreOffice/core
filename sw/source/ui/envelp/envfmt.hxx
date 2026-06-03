@@ -24,7 +24,7 @@
 
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MenuButton.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <envlop.hxx>
 
 class SwTextFormatColl;

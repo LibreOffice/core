@@ -22,7 +22,6 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <global.hxx>
 #include "viewdata.hxx"

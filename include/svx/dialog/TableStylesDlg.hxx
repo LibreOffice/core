@@ -20,6 +20,7 @@
 
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>

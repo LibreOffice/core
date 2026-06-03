@@ -21,8 +21,8 @@
 #include <memory>
 
 #include <i18nlangtag/lang.h>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>

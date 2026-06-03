@@ -21,8 +21,10 @@
 
 #include "anyrefdg.hxx"
 
-#include <svx/ctredlin.hxx>
 #include <chgviset.hxx>
+
+#include <svx/ctredlin.hxx>
+#include <vcl/weld/Button.hxx>
 
 class ScViewData;
 class ScDocument;

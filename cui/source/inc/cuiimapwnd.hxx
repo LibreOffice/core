@@ -22,7 +22,6 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TextView.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/frame.hxx>
 
 class URLDlg : public weld::GenericDialogController

@@ -23,7 +23,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <scdllapi.h>
 #include "csvcontrol.hxx"
 #include "csvruler.hxx"

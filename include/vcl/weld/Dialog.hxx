@@ -11,10 +11,10 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace weld
 {
+class Button;
 class DialogController;
 
 class VCL_DLLPUBLIC Dialog : virtual public Window

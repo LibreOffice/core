@@ -40,7 +40,6 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>

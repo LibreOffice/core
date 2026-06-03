@@ -20,7 +20,6 @@
 #include <config_feature_desktop.h>
 
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <viewopt.hxx>

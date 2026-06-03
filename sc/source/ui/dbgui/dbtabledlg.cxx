@@ -26,7 +26,6 @@
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <reffact.hxx>

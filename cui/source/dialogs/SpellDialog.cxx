@@ -48,7 +48,6 @@
 #include <vcl/texteng.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include <SpellDialog.hxx>
 #include <optlingu.hxx>

@@ -23,7 +23,6 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 #include <connectivity/sqliterator.hxx>
 
 #include <connectivity/predicateinput.hxx>

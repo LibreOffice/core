@@ -98,7 +98,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 
 #include <algorithm>

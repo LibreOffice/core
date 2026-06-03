@@ -68,6 +68,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/weld/Button.hxx>
 #include <tools/svborder.hxx>
 
 #include <sfx2/event.hxx>

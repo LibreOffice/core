@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/weld/weld.hxx>
-
 #include "IdleFormatter.hxx"
 #include "TextLine.hxx"
 

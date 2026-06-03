@@ -23,13 +23,13 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SwLabPreview : public weld::CustomWidgetController
 {

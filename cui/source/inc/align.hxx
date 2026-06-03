@@ -47,7 +47,6 @@ enum VerticalAlign {
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TriStateEnabled.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SvxJustifyMethodItem;
 

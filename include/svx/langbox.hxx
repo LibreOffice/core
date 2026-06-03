@@ -25,7 +25,6 @@
 #include <i18nlangtag/lang.h>
 #include <svx/svxdllapi.h>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 enum class SvxLanguageListFlags

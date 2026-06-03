@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Image.hxx>

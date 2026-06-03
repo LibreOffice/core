@@ -56,7 +56,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld/Dialog.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <strings.hrc>
 #include <unx/genprn.h>
 #include <unx/geninst.h>

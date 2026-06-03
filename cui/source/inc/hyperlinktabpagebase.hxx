@@ -10,7 +10,8 @@
 #pragma once
 
 #include <memory>
-#include <vcl/weld/weld.hxx>
+
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Builder.hxx>

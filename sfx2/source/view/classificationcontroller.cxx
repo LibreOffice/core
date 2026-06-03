@@ -30,7 +30,6 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Label.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>

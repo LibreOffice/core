@@ -45,7 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svl/fstathelper.hxx>
 
 #include <o3tl/string_view.hxx>

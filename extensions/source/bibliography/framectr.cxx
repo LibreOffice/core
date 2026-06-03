@@ -48,7 +48,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 #include <osl/mutex.hxx>
 
 #include <unordered_map>

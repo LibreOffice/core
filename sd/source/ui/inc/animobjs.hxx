@@ -25,6 +25,7 @@
 #include <sfx2/progress.hxx>
 #include <misc/scopelock.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/Label.hxx>
@@ -32,7 +33,6 @@
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TimeFormatter.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 class SdDrawDocument;

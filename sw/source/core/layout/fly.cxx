@@ -71,6 +71,7 @@
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 #include <rtl/math.hxx>
+#include <vcl/weld/Button.hxx>
 
 #include <wrtsh.hxx>
 #include <view.hxx>

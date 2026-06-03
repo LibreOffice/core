@@ -35,7 +35,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace chart
 {

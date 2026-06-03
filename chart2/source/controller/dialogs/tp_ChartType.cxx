@@ -33,7 +33,6 @@
 #include <utility>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

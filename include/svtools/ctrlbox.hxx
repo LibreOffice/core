@@ -28,13 +28,13 @@
 #include <vcl/weld/Calendar.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MenuButton.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <memory>
 
 namespace weld
 {
 class Builder;
+class Button;
 class CustomWeld;
 class TreeIter;
 class TreeView;

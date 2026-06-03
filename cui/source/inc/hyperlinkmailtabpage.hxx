@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include <vcl/weld/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/hlnkitem.hxx>
+#include <vcl/weld/Button.hxx>
+
 #include "hyperlinktabpagebase.hxx"
 
 class HyperlinkMailTabPage final : public HyperlinkTabPageBase

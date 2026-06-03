@@ -19,8 +19,8 @@
 
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
 #include <unotools/moduleoptions.hxx>

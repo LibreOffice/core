@@ -30,7 +30,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star::beans
 {

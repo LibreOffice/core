@@ -20,7 +20,6 @@
 
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/TextView.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace pcr
 {

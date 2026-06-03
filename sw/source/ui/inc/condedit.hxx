@@ -19,7 +19,6 @@
 #pragma once
 
 #include <vcl/transfer.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/dbaexchange.hxx>
 
 template <typename X> class ConditionEdit;

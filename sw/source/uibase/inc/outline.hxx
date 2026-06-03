@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/ItemView.hxx>
 #include <vcl/weld/Label.hxx>

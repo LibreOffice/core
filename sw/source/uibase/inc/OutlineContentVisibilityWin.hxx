@@ -8,9 +8,11 @@
  */
 #pragma once
 
-#include <vcl/InterimItemWindow.hxx>
 #include "edtwin.hxx"
 #include "FrameControl.hxx"
+
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Button.hxx>
 
 enum class ButtonSymbol
 {

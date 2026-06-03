@@ -23,7 +23,6 @@
 #include <editeng/svxenum.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SVXCORE_DLLPUBLIC SvxPageNumberListBox
 {

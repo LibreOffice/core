@@ -22,6 +22,7 @@
 #include <fldbas.hxx>
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Button.hxx>
 
 class SwView;
 class SwWrtShell;

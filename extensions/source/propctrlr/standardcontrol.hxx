@@ -28,6 +28,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/DateFormatter.hxx>
 #include <vcl/weld/Entry.hxx>

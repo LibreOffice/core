@@ -14,6 +14,7 @@
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/RadioButton.hxx>
 
 class ScStatisticsTwoVariableDialog : public ScAnyRefDlgController

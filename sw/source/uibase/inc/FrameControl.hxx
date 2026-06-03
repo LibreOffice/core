@@ -10,10 +10,14 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 
 #include "edtwin.hxx"
+
+namespace weld
+{
+class Button;
+}
 
 class SwPageFrame;
 class SwFrame;

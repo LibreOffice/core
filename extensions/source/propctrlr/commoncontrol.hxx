@@ -29,7 +29,6 @@
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TransportAsXWindow.hxx>
-#include <vcl/weld/weld.hxx>
 
 class ColorListBox;
 class SvtCalendarBox;

@@ -27,7 +27,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/Menu.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/idle.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>

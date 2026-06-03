@@ -16,6 +16,11 @@ class OutputDevice;
 enum class SelectionMode;
 enum class TxtAlign;
 
+namespace com::sun::star::graphic
+{
+class XGraphic;
+}
+
 namespace vcl
 {
 typedef OutputDevice RenderContext;

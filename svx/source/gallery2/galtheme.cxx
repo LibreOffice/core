@@ -33,7 +33,7 @@
 #include <sot/filelist.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Widget.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmmodel.hxx>

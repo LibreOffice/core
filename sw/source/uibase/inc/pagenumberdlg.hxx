@@ -21,6 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <svx/pagenumberlistbox.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Image.hxx>
 

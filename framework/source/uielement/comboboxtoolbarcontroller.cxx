@@ -25,7 +25,6 @@
 #include <comphelper/unique_unlock.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>

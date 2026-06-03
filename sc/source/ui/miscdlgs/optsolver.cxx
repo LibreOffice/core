@@ -24,7 +24,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 
 #include <reffact.hxx>

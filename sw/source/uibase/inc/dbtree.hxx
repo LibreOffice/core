@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <swdllapi.h>
 

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svtools/toolbarmenu.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Button.hxx>
 
 class PageColumnPopup;
 

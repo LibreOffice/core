@@ -40,7 +40,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 
 #include <docsh.hxx>

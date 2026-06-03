@@ -76,7 +76,6 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld/Paned.hxx>
 #include <vcl/weld/SizeGroup.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>

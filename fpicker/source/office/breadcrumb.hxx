@@ -13,7 +13,7 @@
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <map>
 #include <vector>
 

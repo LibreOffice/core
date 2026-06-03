@@ -27,7 +27,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <browserids.hxx>
 #include <comphelper/types.hxx>
 #include <core_resource.hxx>

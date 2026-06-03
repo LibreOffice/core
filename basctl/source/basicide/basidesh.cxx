@@ -73,7 +73,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <svx/xmlsecctrl.hxx>
 #include <sfx2/viewfac.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>

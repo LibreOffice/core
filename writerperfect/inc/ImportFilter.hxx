@@ -26,7 +26,6 @@
 #include <unotools/mediadescriptor.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld/weld.hxx>
 #include <xmloff/xmlimp.hxx>
 
 #include "DocumentHandler.hxx"

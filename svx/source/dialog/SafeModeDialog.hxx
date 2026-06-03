@@ -10,13 +10,13 @@
 #pragma once
 
 #include <comphelper/backupfilehelper.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SafeModeDialog : public weld::GenericDialogController
 {

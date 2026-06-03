@@ -21,8 +21,8 @@
 #include <config_options.h>
 #include <memory>
 #include <vcl/vclenum.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svtools/svtdllapi.h>
 
 namespace svtools

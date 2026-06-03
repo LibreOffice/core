@@ -23,7 +23,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace sfx2::sidebar {
 

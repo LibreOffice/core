@@ -65,7 +65,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/TransportAsXWindow.hxx>
-#include <vcl/weld/weld.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 
 using namespace ::com::sun::star;

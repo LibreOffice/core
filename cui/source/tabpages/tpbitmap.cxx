@@ -46,7 +46,6 @@
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sal/log.hxx>

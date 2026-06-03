@@ -28,7 +28,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/mnemonic.hxx>
 #include <o3tl/string_view.hxx>
 

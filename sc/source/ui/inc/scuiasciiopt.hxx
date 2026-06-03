@@ -29,7 +29,6 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include "asciiopt.hxx"
 

@@ -53,6 +53,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 using namespace ::com::sun::star;

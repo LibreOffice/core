@@ -24,6 +24,7 @@
 #include "ChartTypeDialogController.hxx"
 #include "ChartResourceGroupDlgs.hxx"
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 
 namespace chart

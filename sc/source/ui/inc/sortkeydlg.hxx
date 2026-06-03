@@ -18,7 +18,6 @@
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/RadioButton.hxx>
-#include <vcl/weld/weld.hxx>
 
 struct ScSortKeyItem
 {

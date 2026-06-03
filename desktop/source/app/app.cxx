@@ -111,7 +111,6 @@
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/exceptiontypes.hxx>
 #include <vcl/help.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/flatpak.hxx>
 #include <sfx2/sfxsids.hrc>

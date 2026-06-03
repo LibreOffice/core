@@ -37,8 +37,8 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <tools/link.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <map>
 #include <memory>

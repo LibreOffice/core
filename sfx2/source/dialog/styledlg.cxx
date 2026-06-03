@@ -28,6 +28,7 @@
 
 #include <vcl/tabs.hrc>
 #include <vcl/vclenum.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Dialog.hxx>
 
 /*  [Description]

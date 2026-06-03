@@ -28,6 +28,7 @@
 #include "asyncfilepicker.hxx"
 #include "fpsmartcontent.hxx"
 #include "fpdialogbase.hxx"
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>

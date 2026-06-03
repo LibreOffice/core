@@ -22,6 +22,7 @@
 #include <docstat.hxx>
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Label.hxx>
 
 // DocInfo now as page

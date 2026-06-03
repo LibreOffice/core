@@ -20,7 +20,6 @@
 #include <vcl/ColorDialog.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace
 {

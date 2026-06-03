@@ -11,7 +11,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/weld/TreeIter.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Widget.hxx>
 
 namespace weld
 {

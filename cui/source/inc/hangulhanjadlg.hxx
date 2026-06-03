@@ -20,6 +20,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
@@ -28,7 +29,6 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>

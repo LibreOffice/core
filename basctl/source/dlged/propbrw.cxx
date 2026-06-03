@@ -40,7 +40,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <comphelper/sequence.hxx>
 

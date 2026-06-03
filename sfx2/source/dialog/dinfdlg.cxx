@@ -27,7 +27,6 @@
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/localedatawrapper.hxx>

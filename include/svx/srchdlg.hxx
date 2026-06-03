@@ -27,6 +27,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/timer.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>

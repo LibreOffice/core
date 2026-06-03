@@ -23,7 +23,6 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Notebook.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace sd {
 

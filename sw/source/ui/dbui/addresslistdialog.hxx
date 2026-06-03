@@ -21,10 +21,10 @@
 #include <sfx2/basedlgs.hxx>
 #include <swdbdata.hxx>
 #include <sharedconnection.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeIter.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star{
     namespace sdb{

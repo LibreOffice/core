@@ -43,7 +43,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 
 #include <sfx2/mailmodelapi.hxx>

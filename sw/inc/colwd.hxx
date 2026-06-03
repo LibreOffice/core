@@ -22,7 +22,7 @@
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <memory>
 
 class SwTableFUNC;

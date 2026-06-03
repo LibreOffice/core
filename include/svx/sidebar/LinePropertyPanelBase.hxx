@@ -21,7 +21,6 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/weld.hxx>
 #include <memory>
 #include <svl/poolitem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>

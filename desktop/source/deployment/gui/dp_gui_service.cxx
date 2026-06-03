@@ -28,7 +28,6 @@
 #include <comphelper/unwrapargs.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/task/XJobExecutor.hpp>

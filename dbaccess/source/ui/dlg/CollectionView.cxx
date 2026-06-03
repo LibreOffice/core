@@ -33,7 +33,6 @@
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
 #include <UITools.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>

@@ -18,12 +18,13 @@
  */
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/lang/Locale.hpp>

@@ -28,7 +28,6 @@
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Grid.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
-#include <vcl/weld/weld.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>

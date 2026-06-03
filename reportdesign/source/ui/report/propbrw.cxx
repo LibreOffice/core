@@ -33,7 +33,6 @@
 #include <com/sun/star/report/inspection/DefaultComponentInspectorModel.hpp>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/svditer.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>

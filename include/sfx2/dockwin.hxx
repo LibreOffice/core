@@ -24,8 +24,6 @@
 #include <sal/types.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/weld/Box.hxx>
-#include <vcl/weld/weld.hxx>
-
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 

@@ -23,6 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/IconView.hxx>

@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <tools/datetime.hxx>
-#include <vcl/weld/weld.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/grabbagitem.hxx>

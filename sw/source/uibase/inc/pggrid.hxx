@@ -26,7 +26,6 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/colorbox.hxx>
 
 // TabPage Format/(Styles/)Page/Text grid

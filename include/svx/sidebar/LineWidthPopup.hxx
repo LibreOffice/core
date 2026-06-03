@@ -23,7 +23,6 @@
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <array>
 

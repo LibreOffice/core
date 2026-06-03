@@ -16,7 +16,6 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <vector>
@@ -25,10 +24,8 @@ class Place;
 class DetailsContainer;
 namespace weld
 {
+class Button;
 class ComboBox;
-}
-namespace weld
-{
 class SpinButton;
 }
 

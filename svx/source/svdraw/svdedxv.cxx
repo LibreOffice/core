@@ -44,7 +44,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/lok.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

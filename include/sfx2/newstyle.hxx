@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 

@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_BUILDERPAGE_HXX
 
 #include <vcl/weld/Container.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace weld
 {

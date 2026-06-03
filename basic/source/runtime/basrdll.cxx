@@ -25,7 +25,6 @@
 #include <vcl/vclenum.hxx>
 #include <tools/debug.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>

@@ -28,7 +28,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>

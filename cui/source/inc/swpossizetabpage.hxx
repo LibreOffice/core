@@ -26,7 +26,6 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/dlgutil.hxx>
 
 // SvxSwPosSizeTabPage - position and size page for Writer drawing objects

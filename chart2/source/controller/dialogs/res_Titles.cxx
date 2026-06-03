@@ -22,7 +22,6 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace chart
 {

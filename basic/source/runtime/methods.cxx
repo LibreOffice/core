@@ -32,7 +32,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/character.hxx>

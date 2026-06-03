@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>

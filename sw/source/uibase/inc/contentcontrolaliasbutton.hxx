@@ -11,6 +11,8 @@
 
 #include "FrameControl.hxx"
 
+#include <vcl/weld/Button.hxx>
+
 class SwEditWin;
 class SwContentControl;
 

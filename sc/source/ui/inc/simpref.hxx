@@ -21,6 +21,8 @@
 
 #include "anyrefdg.hxx"
 
+#include <vcl/weld/Button.hxx>
+
 class ScSimpleRefDlg: public ScAnyRefDlgController
 {
 private:

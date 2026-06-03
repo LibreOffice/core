@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <utility>
-#include <vcl/weld/weld.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

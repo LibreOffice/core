@@ -24,7 +24,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/ColorDialog.hxx>
 #include <vcl/abstdlg.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace
 {

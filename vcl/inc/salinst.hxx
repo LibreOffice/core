@@ -30,7 +30,6 @@
 #include <vcl/svmain.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/ColorChooserDialog.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include "ClipboardSelectionType.hxx"
 

@@ -25,6 +25,7 @@
 #include <filterentries.hxx>
 #include <queryentry.hxx>
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 
 #include <memory>

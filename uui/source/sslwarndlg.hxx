@@ -18,9 +18,10 @@
  */
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

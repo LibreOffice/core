@@ -18,12 +18,12 @@
  */
 #pragma once
 
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/charmapcontainer.hxx>

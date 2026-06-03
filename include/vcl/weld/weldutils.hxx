@@ -15,8 +15,10 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/weld/weld.hxx>
 
+class CommandEvent;
+class MouseEvent;
+class OutputDevice;
 enum class SelectionOptions;
 
 namespace com::sun::star::frame
@@ -35,14 +37,17 @@ class Time;
 
 namespace vcl
 {
+class Font;
 class Window;
 }
 
 namespace weld
 {
+class Button;
 class TextWidget;
 class TreeIter;
 class TreeView;
+class Widget;
 class Window;
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC

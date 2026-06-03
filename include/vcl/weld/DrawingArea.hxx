@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Widget.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 

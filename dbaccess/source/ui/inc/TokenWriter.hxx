@@ -34,7 +34,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star {
     namespace sdbc{

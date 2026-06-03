@@ -35,7 +35,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <strings.hrc>

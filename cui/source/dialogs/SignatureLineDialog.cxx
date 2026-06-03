@@ -12,7 +12,6 @@
 #include <comphelper/xmltools.hxx>
 #include <utility>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/signaturelinehelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

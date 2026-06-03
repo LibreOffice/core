@@ -25,6 +25,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>

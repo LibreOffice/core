@@ -32,7 +32,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>

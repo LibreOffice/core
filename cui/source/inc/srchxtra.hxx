@@ -21,11 +21,11 @@
 #include <sfx2/tabdlg.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svx/srchdlg.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SvxSearchFormatDialog : public SfxTabDialogController
 {

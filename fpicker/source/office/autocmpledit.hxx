@@ -11,7 +11,7 @@
 
 #include <vcl/idle.hxx>
 #include <vcl/weld/Entry.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <vector>
 
 class AutocompleteEdit

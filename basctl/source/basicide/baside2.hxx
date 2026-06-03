@@ -29,12 +29,12 @@
 #include <basic/sbstar.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Button.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Scrollbar.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svtools/scrolladaptor.hxx>

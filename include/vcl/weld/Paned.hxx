@@ -10,7 +10,6 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
 
 namespace weld
 {

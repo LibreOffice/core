@@ -24,7 +24,7 @@
 #include <tools/stream.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld/TreeIter.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
