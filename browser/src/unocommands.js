@@ -501,7 +501,7 @@ var unoCommandsArray = {
 	'ObjectAlignRight':{global:{menu:_('~Right'),},},
 	'ObjectBackOne':{global:{menu:_('Back One'),},},
 	'ObjectForwardOne':{global:{menu:_('Forward One'),},},
-	'ObjectTitleDescription':{global:{context:_('Add descriptions of non-text content (for accessibility)'),menu:_('Description...'),},},
+	'ObjectTitleDescription':{global:{context:_('Add descriptions of non-text content (for accessibility)'),menu:_('Alt Text...'),},},
 	'OnlineAutoFormat':{text:{menu:_('~While Typing'),},},
 	'OpenHyperlinkOnCursor':{global:{menu:_('Open Hyperlink'),},},
 	'Orientation':{text:{menu:_('Orientation'),},},
