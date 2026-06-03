@@ -28,6 +28,8 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/outliner.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -35,6 +37,7 @@
 #include <svl/srchitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
+#include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
@@ -621,6 +624,59 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
       - Expected: 7.5
       - Actual  : 0.300000011920929 */
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7.5, fFontSize1, 0.01);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetHyperlinkKeepSelection)
+{
+    // Given an Impress doc with a rectangle shape, in text edit mode, with "f" typed and
+    // selected:
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    rtl::Reference<SdrRectObj> pRect
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(1000, 1000, 5000, 5000));
+    pPage->NbcInsertObject(pRect.get());
+
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pRect.get());
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    SfxStringItem aInputString(SID_ATTR_CHAR, u"f"_ustr);
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR, SfxCallMode::SYNCHRON,
+                                                             { &aInputString });
+
+    OutlinerView* pOlView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOlView);
+    pOlView->SetSelection(ESelection(0, 0, 0, 1));
+    CPPUNIT_ASSERT(pOlView->HasSelection());
+
+    // When dispatching .uno:SetHyperlink with Hyperlink.Text differing from the selection,
+    // but marked as a hint:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, uno::Any(u"mytext"_ustr)),
+        comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, uno::Any(true)),
+        comphelper::makePropertyValue(u"Hyperlink.URL"_ustr,
+                                      uno::Any(u"http://www.example.com"_ustr)),
+    };
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr, aArgs);
+
+    // Then make sure the previously-selected character is preserved as the URL field's
+    // displayed text, not replaced by Hyperlink.Text:
+    pView->SdrEndTextEdit();
+    const OutlinerParaObject* pOPO = pRect->GetOutlinerParaObject();
+    CPPUNIT_ASSERT(pOPO);
+    const SvxFieldData* pField
+        = pOPO->GetTextObject().GetFieldData(0, 0, css::text::textfield::Type::URL);
+    auto* pURLField = dynamic_cast<const SvxURLField*>(pField);
+    CPPUNIT_ASSERT(pURLField);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: f
+    // - Actual  : mytext
+    // i.e. the selected character was lost, the provided text hint was used.
+    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pURLField->GetRepresentation());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlidePasteSizeMismatch)

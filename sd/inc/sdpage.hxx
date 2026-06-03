@@ -195,7 +195,7 @@ public:
     void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt, bool bInit);
 
-    virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
+    SD_DLLPUBLIC virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual rtl::Reference<SdrObject> NbcRemoveObject(size_t nObjNum) override;
     virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 

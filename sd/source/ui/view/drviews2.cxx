@@ -3115,10 +3115,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 else if (pHLItem->GetInsertMode() == HLINK_DEFAULT)
                 {
                     OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+                    // When the provided text is just a hint, prefer the selection over it; if both
+                    // are missing, use the URL.
+                    OUString sLinkText;
+                    if (pHLItem->GetTextIsHint() && pOlView && pOlView->HasSelection())
+                        sLinkText = pOlView->GetSelected();
+                    else if (!pHLItem->GetName().isEmpty())
+                        sLinkText = pHLItem->GetName();
+                    else
+                        sLinkText = pHLItem->GetURL();
 
                     if (pOlView || comphelper::LibreOfficeKit::isActive())
                     {
-                        InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
+                        InsertURLField(pHLItem->GetURL(), sLinkText,
                                        pHLItem->GetTargetFrame(), pHLItem->GetIntName());
                     }
                     else
