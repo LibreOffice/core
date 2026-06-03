@@ -469,6 +469,21 @@ ScDocShell* ScCondFormatObj::getDocShell()
     return mpDocShell;
 }
 
+namespace
+{
+ScColorScaleFormat* createColorScaleFormat(ScDocument& rDoc, size_t nEntries)
+{
+    ScColorScaleFormat* pNewEntry = new ScColorScaleFormat(rDoc);
+
+    for (size_t i = 0; i < nEntries; ++i)
+        pNewEntry->AddEntry(new ScColorScaleEntry);
+
+    pNewEntry->EnsureSize();
+
+    return pNewEntry;
+}
+}
+
 void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
 {
     SolarMutexGuard aGuard;
@@ -485,8 +500,13 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
                     rDoc, pFormat->GetRange().GetTopLeftCorner(), u""_ustr);
         break;
         case sheet::ConditionEntryType::COLORSCALE:
-            pNewEntry = new ScColorScaleFormat(rDoc);
-            static_cast<ScColorScaleFormat*>(pNewEntry)->EnsureSize();
+            pNewEntry = createColorScaleFormat(rDoc, 0);
+        break;
+        case sheet::ConditionEntryType::COLORSCALE2:
+            pNewEntry = createColorScaleFormat(rDoc, 2);
+        break;
+        case sheet::ConditionEntryType::COLORSCALE3:
+            pNewEntry = createColorScaleFormat(rDoc, 3);
         break;
         case sheet::ConditionEntryType::DATABAR:
             pNewEntry = new ScDataBarFormat(rDoc);
@@ -855,7 +875,15 @@ ScColorScaleFormat* ScColorScaleFormatObj::getCoreObject()
 
 sal_Int32 ScColorScaleFormatObj::getType()
 {
-    return sheet::ConditionEntryType::COLORSCALE;
+    switch (getCoreObject()->size())
+    {
+        case 2:
+            return sheet::ConditionEntryType::COLORSCALE2;
+        case 3:
+            return sheet::ConditionEntryType::COLORSCALE3;
+        default:
+            return sheet::ConditionEntryType::COLORSCALE;
+    }
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPropertySetInfo()

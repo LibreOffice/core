@@ -20,6 +20,14 @@ constants ConditionEntryType
     const long ICONSET = 3;
 
     const long DATE = 4;
+
+    /** A color scale conditional format with a min and a max
+     */
+    const long COLORSCALE2 = 5;
+
+    /** A color scale conditional format with a min, a middle and a max
+     */
+    const long COLORSCALE3 = 6;
 };
 
 
