@@ -3,8 +3,9 @@
 # Collabora Online
 
 > [!IMPORTANT]
-> **This repository is a read-only mirror.** Collabora Online is developed on our Gerrit
-> instance at **https://gerrit.collaboraoffice.com**; this GitHub repository only mirrors that
+> **The CollaboraOnline/online.mirror repository on GitHub is a read-only mirror.**
+> Collabora Online is developed on our Gerrit
+> instance at **https://gerrit.collaboraoffice.com**; the GitHub repository only mirrors that
 > source code.
 >
 > - **Code contributions** go through Gerrit, not GitHub. Pull requests are disabled here; see
