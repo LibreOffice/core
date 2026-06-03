@@ -1264,7 +1264,6 @@ SCTAB ScDocument::GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID)
         {
             return pView->getTablePointer()->GetTab();
         }
-        assert(false && "a non valid sheet view is unexpected...");
     }
     return -1;
 }
