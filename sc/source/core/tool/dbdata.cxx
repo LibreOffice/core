@@ -1312,6 +1312,12 @@ bool ScDBData::UpdateReference(const ScDocument& rDoc, UpdateRefMode eUpdateRefM
 
 void ScDBData::ExtendDataArea(const ScDocument& rDoc)
 {
+    // Only the anonymous range follows its data block; a named DB range is a
+    // fixed, user-owned extent, and a Total Row fixes the bottom edge too —
+    // neither must be auto-extended (e.g. on filter).
+    if (HasTotals() || GetTableStyleInfo() || GetName() != STR_DB_LOCAL_NONAME)
+        return;
+
     // Extend the DB area to include data rows immediately below.
     SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;
     SCROW nOldEndRow = nEndRow;

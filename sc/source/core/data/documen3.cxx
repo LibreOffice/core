@@ -1591,15 +1591,7 @@ void ScDocument::GetFilterEntries(
     ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);  //!??
     if (!pDBData)
         return;
-    // Do not extend DBArea automatically in case of Table Styles with Total row.
-    // Only extend through rows that actually have cell content (matches Excel):
-    // empty rows that merely carry conditional formatting or a non-default fill
-    // colour must not pull the autofilter range into them.
-    if ((!pDBData->HasTotals() || !pDBData->GetTableStyleInfo())
-        && (pDBData->GetName() == STR_DB_LOCAL_NONAME))
-    {
-        pDBData->ExtendDataArea(*this);
-    }
+    pDBData->ExtendDataArea(*this);
 
     SCTAB nAreaTab;
     SCCOL nStartCol;
