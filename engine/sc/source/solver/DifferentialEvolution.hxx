@@ -17,6 +17,10 @@
 struct Individual
 {
     std::vector<double> mVariables;
+    // Fitness of mVariables, kept so it does not have to be recomputed. Each
+    // recompute writes every variable into the document and reads the
+    // objective back, which is by far the most expensive part of the search.
+    double mFitness = std::numeric_limits<double>::lowest();
 };
 
 template <typename DataProvider> class DifferentialEvolutionAlgorithm
@@ -81,6 +85,7 @@ public:
             maPopulation.emplace_back();
             Individual& rIndividual = maPopulation.back();
             mrDataProvider.initializeVariables(rIndividual.mVariables, maGenerator);
+            rIndividual.mFitness = mrDataProvider.calculateFitness(rIndividual.mVariables);
         }
     }
 
@@ -137,9 +142,12 @@ public:
 
             double fCandidateFitness = mrDataProvider.calculateFitness(aCandidate.mVariables);
 
-            // see if is better than original, if so replace
-            if (fCandidateFitness > mrDataProvider.calculateFitness(rOriginal.mVariables))
+            // Replace the original if the candidate is better. The original's
+            // fitness was computed when it was created, so reuse the stored
+            // value here.
+            if (fCandidateFitness > rOriginal.mFitness)
             {
+                aCandidate.mFitness = fCandidateFitness;
                 maPopulation[x] = std::move(aCandidate);
 
                 if (fCandidateFitness > mfBestFitness)

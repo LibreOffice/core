@@ -34,6 +34,9 @@
 #include <limits>
 #include <chrono>
 #include <random>
+#include <unordered_map>
+
+#include <o3tl/hash_combine.hxx>
 
 #include <unotools/resmgr.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -91,6 +94,31 @@ struct Bound
     }
 };
 
+// A cell position used as a cache key.
+struct CellKey
+{
+    sal_Int32 nSheet;
+    sal_Int32 nColumn;
+    sal_Int32 nRow;
+
+    bool operator==(const CellKey& rOther) const
+    {
+        return nSheet == rOther.nSheet && nColumn == rOther.nColumn && nRow == rOther.nRow;
+    }
+};
+
+struct CellKeyHash
+{
+    size_t operator()(const CellKey& rKey) const
+    {
+        size_t nSeed = 0;
+        o3tl::hash_combine(nSeed, rKey.nSheet);
+        o3tl::hash_combine(nSeed, rKey.nColumn);
+        o3tl::hash_combine(nSeed, rKey.nRow);
+        return nSeed;
+    }
+};
+
 enum
 {
     PROP_NONNEGATIVE,
@@ -132,6 +160,11 @@ private:
 
     std::vector<Bound> maBounds;
     std::vector<sheet::SolverConstraint> maNonBoundedConstraints;
+
+    // Resolved cells, keyed by sheet, column and row. The search reads and
+    // writes the same handful of cells many thousands of times, so resolving
+    // each one only once is a large saving.
+    std::unordered_map<CellKey, uno::Reference<table::XCell>, CellKeyHash> maCellCache;
 
 private:
     static OUString getResourceString(TranslateId aId);
@@ -294,10 +327,17 @@ OUString SwarmSolver::getResourceString(TranslateId aId)
 
 uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPosition)
 {
+    CellKey aKey{ rPosition.Sheet, rPosition.Column, rPosition.Row };
+    auto aFound = maCellCache.find(aKey);
+    if (aFound != maCellCache.end())
+        return aFound->second;
+
     uno::Reference<container::XIndexAccess> xSheets(mxDocument->getSheets(), uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByIndex(rPosition.Sheet),
                                                uno::UNO_QUERY);
-    return xSheet->getCellByPosition(rPosition.Column, rPosition.Row);
+    uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(rPosition.Column, rPosition.Row);
+    maCellCache.emplace(aKey, xCell);
+    return xCell;
 }
 
 // Build a document cell address from the API address, throwing if its sheet is
@@ -584,6 +624,7 @@ void SAL_CALL SwarmSolver::solve()
     // are only ever appended.
     maBounds.assign(maVariables.getLength(), Bound());
     maNonBoundedConstraints.clear();
+    maCellCache.clear();
 
     xModel->lockControllers();
 
