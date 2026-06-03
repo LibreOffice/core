@@ -396,7 +396,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="squaremode-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|squaremode">When this setting is enabled, the text grid will look like genkō yōshi, adding ruby lines.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|squaremode">When this setting is enabled, the text grid will consist of interleaved phonetic-guide lines and lines of square boxes for writing CJK characters.</property>
                       </object>
                     </child>
                   </object>
