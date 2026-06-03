@@ -11,16 +11,15 @@
 
 #include <svx/IColorSet.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/weld/ItemView.hxx>
+#include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
-namespace vcl
-{
 class VirtualDevice;
-}
 
 namespace weld
 {
 class IconView;
+class TreeIter;
 }
 
 class SVXCORE_DLLPUBLIC ColorIconView : public IColorSet
