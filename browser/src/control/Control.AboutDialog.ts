@@ -427,16 +427,17 @@ class AboutDialog {
 	): AboutDialogElements {
 		const infoDiv = content.querySelector('#about-dialog-info') as HTMLElement;
 
-		const coolwsdLabel = AboutDialog.createElement('div', {
-			id: 'coolwsd-version-label',
-		});
-		coolwsdLabel.textContent = _('Version:');
-		infoDiv.appendChild(coolwsdLabel);
-
 		const coolwsdVersionContainer = AboutDialog.createElement('div', {
 			className: 'about-dialog-info-div',
 		});
-		const coolwsdVersion = AboutDialog.createElement('div', {
+
+		const coolwsdLabel = AboutDialog.createElement('span', {
+			id: 'coolwsd-version-label',
+		});
+		coolwsdLabel.textContent = _('Version:') + '\xA0';
+		coolwsdVersionContainer.appendChild(coolwsdLabel);
+
+		const coolwsdVersion = AboutDialog.createElement('span', {
 			id: 'coolwsd-version',
 			attrs: { dir: 'ltr' },
 		});
