@@ -175,7 +175,7 @@ private:
     std::set<OUString> aRangeNames;
 
 public:
-    ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewSh);
+    ScPosWnd(vcl::Window* pParent);
     virtual         ~ScPosWnd() override;
     virtual void    dispose() override;
 

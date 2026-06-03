@@ -749,8 +749,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
     vcl::Window* pParent, const StylePreviewList& rDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
-    : InterimItemWindow(pParent, u"svx/ui/stylespreview.ui"_ustr, u"ApplyStyleBox"_ustr, true,
-                        reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+    : InterimItemWindow(pParent, u"svx/ui/stylespreview.ui"_ustr, u"ApplyStyleBox"_ustr, true)
     , StylesPreviewWindow_Base(*m_xBuilder, rDefaultStyles, xFrame)
 {
     SetOptimalSize();

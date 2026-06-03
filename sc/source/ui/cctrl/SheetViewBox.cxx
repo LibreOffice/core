@@ -28,7 +28,7 @@
 
 SheetViewBox::SheetViewBox(vcl::Window* pParent)
     : InterimItemWindow(pParent, u"modules/scalc/ui/sheetviewbox.ui"_ustr, u"SheetViewBox"_ustr,
-                        true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+                        true)
     , m_xWidget(m_xBuilder->weld_combo_box(u"sheetview_combobox"_ustr))
 {
     m_xWidget->connect_changed(LINK(this, SheetViewBox, SelectHdl));

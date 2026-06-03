@@ -24,7 +24,7 @@
 
 TableStylesBox::TableStylesBox(vcl::Window* pParent)
     : InterimItemWindow(pParent, u"modules/scalc/ui/tablestylesbox.ui"_ustr, u"TableStylesBox"_ustr,
-                        true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+                        true)
     , m_xChkHeaderRow(m_xBuilder->weld_check_button(u"chk_header_row2"_ustr))
     , m_xChkTotalRow(m_xBuilder->weld_check_button(u"chk_total_row2"_ustr))
     , m_xChkFilterButtons(m_xBuilder->weld_check_button(u"chk_filter_buttons2"_ustr))

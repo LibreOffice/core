@@ -100,7 +100,7 @@ com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation(
 ThemeColorsPaneWrapper::ThemeColorsPaneWrapper(
     vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : InterimItemWindow(pParent, u"svx/ui/themeselectorpanel.ui"_ustr, u"ThemeSelectorPanel"_ustr,
-                        true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+                        true)
     , svx::ThemeColorsPaneBase(m_xBuilder->weld_icon_view(u"iconview_theme_colors"_ustr))
     , m_xFrame(rxFrame)
 {

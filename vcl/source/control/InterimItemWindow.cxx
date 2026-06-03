@@ -18,8 +18,7 @@
 #include <window.h>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
-                                     const OUString& rID, bool bAllowCycleFocusOut,
-                                     sal_uInt64 nLOKWindowId)
+                                     const OUString& rID, bool bAllowCycleFocusOut)
     : Control(pParent, WB_TABSTOP)
     , m_pWidget(nullptr) // inheritors are expected to call InitControlBase
     , m_aLayoutIdle("InterimItemWindow m_aLayoutIdle")
@@ -30,7 +29,7 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
     m_xBuilder = Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription,
-                                                   bAllowCycleFocusOut, nLOKWindowId);
+                                                   bAllowCycleFocusOut);
     m_xContainer = m_xBuilder->weld_container(rID);
 
     SetBackground();

@@ -89,8 +89,7 @@ com_sun_star_comp_sd_SlideMasterPagesAllToolBoxControl_get_implementation(
 SlideMasterPagesAllWrapper::SlideMasterPagesAllWrapper(vcl::Window* pParent,
                                                        sd::ViewShellBase& rBase)
     : InterimItemWindow(pParent, u"modules/simpress/ui/masterpagepanelall.ui"_ustr,
-                        u"MasterPagePanel"_ustr, true,
-                        reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+                        u"MasterPagePanel"_ustr, true)
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
     assert(pDocument && "SlideMasterPagesAllWrapper got null SdDrawDocument");

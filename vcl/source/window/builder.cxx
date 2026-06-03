@@ -192,8 +192,7 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
 
 std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent,
                                                                  const OUString& rUIFile,
-                                                                 bool bAllowCycleFocusOut,
-                                                                 sal_uInt64)
+                                                                 bool bAllowCycleFocusOut)
 {
     SalInstance* pSalInstance = GetSalInstance();
     return pSalInstance->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile,

@@ -165,7 +165,7 @@ static ScTabViewShell* lcl_chooseRuntimeImpl( const SfxBindings* pBind )
 ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN | WB_BORDER | WB_NOSHADOW) ),
-        aWndPos         ( VclPtr<ScPosWnd>::Create( this, lcl_chooseRuntimeImpl(pBind)) ),
+        aWndPos(VclPtr<ScPosWnd>::Create(this)),
         mxTextWindow    ( VclPtr<ScInputBarGroup>::Create( this, lcl_chooseRuntimeImpl(pBind)) ),
         pInputHdl       ( nullptr ),
         mpViewShell     ( nullptr ),
@@ -849,7 +849,7 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 }
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
-    : InterimItemWindow(pParent, u"modules/scalc/ui/inputbar.ui"_ustr, u"InputBar"_ustr, true, reinterpret_cast<sal_uInt64>(pViewSh))
+    : InterimItemWindow(pParent, u"modules/scalc/ui/inputbar.ui"_ustr, u"InputBar"_ustr, true)
     , mxBackground(m_xBuilder->weld_container(u"background"_ustr))
     , mxTextWndGroup(new ScTextWndGroup(*this, pViewSh))
     , mxButtonUp(m_xBuilder->weld_button(u"up"_ustr))
@@ -2255,9 +2255,8 @@ void ScTextWnd::TextGrabFocus()
 }
 
 // Position window
-ScPosWnd::ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewShell)
-    : InterimItemWindow(pParent, u"modules/scalc/ui/posbox.ui"_ustr, u"PosBox"_ustr, true,
-                        reinterpret_cast<sal_uInt64>(pViewShell))
+ScPosWnd::ScPosWnd(vcl::Window* pParent)
+    : InterimItemWindow(pParent, u"modules/scalc/ui/posbox.ui"_ustr, u"PosBox"_ustr, true)
     , m_xWidget(m_xBuilder->weld_combo_box(u"pos_window"_ustr))
     , m_nAsyncGetFocusId(nullptr)
     , nTipVisible(nullptr)

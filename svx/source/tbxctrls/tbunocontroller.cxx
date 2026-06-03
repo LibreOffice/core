@@ -312,7 +312,7 @@ void SvxFontSizeBox_Impl::SetOptimalSize()
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(vcl::Window* pParent,
                                          const uno::Reference<frame::XFrame>& rFrame,
                                          FontHeightToolBoxControl& rCtrl)
-    : InterimItemWindow(pParent, u"svx/ui/fontsizebox.ui"_ustr, u"FontSizeBox"_ustr, true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+    : InterimItemWindow(pParent, u"svx/ui/fontsizebox.ui"_ustr, u"FontSizeBox"_ustr, true)
     , SvxFontSizeBox_Base(m_xBuilder->weld_combo_box(u"fontsizecombobox"_ustr), rFrame, rCtrl)
 {
     InitControlBase(m_xWidget->getWidget());
