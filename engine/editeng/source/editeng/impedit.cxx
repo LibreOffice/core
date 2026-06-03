@@ -1769,7 +1769,9 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
     mnTravelXPos = TRAVEL_X_DONTKNOW;
     mnCursorBidiLevel = CURSOR_BIDILEVEL_DONTKNOW;
+    bool bWasEndOfLine = maExtraCursorFlags.bEndOfLine;
     maExtraCursorFlags = CursorFlags();
+    maExtraCursorFlags.bEndOfLine = bWasEndOfLine;
     mbClickedInSelection = false;
 
     if ( rMouseEvent.IsMiddle() && !mbReadOnly &&
@@ -2228,6 +2230,9 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     // then again with the PaM for the Rect, even though the line is already
     // known... This must not be, though!
     EditPaM aPaM = getEditEngine().GetPaM(aDocPos);
+
+    maExtraCursorFlags.bEndOfLine = getImpEditEngine().IsAtMultiLineFieldEnd(aPaM);
+
     bool bGotoCursor = DoAutoScroll();
 
     // aTmpNewSel: Diff between old and new, not the new selection, unless for tiled rendering

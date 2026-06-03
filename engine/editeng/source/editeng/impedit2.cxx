@@ -883,9 +883,13 @@ EditSelection const& ImpEditEngine::MoveCursor(const KeyEvent& rKeyEvent, EditVi
     switch ( nCode )
     {
         case KEY_UP:        aPaM = CursorUp( aPaM, pEditView );
-                            break;
+            if (IsAtMultiLineFieldEnd(aPaM))
+                fnSetEndOfLineFlag();
+            break;
         case KEY_DOWN:      aPaM = CursorDown( aPaM, pEditView );
-                            break;
+            if (IsAtMultiLineFieldEnd(aPaM))
+                fnSetEndOfLineFlag();
+            break;
         case KEY_LEFT:      aPaM = bCtrl ? WordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? i18n::CharacterIteratorMode::SKIPCHARACTER : i18n::CharacterIteratorMode::SKIPCELL );
                             fnSetParaChangeEndOfLineFlag();
                             break;
@@ -1332,6 +1336,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView const * pView )
     if ( pView->getImpl().mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = GetXPos(*pPPortion, rLine, rPaM.GetIndex());
+        nX = GetMultiLineFieldEndX(*pPPortion, nLine, rPaM.GetIndex(), nX);
         pView->getImpl().mnTravelXPos = nX + mnOnePixelInRef;
     }
     else
@@ -1347,7 +1352,8 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView const * pView )
         // at the end of this line, the cursor lands on the current line at the
         // beginning. See Problem: Last character of an automatically wrapped
         // Row = cursor
-        if ( aNewPaM.GetIndex() && ( aNewPaM.GetIndex() == rLine.GetStart() ) )
+        if (aNewPaM.GetIndex() && (aNewPaM.GetIndex() == rLine.GetStart())
+            && !IsAtMultiLineFieldEnd(*pPPortion, aNewPaM.GetIndex()))
             aNewPaM = CursorLeft( aNewPaM );
     }
     else    // previous paragraph
@@ -1377,6 +1383,7 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView const * pView )
     {
         const EditLine& rLine = pPPortion->GetLines()[nLine];
         nX = GetXPos(*pPPortion, rLine, rPaM.GetIndex());
+        nX = GetMultiLineFieldEndX(*pPPortion, nLine, rPaM.GetIndex(), nX);
         pView->getImpl().mnTravelXPos = nX + mnOnePixelInRef;
     }
     else
@@ -1388,7 +1395,10 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView const * pView )
         const EditLine& rNextLine = pPPortion->GetLines()[nLine+1];
         aNewPaM.SetIndex(GetChar(*pPPortion, rNextLine, nX));
         // Special treatment, see CursorUp ...
-        if ( ( aNewPaM.GetIndex() == rNextLine.GetEnd() ) && ( aNewPaM.GetIndex() > rNextLine.GetStart() ) && ( aNewPaM.GetIndex() < pPPortion->GetNode()->Len() ) )
+        if ((aNewPaM.GetIndex() == rNextLine.GetEnd())
+            && (aNewPaM.GetIndex() > rNextLine.GetStart())
+            && (aNewPaM.GetIndex() < pPPortion->GetNode()->Len())
+            && !IsAtMultiLineFieldEnd(*pPPortion, aNewPaM.GetIndex()))
             aNewPaM = CursorLeft( aNewPaM );
     }
     else    // next paragraph
@@ -1401,7 +1411,9 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView const * pView )
             // Never at the very end when several lines, because then a line
             // below the cursor appears.
             aNewPaM.SetIndex(GetChar(*pNextPortion, rLine, nX + mnOnePixelInRef));
-            if ( ( aNewPaM.GetIndex() == rLine.GetEnd() ) && ( aNewPaM.GetIndex() > rLine.GetStart() ) && ( pNextPortion->GetLines().Count() > 1 ) )
+            if ((aNewPaM.GetIndex() == rLine.GetEnd()) && (aNewPaM.GetIndex() > rLine.GetStart())
+                && (pNextPortion->GetLines().Count() > 1)
+                && !IsAtMultiLineFieldEnd(*pNextPortion, aNewPaM.GetIndex()))
                 aNewPaM = CursorLeft( aNewPaM );
         }
     }
@@ -3271,11 +3283,32 @@ tools::Rectangle ImpEditEngine::GetEditCursor(ParaPortion const& rPortion, EditL
         nX = GetXPos(rPortion, rLine, nIndex, aFlags.bPreferPortionStart);
     }
 
+    tools::Long nYShift = 0;
+    if (nIndex > rLine.GetStart())
+    {
+        sal_Int32 nTPStart = 0;
+        sal_Int32 nTP = rPortion.GetTextPortions().FindPortion(nIndex - 1, nTPStart);
+        const TextPortion& rTP = rPortion.GetTextPortions()[nTP];
+        if (rTP.GetKind() == PortionKind::FIELD && nIndex == nTPStart + rTP.GetLen())
+        {
+            ExtraPortionInfo* pEI = rTP.GetExtraInfos();
+            if (pEI && pEI->lineBreaksList.size() > 1)
+            {
+                if (!IsRightToLeft(GetEditDoc().GetPos(rPortion.GetNode())))
+                {
+                    nX = rLine.GetStartPosX() - rLine.GetNextLinePosXDiff()
+                         + pEI->nLastLineTextWidth;
+                }
+                nYShift = rLine.GetMaxAscent() * (pEI->lineBreaksList.size() - 1);
+            }
+        }
+    }
+
     tools::Rectangle aEditCursor;
     aEditCursor.SetLeft(nX);
     aEditCursor.SetRight(nX);
 
-    aEditCursor.SetBottom(rLine.GetHeight() - 1);
+    aEditCursor.SetBottom(rLine.GetHeight() - 1 + nYShift);
     if (aFlags.bTextOnly)
         aEditCursor.SetTop(aEditCursor.Bottom() - rLine.GetTxtHeight() + 1);
     else
@@ -3476,6 +3509,39 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
         {
             if (rInfo.nColumn > nClickColumn)
                 return CallbackResult::Stop;
+
+            // A multi-line URL field creates a gap between its line's area
+            // and the next line's area (the wrapped content is rendered in
+            // that gap). If the click landed in the gap, it belongs to the
+            // previous line which owns the wrapped field. Without this
+            // check the click falls through to the next line/paragraph,
+            // IsTextPos rejects it, and the click never reaches EditEngine.
+            if (pLastPortion && pLastLine && rInfo.nColumn == nClickColumn)
+            {
+                bool bClickInGap = false;
+                if (!IsEffectivelyVertical())
+                    bClickInGap = aPos.Y() < rInfo.aArea.Top();
+                else if (IsTopToBottom())
+                    bClickInGap = aPos.X() > rInfo.aArea.Right();
+                else
+                    bClickInGap = aPos.X() < rInfo.aArea.Left();
+
+                if (bClickInGap)
+                {
+                    for (sal_Int32 i = pLastLine->GetStartPortion();
+                         i <= pLastLine->GetEndPortion(); i++)
+                    {
+                        const TextPortion& rTP = pLastPortion->GetTextPortions()[i];
+                        if (rTP.GetKind() == PortionKind::FIELD)
+                        {
+                            ExtraPortionInfo* pEI = rTP.GetExtraInfos();
+                            if (pEI && pEI->lineBreaksList.size() > 1)
+                                return CallbackResult::Stop;
+                        }
+                    }
+                }
+            }
+
             pLastPortion = &rInfo.rPortion; // Candidate paragraph
             pLastLine = rInfo.pLine; // Last visible line not later than click position
             nLineStartX = getTopLeftDocOffset(rInfo.aArea).Width();
@@ -3487,6 +3553,46 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
     IterateLineAreas(FindLastMatchingPortionAndLine, IterFlag::inclILS);
 
     return { pLastPortion, pLastLine, nLineStartX };
+}
+
+bool ImpEditEngine::IsAtMultiLineFieldEnd(const ParaPortion& rPortion, sal_Int32 nIndex)
+{
+    if (nIndex <= 0)
+        return false;
+    sal_Int32 nTPStart = 0;
+    sal_Int32 nTP = rPortion.GetTextPortions().FindPortion(nIndex - 1, nTPStart);
+    const TextPortion& rTP = rPortion.GetTextPortions()[nTP];
+    if (rTP.GetKind() != PortionKind::FIELD || nIndex != nTPStart + rTP.GetLen())
+        return false;
+    ExtraPortionInfo* pEI = rTP.GetExtraInfos();
+    return pEI && pEI->lineBreaksList.size() > 1;
+}
+
+bool ImpEditEngine::IsAtMultiLineFieldEnd(const EditPaM& rPaM)
+{
+    if (rPaM.GetIndex() <= 0)
+        return false;
+    const ParaPortion* pPortion = FindParaPortion(rPaM.GetNode());
+    if (!pPortion)
+        return false;
+    return IsAtMultiLineFieldEnd(*pPortion, rPaM.GetIndex());
+}
+
+tools::Long ImpEditEngine::GetMultiLineFieldEndX(const ParaPortion& rPortion, sal_Int32 nLine,
+                                                 sal_Int32 nIndex, tools::Long nFallback) const
+{
+    if (nLine <= 0 || nIndex <= 0 || IsRightToLeft(GetEditDoc().GetPos(rPortion.GetNode())))
+        return nFallback;
+    sal_Int32 nTPStart = 0;
+    sal_Int32 nTP = rPortion.GetTextPortions().FindPortion(nIndex - 1, nTPStart);
+    const TextPortion& rTP = rPortion.GetTextPortions()[nTP];
+    if (rTP.GetKind() != PortionKind::FIELD || nIndex != nTPStart + rTP.GetLen())
+        return nFallback;
+    ExtraPortionInfo* pEI = rTP.GetExtraInfos();
+    if (!pEI || pEI->lineBreaksList.size() <= 1)
+        return nFallback;
+    const EditLine& rFieldLine = rPortion.GetLines()[nLine - 1];
+    return rFieldLine.GetStartPosX() - rFieldLine.GetNextLinePosXDiff() + pEI->nLastLineTextWidth;
 }
 
 EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
@@ -3503,7 +3609,8 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
         if (nCurIndex && (nCurIndex == pLine->GetEnd())
             && (pLine != &pPortion->GetLines()[pPortion->GetLines().Count() - 1]))
         {
-            aPaM = CursorLeft(aPaM);
+            if (!IsAtMultiLineFieldEnd(*pPortion, nCurIndex))
+                aPaM = CursorLeft(aPaM);
         }
 
         return aPaM;
@@ -4446,8 +4553,19 @@ sal_Int32 ImpEditEngine::GetChar(ParaPortion const& rParaPortion, EditLine const
                 // ...but check on which side
                 if ( bSmart )
                 {
+                    tools::Long nEffectiveRight = nXRight;
+                    if (rPortion.GetKind() == PortionKind::FIELD
+                        && !IsRightToLeft(GetEditDoc().GetPos(rParaPortion.GetNode())))
+                    {
+                        ExtraPortionInfo* pEI = rPortion.GetExtraInfos();
+                        if (pEI && pEI->lineBreaksList.size() > 1)
+                        {
+                            tools::Long nFieldOffset = nXLeft - rLine.GetStartPosX();
+                            nEffectiveRight = nXLeft + pEI->nOrgWidth - nFieldOffset;
+                        }
+                    }
                     tools::Long nLeftDiff = nXPos-nXLeft;
-                    tools::Long nRightDiff = nXRight-nXPos;
+                    tools::Long nRightDiff = nEffectiveRight - nXPos;
                     if ( nRightDiff < nLeftDiff )
                         nChar++;
                 }
@@ -4712,6 +4830,16 @@ tools::Long ImpEditEngine::GetXPos(ParaPortion const& rParaPortion, EditLine con
             }
             else if ( !rPortion.IsRightToLeft() )
             {
+                if (rPortion.GetKind() == PortionKind::FIELD
+                    && !IsRightToLeft(GetEditDoc().GetPos(rParaPortion.GetNode())))
+                {
+                    ExtraPortionInfo* pEI = rPortion.GetExtraInfos();
+                    if (pEI && pEI->lineBreaksList.size() > 1)
+                    {
+                        tools::Long nFieldOffset = nX - rLine.GetStartPosX();
+                        nPortionTextWidth = pEI->nOrgWidth - nFieldOffset;
+                    }
+                }
                 nX += nPortionTextWidth;
             }
         }

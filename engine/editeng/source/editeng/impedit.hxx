@@ -677,6 +677,8 @@ private:
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
     bool IsTextPos(const Point& rDocPos, sal_uInt16 nBorder);
     tools::Long GetXPos(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
+    tools::Long GetMultiLineFieldEndX(const ParaPortion& rPortion, sal_Int32 nLine,
+                                      sal_Int32 nIndex, tools::Long nFallback) const;
     tools::Long GetPortionXOffset(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nTextPortion) const;
     sal_Int32 GetChar(ParaPortion const& rParaPortion, EditLine const& rLine, tools::Long nX, bool bSmart = true);
     Range GetLineXPosStartEnd(ParaPortion const& rParaPortion, EditLine const& rLine) const;
@@ -910,6 +912,9 @@ public:
                             virtual ~ImpEditEngine() override;
                             ImpEditEngine(const ImpEditEngine&) = delete;
     ImpEditEngine&          operator=(const ImpEditEngine&) = delete;
+
+    static bool IsAtMultiLineFieldEnd(const ParaPortion& rPortion, sal_Int32 nIndex);
+    bool IsAtMultiLineFieldEnd(const EditPaM& rPaM);
 
     EditUndoManager& GetUndoManager()
     {

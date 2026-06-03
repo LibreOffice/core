@@ -58,6 +58,7 @@ struct ExtraPortionInfo
     ExtraPortionInfo() {}
 
     tools::Long nOrgWidth = 0;
+    tools::Long nLastLineTextWidth = 0;
     tools::Long nWidthFullCompression = 0;
 
     tools::Long nPortionOffsetX = 0;

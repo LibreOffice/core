@@ -1195,8 +1195,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             }
                             //next Line should start here... after this field end
                             if (!bFieldStartNextLine)
+                            {
                                 nStartNextLineAfterMultiLineField
                                     = aTmpDXArray[nTextLength - 1] - nLineStartX;
+                                pExtraInfo->nLastLineTextWidth = nStartNextLineAfterMultiLineField;
+                            }
                             else if (pExtraInfo)
                             {
                                 // if the 1. character does not fit,
