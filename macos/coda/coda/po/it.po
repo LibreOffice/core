@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: coolwsd 25.04.7.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-06 18:17+0000\n"
-"PO-Revision-Date: 2025-12-09 11:27+0000\n"
-"Last-Translator: Marco Cecchetti <mrcekets@gmail.com>\n"
+"PO-Revision-Date: 2026-06-03 18:58+0000\n"
+"Last-Translator: Sleepy Sandy <r.thomas092103@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-office-macos-app/it/>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 2026.6\n"
 
 msgctxt "1UK-8n-QPP.title"
 msgid "Customize Toolbar…"
@@ -47,23 +47,23 @@ msgstr "Ripeti"
 
 msgctxt "AYu-sK-qS6.title"
 msgid "Main Menu"
-msgstr ""
+msgstr "Menù principale"
 
 msgctxt "BOF-NM-1cW.title"
 msgid "Preferences…"
-msgstr ""
+msgstr "Preferenze…"
 
 msgctxt "Bw7-FT-i3A.title"
 msgid "Save As…"
-msgstr ""
+msgstr "Salva come…"
 
 msgctxt "DVo-aG-piG.title"
 msgid "Close"
-msgstr ""
+msgstr "Chiudi"
 
 msgctxt "F2S-fz-NVQ.title"
 msgid "Help"
-msgstr ""
+msgstr "Assistenza"
 
 msgctxt "H8h-7b-M4v.title"
 msgid "View"
@@ -75,7 +75,7 @@ msgstr ""
 
 msgctxt "IAo-SY-fd9.title"
 msgid "Open…"
-msgstr ""
+msgstr "Apri…"
 
 msgctxt "KaW-ft-85H.title"
 msgid "Revert to Saved"
@@ -83,7 +83,7 @@ msgstr ""
 
 msgctxt "Kd2-mp-pUS.title"
 msgid "Show All"
-msgstr ""
+msgstr "Mostra tutti"
 
 msgctxt "LE2-aR-0XJ.title"
 msgid "Bring All to Front"
@@ -91,11 +91,11 @@ msgstr ""
 
 msgctxt "NMo-om-nkz.title"
 msgid "Services"
-msgstr ""
+msgstr "Servizi"
 
 msgctxt "OY7-WF-poV.title"
 msgid "Minimize"
-msgstr ""
+msgstr "Minimizza"
 
 #. Do not change the placeholder ProductName!
 msgctxt "Olw-nP-bQN.title"
@@ -104,23 +104,23 @@ msgstr ""
 
 msgctxt "R4o-n2-Eq4.title"
 msgid "Zoom"
-msgstr ""
+msgstr "Ingrandisci"
 
 msgctxt "Td7-aD-5lo.title"
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
 msgctxt "Vdr-fp-XzO.title"
 msgid "Hide Others"
-msgstr ""
+msgstr "Nascondi gli altri"
 
 msgctxt "W48-6f-4Dl.title"
 msgid "Edit"
-msgstr ""
+msgstr "Modifica"
 
 msgctxt "Was-JA-tGl.title"
 msgid "New"
-msgstr ""
+msgstr "Nuovo"
 
 msgctxt "WeT-3V-zwk.title"
 msgid "Paste and Match Style"
@@ -128,43 +128,43 @@ msgstr ""
 
 msgctxt "aTl-1u-JFS.title"
 msgid "Print…"
-msgstr ""
+msgstr "Stampa…"
 
 msgctxt "aUF-d1-5bR.title"
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
 msgctxt "bib-Uj-vzu.title"
 msgid "File"
-msgstr ""
+msgstr "File"
 
 msgctxt "dMs-cI-mzQ.title"
 msgid "File"
-msgstr ""
+msgstr "File"
 
 msgctxt "dRJ-4n-Yzg.title"
 msgid "Undo"
-msgstr ""
+msgstr "Annulla"
 
 msgctxt "gVA-U4-sdL.title"
 msgid "Paste"
-msgstr ""
+msgstr "Incolla"
 
 msgctxt "hz9-B4-Xy5.title"
 msgid "Services"
-msgstr ""
+msgstr "Servizi"
 
 msgctxt "kIP-vf-haE.title"
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Mostra barra laterale"
 
 msgctxt "oas-Oc-fiZ.title"
 msgid "Open Recent"
-msgstr ""
+msgstr "Apri recenti"
 
 msgctxt "pxx-59-PXV.title"
 msgid "Save…"
-msgstr ""
+msgstr "Salva…"
 
 msgctxt "qIS-W8-SiK.title"
 msgid "Page Setup…"
@@ -176,7 +176,7 @@ msgstr ""
 
 msgctxt "tXI-mr-wws.title"
 msgid "Open Recent"
-msgstr ""
+msgstr "Apri recenti"
 
 #. Do not change the placeholder ProductName!
 msgctxt "uQy-DD-JDr.title"
@@ -185,11 +185,11 @@ msgstr ""
 
 msgctxt "uRl-iY-unG.title"
 msgid "Cut"
-msgstr ""
+msgstr "Taglia"
 
 msgctxt "vFu-3Y-2xa.title"
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
 msgctxt "vNY-rz-j42.title"
 msgid "Clear Menu"
