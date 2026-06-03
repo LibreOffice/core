@@ -12,7 +12,7 @@
    Rules not intended for touch devices */
 .ui-toggle button:hover,
 .button-secondary:hover,
-button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.ui-treeview-header-button):not(.ui-chip-main):not(.ui-chip-action):hover {
+button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.ui-treeview-header-button):not(.ui-chip-main):not(.ui-chip-action):hover {
 	cursor: pointer;
 	color: var(--color-text-darker) !important;
 	background-color: var(--color-background-lighter) !important;

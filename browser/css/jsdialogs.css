@@ -541,7 +541,7 @@ algned to the bottom */
 	text-underline-offset: 6px;
 }
 
-body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):hover {
+body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):hover {
 	color: rgba(var(--doc-type), 1) !important;
 	background-color: var(--color-background-darker) !important;
 }

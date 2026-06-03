@@ -2197,7 +2197,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			// todo: is that needed? should be in widget impl?
 			if (data.has_default === true && (data.type === 'pushbutton' || data.type === 'okbutton')) {
 				const buttonNode = newControl.querySelector('button');
-				if (buttonNode) window.L.DomUtil.addClass(buttonNode, 'button-primary');
+				if (buttonNode) {
+					window.L.DomUtil.addClass(buttonNode, 'button');
+					window.L.DomUtil.addClass(buttonNode, 'button-primary');
+				}
 			}
 		}
 

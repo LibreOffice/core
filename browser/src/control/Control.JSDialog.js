@@ -442,8 +442,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		instance.builder.build(instance.content, [instance]);
 		instance.builder.setContainer(instance.content);
 		var primaryBtn = instance.content.querySelector('#' + instance.defaultButtonId + ' button');
-		if (primaryBtn)
+		if (primaryBtn) {
+			window.L.DomUtil.addClass(primaryBtn, 'button');
 			window.L.DomUtil.addClass(primaryBtn, 'button-primary');
+		}
 	},
 
 	addFocusHandler: function(instance) {
