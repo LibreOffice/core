@@ -92,6 +92,8 @@ namespace writerfilter::ooxml {
 namespace writerfilter::dmapper {
 
 class SdtHelper;
+class FieldContext;
+typedef tools::SvRef<FieldContext> FieldContextPtr;
 
 struct PageMar
 {
@@ -278,6 +280,7 @@ struct SubstreamContext
     bool bIsPreviousInlineParagraph = false;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
+    std::deque<FieldContextPtr> m_aFieldStack;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -410,8 +413,6 @@ struct AnchoredContext
     {
     }
 };
-
-typedef tools::SvRef<FieldContext>  FieldContextPtr;
 
 /*-------------------------------------------------------------------------
     extended tab stop struct
@@ -582,7 +583,6 @@ public: // DomainMapper needs it
 private:
     std::stack<std::pair<TextAppendContext, PagePartType>> m_aHeaderFooterTextAppendStack;
 
-    std::deque<FieldContextPtr> m_aFieldStack;
     bool m_bForceGenericFields;
     /// Type of decimal symbol associated to the document language in Writer locale definition
     bool                                                                            m_bIsDecimalComma;
