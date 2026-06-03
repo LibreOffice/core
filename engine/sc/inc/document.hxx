@@ -2512,6 +2512,14 @@ public:
     /** Creates a new sheet view for the table, using the sheet view table */
     SC_DLLPUBLIC std::pair<sc::SheetViewID, SCTAB> CreateNewSheetView(SCTAB nTab);
 
+    /** Re-create a previously-removed sheet view of the table at the
+     *  given ID, with the given name and GUIDs. The slot at nID must
+     *  be free in the table's sheet view manager.
+     */
+    SC_DLLPUBLIC std::pair<sc::SheetViewID, SCTAB>
+    RestoreSheetView(SCTAB nTab, sc::SheetViewID nID, OUString const& rName,
+                     OString const& rGUID, OString const& rFilterGUID);
+
     /** Return the sheet view table for the ID */
     SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
 

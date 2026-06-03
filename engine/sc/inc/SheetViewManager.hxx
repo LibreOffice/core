@@ -115,6 +115,12 @@ public:
     /** Creates a new sheet view. */
     SheetViewID create(ScTable* pSheetViewTable);
 
+    /** Re-create a previously-removed sheet view at a given ID, with the
+     *  given name and GUIDs. The slot at nID must be free.
+     */
+    SheetViewID createAt(SheetViewID nID, ScTable* pSheetViewTable, OUString const& rName,
+                         OString const& rGUID, OString const& rFilterGUID);
+
     /** Returns a sheet view for the ID. */
     std::shared_ptr<SheetView> get(SheetViewID nID) const;
 

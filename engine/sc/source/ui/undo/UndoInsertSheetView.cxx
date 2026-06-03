@@ -10,8 +10,11 @@
 #include <undo/UndoInsertSheetView.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <document.hxx>
 #include <docsh.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
+#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 #include <tabvwsh.hxx>
 #include <undoolk.hxx>
 
@@ -24,6 +27,20 @@ UndoInsertSheetView::UndoInsertSheetView(ScDocShell& rNewDocShell, SCTAB nTab, S
     , mnSheetViewTab(nSheetViewTab)
     , mnSheetViewID(nSheetViewID)
 {
+    // Snapshot the sheet view's identity now. The SheetView is destroyed
+    // when this insert is undone, so its name and GUIDs cannot be read
+    // later.
+    auto pManager = rNewDocShell.GetDocument().GetSheetViewManager(mnTab);
+    if (pManager)
+    {
+        auto pSheetView = pManager->get(mnSheetViewID);
+        if (pSheetView)
+        {
+            maName = pSheetView->GetName();
+            maGUID = pSheetView->GetGUID();
+            maFilterGUID = pSheetView->GetFilterGUID();
+        }
+    }
     mpDrawUndo = GetSdrUndoAction(&rNewDocShell.GetDocument());
 }
 
@@ -63,6 +80,7 @@ void UndoInsertSheetView::Redo()
     bDrawIsInUndo = true;
 
     InsertSheetViewOperation aOperation(rDocShell, mnTab, false);
+    aOperation.setRestoreIdentity(mnSheetViewID, maName, maGUID, maFilterGUID);
     if (aOperation.run())
     {
         mnSheetViewID = aOperation.getSheetViewID();

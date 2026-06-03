@@ -30,6 +30,15 @@ InsertSheetViewOperation::InsertSheetViewOperation(ScDocShell& rDocShell, SCTAB 
 {
 }
 
+void InsertSheetViewOperation::setRestoreIdentity(SheetViewID nID, OUString const& rName,
+                                                  OString const& rGUID, OString const& rFilterGUID)
+{
+    moRestoreID = nID;
+    maRestoreName = rName;
+    maRestoreGUID = rGUID;
+    maRestoreFilterGUID = rFilterGUID;
+}
+
 bool InsertSheetViewOperation::runImplementation()
 {
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
@@ -42,7 +51,17 @@ bool InsertSheetViewOperation::runImplementation()
 
     DrawUndoGuard aDrawUndoGuard(rDoc, mbRecord);
 
-    auto[nSheetViewID, nSheetViewTab] = rDoc.CreateNewSheetView(mnTab);
+    SheetViewID nSheetViewID = InvalidSheetViewID;
+    SCTAB nSheetViewTab = -1;
+    if (moRestoreID)
+    {
+        std::tie(nSheetViewID, nSheetViewTab) = rDoc.RestoreSheetView(
+            mnTab, *moRestoreID, maRestoreName, maRestoreGUID, maRestoreFilterGUID);
+    }
+    else
+    {
+        std::tie(nSheetViewID, nSheetViewTab) = rDoc.CreateNewSheetView(mnTab);
+    }
     if (nSheetViewID == InvalidSheetViewID)
         return false;
 

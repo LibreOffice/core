@@ -28,6 +28,29 @@ SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
     return nID;
 }
 
+SheetViewID SheetViewManager::createAt(SheetViewID nID, ScTable* pSheetViewTable,
+                                       OUString const& rName, OString const& rGUID,
+                                       OString const& rFilterGUID)
+{
+    if (nID < 0)
+        return InvalidSheetViewID;
+
+    if (o3tl::make_unsigned(nID) >= maViews.size())
+        maViews.resize(nID + 1);
+
+    // The target slot must be empty.
+    assert(!maViews[nID] && "Restoring a sheet view into a slot that is occupied.");
+    if (maViews[nID])
+        return InvalidSheetViewID;
+
+    auto pView = std::make_shared<SheetView>(pSheetViewTable, rName, nID);
+    pView->SetGUID(rGUID);
+    pView->SetFilterGUID(rFilterGUID);
+    maViews[nID] = std::move(pView);
+    mnSheetViewCount++;
+    return nID;
+}
+
 bool SheetViewManager::remove(SheetViewID nID)
 {
     if (!isValidSheetViewID(nID))

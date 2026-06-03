@@ -12,6 +12,10 @@
 #include <undobase.hxx>
 #include <address.hxx>
 #include <SheetViewTypes.hxx>
+
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+
 #include <memory>
 
 class SdrUndoAction;
@@ -26,6 +30,11 @@ private:
     SCTAB mnTab; // the default/source tab
     SCTAB mnSheetViewTab; // the sheet view tab
     SheetViewID mnSheetViewID;
+
+    // Identity of the original sheet view captured at construction time.
+    OUString maName;
+    OString maGUID;
+    OString maFilterGUID;
 
 public:
     UndoInsertSheetView(ScDocShell& rDocShell, SCTAB nTab, SCTAB nSheetViewTab,

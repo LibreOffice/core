@@ -952,6 +952,70 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRedoNewSheetViewKeepsOthersUnchanged)
     CPPUNIT_ASSERT_EQUAL(SCTAB(3), pTabView2->GetViewData().GetTabNumber());
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoRedoPreservesSheetViewIdentity)
+{
+    // After creating a sheet view, undoing the insert and then redoing it,
+    // the sheet view must come back with the same identity (ID, name and
+    // GUIDs) it started with. Without that, anything that referenced the
+    // original identity becomes stale across a single undo and redo.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+
+    // Create a sheet view of Sheet1 and capture its identity.
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    auto pManager = rDocument.GetSheetViewManager(0);
+    CPPUNIT_ASSERT(pManager);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pManager->size());
+
+    sc::SheetViewID nOriginalID = sc::InvalidSheetViewID;
+    OUString aOriginalName;
+    OString aOriginalGUID;
+    OString aOriginalFilterGUID;
+    for (auto const& rSheetView : pManager->iterateValidSheetViews())
+    {
+        nOriginalID = rSheetView.getID();
+        aOriginalName = rSheetView.GetName();
+        aOriginalGUID = rSheetView.GetGUID();
+        aOriginalFilterGUID = rSheetView.GetFilterGUID();
+    }
+    CPPUNIT_ASSERT(nOriginalID != sc::InvalidSheetViewID);
+    CPPUNIT_ASSERT(!aOriginalName.isEmpty());
+    CPPUNIT_ASSERT(!aOriginalGUID.isEmpty());
+
+    // Undo removes the sheet view tab and the SheetView from the manager.
+    undo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDocument.GetTableCount());
+
+    // Redo must restore the same SheetView, not create a fresh one.
+    redo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    pManager = rDocument.GetSheetViewManager(0);
+    CPPUNIT_ASSERT(pManager);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pManager->size());
+
+    for (auto const& rSheetView : pManager->iterateValidSheetViews())
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SheetViewID must be preserved across undo + redo",
+                                     nOriginalID, rSheetView.getID());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SheetView name must be preserved across undo + redo",
+                                     aOriginalName, rSheetView.GetName());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SheetView GUID must be preserved across undo + redo",
+                                     aOriginalGUID, rSheetView.GetGUID());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SheetView filter GUID must be preserved across undo + redo",
+                                     aOriginalFilterGUID, rSheetView.GetFilterGUID());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
 {
     // Delete the sheet view holder table directly

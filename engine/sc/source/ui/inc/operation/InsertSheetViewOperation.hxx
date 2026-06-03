@@ -13,6 +13,11 @@
 #include <address.hxx>
 #include <SheetViewTypes.hxx>
 
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+
+#include <optional>
+
 class ScDocShell;
 
 namespace sc
@@ -26,10 +31,24 @@ private:
     SheetViewID mnSheetViewID = InvalidSheetViewID;
     SCTAB mnSheetViewTab = -1;
 
+    // Optional identity (ID, name, GUIDs) of a previously-removed sheet
+    // view. Empty for a fresh insert.
+    std::optional<SheetViewID> moRestoreID;
+    OUString maRestoreName;
+    OString maRestoreGUID;
+    OString maRestoreFilterGUID;
+
     bool runImplementation() override;
 
 public:
     InsertSheetViewOperation(ScDocShell& rDocShell, SCTAB nTab, bool bRecord);
+
+    /** Set the identity (ID, name, GUIDs) of a previously-removed sheet
+     *  view that this operation should reinstate. Leave unset for a
+     *  fresh insert.
+     */
+    void setRestoreIdentity(SheetViewID nID, OUString const& rName, OString const& rGUID,
+                            OString const& rFilterGUID);
 
     SheetViewID getSheetViewID() const { return mnSheetViewID; }
     SCTAB getSheetViewTab() const { return mnSheetViewTab; }
