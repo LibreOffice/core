@@ -1383,17 +1383,25 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	background: rgba(236, 167, 0, 0.04);
 }
 
-/* -- Selection context indicator (above prompt chips) -- */
+/* -- Selection context indicator (attachment chip inside the input box) -- */
 
 #aichat-selection-context {
+	display: inline-flex;
+	align-items: center;
+	align-self: flex-start;
+	max-width: 100%;
+	box-sizing: border-box;
+	height: 20px;
+	padding: 0 8px;
 	font-size: 11px;
+	line-height: 1;
 	color: rgb(var(--aichat-accent));
-	background: rgba(var(--aichat-accent), 0.04);
-	border-left: 2px solid rgba(var(--aichat-accent), 0.4);
-	border-radius: 0 var(--border-radius-s) var(--border-radius-s) 0;
-	padding: 6px 10px;
-	margin: 0 4px 10px;
-	line-height: 1.4;
+	background: rgba(var(--aichat-accent), 0.08);
+	border: 1px solid rgba(var(--aichat-accent), 0.25);
+	border-radius: 10px;
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
 	animation: aichat-slide-up 0.15s ease-out;
 }
 

@@ -467,11 +467,6 @@ namespace cool {
 			chips.setAttribute('role', 'list');
 			const wrappers = chips.querySelectorAll('[id^="aichat-chip-"]');
 			wrappers.forEach((w) => w.setAttribute('role', 'listitem'));
-
-			const selCtx = document.getElementById('aichat-selection-context');
-			if (selCtx) {
-				selCtx.style.display = TextSelections.isActive() ? '' : 'none';
-			}
 		}
 
 		private applyInputStyles(): void {
@@ -480,6 +475,11 @@ namespace cool {
 			);
 			if (sendBtn) {
 				sendBtn.classList.toggle('aichat-stop-mode', this.isProcessing);
+			}
+
+			const selCtx = document.getElementById('aichat-selection-context');
+			if (selCtx) {
+				selCtx.style.display = TextSelections.isActive() ? '' : 'none';
 			}
 		}
 
@@ -848,6 +848,12 @@ namespace cool {
 						type: 'container',
 						vertical: true,
 						children: [
+							{
+								id: 'aichat-selection-context',
+								type: 'fixedtext',
+								text: '\u2726 ' + _('Using selected text as context'),
+								enabled: true,
+							},
 							{
 								id: 'aichat-input',
 								type: 'multilineedit',
@@ -1648,14 +1654,6 @@ namespace cool {
 		private getPromptChipsJSON(): any {
 			const cardChildren: any[] = [];
 
-			// Selection context indicator — shown/hidden in applyCardStyles()
-			cardChildren.push({
-				id: 'aichat-selection-context',
-				type: 'fixedtext',
-				text: '\u2726  ' + _('Using selected text as context'),
-				enabled: true,
-			});
-
 			if (app.map.getDocType() === 'spreadsheet') {
 				cardChildren.push({
 					id: 'aichat-chip-formula-diagnosis',
@@ -1687,7 +1685,7 @@ namespace cool {
 			// Count doc-specific chips toward the initial limit so
 			// Calc (3 specific) and Writer (0 specific) show the same
 			// total number of chips before "See more".
-			const specificCount = cardChildren.length - 1; // subtract selection-context
+			const specificCount = cardChildren.length;
 			const collapsedGenericCount = Math.max(
 				0,
 				this.INITIAL_CARDS_SHOWN - specificCount,
