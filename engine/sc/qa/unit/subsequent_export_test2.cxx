@@ -1701,17 +1701,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testPivotTableDate)
     xmlDocUniquePtr pCache = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
     CPPUNIT_ASSERT(pCache);
 
-    // earlier "1899-12-29T03:58:14"
-    assertXPath(pCache, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
-                "minDate", u"1899-12-30T00:00:00");
-    // earlier <d v="1899-12-29T03:58:14"/>
     assertXPath(pCache,
-                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems/x:n[1]", "v",
-                u"-0.834560185185181");
-    // earlier <d v="1899-12-29T05:42:42"/>
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[@name='Project Create "
+                "Date']/x:sharedItems",
+                "minDate", u"2013-05-01T11:52:24");
+
+    assertXPathNoAttribute(
+        pCache,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[@name='Sales Response "
+        "(Days)']/x:sharedItems",
+        "minDate");
+
     assertXPath(pCache,
-                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems/x:n[2]", "v",
-                u"-0.762013888888889");
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[@name='Sales Response "
+                "(Days)']/x:sharedItems",
+                "minValue", u"-0.834560185185181");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testOffsetIllegalParam)

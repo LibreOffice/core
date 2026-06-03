@@ -783,7 +783,7 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
                     }
                     else if (xCurrField->IsStandardField())
                     {
-                        aOrigFields.push_back(xCurrField);
+                        aPostpFields.push_back(xCurrField);
                         if (bGenerateSource && (nFieldScCol <= rDoc.MaxCol()))
                             xCurrField->WriteFieldNameToSource(nFieldScCol++, nScTab);
                     }
