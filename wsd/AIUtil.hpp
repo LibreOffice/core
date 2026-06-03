@@ -16,10 +16,6 @@
 
 #pragma once
 
-#include <config.h>
-
-#if !MOBILEAPP
-
 #include <Poco/JSON/Object.h>
 
 #include <optional>
@@ -44,7 +40,5 @@ std::optional<std::string> validateTransformStructure(
     const Poco::JSON::Object::Ptr& transformObj);
 
 } // namespace AIUtil
-
-#endif // !MOBILEAPP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

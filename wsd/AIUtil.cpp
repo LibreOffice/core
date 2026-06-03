@@ -13,8 +13,6 @@
 
 #include "AIUtil.hpp"
 
-#if !MOBILEAPP
-
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 
@@ -145,7 +143,5 @@ std::optional<std::string> validateTransformStructure(
 }
 
 } // namespace AIUtil
-
-#endif // !MOBILEAPP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

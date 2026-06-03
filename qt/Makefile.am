@@ -59,6 +59,7 @@ cmake_list= \
             ../net/FakeSocket.cpp \
             ../net/Socket.cpp \
             ../wsd/AIChatSession.cpp \
+            ../wsd/AIUtil.cpp \
             ../wsd/ClientSession.cpp \
             ../wsd/DocumentBroker.cpp \
             ../wsd/COOLWSD.cpp \
