@@ -16,7 +16,10 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <test/bootstrapfixture.hxx>
+#include <vector>
 
 using namespace css;
 
@@ -31,6 +34,7 @@ class LpSolverTest: public test::BootstrapFixture
     void testSLPSolver();
     void testSLPSolverNonlinear();
     void testSLPSolverNonlinearConstraint();
+    void testSLPSolverLargeModel();
 #endif
 
 #ifdef ENABLE_COINMP
@@ -47,6 +51,7 @@ public:
     CPPUNIT_TEST(testSLPSolver);
     CPPUNIT_TEST(testSLPSolverNonlinear);
     CPPUNIT_TEST(testSLPSolverNonlinearConstraint);
+    CPPUNIT_TEST(testSLPSolverLargeModel);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -167,6 +172,70 @@ void LpSolverTest::testSLPSolverNonlinearConstraint()
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.70710678, aSolution[0], 1E-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.70710678, aSolution[1], 1E-3);
+}
+#endif
+
+#ifdef ENABLE_COINMP
+// A large model (100-period resource depletion) that the swarm solver cannot
+// handle at all. This guards that the sequential linear solver loads it, stays
+// feasible, and improves the objective. Full convergence needs faster sampling
+// than is in place today, so the time limit is short and only progress is
+// checked.
+void LpSolverTest::testSLPSolverLargeModel()
+{
+    OUString aUrl
+        = m_directories.getURLFromSrc(u"/sc/qa/unit/data/solver/ResourceDepletion.fods"_ustr);
+    uno::Reference<frame::XDesktop2> xLoader = frame::Desktop::create(m_xContext);
+    uno::Reference<lang::XComponent> xComponent(xLoader->loadComponentFromURL(
+        aUrl, u"_blank"_ustr, 0, uno::Sequence<css::beans::PropertyValue>()));
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSheets(xDocument->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    const table::CellAddress aObjective(0, 1, 6); // B7
+    // objective value at the document's starting extraction path
+    double fInitialObjective = xSheet->getCellByPosition(1, 6)->getValue();
+
+    std::vector<table::CellAddress> aVariableList;
+    std::vector<sheet::SolverConstraint> aConstraintList;
+    for (sal_Int32 nRow = 9; nRow < 109; ++nRow) // rows 10..109
+    {
+        aVariableList.push_back(table::CellAddress(0, 1, nRow)); // B: extraction
+        aConstraintList.push_back({ table::CellAddress(0, 1, nRow),
+                                    sheet::SolverConstraintOperator_GREATER_EQUAL, uno::Any(0.0) });
+        // E: stock remaining after this period must not go negative
+        aConstraintList.push_back({ table::CellAddress(0, 4, nRow),
+                                    sheet::SolverConstraintOperator_GREATER_EQUAL, uno::Any(0.0) });
+    }
+    uno::Sequence<table::CellAddress> aVariables(aVariableList.data(), aVariableList.size());
+    uno::Sequence<sheet::SolverConstraint> aConstraints(aConstraintList.data(),
+                                                        aConstraintList.size());
+
+    uno::Reference<sheet::XSolver> xSolver(
+        m_xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.comp.Calc.SLPSolver"_ustr, m_xContext),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProperties(xSolver, uno::UNO_QUERY_THROW);
+    xProperties->setPropertyValue(u"Timeout"_ustr, uno::Any(sal_Int32(10)));
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(true);
+
+    xSolver->solve();
+
+    CPPUNIT_ASSERT(xSolver->getSuccess());
+    uno::Sequence<double> aSolution = xSolver->getSolution();
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
+    for (sal_Int32 i = 0; i < aSolution.getLength(); ++i)
+        xSheet->getCellByPosition(1, 9 + i)->setValue(aSolution[i]);
+    double fObjective = xSheet->getCellByPosition(1, 6)->getValue();
+    CPPUNIT_ASSERT_MESSAGE("the solver must improve the objective on the large model",
+                           fObjective > fInitialObjective);
+
+    xComponent->dispose();
 }
 #endif
 

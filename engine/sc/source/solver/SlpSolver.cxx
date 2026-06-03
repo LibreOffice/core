@@ -365,7 +365,9 @@ void SAL_CALL SLPSolver::solve()
     constexpr double fStepTolerance = 1.0e-7;
     constexpr double fMinPredictedReduction = 1.0e-12;
     constexpr double fDefaultTimeout = 100.0;
-    constexpr sal_Int32 nMaxIterations = 200;
+    // High safety limit only. The time budget and the convergence test below
+    // are what normally end the loop, so a large model is not cut off early.
+    constexpr sal_Int32 nMaxIterations = 100000;
 
     double fTrust = fInitialTrust;
     double fMerit = meritAt(aX, fPenalty);
