@@ -23,14 +23,14 @@ disable freetype dependent code
  #include <unordered_set>
  
  // helper for using std::visit to get a dependent false for static_asserts
-@@ -2723,6 +2723,8 @@
+@@ -2738,6 +2738,8 @@
  
  Form::AddFontResult Form::addFontToDefaultResources(const std::string &filepath, int faceIndex, const std::string &fontFamily, const std::string &fontStyle, bool fontSubstitutedIn, bool forceName)
  {
 +    return {};
 +#if 0
      if (!filepath.ends_with(".ttf") && !filepath.ends_with(".ttc") && !filepath.ends_with(".otf")) {
-         error(errIO, -1, "We only support embedding ttf/ttc/otf fonts for now. The font file for {0:s} {1:s} was {2:s}", fontFamily.c_str(), fontStyle.c_str(), filepath.c_str());
+         error(errIO, -1, "We only support embedding ttf/ttc/otf fonts for now. The font file for {0:r} {1:r} was {2:r}", &fontFamily, &fontStyle, &filepath);
          return {};
 @@ -2974,6 +2974,7 @@
      }

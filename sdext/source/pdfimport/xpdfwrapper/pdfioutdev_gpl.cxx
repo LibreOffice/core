@@ -60,6 +60,10 @@
 #include "UTF8.h"
 #endif
 
+#if POPPLER_CHECK_VERSION(26, 6, 0)
+#include <Annot.h>
+#endif
+
 #ifdef _WIN32
 # define snprintf _snprintf
 
@@ -1223,7 +1227,9 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
         {
             GfxRGB aMinRGB;
             colorMap->getColorSpace()->getRGB(
-#if POPPLER_CHECK_VERSION(0, 82, 0)
+#if POPPLER_CHECK_VERSION(26, 6, 0)
+                *reinterpret_cast<const GfxColor*>(maskColors),
+#elif POPPLER_CHECK_VERSION(0, 82, 0)
                 reinterpret_cast<const GfxColor*>(maskColors),
 #else
                 reinterpret_cast<GfxColor*>(maskColors),
@@ -1232,7 +1238,9 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
 
             GfxRGB aMaxRGB;
             colorMap->getColorSpace()->getRGB(
-#if POPPLER_CHECK_VERSION(0, 82, 0)
+#if POPPLER_CHECK_VERSION(26, 6, 0)
+                *(reinterpret_cast<const GfxColor*>(maskColors)+gfxColorMaxComps),
+#elif POPPLER_CHECK_VERSION(0, 82, 0)
                 reinterpret_cast<const GfxColor*>(maskColors)+gfxColorMaxComps,
 #else
                 reinterpret_cast<GfxColor*>(maskColors)+gfxColorMaxComps,
@@ -1365,7 +1373,11 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
     aBox.y2 = pBbox[3];
 
     const int nDPI = 72; // GfxState seems to have 72.0 as magic for some reason
+#if POPPLER_CHECK_VERSION(26, 6, 0)
+    auto pSplashGfxState = new GfxState(nDPI, nDPI, aBox, 0, false);
+#else
     auto pSplashGfxState = new GfxState(nDPI, nDPI, &aBox, 0, false);
+#endif
 #if POPPLER_CHECK_VERSION(26, 2, 0)
     auto pSplashOut = new SplashOutputDev(splashModeRGB8, 1, nullptr);
 #else
@@ -1375,7 +1387,11 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
     pSplashOut->startDoc(m_pDoc);
     pSplashOut->startPage(0 /* pageNum */, pSplashGfxState, nullptr /* xref */);
 
+#if POPPLER_CHECK_VERSION(26, 6, 0)
+    auto pSplashGfx = new Gfx(m_pDoc, pSplashOut, pResDict, aBox, nullptr);
+#else
     auto pSplashGfx = new Gfx(m_pDoc, pSplashOut, pResDict, &aBox, nullptr);
+#endif
     pSplashGfx->display(aStr);
     std::unique_ptr<SplashBitmap> pSplashBitmap(pSplashOut->takeBitmap());
     // Poppler tells us to free the splash device immediately after taking the
