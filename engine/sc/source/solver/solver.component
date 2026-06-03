@@ -13,6 +13,11 @@
     <service name="com.sun.star.sheet.Solver"/>
     <optional/>
   </implementation>
+  <implementation name="com.sun.star.comp.Calc.SLPSolver"
+      constructor="com_sun_star_comp_Calc_SLPSolver_get_implementation">
+    <service name="com.sun.star.sheet.Solver"/>
+    <optional/>
+  </implementation>
   <implementation name="com.sun.star.comp.Calc.SwarmSolver"
       constructor="com_sun_star_comp_Calc_SwarmSolver_get_implementation">
     <service name="com.sun.star.sheet.Solver"/>
