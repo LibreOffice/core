@@ -267,6 +267,9 @@ bool isAllowedWopiHost(const Poco::URI& uri)
     if (HostUtil::allowedWopiHost(targetHost))
         return true;
 
+    if (HostUtil::isWopiHostsEmpty() && net::isLocalhost(targetHost))
+        return true;
+
     // Check if a resolved IP address is in the allowlist.
     const auto hostAddresses(net::resolveAddresses(targetHost));
     for (const auto& address : hostAddresses)
