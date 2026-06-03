@@ -67,10 +67,10 @@ jobs:
     - if: matrix.language == 'cpp'
       name: Configure
       run: |
-        cd .. && wget --no-verbose https://github.com/CollaboraOnline/online/releases/download/for-code-assets/core-main-assets.tar.gz
-        tar xf core-main-assets.tar.gz && rm core-main-assets.tar.gz && export COREPATH=$(pwd)
-        cd online && ./autogen.sh
-        ./configure --enable-silent-rules --with-lokit-path=${COREPATH}/include --with-lo-path=${COREPATH}/instdir --enable-debug
+        wget --no-verbose https://github.com/CollaboraOnline/online/releases/download/for-code-assets/engine-main-assets.tar.gz
+        tar xf engine-main-assets.tar.gz -C engine && rm engine-main-assets.tar.gz
+        ./autogen.sh
+        ./configure --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/engine/include --with-lo-path=${GITHUB_WORKSPACE}/engine/instdir --enable-debug
         cd browser && npm update
 
     - if: matrix.language == 'cpp'
