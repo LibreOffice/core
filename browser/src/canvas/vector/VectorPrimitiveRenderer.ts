@@ -63,6 +63,12 @@ namespace cool {
 				case PointArrayPrimitive.type:
 					this._renderPointArray(context, primitive as PointArrayPrimitive);
 					break;
+				case TextSimplePortionPrimitive.type:
+					this._renderTextSimplePortion(
+						context,
+						primitive as TextSimplePortionPrimitive,
+					);
+					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
@@ -230,6 +236,68 @@ namespace cool {
 			context.moveTo(startX, startY);
 			context.lineTo(endX, endY);
 			context.stroke();
+			context.restore();
+		}
+
+		// Maps the wire font-weight value 0..10 to a CSS font-weight
+		// number. The value 0 means unknown and renders as normal.
+		private static readonly _FONT_WEIGHT_CSS: Record<number, number> = {
+			0: 400,
+			1: 100,
+			2: 200,
+			3: 300,
+			4: 350,
+			5: 400,
+			6: 500,
+			7: 600,
+			8: 700,
+			9: 800,
+			10: 900,
+		};
+
+		private _renderTextSimplePortion(
+			context: CanvasRenderingContext2D,
+			primitive: TextSimplePortionPrimitive,
+		): void {
+			if (!primitive.text) return;
+
+			const start = primitive.textPosition ?? 0;
+			const length = primitive.textLength ?? primitive.text.length - start;
+			const text = primitive.text.substring(start, start + length);
+			if (!text) return;
+
+			const [a = 0, b = 0, c = 0, , e = 0, f = 0] = primitive.matrix ?? [];
+			const fontSize = primitive.fontSize ?? 12;
+
+			const style = primitive.italic ? 'italic' : 'normal';
+			const weight =
+				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
+			const family = primitive.familyname ?? 'sans-serif';
+
+			context.save();
+			context.font = `${style} ${weight} ${fontSize}px "${family}"`;
+			context.fillStyle = primitive.fontcolor ?? '#000000';
+
+			const rotated = b !== 0 || c !== 0;
+			if (rotated) {
+				// Off-diagonal matrix entries mean the run is rotated.
+				// Move to the anchor first, then rotate so fillText
+				// draws along the rotated direction.
+				context.translate(e, f);
+				context.rotate(Math.atan2(b, a));
+			}
+			const x = rotated ? 0 : e;
+			const y = rotated ? 0 : f;
+			context.fillText(text, x, y);
+
+			if (primitive.outline) {
+				context.strokeStyle = primitive.fontcolor ?? '#000000';
+				// Outline thickness scales with the font size. A one-
+				// pixel stroke becomes invisible on large text.
+				context.lineWidth = Math.max(1, fontSize / 20);
+				context.strokeText(text, x, y);
+			}
+
 			context.restore();
 		}
 

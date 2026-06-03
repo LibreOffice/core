@@ -216,6 +216,42 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 
+		it('renders textSimplePortion at the matrix anchor', function () {
+			// textSimplePortion paints text in the requested font and
+			// colour at the matrix anchor. The substring offsets pick
+			// out part of the carried text.
+			const primitive = loadVectorRenderingReference(
+				'testTextSimplePortion',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'textSimplePortion');
+			nodeassert.strictEqual(primitive.text, 'Hello');
+			nodeassert.strictEqual(primitive.textPosition, 0);
+			nodeassert.strictEqual(primitive.textLength, 5);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fillText = recorder.findCall('fillText');
+			nodeassert.ok(fillText, 'fillText not called');
+			nodeassert.strictEqual(fillText?.args[0], 'Hello');
+			// The anchor (translation components of the matrix) lands
+			// in args[1] and args[2].
+			nodeassert.strictEqual(fillText?.args[1], primitive.matrix[4]);
+			nodeassert.strictEqual(fillText?.args[2], primitive.matrix[5]);
+			// The fillStyle at the call matches the wire fontcolor.
+			nodeassert.strictEqual(fillText?.properties.fillStyle, primitive.fontcolor);
+			// The font string carries the wire fontSize and family.
+			nodeassert.ok(
+				fillText?.properties.font.includes(`${primitive.fontSize}px`),
+				'font string missing fontSize',
+			);
+			nodeassert.ok(
+				fillText?.properties.font.includes(primitive.familyname),
+				'font string missing family',
+			);
+		});
+
 		it('paints each point of a pointArray', function () {
 			// pointArray lays down a single-pixel mark at every point,
 			// all in the same colour.

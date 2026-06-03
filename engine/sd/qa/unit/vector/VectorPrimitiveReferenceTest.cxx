@@ -25,6 +25,11 @@
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
+
+#include <com/sun/star/lang/Locale.hpp>
+#include <tools/fontenum.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
@@ -506,6 +511,39 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
     assertJsonPath(aJson, "/primitives/0/type", "polygonStroke");
     assertJsonPathExists(aJson, "/primitives/0/stroke/dotDashArray");
     CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/primitives/0/stroke/dotDashArray").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextSimplePortion)
+{
+    // A run of horizontal text "Hello" anchored at (50, 100) with a
+    // font size of 20. The font is Liberation Sans, normal weight,
+    // upright. The wire carries the text, the substring offsets,
+    // the transform matrix, the font shape and the colour.
+    basegfx::B2DHomMatrix aTextTransform;
+    aTextTransform.scale(20.0, 20.0);
+    aTextTransform.translate(50.0, 100.0);
+
+    drawinglayer::attribute::FontAttribute aFontAttr(u"Liberation Sans"_ustr, u""_ustr,
+                                                     WEIGHT_NORMAL);
+
+    css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{}, std::vector<sal_Bool>{},
+        aFontAttr, aLocale, basegfx::BColor(0.0, 0.0, 0.0)));
+
+    auto aJson = writeReference(u"testTextSimplePortion", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "textSimplePortion");
+    assertJsonPath(aJson, "/primitives/0/text", "Hello");
+    assertJsonPath(aJson, "/primitives/0/textPosition", sal_Int64(0));
+    assertJsonPath(aJson, "/primitives/0/textLength", sal_Int64(5));
+    assertJsonPath(aJson, "/primitives/0/fontcolor", "#000000");
+    assertJsonPath(aJson, "/primitives/0/familyname", "Liberation Sans");
+    assertJsonPath(aJson, "/primitives/0/weight", sal_Int64(WEIGHT_NORMAL));
+    assertJsonPathDouble(aJson, "/primitives/0/fontSize", 20.0, 1e-9);
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPointArray)

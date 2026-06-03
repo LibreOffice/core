@@ -96,6 +96,7 @@
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonRGBAPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonStrokePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/SingleLinePrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/TextSimplePortionPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TransformPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitiveRenderer.ts" />
