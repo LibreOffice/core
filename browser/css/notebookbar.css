@@ -762,7 +762,7 @@ label.notebookbar.ui-checkbox-label {
 	margin-left: 10px;
 }
 
-.jsdialog #transitions_icons {
+.jsdialog #transitions_icons:not(.sidebar) {
 	width: 33.6vw !important;
 }
 

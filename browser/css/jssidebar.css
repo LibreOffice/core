@@ -26,6 +26,24 @@ img.sidebar.ui-image {
 	height: 44px;
 }
 
+/* The iconview wrappers must fill the sidebar too, or the grid inside them
+   (width:100%) only fills a narrow box and collapses to one column. */
+#transitions_icons-iconview-list.sidebar,
+#transitions_icons-iconview-list-window.sidebar,
+#transitions-panel-button.sidebar {
+	width: 100%;
+}
+
+#transitions_icons-iconview-list-buttons-container.sidebar,
+#transitions-group-bottom.sidebar {
+	display: none;
+}
+
+#apply_to_all-button.sidebar {
+	padding: 12px;
+	margin: 12px;
+}
+
 #layoutpanel_icons {
 	width: 100%;
 }
