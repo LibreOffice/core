@@ -5424,7 +5424,13 @@ static void updateConfig(const OUString& rConfigPath)
                 }
 
                 SAL_INFO("kit", "Installing XCU Item: " << xcustat.getFileName());
-                // Filter xcu to a subset of options to allow
+                // Filter xcu to a subset of options to allow (apply side of
+                // the COOL officecfg round-trip).
+                //
+                // !!! KEEP IN SYNC with getUploadableXcuPaths() in online's
+                // wsd/DocumentBroker.cpp (the upload side). No shared symbol
+                // exists across the kit<->wsd boundary, so edits here need
+                // the mirror edit there.
                 const uno::Sequence<OUString> aAllowedSubset{
                     u"/org.openoffice.Office.Calc/Grid"_ustr,
                     u"/org.openoffice.Office.Calc/Print"_ustr,
@@ -5440,7 +5446,8 @@ static void updateConfig(const OUString& rConfigPath)
                     u"/org.openoffice.Office.Writer/Grid"_ustr,
                     u"/org.openoffice.Office.Writer/Print"_ustr,
                     u"/org.openoffice.Office.Writer/Content/Display/GraphicObject"_ustr,
-                    u"/org.openoffice.Office.Writer/Content/NonprintingCharacter"_ustr
+                    u"/org.openoffice.Office.Writer/Content/NonprintingCharacter"_ustr,
+                    u"/org.openoffice.Office.Common/BulletsNumbering"_ustr
                 };
                 xUpdate->insertModificationXcuFile(xcustat.getFileURL(), aAllowedSubset, {});
             }

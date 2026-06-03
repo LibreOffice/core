@@ -50,11 +50,18 @@
 #include <wsd/TileCache.hpp>
 
 #include <Poco/DigestStream.h>
+#include <Poco/DOM/AutoPtr.h>
+#include <Poco/DOM/DOMParser.h>
+#include <Poco/DOM/DOMWriter.h>
+#include <Poco/DOM/Document.h>
+#include <Poco/DOM/Element.h>
+#include <Poco/DOM/Node.h>
 #include <Poco/Exception.h>
 #include <Poco/Path.h>
 #include <Poco/SHA1Engine.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/URI.h>
+#include <Poco/XML/XMLWriter.h>
 
 #include <atomic>
 #include <cassert>
@@ -1700,9 +1707,10 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
         Poco::Path destDir(_presetsPath, groupName);
         Poco::File(destDir).createDirectories();
         std::string filePath;
-        if (groupName == "xcu")
-            filePath = Poco::Path(destDir.toString(), "config.xcu").toString();
-        else if (groupName == "browsersetting")
+        // browsersetting/viewsetting are read by fixed name; other groups
+        // derive the filename from the URL so multiple files per group can
+        // coexist (xcu: admin defaults + per-user registrymodifications).
+        if (groupName == "browsersetting")
             filePath = Poco::Path(destDir.toString(), "browsersetting.json").toString();
         else if (groupName == "viewsetting")
             filePath = Poco::Path(destDir.toString(), "viewsetting.json").toString();
@@ -1762,6 +1770,9 @@ struct RoundTripPresetGroup
 {
     std::string name;
     bool onlyKnownOrStandardDic;
+    // Scrub each file in this group to the allowed officecfg node subset
+    // before upload (see scrubXcuForUpload). Only meaningful for xcu.
+    bool scrubXcu = false;
 };
 
 const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
@@ -1769,8 +1780,119 @@ const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
     static const std::vector<RoundTripPresetGroup> sGroups = {
         { "wordbook", true },
         { "themes", false },
+        // false ("upload all") because configmgr writes new files here
+        // (registrymodifications.xcu) we want to keep; scrubXcu=true so we
+        // only keep the allowed nodes and not the whole local registry.
+        { "xcu", false, /*scrubXcu=*/true },
     };
     return sGroups;
+}
+
+// configmgr's writable layer (see setupKitEnvironment) collects *every*
+// officecfg commit a session makes into xcu/registrymodifications.xcu, not
+// just the settings we expose: recent-document history, window state,
+// tip-of-the-day counters, the linguistic registry, etc. Scrub the file to
+// these allowed roots before upload so that churn isn't persisted into the
+// user's settings storage; everything else is dropped.
+//
+// !!! KEEP IN SYNC with aAllowedSubset in engine/desktop/source/lib/init.cxx
+// (the apply side; this is the upload side). No shared symbol exists across
+// the kit<->wsd boundary, so edits here need the mirror edit there.
+const std::vector<std::string>& getUploadableXcuPaths()
+{
+    static const std::vector<std::string> sPaths = {
+        "/org.openoffice.Office.Calc/Grid",
+        "/org.openoffice.Office.Calc/Print",
+        "/org.openoffice.Office.Calc/Content/Display/ObjectGraphic",
+        "/org.openoffice.Office.Calc/Content/Display/FormulaMark",
+
+        "/org.openoffice.Office.Draw/Grid",
+        "/org.openoffice.Office.Draw/Print",
+
+        "/org.openoffice.Office.Impress/Grid",
+        "/org.openoffice.Office.Impress/Print",
+
+        "/org.openoffice.Office.Writer/Grid",
+        "/org.openoffice.Office.Writer/Print",
+        "/org.openoffice.Office.Writer/Content/Display/GraphicObject",
+        "/org.openoffice.Office.Writer/Content/NonprintingCharacter",
+
+        "/org.openoffice.Office.Common/BulletsNumbering",
+    };
+    return sPaths;
+}
+
+// True if an <item>'s oor:path is at or below one of the allowed roots.
+// Matches the prefix only on a path-segment boundary so that e.g.
+// ".../BulletsNumbering" does not also let ".../BulletsNumberingFoo"
+// through.
+bool isAllowedXcuPath(const std::string& path)
+{
+    for (const std::string& allowed : getUploadableXcuPaths())
+    {
+        if (path == allowed ||
+            (path.size() > allowed.size() &&
+             path.compare(0, allowed.size(), allowed) == 0 && path[allowed.size()] == '/'))
+            return true;
+    }
+    return false;
+}
+
+// Drops every top-level <item> with a disallowed oor:path and writes the
+// rest to a sibling temp file, returning its path for upload. Returns ""
+// (caller skips the upload) on parse/write failure, or when nothing allowed
+// remains — so we never push unscrubbed data nor clobber the host's copy
+// with an empty file.
+std::string scrubXcuForUpload(const std::string& rawPath)
+{
+    try
+    {
+        Poco::XML::DOMParser parser;
+        Poco::AutoPtr<Poco::XML::Document> doc = parser.parse(rawPath);
+        Poco::XML::Element* root = doc->documentElement(); // <oor:items>
+        if (!root)
+            return std::string();
+
+        std::vector<Poco::XML::Node*> toRemove;
+        std::size_t kept = 0;
+        for (Poco::XML::Node* node = root->firstChild(); node; node = node->nextSibling())
+        {
+            if (node->nodeType() != Poco::XML::Node::ELEMENT_NODE)
+                continue;
+            auto* element = static_cast<Poco::XML::Element*>(node);
+            if (isAllowedXcuPath(element->getAttribute("oor:path")))
+                ++kept;
+            else
+                toRemove.push_back(node);
+        }
+
+        if (kept == 0)
+        {
+            LOG_DBG("Scrubbed xcu [" << rawPath << "] has no uploadable nodes; skipping upload");
+            return std::string();
+        }
+
+        for (Poco::XML::Node* node : toRemove)
+            root->removeChild(node);
+
+        const std::string outPath = rawPath + ".scrubbed";
+        std::ofstream ofs(outPath, std::ios::binary | std::ios::trunc);
+        if (!ofs)
+        {
+            LOG_ERR("Failed to open scrubbed xcu [" << outPath << "] for writing");
+            return std::string();
+        }
+        Poco::XML::DOMWriter writer;
+        writer.setOptions(Poco::XML::XMLWriter::WRITE_XML_DECLARATION);
+        writer.writeNode(ofs, doc);
+        ofs.close();
+        return outPath;
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR("Failed to scrub xcu [" << rawPath << "] for upload: " << ex.what());
+        return std::string();
+    }
 }
 } // namespace
 
@@ -4630,6 +4752,24 @@ void DocumentBroker::uploadPresetsToWopiHost()
                 continue;
             }
 
+            // For xcu, upload a scrubbed copy holding only the allowed
+            // nodes instead of the full local registry configmgr wrote.
+            // bodyPath points at whatever we actually send; scrubbedPath is
+            // the temp file to clean up afterwards (empty if none).
+            std::string bodyPath = fileJailPath;
+            std::string scrubbedPath;
+            if (group.scrubXcu)
+            {
+                scrubbedPath = scrubXcuForUpload(fileJailPath);
+                if (scrubbedPath.empty())
+                {
+                    // Either nothing allowed remained or scrubbing failed;
+                    // in both cases don't push anything for this file.
+                    continue;
+                }
+                bodyPath = scrubbedPath;
+            }
+
             std::string filePath = "/settings/userconfig/";
             filePath.append(group.name);
             filePath.push_back('/');
@@ -4647,11 +4787,14 @@ void DocumentBroker::uploadPresetsToWopiHost()
             LOG_TRC("Uploading file from jailPath[" << filePath << "] to wopiHost["
                                                     << uriObject.toString() << ']');
 
-            httpRequest.setBodyFile(fileJailPath);
+            httpRequest.setBodyFile(bodyPath);
             httpRequest.set("Content-Type", "application/octet-stream");
 
             auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
             auto httpResponse = httpSession->syncRequest(httpRequest);
+
+            if (!scrubbedPath.empty())
+                FileUtil::removeFile(scrubbedPath);
 
             http::StatusLine statusLine = httpResponse->statusLine();
             if (statusLine.statusCode() != http::StatusCode::OK)
