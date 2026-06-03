@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell office:value-type="float" office:value="0"/>
+     <table:table-cell table:formula="of:=[.A1]+[.A2]" office:value-type="float" office:value="0"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="float" office:value="0"/>
+     <table:table-cell table:formula="of:=[.A1]+3*[.A2]" office:value-type="float" office:value="0"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell/>
+     <table:table-cell table:formula="of:=2*[.A1]+4*[.A2]" office:value-type="float" office:value="0"/>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

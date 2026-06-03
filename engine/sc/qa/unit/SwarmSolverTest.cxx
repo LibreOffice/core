@@ -78,6 +78,7 @@ class SwarmSolverTest : public UnoApiTest
     void testUnboundedIntegerVariable();
     void testRepeatedSolveResetsState();
     void testControllersUnlockedAfterError();
+    void testConstrainedLinearProgram();
 
 public:
     SwarmSolverTest()
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testUnboundedIntegerVariable);
     CPPUNIT_TEST(testRepeatedSolveResetsState);
     CPPUNIT_TEST(testControllersUnlockedAfterError);
+    CPPUNIT_TEST(testConstrainedLinearProgram);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -739,6 +741,57 @@ void SwarmSolverTest::testControllersUnlockedAfterError()
     CPPUNIT_ASSERT(bThrew);
     CPPUNIT_ASSERT_MESSAGE("Controllers must be unlocked after a failed solve",
                            !xModel->hasControllersLocked());
+}
+
+void SwarmSolverTest::testConstrainedLinearProgram()
+{
+    // A small linear program with two binding inequality constraints on formula
+    // cells. Maximize 2x + 4y subject to x + y <= 4 and x + 3y <= 6, with both
+    // variables in [0, 10]. The two constraints meet at x = 3, y = 1, where the
+    // objective reaches its maximum of 10.
+
+    loadFromFile(u"ConstrainedLinear.fods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    // objective 2x + 4y is in B3
+    table::CellAddress aObjective(0, 1, 2);
+    // x is A1, y is A2
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 }, { 0, 0, 1 } };
+
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        // box bounds on the two variables
+        { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
+          uno::Any(0.0) },
+        { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(10.0) },
+        { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_GREATER_EQUAL,
+          uno::Any(0.0) },
+        { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(10.0) },
+        // x + y <= 4 (cell B1)
+        { table::CellAddress(0, 1, 0), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(4.0) },
+        // x + 3y <= 6 (cell B2)
+        { table::CellAddress(0, 1, 1), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(6.0) }
+    };
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(true);
+
+    xSolver->solve();
+
+    CPPUNIT_ASSERT(xSolver->getSuccess());
+
+    uno::Sequence<double> aSolution = xSolver->getSolution();
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aSolution[1], 1E-3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);
