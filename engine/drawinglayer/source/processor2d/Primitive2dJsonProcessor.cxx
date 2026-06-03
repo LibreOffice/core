@@ -154,20 +154,17 @@ void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
     writeGraphicBase64(mrWriter, rGraphic);
 }
 
-/// Write bitmap data: uses the bitmap's own checksum, delegates to writeGraphicData.
+/// Write bitmap data: writes the bitmap's own checksum and stores
+/// the image in the cache. The cache must be set before any bitmap
+/// primitive is serialised. Bitmaps are always referenced by
+/// checksum on the wire and never carry inline data.
 void Primitive2dJsonProcessor::writeBitmapData(const Bitmap& rBitmap)
 {
+    assert(mpBitmapCache && "bitmap cache must be set before writing bitmap primitives");
+
     sal_Int64 nChecksum = static_cast<sal_Int64>(rBitmap.GetChecksum());
     mrWriter.put("checksum", nChecksum);
-
-    Graphic aGraphic(rBitmap);
-    if (mpBitmapCache)
-    {
-        mpBitmapCache->emplace(nChecksum, aGraphic);
-        return;
-    }
-
-    writeGraphicBase64(mrWriter, aGraphic);
+    mpBitmapCache->emplace(nChecksum, Graphic(rBitmap));
 }
 
 void Primitive2dJsonProcessor::writeSvgGradientCommon(

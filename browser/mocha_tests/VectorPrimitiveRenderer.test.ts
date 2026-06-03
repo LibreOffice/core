@@ -10,17 +10,22 @@
  */
 
 describe('VectorPrimitiveRenderer', function () {
-	// The renderer constructs new Path2D. Use Path2DRecorder as a
-	// stand-in to capture the path string.
+	// The renderer constructs new Path2D and new Image. Stand-ins
+	// capture the constructor arguments and let the renderer treat
+	// the resulting object as a ready resource.
 	let originalPath2D: any;
+	let originalImage: any;
 
 	before(function () {
 		originalPath2D = (globalThis as any).Path2D;
 		(globalThis as any).Path2D = Path2DRecorder;
+		originalImage = (globalThis as any).Image;
+		(globalThis as any).Image = ImageRecorder;
 	});
 
 	after(function () {
 		(globalThis as any).Path2D = originalPath2D;
+		(globalThis as any).Image = originalImage;
 	});
 
 	// Each fixture is a single primitive built with the drawinglayer
@@ -289,6 +294,42 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(lineTos.length, 2);
 			for (let i = 0; i < 2; i++)
 				nodeassert.strictEqual(moveTos[i].args[1], lineTos[i].args[1]);
+		});
+
+		it('renders a bitmap at its declared bounds', function () {
+			// bitmap maps the unit square (0,0)-(1,1) to its display
+			// bounds through the wire matrix. The image content comes
+			// from a checksum lookup populated by a separate fetch.
+			const primitive = loadVectorRenderingReference('testBitmap').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'bitmap');
+			nodeassert.strictEqual(typeof primitive.checksum, 'number');
+			nodeassert.strictEqual(primitive.matrix.length, 6);
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// The matrix is applied to the context.
+			const transform = recorder.findCall('transform');
+			nodeassert.ok(transform, 'transform not called');
+			nodeassert.strictEqual(transform.args.length, 6);
+			for (let i = 0; i < 6; i++)
+				nodeassert.strictEqual(transform.args[i], primitive.matrix[i]);
+
+			// The image from the lookup is drawn into the unit square.
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+			nodeassert.deepStrictEqual(draw.args.slice(1), [0, 0, 1, 1]);
+
+			// The transform stays scoped to this primitive.
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 
 		it('paints each point of a pointArray', function () {

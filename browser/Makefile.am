@@ -412,6 +412,7 @@ COOL_JS_LST =\
 	src/canvas/vector/PreviewId.ts \
 	src/canvas/vector/SlideObject.ts \
 	src/canvas/vector/primitive/BackgroundColorPrimitive.ts \
+	src/canvas/vector/primitive/BitmapPrimitive.ts \
 	src/canvas/vector/primitive/ExclusiveEditViewPrimitive.ts \
 	src/canvas/vector/primitive/FilledRectanglePrimitive.ts \
 	src/canvas/vector/primitive/GroupPrimitive.ts \

@@ -10,8 +10,18 @@
  */
 
 namespace cool {
+	/// A function that resolves a bitmap checksum to the decoded
+	/// image, or undefined when the image is not in the cache yet.
+	export type BitmapLookup = (checksum: number) => HTMLImageElement | undefined;
+
 	/// Renders JSON primitives with Canvas 2D drawing operations.
 	export class VectorPrimitiveRenderer {
+		private _bitmapLookup: BitmapLookup | undefined;
+
+		constructor(bitmapLookup?: BitmapLookup) {
+			this._bitmapLookup = bitmapLookup;
+		}
+
 		renderPrimitive(
 			context: CanvasRenderingContext2D,
 			primitive: Primitive,
@@ -62,6 +72,9 @@ namespace cool {
 					break;
 				case PointArrayPrimitive.type:
 					this._renderPointArray(context, primitive as PointArrayPrimitive);
+					break;
+				case BitmapPrimitive.type:
+					this._renderBitmap(context, primitive as BitmapPrimitive);
 					break;
 				case TextSimplePortionPrimitive.type:
 					this._renderTextSimplePortion(
@@ -362,6 +375,39 @@ namespace cool {
 				if (primitive.strikeout)
 					drawLine(frame.y - frame.fontSize * 0.3, textColor);
 			}
+			context.restore();
+		}
+
+		private _renderBitmap(
+			context: CanvasRenderingContext2D,
+			primitive: BitmapPrimitive,
+		): void {
+			const matrix = primitive.matrix;
+			if (!matrix || matrix.length < 6) return;
+			if (typeof primitive.checksum !== 'number' || !this._bitmapLookup) return;
+
+			// The lookup returns undefined while the bitmap is still
+			// being fetched.
+			const image = this._bitmapLookup(primitive.checksum);
+			if (!image) return;
+			// The image may still be decoding. drawImage requires a
+			// ready source, so skip this paint. A later redraw
+			// scheduled when the image finishes decoding picks it up.
+			if (!image.complete) return;
+
+			context.save();
+			// The matrix maps the unit square to the image's bounds,
+			// so we draw the image into the unit square and let the
+			// transform place it on the slide.
+			context.transform(
+				matrix[0],
+				matrix[1],
+				matrix[2],
+				matrix[3],
+				matrix[4],
+				matrix[5],
+			);
+			context.drawImage(image, 0, 0, 1, 1);
 			context.restore();
 		}
 

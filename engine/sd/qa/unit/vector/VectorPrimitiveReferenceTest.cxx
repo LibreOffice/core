@@ -25,6 +25,9 @@
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+
+#include <vcl/bitmap.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
@@ -50,9 +53,12 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 
 #include <osl/file.hxx>
+#include <tools/json_writer.hxx>
+#include <vcl/graph.hxx>
 
 #include <fstream>
 #include <string_view>
+#include <unordered_map>
 
 using namespace drawinglayer::primitive2d;
 
@@ -64,13 +70,23 @@ namespace
 class VectorPrimitiveReferenceTest : public test::BootstrapFixture, public JsonTestTools
 {
 protected:
-    /// Run the primitives through Primitive2dJsonProcessor::dumpAsJson,
-    /// write the result to workdir, and return the parsed JSON so the
-    /// caller can assert on it.
+    /// Run the primitives through Primitive2dJsonProcessor with a
+    /// local bitmap cache, write the result to workdir, and return
+    /// the parsed JSON so the caller can assert on it. The cache is
+    /// required because bitmap primitives are checksum-only on the
+    /// wire.
     tools::JsonPath writeReference(std::u16string_view sName,
                                    Primitive2DContainer const& rPrimitives)
     {
-        OString aResult = drawinglayer::Primitive2dJsonProcessor::dumpAsJson(rPrimitives);
+        std::unordered_map<sal_Int64, Graphic> aBitmapCache;
+        tools::JsonWriter aWriter;
+        {
+            drawinglayer::Primitive2dJsonProcessor aProcessor(aWriter);
+            aProcessor.setBitmapCache(aBitmapCache);
+            auto aArray = aWriter.startArray("primitives");
+            aProcessor.decomposeAndWrite(rPrimitives);
+        }
+        OString aResult = aWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(!aResult.isEmpty());
 
         static constexpr OUString sFolder = u"/VectorRenderingReference/"_ustr;
@@ -579,6 +595,31 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextDecoratedPortion)
     assertJsonPath(aJson, "/primitives/0/underlineColor", "#000000");
     assertJsonPath(aJson, "/primitives/0/strikeout",
                    sal_Int64(drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testBitmap)
+{
+    // bitmap places a raster image through a 2D affine transform.
+    // The matrix maps the unit square (0,0)-(1,1) to the image's
+    // destination bounds. The wire carries the matrix, the source
+    // pixel dimensions and a checksum. The image bytes live in the
+    // processor's bitmap cache and never travel inline.
+    Bitmap aBitmap(Size(4, 4), vcl::PixelFormat::N32_BPP);
+    aBitmap.Erase(COL_GREEN);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(40.0, 30.0);
+    aTransform.translate(10.0, 20.0);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new drawinglayer::primitive2d::BitmapPrimitive2D(aBitmap, aTransform));
+
+    auto aJson = writeReference(u"testBitmap", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "bitmap");
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/width", sal_Int64(4));
+    assertJsonPath(aJson, "/primitives/0/height", sal_Int64(4));
+    assertJsonPathExists(aJson, "/primitives/0/checksum");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPointArray)
