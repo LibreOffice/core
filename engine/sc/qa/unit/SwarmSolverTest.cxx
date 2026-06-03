@@ -18,6 +18,8 @@
 
 #include <ParticelSwarmOptimization.hxx>
 
+#include <cmath>
+
 using namespace css;
 
 namespace
@@ -72,6 +74,7 @@ class SwarmSolverTest : public UnoApiTest
     void testParticleSwarmVelocityNotInitializedAsPosition();
     void testUnreadableConstraintStillChecksOthers();
     void testContradictoryBoundsTerminate();
+    void testUnboundedIntegerVariable();
 
 public:
     SwarmSolverTest()
@@ -91,6 +94,7 @@ public:
     CPPUNIT_TEST(testParticleSwarmVelocityNotInitializedAsPosition);
     CPPUNIT_TEST(testUnreadableConstraintStillChecksOthers);
     CPPUNIT_TEST(testContradictoryBoundsTerminate);
+    CPPUNIT_TEST(testUnboundedIntegerVariable);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -593,6 +597,49 @@ void SwarmSolverTest::testContradictoryBoundsTerminate()
 
     CPPUNIT_ASSERT_MESSAGE("A model with contradictory bounds is not solvable",
                            !xSolver->getSuccess());
+}
+
+void SwarmSolverTest::testUnboundedIntegerVariable()
+{
+    // Regression: an integer variable with no explicit bound kept the default
+    // range around the float limits. Turning those limits into a 64 bit integer
+    // collapsed both ends to the same value, so the whole population started at one
+    // point, never varied, and the search returned nothing. The variable must
+    // instead be seeded across a usable range and the model reported as solved.
+
+    loadFromFile(u"Simple.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
+    xPropSet->setPropertyValue(u"Integer"_ustr, uno::Any(true));
+
+    table::CellAddress aObjective(0, 1, 1);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+    // No constraints, so the variable keeps the default unbounded range.
+    uno::Sequence<sheet::SolverConstraint> aConstraints;
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(false);
+
+    xSolver->solve();
+
+    CPPUNIT_ASSERT_MESSAGE("An unbounded integer variable must still be solvable",
+                           xSolver->getSuccess());
+
+    uno::Sequence<double> aSolution = xSolver->getSolution();
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
+    CPPUNIT_ASSERT(std::isfinite(aSolution[0]));
+    CPPUNIT_ASSERT_EQUAL(aSolution[0], std::trunc(aSolution[0]));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);

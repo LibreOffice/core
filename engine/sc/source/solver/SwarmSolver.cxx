@@ -374,8 +374,14 @@ void SwarmSolver::initializeVariables(std::vector<double>& rVariables, std::mt19
             }
             else if (mbInteger)
             {
-                sal_Int64 intLower(rBound.lower);
-                sal_Int64 intUpper(rBound.upper);
+                // The default bounds sit around the float range, which a 64 bit
+                // integer cannot hold. Turning such a double into sal_Int64 is
+                // undefined, so clamp to a magnitude that converts safely first.
+                // 2^62 is a power of two well inside the range and exact in both
+                // types.
+                constexpr double fIntegerLimit = double(sal_Int64(1) << 62);
+                sal_Int64 intLower(std::clamp(rBound.lower, -fIntegerLimit, fIntegerLimit));
+                sal_Int64 intUpper(std::clamp(rBound.upper, -fIntegerLimit, fIntegerLimit));
                 std::uniform_int_distribution<sal_Int64> random(intLower, intUpper);
                 rVariables[i] = double(random(rGenerator));
             }
