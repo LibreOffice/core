@@ -69,6 +69,12 @@ namespace cool {
 						primitive as TextSimplePortionPrimitive,
 					);
 					break;
+				case TextDecoratedPortionPrimitive.type:
+					this._renderTextDecoratedPortion(
+						context,
+						primitive as TextDecoratedPortionPrimitive,
+					);
+					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
@@ -255,49 +261,107 @@ namespace cool {
 			10: 900,
 		};
 
-		private _renderTextSimplePortion(
+		// Sets up the canvas font and (when needed) the rotation
+		// transform for a text primitive, and returns the drawing
+		// anchor and the substring to paint. Callers must save and
+		// restore the context around the call. Returns null if there
+		// is nothing to draw.
+		private _setupTextFrame(
 			context: CanvasRenderingContext2D,
-			primitive: TextSimplePortionPrimitive,
-		): void {
-			if (!primitive.text) return;
-
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+		): { x: number; y: number; fontSize: number; text: string } | null {
+			if (!primitive.text) return null;
 			const start = primitive.textPosition ?? 0;
 			const length = primitive.textLength ?? primitive.text.length - start;
 			const text = primitive.text.substring(start, start + length);
-			if (!text) return;
+			if (!text) return null;
 
 			const [a = 0, b = 0, c = 0, , e = 0, f = 0] = primitive.matrix ?? [];
 			const fontSize = primitive.fontSize ?? 12;
-
 			const style = primitive.italic ? 'italic' : 'normal';
 			const weight =
 				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
 			const family = primitive.familyname ?? 'sans-serif';
 
-			context.save();
 			context.font = `${style} ${weight} ${fontSize}px "${family}"`;
-			context.fillStyle = primitive.fontcolor ?? '#000000';
-
 			const rotated = b !== 0 || c !== 0;
 			if (rotated) {
 				// Off-diagonal matrix entries mean the run is rotated.
-				// Move to the anchor first, then rotate so fillText
+				// Move to the anchor first, then rotate so the text
 				// draws along the rotated direction.
 				context.translate(e, f);
 				context.rotate(Math.atan2(b, a));
 			}
-			const x = rotated ? 0 : e;
-			const y = rotated ? 0 : f;
-			context.fillText(text, x, y);
+			return {
+				x: rotated ? 0 : e,
+				y: rotated ? 0 : f,
+				fontSize,
+				text,
+			};
+		}
 
-			if (primitive.outline) {
-				context.strokeStyle = primitive.fontcolor ?? '#000000';
-				// Outline thickness scales with the font size. A one-
-				// pixel stroke becomes invisible on large text.
-				context.lineWidth = Math.max(1, fontSize / 20);
-				context.strokeText(text, x, y);
+		private _renderTextSimplePortion(
+			context: CanvasRenderingContext2D,
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+		): void {
+			context.save();
+			const frame = this._setupTextFrame(context, primitive);
+			if (frame) {
+				context.fillStyle = primitive.fontcolor ?? '#000000';
+				context.fillText(frame.text, frame.x, frame.y);
+
+				if (primitive.outline) {
+					context.strokeStyle = primitive.fontcolor ?? '#000000';
+					// Outline thickness scales with the font size. A one-
+					// pixel stroke becomes invisible on large text.
+					context.lineWidth = Math.max(1, frame.fontSize / 20);
+					context.strokeText(frame.text, frame.x, frame.y);
+				}
 			}
+			context.restore();
+		}
 
+		private _renderTextDecoratedPortion(
+			context: CanvasRenderingContext2D,
+			primitive: TextDecoratedPortionPrimitive,
+		): void {
+			// Paint the text body first. The decorations draw on
+			// top below.
+			this._renderTextSimplePortion(context, primitive);
+
+			if (!primitive.underline && !primitive.overline && !primitive.strikeout)
+				return;
+
+			context.save();
+			const frame = this._setupTextFrame(context, primitive);
+			if (frame) {
+				const width = context.measureText(frame.text).width;
+				const lineWidth = Math.max(1, frame.fontSize / 20);
+				const textColor = primitive.fontcolor ?? '#000000';
+
+				const drawLine = (lineY: number, color: string): void => {
+					context.strokeStyle = color;
+					context.lineWidth = lineWidth;
+					context.beginPath();
+					context.moveTo(frame.x, lineY);
+					context.lineTo(frame.x + width, lineY);
+					context.stroke();
+				};
+
+				if (primitive.underline) {
+					const lineY = primitive.underlineAbove
+						? frame.y - frame.fontSize * 0.85
+						: frame.y + frame.fontSize * 0.15;
+					drawLine(lineY, primitive.underlineColor ?? textColor);
+				}
+				if (primitive.overline)
+					drawLine(
+						frame.y - frame.fontSize * 0.85,
+						primitive.overlineColor ?? textColor,
+					);
+				if (primitive.strikeout)
+					drawLine(frame.y - frame.fontSize * 0.3, textColor);
+			}
 			context.restore();
 		}
 

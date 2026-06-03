@@ -252,6 +252,45 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
+		it('draws underline and strikeout for textDecoratedPortion', function () {
+			// textDecoratedPortion paints the same text as the simple
+			// portion and adds underline, overline and strikeout lines
+			// on top. Each decoration is one stroke at the right
+			// vertical offset from the text anchor.
+			const primitive = loadVectorRenderingReference(
+				'testTextDecoratedPortion',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'textDecoratedPortion');
+			nodeassert.ok(primitive.underline > 0, 'fixture must have underline');
+			nodeassert.ok(primitive.strikeout > 0, 'fixture must have strikeout');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// Text is still drawn.
+			nodeassert.ok(recorder.findCall('fillText'), 'fillText not called');
+
+			// One decoration stroke per decoration. The fixture sets
+			// underline and strikeout, so we expect two strokes.
+			const strokes = recorder.callsOf('stroke');
+			nodeassert.strictEqual(strokes.length, 2);
+
+			// The fixture paints both decorations in black, so each
+			// stroke uses that colour.
+			for (const stroke of strokes)
+				nodeassert.strictEqual(stroke.properties.strokeStyle, '#000000');
+
+			// Both decoration lines are horizontal: each moveTo and
+			// lineTo share a y coordinate.
+			const moveTos = recorder.callsOf('moveTo');
+			const lineTos = recorder.callsOf('lineTo');
+			nodeassert.strictEqual(moveTos.length, 2);
+			nodeassert.strictEqual(lineTos.length, 2);
+			for (let i = 0; i < 2; i++)
+				nodeassert.strictEqual(moveTos[i].args[1], lineTos[i].args[1]);
+		});
+
 		it('paints each point of a pointArray', function () {
 			// pointArray lays down a single-pixel mark at every point,
 			// all in the same colour.

@@ -144,6 +144,13 @@ class CanvasRecorder {
 	strokeText(...args: any[]): void {
 		this._record('strokeText', args);
 	}
+	measureText(text: string): TextMetrics {
+		// Deterministic stub. Real canvases measure against the
+		// current font and OS font tables; for tests we just give
+		// each character a fixed advance so assertions can predict
+		// the result.
+		return { width: text.length * 10 } as TextMetrics;
+	}
 	drawImage(...args: any[]): void {
 		this._record('drawImage', args);
 	}

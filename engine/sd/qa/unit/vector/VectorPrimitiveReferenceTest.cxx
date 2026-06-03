@@ -26,6 +26,8 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
@@ -544,6 +546,39 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextSimplePortion)
     assertJsonPath(aJson, "/primitives/0/weight", sal_Int64(WEIGHT_NORMAL));
     assertJsonPathDouble(aJson, "/primitives/0/fontSize", 20.0, 1e-9);
     CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextDecoratedPortion)
+{
+    // The same horizontal "Hello" as testTextSimplePortion, but
+    // underlined and struck through. The wire adds the decoration
+    // fields alongside the text portion ones.
+    basegfx::B2DHomMatrix aTextTransform;
+    aTextTransform.scale(20.0, 20.0);
+    aTextTransform.translate(50.0, 100.0);
+
+    drawinglayer::attribute::FontAttribute aFontAttr(u"Liberation Sans"_ustr, u""_ustr,
+                                                     WEIGHT_NORMAL);
+
+    css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{}, std::vector<sal_Bool>{},
+        aFontAttr, aLocale, basegfx::BColor(0.0, 0.0, 0.0), COL_TRANSPARENT, 0, 100, 0, false,
+        basegfx::BColor(0.0, 0.0, 0.0), basegfx::BColor(0.0, 0.0, 0.0),
+        drawinglayer::primitive2d::TEXT_LINE_NONE, drawinglayer::primitive2d::TEXT_LINE_SINGLE,
+        false, drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE));
+
+    auto aJson = writeReference(u"testTextDecoratedPortion", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "textDecoratedPortion");
+    assertJsonPath(aJson, "/primitives/0/text", "Hello");
+    assertJsonPath(aJson, "/primitives/0/underline",
+                   sal_Int64(drawinglayer::primitive2d::TEXT_LINE_SINGLE));
+    assertJsonPath(aJson, "/primitives/0/underlineColor", "#000000");
+    assertJsonPath(aJson, "/primitives/0/strikeout",
+                   sal_Int64(drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPointArray)
