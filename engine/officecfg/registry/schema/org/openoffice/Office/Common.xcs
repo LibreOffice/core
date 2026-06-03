@@ -3024,6 +3024,14 @@
           <it>OpenSymbol</it>
         </value>
       </prop>
+      <prop oor:name="DefaultListNumbering" oor:type="oor:int-list" oor:nillable="false">
+        <info>
+          <desc>Per-level default numbering type when an ordered list is toggled in Writer. Values are css::style::NumberingType constants (4 = ARABIC, 0/1 = letters upper/lower, 2/3 = roman upper/lower); cycles by modulo. 5 (NUMBER_NONE) is a sentinel meaning "no per-level preference, use ARABIC".</desc>
+        </info>
+        <value>
+          <it>4</it>
+        </value>
+      </prop>
     </group>
     <group oor:name="Help">
       <info>

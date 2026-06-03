@@ -32,11 +32,15 @@
 
 #include <SwStyleNameMapper.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/intitem.hxx>
+#include <comphelper/configuration.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 
 #include <vcl/tabs.hrc>
@@ -868,12 +872,14 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
         &rSwItemSet)
     , m_rWrtSh(rSh)
     , m_xDummyCombo(m_xBuilder->weld_combo_box(u"dummycombo"_ustr))
+    , m_xSetDefaultBtn(m_xBuilder->weld_button(u"setdefault"_ustr))
 {
     weld::Button* pButton = GetUserButton();
     pButton->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
     pButton->set_sensitive(m_rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
     weld::Button& pCancelButton = GetCancelButton();
     pCancelButton.connect_clicked(LINK(this, SwSvxNumBulletTabDialog, CancelHdl));
+    m_xSetDefaultBtn->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, SetDefaultHdl));
     AddTabPage(u"bullets"_ustr, TabResId(RID_TAB_UNOORDERED.aLabel), RID_SVXPAGE_PICK_BULLET,
                RID_M + RID_TAB_UNOORDERED.sIconName);
     AddTabPage(u"singlenum"_ustr, TabResId(RID_TAB_ORDERED.aLabel), RID_SVXPAGE_PICK_SINGLE_NUM,
@@ -961,6 +967,87 @@ IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, CancelHdl, weld::Button&, void)
     PrepareCancel();
 
     m_xDialog->response(RET_CANCEL);
+}
+
+IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, SetDefaultHdl, weld::Button&, void)
+{
+    // PrepareLeaveCurrentPage rather than Apply: Apply returns false when
+    // no page has been modified, but "Set as default" must also work on an
+    // unedited dialog.
+    if (!PrepareLeaveCurrentPage())
+        return;
+
+    const SvxNumBulletItem* pItem
+        = m_xExampleSet->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
+    if (!pItem)
+        return;
+
+    const SvxNumRule& rRule = pItem->GetNumRule();
+    const sal_uInt16 nLevels = rRule.GetLevelCount();
+    if (nLevels == 0)
+        return;
+
+    css::uno::Sequence<sal_Int32> aNumbering(nLevels);
+    css::uno::Sequence<OUString> aBullets(nLevels);
+    css::uno::Sequence<OUString> aFonts(nLevels);
+    auto* pNumberingData = aNumbering.getArray();
+    auto* pBulletsData = aBullets.getArray();
+    auto* pFontsData = aFonts.getArray();
+
+    // Non-number levels write SVX_NUM_NUMBER_NONE into aNumbering as a
+    // sentinel: storing the actual type would propagate SVX_NUM_CHAR_SPECIAL
+    // into the numbered-toggle path in NumOrBulletOn.
+    bool bAnyBulletLevel = false;
+    bool bAnyNumberLevel = false;
+    for (sal_uInt16 nLevel = 0; nLevel < nLevels; ++nLevel)
+    {
+        const SvxNumberFormat& rFmt = rRule.GetLevel(nLevel);
+        const SvxNumType eType = rFmt.GetNumberingType();
+
+        if (eType == SVX_NUM_CHAR_SPECIAL)
+        {
+            bAnyBulletLevel = true;
+            pNumberingData[nLevel] = SVX_NUM_NUMBER_NONE;
+            const sal_UCS4 cBullet = rFmt.GetBulletChar();
+            pBulletsData[nLevel] = OUString(&cBullet, 1);
+            const auto& rFont = rFmt.GetBulletFont();
+            pFontsData[nLevel] = rFont ? rFont->GetFamilyName() : u"OpenSymbol"_ustr;
+        }
+        else if (eType == SVX_NUM_NUMBER_NONE || eType == SVX_NUM_BITMAP)
+        {
+            pNumberingData[nLevel] = SVX_NUM_NUMBER_NONE;
+            pBulletsData[nLevel] = u"•"_ustr;
+            pFontsData[nLevel] = u"OpenSymbol"_ustr;
+        }
+        else
+        {
+            bAnyNumberLevel = true;
+            pNumberingData[nLevel] = eType;
+            pBulletsData[nLevel] = u"•"_ustr;
+            pFontsData[nLevel] = u"OpenSymbol"_ustr;
+        }
+    }
+
+    try
+    {
+        auto pBatch = comphelper::ConfigurationChanges::create();
+        if (bAnyNumberLevel)
+            officecfg::Office::Common::BulletsNumbering::DefaultListNumbering::set(
+                aNumbering, pBatch);
+        if (bAnyBulletLevel)
+        {
+            officecfg::Office::Common::BulletsNumbering::DefaultListBullets::set(
+                aBullets, pBatch);
+            officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::set(
+                aFonts, pBatch);
+        }
+        pBatch->commit();
+    }
+    catch (const css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.ui",
+                             "SwSvxNumBulletTabDialog: failed to persist bullets/numbering defaults");
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -124,8 +124,10 @@ class SwSvxNumBulletTabDialog final : public SfxTabDialogController
     virtual void    PageCreated(const OUString& rPageId, SfxTabPage& rPage) override;
     DECL_LINK(RemoveNumberingHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_LINK(SetDefaultHdl, weld::Button&, void);
 
     std::unique_ptr<weld::ComboBox> m_xDummyCombo;
+    std::unique_ptr<weld::Button> m_xSetDefaultBtn;
 
 public:
     SwSvxNumBulletTabDialog(weld::Window* pParent,

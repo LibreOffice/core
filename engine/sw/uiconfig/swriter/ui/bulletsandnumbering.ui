@@ -34,6 +34,22 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="setdefault">
+                <property name="label" translatable="yes" context="bulletsandnumbering|setdefault">Set as My _Default</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|setdefault|tooltip_text">Save the current bullet character, font and numbering type per level as your personal default for toggling lists from the toolbar. The setting applies only to you and is restored the next time you open a document on this server.</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="reset">
                 <property name="label" translatable="yes" context="bulletsandnumbering|reset">Reset</property>
                 <property name="visible">True</property>
@@ -44,7 +60,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -60,7 +76,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -74,7 +90,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -88,7 +104,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
                 <property name="secondary">True</property>
               </packing>
             </child>
@@ -99,7 +115,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">5</property>
+                <property name="position">6</property>
               </packing>
             </child>
           </object>

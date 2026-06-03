@@ -1481,6 +1481,22 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
 {
     StartUndo(SwUndoId::NUMORNONUM);
 
+    // SVX_NUM_NUMBER_NONE is a sentinel from SetDefaultHdl meaning "no
+    // number preference at this level"; map back to ARABIC at lookup.
+    // Empty sequence (or !bNum) skips lookups and uses ARABIC.
+    const uno::Sequence<sal_Int32> aDefaultNumbering = bNum
+        ? officecfg::Office::Common::BulletsNumbering::DefaultListNumbering::get()
+        : uno::Sequence<sal_Int32>();
+    auto fnNumberingTypeForLevel = [&aDefaultNumbering](sal_Int32 nLevel) -> SvxNumType
+    {
+        if (!aDefaultNumbering.hasElements())
+            return SVX_NUM_ARABIC;
+        const sal_Int32 v = aDefaultNumbering[nLevel % aDefaultNumbering.getLength()];
+        if (v == SVX_NUM_NUMBER_NONE)
+            return SVX_NUM_ARABIC;
+        return static_cast<SvxNumType>(v);
+    };
+
     const SwNumRule* pNumRule = GetNumRuleAtCurrCursorPos();
 
     // - activate outline rule respectively turning on outline rule for
@@ -1650,7 +1666,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 SwNumFormat aFormat(aNumRule.Get(o3tl::narrowing<sal_uInt16>(nLevel)));
 
                 if (bNum)
-                    aFormat.SetNumberingType(SVX_NUM_ARABIC);
+                    aFormat.SetNumberingType(fnNumberingTypeForLevel(nLevel));
                 else
                 {
                     // #i63395# Only apply user defined default bullet font
@@ -1731,6 +1747,10 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
                 aFormat.SetListFormat(u""_ustr, u""_ustr, nLvl);
+            }
+            else
+            {
+                aFormat.SetNumberingType(fnNumberingTypeForLevel(nLvl));
             }
 
             // #i95907#
