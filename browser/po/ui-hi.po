@@ -5725,7 +5725,7 @@ msgstr ""
 
 #: src/app/Socket.ts:300
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "उफ़, दस्तावेज़ से संपर्क करने में कुछ गडबड है। "
+msgstr "उफ़, {productname} से संपर्क करने में कुछ गडबड है। "
 
 #: src/app/Socket.ts:566
 msgid ""

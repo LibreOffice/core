@@ -5587,7 +5587,7 @@ msgstr "Eilutės numeris"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:349
 msgid "Column {index}"
-msgstr "Stulpelis {indeksas}"
+msgstr "Stulpelis {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"

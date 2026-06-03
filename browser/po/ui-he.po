@@ -5903,9 +5903,7 @@ msgstr "מידע נוסף ותמיכה"
 msgid ""
 "This service is limited to {0} documents, and {1} connections total by the "
 "admin. This limit has been reached. Please try again later."
-msgstr ""
-"שירות זה מוגבל לכדי {0} מסמכים ו־%1 חיבורים סך הכול על ידי המנהל. הגעת "
-"למגבלה זו. נא לנסות שוב מאוחר יותר."
+msgstr "שירות זה מוגבל לכדי {0} מסמכים ו־{1} חיבורים סך הכול על ידי המנהל. הגעת למגבלה זו. נא לנסות שוב מאוחר יותר."
 
 #: src/errormessages.js:27
 msgid ""

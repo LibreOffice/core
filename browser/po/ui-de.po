@@ -2789,7 +2789,7 @@ msgstr "Aktion aus Aufklappmenü anwenden"
 
 #: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
-msgstr "{Name} öffnen"
+msgstr "{name} öffnen"
 
 #: src/control/Control.JSDialogBuilder.js:1886
 #: src/control/Control.Menubar.ts:962
@@ -5996,11 +5996,7 @@ msgid ""
 "that it is suitable for deployment in enterprises, this message appears "
 "when more than {docs} documents or {connections} connections are in use "
 "concurrently."
-msgstr ""
-"Dies ist eine nicht unterstützte Version von {Produktname}. Um den Eindruck "
-"zu vermeiden, dass es für den Einsatz in Unternehmen geeignet ist, wird "
-"diese Meldung angezeigt, wenn mehr als {docs} Dokumente oder {connections} "
-"Verbindungen gleichzeitig verwendet werden."
+msgstr "Dies ist eine nicht unterstützte Version von {productname}. Um den Eindruck zu vermeiden, dass es für den Einsatz in Unternehmen geeignet ist, wird diese Meldung angezeigt, wenn mehr als {docs} Dokumente oder {connections} Verbindungen gleichzeitig verwendet werden."
 
 #: src/errormessages.js:25
 msgid "More information and support"

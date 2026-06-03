@@ -1973,7 +1973,7 @@ msgstr ""
 
 #: src/control/Control.AlertDialog.js:107
 msgid "The server encountered a {0} error while parsing the {1} command."
-msgstr "Сървърът се сблъска с грешка „{0}“ при анализа на командата „%1“."
+msgstr "Сървърът се сблъска с грешка „{0}“ при анализа на командата „{1}“."
 
 #: src/control/Control.BackstageView.ts:96
 #: src/control/Control.BackstageView.ts:239

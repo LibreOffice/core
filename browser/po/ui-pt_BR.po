@@ -4398,7 +4398,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "visualização da página "
+msgstr "visualização da página %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"

@@ -4358,7 +4358,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "پیش نمایش صفحه "
+msgstr "پیش نمایش صفحه %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"
@@ -4708,11 +4708,11 @@ msgstr ""
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
-msgstr "% کاربر ملحق شده است"
+msgstr "{user} ملحق شده است"
 
 #: src/control/Control.UserList.ts:57
 msgid "{user} has left"
-msgstr "% کاربر ترک کرده است"
+msgstr "{user} ترک کرده است"
 
 #: src/control/Control.UserList.ts:58
 msgid "Following {user}"
@@ -5897,9 +5897,7 @@ msgstr "اطلاعات بیشتر و پشتیبانی"
 msgid ""
 "This service is limited to {0} documents, and {1} connections total by the "
 "admin. This limit has been reached. Please try again later."
-msgstr ""
-"این سرویس به % 0 سند و % 1 اتصالات در مجموع توسط سرپرست محدود شده است. به "
-"این حد رسیده است. لطفاً بعداً دوباره امتحان کنید."
+msgstr "این سرویس به {0} سند و {1} اتصالات در مجموع توسط سرپرست محدود شده است. به این حد رسیده است. لطفاً بعداً دوباره امتحان کنید."
 
 #: src/errormessages.js:27
 msgid ""

@@ -5975,11 +5975,7 @@ msgid ""
 "that it is suitable for deployment in enterprises, this message appears "
 "when more than {docs} documents or {connections} connections are in use "
 "concurrently."
-msgstr ""
-"Seo leagan nach dtacaítear leis de {productname}. Chun an tuiscint go bhfuil "
-"sé oiriúnach le himscaradh i bhfiontair a sheachaint, feictear an "
-"teachtaireacht seo nuair a bhíonn níos mó ná doiciméid {docs} nó naisc "
-"{naisc} in úsáid i gcomhthráth."
+msgstr "Seo leagan nach dtacaítear leis de {productname}. Chun an tuiscint go bhfuil sé oiriúnach le himscaradh i bhfiontair a sheachaint, feictear an teachtaireacht seo nuair a bhíonn níos mó ná doiciméid {docs} nó naisc {connections} in úsáid i gcomhthráth."
 
 #: src/errormessages.js:25
 msgid "More information and support"

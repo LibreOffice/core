@@ -2752,7 +2752,7 @@ msgstr ""
 
 #: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
-msgstr "Abra {nome}"
+msgstr "Abra {name}"
 
 #: src/control/Control.JSDialogBuilder.js:1886
 #: src/control/Control.Menubar.ts:962
@@ -6574,7 +6574,7 @@ msgstr "Diminuir ampliação"
 
 #: src/slideshow/PresenterConsole.js:188
 msgid "Preview Slide {1}"
-msgstr "Pré-visualizar Diapositivo %1"
+msgstr "Pré-visualizar Diapositivo {1}"
 
 #: src/slideshow/PresenterConsole.js:1316
 msgid "Slide {0} of {1}"

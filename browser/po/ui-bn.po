@@ -4636,7 +4636,7 @@ msgstr ""
 #: src/control/Control.Tabs.js:545
 #, fuzzy
 msgid "Are you sure you want to delete sheet, {sheet}?"
-msgstr "আপনি কি এই সেশন শেষ করতে চান?"
+msgstr "আপনি কি শীট, {sheet}, মুছে ফেলতে চান?"
 
 #: src/control/Control.Tabs.js:556
 msgid "Rename sheet"

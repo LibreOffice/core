@@ -4667,7 +4667,7 @@ msgstr ""
 #: src/control/Control.Tabs.js:545
 #, fuzzy
 msgid "Are you sure you want to delete sheet, {sheet}?"
-msgstr "Da li ste sigurni da želite obrisati ovaj list?"
+msgstr "Da li ste sigurni da želite obrisati list, {sheet}?"
 
 #: src/control/Control.Tabs.js:556
 msgid "Rename sheet"
@@ -5719,7 +5719,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "Uh, nastao je problem prilikom spajanja sa LibreOffice na mreži : "
+msgstr "Uh, nastao je problem prilikom spajanja sa {productname} : "
 
 #: src/app/Socket.ts:566
 msgid ""

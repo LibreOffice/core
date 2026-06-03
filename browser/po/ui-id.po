@@ -2764,7 +2764,7 @@ msgstr "Terapkan dropdown tindakan"
 
 #: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
-msgstr "Buka (nama)"
+msgstr "Buka {name}"
 
 #: src/control/Control.JSDialogBuilder.js:1886
 #: src/control/Control.Menubar.ts:962
@@ -5626,19 +5626,19 @@ msgstr "Tidak ada emoji yang cocok dengan \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
-msgstr "Atas: {atas}"
+msgstr "Atas: {top}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:144
 msgid "Left: {left}"
-msgstr "Kiri: {kiri}"
+msgstr "Kiri: {left}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:154
 msgid "Bottom: {bottom}"
-msgstr "Bawah: {bawah}"
+msgstr "Bawah: {bottom}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:159
 msgid "Right: {right}"
-msgstr "Kanan: {kanan}"
+msgstr "Kanan: {right}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:183
 msgid "Custom Margins…"
@@ -5966,9 +5966,7 @@ msgstr "Informasi dan dukungan lebih lanjut"
 msgid ""
 "This service is limited to {0} documents, and {1} connections total by the "
 "admin. This limit has been reached. Please try again later."
-msgstr ""
-"Layanan ini terbatas pada{0} dokumen, dan%1 koneksi total oleh admin. Batas "
-"ini telah tercapai. Silakan coba lagi nanti."
+msgstr "Layanan ini terbatas pada{0} dokumen, dan{1} koneksi total oleh admin. Batas ini telah tercapai. Silakan coba lagi nanti."
 
 #: src/errormessages.js:27
 msgid ""
@@ -5988,7 +5986,7 @@ msgstr ""
 
 #: src/errormessages.js:29
 msgid "Authorization error was: '{errormessage}'."
-msgstr "Kesalahan otorisasi adalah: '%galatMesage'."
+msgstr "Kesalahan otorisasi adalah: '{errormessage}'."
 
 #: src/errormessages.js:30
 msgid "Wrong or missing WOPISrc parameter, please contact support."

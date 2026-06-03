@@ -2765,7 +2765,7 @@ msgstr ""
 
 #: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
-msgstr "Ouvrir {nom}"
+msgstr "Ouvrir {name}"
 
 #: src/control/Control.JSDialogBuilder.js:1886
 #: src/control/Control.Menubar.ts:962

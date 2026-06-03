@@ -5931,9 +5931,7 @@ msgstr "Thêm thông tin và hỗ trợ"
 msgid ""
 "This service is limited to {0} documents, and {1} connections total by the "
 "admin. This limit has been reached. Please try again later."
-msgstr ""
-"Dịch vụ này được quản trị viên giới hạn cho% 0 tài liệu và% 1 kết nối. Giới "
-"hạn này đã đạt đến. Vui lòng thử lại sau."
+msgstr "Dịch vụ này được quản trị viên giới hạn cho {0} tài liệu và {1} kết nối. Giới hạn này đã đạt đến. Vui lòng thử lại sau."
 
 #: src/errormessages.js:27
 msgid ""

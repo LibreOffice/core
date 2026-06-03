@@ -1058,7 +1058,7 @@ msgstr "Ctrl+Shift+Alt+D i tuffɣa"
 
 #: src/app/Debug.ts:1573
 msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
-msgstr "Tiririt n uneḍru tettwaɛeṭṭel ɣef teɣzi ur nettuṛaǧu ara: 0}ms"
+msgstr "Tiririt n uneḍru tettwaɛeṭṭel ɣef teɣzi ur nettuṛaǧu ara: {0}ms"
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
@@ -4735,11 +4735,11 @@ msgstr "Sken-d umuɣ"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
-msgstr "{user] yekcem-d"
+msgstr "{user} yekcem-d"
 
 #: src/control/Control.UserList.ts:57
 msgid "{user} has left"
-msgstr "{user] yeffeɣ"
+msgstr "{user} yeffeɣ"
 
 #: src/control/Control.UserList.ts:58
 msgid "Following {user}"
@@ -6470,7 +6470,7 @@ msgstr "Tigri Tuzwirt {1}"
 
 #: src/slideshow/PresenterConsole.js:1316
 msgid "Slide {0} of {1}"
-msgstr "Tigri {0] n {1}"
+msgstr "Tigri {0} n {1}"
 
 #: src/slideshow/PresenterConsole.js:1340
 msgid "No Notes"

@@ -5726,7 +5726,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "A ghe ze un problema inte ła conesion a Collabora Online:"
+msgstr "A ghe ze un problema inte ła conesion a {productname}:"
 
 #: src/app/Socket.ts:566
 msgid ""

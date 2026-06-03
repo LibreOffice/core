@@ -292,7 +292,7 @@ msgstr "فشل تعيين ملف تعريف ارتباط مصادقة jwt عبر
 
 #: admin/src/AdminClusterOverview.js:553 admin/src/AdminSocketOverview.js:424
 msgid "Failed to authenticate this session over protocol {0}"
-msgstr "فشلت مصادقة هذه الجلسة عبر البروتوكول٪ 0"
+msgstr "فشلت مصادقة هذه الجلسة عبر البروتوكول {0}"
 
 #: admin/src/AdminClusterOverview.js:558 admin/src/AdminSocketOverview.js:429
 msgid "Warning"
@@ -4380,7 +4380,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "مُعاينة الصفحة "
+msgstr "مُعاينة الصفحة %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"
@@ -5724,7 +5724,7 @@ msgstr ""
 #: src/control/jsdialog/Widget.SidebarContainers.ts:72
 #, fuzzy
 msgid "More options for {1}"
-msgstr "خيارات أخرى لـ {name}"
+msgstr "خيارات أخرى لـ {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2004
 msgid "Headings and objects that you add to the document will appear here"
@@ -5918,9 +5918,7 @@ msgstr "الدعم ومعلومات أكثر"
 msgid ""
 "This service is limited to {0} documents, and {1} connections total by the "
 "admin. This limit has been reached. Please try again later."
-msgstr ""
-"هذه الخدمة مقصورة على {0} من المستندات، و%1 من الاتصالات حسب إجراءات المدير. "
-"لقد بلغت الخدمة هذا الحد. رجاءً أعد المحاولة لاحقا."
+msgstr "هذه الخدمة مقصورة على {0} من المستندات، و{1} من الاتصالات حسب إجراءات المدير. لقد بلغت الخدمة هذا الحد. رجاءً أعد المحاولة لاحقا."
 
 #: src/errormessages.js:27
 msgid ""
@@ -5974,7 +5972,7 @@ msgstr ""
 
 #: src/errormessages.js:34
 msgid "Invalid link: '{url}'"
-msgstr "الرابط غير صالح: '٪url'"
+msgstr "الرابط غير صالح: '{url}'"
 
 #: src/errormessages.js:35
 msgid ""
@@ -6309,7 +6307,7 @@ msgstr "يرفع..."
 
 #: src/map/handler/Map.FileInserter.js:254
 msgid "Uploading file to server failed with status: {0}"
-msgstr "فشل تحميل الملف إلى الخادم مع الحالة:٪ 0"
+msgstr "فشل تحميل الملف إلى الخادم مع الحالة: {0}"
 
 #: src/map/handler/Map.FileInserter.js:281
 msgid "Failed to read the selected file."

@@ -5733,7 +5733,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "Ep, hi ha un problema en connectar al document"
+msgstr "Ep, hi ha un problema en connectar a {productname}"
 
 #: src/app/Socket.ts:566
 msgid ""

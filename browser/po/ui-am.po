@@ -4727,11 +4727,11 @@ msgstr ""
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
-msgstr "%ተጠቃሚ ገብቷል"
+msgstr "{user} ገብቷል"
 
 #: src/control/Control.UserList.ts:57
 msgid "{user} has left"
-msgstr "%ተጠቃሚ ወጥቷል"
+msgstr "{user} ወጥቷል"
 
 #: src/control/Control.UserList.ts:58
 msgid "Following {user}"
@@ -5728,7 +5728,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "ውይ! ከ ሰነድ ጋር ለ መገናኘት ሲሞከር ችግር ተፈጥሯል"
+msgstr "ውይ! ከ {productname} ጋር ለ መገናኘት ሲሞከር ችግር ተፈጥሯል"
 
 #: src/app/Socket.ts:566
 msgid ""
@@ -5939,9 +5939,7 @@ msgstr ""
 msgid ""
 "Your session will expire in {time}. Please save your work and refresh the "
 "session (or webpage) to continue. You might need to login again."
-msgstr ""
-"የ እርስዎ ክፍለ ጊዜ ያልቃል በ %ጊዜ ውስጥ: እባክዎን የ እርስዎን ስራ ያስቀምጡ እና ለ መቀጠል ክፍለ ጊዜውን ("
-"ወይንም ድህረ ገጹን) ያነቃቁ:"
+msgstr "የ እርስዎ ክፍለ ጊዜ ያልቃል በ {time} ውስጥ: እባክዎን የ እርስዎን ስራ ያስቀምጡ እና ለ መቀጠል ክፍለ ጊዜውን (ወይንም ድህረ ገጹን) ያነቃቁ:"
 
 #: src/errormessages.js:32
 #, fuzzy

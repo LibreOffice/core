@@ -4380,7 +4380,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "페이지 미리보기 "
+msgstr "페이지 미리보기 %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"
@@ -5736,7 +5736,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "문서를 여는데 문제가 발생했습니다."
+msgstr "{productname}를 여는데 문제가 발생했습니다."
 
 #: src/app/Socket.ts:566
 msgid ""

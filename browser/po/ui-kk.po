@@ -4387,7 +4387,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "бет алдын ала қарауы "
+msgstr "бет алдын ала қарауы %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"
@@ -5738,7 +5738,7 @@ msgstr ""
 #: src/control/jsdialog/Widget.SidebarContainers.ts:72
 #, fuzzy
 msgid "More options for {1}"
-msgstr "{name} үшін қосымша параметрлер"
+msgstr "{1} үшін қосымша параметрлер"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2004
 msgid "Headings and objects that you add to the document will appear here"
@@ -5751,7 +5751,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "Қап, Collabora Online жүйесіне байланысу қатесі орын алды : "
+msgstr "Қап, {productname} жүйесіне байланысу қатесі орын алды : "
 
 #: src/app/Socket.ts:566
 msgid ""

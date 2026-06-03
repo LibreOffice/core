@@ -4369,7 +4369,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "ページのプレビュー "
+msgstr "ページのプレビュー %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"
@@ -5722,7 +5722,7 @@ msgstr ""
 
 #: src/app/Socket.ts:300
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "あれれ〜？、ドキュメントへの接続に問題が発生しました "
+msgstr "あれれ〜？、{productname}への接続に問題が発生しました "
 
 #: src/app/Socket.ts:566
 msgid ""

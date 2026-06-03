@@ -2244,9 +2244,7 @@ msgstr "تاللاشنى چۈشۈرۈش"
 msgid ""
 "If you want to share large elements outside of {productname} it's necessary "
 "to first download them."
-msgstr ""
-"ئەگەر چوڭ ئېلېمېنتلارنى {مەھسۇلات ئىسمى} دىن باشقا ھەمبەھىرلىمەكچى بولسىڭىز ،"
-" ئالدى بىلەن ئۇلارنى چۈشۈرۈش كېرەك."
+msgstr "ئەگەر چوڭ ئېلېمېنتلارنى {productname} دىن باشقا ھەمبەھىرلىمەكچى بولسىڭىز ، ئالدى بىلەن ئۇلارنى چۈشۈرۈش كېرەك."
 
 #: src/control/Control.DownloadProgress.js:61
 #: src/control/Control.NotebookbarCalc.js:319
@@ -4392,7 +4390,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "بەتنى ئالدىن كۆرۈش "
+msgstr "بەتنى ئالدىن كۆرۈش %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"
@@ -4695,7 +4693,7 @@ msgstr "جەدۋەلنى كۆچۈرۈڭ ..."
 #: src/control/Control.Tabs.js:545
 #, fuzzy
 msgid "Are you sure you want to delete sheet, {sheet}?"
-msgstr "بۇ ۋاراقنى راستلا ئۆچۈرەمسىز؟"
+msgstr "{sheet} ۋاراقنى راستلا ئۆچۈرەمسىز؟"
 
 #: src/control/Control.Tabs.js:556
 msgid "Rename sheet"
@@ -4760,7 +4758,7 @@ msgstr "{user} ئايرىلدى"
 
 #: src/control/Control.UserList.ts:58
 msgid "Following {user}"
-msgstr "تۆۋەندىكى {ئىشلەتكۈچى}"
+msgstr "تۆۋەندىكى {user}"
 
 #: src/control/Control.UserList.ts:59
 msgid "Following the editor"
@@ -4772,7 +4770,7 @@ msgstr "ئەگىشىشنى توختىتىڭ"
 
 #: src/control/Control.UserList.ts:61
 msgid "Avatar for {user}"
-msgstr "{ئىشلەتكۈچى ئۈچۈن ئاۋات"
+msgstr "{user} ئۈچۈن ئاۋاتار"
 
 #: src/control/Control.UserList.ts:81
 msgid "%n users"
@@ -5750,7 +5748,7 @@ msgstr ""
 #: src/control/jsdialog/Widget.SidebarContainers.ts:72
 #, fuzzy
 msgid "More options for {1}"
-msgstr "{Name for ئۈچۈن تېخىمۇ كۆپ تاللاشلار"
+msgstr "{1} ئۈچۈن تېخىمۇ كۆپ تاللاشلار"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2004
 msgid "Headings and objects that you add to the document will appear here"
@@ -5763,7 +5761,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "ئاپلا، توردىكى LibreOffice قا ئۇلىنىشتا مەسىلە كۆرۈلدى: "
+msgstr "ئاپلا، {productname} قا ئۇلىنىشتا مەسىلە كۆرۈلدى: "
 
 #: src/app/Socket.ts:566
 msgid ""
@@ -5864,8 +5862,7 @@ msgstr "بىرەيلەن"
 
 #: src/app/Socket.ts:2383
 msgid "{username} saved this document as {filename}. Do you want to join?"
-msgstr ""
-"ئىشلەتكۈچى ئىسمى} بۇ ھۆججەتنى {ھۆججەت ئىسمى as قىلىپ ساقلىدى. قوشۇلماقچىمۇ؟"
+msgstr "{username} بۇ ھۆججەتنى {filename} قىلىپ ساقلىدى. قوشۇلماقچىمۇ؟"
 
 #: src/app/Socket.ts:2406
 msgid "The document is being renamed and will reload shortly"
@@ -5934,10 +5931,7 @@ msgid ""
 "that it is suitable for deployment in enterprises, this message appears "
 "when more than {docs} documents or {connections} connections are in use "
 "concurrently."
-msgstr ""
-"بۇ {مەھسۇلات ئىسمى} نىڭ قوللىمايدىغان نۇسخىسى. كارخانىلارغا ئورۇنلاشتۇرۇشقا "
-"ماس كېلىدۇ دېگەن تەسىراتتىن ساقلىنىش ئۈچۈن ، بۇ ئۇچۇر {docs} ھۆججەت ياكى "
-"{ئۇلىنىش} دىن ئارتۇق ئۇلىنىش بىرلا ۋاقىتتا ئىشلىتىلگەندە كۆرۈلىدۇ."
+msgstr "بۇ {productname} نىڭ قوللىمايدىغان نۇسخىسى. كارخانىلارغا ئورۇنلاشتۇرۇشقا ماس كېلىدۇ دېگەن تەسىراتتىن ساقلىنىش ئۈچۈن ، بۇ ئۇچۇر {docs} ھۆججەت ياكى {connections} دىن ئارتۇق ئۇلىنىش بىرلا ۋاقىتتا ئىشلىتىلگەندە كۆرۈلىدۇ."
 
 #: src/errormessages.js:25
 msgid "More information and support"
@@ -5979,9 +5973,7 @@ msgstr "WOPISrc پارامېتىرى خاتا ياكى يوقاپ كەتتى ، 
 msgid ""
 "Your session will expire in {time}. Please save your work and refresh the "
 "session (or webpage) to continue. You might need to login again."
-msgstr ""
-"سىزنىڭ ۋاقتىڭىز {ۋاقىت ئىچىدە توشىدۇ. خىزمىتىڭىزنى ساقلاپ ، يىغىن (ياكى تور "
-"بەت) نى يېڭىلاپ داۋاملاشتۇرۇڭ. قايتا تىزىملىتىشىڭىز مۇمكىن."
+msgstr "سىزنىڭ ۋاقتىڭىز {time} ئىچىدە توشىدۇ. خىزمىتىڭىزنى ساقلاپ ، يىغىن (ياكى تور بەت) نى يېڭىلاپ داۋاملاشتۇرۇڭ. قايتا تىزىملىتىشىڭىز مۇمكىن."
 
 #: src/errormessages.js:32
 msgid ""
@@ -6038,12 +6030,7 @@ msgid ""
 "result in multiple users not seeing each other, conflicts in the document "
 "storage and/or copy/paste problems. Expected serverId {0} for routeToken "
 "{1} but connected to serverId {2}"
-msgstr ""
-"سىزنىڭ {مەھسۇلات ئىسمىڭىز} توپىڭىز خاتا تەڭشەلگەن ياكى كۆلەملەشكەندەك قىلىدۇ "
-"- سىستېما باشقۇرغۇچى بىلەن ئالاقىلىشىڭ. تەھرىرلەشنى داۋاملاشتۇرۇش نۇرغۇن "
-"ئىشلەتكۈچىلەرنىڭ بىر-بىرىنى كۆرمەسلىكى ، ھۆججەت ساقلاشتىكى توقۇنۇشلار ۋە "
-"ياكى كۆچۈرۈپ چاپلاش مەسىلىلىرىنى كەلتۈرۈپ چىقىرىشى مۇمكىن. كۈتكەن serverId {"
-"0 route routeToken {1 for ئۈچۈن ، ئەمما serverId {2 to غا ئۇلىنىدۇ"
+msgstr "سىزنىڭ {productname} توپىڭىز خاتا تەڭشەلگەن ياكى كۆلەملەشكەندەك قىلىدۇ - سىستېما باشقۇرغۇچى بىلەن ئالاقىلىشىڭ. تەھرىرلەشنى داۋاملاشتۇرۇش نۇرغۇن ئىشلەتكۈچىلەرنىڭ بىر-بىرىنى كۆرمەسلىكى ، ھۆججەت ساقلاشتىكى توقۇنۇشلار ۋە ياكى كۆچۈرۈپ چاپلاش مەسىلىلىرىنى كەلتۈرۈپ چىقىرىشى مۇمكىن. كۈتكەن serverId {0} routeToken {1} ئۈچۈن ، ئەمما serverId {2} غا ئۇلىنىدۇ"
 
 #: src/errormessages.js:40
 msgid ""
@@ -6242,9 +6229,7 @@ msgstr "ئاگاھلاندۇرۇش! سىز ئىشلىتىۋاتقان توركۆ
 #: src/map/Clipboard.js:199
 msgid ""
 "To paste outside {productname}, please first click the 'download' button"
-msgstr ""
-"{مەھسۇلات ئىسمى} نىڭ سىرتىغا چاپلاش ئۈچۈن ، ئالدى بىلەن «چۈشۈرۈش» "
-"كۇنۇپكىسىنى بېسىڭ"
+msgstr "{productname} نىڭ سىرتىغا چاپلاش ئۈچۈن ، ئالدى بىلەن «چۈشۈرۈش» كۇنۇپكىسىنى بېسىڭ"
 
 #: src/map/Clipboard.js:207
 msgid "Copying from the document disabled"
@@ -6712,7 +6697,7 @@ msgstr "توردا قارشى ئالىمىز"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:26-7
 msgid "Explore The New {coolversion}"
-msgstr "يېڭى {سوۋۇتۇش} ئۈستىدە ئىزدىنىڭ"
+msgstr "يېڭى {coolversion} ئۈستىدە ئىزدىنىڭ"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:27-7
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:38-7

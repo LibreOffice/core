@@ -1484,7 +1484,7 @@ msgstr "Ange röstläge"
 
 #: src/control/Control.AIChatSidebar.ts:890
 msgid "Tone of voice: {0}{1}"
-msgstr "Röstläge: {0}"
+msgstr "Röstläge: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
@@ -2756,7 +2756,7 @@ msgstr "Tillämpa från val i rullgardinsmenyn"
 
 #: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
-msgstr "Öppna {namn}"
+msgstr "Öppna {name}"
 
 #: src/control/Control.JSDialogBuilder.js:1886
 #: src/control/Control.Menubar.ts:962
@@ -5981,9 +5981,7 @@ msgstr "Fel eller saknad WOPISrc parameter, kontakta support."
 msgid ""
 "Your session will expire in {time}. Please save your work and refresh the "
 "session (or webpage) to continue. You might need to login again."
-msgstr ""
-"Din session kommer att upphöra om %tid. Spara ditt arbete och uppdatera "
-"sessionen (eller webbsidan) för att fortsätta. Du kan behöva logga in igen."
+msgstr "Din session kommer att upphöra om {time}. Spara ditt arbete och uppdatera sessionen (eller webbsidan) för att fortsätta. Du kan behöva logga in igen."
 
 #: src/errormessages.js:32
 msgid ""

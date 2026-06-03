@@ -4397,7 +4397,7 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:209
 #, fuzzy
 msgid "preview of page %1"
-msgstr "προεπισκόπηση της σελίδας "
+msgstr "προεπισκόπηση της σελίδας %1"
 
 #: src/control/Control.PartsPreview.js:211
 msgid "Slide %1"
@@ -5743,7 +5743,7 @@ msgstr ""
 #: src/control/jsdialog/Widget.SidebarContainers.ts:72
 #, fuzzy
 msgid "More options for {1}"
-msgstr "Περισσότερες επιλογές για {name}"
+msgstr "Περισσότερες επιλογές για {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2004
 msgid "Headings and objects that you add to the document will appear here"
@@ -5933,11 +5933,7 @@ msgid ""
 "that it is suitable for deployment in enterprises, this message appears "
 "when more than {docs} documents or {connections} connections are in use "
 "concurrently."
-msgstr ""
-"Αυτή είναι μια μη υποστηριζόμενη έκδοση του {productname}. Για να αποφευχθεί "
-"η εντύπωση ότι είναι κατάλληλο για ανάπτυξη σε επιχειρήσεις, αυτό το μήνυμα "
-"εμφανίζεται όταν χρησιμοποιούνται ταυτόχρονα περισσότερα από {docs} έγγραφα "
-"ή {συνδέσεις} συνδέσεις"
+msgstr "Αυτή είναι μια μη υποστηριζόμενη έκδοση του {productname}. Για να αποφευχθεί η εντύπωση ότι είναι κατάλληλο για ανάπτυξη σε επιχειρήσεις, αυτό το μήνυμα εμφανίζεται όταν χρησιμοποιούνται ταυτόχρονα περισσότερα από {docs} έγγραφα ή {connections} συνδέσεις"
 
 #: src/errormessages.js:25
 msgid "More information and support"

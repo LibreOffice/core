@@ -4660,7 +4660,7 @@ msgstr ""
 #: src/control/Control.Tabs.js:545
 #, fuzzy
 msgid "Are you sure you want to delete sheet, {sheet}?"
-msgstr "Is u seker dat u die sessie wil beindig?"
+msgstr "Is u seker u wil blad {sheet} skrap?"
 
 #: src/control/Control.Tabs.js:556
 msgid "Rename sheet"
@@ -5713,7 +5713,7 @@ msgstr ""
 #: src/app/Socket.ts:300
 #, fuzzy
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "Daar is a probleem om na die dokument toe te konnekteer"
+msgstr "Daar is a probleem om na {productname} toe te konnekteer"
 
 #: src/app/Socket.ts:566
 msgid ""

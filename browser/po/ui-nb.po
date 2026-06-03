@@ -289,7 +289,7 @@ msgstr "Kunne ikke angi cookie for jwt-godkjenning via usikker tilkobling"
 
 #: admin/src/AdminClusterOverview.js:553 admin/src/AdminSocketOverview.js:424
 msgid "Failed to authenticate this session over protocol {0}"
-msgstr "Kunne ikke godkjenne denne økten over protokoll % 0"
+msgstr "Kunne ikke godkjenne denne økten over protokoll {0}"
 
 #: admin/src/AdminClusterOverview.js:558 admin/src/AdminSocketOverview.js:429
 msgid "Warning"

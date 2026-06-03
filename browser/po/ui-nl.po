@@ -2773,7 +2773,7 @@ msgstr "Actie-dropdown toepassen"
 
 #: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
-msgstr "Open {naam}"
+msgstr "Open {name}"
 
 #: src/control/Control.JSDialogBuilder.js:1886
 #: src/control/Control.Menubar.ts:962
@@ -4806,7 +4806,7 @@ msgstr "Stop met volgen"
 
 #: src/control/Control.UserList.ts:61
 msgid "Avatar for {user}"
-msgstr "Avatar voor %gebruiker"
+msgstr "Avatar voor {user}"
 
 #: src/control/Control.UserList.ts:81
 msgid "%n users"
@@ -5979,9 +5979,7 @@ msgstr "Meer informatie en ondersteuning"
 msgid ""
 "This service is limited to {0} documents, and {1} connections total by the "
 "admin. This limit has been reached. Please try again later."
-msgstr ""
-"Deze dienst is in het geheel door de beheerder beperkt tot {0} documenten en "
-"%1 verbindingen. Deze limiet werd bereikt. Probeer later opnieuw."
+msgstr "Deze dienst is in het geheel door de beheerder beperkt tot {0} documenten en {1} verbindingen. Deze limiet werd bereikt. Probeer later opnieuw."
 
 #: src/errormessages.js:27
 msgid ""
