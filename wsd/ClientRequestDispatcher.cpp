@@ -1353,7 +1353,9 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             servedSync = handleSignatureRequest(request, socket);
         }
 
-        else if (requestDetails.isProxy() && requestDetails.equals(2, "ws"))
+        else if (requestDetails.isProxy() &&
+                 (requestDetails.equals(1, "ws") || requestDetails.equals(2, "ws")))
+            // The new WebSocket URL has 'ws' as the second segment; support both old and new.
             servedSync = handleClientProxyRequest(request, requestDetails, message, disposition);
         else if (requestDetails.isWebSocket() &&
                  requestDetails.equals(RequestDetails::Field::Type, "cool") &&

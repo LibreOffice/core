@@ -2015,16 +2015,22 @@ function showWelcomeSVG() {
 	// Form a valid new Cool WebSocket URL from its components.
 	// ws://localhost:9980/cool/ws?WOPISrc=<encoded-document-URI>[&<docParams>]
 	global.makeWopiCoolWsUrl = function (root, docParams) {
-		var wopiSrc = '';
+		var query = '';
 		if (global.wopiSrc != '') {
-			wopiSrc = '?WOPISrc=' + encodeURIComponent(global.wopiSrc);
+			query = '?WOPISrc=' + encodeURIComponent(global.wopiSrc);
 
 			if (global.routeToken != '')
-				wopiSrc += '&RouteToken=' + global.routeToken;
+				query += '&RouteToken=' + global.routeToken;
 		}
 
-		var separator = wopiSrc ? '&' : (docParams ? '?' : '');
-		return root + '/ws' + wopiSrc + separator + docParams;
+		if (docParams)
+			query += (query ? '&' : '?') + docParams;
+
+		// Empty compat slot, kept last so the slow-proxy ProxySocket can suffix
+		// /<sessionId>/<command>/<serial> onto it (see ProxySocket.getEndPoint).
+		query += (query ? '&' : '?') + 'compat=';
+
+		return root + '/ws' + query;
 	};
 
 	// Form a valid WS URL to the host with the given path and
