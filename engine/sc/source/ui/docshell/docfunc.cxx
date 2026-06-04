@@ -111,6 +111,7 @@
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/DeleteCellsOperation.hxx>
 #include <operation/PutDataOperation.hxx>
+#include <operation/SetCellTextOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
 #include <operation/SetFormulasOperation.hxx>
 #include <operation/SetValueOperation.hxx>
@@ -752,48 +753,9 @@ bool ScDocFunc::SetCellText(
     const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
     const formula::FormulaGrammar::Grammar eGrammar )
 {
-    bool bSet = false;
-    if ( bInterpret )
-    {
-        if ( bEnglish )
-        {
-            ScDocument& rDoc = rDocShell.GetDocument();
-
-            ::std::optional<ScExternalRefManager::ApiGuard> pExtRefGuard;
-            if (bApi)
-                pExtRefGuard.emplace(rDoc);
-
-            ScInputStringType aRes =
-                ScStringUtil::parseInputString(rDoc.GetNonThreadedContext(), rText, LANGUAGE_ENGLISH_US);
-
-            switch (aRes.meType)
-            {
-                case ScInputStringType::Formula:
-                    bSet = SetFormulaCell(rPos, new ScFormulaCell(rDoc, rPos, aRes.maText, eGrammar), !bApi);
-                break;
-                case ScInputStringType::Number:
-                    bSet = SetValueCell(rPos, aRes.mfValue, !bApi);
-                break;
-                case ScInputStringType::Text:
-                    bSet = SetStringOrEditCell(rPos, aRes.maText, !bApi);
-                break;
-                default:
-                    ;
-            }
-        }
-        // otherwise keep Null -> SetString with local formulas/number formats
-    }
-    else if (!rText.isEmpty())
-    {
-        bSet = SetStringOrEditCell(rPos, rText, !bApi);
-    }
-
-    if (!bSet)
-    {
-        bool bNumFmtSet = false;
-        bSet = SetNormalString( bNumFmtSet, rPos, rText, bApi );
-    }
-    return bSet;
+    sc::SetCellTextOperation aOperation(*this, rDocShell, rPos, rText, bInterpret, bEnglish,
+                                        bApi, eGrammar);
+    return aOperation.run();
 }
 
 bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )

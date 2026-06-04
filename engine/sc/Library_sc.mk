@@ -565,6 +565,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/ReplaceNoteTextOperation \
     sc/source/ui/operation/SetEditTextOperation \
     sc/source/ui/operation/SetNoteTextOperation \
+    sc/source/ui/operation/SetCellTextOperation \
     sc/source/ui/operation/SetFormulaOperation \
     sc/source/ui/operation/SetNormalStringOperation \
     sc/source/ui/operation/SetStringOperation \
