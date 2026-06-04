@@ -71,6 +71,7 @@ const MenuCommands: MenuCommandsInterface = {
 			   'TableDeleteMenu', 'SetObjectToBackground', 'SetObjectToForeground',
 			   'DeleteRows', 'DeleteColumns', 'DeleteTable', 'EditCurrentRegion',
 			   'MergeCells', 'SetOptimalColumnWidth', 'SetOptimalRowHeight',
+			   'SetMinimalColumnWidth', 'SetMinimalRowHeight', 'DistributeRows', 'DistributeColumns',
 			   'UpdateCurIndex','RemoveTableOf','EditCurIndex',
 			   'ReplyComment', 'DeleteComment', 'DeleteAuthor', 'DeleteAllNotes',
 			   'SpellingAndGrammarDialog', 'FontDialog', 'FontDialogForParagraph', 'TableDialog',
@@ -86,7 +87,9 @@ const MenuCommands: MenuCommandsInterface = {
 
 		presentation: ['SetDefault', 'TableInsertMenu',
 				  'InsertRowsBefore', 'InsertRowsAfter', 'InsertColumnsBefore', 'InsertColumnsAfter',
-				  'TableDeleteMenu', 'DeleteRows', 'DeleteColumns', 'DeleteTable'],
+				  'TableDeleteMenu', 'DeleteRows', 'DeleteColumns', 'DeleteTable',
+				  'SetMinimalRowHeight', 'SetOptimalRowHeight', 'SetMinimalColumnWidth', 'SetOptimalColumnWidth',
+				  'DistributeRows', 'DistributeColumns'],
 		drawing: []
 	},
 	// UNOCOMMANDS_EXTRACT_END <- don't remove this line, it's used by unocommands.py

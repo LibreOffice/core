@@ -376,6 +376,14 @@ class Menubar extends window.L.Control {
 					{uno: '.uno:EntireCell'}]},
 				{uno: '.uno:SplitCell'},
 				{uno: '.uno:MergeCells'},
+				{name: _UNO('.uno:TableAutoFitMenu'), type: 'menu', menu: [
+					{uno: '.uno:SetMinimalRowHeight'},
+					{uno: '.uno:SetOptimalRowHeight'},
+					{uno: '.uno:DistributeRows'},
+					{type: 'separator'},
+					{uno: '.uno:SetMinimalColumnWidth'},
+					{uno: '.uno:SetOptimalColumnWidth'},
+					{uno: '.uno:DistributeColumns'}]},
 				{type: 'separator'},
 				{uno: '.uno:Protect'},
 				{uno: '.uno:UnsetCellsReadOnly'},
@@ -581,6 +589,14 @@ class Menubar extends window.L.Control {
 					{uno: '.uno:EntireRow'},
 					{uno: '.uno:EntireColumn'}]},
 				{uno: '.uno:MergeCells'},
+				{name: _UNO('.uno:TableAutoFitMenu'), type: 'menu', menu: [
+					{uno: '.uno:SetMinimalRowHeight'},
+					{uno: '.uno:SetOptimalRowHeight'},
+					{uno: '.uno:DistributeRows'},
+					{type: 'separator'},
+					{uno: '.uno:SetMinimalColumnWidth'},
+					{uno: '.uno:SetOptimalColumnWidth'},
+					{uno: '.uno:DistributeColumns'}]},
 				{uno: '.uno:TableDialog'}]
 			},
 			{name: _UNO('.uno:SlideMenu', 'presentation'), id: 'slide', type: 'menu', accessibility: {combination: 'MS'}, menu: [
@@ -741,6 +757,14 @@ class Menubar extends window.L.Control {
 					{name: _UNO('.uno:EntireRow', 'presentation'), uno: '.uno:EntireRow'},
 					{name: _UNO('.uno:EntireColumn', 'presentation'), uno: '.uno:EntireColumn'}]},
 				{name: _UNO('.uno:MergeCells', 'presentation'), uno: '.uno:MergeCells'},
+				{name: _UNO('.uno:TableAutoFitMenu'), type: 'menu', menu: [
+					{name: _UNO('.uno:SetMinimalRowHeight', 'presentation'), uno: '.uno:SetMinimalRowHeight'},
+					{name: _UNO('.uno:SetOptimalRowHeight', 'presentation'), uno: '.uno:SetOptimalRowHeight'},
+					{name: _UNO('.uno:DistributeRows', 'presentation'), uno: '.uno:DistributeRows'},
+					{type: 'separator'},
+					{name: _UNO('.uno:SetMinimalColumnWidth', 'presentation'), uno: '.uno:SetMinimalColumnWidth'},
+					{name: _UNO('.uno:SetOptimalColumnWidth', 'presentation'), uno: '.uno:SetOptimalColumnWidth'},
+					{name: _UNO('.uno:DistributeColumns', 'presentation'), uno: '.uno:DistributeColumns'}]},
 				{name: _UNO('.uno:TableDialog', 'presentation'), uno: '.uno:TableDialog'}]
 			},
 			{name: _UNO('.uno:PageMenu', 'presentation'), id: 'pagemenu', type: 'menu', accessibility: {combination: 'MP'}, menu: [

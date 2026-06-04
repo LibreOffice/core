@@ -2231,6 +2231,45 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			{ type: 'separator', id: 'table-deleterows-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
+				'id': 'table-distribute',
+				'name': _('Distribute'),
+				'accessibility': { focusBack: false, combination: 'DI', de: null },
+				'children' : [
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'table-distribute-columns',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeColumns', 'presentation'),
+										'command': '.uno:DistributeColumns',
+										'accessibility': { focusBack: true, combination: 'DC', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'table-distribute-rows',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeRows', 'presentation'),
+										'command': '.uno:DistributeRows',
+										'accessibility': { focusBack: true, combination: 'DR', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+				]
+			},
+			{ type: 'separator', id: 'table-distribute-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
 				'id': 'table-merge-split',
 				'name':_('Merge & Split'),
 				'accessibility': { focusBack: true, combination: 'MC', de: null },
