@@ -74,7 +74,6 @@ gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_
 gb_LinkTarget_LAYER_LINKPATHS := \
 	URELIB:URELIB. \
 	UREBIN:URELIB. \
-	SDKBIN:URELIB. \
 	OOO:URELIB+OOO. \
 	SHLXTHDL:. \
 	OXT:OXT. \

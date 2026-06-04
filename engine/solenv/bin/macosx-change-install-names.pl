@@ -49,7 +49,6 @@ sub action($$$)
         ('app/UREBIN/URELIB' => '@executable_path/../Frameworks',
          'app/OOO/URELIB' => '@executable_path/../Frameworks',
          'app/OOO/OOO' => '@executable_path/../Frameworks',
-         'app/SDKBIN/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
@@ -67,7 +66,7 @@ sub action($$$)
     return $act;
 }
 
-@ARGV >= 2 or die 'Usage: app|shl UREBIN|URELIB|OOO|SDKBIN|OXT|NONE <filepath>*';
+@ARGV >= 2 or die 'Usage: app|shl UREBIN|URELIB|OOO|OXT|NONE <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
 foreach $file (@ARGV)

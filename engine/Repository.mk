@@ -85,7 +85,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	$(if $(filter MACOSX,$(OS)),QuickLookThumbnail) \
 ))
 
-$(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
+$(eval $(call gb_Helper_register_executables,NONE, \
 	$(if $(ENABLE_CLI),\
 		$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),climaker)) \
 	) \

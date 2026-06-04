@@ -70,7 +70,6 @@ gb_LinkTarget__RPATHS := \
 	URELIB:@__________________________________________________URELIB/ \
 	UREBIN: \
 	OOO:@__________________________________________________OOO/ \
-	SDKBIN: \
 	OXT: \
 	NONE:@__________________________________________________NONE/ \
 
@@ -244,7 +243,6 @@ gb_Executable_TARGETTYPEFLAGS := -bind_at_load
 
 gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
-	$(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
