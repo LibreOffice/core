@@ -139,7 +139,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(T_LTOFLAGS) \
-		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1))) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_USE_LD) $(T_LDFLAGS) $(foreach pre_js,$(T_PREJS), --pre-js $(pre_js)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -153,7 +152,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 		    -Wl$(COMMA)--start-group \
 			$(shell echo -n \
-				$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
+				$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
 				$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 				$(patsubst $(gb_LinkTarget__syslib),%,$(T_LIBS)) \
 				$(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
@@ -166,10 +165,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		    $(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
 		    -Wl$(COMMA)--end-group \
 		    -Wl$(COMMA)--no-as-needed \
-		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
+		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
                 ) \
 		-o $(1) \
-	$(if $(SOVERSION),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)) \
 	$(if $(filter EMSCRIPTEN,$(OS)),$(if $(call gb_target_symbols_enabled,$(1)),$(if $(filter TRUE,$(HAVE_EXTERNAL_DWARF)),&& emdwp -e $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm,$(1)) -o $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm.dwp,$(1))))) \
 	$(if $(call gb_LinkTarget__WantLock,$(2)),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
 
@@ -245,7 +243,6 @@ gb_Library_DLLEXT := .a
 else
 
 gb_Library_TARGETTYPEFLAGS := -shared -Wl,-z,noexecstack
-gb_Library_UDK_MAJORVER := 3
 gb_Library_PLAINEXT := .so
 gb_Library_PLAINEXT_FOR_BUILD := .so
 gb_Library_DLLEXT := .so
@@ -264,21 +261,9 @@ gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OXT),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
-	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-
-ifeq ($(DISABLE_DYNLOADING),TRUE)
-
-gb_Library_FILENAMES += \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
-
-else
-
-gb_Library_FILENAMES += \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT).$(gb_Library_UDK_MAJORVER)) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT).$(gb_Library_UDK_MAJORVER)) \
-
-endif
+	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
@@ -303,8 +288,6 @@ define gb_Library_Library_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
 
 endef
-
-gb_Library__set_soversion_platform = $(gb_Library__set_soversion)
 
 gb_Library_get_sdk_link_dir = $(INSTDIR)/$(SDKDIRNAME)/lib
 

@@ -39,9 +39,6 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
-# empty to avoid --warn-undefined-functions
-gb_Library__set_soversion_platform =
-
 # default platform and configuration values used by msbuild
 gb_MSBUILD_CONFIG := $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)
 gb_MSBUILD_PLATFORM := $(strip \

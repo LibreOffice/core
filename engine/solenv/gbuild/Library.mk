@@ -54,7 +54,7 @@ gb_Library__get_dir_for_layer_for_build = $(patsubst $(1):%,%,$(filter $(1):%,$(
 gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
 gb_Library_get_instdir_for_build = $(call gb_Library__get_dir_for_layer_for_build,$(call gb_Library_get_layer,$(1)))
 
-gb_Library_get_ilib_target = $(if $(filter $(1),$(gb_Library_RTVERLIBS) $(gb_Library_UNOVERLIBS)),$(call gb_Library_get_sdk_link_dir)/$(call gb_Library_get_ilibfilename,$(1)),$(gb_Library_DLLDIR)/$(call gb_Library_get_ilibfilename,$(1)))
+gb_Library_get_ilib_target = $(gb_Library_DLLDIR)/$(call gb_Library_get_ilibfilename,$(1))
 
 define gb_Library_Library
 $(call gb_Postprocess_register_target,AllLibraries,Library,$(1))
@@ -104,24 +104,6 @@ $$(eval $$(call gb_Module_register_target,$(call gb_Library_get_exports_target,$
 
 $(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library_get_exports_target,$(1)))
 
-endef
-
-# we actually (ab)use ILIBTARGET here to store the unversioned symlink -
-# it serves a similar purpose to an MSVC import library, as input for linker
-# call gb_Library__add_soversion_link,library,linkname
-define gb_Library__add_soversion_link
-$(call gb_LinkTarget_set_ilibtarget,$(call gb_Library_get_linktarget,$(1)),$(2))
-
-endef
-
-define gb_Library__set_soversion
-$(call gb_LinkTarget_set_soversion,$(call gb_Library_get_linktarget,$(1)))
-$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_versionlink_target,$(1)))
-
-endef
-
-define gb_Library_set_soversion
-$(call gb_Library__set_soversion_platform,$(1))
 endef
 
 gb_Library__get_component_var = $(call gb_Library__get_workdir_linktargetname,$(1))<>COMPONENTFILE

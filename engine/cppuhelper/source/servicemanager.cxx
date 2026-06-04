@@ -1795,8 +1795,6 @@ static OUString simplifyModule(std::u16string_view uri)
         edit.remove(0,nIdx+1);
     if ((nIdx = edit.lastIndexOf("lo.so")) > 0)
         edit.truncate(nIdx);
-    if ((nIdx = edit.lastIndexOf(".3")) > 0)
-        edit.truncate(nIdx);
     if ((nIdx = edit.lastIndexOf("gcc3.so")) > 0)
         edit.truncate(nIdx);
     if ((nIdx = edit.lastIndexOf(".so")) > 0)

@@ -181,8 +181,6 @@ $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1
 
 endef
 
-gb_Library__set_soversion_platform =
-
 gb_Library_get_sdk_link_dir := $(gb_Library_DLLDIR)
 
 # Executable class

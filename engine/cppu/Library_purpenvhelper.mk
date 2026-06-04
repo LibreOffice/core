@@ -10,8 +10,6 @@
 
 $(eval $(call gb_Library_Library,purpenvhelper))
 
-$(eval $(call gb_Library_set_soversion,purpenvhelper))
-
 $(eval $(call gb_Library_add_defs,purpenvhelper,\
 	-DPURPENV_DLLIMPLEMENTATION \
 ))

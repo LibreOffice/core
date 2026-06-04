@@ -251,10 +251,6 @@ define gb_Library_get_exports_target
 $(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
 endef
 
-define gb_Library_get_versionlink_target
-$(call gb_Library_get_sdk_link_dir)/$(basename $(call gb_Library_get_filename,$(1)))
-endef
-
 define gb_Library_get_headers_target
 $(patsubst $(1):%,$(WORKDIR)/Headers/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef

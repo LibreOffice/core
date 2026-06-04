@@ -898,8 +898,7 @@ define gb_LinkTarget__command_impl
 	$(if $(filter $(2),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),
 			$(call gb_LinkTarget__command,$(1),$(2)),
-			mkdir -p $(dir $(1)) && echo invalid - merged lib > $(1)
-			$(if $(SOVERSION),&& echo invalid - merged lib > $(WORKDIR)/LinkTarget/$(2))),
+			mkdir -p $(dir $(1)) && echo invalid - merged lib > $(1)),
 		$(if $(filter-out CompilerTest,$(TARGETTYPE)),
 			$(call gb_LinkTarget__command,$(1),$(2))))
 	$(call gb_LinkTarget__command_objectlist,$(WORKDIR)/LinkTarget/$(2).objectlist)
@@ -1079,7 +1078,6 @@ $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_DISABLED :=
 $(call gb_LinkTarget_get_target,$(1)) : PLUGIN_WARNINGS_AS_ERRORS :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_CODE :=
-$(call gb_LinkTarget_get_target,$(1)) : SOVERSION :=
 $(call gb_LinkTarget_get_target,$(1)) : COMPILER_TEST :=
 $(call gb_LinkTarget_get_target,$(1)) : T_SYMBOLS := $(if $(call gb_target_symbols_enabled,$(2)),$(true),$(false))
 $(call gb_LinkTarget_get_target,$(1)) : T_FORCE_COMPILE := $(if $(call gb_LinkTarget__force_compile,$(2)),$(true),$(false))
@@ -1119,12 +1117,6 @@ $(if $(findstring $(INSTDIR),$(1)),$(call gb_LinkTarget__make_installed_rule,$(1
 $(call gb_PrecompiledHeader_generate_timestamp_rule,$(2))
 
 endef # gb_LinkTarget_LinkTarget
-
-# call gb_LinkTarget_set_soversion,linktarget
-define gb_LinkTarget_set_soversion
-$(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(true)
-
-endef
 
 # call gb_LinkTarget_add_defs,linktarget,defines
 define gb_LinkTarget_add_defs

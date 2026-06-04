@@ -10,8 +10,6 @@
 
 $(eval $(call gb_Library_Library,cppu))
 
-$(eval $(call gb_Library_set_soversion,cppu))
-
 $(eval $(call gb_Library_use_udk_api,cppu))
 
 $(eval $(call gb_Library_set_is_ure_library_or_dependency,cppu))
