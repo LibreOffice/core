@@ -7606,6 +7606,60 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
     ScAddress aCurrentAddress = mrViewData.GetCurPos();
 
     ScDocument& rDocument = mrViewData.GetDocument();
+
+    if (comphelper::COKit::isActive())
+    {
+        // The native overlay is not visible to the client, so send the cells of
+        // the sparkline group to the client and let it draw the highlight. An
+        // empty set clears any previous highlight when the cursor leaves a
+        // sparkline cell. The cell rectangles are computed the same way as
+        // formula reference marks, but they are sent on a separate channel so
+        // the two highlights do not interfere with each other.
+        std::vector<ReferenceMark> aReferenceMarks;
+
+        auto pSparkline = rDocument.GetSparkline(aCurrentAddress);
+        auto* pList = pSparkline ? rDocument.GetSparklineList(aCurrentAddress.Tab()) : nullptr;
+        if (pList)
+        {
+            auto const aSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
+            const Color aColor = SvtOptionsDrawinglayer::getHilightColor();
+            const SCTAB nTab = aCurrentAddress.Tab();
+            ScDocShell* pDocSh = mrViewData.GetDocShell();
+
+            aReferenceMarks.reserve(aSparklines.size());
+            for (auto const& pCurrentSparkline : aSparklines)
+            {
+                const SCCOL nColumn = pCurrentSparkline->getColumn();
+                const SCROW nRow = pCurrentSparkline->getRow();
+                aReferenceMarks.push_back(ScInputHandler::GetReferenceMark(
+                    mrViewData, *pDocSh, nColumn, nColumn, nRow, nRow, nTab, aColor));
+            }
+        }
+
+        tools::JsonWriter aWriter;
+        aWriter.put("commandName", "SparklineGroup");
+        {
+            const auto aStateNode = aWriter.startNode("state");
+            const auto aMarksArray = aWriter.startArray("marks");
+            for (auto const& rMark : aReferenceMarks)
+            {
+                if (!rMark.Is())
+                    continue;
+                const auto aMarkStruct = aWriter.startStruct();
+                aWriter.put("rectangle",
+                            rtl::Concat2View(OString::number(rMark.nX) + ", "
+                                + OString::number(rMark.nY) + ", "
+                                + OString::number(rMark.nWidth) + ", "
+                                + OString::number(rMark.nHeight)));
+                aWriter.put("color", rMark.aColor.AsRGBHexString());
+                aWriter.put("part", OString::number(rMark.nTab));
+            }
+        }
+        if (ScTabViewShell* pViewShell = mrViewData.GetViewShell())
+            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aWriter.finishAndGetAsOString());
+        return;
+    }
+
     if (auto pSparkline = rDocument.GetSparkline(aCurrentAddress))
     {
         mpOOSparklineGroup.reset(new sdr::overlay::OverlayObjectList);

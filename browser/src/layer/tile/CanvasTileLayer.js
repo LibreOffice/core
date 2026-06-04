@@ -2417,12 +2417,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	_onReferencesMsg: function (textMsg) {
-		textMsg = textMsg.substr(textMsg.indexOf(' ') + 1);
-		var marks = JSON.parse(textMsg);
-		marks = marks.marks;
+	// Build the list of {mark, part} references from the marks array of a
+	// referencemarks/SparklineGroup payload. Each mark becomes a CPolygon that
+	// fills the cell range with a translucent highlight.
+	_marksToReferences: function (marks) {
 		var references = [];
-		this._referencesAll = [];
 
 		for (var mark = 0; mark < marks.length; mark++) {
 			var strTwips = marks[mark].rectangle.match(/\d+/g);
@@ -2457,11 +2456,38 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 		}
 
-		for (i = 0; i < references.length; i++) {
-			this._referencesAll.push(references[i]);
-		}
+		return references;
+	},
 
+	_onReferencesMsg: function (textMsg) {
+		textMsg = textMsg.substr(textMsg.indexOf(' ') + 1);
+		var marks = JSON.parse(textMsg);
+		this._referencesAll = this._marksToReferences(marks.marks);
 		this._updateReferenceMarks();
+	},
+
+	// Highlight of the cells belonging to the sparkline group of the current
+	// cell. Kept independent of the formula reference marks above so that the
+	// two highlights do not clear each other.
+	_updateSparklineGroupReferences: function() {
+		if (!this._sparklineGroupReferences)
+			return;
+
+		this._sparklineGroupReferences.clear();
+
+		if (!this._sparklineGroupReferencesAll)
+			return;
+
+		for (var i = 0; i < this._sparklineGroupReferencesAll.length; i++) {
+			if (this._selectedPart === this._sparklineGroupReferencesAll[i].part)
+				this._sparklineGroupReferences.addMark(this._sparklineGroupReferencesAll[i].mark);
+		}
+	},
+
+	_onSparklineGroupMsg: function (state) {
+		this._sparklineGroupReferencesAll = (state && state.marks)
+			? this._marksToReferences(state.marks) : [];
+		this._updateSparklineGroupReferences();
 	},
 
 	_getStringPart: function (string) {
@@ -3954,6 +3980,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._oleCSelections = new CSelections(undefined, this._canvasOverlay,
 			this._selectionsDataDiv, this._map, false /* isView */, undefined, 'ole');
 		this._references = new CReferences(this._canvasOverlay);
+		this._sparklineGroupReferences = new CReferences(this._canvasOverlay);
 
 		/*
 		 * `recalculateZoomOnResize` sets this flag to `true`. Then in `_fitWidthZoom`
@@ -3965,6 +3992,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._includedCommentsInFirstFit = false;
 
 		this._referencesAll = [];
+		this._sparklineGroupReferencesAll = [];
 
 		this._debug = map._debug;
 
