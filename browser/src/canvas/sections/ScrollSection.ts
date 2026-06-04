@@ -90,7 +90,15 @@ export class ScrollSection extends CanvasSectionObject {
 
 		this.sectionProperties.animatingScroll = false;
 
-		this.sectionProperties.animateWheelScroll = (<any>window).mode.isDesktop();
+		// Scroll in discrete steps instead of animating when the user has asked
+		// the system for reduced motion.
+		this.sectionProperties.reducedMotionQuery = window.matchMedia ?
+			window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+		this.updateAnimateWheelScroll();
+		if (this.sectionProperties.reducedMotionQuery) {
+			this.sectionProperties.reducedMotionQuery.addEventListener(
+				'change', this.updateAnimateWheelScroll.bind(this));
+		}
 		this.sectionProperties.lastElapsedTime = 0;
 		this.sectionProperties.scrollAnimationDelta = [0, 0];
 		this.sectionProperties.scrollAnimationAcc = [0, 0];
@@ -112,6 +120,12 @@ export class ScrollSection extends CanvasSectionObject {
 			(this.map._docLayer._docType === 'spreadsheet' &&
 				!(<any>window).mode.isDesktop()) ||
 			(app.map.getDocType() === 'text' && (<any>window).mode.isDesktop());
+	}
+
+	private updateAnimateWheelScroll(): void {
+		const reduceMotion = this.sectionProperties.reducedMotionQuery !== null
+			&& this.sectionProperties.reducedMotionQuery.matches;
+		this.sectionProperties.animateWheelScroll = (<any>window).mode.isDesktop() && !reduceMotion;
 	}
 
 	public completePendingScroll(): void {
