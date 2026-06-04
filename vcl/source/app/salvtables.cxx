@@ -635,11 +635,6 @@ SalInstanceWidget::get_clipboard() const
     return m_xWidget->GetClipboard();
 }
 
-void SalInstanceWidget::get_property_tree(tools::JsonWriter& rJsonWriter)
-{
-    m_xWidget->DumpAsPropertyTree(rJsonWriter);
-}
-
 void SalInstanceWidget::set_stack_background()
 {
     set_background(m_xWidget->GetSettings().GetStyleSettings().GetFieldColor());

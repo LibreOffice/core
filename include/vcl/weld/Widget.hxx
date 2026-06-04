@@ -41,11 +41,6 @@ class Font;
 }
 template <class reference_type> class VclPtr;
 
-namespace tools
-{
-class JsonWriter;
-}
-
 namespace weld
 {
 class Container;
@@ -345,8 +340,6 @@ public:
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> get_clipboard() const = 0;
-
-    virtual void get_property_tree(tools::JsonWriter& rJsonWriter);
 
     // render the widget to an output device
     virtual void draw(OutputDevice& rOutput, const Point& rPos, const Size& rSizePixel) = 0;
