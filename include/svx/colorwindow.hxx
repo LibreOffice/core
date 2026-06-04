@@ -102,7 +102,8 @@ private:
     std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
     weld::Button* mpDefaultButton;
 
-    DECL_DLLPRIVATE_LINK(SelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(ColorSelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(RecentColorSelectHdl, ValueSet*, void);
     DECL_DLLPRIVATE_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(OpenPickerClickHdl, weld::Button&, void);
@@ -110,6 +111,7 @@ private:
     static bool SelectValueSetEntry(SvxColorValueSet& rColorSet, const Color& rColor);
     static NamedColor GetSelectEntryColor(const ValueSet& rColorSet);
     NamedColor GetAutoColor() const;
+    void ApplySelectedColor(ValueSet& rColorSet);
 
 public:
     ColorWindow(OUString  rCommand,

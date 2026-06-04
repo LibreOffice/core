@@ -2148,8 +2148,8 @@ ColorWindow::ColorWindow(OUString  rCommand,
     mxButtonNoneColor->connect_clicked(LINK(this, ColorWindow, AutoColorClickHdl));
     mxButtonPicker->connect_clicked(LINK(this, ColorWindow, OpenPickerClickHdl));
 
-    mxColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
-    mxRecentColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
+    mxColorSet->SetSelectHdl(LINK( this, ColorWindow, ColorSelectHdl));
+    mxRecentColorSet->SetSelectHdl(LINK( this, ColorWindow, RecentColorSelectHdl));
     m_xTopLevel->set_help_id(HID_POPUP_COLOR);
     mxColorSet->SetHelpId(HID_POPUP_COLOR_CTRL);
 
@@ -2254,11 +2254,21 @@ NamedColor ColorWindow::GetSelectEntryColor() const
     return GetAutoColor();
 }
 
-IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
+IMPL_LINK_NOARG(ColorWindow, ColorSelectHdl, ValueSet*, void)
 {
-    NamedColor aNamedColor = GetSelectEntryColor(*pColorSet);
+    ApplySelectedColor(*mxColorSet);
+}
 
-    if (pColorSet != mxRecentColorSet.get())
+IMPL_LINK_NOARG(ColorWindow, RecentColorSelectHdl, ValueSet*, void)
+{
+    ApplySelectedColor(*mxRecentColorSet);
+}
+
+void ColorWindow::ApplySelectedColor(ValueSet& rColorSet)
+{
+    NamedColor aNamedColor = GetSelectEntryColor(rColorSet);
+
+    if (&rColorSet != mxRecentColorSet.get())
     {
          mxPaletteManager->AddRecentColor(aNamedColor.m_aColor, aNamedColor.m_aName);
          if (!maMenuButton.get_active())
@@ -2276,7 +2286,7 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
 
     if (bThemePaletteSelected)
     {
-        const sal_uInt16 nSelectedItemPos = pColorSet->GetItemPos(pColorSet->GetSelectedItemId());
+        const sal_uInt16 nSelectedItemPos = rColorSet.GetItemPos(rColorSet.GetSelectedItemId());
         sal_uInt16 nThemeIndex;
         sal_uInt16 nEffectIndex;
         if (PaletteManager::GetThemeAndEffectIndex(nSelectedItemPos, nThemeIndex, nEffectIndex))
