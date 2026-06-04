@@ -492,7 +492,18 @@ class TreeViewControl {
 		let selectionElement;
 		if (this._hasState) {
 			const td = window.L.DomUtil.create('div', '', tr);
-			selectionElement = this.createSelectionElement(td, data, entry, builder);
+			// The tree carries checkbox/radio cells overall, but this
+			// particular row may not be one of them. Keep the placeholder
+			// div so column widths line up across rows, and only render
+			// the actual input when the engine sent toggle info for it.
+			if (entry.state !== undefined || entry.enabled !== undefined) {
+				selectionElement = this.createSelectionElement(
+					td,
+					data,
+					entry,
+					builder,
+				);
+			}
 			if (this._isRealTree) td.setAttribute('aria-level', level);
 		}
 

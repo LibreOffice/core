@@ -283,9 +283,17 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		if (objectType === 'responsebutton' && data === 1 && !builder.reportValidity())
 			return;
 
-		console.assert(
-			typeof object.id === 'number' || (typeof object.id === 'string' && object.id.length > 0),
-			'Trying to send command without valid id');
+		const hasValidId = typeof object.id === 'number'
+			|| (typeof object.id === 'string' && object.id.length > 0);
+		if (!hasValidId) {
+			// The kit asserts when a dialogevent arrives without a widget
+			// id, so drop the message here. Log enough context to track
+			// down whichever widget is firing without an id.
+			window.app.console.error(
+				'JSDialog: dropping ' + objectType + ' \'' + eventType + '\' callback with empty id',
+				{ object: object, data: data });
+			return;
+		}
 
 		if (JSDialog.verbose) {
 			window.app.console.debug('control: \'' + objectType + '\' id:\'' + object.id + '\' event: \'' + eventType + '\' state: \'' + data + '\'');

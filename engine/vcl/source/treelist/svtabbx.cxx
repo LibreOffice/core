@@ -173,7 +173,12 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                 rJsonWriter.put("state", false);
             else if (eCheckState == SvButtonState::Checked)
                 rJsonWriter.put("state", true);
-            rJsonWriter.put("enabled", pTabListBox->GetCheckButtonEnabled(pEntry));
+            // Only carry "enabled" when this row actually has a check
+            // button. The JSDialog tree treats enabled=false on the entry
+            // as the whole row being disabled, so rows that simply have
+            // no checkbox column would otherwise appear unselectable.
+            if (pEntry->GetFirstItem(SvLBoxItemType::Button))
+                rJsonWriter.put("enabled", pTabListBox->GetCheckButtonEnabled(pEntry));
         }
 
         if (pTabListBox->IsSelected(pEntry))

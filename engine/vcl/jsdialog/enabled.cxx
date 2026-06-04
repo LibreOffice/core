@@ -174,6 +174,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/deletecells.ui" },
         { u"modules/scalc/ui/deletecontents.ui" },
         { u"modules/scalc/ui/descriptivestatisticsdialog.ui" },
+        { u"modules/scalc/ui/doubledialog.ui" },
         { u"modules/scalc/ui/erroralerttabpage.ui" },
         { u"modules/scalc/ui/exponentialsmoothingdialog.ui" },
         { u"modules/scalc/ui/formatcellsdialog.ui" },
@@ -185,10 +186,12 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/headerfooterdialog.ui" },
         { u"modules/scalc/ui/imoptdialog.ui" },
         { u"modules/scalc/ui/insertcells.ui" },
+        { u"modules/scalc/ui/integerdialog.ui" },
         { u"modules/scalc/ui/managenamesdialog.ui" },
         { u"modules/scalc/ui/mergecellsdialog.ui" },
         { u"modules/scalc/ui/movecopysheet.ui" },
         { u"modules/scalc/ui/movingaveragedialog.ui" },
+        { u"modules/scalc/ui/nosolutiondialog.ui" },
         { u"modules/scalc/ui/optimalcolwidthdialog.ui" },
         { u"modules/scalc/ui/optimalrowheightdialog.ui" },
         { u"modules/scalc/ui/paradialog.ui" },
@@ -740,11 +743,18 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
         else if (entry == u"modules/scalc/ui/imoptdialog.ui")
             continue;
         // Skip these Solver sub-dialogs. They only appear during a solve
-        // run (the Options button, the progress popup, or the success
-        // popup), so no single UNO command opens them.
+        // run (the Options button, the progress popup, the success
+        // popup, or the no-solution popup), so no single UNO command
+        // opens them.
         else if (entry == u"modules/scalc/ui/solveroptionsdialog.ui" ||
                  entry == u"modules/scalc/ui/solverprogressdialog.ui" ||
-                 entry == u"modules/scalc/ui/solversuccessdialog.ui")
+                 entry == u"modules/scalc/ui/solversuccessdialog.ui" ||
+                 entry == u"modules/scalc/ui/nosolutiondialog.ui")
+            continue;
+        // Skip these generic value-edit popups. They open from a tree
+        // row inside the Solver options dialog, not from a UNO command.
+        else if (entry == u"modules/scalc/ui/doubledialog.ui" ||
+                 entry == u"modules/scalc/ui/integerdialog.ui")
             continue;
 
         OUString sEntry(entry);
