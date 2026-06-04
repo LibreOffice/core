@@ -1345,7 +1345,18 @@ export class CommentSection extends CanvasSectionObject {
 		if (CommentSection.importingComments || !comment)
 			return;
 
-		const rootComment = this.sectionProperties.commentList[this.getRootIndexOf(comment.sectionProperties?.data.id)];
+		if (!comment.sectionProperties || !comment.sectionProperties.data) {
+			app.console.error('scrollCommentIntoView: comment without valid data');
+			return;
+		}
+
+		const rootComment = this.sectionProperties.commentList[
+			this.getRootIndexOf(comment.sectionProperties.data.id)];
+
+		if (!rootComment) {
+			app.console.error('scrollCommentIntoView: cannot find root comment with id: "' + comment.sectionProperties.data.id + '"');
+			return;
+		}
 
 		if (!rootComment.sectionProperties.data.anchorSPoint) {
 			const anchorPos = rootComment.sectionProperties.data.anchorPos;
