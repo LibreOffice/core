@@ -6960,11 +6960,11 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, tools::Long nWidth, Fo
         updateGraphicsState();
     }
 
-    // strikeout string is left aligned non-CTL text
-    vcl::text::ComplexTextLayoutFlags nOrigTLM = GetLayoutMode();
-    SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+    push(PushFlags::TEXTLAYOUTMODE | PushFlags::CLIPREGION);
 
-    push( PushFlags::CLIPREGION );
+    // strikeout string is left aligned non-CTL text
+    setLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+
     FontMetric aRefDevFontMetric = GetFontMetric();
     tools::Rectangle aRect;
     aRect.SetLeft( rPos.X() );
@@ -6983,8 +6983,6 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, tools::Long nWidth, Fo
     intersectClipRegion( aRect );
     drawText( rPos, aStrikeout, 0, aStrikeout.getLength(), false );
     pop();
-
-    SetLayoutMode( nOrigTLM );
 
     if ( bShadow )
     {
@@ -9589,6 +9587,10 @@ void PDFWriterImpl::pop()
         setTextAlign( aState.m_aFont.GetAlignment() );
     if( ! (aState.m_nFlags & PushFlags::TEXTFILLCOLOR) )
         setTextFillColor( aState.m_aFont.GetFillColor() );
+    if (!(aState.m_nFlags & PushFlags::TEXTLAYOUTMODE))
+    {
+        setLayoutMode(aState.m_nLayoutMode);
+    }
     if( ! (aState.m_nFlags & PushFlags::REFPOINT) )
     {
         // what ?
