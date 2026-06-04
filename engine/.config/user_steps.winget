@@ -1,9 +1,9 @@
 # yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
 
-# configuration to setup the dependencies in ~/lo and add make, jom and clang-format to ~/bin
+# configuration to setup the dependencies in ~/co and add make, jom and clang-format to ~/bin
 # and install a wsl distro with the required packages
-# this configuration is meant to be applied as the build user, and after the admin_java_and_deps one
-# has been applied. It also creates a ~/lo/autogen.input with some sensible defaults that can be
+# this configuration is meant to be applied as the build user, and after the admin_deps one
+# has been applied. It also creates a ~/co/autogen.input with some sensible defaults that can be
 # used as a template for own modifications
 
 properties:
@@ -18,10 +18,8 @@ properties:
         # the empty string element is so that each file can be specified with trailing comma
         TestScript: |
           $files = @(
-              "apache-ant-1.10.15-bin.zip",
               "clang-format-5.0.0-win.exe",
               "jom_1_1_4.zip",
-              "junit-4.10.jar",
               "make-4.2.1-msvc.exe",
               "pkgconf-2.4.3.exe",
               "strawberry-perl-5.40.0.1-64bit-portable.zip",
@@ -45,13 +43,13 @@ properties:
         GetScript:  Test-Path -Path "$env:UserProfile/bin" -PathType "Container"
         SetScript: New-Item -ItemType "directory" -Path "$env:UserProfile" -Name "bin"
     - resource: xPSDesiredStateConfiguration/xScript
-      id: lodir
+      id: codir
       directives:
-        description: create the ~/lo directory
+        description: create the ~/co directory
       settings:
-        TestScript: Test-Path -Path "$env:UserProfile/lo" -PathType "Container"
-        GetScript:  Test-Path -Path "$env:UserProfile/lo" -PathType "Container"
-        SetScript: New-Item -ItemType "directory" -Path "$env:UserProfile" -Name "lo"
+        TestScript: Test-Path -Path "$env:UserProfile/co" -PathType "Container"
+        GetScript:  Test-Path -Path "$env:UserProfile/co" -PathType "Container"
+        SetScript: New-Item -ItemType "directory" -Path "$env:UserProfile" -Name "co"
     - resource: xPSDesiredStateConfiguration/xScript
       id: make
       dependsOn:
@@ -82,37 +80,17 @@ properties:
         TestScript: Test-Path -Path "$env:USERPROFILE/bin/pkgconf-2.4.3.exe"
         GetScript:  Test-Path -Path "$env:USERPROFILE/bin/pkgconf-2.4.3.exe"
         SetScript: Copy-Item -LiteralPath "$env:PUBLIC/Downloads/pkgconf-2.4.3.exe" -Destination "$env:USERPROFILE/bin/pkgconf-2.4.3.exe"
-    - resource: xPSDesiredStateConfiguration/xScript
-      id: junit
-      dependsOn:
-        - lodir
-      directives:
-        description: copy junit to the ~/lo directory
-      settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/lo/junit-4.10.jar"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/junit-4.10.jar"
-        SetScript: Copy-Item -LiteralPath "$env:PUBLIC/Downloads/junit-4.10.jar" -Destination "$env:USERPROFILE/lo/junit-4.10.jar"
     # the DSC Archive module doesn't operate with $env:FOO / would need hardcoded paths
-    - resource: xPSDesiredStateConfiguration/xScript
-      id: ant-extract
-      dependsOn:
-        - lodir
-      directives:
-        description: extract ant to the ~/lo directory
-      settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.15/bin/ant"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.15/bin/ant"
-        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/apache-ant-1.10.15-bin.zip" -Destination "$env:USERPROFILE/lo/"
     - resource: xPSDesiredStateConfiguration/xScript
       id: spp-extract
       dependsOn:
-        - lodir
+        - codir
       directives:
-        description: extract strawberry-perl-portable to the ~/lo directory
+        description: extract strawberry-perl-portable to the ~/co directory
       settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/lo/spp/perl/bin/perl.exe"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/spp/perl/bin/perl.exe"
-        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/strawberry-perl-5.40.0.1-64bit-portable.zip" -Destination "$env:USERPROFILE/lo/spp"
+        TestScript: Test-Path -Path "$env:USERPROFILE/co/spp/perl/bin/perl.exe"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/co/spp/perl/bin/perl.exe"
+        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/strawberry-perl-5.40.0.1-64bit-portable.zip" -Destination "$env:USERPROFILE/co/spp"
     - resource: xPSDesiredStateConfiguration/xScript
       id: spp-install-font-ttf
       dependsOn:
@@ -120,25 +98,25 @@ properties:
       directives:
         description: install perl-font-TTF to spp via cpan
       settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/lo/spp/perl/site/lib/Font/TTF.pm"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/spp/perl/site/lib/Font/TTF.pm"
+        TestScript: Test-Path -Path "$env:USERPROFILE/co/spp/perl/site/lib/Font/TTF.pm"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/co/spp/perl/site/lib/Font/TTF.pm"
         SetScript: |
-          $env:Path = "$env:USERPROFILE/lo/spp/c/bin;$env:USERPROFILE/lo/spp/perl/bin;$env:path"
+          $env:Path = "$env:USERPROFILE/co/spp/c/bin;$env:USERPROFILE/co/spp/perl/bin;$env:path"
           cpanm Font::TTF
     - resource: xPSDesiredStateConfiguration/xScript
       id: jom
       dependsOn:
         - bindir
-        - lodir
+        - codir
       directives:
         description: extract and copy jom to the ~/bin directory
       settings:
         TestScript: Test-Path -Path "$env:USERPROFILE/bin/jom.exe"
         GetScript:  Test-Path -Path "$env:USERPROFILE/bin/jom.exe"
         SetScript: |
-          Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/jom_1_1_4.zip" -Destination "$env:USERPROFILE/lo/jom_unpack"
-          Copy-Item -LiteralPath "$env:USERPROFILE/lo/jom_unpack/jom.exe" -Destination "$env:USERPROFILE/bin/jom.exe"
-          Remove-Item -LiteralPath "$env:USERPROFILE/lo/jom_unpack" -Recurse
+          Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/jom_1_1_4.zip" -Destination "$env:USERPROFILE/co/jom_unpack"
+          Copy-Item -LiteralPath "$env:USERPROFILE/co/jom_unpack/jom.exe" -Destination "$env:USERPROFILE/bin/jom.exe"
+          Remove-Item -LiteralPath "$env:USERPROFILE/co/jom_unpack" -Recurse
     - resource: xPSDesiredStateConfiguration/xScript
       id: gitsettings
       directives:
@@ -152,25 +130,19 @@ properties:
     - resource: xPSDesiredStateConfiguration/xScript
       id: autogensnippet
       dependsOn:
-        - lodir
+        - codir
       directives:
         description: create an autogen.input snippet with some sensible defaults
       settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/lo/autogen.input"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/autogen.input"
+        TestScript: Test-Path -Path "$env:USERPROFILE/co/autogen.input"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/co/autogen.input"
         SetScript: |
-          New-Item -Path "$env:USERPROFILE/lo" -Name "autogen.input" -ItemType "file" -Value "# adjust to your needs
+          New-Item -Path "$env:USERPROFILE/co" -Name "autogen.input" -ItemType "file" -Value "--with-distro=CODAWindows
+          # adjust to your needs - the build options come from distro-configs/CODAWindows.conf
           --host=x86_64-pc-cygwin
           #--host=i686-pc-cygwin
-          --disable-ccache
-          --with-visual-studio=2022
-          --enable-python=fully-internal
-          --without-lxml
-          --disable-online-update
-          --with-external-tar=$env:USERPROFILE\lo\lo-externaltar
-          --with-strawberry-perl-portable=$env:USERPROFILE\lo\spp
-          --with-ant-home=$env:USERPROFILE\lo\apache-ant-1.10.15
-          --with-junit=$env:USERPROFILE\lo\junit-4.10.jar
+          --with-external-tar=$env:USERPROFILE\co\co-externaltar
+          --with-strawberry-perl-portable=$env:USERPROFILE\co\spp
           #--disable-dependency-tracking
           #--enable-dbgutil
           #--with-lang=fr ja
