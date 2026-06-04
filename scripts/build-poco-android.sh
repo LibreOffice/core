@@ -11,13 +11,13 @@ BUILD_PATH=$2 # e.g. ~/Android/
 mkdir -p $BUILD_PATH
 cd $BUILD_PATH
 # The official POCO C++ Libraries repository is on GitHub.
-# The master branch always reflects the latest release.
 if ! test -f android-poco/.git/config; then
-    git clone -b master https://github.com/pocoproject/poco.git android-poco
+    git clone https://github.com/pocoproject/poco.git android-poco
 fi
 cd android-poco
 git checkout -f
 git pull -r
+git checkout poco-1.12.5p2-release
 patch -p1 << 'EOF'
 diff --git a/Makefile b/Makefile
 index 217637409..860514959 100644
@@ -123,7 +123,7 @@ mkdir -p $INSTDIR
    --omit=ActiveRecord,Crypto,NetSSL_OpenSSL,Zip,Data,Data/SQLite,Data/ODBC,Data/MySQL,MongoDB,PDF,CppParser,PageCompiler,JWT,Prometheus,Redis
 
 make -sj12 ANDROID_ABI=armeabi-v7a CC=armv7a-linux-androideabi21-clang CXX=armv7a-linux-androideabi21-clang++ install
-make -sj12 ANDROID_ABI=arm64-v8a install
+make -sj12 ANDROID_ABI=arm64-v8a LIB="llvm-ar -cr" RANLIB=llvm-ranlib STRIP=llvm-strip install
 make -sj12 ANDROID_ABI=x86       install
 make -sj12 ANDROID_ABI=x86_64    install
 
