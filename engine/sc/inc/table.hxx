@@ -1189,7 +1189,7 @@ public:
 
     void CollectBroadcasterState(sc::BroadcasterState& rState) const;
 
-    std::shared_ptr<sc::SheetViewManager> const& GetSheetViewManager() const;
+    SC_DLLPUBLIC std::shared_ptr<sc::SheetViewManager> const& GetSheetViewManager() const;
 
     bool IsSheetViewHolder() const { return bool(mpSheetViewFor); }
 

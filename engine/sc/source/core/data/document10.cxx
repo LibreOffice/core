@@ -1222,7 +1222,8 @@ bool ScDocument::HasSheetViews(SCTAB nTab) const
 {
     if (ScTable const* pTable = FetchTable(nTab))
     {
-        return !pTable->GetSheetViewManager()->isEmpty();
+        auto const& pManager = pTable->GetSheetViewManager();
+        return pManager && !pManager->isEmpty();
     }
     return false;
 }

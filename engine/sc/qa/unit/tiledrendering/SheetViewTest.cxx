@@ -25,6 +25,7 @@
 #include <scitems.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
+#include <table.hxx>
 #include <attrib.hxx>
 #include <editeng/brushitem.hxx>
 #include <i18nutil/transliteration.hxx>
@@ -1137,6 +1138,35 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCreateSheetViewRejectsHolderTab)
     CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, nRestoredID);
     CPPUNIT_ASSERT_EQUAL(SCTAB(-1), nRestoredTab);
     CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testTableGetSheetViewManagerNullOnHolder)
+{
+    // ScTable::GetSheetViewManager must return a null shared_ptr on a
+    // sheet view holder tab. The holder's own manager is allocated
+    // eagerly but is never populated. Letting it leak out invites
+    // callers to add second-order sheet views to it by mistake.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+
+    // Create a sheet view of Sheet1. Layout: [Sheet1, Sheet1-view].
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDocument.IsSheetViewHolder(1));
+
+    // The default tab's manager must be non-null.
+    ScTable* pDefaultTable = rDocument.FetchTable(0);
+    CPPUNIT_ASSERT(pDefaultTable);
+    CPPUNIT_ASSERT(pDefaultTable->GetSheetViewManager());
+
+    // The holder tab must report no manager.
+    ScTable* pHolderTable = rDocument.FetchTable(1);
+    CPPUNIT_ASSERT(pHolderTable);
+    CPPUNIT_ASSERT(!pHolderTable->GetSheetViewManager());
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
