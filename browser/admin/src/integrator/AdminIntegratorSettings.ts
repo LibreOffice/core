@@ -2931,7 +2931,7 @@ class SettingIframe {
 		}
 
 		// Interface settings
-		if (isUserConfig) {
+		if (isUserConfig && !isCODesktop) {
 			if (!data) {
 				this._browserSettingSection = this.createEmptySection(
 					this._browserSettingSection,
