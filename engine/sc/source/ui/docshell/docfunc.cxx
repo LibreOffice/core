@@ -114,6 +114,7 @@
 #include <operation/PutDataOperation.hxx>
 #include <operation/SetCellTextOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
+#include <operation/ShowNoteOperation.hxx>
 #include <operation/SetFormulasOperation.hxx>
 #include <operation/SetValueOperation.hxx>
 #include <operation/SetValuesOperation.hxx>
@@ -762,30 +763,8 @@ bool ScDocFunc::SetCellText(
 
 bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 {
-    ScDocument& rDoc = rDocShell.GetDocument();
-    ScPostIt* pNote = rDoc.GetNote( rPos );
-    if( !pNote || (bShow == pNote->IsCaptionShown()) ||
-        comphelper::COKit::isActive() )
-        return false;
-
-    // move the caption to internal or hidden layer and create undo action
-    pNote->ShowCaption( rPos, bShow );
-    if( rDoc.IsUndoEnabled() )
-        rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideNote>( rDocShell, rPos, bShow ) );
-
-    rDoc.SetStreamValid(rPos.Tab(), false);
-
-    ScTabView::OnKitNoteStateChanged(pNote);
-
-    if (ScViewData* pViewData = ScDocShell::GetViewData())
-    {
-        if (ScDrawView* pDrawView = pViewData->GetScDrawView())
-            pDrawView->SyncForGrid( pNote->GetCaption());
-    }
-
-    rDocShell.SetDocumentModified();
-
-    return true;
+    sc::ShowNoteOperation aOperation(rDocShell, rPos, bShow);
+    return aOperation.run();
 }
 
 void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool bApi )
