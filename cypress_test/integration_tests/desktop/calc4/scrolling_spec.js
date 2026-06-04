@@ -103,6 +103,51 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		cy.cGet(helper.addressInputSelector).invoke('val').should('contain', 'D');
 	});
 
+	it('Dragging the vertical scroll bar does not grow the document', function () {
+		desktopHelper.assertScrollbarPosition('vertical', 25, 40);
+		helper.processToIdle(this.win);
+
+		let initialDocHeight;
+		let thumbX, thumbY;
+
+		cy.cGet('#document-canvas').then((items) => {
+			expect(items).to.have.lengthOf(1);
+			const layout = this.win.app.activeDocument.activeLayout;
+			const scrollProps = layout.scrollProperties;
+			const dpiScale = this.win.app.dpiScale;
+
+			initialDocHeight = layout.viewSize.y;
+
+			// Grab the middle of the vertical scroll bar thumb.
+			thumbX = Math.round(items[0].getBoundingClientRect().width) - 8;
+			thumbY = Math.round((scrollProps.startY + scrollProps.verticalScrollSize * 0.5) / dpiScale);
+		});
+
+		cy.then(() => {
+			cy.cGet('#document-canvas').realMouseDown({ pointer: 'mouse', button: 'left', x: thumbX, y: thumbY, scrollBehavior: false });
+
+			// Drag the thumb far past the end of the scroll bar.
+			for (let i = 1; i <= 6; i++) {
+				cy.cGet('#document-canvas').realMouseMove(thumbX, thumbY + i * 100, { scrollBehavior: false });
+			}
+		});
+
+		// While the mouse button is held down, the thumb stays pinned to the end
+		// of the scroll bar and the scrollable area keeps its size. Before the
+		// fix every arrival at the end grew the document by another screen, so
+		// the thumb kept shrinking and jumping up and the document grew without
+		// limit.
+		cy.cGet('#test-div-vertical-scrollbar').should(() => {
+			const layout = this.win.app.activeDocument.activeLayout;
+			const scrollProps = layout.scrollProperties;
+			const railEnd = scrollProps.yOffset + scrollProps.verticalScrollLength;
+			expect(scrollProps.startY + scrollProps.verticalScrollSize).to.be.closeTo(railEnd, 3);
+			expect(layout.viewSize.y).to.equal(initialDocHeight);
+		});
+
+		cy.cGet('#document-canvas').realMouseUp({ pointer: 'mouse', button: 'left' });
+	});
+
 	it('Scroll while selecting with mouse - outside the canvas', function () {
 		cy.cGet(helper.addressInputSelector).should('have.value', 'A2');
 

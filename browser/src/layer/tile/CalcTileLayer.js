@@ -191,6 +191,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	_restrictDocumentSize: function () {
+		if (this._documentSizeFrozen) {
+			return;
+		}
+
 		if (!this.sheetGeometry || !this._lastColumn || !this._lastRow) {
 			return;
 		}
@@ -261,6 +265,29 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		if (!this._syncTileContainerSize() && (limitWidth || limitHeight || extendedLimit))
 			app.sectionContainer.requestReDraw();
+	},
+
+	// While the document size is frozen, the scrollable area does not grow or
+	// shrink. A size received from the engine in the meantime is stored and
+	// applied when the freeze ends.
+	freezeDocumentSize: function () {
+		this._documentSizeFrozen = true;
+	},
+
+	unfreezeDocumentSize: function () {
+		if (!this._documentSizeFrozen)
+			return;
+
+		this._documentSizeFrozen = false;
+
+		if (this._pendingDocumentSize) {
+			app.activeDocument.fileSize = this._pendingDocumentSize.clone();
+			app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+			this._pendingDocumentSize = null;
+			this._syncTileContainerSize();
+		}
+
+		this._restrictDocumentSize();
 	},
 
 	_getCursorPosSize: function () {
@@ -435,11 +462,16 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 			var firstSelectedPart = (typeof this._selectedPart !== 'number');
 
-			app.activeDocument.fileSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
-			app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+			if (this._documentSizeFrozen) {
+				this._pendingDocumentSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
+			}
+			else {
+				app.activeDocument.fileSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
+				app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
 
-			if (app.map._docLoaded)
-				this._syncTileContainerSize();
+				if (app.map._docLoaded)
+					this._syncTileContainerSize();
+			}
 
 			this._docType = statusJSON.type;
 			this._parts = statusJSON.partscount;

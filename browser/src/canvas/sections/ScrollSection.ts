@@ -692,6 +692,25 @@ export class ScrollSection extends CanvasSectionObject {
 		}
 	}
 
+	/*
+		Scroll bar dragging maps the mouse movement to a document position with
+		the current ratio between the scroll bar length and the scrollable area.
+		In spreadsheets the scrollable area grows when the view reaches its end,
+		which changes that ratio mid-drag: the scroll bar shrinks and jumps under
+		the pointer and the document grows without limit while the user keeps
+		dragging. So freeze the document size when the scroll bar is grabbed and
+		recalculate it once when it is released.
+	*/
+	private freezeDocumentSize(): void {
+		if (this.map._docLayer._docType === 'spreadsheet')
+			this.map._docLayer.freezeDocumentSize();
+	}
+
+	private unfreezeDocumentSize(): void {
+		if (this.map._docLayer._docType === 'spreadsheet')
+			this.map._docLayer.unfreezeDocumentSize();
+	}
+
 	public onMouseDown (point: cool.SimplePoint, e: MouseEvent): void {
 		const layout = (app.activeDocument as DocumentBase).activeLayout;
 		const scrollProps: ScrollProperties = layout.scrollProperties;
@@ -713,6 +732,7 @@ export class ScrollSection extends CanvasSectionObject {
 					this.sectionProperties.clickScrollVertical = true;
 					this.map.scrollingIsHandled = true;
 					this.containerObject.capturePointerForDrag();
+					this.freezeDocumentSize();
 					this.quickScrollVertical(point);
 					e.stopPropagation(); // Don't propagate to map.
 					this.stopPropagating(); // Don't propagate to bound sections.
@@ -738,6 +758,7 @@ export class ScrollSection extends CanvasSectionObject {
 					this.sectionProperties.clickScrollHorizontal = true;
 					this.map.scrollingIsHandled = true;
 					this.containerObject.capturePointerForDrag();
+					this.freezeDocumentSize();
 					this.quickScrollHorizontal(point);
 					e.stopPropagation(); // Don't propagate to map.
 					this.stopPropagating(); // Don't propagate to bound sections.
@@ -756,6 +777,7 @@ export class ScrollSection extends CanvasSectionObject {
 		window.L.DomUtil.removeClass(document.documentElement, 'prevent-select');
 		this.map.scrollingIsHandled = false;
 		this.clearQuickScrollTimeout();
+		this.unfreezeDocumentSize();
 
 		if (this.sectionProperties.clickScrollVertical) {
 			this.containerObject.releasePointerForDrag();
