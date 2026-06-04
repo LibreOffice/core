@@ -12,16 +12,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-05-30 21:25+0000\n"
-"Last-Translator: teste celular <teste.aparelho.mail@gmail.com>\n"
+"PO-Revision-Date: 2026-06-05 00:58+0000\n"
+"Last-Translator: Diego Nascimento "
+"<weblate@simplelogin.nascimentodiego.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -569,31 +570,31 @@ msgstr "Desenho"
 #: src/control/Control.NotebookbarDraw.js:1445
 #: src/control/Control.NotebookbarWriter.js:1242
 msgid "Page"
-msgstr ""
+msgstr "Página"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:534
 msgid "Fit to page"
-msgstr ""
+msgstr "Ajustar à página"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:535
 msgid "Tile pages"
-msgstr ""
+msgstr "Página em grade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:536
 msgid "Booklet"
-msgstr ""
+msgstr "Guia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:537
 msgid "Booklet front"
-msgstr ""
+msgstr "Capa do guia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:538
 msgid "Booklet back"
-msgstr ""
+msgstr "Verso do guia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:539
 msgid "Page name"
-msgstr ""
+msgstr "Nome da página"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:540
 #: src/control/Control.NotebookbarCalc.js:817
@@ -609,11 +610,11 @@ msgstr "Tempo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:542
 msgid "Hidden pages"
-msgstr ""
+msgstr "Páginas ocultas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:543
 msgid "From printer setup"
-msgstr ""
+msgstr "Da configuração da Impressora"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.BackstageView.ts:551 templates/templates.js:80
@@ -638,41 +639,40 @@ msgstr "Notas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:546
 msgid "Handouts"
-msgstr ""
+msgstr "Material de Apoio"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:547
 #: src/control/Control.NavigatorPanel.ts:213
 msgid "Outline"
-msgstr ""
+msgstr "Contorno"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:548
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Material de apoio horizontal"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:549
 msgid "Images"
-msgstr ""
+msgstr "Imagens"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:550
-#, fuzzy
 msgid "Tables"
-msgstr "Tabela"
+msgstr "Tabelas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
 msgid "Controls"
-msgstr ""
+msgstr "Controles"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:552
 msgid "Background"
-msgstr ""
+msgstr "Fundo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:553
 msgid "Print Black"
-msgstr ""
+msgstr "Imprimir em preto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:554
 msgid "Hidden text"
-msgstr ""
+msgstr "Texto oculto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:555
 msgid "Placeholders"
@@ -680,113 +680,119 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Left pages"
-msgstr ""
+msgstr "Páginas à esquerda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:557
 msgid "Right pages"
-msgstr ""
+msgstr "Páginas à direita"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:558
 msgid "Brochure"
-msgstr ""
+msgstr "Folheto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Folheto direita para esquerda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:745
 msgid "Invalid JSON file"
-msgstr ""
+msgstr "Arquivo JSON inválido"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:749
 msgid "Error reading file"
-msgstr ""
+msgstr "Erro ao ler arquivo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:761
 msgid "Autotext"
-msgstr ""
+msgstr "Autotexto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:763
 msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
 msgstr ""
+"Faça o envio de feagmento de texto reutilizáveis (.bau). Para inserir o "
+"texto no seu documento, digite o atalho para uma entrada de AutoTexto e "
+"pressione F3."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:769
 msgid "Upload Autotext"
-msgstr ""
+msgstr "Enviar Autotexto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:774
 msgid "Custom dictionaries"
-msgstr ""
+msgstr "Dicionários personalizados"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid ""
 "Add or edit words in a spell check dictionary. Words in your wordbook (."
 "dic) will be available for spelling checks."
 msgstr ""
+"Adicionar ou editar palavras em um dicionário de gramática. Palavras em seus "
+"dicionários (.dic) ficarão disponíveis para checagem gramatical."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:782
 msgid "Upload Wordbook"
-msgstr ""
+msgstr "Enviar Dicionário"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:787
 msgid "Document themes"
-msgstr ""
+msgstr "Temas de Documentos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Enviar documentos de temas (.theme) personalizados. Isso irá definir palheta "
+"de cores em Formato>Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:795
 msgid "Upload Theme"
-msgstr ""
+msgstr "Enviar Tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:850
 msgid "Something went wrong. Please try to refresh the page."
-msgstr ""
+msgstr "Algo deu errado. Por favor tente atualizar a página."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1006
-#, fuzzy
 msgid ""
 "Something went wrong while fetching wordbook. Please try to refresh the "
 "page."
 msgstr ""
-"Algo deu errado ao buscar o arquivo de configuração. Por favor, tente "
-"atualizar a página."
+"Algo deu errado ao buscar o dicionário. Por favor, tente atualizar a página."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1020
 msgid "Interface Settings"
-msgstr ""
+msgstr "Configurações de Visual"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1022
 msgid "Set default interface preferences."
-msgstr ""
+msgstr "Definir padrão de preferências visual."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1173
 msgid "Select a tab to browser settings."
-msgstr ""
+msgstr "Selecione uma aba para navegar em configurações."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1190
 #: admin/src/integrator/Xcu.ts:374
 msgid "Reset to default Document settings"
-msgstr ""
+msgstr "Redefinir para as configurações padrão de Documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1194
 #: admin/src/integrator/Xcu.ts:388
 msgid "Are you sure you want to reset Document settings?"
-msgstr ""
+msgstr "Tem certeza que deseja redefinir configurações de Documento?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1211
 #: admin/src/integrator/Xcu.ts:403
 msgid "Save Document settings"
-msgstr ""
+msgstr "Salvar configurações de Documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1488
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr ""
+"(Aviso: A acessibilidade do servidor deve estar habilitada para alternar)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1585
 msgid "Notebookbar view"
