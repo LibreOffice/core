@@ -19,10 +19,6 @@ $(eval $(call gb_CppunitTest_use_externals,desktop_app, \
     icu_headers \
     icui18n \
     icuuc \
-	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
-		curl \
-        orcus-parser \
-        orcus )\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
@@ -51,13 +47,6 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     utl \
     vcl \
 ))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_use_static_libraries,desktop_app,\
-    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
-        windows_process )\
-))
-endif
 
 $(eval $(call gb_CppunitTest_use_library_objects,desktop_app, \
     sofficeapp \

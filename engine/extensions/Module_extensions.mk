@@ -60,18 +60,6 @@ ifeq (,$(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS))
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_updatefeed \
 ))
-
-ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
-$(eval $(call gb_Module_add_targets,extensions,\
-	Configuration_updchk \
-	Library_updatecheckui \
-	Library_updchk \
-))
-
-$(eval $(call gb_Module_add_check_targets,extensions,\
-    CppunitTest_extensions_test_update \
-))
-endif
 endif # !ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS
 endif
 

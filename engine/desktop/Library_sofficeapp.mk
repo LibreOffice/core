@@ -28,9 +28,6 @@ $(eval $(call gb_Library_use_externals,sofficeapp, \
     $(if $(filter-out EMSCRIPTEN iOS,$(OS)), \
         curl \
     ))\
-    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
-        orcus-parser \
-        orcus )\
 ))
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
@@ -83,13 +80,6 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     vcl \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_static_libraries,sofficeapp,\
-    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
-        windows_process )\
-))
-endif
-
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_cxxflags,sofficeapp,\
@@ -128,8 +118,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/officeipcthread \
     desktop/source/app/opencl \
     desktop/source/app/sofficemain \
-    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
-        desktop/source/app/updater )\
     desktop/source/app/userinstall \
     desktop/source/migration/migration \
 ))

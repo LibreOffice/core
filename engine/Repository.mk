@@ -60,9 +60,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	propex \
 	saxparser \
 	svidl \
-	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
-		test_updater_dialog \
-	) \
 	treex \
 	ulfex \
 	unoidl-check \
@@ -108,12 +105,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 endif
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
-	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
-		mar \
-		$(if $(filter WNT,$(OS)), \
-			update_service \
-		) \
-		updater )\
 	$(call gb_Helper_optional,BREAKPAD,minidump_upload) \
 	$(call gb_Helper_optional,FUZZERS,wmffuzzer) \
 	$(call gb_Helper_optional,FUZZERS,jpgfuzzer) \
@@ -286,13 +277,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
 	animcore \
 	PresentationMinimizer \
 	wpftimpress \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,onlineupdate, \
-	$(if $(ENABLE_ONLINE_UPDATE), \
-		updatecheckui \
-		updchk \
-	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
@@ -954,10 +938,6 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	readlicense_oo_files \
 	readlicense_oo_license \
 	$(call gb_Helper_optional,DESKTOP,setup_native_packinfo) \
-	$(if $(ENABLE_ONLINE_UPDATE_MAR), \
-	    update-settings_ini \
-	    updater_ini \
-	) \
 ))
 
 ifeq ($(USING_X11), TRUE)
@@ -985,10 +965,6 @@ $(eval $(call gb_Helper_register_packages_for_install,writer_brand,\
 	desktop_swriter_sh \
 ))
 endif # USING_X11=TRUE
-
-$(eval $(call gb_Helper_register_packages_for_install,onlineupdate,\
-	$(if $(ENABLE_ONLINE_UPDATE),$(if $(filter LINUX SOLARIS,$(OS)),setup_native_scripts)) \
-))
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,python, \

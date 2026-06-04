@@ -13,7 +13,6 @@ gb_PackageInfo_InstallModules := \
 	graphicsfilter \
 	tde \
 	impress \
-	onlineupdate \
 	gnome \
 	kde \
 	math \

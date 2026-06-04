@@ -561,11 +561,6 @@ VERAPDF_JAR := verapdf-cli-1.29.0.jar
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ONLINEUPDATE_SHA256SUM := 37206cf981e8409d048b59ac5839621ea107ff49af72beb9d7769a2f41da8d90
-ONLINEUPDATE_TARBALL := onlineupdate-c003be8b9727672e7d30972983b375f4c200233f-2.tar.xz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 OPENLDAP_SHA256SUM := d693b49517a42efb85a1a364a310aed16a53d428d1b46c0d31ef3fba78fcb656
 OPENLDAP_TARBALL := openldap-2.6.13.tgz
 # three static lines

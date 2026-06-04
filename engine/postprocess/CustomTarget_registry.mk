@@ -188,7 +188,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/UI/WindowContentFactories.xcs \
 	$(postprocess_XCS)/Office/UI/WindowState.xcs \
 	$(postprocess_XCS)/Office/UI.xcs \
-	$(postprocess_XCS)/Office/Update.xcs \
 	$(postprocess_XCS)/Office/Views.xcs \
 	$(postprocess_XCS)/Office/Writer.xcs \
 	$(postprocess_XCS)/Office/WriterWeb.xcs \
@@ -387,14 +386,6 @@ postprocess_DEPS_gnome := main
 postprocess_FILES_gnome += $(postprocess_MOD)/org/openoffice/ucb/Configuration-gio.xcu
 endif
 
-ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
-postprocess_XCDS += onlineupdate.xcd
-postprocess_DEPS_onlineupdate := main
-postprocess_FILES_onlineupdate := \
-	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Addons-onlineupdate.xcu \
-	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Jobs-onlineupdate.xcu
-endif
-
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 postprocess_XCDS += pdfimport.xcd
 postprocess_OPTDEPS_pdfimport := calc draw impress math writer
@@ -518,7 +509,6 @@ $(gb_CustomTarget_workdir)/postprocess/registry/registry_$(1).list : \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
 		$(foreach driver,$(postprocess_DRIVERS),$(call gb_Configuration_get_target,$(driver))) \
 	) \
-	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),$(call gb_Configuration_get_target,updchk)) \
 	| $(gb_CustomTarget_workdir)/postprocess/registry/.dir
 
 endef
@@ -610,8 +600,6 @@ $(gb_CustomTarget_workdir)/postprocess/registry/registry_%.list :
 	         $(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
 	             $(foreach driver,$(postprocess_DRIVERS),\
 	                 $(call gb_XcuResTarget_get_target,$(driver)/$*/)))\
-	         $(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
-	             $(call gb_XcuResTarget_get_target,updchk/$*/))\
 	         -name "*.xcu" \
 		| LC_ALL=C $(SORT) \
 	        | $(gb_AWK) 'BEGIN{print "<list>"} \

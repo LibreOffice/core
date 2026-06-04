@@ -480,15 +480,7 @@ ProfileItem gid_Brand_Profileitem_Version_Updateurl
     Section = "Version";
     Order = 15;
     Key = "UpdateURL";
-  #if defined(ENABLE_ONLINE_UPDATE)
-  #ifdef WNT
-    Value = "${UPDATEURL}";
-  #else  // defined WNT
-    Value = "${UPDATEURL}?pkgfmt=<pkgformat>";
-  #endif //defined WNT
-  #else
     Value = "";
-  #endif
 End
 
 ProfileItem gid_Brand_Profileitem_Version_UpdateChannel

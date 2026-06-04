@@ -31,7 +31,6 @@ cui/ui/optjsearchpage.ui
 cui/ui/optlanguagespage.ui
 cui/ui/optlingupage.ui
 cui/ui/optnewdictionarydialog.ui
-cui/ui/optonlineupdatepage.ui
 cui/ui/optpathspage.ui
 cui/ui/optproxypage.ui
 cui/ui/optsavepage.ui

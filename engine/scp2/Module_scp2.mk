@@ -19,7 +19,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallModule_graphicfilter \
 	InstallModule_impress \
 	InstallModule_math \
-	InstallModule_onlineupdate \
 	InstallModule_ooo \
 	InstallModule_python \
 	InstallModule_ure \

@@ -56,7 +56,6 @@
 #include <optlingu.hxx>
 #include <optpath.hxx>
 #include "optsave.hxx"
-#include "optupdt.hxx"
 #include <treeopt.hxx>
 #include "optbasic.hxx"
 #include "optlanguagetool.hxx"
@@ -270,7 +269,6 @@ static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Co
         case RID_SVXPAGE_LANGTOOL_OPTIONS:          fnCreate = &OptLanguageToolTabPage::Create ; break;
         case RID_SVXPAGE_DEEPL_OPTIONS:             fnCreate = &OptDeeplTabPage::Create ; break;
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
-        case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
 #if HAVE_FEATURE_SCRIPTING
         case RID_SVXPAGE_BASICIDE_OPTIONS:          fnCreate = &SvxBasicIDEOptionsPage::Create; break;
@@ -306,7 +304,6 @@ constexpr OptionsMapping_Impl OptionsMap_Impl[]
     { u"ProductName"_ustr,        u"Accessibility"_ustr,        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { u"ProductName"_ustr,        u"Java"_ustr,                 RID_SVXPAGE_OPTIONS_JAVA },
     { u"ProductName"_ustr,        u"BasicIDEOptions"_ustr,      RID_SVXPAGE_BASICIDE_OPTIONS },
-    { u"ProductName"_ustr,        u"OnlineUpdate"_ustr,         RID_SVXPAGE_ONLINEUPDATE },
     { u"LanguageSettings"_ustr,   u""_ustr,                SID_LANGUAGE_OPTIONS },
     { u"LanguageSettings"_ustr,   u"Languages"_ustr,            OFA_TP_LANGUAGES  },
     { u"LanguageSettings"_ustr,   u"WritingAids"_ustr,          RID_SFXPAGE_LINGU },
@@ -1707,14 +1704,6 @@ void OfaTreeOptionsDialog::generalOptions(const std::vector<sal_uInt16>& vPageId
             sal_uInt16 nPageId = SID_GENERAL_OPTIONS_RES[i].second;
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
-
-            // Disable Online Update page if neither mode is available
-            if( RID_SVXPAGE_ONLINEUPDATE == nPageId
-                && !(SvxOnlineUpdateTabPage::isTraditionalOnlineUpdateAvailable()
-                     || SvxOnlineUpdateTabPage::isMarOnlineUpdateAvailable()) )
-            {
-                continue;
-            }
 
             if (!vPageId.empty())
             {

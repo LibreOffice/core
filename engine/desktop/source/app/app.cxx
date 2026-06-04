@@ -42,9 +42,6 @@
 #include "desktopcontext.hxx"
 #include <migration.hxx>
 #include "officeipcthread.hxx"
-#if HAVE_FEATURE_UPDATE_MAR
-#include "updater.hxx"
-#endif
 
 #include <framework/desktop.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -58,9 +55,6 @@
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
-#if HAVE_FEATURE_UPDATE_MAR
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#endif
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -97,7 +91,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
-#include <officecfg/Office/Update.hxx>
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -128,10 +121,6 @@
 #include <vcl/window.hxx>
 #include "langselect.hxx"
 #include <salhelper/thread.hxx>
-
-#if HAVE_FEATURE_UPDATE_MAR
-#include <tools/time.hxx>
-#endif
 
 #if defined MACOSX
 #include <errno.h>
@@ -171,9 +160,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::task;
-#if HAVE_FEATURE_UPDATE_MAR
-using namespace ::com::sun::star::system;
-#endif
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
@@ -1130,20 +1116,6 @@ void restartOnMac(bool passArguments) {
 #endif
 }
 
-#if HAVE_FEATURE_UPDATE_MAR
-bool isTimeForUpdateCheck()
-{
-    sal_uInt64 nLastUpdate = officecfg::Office::Update::Update::LastUpdateTime::get();
-    sal_uInt64 nNow = tools::Time::GetSystemTicks();
-
-    sal_uInt64 n7DayInMS = 1000 * 60 * 60 * 24 * 7; // 7 days in ms
-    if (nNow - n7DayInMS >= nLastUpdate)
-        return true;
-
-    return false;
-}
-#endif
-
 }
 
 void Desktop::Exception(ExceptionCategory nCategory)
@@ -1404,83 +1376,6 @@ int Desktop::Main()
 
     Reference<XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
 
-#if HAVE_FEATURE_UPDATE_MAR
-    if (!rCmdLineArgs.IsHeadless()
-        && (officecfg::Office::Update::Update::Enabled::get()
-            || std::getenv("LIBO_UPDATER_TEST_ENABLE")))
-    {
-        // check if we just updated
-        bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get()
-                              || std::getenv("LIBO_UPDATER_TEST_RUNNING");
-        if (bUpdateRunning)
-        {
-            OUString aOldBuildID = officecfg::Office::Update::Update::OldBuildID::get();
-            if (aOldBuildID == Updater::getBuildID())
-            {
-                Updater::log("Old and new Build ID are the same. No Updating took place.");
-            }
-            else
-            {
-                OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
-                if (!aSeeAlso.isEmpty())
-                {
-                    SAL_INFO("desktop.updater", "See also: " << aSeeAlso);
-                    Reference<css::system::XSystemShellExecute> xSystemShell(
-                        SystemShellExecute::create(::comphelper::getProcessComponentContext()));
-
-                    xSystemShell->execute(aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY);
-                }
-            }
-
-            // reset all the configuration values,
-            // all values need to be read before this code
-            std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Update::Update::UpdateRunning::set(false, batch);
-            officecfg::Office::Update::Update::SeeAlso::set(OUString(), batch);
-            officecfg::Office::Update::Update::OldBuildID::set(OUString(), batch);
-            batch->commit();
-
-            Updater::removeUpdateFiles();
-        }
-
-        osl::DirectoryItem aUpdateFile;
-        osl::DirectoryItem::get(Updater::getUpdateFileURL(), aUpdateFile);
-
-        if (aUpdateFile.is() || std::getenv("LIBO_UPDATER_TEST_UPDATE"))
-        {
-            OUString aBuildID(Updater::getBuildID());
-            std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);
-            officecfg::Office::Update::Update::UpdateRunning::set(true, batch);
-            batch->commit();
-
-            // make sure the change is written to the configuration before we start the update
-            css::uno::Reference<css::util::XFlushable> xFlushable(css::configuration::theDefaultProvider::get(xContext), UNO_QUERY);
-            xFlushable->flush();
-            // avoid the old oosplash staying around
-            CloseSplashScreen();
-            bool bSuccess = update();
-            if (bSuccess)
-            {
-                xDesktop->terminate();
-                return EXIT_SUCCESS;
-            }
-        }
-        else if (isTimeForUpdateCheck() || std::getenv("LIBO_UPDATER_TEST_UPDATE_CHECK"))
-        {
-            sal_uInt64 nNow = tools::Time::GetSystemTicks();
-            Updater::log("Update Check Time: " + OUString::number(nNow));
-            std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Update::Update::LastUpdateTime::set(nNow, batch);
-            batch->commit();
-            m_aUpdateThread = std::thread(update_checker);
-        }
-    }
-#endif
-
     // create service for loading SFX (still needed in startup)
     pExecGlobals->xGlobalBroadcaster = Reference < css::document::XDocumentEventListener >
         ( css::frame::theGlobalEventBroadcaster::get(xContext), UNO_SET_THROW );
@@ -1651,9 +1546,6 @@ int Desktop::doShutdown()
 {
     if( ! pExecGlobals )
         return EXIT_SUCCESS;
-
-    if (m_aUpdateThread.joinable())
-        m_aUpdateThread.join();
 
     if (pExecGlobals->xJVMloadThread.is())
     {

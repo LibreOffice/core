@@ -10,10 +10,6 @@ excludelist:
     desktop/source/app/app.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
-    # Needed for HAVE_FEATURE_UPDATE_MAR
-    - com/sun/star/system/XSystemShellExecute.hpp
-    - com/sun/star/system/SystemShellExecute.hpp
-    - officecfg/Office/Update.hxx
     desktop/source/app/appinit.cxx:
     # Needed on IOS
     - rtl/bootstrap.hxx

@@ -30,9 +30,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(filter TRUE,$(ENABLE_QT5) $(ENABLE_QT6) $(ENABLE_KF5) $(ENABLE_KF6) $(ENABLE_GTK3_KDE5)),\
 		scp2/kde \
 	) \
-	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
-		scp2/onlineupdate \
-	) \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

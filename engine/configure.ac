@@ -2031,47 +2031,6 @@ AC_ARG_ENABLE(z7-debug,
          more disk spaces but allows to use ccache. Final PDB files are created even with this option enabled.
          Enabled by default if ccache is detected.]))
 
-libo_FUZZ_ARG_ENABLE(online-update,
-    AS_HELP_STRING([--enable-online-update],
-        [Enable the online update service that will check for new versions of
-         Collabora Office. Disabled by default. Requires --with-privacy-policy-url to be set.]),
-,)
-
-libo_FUZZ_ARG_ENABLE(online-update-mar,
-    AS_HELP_STRING([--enable-online-update-mar],
-        [Enable the Mozilla-like online update service that will
-         check for new versions of Collabora Office. Currently only works for
-         Windows and Linux. Disabled by default.]),
-,)
-
-libo_FUZZ_ARG_WITH(online-update-mar-baseurl,
-    AS_HELP_STRING([--with-online-update-mar-baseurl=...],
-        [Set the base URL value for --enable-online-update-mar.
-         (Can be left off for debug purposes, even if that may render the feature
-         non-functional.)]),
-,)
-
-libo_FUZZ_ARG_WITH(online-update-mar-certificateder,
-    AS_HELP_STRING([--with-online-update-mar-certificateder=...],
-        [Set the certificate DER value for --enable-online-update-mar.
-         (Can be left off for debug purposes, even if that may render the feature
-         non-functional.)]),
-,)
-
-libo_FUZZ_ARG_WITH(online-update-mar-certificatename,
-    AS_HELP_STRING([--with-online-update-mar-certificatename=...],
-        [Set the certificate name value for --enable-online-update-mar.
-         (Can be left off for debug purposes, even if that may render the feature
-         non-functional.)]),
-,)
-
-libo_FUZZ_ARG_WITH(online-update-mar-certificatepath,
-    AS_HELP_STRING([--with-online-update-mar-certificatepath=...],
-        [Set the certificate path value for --enable-online-update-mar.
-         (Can be left off for debug purposes, even if that may render the feature
-         non-functional.)]),
-,)
-
 libo_FUZZ_ARG_ENABLE(extension-update,
     AS_HELP_STRING([--disable-extension-update],
         [Disable possibility to update installed extensions.]),
@@ -2399,8 +2358,7 @@ AC_ARG_WITH(system-libs,
 
 AC_ARG_WITH(system-bzip2,
     AS_HELP_STRING([--with-system-bzip2],
-        [Use bzip2 already on system. Used when --enable-online-update-mar
-        or --enable-python=internal]),,
+        [Use bzip2 already on system. Used when --enable-python=internal]),,
     [with_system_bzip2="$with_system_libs"])
 
 AC_ARG_WITH(system-headers,
@@ -3225,7 +3183,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_gpgmepp=no
     enable_ldap=no
     enable_nss=no
-    enable_online_update=no
     enable_opencl=no
     enable_pdfimport=no
     enable_randr=no
@@ -13486,85 +13443,10 @@ else
 fi
 AC_SUBST(WITH_NOTO_FONT)
 
-dnl ===================================================================
-dnl Test whether to enable online update service
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable online update])
-ENABLE_ONLINE_UPDATE=
-if test "$enable_online_update" = ""; then
-    AC_MSG_RESULT([no])
-else
-    if test "$enable_online_update" = "mar"; then
-        AC_MSG_ERROR([--enable-online-update=mar is deprecated, use --enable-online-update-mar instead])
-    elif test "$enable_online_update" = "yes"; then
-        if test "$enable_curl" != "yes"; then
-            AC_MSG_ERROR([--disable-online-update must be used when --disable-curl is used])
-        fi
-        AC_MSG_RESULT([yes])
-        ENABLE_ONLINE_UPDATE="TRUE"
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST(ENABLE_ONLINE_UPDATE)
-
-
-dnl ===================================================================
-dnl Test whether to enable mar online update service
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable mar online update])
-ENABLE_ONLINE_UPDATE_MAR=
-if test "$enable_online_update_mar" = yes; then
-    AC_MSG_RESULT([yes])
-    BUILD_TYPE="$BUILD_TYPE ONLINEUPDATE"
-    ENABLE_ONLINE_UPDATE_MAR="TRUE"
-    AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_ONLINE_UPDATE_MAR)
-
-AC_MSG_CHECKING([for mar online update baseurl])
-ONLINEUPDATE_MAR_BASEURL=$with_online_update_mar_baseurl
-if test -n "$ONLINEUPDATE_MAR_BASEURL"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ONLINEUPDATE_MAR_BASEURL)
-
-AC_MSG_CHECKING([for mar online update certificateder])
-ONLINEUPDATE_MAR_CERTIFICATEDER=$with_online_update_mar_certificateder
-if test -n "$ONLINEUPDATE_MAR_CERTIFICATEDER"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATEDER)
-
-AC_MSG_CHECKING([for mar online update certificatename])
-ONLINEUPDATE_MAR_CERTIFICATENAME=$with_online_update_mar_certificatename
-if test -n "$ONLINEUPDATE_MAR_CERTIFICATENAME"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATENAME)
-
-AC_MSG_CHECKING([for mar online update certificatepath])
-ONLINEUPDATE_MAR_CERTIFICATEPATH=$with_online_update_mar_certificatepath
-if test -n "$ONLINEUPDATE_MAR_CERTIFICATEPATH"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ONLINEUPDATE_MAR_CERTIFICATEPATH)
-
-
 PRIVACY_POLICY_URL="$with_privacy_policy_url"
-if test "$ENABLE_ONLINE_UPDATE" = TRUE -o "$ENABLE_BREAKPAD" = "TRUE"; then
+if test "$ENABLE_BREAKPAD" = "TRUE"; then
     if test "x$with_privacy_policy_url" = "xundefined"; then
-        AC_MSG_FAILURE([online update or breakpad/crashreporting are enabled, but no --with-privacy-policy-url=... was provided])
+        AC_MSG_FAILURE([breakpad/crashreporting is enabled, but no --with-privacy-policy-url=... was provided])
     fi
 fi
 AC_SUBST(PRIVACY_POLICY_URL)
@@ -13572,7 +13454,7 @@ dnl ===================================================================
 dnl Test whether we need bzip2
 dnl ===================================================================
 SYSTEM_BZIP2=
-if test "$ENABLE_ONLINE_UPDATE_MAR" = TRUE -o "$enable_python" = internal; then
+if test "$enable_python" = internal; then
     AC_MSG_CHECKING([whether to use system bzip2])
     if test "$with_system_bzip2" = yes; then
         SYSTEM_BZIP2=TRUE

@@ -142,7 +142,6 @@ parts:
         --disable-ldap \
         --disable-lpsolve \
         --disable-noto-font \
-        --disable-online-update \
         --disable-qt5 \
         --disable-randr \
         --disable-sal-log \

@@ -151,7 +151,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optlanguagespage \
 	cui/uiconfig/ui/optlingupage \
 	cui/uiconfig/ui/optnewdictionarydialog \
-	cui/uiconfig/ui/optonlineupdatepage \
 	cui/uiconfig/ui/optpathspage \
 	cui/uiconfig/ui/optproxypage \
 	cui/uiconfig/ui/optsavepage \

@@ -271,7 +271,6 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Want the cursor to go into the cell to the right, after entering a value in Calc? Use the Tab key instead of Enter."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "To display the scrollbar to the left, enable Tools ▸ Options ▸ Languages and Locales ▸ General ▸ Complex text and right click a sheet in Sheet tabs above Status bar ▸ Right-To-Left."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "Drag a formatted object to the Styles and Formatting window. A dialog box opens, just enter the name of the new style."), "", "", swriter},
-     { NC_("RID_CUI_TIPOFTHEDAY", "New versions of %PRODUCTNAME provide new features, bug fixes, and security patches. Keep your software updated!"), "SFX2_HID_DLG_CHECKFORONLINEUPDATE", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and XML filters?"), "https://fridrich.blogspot.com/2013/08/extending-swiss-army-knife-overview.html", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Press Shift+F1 to see any available extended tooltips in dialog boxes, when \"Extended tips\" is not enabled in Tools ▸ Options ▸ %PRODUCTNAME ▸ General."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/05/00000120.html", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Never use certain arrow styles? Remove them by using the Delete button on the Format ▸ Text Box and Shape ▸ Line ▸ Arrow Styles tab."), "cui/ui/lineendstabpage/BTN_MODIFY", "", sdraw},

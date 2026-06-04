@@ -200,7 +200,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optlingu \
     cui/source/options/optpath \
     cui/source/options/optsave \
-    cui/source/options/optupdt \
     cui/source/options/appearance \
     cui/source/options/sdbcdriverenum \
     cui/source/options/securityoptions \

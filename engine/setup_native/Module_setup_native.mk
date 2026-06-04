@@ -15,7 +15,6 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	Package_packinfo \
 	$(if $(filter LINUX SOLARIS,$(OS)), \
 		CustomTarget_scripts \
-		$(if $(ENABLE_ONLINE_UPDATE),Package_scripts) \
 	) \
 ))
 

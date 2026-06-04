@@ -112,11 +112,6 @@
 #define HAVE_FEATURE_PDFIMPORT 0
 
 /*
- * Whether the automatic online updater is available
- */
-#define HAVE_FEATURE_UPDATE_MAR 0
-
-/*
  * Whether we are avoiding the tweaks needed for the Android app from the
  * android/ subdir.
  */
