@@ -524,12 +524,12 @@ void CommandCategoryListBox::addChildren(
         = parentNode->getChildNodes();
     for (auto const& child : aChildNodes)
     {
-        // Acquire to prevent auto-destruction
-        child->acquire();
-
         if (child->hasChildNodes())
         {
             OUString sUIName = child->getName();
+
+            // Acquire a reference that will be owned by SfxGroupInfo_Impl and released in ClearAll.
+            child->acquire();
 
             m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
                 SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void*>(child.get())));
