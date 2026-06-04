@@ -34,6 +34,8 @@ std::string_view operationTypeString(OperationType eOperation)
             return "SetNormalString";
         case OperationType::SetValue:
             return "SetValue";
+        case OperationType::SetValues:
+            return "SetValues";
         case OperationType::SetString:
             return "SetString";
         case OperationType::SetTextEdit:

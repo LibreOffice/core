@@ -25,6 +25,7 @@ enum class OperationType
     TransliterateText,
     SetNormalString,
     SetValue,
+    SetValues,
     SetString,
     SetTextEdit,
     SetFormula,

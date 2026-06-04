@@ -112,6 +112,7 @@
 #include <operation/DeleteCellsOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
 #include <operation/SetValueOperation.hxx>
+#include <operation/SetValuesOperation.hxx>
 #include <operation/SetStringOperation.hxx>
 #include <operation/SetFormulaOperation.hxx>
 #include <operation/SetEditTextOperation.hxx>
@@ -677,36 +678,8 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
 
 void ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction )
 {
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    // Check for invalid range.
-    SCROW nLastRow = rPos.Row() + aVals.size() - 1;
-    if (nLastRow > rDoc.MaxRow())
-        // out of bound.
-        return;
-
-    ScRange aRange(rPos);
-    aRange.aEnd.SetRow(nLastRow);
-
-    ScDocShellModificator aModificator(rDocShell);
-
-    if (rDoc.IsUndoEnabled())
-    {
-        std::unique_ptr<sc::UndoSetCells> pUndoObj(new sc::UndoSetCells(rDocShell, rPos));
-        rDoc.TransferCellValuesTo(rPos, aVals.size(), pUndoObj->GetOldValues());
-        pUndoObj->SetNewValues(aVals);
-        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-        pUndoMgr->AddUndoAction(std::move(pUndoObj));
-    }
-
-    rDoc.SetValues(rPos, aVals);
-
-    rDocShell.PostPaint(aRange, PaintPartFlags::Grid);
-    aModificator.SetDocumentModified();
-
-    // #103934#; notify editline and cell in edit mode
-    if (!bInteraction)
-        NotifyInputHandler(rPos);
+    sc::SetValuesOperation aOperation(*this, rDocShell, rPos, aVals, !bInteraction);
+    aOperation.run();
 }
 
 bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
