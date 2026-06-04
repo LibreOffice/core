@@ -4,6 +4,10 @@
 # Path may be given relative to the current directory or from the
 # repo root, with or without the engine/ prefix. Any preceding
 # arguments are forwarded to git log (e.g. -Sfoo).
+#
+# Note: A -- among the [git log args...] (like in `engine-git-log.sh -- engine/unodevtools`) would
+# not work as one might expect.  (Implementing that would be tedious and fragile, given scenarios
+# like `engine-git-log.sh -S -- foo`, where -- shall be the value of -S, not a pathspec separator.)
 if [ $# -lt 1 ]; then
     echo "Usage: $0 [git log args...] <path>" >&2
     exit 1
