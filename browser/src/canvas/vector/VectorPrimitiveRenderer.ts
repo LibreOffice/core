@@ -118,14 +118,15 @@ namespace cool {
 			const hasMatrix = matrix !== undefined && matrix.length >= 6;
 
 			if (hasMatrix) {
-				const a = matrix[0] !== undefined ? parseFloat(matrix[0] as any) : 1;
-				const b = matrix[1] !== undefined ? parseFloat(matrix[1] as any) : 0;
-				const c = matrix[2] !== undefined ? parseFloat(matrix[2] as any) : 0;
-				const d = matrix[3] !== undefined ? parseFloat(matrix[3] as any) : 1;
-				const e = matrix[4] !== undefined ? parseFloat(matrix[4] as any) : 0;
-				const f = matrix[5] !== undefined ? parseFloat(matrix[5] as any) : 0;
 				context.save();
-				context.transform(a, b, c, d, e, f);
+				context.transform(
+					matrix[0],
+					matrix[1],
+					matrix[2],
+					matrix[3],
+					matrix[4],
+					matrix[5],
+				);
 			}
 
 			if (primitive.children)

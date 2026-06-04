@@ -18,11 +18,9 @@ namespace cool {
 	///     | a  c  e |
 	///     | b  d  f |
 	///     | 0  0  1 |
-	///
-	/// Values arrive as strings on the wire.
 	export interface TransformPrimitive extends Primitive {
 		type: typeof TransformPrimitive.type;
-		matrix?: Array<string | number>;
+		matrix?: number[];
 	}
 
 	export namespace TransformPrimitive {

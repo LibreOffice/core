@@ -257,10 +257,10 @@ void Primitive2dJsonProcessor::writeRangeScaled(std::string_view sName,
                                                 const basegfx::B2DRange& rRange)
 {
     auto aArray = mrWriter.startArray(sName);
-    mrWriter.putSimpleValue(OUString::number(rRange.getMinX() * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rRange.getMinY() * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rRange.getMaxX() * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rRange.getMaxY() * mfScaleFactor));
+    mrWriter.putSimpleValue(rRange.getMinX() * mfScaleFactor);
+    mrWriter.putSimpleValue(rRange.getMinY() * mfScaleFactor);
+    mrWriter.putSimpleValue(rRange.getMaxX() * mfScaleFactor);
+    mrWriter.putSimpleValue(rRange.getMaxY() * mfScaleFactor);
 }
 
 void Primitive2dJsonProcessor::writeHatchScaled(
@@ -359,7 +359,7 @@ void Primitive2dJsonProcessor::writeStrokeAttributeScaled(
     {
         auto aDashArrayNode = mrWriter.startArray("dotDashArray");
         for (double fValue : rDashArray)
-            mrWriter.putSimpleValue(OUString::number(fValue * mfScaleFactor));
+            mrWriter.putSimpleValue(fValue * mfScaleFactor);
     }
 }
 
@@ -430,7 +430,7 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
     {
         auto aDxArray = mrWriter.startArray("dxarray");
         for (double fValue : rPrimitive.getDXArray())
-            mrWriter.putSimpleValue(OUString::number(fValue * mfScaleFactor));
+            mrWriter.putSimpleValue(fValue * mfScaleFactor);
     }
 }
 
@@ -439,12 +439,12 @@ void Primitive2dJsonProcessor::writeMatrixScaled(std::string_view sName,
                                                  const basegfx::B2DHomMatrix& rMatrix)
 {
     auto aArray = mrWriter.startArray(sName);
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(0, 0) * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(1, 0) * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(0, 1) * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(1, 1) * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(0, 2) * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(1, 2) * mfScaleFactor));
+    mrWriter.putSimpleValue(rMatrix.get(0, 0) * mfScaleFactor);
+    mrWriter.putSimpleValue(rMatrix.get(1, 0) * mfScaleFactor);
+    mrWriter.putSimpleValue(rMatrix.get(0, 1) * mfScaleFactor);
+    mrWriter.putSimpleValue(rMatrix.get(1, 1) * mfScaleFactor);
+    mrWriter.putSimpleValue(rMatrix.get(0, 2) * mfScaleFactor);
+    mrWriter.putSimpleValue(rMatrix.get(1, 2) * mfScaleFactor);
 }
 
 // Write matrix with scale applied only to translation (e, f).
@@ -456,12 +456,12 @@ void Primitive2dJsonProcessor::writeMatrixTranslationScaled(std::string_view sNa
                                                             const basegfx::B2DHomMatrix& rMatrix)
 {
     auto aArray = mrWriter.startArray(sName);
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(0, 0)));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(1, 0)));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(0, 1)));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(1, 1)));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(0, 2) * mfScaleFactor));
-    mrWriter.putSimpleValue(OUString::number(rMatrix.get(1, 2) * mfScaleFactor));
+    mrWriter.putSimpleValue(rMatrix.get(0, 0));
+    mrWriter.putSimpleValue(rMatrix.get(1, 0));
+    mrWriter.putSimpleValue(rMatrix.get(0, 1));
+    mrWriter.putSimpleValue(rMatrix.get(1, 1));
+    mrWriter.putSimpleValue(rMatrix.get(0, 2) * mfScaleFactor);
+    mrWriter.putSimpleValue(rMatrix.get(1, 2) * mfScaleFactor);
 }
 
 basegfx::B2DPolyPolygon
@@ -485,10 +485,10 @@ void Primitive2dJsonProcessor::writePathScaled(const basegfx::B2DPolyPolygon& rP
     const basegfx::B2DRange aRange(aScaled.getB2DRange());
     {
         auto aBoundsArray = mrWriter.startArray("bounds");
-        mrWriter.putSimpleValue(OUString::number(aRange.getMinX()));
-        mrWriter.putSimpleValue(OUString::number(aRange.getMinY()));
-        mrWriter.putSimpleValue(OUString::number(aRange.getMaxX()));
-        mrWriter.putSimpleValue(OUString::number(aRange.getMaxY()));
+        mrWriter.putSimpleValue(aRange.getMinX());
+        mrWriter.putSimpleValue(aRange.getMinY());
+        mrWriter.putSimpleValue(aRange.getMaxX());
+        mrWriter.putSimpleValue(aRange.getMaxY());
     }
 }
 
@@ -1116,10 +1116,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
             const basegfx::B2DRange& rRange = rPrimitive.getB2DRange();
             auto aBoundsArray = mrWriter.startArray("bounds");
-            mrWriter.putSimpleValue(OUString::number(rRange.getMinX() * mfScaleFactor));
-            mrWriter.putSimpleValue(OUString::number(rRange.getMinY() * mfScaleFactor));
-            mrWriter.putSimpleValue(OUString::number(rRange.getMaxX() * mfScaleFactor));
-            mrWriter.putSimpleValue(OUString::number(rRange.getMaxY() * mfScaleFactor));
+            mrWriter.putSimpleValue(rRange.getMinX() * mfScaleFactor);
+            mrWriter.putSimpleValue(rRange.getMinY() * mfScaleFactor);
+            mrWriter.putSimpleValue(rRange.getMaxX() * mfScaleFactor);
+            mrWriter.putSimpleValue(rRange.getMaxY() * mfScaleFactor);
         }
         break;
 
@@ -1130,10 +1130,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
             const basegfx::B2DRange& rRange = rPrimitive.getB2DRange();
             auto aBoundsArray = mrWriter.startArray("bounds");
-            mrWriter.putSimpleValue(OUString::number(rRange.getMinX() * mfScaleFactor));
-            mrWriter.putSimpleValue(OUString::number(rRange.getMinY() * mfScaleFactor));
-            mrWriter.putSimpleValue(OUString::number(rRange.getMaxX() * mfScaleFactor));
-            mrWriter.putSimpleValue(OUString::number(rRange.getMaxY() * mfScaleFactor));
+            mrWriter.putSimpleValue(rRange.getMinX() * mfScaleFactor);
+            mrWriter.putSimpleValue(rRange.getMinY() * mfScaleFactor);
+            mrWriter.putSimpleValue(rRange.getMaxX() * mfScaleFactor);
+            mrWriter.putSimpleValue(rRange.getMaxY() * mfScaleFactor);
         }
         break;
 

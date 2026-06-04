@@ -11,6 +11,7 @@
 #include <sal/config.h>
 
 #include <tools/toolsdllapi.h>
+#include <o3tl/concepts.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
@@ -71,6 +72,10 @@ public:
     void put(std::string_view pPropName, bool);
 
     void putSimpleValue(std::u16string_view rPropValue);
+
+    /// Put a numeric value as a raw JSON number, not as a quoted
+    /// string. Use this when emitting numbers inside an array.
+    template <o3tl::arithmetic N> void putSimpleValue(N n) { putRaw(OString::number(n)); }
 
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
     void putRaw(std::string_view);

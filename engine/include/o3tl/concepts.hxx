@@ -48,6 +48,7 @@ template <typename T> concept floating_point = std::is_floating_point_v<T>;
 // Common concepts
 namespace o3tl
 {
+template <typename T> concept arithmetic = integral<T> || floating_point<T>;
 template <typename T> concept type_32_bit = sizeof(T) == 4;
 template <typename T> concept type_64_bit = sizeof(T) == 8;
 }
