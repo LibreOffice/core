@@ -258,6 +258,18 @@ class GraphicSelection {
 		}
 	}
 
+	// Preview geometry sent by core while a shape handle is being dragged.
+	public static onShapeDragPreview(textMsg: string) {
+		if (!this.handlesSection) return;
+
+		textMsg = textMsg.substring('shapedragpreview:'.length);
+		try {
+			this.handlesSection.onShapeDragPreview(JSON.parse(textMsg));
+		} catch (error) {
+			window.app.console.warn('cannot parse shapedragpreview message');
+		}
+	}
+
 	private static checkDiagramData() {
 		if (GraphicSelection.extraInfo && GraphicSelection.extraInfo.isDiagram) {
 			if (!GraphicSelection.diagramButton) {

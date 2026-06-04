@@ -234,8 +234,13 @@ public:
         SdrPageWindow& rPageWindow,
         const char* pDebugName) const;
 
-    // Interactive Move Action programmatically
-    bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum = -1);
+    // Interactive Move Action programmatically. With bPreview the document
+    // is not modified: the geometry the shape would get on drop is computed
+    // on a drag clone and reported via KIT_CALLBACK_SHAPE_DRAG_PREVIEW.
+    bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum = -1, const bool bPreview = false);
+
+private:
+    void SendShapeDragPreview(const sal_uInt32 handleNum);
 };
 
 // First of all the app creates a SdrModel.

@@ -3855,6 +3855,9 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
     case KIT_CALLBACK_SHAPE_INNER_TEXT:
         sendTextFrame("graphicinnertextarea: " + payload);
         break;
+    case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
+        sendTextFrame("shapedragpreview: " + payload);
+        break;
     case KIT_CALLBACK_CELL_CURSOR:
         updateCursorPosition(payload);
         sendTextFrame("cellcursor: " + payload);

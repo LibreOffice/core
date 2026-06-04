@@ -91,6 +91,12 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.sectionProperties.initialPosition = this.position.slice();
 		this.sectionProperties.positionOnMouseDown = new cool.SimplePoint(0, 0);
 
+		// Drag preview polyline sent by core while a handle is dragged.
+		// Array of polygons, each an array of [x, y] in core pixels.
+		this.sectionProperties.shapeDragPreviewPolygons = null;
+		this.sectionProperties.shapeDragPreviewRequestTime = null;
+		this.sectionProperties.queuedShapeDragPreview = null;
+
 		// These are for snapping the objects to the same level with others' boundaries.
 		this.sectionProperties.closestX = null;
 		this.sectionProperties.closestY = null;
@@ -815,6 +821,95 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.sectionProperties.lastDragDistance = [0, 0];
 	}
 
+	/*
+		Ask core for the geometry the shape would get if the dragged handle
+		was dropped at the given position. Core answers with a
+		shapedragpreview message. At most one request is in flight, newer
+		positions replace the queued one until the answer arrives.
+	*/
+	public requestShapeDragPreview(handleId: any, point: cool.SimplePoint) {
+		const requestTime = this.sectionProperties.shapeDragPreviewRequestTime;
+		if (requestTime !== null && Date.now() - requestTime < 250) {
+			this.sectionProperties.queuedShapeDragPreview = { handleId: handleId, point: point };
+			return;
+		}
+
+		this.sendShapeDragPreviewRequest(handleId, point);
+	}
+
+	private sendShapeDragPreviewRequest(handleId: any, point: cool.SimplePoint) {
+		this.sectionProperties.shapeDragPreviewRequestTime = Date.now();
+		this.sectionProperties.queuedShapeDragPreview = null;
+
+		const parameters = {
+			HandleNum: { type: 'long', value: handleId },
+			NewPosX: { type: 'long', value: Math.round(point.x) },
+			NewPosY: { type: 'long', value: Math.round(point.y) },
+			Preview: { type: 'boolean', value: true }
+		};
+
+		app.map.sendUnoCommand('.uno:MoveShapeHandle', parameters);
+	}
+
+	public onShapeDragPreview(preview: any) {
+		this.sectionProperties.shapeDragPreviewRequestTime = null;
+
+		if (!this.containerObject.isDraggingSomething()) {
+			// The drag has ended in the meantime, this preview is stale.
+			this.clearShapeDragPreview();
+			return;
+		}
+
+		const polygons: number[][][] = [];
+		if (Array.isArray(preview?.polygons)) {
+			for (const polygonText of preview.polygons) {
+				const points: number[][] = [];
+				for (const pointText of String(polygonText).split(' ')) {
+					const coordinates = pointText.split(',');
+					if (coordinates.length !== 2) continue;
+					points.push([
+						parseInt(coordinates[0]) * app.twipsToPixels,
+						parseInt(coordinates[1]) * app.twipsToPixels
+					]);
+				}
+				if (points.length > 1) polygons.push(points);
+			}
+		}
+
+		this.sectionProperties.shapeDragPreviewPolygons = polygons.length > 0 ? polygons : null;
+		this.containerObject.requestReDraw();
+
+		const queued = this.sectionProperties.queuedShapeDragPreview;
+		if (queued) this.sendShapeDragPreviewRequest(queued.handleId, queued.point);
+	}
+
+	public clearShapeDragPreview() {
+		this.sectionProperties.shapeDragPreviewPolygons = null;
+		this.sectionProperties.shapeDragPreviewRequestTime = null;
+		this.sectionProperties.queuedShapeDragPreview = null;
+		this.containerObject.requestReDraw();
+	}
+
+	private drawShapeDragPreview() {
+		const polygons = this.sectionProperties.shapeDragPreviewPolygons;
+		if (!polygons) return;
+
+		this.context.save();
+		this.context.strokeStyle = app.map.uiManager.isBackgroundDark() ? 'white' : 'black';
+		this.context.lineWidth = app.dpiScale;
+		this.context.beginPath();
+
+		for (let i = 0; i < polygons.length; i++) {
+			const points = polygons[i];
+			this.context.moveTo(points[0][0] - this.position[0], points[0][1] - this.position[1]);
+			for (let j = 1; j < points.length; j++)
+				this.context.lineTo(points[j][0] - this.position[0], points[j][1] - this.position[1]);
+		}
+
+		this.context.stroke();
+		this.context.restore();
+	}
+
 	public onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
 		this.sectionProperties.viewedRectangleOnMouseDown = app.activeDocument.activeLayout.viewedRectangle.clone();
 		this.sectionProperties.initialPosition = this.position.slice();
@@ -1278,6 +1373,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
 		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
 		this.drawSelectionFrame();
+		this.drawShapeDragPreview();
 		if (!this.showSection || !this.isVisible)
 			this.hideSVG();
 		else if (this.anythingToDraw()) {

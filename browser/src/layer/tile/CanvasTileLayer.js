@@ -858,6 +858,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('graphicinnertextarea:')) {
 			return; // Not used.
 		}
+		else if (textMsg.startsWith('shapedragpreview:')) {
+			GraphicSelection.onShapeDragPreview(textMsg);
+		}
 		else if (textMsg.startsWith('cellcursor:')) {
 			this._onCellCursorMsg(textMsg);
 		}

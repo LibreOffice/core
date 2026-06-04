@@ -49,6 +49,12 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/kit.hxx>
+#include <COKit/COKitEnums.h>
+#include <sfx2/viewsh.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <rtl/strbuf.hxx>
 
 
 SdrViewEvent::SdrViewEvent()
@@ -1457,7 +1463,64 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
     }
 }
 
-bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum)
+// Report the geometry the shape would get if the dragged handle was
+// dropped at the current drag position. The same approach as the desktop
+// drag overlay: the drag is applied to a clone of the shape, the document
+// stays untouched. A connector clone re-routes its line, so the reported
+// polygon is the real line the drop would produce.
+void SdrView::SendShapeDragPreview(const sal_uInt32 handleNum)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    SfxViewShell* pViewShell = GetSfxViewShell();
+    if (!pViewShell)
+        return;
+
+    const SdrHdl* pHdl = GetDragStat().GetHdl();
+    const SdrObject* pObj = pHdl ? pHdl->GetObj() : nullptr;
+    if (!pObj || !pObj->hasSpecialDrag())
+        return;
+
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    rtl::Reference<SdrObject> pClone = pObj->getFullDragClone();
+    if (pClone && pClone->applySpecialDrag(maDragStat))
+        aPolyPolygon = pClone->TakeXorPoly();
+
+    // Flatten bezier curves, the payload carries plain points.
+    if (aPolyPolygon.areControlPointsUsed())
+        aPolyPolygon = basegfx::utils::adaptiveSubdivideByAngle(aPolyPolygon);
+
+    // Impress and Draw use a 100th MM map mode. The payload is in twips.
+    bool bConvertMapMode = false;
+    if (const OutputDevice* pOutputDevice = GetFirstOutputDevice())
+        bConvertMapMode = pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
+
+    OStringBuffer aPayload("{ \"handle\": \"" + OString::number(handleNum) + "\", \"polygons\": [");
+    for (sal_uInt32 nPoly = 0; nPoly < aPolyPolygon.count(); ++nPoly)
+    {
+        const basegfx::B2DPolygon& rPolygon = aPolyPolygon.getB2DPolygon(nPoly);
+        if (nPoly > 0)
+            aPayload.append(", ");
+        aPayload.append("\"");
+        for (sal_uInt32 nPoint = 0; nPoint < rPolygon.count(); ++nPoint)
+        {
+            const basegfx::B2DPoint aB2Point = rPolygon.getB2DPoint(nPoint);
+            Point aPoint(basegfx::fround(aB2Point.getX()), basegfx::fround(aB2Point.getY()));
+            if (bConvertMapMode)
+                aPoint = o3tl::convert(aPoint, o3tl::Length::mm100, o3tl::Length::twip);
+            if (nPoint > 0)
+                aPayload.append(" ");
+            aPayload.append(OString::number(aPoint.X()) + "," + OString::number(aPoint.Y()));
+        }
+        aPayload.append("\"");
+    }
+    aPayload.append("] }");
+
+    pViewShell->viewCallback(KIT_CALLBACK_SHAPE_DRAG_PREVIEW, aPayload.makeStringAndClear());
+}
+
+bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum, const bool bPreview)
 {
     if (GetHdlList().IsMoveOutside())
         return false;
@@ -1490,7 +1553,14 @@ bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint
         rDragStat.GetGlueOptions().objectOrdNum = aObjectOrdNum;
     }
     MovDragObj(aEndPoint);
-    EndDragObj();
+
+    if (bPreview)
+    {
+        SendShapeDragPreview(handleNum);
+        BrkDragObj();
+    }
+    else
+        EndDragObj();
 
     // Clear Glue Options
     rDragStat.GetGlueOptions().objectOrdNum = -1;

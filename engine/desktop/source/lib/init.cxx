@@ -2060,6 +2060,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case KIT_CALLBACK_COLOR_PALETTES:
             case KIT_CALLBACK_TOOLTIP:
             case KIT_CALLBACK_SHAPE_INNER_TEXT:
+            case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
             {
                 if (removeAll(type))
                     SAL_INFO("kit", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");

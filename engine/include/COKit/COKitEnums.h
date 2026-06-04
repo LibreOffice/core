@@ -1076,7 +1076,26 @@ typedef enum
      * Payload format is JSON.
      * Example: { "mimeTypes": ["text/plain;charset=utf-8", "image/png"] }
      */
-    KIT_CALLBACK_CLIPBOARD_MIMETYPES = 74
+    KIT_CALLBACK_CLIPBOARD_MIMETYPES = 74,
+
+    /**
+     * Preview geometry while a shape handle is dragged.
+     *
+     * Sent in response to a MoveShapeHandle command in preview mode. The
+     * document is not modified. The payload describes the geometry the
+     * shape would get if the handle was dropped at the requested position.
+     *
+     * The payload format is:
+     *
+     * {
+     *     "handle": "<handle number>",
+     *     "polygons": ["x1,y1 x2,y2 ...", ...]
+     * }
+     *
+     * The points are in twips, in document coordinates. An empty
+     * "polygons" array means no preview is available for this handle.
+     */
+    KIT_CALLBACK_SHAPE_DRAG_PREVIEW = 75
 
 }
 COKitCallbackType;
@@ -1256,6 +1275,8 @@ static inline const char* kitCallbackTypeToString(int nType)
         return "KIT_CALLBACK_SHAPE_INNER_TEXT";
     case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
         return "KIT_CALLBACK_CLIPBOARD_MIMETYPES";
+    case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
+        return "KIT_CALLBACK_SHAPE_DRAG_PREVIEW";
     }
 
     assert(!"Unknown COKitCallbackType type.");
