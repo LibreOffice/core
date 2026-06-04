@@ -74,7 +74,6 @@ namespace slideshow::internal
         };
 
         bool operator==( const RGBColor& rLHS, const RGBColor& rRHS );
-        bool operator!=( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator+( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator*( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator*( double nFactor, const RGBColor& rRHS );

@@ -311,11 +311,6 @@ namespace slideshow::internal
                      rLHS.getBlue() == rRHS.getBlue() );
         }
 
-        bool operator!=( const RGBColor& rLHS, const RGBColor& rRHS )
-        {
-            return !( rLHS == rRHS );
-        }
-
         RGBColor operator+( const RGBColor& rLHS, const RGBColor& rRHS )
         {
             return RGBColor( rLHS.getRed() + rRHS.getRed(),
