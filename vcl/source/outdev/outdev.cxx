@@ -79,10 +79,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpExtOutDevData                 = nullptr;
     mnTextOffX                      = 0;
     mnTextOffY                      = 0;
-    mnOutOffOrigX                   = 0;
-    mnOutOffLogicX                  = 0;
-    mnOutOffOrigY                   = 0;
-    mnOutOffLogicY                  = 0;
     mnEmphasisAscent                = 0;
     mnEmphasisDescent               = 0;
     mnDrawMode                      = DrawModeFlags::Default;
@@ -116,12 +112,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbRefPoint                      = false;
     mbEnableRTL                     = false;    // mirroring must be explicitly allowed (typically for windows only)
     mbSubpixelPositioning           = false; // tdf#168002 allow SubpixelPositioning (default: false)
-
-    // struct ImplMapRes
-    maMapRes.mnMapOfsX              = 0;
-    maMapRes.mnMapOfsY              = 0;
-    maMapRes.mfMapScX               = 1;
-    maMapRes.mfMapScY               = 1;
 
     // struct ImplOutDevData- see #i82615#
     mpOutDevData.reset(new ImplOutDevData);

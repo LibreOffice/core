@@ -39,6 +39,20 @@ void CoordinateMapper::SetDPIScalePercentage(sal_Int32 nPercent)
     mnDPIScalePercentage = nPercent;
 }
 
+float CoordinateMapper::GetDPIScaleFactor() const { return mnDPIScalePercentage / 100.0f; }
+
+void CoordinateMapper::SetPixelOffset(const Size& rSize)
+{
+    mnOutOffOrigX = rSize.getWidth();
+    mnOutOffOrigY = rSize.getHeight();
+}
+
+void CoordinateMapper::SetLogicalOffset(const Size& rSize)
+{
+    mnOutOffLogicX = rSize.getWidth();
+    mnOutOffLogicY = rSize.getHeight();
+}
+
 tools::Long CoordinateMapper::GetOutOffXPixel() const { return mnOutOffX; }
 
 tools::Long CoordinateMapper::GetOutOffYPixel() const { return mnOutOffY; }
@@ -56,5 +70,16 @@ tools::Long CoordinateMapper::GetOutputHeightPixel() const { return mnOutHeight;
 void CoordinateMapper::SetOutputWidthPixel(tools::Long nWidth) { mnOutWidth = nWidth; }
 
 void CoordinateMapper::SetOutputHeightPixel(tools::Long nHeight) { mnOutHeight = nHeight; }
+
+void CoordinateMapper::CalcMapResolution(const MapMode& rMapMode, tools::Long nDPIX,
+                                         tools::Long nDPIY)
+{
+    maMapRes.CalcMapResolution(rMapMode, nDPIX, nDPIY);
+}
+
+ImplMapRes CoordinateMapper::ResolveMapRes(const MapMode* pMode)
+{
+    return maMapRes.ResolveMapRes(pMode, maMapMode, mbMap, mnDPIX, mnDPIY);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

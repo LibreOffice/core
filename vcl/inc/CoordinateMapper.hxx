@@ -30,18 +30,29 @@ class CoordinateMapper
 private:
     bool mbMap = false;
     MapMode maMapMode;
+    ImplMapRes maMapRes;
 
     sal_Int32 mnDPIX = 0;
     sal_Int32 mnDPIY = 0;
     sal_Int32 mnDPIScalePercentage = 100;
 
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long mnOutOffX;
+    tools::Long mnOutOffX = 0;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long mnOutOffY;
+    tools::Long mnOutOffY = 0;
 
-    tools::Long mnOutWidth;
-    tools::Long mnOutHeight;
+    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
+    tools::Long mnOutOffOrigX = 0;
+    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
+    tools::Long mnOutOffOrigY = 0;
+
+    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
+    tools::Long mnOutOffLogicX = 0;
+    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
+    tools::Long mnOutOffLogicY = 0;
+
+    tools::Long mnOutWidth = 0;
+    tools::Long mnOutHeight = 0;
 
 public:
     bool IsMapModeEnabled() const { return mbMap; }
@@ -54,6 +65,7 @@ public:
     void SetDPIY(sal_Int32 nDPIY);
 
     sal_Int32 GetDPIScalePercentage() const;
+    float GetDPIScaleFactor() const;
     void SetDPIScalePercentage(sal_Int32 nPercentage);
 
     tools::Long GetOutOffXPixel() const;
@@ -67,6 +79,15 @@ public:
     tools::Long GetOutputWidthPixel() const;
     tools::Long GetOutputHeightPixel() const;
     Size GetOutputSizePixel() const;
+
+    Size GetPixelOffset() const { return Size(mnOutOffOrigX, mnOutOffOrigY); }
+    void SetPixelOffset(const Size& rSize);
+    tools::Long GetPixelXOffset() { return mnOutOffOrigX; }
+    tools::Long GetPixelYOffset() { return mnOutOffOrigY; }
+
+    void SetLogicalOffset(const Size& rSize);
+    tools::Long GetLogicalXOffset() { return mnOutOffLogicX; }
+    tools::Long GetLogicalYOffset() { return mnOutOffLogicY; }
 
     void SetOutputWidthPixel(tools::Long nWidth);
     void SetOutputHeightPixel(tools::Long nHeight);
@@ -83,6 +104,20 @@ public:
     void SetScaleY(double nY) { maMapMode.SetScaleY(nY); }
 
     void SetOrigin(const Point& rPt) { maMapMode.SetOrigin(rPt); }
+
+    tools::Long GetMappingXOffset() const { return maMapRes.mnMapOfsX; }
+    tools::Long GetMappingYOffset() const { return maMapRes.mnMapOfsY; }
+    double GetMapResolutionScaleX() const { return maMapRes.mfMapScX; }
+    double GetMapResolutionScaleY() const { return maMapRes.mfMapScY; }
+
+    void SetMappingXOffset(tools::Long nOffset) { maMapRes.mnMapOfsX = nOffset; }
+    void SetMappingYOffset(tools::Long nOffset) { maMapRes.mnMapOfsY = nOffset; }
+    void SetMapResolutionScaleX(double fX) { maMapRes.mfMapScX = fX; }
+    void SetMapResolutionScaleY(double fY) { maMapRes.mfMapScY = fY; }
+
+    void CalcMapResolution(const MapMode& rMapMode, tools::Long nDPIX, tools::Long nDPIY);
+
+    ImplMapRes ResolveMapRes(const MapMode* pMode);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -29,6 +29,8 @@ struct ImplMapRes
     ImplMapRes() = default;
     void SetMapRes(const o3tl::Length eUnit);
     void CalcMapResolution(const MapMode& rMapMode, tools::Long nDPIX, tools::Long nDPIY);
+    ImplMapRes ResolveMapRes(const MapMode* pMode, const MapMode& rDefaultMapMode, bool bMap,
+                             tools::Long nDPIX, tools::Long nDPIY);
 
     tools::Long mnMapOfsX = 0; ///< Offset in X direction
     tools::Long mnMapOfsY = 0; ///< Offset in Y direction

@@ -2086,7 +2086,7 @@ bool OutputDevice::GetTextBoundRect(basegfx::B2DRectangle& rRect, const OUString
             rRect = PixelToLogic( aPixelRect );
             if (mpMapper->IsMapModeEnabled())
             {
-                rRect.translate(maMapRes.mnMapOfsX, maMapRes.mnMapOfsY);
+                rRect.translate(mpMapper->GetMappingXOffset(), mpMapper->GetMappingYOffset());
             }
         }
     }

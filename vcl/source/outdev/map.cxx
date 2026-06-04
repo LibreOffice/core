@@ -105,8 +105,8 @@ tools::Long OutputDevice::ImplLogicXToDevicePixel( tools::Long nX ) const
     if ( !mpMapper->IsMapModeEnabled() )
         return nX+GetOutOffXPixel();
 
-    return lcl_logicToPixel( nX + maMapRes.mnMapOfsX, GetDPIX(),
-                             maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX;
+    return lcl_logicToPixel( nX + mpMapper->GetMappingXOffset(), GetDPIX(),
+                             mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset();
 }
 
 tools::Long OutputDevice::ImplLogicYToDevicePixel( tools::Long nY ) const
@@ -114,8 +114,8 @@ tools::Long OutputDevice::ImplLogicYToDevicePixel( tools::Long nY ) const
     if ( !mpMapper->IsMapModeEnabled() )
         return nY+GetOutOffYPixel();
 
-    return lcl_logicToPixel( nY + maMapRes.mnMapOfsY, GetDPIY(),
-                             maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY;
+    return lcl_logicToPixel( nY + mpMapper->GetMappingYOffset(), GetDPIY(),
+                             mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset();
 }
 
 tools::Long OutputDevice::LogicWidthToDevicePixel(tools::Long nWidth) const
@@ -123,7 +123,7 @@ tools::Long OutputDevice::LogicWidthToDevicePixel(tools::Long nWidth) const
     if ( !mpMapper->IsMapModeEnabled() )
         return nWidth;
 
-    return lcl_logicToPixel(nWidth, GetDPIX(), maMapRes.mfMapScX);
+    return lcl_logicToPixel(nWidth, GetDPIX(), mpMapper->GetMapResolutionScaleX());
 }
 
 tools::Long OutputDevice::LogicHeightToDevicePixel( tools::Long nHeight ) const
@@ -131,7 +131,7 @@ tools::Long OutputDevice::LogicHeightToDevicePixel( tools::Long nHeight ) const
     if ( !mpMapper->IsMapModeEnabled() )
         return nHeight;
 
-    return lcl_logicToPixel(nHeight, GetDPIY(), maMapRes.mfMapScY);
+    return lcl_logicToPixel(nHeight, GetDPIY(), mpMapper->GetMapResolutionScaleY());
 }
 
 tools::Long OutputDevice::DevicePixelToLogicWidth( tools::Long nWidth ) const
@@ -139,7 +139,7 @@ tools::Long OutputDevice::DevicePixelToLogicWidth( tools::Long nWidth ) const
     if ( !mpMapper->IsMapModeEnabled() )
         return nWidth;
 
-    return lcl_pixelToLogic(nWidth, GetDPIX(), maMapRes.mfMapScX);
+    return lcl_pixelToLogic(nWidth, GetDPIX(), mpMapper->GetMapResolutionScaleX());
 }
 
 SAL_DLLPRIVATE double OutputDevice::ImplDevicePixelToLogicWidthDouble(double nWidth) const
@@ -147,7 +147,7 @@ SAL_DLLPRIVATE double OutputDevice::ImplDevicePixelToLogicWidthDouble(double nWi
     if (!mpMapper->IsMapModeEnabled())
         return nWidth;
 
-    return lcl_pixelToLogicDouble(nWidth, GetDPIX(), maMapRes.mfMapScX);
+    return lcl_pixelToLogicDouble(nWidth, GetDPIX(), mpMapper->GetMapResolutionScaleX());
 }
 
 tools::Long OutputDevice::DevicePixelToLogicHeight( tools::Long nHeight ) const
@@ -155,7 +155,7 @@ tools::Long OutputDevice::DevicePixelToLogicHeight( tools::Long nHeight ) const
     if ( !mpMapper->IsMapModeEnabled() )
         return nHeight;
 
-    return lcl_pixelToLogic(nHeight, GetDPIY(), maMapRes.mfMapScY);
+    return lcl_pixelToLogic(nHeight, GetDPIY(), mpMapper->GetMapResolutionScaleY());
 }
 
 double OutputDevice::ImplDevicePixelToLogicHeightDouble(double nHeight) const
@@ -163,7 +163,7 @@ double OutputDevice::ImplDevicePixelToLogicHeightDouble(double nHeight) const
     if (!mpMapper->IsMapModeEnabled())
         return nHeight;
 
-    return lcl_pixelToLogicDouble(nHeight, GetDPIY(), maMapRes.mfMapScY);
+    return lcl_pixelToLogicDouble(nHeight, GetDPIY(), mpMapper->GetMapResolutionScaleY());
 }
 
 Point OutputDevice::LogicToDevicePixel(const Point& rLogicPt) const
@@ -171,10 +171,10 @@ Point OutputDevice::LogicToDevicePixel(const Point& rLogicPt) const
     if ( !mpMapper->IsMapModeEnabled() )
         return Point( rLogicPt.X()+GetOutOffXPixel(), rLogicPt.Y()+GetOutOffYPixel() );
 
-    return Point( lcl_logicToPixel( rLogicPt.X() + maMapRes.mnMapOfsX, GetDPIX(),
-                                    maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX,
-                  lcl_logicToPixel( rLogicPt.Y() + maMapRes.mnMapOfsY, GetDPIY(),
-                                    maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY );
+    return Point( lcl_logicToPixel( rLogicPt.X() + mpMapper->GetMappingXOffset(), GetDPIX(),
+                                    mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset(),
+                  lcl_logicToPixel( rLogicPt.Y() + mpMapper->GetMappingYOffset(), GetDPIY(),
+                                    mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset() );
 }
 
 Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
@@ -183,9 +183,9 @@ Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
         return rLogicSize;
 
     return Size( lcl_logicToPixel( rLogicSize.Width(), GetDPIX(),
-                                   maMapRes.mfMapScX ),
+                                   mpMapper->GetMapResolutionScaleX() ),
                  lcl_logicToPixel( rLogicSize.Height(), GetDPIY(),
-                                   maMapRes.mfMapScY ) );
+                                   mpMapper->GetMapResolutionScaleY() ) );
 }
 
 tools::Rectangle OutputDevice::LogicToDevicePixel(const tools::Rectangle& rLogicRect) const
@@ -219,10 +219,10 @@ tools::Rectangle OutputDevice::LogicToDevicePixel(const tools::Rectangle& rLogic
     else
     {
         aRetval = tools::Rectangle(
-            lcl_logicToPixel( rLogicRect.Left()+maMapRes.mnMapOfsX, GetDPIX(), maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX,
-            lcl_logicToPixel( rLogicRect.Top()+maMapRes.mnMapOfsY, GetDPIY(), maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY,
-            rLogicRect.IsWidthEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Right()+maMapRes.mnMapOfsX, GetDPIX(), maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX,
-            rLogicRect.IsHeightEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Bottom()+maMapRes.mnMapOfsY, GetDPIY(), maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY );
+            lcl_logicToPixel( rLogicRect.Left()+mpMapper->GetMappingXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset(),
+            lcl_logicToPixel( rLogicRect.Top()+mpMapper->GetMappingYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset(),
+            rLogicRect.IsWidthEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Right()+mpMapper->GetMappingXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset(),
+            rLogicRect.IsHeightEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Bottom()+mpMapper->GetMappingYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset() );
     }
 
     if(rLogicRect.IsWidthEmpty())
@@ -250,10 +250,10 @@ tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogi
         for (sal_uInt16 i = 0; i < nPoints; i++)
         {
             const Point& rPt = pPointAry[i];
-            Point aPt(lcl_logicToPixel( rPt.X()+maMapRes.mnMapOfsX, GetDPIX(),
-                                        maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX,
-                      lcl_logicToPixel( rPt.Y()+maMapRes.mnMapOfsY, GetDPIY(),
-                                        maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY);
+            Point aPt(lcl_logicToPixel( rPt.X()+mpMapper->GetMappingXOffset(), GetDPIX(),
+                                        mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset(),
+                      lcl_logicToPixel( rPt.Y()+mpMapper->GetMappingYOffset(), GetDPIY(),
+                                        mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset());
             aPoly[i] = aPt;
         }
     }
@@ -287,20 +287,20 @@ basegfx::B2DPolygon OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolyg
         for (sal_uInt32 i = 0; i < nPoints; ++i)
         {
             const basegfx::B2DPoint& rPt = aPoly.getB2DPoint(i);
-            basegfx::B2DPoint aPt(lcl_logicToPixel( rPt.getX()+maMapRes.mnMapOfsX, GetDPIX(),
-                                        maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX,
-                                  lcl_logicToPixel( rPt.getY()+maMapRes.mnMapOfsY, GetDPIY(),
-                                        maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY);
+            basegfx::B2DPoint aPt(lcl_logicToPixel( rPt.getX()+mpMapper->GetMappingXOffset(), GetDPIX(),
+                                        mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset(),
+                                  lcl_logicToPixel( rPt.getY()+mpMapper->GetMappingYOffset(), GetDPIY(),
+                                        mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset());
 
             const bool bC1 = aPoly.isPrevControlPointUsed(i);
             if (bC1)
             {
                 const basegfx::B2DPoint aB2DC1(aPoly.getPrevControlPoint(i));
 
-                aC1 = basegfx::B2DPoint(lcl_logicToPixel( aB2DC1.getX()+maMapRes.mnMapOfsX, GetDPIX(),
-                                            maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX,
-                                        lcl_logicToPixel( aB2DC1.getY()+maMapRes.mnMapOfsY, GetDPIY(),
-                                            maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY);
+                aC1 = basegfx::B2DPoint(lcl_logicToPixel( aB2DC1.getX()+mpMapper->GetMappingXOffset(), GetDPIX(),
+                                            mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset(),
+                                        lcl_logicToPixel( aB2DC1.getY()+mpMapper->GetMappingYOffset(), GetDPIY(),
+                                            mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset());
             }
 
             const bool bC2 = aPoly.isNextControlPointUsed(i);
@@ -308,10 +308,10 @@ basegfx::B2DPolygon OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolyg
             {
                 const basegfx::B2DPoint aB2DC2(aPoly.getNextControlPoint(i));
 
-                aC2 = basegfx::B2DPoint(lcl_logicToPixel( aB2DC2.getX()+maMapRes.mnMapOfsX, GetDPIX(),
-                                            maMapRes.mfMapScX )+GetOutOffXPixel()+mnOutOffOrigX,
-                                        lcl_logicToPixel( aB2DC2.getY()+maMapRes.mnMapOfsY, GetDPIY(),
-                                            maMapRes.mfMapScY )+GetOutOffYPixel()+mnOutOffOrigY);
+                aC2 = basegfx::B2DPoint(lcl_logicToPixel( aB2DC2.getX()+mpMapper->GetMappingXOffset(), GetDPIX(),
+                                            mpMapper->GetMapResolutionScaleX() )+GetOutOffXPixel()+mpMapper->GetPixelXOffset(),
+                                        lcl_logicToPixel( aB2DC2.getY()+mpMapper->GetMappingYOffset(), GetDPIY(),
+                                            mpMapper->GetMapResolutionScaleY() )+GetOutOffYPixel()+mpMapper->GetPixelYOffset());
             }
 
             aPoly.setB2DPoint(i, aPt);
@@ -418,10 +418,10 @@ tools::Rectangle OutputDevice::ImplDevicePixelToLogic( const tools::Rectangle& r
     else
     {
         aRetval = tools::Rectangle(
-            lcl_pixelToLogic( rPixelRect.Left()-GetOutOffXPixel()-mnOutOffOrigX, GetDPIX(), maMapRes.mfMapScX )-maMapRes.mnMapOfsX,
-            lcl_pixelToLogic( rPixelRect.Top()-GetOutOffYPixel()-mnOutOffOrigY, GetDPIY(), maMapRes.mfMapScY )-maMapRes.mnMapOfsY,
-            rPixelRect.IsWidthEmpty() ? 0 : lcl_pixelToLogic( rPixelRect.Right()-GetOutOffXPixel()-mnOutOffOrigX, GetDPIX(), maMapRes.mfMapScX )-maMapRes.mnMapOfsX,
-            rPixelRect.IsHeightEmpty() ? 0 : lcl_pixelToLogic( rPixelRect.Bottom()-GetOutOffYPixel()-mnOutOffOrigY, GetDPIY(), maMapRes.mfMapScY )-maMapRes.mnMapOfsY );
+            lcl_pixelToLogic( rPixelRect.Left()-GetOutOffXPixel()-mpMapper->GetPixelXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX() )-mpMapper->GetMappingXOffset(),
+            lcl_pixelToLogic( rPixelRect.Top()-GetOutOffYPixel()-mpMapper->GetPixelYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY() )-mpMapper->GetMappingYOffset(),
+            rPixelRect.IsWidthEmpty() ? 0 : lcl_pixelToLogic( rPixelRect.Right()-GetOutOffXPixel()-mpMapper->GetPixelXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX() )-mpMapper->GetMappingXOffset(),
+            rPixelRect.IsHeightEmpty() ? 0 : lcl_pixelToLogic( rPixelRect.Bottom()-GetOutOffYPixel()-mpMapper->GetPixelYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY() )-mpMapper->GetMappingYOffset() );
     }
 
     if(rPixelRect.IsWidthEmpty())
@@ -439,7 +439,7 @@ vcl::Region OutputDevice::ImplPixelToDevicePixel( const vcl::Region& rRegion ) c
         return rRegion;
 
     vcl::Region aRegion( rRegion );
-    aRegion.Move( GetOutOffXPixel()+mnOutOffOrigX, GetOutOffYPixel()+mnOutOffOrigY );
+    aRegion.Move( GetOutOffXPixel()+mpMapper->GetPixelXOffset(), GetOutOffYPixel()+mpMapper->GetPixelYOffset() );
     return aRegion;
 }
 
@@ -462,6 +462,8 @@ void OutputDevice::SetOutOffXPixel(tools::Long nOutOffX) { return mpMapper->SetO
 void OutputDevice::SetOutOffYPixel(tools::Long nOutOffY) { return mpMapper->SetOutOffYPixel(nOutOffY); }
 
 Point OutputDevice::GetOutputOffPixel() const { return mpMapper->GetOutputOffPixel(); }
+
+Size OutputDevice::GetPixelOffset() const { return mpMapper->GetPixelOffset(); }
 
 bool OutputDevice::IsMapModeEnabled() const { return mpMapper->IsMapModeEnabled(); }
 
@@ -486,8 +488,7 @@ void OutputDevice::SetMapMode()
     ImplInitMapModeObjects();
 
     // #106426# Adapt logical offset when changing mapmode
-    mnOutOffLogicX = mnOutOffOrigX; // no mapping -> equal offsets
-    mnOutOffLogicY = mnOutOffOrigY;
+    mpMapper->SetLogicalOffset(Size(mpMapper->GetPixelXOffset(), mpMapper->GetPixelYOffset()));
 
     // #i75163#
     ImplInvalidateViewTransform();
@@ -520,8 +521,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         {
             // set offset
             Point aOrigin = rNewMapMode.GetOrigin();
-            maMapRes.mnMapOfsX = aOrigin.X();
-            maMapRes.mnMapOfsY = aOrigin.Y();
+            mpMapper->SetMappingXOffset(aOrigin.X());
+            mpMapper->SetMappingYOffset(aOrigin.Y());
             mpMapper->ResetMapMode(rNewMapMode);
 
             // #i75163#
@@ -531,14 +532,14 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         }
         if ( !bOldMap && bRelMap )
         {
-            maMapRes.mfMapScX    = 1.0 / GetDPIX();
-            maMapRes.mfMapScY    = 1.0 / GetDPIY();
-            maMapRes.mnMapOfsX      = 0;
-            maMapRes.mnMapOfsY      = 0;
+            mpMapper->SetMapResolutionScaleX(1.0 / GetDPIX());
+            mpMapper->SetMapResolutionScaleY(1.0 / GetDPIY());
+            mpMapper->SetMappingXOffset(0);
+            mpMapper->SetMappingYOffset(0);
         }
 
         // calculate new MapMode-resolution
-        maMapRes.CalcMapResolution(rNewMapMode, GetDPIX(), GetDPIY());
+        mpMapper->CalcMapResolution(rNewMapMode, GetDPIX(), GetDPIY());
     }
 
     // set new MapMode
@@ -546,7 +547,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     {
         mpMapper->SetScaleX(mpMapper->GetScaleX() * rNewMapMode.GetScaleX());
         mpMapper->SetScaleY(mpMapper->GetScaleY() * rNewMapMode.GetScaleY());
-        mpMapper->SetOrigin(Point(maMapRes.mnMapOfsX, maMapRes.mnMapOfsY));
+        mpMapper->SetOrigin(Point(mpMapper->GetMappingXOffset(), mpMapper->GetMappingYOffset()));
     }
     else
     {
@@ -559,10 +560,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     ImplInitMapModeObjects();
 
     // #106426# Adapt logical offset when changing mapmode
-    mnOutOffLogicX = lcl_pixelToLogic( mnOutOffOrigX, GetDPIX(),
-                                       maMapRes.mfMapScX );
-    mnOutOffLogicY = lcl_pixelToLogic( mnOutOffOrigY, GetDPIY(),
-                                       maMapRes.mfMapScY );
+    mpMapper->SetLogicalOffset(Size(lcl_pixelToLogic(mpMapper->GetPixelXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX()),
+                                    lcl_pixelToLogic(mpMapper->GetPixelYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY())));
 
     // #i75163#
     ImplInvalidateViewTransform();
@@ -631,10 +630,8 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         mpMapper->ResetMapMode(rNewMapMode);
 
     // #106426# Adapt logical offset when changing MapMode
-    mnOutOffLogicX = lcl_pixelToLogic( mnOutOffOrigX, GetDPIX(),
-                                       maMapRes.mfMapScX );
-    mnOutOffLogicY = lcl_pixelToLogic( mnOutOffOrigY, GetDPIY(),
-                                       maMapRes.mfMapScY );
+    mpMapper->SetLogicalOffset(Size(lcl_pixelToLogic(mpMapper->GetPixelXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX()),
+                                    lcl_pixelToLogic(mpMapper->GetPixelYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY())));
 }
 
 // #i75163#
@@ -647,10 +644,10 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
     {
         mpOutDevData->mpViewTransform = new basegfx::B2DHomMatrix;
 
-        const double fScaleFactorX(static_cast<double>(GetDPIX()) * maMapRes.mfMapScX);
-        const double fScaleFactorY(static_cast<double>(GetDPIY()) * maMapRes.mfMapScY);
-        const double fZeroPointX((static_cast<double>(maMapRes.mnMapOfsX) * fScaleFactorX) + static_cast<double>(mnOutOffOrigX));
-        const double fZeroPointY((static_cast<double>(maMapRes.mnMapOfsY) * fScaleFactorY) + static_cast<double>(mnOutOffOrigY));
+        const double fScaleFactorX(static_cast<double>(GetDPIX()) * mpMapper->GetMapResolutionScaleX());
+        const double fScaleFactorY(static_cast<double>(GetDPIY()) * mpMapper->GetMapResolutionScaleY());
+        const double fZeroPointX((static_cast<double>(mpMapper->GetMappingXOffset()) * fScaleFactorX) + static_cast<double>(mpMapper->GetPixelXOffset()));
+        const double fZeroPointY((static_cast<double>(mpMapper->GetMappingYOffset()) * fScaleFactorY) + static_cast<double>(mpMapper->GetPixelYOffset()));
 
         mpOutDevData->mpViewTransform->set(0, 0, fScaleFactorX);
         mpOutDevData->mpViewTransform->set(1, 1, fScaleFactorY);
@@ -688,8 +685,8 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation( const MapMode& rMapMo
 
     const double fScaleFactorX(static_cast<double>(GetDPIX()) * aMapRes.mfMapScX);
     const double fScaleFactorY(static_cast<double>(GetDPIY()) * aMapRes.mfMapScY);
-    const double fZeroPointX((static_cast<double>(aMapRes.mnMapOfsX) * fScaleFactorX) + static_cast<double>(mnOutOffOrigX));
-    const double fZeroPointY((static_cast<double>(aMapRes.mnMapOfsY) * fScaleFactorY) + static_cast<double>(mnOutOffOrigY));
+    const double fZeroPointX((static_cast<double>(aMapRes.mnMapOfsX) * fScaleFactorX) + static_cast<double>(mpMapper->GetPixelXOffset()));
+    const double fZeroPointY((static_cast<double>(aMapRes.mnMapOfsY) * fScaleFactorY) + static_cast<double>(mpMapper->GetPixelYOffset()));
 
     aTransform.set(0, 0, fScaleFactorX);
     aTransform.set(1, 1, fScaleFactorY);
@@ -722,10 +719,10 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt ) const
     if ( !mpMapper->IsMapModeEnabled() )
         return rLogicPt;
 
-    return Point( lcl_logicToPixel( rLogicPt.X() + maMapRes.mnMapOfsX, GetDPIX(),
-                                    maMapRes.mfMapScX )+mnOutOffOrigX,
-                  lcl_logicToPixel( rLogicPt.Y() + maMapRes.mnMapOfsY, GetDPIY(),
-                                    maMapRes.mfMapScY )+mnOutOffOrigY );
+    return Point( lcl_logicToPixel( rLogicPt.X() + mpMapper->GetMappingXOffset(), GetDPIX(),
+                                    mpMapper->GetMapResolutionScaleX() )+mpMapper->GetPixelXOffset(),
+                  lcl_logicToPixel( rLogicPt.Y() + mpMapper->GetMappingYOffset(), GetDPIY(),
+                                    mpMapper->GetMapResolutionScaleY() )+mpMapper->GetPixelYOffset() );
 }
 
 Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
@@ -735,9 +732,9 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
         return rLogicSize;
 
     return Size( lcl_logicToPixel( rLogicSize.Width(), GetDPIX(),
-                                   maMapRes.mfMapScX ),
+                                   mpMapper->GetMapResolutionScaleX() ),
                  lcl_logicToPixel( rLogicSize.Height(), GetDPIY(),
-                                   maMapRes.mfMapScY ) );
+                                   mpMapper->GetMapResolutionScaleY() ) );
 }
 
 tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect ) const
@@ -747,10 +744,10 @@ tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect 
         return rLogicRect;
 
     tools::Rectangle aRetval(
-        lcl_logicToPixel( rLogicRect.Left() + maMapRes.mnMapOfsX, GetDPIX(), maMapRes.mfMapScX )+mnOutOffOrigX,
-        lcl_logicToPixel( rLogicRect.Top() + maMapRes.mnMapOfsY, GetDPIY(), maMapRes.mfMapScY )+mnOutOffOrigY,
-        rLogicRect.IsWidthEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Right() + maMapRes.mnMapOfsX, GetDPIX(), maMapRes.mfMapScX )+mnOutOffOrigX,
-        rLogicRect.IsHeightEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Bottom() + maMapRes.mnMapOfsY, GetDPIY(), maMapRes.mfMapScY )+mnOutOffOrigY );
+        lcl_logicToPixel( rLogicRect.Left() + mpMapper->GetMappingXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX() )+mpMapper->GetPixelXOffset(),
+        lcl_logicToPixel( rLogicRect.Top() + mpMapper->GetMappingYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY() )+mpMapper->GetPixelYOffset(),
+        rLogicRect.IsWidthEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Right() + mpMapper->GetMappingXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX() )+mpMapper->GetPixelXOffset(),
+        rLogicRect.IsHeightEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Bottom() + mpMapper->GetMappingYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY() )+mpMapper->GetPixelYOffset() );
 
     if(rLogicRect.IsWidthEmpty())
         aRetval.SetWidthEmpty();
@@ -777,10 +774,10 @@ tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly ) co
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX( lcl_logicToPixel( pPt->X() + maMapRes.mnMapOfsX, GetDPIX(),
-                                    maMapRes.mfMapScX )+mnOutOffOrigX );
-        aPt.setY( lcl_logicToPixel( pPt->Y() + maMapRes.mnMapOfsY, GetDPIY(),
-                                    maMapRes.mfMapScY )+mnOutOffOrigY );
+        aPt.setX( lcl_logicToPixel( pPt->X() + mpMapper->GetMappingXOffset(), GetDPIX(),
+                                    mpMapper->GetMapResolutionScaleX() )+mpMapper->GetPixelXOffset() );
+        aPt.setY( lcl_logicToPixel( pPt->Y() + mpMapper->GetMappingYOffset(), GetDPIY(),
+                                    mpMapper->GetMapResolutionScaleY() )+mpMapper->GetPixelYOffset() );
         aPoly[i] = aPt;
     }
 
@@ -858,9 +855,9 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt,
     aMapRes.CalcMapResolution(rMapMode, GetDPIX(), GetDPIY());
 
     return Point( lcl_logicToPixel( rLogicPt.X() + aMapRes.mnMapOfsX, GetDPIX(),
-                                    aMapRes.mfMapScX )+mnOutOffOrigX,
+                                    aMapRes.mfMapScX )+mpMapper->GetPixelXOffset(),
                   lcl_logicToPixel( rLogicPt.Y() + aMapRes.mnMapOfsY, GetDPIY(),
-                                    aMapRes.mfMapScY )+mnOutOffOrigY );
+                                    aMapRes.mfMapScY )+mpMapper->GetPixelYOffset() );
 }
 
 Size OutputDevice::LogicToPixel( const Size& rLogicSize,
@@ -892,10 +889,10 @@ tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
     aMapRes.CalcMapResolution(rMapMode, GetDPIX(), GetDPIY());
 
     tools::Rectangle aRetval(
-        lcl_logicToPixel( rLogicRect.Left() + aMapRes.mnMapOfsX, GetDPIX(), aMapRes.mfMapScX )+mnOutOffOrigX,
-        lcl_logicToPixel( rLogicRect.Top() + aMapRes.mnMapOfsY, GetDPIY(), aMapRes.mfMapScY )+mnOutOffOrigY,
-        rLogicRect.IsWidthEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Right() + aMapRes.mnMapOfsX, GetDPIX(),   aMapRes.mfMapScX )+mnOutOffOrigX,
-        rLogicRect.IsHeightEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Bottom() + aMapRes.mnMapOfsY, GetDPIY(), aMapRes.mfMapScY )+mnOutOffOrigY );
+        lcl_logicToPixel( rLogicRect.Left() + aMapRes.mnMapOfsX, GetDPIX(), aMapRes.mfMapScX )+mpMapper->GetPixelXOffset(),
+        lcl_logicToPixel( rLogicRect.Top() + aMapRes.mnMapOfsY, GetDPIY(), aMapRes.mfMapScY )+mpMapper->GetPixelYOffset(),
+        rLogicRect.IsWidthEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Right() + aMapRes.mnMapOfsX, GetDPIX(),   aMapRes.mfMapScX )+mpMapper->GetPixelXOffset(),
+        rLogicRect.IsHeightEmpty() ? 0 : lcl_logicToPixel( rLogicRect.Bottom() + aMapRes.mnMapOfsY, GetDPIY(), aMapRes.mfMapScY )+mpMapper->GetPixelYOffset() );
 
     if(rLogicRect.IsWidthEmpty())
         aRetval.SetWidthEmpty();
@@ -928,9 +925,9 @@ tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly,
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
         aPt.setX( lcl_logicToPixel( pPt->X() + aMapRes.mnMapOfsX, GetDPIX(),
-                                    aMapRes.mfMapScX )+mnOutOffOrigX );
+                                    aMapRes.mfMapScX )+mpMapper->GetPixelXOffset() );
         aPt.setY( lcl_logicToPixel( pPt->Y() + aMapRes.mnMapOfsY, GetDPIY(),
-                                    aMapRes.mfMapScY )+mnOutOffOrigY );
+                                    aMapRes.mfMapScY )+mpMapper->GetPixelYOffset() );
         aPoly[i] = aPt;
     }
 
@@ -953,9 +950,9 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
         return rDevicePt;
 
     return Point( lcl_pixelToLogic( rDevicePt.X(), GetDPIX(),
-                                    maMapRes.mfMapScX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
+                                    mpMapper->GetMapResolutionScaleX() ) - mpMapper->GetMappingXOffset() - mpMapper->GetLogicalXOffset(),
                   lcl_pixelToLogic( rDevicePt.Y(), GetDPIY(),
-                                    maMapRes.mfMapScY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
+                                    mpMapper->GetMapResolutionScaleY() ) - mpMapper->GetMappingYOffset() - mpMapper->GetLogicalYOffset() );
 }
 
 Point OutputDevice::SubPixelToLogic(const basegfx::B2DPoint& rDevicePt) const
@@ -967,9 +964,9 @@ Point OutputDevice::SubPixelToLogic(const basegfx::B2DPoint& rDevicePt) const
     }
 
     return Point(ImplSubPixelToLogic(rDevicePt.getX(), GetDPIX(),
-                                     maMapRes.mfMapScX) - maMapRes.mnMapOfsX - mnOutOffLogicX,
+                                     mpMapper->GetMapResolutionScaleX()) - mpMapper->GetMappingXOffset() - mpMapper->GetLogicalXOffset(),
                  ImplSubPixelToLogic(rDevicePt.getY(), GetDPIY(),
-                                     maMapRes.mfMapScY) - maMapRes.mnMapOfsY - mnOutOffLogicY);
+                                     mpMapper->GetMapResolutionScaleY()) - mpMapper->GetMappingYOffset() - mpMapper->GetLogicalYOffset());
 }
 
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
@@ -979,9 +976,9 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
         return rDeviceSize;
 
     return Size( lcl_pixelToLogic( rDeviceSize.Width(), GetDPIX(),
-                                   maMapRes.mfMapScX ),
+                                   mpMapper->GetMapResolutionScaleX() ),
                  lcl_pixelToLogic( rDeviceSize.Height(), GetDPIY(),
-                                   maMapRes.mfMapScY ) );
+                                   mpMapper->GetMapResolutionScaleY() ) );
 }
 
 tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect ) const
@@ -991,10 +988,10 @@ tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect
         return rDeviceRect;
 
     tools::Rectangle aRetval(
-        lcl_pixelToLogic( rDeviceRect.Left(), GetDPIX(), maMapRes.mfMapScX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
-        lcl_pixelToLogic( rDeviceRect.Top(), GetDPIY(), maMapRes.mfMapScY ) - maMapRes.mnMapOfsY - mnOutOffLogicY,
-        rDeviceRect.IsWidthEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Right(), GetDPIX(), maMapRes.mfMapScX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
-        rDeviceRect.IsHeightEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Bottom(), GetDPIY(), maMapRes.mfMapScY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
+        lcl_pixelToLogic( rDeviceRect.Left(), GetDPIX(), mpMapper->GetMapResolutionScaleX() ) - mpMapper->GetMappingXOffset() - mpMapper->GetLogicalXOffset(),
+        lcl_pixelToLogic( rDeviceRect.Top(), GetDPIY(), mpMapper->GetMapResolutionScaleY() ) - mpMapper->GetMappingYOffset() - mpMapper->GetLogicalYOffset(),
+        rDeviceRect.IsWidthEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Right(), GetDPIX(), mpMapper->GetMapResolutionScaleX() ) - mpMapper->GetMappingXOffset() - mpMapper->GetLogicalXOffset(),
+        rDeviceRect.IsHeightEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Bottom(), GetDPIY(), mpMapper->GetMapResolutionScaleY() ) - mpMapper->GetMappingYOffset() - mpMapper->GetLogicalYOffset() );
 
     if(rDeviceRect.IsWidthEmpty())
         aRetval.SetWidthEmpty();
@@ -1022,9 +1019,9 @@ tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly ) c
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
         aPt.setX( lcl_pixelToLogic( pPt->X(), GetDPIX(),
-                                    maMapRes.mfMapScX ) - maMapRes.mnMapOfsX - mnOutOffLogicX );
+                                    mpMapper->GetMapResolutionScaleX() ) - mpMapper->GetMappingXOffset() - mpMapper->GetLogicalXOffset() );
         aPt.setY( lcl_pixelToLogic( pPt->Y(), GetDPIY(),
-                                    maMapRes.mfMapScY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
+                                    mpMapper->GetMapResolutionScaleY() ) - mpMapper->GetMappingYOffset() - mpMapper->GetLogicalYOffset() );
         aPoly[i] = aPt;
     }
 
@@ -1111,9 +1108,9 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt,
     aMapRes.CalcMapResolution(rMapMode, GetDPIX(), GetDPIY());
 
     return Point( lcl_pixelToLogic( rDevicePt.X(), GetDPIX(),
-                                    aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
+                                    aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset(),
                   lcl_pixelToLogic( rDevicePt.Y(), GetDPIY(),
-                                    aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
+                                    aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset() );
 }
 
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
@@ -1147,10 +1144,10 @@ tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect
     aMapRes.CalcMapResolution(rMapMode, GetDPIX(), GetDPIY());
 
     tools::Rectangle aRetval(
-        lcl_pixelToLogic( rDeviceRect.Left(), GetDPIX(), aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
-        lcl_pixelToLogic( rDeviceRect.Top(), GetDPIY(), aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mnOutOffLogicY,
-        rDeviceRect.IsWidthEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Right(), GetDPIX(), aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
-        rDeviceRect.IsHeightEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Bottom(), GetDPIY(), aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
+        lcl_pixelToLogic( rDeviceRect.Left(), GetDPIX(), aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset(),
+        lcl_pixelToLogic( rDeviceRect.Top(), GetDPIY(), aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset(),
+        rDeviceRect.IsWidthEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Right(), GetDPIX(), aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset(),
+        rDeviceRect.IsHeightEmpty() ? 0 : lcl_pixelToLogic( rDeviceRect.Bottom(), GetDPIY(), aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset() );
 
     if(rDeviceRect.IsWidthEmpty())
         aRetval.SetWidthEmpty();
@@ -1184,9 +1181,9 @@ tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly,
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
         aPt.setX( lcl_pixelToLogic( pPt->X(), GetDPIX(),
-                                    aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mnOutOffLogicX );
+                                    aMapRes.mfMapScX ) - aMapRes.mnMapOfsX - mpMapper->GetLogicalXOffset() );
         aPt.setY( lcl_pixelToLogic( pPt->Y(), GetDPIY(),
-                                    aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
+                                    aMapRes.mfMapScY ) - aMapRes.mnMapOfsY - mpMapper->GetLogicalYOffset() );
         aPoly[i] = aPt;
     }
 
@@ -1209,24 +1206,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     const basegfx::B2DHomMatrix aTransformationMatrix = GetInverseViewTransformation( rMapMode );
     aTransformedPoly.transform( aTransformationMatrix );
     return aTransformedPoly;
-}
-
-static ImplMapRes lcl_resolveMapRes(const MapMode* pMode, const MapMode& rDefaultMapMode, const ImplMapRes& rDefaultMapRes,
-                                    bool bMap, tools::Long nDPIX, tools::Long nDPIY)
-{
-    const MapMode* pEffectiveMode = pMode ? pMode : &rDefaultMapMode;
-
-    if (bMap && pEffectiveMode == &rDefaultMapMode)
-        return rDefaultMapRes;
-
-    ImplMapRes aRes;
-
-    if (pEffectiveMode->GetMapUnit() == MapUnit::MapRelative)
-        aRes = rDefaultMapRes; // Pre-fill, do NOT return early
-
-    aRes.CalcMapResolution(*pEffectiveMode, nDPIX, nDPIY);
-
-    return aRes;
 }
 
 static void lcl_verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
@@ -1316,8 +1295,8 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
     if (*pSrc == *pDst)
         return rPtSource;
 
-    ImplMapRes aMapResSource = lcl_resolveMapRes(pMapModeSource, mpMapper->GetMapMode(), maMapRes, mpMapper->IsMapModeEnabled(), GetDPIX(), GetDPIY());
-    ImplMapRes aMapResDest   = lcl_resolveMapRes(pMapModeDest, mpMapper->GetMapMode(), maMapRes, mpMapper->IsMapModeEnabled(), GetDPIX(), GetDPIY());
+    ImplMapRes aMapResSource = mpMapper->ResolveMapRes(pMapModeSource);
+    ImplMapRes aMapResDest   = mpMapper->ResolveMapRes(pMapModeDest);
 
     return Point( lcl_scaleLogicValue( rPtSource.X() + aMapResSource.mnMapOfsX,
                        aMapResSource.mfMapScX, aMapResDest.mfMapScX ) -
@@ -1337,8 +1316,8 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
     if (*pSrc == *pDst)
         return rSzSource;
 
-    ImplMapRes aMapResSource = lcl_resolveMapRes(pMapModeSource, mpMapper->GetMapMode(), maMapRes, mpMapper->IsMapModeEnabled(), GetDPIX(), GetDPIY());
-    ImplMapRes aMapResDest   = lcl_resolveMapRes(pMapModeDest, mpMapper->GetMapMode(), maMapRes, mpMapper->IsMapModeEnabled(), GetDPIX(), GetDPIY());
+    ImplMapRes aMapResSource = mpMapper->ResolveMapRes(pMapModeSource);
+    ImplMapRes aMapResDest   = mpMapper->ResolveMapRes(pMapModeDest);
 
     return Size( lcl_scaleLogicValue( rSzSource.Width(),
                       aMapResSource.mfMapScX, aMapResDest.mfMapScX ),
@@ -1356,8 +1335,8 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     if (*pSrc == *pDst)
         return rRectSource;
 
-    ImplMapRes aMapResSource = lcl_resolveMapRes(pMapModeSource, mpMapper->GetMapMode(), maMapRes, mpMapper->IsMapModeEnabled(), GetDPIX(), GetDPIY());
-    ImplMapRes aMapResDest   = lcl_resolveMapRes(pMapModeDest, mpMapper->GetMapMode(), maMapRes, mpMapper->IsMapModeEnabled(), GetDPIX(), GetDPIY());
+    ImplMapRes aMapResSource = mpMapper->ResolveMapRes(pMapModeSource);
+    ImplMapRes aMapResDest   = mpMapper->ResolveMapRes(pMapModeDest);
 
     return tools::Rectangle( lcl_scaleLogicValue( rRectSource.Left() + aMapResSource.mnMapOfsX,
                            aMapResSource.mfMapScX, aMapResDest.mfMapScX ) -
@@ -1551,15 +1530,11 @@ tools::Long OutputDevice::LogicToLogic( tools::Long nLongSource,
 
 void OutputDevice::SetPixelOffset( const Size& rOffset )
 {
-    mnOutOffOrigX  = rOffset.Width();
-    mnOutOffOrigY  = rOffset.Height();
+    mpMapper->SetPixelOffset(rOffset);
 
-    mnOutOffLogicX = lcl_pixelToLogic( mnOutOffOrigX, GetDPIX(),
-                                       maMapRes.mfMapScX );
-    mnOutOffLogicY = lcl_pixelToLogic( mnOutOffOrigY, GetDPIY(),
-                                       maMapRes.mfMapScY );
+    mpMapper->SetLogicalOffset(Size(lcl_pixelToLogic(mpMapper->GetPixelXOffset(), GetDPIX(), mpMapper->GetMapResolutionScaleX()),
+                                    lcl_pixelToLogic(mpMapper->GetPixelYOffset(), GetDPIY(), mpMapper->GetMapResolutionScaleY())));
 }
-
 
 double OutputDevice::LogicWidthToDeviceSubPixel(tools::Long nWidth) const
 {
@@ -1567,7 +1542,7 @@ double OutputDevice::LogicWidthToDeviceSubPixel(tools::Long nWidth) const
         return nWidth;
 
     return ImplLogicToSubPixel(nWidth, GetDPIX(),
-                               maMapRes.mfMapScX);
+                               mpMapper->GetMapResolutionScaleX());
 }
 
 double OutputDevice::LogicHeightToDeviceSubPixel(tools::Long nHeight) const
@@ -1576,7 +1551,7 @@ double OutputDevice::LogicHeightToDeviceSubPixel(tools::Long nHeight) const
         return nHeight;
 
     return ImplLogicToSubPixel(nHeight, GetDPIY(),
-                               maMapRes.mfMapScY);
+                               mpMapper->GetMapResolutionScaleY());
 }
 
 basegfx::B2DPoint OutputDevice::LogicToDeviceSubPixel(const Point& rPoint) const
@@ -1584,12 +1559,12 @@ basegfx::B2DPoint OutputDevice::LogicToDeviceSubPixel(const Point& rPoint) const
     if (!mpMapper->IsMapModeEnabled())
         return basegfx::B2DPoint(rPoint.X() + GetOutOffXPixel(), rPoint.Y() + GetOutOffYPixel());
 
-    return basegfx::B2DPoint(ImplLogicToSubPixel(rPoint.X() + maMapRes.mnMapOfsX, GetDPIX(),
-                                           maMapRes.mfMapScX)
-                                           + GetOutOffXPixel() + mnOutOffOrigX,
-                       ImplLogicToSubPixel(rPoint.Y() + maMapRes.mnMapOfsY, GetDPIY(),
-                                           maMapRes.mfMapScY)
-                                           + GetOutOffYPixel() + mnOutOffOrigY);
+    return basegfx::B2DPoint(ImplLogicToSubPixel(rPoint.X() + mpMapper->GetMappingXOffset(), GetDPIX(),
+                                           mpMapper->GetMapResolutionScaleX())
+                                           + GetOutOffXPixel() + mpMapper->GetPixelXOffset(),
+                       ImplLogicToSubPixel(rPoint.Y() + mpMapper->GetMappingYOffset(), GetDPIY(),
+                                           mpMapper->GetMapResolutionScaleY())
+                                           + GetOutOffYPixel() + mpMapper->GetPixelYOffset());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

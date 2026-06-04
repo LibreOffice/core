@@ -842,9 +842,9 @@ bool OutputDevice::ImplNewFont() const
 
 bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const
 {
-    if (maMapRes.mfMapScY == 0.0)
+    if (mpMapper->GetMapResolutionScaleY() == 0.0)
         return false;
-    const double fStretch = maMapRes.mfMapScX / maMapRes.mfMapScY;
+    const double fStretch = mpMapper->GetMapResolutionScaleX() / mpMapper->GetMapResolutionScaleY();
     const int nOrigWidth = mpFontInstance->mxFontMetric->GetWidth();
     const int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
 

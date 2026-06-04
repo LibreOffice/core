@@ -125,4 +125,22 @@ void ImplMapRes::CalcMapResolution(const MapMode& rMapMode, tools::Long nDPIX, t
     mfMapScY = fScaleY * mfMapScY;
 }
 
+ImplMapRes ImplMapRes::ResolveMapRes(const MapMode* pMode, const MapMode& rDefaultMapMode,
+                                     bool bMap, tools::Long nDPIX, tools::Long nDPIY)
+{
+    const MapMode* pEffectiveMode = pMode ? pMode : &rDefaultMapMode;
+
+    if (bMap && pEffectiveMode == &rDefaultMapMode)
+        return *this;
+
+    ImplMapRes aRes;
+
+    if (pEffectiveMode->GetMapUnit() == MapUnit::MapRelative)
+        aRes = *this;
+
+    aRes.CalcMapResolution(*pEffectiveMode, nDPIX, nDPIY);
+
+    return aRes;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

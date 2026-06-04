@@ -153,7 +153,8 @@ void AdjustTwoRect( SalTwoRect& rTwoRect, const tools::Rectangle& rValidSrcRect 
 
 class OutputDevice;
 
-namespace vcl {
+namespace vcl
+{
     typedef OutputDevice RenderContext;
 }
 
@@ -193,14 +194,6 @@ private:
     // The canvas interface for this output device. Is persistent after the first GetCanvas() call
     mutable css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigX;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicX;
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigY;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicY;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
     tools::Long                            mnOutOffX;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
@@ -212,7 +205,6 @@ private:
     mutable tools::Long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
     vcl::text::ComplexTextLayoutFlags mnTextLayoutMode;
-    ImplMapRes                      maMapRes;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
@@ -1627,7 +1619,7 @@ public:
 
         @return the current offset in pixel
      */
-    SAL_WARN_UNUSED_RESULT Size GetPixelOffset() const { return Size(mnOutOffOrigX, mnOutOffOrigY);}
+    SAL_WARN_UNUSED_RESULT Size GetPixelOffset() const;
 
     SAL_WARN_UNUSED_RESULT Point LogicToPixel(const Point& rLogicPt) const;
     SAL_WARN_UNUSED_RESULT Size  LogicToPixel(const Size& rLogicSize) const;
