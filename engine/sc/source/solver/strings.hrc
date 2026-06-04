@@ -24,7 +24,7 @@
 #define RID_SOLVER_COMPONENT        NC_("RID_SOLVER_COMPONENT", "%PRODUCTNAME Linear Solver")
 #define RID_COINMP_SOLVER_COMPONENT NC_("RID_COINMP_SOLVER_COMPONENT", "%PRODUCTNAME CoinMP Linear Solver")
 #define RID_SWARM_SOLVER_COMPONENT  NC_("RID_SWARM_SOLVER_COMPONENT", "%PRODUCTNAME Swarm Non-Linear Solver (experimental)")
-#define RID_SLP_SOLVER_COMPONENT    NC_("RID_SLP_SOLVER_COMPONENT", "Sequential Linear Solver (experimental)")
+#define RID_SLP_SOLVER_COMPONENT    NC_("RID_SLP_SOLVER_COMPONENT", "Sequential Quadratic Solver (experimental)")
 #define RID_PROPERTY_NONNEGATIVE    NC_("RID_PROPERTY_NONNEGATIVE", "Assume variables as non-negative")
 #define RID_PROPERTY_INTEGER        NC_("RID_PROPERTY_INTEGER", "Assume variables as integer")
 #define RID_PROPERTY_TIMEOUT        NC_("RID_PROPERTY_TIMEOUT", "Solving time limit (seconds)")

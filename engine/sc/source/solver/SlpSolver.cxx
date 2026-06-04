@@ -33,44 +33,46 @@ using namespace com::sun::star;
 
 namespace
 {
-// Sequential Linear Programming (SLP) solver for smooth nonlinear models.
+// Sequential Quadratic Programming (SQP) solver for smooth nonlinear models.
 // CoinMP can only solve straight-line (linear) problems, so this solver reaches
-// a nonlinear optimum by solving a sequence of linear ones, each a fresh
-// approximation of the real model around the latest point.
+// a nonlinear optimum by solving a sequence of small quadratic problems, each a
+// local model of the real one around the latest point. The quadratic curvature
+// lets it converge in far fewer steps than a purely linear model would.
 //
 // Starting from the current cell values, it repeats four steps until the point
 // stops moving:
 //
-// 1. Approximate the objective and every constraint cell with an affine model
-//    around the current point. Each variable is nudged a little and the
-//    response measured, which gives a constant plus a slope per variable. The
-//    approximation is only trustworthy close to where it was sampled.
+// 1. Sample an affine model of the objective and every constraint cell around
+//    the current point by nudging each variable a little (a finite difference).
+//    This gives the objective gradient and a linear approximation of every
+//    constraint.
 //
-// 2. Solve that linear approximation with CoinMP, but only over a trust region:
-//    a box around the current point, sized as a fraction of each variable's
-//    scale, inside which the model is believed accurate. The solve returns a
-//    trial point.
+// 2. Build a quadratic model of the objective: its gradient plus a curvature
+//    term held in a matrix that a damped BFGS (Broyden-Fletcher-Goldfarb-Shanno)
+//    update keeps positive definite as the gradient changes from step to step.
 //
-// 3. Score the trial point with a merit function: its real objective value
-//    plus a large penalty for any constraint violation. Combining both goals
-//    into one number lets two points be compared. The trial is accepted only if
-//    its merit beats the current point, otherwise it is rejected.
+// 3. Minimize that quadratic over the linearized constraints, kept as hard
+//    constraints so every point stays feasible, inside a trust region. The
+//    quadratic subproblem is solved by Frank-Wolfe: each inner iteration
+//    minimizes a linear objective over the same feasible region with CoinMP and
+//    takes a line-search step towards the vertex it returns.
 //
-// 4. Resize the trust region from how well the linear model predicted the real
-//    change. A good prediction grows it so the next step can reach further. A
-//    poor prediction, or a rejected trial, shrinks it so the model is resampled
-//    in a smaller region where it is more reliable.
+// 4. Score the trial point with a merit function, its objective plus a large
+//    penalty for any constraint violation, and keep it only if the merit beats
+//    the current point. Resize the trust region from how well the quadratic
+//    model predicted the real change, and refresh the curvature from the new
+//    gradient.
 //
 // The loop ends when the step becomes negligible, the trust region collapses,
 // the iteration limit is reached, or the time budget runs out. Success is
 // reported only when the final point actually satisfies the constraints.
 //
-// The method is standard. Griffith and Stewart introduced sequential linear
-// programming in "A nonlinear programming technique for the optimization of
-// continuous processing systems", Management Science 7 (1961), 379-392. The
-// trust region, the actual-to-predicted reduction ratio that resizes it, and
-// the penalty merit function are covered by Nocedal and Wright, Numerical
-// Optimization, second edition (Springer, 2006).
+// The pieces are standard. The sequential quadratic model, the damped BFGS
+// curvature update, the trust region, and the penalty merit function are
+// covered by Nocedal and Wright, Numerical Optimization, second edition
+// (Springer, 2006). Frank-Wolfe, used for the inner subproblem, is from Frank
+// and Wolfe, "An algorithm for quadratic programming", Naval Research Logistics
+// Quarterly 3 (1956), 95-110.
 class SLPSolver : public SolverComponent
 {
 public:
@@ -102,11 +104,18 @@ private:
     // Fill rLower and rUpper from the single-variable constant constraints and
     // the non-negative option.
     void deriveBounds(std::vector<double>& rLower, std::vector<double>& rUpper);
-    // A representative magnitude for each variable, used to size the trust region
-    // and the finite-difference step.
+    // A representative magnitude for each variable: the width of a finite range,
+    // otherwise the size of the starting value.
     std::vector<double> deriveScale(const std::vector<double>& rLower,
                                     const std::vector<double>& rUpper,
                                     const std::vector<double>& rStart);
+    // The finite-difference step for each variable: a small fraction of its
+    // scale, with an absolute floor so a near-zero scale is still probed.
+    std::vector<double> deriveStep(const std::vector<double>& rScale);
+    // The starting BFGS curvature matrix, a diagonal that balances the variable
+    // scales so the quadratic term is comparable across variables.
+    std::vector<double> initialCurvature(const std::vector<double>& rScale);
+
     // Build an affine model of the objective and every constraint cell around
     // rPoint. For each dependent cell the returned vector holds the model's value
     // extrapolated to the origin (all variables zero) at index 0, and the slope
@@ -114,16 +123,118 @@ private:
     // Leaves the variable cells holding rPoint.
     ScSolverCellHashMap sampleAffineModel(const std::vector<double>& rPoint,
                                           const std::vector<double>& rStep);
-    // Sample the model around rPoint and solve it over a trust region of the
-    // given radius, returning the linear subproblem's result.
-    CoinMpSolveResult
-    solveLinearizedStep(const std::vector<double>& rPoint, const std::vector<double>& rScale,
-                        const std::vector<double>& rLower, const std::vector<double>& rUpper,
-                        const std::vector<char>& rColumnType, double fTrust, double fTimeout);
-    // Store rPoint as the solution when it satisfies the constraints, otherwise
-    // record that the model is infeasible.
+
+    // The gradient of the cost with respect to each variable, read from the
+    // objective slopes in rCells. For a maximize model the sign is flipped so
+    // the gradient always points in the minimize direction.
+    std::vector<double> costGradient(const ScSolverCellHashMap& rCells);
+
+    // Find the step d that most improves the quadratic model of the objective
+    // without leaving the feasible region. The model is 0.5 d' B d + g' d, where
+    // g (rGradient) is the objective gradient at the current point and B (rB) is
+    // the BFGS curvature matrix, so the expression estimates how much the
+    // objective changes for a step d. The feasible region is the linearized
+    // constraints carried in rCells together with the trust-region box
+    // [rTrustLower, rTrustUpper], so the new point rX + d obeys the linearized
+    // constraints and stays inside the region where the model is trusted.
+    //
+    // The subproblem is solved by Frank-Wolfe (the conditional-gradient method),
+    // which only ever minimizes a linear objective over that region, so each
+    // inner step is a single CoinMP solve. An inner step takes the gradient of
+    // the quadratic model at the current d (which is B d + g), asks CoinMP for
+    // the feasible point that minimizes it (a vertex of the region), and moves d
+    // partway towards that vertex by an exact line search of the quadratic. Every
+    // vertex is feasible, so d stays feasible throughout, and the loop stops once
+    // moving towards the best vertex can no longer improve the model.
+    //
+    // Returns the step d (the new point is rX + d), or an empty vector if the
+    // linearized problem has no feasible point inside this trust region.
+    std::vector<double> solveTrustRegionQp(const ScSolverCellHashMap& rCells,
+                                           const std::vector<double>& rB,
+                                           const std::vector<double>& rGradient,
+                                           const std::vector<double>& rX,
+                                           const std::vector<double>& rTrustLower,
+                                           const std::vector<double>& rTrustUpper,
+                                           const std::vector<char>& rColumnType, double fTimeout);
+
+    // Write rPoint back as the solution when it satisfies the model, otherwise
+    // record an infeasible status.
     void reportSolution(const std::vector<double>& rPoint);
 };
+
+double dotProduct(const std::vector<double>& rLeft, const std::vector<double>& rRight)
+{
+    double fSum = 0.0;
+    for (size_t i = 0; i < rLeft.size(); ++i)
+        fSum += rLeft[i] * rRight[i];
+    return fSum;
+}
+
+// Dense row-major square matrix times a vector.
+std::vector<double> multiplyMatrixVector(const std::vector<double>& rMatrix,
+                                         const std::vector<double>& rVector)
+{
+    size_t nSize = rVector.size();
+    std::vector<double> aResult(nSize, 0.0);
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        const double* pRow = &rMatrix[i * nSize];
+        double fSum = 0.0;
+        for (size_t j = 0; j < nSize; ++j)
+            fSum += pRow[j] * rVector[j];
+        aResult[i] = fSum;
+    }
+    return aResult;
+}
+
+// Refresh the curvature matrix rB from one step of progress, so the next
+// quadratic model bends the way the objective actually bent over that step.
+//
+// BFGS (Broyden, Fletcher, Goldfarb and Shanno) learns the curvature rather
+// than computing it. The true second derivatives would cost many extra cell
+// recalculations, so instead it watches how the gradient changed
+// (rGradientChange) over how far the point moved (rPointChange). A gradient
+// that swings sharply over a short move means high curvature there. Each such
+// pair folds into rB with a small update, so rB grows more accurate the longer
+// the solver runs, at no extra sampling cost.
+//
+// The plain update only keeps rB a true upward-curving bowl (positive definite,
+// the shape a minimum sits in) when the point move and the gradient change
+// point the same way. The damping, due to Powell, blends the gradient change
+// towards the old curvature whenever they do not, so rB stays positive definite
+// even on a bumpy nonlinear problem.
+void updateCurvature(std::vector<double>& rB, const std::vector<double>& rPointChange,
+                     const std::vector<double>& rGradientChange)
+{
+    const size_t nVariables = rPointChange.size();
+    std::vector<double> aBs = multiplyMatrixVector(rB, rPointChange);
+    double fSBs = dotProduct(rPointChange, aBs);
+    double fSy = dotProduct(rPointChange, rGradientChange);
+    if (fSBs <= 0.0)
+        return;
+
+    constexpr double fDampingThreshold = 0.2;
+    constexpr double fDampingScale = 0.8;
+    double fTheta = 1.0;
+    if (fSy < fDampingThreshold * fSBs)
+        fTheta = fDampingScale * fSBs / (fSBs - fSy);
+    std::vector<double> aR(nVariables);
+    for (size_t j = 0; j < nVariables; ++j)
+    {
+        aR[j] = fTheta * rGradientChange[j] + (1.0 - fTheta) * aBs[j];
+    }
+    double fSr = dotProduct(rPointChange, aR);
+    if (fSr > 1.0e-12)
+    {
+        for (size_t i = 0; i < nVariables; ++i)
+        {
+            for (size_t j = 0; j < nVariables; ++j)
+            {
+                rB[i * nVariables + j] += -aBs[i] * aBs[j] / fSBs + aR[i] * aR[j] / fSr;
+            }
+        }
+    }
+}
 
 void SLPSolver::applyPoint(const std::vector<double>& rPoint)
 {
@@ -175,6 +286,8 @@ double SLPSolver::meritAt(const std::vector<double>& rPoint, double fPenalty)
 void SLPSolver::deriveBounds(std::vector<double>& rLower, std::vector<double>& rUpper)
 {
     const size_t nVariables = maVariables.size();
+    // Fold single-variable constant constraints into box bounds. They remain
+    // ordinary constraint rows too.
     rLower.assign(nVariables, mbNonNegative ? 0.0 : -DBL_MAX);
     rUpper.assign(nVariables, DBL_MAX);
 
@@ -218,6 +331,84 @@ std::vector<double> SLPSolver::deriveScale(const std::vector<double>& rLower,
             aScale[j] = std::max(1.0, std::abs(rStart[j]));
     }
     return aScale;
+}
+
+std::vector<double> SLPSolver::deriveStep(const std::vector<double>& rScale)
+{
+    const size_t nVariables = maVariables.size();
+    constexpr double fRelativeStep = 1.0e-6;
+    constexpr double fStepFloor = 1.0e-7;
+    std::vector<double> aStep(nVariables);
+    for (size_t j = 0; j < nVariables; ++j)
+        aStep[j] = std::max(fStepFloor, fRelativeStep * rScale[j]);
+    return aStep;
+}
+
+std::vector<double> SLPSolver::initialCurvature(const std::vector<double>& rScale)
+{
+    const size_t nVariables = maVariables.size();
+    std::vector<double> aB(nVariables * nVariables, 0.0);
+    for (size_t j = 0; j < nVariables; ++j)
+        aB[j * nVariables + j] = 1.0 / (rScale[j] * rScale[j]);
+    return aB;
+}
+
+std::vector<double>
+SLPSolver::solveTrustRegionQp(const ScSolverCellHashMap& rCells, const std::vector<double>& rB,
+                              const std::vector<double>& rGradient, const std::vector<double>& rX,
+                              const std::vector<double>& rTrustLower,
+                              const std::vector<double>& rTrustUpper,
+                              const std::vector<char>& rColumnType, double fTimeout)
+{
+    const size_t nVariables = rX.size();
+    std::vector<double> aD(nVariables, 0.0); // Step, starts at zero (the point rX).
+
+    // The linearized constraints stay the same throughout. Only the objective
+    // row changes each iteration, so copy the cells once and rewrite that row in
+    // place. The map is never restructured here, so the reference stays valid.
+    ScSolverCellHashMap aLinearCells = rCells;
+    std::vector<double>& rObjectCoefficients = aLinearCells[maObjective];
+
+    constexpr int nMaxFrankWolfe = 50;
+    constexpr double fGapTolerance = 1.0e-9;
+    for (int nFrankWolfe = 0; nFrankWolfe < nMaxFrankWolfe; ++nFrankWolfe)
+    {
+        // Gradient of the quadratic model at the current step: B d + g.
+        std::vector<double> aQuadraticGradient = multiplyMatrixVector(rB, aD);
+        for (size_t j = 0; j < nVariables; ++j)
+            aQuadraticGradient[j] += rGradient[j];
+
+        // Minimize that linear objective over the feasible region: put the
+        // quadratic-model gradient in as the objective coefficients.
+        rObjectCoefficients.assign(nVariables + 1, 0.0);
+        for (size_t j = 0; j < nVariables; ++j)
+            rObjectCoefficients[j + 1] = aQuadraticGradient[j];
+
+        CoinMpSolveResult aLinearResult = coinmpSolveLinearModel(
+            maVariables, maConstraints, maObjective, aLinearCells, rTrustLower, rTrustUpper,
+            rColumnType, /*bMaximize*/ false, fTimeout);
+        if (!aLinearResult.bSuccess)
+            return std::vector<double>(); // Infeasible in this trust region.
+
+        // Frank-Wolfe vertex as a step from rX, and the search direction.
+        std::vector<double> aDirection(nVariables);
+        for (size_t j = 0; j < nVariables; ++j)
+            aDirection[j] = (aLinearResult.aSolution[j] - rX[j]) - aD[j];
+
+        // Duality gap: how much the linear model could still improve.
+        double fGap = -dotProduct(aQuadraticGradient, aDirection);
+        if (fGap < fGapTolerance)
+            break;
+
+        // Exact line search of the quadratic along the Frank-Wolfe direction.
+        std::vector<double> aBDirection = multiplyMatrixVector(rB, aDirection);
+        double fDenominator = dotProduct(aDirection, aBDirection);
+        double fGamma = fDenominator > 1.0e-12 ? std::clamp(fGap / fDenominator, 0.0, 1.0) : 1.0;
+
+        for (size_t j = 0; j < nVariables; ++j)
+            aD[j] += fGamma * aDirection[j];
+    }
+    return aD;
 }
 
 ScSolverCellHashMap SLPSolver::sampleAffineModel(const std::vector<double>& rPoint,
@@ -268,36 +459,15 @@ ScSolverCellHashMap SLPSolver::sampleAffineModel(const std::vector<double>& rPoi
     return aCells;
 }
 
-CoinMpSolveResult
-SLPSolver::solveLinearizedStep(const std::vector<double>& rPoint, const std::vector<double>& rScale,
-                               const std::vector<double>& rLower, const std::vector<double>& rUpper,
-                               const std::vector<char>& rColumnType, double fTrust, double fTimeout)
+std::vector<double> SLPSolver::costGradient(const ScSolverCellHashMap& rCells)
 {
     const size_t nVariables = maVariables.size();
-
-    // Finite-difference step: a small fraction of each variable's scale, with an
-    // absolute floor so a near-zero scale is still probed.
-    constexpr double fRelativeStep = 1.0e-6;
-    constexpr double fStepFloor = 1.0e-7;
-    std::vector<double> aStep(nVariables);
+    const std::vector<double>& rObjectCoefficients = rCells.at(maObjective);
+    double fSign = mbMaximize ? -1.0 : 1.0;
+    std::vector<double> aGradient(nVariables);
     for (size_t j = 0; j < nVariables; ++j)
-        aStep[j] = std::max(fStepFloor, fRelativeStep * rScale[j]);
-
-    ScSolverCellHashMap aCells = sampleAffineModel(rPoint, aStep);
-
-    // Trust-region bounds, kept inside the real variable bounds.
-    std::vector<double> aTrustLower(nVariables);
-    std::vector<double> aTrustUpper(nVariables);
-    for (size_t j = 0; j < nVariables; ++j)
-    {
-        aTrustLower[j] = std::max(rLower[j], rPoint[j] - fTrust * rScale[j]);
-        aTrustUpper[j] = std::min(rUpper[j], rPoint[j] + fTrust * rScale[j]);
-        if (aTrustUpper[j] < aTrustLower[j])
-            aTrustUpper[j] = aTrustLower[j];
-    }
-
-    return coinmpSolveLinearModel(maVariables, maConstraints, maObjective, aCells, aTrustLower,
-                                  aTrustUpper, rColumnType, mbMaximize, fTimeout);
+        aGradient[j] = fSign * rObjectCoefficients[j + 1];
+    return aGradient;
 }
 
 void SLPSolver::reportSolution(const std::vector<double>& rPoint)
@@ -347,13 +517,17 @@ void SAL_CALL SLPSolver::solve()
         aX[j] = std::clamp(GetValue(maVariables[j]), aLower[j], aUpper[j]);
 
     std::vector<double> aScale = deriveScale(aLower, aUpper, aX);
+    std::vector<double> aStep = deriveStep(aScale);
+
     std::vector<char> aColumnType(nVariables, mbInteger ? 'I' : 'C');
 
-    // SLP tuning parameters. The trust region is a fraction of each variable's
-    // scale: it grows by fTrustGrow when the model predicts a step well (ratio
-    // above fGoodRatio) and shrinks by fTrustShrink otherwise (ratio below
-    // fPoorRatio, or a rejected step). The loop stops once the relative step is
-    // below fStepTolerance or the radius falls below fTrustMin.
+    std::vector<double> aB = initialCurvature(aScale);
+
+    // SQP tuning parameters. The trust region is a fraction of each variable's
+    // scale: it grows by fTrustGrow when the quadratic model predicts a step well
+    // (ratio above fGoodRatio) and shrinks by fTrustShrink otherwise (ratio below
+    // fPoorRatio, an empty subproblem, or a rejected step). The loop stops once
+    // the relative step is below fStepTolerance or the radius below fTrustMin.
     constexpr double fPenalty = 1.0e4;
     constexpr double fInitialTrust = 0.3;
     constexpr double fTrustMin = 1.0e-9;
@@ -362,7 +536,7 @@ void SAL_CALL SLPSolver::solve()
     constexpr double fTrustShrink = 0.5;
     constexpr double fGoodRatio = 0.75;
     constexpr double fPoorRatio = 0.25;
-    constexpr double fStepTolerance = 1.0e-7;
+    constexpr double fStepTolerance = 1.0e-8;
     constexpr double fMinPredictedReduction = 1.0e-12;
     constexpr double fDefaultTimeout = 100.0;
     // High safety limit only. The time budget and the convergence test below
@@ -371,6 +545,8 @@ void SAL_CALL SLPSolver::solve()
 
     double fTrust = fInitialTrust;
     double fMerit = meritAt(aX, fPenalty);
+    ScSolverCellHashMap aCells = sampleAffineModel(aX, aStep);
+    std::vector<double> aGradient = costGradient(aCells);
 
     const double fTimeout = mnTimeout > 0 ? double(mnTimeout) : fDefaultTimeout;
     auto aStart = std::chrono::steady_clock::now();
@@ -381,41 +557,63 @@ void SAL_CALL SLPSolver::solve()
         if (aElapsed.count() >= fTimeout)
             break;
 
-        CoinMpSolveResult aSubproblem
-            = solveLinearizedStep(aX, aScale, aLower, aUpper, aColumnType, fTrust, fTimeout);
-        if (!aSubproblem.bSuccess)
+        // Trust-region bounds, kept inside the real variable bounds.
+        std::vector<double> aTrustLower(nVariables);
+        std::vector<double> aTrustUpper(nVariables);
+        for (size_t j = 0; j < nVariables; ++j)
         {
-            // The linearized problem could not be solved in this trust region.
+            aTrustLower[j] = std::max(aLower[j], aX[j] - fTrust * aScale[j]);
+            aTrustUpper[j] = std::min(aUpper[j], aX[j] + fTrust * aScale[j]);
+            if (aTrustUpper[j] < aTrustLower[j])
+                aTrustUpper[j] = aTrustLower[j];
+        }
+
+        std::vector<double> aDelta = solveTrustRegionQp(aCells, aB, aGradient, aX, aTrustLower,
+                                                        aTrustUpper, aColumnType, fTimeout);
+        if (aDelta.empty())
+        {
             fTrust *= fTrustShrink;
             if (fTrust < fTrustMin)
                 break;
             continue;
         }
 
-        const std::vector<double>& rTrial = aSubproblem.aSolution;
-        double fMeritTrial = meritAt(rTrial, fPenalty);
+        std::vector<double> aTrial(nVariables);
+        for (size_t j = 0; j < nVariables; ++j)
+            aTrial[j] = aX[j] + aDelta[j];
 
-        // The subproblem meets the linearized constraints, so its predicted
-        // violation is zero.
-        double fPredictedMerit = cost(aSubproblem.fObjective);
-        double fActualReduction = fMerit - fMeritTrial;
-        double fPredictedReduction = fMerit - fPredictedMerit;
+        double fMeritTrial = meritAt(aTrial, fPenalty);
+
+        // Reduction the quadratic model predicted: -(g'd + 0.5 d'B d).
+        std::vector<double> aBDelta = multiplyMatrixVector(aB, aDelta);
+        double fPredicted = -(dotProduct(aGradient, aDelta) + 0.5 * dotProduct(aDelta, aBDelta));
+        double fActual = fMerit - fMeritTrial;
 
         double fStepRelative = 0.0;
         for (size_t j = 0; j < nVariables; ++j)
-            fStepRelative = std::max(fStepRelative, std::abs(rTrial[j] - aX[j]) / aScale[j]);
+            fStepRelative = std::max(fStepRelative, std::abs(aDelta[j]) / aScale[j]);
 
-        if (fActualReduction > 0.0)
+        if (fActual > 0.0)
         {
-            // The trial improved the merit, so move to it.
-            aX = rTrial;
+            // Accept: sample at the new point and update the curvature.
+            ScSolverCellHashMap aCellsNew = sampleAffineModel(aTrial, aStep);
+            std::vector<double> aNewGradient = costGradient(aCellsNew);
+
+            std::vector<double> aPointChange(nVariables);
+            std::vector<double> aGradientChange(nVariables);
+            for (size_t j = 0; j < nVariables; ++j)
+            {
+                aPointChange[j] = aTrial[j] - aX[j];
+                aGradientChange[j] = aNewGradient[j] - aGradient[j];
+            }
+            updateCurvature(aB, aPointChange, aGradientChange);
+
+            aX = aTrial;
+            aGradient = aNewGradient;
+            aCells = aCellsNew;
             fMerit = fMeritTrial;
 
-            // Grow the trust region when the model predicted the change well,
-            // shrink it when the prediction was poor.
-            double fRatio = fPredictedReduction > fMinPredictedReduction
-                                ? fActualReduction / fPredictedReduction
-                                : 1.0;
+            double fRatio = fPredicted > fMinPredictedReduction ? fActual / fPredicted : 1.0;
             if (fRatio > fGoodRatio)
                 fTrust = std::min(fTrustMax, fTrust * fTrustGrow);
             else if (fRatio < fPoorRatio)
@@ -428,7 +626,9 @@ void SAL_CALL SLPSolver::solve()
             fTrust *= fTrustShrink;
         }
 
-        if (fStepRelative < fStepTolerance || fTrust < fTrustMin)
+        if (fStepRelative < fStepTolerance && fActual <= 0.0)
+            break;
+        if (fTrust < fTrustMin)
             break;
     }
 
