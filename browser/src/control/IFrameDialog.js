@@ -188,7 +188,13 @@ window.L.IFrameDialog = window.L.Class.extend({
 	},
 
 	postMessage: function (msg) {
-		this._iframe.contentWindow.postMessage(JSON.stringify(msg), window.origin);
+		// On the desktop apps the parent and the iframe both load over
+		// file://, but WebView2 gives the iframe an opaque "null" origin
+		// while the parent is "file://"; a targetOrigin of window.origin
+		// then never matches and the message is silently dropped. The
+		// iframe is our own trusted local content there, so target "*".
+		const targetOrigin = window.mode.isCODesktop() ? '*' : window.origin;
+		this._iframe.contentWindow.postMessage(JSON.stringify(msg), targetOrigin);
 	},
 
 	isVisible: function () {

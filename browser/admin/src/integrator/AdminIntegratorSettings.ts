@@ -133,7 +133,13 @@ const onLoaded = () => {
 const onMessage = (e) => {
 	try {
 		const data = JSON.parse(e.data);
-		if (e.origin === window.origin && window.parent !== window.self) {
+		// On the desktop apps the parent (cool.html) and this iframe both
+		// load over file://, but WebView2 hands the iframe an opaque "null"
+		// origin while the parent stays "file://", so the strict equality
+		// never holds and the settings-ready handshake stalls. The iframe is
+		// our own trusted local content there, so accept the message.
+		const sameOrigin = e.origin === window.origin || isCODesktop;
+		if (sameOrigin && window.parent !== window.self) {
 			if (data.MessageId === 'settings-ready') {
 				window.parent.postMessage(
 					'{"MessageId":"settings-show"}',
