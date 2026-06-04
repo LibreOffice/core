@@ -54,7 +54,6 @@ enum class VclEventId;
 
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace comphelper { class OAccessible; }
-namespace tools { class JsonWriter; }
 
 namespace vcl
 {
@@ -399,8 +398,6 @@ public:
      * Get the ID of the window.
      */
     const OUString& get_id() const { return maID; }
-
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) const;
 
 private:
     rtl::Reference<comphelper::OAccessible> CreateAccessible();
