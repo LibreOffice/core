@@ -19,36 +19,25 @@
 
 #pragma once
 
-#include <svx/ColorIconView.hxx>
-#include <svx/PaletteManager.hxx>
-#include <vcl/weld/Button.hxx>
-#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/ToggleButton.hxx>
+#include <svx/colorbox.hxx>
 
 class ScTabBgColorDlg : public weld::GenericDialogController
 {
 public:
-    ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle);
+    ScTabBgColorDlg(weld::Window* pParent,
+                    const OUString& rTitle,
+                    const Color& rDefaultColor);
     virtual ~ScTabBgColorDlg() override;
 
     Color GetSelectedColor() const;
 
 private:
-    PaletteManager          m_aPaletteManager;
+    Color                         m_aTabBgColor;
+    std::unique_ptr<ColorListBox> m_xColorListBox;
 
-    std::unique_ptr<weld::ComboBox> m_xSelectPalette;
-    std::unique_ptr<weld::ToggleButton> m_xDefaultButton;
-    ColorIconView m_aTabBgColorIconView;
-    std::unique_ptr<weld::Button> m_xBtnOk;
-
-    void FillPaletteLB();
-
-    DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
-    DECL_LINK(DefaultButtonToggled, weld::Toggleable&, void);
-    DECL_LINK(TabBgColorSelectHdl, const ColorIconView&, void);
-    DECL_LINK(TabBgColorActivatedHdl, const Color&, void);
-    DECL_LINK(TabBgColorOKHdl_Impl, weld::Button&, void);
+    DECL_LINK(ColorSelectedHdl, ColorListBox&, void);
+    DECL_LINK(AutoOpenPickerHdl, void*, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

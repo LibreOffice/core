@@ -534,9 +534,9 @@ public:
                                                                     const OUString& rHelpId,
                                                                     const OUString& rEditHelpId) = 0;
 
-    virtual VclPtr<AbstractScTabBgColorDlg>
-    CreateScTabBgColorDlg(weld::Window* pParent,
-                          const OUString& rTitle) = 0; //Dialog Title
+    virtual VclPtr<AbstractScTabBgColorDlg> CreateScTabBgColorDlg(weld::Window* pParent,
+                                                                  const OUString& rTitle, //Dialog Title
+                                                                  const Color& rDefaultColor) = 0; //Currently selected Color
 
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg(weld::Window* pParent, bool bAscii,
                                                                         const ScImportOptions*  pOptions,

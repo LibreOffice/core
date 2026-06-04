@@ -19,36 +19,30 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <scresid.hxx>
-#include <strings.hrc>
 #include <tabbgcolordlg.hxx>
 
-#include <tools/color.hxx>
-#include <vcl/event.hxx>
+#include <svx/colorwindow.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Dialog.hxx>
-#include <vcl/weld/IconView.hxx>
 
-#include <officecfg/Office/Common.hxx>
-
-ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle)
+ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
+                                 const Color& rDefaultColor)
     : GenericDialogController(pParent, u"modules/scalc/ui/tabcolordialog.ui"_ustr,
                               u"TabColorDialog"_ustr)
-    , m_xSelectPalette(m_xBuilder->weld_combo_box(u"paletteselector"_ustr))
-    , m_xDefaultButton(m_xBuilder->weld_toggle_button(u"defaultbutton"_ustr))
-    , m_aTabBgColorIconView(m_xBuilder->weld_icon_view(u"coloriconview"_ustr))
-    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_aTabBgColor(rDefaultColor)
+    , m_xColorListBox(new ColorListBox(m_xBuilder->weld_menu_button(u"colorlistbox"_ustr),
+                                       [pParent] { return pParent; }))
 {
     m_xDialog->set_title(rTitle);
+    m_xColorListBox->SetSlotId(0, /*bShowNoneButton=*/true);
 
-    FillPaletteLB();
+    // tdf#163838 - select the current tab color when reopening the dialog
+    if (rDefaultColor != COL_AUTO)
+        m_xColorListBox->SelectEntry(rDefaultColor);
 
-    m_xSelectPalette->connect_changed(LINK(this, ScTabBgColorDlg, SelectPaletteLBHdl));
-    m_xDefaultButton->connect_toggled(LINK(this, ScTabBgColorDlg, DefaultButtonToggled));
-    m_aTabBgColorIconView.setSelectionChangedHdl(LINK(this, ScTabBgColorDlg, TabBgColorSelectHdl));
-    m_aTabBgColorIconView.setColorActivatedHdl(LINK(this, ScTabBgColorDlg, TabBgColorActivatedHdl));
-    m_xBtnOk->connect_clicked(LINK(this, ScTabBgColorDlg, TabBgColorOKHdl_Impl));
+    m_xColorListBox->SetSelectHdl(LINK(this, ScTabBgColorDlg, ColorSelectedHdl));
+    Application::PostUserEvent(LINK(this, ScTabBgColorDlg, AutoOpenPickerHdl));
 }
 
 ScTabBgColorDlg::~ScTabBgColorDlg()
@@ -57,68 +51,19 @@ ScTabBgColorDlg::~ScTabBgColorDlg()
 
 Color ScTabBgColorDlg::GetSelectedColor() const
 {
-    if (m_xDefaultButton->get_active())
-        return COL_AUTO;
-
-    const int nIndex = m_aTabBgColorIconView.get_selected_index();
-    Color aColor = nIndex >= 0 ? (m_aTabBgColorIconView.getColor(nIndex)) : COL_AUTO;
-    return aColor;
+    return m_aTabBgColor;
 }
 
-void ScTabBgColorDlg::FillPaletteLB()
+IMPL_LINK_NOARG(ScTabBgColorDlg, ColorSelectedHdl, ColorListBox&, void)
 {
-    m_xSelectPalette->clear();
-    std::vector<OUString> aPaletteList = m_aPaletteManager.GetPaletteList();
-    for (auto const& palette : aPaletteList)
-    {
-        m_xSelectPalette->append_text(palette);
-    }
-    OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
-    m_xSelectPalette->set_active_text(aPaletteName);
-    if (m_xSelectPalette->get_active() != -1)
-    {
-        SelectPaletteLBHdl(*m_xSelectPalette);
-    }
-}
-
-IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
-{
-    m_aTabBgColorIconView.clear();
-    sal_Int32 nPos = m_xSelectPalette->get_active();
-    m_aPaletteManager.SetPalette( nPos );
-    m_aPaletteManager.ReloadColorSet(m_aTabBgColorIconView);
-    m_xDefaultButton->set_active(true);
-    m_aTabBgColorIconView.unselect_all();
-}
-
-IMPL_LINK_NOARG(ScTabBgColorDlg, DefaultButtonToggled, weld::Toggleable&, void)
-{
-    // Only allow toggling default color on, not off by clicking the button.
-    // Disabling instead happens by selecting another color.
-    if (!m_xDefaultButton->get_active())
-    {
-        m_xDefaultButton->set_active(true);
-        return;
-    }
-
-    m_aTabBgColorIconView.unselect_all();
-}
-
-//    Handler, called when color selection is changed
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorSelectHdl, const ColorIconView&, void)
-{
-    m_xDefaultButton->set_active(false);
-}
-
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorActivatedHdl, const Color&, void)
-{
+    Color aColor = m_xColorListBox->GetSelectEntryColor();
+    m_aTabBgColor = aColor == COL_NONE_COLOR ? COL_AUTO : aColor;
     m_xDialog->response(RET_OK);
 }
 
-//    Handler, called when the OK button is pushed
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, AutoOpenPickerHdl, void*, void)
 {
-    m_xDialog->response(RET_OK);
+    m_xColorListBox->get_widget().set_active(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

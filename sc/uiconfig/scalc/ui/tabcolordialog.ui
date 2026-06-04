@@ -2,30 +2,17 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkImage" id="auto_icon">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">cmd/sc_square_unfilled.png</property>
-  </object>
-  <object class="GtkTreeStore" id="coloriconview_model">
-    <columns>
-      <!-- column-name pixbuf -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-      <!-- column-name tooltip -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkDialog" id="TabColorDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can-focus">False</property>
-        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
@@ -33,8 +20,8 @@
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes" context="stock">_OK</property>
+              <object class="GtkButton" id="close">
+                <property name="label" translatable="yes" context="stock">_Close</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
@@ -48,41 +35,27 @@
                 <property name="position">0</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes" context="stock">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="spacing">3</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="valign">center</property>
-                <property name="label" translatable="yes" context="tabcolordialog |label1">Palette:</property>
+                <property name="label" translatable="yes" context="tabcolordialog|label1">_Color:</property>
                 <property name="use-underline">True</property>
-                <property name="mnemonic-widget">paletteselector</property>
+                <property name="mnemonic-widget">colorlistbox</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
               </object>
@@ -93,9 +66,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="paletteselector">
+              <object class="GtkMenuButton" id="colorlistbox">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -110,58 +83,10 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkToggleButton" id="defaultbutton">
-            <property name="label" translatable="yes" context="tabcolordialog|defaultbutton">Default</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="can-default">True</property>
-            <property name="receives-default">False</property>
-            <property name="image">auto_icon</property>
-            <property name="use-underline">True</property>
-            <property name="always-show-image">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="colorsetwin">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="shadow-type">in</property>
-            <property name="propagate-natural-width">True</property>
-            <property name="propagate-natural-height">True</property>
-            <child>
-              <object class="GtkIconView" id="coloriconview">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin">6</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="model">coloriconview_model</property>
-                <property name="columns">12</property>
-                <property name="pixbuf-column">0</property>
-                <property name="tooltip-column">2</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">ok</action-widget>
-      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>

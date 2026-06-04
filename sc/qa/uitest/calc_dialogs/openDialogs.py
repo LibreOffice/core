@@ -93,7 +93,7 @@ dialogs = [
         # tested in sc/qa/uitest/calc_tests/sheetRename.py
     # {"command": ".uno:Move", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests6/moveCopySheet.py
-    {"command": ".uno:SetTabBgColor", "closeButton": "cancel"},
+    {"command": ".uno:SetTabBgColor", "closeButton": "close", "skipTestOK": True},
     {"command": ".uno:TableEvents", "closeButton": "cancel"},
     # {"command": ".uno:DataSort", "closeButton": "cancel"},
         # cancel button tested in sc/qa/uitest/calc_tests/sorting.py
