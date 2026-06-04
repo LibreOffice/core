@@ -632,6 +632,10 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
                                     bool bRecord, bool bApi )
 {
     bool bDo = !rParam.bRemoveOnly; // sal_False = only delete
+    // A resize (extend/shrink) relocates the total row: bReplace && bDo, unlike the toggle
+    // (ON: bReplace=false; OFF: bRemoveOnly=true). It is net-0 rows, which drives the tear
+    // refusal and Undo/Redo handling below.
+    const bool bResize = rParam.bReplace && bDo;
 
     ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
@@ -660,38 +664,50 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
         return;
     }
 
-    // Determine whether a column-bounded row shift starting at the would-be total row
-    // would tear an adjacent fixed-range structure. If so:
-    //   - if the band cells at that row are clear, take the in-place path (no row shift,
-    //     just write/clear the total-row cells; matches MSO/ONLYOFFICE behaviour);
-    //   - otherwise refuse with the existing warning, like Insert Cells does.
+    // Would a column-bounded row shift at the would-be total row tear a straddling structure
+    // below? If so, a resize (which must shift to relocate the total) is refused outright; a
+    // toggle may write the total cells in-place when the band is empty, and is refused only
+    // when they are non-empty.
     const SCROW nShiftRow = rParam.nRow2 + 1;
     const bool bTearRisk = pDBData->HasTearRiskAtBand(rDoc, nShiftRow);
     bool bInPlace = false;
     if (bTearRisk)
     {
-        if (bDo && pDBData->IsBandBlockedAtRow(rDoc, nShiftRow))
+        if (bResize || (bDo && pDBData->IsBandBlockedAtRow(rDoc, nShiftRow)))
         {
             if (!bApi)
-                rDocShell.ErrorMessageAsync(STR_MSSG_DOSUBTOTALS_2);
+                rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_STRADDLE);
             return;
         }
         bInPlace = true;
+    }
+
+    // A resize must not reach into another structure: HasTearRiskAtBand catches only
+    // wider/straddling ones from afar, WouldResizeOverlap catches a same-width/within-column
+    // one once the new area reaches it.
+    if (bResize)
+    {
+        ScRange aNewArea;
+        rNewData.GetArea(aNewArea);
+        if (pDBData->WouldResizeOverlap(rDoc, aNewArea))
+        {
+            if (!bApi)
+                rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
+            return;
+        }
     }
 
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
     ScDocShellModificator aModificator(rDocShell);
 
     ScSubTotalParam aNewParam;
-    rNewData.GetSubTotalParam(aNewParam); // end of range is being changed
-    // Pin the row/col window to the input rParam (which is always the pre-operation
-    // state). For the original Do this is a no-op; for Redo it overrides the post-Do
-    // values that would otherwise come from rNewData (taken from xRedoDB) and lead to
-    // an off-by-one shift on replay.
-    aNewParam.nCol1 = rParam.nCol1;
-    aNewParam.nRow1 = rParam.nRow1;
-    aNewParam.nCol2 = rParam.nCol2;
-    aNewParam.nRow2 = rParam.nRow2;
+    rNewData.GetSubTotalParam(aNewParam); // end of range is being changed (new bottom)
+
+    // Snapshot down to the lower of the old/new bottom, so content absorbed below the old
+    // total row is captured for undo.
+    const SCROW nCaptureEndRow
+        = (bResize && aNewParam.nRow2 > rParam.nRow2) ? aNewParam.nRow2 : rParam.nRow2;
+
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScDBCollection> pUndoDB;
 
@@ -704,7 +720,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
         pUndoDoc->InitUndo(rDoc, nTab, nTab, false, bOldFilter);
 
         //  secure data range - incl. filtering result
-        rDoc.CopyToDocument(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, rParam.nRow2, nTab,
+        rDoc.CopyToDocument(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, nCaptureEndRow, nTab,
                             InsertDeleteFlags::ALL, false, *pUndoDoc);
 
         //  all formulas because of references

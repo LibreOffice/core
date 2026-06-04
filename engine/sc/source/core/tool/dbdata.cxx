@@ -996,11 +996,34 @@ bool ScDBData::HasTearRiskAtBand(const ScDocument& rDoc, SCROW nShiftRow) const
                 return true;
         }
     }
-    // Merged cells anywhere in the band rows below the table — conservative; matches
-    // the existing Insert-Cells precedent.
-    if (rDoc.HasAttrib(nStartCol, nShiftRow, nTable, nEndCol, rDoc.MaxRow(), nTable,
-                       HasAttrFlags::Merged | HasAttrFlags::Overlapped))
-        return true;
+    // Only merges that straddle the table's column boundaries are a from-afar tear risk; a
+    // merge within [nStartCol..nEndCol] shifts cleanly and is left to the overlap guard.
+    // ExtendOverlapped() (const, unlike ExtendMerge) flags a merge crossing the left column,
+    // or one originating inside the table and extending past nEndCol.
+    SCCOL nLeftCol = nStartCol;
+    SCROW nLeftRow = nShiftRow;
+    rDoc.ExtendOverlapped(nLeftCol, nLeftRow, nEndCol, rDoc.MaxRow(), nTable);
+    if (nLeftCol < nStartCol)
+        return true; // a merge crosses the table's left boundary
+
+    if (nEndCol < rDoc.MaxCol())
+    {
+        SCCOL nRightCol = nEndCol + 1;
+        SCROW nRightRow = nShiftRow;
+        rDoc.ExtendOverlapped(nRightCol, nRightRow, nEndCol + 1, rDoc.MaxRow(), nTable);
+        if (nRightCol <= nEndCol)
+            return true; // a merge crosses the table's right boundary
+    }
+
+    // A matrix straddling the table's columns would be torn by a column-bounded row shift.
+    // IsBlockEditable flags "not editable, only a matrix" exactly when one crosses the band's
+    // column edges; a within-column matrix shifts cleanly.
+    // TODO: Excel relocates a straddling array instead of refusing; our InsertRow cannot, so
+    //   we refuse. A within-column matrix bisected by the inserted row is not guarded.
+    bool bOnlyMatrix = false;
+    if (!rDoc.IsBlockEditable(nTable, nStartCol, nShiftRow, nEndCol, rDoc.MaxRow(), &bOnlyMatrix)
+        && bOnlyMatrix)
+        return true; // a matrix crosses the table's column boundaries
 
     return false;
 }
@@ -1008,6 +1031,56 @@ bool ScDBData::HasTearRiskAtBand(const ScDocument& rDoc, SCROW nShiftRow) const
 bool ScDBData::IsBandBlockedAtRow(const ScDocument& rDoc, SCROW nShiftRow) const
 {
     return !rDoc.IsEmptyData(nStartCol, nShiftRow, nEndCol, nShiftRow, nTable);
+}
+
+bool ScDBData::BandReachesStructure(ScDocument& rDoc, const ScRange& rBand) const
+{
+    auto bHitsOther = [&](const ScDBData* pOther) {
+        if (!pOther || pOther == this)
+            return false;
+        ScRange aOther;
+        pOther->GetArea(aOther);
+        return aOther.aStart.Tab() == nTable && rBand.Intersects(aOther);
+    };
+    if (const ScDBCollection* pDBs = rDoc.GetDBCollection())
+    {
+        for (const auto& rOther : pDBs->getNamedDBs())
+            if (bHitsOther(rOther.get()))
+                return true;
+        for (const auto& rOther : pDBs->getAnonDBs())
+            if (bHitsOther(rOther.get()))
+                return true;
+    }
+    // Sheet-local / document anonymous DB ranges (e.g. an AutoFilter on a plain range).
+    // Plain named ranges are not DB ranges and intentionally do not block.
+    if (bHitsOther(rDoc.GetAnonymousDBData(nTable)) || bHitsOther(rDoc.GetAnonymousDBData()))
+        return true;
+    if (const ScDPCollection* pDPs = rDoc.GetDPCollection())
+        if (pDPs->HasTable(rBand))
+            return true;
+    return rDoc.HasAttrib(rBand.aStart.Col(), rBand.aStart.Row(), nTable, rBand.aEnd.Col(),
+                          rBand.aEnd.Row(), nTable, HasAttrFlags::Merged | HasAttrFlags::Overlapped);
+}
+
+bool ScDBData::WouldResizeOverlap(ScDocument& rDoc, const ScRange& rNewArea) const
+{
+    const SCROW nNewEndRow = rNewArea.aEnd.Row();
+    const SCCOL nNewEndCol = rNewArea.aEnd.Col();
+    const bool bGrewDown = nNewEndRow > nEndRow;
+    const bool bGrewRight = nNewEndCol > nEndCol;
+    if (!bGrewDown && !bGrewRight)
+        return false; // a shrink (or no growth) cannot newly overlap anything
+
+    // Test the growth bands only (this table's own area is valid and excluded): a table may
+    // not be extended over another structure. The bottom band spans the full new width
+    // (covering the corner); the right band spans the original height.
+    if (bGrewDown
+        && BandReachesStructure(rDoc, ScRange(nStartCol, nEndRow + 1, nTable, nNewEndCol, nNewEndRow, nTable)))
+        return true;
+    if (bGrewRight
+        && BandReachesStructure(rDoc, ScRange(nEndCol + 1, nStartRow, nTable, nNewEndCol, nEndRow, nTable)))
+        return true;
+    return false;
 }
 
 bool ScDBData::WouldTableTotalsBeRefused(bool bAddTotal) const

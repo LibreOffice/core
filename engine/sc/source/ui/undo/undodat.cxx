@@ -868,7 +868,10 @@ void ScUndoTableTotals::Undo()
 
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    if (!mbInPlace)
+    // A resize is net-0 rows, so Undo must NOT shift rows (that would corrupt content below).
+    // Only the toggle (net +-1, never in-place) shifts here.
+    const bool bResize = aParam.bReplace && !aParam.bRemoveOnly;
+    if (!mbInPlace && !bResize)
     {
         if (nNewEndRow > aParam.nRow2)
         {
@@ -880,16 +883,19 @@ void ScUndoTableTotals::Undo()
         }
     }
 
-    // For an in-place ON, Do wrote total-row cells at nNewEndRow but no shift was
-    // performed; extend the clear so we also wipe those cells (xUndoDoc only covers up
-    // to aParam.nRow2, so the inserted total row would otherwise survive Undo).
+    // Restore down to the lower of the two bottoms (so absorbed content returns). For an
+    // in-place ON, the clear extends past the restore range to wipe the total cells Do wrote
+    // (empty before, nothing to restore).
+    const SCROW nRestoreEndRow
+        = (bResize && nNewEndRow > aParam.nRow2) ? nNewEndRow : aParam.nRow2;
     const SCROW nClearEndRow
-        = (mbInPlace && nNewEndRow > aParam.nRow2) ? nNewEndRow : aParam.nRow2;
+        = bResize ? nRestoreEndRow
+                  : ((mbInPlace && nNewEndRow > aParam.nRow2) ? nNewEndRow : aParam.nRow2);
     rDoc.DeleteAreaTab( aParam.nCol1, aParam.nRow1+1, aParam.nCol2, nClearEndRow, nTab, InsertDeleteFlags::ALL );
 
-    xUndoDoc->CopyToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, aParam.nRow2, nTab,
+    xUndoDoc->CopyToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, nRestoreEndRow, nTab,
                                                             InsertDeleteFlags::NONE, false, rDoc);
-    xUndoDoc->UndoToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, aParam.nRow2, nTab,
+    xUndoDoc->UndoToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, nRestoreEndRow, nTab,
                                                             InsertDeleteFlags::ALL, false, rDoc);
 
     if (xUndoDB)
@@ -917,12 +923,16 @@ void ScUndoTableTotals::Redo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    // xRedoDB is captured in DoTableSubTotals *before* the post-Do SetArea() runs, so
-    // the DBData stored in it still has the pre-Do bottom row (= aParam.nRow2). Use that
-    // for the lookup, otherwise it returns nullptr and Redo silently does nothing.
+    // Find the post-Do DBData by its stored bottom (GetDBAtArea matches exactly): a resize
+    // stored nNewEndRow, a toggle kept aParam.nRow2. Replay with bRecord=false so Redo
+    // re-runs the same tear/overlap checks as Do.
     const ScDBData* pDBData = nullptr;
     if (xRedoDB)
-        pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, aParam.nRow2);
+    {
+        const bool bResize = aParam.bReplace && !aParam.bRemoveOnly;
+        const SCROW nLookupRow = bResize ? nNewEndRow : aParam.nRow2;
+        pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, nLookupRow);
+    }
     if (pDBData)
     {
         // Route through the recording controller (with bRecord=false) so Redo also

@@ -128,6 +128,8 @@
 #define STR_MSSG_DOSUBTOTALS_0                  NC_("STR_MSSG_DOSUBTOTALS_0", "%PRODUCTNAME Calc")
 #define STR_MSSG_DOSUBTOTALS_1                  NC_("STR_MSSG_DOSUBTOTALS_1", "Delete data?")
 #define STR_MSSG_DOSUBTOTALS_2                  NC_("STR_MSSG_DOSUBTOTALS_2", "Unable to insert rows")
+#define STR_MSSG_TABLE_OVERLAP                  NC_("STR_MSSG_TABLE_OVERLAP", "A Table cannot overlap another Table, PivotTable, merged cells, or a filtered range.")
+#define STR_MSSG_TABLE_STRADDLE                 NC_("STR_MSSG_TABLE_STRADDLE", "Cannot add or move the Total Row: a Table, PivotTable, array formula, or merged cell below crosses the Table's column boundaries.")
 #define STR_MSSG_REPEATDB_0                     NC_("STR_MSSG_REPEATDB_0", "No operations to execute")
 #define STR_MSSG_MAKEAUTOFILTER_0               NC_("STR_MSSG_MAKEAUTOFILTER_0", "The range does not contain column headers.\nDo you want the first line to be used as column header?")
 #define STR_MSSG_IMPORTDATA_0                   NC_("STR_MSSG_IMPORTDATA_0", "Error while importing data!")

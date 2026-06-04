@@ -340,6 +340,11 @@ public:
     /// Returns true if any cell in this table's column band at nShiftRow is non-empty.
     bool        IsBandBlockedAtRow(const ScDocument& rDoc, SCROW nShiftRow) const;
 
+    /// True if extending this table to rNewArea (down/right) would overlap another ScDBData,
+    /// pivot table, or merged cells — the cases HasTearRiskAtBand's from-afar checks miss (a
+    /// same-width/narrower neighbour, or one reached by a right-drag). False for a shrink.
+    bool WouldResizeOverlap(ScDocument& rDoc, const ScRange& rNewArea) const;
+
     /// Returns true if toggling Total Row on this table (bAddTotal = true to add, false
     /// to remove) would be refused because of tear-risk at the row immediately below
     /// the data combined with non-empty cells in the band.
@@ -390,6 +395,8 @@ private:
     void AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
             SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 );
     void InvalidateTableColumnNames( bool bSwapToEmptyNames );
+
+    bool BandReachesStructure(ScDocument& rDoc, const ScRange& rBand) const;
 
     /// Classify a single broadcast hit against the adjacency bands and their
     /// overflow buffers. Returns true if the cell was inside one of our

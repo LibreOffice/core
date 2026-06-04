@@ -2562,6 +2562,12 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 aSubTotalParam.bReplace = true;
                 aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, false);
             }
+            else if (pDBData->WouldResizeOverlap(rDocument, aNewDBRange))
+            {
+                // A table must not be dragged over another structure; same refusal as the
+                // total-row extend path, here also covering a right-drag.
+                mrViewData.GetDocShell()->ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
+            }
             else
             {
                 aFunc.ModifyDBData(aNewDBData);
