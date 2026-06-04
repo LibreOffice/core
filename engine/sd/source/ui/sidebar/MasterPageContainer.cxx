@@ -37,6 +37,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <tools/TimerBasedTaskExecution.hxx>
@@ -788,6 +789,18 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
         if (auto pSdXImpressDocument = comphelper::getFromUnoTunnel<SdXImpressDocument>(xUnoTunnel))
         {
             mpDocument = pSdXImpressDocument->GetDoc();
+
+            // This model exists only to render master-page previews and is
+            // never saved. Building it (creating the default page, applying
+            // autolayouts) and later copying master pages into it flips the
+            // document's modified flag. Under LOK SfxObjectShell::ModifyChanged
+            // broadcasts .uno:ModifiedStatus to every view in the process, so
+            // those internal flips leak onto the user's open document as a
+            // spurious "modified" notification (cool#15899). Disable modified
+            // tracking on this throwaway document so it never notifies.
+            if (mpDocument)
+                if (::sd::DrawDocShell* pDocShell = mpDocument->GetDocSh())
+                    pDocShell->EnableSetModified(false);
         }
 
         // Create a default page.
