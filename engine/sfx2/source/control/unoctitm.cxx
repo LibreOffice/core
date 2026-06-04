@@ -1240,6 +1240,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"FormatPaintbrush", { PayloadType::IsActivePayload, true } },
         { u"FreezePanes", { PayloadType::IsActivePayload, true } },
         { u"Sidebar", { PayloadType::IsActivePayload, true } },
+        { u"Navigator", { PayloadType::IsActivePayload, true } },
         { u"SpacePara1", { PayloadType::IsActivePayload, true } },
         { u"SpacePara15", { PayloadType::IsActivePayload, true } },
         { u"SpacePara2", { PayloadType::IsActivePayload, true } },

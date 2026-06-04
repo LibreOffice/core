@@ -42,6 +42,7 @@ function getToggleButtons() {
 		'.uno:JustifyPara',
 		'.uno:LeftPara',
 		'.uno:ModifiedStatus',
+		'.uno:Navigator',
 		'.uno:ObjectAlignLeft',
 		'.uno:ObjectAlignRight',
 		'.uno:OnlineAutoFormat',
