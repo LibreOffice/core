@@ -694,7 +694,7 @@ AC_DEFINE_UNQUOTED(SRC_ROOT,"$SRC_ROOT")
 AC_DEFINE_UNQUOTED(BUILDDIR,"$BUILDDIR")
 
 if test "z$EUID" = "z0" -a "`uname -o 2>/dev/null`" = "Cygwin"; then
-    AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
+    AC_MSG_ERROR([You must build Collabora Office as a normal user - not using an administrative account])
 fi
 
 # need sed in os checks...
@@ -1009,7 +1009,7 @@ solaris*)
     AC_MSG_CHECKING([the Solaris operating system release])
     _os_release=`echo $host_os | $SED -e s/solaris2\.//`
     if test "$_os_release" -lt "10"; then
-        AC_MSG_ERROR([use Solaris >= 10 to build LibreOffice])
+        AC_MSG_ERROR([use Solaris >= 10 to build Collabora Office])
     else
         AC_MSG_RESULT([ok ($_os_release)])
     fi
@@ -1262,7 +1262,7 @@ emscripten)
     ;;
 
 *)
-    AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
+    AC_MSG_ERROR([$host_os operating system is not suitable to build Collabora Office for!])
     ;;
 esac
 
@@ -1700,7 +1700,7 @@ libo_FUZZ_ARG_ENABLE(pch,
 
 libo_FUZZ_ARG_ENABLE(epm,
     AS_HELP_STRING([--enable-epm],
-        [LibreOffice includes self-packaging code, that requires epm, however epm is
+        [Collabora Office includes self-packaging code, that requires epm, however epm is
          useless for large scale package building.])
 )
 
@@ -2040,13 +2040,13 @@ AC_ARG_ENABLE(z7-debug,
 libo_FUZZ_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
-         LibreOffice. Disabled by default. Requires --with-privacy-policy-url to be set.]),
+         Collabora Office. Disabled by default. Requires --with-privacy-policy-url to be set.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(online-update-mar,
     AS_HELP_STRING([--enable-online-update-mar],
         [Enable the Mozilla-like online update service that will
-         check for new versions of LibreOffice. Currently only works for
+         check for new versions of Collabora Office. Currently only works for
          Windows and Linux. Disabled by default.]),
 ,)
 
@@ -2147,7 +2147,7 @@ AC_ARG_WITH(package-version,
 
 libo_FUZZ_ARG_ENABLE(readonly-installset,
     AS_HELP_STRING([--enable-readonly-installset],
-        [Prevents any attempts by LibreOffice to write into its installation. That means
+        [Prevents any attempts by Collabora Office to write into its installation. That means
          at least that no "system-wide" extensions can be added. Partly experimental work in
          progress, probably not fully implemented. Always enabled for macOS.]),
 ,)
@@ -2354,14 +2354,14 @@ libo_FUZZ_ARG_WITH(helppack-integration,
 
 libo_FUZZ_ARG_WITH(fonts,
     AS_HELP_STRING([--without-fonts],
-        [LibreOffice includes some third-party fonts to provide a reliable basis for
+        [Collabora Office includes some third-party fonts to provide a reliable basis for
          help content, templates, samples, etc. When these fonts are already
          known to be available on the system then you should use this option.]),
 ,)
 
 libo_FUZZ_ARG_WITH(docrepair-fonts,
     AS_HELP_STRING([--with-docrepair-fonts],
-        [LibreOffice optionally includes fonts from 'The DocRepair Project' that
+        [Collabora Office optionally includes fonts from 'The DocRepair Project' that
          provide metrically equivalent fallback fonts for a variety of common fonts
          seen in Office Open XML documents. See https://github.com/docrepair-fonts
          for more details. This option has no effect when --without-fonts is used.]),
@@ -2381,7 +2381,7 @@ AC_ARG_WITH(epm,
 
 AC_ARG_WITH(package-format,
     AS_HELP_STRING([--with-package-format],
-        [Specify package format(s) for LibreOffice installation sets. The
+        [Specify package format(s) for Collabora Office installation sets. The
          implicit --without-package-format leads to no installation sets being
          generated. Possible values: archive, bsd, deb, dmg, emscripten,
          installed, msi, pkg, and rpm.
@@ -2391,10 +2391,10 @@ AC_ARG_WITH(package-format,
 AC_ARG_WITH(tls,
     AS_HELP_STRING([--with-tls],
         [Decides which TLS/SSL and cryptographic implementations to use for
-         LibreOffice's code. Default is to use NSS although OpenSSL is also
+         Collabora Office's code. Default is to use NSS although OpenSSL is also
          possible. Notice that selecting NSS restricts the usage of OpenSSL
          in LO's code but selecting OpenSSL doesn't restrict by now the
-         usage of NSS in LO's code. Possible values: openssl, nss.
+         usage of NSS in Collabora Office's code. Possible values: openssl, nss.
          Example: --with-tls="nss"]),
 ,)
 
@@ -2429,7 +2429,7 @@ AC_ARG_WITH(system-cairo,
 
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--with-myspell-dicts],
-        [Adds myspell dictionaries to the LibreOffice installation set]),
+        [Adds myspell dictionaries to the Collabora Office installation set]),
 ,)
 
 AC_ARG_WITH(system-dicts,
@@ -2529,7 +2529,7 @@ AC_ARG_WITH(system-mariadb,
 
 AC_ARG_ENABLE(bundle-mariadb,
     AS_HELP_STRING([--enable-bundle-mariadb],
-        [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/LibreOffice.])
+        [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/Collabora Office.])
 )
 
 AC_ARG_WITH(system-hsqldb,
@@ -2785,7 +2785,7 @@ AC_ARG_WITH(windows-sdk,
 
 AC_ARG_WITH(lang,
     AS_HELP_STRING([--with-lang="es sw tu cs sk"],
-        [Use this option to build LibreOffice with additional UI language support.
+        [Use this option to build Collabora Office with additional UI language support.
          English (US) is always included by default.
          Separate multiple languages with space.
          For all languages, use --with-lang=ALL.]),
@@ -3087,7 +3087,7 @@ dnl ===================================================================
 
 AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
-        [set the minimum OS version needed to run the built LibreOffice])
+        [set the minimum OS version needed to run the built Collabora Office])
     [
                           e. g.: --with-macosx-version-min-required=11.0
     ],
@@ -5609,7 +5609,7 @@ emscripten*)
     ;;
 
 *)
-    AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
+    AC_MSG_ERROR([$host_os operating system is not suitable to build Collabora Office for!])
     ;;
 esac
 
@@ -5753,7 +5753,7 @@ AC_SUBST(ENABLE_QUICKJS)
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
     if test "$using_x11" != yes; then
-        AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --disable-gui.])
+        AC_MSG_ERROR([$host_os operating system is not suitable to build Collabora Office with --disable-gui.])
     fi
     USING_X11=
     DISABLE_GUI=TRUE
@@ -5838,7 +5838,7 @@ deb - Debian software distribution
 pkg - Solaris software distribution
 rpm - RedHat software distribution
 
-LibreOffice additionally supports:
+Collabora Office additionally supports:
 archive - .tar.gz or .zip
 dmg - macOS .dmg
 emscripten - directory with qt_soffice.html etc.
@@ -5946,7 +5946,7 @@ if test "$enable_xmlhelp" = yes; then
     AC_MSG_RESULT([yes])
 else
     if test "$with_help" = yes; then
-        add_warning "Building the XML help, but LO with disabled xmlhelp support. Generated help can't be accessed from this LO build!"
+        add_warning "Building the XML help, but Collabora Office with disabled xmlhelp support. Generated help can't be accessed from this Collabora Office build!"
     fi
     AC_MSG_RESULT([no])
 fi
@@ -7322,7 +7322,7 @@ if test "$GXX" = "yes" -a -z "$COM_IS_CLANG"; then
     _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
     if test "$_gpp_majmin" -lt "1200"; then
-        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 12.0 to build LibreOffice, you have $_gpp_version.])
+        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 12.0 to build Collabora Office, you have $_gpp_version.])
     else
         AC_MSG_RESULT([ok (g++ $_gpp_version)])
     fi
@@ -9564,7 +9564,7 @@ if test "$enable_epm" = "yes"; then
        echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
         if test "$with_epm" = "no" -a "$_os" != "Darwin"; then
             if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
-                AC_MSG_CHECKING([whether epm is patched for LibreOffice's needs])
+                AC_MSG_CHECKING([whether epm is patched for Collabora Office's needs])
                 if grep "Patched for .*Office" $EPM >/dev/null 2>/dev/null; then
                     AC_MSG_RESULT([yes])
                 else
@@ -10262,7 +10262,7 @@ AC_MSG_CHECKING([which Python to use for Pyuno])
 case "$enable_python" in
 no|disable)
     if test -z "$PYTHON_FOR_BUILD" -a "$cross_compiling" != yes; then
-        # Python is required to build LibreOffice. In theory we could separate the build-time Python
+        # Python is required to build Collabora Office. In theory we could separate the build-time Python
         # requirement from the choice whether to include Python stuff in the installer, but why
         # bother?
         AC_MSG_ERROR([Python is required at build time.])
@@ -12430,7 +12430,7 @@ AC_SUBST(ENABLE_PDFIMPORT)
 # Skia?
 ENABLE_SKIA=
 if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; then
-    # Skia now requires at least freetype2 >= 2.8.1, which is less that what LO requires as system freetype.
+    # Skia now requires at least freetype2 >= 2.8.1, which is less that what Collabora Office requires as system freetype.
     if test "$SYSTEM_FREETYPE" = TRUE; then
         PKG_CHECK_EXISTS(freetype2 >= 21.0.15, # 21.0.15 = 2.8.1
             [skia_freetype_ok=yes],
@@ -14632,7 +14632,7 @@ AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_SECRET, $ONEDRIVE_CLIENT_SECRET)
 
 
 dnl ===================================================================
-dnl Hook up LibreOffice's nodep environmental variable to automake's equivalent
+dnl Hook up Collabora Office's nodep environmental variable to automake's equivalent
 dnl --enable-dependency-tracking configure option
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable dependency tracking])
@@ -15003,15 +15003,15 @@ if test $_os = WINNT -a -f "$SRC_ROOT/antivirusDetection.vbs" ; then
             EICAR_TEMP_FILE_CONTENTS=`cat $SRC_ROOT/eicar`
             rm $SRC_ROOT/eicar
             if [ [ "$EICAR_STRING" != "$EICAR_TEMP_FILE_CONTENTS" ] ]; then
-                AC_MSG_ERROR([Exclude the build and source directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST])
+                AC_MSG_ERROR([Exclude the build and source directories associated with Collabora Office in the following Antivirus software: $ANTIVIRUS_LIST])
             fi
             echo $EICAR_STRING > $BUILDDIR/eicar
             EICAR_TEMP_FILE_CONTENTS=`cat $BUILDDIR/eicar`
             rm $BUILDDIR/eicar
             if [ [ "$EICAR_STRING" != "$EICAR_TEMP_FILE_CONTENTS" ] ]; then
-                AC_MSG_ERROR([Exclude the build and source directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST])
+                AC_MSG_ERROR([Exclude the build and source directories associated with Collabora Office in the following Antivirus software: $ANTIVIRUS_LIST])
             fi
-            add_warning "To speed up builds and avoid failures in unit tests, it is highly recommended that you exclude the build and source directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST"
+            add_warning "To speed up builds and avoid failures in unit tests, it is highly recommended that you exclude the build and source directories associated with Collabora Office in the following Antivirus software: $ANTIVIRUS_LIST"
         else
             AC_MSG_RESULT([not found])
         fi
