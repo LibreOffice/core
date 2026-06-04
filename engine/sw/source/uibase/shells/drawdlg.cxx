@@ -32,7 +32,9 @@
 #include <memory>
 #include <svl/stritem.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflgrit.hxx>
@@ -227,6 +229,39 @@ namespace
 {
     void lcl_convertStringArguments(const std::unique_ptr<SfxItemSet>& pArgs)
     {
+        // A fill or line color argument can arrive without a matching style
+        // argument. When the object has no fill or no line, the color alone
+        // would be stored but stay invisible. Force a solid style in that
+        // case so the chosen color becomes visible. A fully transparent
+        // color means no fill or no line is wanted.
+        if (const SfxPoolItem* pColorItem = pArgs->GetItem(SID_ATTR_FILL_COLOR, false))
+        {
+            const Color aColor = static_cast<const XFillColorItem*>(pColorItem)->GetColorValue();
+            if (aColor.IsFullyTransparent())
+                pArgs->Put(XFillStyleItem(css::drawing::FillStyle_NONE));
+            else
+            {
+                const SfxPoolItem* pStyleItem = pArgs->GetItem(SID_ATTR_FILL_STYLE, false);
+                if (!pStyleItem
+                    || static_cast<const XFillStyleItem*>(pStyleItem)->GetValue()
+                           == css::drawing::FillStyle_NONE)
+                    pArgs->Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
+            }
+        }
+        if (const SfxPoolItem* pColorItem = pArgs->GetItem(SID_ATTR_LINE_COLOR, false))
+        {
+            const Color aColor = static_cast<const XLineColorItem*>(pColorItem)->GetColorValue();
+            if (aColor.IsFullyTransparent())
+                pArgs->Put(XLineStyleItem(css::drawing::LineStyle_NONE));
+            else
+            {
+                const SfxPoolItem* pStyleItem = pArgs->GetItem(SID_ATTR_LINE_STYLE, false);
+                if (!pStyleItem
+                    || static_cast<const XLineStyleItem*>(pStyleItem)->GetValue()
+                           == css::drawing::LineStyle_NONE)
+                    pArgs->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
+            }
+        }
         if (const SvxDoubleItem* pWidthItem = pArgs->GetItemIfSet(SID_ATTR_LINE_WIDTH_ARG, false))
         {
             double fValue = pWidthItem->GetValue();
