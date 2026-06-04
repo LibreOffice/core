@@ -1175,18 +1175,19 @@ sc::SheetViewID ScDocument::GetTableSheetViewID(SCTAB nTab) const
 
 std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
 {
-    if (ScTable* pTable = FetchTable(nTab))
+    ScTable* pTable = FetchTable(nTab);
+    if (!pTable || pTable->IsSheetViewHolder())
+        return { sc::InvalidSheetViewID, -1 };
+
+    SCTAB nSheetViewTab = nTab + 1;
+    if (CopyTab(nTab, nSheetViewTab))
     {
-        SCTAB nSheetViewTab = nTab + 1;
-        if (CopyTab(nTab, nSheetViewTab))
+        if (ScTable* pSheetViewTable = FetchTable(nSheetViewTab))
         {
-            if (ScTable* pSheetViewTable = FetchTable(nSheetViewTab))
-            {
-                auto nSheetViewID = pTable->GetSheetViewManager()->create(pSheetViewTable);
-                pSheetViewTable->SetVisible(false);
-                pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
-                return { nSheetViewID, nSheetViewTab };
-            }
+            auto nSheetViewID = pTable->GetSheetViewManager()->create(pSheetViewTable);
+            pSheetViewTable->SetVisible(false);
+            pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
+            return { nSheetViewID, nSheetViewTab };
         }
     }
     return { sc::InvalidSheetViewID, -1 };
@@ -1196,21 +1197,22 @@ std::pair<sc::SheetViewID, SCTAB>
 ScDocument::RestoreSheetView(SCTAB nTab, sc::SheetViewID nID, OUString const& rName,
                              OString const& rGUID, OString const& rFilterGUID)
 {
-    if (ScTable* pTable = FetchTable(nTab))
+    ScTable* pTable = FetchTable(nTab);
+    if (!pTable || pTable->IsSheetViewHolder())
+        return { sc::InvalidSheetViewID, -1 };
+
+    SCTAB nSheetViewTab = nTab + 1;
+    if (CopyTab(nTab, nSheetViewTab))
     {
-        SCTAB nSheetViewTab = nTab + 1;
-        if (CopyTab(nTab, nSheetViewTab))
+        if (ScTable* pSheetViewTable = FetchTable(nSheetViewTab))
         {
-            if (ScTable* pSheetViewTable = FetchTable(nSheetViewTab))
-            {
-                auto nSheetViewID = pTable->GetSheetViewManager()->createAt(
-                    nID, pSheetViewTable, rName, rGUID, rFilterGUID);
-                if (nSheetViewID == sc::InvalidSheetViewID)
-                    return { sc::InvalidSheetViewID, -1 };
-                pSheetViewTable->SetVisible(false);
-                pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
-                return { nSheetViewID, nSheetViewTab };
-            }
+            auto nSheetViewID = pTable->GetSheetViewManager()->createAt(
+                nID, pSheetViewTable, rName, rGUID, rFilterGUID);
+            if (nSheetViewID == sc::InvalidSheetViewID)
+                return { sc::InvalidSheetViewID, -1 };
+            pSheetViewTable->SetVisible(false);
+            pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
+            return { nSheetViewID, nSheetViewTab };
         }
     }
     return { sc::InvalidSheetViewID, -1 };

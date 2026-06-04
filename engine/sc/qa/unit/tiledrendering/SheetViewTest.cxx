@@ -1105,6 +1105,40 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewFallsBackToSourceSheet)
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView2->GetViewData().GetTabNumber());
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testCreateSheetViewRejectsHolderTab)
+{
+    // CreateNewSheetView and RestoreSheetView must refuse a holder tab
+    // as the source. A sheet view of a sheet view has no meaning, and
+    // letting it through would attach the second-order view to the
+    // holder's own unused manager and corrupt state.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+
+    // Create a sheet view of Sheet1. Layout: [Sheet1, Sheet1-view].
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+    CPPUNIT_ASSERT(rDocument.IsSheetViewHolder(1));
+
+    // Trying to create a sheet view of the holder tab must fail and not
+    // touch the document.
+    auto[nNewID, nNewTab] = rDocument.CreateNewSheetView(1);
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, nNewID);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(-1), nNewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    // Same for the restore path.
+    auto[nRestoredID, nRestoredTab]
+        = rDocument.RestoreSheetView(1, 99, u"name"_ustr, "g"_ostr, "fg"_ostr);
+    CPPUNIT_ASSERT_EQUAL(sc::InvalidSheetViewID, nRestoredID);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(-1), nRestoredTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
 {
     // Delete the sheet view holder table directly
