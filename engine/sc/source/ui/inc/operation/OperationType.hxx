@@ -31,6 +31,7 @@ enum class OperationType
     SetFormula,
     SetFormulas,
     SetCellText,
+    ApplyStyle,
     PutData,
     SetNoteText,
     ReplaceNoteText,

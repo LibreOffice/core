@@ -531,6 +531,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/navipi/navipi \
     sc/source/ui/navipi/scenwnd \
     sc/source/ui/operation/ApplyAttributesOperation \
+    sc/source/ui/operation/ApplyStyleOperation \
     sc/source/ui/operation/AutoFormatOperation \
     sc/source/ui/operation/ChangeIndentOperation \
     sc/source/ui/operation/ChangeSparklineGroupAttributesOperation \

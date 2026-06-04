@@ -110,6 +110,7 @@
 #include <operation/DeleteSparklineOperation.hxx>
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/DeleteCellsOperation.hxx>
+#include <operation/ApplyStyleOperation.hxx>
 #include <operation/PutDataOperation.hxx>
 #include <operation/SetCellTextOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
@@ -826,71 +827,8 @@ bool ScDocFunc::ApplyAttributes(const ScMarkData& rMark, const ScPatternAttr& rP
 bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
                                 bool bApi )
 {
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
-    if ( !rDoc.IsUndoEnabled() )
-        bRecord = false;
-
-    bool bImportingXML = rDoc.IsImportingXML();
-    // Cell formats can still be set if the range isn't editable only because of matrix formulas.
-    // #i62483# When loading XML, the check can be skipped altogether.
-    bool bOnlyNotBecauseOfMatrix;
-    if ( !bImportingXML && !rDoc.IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
-            && !bOnlyNotBecauseOfMatrix )
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
-        return false;
-    }
-
-    ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>( rDoc.GetStyleSheetPool()->Find(
-                                                rStyleName, SfxStyleFamily::Para ));
-    if (!pStyleSheet)
-        return false;
-
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScRange aMultiRange;
-    bool bMulti = rMark.IsMultiMarked();
-    if ( bMulti )
-        aMultiRange = rMark.GetMultiMarkArea();
-    else
-        aMultiRange = rMark.GetMarkArea();
-
-    if ( bRecord )
-    {
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        SCTAB nStartTab = aMultiRange.aStart.Tab();
-        SCTAB nTabCount = rDoc.GetTableCount();
-        pUndoDoc->InitUndo( rDoc, nStartTab, nStartTab );
-        for (const auto& rTab : rMark)
-        {
-            if (rTab >= nTabCount)
-                break;
-
-            if (rTab != nStartTab)
-                pUndoDoc->AddUndoTab( rTab, rTab );
-        }
-
-        ScRange aCopyRange = aMultiRange;
-        aCopyRange.aStart.SetTab(0);
-        aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &rMark );
-
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoSelectionStyle>(
-                    rDocShell, rMark, aMultiRange, rStyleName, std::move(pUndoDoc) ) );
-
-    }
-
-    rDoc.ApplySelectionStyle( *pStyleSheet, rMark );
-
-    if (!AdjustRowHeight( aMultiRange, true, bApi ))
-        rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid );
-
-    aModificator.SetDocumentModified();
-
-    return true;
+    sc::ApplyStyleOperation aOperation(*this, rDocShell, rMark, rStyleName, bApi);
+    return aOperation.run();
 }
 
 bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, InsCellCmd eCmd,
