@@ -23,12 +23,9 @@
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
 #include <vcl/uitest/uiobject.hxx>
-#include <tools/json_writer.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <comphelper/base64.hxx>
-#include <comphelper/propertyvalue.hxx>
 
 namespace
 {
@@ -286,44 +283,5 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 }
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
-
-void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry)
-{
-    while (pEntry)
-    {
-        auto aNode = rJsonWriter.startStruct();
-
-        // simple listbox value
-        const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
-        if (pIt)
-            rJsonWriter.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
-
-        pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);
-        if (pIt)
-        {
-            const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
-            Size i = pBmpItem->GetBitmap1().GetSizePixel();
-            if (pBmpItem)
-            {
-                rJsonWriter.put("ondemand", true);
-                rJsonWriter.put("width", i.getWidth());
-                rJsonWriter.put("height", i.getHeight());
-            }
-        }
-
-        if (const OUString tooltip = GetEntryTooltip(*pEntry); !tooltip.isEmpty())
-            rJsonWriter.put("tooltip", tooltip);
-
-        if (IsSelected(pEntry))
-            rJsonWriter.put("selected", true);
-
-        if (pEntry->IsSeparator())
-            rJsonWriter.put("separator", true);
-
-        rJsonWriter.put("row", GetModel()->GetAbsPos(pEntry));
-
-        pEntry = pEntry->NextSibling();
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

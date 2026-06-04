@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <tools/json_writer.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/image.hxx>
 
@@ -53,8 +52,6 @@ protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
 
 private:
-    void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
-
     bool HasSeparatorEntry() const;
 };
 
