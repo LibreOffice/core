@@ -301,6 +301,7 @@ class WriterReferencesTab implements NotebookbarTab {
 			{
 				type: 'separator',
 				id: 'references-zoterosetdocprefs-break',
+				orientation: 'vertical',
 				visible: !!app.map.zotero,
 			},
 		] as WidgetJSON[]);
