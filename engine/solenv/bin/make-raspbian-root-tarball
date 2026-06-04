@@ -45,7 +45,6 @@ STAGINGDIR=`mktemp -d`
 find lib/*.so* \
      lib/arm-linux-gnueabihf \
      usr/include \
-     usr/lib/liblpsolve*.a \
      usr/lib/*.so* \
      usr/lib/arm-linux-gnueabihf \
      usr/lib/jvm/java-6-openjdk-armhf/include \

@@ -35,7 +35,7 @@ public:
 
     virtual void setUp() override;
     void testXSolverSettings();
-#ifdef ENABLE_LPSOLVE
+#ifdef ENABLE_COINMP
     void testCellAddress(const table::CellAddress& rExpected, const uno::Any& rActual);
     void testCellRangeAddress(const uno::Any& rExpected, const uno::Any& rActual);
 #endif
@@ -50,7 +50,7 @@ ScSolverSettingsObj::ScSolverSettingsObj()
 {
 }
 
-#ifdef ENABLE_LPSOLVE
+#ifdef ENABLE_COINMP
 void ScSolverSettingsObj::testCellAddress(const table::CellAddress& rExpected,
                                           const uno::Any& rActual)
 {
@@ -78,7 +78,7 @@ void ScSolverSettingsObj::testCellRangeAddress(const uno::Any& rExpected, const 
 // Creates a model using the XSolverSettings API checks if it is accessible via the API
 void ScSolverSettingsObj::testXSolverSettings()
 {
-#ifdef ENABLE_LPSOLVE
+#ifdef ENABLE_COINMP
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -108,7 +108,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     xSolverModel->setConstraints(aConstraints);
 
     // Set solver engine options
-    xSolverModel->setEngine(u"com.sun.star.comp.Calc.LpsolveSolver"_ustr);
+    xSolverModel->setEngine(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr);
     uno::Sequence<beans::PropertyValue> aEngineOptions{
         comphelper::makePropertyValue(u"Timeout"_ustr, uno::Any(static_cast<sal_Int32>(10))),
         comphelper::makePropertyValue(u"NonNegative"_ustr, true),
@@ -120,8 +120,9 @@ void ScSolverSettingsObj::testXSolverSettings()
     xSolverModel->setSuppressDialog(true);
     xSolverModel->solve();
 
-    // The correct solution value is 6981 (using LpsolveSolver)
-    CPPUNIT_ASSERT_EQUAL(static_cast<double>(6981), xSheet->getCellByPosition(6, 6)->getValue());
+    // The optimal total value for this knapsack is 6987, which fills the weight
+    // capacity of 1000 exactly.
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(6987), xSheet->getCellByPosition(6, 6)->getValue());
 
     // Check objective function and variable cells
     testCellAddress(aObjCell, xSolverModel->getObjectiveCell());
@@ -147,7 +148,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     testCellRangeAddress(uno::Any(aRight2), aSeqConstr[1].Right);
 
     // Check solver engine options
-    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.comp.Calc.LpsolveSolver"_ustr, xSolverModel->getEngine());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr, xSolverModel->getEngine());
 
     // Check solver engine options
     uno::Sequence<beans::PropertyValue> aEngProps = xSolverModel->getEngineOptions();

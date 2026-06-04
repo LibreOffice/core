@@ -18,7 +18,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/calc,\
 	ENABLE_MACOSX_SANDBOX \
 ))
 
-ifneq (,$(ENABLE_COINMP)$(ENABLE_LPSOLVE))
+ifneq (,$(ENABLE_COINMP))
 $(eval $(call gb_InstallModule_add_defs,scp2/calc,\
 	-DWITH_LPSOLVER \
 ))

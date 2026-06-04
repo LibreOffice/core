@@ -2411,50 +2411,6 @@ endef
 endif # ANDROID
 endif # SYSTEM_LCMS2
 
-ifneq ($(ENABLE_LPSOLVE),)
-
-ifneq ($(SYSTEM_LPSOLVE),)
-
-define gb_LinkTarget__use_lpsolve
-$(call gb_LinkTarget_add_libs,$(1),-llpsolve55)
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_LPSOLVE \
-)
-
-endef
-
-else # !SYSTEM_LPSOLVE
-
-define gb_LinkTarget__use_lpsolve
-$(call gb_LinkTarget_use_package,$(1),lpsolve)
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/lpsolve/lpsolve55/lpsolve55.lib \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(gb_UnpackedTarball_workdir)/lpsolve/lpsolve55 -llpsolve55 \
-)
-endif
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/lpsolve \
-	$$(INCLUDE) \
-)
-
-endef
-
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	lpsolve \
-))
-
-endif # SYSTEM_LPSOLVE
-
-else
-
-gb_LinkTarget__use_lpsolve :=
-
-endif # ENABLE_LPSOLVE
-
 ifneq ($(ENABLE_COINMP),)
 
 ifneq ($(SYSTEM_COINMP),TRUE)

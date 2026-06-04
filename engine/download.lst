@@ -494,11 +494,6 @@ LIBXSLT_TARBALL := libxslt-1.1.$(LIBXSLT_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LPSOLVE_SHA256SUM := 171816288f14215c69e730f7a4f1c325739873e21f946ff83884b350574e6695
-LPSOLVE_TARBALL := 26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 LXML_SHA256SUM := cd79f3367bd74b317dda655dc8fcfa304d9eb6e4fb06b7168c5cf27f96e0cd62
 LXML_TARBALL := lxml-6.0.2.tar.gz
 # three static lines

@@ -48,7 +48,6 @@ libwebp
 libwps
 libzxing
 loplugin
-lpsolve
 MAKEFLAGS
 mergelibs
 msgfmt

@@ -48,7 +48,6 @@ libraryNames = {
     "zxing": "zxing-cpp",
     "liborcus": "orcus",
     "clucene-core": "clucene-core",
-    "lp_solve": "lp_solve",
     "hsqldb": "hsqldb",
     "y-crdt": "y-crdt",
     "sqlite": "sqlite",

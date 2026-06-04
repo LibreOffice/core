@@ -38,7 +38,7 @@ enum SolverParameter
     SP_LO_ENGINE, // Engine name used in LO
     SP_MS_ENGINE, // Engine ID used in MSO
     SP_INTEGER, // Assume all variables are integer (0: no, 1: yes)
-    // LpSolve, CoinMP and SwarmSolver
+    // CoinMP and SwarmSolver
     SP_NON_NEGATIVE, // Assume non negativity (1: yes, 2: no)
     SP_EPSILON_LEVEL, // Epsilon level
     SP_LIMIT_BBDEPTH, // Branch and bound depth
@@ -230,7 +230,6 @@ private:
     // Maps LO solver implementation names to MS engine codes
     std::map<OUString, OUString> SolverNamesToExcelEngines = {
         { "com.sun.star.comp.Calc.CoinMPSolver", "2" }, // Simplex LP
-        { "com.sun.star.comp.Calc.LpsolveSolver", "2" }, // Simplex LP
         { "com.sun.star.comp.Calc.SwarmSolver", "1" }, // GRG Nonlinear
     };
 

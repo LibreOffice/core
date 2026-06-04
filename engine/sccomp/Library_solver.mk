@@ -23,7 +23,6 @@ $(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/solver,se
 
 $(eval $(call gb_Library_add_componentimpls,solver, \
     $(if $(ENABLE_COINMP),coinmp) \
-    $(if $(ENABLE_LPSOLVE),lpsolve) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,solver))
@@ -44,14 +43,12 @@ $(eval $(call gb_Library_use_libraries,solver,\
 
 $(eval $(call gb_Library_use_externals,solver,\
 	coinmp \
-	lpsolve \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,solver,\
 	sccomp/source/solver/SwarmSolver \
 	sccomp/source/solver/SolverComponent \
 	$(if $(ENABLE_COINMP), sccomp/source/solver/CoinMPSolver) \
-	$(if $(ENABLE_LPSOLVE), sccomp/source/solver/LpsolveSolver) \
 ))
 
 # vim: set noet sw=4 ts=4:

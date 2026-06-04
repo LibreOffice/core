@@ -306,7 +306,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_manual_tests \
 ))
 
-ifneq ($(or $(ENABLE_LPSOLVE),$(ENABLE_COINMP)),)
+ifneq ($(ENABLE_COINMP),)
 $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_solver \
 ))

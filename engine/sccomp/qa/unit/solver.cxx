@@ -22,14 +22,8 @@ class LpSolverTest: public test::BootstrapFixture
 {
     uno::Reference<sheet::XSpreadsheetDocument> m_xDocument;
 
-#ifdef ENABLE_LPSOLVE
-    void testLpSolver();
-#endif
 #ifdef ENABLE_COINMP
     void testCoinMPSolver();
-#endif
-
-#if defined(ENABLE_LPSOLVE) || defined(ENABLE_COINMP)
     void testSolver(OUString const & rName);
 #endif
 
@@ -38,9 +32,6 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(LpSolverTest);
-#ifdef ENABLE_LPSOLVE
-    CPPUNIT_TEST(testLpSolver);
-#endif
 #ifdef ENABLE_COINMP
     CPPUNIT_TEST(testCoinMPSolver);
 #endif
@@ -64,13 +55,6 @@ void LpSolverTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-#ifdef ENABLE_LPSOLVE
-void LpSolverTest::testLpSolver()
-{
-    testSolver(u"com.sun.star.comp.Calc.LpsolveSolver"_ustr);
-}
-#endif
-
 #ifdef ENABLE_COINMP
 void LpSolverTest::testCoinMPSolver()
 {
@@ -78,7 +62,7 @@ void LpSolverTest::testCoinMPSolver()
 }
 #endif
 
-#if defined(ENABLE_LPSOLVE) || defined(ENABLE_COINMP)
+#ifdef ENABLE_COINMP
 void LpSolverTest::testSolver(OUString const & rName)
 {
     uno::Reference<sheet::XSolver> xSolver(m_xContext->getServiceManager()->

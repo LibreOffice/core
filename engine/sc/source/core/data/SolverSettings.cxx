@@ -438,6 +438,11 @@ void SolverSettings::ReadEngine()
         m_sLOEngineName = u"com.sun.star.comp.Calc.CoinMPSolver"_ustr;
     }
 
+    // The Lpsolve solver has been removed. A document that still names it is
+    // solved by CoinMP, which handles the same linear models.
+    if (m_sLOEngineName == "com.sun.star.comp.Calc.LpsolveSolver")
+        m_sLOEngineName = u"com.sun.star.comp.Calc.CoinMPSolver"_ustr;
+
     if (SolverNamesToExcelEngines.count(m_sLOEngineName))
     {
         // Find equivalent MS engine code
