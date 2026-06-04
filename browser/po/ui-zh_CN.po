@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-05-30 08:44+0000\n"
-"Last-Translator: Poesty Li <poesty7450@gmail.com>\n"
+"PO-Revision-Date: 2026-06-05 00:58+0000\n"
+"Last-Translator: ddi <136760224@qq.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hans/>\n"
-"Language: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1264,7 +1264,7 @@ msgstr "页脚"
 
 #: src/control/CalcNotifications.ts:41
 msgid "A formula range was not extended to include the inserted cells."
-msgstr ""
+msgstr "未将公式范围扩展至包含所插入的单元格。"
 
 #: src/control/CalcNotifications.ts:50
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
@@ -2807,7 +2807,7 @@ msgstr "电子出版物（.epub）"
 #: src/control/Control.NotebookbarBuilder.js:414
 #: src/control/Control.NotebookbarBuilder.js:604
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown 文件 (.md)"
 
 #: src/control/Control.Menubar.ts:111 src/control/Control.UIManager.ts:414
 msgid "Rename Document"
