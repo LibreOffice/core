@@ -31,6 +31,8 @@
 #include <num.hxx>
 
 #include <SwStyleNameMapper.hxx>
+#include <strings.hrc>
+#include <swtypes.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svl/stritem.hxx>
@@ -880,6 +882,15 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     weld::Button& pCancelButton = GetCancelButton();
     pCancelButton.connect_clicked(LINK(this, SwSvxNumBulletTabDialog, CancelHdl));
     m_xSetDefaultBtn->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, SetDefaultHdl));
+    // Anonymous COOL sessions: commit() works but nothing round-trips.
+    // Disable rather than silently no-op.
+    if (comphelper::COKit::isActive()
+        && !comphelper::COKit::isUserSettingsPersistenceAvailable())
+    {
+        m_xSetDefaultBtn->set_sensitive(false);
+        m_xSetDefaultBtn->set_tooltip_text(
+            SwResId(STR_BULLETS_SET_AS_DEFAULT_NEEDS_SIGN_IN_TOOLTIP));
+    }
     AddTabPage(u"bullets"_ustr, TabResId(RID_TAB_UNOORDERED.aLabel), RID_SVXPAGE_PICK_BULLET,
                RID_M + RID_TAB_UNOORDERED.sIconName);
     AddTabPage(u"singlenum"_ustr, TabResId(RID_TAB_ORDERED.aLabel), RID_SVXPAGE_PICK_SINGLE_NUM,

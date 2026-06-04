@@ -1579,6 +1579,10 @@
 
 #define STR_PAGES NNC_("STR_PAGES", "Page: %1", "Pages: %1-%2")
 
+#define STR_BULLETS_SET_AS_DEFAULT_NEEDS_SIGN_IN_TOOLTIP \
+    NC_("STR_BULLETS_SET_AS_DEFAULT_NEEDS_SIGN_IN_TOOLTIP", \
+        "Sign in to save this as your default for future documents.")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
