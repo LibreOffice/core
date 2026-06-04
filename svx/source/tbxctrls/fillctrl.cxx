@@ -607,19 +607,12 @@ FillControl::FillControl(vcl::Window* pParent, const css::uno::Reference<css::fr
     mxLbFillType->connect_key_press(LINK(this, FillControl, TypeKeyInputHdl));
     mxToolBoxColor->connect_key_press(LINK(this, FillControl, ColorKeyInputHdl));
 
-    mxLbFillType->connect_get_property_tree(LINK(this, FillControl, DumpAsPropertyTreeHdl));
-
     mxLbFillType->connect_focus_in(LINK(this, FillControl, TypeFocusHdl));
     mxLbFillAttr->connect_focus_in(LINK(this, FillControl, AttrFocusHdl));
 
     SvxFillTypeBox::Fill(*mxLbFillType);
 
     SetOptimalSize();
-}
-
-IMPL_STATIC_LINK(FillControl, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
-{
-    rJsonWriter.put("command", ".uno:FillStyle");
 }
 
 void FillControl::ReleaseFocus_Impl()

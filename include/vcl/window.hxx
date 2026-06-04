@@ -1443,7 +1443,6 @@ public:
     SAL_DLLPRIVATE void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
     SAL_DLLPRIVATE void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
-    SAL_DLLPRIVATE void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 
     Size                        GetOutputSizePixel() const;
     SAL_DLLPRIVATE tools::Rectangle GetOutputRectPixel() const;

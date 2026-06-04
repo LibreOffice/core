@@ -26,13 +26,7 @@ PanelLayout::PanelLayout(weld::Widget* pParent, const OUString& rID,
     , m_pPanel(nullptr)
 {
     m_xContainer->set_background(Theme::GetColor(Theme::Color_PanelBackground));
-    m_xContainer->connect_get_property_tree(LINK(this, PanelLayout, DumpAsPropertyTreeHdl));
     ::Application::AddEventListener(LINK(this, PanelLayout, DataChangedEventListener));
-}
-
-IMPL_LINK(PanelLayout, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
-{
-    DumpAsPropertyTree(rJsonWriter);
 }
 
 void PanelLayout::DumpAsPropertyTree(tools::JsonWriter&)

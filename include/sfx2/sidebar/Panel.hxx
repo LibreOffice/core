@@ -140,8 +140,6 @@ private:
     std::unique_ptr<PanelTitleBar> mxTitleBar;
     std::unique_ptr<weld::Box> mxContents;
     css::uno::Reference<css::awt::XWindow> mxXWindow;
-
-    DECL_DLLPRIVATE_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
 
 typedef std::vector<std::shared_ptr<Panel>> SharedPanelContainer;

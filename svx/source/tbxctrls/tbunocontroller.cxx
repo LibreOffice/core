@@ -125,7 +125,6 @@ protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
-    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
 
 class SvxFontSizeBox_Impl final : public InterimItemWindow
@@ -187,7 +186,6 @@ SvxFontSizeBox_Base::SvxFontSizeBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     m_xWidget->connect_key_press(LINK(this, SvxFontSizeBox_Base, KeyInputHdl));
     m_xWidget->connect_entry_activate(LINK(this, SvxFontSizeBox_Base, ActivateHdl));
     m_xWidget->connect_focus_out(LINK(this, SvxFontSizeBox_Base, FocusOutHdl));
-    m_xWidget->connect_get_property_tree(LINK(this, SvxFontSizeBox_Base, DumpAsPropertyTreeHdl));
 }
 
 void SvxFontSizeBox_Base::ReleaseFocus_Impl()
@@ -325,31 +323,6 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     {
         SetOptimalSize();
     }
-}
-
-IMPL_LINK(SvxFontSizeBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
-{
-    {
-        auto entriesNode = rJsonWriter.startNode("entries");
-        for (int i = 0, nCount = m_xWidget->get_count(); i < nCount; ++i)
-        {
-            auto entryNode = rJsonWriter.startNode("");
-            rJsonWriter.put("", m_xWidget->get_text(i));
-        }
-    }
-
-    int nActive = m_xWidget->get_active();
-    rJsonWriter.put("selectedCount", static_cast<sal_Int32>(nActive == -1 ? 0 : 1));
-    {
-        auto selectedNode = rJsonWriter.startNode("selectedEntries");
-        if (nActive != -1)
-        {
-            auto node = rJsonWriter.startNode("");
-            rJsonWriter.put("", static_cast<sal_Int32>(nActive));
-        }
-    }
-
-    rJsonWriter.put("command", ".uno:FontHeight");
 }
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )

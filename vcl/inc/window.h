@@ -256,7 +256,6 @@ public:
     Link<const CommandEvent&, bool> maCommandHdl;
     Link<vcl::Window&, bool> maHelpRequestHdl;
     Link<vcl::Window&, bool> maMnemonicActivateHdl;
-    Link<tools::JsonWriter&, void> maDumpAsPropertyTreeHdl;
 
     vcl::Cursor*        mpCursor;
     PointerStyle        maPointer;

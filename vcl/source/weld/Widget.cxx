@@ -11,8 +11,6 @@
 
 namespace weld
 {
-void Widget::connect_get_property_tree(const Link<tools::JsonWriter&, void>&) {}
-
 void Widget::get_property_tree(tools::JsonWriter&) {}
 }
 

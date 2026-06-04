@@ -66,7 +66,6 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mxContents(mxBuilder->weld_box(u"contents"_ustr))
 {
     mxContents->set_visible(mbIsExpanded);
-    mxContainer->connect_get_property_tree(LINK(this, Panel, DumpAsPropertyTreeHdl));
 }
 
 bool Panel::get_extents(tools::Rectangle &rExtents) const
@@ -105,12 +104,6 @@ void Panel::SetLurkMode(bool bLurk)
 {
     // cf. DeckLayouter
     mbLurking = bLurk;
-}
-
-IMPL_LINK(Panel, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
-{
-    if (!IsLurking())
-        rJsonWriter.put("type", "panel");
 }
 
 Panel::~Panel()

@@ -38,7 +38,6 @@ protected:
 
 private:
     DECL_DLLPRIVATE_LINK(DataChangedEventListener, VclSimpleEvent&, void);
-    DECL_DLLPRIVATE_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 
 public:
     PanelLayout(weld::Widget* pParent, const OUString& rID, const OUString& rUIXMLDescription);

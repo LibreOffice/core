@@ -635,11 +635,6 @@ SalInstanceWidget::get_clipboard() const
     return m_xWidget->GetClipboard();
 }
 
-void SalInstanceWidget::connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink)
-{
-    m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
-}
-
 void SalInstanceWidget::get_property_tree(tools::JsonWriter& rJsonWriter)
 {
     m_xWidget->DumpAsPropertyTree(rJsonWriter);

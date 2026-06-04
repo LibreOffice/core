@@ -1773,14 +1773,6 @@ void Window::ImplNewInputContext()
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 }
 
-void Window::SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink)
-{
-    if (mpWindowImpl) // may be called after dispose
-    {
-        mpWindowImpl->maDumpAsPropertyTreeHdl = rLink;
-    }
-}
-
 void Window::SetModalHierarchyHdl(const Link<bool, void>& rLink)
 {
     ImplGetFrame()->SetModalHierarchyHdl(rLink);
@@ -3435,8 +3427,6 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         if (!sAccName.isEmpty())
             rJsonWriter.put("label", sAccName);
     }
-
-    mpWindowImpl->maDumpAsPropertyTreeHdl.Call(rJsonWriter);
 }
 
 void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
