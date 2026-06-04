@@ -862,16 +862,6 @@ void PosSizePropertyPanel::executeSize()
     }
 }
 
-void PosSizePropertyPanel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    if (meDlgUnit != GetCurrentUnit(SfxItemState::DEFAULT, nullptr))
-    {
-        mpBindings->Update( SID_ATTR_METRIC );
-    }
-
-    PanelLayout::DumpAsPropertyTree(rJsonWriter);
-}
-
 void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* pState, double fUIScale)
 {
     // #i124409# use the given Item to get the correct UI unit and initialize it

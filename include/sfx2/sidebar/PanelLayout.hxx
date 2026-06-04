@@ -16,7 +16,6 @@
 class DataChangedEvent;
 class VclSimpleEvent;
 namespace sfx2 { namespace sidebar { class Panel; } }
-namespace tools { class JsonWriter; }
 namespace weld
 {
 class Builder;
@@ -32,7 +31,6 @@ protected:
     sfx2::sidebar::Panel* m_pPanel;
 
     virtual void DataChanged(const DataChangedEvent& rEvent);
-    virtual void DumpAsPropertyTree(tools::JsonWriter&);
 
     virtual weld::Window* GetFrameWeld() const;
 

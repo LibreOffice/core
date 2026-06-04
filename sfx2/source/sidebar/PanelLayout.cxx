@@ -29,10 +29,6 @@ PanelLayout::PanelLayout(weld::Widget* pParent, const OUString& rID,
     ::Application::AddEventListener(LINK(this, PanelLayout, DataChangedEventListener));
 }
 
-void PanelLayout::DumpAsPropertyTree(tools::JsonWriter&)
-{
-}
-
 IMPL_LINK(PanelLayout, DataChangedEventListener, VclSimpleEvent&, rEvent, void)
 {
     if (rEvent.GetId() != VclEventId::ApplicationDataChanged)

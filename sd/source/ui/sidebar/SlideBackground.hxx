@@ -71,7 +71,6 @@ public:
 
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
-    virtual void DumpAsPropertyTree(::tools::JsonWriter&) override;
 
 private:
 

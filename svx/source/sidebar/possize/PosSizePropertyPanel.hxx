@@ -68,8 +68,6 @@ public:
         const SfxItemState eState,
         const SfxPoolItem* pState) override;
 
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-
     SfxBindings* GetBindings() { return mpBindings;}
 
     // constructor/destructor

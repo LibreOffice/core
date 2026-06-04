@@ -261,16 +261,6 @@ void SlideBackground::Initialize()
     UpdateMarginBox();
 }
 
-void SlideBackground::DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter)
-{
-    if (mxPaperSizeBox->get_active() == -1)
-    {
-        mpBindings->Update(SID_ATTR_PAGE_SIZE);
-    }
-
-    PanelLayout::DumpAsPropertyTree(rJsonWriter);
-}
-
 void SlideBackground::HandleContextChange(
     const vcl::EnumContext& rContext)
 {
