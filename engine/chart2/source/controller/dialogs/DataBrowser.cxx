@@ -1007,21 +1007,26 @@ void DataBrowser::SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink )
     m_aCursorMovedHdlLink = rLink;
 }
 
-bool DataBrowser::EndEditing()
+void DataBrowser::EndEditing(const std::function<void(bool)>& rEndedFn)
 {
     // apply changes made to series headers
     for( const auto& spHeader : m_aSeriesHeaders )
         spHeader->applyChanges();
 
     if( m_bDataValid )
-        return true;
+    {
+        rEndedFn(true);
+        return;
+    }
 
     // ask user if invalid data should be accepted
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
+    std::shared_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
         &m_rTreeView,
         VclMessageType::Question, VclButtonsType::YesNo,
         SchResId(STR_DATA_EDITOR_INCORRECT_INPUT)));
-    return xQueryBox->run() == RET_YES;
+    xQueryBox->runAsync(xQueryBox, [rEndedFn](sal_Int32 nResult) {
+        rEndedFn(nResult == RET_YES);
+    });
 }
 
 void DataBrowser::GrabFocus()

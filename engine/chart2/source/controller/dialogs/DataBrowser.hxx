@@ -21,6 +21,7 @@
 
 #include <vcl/weld.hxx>
 
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -76,8 +77,10 @@ public:
 
     void SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink );
 
-    /// confirms all pending changes to be ready to be closed
-    bool EndEditing();
+    /// confirms all pending changes to be ready to be closed; invokes
+    /// rEndedFn with true if the dialog may close, possibly asynchronously
+    /// after the user confirms accepting invalid data
+    void EndEditing(const std::function<void(bool)>& rEndedFn);
 
     bool IsEnableItem() const { return m_bDataValid; }
 
