@@ -28,7 +28,6 @@ class SmModel;
 class SmMLImportWrapper
 {
     rtl::Reference<SmModel> m_xModel;
-    SmDocShell* m_pDocShell;
     SmMLImport* m_pMlImport;
 
 public:
