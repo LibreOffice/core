@@ -38,6 +38,7 @@
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
+#include <GetDocumentModel.hxx>
 #include <sfx2/minfitem.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
@@ -737,34 +738,6 @@ OUString CuiConfigGroupListBox::GetImage(
             aImage = RID_CUIBMP_LIB;
     }
     return aImage;
-}
-
-Reference< XInterface  >
-CuiConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & xCtx, std::u16string_view docName )
-{
-    Reference< XInterface > xModel;
-    Reference< frame::XDesktop2 > desktop = frame::Desktop::create( xCtx );
-
-    Reference< container::XEnumerationAccess > componentsAccess =
-        desktop->getComponents();
-    Reference< container::XEnumeration > components =
-        componentsAccess->createEnumeration();
-    while (components->hasMoreElements())
-    {
-        Reference< frame::XModel > model(
-            components->nextElement(), UNO_QUERY );
-        if ( model.is() )
-        {
-            OUString sTdocUrl =
-                ::comphelper::DocumentInfo::getDocumentTitle( model );
-            if( sTdocUrl == docName )
-            {
-                xModel = model;
-                break;
-            }
-        }
-    }
-    return xModel;
 }
 
 OUString CuiConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)

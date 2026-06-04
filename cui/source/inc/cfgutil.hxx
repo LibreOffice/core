@@ -226,10 +226,6 @@ class CuiConfigGroupListBox
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
-    static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
-        css::uno::Reference< css::uno::XComponentContext > const & xCtx,
-        std::u16string_view docName);
-
     sal_Int32 InitModule();
     void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                         const weld::TreeIter* pParentEntry);

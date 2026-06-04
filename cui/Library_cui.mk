@@ -243,6 +243,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tptrans \
     cui/source/tabpages/transfrm \
     cui/source/util/FontFeatures \
+    cui/source/util/GetDocumentModel \
     cui/source/dialogs/widgettestdlg \
 ))
 

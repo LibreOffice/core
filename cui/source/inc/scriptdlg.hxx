@@ -134,8 +134,6 @@ class SvxScriptOrgDialog : public SfxDialogController
     static css::uno::Reference< css::script::browse::XBrowseNode >
         getLangNodeFromRootNode( css::uno::Reference< css::script::browse::XBrowseNode > const & root, std::u16string_view language );
 
-    static css::uno::Reference< css::uno::XInterface  > getDocumentModel( css::uno::Reference< css::uno::XComponentContext > const & xCtx, std::u16string_view docName );
-
 public:
     // prob need another arg in the ctor
     // to specify the language or provider

@@ -32,6 +32,7 @@
 #include <bitmaps.hlst>
 #include <scriptdlg.hxx>
 #include <dialmgr.hxx>
+#include <GetDocumentModel.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
@@ -168,7 +169,7 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
         }
         else
         {
-            xDocumentModel.set(getDocumentModel(xCtx, uiName ), UNO_QUERY);
+            xDocumentModel = getDocumentModel(xCtx, uiName);
 
             if ( xDocumentModel.is() )
             {
@@ -201,33 +202,6 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
     }
 
     m_xScriptsBox->thaw();
-}
-
-Reference< XInterface  >
-SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext > const & xCtx, std::u16string_view docName )
-{
-    Reference< XInterface > xModel;
-    Reference< frame::XDesktop2 > desktop  = frame::Desktop::create(xCtx);
-
-    Reference< container::XEnumerationAccess > componentsAccess =
-        desktop->getComponents();
-    Reference< container::XEnumeration > components =
-        componentsAccess->createEnumeration();
-    while (components->hasMoreElements())
-    {
-        Reference< frame::XModel > model(
-            components->nextElement(), UNO_QUERY );
-        if ( model.is() )
-        {
-            OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
-            if( sTdocUrl == docName )
-            {
-                xModel = model;
-                break;
-            }
-        }
-    }
-    return xModel;
 }
 
 Reference< browse::XBrowseNode >
