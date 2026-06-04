@@ -1854,6 +1854,79 @@ if test "$host_os" != "emscripten"; then
           [LIBS="$LIBS -lexpat"])
 fi
 
+# For the fuzzer build, prefer linking Poco statically. The fuzzers are built
+# with CFI (-fsanitize=cfi); mixing a CFI-instrumented binary with the
+# non-instrumented system libPoco*.so triggers cross-DSO CFI aborts -- e.g.
+# Poco::Dynamic::Var::extract()'s downcast to VarHolderImpl<T> aborts because
+# the object's vtable lives in libPocoUtil.so, which is not in the executable's
+# CFI set. Linking Poco statically puts those vtables in the executable itself,
+# so the checks pass. Probe for the static archives via -print-file-name (this
+# honours any -L${with_poco_libs} already in LDFLAGS as well as the system
+# search path); fall back to the dynamic -lPoco* above when they are missing.
+POCO_FUZZER_STATIC_LIBS=
+if test "$LIBFUZZER" = "1" -a "$host_os" != "emscripten"; then
+    poco_static_ok=yes
+    poco_static_libs=
+    poco_static_missing=
+    # Diagnostics: these are the inputs that determine what is searched and
+    # where. The most common reasons a present .a is "not found" are a debug
+    # suffix mismatch (looking for libPoco*d.a vs libPoco*.a) and the archive
+    # living in a directory that is not searched (pass --with-poco-libs=<dir>).
+    AC_MSG_NOTICE([static Poco probe: POCO_DEBUG_SUFFIX='${POCO_DEBUG_SUFFIX}' (so archive names are libPoco*${POCO_DEBUG_SUFFIX}.a)])
+    AC_MSG_NOTICE([static Poco probe: --with-poco-libs='${with_poco_libs}'])
+    AC_MSG_NOTICE([static Poco probe: CXX='${CXX}'])
+    AC_MSG_NOTICE([static Poco probe: LDFLAGS='${LDFLAGS}'])
+    # Listed in dependency (topological) order -- dependents before their
+    # dependencies, PocoFoundation last -- so the static archives resolve in a
+    # single linker pass without needing --start-group. Poco's libraries form a
+    # DAG, so a topological order always links cleanly. Keep this order.
+    for poco_lib in PocoNetSSL PocoNet PocoUtil PocoJSON PocoXML PocoCrypto PocoFoundation; do
+        poco_archive_name="lib${poco_lib}${POCO_DEBUG_SUFFIX}.a"
+        poco_archive_path=
+        poco_how=
+        # 1) Prefer an explicit --with-poco-libs directory. -print-file-name
+        #    does NOT search -L directories on all toolchains, so a custom Poco
+        #    location is otherwise invisible to the probe below.
+        if test -n "$with_poco_libs" && test -f "$with_poco_libs/$poco_archive_name"; then
+            poco_archive_path="$with_poco_libs/$poco_archive_name"
+            poco_how="found in --with-poco-libs"
+        else
+            # 2) Otherwise ask the compiler. Returns an absolute path when found
+            #    on its built-in search dirs, else echoes the bare name back.
+            poco_print=`$CXX $LDFLAGS -print-file-name=$poco_archive_name 2>/dev/null`
+            case "$poco_print" in
+                /*)
+                    if test -f "$poco_print"; then
+                        poco_archive_path="$poco_print"
+                        poco_how="found via -print-file-name"
+                    else
+                        poco_how="-print-file-name returned '$poco_print' but no such file"
+                    fi
+                    ;;
+                *)
+                    poco_how="-print-file-name returned bare name '$poco_print' (not on the compiler's search path; pass --with-poco-libs)"
+                    ;;
+            esac
+        fi
+        if test -n "$poco_archive_path"; then
+            AC_MSG_NOTICE([static Poco probe: $poco_archive_name: $poco_how -> $poco_archive_path])
+            poco_static_libs="$poco_static_libs $poco_archive_path"
+        else
+            AC_MSG_NOTICE([static Poco probe: $poco_archive_name: NOT FOUND ($poco_how)])
+            poco_static_ok=no
+            poco_static_missing="$poco_archive_name"
+            break
+        fi
+    done
+    AC_MSG_CHECKING([whether to link Poco statically into the fuzzers])
+    AS_IF([test "$poco_static_ok" = "yes"],
+          [POCO_FUZZER_STATIC_LIBS="$poco_static_libs"
+           AC_MSG_RESULT([yes])],
+          [AC_MSG_RESULT([no; first missing archive: $poco_static_missing -- falling back to dynamic Poco])])
+fi
+AC_SUBST([POCO_FUZZER_STATIC_LIBS])
+AM_CONDITIONAL([HAVE_POCO_STATIC_LIBS], [test -n "$POCO_FUZZER_STATIC_LIBS"])
+
 AS_IF([test "$ENABLE_SSL" = "true"],
       [LIBS="$LIBS -lssl -lcrypto"])
 
