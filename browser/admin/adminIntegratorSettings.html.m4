@@ -27,7 +27,16 @@ m4_dnl------------------------------------------------------------------------
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    m4_ifelse(MOBILEAPP, [], [<link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/localizations.json" type="application/vnd.oftn.l10n+json"/>])
+    m4_dnl The desktop/mobile apps load this page in a file:// iframe where the
+    m4_dnl <link rel="localizations"> loader never worked, so the surrounding
+    m4_dnl dialog was localized but its contents were not. Mirror the main app:
+    m4_dnl a small window.LANG -> window.LOCALIZATIONS table (Options strings only,
+    m4_dnl see util/create-settings-l10n-js.py), consumed by the override in
+    m4_dnl admin/main-admin.js. Online keeps the server-served localizations link.
+    m4_ifelse(MOBILEAPP,[true],
+      [<script>(function () { var l = new URLSearchParams(window.location.search).get('lang'); window.LANG = (l && l !== 'undefined') ? l : 'en-US'; })();</script>
+      <script src="l10n-settings.js"></script>],
+      [<link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/localizations.json" type="application/vnd.oftn.l10n+json"/>])
     <title>Collabora Online - Settings</title>
     <link
       rel="StyleSheet"

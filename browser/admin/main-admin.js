@@ -15,6 +15,21 @@ global.$ = global.jQuery = $;
 
 require('l10n-for-node');
 
+// On the desktop and mobile apps the Options dialog runs in a file:// iframe
+// where l10n-for-node's <link rel="localizations"> loader does not work, so the
+// translations are supplied as a bundled window.LOCALIZATIONS table (see
+// l10n-settings.js / util/create-settings-l10n-js.py). Mirror global.js and look
+// the string up there. Online has no window.LOCALIZATIONS and keeps the
+// l10n-for-node behavior unchanged.
+if (window.LOCALIZATIONS) {
+	String.prototype.toLocaleString = function () {
+		const string = this.valueOf();
+		return Object.prototype.hasOwnProperty.call(window.LOCALIZATIONS, string)
+			? window.LOCALIZATIONS[string]
+			: string;
+	};
+}
+
 global._ = function (string) {
 	return string.toLocaleString();
 };

@@ -28,6 +28,22 @@ $(L10N_ALL_JS) : $(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*
 	python3 $(srcdir)/util/create-l10n-all-js.py >$@
 	find $(srcdir)/po -name 'ui-*.po.json' -delete
 	find $(srcdir)/po -name 'help-*.po.json' -delete
+
+# Scoped translations for the Options (integrator settings) dialog, which runs
+# in a file:// iframe where the <link rel="localizations"> loader does not work.
+# Only the dialog's strings, all languages (~200 KB), reusing l10n-all.js's
+# window.LANG -> window.LOCALIZATIONS selection. No xgettext at build time: the
+# string set is read from the integrator sources, translations from po/ui-*.po.
+SETTINGS_L10N_JS = $(DIST_FOLDER)/l10n-settings.js
+
+$(SETTINGS_L10N_JS): \
+		$(srcdir)/admin/src/integrator/AdminIntegratorSettings.ts \
+		$(srcdir)/admin/src/integrator/WordBook.ts \
+		$(srcdir)/admin/src/integrator/Xcu.ts \
+		$(wildcard $(srcdir)/po/ui-*.po) \
+		$(srcdir)/util/create-settings-l10n-js.py
+	@mkdir -p $(dir $@)
+	python3 $(srcdir)/util/create-settings-l10n-js.py --srcdir $(srcdir) >$@
 endif
 
 QUIET_TSC = $(QUIET_TSC_$(V))
@@ -970,6 +986,7 @@ $(TYPESCRIPT_JS_DIR)/%.js: $(srcdir)/%.ts
 build-cool: \
 	$(COOL_L10N_DST) \
 	$(L10N_JSON) \
+	$(SETTINGS_L10N_JS) \
 	$(COOL_IMAGES_DST) \
 	$(COOL_IMAGES_CUSTOM_DST) \
 	$(COOL_TEMPLATES_DST) \
