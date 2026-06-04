@@ -91,6 +91,7 @@
 /// <reference path="../src/canvas/vector/primitive/PolygonHairlinePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolygonStrokePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/PolyPolygonStrokePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/SingleLinePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TransformPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts" />

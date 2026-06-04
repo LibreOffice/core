@@ -32,6 +32,7 @@ namespace cool {
 					);
 					break;
 				case PolygonStrokePrimitive.type:
+				case PolyPolygonStrokePrimitive.type:
 					this._renderPolygonStroke(
 						context,
 						primitive as PolygonStrokePrimitive,

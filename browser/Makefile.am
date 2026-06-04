@@ -405,6 +405,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/PolygonHairlinePrimitive.ts \
 	src/canvas/vector/primitive/PolygonStrokePrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts \
+	src/canvas/vector/primitive/PolyPolygonStrokePrimitive.ts \
 	src/canvas/vector/primitive/Primitive.ts \
 	src/canvas/vector/primitive/SingleLinePrimitive.ts \
 	src/canvas/vector/primitive/TransformPrimitive.ts \

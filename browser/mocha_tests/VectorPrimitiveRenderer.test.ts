@@ -130,6 +130,31 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.deepStrictEqual(setLineDash.args, [primitive.stroke.dotDashArray]);
 		});
 
+		it('renders polyPolygonStroke as one stroked path', function () {
+			// polyPolygonStroke ships an SVG-D path that describes
+			// more than one disjoint subpath. The whole thing strokes
+			// in a single canvas call.
+			const primitive = loadVectorRenderingReference(
+				'testPolyPolygonStroke',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'polyPolygonStroke');
+			nodeassert.strictEqual(typeof primitive.path, 'string');
+			nodeassert.strictEqual(typeof primitive.line?.color, 'string');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const stroke = recorder.findCall('stroke');
+			nodeassert.ok(stroke, 'stroke not called');
+			nodeassert.strictEqual(recorder.countOf('stroke'), 1);
+			nodeassert.strictEqual(stroke?.properties.strokeStyle, primitive.line.color);
+			nodeassert.strictEqual(
+				(stroke?.args[0] as Path2DRecorder).path,
+				primitive.path,
+			);
+		});
+
 		it('renders a group\'s children in order', function () {
 			// A group node carries no drawing of its own. The renderer
 			// must descend into the children in order.

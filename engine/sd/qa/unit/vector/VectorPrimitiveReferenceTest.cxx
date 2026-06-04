@@ -21,6 +21,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
@@ -479,6 +480,41 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
     assertJsonPath(aJson, "/primitives/0/type", "polygonStroke");
     assertJsonPathExists(aJson, "/primitives/0/stroke/dotDashArray");
     CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/primitives/0/stroke/dotDashArray").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonStroke)
+{
+    // polyPolygonStroke carries the same line and stroke attributes
+    // as polygonStroke, but its path describes more than one
+    // disjoint subpath. The fixture strokes two separate horizontal
+    // lines with a single primitive.
+    basegfx::B2DPolygon aFirst;
+    aFirst.append(basegfx::B2DPoint(0.0, 0.0));
+    aFirst.append(basegfx::B2DPoint(100.0, 0.0));
+
+    basegfx::B2DPolygon aSecond;
+    aSecond.append(basegfx::B2DPoint(0.0, 50.0));
+    aSecond.append(basegfx::B2DPoint(100.0, 50.0));
+
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    aPolyPolygon.append(aFirst);
+    aPolyPolygon.append(aSecond);
+
+    drawinglayer::attribute::LineAttribute aLine(basegfx::BColor(0.0, 0.0, 0.0), 2.0,
+                                                 basegfx::B2DLineJoin::Miter,
+                                                 css::drawing::LineCap_BUTT);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new PolyPolygonStrokePrimitive2D(aPolyPolygon, aLine));
+
+    auto aJson = writeReference(u"testPolyPolygonStroke", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "polyPolygonStroke");
+    assertJsonPath(aJson, "/primitives/0/line/color", "#000000");
+    assertJsonPathDouble(aJson, "/primitives/0/line/width", 2.0, 1e-9);
+    assertJsonPath(aJson, "/primitives/0/line/linejoin", "miter");
+    assertJsonPath(aJson, "/primitives/0/line/linecap", "butt");
+    assertJsonPathExists(aJson, "/primitives/0/path");
 }
 
 } // namespace
