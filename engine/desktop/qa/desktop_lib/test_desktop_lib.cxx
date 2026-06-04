@@ -738,6 +738,7 @@ void DesktopKitTest::testExportDirectToPdfDottedName()
                          aSuggested.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
 
     osl::File::remove(aDocUrl);
+    osl::Directory::remove(aTempDir);
 }
 
 void DesktopKitTest::testSaveAsJsonOptions()
