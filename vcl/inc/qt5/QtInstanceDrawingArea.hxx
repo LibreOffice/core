@@ -57,9 +57,6 @@ private:
     void handlePaintEvent();
     void handleResizeEvent();
     virtual bool handleToolTipEvent(const QHelpEvent& rHelpEvent) override;
-
-private:
-    virtual void click(const Point&);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

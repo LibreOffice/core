@@ -156,7 +156,6 @@ public:
                                                                 bool bAutoScroll = true) override;
     virtual void unset_drag_dest_row() override;
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override;
-    virtual tools::Rectangle get_cell_area(const weld::TreeIter& rIter, const int nColumn) const;
     virtual weld::TreeView* get_drag_source() const override;
 
     using QtInstanceWidget::set_sensitive;

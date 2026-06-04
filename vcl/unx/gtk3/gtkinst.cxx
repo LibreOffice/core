@@ -3589,19 +3589,9 @@ public:
         gtk_widget_set_hexpand(m_pWidget, bExpand);
     }
 
-    virtual bool get_hexpand() const
-    {
-        return gtk_widget_get_hexpand(m_pWidget);
-    }
-
     virtual void set_vexpand(bool bExpand) override
     {
         gtk_widget_set_vexpand(m_pWidget, bExpand);
-    }
-
-    virtual bool get_vexpand() const
-    {
-        return gtk_widget_get_vexpand(m_pWidget);
     }
 
     virtual void set_margin_top(int nMargin) override
@@ -3622,16 +3612,6 @@ public:
     virtual void set_margin_end(int nMargin) override
     {
         gtk_widget_set_margin_end(m_pWidget, nMargin);
-    }
-
-    virtual int get_margin_top() const
-    {
-        return gtk_widget_get_margin_top(m_pWidget);
-    }
-
-    virtual int get_margin_bottom() const
-    {
-        return gtk_widget_get_margin_bottom(m_pWidget);
     }
 
     virtual int get_margin_start() const override
@@ -16002,23 +15982,6 @@ public:
         return aRet;
     }
 
-    virtual tools::Rectangle get_cell_area(const weld::TreeIter& rIter,
-                                           const int nColumn) const
-    {
-        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreePath* pPath = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
-        assert(pColumn && "wrong count");
-
-         // Note: We do not check cell renderers inside the column because it appears to be difficult to find their focus area
-        GdkRectangle aRect;
-        gtk_tree_view_get_cell_area(m_pTreeView, pPath, pColumn, &aRect);
-        tools::Rectangle aRet(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
-
-        gtk_tree_path_free(pPath);
-        return aRet;
-    }
-
     virtual void start_editing(const weld::TreeIter& rIter) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
@@ -16869,11 +16832,6 @@ public:
         return get(rGtkIter.iter, m_nIdCol);
     }
 
-    virtual OUString get_text(const weld::TreeIter& rIter) const
-    {
-        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        return get(rGtkIter.iter, m_nTextCol);
-    }
 
     virtual void disable_notify_events() override
     {
@@ -18363,13 +18321,6 @@ public:
     bool signalCommand(const CommandEvent& rCEvt)
     {
         return signal_command(rCEvt);
-    }
-
-    virtual void click(const Point& rPos)
-    {
-        MouseEvent aEvent(rPos);
-        signal_mouse_press(aEvent);
-        signal_mouse_release(aEvent);
     }
 };
 

@@ -169,21 +169,6 @@ tools::Rectangle QtInstanceIconView::get_rect(const weld::TreeIter& rIter) const
     return aRect;
 }
 
-OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
-{
-    SolarMutexGuard g;
-
-    OUString sText;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndex aIndex = modelIndex(rIter);
-        const QVariant aData = m_pModel->data(aIndex);
-        assert(aData.canConvert<QString>() && "model data not a string");
-        sText = toOUString(aData.toString());
-    });
-
-    return sText;
-}
-
 void QtInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;

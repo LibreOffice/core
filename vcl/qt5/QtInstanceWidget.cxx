@@ -404,17 +404,6 @@ void QtInstanceWidget::set_hexpand(bool bExpand)
     });
 }
 
-bool QtInstanceWidget::get_hexpand() const
-{
-    SolarMutexGuard g;
-
-    bool bExpand = false;
-    GetQtInstance().RunInMainThread(
-        [&] { bExpand = m_pWidget->sizePolicy().horizontalPolicy() == QSizePolicy::Expanding; });
-
-    return bExpand;
-}
-
 void QtInstanceWidget::set_vexpand(bool bExpand)
 {
     SolarMutexGuard g;
@@ -424,17 +413,6 @@ void QtInstanceWidget::set_vexpand(bool bExpand)
         aSizePolicy.setVerticalPolicy(bExpand ? QSizePolicy::Expanding : QSizePolicy::Preferred);
         m_pWidget->setSizePolicy(aSizePolicy);
     });
-}
-
-bool QtInstanceWidget::get_vexpand() const
-{
-    SolarMutexGuard g;
-
-    bool bExpand = false;
-    GetQtInstance().RunInMainThread(
-        [&] { bExpand = m_pWidget->sizePolicy().verticalPolicy() == QSizePolicy::Expanding; });
-
-    return bExpand;
 }
 
 void QtInstanceWidget::set_margin_top(int nMargin)
@@ -485,26 +463,6 @@ void QtInstanceWidget::set_margin_end(int nMargin)
             aMargins.setRight(nMargin);
         m_pWidget->setContentsMargins(aMargins);
     });
-}
-
-int QtInstanceWidget::get_margin_top() const
-{
-    SolarMutexGuard g;
-
-    int nMargin = 0;
-    GetQtInstance().RunInMainThread([&] { nMargin = m_pWidget->contentsMargins().top(); });
-
-    return nMargin;
-}
-
-int QtInstanceWidget::get_margin_bottom() const
-{
-    SolarMutexGuard g;
-
-    int nMargin = 0;
-    GetQtInstance().RunInMainThread([&] { nMargin = m_pWidget->contentsMargins().bottom(); });
-
-    return nMargin;
 }
 
 int QtInstanceWidget::get_margin_start() const

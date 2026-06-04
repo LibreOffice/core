@@ -109,8 +109,6 @@ AbsoluteScreenPixelPoint QtInstanceDrawingArea::get_accessible_location_on_scree
     return aLocation;
 }
 
-void QtInstanceDrawingArea::click(const Point&) { assert(false && "Not implemented yet"); }
-
 bool QtInstanceDrawingArea::eventFilter(QObject* pObject, QEvent* pEvent)
 {
     if (pObject != m_pLabel)

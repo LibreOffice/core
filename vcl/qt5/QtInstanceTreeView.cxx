@@ -842,20 +842,6 @@ tools::Rectangle QtInstanceTreeView::get_row_area(const weld::TreeIter& rIter) c
     return aRowArea;
 }
 
-tools::Rectangle QtInstanceTreeView::get_cell_area(const weld::TreeIter& rIter,
-                                                   const int nColumn) const
-{
-    SolarMutexGuard g;
-
-    tools::Rectangle aCellArea;
-    GetQtInstance().RunInMainThread([&] {
-        const QRect aCellRect = m_pTreeView->visualRect(modelIndex(rIter, nColumn));
-        aCellArea = toRectangle(aCellRect);
-    });
-
-    return aCellArea;
-}
-
 weld::TreeView* QtInstanceTreeView::get_drag_source() const
 {
     assert(false && "Not implemented yet");

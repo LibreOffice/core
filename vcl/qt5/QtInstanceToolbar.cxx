@@ -128,16 +128,6 @@ void QtInstanceToolbar::set_item_label(const OUString& rIdent, const OUString& r
     GetQtInstance().RunInMainThread([&] { getToolButton(rIdent).setText(toQString(rLabel)); });
 }
 
-OUString QtInstanceToolbar::get_item_label(const OUString& rIdent) const
-{
-    SolarMutexGuard g;
-
-    OUString sLabel;
-    GetQtInstance().RunInMainThread([&] { sLabel = toOUString(getToolButton(rIdent).text()); });
-
-    return sLabel;
-}
-
 void QtInstanceToolbar::set_item_tooltip_text(const OUString& rIdent, const OUString& rTip)
 {
     SolarMutexGuard g;

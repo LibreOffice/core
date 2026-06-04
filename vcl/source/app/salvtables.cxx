@@ -398,11 +398,7 @@ OUString SalInstanceWidget::get_help_id() const { return m_xWidget->GetHelpId();
 
 void SalInstanceWidget::set_hexpand(bool bExpand) { m_xWidget->set_hexpand(bExpand); }
 
-bool SalInstanceWidget::get_hexpand() const { return m_xWidget->get_hexpand(); }
-
 void SalInstanceWidget::set_vexpand(bool bExpand) { m_xWidget->set_vexpand(bExpand); }
-
-bool SalInstanceWidget::get_vexpand() const { return m_xWidget->get_vexpand(); }
 
 void SalInstanceWidget::set_margin_top(int nMargin) { m_xWidget->set_margin_top(nMargin); }
 
@@ -411,10 +407,6 @@ void SalInstanceWidget::set_margin_bottom(int nMargin) { m_xWidget->set_margin_b
 void SalInstanceWidget::set_margin_start(int nMargin) { m_xWidget->set_margin_start(nMargin); }
 
 void SalInstanceWidget::set_margin_end(int nMargin) { m_xWidget->set_margin_end(nMargin); }
-
-int SalInstanceWidget::get_margin_top() const { return m_xWidget->get_margin_top(); }
-
-int SalInstanceWidget::get_margin_bottom() const { return m_xWidget->get_margin_bottom(); }
 
 int SalInstanceWidget::get_margin_start() const { return m_xWidget->get_margin_start(); }
 
@@ -1125,11 +1117,6 @@ void SalInstanceToolbar::set_item_label(int nIndex, const OUString& rLabel)
     m_xToolBox->SetItemText(m_xToolBox->GetItemId(nIndex), rLabel);
 }
 
-OUString SalInstanceToolbar::get_item_label(const OUString& rIdent) const
-{
-    return m_xToolBox->GetItemText(m_xToolBox->GetItemId(rIdent));
-}
-
 void SalInstanceToolbar::set_item_label(const OUString& rIdent, const OUString& rLabel)
 {
     m_xToolBox->SetItemText(m_xToolBox->GetItemId(rIdent), rLabel);
@@ -1657,11 +1644,6 @@ weld::ScreenShotCollection SalInstanceWindow::collect_screenshot_data()
     CollectChildren(*m_xWindow, aTopLeft, aRet);
 
     return aRet;
-}
-
-const vcl::ILibreOfficeKitNotifier* SalInstanceWindow::GetLOKNotifier()
-{
-    return m_xWindow ? m_xWindow->GetLOKNotifier() : nullptr;
 }
 
 SalInstanceWindow::~SalInstanceWindow()
@@ -4786,24 +4768,6 @@ tools::Rectangle SalInstanceTreeView::get_row_area(const weld::TreeIter& rIter) 
     return m_xTreeView->GetBoundingRect(static_cast<const SalInstanceTreeIter&>(rIter).iter);
 }
 
-tools::Rectangle SalInstanceTreeView::get_cell_area(const weld::TreeIter& rIter,
-                                                    const int nColumn) const
-{
-    if (nColumn < 0)
-        return {}; // Ignore expander column
-
-    int column = to_internal_model(nColumn);
-    auto rect = get_row_area(rIter);
-    rect.SetLeft(column == 1
-                     ? 0
-                     : m_xTreeView->GetLogicTab(
-                           column)); // GetLogicTab(1) gives position of internal expander bitmap
-    if (o3tl::make_unsigned(nColumn) < m_xTreeView->GetEntry(0)->ItemCount() - 1)
-        rect.SetRight(m_xTreeView->GetLogicTab(column + 1));
-
-    return rect;
-}
-
 weld::TreeView* SalInstanceTreeView::get_drag_source() const { return g_DragSource; }
 
 int SalInstanceTreeView::vadjustment_get_value() const
@@ -5232,12 +5196,6 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
             m_xIconView->UpdateEntrySize(*pEntry);
         m_xIconView->ModelHasEntryInvalidated(pEntry);
     }
-}
-
-OUString SalInstanceIconView::get_text(const weld::TreeIter& rIter) const
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    return SvTabListBox::GetEntryText(rVclIter.iter, 0);
 }
 
 void SalInstanceIconView::set_text(int pos, const OUString& rText)
@@ -5845,40 +5803,6 @@ SalInstanceDrawingArea::~SalInstanceDrawingArea()
 }
 
 OutputDevice& SalInstanceDrawingArea::get_ref_device() { return *m_xDrawingArea->GetOutDev(); }
-
-void SalInstanceDrawingArea::click(const Point& rPos)
-{
-    MouseEvent aEvent(rPos, 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
-    VclPtr<VclDrawingArea> xDrawingArea(m_xDrawingArea);
-    xDrawingArea->MouseButtonDown(aEvent);
-    xDrawingArea->MouseButtonUp(aEvent);
-}
-
-void SalInstanceDrawingArea::dblclick(const Point& rPos)
-{
-    MouseEvent aEvent(rPos, 2, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
-    VclPtr<VclDrawingArea> xDrawingArea(m_xDrawingArea);
-    xDrawingArea->MouseButtonDown(aEvent);
-    xDrawingArea->MouseButtonUp(aEvent);
-}
-
-void SalInstanceDrawingArea::mouse_up(const Point& rPos)
-{
-    MouseEvent aEvent(rPos, 0, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
-    m_xDrawingArea->MouseButtonUp(aEvent);
-}
-
-void SalInstanceDrawingArea::mouse_down(const Point& rPos)
-{
-    MouseEvent aEvent(rPos, 0, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
-    m_xDrawingArea->MouseButtonDown(aEvent);
-}
-
-void SalInstanceDrawingArea::mouse_move(const Point& rPos)
-{
-    MouseEvent aEvent(rPos, 0, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
-    m_xDrawingArea->MouseMove(aEvent);
-}
 
 IMPL_LINK(SalInstanceDrawingArea, PaintHdl, target_and_area, aPayload, void)
 {
