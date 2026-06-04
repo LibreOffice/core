@@ -29,6 +29,7 @@ enum class OperationType
     SetString,
     SetTextEdit,
     SetFormula,
+    SetFormulas,
     SetNoteText,
     ReplaceNoteText,
     InsertColumnsBefore,

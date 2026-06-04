@@ -42,6 +42,8 @@ std::string_view operationTypeString(OperationType eOperation)
             return "SetTextEdit";
         case OperationType::SetFormula:
             return "SetFormula";
+        case OperationType::SetFormulas:
+            return "SetFormulas";
         case OperationType::SetNoteText:
             return "SetNoteText";
         case OperationType::ReplaceNoteText:

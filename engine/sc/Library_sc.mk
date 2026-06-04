@@ -567,6 +567,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/SetFormulaOperation \
     sc/source/ui/operation/SetNormalStringOperation \
     sc/source/ui/operation/SetStringOperation \
+    sc/source/ui/operation/SetFormulasOperation \
     sc/source/ui/operation/SetValueOperation \
     sc/source/ui/operation/SetValuesOperation \
     sc/source/ui/operation/SubTotalsOperation \
