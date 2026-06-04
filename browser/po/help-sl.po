@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Collabora Online - Help\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-06-03 06:28+0000\n"
+"PO-Revision-Date: 2026-06-04 08:20+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
 "online/help/sl/>\n"
@@ -2006,6 +2006,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Prekrivni napis »Nedejaven dokument« s sporočilom: »Nedejaven dokument – "
+"kliknite za osvežitev in nadaljevanje urejanja«"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2322,6 +2324,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Pogovorno okno Oblikuj celice z zavihkom Številke, na katerem so seznam "
+"kategorije, možnosti oblikovanja, decimalna mesta in koda oblike"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2360,6 +2364,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Spustni meni Samodejni filter v stolpcu preglednice z razvrščanjem, "
+"filtriranjem po barvi, pogojnim filtriranjem ter potrditvenimi polji za "
+"posamezne vrednosti"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2398,6 +2405,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Preglednica s kontrolniki združevanja vrstic in stolpcev, ki prikazuje gumbe "
+"ravni orisa ter preklopnike strnjevanja/razširjanja"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2423,6 +2432,8 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Pogovorno okno Veljavnost na zavihku Pogoji z Dovoli, nastavljenim na "
+"Seznam, ki kaže možnosti za prazne celice, seznam izbir ter vrednosti vnosov"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2449,6 +2460,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Spustni seznam celice, ki prikazuje potrjene vnose, kot so Apple, Pear, "
+"Banana, Kiwi in Lemon"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2477,6 +2490,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Celica preglednice s pojavnim oknom komentarja, ki prikazuje avtorja, datum, "
+"besedilo komentarja ter gumba Shrani in Prekliči"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2497,6 +2512,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Izbirnik nabora ikon za pogojno oblikovanje, ki prikazuje nabore ikon za "
+"puščice, krožce, semaforje, zvezde, smeške in stolpčne grafikone"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2591,6 +2608,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Pogovorno okno Odstavek z odprtim zavihkom Odmiki in razmiki, kjer so "
+"nastavitve za odmik in razmik ter razmik vrstice, na desni pa je predogled"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2613,6 +2632,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Izbirnik Vstavi tabelo kaže mrežo za izbor števila vrstic in stolpcev, "
+"trenutno je izbrana velikost 5 x 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2645,6 +2666,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Sled spremembe, prikazana kot polje komentarja ob dokumentu z imenom "
+"avtorja, datumom in opisom spremembe"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -2779,6 +2802,9 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Podokno lastnosti prosojnice, ki prikazuje oblikovanje, usmerjenost, ozadje "
+"in nastavitve matrice prosojnice, pod njimi galerija postavitev z oglednimi "
+"možnostmi"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -2967,6 +2993,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Pogovorno okno slovarja sopomenk za angleško besedo company, ki izpiše "
+"sopomenke, kot so institution, establishment in troupe, s poljem Zamenjaj z"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3055,6 +3083,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Pogovorno okno Posebni znaki z mrežo znakov, poljem za iskanje in pisave, "
+"vnosom šestnajstiške in desetiške kode ter nedavnimi in priljubljenimi znaki "
+"na dnu"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3161,6 +3192,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Pogovorno okno Upravljaj spremembe s seznamom sledenih sprememb, ki "
+"prikazuje stolpce dejanja, avtorja, datum in komentarja ter gumbe Sprejmi, "
+"Zavrni, Sprejmi vse in Zavrni vse"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3195,6 +3229,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Pogovorno okno Slog strani z odprtim zavihkom Organizator, ki prikazuje ime "
+"sloga, naslednji slog, dedovanje ter polja kategorije s povzetkom lastnosti "
+"strani"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3214,7 +3251,7 @@ msgid ""
 "span>, <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 "Izberite <span class=\"ui\">Oblika</span> → <span class=\"ui\">Odstavek</"
-"span>, zavihek <span class=\"ui\">Potek besedila</span>."
+"span>, zavihek <span class=\"ui\">Potek besedila</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
 msgid ""
@@ -3468,6 +3505,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Pogovorno okno Področje z odprtim zavihkom Barva z barvno paleto, predogledi "
+"dejavne in nove barve, polji vrednosti RGB ter odsekom palete po meri"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
