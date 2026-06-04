@@ -378,8 +378,6 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                     aChildNodes = rootNode->getChildNodes();
                 for (auto const& childGroup : aChildNodes)
                 {
-                    childGroup->acquire();
-
                     if (childGroup->hasChildNodes())
                     {
                         OUString sUIName;
