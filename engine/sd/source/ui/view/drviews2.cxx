@@ -956,7 +956,16 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
 
                             // Change master value
                             pPageStandard->TRG_SetMasterPage(*pMPage);
-                            pPageNote->TRG_SetMasterPage(*pMPage);
+                            // A notes page must reference a notes master, not the
+                            // standard master. Use the notes master paired with the
+                            // chosen standard master. If the document has no notes
+                            // master at that index, keep the one CreatePage inherited.
+                            if (nMasterPageId < GetDoc()->GetMasterSdPageCount(PageKind::Notes))
+                            {
+                                SdPage* pNotesMPage
+                                    = GetDoc()->GetMasterSdPage(nMasterPageId, PageKind::Notes);
+                                pPageNote->TRG_SetMasterPage(*pNotesMPage);
+                            }
 
                             if (bUndo)
                             {

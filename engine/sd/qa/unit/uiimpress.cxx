@@ -377,6 +377,38 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndo)
     CPPUNIT_ASSERT_EQUAL(u"Generated title"_ustr, getSlide0Title());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureInsertSlideNotesMaster)
+{
+    // An inserted slide's notes page must keep a notes master. If it instead
+    // points at the standard master, the notes placeholder text leaks onto the
+    // slide and the slide master after a PPTX round-trip.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"InsertMasterSlide": 0},
+            {"SetText.0": "Second slide"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pImpressDocument->getDrawPages()->getCount());
+
+    SdPage* pNotesMaster
+        = static_cast<SdPage*>(&(pDoc->GetSdPage(1, PageKind::Notes)->TRG_GetMasterPage()));
+    CPPUNIT_ASSERT_EQUAL(PageKind::Notes, pNotesMaster->GetPageKind());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndoImage)
 {
     // Inserting an image replaces a placeholder object; undoing the transform
