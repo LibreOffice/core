@@ -206,6 +206,18 @@ public:
 
     void setIsAdminUser(const std::optional<bool> isAdminUser) { _isAdminUser = isAdminUser; }
 
+    /// True when the host has a WOPI UserSettingsUri for this user.
+    /// Anonymous sessions: false.
+    void setUserSettingsPersistenceAvailable(bool bAvailable)
+    {
+        _userSettingsPersistenceAvailable = bAvailable;
+    }
+
+    bool isUserSettingsPersistenceAvailable() const
+    {
+        return _userSettingsPersistenceAvailable;
+    }
+
     void setUserExtraInfo(const std::string& userExtraInfo) { _userExtraInfo = userExtraInfo; }
 
     void setUserPrivateInfo(const std::string& userPrivateInfo) { _userPrivateInfo = userPrivateInfo; }
@@ -448,6 +460,10 @@ private:
 
     /// If user is admin on the integrator side
     std::optional<bool> _isAdminUser;
+
+    /// Defaults false: batch/convert brokers that skip
+    /// updateSessionWithWopiInfo inherit a safe "no persistence" answer.
+    bool _userSettingsPersistenceAvailable = false;
 
     /// True if we have been disconnected.
     std::atomic<bool> _disconnected;

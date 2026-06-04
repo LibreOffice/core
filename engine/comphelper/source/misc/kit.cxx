@@ -9,6 +9,8 @@
 
 #include <comphelper/kit.hxx>
 
+#include <atomic>
+
 #include <com/sun/star/awt/Rectangle.hpp>
 
 #include <osl/process.h>
@@ -34,6 +36,11 @@ static bool g_bActive(false);
 #endif
 
 static bool g_bForkedChild(false);
+
+// Default true so non-COOL paths keep existing behaviour.
+// TODO(per-view): process-wide; last attach wins in mixed-session kits.
+// Move to per-SfxViewShell when more settings join this signal.
+static std::atomic<bool> g_bUserSettingsPersistenceAvailable(true);
 
 static bool g_bPartInInvalidation(false);
 
@@ -143,6 +150,16 @@ void setForkedChild(bool bIsChild)
 bool isForkedChild()
 {
     return g_bForkedChild;
+}
+
+void setUserSettingsPersistenceAvailable(bool bAvailable)
+{
+    g_bUserSettingsPersistenceAvailable.store(bAvailable, std::memory_order_relaxed);
+}
+
+bool isUserSettingsPersistenceAvailable()
+{
+    return g_bUserSettingsPersistenceAvailable.load(std::memory_order_relaxed);
 }
 
 void setPartInInvalidation(bool bPartInInvalidation)

@@ -1620,6 +1620,8 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         asyncInstallPresets(session, configId, userSettingsUri, jailPresetsPath);
     }
 
+    session->setUserSettingsPersistenceAvailable(!userSettingsUri.empty());
+
     // Pass the ownership to the client session.
     session->setWopiFileInfo(std::move(wopiFileInfo));
     session->setUserId(userId);
@@ -4271,6 +4273,12 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
                 _docKey << "] to have " << count << " sessions.");
 
         UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerAddSession(_docKey, session));
+
+        // Sent unconditionally - anonymous sessions explicitly say "false"
+        // rather than relying on signal absence.
+        forwardToChild(session,
+                       std::string("userpersistence ") +
+                           (session->isUserSettingsPersistenceAvailable() ? "true" : "false"));
 
         return count;
     }

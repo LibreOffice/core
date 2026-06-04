@@ -5499,6 +5499,14 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
     {
         updateConfig(OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8));
     }
+    else if (strcmp(pOption, "userpersistence") == 0)
+    {
+        // Wire contract: exactly "true" or "false"; anything else (including
+        // null) is treated as false - never promise persistence without an
+        // explicit opt-in.
+        const bool bAvailable = pValue && strcmp(pValue, "true") == 0;
+        comphelper::COKit::setUserSettingsPersistenceAvailable(bAvailable);
+    }
 #ifdef LINUX
     else if (strcmp(pOption, "addfont") == 0)
     {

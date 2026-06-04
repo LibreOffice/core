@@ -562,6 +562,16 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         Poco::Path presetsPath(JAILED_CONFIG_ROOT);
         getLOKit()->setOption("addconfig", Poco::URI(presetsPath).toString().c_str());
     }
+    else if (tokens.equals(0, "userpersistence"))
+    {
+        if (tokens.size() >= 2)
+        {
+            // tokens[] returns by value; pin to a local before c_str() so
+            // the string survives any future async lifetime extension.
+            const std::string value = tokens[1];
+            getLOKit()->setOption("userpersistence", value.c_str());
+        }
+    }
     else if (!_isDocLoaded)
     {
         sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=nodocloaded");

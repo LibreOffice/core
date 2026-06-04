@@ -75,6 +75,12 @@ COMPHELPER_DLLPUBLIC bool isActive();
 /// eg. file-system resources with its parent process?
 COMPHELPER_DLLPUBLIC bool isForkedChild();
 
+/// True when per-user settings written by the engine will outlive the kit
+/// (host has a WOPI UserSettingsUri). False for anonymous/batch sessions.
+/// Defaults to true so non-COOL paths keep their existing behaviour.
+COMPHELPER_DLLPUBLIC void setUserSettingsPersistenceAvailable(bool bAvailable);
+COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
+
 /// Used by SlideshowLayerRenderer for signaling that a slide rendering is occurring.
 COMPHELPER_DLLPUBLIC void setSlideshowRendering(bool bSlideshowRendering);
 COMPHELPER_DLLPUBLIC bool isSlideshowRendering();
