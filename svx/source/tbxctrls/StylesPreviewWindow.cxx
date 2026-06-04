@@ -93,7 +93,6 @@ private:
 
 public:
     static std::map<OUString, Bitmap>& Get() { return gStylePreviewCache; }
-    static std::map<OUString, OString>& GetJson() { return gJsonStylePreviewCache; }
 
     static void ClearCache(bool bHard)
     {
@@ -441,7 +440,6 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_xStylesView->connect_selection_changed(LINK(this, StylesPreviewWindow_Base, Selected));
     m_xStylesView->connect_item_activated(LINK(this, StylesPreviewWindow_Base, DoubleClick));
     m_xStylesView->connect_command(LINK(this, StylesPreviewWindow_Base, DoCommand));
-    m_xStylesView->connect_get_image(LINK(this, StylesPreviewWindow_Base, GetPreviewImage));
 
     const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                        css::uno::UNO_QUERY);
@@ -535,43 +533,6 @@ void StylesListUpdateTask::Invoke()
     m_rStylesList.UpdateSelection();
 }
 
-static OString extractPngString(const Bitmap& rBitmap)
-{
-    SvMemoryStream aOStm(65535, 65535);
-    // Use fastest compression "1"
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
-    };
-    vcl::PngImageWriter aPNGWriter(aOStm);
-    aPNGWriter.setParameters(aFilterData);
-    if (aPNGWriter.write(rBitmap))
-    {
-        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
-                                          aOStm.Tell());
-        OStringBuffer aBuffer("data:image/png;base64,");
-        ::comphelper::Base64::encode(aBuffer, aSeq);
-        return aBuffer.makeStringAndClear();
-    }
-
-    return ""_ostr;
-}
-
-// 0: OUString, 1: TreeIter, returns true if supported
-IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_query&, rQuery, bool)
-{
-    const weld::TreeIter& rIter = std::get<1>(rQuery);
-    OUString sStyleId(m_xStylesView->get_id(rIter));
-    OUString sStyleName(m_xStylesView->get_id(rIter));
-    OString sBase64Png(GetCachedPreviewJson({ sStyleId, sStyleName }));
-    if (sBase64Png.isEmpty())
-        return false;
-
-    OUString& rResult = std::get<0>(rQuery);
-    rResult = OStringToOUString(sBase64Png, RTL_TEXTENCODING_ASCII_US);
-
-    return true;
-}
-
 Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
 {
     auto aFound = StylePreviewCache::Get().find(rStyle.translatedName);
@@ -590,18 +551,6 @@ Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& 
 
         return aBitmap;
     }
-}
-
-OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescriptor& rStyle)
-{
-    auto aJsonFound = StylePreviewCache::GetJson().find(rStyle.translatedName);
-    if (aJsonFound != StylePreviewCache::GetJson().end())
-        return StylePreviewCache::GetJson()[rStyle.translatedName];
-
-    Bitmap aBitmap = GetCachedPreview(rStyle);
-    OString sResult = extractPngString(aBitmap);
-    StylePreviewCache::GetJson()[rStyle.translatedName] = sResult;
-    return sResult;
 }
 
 namespace

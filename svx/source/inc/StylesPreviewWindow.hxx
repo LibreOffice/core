@@ -120,7 +120,6 @@ protected:
     DECL_LINK(Selected, weld::ItemView&, void);
     DECL_LINK(DoubleClick, const weld::TreeIter&, bool);
     DECL_LINK(DoCommand, const CommandEvent&, bool);
-    DECL_LINK(GetPreviewImage, const weld::encoded_image_query&, bool);
 
 public:
     StylesPreviewWindow_Base(weld::Builder& xBuilder, const StylePreviewList& rDefaultStyles,
@@ -130,7 +129,6 @@ public:
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
     static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle);
-    static OString GetCachedPreviewJson(const StylePreviewDescriptor& rStyle);
 
 private:
     void UpdateStylesList();
