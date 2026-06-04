@@ -385,6 +385,34 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('save'), 'save not called');
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
+
+		it('strokes the bounds for lineRectangle', function () {
+			const primitive = loadVectorRenderingReference(
+				'testLineRectangle',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'lineRectangle');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const strokeRect = recorder.findCall('strokeRect');
+			nodeassert.ok(strokeRect, 'strokeRect not called');
+			const [minX, minY, maxX, maxY] = primitive.bounds;
+			nodeassert.deepStrictEqual(strokeRect.args, [
+				minX,
+				minY,
+				maxX - minX,
+				maxY - minY,
+			]);
+			nodeassert.strictEqual(
+				recorder.properties.strokeStyle,
+				primitive.color,
+			);
+			nodeassert.strictEqual(recorder.properties.lineWidth, 1);
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+		});
 	});
 
 	// Fixtures from documents. Each fixture is a full reply built

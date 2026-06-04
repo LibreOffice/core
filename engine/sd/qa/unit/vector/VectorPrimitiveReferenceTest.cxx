@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
@@ -421,6 +422,21 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testFilledRectangle)
 
     assertJsonPath(aJson, "/primitives/0/type", "filledRectangle");
     assertJsonPath(aJson, "/primitives/0/color", "#0000ff");
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aJson.getSize("/primitives/0/bounds").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testLineRectangle)
+{
+    // A red axis-aligned outlined rectangle. Same wire shape as
+    // filledRectangle (type, color, four-value bounds), but stroked.
+    basegfx::B2DRange aRange(10.0, 20.0, 110.0, 70.0);
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new LineRectanglePrimitive2D(aRange, basegfx::BColor(1.0, 0.0, 0.0)));
+
+    auto aJson = writeReference(u"testLineRectangle", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "lineRectangle");
+    assertJsonPath(aJson, "/primitives/0/color", "#ff0000");
     CPPUNIT_ASSERT_EQUAL(size_t(4), aJson.getSize("/primitives/0/bounds").value_or(0));
 }
 

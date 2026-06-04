@@ -399,6 +399,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/FilledRectanglePrimitive.ts \
 	src/canvas/vector/primitive/GroupPrimitive.ts \
 	src/canvas/vector/primitive/HiddenGeometryPrimitive.ts \
+	src/canvas/vector/primitive/LineRectanglePrimitive.ts \
 	src/canvas/vector/primitive/ModifiedColorPrimitive.ts \
 	src/canvas/vector/primitive/ObjectInfoPrimitive.ts \
 	src/canvas/vector/primitive/PolygonHairlinePrimitive.ts \

@@ -49,6 +49,12 @@ namespace cool {
 						primitive as FilledRectanglePrimitive,
 					);
 					break;
+				case LineRectanglePrimitive.type:
+					this._renderLineRectangle(
+						context,
+						primitive as LineRectanglePrimitive,
+					);
+					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
@@ -169,6 +175,21 @@ namespace cool {
 			context.save();
 			context.fillStyle = primitive.color ?? '#000000';
 			context.fillRect(minX, minY, maxX - minX, maxY - minY);
+			context.restore();
+		}
+
+		private _renderLineRectangle(
+			context: CanvasRenderingContext2D,
+			primitive: LineRectanglePrimitive,
+		): void {
+			if (!primitive.bounds || primitive.bounds.length < 4) return;
+
+			const [minX, minY, maxX, maxY] = primitive.bounds;
+			context.save();
+			context.strokeStyle = primitive.color ?? '#000000';
+			// LineRectangle is a one-canvas-pixel outline by definition.
+			context.lineWidth = 1;
+			context.strokeRect(minX, minY, maxX - minX, maxY - minY);
 			context.restore();
 		}
 
