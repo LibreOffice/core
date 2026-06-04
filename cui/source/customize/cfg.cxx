@@ -258,13 +258,6 @@ void SvxConfigDialog::ActivatePage(const OUString& rPage)
 void SvxConfigDialog::SetFrame(const css::uno::Reference<css::frame::XFrame>& xFrame)
 {
     m_xFrame = xFrame;
-    OUString aModuleId = SvxConfigPage::GetFrameWithDefaultAndIdentify(m_xFrame);
-
-    if (aModuleId != "com.sun.star.text.TextDocument" &&
-        aModuleId != "com.sun.star.sheet.SpreadsheetDocument" &&
-        aModuleId != "com.sun.star.presentation.PresentationDocument" &&
-        aModuleId != "com.sun.star.drawing.DrawingDocument")
-        RemoveTabPage(u"notebookbar"_ustr);
 }
 
 void SvxConfigDialog::PageCreated(const OUString &rId, SfxTabPage& rPage)
