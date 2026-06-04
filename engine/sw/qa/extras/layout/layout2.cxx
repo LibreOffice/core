@@ -777,10 +777,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
     pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"1.");
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"a)");
-    // TODO: show as b)[a)]
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text", u"b)");
-    // FIXME: This must be "c)[b]"
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text", u"c)[a)] ");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text", u"b)[a)] ");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text", u"c)[b)] ");
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text", u"2.");
 }
 
