@@ -11,6 +11,8 @@
 
 #include <comphelper/compbase.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sot/exchange.hxx>
 #include <svx/svdpage.hxx>
@@ -2293,6 +2295,41 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSpillMatrixContractionOnEdit)
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(3, 2, 0))); // D3
     CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(3, 3, 0))); // D4
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(3, 4, 0))); // D5 cleared
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSetHyperlinkKeepSelection)
+{
+    // Given a Calc doc with "foo" in cell A1 and the cell cursor on A1:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    pDoc->SetString(ScAddress(0, 0, 0), u"foo"_ustr);
+    goToCell(u"A1"_ustr);
+
+    // When dispatching .uno:SetHyperlink with Hyperlink.Text differing from the cell content,
+    // but marked as a hint:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, uno::Any(u"mytext"_ustr)),
+        comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, uno::Any(true)),
+        comphelper::makePropertyValue(u"Hyperlink.URL"_ustr,
+                                      uno::Any(u"http://www.example.com"_ustr)),
+    };
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr, aArgs);
+
+    // Commit the input mode that InsertURLField left the cell in.
+    ScModule::get()->InputEnterHandler();
+
+    // Then make sure the cell's existing content is preserved as the URL field's
+    // displayed text, not replaced by Hyperlink.Text:
+    const EditTextObject* pEditText = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pEditText);
+    const SvxFieldData* pField = pEditText->GetFieldData(0, 0, css::text::textfield::Type::URL);
+    auto pURLField = dynamic_cast<const SvxURLField*>(pField);
+    CPPUNIT_ASSERT(pURLField);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: foo
+    // - Actual  : mytext
+    // i.e. the cell content was lost, the provided text hint was used.
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, pURLField->GetRepresentation());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
