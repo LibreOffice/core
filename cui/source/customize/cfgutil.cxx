@@ -251,11 +251,11 @@ OUString CuiConfigFunctionListBox::GetCommandHelpText()
     SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
     if (pData)
     {
-        if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
+        if ( pData->getKind() == SfxCfgKind::FUNCTION_SLOT )
         {
             return Application::GetHelp()->GetHelpText(pData->sCommand);
         }
-        else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
+        else if ( pData->getKind() == SfxCfgKind::FUNCTION_SCRIPT )
         {
             return pData->sHelpText;
         }
@@ -312,27 +312,6 @@ void CuiConfigFunctionListBox::ClearAll()
     possibly existing MacroInfo.
 */
 {
-    sal_uInt16 nCount = aArr.size();
-    for ( sal_uInt16 i=0; i<nCount; ++i )
-    {
-        SfxGroupInfo_Impl *pData = aArr[i].get();
-
-        if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-        {
-            OUString* pScriptURI = static_cast<OUString*>(pData->pObject);
-            delete pScriptURI;
-        }
-
-        if ( pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER )
-        {
-            XInterface* xi = static_cast<XInterface *>(pData->pObject);
-            if (xi != nullptr)
-            {
-                xi->release();
-            }
-        }
-    }
-
     aArr.clear();
     m_xTreeView->clear();
 }
@@ -340,8 +319,8 @@ void CuiConfigFunctionListBox::ClearAll()
 OUString CuiConfigFunctionListBox::GetSelectedScriptURI() const
 {
     SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
-    if (pData && pData->nKind == SfxCfgKind::FUNCTION_SCRIPT)
-        return *static_cast<OUString*>(pData->pObject);
+    if (pData && pData->getKind() == SfxCfgKind::FUNCTION_SCRIPT)
+        return std::get<size_t(SfxCfgKind::FUNCTION_SCRIPT)>(pData->aData);
     return OUString();
 }
 
@@ -440,30 +419,6 @@ CuiConfigGroupListBox::~CuiConfigGroupListBox()
 
 void CuiConfigGroupListBox::ClearAll()
 {
-    sal_uInt16 nCount = aArr.size();
-    for ( sal_uInt16 i=0; i<nCount; ++i )
-    {
-        SfxGroupInfo_Impl *pData = aArr[i].get();
-        if (pData->nKind == SfxCfgKind::GROUP_STYLES && pData->pObject)
-        {
-            SfxStyleInfo_Impl* pStyle = static_cast<SfxStyleInfo_Impl*>(pData->pObject);
-            delete pStyle;
-        }
-        else if (pData->nKind == SfxCfgKind::FUNCTION_SCRIPT && pData->pObject )
-        {
-            OUString* pScriptURI = static_cast<OUString*>(pData->pObject);
-            delete pScriptURI;
-        }
-        else if (pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER)
-        {
-            XInterface* xi = static_cast<XInterface *>(pData->pObject);
-            if (xi != nullptr)
-            {
-                xi->release();
-            }
-        }
-    }
-
     aArr.clear();
     m_xTreeView->clear();
 }
@@ -494,7 +449,9 @@ sal_Int32 CuiConfigGroupListBox::InitModule()
             catch(const css::container::NoSuchElementException&)
                 { continue; }
 
-            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, nGroupID ) );
+            aArr.push_back(
+                std::make_unique<SfxGroupInfo_Impl>(
+                    SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_FUNCTION>), nGroupID ) );
             m_xTreeView->append(weld::toId(aArr.back().get()), sGroupName);
             nAddedGroups++;
         }
@@ -568,10 +525,6 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                 }
                 if (theChild->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
                 {
-//                  We call acquire on the XBrowseNode so that it does not
-//                  get autodestructed and become invalid when accessed later.
-                    theChild->acquire();
-
                     bool bChildOnDemand = false;
 
                     if ( theChild->hasChildNodes() )
@@ -594,8 +547,11 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
 
                     OUString aImage = GetImage(theChild, m_xContext, bIsRootNode);
 
-                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
-                            0, static_cast<void *>( theChild.get())));
+                    aArr.push_back(
+                        std::make_unique<SfxGroupInfo_Impl>(
+                            SfxGroupInfo_Data(
+                                SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>, theChild),
+                            0));
 
                     OUString sId(weld::toId(aArr.back().get()));
                     m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, bChildOnDemand, m_xScratchIter.get());
@@ -617,7 +573,8 @@ void CuiConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchI
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rInfo.Command, m_sModuleLongName);
 
         OUString sUIName = MapCommand2UIName(rInfo.Command);
-        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
+        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(
+                            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::FUNCTION_SLOT>), 0 ) );
         SfxGroupInfo_Impl* pGrpInfo = aArr.back().get();
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel   = sUIName;
@@ -670,7 +627,8 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     // add All Commands to the top
     if ( bEventMode && nAddedGroups )
     {
-        aArr.insert(aArr.begin(), std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
+        aArr.insert(aArr.begin(), std::make_unique<SfxGroupInfo_Impl>(
+                        SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_ALLFUNCTIONS>), 0));
         OUString sId(weld::toId(aArr.front().get()));
         OUString s(CuiResId(RID_CUISTR_ALLFUNCTIONS));
         m_xTreeView->insert(nullptr, 0, &s, &sId, nullptr, nullptr, false, nullptr);
@@ -681,12 +639,11 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     {
         if ( bEventMode )
         {
-                //We call acquire on the XBrowseNode so that it does not
-                //get autodestructed and become invalid when accessed later.
-            rootNode->acquire();
-
-            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
-                    static_cast<void *>(rootNode.get())));
+            aArr.push_back(
+                std::make_unique<SfxGroupInfo_Impl>(
+                    SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>,
+                                      rootNode),
+                    0) );
             OUString aTitle(xImp->m_sDlgMacros);
             OUString sId(weld::toId(aArr.back().get()));
             m_xTreeView->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, true, nullptr);
@@ -702,12 +659,17 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     // add styles and sidebar decks to the end
     if ( bEventMode )
     {
-        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
+        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(
+                            // TODO last parameter should contain user data
+                            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_STYLES>),
+                            0 ) );
         OUString sStyle(xImp->m_aStrGroupStyles);
         OUString sId(weld::toId(aArr.back().get()));
         m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, true, nullptr);
 
-        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SIDEBARDECKS, 0));
+        aArr.push_back(
+            std::make_unique<SfxGroupInfo_Impl>(
+                SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_SIDEBARDECKS>), 0) );
         OUString sSidebarDecks(xImp->m_aStrGroupSidebarDecks);
         sId = weld::toId(aArr.back().get());
         m_xTreeView->insert(nullptr, -1, &sSidebarDecks, &sId, nullptr, nullptr, false, nullptr);
@@ -846,7 +808,7 @@ void CuiConfigGroupListBox::GroupSelected()
     m_pFunctionListBox->freeze();
     m_pFunctionListBox->ClearAll();
 
-    switch ( pInfo->nKind )
+    switch ( pInfo->getKind() )
     {
         case SfxCfgKind::GROUP_ALLFUNCTIONS:
         {
@@ -855,7 +817,7 @@ void CuiConfigGroupListBox::GroupSelected()
             while (bValidIter)
             {
                 SfxGroupInfo_Impl *pCurrentInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter));
-                if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
+                if (pCurrentInfo->getKind() == SfxCfgKind::GROUP_FUNCTION)
                 {
                     css::uno::Sequence< css::frame::DispatchInformation > lCommands;
                     try
@@ -884,7 +846,7 @@ void CuiConfigGroupListBox::GroupSelected()
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
             Reference< browse::XBrowseNode > rootNode(
-                static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+                std::get<size_t(SfxCfgKind::GROUP_SCRIPTCONTAINER)>(pInfo->aData));
 
             try {
                 if ( rootNode->hasChildNodes() )
@@ -920,10 +882,12 @@ void CuiConfigGroupListBox::GroupSelected()
                                 // do nothing, the description will be empty
                             }
 
-                            OUString* pScriptURI = new OUString( uri );
-
                             OUString aImage = GetImage(childNode, Reference< XComponentContext >(), false);
-                            m_pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+                            m_pFunctionListBox->aArr.push_back(
+                                std::make_unique<SfxGroupInfo_Impl>(
+                                    SfxGroupInfo_Data(
+                                        SfxCfgKindAsIndex<SfxCfgKind::FUNCTION_SCRIPT>, uri),
+                                    0 ));
                             m_pFunctionListBox->aArr.back()->sCommand = uri;
                             m_pFunctionListBox->aArr.back()->sLabel = childNode->getName();
                             m_pFunctionListBox->aArr.back()->sHelpText = description;
@@ -942,18 +906,24 @@ void CuiConfigGroupListBox::GroupSelected()
 
         case SfxCfgKind::GROUP_STYLES :
         {
-            SfxStyleInfo_Impl* pFamily = static_cast<SfxStyleInfo_Impl*>(pInfo->pObject);
+            SfxStyleInfo_Impl* pFamily
+                = std::get<size_t(SfxCfgKind::GROUP_STYLES)>(pInfo->aData).get();
+
             if (pFamily)
             {
                 const std::vector< SfxStyleInfo_Impl > lStyles = m_pStylesInfo->getStyles(pFamily->sFamily);
                 for (auto const& lStyle : lStyles)
                 {
-                    SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(lStyle);
-                    m_pFunctionListBox->aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, pStyle));
-                    m_pFunctionListBox->aArr.back()->sCommand = pStyle->sCommand;
-                    m_pFunctionListBox->aArr.back()->sLabel = pStyle->sLabel;
+                    auto pStyle = std::make_unique<SfxStyleInfo_Impl>(lStyle);
+                    m_pFunctionListBox->aArr.push_back(
+                        std::make_unique<SfxGroupInfo_Impl>(
+                            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_STYLES>,
+                                              std::move(pStyle)),
+                            0));
+                    m_pFunctionListBox->aArr.back()->sCommand = lStyle.sCommand;
+                    m_pFunctionListBox->aArr.back()->sLabel = lStyle.sLabel;
                     OUString sId(weld::toId(m_pFunctionListBox->aArr.back().get()));
-                    m_pFunctionListBox->append(sId, pStyle->sLabel);
+                    m_pFunctionListBox->append(sId, lStyle.sLabel);
                 }
             }
             break;
@@ -969,9 +939,9 @@ void CuiConfigGroupListBox::GroupSelected()
             for (auto const& rDeck : aDecks)
             {
                 const OUString sCommand = ".uno:SidebarDeck." + rDeck.msId;
-                m_pFunctionListBox->aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(
-                                                       SfxCfgKind::GROUP_SIDEBARDECKS, 0,
-                                                       nullptr));
+                m_pFunctionListBox->aArr.push_back(
+                    std::make_unique<SfxGroupInfo_Impl>(
+                        SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_SIDEBARDECKS>), 0));
                 m_pFunctionListBox->aArr.back()->sCommand = sCommand;
                 m_pFunctionListBox->aArr.back()->sLabel = rDeck.msId;
                 m_pFunctionListBox->aArr.back()->sTooltip =
@@ -985,7 +955,7 @@ void CuiConfigGroupListBox::GroupSelected()
 
         default:
             // Do nothing, the list box will stay empty
-            SAL_INFO( "cui.customize", "Ignoring unexpected SfxCfgKind: " <<  static_cast<int>(pInfo->nKind) );
+            SAL_INFO( "cui.customize", "Ignoring unexpected SfxCfgKind: " <<  pInfo->aData.index() );
             break;
     }
 
@@ -1001,14 +971,14 @@ void CuiConfigGroupListBox::GroupSelected()
 IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 {
     SfxGroupInfo_Impl *pInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter));
-    switch ( pInfo->nKind )
+    switch ( pInfo->getKind() )
     {
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
             if (!m_xTreeView->iter_has_child(rIter))
             {
-                Reference< browse::XBrowseNode > rootNode(
-                    static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+                const Reference< browse::XBrowseNode >& rootNode =
+                    std::get<size_t(SfxCfgKind::GROUP_SCRIPTCONTAINER)>(pInfo->aData);
                 FillScriptList(rootNode, &rIter);
             }
             break;
@@ -1021,10 +991,14 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
                 const std::vector<SfxStyleInfo_Impl> lStyleFamilies = m_pStylesInfo->getStyleFamilies();
                 for (auto const& lStyleFamily : lStyleFamilies)
                 {
-                    SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(lStyleFamily);
-                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
+                    auto pFamily = std::make_unique<SfxStyleInfo_Impl>(lStyleFamily);
+                    aArr.push_back(
+                        std::make_unique<SfxGroupInfo_Impl>(
+                            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_STYLES>,
+                                              std::move(pFamily)),
+                            0 ));
                     OUString sId(weld::toId(aArr.back().get()));
-                    m_xTreeView->insert(&rIter, -1, &pFamily->sLabel, &sId, nullptr, nullptr, false, nullptr);
+                    m_xTreeView->insert(&rIter, -1, &lStyleFamily.sLabel, &sId, nullptr, nullptr, false, nullptr);
                 }
             }
             break;
@@ -1302,9 +1276,9 @@ SvxScriptSelectorDialog::GetScriptURL() const
     if (std::unique_ptr<weld::TreeIter> xIter = m_xCommands->get_selected())
     {
         SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter));
-        if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
-            ||  ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-            ||  ( pData->nKind == SfxCfgKind::GROUP_STYLES )
+        if  (   ( pData->getKind() == SfxCfgKind::FUNCTION_SLOT )
+            ||  ( pData->getKind() == SfxCfgKind::FUNCTION_SCRIPT )
+            ||  ( pData->getKind() == SfxCfgKind::GROUP_STYLES )
             )
         {
             result = pData->sCommand;

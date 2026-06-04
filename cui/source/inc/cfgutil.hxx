@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <variant>
 #include <vector>
 #include <memory>
 #include <string_view>
@@ -85,27 +86,46 @@ public:
 
 enum class SfxCfgKind
 {
-    GROUP_FUNCTION           = 1,
-    FUNCTION_SLOT            = 2,
-    GROUP_SCRIPTCONTAINER    = 3,
-    FUNCTION_SCRIPT          = 4,
-    GROUP_STYLES             = 5,
-    GROUP_ALLFUNCTIONS       = 6,
-    GROUP_SIDEBARDECKS       = 7
+    GROUP_FUNCTION,
+    FUNCTION_SLOT,
+    GROUP_SCRIPTCONTAINER,
+    FUNCTION_SCRIPT,
+    GROUP_STYLES,
+    GROUP_ALLFUNCTIONS,
+    GROUP_SIDEBARDECKS,
 };
+
+// Used to construct SfxGroupInfo_Data by selecting the variant as an index tag
+template <SfxCfgKind K>
+constexpr std::in_place_index_t<size_t(K)> SfxCfgKindAsIndex {};
+
+// The types must match the order of the values of SfxCfgKind
+typedef std::variant<
+    std::monostate, // GROUP_FUNCTION
+    std::monostate, // FUNCTION_SLOT
+    css::uno::Reference<css::script::browse::XBrowseNode>, // GROUP_SCRIPTCONTAINER
+    OUString, // FUNCTION_SCRIPT
+    std::unique_ptr<SfxStyleInfo_Impl>, // GROUP_STYLES
+    std::monostate, // GROUP_ALLFUNCTIONS
+    std::monostate // GROUP_SIDEBARDECKS
+    > SfxGroupInfo_Data;
 
 struct SfxGroupInfo_Impl
 {
-    SfxCfgKind  nKind;
+    SfxGroupInfo_Data aData;
     sal_uInt16  nUniqueID;
-    void*       pObject;
     OUString    sCommand;
     OUString    sLabel;
     OUString    sHelpText;
     OUString    sTooltip;
 
-                SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = nullptr ) :
-                    nKind( n ), nUniqueID( nr ), pObject( pObj ) {}
+    SfxGroupInfo_Impl( SfxGroupInfo_Data ad, sal_uInt16 nr )
+        : aData( std::move(ad) )
+        , nUniqueID( nr )
+    {
+    }
+
+    SfxCfgKind getKind() const { return static_cast<SfxCfgKind>(aData.index()); }
 };
 
 typedef std::vector<std::unique_ptr<SfxGroupInfo_Impl> > SfxGroupInfoArr_Impl;

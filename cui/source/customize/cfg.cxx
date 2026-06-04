@@ -1333,9 +1333,9 @@ OUString SvxConfigPage::GetScriptURL() const
     SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xFunctions->get_selected_id());
     if (pData)
     {
-        if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT ) ||
-                ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT ) ||
-                ( pData->nKind == SfxCfgKind::GROUP_STYLES )    )
+        if  (   ( pData->getKind() == SfxCfgKind::FUNCTION_SLOT ) ||
+                ( pData->getKind() == SfxCfgKind::FUNCTION_SCRIPT ) ||
+                ( pData->getKind() == SfxCfgKind::GROUP_STYLES )    )
         {
             result = pData->sCommand;
         }

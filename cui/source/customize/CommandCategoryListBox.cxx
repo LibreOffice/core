@@ -66,29 +66,6 @@ CommandCategoryListBox::~CommandCategoryListBox() { ClearAll(); }
 
 void CommandCategoryListBox::ClearAll()
 {
-    // Clear objects from m_aGroupInfo vector to avoid memory leak
-    for (const auto& It : m_aGroupInfo)
-    {
-        if (It->nKind == SfxCfgKind::GROUP_STYLES && It->pObject)
-        {
-            SfxStyleInfo_Impl* pStyle = static_cast<SfxStyleInfo_Impl*>(It->pObject);
-            delete pStyle;
-        }
-        else if (It->nKind == SfxCfgKind::FUNCTION_SCRIPT && It->pObject)
-        {
-            OUString* pScriptURI = static_cast<OUString*>(It->pObject);
-            delete pScriptURI;
-        }
-        else if (It->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER && It->pObject)
-        {
-            css::uno::XInterface* xi = static_cast<css::uno::XInterface*>(It->pObject);
-            if (xi != nullptr)
-            {
-                xi->release();
-            }
-        }
-    }
-
     m_aGroupInfo.clear();
     m_xControl->clear();
 }
@@ -132,8 +109,8 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
         if (nGroupsLength > 0)
         {
             // Add the category of "All commands"
-            m_aGroupInfo.push_back(
-                std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
+            m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_ALLFUNCTIONS>), 0));
             m_xControl->append(weld::toId(m_aGroupInfo.back().get()),
                                CuiResId(RID_CUISTR_ALLFUNCTIONS));
         }
@@ -178,8 +155,8 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
         {
             const OUString& rGroupName = a.first;
             sal_Int16 nGroupID = a.second;
-            m_aGroupInfo.push_back(
-                std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_FUNCTION, nGroupID));
+            m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_FUNCTION>), nGroupID));
             m_xControl->append(weld::toId(m_aGroupInfo.back().get()), rGroupName);
         }
 
@@ -187,14 +164,14 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
         m_xControl->append_separator(u""_ustr);
 
         // Add macros category
-        m_aGroupInfo.push_back(
-            std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr));
+        m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>), 0));
         m_xControl->append(weld::toId(m_aGroupInfo.back().get()), CuiResId(RID_CUISTR_MACROS));
 
         // Add styles category
         //TODO: last param should contain user data?
-        m_aGroupInfo.push_back(
-            std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, nullptr));
+        m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_STYLES>), 0));
         m_xControl->append(weld::toId(m_aGroupInfo.back().get()),
                            CuiResId(RID_CUISTR_GROUP_STYLES));
     }
@@ -251,7 +228,8 @@ void CommandCategoryListBox::FillFunctionsList(
         if (pCurrentSaveInData)
             xImage = pCurrentSaveInData->GetImage(rInfo.Command);
 
-        m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::FUNCTION_SLOT, 0));
+        m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::FUNCTION_SLOT>), 0));
         SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel = sUIName;
@@ -300,7 +278,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
     pFunctionListBox->freeze();
     pFunctionListBox->ClearAll();
 
-    switch (pInfo->nKind)
+    switch (pInfo->getKind())
     {
         case SfxCfgKind::GROUP_ALLFUNCTIONS:
         {
@@ -316,7 +294,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                 if (!pCurrentInfo) //separator
                     continue;
 
-                if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
+                if (pCurrentInfo->getKind() == SfxCfgKind::GROUP_FUNCTION)
                 {
                     css::uno::Sequence<css::frame::DispatchInformation> lCommands;
                     try
@@ -366,12 +344,10 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
 
             if (rootNode.is() && rootNode->hasChildNodes())
             {
-                //We call acquire on the XBrowseNode so that it does not
-                //get autodestructed and become invalid when accessed later.
-                rootNode->acquire();
-
                 m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
-                    SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void*>(rootNode.get())));
+                    SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>,
+                                      rootNode),
+                    0));
 
                 // Add main macro groups
                 const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
@@ -400,7 +376,8 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                         }
 
                         m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
-                            SfxCfgKind::GROUP_SCRIPTCONTAINER, 0));
+                            SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>),
+                            0));
                         std::unique_ptr<weld::TreeIter> xMacroGroup(pFunctionListBox->tree_append(
                             weld::toId(m_aGroupInfo.back().get()), sUIName));
 
@@ -440,8 +417,8 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                     continue;
                 }
 
-                m_aGroupInfo.push_back(
-                    std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0));
+                m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                    SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_STYLES>), 0));
                 // pIt.sLabel is Name of the style family
                 std::unique_ptr<weld::TreeIter> xFuncEntry(pFunctionListBox->tree_append(
                     weld::toId(m_aGroupInfo.back().get()), pIt.sLabel));
@@ -466,13 +443,15 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                         continue;
                     }
 
-                    SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(pStyleIt);
+                    auto pStyle = std::make_unique<SfxStyleInfo_Impl>(pStyleIt);
 
-                    m_aGroupInfo.push_back(
-                        std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, pStyle));
+                    m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                        SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_STYLES>,
+                                          std::move(pStyle)),
+                        0));
 
-                    m_aGroupInfo.back()->sCommand = pStyle->sCommand;
-                    m_aGroupInfo.back()->sLabel = pStyle->sLabel;
+                    m_aGroupInfo.back()->sCommand = pStyleIt.sCommand;
+                    m_aGroupInfo.back()->sLabel = pStyleIt.sLabel;
 
                     pFunctionListBox->append(weld::toId(m_aGroupInfo.back().get()), sUIName,
                                              xFuncEntry.get());
@@ -493,8 +472,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
         }
         default:
             // Do nothing, the list box will stay empty
-            SAL_INFO("cui.customize",
-                     "Ignoring unexpected SfxCfgKind: " << static_cast<int>(pInfo->nKind));
+            SAL_INFO("cui.customize", "Ignoring unexpected SfxCfgKind: " << pInfo->aData.index());
             break;
     }
 
@@ -528,11 +506,8 @@ void CommandCategoryListBox::addChildren(
         {
             OUString sUIName = child->getName();
 
-            // Acquire a reference that will be owned by SfxGroupInfo_Impl and released in ClearAll.
-            child->acquire();
-
             m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
-                SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void*>(child.get())));
+                SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>, child), 0));
             std::unique_ptr<weld::TreeIter> xNewEntry(pFunctionListBox->tree_append(
                 weld::toId(m_aGroupInfo.back().get()), sUIName, parentEntry));
 
@@ -585,14 +560,12 @@ void CommandCategoryListBox::addChildren(
                 description = CuiResId(RID_CUISTR_NOMACRODESC);
             }
 
-            OUString* pScriptURI = new OUString(uri);
-
             css::uno::Reference<css::graphic::XGraphic> xImage;
             if (pCurrentSaveInData)
                 xImage = pCurrentSaveInData->GetImage(uri);
 
-            m_aGroupInfo.push_back(
-                std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI));
+            m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                SfxGroupInfo_Data(SfxCfgKindAsIndex<SfxCfgKind::FUNCTION_SCRIPT>, uri), 0));
             m_aGroupInfo.back()->sCommand = uri;
             m_aGroupInfo.back()->sLabel = sUIName;
             m_aGroupInfo.back()->sHelpText = description;
