@@ -321,7 +321,7 @@ OUString CuiConfigFunctionListBox::GetSelectedScriptURI() const
 {
     SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
     if (pData && pData->getKind() == SfxCfgKind::FUNCTION_SCRIPT)
-        return std::get<size_t(SfxCfgKind::FUNCTION_SCRIPT)>(pData->aData);
+        return std::get<size_t(SfxCfgKind::FUNCTION_SCRIPT)>(pData->aData).sUrl;
     return OUString();
 }
 
@@ -466,6 +466,7 @@ sal_Int32 CuiConfigGroupListBox::InitModule()
 }
 
 void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
+                                           const css::uno::Reference< css::frame::XModel >& xParentDocumentModel,
                                            const weld::TreeIter* pParentEntry)
 {
     try {
@@ -505,6 +506,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
 
                 bool bDisplay = true;
                 OUString uiName = theChild->getName();
+                Reference< XModel > xDocumentModel;
                 if ( bIsRootNode )
                 {
                     if (  ! (uiName == user  || uiName == share ||
@@ -522,7 +524,15 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                         {
                             uiName = xImp->m_sProdMacros;
                         }
+                        else
+                        {
+                            xDocumentModel = getDocumentModel(m_xContext, uiName);
+                        }
                     }
+                }
+                else
+                {
+                    xDocumentModel = xParentDocumentModel;
                 }
                 if (theChild->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
                 {
@@ -551,7 +561,8 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                     aArr.push_back(
                         std::make_unique<SfxGroupInfo_Impl>(
                             SfxGroupInfo_Data(
-                                SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>, theChild),
+                                SfxCfgKindAsIndex<SfxCfgKind::GROUP_SCRIPTCONTAINER>, theChild,
+                                xDocumentModel),
                             0));
 
                     OUString sId(weld::toId(aArr.back().get()));
@@ -653,7 +664,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         {
              //We are only showing scripts not slot APIs so skip
              //Root node and show location nodes
-            FillScriptList(rootNode, nullptr);
+            FillScriptList(rootNode, css::uno::Reference<css::frame::XModel>(), nullptr);
         }
     }
 
@@ -818,14 +829,14 @@ void CuiConfigGroupListBox::GroupSelected()
 
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
-            Reference< browse::XBrowseNode > rootNode(
-                std::get<size_t(SfxCfgKind::GROUP_SCRIPTCONTAINER)>(pInfo->aData));
+            const SfxScriptContainer_Data& rContainerData =
+                std::get<size_t(SfxCfgKind::GROUP_SCRIPTCONTAINER)>(pInfo->aData);
 
             try {
-                if ( rootNode->hasChildNodes() )
+                if ( rContainerData.xBrowseNode->hasChildNodes() )
                 {
                     const Sequence< Reference< browse::XBrowseNode > > children =
-                        rootNode->getChildNodes();
+                        rContainerData.xBrowseNode->getChildNodes();
 
                     for ( const Reference< browse::XBrowseNode >& childNode : children )
                     {
@@ -859,7 +870,8 @@ void CuiConfigGroupListBox::GroupSelected()
                             m_pFunctionListBox->aArr.push_back(
                                 std::make_unique<SfxGroupInfo_Impl>(
                                     SfxGroupInfo_Data(
-                                        SfxCfgKindAsIndex<SfxCfgKind::FUNCTION_SCRIPT>, uri),
+                                        SfxCfgKindAsIndex<SfxCfgKind::FUNCTION_SCRIPT>, uri,
+                                        rContainerData.xModel),
                                     0 ));
                             m_pFunctionListBox->aArr.back()->sCommand = uri;
                             m_pFunctionListBox->aArr.back()->sLabel = childNode->getName();
@@ -950,9 +962,9 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
         {
             if (!m_xTreeView->iter_has_child(rIter))
             {
-                const Reference< browse::XBrowseNode >& rootNode =
+                const SfxScriptContainer_Data& rContainerData =
                     std::get<size_t(SfxCfgKind::GROUP_SCRIPTCONTAINER)>(pInfo->aData);
-                FillScriptList(rootNode, &rIter);
+                FillScriptList(rContainerData.xBrowseNode, rContainerData.xModel, &rIter);
             }
             break;
         }
