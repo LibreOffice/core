@@ -55,6 +55,9 @@ namespace cool {
 						primitive as LineRectanglePrimitive,
 					);
 					break;
+				case SingleLinePrimitive.type:
+					this._renderSingleLine(context, primitive as SingleLinePrimitive);
+					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
@@ -190,6 +193,26 @@ namespace cool {
 			// LineRectangle is a one-canvas-pixel outline by definition.
 			context.lineWidth = 1;
 			context.strokeRect(minX, minY, maxX - minX, maxY - minY);
+			context.restore();
+		}
+
+		private _renderSingleLine(
+			context: CanvasRenderingContext2D,
+			primitive: SingleLinePrimitive,
+		): void {
+			const startX = primitive.startX ?? 0;
+			const startY = primitive.startY ?? 0;
+			const endX = primitive.endX ?? 0;
+			const endY = primitive.endY ?? 0;
+
+			context.save();
+			context.strokeStyle = primitive.color ?? '#000000';
+			// SingleLine renders at one canvas pixel by definition.
+			context.lineWidth = 1;
+			context.beginPath();
+			context.moveTo(startX, startY);
+			context.lineTo(endX, endY);
+			context.stroke();
 			context.restore();
 		}
 

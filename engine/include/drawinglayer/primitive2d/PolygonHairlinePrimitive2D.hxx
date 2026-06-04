@@ -70,7 +70,7 @@ public:
     PolygonHairlinePrimitive2D (see above). It is also a
     hairline-primitive, see above.
 */
-class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) SingleLinePrimitive2D final : public BasePrimitive2D
+class DRAWINGLAYER_DLLPUBLIC SingleLinePrimitive2D final : public BasePrimitive2D
 {
 private:
     /// the line geometry

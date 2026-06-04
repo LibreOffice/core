@@ -413,6 +413,30 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('save'), 'save not called');
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
+
+		it('strokes a single line from start to end', function () {
+			const primitive = loadVectorRenderingReference(
+				'testSingleLine',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'singleLine');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const moveTo = recorder.findCall('moveTo');
+			const lineTo = recorder.findCall('lineTo');
+			nodeassert.ok(moveTo, 'moveTo not called');
+			nodeassert.ok(lineTo, 'lineTo not called');
+			nodeassert.deepStrictEqual(moveTo.args, [primitive.startX, primitive.startY]);
+			nodeassert.deepStrictEqual(lineTo.args, [primitive.endX, primitive.endY]);
+			nodeassert.ok(recorder.findCall('stroke'), 'stroke not called');
+			nodeassert.strictEqual(
+				recorder.properties.strokeStyle,
+				primitive.color,
+			);
+			nodeassert.strictEqual(recorder.properties.lineWidth, 1);
+		});
 	});
 
 	// Fixtures from documents. Each fixture is a full reply built

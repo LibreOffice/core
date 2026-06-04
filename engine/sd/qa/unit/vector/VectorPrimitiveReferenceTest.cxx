@@ -440,6 +440,25 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testLineRectangle)
     CPPUNIT_ASSERT_EQUAL(size_t(4), aJson.getSize("/primitives/0/bounds").value_or(0));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testSingleLine)
+{
+    // A red line segment from (10, 20) to (110, 70). The wire
+    // carries the colour and four endpoint coordinates.
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new SingleLinePrimitive2D(basegfx::B2DPoint(10.0, 20.0),
+                                                 basegfx::B2DPoint(110.0, 70.0),
+                                                 basegfx::BColor(1.0, 0.0, 0.0)));
+
+    auto aJson = writeReference(u"testSingleLine", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "singleLine");
+    assertJsonPath(aJson, "/primitives/0/color", "#ff0000");
+    assertJsonPathDouble(aJson, "/primitives/0/startX", 10.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/startY", 20.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/endX", 110.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/endY", 70.0, 1e-9);
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
 {
     // A dot-dash stroke pattern reaches the wire as stroke.dotDashArray.
