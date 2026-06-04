@@ -482,6 +482,7 @@ class AbstractScriptSelectorDialog_Impl final
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetScriptURL() const override { return m_pDlg->GetScriptURL(); }
+    Reference<frame::XModel> GetScriptModel() const override { return m_pDlg->GetScriptModel(); }
     void SetRunLabel() override { m_pDlg->SetRunLabel(); }
 };
 }

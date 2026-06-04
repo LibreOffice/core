@@ -321,6 +321,7 @@ public:
     virtual ~SvxScriptSelectorDialog() override;
 
     OUString    GetScriptURL() const;
+    css::uno::Reference<css::frame::XModel> GetScriptModel() const;
     void        SetRunLabel();
     void        SaveLastUsedMacro();
     void        LoadLastUsedMacro();

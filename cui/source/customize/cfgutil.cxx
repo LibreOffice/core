@@ -1273,6 +1273,31 @@ SvxScriptSelectorDialog::GetScriptURL() const
     return result;
 }
 
+css::uno::Reference<css::frame::XModel>
+SvxScriptSelectorDialog::GetScriptModel() const
+{
+    Reference<frame::XModel> xModel;
+
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xCommands->get_selected())
+    {
+        SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter));
+
+        switch (pData->getKind())
+        {
+            case SfxCfgKind::FUNCTION_SCRIPT:
+                xModel = std::get<size_t(SfxCfgKind::FUNCTION_SCRIPT)>(pData->aData).xModel;
+                break;
+            case SfxCfgKind::GROUP_SCRIPTCONTAINER:
+                xModel = std::get<size_t(SfxCfgKind::GROUP_SCRIPTCONTAINER)>(pData->aData).xModel;
+                break;
+            default:
+                break;
+        }
+    }
+
+    return xModel;
+}
+
 void
 SvxScriptSelectorDialog::SaveLastUsedMacro()
 {
