@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-06-03 16:22+0000\n"
-"Last-Translator: Mylo <admin@lesamanins.com>\n"
+"PO-Revision-Date: 2026-06-05 00:58+0000\n"
+"Last-Translator: Azerliap <azerliap@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
 "Language: fr\n"
@@ -1062,8 +1062,8 @@ msgstr ""
 #: js/global.js:1810
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr ""
-"Le document est en cours de migration vers un nouveau serveur.\n"
-"Ré-essaie sous-peu..."
+"Le document est en cours de migration vers un nouveau serveur. Ré-essaie "
+"sous-peu..."
 
 #: js/global.js:1812
 msgid "Failed to get RouteToken from controller"
@@ -1084,8 +1084,9 @@ msgstr ""
 "ms"
 
 #: src/app/LOUtil.ts:981
+#, fuzzy
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "{0} site internet, s'ouvre dans un nouvel onglet"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
@@ -1288,7 +1289,7 @@ msgstr "Inspecter avec assistant de fonction"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Modifier dans la barre de formule"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
@@ -1305,6 +1306,7 @@ msgstr "Pied de page"
 #: src/control/CalcNotifications.ts:41
 msgid "A formula range was not extended to include the inserted cells."
 msgstr ""
+"Une plage de formule n'a pas été étendue pour inclure les cellules insérées."
 
 #: src/control/CalcNotifications.ts:50
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
@@ -1326,8 +1328,9 @@ msgstr "Couleur automatique"
 
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
+#, fuzzy
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(s'ouvre dans un nouvel onglet)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -1494,20 +1497,24 @@ msgstr "Envoyer message"
 
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
+#, fuzzy
 msgid "Set tone"
-msgstr ""
+msgstr "Définir le ton"
 
 #: src/control/Control.AIChatSidebar.ts:889
+#, fuzzy
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Définir le ton de la voix"
 
 #: src/control/Control.AIChatSidebar.ts:890
+#, fuzzy
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Ton de la voix: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
+#, fuzzy
 msgid "with emoji"
-msgstr ""
+msgstr "avec émoticone"
 
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
@@ -1518,20 +1525,24 @@ msgstr "Aucun(e)"
 
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
+#, fuzzy
 msgid "Tone of voice"
-msgstr ""
+msgstr "Ton de la voix"
 
 #: src/control/Control.AIChatSidebar.ts:953
+#, fuzzy
 msgid "Reset voice"
-msgstr ""
+msgstr "Réinitialiser la voix"
 
 #: src/control/Control.AIChatSidebar.ts:956
+#, fuzzy
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Réinitialiser le ton de la voix"
 
 #: src/control/Control.AIChatSidebar.ts:972
+#, fuzzy
 msgid "Your tones"
-msgstr ""
+msgstr "Vos tons"
 
 #: src/control/Control.AIChatSidebar.ts:989
 #, fuzzy
@@ -1539,12 +1550,14 @@ msgid "Edit tone"
 msgstr "Mode édition"
 
 #: src/control/Control.AIChatSidebar.ts:1006
+#, fuzzy
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Ajouter ma propre voix"
 
 #: src/control/Control.AIChatSidebar.ts:1008
+#, fuzzy
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Ajouter un ton de voix customisé"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
@@ -1570,32 +1583,38 @@ msgid "Use icon"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1199
+#, fuzzy
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Choisissez un autre émoticône"
 
 #: src/control/Control.AIChatSidebar.ts:1213
+#, fuzzy
 msgid "Back to tones"
-msgstr ""
+msgstr "Retour au tons"
 
 #: src/control/Control.AIChatSidebar.ts:1226
+#, fuzzy
 msgid "Icon"
-msgstr ""
+msgstr "Icônes"
 
 #: src/control/Control.AIChatSidebar.ts:1238
+#, fuzzy
 msgid "Name your tone"
-msgstr ""
+msgstr "Nommer votre ton"
 
 #: src/control/Control.AIChatSidebar.ts:1245
+#, fuzzy
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "p.ex. Réponse rapide"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1252
+#, fuzzy
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Décrivez comment l'IA devrait écrire"
 
 #: src/control/Control.AIChatSidebar.ts:1260
 msgid ""
@@ -1603,57 +1622,68 @@ msgid ""
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1264
+#, fuzzy
 msgid "Tone description"
-msgstr ""
+msgstr "Description du ton"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
+#, fuzzy
 msgid "Delete tone"
-msgstr ""
+msgstr "Supprimer le ton"
 
 #: src/control/Control.AIChatSidebar.ts:1275
+#, fuzzy
 msgid "Delete this tone"
-msgstr ""
+msgstr "Supprimer ce ton"
 
 #: src/control/Control.AIChatSidebar.ts:1288
+#, fuzzy
 msgid "Save voice"
-msgstr ""
+msgstr "Sauvegarder la voix"
 
 #: src/control/Control.AIChatSidebar.ts:1290
+#, fuzzy
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Sauvegarder le ton de la voix"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
+#, fuzzy
 msgid "Search emojis"
-msgstr ""
+msgstr "Rechercher des émoticônes"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
+#, fuzzy
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Choisir un émoticône"
 
 #: src/control/Control.AIChatSidebar.ts:1330
+#, fuzzy
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Confirmer la suppression du ton"
 
 #: src/control/Control.AIChatSidebar.ts:1341
+#, fuzzy
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Ce ton de voix sera supprimé"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "Annuler la suppression"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
+#, fuzzy
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Vous avez atteint le maximum de {0} tons personnalisés."
 
 #: src/control/Control.AIChatSidebar.ts:1631
+#, fuzzy
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Utiliser le texte sélectionné comme contexte"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
@@ -1664,32 +1694,39 @@ msgid "Sanity check data"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1651
+#, fuzzy
 msgid "Create a formula"
-msgstr ""
+msgstr "Créer une formule"
 
 #: src/control/Control.AIChatSidebar.ts:1658
+#, fuzzy
 msgid "Create slides"
-msgstr ""
+msgstr "Créer des diapositives"
 
 #: src/control/Control.AIChatSidebar.ts:1690
+#, fuzzy
 msgid "See less"
-msgstr ""
+msgstr "Voir moins"
 
 #: src/control/Control.AIChatSidebar.ts:1690
+#, fuzzy
 msgid "See more"
-msgstr ""
+msgstr "Voir plus"
 
 #: src/control/Control.AIChatSidebar.ts:1800
+#, fuzzy
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Image insérée sur le curseur"
 
 #: src/control/Control.AIChatSidebar.ts:1819
+#, fuzzy
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Texte inséré sur le curseur"
 
 #: src/control/Control.AIChatSidebar.ts:1893
+#, fuzzy
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Limite de la longueur du message presque atteinte"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
@@ -1697,14 +1734,18 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2797
+#, fuzzy
 msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"La sélection contient des images ou d'autres contenus non-textes qui ne "
+"peuvent pas être envoyés comme contexte."
 
 #: src/control/Control.AIChatSidebar.ts:2049
+#, fuzzy
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Message trop long : Merci de le réduire et réessayez."
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
@@ -1716,33 +1757,40 @@ msgid "Generated image"
 msgstr "image générée par IA"
 
 #: src/control/Control.AIChatSidebar.ts:2137
+#, fuzzy
 msgid "AI request failed"
-msgstr ""
+msgstr "La requête AI a échoué"
 
 #: src/control/Control.AIChatSidebar.ts:2154
+#, fuzzy
 msgid "The AI assistant"
-msgstr ""
+msgstr "L'assistant AI"
 
 #: src/control/Control.AIChatSidebar.ts:2167
+#, fuzzy
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Voulez-vous procéder ?"
 
 #: src/control/Control.AIChatSidebar.ts:2170
+#, fuzzy
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 veut inspecter votre document. Voulez-vous procéder ?"
 
 #: src/control/Control.AIChatSidebar.ts:2174
+#, fuzzy
 msgid "Modify document structure"
-msgstr ""
+msgstr "Modifier la structure du document"
 
 #: src/control/Control.AIChatSidebar.ts:2176
+#, fuzzy
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 veut modifier votre document:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
+#, fuzzy
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Voulez-vous appliquer ce changement ?"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
