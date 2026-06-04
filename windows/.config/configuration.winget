@@ -1,18 +1,18 @@
 # yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
 
-# This configuration is for a typical end-user installation of Visual Studio Community 2022 with the
+# This configuration is for a typical end-user installation of Visual Studio Community 2026 with the
 # required components to build Collabora Office, excluding the components to cross-compile for ARM64
 # It includes recommended packages as if you had selected the "Desktop development with C++"
-# workload in the in the UI driven installer.
+# and ".NET desktop development" workloads in the UI driven installer.
 
 properties:
   resources:
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: VisualStudio
       directives:
-        description: Install Visual Studio 2022 Community
+        description: Install Visual Studio 2026 Community
       settings:
-        id: Microsoft.VisualStudio.2022.Community
+        id: Microsoft.VisualStudio.Community
         source: winget
     - resource: Microsoft.VisualStudio.DSC/VSComponents
       id: Collabora Office Components including recommended packages
@@ -22,7 +22,7 @@ properties:
         description: Install components required to build Collabora Office, including recommended ones
       settings:
         productId: Microsoft.VisualStudio.Product.Community
-        channelId: VisualStudio.17.Release
-        vsConfigFile: '${WinGetConfigRoot}\2022.vsconfig'
+        channelId: VisualStudio.18.Release
+        vsConfigFile: '${WinGetConfigRoot}\2026.vsconfig'
         IncludeRecommended: true
   configurationVersion: 0.2.0

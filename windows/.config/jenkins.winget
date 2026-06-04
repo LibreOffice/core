@@ -11,9 +11,9 @@ properties:
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: VisualStudio
       directives:
-        description: Install Visual Studio 2022 Community
+        description: Install Visual Studio 2026 Community
       settings:
-        id: Microsoft.VisualStudio.2022.Community
+        id: Microsoft.VisualStudio.Community
         source: winget
     - resource: Microsoft.VisualStudio.DSC/VSComponents
       id: minimal Collabora Office Components
@@ -23,6 +23,6 @@ properties:
         description: Install components required to build Collabora Office
       settings:
         productId: Microsoft.VisualStudio.Product.Community
-        channelId: VisualStudio.17.Release
-        vsConfigFile: '${WinGetConfigRoot}\2022_cross.vsconfig'
+        channelId: VisualStudio.18.Release
+        vsConfigFile: '${WinGetConfigRoot}\2026_cross.vsconfig'
   configurationVersion: 0.2.0
