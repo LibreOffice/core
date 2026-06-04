@@ -1318,7 +1318,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			window.L.DomUtil.remove(selectedFrame);
 
 			this._previewTiles.splice(e.selectedPart, 1);
-			this.focusCurrentSlide();
+			if (this._map._deletePageFromPreview)
+				this.focusCurrentSlide(); // came from focus + Delete key -> keep focus in preview
+			else
+				this._map.focus();
+			
+			this._map._deletePageFromPreview = false;
 		}
 	},
 

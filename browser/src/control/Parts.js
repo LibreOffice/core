@@ -445,6 +445,7 @@ window.L.Map.include({
 
 	deletePage: function (nPos) {
 		if (this.isPresentationOrDrawing()) {
+			this._deletePageFromPreview = true;
 			app.socket.sendMessage('uno .uno:DeletePage');
 		}
 		else if (this.getDocType() === 'spreadsheet') {
