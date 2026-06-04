@@ -142,6 +142,7 @@
 #include <operation/ReplaceNoteTextOperation.hxx>
 #include <operation/SetNoteTextOperation.hxx>
 #include <operation/TransliterateTextOperation.hxx>
+#include <operation/UnmergeCellsOperation.hxx>
 #include <operation/UngroupSparklinesOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
@@ -1888,77 +1889,8 @@ bool ScDocFunc::UnmergeCells( const ScRange& rRange, bool bRecord, ScUndoRemoveM
 
 bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge )
 {
-    if (rOption.maTabs.empty())
-        // Nothing to unmerge.
-        return true;
-
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    if (bRecord && !rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    ScDocument* pUndoDoc = (pUndoRemoveMerge ? pUndoRemoveMerge->GetUndoDoc() : nullptr);
-    assert( pUndoDoc || !pUndoRemoveMerge );
-    for (const SCTAB nTab : rOption.maTabs)
-    {
-        ScRange aRange = rOption.getSingleRange(nTab);
-        if ( !rDoc.HasAttrib(aRange, HasAttrFlags::Merged) )
-            continue;
-
-        ScRange aExtended = aRange;
-        rDoc.ExtendMerge(aExtended);
-        ScRange aRefresh = aExtended;
-        rDoc.ExtendOverlapped(aRefresh);
-
-        if (bRecord)
-        {
-            if (!pUndoDoc)
-            {
-                pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                pUndoDoc->InitUndo(rDoc, *rOption.maTabs.begin(), *rOption.maTabs.rbegin());
-            }
-            rDoc.CopyToDocument(aExtended, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
-        }
-
-        const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetUserOrPoolDefaultItem( ATTR_MERGE );
-        ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-        aPattern.ItemSetPut(rDefAttr);
-        rDoc.ApplyPatternAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
-                                   aRange.aEnd.Col(), aRange.aEnd.Row(), nTab,
-                                   aPattern );
-
-        rDoc.RemoveFlagsTab( aExtended.aStart.Col(), aExtended.aStart.Row(),
-                              aExtended.aEnd.Col(), aExtended.aEnd.Row(), nTab,
-                              ScMF::Hor | ScMF::Ver );
-
-        rDoc.ExtendMerge( aRefresh, true );
-
-        if ( !AdjustRowHeight( aExtended, true, true ) )
-            rDocShell.PostPaint( aExtended, PaintPartFlags::Grid );
-
-        bool bDone = ScDetectiveFunc(rDoc, nTab).DeleteAll( ScDetectiveDelete::Circles );
-        if(bDone)
-           DetectiveMarkInvalid(nTab);
-    }
-
-    if (bRecord)
-    {
-        if (pUndoRemoveMerge)
-        {
-            // If pUndoRemoveMerge was passed, the caller is responsible for
-            // adding it to Undo. Just add the current option.
-            pUndoRemoveMerge->AddCellMergeOption( rOption);
-        }
-        else
-        {
-            rDocShell.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoRemoveMerge>( rDocShell, rOption, ScDocumentUniquePtr(pUndoDoc) ) );
-        }
-    }
-    aModificator.SetDocumentModified();
-
-    return true;
+    sc::UnmergeCellsOperation aOperation(*this, rDocShell, rOption, bRecord, pUndoRemoveMerge);
+    return aOperation.run();
 }
 
 void ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )

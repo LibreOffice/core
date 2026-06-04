@@ -55,6 +55,7 @@ enum class OperationType
     FillSeries,
     FillAuto,
     MergeCells,
+    UnmergeCells,
     InsertNameList,
     ConvertFormulaToValue,
     Sort,

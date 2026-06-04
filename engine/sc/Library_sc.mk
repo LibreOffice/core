@@ -577,6 +577,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/SortOperation \
     sc/source/ui/operation/TransliterateTextOperation \
     sc/source/ui/operation/UngroupSparklinesOperation \
+    sc/source/ui/operation/UnmergeCellsOperation \
     sc/source/ui/operation/UpdatePivotTableOperation \
     sc/source/ui/pagedlg/areasdlg \
     sc/source/ui/pagedlg/tphfedit \

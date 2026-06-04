@@ -94,6 +94,8 @@ std::string_view operationTypeString(OperationType eOperation)
             return "FillAuto";
         case OperationType::MergeCells:
             return "MergeCells";
+        case OperationType::UnmergeCells:
+            return "UnmergeCells";
         case OperationType::InsertNameList:
             return "InsertNameList";
         case OperationType::ConvertFormulaToValue:
