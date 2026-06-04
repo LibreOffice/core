@@ -126,6 +126,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/spellingdialog.ui" },
         { u"cui/ui/spelloptionsdialog.ui" },
         { u"cui/ui/splitcellsdialog.ui" },
+        { u"cui/ui/swpossizepage.ui" },
         { u"cui/ui/textflowpage.ui" },
         { u"cui/ui/thesaurus.ui" },
         { u"cui/ui/transparencytabpage.ui" },
@@ -935,6 +936,11 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 {
                     continue;
                 }
+                // The Position and Size dialog shows this page only for
+                // writer shapes. The other applications show
+                // possizetabpage instead.
+                if (entry == u"cui/ui/swpossizepage.ui")
+                    continue;
                 // Reached only via writer-specific flows (header/footer
                 // "More..." button, image Compress/Crop, .uno:Fieldnames or
                 // .uno:InsertMode confirmation, etc.).

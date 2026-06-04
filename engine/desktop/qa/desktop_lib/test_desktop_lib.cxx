@@ -8,6 +8,7 @@
  */
 
 #include <config_oox.h>
+#include <cstdlib>
 #include <memory>
 #include <string_view>
 
@@ -17,6 +18,7 @@
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -153,6 +155,7 @@ public:
     void testSearchCalc();
     void testPropertySettingOnFormulaBar();
     void testSearchTermReset();
+    void testWriterShapePosSizeDialog();
     void testFormulaBarAcceptButton();
     void testSearchAllNotificationsCalc();
     void testPaintTile();
@@ -236,6 +239,7 @@ public:
     CPPUNIT_TEST(testSearchCalc);
     CPPUNIT_TEST(testPropertySettingOnFormulaBar);
     CPPUNIT_TEST(testSearchTermReset);
+    CPPUNIT_TEST(testWriterShapePosSizeDialog);
     CPPUNIT_TEST(testFormulaBarAcceptButton);
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
@@ -2334,6 +2338,7 @@ public:
     RedlineInfo m_aLastRedlineInfo;
     std::string m_searchTerm;
     int m_findReplaceDialogId;
+    unsigned long long m_posSizeDialogId = 0;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
@@ -2433,6 +2438,20 @@ public:
 
             if (m_JSONDialog.find("jsontype") != m_JSONDialog.not_found() && m_JSONDialog.get_child("jsontype").get_value<std::string>() == "dialog")
             {
+                if (m_JSONDialog.find("title") != m_JSONDialog.not_found()
+                    && m_JSONDialog.get_child("title").get_value<std::string>() == "Position and Size")
+                {
+                    // The full dialog dump can contain two top level "id" keys: the
+                    // widget id string and the numeric kit window id. Take the numeric one.
+                    for (const auto& rPair : m_JSONDialog)
+                    {
+                        if (rPair.first != "id")
+                            continue;
+                        const std::string sId = rPair.second.get_value<std::string>();
+                        if (unsigned long long nId = std::strtoull(sId.c_str(), nullptr, 10))
+                            m_posSizeDialogId = nId;
+                    }
+                }
                 if (m_JSONDialog.find("data") != m_JSONDialog.not_found())
                 {
                     if (m_JSONDialog.get_child("data").find("control_id") != m_JSONDialog.get_child("data").not_found())
@@ -3309,6 +3328,49 @@ void DesktopKitTest::testSearchTermReset()
 
     // We should have got the "searchterm" again. It should be empty. Below line doesn't pass without the changes in this commit.
     CPPUNIT_ASSERT_EQUAL(std::string(""), aView.m_searchTerm);
+}
+
+void DesktopKitTest::testWriterShapePosSizeDialog()
+{
+    // cool#12182: the Position and Size dialog has to resize a selected Writer shape.
+    LibCO_Impl aOffice;
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    Scheduler::ProcessEventsToIdle();
+
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // Insert a rectangle. It is selected after insertion.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:BasicShapes.rectangle", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    const awt::Size aSizeBefore = xShape->getSize();
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:TransformDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // The dialog has arrived as a jsdialog.
+    CPPUNIT_ASSERT(aView.m_posSizeDialogId != 0);
+
+    // Enter a new width on the Position and Size tab and confirm with OK.
+    pDocument->pClass->sendDialogEvent(pDocument, aView.m_posSizeDialogId,
+        "{\"id\":\"width\", \"cmd\": \"change\", \"data\": \"2\", \"type\": \"spinfield\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    pDocument->pClass->sendDialogEvent(pDocument, aView.m_posSizeDialogId,
+        "{\"id\":\"ok\", \"cmd\": \"click\", \"data\": \"1\", \"type\": \"pushbutton\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    const awt::Size aSizeAfter = xShape->getSize();
+    CPPUNIT_ASSERT_MESSAGE("entered width was not applied to the shape",
+                           aSizeBefore.Width != aSizeAfter.Width);
 }
 
 void DesktopKitTest::testFormulaBarAcceptButton()
