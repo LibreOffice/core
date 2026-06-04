@@ -66,6 +66,7 @@ coolwsd_sources = \
                   ../wsd/Admin.cpp \
                   ../wsd/AdminModel.cpp \
                   ../wsd/AIChatSession.cpp \
+                  ../wsd/AIUtil.cpp \
                   ../wsd/Auth.cpp \
                   ../wsd/COOLWSD.cpp \
                   ../wsd/CacheUtil.cpp \
