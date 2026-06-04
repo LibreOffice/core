@@ -490,6 +490,15 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				app.map._clip.clearSelection();
 				app.map._clip.setTextSelectionType('slide');
 			}
+			else if (this._isCtrlKey(ev) && !ev.altKey
+				&& (ev.keyCode === this.keyCodes.Y || (ev.shiftKey && ev.keyCode === this.keyCodes.Z))) {
+				app.socket.sendMessage('uno .uno:Redo');
+				ev.preventDefault();
+			}
+			else if (this._isCtrlKey(ev) && !ev.altKey && ev.keyCode === this.keyCodes.Z) {
+				app.socket.sendMessage('uno .uno:Undo');
+				ev.preventDefault();
+			}
 			else if (!ev.ctrlKey && !ev.shiftKey) {
 				if (ev.key === 'Meta' || ev.key === 'Alt' ||
 				    ev.key === 'AltGraph' || ev.key === 'CapsLock' ||
