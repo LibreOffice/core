@@ -83,6 +83,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdlayer.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
@@ -186,6 +187,7 @@
 #include <slideshow.hxx>
 #include <stlsheet.hxx>
 #include <undolayer.hxx>
+#include <unmodpg.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sdmod.hxx>
@@ -351,12 +353,17 @@ bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
         return false;
     }
 
-    SdrObject* pPickObj = pPage->GetObj(nObjId);
+    rtl::Reference<SdrObject> pPickObj = pPage->GetObj(nObjId);
     rtl::Reference<SdrGrafObj> pNewGrafObj
         = new SdrGrafObj(*pDoc, aGraphic, pPickObj->GetLogicRect());
     pNewGrafObj->AdjustToMaxRect(pPickObj->GetLogicRect());
     pNewGrafObj->SetOutlinerParaObject(std::nullopt);
     pNewGrafObj->SetEmptyPresObj(false);
+
+    // Record undo before the replace: the action reads its object list from
+    // the old object, which ReplaceObject removes from the page.
+    if (pDoc->IsUndoEnabled())
+        pDoc->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoReplaceObject(*pPickObj, *pNewGrafObj));
 
     pPage->ReplaceObject(pNewGrafObj.get(), pPickObj->GetOrdNum());
 
@@ -747,6 +754,39 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
         throw;
     }
 
+    // Group all changes below into one undo step so a single undo reverts the
+    // whole transform. An empty list action (e.g. navigation only) is dropped.
+    SfxUndoManager* pUndoManager = GetDocSh() ? GetDocSh()->GetUndoManager() : nullptr;
+    const bool bUndo = mpDrawView && mpDrawView->IsUndoEnabled() && pUndoManager;
+    if (bUndo)
+        pUndoManager->EnterListAction(SdResId(STR_UNDO_TRANSFORM_DOCUMENT),
+                                      SdResId(STR_UNDO_TRANSFORM_DOCUMENT), 0,
+                                      GetViewShellBase().GetViewShellId());
+
+    // Close the undo group when the function returns, even if a malformed
+    // command in the loop below throws.
+    comphelper::ScopeGuard aUndoGuard(
+        [bUndo, pUndoManager]
+        {
+            if (bUndo)
+                pUndoManager->LeaveListAction();
+        });
+
+    // Undo for a name or autolayout change. ModifyPageUndoAction snapshots the
+    // page state on construction, so call this before applying the change.
+    auto addModifyPageUndo = [&](SdPage* pPg, const OUString& rNewName, AutoLayout eNewLayout)
+    {
+        if (!bUndo || !pPg)
+            return;
+        SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+        SdrLayerID aBg = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+        SdrLayerID aBgObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
+        SdrLayerIDSet aVisibleLayers = pPg->TRG_GetMasterPageVisibleLayers();
+        pUndoManager->AddUndoAction(std::make_unique<ModifyPageUndoAction>(
+            *GetDoc(), pPg, rNewName, eNewLayout, aVisibleLayers.IsSet(aBg),
+            aVisibleLayers.IsSet(aBgObj)));
+    };
+
     // Iterate through the JSON data loaded into a tree structure
     for (const auto& aItem : aTree)
     {
@@ -917,6 +957,14 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                             // Change master value
                             pPageStandard->TRG_SetMasterPage(*pMPage);
                             pPageNote->TRG_SetMasterPage(*pMPage);
+
+                            if (bUndo)
+                            {
+                                mpDrawView->AddUndo(
+                                    SdrUndoFactory::CreateUndoNewPage(*pPageStandard));
+                                mpDrawView->AddUndo(
+                                    SdrUndoFactory::CreateUndoNewPage(*pPageNote));
+                            }
                         }
                         else if (aItem3.first == "DeleteSlide")
                         {
@@ -942,6 +990,20 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                                    + aItem3.first + ": "
                                                    + std::to_string(nPageIdToDel) + "'");
                                     nPageIdToDel = 0;
+                                }
+                                if (bUndo)
+                                {
+                                    // Capture pages before removal.
+                                    SdPage* pDelStd
+                                        = GetDoc()->GetSdPage(nPageIdToDel, PageKind::Standard);
+                                    SdPage* pDelNotes
+                                        = GetDoc()->GetSdPage(nPageIdToDel, PageKind::Notes);
+                                    if (pDelNotes)
+                                        mpDrawView->AddUndo(
+                                            SdrUndoFactory::CreateUndoDeletePage(*pDelNotes));
+                                    if (pDelStd)
+                                        mpDrawView->AddUndo(
+                                            SdrUndoFactory::CreateUndoDeletePage(*pDelStd));
                                 }
                                 GetDoc()->RemovePage(nPageIdToDel * 2 + 1);
                                 GetDoc()->RemovePage(nPageIdToDel * 2 + 1);
@@ -997,8 +1059,25 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                 }
                                 int nSecond = 3 - nFirst;
 
-                                GetDoc()->MovePage(nMoveFrom * 2 + nFirst,
-                                                   nMoveTo * 2 + nFirst);
+                                if (bUndo)
+                                {
+                                    SdrPage* pMv = GetDoc()->GetPage(nMoveFrom * 2 + nFirst);
+                                    if (pMv)
+                                        mpDrawView->AddUndo(
+                                            SdrUndoFactory::CreateUndoSetPageNum(
+                                                *pMv, nMoveFrom * 2 + nFirst,
+                                                nMoveTo * 2 + nFirst));
+                                }
+                                GetDoc()->MovePage(nMoveFrom * 2 + nFirst, nMoveTo * 2 + nFirst);
+                                if (bUndo)
+                                {
+                                    SdrPage* pMv = GetDoc()->GetPage(nMoveFrom * 2 + nSecond);
+                                    if (pMv)
+                                        mpDrawView->AddUndo(
+                                            SdrUndoFactory::CreateUndoSetPageNum(
+                                                *pMv, nMoveFrom * 2 + nSecond,
+                                                nMoveTo * 2 + nSecond));
+                                }
                                 GetDoc()->MovePage(nMoveFrom * 2 + nSecond,
                                                    nMoveTo * 2 + nSecond);
 
@@ -1041,6 +1120,19 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                 nDupSlideId = 0;
                             }
                             GetDoc()->DuplicatePage(nDupSlideId);
+                            if (bUndo)
+                            {
+                                SdPage* pDupStd = GetDoc()->GetSdPage(
+                                    nDupSlideId + 1, PageKind::Standard);
+                                SdPage* pDupNotes = GetDoc()->GetSdPage(
+                                    nDupSlideId + 1, PageKind::Notes);
+                                if (pDupStd)
+                                    mpDrawView->AddUndo(
+                                        SdrUndoFactory::CreateUndoNewPage(*pDupStd));
+                                if (pDupNotes)
+                                    mpDrawView->AddUndo(
+                                        SdrUndoFactory::CreateUndoNewPage(*pDupNotes));
+                            }
                             // Jump to the created page.
                             nNextPageId = nDupSlideId + 1;
                             // Make sure the current page will be set also.
@@ -1081,17 +1173,22 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                             }
 
                             // Todo warning:  ... if (nLayoutId >= ???)
-                            GetDoc()
-                                ->GetSdPage(nActPageId, PageKind::Standard)
-                                ->SetAutoLayout(nLayoutId, true);
+                            SdPage* pLayoutPage
+                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
+                            addModifyPageUndo(pLayoutPage, pLayoutPage->GetName(),
+                                              nLayoutId);
+                            pLayoutPage->SetAutoLayout(nLayoutId, true);
                         }
                         else if (aItem3.first == "RenameSlide")
                         {
                             SdPage* pPageStandard
                                 = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-                            pPageStandard->SetName(
-                                OStringToOUString(aItem3.second.get_value<std::string>(),
-                                                  RTL_TEXTENCODING_UTF8));
+                            OUString aNewName = OStringToOUString(
+                                aItem3.second.get_value<std::string>(),
+                                RTL_TEXTENCODING_UTF8);
+                            addModifyPageUndo(pPageStandard, aNewName,
+                                              pPageStandard->GetAutoLayout());
+                            pPageStandard->SetName(aNewName);
                         }
                         else if (aItem3.first.starts_with("SetText."))
                         {
@@ -1111,6 +1208,10 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                 if (pSdrObj->IsSdrTextObj())
                                 {
                                     SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pSdrObj);
+                                    if (bUndo)
+                                        mpDrawView->AddUndo(
+                                            GetDoc()->GetSdrUndoFactory()
+                                                .CreateUndoObjectSetText(*pSdrObj, 0));
                                     pSdrTxt->SetText(OStringToOUString(
                                         aItem3.second.get_value<std::string>(),
                                         RTL_TEXTENCODING_UTF8));

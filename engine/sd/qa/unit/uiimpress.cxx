@@ -320,6 +320,95 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureExtractSlideText)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndo)
+{
+    // The whole transform must collapse into one undo step: one undo reverts
+    // it, one redo restores it.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    // A fresh Impress document starts with a single slide.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pImpressDocument->getDrawPages()->getCount());
+
+    auto getSlide0Title = [&]() -> OUString {
+        SdPage* pPage = pImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+        SdrObject* pObj = pPage ? pPage->GetObj(0) : nullptr;
+        if (pObj && pObj->IsSdrTextObj())
+        {
+            SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
+            if (pTextObj->GetOutlinerParaObject())
+                return pTextObj->GetOutlinerParaObject()->GetTextObject().GetText(0);
+        }
+        return OUString();
+    };
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Generated title"},
+            {"InsertMasterSlide": 0},
+            {"SetText.0": "Second slide"},
+            {"InsertMasterSlide": 0},
+            {"SetText.0": "Third slide"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    // The transform added two slides (three total) and set the first title.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pImpressDocument->getDrawPages()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"Generated title"_ustr, getSlide0Title());
+
+    // One undo reverts everything: back to one slide, title no longer set.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pImpressDocument->getDrawPages()->getCount());
+    CPPUNIT_ASSERT(getSlide0Title() != u"Generated title"_ustr);
+
+    // A single redo restores all of it.
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pImpressDocument->getDrawPages()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"Generated title"_ustr, getSlide0Title());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndoImage)
+{
+    // Inserting an image replaces a placeholder object; undoing the transform
+    // must revert that replace without crashing.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    auto isObj1Graphic = [&]() {
+        SdPage* pPage = pImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+        SdrObject* pObj = pPage ? pPage->GetObj(1) : nullptr;
+        return pObj && pObj->GetObjIdentifier() == SdrObjKind::Graphic;
+    };
+
+    OUString aImageURL = createFileURL(u"TestImage1.png");
+    OUString aJson = "{ \"Transforms\": { \"SlideCommands\": ["
+                     "{ \"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE_CONTENT\" },"
+                     "{ \"InsertImage.1\": \""
+                     + aImageURL + "\" } ] } }";
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+    CPPUNIT_ASSERT(isObj1Graphic());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT(!isObj1Graphic());
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT(isObj1Graphic());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUnoCommand)
 {
     // 1. Create a document;

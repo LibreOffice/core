@@ -125,6 +125,7 @@
 #define STR_UNDO_CHANGE_PRES_OBJECT                     NC_("STR_UNDO_CHANGE_PRES_OBJECT", "Modify presentation object '$'")
 #define STR_UNDO_MODIFY_PAGE                            NC_("STR_UNDO_MODIFY_PAGE", "Slide layout")
 #define STR_UNDO_MODIFY_PAGE_DRAW                       NC_("STR_UNDO_MODIFY_PAGE_DRAW", "Page layout")
+#define STR_UNDO_TRANSFORM_DOCUMENT                     NC_("STR_UNDO_TRANSFORM_DOCUMENT", "Edit slides")
 #define STR_UNDO_INSERT_FILE                            NC_("STR_UNDO_INSERT_FILE", "Insert file")
 #define STR_UNDO_INSERT_SPECCHAR                        NC_("STR_UNDO_INSERT_SPECCHAR", "Insert special character")
 #define STR_UNDO_SET_PRESLAYOUT                         NC_("STR_UNDO_SET_PRESLAYOUT", "Apply presentation layout")
