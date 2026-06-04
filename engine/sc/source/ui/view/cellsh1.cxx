@@ -3140,7 +3140,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const OUString& rTarget = pHyper->GetTargetFrame();
                     sal_uInt16 nType = static_cast<sal_uInt16>(pHyper->GetInsertMode());
 
-                    pTabViewShell->InsertURL( rName, rURL, rTarget, nType );
+                    // When the provided text is just a hint, prefer the cell's existing content
+                    // over it; if both are missing, use the URL.
+                    ScViewData& rData = GetViewData();
+                    OUString aCellText = rData.GetDocument().GetString(
+                        rData.GetCurX(), rData.GetCurY(), rData.GetTabNumber());
+                    OUString sLinkText;
+                    if (pHyper->GetTextIsHint() && !aCellText.isEmpty())
+                        sLinkText = aCellText;
+                    else if (!rName.isEmpty())
+                        sLinkText = rName;
+                    else
+                        sLinkText = rURL;
+
+                    pTabViewShell->InsertURL( sLinkText, rURL, rTarget, nType );
                     rReq.Done();
                 }
                 else

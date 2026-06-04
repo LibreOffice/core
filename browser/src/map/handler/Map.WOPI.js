@@ -750,11 +750,9 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		else if (msg.MessageId == 'Action_InsertLink') {
 			if (msg.Values) {
 				var link = this._map.makeURLFromStr(msg.Values.url);
-				var selection = this._map.getTextForLink();
-
-				var text = selection ? selection.trim()
-					: (msg.Values.text ? String(msg.Values.text).trim() : '')
-					|| link;
+				// Hyperlink.TextIsHint tells the engine to keep the existing
+				// selection (if any) and use this text only as a fallback.
+				var text = (msg.Values.text ? String(msg.Values.text).trim() : '') || link;
 
 				var command = {
 					'Hyperlink.Text': {
