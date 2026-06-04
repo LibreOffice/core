@@ -128,6 +128,14 @@ properties:
           git config --global core.autocrlf false
           git config --global protocol.version 2
     - resource: xPSDesiredStateConfiguration/xScript
+      id: msys-winsymlinks
+      directives:
+        description: set MSYS=winsymlinks:nativestrict so Git-Bash/MSYS2 tar creates native symlinks when unpacking tarballs (requires Developer Mode, enabled by the admin step)
+      settings:
+        TestScript: [System.Environment]::GetEnvironmentVariable("MSYS", "User") -eq "winsymlinks:nativestrict"
+        GetScript:  [System.Environment]::GetEnvironmentVariable("MSYS", "User") -eq "winsymlinks:nativestrict"
+        SetScript: [System.Environment]::SetEnvironmentVariable("MSYS", "winsymlinks:nativestrict", "User")
+    - resource: xPSDesiredStateConfiguration/xScript
       id: autogensnippet
       dependsOn:
         - codir

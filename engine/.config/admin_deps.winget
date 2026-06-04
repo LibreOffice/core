@@ -69,4 +69,15 @@ properties:
         TestScript: wsl.exe --status 2>$null; return ![bool]$LASTEXITCODE
         GetScript:  wsl.exe --status 2>$null; return ![bool]$LASTEXITCODE
         SetScript: wsl.exe --install --no-distribution
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: developer-mode
+      directives:
+        description: enable Developer Mode so symlinks can be created without admin (some tarballs, e.g. pixman, contain symlinks that tar has to recreate at unpack time)
+        securityContext: elevated
+      settings:
+        TestScript: (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -Name "AllowDevelopmentWithoutDevLicense" -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense -eq 1
+        GetScript:  (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -Name "AllowDevelopmentWithoutDevLicense" -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense -eq 1
+        SetScript: |
+          New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -Force | Out-Null
+          New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -Name "AllowDevelopmentWithoutDevLicense" -PropertyType DWord -Value 1 -Force | Out-Null
   configurationVersion: 0.2.0
