@@ -487,13 +487,6 @@ void SelectableFixedText::LoseFocus()
     Invalidate();
 }
 
-void SelectableFixedText::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Edit::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "fixedtext");
-    rJsonWriter.put("selectable", true);
-}
-
 void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
@@ -691,13 +684,6 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
 Size FixedLine::GetOptimalSize() const
 {
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
-}
-
-void FixedLine::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "separator");
-    rJsonWriter.put("orientation", (GetStyle() & WB_VERT) ? "vertical" : "horizontal");
 }
 
 void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -992,24 +978,5 @@ bool FixedImage::set_property(const OUString &rKey, const OUString &rValue)
         return Control::set_property(rKey, rValue);
     return true;
 }
-
-void FixedImage::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("id", get_id());
-    rJsonWriter.put("type", "image");
-    if (!!maImage)
-    {
-        SvMemoryStream aOStm(6535, 6535);
-        if(GraphicConverter::Export(aOStm, maImage.GetBitmap(), ConvertDataFormat::PNG) == ERRCODE_NONE)
-        {
-            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-            OStringBuffer aBuffer("data:image/png;base64,");
-            ::comphelper::Base64::encode(aBuffer, aSeq);
-            rJsonWriter.put("image", aBuffer);
-        }
-    }
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

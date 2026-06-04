@@ -50,8 +50,6 @@ public:
 
     void SetValueFromString(const OUString& rStr); // currently used by online
 
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-
     virtual FactoryFunction GetUITestFactory() const override;
 
     Formatter& GetFormatter();

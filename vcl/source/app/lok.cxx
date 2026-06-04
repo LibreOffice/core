@@ -82,7 +82,6 @@ void dumpState(rtl::OStringBuffer& rState)
     while (pWin)
     {
         tools::JsonWriter aProps;
-        pWin->DumpAsPropertyTree(aProps);
 
         rState.append("\n\tWindow: ");
 

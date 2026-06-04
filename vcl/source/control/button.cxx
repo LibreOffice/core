@@ -572,79 +572,6 @@ FactoryFunction Button::GetUITestFactory() const
     return ButtonUIObject::create;
 }
 
-namespace
-{
-
-std::string_view symbolTypeName(SymbolType eSymbolType)
-{
-    switch (eSymbolType)
-    {
-        case SymbolType::DONTKNOW:         return "DONTKNOW";
-        case SymbolType::IMAGE:            return "IMAGE";
-        case SymbolType::ARROW_UP:         return "ARROW_UP";
-        case SymbolType::ARROW_DOWN:       return "ARROW_DOWN";
-        case SymbolType::ARROW_LEFT:       return "ARROW_LEFT";
-        case SymbolType::ARROW_RIGHT:      return "ARROW_RIGHT";
-        case SymbolType::SPIN_UP:          return "SPIN_UP";
-        case SymbolType::SPIN_DOWN:        return "SPIN_DOWN";
-        case SymbolType::SPIN_LEFT:        return "SPIN_LEFT";
-        case SymbolType::SPIN_RIGHT:       return "SPIN_RIGHT";
-        case SymbolType::FIRST:            return "FIRST";
-        case SymbolType::LAST:             return "LAST";
-        case SymbolType::PREV:             return "PREV";
-        case SymbolType::NEXT:             return "NEXT";
-        case SymbolType::PAGEUP:           return "PAGEUP";
-        case SymbolType::PAGEDOWN:         return "PAGEDOWN";
-        case SymbolType::PLAY:             return "PLAY";
-        case SymbolType::STOP:             return "STOP";
-        case SymbolType::CLOSE:            return "CLOSE";
-        case SymbolType::CHECKMARK:        return "CHECKMARK";
-        case SymbolType::RADIOCHECKMARK:   return "RADIOCHECKMARK";
-        case SymbolType::FLOAT:            return "FLOAT";
-        case SymbolType::DOCK:             return "DOCK";
-        case SymbolType::HIDE:             return "HIDE";
-        case SymbolType::HELP:             return "HELP";
-        case SymbolType::PLUS:             return "PLUS";
-    }
-
-    return "UNKNOWN";
-}
-
-}
-
-void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("text", GetText());
-    if (HasImage())
-    {
-        SvMemoryStream aOStm(6535, 6535);
-        if(GraphicConverter::Export(aOStm, GetModeImage().GetBitmap(), ConvertDataFormat::PNG) == ERRCODE_NONE)
-        {
-            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-            OStringBuffer aBuffer("data:image/png;base64,");
-            ::comphelper::Base64::encode(aBuffer, aSeq);
-            rJsonWriter.put("image", aBuffer);
-        }
-    }
-
-    if (GetStyle() & WB_DEFBUTTON)
-        rJsonWriter.put("has_default", true);
-}
-
-void PushButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Button::DumpAsPropertyTree(rJsonWriter);
-    if (GetSymbol() != SymbolType::DONTKNOW)
-        rJsonWriter.put("symbol", symbolTypeName(GetSymbol()));
-    if (isToggleButton())
-    {
-        rJsonWriter.put("isToggle", true);
-        if (IsChecked())
-            rJsonWriter.put("checked", true);
-    }
-}
-
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )
 {
     if (pButton == nullptr)
@@ -2997,32 +2924,6 @@ void RadioButton::ShowFocus(const tools::Rectangle& rRect)
     Button::ShowFocus(rRect);
 }
 
-void RadioButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Button::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("checked", IsChecked());
-
-    OUStringBuffer sGroupId;
-    std::vector<VclPtr<RadioButton>> aGroup = GetRadioButtonGroup();
-    for(const auto& pButton : aGroup)
-        sGroupId.append(pButton->get_id());
-
-    if (!sGroupId.isEmpty())
-        rJsonWriter.put("group", sGroupId.toString());
-
-    if (!!maImage)
-    {
-        SvMemoryStream aOStm(6535, 6535);
-        if(GraphicConverter::Export(aOStm, maImage.GetBitmap(), ConvertDataFormat::PNG) == ERRCODE_NONE)
-        {
-            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-            OStringBuffer aBuffer("data:image/png;base64,");
-            ::comphelper::Base64::encode(aBuffer, aSeq);
-            rJsonWriter.put("image", aBuffer);
-        }
-    }
-}
-
 FactoryFunction RadioButton::GetUITestFactory() const
 {
     return RadioButtonUIObject::create;
@@ -3781,12 +3682,6 @@ void CheckBox::ShowFocus(const tools::Rectangle& rRect)
                           ControlState::FOCUSED, aControlValue, OUString());
     }
     Button::ShowFocus(rRect);
-}
-
-void CheckBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Button::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("checked", IsChecked());
 }
 
 FactoryFunction CheckBox::GetUITestFactory() const

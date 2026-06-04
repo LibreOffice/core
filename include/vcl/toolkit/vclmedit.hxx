@@ -168,8 +168,6 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
-
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

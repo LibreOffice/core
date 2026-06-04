@@ -1575,30 +1575,4 @@ FactoryFunction ComboBox::GetUITestFactory() const
     return ComboBoxUIObject::create;
 }
 
-void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-
-    {
-        auto entriesNode = rJsonWriter.startArray("entries");
-        for (int i = 0; i < GetEntryCount(); ++i)
-        {
-            rJsonWriter.putSimpleValue(GetEntry(i));
-        }
-    }
-
-    {
-        auto selectedNode = rJsonWriter.startArray("selectedEntries");
-        for (int i = 0; i < GetSelectedEntryCount(); ++i)
-        {
-            rJsonWriter.putSimpleValue(OUString::number(GetSelectedEntryPos(i)));
-        }
-    }
-
-    rJsonWriter.put("selectedCount", GetSelectedEntryCount());
-
-    if (IsUserDrawEnabled())
-        rJsonWriter.put("customEntryRenderer", true);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

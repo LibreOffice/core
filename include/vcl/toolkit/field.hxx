@@ -232,7 +232,6 @@ public:
     SAL_DLLPRIVATE virtual bool            set_property(const OUString &rKey, const OUString &rValue) override;
     SAL_DLLPRIVATE virtual void            dispose() override;
 
-    SAL_DLLPRIVATE virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
     SAL_DLLPRIVATE virtual FactoryFunction GetUITestFactory() const override;
 };
 

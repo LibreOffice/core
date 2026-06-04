@@ -2899,16 +2899,4 @@ FactoryFunction Edit::GetUITestFactory() const
     return EditUIObject::create;
 }
 
-
-void Edit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-
-    if (!maPlaceholderText.isEmpty())
-        rJsonWriter.put("placeholder", maPlaceholderText);
-
-    if (IsPassword())
-        rJsonWriter.put("password", true);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

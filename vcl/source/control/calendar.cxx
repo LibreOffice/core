@@ -1646,18 +1646,6 @@ Size Calendar::GetOptimalSize() const
     return CalcWindowSizePixel();
 }
 
-void Calendar::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-
-    const auto aDate = GetFirstSelectedDate();
-
-    rJsonWriter.put("type", "calendar");
-    rJsonWriter.put("day", aDate.GetDay());
-    rJsonWriter.put("month", aDate.GetMonth());
-    rJsonWriter.put("year", aDate.GetYear());
-}
-
 namespace
 {
     class ImplCFieldFloat final

@@ -294,8 +294,6 @@ include/vbahelper/vbareturntypes.hxx:37
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:38
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/menu.hxx:404
-    void Menu::DumpAsPropertyTree(class tools::JsonWriter &,)const
 include/vcl/weld/customweld.hxx:40
     _Bool weld::CustomWidgetController::KeyUp(const class KeyEvent &,)
 include/vcl/weld/customweld.hxx:44

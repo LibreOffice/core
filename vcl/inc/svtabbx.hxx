@@ -113,8 +113,6 @@ public:
     bool             GetTabVisible( sal_uInt16 nTab );
 
     void             SetRole(SvTabListBoxRole e) { m_eRole = e; }
-
-    virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

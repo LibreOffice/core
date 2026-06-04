@@ -141,8 +141,6 @@ public:
                                                      sal_Int32 nIndex) override;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow, sal_Int32 _nColumnPos,
                                            const Point& _rPoint) override;
-
-    virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

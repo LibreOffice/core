@@ -10044,13 +10044,11 @@ VclContainer::getLayoutRequisition(vcl::Window const&)
 VclContainer::setLayoutAllocation(vcl::Window&, Point const&, Size const&)
 VclContainer::setLayoutPosSize(vcl::Window&, Point const&, Size const&)
 VclDrawingArea::DeleteSurroundingText(Selection const&)
-VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter&)
 VclDrawingArea::GetSurroundingText() const
 VclDrawingArea::GetSurroundingTextSelection() const
 VclDrawingArea::GetUITestFactory() const
 VclDrawingArea::RequestHelp(HelpEvent const&)
 VclDrawingArea::StartDrag(signed char, Point const&)
-VclGrid::DumpAsPropertyTree(tools::JsonWriter&)
 VclGrid::calculateRequisition() const
 VclGrid::calculateRequisitionForSpacings(int, int) const
 VclGrid::setAllocation(Size const&)

@@ -1439,29 +1439,6 @@ FactoryFunction ListBox::GetUITestFactory() const
     return ListBoxUIObject::create;
 }
 
-void ListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-
-    {
-        auto entriesNode = rJsonWriter.startArray("entries");
-        for (int i = 0; i < GetEntryCount(); ++i)
-        {
-            rJsonWriter.putSimpleValue(GetEntry(i));
-        }
-    }
-
-    rJsonWriter.put("selectedCount", GetSelectedEntryCount());
-
-    {
-        auto entriesNode = rJsonWriter.startArray("selectedEntries");
-        for (int i = 0; i < GetSelectedEntryCount(); ++i)
-        {
-            rJsonWriter.putSimpleValue(OUString::number(GetSelectedEntryPos(i)));
-        }
-    }
-}
-
 MultiListBox::MultiListBox( vcl::Window* pParent, WinBits nStyle ) :
     ListBox( WindowType::MULTILISTBOX )
 {

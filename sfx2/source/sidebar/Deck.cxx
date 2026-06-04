@@ -122,39 +122,6 @@ void Deck::DataChanged(const DataChangedEvent&)
     RequestLayoutInternal();
 }
 
-/*
- * Get the ordering as is shown in the layout, and our type as 'deck'
- * also elide nested panel windows.
- */
-void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    rJsonWriter.put("id", get_id().isEmpty() ? msId : get_id());
-    rJsonWriter.put("type", "deck");
-    rJsonWriter.put("text", GetText());
-    rJsonWriter.put("enabled", IsEnabled());
-    if (!IsVisible())
-        rJsonWriter.put("visible", false);
-
-    auto childrenNode = rJsonWriter.startArray("children");
-    for (const auto &it : maPanels)
-    {
-        // collapse the panel itself out
-        auto xContent = it->GetContents();
-        if (!xContent)
-            continue;
-
-        auto childNode = rJsonWriter.startStruct();
-        // JSDialog references widget by vcl id
-        rJsonWriter.put("id", it->GetContainer()->get_buildable_name());
-        rJsonWriter.put("name", it->GetId());
-        rJsonWriter.put("type", "panel");
-        rJsonWriter.put("text", it->GetTitle());
-        rJsonWriter.put("enabled", true);
-        rJsonWriter.put("hidden", it->IsLurking());
-        rJsonWriter.put("expanded", it->IsExpanded());
-    }
-}
-
 /**
  * This container may contain existing panels that are
  * being re-used, and new ones too.

@@ -105,27 +105,6 @@ void SvHeaderTabListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
     RecalculateAccessibleChildren();
 }
 
-void SvHeaderTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    SvTabListBox::DumpAsPropertyTree(rJsonWriter);
-
-    auto aHeaders = rJsonWriter.startArray("headers");
-
-    HeaderBar* pHeaderBar = GetHeaderBar();
-    for (sal_uInt16 i = 0; i < pHeaderBar->GetItemCount(); i++)
-    {
-        auto aNode = rJsonWriter.startStruct();
-        sal_uInt16 nItemId = pHeaderBar->GetItemId(i);
-        HeaderBarItemBits eItemBits = pHeaderBar->GetItemBits(nItemId);
-        rJsonWriter.put("text", pHeaderBar->GetItemText(nItemId));
-        rJsonWriter.put("sortable", !!(eItemBits & HeaderBarItemBits::CLICKABLE));
-        if (eItemBits & HeaderBarItemBits::UPARROW)
-            rJsonWriter.put("arrow", "up");
-        else if (eItemBits & HeaderBarItemBits::DOWNARROW)
-            rJsonWriter.put("arrow", "down");
-    }
-}
-
 IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 {
     m_xHeaderBar->SetOffset(-GetXOffset());

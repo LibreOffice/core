@@ -251,23 +251,6 @@ void FormattedField::SetValueFromString(const OUString& rStr)
     }
 }
 
-void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    SpinField::DumpAsPropertyTree(rJsonWriter);
-    Formatter& rFormatter = GetFormatter();
-
-    if (dynamic_cast<weld::TimeFormatter*>(&rFormatter))
-    {
-        // weld::TimeFormatter uses h24 format
-        rJsonWriter.put("type", "time");
-    }
-
-    rJsonWriter.put("min", rFormatter.HasMinValue() ? rFormatter.GetMinValue() : std::numeric_limits<sal_Int32>::min());
-    rJsonWriter.put("max", rFormatter.HasMaxValue() ? rFormatter.GetMaxValue() : std::numeric_limits<sal_Int32>::max());
-    rJsonWriter.put("value", rFormatter.GetValue());
-    rJsonWriter.put("step", rFormatter.GetSpinSize());
-}
-
 FactoryFunction FormattedField::GetUITestFactory() const
 {
     return FormattedFieldUIObject::create;

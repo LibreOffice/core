@@ -257,8 +257,6 @@ public:
     SAL_DLLPRIVATE virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
     SAL_DLLPRIVATE virtual FactoryFunction GetUITestFactory() const override;
-
-    SAL_DLLPRIVATE virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MultiListBox final : public ListBox

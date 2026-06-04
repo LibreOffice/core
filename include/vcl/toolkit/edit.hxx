@@ -246,8 +246,6 @@ public:
     bool IsPassword() const { return mbPassword; }
 
     bool IsActivePopup() const { return mbActivePopup; }
-
-    virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

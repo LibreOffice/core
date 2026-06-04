@@ -395,12 +395,6 @@ bool VclBox::set_property(const OUString &rKey, const OUString &rValue)
     return true;
 }
 
-void VclBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    VclContainer::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("vertical", m_bVerticalContainer);
-}
-
 sal_uInt16 VclBox::getDefaultAccessibleRole() const
 {
     // fdo#74284 call Boxes Panels, keep them as "Filler" under
@@ -725,39 +719,6 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
             tools::Long nPrimaryCoordinate = getPrimaryCoordinate(aOtherGroupPos);
             setPrimaryCoordinate(aOtherGroupPos, nPrimaryCoordinate + nSubGroupPrimaryDimension + nSpacing);
         }
-    }
-}
-
-void VclButtonBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    VclBox::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "buttonbox");
-
-    switch(m_eLayoutStyle)
-    {
-        case VclButtonBoxStyle::Default:
-            rJsonWriter.put("layoutstyle", "default");
-            break;
-
-        case VclButtonBoxStyle::Spread:
-            rJsonWriter.put("layoutstyle", "spread");
-            break;
-
-        case VclButtonBoxStyle::Edge:
-            rJsonWriter.put("layoutstyle", "edge");
-            break;
-
-        case VclButtonBoxStyle::Center:
-            rJsonWriter.put("layoutstyle", "center");
-            break;
-
-        case VclButtonBoxStyle::Start:
-            rJsonWriter.put("layoutstyle", "start");
-            break;
-
-        case VclButtonBoxStyle::End:
-            rJsonWriter.put("layoutstyle", "end");
-            break;
     }
 }
 
@@ -1433,12 +1394,6 @@ void VclGrid::setAllocation(const Size& rAllocation)
     }
 }
 
-void VclGrid::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    VclContainer::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "grid");
-}
-
 bool VclGrid::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "row-spacing")
@@ -1610,12 +1565,6 @@ OUString VclFrame::getDefaultAccessibleName() const
     if (pLabel)
         return pLabel->GetAccessibleName();
     return VclBin::getDefaultAccessibleName();
-}
-
-void VclFrame::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    VclBin::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "frame");
 }
 
 class DisclosureButton final : public CheckBox
@@ -1856,12 +1805,6 @@ const vcl::Window *VclExpander::get_label_widget() const
 vcl::Window *VclExpander::get_label_widget()
 {
     return const_cast<vcl::Window*>(std::as_const(*this).get_label_widget());
-}
-
-void VclExpander::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    VclContainer::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "expander");
 }
 
 FactoryFunction VclExpander::GetUITestFactory() const
@@ -2197,55 +2140,6 @@ void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
     const auto nBorderWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
     SAL_WARN_IF(nBorderWidth > m_nBorderWidth, "vcl.layout", "desired border at paint " <<
                 nBorderWidth << " is larger than expected " << m_nBorderWidth);
-}
-
-namespace {
-void lcl_dumpScrollbar(::tools::JsonWriter& rJsonWriter, const ScrollBar& rScrollBar)
-{
-    rJsonWriter.put("lower", rScrollBar.GetRangeMin());
-    rJsonWriter.put("upper", rScrollBar.GetRangeMax());
-    rJsonWriter.put("step_increment", rScrollBar.GetLineSize());
-    rJsonWriter.put("page_increment", rScrollBar.GetPageSize());
-    rJsonWriter.put("value", rScrollBar.GetThumbPos());
-    rJsonWriter.put("page_size", rScrollBar.GetVisibleSize());
-}
-};
-
-void VclScrolledWindow::DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter)
-{
-    VclBin::DumpAsPropertyTree(rJsonWriter);
-
-    rJsonWriter.put("user_managed_scrolling", m_bUserManagedScrolling);
-
-    {
-        auto aVertical = rJsonWriter.startNode("vertical");
-
-        ScrollBar& rScrollBar = getVertScrollBar();
-        lcl_dumpScrollbar(rJsonWriter, rScrollBar);
-
-        WinBits nWinBits = GetStyle();
-        if (nWinBits & WB_VSCROLL)
-            rJsonWriter.put("policy", "always");
-        else if (nWinBits & WB_AUTOVSCROLL)
-            rJsonWriter.put("policy", "auto");
-        else
-            rJsonWriter.put("policy", "never");
-    }
-
-    {
-        auto aHorizontal = rJsonWriter.startNode("horizontal");
-
-        ScrollBar& rScrollBar = getHorzScrollBar();
-        lcl_dumpScrollbar(rJsonWriter, rScrollBar);
-
-        WinBits nWinBits = GetStyle();
-        if (nWinBits & WB_HSCROLL)
-            rJsonWriter.put("policy", "always");
-        else if (nWinBits & WB_AUTOHSCROLL)
-            rJsonWriter.put("policy", "auto");
-        else
-            rJsonWriter.put("policy", "never");
-    }
 }
 
 void VclViewport::setAllocation(const Size &rAllocation)
@@ -3083,39 +2977,6 @@ VclPaned::~VclPaned()
 VclScrolledWindow::~VclScrolledWindow()
 {
     disposeOnce();
-}
-
-void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Control::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "drawingarea");
-
-    ScopedVclPtrInstance<VirtualDevice> pDevice;
-    OutputDevice* pRefDevice = GetOutDev();
-    Size aRenderSize(pRefDevice->PixelToLogic(GetOutputSizePixel()));
-    Size aOutputSize = GetSizePixel();
-    pDevice->SetOutputSize(aRenderSize);
-    tools::Rectangle aRect(Point(0,0), aRenderSize);
-
-    // Dark mode support
-    pDevice->DrawWallpaper(aRect, pRefDevice->GetBackground());
-
-    Paint(*pDevice, aRect);
-
-    Bitmap aImage = pDevice->GetBitmap(Point(0,0), aRenderSize);
-    aImage.Scale(aOutputSize);
-    rJsonWriter.put("imagewidth", aRenderSize.Width());
-    rJsonWriter.put("imageheight", aRenderSize.Height());
-
-    SvMemoryStream aOStm(65535, 65535);
-    if(GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
-    {
-        css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-        OStringBuffer aBuffer("data:image/png;base64,");
-        ::comphelper::Base64::encode(aBuffer, aSeq);
-        rJsonWriter.put("image", aBuffer);
-    }
-    rJsonWriter.put("text", GetQuickHelpText());
 }
 
 FactoryFunction VclDrawingArea::GetUITestFactory() const

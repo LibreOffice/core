@@ -1502,11 +1502,4 @@ bool VclMultiLineEdit::set_property(const OUString &rKey, const OUString &rValue
     return true;
 }
 
-void VclMultiLineEdit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    Edit::DumpAsPropertyTree(rJsonWriter);
-
-    rJsonWriter.put("cursor", pImpVclMEdit->GetTextWindow()->GetTextView()->IsCursorEnabled());
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

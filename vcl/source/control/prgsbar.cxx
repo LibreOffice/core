@@ -239,10 +239,4 @@ void ProgressBar::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-void ProgressBar::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    vcl::Window::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("value", mnPercent);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

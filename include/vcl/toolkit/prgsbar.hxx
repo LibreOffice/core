@@ -73,9 +73,6 @@ private:
     SAL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nNewPerc);
 
-protected:
-    virtual void        DumpAsPropertyTree(tools::JsonWriter&) override;
-
 public:
                         ProgressBar( vcl::Window* pParent, WinBits nWinBits, BarStyle eBarStyle );
 

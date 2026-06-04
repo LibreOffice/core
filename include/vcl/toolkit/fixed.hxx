@@ -86,7 +86,6 @@ public:
 
     virtual void    LoseFocus() override;
     virtual void    ApplySettings(vcl::RenderContext&) override;
-    virtual void    DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedLine final : public Control
@@ -116,7 +115,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual Size    GetOptimalSize() const override;
-    virtual void    DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 class VCL_DLLPUBLIC FixedBitmap final : public Control
@@ -177,8 +175,6 @@ public:
 
     const Image&    GetModeImage( ) const { return maImage;}
     SAL_DLLPRIVATE virtual bool    set_property(const OUString &rKey, const OUString &rValue) override;
-
-    SAL_DLLPRIVATE void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

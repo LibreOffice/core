@@ -543,7 +543,6 @@ FixedHyperlink::set_property(rtl::OUString const&, rtl::OUString const&)
 FixedLine::ApplySettings(OutputDevice&)
 FixedLine::DataChanged(DataChangedEvent const&)
 FixedLine::Draw(OutputDevice*, Point const&, SystemTextColorFlags)
-FixedLine::DumpAsPropertyTree(tools::JsonWriter&)
 FixedLine::FillLayoutData() const
 FixedLine::GetCanonicalFont(StyleSettings const&) const
 FixedLine::GetCanonicalTextColor(StyleSettings const&) const
@@ -666,7 +665,6 @@ FontSizeBox::format_number(int) const
 FontSizeNames::Name2Size(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
 FontSizeNames::Size2Name(int) const
 FormattedField::Down()
-FormattedField::DumpAsPropertyTree(tools::JsonWriter&)
 FormattedField::EventNotify(NotifyEvent&)
 FormattedField::First()
 FormattedField::GetUITestFactory() const
@@ -1313,7 +1311,6 @@ MenuBarUpdateIconManager::SetShowMenuIcon(bool)
 MenuBarUpdateIconManager::~MenuBarUpdateIconManager()
 MenuButton::Activate()
 MenuButton::CancelMenu()
-MenuButton::DumpAsPropertyTree(tools::JsonWriter&)
 MenuButton::ExecuteMenu()
 MenuButton::GetUITestFactory() const
 MenuButton::InPopupMode() const
@@ -1547,7 +1544,6 @@ PptSlidePersistList::PptSlidePersistList()
 PptSlidePersistList::~PptSlidePersistList()
 ProcessData::NotifyFreeObj(SdrObject*)
 ProgressBar::DataChanged(DataChangedEvent const&)
-ProgressBar::DumpAsPropertyTree(tools::JsonWriter&)
 ProgressBar::GetOptimalSize() const
 ProgressBar::Paint(OutputDevice&, tools::Rectangle const&)
 ProgressBar::Resize()
@@ -6018,7 +6014,6 @@ SvHeaderTabListBox::CreateAccessibleCell(int, unsigned short)
 SvHeaderTabListBox::CreateAccessibleColumnHeader(unsigned short)
 SvHeaderTabListBox::CreateAccessibleControl(int)
 SvHeaderTabListBox::CreateAccessibleRowHeader(int)
-SvHeaderTabListBox::DumpAsPropertyTree(tools::JsonWriter&)
 SvHeaderTabListBox::FillAccessibleStateSet(long&, AccessibleBrowseBoxObjType) const
 SvHeaderTabListBox::FillAccessibleStateSetForCell(long&, int, unsigned short) const
 SvHeaderTabListBox::GetAccessible()
@@ -6184,7 +6179,6 @@ SvStream::FlushData()
 SvStream::GetData(void*, unsigned long)
 SvStream::PutData(void const*, unsigned long)
 SvStream::SeekPos(unsigned long)
-SvTabListBox::DumpAsPropertyTree(tools::JsonWriter&)
 SvTabListBox::GetCellText(unsigned int, unsigned short) const
 SvTabListBox::GetChildOnPos(SvTreeListEntry*, unsigned int, unsigned int&) const
 SvTabListBox::GetEntryOnPos(unsigned int) const
@@ -9531,13 +9525,11 @@ VclButtonBox::addSpacing(Size const&, unsigned short) const
 VclButtonBox::calculatePrimarySecondaryRequisitions() const
 VclContainer::setLayoutPosSize(vcl::Window&, Point const&, Size const&)
 VclDrawingArea::DeleteSurroundingText(Selection const&)
-VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter&)
 VclDrawingArea::GetSurroundingText() const
 VclDrawingArea::GetSurroundingTextSelection() const
 VclDrawingArea::GetUITestFactory() const
 VclDrawingArea::RequestHelp(HelpEvent const&)
 VclDrawingArea::StartDrag(signed char, Point const&)
-VclGrid::DumpAsPropertyTree(tools::JsonWriter&)
 VclGrid::calculateRequisition() const
 VclGrid::calculateRequisitionForSpacings(int, int) const
 VclGrid::setAllocation(Size const&)

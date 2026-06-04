@@ -74,8 +74,6 @@ public:
 
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
 private:

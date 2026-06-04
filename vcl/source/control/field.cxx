@@ -41,81 +41,6 @@
 
 namespace
 {
-
-std::string FieldUnitToString(FieldUnit unit)
-{
-    switch(unit)
-    {
-        case FieldUnit::NONE:
-            return "";
-
-        case FieldUnit::MM:
-            return "mm";
-
-        case FieldUnit::CM:
-            return "cm";
-
-        case FieldUnit::M:
-            return "m";
-
-        case FieldUnit::KM:
-            return "km";
-
-        case FieldUnit::TWIP:
-            return "twip";
-
-        case FieldUnit::POINT:
-            return "point";
-
-        case FieldUnit::PICA:
-            return "pica";
-
-        case FieldUnit::INCH:
-            return "inch";
-
-        case FieldUnit::FOOT:
-            return "foot";
-
-        case FieldUnit::MILE:
-            return "mile";
-
-        case FieldUnit::CHAR:
-            return "char";
-
-        case FieldUnit::LINE:
-            return "line";
-
-        case FieldUnit::CUSTOM:
-            return "custom";
-
-        case FieldUnit::PERCENT:
-            return "percent";
-
-        case FieldUnit::MM_100TH:
-            return "mm100th";
-
-        case FieldUnit::PIXEL:
-            return "pixel";
-
-        case FieldUnit::DEGREE:
-            return "degree";
-
-        case FieldUnit::SECOND:
-            return "second";
-
-        case FieldUnit::MILLISECOND:
-            return "millisecond";
-
-        case FieldUnit::FONT_EM:
-            return "em";
-
-        case FieldUnit::FONT_CJK_ADVANCE:
-            return "ic";
-    }
-
-    return "";
-}
-
 sal_Int64 ImplPower10( sal_uInt16 n )
 {
     sal_Int64 nValue = 1;
@@ -1477,17 +1402,6 @@ void MetricField::Last()
 {
     FieldLast();
     SpinField::Last();
-}
-
-void MetricField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    SpinField::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("min", GetMin());
-    rJsonWriter.put("max", GetMax());
-    rJsonWriter.put("unit", FieldUnitToString(GetUnit()));
-    OUString sValue = Application::GetSettings().GetNeutralLocaleDataWrapper().
-        getNum(GetValue(), GetDecimalDigits(), false, false);
-    rJsonWriter.put("value", sValue);
 }
 
 FactoryFunction MetricField::GetUITestFactory() const

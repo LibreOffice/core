@@ -509,8 +509,6 @@ public:
     void SetToolBoxTextPosition( ToolBoxTextPosition ePosition );
 
     void SetLineSpacing(bool b) { mbLineSpacing = b; }
-
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 inline void ToolBox::CheckItem( ToolBoxItemId nItemId, bool bCheck )

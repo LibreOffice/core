@@ -102,8 +102,6 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-
 protected:
 
     /// Handler for click, in case we want the button to handle uno commands (.uno:Something).
@@ -176,8 +174,6 @@ public:
     {
         return mbIsAction;
     }
-
-    void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     bool isToggleButton() { return mbIsToggleButton; }
     void setToggleButton(bool bIsToggleButton) { mbIsToggleButton = bIsToggleButton; }
@@ -368,9 +364,6 @@ public:
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
-    /// Button has additional stuff that we need to dump too.
-    void DumpAsPropertyTree(tools::JsonWriter&) override;
-
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
@@ -488,9 +481,6 @@ public:
      */
     SAL_DLLPRIVATE void group(RadioButton &rOther);
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
-
-    /// Button has additional stuff that we need to dump too.
-    void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 };

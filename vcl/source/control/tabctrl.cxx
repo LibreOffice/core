@@ -2160,40 +2160,6 @@ FactoryFunction TabControl::GetUITestFactory() const
     return TabControlUIObject::create;
 }
 
-void TabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    rJsonWriter.put("id", get_id());
-    rJsonWriter.put("type", "tabcontrol");
-    rJsonWriter.put("selected", GetCurPageId());
-
-    {
-        auto childrenNode = rJsonWriter.startArray("children");
-        for (auto id : GetPageIDs())
-        {
-            TabPage* pChild = GetTabPage(id);
-
-            if (pChild)
-            {
-                auto childNode = rJsonWriter.startStruct();
-                pChild->DumpAsPropertyTree(rJsonWriter);
-
-                if (!pChild->IsVisible())
-                    rJsonWriter.put("hidden", true);
-            }
-        }
-    }
-    {
-        auto tabsNode = rJsonWriter.startArray("tabs");
-        for(auto id : GetPageIDs())
-        {
-            auto tabNode = rJsonWriter.startStruct();
-            rJsonWriter.put("text", GetPageText(id));
-            rJsonWriter.put("id", id);
-            rJsonWriter.put("name", GetPageName(id));
-        }
-    }
-}
-
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
 IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)

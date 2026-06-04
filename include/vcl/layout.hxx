@@ -95,7 +95,6 @@ public:
         return m_bVerticalContainer;
     }
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const override;
     void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
@@ -211,7 +210,6 @@ public:
     {
     }
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
@@ -327,7 +325,6 @@ private:
     Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 public:
     VclGrid(vcl::Window *pParent)
         : VclContainer(pParent)
@@ -439,7 +436,6 @@ public:
     virtual const vcl::Window *get_child() const override;
     vcl::Window *get_label_widget();
     const vcl::Window *get_label_widget() const;
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
@@ -466,7 +462,6 @@ public:
     const vcl::Window *get_label_widget() const;
     virtual void StateChanged(StateChangedType nType) override;
     void  SetExpandedHdl( const Link<VclExpander&,void>& rLink ) { maExpandedHdl = rLink; }
-    virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
     virtual FactoryFunction GetUITestFactory() const override;
 private:
     virtual Size calculateRequisition() const override;
@@ -495,7 +490,6 @@ public:
     //to override it
     void setUserManagedScrolling(bool bUserManagedScrolling) { m_bUserManagedScrolling = bUserManagedScrolling;}
     void doSetAllocation(const Size &rAllocation, bool bRetryOnFailure);
-    virtual void DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter) override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
@@ -768,7 +762,6 @@ public:
         m_xTransferHelper = rHelper;
         m_nDragAction = eDNDConstants;
     }
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 //Get first window of a pTopLevel window as

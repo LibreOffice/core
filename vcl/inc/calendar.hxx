@@ -212,8 +212,6 @@ public:
 
     void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
     void            SetActivateHdl( const Link<Calendar*,void>& rLink ) { maActivateHdl = rLink; }
-
-    virtual void    DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
