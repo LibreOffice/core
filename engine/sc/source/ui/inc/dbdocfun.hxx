@@ -51,7 +51,6 @@ friend class SortOperation;
 
 private:
     ScDocShell&     rDocShell;
-    static bool CheckSheetViewProtection(sc::OperationType eOperation);
 
 public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}

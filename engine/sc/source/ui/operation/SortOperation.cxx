@@ -13,7 +13,6 @@
 #include <docfunc.hxx>
 #include <editable.hxx>
 #include <markdata.hxx>
-#include <SheetViewOperationsTester.hxx>
 #include <editable.hxx>
 #include <progress.hxx>
 #include <undosort.hxx>
@@ -107,9 +106,6 @@ bool SortOperation::runImplementation()
         else
             nStartingColToEdit++;
     }
-
-    if (!checkSheetViewProtection())
-        return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
         rDoc, mnTab, nStartingColToEdit, nStartingRowToEdit, aLocalParam.nCol2, aLocalParam.nRow2,

@@ -46,8 +46,6 @@ protected:
     bool mbRecord : 1 = false;
     ScViewData* mpViewData;
 
-    bool checkSheetViewProtection();
-
     /** Convert a tab from a sheet view to the tab in the default view. */
     SCTAB convertTab(SCTAB nTab);
 

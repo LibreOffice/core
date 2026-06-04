@@ -404,8 +404,6 @@ private:
     void            CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                        SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
 
-    bool CheckSheetViewProtection(sc::OperationType eOperationType);
-
     void PasteFromExcelClip(ScDocument& rClipDoc, SCTAB nSrcTab, SCCOL nPosX, SCROW nPosY,
                             const Point* pLogicPos, bool bAllowDialogs);
 };

@@ -100,7 +100,6 @@
 #include <SparklineAttributes.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
-#include <SheetViewOperationsTester.hxx>
 #include <table.hxx>
 #include <config_features.h>
 
@@ -145,12 +144,6 @@
 #include <sfx2/viewfrm.hxx>
 
 using namespace com::sun::star;
-
-bool ScDocFunc::CheckSheetViewProtection(sc::OperationType eOperation)
-{
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-    return aSheetViewTester.check(eOperation);
-}
 
 void ScDocFunc::NotifyDrawUndo( std::unique_ptr<SdrUndoAction> pUndoAction)
 {

@@ -14,7 +14,6 @@
 #include <editable.hxx>
 #include <formulacell.hxx>
 #include <markdata.hxx>
-#include <SheetViewOperationsTester.hxx>
 
 #include <memory>
 

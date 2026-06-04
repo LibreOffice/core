@@ -57,7 +57,6 @@
 
 #include <chartlis.hxx>
 #include <ChartTools.hxx>
-#include <SheetViewOperationsTester.hxx>
 #include <operation/CreatePivotTableOperation.hxx>
 #include <operation/QueryOperation.hxx>
 #include <operation/RemovePivotTableOperation.hxx>
@@ -69,12 +68,6 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-
-bool ScDBDocFunc::CheckSheetViewProtection(sc::OperationType eOperation)
-{
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-    return aSheetViewTester.check(eOperation);
-}
 
 bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader,
                              bool bRecord, bool bApi, const OUString& rStyleName)

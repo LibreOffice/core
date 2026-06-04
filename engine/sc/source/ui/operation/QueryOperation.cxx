@@ -21,7 +21,6 @@
 #include <undodat.hxx>
 #include <scresid.hxx>
 #include <globalnames.hxx>
-#include <SheetViewOperationsTester.hxx>
 
 #include <osl/diagnose.h>
 #include <vcl/weld.hxx>
@@ -105,9 +104,6 @@ bool QueryOperation::runImplementation()
                 mrDocShell.ErrorMessage(STR_PASTE_FULL);
             return false;
         }
-
-        if (!checkSheetViewProtection())
-            return false;
 
         ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
             rDoc, nDestTab, aLocalParam.nCol1, aLocalParam.nRow1, aLocalParam.nCol2,

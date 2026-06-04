@@ -10,7 +10,6 @@
 #include <operation/Operation.hxx>
 #include <operation/OperationType.hxx>
 #include <cellvalue.hxx>
-#include <SheetViewOperationsTester.hxx>
 #include <address.hxx>
 #include <dbdata.hxx>
 #include <docsh.hxx>
@@ -556,12 +555,6 @@ bool Operation::isInputOnSheetViewAutoFilter(ScRange const& rRange) const
             return true;
     }
     return false;
-}
-
-bool Operation::checkSheetViewProtection()
-{
-    sc::SheetViewOperationsTester aSheetViewTester(mpViewData);
-    return aSheetViewTester.check(meType);
 }
 
 bool Operation::run()
