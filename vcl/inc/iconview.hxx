@@ -48,11 +48,6 @@ public:
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
     typedef std::tuple<OUString&, SvTreeListEntry*> encoded_image_query;
 
-    void SetDumpImageHdl(const Link<const encoded_image_query&, bool>& rLink)
-    {
-        maDumpImageHdl = rLink;
-    }
-
     /// Update entry size based on the given entry's image size and text
     void UpdateEntrySize(const SvTreeListEntry& rEntry);
 
@@ -60,7 +55,6 @@ protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
 
 private:
-    Link<const encoded_image_query&, bool> maDumpImageHdl;
     void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
 
     bool HasSeparatorEntry() const;

@@ -1859,7 +1859,6 @@ private:
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
     DECL_LINK(TooltipHdl, SvTreeListEntry&, OUString);
-    DECL_LINK(DumpImageHdl, const ::IconView::encoded_image_query&, bool);
 
     void do_insert(int pos, const OUString* pStr, const OUString* pId, const Image& rImage,
                    weld::TreeIter* pRet);
@@ -1883,9 +1882,6 @@ public:
     virtual void insert_separator(int pos, const OUString* pId) override;
 
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override;
-
-    virtual void
-    connect_get_image(const Link<const weld::encoded_image_query&, bool>& rLink) override;
 
     virtual int count_selected_items() const override;
 

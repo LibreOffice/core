@@ -5139,20 +5139,6 @@ void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&
     m_xIconView->SetTooltipHdl(LINK(this, SalInstanceIconView, TooltipHdl));
 }
 
-IMPL_LINK(SalInstanceIconView, DumpImageHdl, const ::IconView::encoded_image_query&, rQuery, bool)
-{
-    SvTreeListEntry* pEntry = std::get<1>(rQuery);
-    return m_aGetPropertyTreeElemHdl.Call(
-        weld::encoded_image_query(std::get<0>(rQuery), SalInstanceTreeIter(*this, pEntry)));
-}
-
-void SalInstanceIconView::connect_get_image(
-    const Link<const weld::encoded_image_query&, bool>& rLink)
-{
-    weld::IconView::connect_get_image(rLink);
-    m_xIconView->SetDumpImageHdl(LINK(this, SalInstanceIconView, DumpImageHdl));
-}
-
 int SalInstanceIconView::count_selected_items() const { return m_xIconView->GetSelectionCount(); }
 
 void SalInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
