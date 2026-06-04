@@ -46,7 +46,6 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
-    typedef std::tuple<OUString&, SvTreeListEntry*> encoded_image_query;
 
     /// Update entry size based on the given entry's image size and text
     void UpdateEntrySize(const SvTreeListEntry& rEntry);
