@@ -110,6 +110,7 @@
 #include <operation/DeleteSparklineOperation.hxx>
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/DeleteCellsOperation.hxx>
+#include <operation/PutDataOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
 #include <operation/SetFormulasOperation.hxx>
 #include <operation/SetValueOperation.hxx>
@@ -741,97 +742,10 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
     }
 }
 
-namespace {
-
-    struct ScMyRememberItem
-    {
-        sal_Int32   nIndex;
-        SfxItemSet  aItemSet;
-
-        ScMyRememberItem(SfxItemSet _aItemSet, sal_Int32 nTempIndex) :
-            nIndex(nTempIndex), aItemSet(std::move(_aItemSet)) {}
-    };
-
-}
-
 void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
-    //  PutData calls PutCell or SetNormalString
-
-    bool bRet = false;
-    ScDocument& rDoc = rDocShell.GetDocument();
-    ScEditAttrTester aTester( &rEngine );
-    bool bEditCell = aTester.NeedsObject();
-    if ( bEditCell )
-    {
-        // #i61702# With bLoseContent set, the content of rEngine isn't restored
-        // (used in loading XML, where after the removeActionLock call the API object's
-        // EditEngine isn't accessed again.
-        bool bLoseContent = rDoc.IsImportingXML();
-
-        const bool bUpdateMode = rEngine.SetUpdateLayout(false);
-
-        std::vector<std::unique_ptr<ScMyRememberItem>> aRememberItems;
-
-        //  All paragraph attributes must be removed before calling CreateTextObject,
-        //  not only alignment, so the object doesn't contain the cell attributes as
-        //  paragraph attributes. Before removing the attributes store them in a vector to
-        //  set them back to the EditEngine.
-        sal_Int32 nCount = rEngine.GetParagraphCount();
-        for (sal_Int32 i=0; i<nCount; i++)
-        {
-            const SfxItemSet& rOld = rEngine.GetParaAttribs( i );
-            if ( rOld.Count() )
-            {
-                if ( !bLoseContent )
-                {
-                    aRememberItems.push_back(std::make_unique<ScMyRememberItem>(rEngine.GetParaAttribs(i), i));
-                }
-                rEngine.SetParaAttribs( i, SfxItemSet( *rOld.GetPool(), rOld.GetRanges() ) );
-            }
-        }
-
-        // A copy of pNewData will be stored in the cell.
-        std::unique_ptr<EditTextObject> pNewData(rEngine.CreateTextObject());
-        bRet = SetEditCell(rPos, *pNewData, !bApi);
-
-        // Set the paragraph attributes back to the EditEngine.
-        for (const auto& rxItem : aRememberItems)
-        {
-            rEngine.SetParaAttribs(rxItem->nIndex, rxItem->aItemSet);
-        }
-
-        // #i61702# if the content isn't accessed, there's no need to set the UpdateMode again
-        if ( bUpdateMode && !bLoseContent )
-            rEngine.SetUpdateLayout(true);
-    }
-    else
-    {
-        OUString aText = rEngine.GetText();
-        if (aText.isEmpty())
-        {
-            bool bNumFmtSet = false;
-            bRet = SetNormalString( bNumFmtSet, rPos, aText, bApi );
-        }
-        else
-            bRet = SetStringCell(rPos, aText, !bApi);
-    }
-
-    if ( !(bRet && aTester.NeedsCellAttr()) )
-        return;
-
-    const SfxItemSet& rEditAttr = aTester.GetAttribs();
-    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-    aPattern.GetFromEditItemSet( &rEditAttr );
-    aPattern.DeleteUnchanged( rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() ) );
-    aPattern.ItemSetClearItem(ATTR_HOR_JUSTIFY);    // wasn't removed above if no edit object
-    if ( aPattern.GetItemSet().Count() > 0 )
-    {
-        ScMarkData aMark(rDoc.GetSheetLimits());
-        aMark.SelectTable( rPos.Tab(), true );
-        aMark.SetMarkArea( ScRange( rPos ) );
-        ApplyAttributes( aMark, aPattern, bApi );
-    }
+    sc::PutDataOperation aOperation(*this, rDocShell, rPos, rEngine, bApi);
+    aOperation.run();
 }
 
 bool ScDocFunc::SetCellText(
