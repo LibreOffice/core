@@ -679,15 +679,11 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
     m_xStylesView->freeze();
     m_xStylesView->clear();
-    // for online we can skip inserting the preview into the IconView and rely
-    // on DoJsonProperty to provide the image to clients
-    const bool bNeedInsertPreview = !comphelper::LibreOfficeKit::isActive();
     int nIndex = 0;
     for (const auto& rStyle : m_aAllStyles)
     {
         Bitmap aPreview = GetCachedPreview(rStyle);
-        Bitmap* pPreview = bNeedInsertPreview ? &aPreview : nullptr;
-        m_xStylesView->insert(nIndex, nullptr, &rStyle.translatedName, pPreview, nullptr);
+        m_xStylesView->insert(nIndex, nullptr, &rStyle.translatedName, &aPreview, nullptr);
         m_xStylesView->set_item_tooltip_text(nIndex, rStyle.translatedName);
         m_xStylesView->set_item_accessible_name(nIndex, rStyle.translatedName);
         nIndex++;
