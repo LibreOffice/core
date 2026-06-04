@@ -208,8 +208,6 @@ $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1
 
 endef
 
-gb_Library_get_sdk_link_dir = $(INSTDIR)/$(SDKDIRNAME)/lib
-
 # Executable class
 
 gb_Executable_EXT :=

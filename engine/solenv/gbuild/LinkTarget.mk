@@ -74,8 +74,8 @@ gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_
 gb_LinkTarget_LAYER_LINKPATHS := \
 	UREBIN:OOO. \
 	OOO:OOO. \
-	SHLXTHDL:. \
-	OXT:OXT. \
+	SHLXTHDL:OOO+SHLXTHDL. \
+	OXT:OOO+OXT. \
 	NONE:OOO+NONE. \
 
 

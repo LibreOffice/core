@@ -221,8 +221,6 @@ $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1
 
 endef
 
-gb_Library_get_sdk_link_dir := $(gb_Library_DLLDIR)
-
 # bundle is a special kind of library that exists only on Darwin/OSX
 # set the TARGETTYPE to Bundle, and clear install_name(RPATH)
 define gb_Library_Bundle
