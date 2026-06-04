@@ -550,6 +550,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/FillSeriesOperation \
     sc/source/ui/operation/FillSimpleOperation \
     sc/source/ui/operation/GroupSparklinesOperation \
+    sc/source/ui/operation/ImportNoteOperation \
     sc/source/ui/operation/InsertCellsOperation \
     sc/source/ui/operation/InsertNameListOperation \
     sc/source/ui/operation/InsertSheetViewOperation \

@@ -111,6 +111,7 @@
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/DeleteCellsOperation.hxx>
 #include <operation/ApplyStyleOperation.hxx>
+#include <operation/ImportNoteOperation.hxx>
 #include <operation/PutDataOperation.hxx>
 #include <operation/SetCellTextOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
@@ -783,19 +784,9 @@ void ScDocFunc::ImportNote( const ScAddress& rPos,
                             std::unique_ptr<GenerateNoteCaption> xGenerator,
                             const tools::Rectangle& rCaptionRect, bool bShown )
 {
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote( rPos );
-    SAL_WARN_IF(pOldNote, "sc.ui", "imported data has >1 notes on same cell? at pos " << rPos);
-
-    // create new note
-    ScNoteUtil::CreateNoteFromGenerator(rDoc, rPos, std::move(xGenerator),
-                                        rCaptionRect, bShown);
-
-    rDoc.SetStreamValid(rPos.Tab(), false);
-
-    aModificator.SetDocumentModified();
+    sc::ImportNoteOperation aOperation(rDocShell, rPos, std::move(xGenerator),
+                                       rCaptionRect, bShown);
+    aOperation.run();
 }
 
 bool ScDocFunc::ApplyAttributes(const ScMarkData& rMark, const ScPatternAttr& rPattern, bool bApi )
