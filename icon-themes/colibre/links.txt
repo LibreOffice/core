@@ -2221,6 +2221,10 @@ sd/res/page.png cmd/sc_adddirect.png
 sd/res/pipette.png cmd/sc_bmpmask.png
 sd/res/playblue_16.png cmd/sc_runbasic.png
 sd/res/sf02.png cmd/sc_presentationlayout.png
+sd/res/sf02.png cmd/sc_drawinglayout.png
+cmd/32/drawinglayout.png cmd/32/presentationlayout.png
+cmd/lc_drawinglayout.png cmd/lc_presentationlayout.png
+sd/res/sf02.png cmd/sc_presentationlayout.png
 sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
 sd/res/time_16.png cmd/sc_timefield.png
 sd/res/waiticon.png cmd/sc_mediapause.png
