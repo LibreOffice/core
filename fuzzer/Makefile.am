@@ -221,13 +221,26 @@ if ENABLE_AFL
 AFL_CPPFLAGS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) -I${top_srcdir}/test
 # AFL variants use afl-clang-* instrumentation; strip flags incompatible with
 # the AFL toolchain that may have leaked into CXXFLAGS:
-#  -fsanitize=fuzzer-no-link: AFL links libAFLDriver.a, not libclang_rt.fuzzer.a,
-#     so SanitizerCoverage refs like __sancov_lowest_stack would be unresolved.
-#  CFI flags (-fsanitize=cfi, -fno-sanitize-trap=cfi, -fsanitize-recover=cfi,
-#     -fvisibility=hidden): CFI is intentionally off for AFL (afl-clang-fast's
+#  -fsanitize=%: every sanitizer spec inherited from the global CXXFLAGS,
+#     including whatever --with-sanitizer=... produced. Sanitizers must NOT come
+#     from there for AFL: only the `san` variant is sanitized, and it gets
+#     ASan/UBSan/CFI from afl-clang-fast via the AFL_USE_* env vars (ENV_san),
+#     which also link the matching runtime. If the spec leaked in, the non-san
+#     variants would be *instrumented* at compile but never linked against the
+#     runtime, failing with undefined __asan_report_*/__ubsan_handle_* at link.
+#     A `%` pattern is essential because --with-sanitizer fuses the spec into a
+#     single token (e.g. -fsanitize=address,undefined,fuzzer-no-link) that an
+#     exact-word filter can't match. This also covers the old fuzzer-no-link
+#     case (AFL links libAFLDriver.a, not libclang_rt.fuzzer.a, so its
+#     SanitizerCoverage refs like __sancov_lowest_stack would be unresolved).
+#  -static-libasan/-static-libsan: the sanitizer runtime-linkage selector that
+#     --with-sanitizer adds; a no-op at compile, irrelevant to the AFL link.
+#  -fno-sanitize-trap=cfi, -fsanitize-recover=cfi, -fvisibility=hidden: CFI is
+#     intentionally off for the non-san AFL variants (afl-clang-fast's
 #     instrumentation pass false-positives under CFI metadata).
-AFL_FILTER_OUT = -fsanitize=fuzzer-no-link \
-                 -fsanitize=cfi \
+AFL_FILTER_OUT = -fsanitize=% \
+                 -static-libasan \
+                 -static-libsan \
                  -fno-sanitize-trap=cfi \
                  -fsanitize-recover=cfi \
                  -fvisibility=hidden
