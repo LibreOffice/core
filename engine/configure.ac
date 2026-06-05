@@ -1416,6 +1416,22 @@ else
     AC_MSG_RESULT(no)
     x_LDFLAGS=[\#]
 fi
+
+AC_ARG_ENABLE(relative-debug-paths,
+    AS_HELP_STRING([--enable-relative-debug-paths],
+        [Record source paths in debug info relative to the source tree root
+         (-fdebug-prefix-map), so an object shared between build trees by
+         ccache resolves to the local tree when debugging.]))
+AC_MSG_CHECKING([whether to record debug paths relative to the source tree])
+if test "$enable_relative_debug_paths" = yes; then
+    AC_MSG_RESULT([yes])
+    ENABLE_RELATIVE_DEBUG_PATHS=TRUE
+else
+    AC_MSG_RESULT([no])
+    ENABLE_RELATIVE_DEBUG_PATHS=
+fi
+AC_SUBST(ENABLE_RELATIVE_DEBUG_PATHS)
+
 AC_SUBST(AFLAGS)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)

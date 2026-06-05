@@ -248,6 +248,11 @@ gb_LINKER_DEBUGINFO_FLAGS += -Wl,--gdb-index
 gb_DEBUGINFO_FLAGS += -ggnu-pubnames
 endif
 
+# map SRCDIR to "." so a ccache-shared object resolves to the local tree
+ifeq ($(ENABLE_RELATIVE_DEBUG_PATHS),TRUE)
+gb_DEBUGINFO_FLAGS += -fdebug-prefix-map=$(SRCDIR)=.
+endif
+
 gb_LinkTarget_INCLUDE :=\
     $(SOLARINC) \
     -I$(BUILDDIR)/config_$(gb_Side) \

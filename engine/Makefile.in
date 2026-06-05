@@ -105,13 +105,13 @@ define gb_Top_GbuildModuleRules
 .PHONY: $(1).allbuild $(1).buildall $(1).allcheck $(1).checkall
 
 $(1): bootstrap fetch
-	$(KEEP_AWAKE_CMD) cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
+	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile
 
 $(1).build $(1).check $(1).coverage $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)): bootstrap fetch
-	$(KEEP_AWAKE_CMD) cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile $$(patsubst $(1).%,%,$$@)
 
 $(1).clean $(1).showdeliverables:
-	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+	$$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile $$(patsubst $(1).%,%,$$@)
 
 $(1).allbuild $(1).buildall: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
 	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
