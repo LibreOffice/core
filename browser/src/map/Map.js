@@ -1122,14 +1122,13 @@ window.L.Map = window.L.Evented.extend({
 	// TODO replace with universal implementation after refactoring projections
 
 	getZoomScale: function (toZoom, fromZoom) {
-		var crs = this.options.crs;
 		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return crs.scale(toZoom) / crs.scale(fromZoom);
+		return window.L.LatLng.scale(toZoom) / window.L.LatLng.scale(fromZoom);
 	},
 
 	getScaleZoom: function (scale, fromZoom) {
 		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return fromZoom + (Math.log(scale) / Math.log(this.options.crs.SCALE));
+		return fromZoom + (Math.log(scale) / Math.log(window.L.LatLng.SCALE));
 	},
 
 

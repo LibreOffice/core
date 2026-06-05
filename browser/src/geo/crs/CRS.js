@@ -10,16 +10,6 @@ window.L.CRS = {
 	transformation: new cool.Transformation(1, 0, -1, 0),
 	SCALE: 1.2,
 
-	// converts geo coords to projection-specific coords (e.g. in meters)
-	project: function (latlng) {
-		return this.projection.project(latlng);
-	},
-
-	// converts projected coords to geo coords
-	unproject: function (point) {
-		return this.projection.unproject(point);
-	},
-
 	// defines how the world scales with zoom
 	scale: function (zoom) {
 		return Math.pow(this.SCALE, zoom);

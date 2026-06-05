@@ -1034,7 +1034,7 @@ class Socket {
 			let tileWidthTwips = this._map.options.tileWidthTwips;
 			let tileHeightTwips = this._map.options.tileHeightTwips;
 			if (this._map.options.zoom !== this._map.options.defaultZoom) {
-				const scale = this._map.options.crs.scale(
+				const scale = window.L.LatLng.scale(
 					this._map.options.defaultZoom - this._map.options.zoom,
 				);
 				tileWidthTwips = Math.round(tileWidthTwips * scale);
