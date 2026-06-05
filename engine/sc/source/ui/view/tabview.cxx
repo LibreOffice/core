@@ -1910,10 +1910,28 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         //  get the visible rectangle in logic units
         bool bLOKActive = comphelper::COKit::isActive();
         MapMode aDrawMode = pWin->GetDrawMapMode();
-        tools::Rectangle aVisible(
-            bLOKActive ?
-            OutputDevice::LogicToLogic( aViewData.getKitVisibleArea(), MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM) )
-            : pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
+        tools::Rectangle aVisible;
+        if (bLOKActive)
+        {
+            tools::Rectangle aKitVisible = aViewData.getKitVisibleArea();
+            // aKitVisible is expressed in tile-twips.
+            // The selection rectangle below is computed in
+            // document coords (print-twips). Tile-twips accumulate per-row
+            // pixel rounding, so the two systems drift apart as the row/column
+            // number grows. As a result, at high rows/cols the chart gets placed far
+            // above/left of the selection. Convert to print-twips first so both
+            // rectangles share the same coordinate system.
+            if (comphelper::COKit::isCompatFlagSet(
+                    comphelper::COKit::Compat::scPrintTwipsMsgs))
+            {
+                aKitVisible = tools::Rectangle(
+                    aViewData.GetPrintTwipsPosFromTileTwips(aKitVisible.TopLeft()),
+                    aViewData.GetPrintTwipsPosFromTileTwips(aKitVisible.BottomRight()));
+            }
+            aVisible = OutputDevice::LogicToLogic( aKitVisible, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM) );
+        }
+        else
+            aVisible = pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode );
 
         ScDocument& rDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.CurrentTabForData();
