@@ -98,8 +98,11 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlntrit.hxx>
 
+#include <sfx2/objsh.hxx>
+
 #include <cmath>
 #include <memory>
+#include <optional>
 
 using namespace css;
 
@@ -1097,6 +1100,17 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
 
     if (!pView->GetSdrPageView())
         return;
+
+    // Creating the visual SdrObjects for annotations below is a rendering
+    // detail of annotations that already exist in the model, not a user
+    // edit. Without this guard InsertObjectAtView flips the document's
+    // modified flag, so merely opening (or switching to) a slide that has
+    // comments emits a spurious .uno:ModifiedStatus=true (cool#15899).
+    // Genuine annotation changes mark the document modified separately via
+    // SdPage::addAnnotation/removeAnnotation.
+    std::optional<ModifyBlocker_Impl> oBlocker;
+    if (SfxObjectShell* pDocShell = mrBase.GetDocShell())
+        oBlocker.emplace(pDocShell);
 
     auto& rModel = pView->getSdrModelFromSdrView();
 

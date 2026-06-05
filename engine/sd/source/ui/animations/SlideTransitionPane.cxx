@@ -417,6 +417,7 @@ void SlideTransitionPane::Initialize()
 
     // set defaults
     mxCB_AUTO_PREVIEW->set_active(true);      // automatic preview on
+    mxRB_REPEAT_DISABLED->set_active( true );
 
     // update control states before adding handlers
     updateControls();
@@ -441,8 +442,6 @@ void SlideTransitionPane::Initialize()
     mxMF_REPEAT_AUTO_AFTER->connect_value_changed( LINK( this, SlideTransitionPane, RepeatAfterTimeModified ));
     mxCB_AUTO_PREVIEW->connect_toggled( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
     addListener();
-
-    mxRB_REPEAT_DISABLED->set_active( true );
 
     maLateInitTimer.SetTimeout(200);
     maLateInitTimer.SetInvokeHandler(LINK(this, SlideTransitionPane, LateInitCallback));
