@@ -13,17 +13,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-02 14:06+0000\n"
+"PO-Revision-Date: 2026-06-06 15:01+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/pl/>\n"
-"Language: \n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
@@ -888,6 +888,10 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Do działań na dokumentach (inspekcja i edycja) wybierz model z natywnym "
+"wywołaniem funkcji/narzędzi, takim jak gpt-4o, llama3.1 lub qwen2.5. Modele "
+"bez tego (np. base llama3, gemma) nadal mogą czatować, ale nie mogą "
+"korzystać z narzędzi dokumentu."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2255
 #: admin/src/integrator/AdminIntegratorSettings.ts:2373
@@ -941,6 +945,7 @@ msgstr "Brak (wyłącz generowanie obrazu)"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Nie można pobrać modeli (HTTP {0}). Sprawdź adres URL dostawcy i klucz API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1780,7 +1785,7 @@ msgstr "Zmiana odrzucona"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
-msgstr ""
+msgstr "Użyj sekcji: "
 
 #: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
@@ -3007,7 +3012,7 @@ msgstr "Obraz z dysku..."
 #: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
 #: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
 msgid "Shapes ..."
-msgstr ""
+msgstr "Kształty..."
 
 #: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
 #: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
@@ -5602,17 +5607,19 @@ msgstr "Filtruj wpisy"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "Pozycja {n}, podziel zbiór"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "Pozycja {n}, bez podziału"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
 msgstr ""
+"Linijka podziału kolumn. Użyj klawiszy strzałek, aby przesuwać kursor, i "
+"spacji, aby przełączać podział."
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
@@ -5792,15 +5799,15 @@ msgstr "Więcej opcji dla {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1738
 msgid "Cell value"
-msgstr ""
+msgstr "Wartość komórki"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1742
 msgid "row %1"
-msgstr ""
+msgstr "wiersz %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1751
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
@@ -5840,11 +5847,11 @@ msgstr "Pomyślnie wyeksportowano: "
 
 #: src/app/Socket.ts:1113
 msgid "This document has links to external content."
-msgstr ""
+msgstr "W tym dokumencie znajdują się odnośniki do treści zewnętrznych."
 
 #: src/app/Socket.ts:1114
 msgid "Allow"
-msgstr ""
+msgstr "Zezwól"
 
 #: src/app/Socket.ts:1626
 msgid "Discard"
@@ -6532,7 +6539,7 @@ msgstr "Okno dialogowe powitania"
 
 #: src/map/handler/Map.Settings.ts:143
 msgid "Settings saved"
-msgstr ""
+msgstr "Ustawienia zapisano"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
