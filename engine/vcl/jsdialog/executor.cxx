@@ -130,9 +130,12 @@ void SendAction(const OUString& nWindowId, const OUString& rWidget,
         pJSWidget->sendAction(std::move(pData));
 }
 
-void SendAction(weld::Widget& rWidget, std::unique_ptr<ActionDataMap> pData)
+void SendAction(weld::TreeView& rTreeView, std::unique_ptr<ActionDataMap> pData)
 {
-    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(&rWidget))
+    // Only the custom (JSDialog) tree view can receive actions; the generic
+    // backends are a no-op. Restricted to weld::TreeView on purpose so this
+    // does not turn into a catch-all SendAction(weld::Widget&).
+    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(&rTreeView))
         pJSWidget->sendAction(std::move(pData));
 }
 

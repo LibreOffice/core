@@ -186,8 +186,9 @@ VCL_DLLPUBLIC void SendFullUpdate(weld::Widget& rWidget);
 /// send action message to the client
 VCL_DLLPUBLIC void SendAction(const OUString& nWindowId, const OUString& rWidget,
                               std::unique_ptr<ActionDataMap> pData);
-/// send action for the given widget (resolves the window itself)
-VCL_DLLPUBLIC void SendAction(weld::Widget& rWidget, std::unique_ptr<ActionDataMap> pData);
+/// send action to a custom (JSDialog) tree view, resolving the window itself
+VCL_DLLPUBLIC void SendAction(weld::TreeView& rTreeView,
+                              std::unique_ptr<ActionDataMap> pData);
 VCL_DLLPUBLIC StringMap jsonToStringMap(const char* pJSON);
 };
 
