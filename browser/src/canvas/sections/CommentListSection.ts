@@ -2366,6 +2366,7 @@ export class CommentSection extends CanvasSectionObject {
 
 		for (var i = 0; i < subList.length; i++) {
 			lastY = subList[i].sectionProperties.data.anchorSPoint.vY > lastY ? subList[i].sectionProperties.data.anchorSPoint.vY: lastY;
+			var renderedCommentTop: number;
 			if (selectedComment) {
 				const commentWidth = (this.sectionProperties.showSelectedBigger ? this.sectionProperties.commentWidthBigger: this.sectionProperties.commentWidth) / app.dpiScale;
 								let posX = (this.sectionProperties.showSelectedBigger ?
@@ -2379,15 +2380,19 @@ export class CommentSection extends CanvasSectionObject {
 					posX = documentCanvasWidth - commentWidth;
 				}
 
-				subList[i].setContainerPos(false, this.sectionProperties.canvasContainerBounds, posX, lastY / app.dpiScale);
+				renderedCommentTop = subList[i].setContainerPos(false, this.sectionProperties.canvasContainerBounds, posX, lastY / app.dpiScale);
 			}
 			else {
-				subList[i].setContainerPos(false, this.sectionProperties.canvasContainerBounds, actualPosition[0] / app.dpiScale, lastY / app.dpiScale);
+				renderedCommentTop = subList[i].setContainerPos(false, this.sectionProperties.canvasContainerBounds, actualPosition[0] / app.dpiScale, lastY / app.dpiScale);
 			}
 
+			// Follow where the comment actually landed (it may have been clamped), so
+			// replies stack under the parent's real position instead of drifting away.
+			lastY = renderedCommentTop * app.dpiScale;
+			lastY += (subList[i].getCommentHeight(relayout) * app.dpiScale);
+			lastY += Math.round(this.sectionProperties.marginY / 10); // small gap between a comment and its reply
 			if (this.sectionProperties.show != false && !subList[i].isEdit())
 				subList[i].show();
-			lastY += (subList[i].getCommentHeight(relayout) * app.dpiScale);
 		}
 		return lastY;
 	}

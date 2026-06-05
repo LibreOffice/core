@@ -60,6 +60,8 @@ export class Comment extends CanvasSectionObject {
 
 	containerPosX: number = 0;
 	containerPosY: number = 0;
+	// Final top after clamping (canvas-relative CSS px), so children can follow a clamped parent.
+	renderedPosY: number = 0;
 	canvasContainerBounds: DOMRect = new DOMRect();
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -392,9 +394,11 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.menu.setAttribute('aria-label', Comment.openMenuLabel);
 	}
 
-	public setContainerPos(forceUpdate: boolean, canvasContainerBounds?: DOMRect, left?: number, top?: number): void {
+	// Returns the final (post-clamp) top in canvas-relative CSS px, so a thread's
+	// replies can follow a parent that was clamped to stay in view.
+	public setContainerPos(forceUpdate: boolean, canvasContainerBounds?: DOMRect, left?: number, top?: number): number {
 		if ((<any>window).mode.isSmallScreenDevice()) {
-			return;
+			return this.renderedPosY;
 		}
 
 		if (canvasContainerBounds === undefined) {
@@ -417,7 +421,7 @@ export class Comment extends CanvasSectionObject {
 				&& this.canvasContainerBounds.bottom === canvasContainerBounds.bottom
 				&& !forceUpdate
 		) {
-			return;
+			return this.renderedPosY;
 		}
 
 		this.containerPosX = left;
@@ -466,6 +470,9 @@ export class Comment extends CanvasSectionObject {
 
 		this.sectionProperties.container.style.left = Math.round(left) + 'px';
 		this.sectionProperties.container.style.top = Math.round(top) + 'px';
+
+		this.renderedPosY = top - canvasContainerBounds.top;
+		return this.renderedPosY;
 	}
 
 	private createReplyHint (commentType: HTMLElement): void {
@@ -500,11 +507,14 @@ export class Comment extends CanvasSectionObject {
 		for (let i = 0; i < this.sectionProperties.children.length; i++) {
 			if (this.sectionProperties.children[i].isContainerVisible())
 				childPositions.push({ id: this.sectionProperties.children[i].sectionProperties.data.id,
-					posY: this.sectionProperties.children[i].getContainerPosY()
+					posY: this.sectionProperties.children[i].renderedPosY
 				});
 		}
 		childPositions.sort((a, b) => { return a.posY - b.posY; });
-		let lastPosY = this.getContainerPosY() + this.getCommentHeight(false);
+		// Use renderedPosY (post-clamp), not getContainerPosY (pre-clamp): a clamped
+		// parent renders elsewhere than its requested top, so the line must follow where
+		// things actually are, otherwise it stretches down to the stale position.
+		let lastPosY = this.renderedPosY + this.getCommentHeight(false);
 		let i = 0;
 		for (; i < childPositions.length; i++) {
 			if (this.sectionProperties.childLines[i] === undefined) {
