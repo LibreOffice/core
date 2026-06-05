@@ -112,7 +112,7 @@ public:
 
     bool            SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi );
     SC_DLLPUBLIC bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
-    void SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction );
+    SC_DLLPUBLIC void SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction );
     SC_DLLPUBLIC bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     SC_DLLPUBLIC bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
 

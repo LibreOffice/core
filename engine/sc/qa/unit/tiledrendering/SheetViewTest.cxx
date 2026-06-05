@@ -1140,6 +1140,62 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCreateSheetViewRejectsHolderTab)
     CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSetValueCellsSyncsToSheetView)
+{
+    // The multi-cell value writer must propagate the new values to any
+    // sheet view of the same sheet, matching what the single-cell
+    // SetValueCell already does. Writing from the sheet view tab must
+    // redirect to the default tab and sync back.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+
+    setupViews();
+
+    // Create a sheet view of Sheet1. Layout: [Sheet1, Sheet1 - SheetView].
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    // Write the values from the default view.
+    switchToDefaultView();
+    std::vector<double> aVals = { 1.0, 2.0, 3.0 };
+    pDocShell->GetDocFunc().SetValueCells(ScAddress(0, 0, 0), aVals, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Values must be present on the default tab.
+    CPPUNIT_ASSERT_EQUAL(1.0, rDocument.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(0, 2, 0)));
+
+    // Values must also appear on the sheet view tab.
+    CPPUNIT_ASSERT_EQUAL(1.0, rDocument.GetValue(ScAddress(0, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(0, 2, 1)));
+
+    // Now write a new column from the sheet view. The input address must
+    // be redirected to the default tab so the values land there and then
+    // propagate back to the sheet view through the sync.
+    switchToSheetView();
+    std::vector<double> aValsFromView = { 4.0, 5.0, 6.0 };
+    pDocShell->GetDocFunc().SetValueCells(ScAddress(1, 0, 1), aValsFromView, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Values must be present on the default tab.
+    CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, rDocument.GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, rDocument.GetValue(ScAddress(1, 2, 0)));
+
+    // Values must also appear on the sheet view tab.
+    CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(1, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(5.0, rDocument.GetValue(ScAddress(1, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(6.0, rDocument.GetValue(ScAddress(1, 2, 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testTableGetSheetViewManagerNullOnHolder)
 {
     // ScTable::GetSheetViewManager must return a null shared_ptr on a

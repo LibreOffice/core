@@ -32,32 +32,35 @@ SetValuesOperation::SetValuesOperation(ScDocFunc& rDocFunc, ScDocShell& rDocShel
 
 bool SetValuesOperation::runImplementation()
 {
+    ScAddress aPosition = convertAddress(mrPosition);
     ScDocument& rDoc = mrDocShell.GetDocument();
 
-    SCROW nLastRow = mrPosition.Row() + mrValues.size() - 1;
+    SCROW nLastRow = aPosition.Row() + mrValues.size() - 1;
     if (nLastRow > rDoc.MaxRow())
         return false;
 
-    ScRange aRange(mrPosition);
+    ScRange aRange(aPosition);
     aRange.aEnd.SetRow(nLastRow);
 
     ScDocShellModificator aModificator(mrDocShell);
 
     if (rDoc.IsUndoEnabled())
     {
-        auto pUndoObj = std::make_unique<sc::UndoSetCells>(mrDocShell, mrPosition);
-        rDoc.TransferCellValuesTo(mrPosition, mrValues.size(), pUndoObj->GetOldValues());
+        auto pUndoObj = std::make_unique<sc::UndoSetCells>(mrDocShell, aPosition);
+        rDoc.TransferCellValuesTo(aPosition, mrValues.size(), pUndoObj->GetOldValues());
         pUndoObj->SetNewValues(mrValues);
         mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoObj));
     }
 
-    rDoc.SetValues(mrPosition, mrValues);
+    rDoc.SetValues(aPosition, mrValues);
+
+    syncSheetViews();
 
     mrDocShell.PostPaint(aRange, PaintPartFlags::Grid);
     aModificator.SetDocumentModified();
 
     if (mbApi)
-        mrDocFunc.NotifyInputHandler(mrPosition);
+        mrDocFunc.NotifyInputHandler(aPosition);
 
     return true;
 }
