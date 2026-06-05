@@ -1520,7 +1520,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     Any aException;
     try
     {
-        if (!isScriptAccessAllowed(_rxScriptContext))
+        if (_rxScriptContext.is() && !isScriptAccessAllowed(_rxScriptContext))
             return ERRCODE_IO_ACCESSDENIED;
 
         if ( UnTrustedScript(_rScriptURL) )
