@@ -90,36 +90,36 @@ void SAL_CALL CoinMPSolver::solve()
     //! use old values as initial values?
     for ( const auto& rVarCell : aVariableCells )
     {
-        SolverComponent::SetValue( mxDoc, rVarCell, 0.0 );
+        SetValue(rVarCell, 0.0);
     }
 
     // read initial values from all dependent cells
     for ( auto& rEntry : aCellsHash )
     {
-        double fValue = SolverComponent::GetValue( mxDoc, rEntry.first );
+        double fValue = GetValue(rEntry.first);
         rEntry.second.push_back( fValue );                         // store as first element, as-is
     }
 
     // loop through variables
     for ( const auto& rVarCell : aVariableCells )
     {
-        SolverComponent::SetValue( mxDoc, rVarCell, 1.0 );      // set to 1 to examine influence
+        SetValue(rVarCell, 1.0); // set to 1 to examine influence
 
         // read value change from all dependent cells
         for ( auto& rEntry : aCellsHash )
         {
-            double fChanged = SolverComponent::GetValue( mxDoc, rEntry.first );
+            double fChanged = GetValue(rEntry.first);
             double fInitial = rEntry.second.front();
             rEntry.second.push_back( fChanged - fInitial );
         }
 
-        SolverComponent::SetValue( mxDoc, rVarCell, 2.0 );      // minimal test for linearity
+        SetValue(rVarCell, 2.0); // minimal test for linearity
 
         for ( const auto& rEntry : aCellsHash )
         {
             double fInitial = rEntry.second.front();
             double fCoeff   = rEntry.second.back();       // last appended: coefficient for this variable
-            double fTwo     = SolverComponent::GetValue( mxDoc, rEntry.first );
+            double fTwo = GetValue(rEntry.first);
 
             bool bLinear = rtl::math::approxEqual( fTwo, fInitial + 2.0 * fCoeff ) ||
                            rtl::math::approxEqual( fInitial, fTwo - 2.0 * fCoeff );
@@ -128,7 +128,7 @@ void SAL_CALL CoinMPSolver::solve()
                 maStatus = SolverComponent::GetResourceString( RID_ERROR_NONLINEAR );
         }
 
-        SolverComponent::SetValue( mxDoc, rVarCell, 0.0 );      // set back to zero for examining next variable
+        SetValue(rVarCell, 0.0); // set back to zero for examining next variable
     }
 
     xModel->unlockControllers();

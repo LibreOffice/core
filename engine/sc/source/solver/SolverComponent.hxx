@@ -32,6 +32,8 @@
 
 namespace com::sun::star::table { class XCell; }
 
+class ScDocument;
+
 // hash map for the coefficients of a dependent cell (objective or constraint)
 // The size of each vector is the number of columns (variable cells) plus one, first entry is initial value.
 
@@ -63,6 +65,9 @@ class SolverComponent
 protected:
     // settings
     css::uno::Reference< css::sheet::XSpreadsheetDocument > mxDoc;
+    // The ScDocument behind mxDoc, recovered through the UNO tunnel. Null until
+    // setDocument runs.
+    ScDocument* mpDocument = nullptr;
     css::table::CellAddress                                 maObjective;
     css::uno::Sequence< css::table::CellAddress >           maVariables;
     css::uno::Sequence< css::sheet::SolverConstraint >      maConstraints;
@@ -93,15 +98,10 @@ protected:
     css::sheet::SensitivityReport m_aSensitivityReport;
 
     static OUString GetResourceString(TranslateId aId);
-    static css::uno::Reference<css::table::XCell> GetCell(
-            const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
-            const css::table::CellAddress& rPos );
-    static void SetValue(
-            const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
-            const css::table::CellAddress& rPos, double fValue );
-    static double GetValue(
-            const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
-            const css::table::CellAddress& rPos );
+
+    // Direct cell access through mpDocument.
+    void SetValue(const css::table::CellAddress& rPosition, double fValue);
+    double GetValue(const css::table::CellAddress& rPosition);
 
 public:
                             SolverComponent();

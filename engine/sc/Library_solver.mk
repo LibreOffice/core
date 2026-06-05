@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_sdk_api,solver))
 
 $(eval $(call gb_Library_set_include,solver,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/sc/inc \
     -I$(SRCDIR)/sc/source/solver \
 ))
 
@@ -37,11 +38,13 @@ $(eval $(call gb_Library_use_libraries,solver,\
 	cppu \
 	cppuhelper \
 	sal \
+	sc \
 	utl \
 	i18nlangtag \
 ))
 
 $(eval $(call gb_Library_use_externals,solver,\
+	boost_headers \
 	coinmp \
 ))
 

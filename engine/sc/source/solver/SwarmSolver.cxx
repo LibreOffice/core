@@ -20,6 +20,7 @@
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <rtl/math.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -34,6 +35,11 @@
 #include <random>
 
 #include <unotools/resmgr.hxx>
+#include <comphelper/servicehelper.hxx>
+
+#include <docuno.hxx>
+#include <document.hxx>
+#include <address.hxx>
 
 #include "DifferentialEvolution.hxx"
 #include "ParticelSwarmOptimization.hxx"
@@ -103,6 +109,8 @@ class SwarmSolver
 {
 private:
     uno::Reference<sheet::XSpreadsheetDocument> mxDocument;
+    // The ScDocument implementation behind mxDocument
+    ScDocument* mpDocument = nullptr;
     table::CellAddress maObjective;
     uno::Sequence<table::CellAddress> maVariables;
     uno::Sequence<sheet::SolverConstraint> maConstraints;
@@ -168,6 +176,15 @@ public:
     setDocument(const uno::Reference<sheet::XSpreadsheetDocument>& rDocument) override
     {
         mxDocument = rDocument;
+        mpDocument = nullptr;
+        if (ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(mxDocument))
+        {
+            mpDocument = pModel->GetDocument();
+            // The solver writes input cells and reads the recalculated objective
+            // and constraint cells, which needs automatic recalculation on.
+            if (mpDocument)
+                mpDocument->SetAutoCalc(true);
+        }
     }
 
     virtual table::CellAddress SAL_CALL getObjective() override { return maObjective; }
@@ -281,14 +298,29 @@ uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPos
     return xSheet->getCellByPosition(rPosition.Column, rPosition.Row);
 }
 
+// Build a document cell address from the API address, throwing if its sheet is
+// outside the document. Access through the spreadsheet UNO objects used to throw
+// on a missing sheet. Direct ScDocument access does not, so validate here to keep
+// an invalid variable cell an error rather than a silently ignored write.
+static ScAddress lcl_cellAddress(const ScDocument& rDocument, const table::CellAddress& rPosition)
+{
+    if (rPosition.Sheet < 0 || rPosition.Sheet >= rDocument.GetTableCount())
+        throw uno::RuntimeException(u"solver: cell address is outside the document"_ustr);
+    return ScAddress(static_cast<SCCOL>(rPosition.Column), static_cast<SCROW>(rPosition.Row),
+                     static_cast<SCTAB>(rPosition.Sheet));
+}
+
 void SwarmSolver::setValue(const table::CellAddress& rPosition, double fValue)
 {
-    getCell(rPosition)->setValue(fValue);
+    if (mpDocument)
+        mpDocument->SetValue(lcl_cellAddress(*mpDocument, rPosition), fValue);
 }
 
 double SwarmSolver::getValue(const table::CellAddress& rPosition)
 {
-    return getCell(rPosition)->getValue();
+    if (!mpDocument)
+        return 0.0;
+    return mpDocument->GetValue(lcl_cellAddress(*mpDocument, rPosition));
 }
 
 void SwarmSolver::applyVariables(std::vector<double> const& rVariables)

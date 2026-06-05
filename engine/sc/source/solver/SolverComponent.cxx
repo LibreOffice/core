@@ -26,8 +26,13 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <unotools/resmgr.hxx>
+
+#include <docuno.hxx>
+#include <document.hxx>
+#include <address.hxx>
 
 using namespace com::sun::star;
 
@@ -72,24 +77,21 @@ namespace
     };
 }
 
-uno::Reference<table::XCell> SolverComponent::GetCell( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                                          const table::CellAddress& rPos )
+void SolverComponent::SetValue(const table::CellAddress& rPosition, double fValue)
 {
-    uno::Reference<container::XIndexAccess> xSheets( xDoc->getSheets(), uno::UNO_QUERY );
-    uno::Reference<sheet::XSpreadsheet> xSheet( xSheets->getByIndex( rPos.Sheet ), uno::UNO_QUERY );
-    return xSheet->getCellByPosition( rPos.Column, rPos.Row );
+    if (mpDocument)
+        mpDocument->SetValue(ScAddress(SCCOL(rPosition.Column),
+                                       SCROW(rPosition.Row),
+                                       SCTAB(rPosition.Sheet)), fValue);
 }
 
-void SolverComponent::SetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                   const table::CellAddress& rPos, double fValue )
+double SolverComponent::GetValue(const table::CellAddress& rPosition)
 {
-    SolverComponent::GetCell( xDoc, rPos )->setValue( fValue );
-}
-
-double SolverComponent::GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                     const table::CellAddress& rPos )
-{
-    return SolverComponent::GetCell( xDoc, rPos )->getValue();
+    if (!mpDocument)
+        return 0.0;
+    return mpDocument->GetValue(ScAddress(SCCOL(rPosition.Column),
+                                          SCROW(rPosition.Row),
+                                          SCTAB(rPosition.Sheet)));
 }
 
 SolverComponent::SolverComponent() :
@@ -178,6 +180,15 @@ uno::Reference<sheet::XSpreadsheetDocument> SAL_CALL SolverComponent::getDocumen
 void SAL_CALL SolverComponent::setDocument( const uno::Reference<sheet::XSpreadsheetDocument>& _document )
 {
     mxDoc = _document;
+    mpDocument = nullptr;
+    if (ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(mxDoc))
+    {
+        mpDocument = pModel->GetDocument();
+        // The solver writes input cells and reads the recalculated objective and
+        // constraint cells, which needs automatic recalculation to be on.
+        if ( mpDocument )
+            mpDocument->SetAutoCalc( true );
+    }
 }
 
 table::CellAddress SAL_CALL SolverComponent::getObjective()
