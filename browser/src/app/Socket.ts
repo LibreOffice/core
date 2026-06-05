@@ -1101,13 +1101,10 @@ class Socket {
 		this._maybeOfferExternalLinks(command);
 	}
 
-	// Offer per-document consent for the document's disabled external links.
+	// Let the user agree to load this document's disabled external links.
 	// Editors only; the choice lasts the session.
 	private _maybeOfferExternalLinks(command: ServerCommand): void {
-		const disabled =
-			command.externallinksdisabled === true ||
-			(command.externallinksdisabled as unknown) === 'true';
-		if (!disabled || this._map.isReadOnlyMode()) return;
+		if (!command.externallinksdisabled || this._map.isReadOnlyMode()) return;
 
 		this._map.uiManager.showSnackbar(
 			_('This document has links to external content.'),
