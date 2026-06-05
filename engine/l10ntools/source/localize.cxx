@@ -330,7 +330,6 @@ bool includeProject(std::string_view rProject) {
         "oox",
         "sc",
         "scaddins",
-        "sccomp",
         "sd",
         "sdext",
         "setup_native",

@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scd \
 	Library_scfilt \
 	Library_scui \
+	Library_solver \
 	$(call gb_Helper_optional,OPENCL,Package_opencl) \
 	Package_res_xml \
 	UIConfig_scalc \
@@ -27,6 +28,12 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 $(eval $(call gb_Module_add_l10n_targets,sc,\
 	AllLangMoTarget_sc \
+	AllLangMoTarget_scc \
+))
+
+$(eval $(call gb_Module_add_check_targets,sc,\
+	CppunitTest_sc_solver \
+	$(if $(and $(filter INTEL,$(CPUNAME)),$(filter -fsanitize=%,$(gb_CXX))),,$(if $(filter SCRIPTING,$(BUILD_TYPE)),CppunitTest_sc_swarmsolvertest)) \
 ))
 
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)

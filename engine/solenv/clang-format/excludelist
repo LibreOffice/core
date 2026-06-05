@@ -7183,6 +7183,7 @@ sc/qa/unit/mark_test.cxx
 sc/qa/unit/opencl-test-1.cxx
 sc/qa/unit/opencl-test-2.cxx
 sc/qa/unit/screenshots/screenshots.cxx
+sc/qa/unit/solver.cxx
 sc/qa/unit/subsequent_export_test2.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
@@ -7815,6 +7816,9 @@ sc/source/filter/xml/xmlsubti.hxx
 sc/source/filter/xml/xmltabi.cxx
 sc/source/filter/xml/xmltabi.hxx
 sc/source/filter/xml/xmlwrap.cxx
+sc/source/solver/CoinMPSolver.cxx
+sc/source/solver/SolverComponent.cxx
+sc/source/solver/SolverComponent.hxx
 sc/source/ui/Accessibility/AccessibilityHints.cxx
 sc/source/ui/Accessibility/AccessibleCell.cxx
 sc/source/ui/Accessibility/AccessibleCellBase.cxx
@@ -8523,11 +8527,6 @@ scaddins/source/pricing/black_scholes.cxx
 scaddins/source/pricing/black_scholes.hxx
 scaddins/source/pricing/pricing.cxx
 scaddins/source/pricing/pricing.hxx
-sccomp/qa/unit/solver.cxx
-sccomp/source/solver/CoinMPSolver.cxx
-sccomp/source/solver/LpsolveSolver.cxx
-sccomp/source/solver/SolverComponent.cxx
-sccomp/source/solver/SolverComponent.hxx
 scripting/source/basprov/baslibnode.cxx
 scripting/source/basprov/baslibnode.hxx
 scripting/source/basprov/basmethnode.cxx

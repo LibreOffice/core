@@ -30,7 +30,7 @@ class SwarmSolverTest : public UnoApiTest
 
 public:
     SwarmSolverTest()
-        : UnoApiTest(u"sccomp/qa/unit/data"_ustr)
+        : UnoApiTest(u"sc/qa/unit/data/solver"_ustr)
     {
     }
 

@@ -128,7 +128,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(if $(ENABLE_WASM_STRIP_CALC),, \
 	sc \
 	scaddins \
-	sccomp \
 	) \
 	$(call gb_Helper_optional,DESKTOP,scp2) \
 	scripting \

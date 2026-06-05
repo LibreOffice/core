@@ -313,7 +313,6 @@ class Parser:
             "sax" : 1,
             "sc" : 1,
             "scaddins" : 1,
-            "sccomp" : 1,
             "scripting" : 1,
             "sd" : 1,
             "sdext" : 1,

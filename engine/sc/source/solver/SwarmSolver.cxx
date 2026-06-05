@@ -38,7 +38,7 @@
 #include "DifferentialEvolution.hxx"
 #include "ParticelSwarmOptimization.hxx"
 
-#include <strings.hrc>
+#include "strings.hrc"
 
 namespace com::sun::star::uno
 {
