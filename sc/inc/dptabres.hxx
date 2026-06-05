@@ -569,6 +569,18 @@ public:
             return GetPromote()->IsInitialized();
         return bmInitialized;
     };
+
+    const ScDPResultData* GetResultData() const override
+    {
+        // pResultData is never changed, and on promotion is passed to new version
+        return pResultData;
+    }
+
+    SCROW GetOrder() const override
+    {
+        // mnOrder is never changed, and on promotion is passed to new version
+        return mnOrder;
+    }
 };
 
 class ScDPResultMemberFull : public ScDPResultMember
