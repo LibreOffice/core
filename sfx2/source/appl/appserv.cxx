@@ -1848,17 +1848,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     Sequence< Any > outArgs;
                     Any ret;
 
-                    Reference< XInterface > xScriptContext;
-
-                    Reference< XController > xController;
-                    if ( xFrame.is() )
-                        xController = xFrame->getController();
-                    if ( xController.is() )
-                        xScriptContext = xController->getModel();
-                    if ( !xScriptContext.is() )
-                        xScriptContext = xController;
-
-                    SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
+                    SfxObjectShell::CallXScript( pDlg->GetScriptModel(), pDlg->GetScriptURL(), args,
+                                                 ret, outIndex, outArgs );
                     pDlg->disposeOnce();
                 });
             }
