@@ -21,9 +21,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	scp2/ure \
 	scp2/writer \
 	scp2/xsltfilter \
-	$(if $(WITH_EXTENSION_INTEGRATION),\
-		scp2/extensions \
-	) \
 	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK3)),\
 		scp2/gnome \
 	) \

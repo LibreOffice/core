@@ -1129,7 +1129,6 @@ ios*) # iOS
     enable_mpl_subset=yes
     disable_database_connectivity_dependencies
     enable_coinmp=no
-    enable_extension_integration=no
     enable_xmlhelp=no
     with_ppds=no
     if test "$enable_ios_simulator" = "yes"; then
@@ -1577,22 +1576,9 @@ AC_SUBST(EMSCRIPTEN_WORKERJS)
 # By default these should be enabled unless having extra dependencies.
 # If there is extra dependency over configure options then the enable should
 # be automagic based on whether the requiring feature is enabled or not.
-# All this options change anything only with --enable-extension-integration.
-
-# The name of this option and its help string makes it sound as if
-# extensions are built anyway, just not integrated in the installer,
-# if you use --disable-extension-integration. Is that really the
-# case?
-
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
         [build for iOS simulator])
-)
-
-libo_FUZZ_ARG_ENABLE(extension-integration,
-    AS_HELP_STRING([--disable-extension-integration],
-        [Disable integration of the built extensions in the installer of the
-         product. Use this switch to disable the integration.])
 )
 
 AC_ARG_ENABLE(avmedia,
@@ -1605,9 +1591,7 @@ AC_ARG_ENABLE(database-connectivity,
         [Disable various database connectivity. Work in progress, use only if you are hacking on it.])
 )
 
-# This doesn't mean not building (or "integrating") extensions
-# (although it probably should; i.e. it should imply
-# --disable-extension-integration I guess), it means not supporting
+# This doesn't mean not building extensions, it means not supporting
 # any extension mechanism at all
 libo_FUZZ_ARG_ENABLE(extensions,
     AS_HELP_STRING([--disable-extensions],
@@ -3148,7 +3132,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_dbus=no
     enable_dconf=no
     test "${enable_dynamic_loading+set}" = set -o "$_os" != Emscripten || enable_dynamic_loading=no
-    enable_extension_integration=no
     enable_extensions=no
     enable_gio=no
     enable_gpgmepp=no
@@ -3252,8 +3235,6 @@ AC_SUBST(ENABLE_CUSTOMTARGET_COMPONENTS)
 if test "$enable_extensions" = yes; then
     BUILD_TYPE="$BUILD_TYPE EXTENSIONS"
     AC_DEFINE(HAVE_FEATURE_EXTENSIONS)
-else
-    enable_extension_integration=no
 fi
 
 # remember SYSBASE value
@@ -5838,7 +5819,7 @@ else
 fi
 
 AC_MSG_CHECKING([if we need to build the help index tooling])
-if test \( "$with_help" = yes -o "$enable_extension_integration" != no \) -a -z "$DISABLE_DYNLOADING"; then
+if test "$with_help" = yes -a -z "$DISABLE_DYNLOADING"; then
     BUILD_TYPE="$BUILD_TYPE HELPTOOLS"
     test_clucene=yes
     AC_MSG_RESULT([yes])
@@ -13366,20 +13347,6 @@ if test "x$with_theme" != "xno"; then
 fi
 AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST([WITH_THEMES])
-
-###############################################################################
-# Extensions checking
-###############################################################################
-AC_MSG_CHECKING([for extensions integration])
-if test "x$enable_extension_integration" != "xno"; then
-    WITH_EXTENSION_INTEGRATION=TRUE
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_INTEGRATION"
-    AC_MSG_RESULT([yes, use integration])
-else
-    WITH_EXTENSION_INTEGRATION=
-    AC_MSG_RESULT([no, do not integrate])
-fi
-AC_SUBST(WITH_EXTENSION_INTEGRATION)
 
 dnl Should any extra extensions be included?
 dnl There are standalone tests for each of these below.

@@ -13,7 +13,7 @@ AC_ARG_ENABLE(ext-$4,
 )
 AC_MSG_CHECKING([for building the $1 extension])
 $2_EXTENSION_PACK=
-if test "x$enable_ext_$3" = "xyes" -a "x$enable_extension_integration" != "xno"; then
+if test "x$enable_ext_$3" = "xyes"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_$2"
     $2_EXTENSION_PACK="$5"
     BUILD_TYPE="$BUILD_TYPE $2"

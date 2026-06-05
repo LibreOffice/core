@@ -15,7 +15,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallModule_base \
 	InstallModule_calc \
 	InstallModule_draw \
-	InstallModule_extensions \
 	InstallModule_graphicfilter \
 	InstallModule_impress \
 	InstallModule_math \

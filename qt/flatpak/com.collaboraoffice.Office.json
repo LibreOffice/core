@@ -972,7 +972,6 @@
         "--disable-sdremote",
         "--disable-sdremote-bluetooth",
         "--enable-cairo-rgba",
-        "--enable-extension-integration",
         "--enable-hardening-flags",
         "--enable-mergelibs",
         "--enable-mpl-subset",
