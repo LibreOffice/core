@@ -17,7 +17,10 @@
  */
 declare var JSDialog: any;
 
-function createSlideLayoutEntryWidget(data: any, builder: any): HTMLElement {
+function createSlideLayoutEntryWidget(
+	data: NewSlideLayoutEntryWidgetJSON,
+	builder: any,
+): HTMLElement {
 	const container = document.createElement('div');
 	container.className = 'slidelayout-popup-container';
 	// Build the grid first
@@ -46,7 +49,7 @@ function createSlideLayoutEntryWidget(data: any, builder: any): HTMLElement {
 
 JSDialog.slideLayoutEntry = function (
 	parentContainer: Element,
-	data: any,
+	data: NewSlideLayoutEntryWidgetJSON,
 	builder: any,
 ) {
 	const widget = createSlideLayoutEntryWidget(data, builder);

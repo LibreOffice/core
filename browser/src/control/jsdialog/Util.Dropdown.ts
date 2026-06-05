@@ -138,13 +138,14 @@ JSDialog.OpenDropdown = function (
 				initialSelectedId = entry
 					? (entry as ComboBoxEntry).initialSelectedId
 					: undefined;
-				// A grid - or a widget that wraps a grid (e.g. the new
-				// slide layout picker) - must use grid keyboard navigation.
-				// Otherwise list navigation lets arrow + Tab + arrow
-				// accumulate multiple selected cells in a single-choice grid.
+				// A grid, or a widget that wraps a grid (the new slide layout
+				// picker wraps one so it can also show the Overview button),
+				// navigates with grid keys. Otherwise list navigation lets
+				// arrow + Tab + arrow select more than one cell in a
+				// single-choice grid.
 				if (
 					entry?.type === 'grid' ||
-					(entry as any)?.gridContent?.type === 'grid'
+					(entry as NewSlideLayoutEntryWidgetJSON)?.gridContent?.type === 'grid'
 				)
 					json.gridKeyboardNavigation = true;
 				break;

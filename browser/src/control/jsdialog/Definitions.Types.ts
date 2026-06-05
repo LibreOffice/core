@@ -275,6 +275,12 @@ interface GridWidgetJSON extends ContainerWidgetJSON {
 	columnSpacing?: number;
 }
 
+// the slide layout presets shown in the "New Slide" dropdown: a grid of
+// layout choices plus the extra Overview button
+interface NewSlideLayoutEntryWidgetJSON extends WidgetJSON {
+	gridContent: GridWidgetJSON; // the grid of layout presets
+}
+
 interface ToolboxWidgetJSON extends WidgetJSON {
 	hasVerticalParent: boolean;
 }
