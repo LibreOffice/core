@@ -13,6 +13,7 @@
 
 #include "SettingsStorage.hpp"
 
+#include <common/ConfigUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Util.hpp>
 

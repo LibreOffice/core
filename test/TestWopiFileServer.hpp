@@ -162,9 +162,8 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         if (configId.empty())
             configId = "default";
 
-        const auto& config = Poco::Util::Application::instance().config();
-        std::string etagString =
-            "\"" COOLWSD_VERSION_HASH + config.getString("ver_suffix", "") + '-' + configId + "\"";
+        std::string etagString = "\"" COOLWSD_VERSION_HASH +
+                                 ConfigUtil::getString("ver_suffix", "") + '-' + configId + "\"";
 
         // authentication token to get these settings??
         {

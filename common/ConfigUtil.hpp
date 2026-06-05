@@ -401,10 +401,7 @@ inline std::string getPathFromConfigWithFallback(const std::string& name,
 }
 
 /// Returns true if and only if the property with the given key exists.
-inline bool hasProperty(const std::string& key)
-{
-    return Poco::Util::Application::instance().config().hasProperty(key);
-}
+bool hasProperty(const std::string& key);
 
 } // namespace ConfigUtil
 

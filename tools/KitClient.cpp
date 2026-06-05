@@ -40,7 +40,6 @@
 #include <unistd.h>
 
 using Poco::TemporaryFile;
-using Poco::Util::Application;
 
 bool EnableExperimental = false;
 
@@ -54,7 +53,7 @@ extern "C"
 }
 
 /// The application class implementing a client.
-class LOKitClient: public Application
+class LOKitClient : public Poco::Util::Application
 {
 public:
 protected:

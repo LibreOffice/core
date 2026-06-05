@@ -474,6 +474,12 @@ bool has(const std::string& key)
     return (Config != nullptr) ? Config->has(key) : false;
 }
 
+bool hasProperty(const std::string& key)
+{
+    assert(Config && "Config is not initialized.");
+    return (Config != nullptr) ? Config->hasProperty(key) : false;
+}
+
 } // namespace ConfigUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

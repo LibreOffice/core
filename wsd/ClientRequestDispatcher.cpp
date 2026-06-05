@@ -583,18 +583,17 @@ bool ClientRequestDispatcher::allowPostFrom(const std::string& address)
     static RegexUtil::RegexListMatcher hosts;
     if (!init)
     {
-        const auto& app = Poco::Util::Application::instance();
         // Parse the host allow settings.
         for (size_t i = 0;; ++i)
         {
             const std::string path = "net.post_allow.host[" + std::to_string(i) + ']';
-            const auto host = app.config().getString(path, "");
+            const auto host = ConfigUtil::getString(path, "");
             if (!host.empty())
             {
                 LOG_INF_S("Adding trusted POST_ALLOW host: [" << host << ']');
                 hosts.allow(host);
             }
-            else if (!app.config().has(path))
+            else if (!ConfigUtil::has(path))
             {
                 break;
             }

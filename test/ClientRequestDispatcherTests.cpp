@@ -354,8 +354,10 @@ private:
         const std::string response =
             dispatchRequest("GET /hosting/capabilities HTTP/1.1\r\nHost: localhost\r\n\r\n");
 
-        // Capabilities requires COOLWSD initialization; verify we get a valid HTTP response.
-        LOK_ASSERT(response.find("HTTP/1.1") != std::string::npos);
+        // /hosting/capabilities is returned asynchronously, so we can't test it
+        // with MockStreamSocket. It used to work because Application::instance()
+        // threw, and we returned an error.
+        LOK_ASSERT(response.empty());
     }
 };
 
