@@ -351,14 +351,6 @@ protected:
     // Calls InitViewData for all Items
     void            RecalcViewData();
 
-    // Handler and methods for Drag - finished handler. This link can be set
-    // to the TransferDataContainer. The AddBox/RemoveBox methods must be
-    // called before the StartDrag call.
-    // The Remove will be called from the handler, which then calls DragFinish.
-    // The Remove is also called in the DTOR of the SvTreeListBox -
-    // so it can't be called for a deleted object.
-    Link<sal_Int8,void> GetDragFinishedHdl() const;
-
     void            OnCurrentEntryChanged();
 
     // ISearchableStringList

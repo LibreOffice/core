@@ -1461,7 +1461,11 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     // (GetSourceListBox()->EnableSelectionAsDropTarget( true, true );)
     EnableSelectionAsDropTarget( false );
 
-    xContainer->StartDrag(this, mnDragAction, GetDragFinishedHdl());
+    // Removal happens in the DragFinishHdl_Impl callback, which also calls DragFinish.
+    // Removal also happens in dispose() (which also gets called from the dtor),
+    // so it can't be called for a deleted object.
+    AddBoxToDDList_Impl(*this);
+    xContainer->StartDrag(this, mnDragAction, LINK(this, SvTreeListBox, DragFinishHdl_Impl));
 }
 
 void SvTreeListBox::SetDragHelper(const rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
@@ -1507,13 +1511,6 @@ DragDropMode SvTreeListBox::NotifyStartDrag()
     return DragDropMode(0xffff);
 }
 
-// Handler and methods for Drag - finished handler.
-// The with get GetDragFinishedHdl() get link can set on the
-// TransferDataContainer. This link is a callback for the DragFinished
-// call. AddBox method is called from the GetDragFinishedHdl() and the
-// remove is called in link callback and in the destructor. So it can't
-// called to a deleted object.
-
 namespace
 {
     // void* to avoid loplugin:vclwidgets, we don't need ownership here
@@ -1539,12 +1536,6 @@ IMPL_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8, nAction, void )
         DragFinished( nAction );
         rSortLBoxes.erase( it );
     }
-}
-
-Link<sal_Int8,void> SvTreeListBox::GetDragFinishedHdl() const
-{
-    AddBoxToDDList_Impl( *this );
-    return LINK( const_cast<SvTreeListBox*>(this), SvTreeListBox, DragFinishHdl_Impl );
 }
 
 /*
