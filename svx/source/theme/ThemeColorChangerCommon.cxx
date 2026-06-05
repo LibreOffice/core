@@ -171,22 +171,6 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
         updateEditEngTextSections(rColorSet, pObject, *pView);
 }
 
-void notifyLOK(std::shared_ptr<model::ColorSet> const& /*pColorSet*/,
-               const std::set<Color>& rDocumentColors)
-{
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        tools::JsonWriter aTree;
-
-        if (rDocumentColors.size())
-            PaletteManager::generateJSON(aTree, rDocumentColors);
-
-        PaletteManager::generateColorNamesJSON(aTree);
-
-        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aTree.finishAndGetAsOString());
-    }
-}
-
 } // end svx::theme namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

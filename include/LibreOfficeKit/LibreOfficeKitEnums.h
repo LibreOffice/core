@@ -956,11 +956,6 @@ typedef enum
     LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED = 64,
 
     /**
-     * Informs the LibreOfficeKit client that the color palettes have changed.
-    */
-    LOK_CALLBACK_COLOR_PALETTES = 65,
-
-    /**
      * Informs that the document password has been successfully changed.
      * The payload contains the new password and the type.
     */
@@ -1221,8 +1216,6 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_A11Y_CARET_CHANGED";
     case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
         return "LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED";
-    case LOK_CALLBACK_COLOR_PALETTES:
-        return "LOK_CALLBACK_COLOR_PALETTES";
     case LOK_CALLBACK_DOCUMENT_PASSWORD_RESET:
         return "LOK_CALLBACK_DOCUMENT_PASSWORD_RESET";
     case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:

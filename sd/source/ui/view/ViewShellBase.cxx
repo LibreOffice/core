@@ -1099,14 +1099,6 @@ void ViewShellBase::afterCallbackRegistered()
     // common tasks
     SfxViewShell::afterCallbackRegistered();
 
-    SfxObjectShell* pDocShell = GetObjectShell();
-    if (pDocShell)
-    {
-        std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
-        std::set<Color> aDocumentColors = pDocShell->GetDocColors();
-        svx::theme::notifyLOK(pThemeColors, aDocumentColors);
-    }
-
     if (comphelper::LibreOfficeKit::isActive() && mpDocument && mpDocument->GetStartWithPresentation())
     {
         // Be consistent with SidebarController, emit JSON.

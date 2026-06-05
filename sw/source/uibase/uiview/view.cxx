@@ -1243,14 +1243,6 @@ void SwView::afterCallbackRegistered()
 
     // common tasks
     SfxViewShell::afterCallbackRegistered();
-
-    auto* pDocShell = GetDocShell();
-    if (pDocShell)
-    {
-        std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
-        std::set<Color> aDocumentColors = pDocShell->GetDocColors();
-        svx::theme::notifyLOK(pThemeColors, aDocumentColors);
-    }
 }
 
 SwDocShell* SwView::GetDocShell()

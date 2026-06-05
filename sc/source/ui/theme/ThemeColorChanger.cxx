@@ -312,7 +312,7 @@ void changeThemeColorInTheDocModel(ScDocShell& rDocShell,
 
 } // end anonymous ns
 
-void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSet)
+void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     // Can't change to an empty color set
     if (!pColorSet)

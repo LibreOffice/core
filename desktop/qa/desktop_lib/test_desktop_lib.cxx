@@ -2271,14 +2271,12 @@ public:
     OString m_aCellFormula;
     boost::property_tree::ptree m_JSONDialog;
     int m_nTableSelectionCount;
-    int m_nColorPaletteCallbackCount = 0;
     bool m_bEmptyTableSelection;
     bool m_bTilesInvalidated;
     bool m_bZeroCursor;
     bool m_stateBold;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
-    boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
 
     ViewCallback(LibLODocument_Impl* pDocument)
@@ -2347,14 +2345,6 @@ public:
         {
             m_bEmptyTableSelection = (std::string(pPayload).compare("{ }") == 0);
             ++m_nTableSelectionCount;
-        }
-        break;
-        case LOK_CALLBACK_COLOR_PALETTES:
-        {
-            m_aColorPaletteCallbackResult.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_aColorPaletteCallbackResult);
-            ++m_nColorPaletteCallbackCount;
         }
         break;
         case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:

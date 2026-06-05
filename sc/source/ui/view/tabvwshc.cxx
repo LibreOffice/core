@@ -477,14 +477,6 @@ void ScTabViewShell::afterCallbackRegistered()
             pInputWindow->NotifyLOKClient();
         }
     }
-
-    SfxObjectShell* pDocShell = GetObjectShell();
-    if (pDocShell && !IsTabChangeInProgress())
-    {
-        std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
-        std::set<Color> aDocumentColors = pDocShell->GetDocColors();
-        svx::theme::notifyLOK(pThemeColors, aDocumentColors);
-    }
 }
 
 void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const

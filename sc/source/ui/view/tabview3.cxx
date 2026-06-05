@@ -1901,9 +1901,6 @@ void ScTabView::SelectTabPage( const sal_uInt16 nTab )
 
 void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSameTabButMoved )
 {
-    ScTabViewShell* pViewShell = aViewData.GetViewShell();
-    pViewShell->SetTabChangeInProgress(true);
-
     if ( !ValidTab(nTab) )
     {
         OSL_FAIL("SetTabNo: invalid sheet");
@@ -2107,6 +2104,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     // disable invalidations for kit during tab switching
     {
+        ScTabViewShell* pViewShell = aViewData.GetViewShell();
         SfxLokCallbackInterface* pCallback = pViewShell->getLibreOfficeKitViewCallback();
         pViewShell->setLibreOfficeKitViewCallback(nullptr);
         comphelper::ScopeGuard aOutputGuard(
@@ -2151,7 +2149,6 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     }
 
     OnLibreOfficeKitTabChanged();
-    pViewShell->SetTabChangeInProgress(false);
 }
 
 void ScTabView::AddWindowToForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich)

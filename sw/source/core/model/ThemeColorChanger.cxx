@@ -322,7 +322,7 @@ ThemeColorChanger::ThemeColorChanger(SwDocShell* pDocSh)
 
 ThemeColorChanger::~ThemeColorChanger() = default;
 
-void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSet)
+void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     SwDoc* pDocument = mpDocSh->GetDoc();
     if (!pDocument)

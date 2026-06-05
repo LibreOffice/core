@@ -133,7 +133,7 @@ bool changeStyles(sd::DrawDocShell* pDocShell, std::shared_ptr<model::ColorSet> 
 
 } // end anonymous ns
 
-void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSet)
+void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     auto* pUndoManager = mpDocShell->GetUndoManager();
     sd::ViewShell* pViewShell = mpDocShell->GetViewShell();
