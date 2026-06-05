@@ -140,7 +140,7 @@ public:
 
     bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                            bool bApi );
-    bool            ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
+    SC_DLLPUBLIC bool ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
                                         bool bApi );
 
     bool            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,

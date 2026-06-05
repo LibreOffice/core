@@ -36,6 +36,7 @@ ApplyStyleOperation::ApplyStyleOperation(ScDocFunc& rDocFunc, ScDocShell& rDocSh
 
 bool ApplyStyleOperation::runImplementation()
 {
+    ScMarkData aMark = convertMark(mrMark);
     ScDocument& rDoc = mrDocShell.GetDocument();
     bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
@@ -45,7 +46,7 @@ bool ApplyStyleOperation::runImplementation()
     // Cell formats can still be set if the range isn't editable only because of matrix formulas.
     // #i62483# When loading XML, the check can be skipped altogether.
     bool bOnlyNotBecauseOfMatrix;
-    if (!bImportingXML && !rDoc.IsSelectionEditable(mrMark, &bOnlyNotBecauseOfMatrix)
+    if (!bImportingXML && !rDoc.IsSelectionEditable(aMark, &bOnlyNotBecauseOfMatrix)
         && !bOnlyNotBecauseOfMatrix)
     {
         if (!mbApi)
@@ -61,11 +62,11 @@ bool ApplyStyleOperation::runImplementation()
     ScDocShellModificator aModificator(mrDocShell);
 
     ScRange aMultiRange;
-    bool bMulti = mrMark.IsMultiMarked();
+    bool bMulti = aMark.IsMultiMarked();
     if (bMulti)
-        aMultiRange = mrMark.GetMultiMarkArea();
+        aMultiRange = aMark.GetMultiMarkArea();
     else
-        aMultiRange = mrMark.GetMarkArea();
+        aMultiRange = aMark.GetMarkArea();
 
     if (bRecord)
     {
@@ -73,7 +74,7 @@ bool ApplyStyleOperation::runImplementation()
         SCTAB nStartTab = aMultiRange.aStart.Tab();
         SCTAB nTabCount = rDoc.GetTableCount();
         pUndoDoc->InitUndo(rDoc, nStartTab, nStartTab);
-        for (const auto& rTab : mrMark)
+        for (const auto& rTab : aMark)
         {
             if (rTab >= nTabCount)
                 break;
@@ -85,13 +86,15 @@ bool ApplyStyleOperation::runImplementation()
         ScRange aCopyRange = aMultiRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount - 1);
-        rDoc.CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &mrMark);
+        rDoc.CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &aMark);
 
         mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoSelectionStyle>(
-            mrDocShell, mrMark, aMultiRange, mrStyleName, std::move(pUndoDoc)));
+            mrDocShell, aMark, aMultiRange, mrStyleName, std::move(pUndoDoc)));
     }
 
-    rDoc.ApplySelectionStyle(*pStyleSheet, mrMark);
+    rDoc.ApplySelectionStyle(*pStyleSheet, aMark);
+
+    syncSheetViews();
 
     if (!mrDocFunc.AdjustRowHeight(aMultiRange, true, mbApi))
         mrDocShell.PostPaint(aMultiRange, PaintPartFlags::Grid);

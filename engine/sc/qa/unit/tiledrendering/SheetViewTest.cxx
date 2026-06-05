@@ -25,6 +25,8 @@
 #include <scitems.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
 #include <table.hxx>
 #include <attrib.hxx>
 #include <editeng/brushitem.hxx>
@@ -1262,6 +1264,89 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSetFormulaCellsSyncsToSheetView)
     CPPUNIT_ASSERT_EQUAL(8.0, rDocument.GetValue(ScAddress(1, 0, 1)));
     CPPUNIT_ASSERT_EQUAL(10.0, rDocument.GetValue(ScAddress(1, 1, 1)));
     CPPUNIT_ASSERT_EQUAL(12.0, rDocument.GetValue(ScAddress(1, 2, 1)));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testApplyStyleSyncsToSheetView)
+{
+    // ApplyStyle must propagate the named-style assignment to any sheet
+    // view of the same sheet. Applying from the sheet view tab must
+    // redirect to the default tab and sync back.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+
+    // Make two user-defined styles so we can apply something distinct
+    // from the cell default and tell the two apply steps apart.
+    OUString aStyleFromDefault(u"StyleFromDefault"_ustr);
+    OUString aStyleFromSheetView(u"StyleFromSheetView"_ustr);
+    ScStyleSheetPool* pPool = rDocument.GetStyleSheetPool();
+    CPPUNIT_ASSERT(pPool);
+    pPool->Make(aStyleFromDefault, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
+    pPool->Make(aStyleFromSheetView, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
+
+    setupViews();
+
+    // Create a sheet view of Sheet1.
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    // Apply the first style to A1 from the default view.
+    switchToDefaultView();
+    {
+        ScMarkData aMark(rDocument.GetSheetLimits());
+        aMark.SelectTable(0, true);
+        aMark.SetMarkArea(ScRange(ScAddress(0, 0, 0)));
+        pDocShell->GetDocFunc().ApplyStyle(aMark, aStyleFromDefault, true);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // The style must be on A1 of both tabs.
+    {
+        const ScPatternAttr* pDefaultPattern = rDocument.GetPattern(0, 0, 0);
+        CPPUNIT_ASSERT(pDefaultPattern);
+        const ScStyleSheet* pDefaultStyle = pDefaultPattern->GetStyleSheet();
+        CPPUNIT_ASSERT(pDefaultStyle);
+        CPPUNIT_ASSERT_EQUAL(aStyleFromDefault, pDefaultStyle->GetName());
+
+        const ScPatternAttr* pSheetViewPattern = rDocument.GetPattern(0, 0, 1);
+        CPPUNIT_ASSERT(pSheetViewPattern);
+        const ScStyleSheet* pSheetViewStyle = pSheetViewPattern->GetStyleSheet();
+        CPPUNIT_ASSERT(pSheetViewStyle);
+        CPPUNIT_ASSERT_EQUAL(aStyleFromDefault, pSheetViewStyle->GetName());
+    }
+
+    // Now apply the second style to B1 from the sheet view. The mark
+    // points at the sheet view tab and must be redirected to the default
+    // tab so the style lands there and then propagates back through the
+    // sync.
+    switchToSheetView();
+    {
+        ScMarkData aMark(rDocument.GetSheetLimits());
+        aMark.SelectTable(1, true);
+        aMark.SetMarkArea(ScRange(ScAddress(1, 0, 1)));
+        pDocShell->GetDocFunc().ApplyStyle(aMark, aStyleFromSheetView, true);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // The second style must be on B1 of both tabs.
+    {
+        const ScPatternAttr* pDefaultPattern = rDocument.GetPattern(1, 0, 0);
+        CPPUNIT_ASSERT(pDefaultPattern);
+        const ScStyleSheet* pDefaultStyle = pDefaultPattern->GetStyleSheet();
+        CPPUNIT_ASSERT(pDefaultStyle);
+        CPPUNIT_ASSERT_EQUAL(aStyleFromSheetView, pDefaultStyle->GetName());
+
+        const ScPatternAttr* pSheetViewPattern = rDocument.GetPattern(1, 0, 1);
+        CPPUNIT_ASSERT(pSheetViewPattern);
+        const ScStyleSheet* pSheetViewStyle = pSheetViewPattern->GetStyleSheet();
+        CPPUNIT_ASSERT(pSheetViewStyle);
+        CPPUNIT_ASSERT_EQUAL(aStyleFromSheetView, pSheetViewStyle->GetName());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testTableGetSheetViewManagerNullOnHolder)
