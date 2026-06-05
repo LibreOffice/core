@@ -4513,7 +4513,7 @@ bool globalPreinit(const std::string &loTemplate)
     // desktop or developer's install if env. var not set.
     ::setenv("UNODISABLELIBRARY",
              "abp avmediagst cmdmail losessioninstall "
-             "syssh ucpgio1 ucpimage updatecheckui updatefeed updchk "
+             "syssh ucpgio1 ucpimage updatefeed "
              // Database
              "dbaxml dbp dbu deployment "
              "mysqlc odbc sdbc2 sdbt "

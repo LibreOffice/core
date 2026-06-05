@@ -598,8 +598,6 @@ sub replace_setup_variables
     my $updateid = $productname . "_" . $libo_version_major . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;
 
-    my $updatechannel = 'LOOnlineUpdater';
-
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
         my $oneitem = ${$itemsarrayref}[$i];
@@ -611,7 +609,6 @@ sub replace_setup_variables
         $value =~ s/\<alllanguages\>/$languagesstring/;
         $value =~ s/\<sourceid\>/$installer::globals::build/;
         $value =~ s/\<updateid\>/$updateid/;
-        $value =~ s/\<updatechannel\>/$updatechannel/;
         $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
         $ENV{'OOO_VENDOR'} = "" if !defined $ENV{'OOO_VENDOR'};
         $value =~ s/\<vendor\>/$ENV{'OOO_VENDOR'}/;

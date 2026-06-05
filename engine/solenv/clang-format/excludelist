@@ -2789,7 +2789,6 @@ desktop/source/app/officeipcthread.cxx
 desktop/source/app/officeipcthread.hxx
 desktop/source/app/opencl.cxx
 desktop/source/app/sofficemain.cxx
-desktop/source/app/updater.cxx
 desktop/source/app/userinstall.cxx
 desktop/source/deployment/dp_log.cxx
 desktop/source/deployment/dp_persmap.cxx
@@ -13329,7 +13328,6 @@ vcl/inc/accmgr.hxx
 vcl/inc/animate/AnimationRenderer.hxx
 vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/brdwin.hxx
-vcl/inc/bubblewindow.hxx
 vcl/inc/calendar.hxx
 vcl/inc/canvasbitmap.hxx
 vcl/inc/debugevent.hxx
@@ -14004,7 +14002,6 @@ vcl/source/window/accel.cxx
 vcl/source/window/accessibility.cxx
 vcl/source/window/accmgr.cxx
 vcl/source/window/brdwin.cxx
-vcl/source/window/bubblewindow.cxx
 vcl/source/window/builder.cxx
 vcl/source/window/clipping.cxx
 vcl/source/window/colorpicker.cxx

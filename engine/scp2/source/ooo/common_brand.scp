@@ -483,15 +483,6 @@ ProfileItem gid_Brand_Profileitem_Version_Updateurl
     Value = "";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_UpdateChannel
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 19;
-    Key = "UpdateChannel";
-    Value = "<updatechannel>";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Updateid
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;

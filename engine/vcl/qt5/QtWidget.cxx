@@ -538,8 +538,7 @@ QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
     , m_nDeltaX(0)
     , m_nDeltaY(0)
 {
-    // make floating windows translucent, needed at least by BubbleWindow
-    // (used for update notifications) on X11
+    // make floating windows translucent on X11
     if (f & Qt::FramelessWindowHint)
     {
         setAttribute(Qt::WA_TranslucentBackground);

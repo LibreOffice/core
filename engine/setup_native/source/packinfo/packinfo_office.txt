@@ -242,20 +242,6 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Onlineupdate"
-solarispackagename = "%BASISPACKAGEPREFIX-onlineupdate"
-solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC, SUNWgzip"
-packagename = "%BASISPACKAGEPREFIX-onlineupdate"
-requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "Online update module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Pyuno"
 solarispackagename = "%BASISPACKAGEPREFIX-pyuno"
 solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWPython"
