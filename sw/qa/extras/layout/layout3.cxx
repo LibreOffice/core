@@ -1773,6 +1773,38 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDropVertical)
                 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHeaderImageAlignment)
+{
+    createSwDoc("testHeaderImageAlignment.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The logo is a floating text frame anchored in the first header paragraph.
+    assertXPath(pXmlDoc, "/root/page/header/txt", 4);
+    assertXPath(pXmlDoc, "/root/page/header/txt[1]/anchored/fly", 1);
+
+    // Without the fix there was no fly portion and the text ran under the logo.
+    assertXPath(pXmlDoc,
+                "/root/page/header/txt[1]/SwParaPortion/SwLineLayout/"
+                "SwFixPortion[@type='PortionType::Fly']",
+                1);
+
+    const sal_Int32 nFlyGap = getXPath(pXmlDoc,
+                                       "/root/page/header/txt[1]/SwParaPortion/SwLineLayout/"
+                                       "SwFixPortion[@type='PortionType::Fly']",
+                                       "width")
+                                  .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1000), nFlyGap);
+
+    // The separator paragraph stays BELOW the logo instead of riding up across it.
+    const sal_Int32 nLogoBottom
+        = getXPath(pXmlDoc, "/root/page/header/txt[1]/anchored/fly/infos/bounds", "bottom")
+              .toInt32();
+    const sal_Int32 nSeparatorTop
+        = getXPath(pXmlDoc, "/root/page/header/txt[4]/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_GREATER(nLogoBottom, nSeparatorTop);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
