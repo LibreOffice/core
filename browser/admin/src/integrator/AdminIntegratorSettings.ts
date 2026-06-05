@@ -686,7 +686,7 @@ class SettingIframe {
 	init(): void {
 		this._allConfigSection = document.getElementById('allConfigSection');
 		this.initWindowVariables();
-		if (this.isAdmin()) {
+		if (!window.showLeftNav) {
 			document.getElementById('settings-css')?.remove();
 		}
 		if (isCODesktop) {
