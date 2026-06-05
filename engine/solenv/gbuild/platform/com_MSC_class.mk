@@ -231,10 +231,9 @@ gb_LinkTarget_get_manifestfile = \
 
 gb_LinkTarget_get_linksearchpath_for_layer = \
 	-LIBPATH:$(gb_StaticLibrary_WORKDIR) \
-	-LIBPATH:$(INSTDIR)/$(SDKDIRNAME)/lib \
+	-LIBPATH:$(gb_Library_DLLDIR) \
 	$(if $(filter OXT,$(1)),\
-		-LIBPATH:$(WORKDIR)/LinkTarget/ExtensionLibrary, \
-		-LIBPATH:$(gb_Library_DLLDIR))
+		-LIBPATH:$(WORKDIR)/LinkTarget/ExtensionLibrary)
 
 # avoid fatal error LNK1170 for Library_merged
 define gb_LinkTarget_MergedResponseFile

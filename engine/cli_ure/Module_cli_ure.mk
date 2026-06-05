@@ -21,7 +21,6 @@ $(eval $(call gb_Module_add_targets,cli_ure,\
 	Executable_climaker \
 	Library_cli_cppuhelper_native \
 	Library_cli_uno \
-	Package_cli_basetypes_copy \
 ))
 endif
 endif

@@ -733,7 +733,6 @@ endif
 # Other packages could be potentially autoinstalled.
 $(eval $(call gb_Helper_register_packages, \
 	test_unittest \
-	$(if $(ENABLE_CLI),cli_basetypes_copy) \
 	extras_wordbook \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \

@@ -284,8 +284,7 @@ bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
 // also contain backslashes:
 bool isSamePathname(StringRef pathname, StringRef other);
 
-// Check whether fullPathname is either SRCDIR/include/includePathname or
-// SDKDIR/include/includePathname:
+// Check whether fullPathname is SRCDIR/include/includePathname:
 bool isSameUnoIncludePathname(StringRef fullPathname, StringRef includePathname);
 
 // It appears that, given a function declaration, there is no way to determine

@@ -463,8 +463,7 @@ bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const
            || hasPathnamePrefix(name, SRCDIR "/include/sal/")
            || hasPathnamePrefix(name, SRCDIR "/include/salhelper/")
            || hasPathnamePrefix(name, SRCDIR "/include/typelib/")
-           || hasPathnamePrefix(name, SRCDIR "/include/uno/")
-           || hasPathnamePrefix(name, SDKDIR "/include/"));
+           || hasPathnamePrefix(name, SRCDIR "/include/uno/"));
 }
 
 bool Plugin::isInUnoIncludeFile(const FunctionDecl* functionDecl) const
@@ -943,11 +942,7 @@ bool isSamePathname(StringRef pathname, StringRef other)
 bool isSameUnoIncludePathname(StringRef fullPathname, StringRef includePathname)
 {
     llvm::SmallVector<char, 256> buf;
-    if (isSamePathname(fullPathname, (SRCDIR "/include/" + includePathname).toStringRef(buf))) {
-        return true;
-    }
-    buf.clear();
-    return isSamePathname(fullPathname, (SDKDIR "/include/" + includePathname).toStringRef(buf));
+    return isSamePathname(fullPathname, (SRCDIR "/include/" + includePathname).toStringRef(buf));
 }
 
 bool hasCLanguageLinkageType(FunctionDecl const * decl) {

@@ -76,8 +76,6 @@ namespace gb
     static const List<String> OBJCXXFLAGS;
     /// platformspecific default defines
     static const List<String> OSDEFS;
-    /// ?
-    static const Path SDKDIR;
 };
 
 // PTHREAD_CFLAGS (Linux)
