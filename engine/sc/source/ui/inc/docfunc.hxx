@@ -123,7 +123,7 @@ public:
      * must not delete it after passing it to this call.
      */
     SC_DLLPUBLIC bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
-    bool SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells, bool bInteraction );
+    SC_DLLPUBLIC bool SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells, bool bInteraction );
     void PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi );
     bool SetCellText(
         const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,

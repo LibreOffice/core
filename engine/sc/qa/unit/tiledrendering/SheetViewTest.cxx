@@ -1196,6 +1196,74 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSetValueCellsSyncsToSheetView)
     CPPUNIT_ASSERT_EQUAL(6.0, rDocument.GetValue(ScAddress(1, 2, 1)));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSetFormulaCellsSyncsToSheetView)
+{
+    // The multi-cell formula writer must propagate the new formulas to
+    // any sheet view of the same sheet, matching what the single-cell
+    // SetFormulaCell already does. Writing from the sheet view tab must
+    // redirect to the default tab and sync back.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+
+    setupViews();
+
+    // Create a sheet view of Sheet1. Layout: [Sheet1, Sheet1 - SheetView].
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    // Write the formulas from the default view.
+    switchToDefaultView();
+    std::vector<ScFormulaCell*> aCells;
+    aCells.push_back(new ScFormulaCell(rDocument, ScAddress(0, 0, 0), u"=1+1"_ustr,
+                                       formula::FormulaGrammar::GRAM_DEFAULT));
+    aCells.push_back(new ScFormulaCell(rDocument, ScAddress(0, 1, 0), u"=2+2"_ustr,
+                                       formula::FormulaGrammar::GRAM_DEFAULT));
+    aCells.push_back(new ScFormulaCell(rDocument, ScAddress(0, 2, 0), u"=3+3"_ustr,
+                                       formula::FormulaGrammar::GRAM_DEFAULT));
+    pDocShell->GetDocFunc().SetFormulaCells(ScAddress(0, 0, 0), aCells, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Computed values must be present on the default tab.
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, rDocument.GetValue(ScAddress(0, 2, 0)));
+
+    // And on the sheet view tab.
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(0, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(6.0, rDocument.GetValue(ScAddress(0, 2, 1)));
+
+    // Now write a new column of formulas from the sheet view. The input
+    // address must be redirected to the default tab so the formulas land
+    // there and then propagate back to the sheet view through the sync.
+    switchToSheetView();
+    std::vector<ScFormulaCell*> aCellsFromView;
+    aCellsFromView.push_back(new ScFormulaCell(rDocument, ScAddress(1, 0, 1), u"=4+4"_ustr,
+                                               formula::FormulaGrammar::GRAM_DEFAULT));
+    aCellsFromView.push_back(new ScFormulaCell(rDocument, ScAddress(1, 1, 1), u"=5+5"_ustr,
+                                               formula::FormulaGrammar::GRAM_DEFAULT));
+    aCellsFromView.push_back(new ScFormulaCell(rDocument, ScAddress(1, 2, 1), u"=6+6"_ustr,
+                                               formula::FormulaGrammar::GRAM_DEFAULT));
+    pDocShell->GetDocFunc().SetFormulaCells(ScAddress(1, 0, 1), aCellsFromView, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Computed values must be present on the default tab.
+    CPPUNIT_ASSERT_EQUAL(8.0, rDocument.GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDocument.GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, rDocument.GetValue(ScAddress(1, 2, 0)));
+
+    // And on the sheet view tab.
+    CPPUNIT_ASSERT_EQUAL(8.0, rDocument.GetValue(ScAddress(1, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDocument.GetValue(ScAddress(1, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(12.0, rDocument.GetValue(ScAddress(1, 2, 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testTableGetSheetViewManagerNullOnHolder)
 {
     // ScTable::GetSheetViewManager must return a null shared_ptr on a

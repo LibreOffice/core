@@ -35,13 +35,14 @@ SetFormulasOperation::SetFormulasOperation(ScDocFunc& rDocFunc, ScDocShell& rDoc
 
 bool SetFormulasOperation::runImplementation()
 {
+    ScAddress aPosition = convertAddress(mrPosition);
     ScDocument& rDoc = mrDocShell.GetDocument();
 
     const size_t nLength = mrCells.size();
-    if (mrPosition.Row() + nLength - 1 > o3tl::make_unsigned(rDoc.MaxRow()))
+    if (aPosition.Row() + nLength - 1 > o3tl::make_unsigned(rDoc.MaxRow()))
         return false;
 
-    ScRange aRange(mrPosition);
+    ScRange aRange(aPosition);
     aRange.aEnd.IncRow(nLength - 1);
 
     ScDocShellModificator aModificator(mrDocShell);
@@ -50,11 +51,11 @@ bool SetFormulasOperation::runImplementation()
     std::unique_ptr<sc::UndoSetCells> pUndoObj;
     if (bUndo)
     {
-        pUndoObj.reset(new sc::UndoSetCells(mrDocShell, mrPosition));
-        rDoc.TransferCellValuesTo(mrPosition, nLength, pUndoObj->GetOldValues());
+        pUndoObj.reset(new sc::UndoSetCells(mrDocShell, aPosition));
+        rDoc.TransferCellValuesTo(aPosition, nLength, pUndoObj->GetOldValues());
     }
 
-    rDoc.SetFormulaCells(mrPosition, mrCells);
+    rDoc.SetFormulaCells(aPosition, mrCells);
 
     // For performance reasons API calls may disable calculation while
     // operating and recalculate once when done. If through user interaction
@@ -77,11 +78,13 @@ bool SetFormulasOperation::runImplementation()
         mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoObj));
     }
 
+    syncSheetViews();
+
     mrDocShell.PostPaint(aRange, PaintPartFlags::Grid);
     aModificator.SetDocumentModified();
 
     if (mbApi)
-        mrDocFunc.NotifyInputHandler(mrPosition);
+        mrDocFunc.NotifyInputHandler(aPosition);
 
     return true;
 }
