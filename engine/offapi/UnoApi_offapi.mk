@@ -2419,7 +2419,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/embed,\
 	XInplaceObject \
 	XInsertObjectDialog \
 	XLinkCreator \
-	XLinkFactory \
 	XLinkageSupport \
 	XOLESimpleStorage \
 	XOptimizedStorage \

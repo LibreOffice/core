@@ -24,7 +24,6 @@ interface XEmbeddedObjectCreator
     interface XEmbedObjectCreator;
     interface XEmbedObjectFactory;
     interface XLinkCreator;
-    [optional] interface XLinkFactory;
 };
 
 
