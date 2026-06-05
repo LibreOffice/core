@@ -1349,6 +1349,74 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testApplyStyleSyncsToSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testUnmergeCellsSyncsToSheetView)
+{
+    // UnmergeCells must propagate the removed merge attribute to any
+    // sheet view of the same sheet. Unmerging from the sheet view tab
+    // must redirect to the default tab and sync back.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+
+    setupViews();
+
+    // Create a sheet view of Sheet1. Layout: [Sheet1, Sheet1 - SheetView].
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    // Merge A1:B2 and D1:E2 on Sheet1 from the default view. The merges
+    // sync to the sheet view tab through MergeCellsOperation.
+    switchToDefaultView();
+    {
+        ScCellMergeOption aMergeAB(0, 0, 1, 1);
+        aMergeAB.maTabs.insert(0);
+        pDocShell->GetDocFunc().MergeCells(aMergeAB, false, true, true);
+
+        ScCellMergeOption aMergeDE(3, 0, 4, 1);
+        aMergeDE.maTabs.insert(0);
+        pDocShell->GetDocFunc().MergeCells(aMergeDE, false, true, true);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Both merges must be present on both tabs.
+    CPPUNIT_ASSERT(rDocument.HasAttrib(ScRange(0, 0, 0, 1, 1, 0), HasAttrFlags::Merged));
+    CPPUNIT_ASSERT(rDocument.HasAttrib(ScRange(0, 0, 1, 1, 1, 1), HasAttrFlags::Merged));
+    CPPUNIT_ASSERT(rDocument.HasAttrib(ScRange(3, 0, 0, 4, 1, 0), HasAttrFlags::Merged));
+    CPPUNIT_ASSERT(rDocument.HasAttrib(ScRange(3, 0, 1, 4, 1, 1), HasAttrFlags::Merged));
+
+    // Unmerge A1:B2 from the default view.
+    {
+        ScCellMergeOption aUnmergeAB(0, 0, 1, 1);
+        aUnmergeAB.maTabs.insert(0);
+        pDocShell->GetDocFunc().UnmergeCells(aUnmergeAB, true, nullptr);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // A1:B2 merge attribute must be gone from both tabs.
+    CPPUNIT_ASSERT(!rDocument.HasAttrib(ScRange(0, 0, 0, 1, 1, 0), HasAttrFlags::Merged));
+    CPPUNIT_ASSERT(!rDocument.HasAttrib(ScRange(0, 0, 1, 1, 1, 1), HasAttrFlags::Merged));
+
+    // Now unmerge D1:E2 from the sheet view. The tab set points at the
+    // sheet view tab and must be redirected to the default tab so the
+    // unmerge lands there and then propagates back through the sync.
+    switchToSheetView();
+    {
+        ScCellMergeOption aUnmergeDE(3, 0, 4, 1);
+        aUnmergeDE.maTabs.insert(1);
+        pDocShell->GetDocFunc().UnmergeCells(aUnmergeDE, true, nullptr);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // D1:E2 merge attribute must be gone from both tabs.
+    CPPUNIT_ASSERT(!rDocument.HasAttrib(ScRange(3, 0, 0, 4, 1, 0), HasAttrFlags::Merged));
+    CPPUNIT_ASSERT(!rDocument.HasAttrib(ScRange(3, 0, 1, 4, 1, 1), HasAttrFlags::Merged));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testTableGetSheetViewManagerNullOnHolder)
 {
     // ScTable::GetSheetViewManager must return a null shared_ptr on a

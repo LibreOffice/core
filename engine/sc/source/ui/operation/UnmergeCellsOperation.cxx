@@ -37,7 +37,18 @@ UnmergeCellsOperation::UnmergeCellsOperation(ScDocFunc& rDocFunc, ScDocShell& rD
 
 bool UnmergeCellsOperation::runImplementation()
 {
-    if (maOption.maTabs.empty())
+    ScCellMergeOption aOption(maOption);
+    {
+        std::set<SCTAB> aConvertedTabs;
+        for (SCTAB nTab : aOption.maTabs)
+        {
+            ScAddress aConverted = convertAddress(ScAddress(0, 0, nTab));
+            aConvertedTabs.insert(aConverted.Tab());
+        }
+        aOption.maTabs = aConvertedTabs;
+    }
+
+    if (aOption.maTabs.empty())
         // Nothing to unmerge.
         return true;
 
@@ -50,9 +61,9 @@ bool UnmergeCellsOperation::runImplementation()
 
     ScDocument* pUndoDoc = (mpUndoRemoveMerge ? mpUndoRemoveMerge->GetUndoDoc() : nullptr);
     assert(pUndoDoc || !mpUndoRemoveMerge);
-    for (const SCTAB nTab : maOption.maTabs)
+    for (const SCTAB nTab : aOption.maTabs)
     {
-        ScRange aRange = maOption.getSingleRange(nTab);
+        ScRange aRange = aOption.getSingleRange(nTab);
         if (!rDoc.HasAttrib(aRange, HasAttrFlags::Merged))
             continue;
 
@@ -66,7 +77,7 @@ bool UnmergeCellsOperation::runImplementation()
             if (!pUndoDoc)
             {
                 pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
-                pUndoDoc->InitUndo(rDoc, *maOption.maTabs.begin(), *maOption.maTabs.rbegin());
+                pUndoDoc->InitUndo(rDoc, *aOption.maTabs.begin(), *aOption.maTabs.rbegin());
             }
             rDoc.CopyToDocument(aExtended, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
         }
@@ -96,14 +107,17 @@ bool UnmergeCellsOperation::runImplementation()
         {
             // If mpUndoRemoveMerge was passed, the caller is responsible for
             // adding it to Undo. Just add the current option.
-            mpUndoRemoveMerge->AddCellMergeOption(maOption);
+            mpUndoRemoveMerge->AddCellMergeOption(aOption);
         }
         else
         {
             mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoRemoveMerge>(
-                mrDocShell, maOption, ScDocumentUniquePtr(pUndoDoc)));
+                mrDocShell, aOption, ScDocumentUniquePtr(pUndoDoc)));
         }
     }
+
+    syncSheetViews();
+
     aModificator.SetDocumentModified();
 
     return true;
