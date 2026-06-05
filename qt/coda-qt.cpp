@@ -40,6 +40,10 @@
 
 #include <unistd.h>
 
+#include <clocale>
+#include <cstring>
+#include <langinfo.h>
+
 const char* user_name = nullptr;
 
 int coolwsd_server_socket_fd = -1;
@@ -131,6 +135,27 @@ namespace
 
 int main(int argc, char** argv)
 {
+    // The embedded engine needs a UTF-8 locale to open documents whose file
+    // names contain non-ASCII characters (e.g. "Névtelen.odt"). The server
+    // (COOLWSD::innerMain) forces this for itself, but deliberately exempts
+    // QTAPP so we don't clobber the user's LC_ALL. An invalid or non-UTF-8
+    // LANG (such as "hu" rather than "hu_HU.UTF-8") otherwise leaves LC_CTYPE
+    // at ASCII, and the engine's osl text encoding falls back to ASCII_US and
+    // fails to open the file. Force only LC_CTYPE, and only when the codeset
+    // isn't already UTF-8, so the user's language and number/date formatting
+    // are preserved. Setting it before QApplication (which runs
+    // setlocale(LC_ALL, "")) makes the LC_CTYPE environment variable win for
+    // that category process-wide.
+    std::setlocale(LC_ALL, "");
+    if (std::strcmp(nl_langinfo(CODESET), "UTF-8") != 0)
+    {
+        const char* loc = std::setlocale(LC_CTYPE, "C.UTF-8");
+        if (!loc)
+            loc = std::setlocale(LC_CTYPE, "en_US.UTF-8");
+        if (loc)
+            ::setenv("LC_CTYPE", loc, 1);
+    }
+
     // Must run before QApplication.
     // LocalScheme + LocalAccessAllowed lets the file:// page reach cool:.
     {
