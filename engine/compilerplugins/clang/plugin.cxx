@@ -939,12 +939,6 @@ bool isSamePathname(StringRef pathname, StringRef other)
         pathname, other, [](StringRef p, StringRef a) { return p == a; });
 }
 
-bool isSameUnoIncludePathname(StringRef fullPathname, StringRef includePathname)
-{
-    llvm::SmallVector<char, 256> buf;
-    return isSamePathname(fullPathname, (SRCDIR "/include/" + includePathname).toStringRef(buf));
-}
-
 bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     assert(decl != nullptr);
     if (decl->isExternC()) {

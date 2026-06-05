@@ -284,9 +284,6 @@ bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
 // also contain backslashes:
 bool isSamePathname(StringRef pathname, StringRef other);
 
-// Check whether fullPathname is SRCDIR/include/includePathname:
-bool isSameUnoIncludePathname(StringRef fullPathname, StringRef includePathname);
-
 // It appears that, given a function declaration, there is no way to determine
 // the language linkage of the function's type, only of the function's name
 // (via FunctionDecl::isExternC); however, in a case like

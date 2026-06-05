@@ -115,12 +115,12 @@ void ReservedId::postRun() {
                         auto loc = d->getLocation();
                         if (loc.isValid() && !ignoreLocation(loc) && !suppressWarningAt(loc)) {
                             auto file = getFilenameOfLocation(loc);
-                            if (!loplugin::isSameUnoIncludePathname(
+                            if (!loplugin::isSamePathname(
                                     file,
-                                    "cppuhelper/implbase_ex_post.hxx")
-                                && !loplugin::isSameUnoIncludePathname(
+                                    SRCDIR "/include/cppuhelper/implbase_ex_post.hxx")
+                                && !loplugin::isSamePathname(
                                     file,
-                                    "cppuhelper/implbase_ex_pre.hxx"))
+                                    SRCDIR "/include/cppuhelper/implbase_ex_pre.hxx"))
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
