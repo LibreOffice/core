@@ -2136,28 +2136,6 @@
           <value>com.sun.star.comp.framework.LangSelectionStatusbarController</value>
         </prop>
       </node>
-      <node oor:name="c8" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:ZoomSlider</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.comp.StatusbarController</value>
-        </prop>
-      </node>
-      <node oor:name="c9" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:Zoom</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.comp.StatusbarController</value>
-        </prop>
-      </node>
     </node>
   </node>
 </oor:component-data>

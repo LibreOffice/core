@@ -48,7 +48,6 @@ XCU_FILES = (   XCU_DIR + 'BasicIDECommands.xcu',
                 XCU_DIR + 'DrawImpressCommands.xcu',
                 XCU_DIR + 'GenericCommands.xcu',
                 XCU_DIR + 'MathCommands.xcu',
-                XCU_DIR + 'ReportCommands.xcu',
                 XCU_DIR + 'WriterCommands.xcu')
 
 HXX_DIR = builddir + '/workdir/SdiTarget/'
@@ -501,4 +500,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-  

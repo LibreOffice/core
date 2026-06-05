@@ -18,21 +18,6 @@
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="DataAccess" oor:package="org.openoffice.Office">
-  <node oor:name="ReportEngines" install:module="reportbuilder">
-    <prop oor:name="DefaultReportEngine" oor:type="xs:string">
-      <value>Pentaho Reporting Flow Engine</value>
-    </prop>
-    <node oor:name="ReportEngineNames">
-      <node oor:name="Pentaho Reporting Flow Engine" oor:op="replace">
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value>Pentaho Reporting Flow Engine</value>
-        </prop>
-        <prop oor:name="ServiceName" oor:type="xs:string">
-          <value>org.libreoffice.report.pentaho.SOReportJobFactory</value>
-        </prop>
-      </node>
-    </node>
-  </node>
   <node oor:name="ConnectionPool">
     <node oor:name="DriverSettings">
       <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver" oor:op="replace">

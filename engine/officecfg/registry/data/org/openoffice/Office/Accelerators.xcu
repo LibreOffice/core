@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the Collabora Office project.
  *
@@ -8068,7 +8068,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           </prop>
         </node>
       </node>
-      <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace"/>
     </node>
   </node>
   <node oor:name="SecondaryKeys">
@@ -8628,105 +8627,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <!-- tdf#142257 Add secondary keys for interop along Shift-Ctrl-. for Hungarian only -->
             <value xml:lang="hu">.uno:Grow</value>
-          </prop>
-        </node>
-      </node>
-      <!-- Report Builder start here at the bottom of Modules section-->
-      <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" install:module="reportbuilder">
-        <node oor:name="R_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SelectReport</value>
-          </prop>
-        </node>
-        <node oor:name="RETURN_MOD2" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ControlProperties</value>
-          </prop>
-        </node>
-        <node oor:name="F4" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ControlProperties</value>
-          </prop>
-        </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ReportNavigator</value>
-          </prop>
-        </node>
-        <node oor:name="F8_MOD2" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:AddField</value>
-          </prop>
-        </node>
-        <node oor:name="ESCAPE" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Escape</value>
-          </prop>
-        </node>
-        <node oor:name="G_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DbSortingAndGrouping</value>
-          </prop>
-        </node>
-        <node oor:name="E_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ExecuteReport</value>
-          </prop>
-        </node>
-        <node oor:name="A_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SelectAllInSection</value>
-          </prop>
-        </node>
-        <node oor:name="T_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SelectAllLabels</value>
-          </prop>
-        </node>
-        <node oor:name="F_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SelectAllEdits</value>
-          </prop>
-        </node>
-        <node oor:name="Z_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Redo</value>
-          </prop>
-        </node>
-        <node oor:name="Y_MOD1" oor:op="fuse">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Redo</value>
-          </prop>
-        </node>
-        <node oor:name="Z_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Undo</value>
-          </prop>
-        </node>
-        <node oor:name="SUBTRACT" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="en-US">.uno:CollapseSection</value>
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-          </prop>
-        </node>
-        <node oor:name="ADD" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="en-US">.uno:ExpandSection</value>
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
           </prop>
         </node>
       </node>
