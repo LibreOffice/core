@@ -428,10 +428,6 @@ void SlideSorterViewShell::GetAttrState (SfxItemSet& rSet)
 
 void SlideSorterViewShell::ExecStatusBar (SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
-    if(HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     switch (rReq.GetSlot())
     {
         case SID_STATUS_PAGE:

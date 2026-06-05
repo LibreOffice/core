@@ -62,8 +62,6 @@ public:
 
     ShowWindowMode  GetShowWindowMode() const { return meShowWindowMode; }
 
-    void            RestartShow( sal_Int32 nPageIndexToRestart );
-
     virtual void    LoseFocus() override;
 
     virtual void    KeyInput(const KeyEvent& rKEvt) override;

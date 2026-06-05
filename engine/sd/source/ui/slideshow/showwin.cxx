@@ -260,11 +260,7 @@ void ShowWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Re
 {
     if( (meShowWindowMode == SHOWWINDOWMODE_NORMAL) || (meShowWindowMode == SHOWWINDOWMODE_PREVIEW) )
     {
-        if( mxController.is() )
-        {
-            mxController->paint();
-        }
-        else if(mpViewShell )
+        if(mpViewShell )
         {
             mpViewShell->Paint(rRect, this);
         }
@@ -322,11 +318,7 @@ bool ShowWindow::SetPauseMode( sal_Int32 nTimeout, Graphic const * pLogo )
     if( mpViewShell )
         xSlideShow = SlideShow::GetSlideShow( mpViewShell->GetViewShellBase() );
 
-    if( xSlideShow.is() && !nTimeout )
-    {
-        xSlideShow->jumpToPageIndex( 0 );
-    }
-    else if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
+    if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
         DeleteWindowFromPaintView();
         mnPauseTimeout = nTimeout;
@@ -408,13 +400,6 @@ void ShowWindow::TerminateShow()
 
 void ShowWindow::RestartShow()
 {
-    RestartShow( mnRestartPageIndex );
-}
-
-void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
-{
-    ShowWindowMode eOldShowWindowMode = meShowWindowMode;
-
     maLogo.Clear();
     maPauseTimer.Stop();
     GetOutDev()->Erase();
@@ -427,19 +412,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( mpViewShell->GetViewShellBase() ) );
 
         if( xSlideShow.is() )
-        {
             AddWindowToPaintView();
-
-            if( SHOWWINDOWMODE_BLANK == eOldShowWindowMode || SHOWWINDOWMODE_END == eOldShowWindowMode )
-            {
-                xSlideShow->pause(false);
-                Invalidate();
-            }
-            else
-            {
-                xSlideShow->jumpToPageIndex( nPageIndexToRestart );
-            }
-        }
     }
 
     mnRestartPageIndex = PAGE_NO_END;

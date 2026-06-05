@@ -167,9 +167,6 @@ public:
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
-    // XController
-    virtual bool SAL_CALL suspend( bool Suspend ) override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;

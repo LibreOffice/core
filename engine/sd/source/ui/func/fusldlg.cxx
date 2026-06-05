@@ -225,13 +225,6 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     {
         bValuesChanged = true;
         rPresentationSettings.mbMouseAsPen = bValue;
-
-        // live slideshow? pass pen state on immediately
-        Reference< XSlideShowController > xSlideShowController(
-            SlideShow::GetSlideShowController(mrViewShell.GetViewShellBase() ) );
-        if( xSlideShowController.is() )
-            if(rPresentationSettings.mbInteractive)
-                xSlideShowController->setUsePen( bValue );
     }
 
     pOptions->SetDisplay( aDlgSet.Get(ATTR_PRESENT_DISPLAY).GetValue() );

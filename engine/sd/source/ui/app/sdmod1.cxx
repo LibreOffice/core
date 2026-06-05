@@ -209,48 +209,19 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_OPENHYPERLINK:
         case SID_OPENDOC:
         {
-            bool bIntercept = false;
             ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
             ::sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
-            if (pViewShell)
+
+            if (const SfxStringItem* pURLItem = rReq.GetArg(SID_FILE_NAME))
             {
-                if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() )
-                    && !sd::SlideShow::IsInteractiveSlideshow( pViewShell->GetViewShellBase() ) ) // IASS
+                if (!pViewShell || !SfxObjectShell::AllowedLinkProtocolFromDocument(pURLItem->GetValue(),
+                                                                                    pViewShell->GetObjectShell(),
+                                                                                    pViewShell->GetFrameWeld()))
                 {
-                    // Prevent documents from opening while the slide
-                    // show is running, except when this request comes
-                    // from a shape interaction.
-                    if (rReq.GetArgs() == nullptr)
-                    {
-                        bIntercept = true;
-                    }
+                    return;
                 }
             }
-
-            if (!bIntercept)
-            {
-                if (const SfxStringItem* pURLItem = rReq.GetArg(SID_FILE_NAME))
-                {
-                    if (!pViewShell || !SfxObjectShell::AllowedLinkProtocolFromDocument(pURLItem->GetValue(),
-                                                                                        pViewShell->GetObjectShell(),
-                                                                                        pViewShell->GetFrameWeld()))
-                    {
-                        return;
-                    }
-                }
-                SfxGetpApp()->ExecuteSlot(rReq, SfxGetpApp()->GetInterface());
-            }
-            else
-            {
-                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(rReq.GetFrameWeld(),
-                                                               VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_CANT_PERFORM_IN_LIVEMODE)));
-
-                xErrorBox->run();
-
-                const SfxLinkItem* pLinkItem = rReq.GetArg<SfxLinkItem>(SID_DONELINK);
-                if( pLinkItem )
-                    pLinkItem->GetValue().Call( nullptr );
-            }
+            SfxGetpApp()->ExecuteSlot(rReq, SfxGetpApp()->GetInterface());
         }
         break;
 
@@ -427,18 +398,7 @@ IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, voi
     switch (pMediaData->GetMediaId())
     {
         case MediaCommand::Play:
-        {
-            ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-            if( pDocShell )  // Impress or Draw ?
-            {
-                ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-
-                // #i97925# start the presentation if and only if an Impress document is focused
-                if( pViewShell && (pDocShell->GetDocumentType() == DocumentType::Impress) )
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION );
-            }
             break;
-        }
         default:
             pMediaData->SetPassThroughToOS(true);
             break;

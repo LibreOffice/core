@@ -58,9 +58,6 @@ public class _Presentation extends MultiPropertyTest {
             tEnv.getObjRelation("Presentation");
         if (aPresentation == null) throw new StatusException(Status.failed
             ("Relation 'Presentation' not found"));
-
-        aPresentation.start();
-        testProperty("IsLivePresentation");
     }
 
     protected PropertyTester CustomShowTester = new PropertyTester() {

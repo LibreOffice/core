@@ -97,17 +97,8 @@ rtl::Reference<AbstractResource> PresentationFactory::createResource (
 void PresentationFactory::releaseResource (
     const rtl::Reference<AbstractResource>&)
 {
-    {
-        std::unique_lock l(m_aMutex);
-        throwIfDisposed(l);
-    }
-
-    if (mxController)
-    {
-        ViewShellBase* pBase = mxController->GetViewShellBase();
-        if (pBase != nullptr)
-            SlideShow::Stop( *pBase );
-    }
+    std::unique_lock l(m_aMutex);
+    throwIfDisposed(l);
 }
 
 void PresentationFactory::install(const rtl::Reference<::sd::DrawController>& rxController)

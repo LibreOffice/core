@@ -86,36 +86,9 @@ public:
     static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const & rDocument );
     static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase const & rBase );
 
-    static css::uno::Reference< css::presentation::XSlideShowController > GetSlideShowController(ViewShellBase const & rBase );
-
-    static bool StartPreview( ViewShellBase const & rBase,
-        const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
-        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
-
-    static void Stop( ViewShellBase const & rBase );
-
-    /// returns true if there is a running presentation for the given ViewShellBase
-    static bool IsRunning( ViewShellBase const & rBase );
-
-    /// returns true if there is a running presentation inside the given ViewShell
-    /// returns false even if there is a running presentation but in another ViewShell
-    static bool IsRunning( const ViewShell& rViewShell );
-
     /// returns true if the interactive slideshow mode is activated
     static bool IsInteractiveSlideshow(const ViewShellBase& rViewShellBase);
     bool IsInteractiveSlideshow() const;
-
-    // helper api
-
-    bool startInteractivePreview(
-        const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
-        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
-    bool isInteractiveSetup() const;
-    void endInteractivePreview();
-
-    void startPreview(
-        const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
-        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
 
     // uno api
 
@@ -135,45 +108,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
-    // XPresentation
-    virtual void SAL_CALL start(  ) override;
-    virtual void SAL_CALL end() override;
-    virtual void SAL_CALL rehearseTimings(  ) override;
-
-    // XPresentation2
-    virtual void SAL_CALL startWithArguments(const css::uno::Sequence< css::beans::PropertyValue >& Arguments) override;
-    virtual bool SAL_CALL isRunning(  ) override;
-    virtual css::uno::Reference< css::presentation::XSlideShowController > SAL_CALL getController(  ) override;
-
     // legacy api
-
-    // actions
-    void jumpToPageNumber( sal_Int32 nPage );               // a.k.a. FuSlideShow::JumpToPage()
-    void jumpToPageIndex( sal_Int32 nIndex );
-    void jumpToBookmark( const OUString& sBookmark );            // a.k.a. FuSlideShow::JumpToBookmark()
-
-    /** sets or clears the pause state of the running slideshow.
-        !!!! This should only be called by the SdShowWindow !!!!*/
-    void pause( bool bPause );
-    bool swipe(const CommandGestureSwipeData &rSwipeData);
-    bool longpress(const CommandGestureLongPressData& rLongPressData);
-
-    // settings
-    bool isFullScreen() const;                          // a.k.a. FuSlideShow::IsFullScreen()
-    OutputDevice* getShowWindow();                      // a.k.a. FuSlideShow::GetShowWindow()
-    int getAnimationMode() const;                       // a.k.a. FuSlideShow::GetAnimationMode()
-    sal_Int32 getCurrentPageNumber() const;             // a.k.a. FuSlideShow::GetCurrentPage()
-
-    // events
-    void resize( const Size &rSize );
-    // return false if the activate failed. callers should call end in response to failure
-    bool activate(ViewShellBase& rBase);
-    void deactivate();
-    void paint();
-
-    bool keyInput(const KeyEvent& rKEvt);
-
-    bool dependsOn( ViewShellBase const * pViewShellBase );
 
     static sal_Int32 GetDisplay();
 
@@ -183,16 +118,9 @@ public:
 private:
     SlideShow( SdDrawDocument* pDoc );
 
-    DECL_LINK( StartInPlacePresentationConfigurationHdl, void *, void );
-    void StartInPlacePresentationConfigurationCallback();
-
-    void StartInPlacePresentation();
-    void StartFullscreenPresentation();
-
     /// @throws css::uno::RuntimeException
     void ThrowIfDisposed() const;
 
-    void CreateController( ViewShell* pViewSh, ::sd::View* pView, vcl::Window* pParentWindow );
     WorkWindow *GetWorkWindow();
 
     SlideShow(const SlideShow&) = delete;
@@ -200,26 +128,13 @@ private:
 
     SvxItemPropertySet  maPropSet;
 
-    rtl::Reference< SlideshowImpl > mxController;
-    /** This flag is used together with mxController.is() to prevent
-        multiple instances of the slide show for one document.  The flag
-        covers the time before mxController is set.
-    */
-    bool mbIsInStartup;
     SdDrawDocument* mpDoc;
 
     std::shared_ptr< PresentationSettingsEx > mxCurrentSettings;
 
     ViewShellBase* mpCurrentViewShellBase;
     ViewShellBase* mpFullScreenViewShellBase;
-    FrameView* mpFullScreenFrameView;
-    ImplSVEvent * mnInPlaceConfigEvent;
 };
-
-namespace slideshowhelp
-{
-    SD_DLLPUBLIC void ShowSlideShow(SfxRequest const& rReq, SdDrawDocument& rDoc);
-}
 
 }
 

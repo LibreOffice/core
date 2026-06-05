@@ -225,17 +225,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         }
         break;
 
-        case SID_PRESENTATION:
-        case SID_PRESENTATION_CURRENT_SLIDE:
-        case SID_REHEARSE_TIMINGS:
-        {
-            pOlView->PrepareClose();
-            slideshowhelp::ShowSlideShow(rReq, *GetDoc());
-            Cancel();
-            rReq.Done();
-        }
-        break;
-
         case SID_COLORVIEW:
         {
             ::Outliner& rOutl = pOutlinerView->GetOutliner();

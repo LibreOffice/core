@@ -156,21 +156,6 @@ interface SlideSorterView
         ExecMethod = FuSupport ;
         StateMethod = GetClipboardState ;
     ]
-    SID_REHEARSE_TIMINGS // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_PRESENTATION // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_PRESENTATION_CURRENT_SLIDE // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_HIDE_SLIDE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

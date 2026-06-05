@@ -66,7 +66,6 @@ public:
     void onChangeSpeed();
 
     // methods
-    void preview( const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
     void remove( CustomAnimationEffectPtr const & pEffect );
 
     // ICustomAnimationListController

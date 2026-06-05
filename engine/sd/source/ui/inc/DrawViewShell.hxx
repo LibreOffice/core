@@ -102,8 +102,6 @@ public:
 
     virtual void Init (bool bIsMainViewShell) override;
 
-    virtual void Shutdown() override;
-
     void PrePaint() override;
     virtual void Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
 
@@ -437,10 +435,6 @@ private:
     void DuplicateSelectedSlides (SfxRequest& rRequest);
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) override;
-
-    /** Stop a running slide show.
-    */
-    void StopSlideShow();
 
     /** Show the context menu for snap lines and points.  Because snap lines
         can not be selected the index of the snap line/point for which the

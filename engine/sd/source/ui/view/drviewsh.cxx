@@ -50,9 +50,6 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
     if ( IsMouseButtonDown() && !IsMouseSelecting() )
         return;
 
-    if ( SlideShow::IsRunning( GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow( GetViewShellBase() ) ) // IASS
-        return;
-
     // tdf#98646 check if Rectangle which contains the bounds of the region to
     // be shown eventually contains values that cause overflows when processing
     // e.g. when calling GetWidth()

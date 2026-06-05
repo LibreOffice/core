@@ -424,7 +424,6 @@ void SlideTransitionPane::Initialize()
 
     // set handlers
     mxPB_APPLY_TO_ALL->connect_clicked( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
-    mxPB_PLAY->connect_clicked( LINK( this, SlideTransitionPane, PlayButtonClicked ));
 
     mxTransitionsIconView->connect_item_activated(LINK(this, SlideTransitionPane, TransitionSelected));
 
@@ -906,7 +905,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     return aResult;
 }
 
-void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
+void SlideTransitionPane::applyToSelectedPages(bool = true)
 {
     if (mbUpdatingControls || mbInApplyToPages)
         return;
@@ -923,29 +922,11 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
         lcl_ApplyToPages( pSelectedPages, aEffect );
         mrBase.GetDocShell()->SetModified();
     }
-    if( mxCB_AUTO_PREVIEW->get_sensitive() &&
-        mxCB_AUTO_PREVIEW->get_active() && bPreview)
-    {
-        if (aEffect.mnType) // mnType = 0 denotes no transition
-            playCurrentEffect();
-        else if( mxView.is() && !SlideShow::IsInteractiveSlideshow(mrBase)) // IASS
-            SlideShow::Stop( mrBase );
-    }
 
     if (pFocusWindow)
         pFocusWindow->GrabFocus();
 
     mbInApplyToPages = false;
-}
-
-void SlideTransitionPane::playCurrentEffect()
-{
-    if( mxView.is() )
-    {
-
-        Reference< css::animations::XAnimationNode > xNode;
-        SlideShow::StartPreview( mrBase, mxView->getCurrentPage(), xNode );
-    }
 }
 
 void SlideTransitionPane::addListener()
@@ -1025,11 +1006,6 @@ IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked, weld::Button&, voi
         lcl_CreateUndoForPages( pPages, mrBase );
         lcl_ApplyToPages( pPages, getTransitionEffectFromControls() );
     }
-}
-
-IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked, weld::Button&, void)
-{
-    playCurrentEffect();
 }
 
 IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, weld::IconView&, bool)

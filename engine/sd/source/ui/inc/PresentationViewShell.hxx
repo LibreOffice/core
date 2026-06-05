@@ -49,8 +49,6 @@ public:
     */
     void FinishInitialization(FrameView* pFrameView);
 
-    virtual void Resize() override;
-
 protected:
     virtual VclPtr<SvxRuler> CreateHRuler(::sd::Window* pWin) override;
     virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin) override;
@@ -60,7 +58,6 @@ private:
     ImplSVEvent* mnAbortSlideShowEvent;
 
     virtual void Activate(bool bIsMDIActivate) override;
-    virtual void Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
 
     DECL_LINK(AbortSlideShowHdl, void*, void);
 };

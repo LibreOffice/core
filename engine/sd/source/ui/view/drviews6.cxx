@@ -51,10 +51,6 @@ namespace sd {
  */
 void DrawViewShell::ExecFormText(SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
-    if(HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     CheckLineTo (rReq);
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
@@ -115,10 +111,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 
 void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 {
-    // nothing is executed during a slide show!
-    if (HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     CheckLineTo (rReq);
 
     sal_uInt16 nSId = rReq.GetSlot();
@@ -247,10 +239,6 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
  */
 void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
 {
-    // nothing is executed during a slide show!
-    if (HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     switch ( rReq.GetSlot() )
     {
         case SID_BMPMASK_PIPETTE :

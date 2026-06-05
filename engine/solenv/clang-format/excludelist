@@ -8924,14 +8924,11 @@ sd/source/ui/sidebar/RecentlyUsedMasterPages.cxx
 sd/source/ui/sidebar/RecentlyUsedMasterPages.hxx
 sd/source/ui/sidebar/SlideBackground.cxx
 sd/source/ui/sidebar/SlideBackground.hxx
-sd/source/ui/slideshow/SlideShowRestarter.cxx
 sd/source/ui/slideshow/showwin.cxx
 sd/source/ui/slideshow/showwindow.hxx
 sd/source/ui/slideshow/slideshow.cxx
 sd/source/ui/slideshow/slideshowimpl.cxx
 sd/source/ui/slideshow/slideshowimpl.hxx
-sd/source/ui/slideshow/slideshowviewimpl.cxx
-sd/source/ui/slideshow/slideshowviewimpl.hxx
 sd/source/ui/slidesorter/cache/SlsBitmapCache.cxx
 sd/source/ui/slidesorter/cache/SlsBitmapCompressor.cxx
 sd/source/ui/slidesorter/cache/SlsBitmapFactory.cxx

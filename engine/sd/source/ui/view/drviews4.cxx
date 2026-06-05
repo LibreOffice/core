@@ -526,10 +526,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     if( GetView() &&GetView()->getSmartTags().Command(rCEvt) )
         return;
 
-    const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())); // IASS
-
-    if( rCEvt.GetCommand() == CommandEventId::PasteSelection && !bNativeShow )
+    if( rCEvt.GetCommand() == CommandEventId::PasteSelection )
     {
         TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromPrimarySelection());
 
@@ -557,7 +554,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             }
         }
     }
-    else if( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bNativeShow &&
+    else if( rCEvt.GetCommand() == CommandEventId::ContextMenu &&
              pWin != nullptr && !mpDrawView->IsAction() && !SdModule::get()->GetWaterCan() )
     {
         OUString aPopupId; // Resource name for popup menu
@@ -791,7 +788,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             }
 
             // nothing selected
-            else if (!SlideShow::IsRunning(GetViewShellBase()))
+            else
             {
                 // tdf#163124 this is the non-native SlideShow (see !bNativeShow),
                 // thus the above checks/actions have to be done to make the

@@ -152,11 +152,6 @@ static void ImpAddPrintableCharactersToTextEdit(SfxRequest const & rReq, ::sd::V
 
 void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
-    // We do not execute a thing during a native slide show
-
-    if (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())) // IASS
-        return;
-
     sal_uInt16 nSId = rReq.GetSlot();
 
     if( HasCurrentFunction() &&
@@ -842,12 +837,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
         GetDocSh()->SetStyleFamily(static_cast<SfxStyleFamily>(rReq.GetArgs()->Get( SID_STYLE_FAMILY ).GetValue()));
 
-    // We do not execute a thing during a native slide show
-    if((SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())) // IASS
-        && (rReq.GetSlot() != SID_PRESENTATION_END && rReq.GetSlot() != SID_SIZE_PAGE))
-        return;
-
     CheckLineTo (rReq);
 
     if( !mpDrawView )
@@ -864,19 +853,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        case SID_PRESENTATION:
-        case SID_PRESENTATION_CURRENT_SLIDE:
-        case SID_REHEARSE_TIMINGS:
-        {
-            slideshowhelp::ShowSlideShow(rReq, *GetDoc());
-            rReq.Ignore ();
-        }
-        break;
-
         case SID_PRESENTATION_END:
         {
-            StopSlideShow();
-
             rReq.Ignore ();
         }
         break;
@@ -1784,63 +1762,6 @@ void DrawViewShell::ShowUIControls (bool bVisible)
 {
     ViewShell::ShowUIControls (bVisible);
     maTabControl->Show (bVisible);
-}
-
-namespace slideshowhelp
-{
-    void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc)
-    {
-        Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
-        if( !xPresentation.is() )
-            return;
-
-        sfx2::SfxNotebookBar::LockNotebookBar();
-        if (SID_REHEARSE_TIMINGS == rReq.GetSlot())
-            xPresentation->rehearseTimings();
-        else if (rDoc.getPresentationSettings().mbCustomShow)
-        {
-            //fdo#69975 if a custom show has been set, then
-            //use it whether or not we've been asked to
-            //start from the current or first slide
-            xPresentation->start();
-
-            // if the custom show not set by default, only show it.
-            if (rDoc.getPresentationSettings().mbStartCustomShow)
-                rDoc.getPresentationSettings().mbCustomShow = false;
-        }
-        else if (SID_PRESENTATION_CURRENT_SLIDE == rReq.GetSlot())
-        {
-            //If there is no custom show set, start will automatically
-            //start at the current page
-            xPresentation->start();
-        }
-        else
-        {
-            //Start at page 0, this would blow away any custom
-            //show settings if any were set
-            const SfxUInt16Item* pStartingSlide = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
-            const sal_uInt16 nStartingSlide = pStartingSlide ? pStartingSlide->GetValue() - 1 : 0;
-            SdPage* pSlide = rDoc.GetSdPage(nStartingSlide, PageKind::Standard);
-            const OUString aStartingSlide = pSlide ? pSlide->GetName() : OUString();
-
-            Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue(u"FirstPage"_ustr,
-                                                                                aStartingSlide) };
-            xPresentation->startWithArguments( aArguments );
-        }
-        sfx2::SfxNotebookBar::UnlockNotebookBar();
-    }
-}
-
-void DrawViewShell::StopSlideShow()
-{
-    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
-    if(xPresentation.is() && xPresentation->isRunning())
-    {
-        if( mpDrawView->IsTextEdit() )
-            mpDrawView->SdrEndTextEdit();
-
-        xPresentation->end();
-    }
 }
 
 } // end of namespace sd

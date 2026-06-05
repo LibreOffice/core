@@ -504,22 +504,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
 void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
 {
     SdDrawDocument* pDoc = GetDocSh()->GetDoc();
-    if( pDoc && pDoc->GetDocumentType() == DocumentType::Impress)
-    {
-        rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( pDoc ) );
-        if(xSlideshow.is() && xSlideshow->isRunning())
-        {
-            OutputDevice* pShowWindow = xSlideshow->getShowWindow();
-            if( (pShowWindow == pOutDev) || (xSlideshow->getAnimationMode() == ANIMATIONMODE_PREVIEW) )
-            {
-                if( pShowWindow == pOutDev && mpViewSh )
-                    xSlideshow->paint();
-                if (!xSlideshow->IsInteractiveSlideshow()) // IASS
-                    return;
-            }
-        }
-    }
-    else if( pDoc && pDoc->GetDocumentType() == DocumentType::Draw)
+    if( pDoc && pDoc->GetDocumentType() == DocumentType::Draw)
     {
         // tdf#164605 & tdf#89420
         // A PDF page in Draw is a single imported image, so the text boundary

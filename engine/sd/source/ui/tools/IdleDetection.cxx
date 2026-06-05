@@ -71,20 +71,6 @@ IdleState IdleDetection::CheckSlideShowRunning()
         }
         if (bIgnoreFrame)
             continue;
-
-        // Get sd::ViewShell from active frame.
-        sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
-        if (pBase != nullptr)
-        {
-            rtl::Reference< sd::SlideShow > xSlideShow( sd::SlideShow::GetSlideShow( *pBase ) );
-            if( xSlideShow.is() && xSlideShow->isRunning() && !xSlideShow->IsInteractiveSlideshow()) // IASS
-            {
-                if (xSlideShow->isFullScreen())
-                    eResult |= IdleState::FullScreenShowActive;
-                else
-                    eResult |= IdleState::WindowShowActive;
-            }
-        }
     }
 
     return eResult;

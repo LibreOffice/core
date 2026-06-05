@@ -78,7 +78,6 @@ private:
     impl::TransitionEffect getTransitionEffectFromControls() const;
 
     void applyToSelectedPages(bool bPreview);
-    void playCurrentEffect();
 
     void addListener();
     void removeListener();
@@ -88,7 +87,6 @@ private:
     void Initialize();
 
     DECL_LINK( ApplyToAllButtonClicked, weld::Button&, void );
-    DECL_LINK( PlayButtonClicked, weld::Button&, void );
     DECL_LINK( AutoPreviewClicked, weld::Toggleable&, void );
 
     DECL_LINK( TransitionSelected, weld::IconView&, bool );

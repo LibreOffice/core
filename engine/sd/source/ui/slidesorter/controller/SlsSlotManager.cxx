@@ -132,14 +132,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
     switch (rRequest.GetSlot())
     {
-        case SID_PRESENTATION:
-        case SID_PRESENTATION_CURRENT_SLIDE:
-        case SID_REHEARSE_TIMINGS:
-            slideshowhelp::ShowSlideShow(rRequest, *mrSlideSorter.GetModel().GetDocument());
-            pShell->Cancel();
-            rRequest.Done();
-            break;
-
         case SID_HIDE_SLIDE:
             ChangeSlideExclusionState(model::SharedPageDescriptor(), true);
             break;
@@ -578,7 +570,6 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
 {
     EditMode eEditMode = mrSlideSorter.GetModel().GetEditMode();
     ViewShell& rShell = mrSlideSorter.GetViewShell();
-    DrawDocShell* pDocShell = mrSlideSorter.GetModel().GetDocument()->GetDocSh();
 
     if (rShell.GetCurrentFunction().is())
     {
@@ -661,27 +652,6 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         }
         if (bDisable)
             rSet.DisableItem (SID_SUMMARY_PAGE);
-    }
-
-    // starting of presentation possible?
-    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PRESENTATION ) ||
-        SfxItemState::DEFAULT == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
-    {
-        bool bDisable = true;
-        model::PageEnumeration aAllPages (
-            model::PageEnumerationProvider::CreateAllPagesEnumeration(mrSlideSorter.GetModel()));
-        while (aAllPages.HasMoreElements())
-        {
-            SdPage* pPage = aAllPages.GetNextElement()->GetPage();
-
-            if( !pPage->IsExcluded() )
-                bDisable = false;
-        }
-        if( bDisable || pDocShell->IsPreview())
-        {
-            rSet.DisableItem( SID_PRESENTATION );
-            rSet.DisableItem( SID_REHEARSE_TIMINGS );
-        }
     }
 
     // Disable the rename slots when there are no or more than one slides/master
@@ -1476,8 +1446,6 @@ void SlotManager::ChangeSlideExclusionState (
     }
 
     SfxBindings& rBindings (mrSlideSorter.GetViewShell().GetViewFrame()->GetBindings());
-    rBindings.Invalidate(SID_PRESENTATION);
-    rBindings.Invalidate(SID_REHEARSE_TIMINGS);
     rBindings.Invalidate(SID_HIDE_SLIDE);
     rBindings.Invalidate(SID_SHOW_SLIDE);
     mrSlideSorter.GetModel().GetDocument()->SetChanged();
@@ -1533,7 +1501,6 @@ sal_Int32 SlotManager::GetInsertionPosition() const
 void SlotManager::NotifyEditModeChange()
 {
     SfxBindings& rBindings (mrSlideSorter.GetViewShell().GetViewFrame()->GetBindings());
-    rBindings.Invalidate(SID_PRESENTATION);
     rBindings.Invalidate(SID_INSERTPAGE);
     rBindings.Invalidate(SID_DUPLICATE_PAGE);
 }

@@ -105,62 +105,13 @@ VclPtr<SvxRuler> PresentationViewShell::CreateVRuler(::sd::Window*)
 IMPL_LINK_NOARG(PresentationViewShell, AbortSlideShowHdl, void*, void)
 {
     mnAbortSlideShowEvent = nullptr;
-    rtl::Reference<SlideShow> xSlideShow(SlideShow::GetSlideShow(GetViewShellBase()));
-    if (xSlideShow.is())
-        xSlideShow->end();
 }
 
 void PresentationViewShell::Activate( bool bIsMDIActivate )
 {
     DrawViewShell::Activate( bIsMDIActivate );
 
-    if( bIsMDIActivate )
-    {
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
-
-        GetViewFrame()->GetDispatcher()->ExecuteList(SID_NAVIGATOR_INIT,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
-
-        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        if( xSlideShow.is() )
-        {
-            bool bSuccess = xSlideShow->activate(GetViewShellBase());
-            if (!bSuccess)
-            {
-                /* tdf#64711 PresentationViewShell is deleted by 'end' due to end closing
-                   the object shell. So if we call xSlideShow->end during Activate there are
-                   a lot of places in the call stack of Activate which understandable don't
-                   expect this ViewShell to be deleted during use. Defer to the next event
-                   loop the abort of the slideshow
-                */
-                if (!mnAbortSlideShowEvent)
-                    mnAbortSlideShowEvent = Application::PostUserEvent(LINK(this, PresentationViewShell, AbortSlideShowHdl));
-            }
-        }
-
-        if( HasCurrentFunction() )
-            GetCurrentFunction()->Activate();
-
-        ReadFrameViewData(mpFrameView);
-    }
-
     GetDocSh()->Connect( this );
-}
-
-void PresentationViewShell::Paint( const ::tools::Rectangle& /*rRect*/, ::sd::Window* )
-{
-    rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-    if( xSlideShow.is() )
-        xSlideShow->paint();
-}
-
-void PresentationViewShell::Resize()
-{
-    ViewShell::Resize(); // do not call DrawViewShell here!
-
-    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-    if( xSlideshow.is() )
-        xSlideshow->resize(maViewSize);
 }
 
 } // end of namespace sd

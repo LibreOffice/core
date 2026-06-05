@@ -764,16 +764,6 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_PRESENTATION:
-        case SID_PRESENTATION_CURRENT_SLIDE:
-        case SID_REHEARSE_TIMINGS:
-        {
-            slideshowhelp::ShowSlideShow(rReq, *GetDoc());
-            Cancel();
-            rReq.Done();
-        }
-        break;
-
         case SID_STYLE_EDIT:
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {

@@ -68,9 +68,6 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
         }
 
         mrViewShell.SetStartShowWithDialog(true);
-
-        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
     }
     if (nRet == RET_OK)
     {

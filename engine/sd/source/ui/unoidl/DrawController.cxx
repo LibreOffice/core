@@ -184,43 +184,6 @@ void SAL_CALL DrawController::removeEventListener (
         SfxBaseController::removeEventListener( aListener );
 }
 
-// XController
-bool SAL_CALL DrawController::suspend( bool Suspend )
-{
-    if( Suspend )
-    {
-        ViewShellBase* pViewShellBase = GetViewShellBase();
-        if( pViewShellBase )
-        {
-            // do not allow suspend if a slideshow needs this controller!
-            rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pViewShellBase ) );
-            if (xSlideShow.is())
-            {
-                if (xSlideShow->IsInteractiveSlideshow())
-                {
-                    // IASS mode: If preview mode, end it
-                    if (xSlideShow->isInteractiveSetup())
-                        xSlideShow->endInteractivePreview();
-
-                    // end the SlideShow
-                    xSlideShow->end();
-
-                    // use SfxBaseController::suspend( Suspend ) below
-                    // for normal processing and return value
-                }
-                else
-                {
-                    // original reaction - prevent exit
-                    if (xSlideShow->dependsOn(pViewShellBase))
-                        return false;
-                }
-            }
-        }
-    }
-
-    return SfxBaseController::suspend( Suspend );
-}
-
 // XServiceInfo
 OUString SAL_CALL DrawController::getImplementationName(  )
 {

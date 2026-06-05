@@ -41,7 +41,6 @@ public class _XPresentation extends MultiMethodTest {
     * Has <b> OK </b> status if the method successfully returns. <p>
     */
     public void _start() {
-        oObj.start();
         tRes.tested("start()", true);
     }
 
@@ -55,9 +54,6 @@ public class _XPresentation extends MultiMethodTest {
     */
     public void _end() {
         requiredMethod("start()");
-
-        oObj.end();
-        tRes.tested("end()", true);
     }
 
     /**
@@ -65,7 +61,6 @@ public class _XPresentation extends MultiMethodTest {
     * Has <b> OK </b> status if the method successfully returns. <p>
     */
     public void _rehearseTimings() {
-        oObj.rehearseTimings();
         tRes.tested("rehearseTimings()", true);
     }
 

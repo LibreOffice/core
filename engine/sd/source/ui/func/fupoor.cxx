@@ -123,9 +123,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 {
     aScrollTimer.Stop();
 
-    if ( mpView->IsDragHelpLine() || mpView->IsSetPageOrg() ||
-         (SlideShow::IsRunning( mrViewShell.GetViewShellBase() )
-            && !SlideShow::IsInteractiveSlideshow( mrViewShell.GetViewShellBase() )) ) // IASS
+    if ( mpView->IsDragHelpLine() || mpView->IsSetPageOrg() ) // IASS
         return;
 
     Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
@@ -178,8 +176,6 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16          nCode = rKEvt.GetKeyCode().GetCode();
     bool            bReturn = false;
-    bool bSlideShow = SlideShow::IsRunning( mrViewShell.GetViewShellBase() )
-        && !SlideShow::IsInteractiveSlideshow( mrViewShell.GetViewShellBase() ); // IASS
 
     switch (nCode)
     {
@@ -299,7 +295,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_ADD:
         {
-            if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && !mpDocSh->IsUIActive())
             {
                 // increase zoom
                 mrViewShell.SetZoom(mpWindow->GetZoom() * 3 / 2);
@@ -314,7 +310,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_SUBTRACT:
         {
-            if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && !mpDocSh->IsUIActive())
             {
                 // decrease zoom
                 mrViewShell.SetZoom(mpWindow->GetZoom() * 2 / 3);
@@ -329,7 +325,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_MULTIPLY:
         {
-            if (!mpView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit())
             {
                 // zoom to page
                 mrViewShell.GetViewFrame()->GetDispatcher()->
@@ -341,7 +337,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_DIVIDE:
         {
-            if (!mpView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit())
             {
                 // zoom to selected objects
                 mrViewShell.GetViewFrame()->GetDispatcher()->
@@ -355,7 +351,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             ZoomList* pZoomList = mrViewShell.GetZoomList();
 
-            if (!mpView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !mpDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && pZoomList->IsNextPossible() && !mpDocSh->IsUIActive())
             {
                 // use next ZoomRect
                 mrViewShell.SetZoomRect(pZoomList->GetNextZoomRect());
@@ -368,7 +364,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             ZoomList* pZoomList = mrViewShell.GetZoomList();
 
-            if (!mpView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !mpDocSh->IsUIActive())
+            if (!mpView->IsTextEdit() && pZoomList->IsPreviousPossible() && !mpDocSh->IsUIActive())
             {
                 // use previous ZoomRect
                 mrViewShell.SetZoomRect(pZoomList->GetPreviousZoomRect());
@@ -379,7 +375,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_HOME:
         {
-            if (!mpView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit())
                 if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                    // jump to first page
@@ -391,7 +387,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_END:
         {
-            if (!mpView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit())
                 if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ))
                 {
                     // jump to last page
@@ -406,8 +402,6 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_PAGEUP:
         {
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
-                break;
-            if( bSlideShow)
                 break;
 
             if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( &mrViewShell ) )
@@ -456,7 +450,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
                 break;
-            if(dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr && !bSlideShow)
+            if(dynamic_cast< const DrawViewShell *>( &mrViewShell ) !=  nullptr)
             {
                 // The page-down key switches layers or pages depending on the
                 // modifier key.
@@ -564,7 +558,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_LEFT:
         case KEY_RIGHT:
         {
-            if (!mpView->IsTextEdit() && !bSlideShow)
+            if (!mpView->IsTextEdit())
             {
                 ::tools::Long nX = 0;
                 ::tools::Long nY = 0;

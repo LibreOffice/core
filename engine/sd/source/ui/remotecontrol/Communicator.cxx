@@ -70,21 +70,21 @@ void Communicator::execute()
         uno::Reference<presentation::XPresentation2> xPresentation;
         if( xPS.is() )
             xPresentation.set( xPS->getPresentation(), uno::UNO_QUERY );
-        if ( xPresentation.is() && xPresentation->isRunning() )
-        {
-            presentationStarted( xPresentation->getController() );
-            OString aBuffer =
-                "slideshow_info\n" +
-                OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) +
-                "\n\n";
-
-            pTransmitter->addMessage( aBuffer, Transmitter::PRIORITY_LOW );
-        }
-        else
-        {
-            pTransmitter->addMessage( "slideshow_finished\n\n"_ostr,
-                                      Transmitter::PRIORITY_HIGH );
-        }
+//        if ( xPresentation.is() && xPresentation->isRunning() )
+//        {
+//            presentationStarted( xPresentation->getController() );
+//            OString aBuffer =
+//                "slideshow_info\n" +
+//                OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) +
+//                "\n\n";
+//
+//            pTransmitter->addMessage( aBuffer, Transmitter::PRIORITY_LOW );
+//        }
+//        else
+//        {
+//            pTransmitter->addMessage( "slideshow_finished\n\n"_ostr,
+//                                      Transmitter::PRIORITY_HIGH );
+//        }
     }
     catch (uno::RuntimeException &)
     {

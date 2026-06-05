@@ -96,13 +96,6 @@ namespace sd {
  */
 void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 {
-    // except a page switch and jumps to bookmarks, nothing is executed during
-    // a slide show
-    if( HasCurrentFunction(SID_PRESENTATION) &&
-        rReq.GetSlot() != SID_SWITCHPAGE &&
-        rReq.GetSlot() != SID_JUMPTOMARK)
-        return;
-
     CheckLineTo (rReq);
 
     // End text edit mode for some requests.
@@ -138,31 +131,31 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
     {
         case SID_SWITCHPAGE:  // BASIC
         {
-            // switch page in running slide show
-            if(SlideShow::IsRunning(GetViewShellBase())
-                && !SlideShow::IsInteractiveSlideshow(GetViewShellBase()) // IASS
-                && rReq.GetArgs())
+            const SfxItemSet *pArgs = rReq.GetArgs ();
+            sal_uInt16 nSelectedPage = 0;
+
+            if (! pArgs || pArgs->Count () == 1)
             {
-                if (const SfxUInt32Item* pWhatPage = rReq.GetArg(ID_VAL_WHATPAGE))
-                    SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber(static_cast<sal_Int32>((pWhatPage->GetValue()-1)>>1));
+                nSelectedPage = maTabControl->GetCurPagePos();
             }
-            else
+            else if (pArgs->Count () == 2)
             {
-                const SfxItemSet *pArgs = rReq.GetArgs ();
-                sal_uInt16 nSelectedPage = 0;
+                const SfxUInt32Item* pWhatPage = rReq.GetArg(ID_VAL_WHATPAGE);
+                const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
-                if (! pArgs || pArgs->Count () == 1)
+                sal_Int32 nWhatPage = static_cast<sal_Int32>(pWhatPage->GetValue ());
+                PageKind nWhatKind = static_cast<PageKind>(pWhatKind->GetValue ());
+                if (nWhatKind < PageKind::Standard || nWhatKind > PageKind::Handout)
                 {
-                    nSelectedPage = maTabControl->GetCurPagePos();
+#if HAVE_FEATURE_SCRIPTING
+                    StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
+#endif
+                    rReq.Ignore ();
+                    break;
                 }
-                else if (pArgs->Count () == 2)
+                else if (meEditMode != EditMode::MasterPage)
                 {
-                    const SfxUInt32Item* pWhatPage = rReq.GetArg(ID_VAL_WHATPAGE);
-                    const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
-
-                    sal_Int32 nWhatPage = static_cast<sal_Int32>(pWhatPage->GetValue ());
-                    PageKind nWhatKind = static_cast<PageKind>(pWhatKind->GetValue ());
-                    if (nWhatKind < PageKind::Standard || nWhatKind > PageKind::Handout)
+                    if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount(nWhatKind)))
                     {
 #if HAVE_FEATURE_SCRIPTING
                         StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
@@ -170,42 +163,31 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         rReq.Ignore ();
                         break;
                     }
-                    else if (meEditMode != EditMode::MasterPage)
-                    {
-                        if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount(nWhatKind)))
-                        {
-#if HAVE_FEATURE_SCRIPTING
-                            StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
-#endif
-                            rReq.Ignore ();
-                            break;
-                        }
 
-                        nSelectedPage = static_cast<short>(nWhatPage);
-                        mePageKind    = nWhatKind;
-                    }
+                    nSelectedPage = static_cast<short>(nWhatPage);
+                    mePageKind    = nWhatKind;
                 }
-                else
-                {
-#if HAVE_FEATURE_SCRIPTING
-                    StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
-#endif
-                    rReq.Ignore ();
-                    break;
-                }
-
-                if( GetDocSh() && (GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED))
-                    GetDocSh()->SetModified();
-
-                SwitchPage(nSelectedPage, bAllowFocusChange);
-
-                if(HasCurrentFunction(SID_BEZIER_EDIT))
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
-
-                Invalidate();
-                InvalidateWindows();
-                rReq.Done ();
             }
+            else
+            {
+#if HAVE_FEATURE_SCRIPTING
+                StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+#endif
+                rReq.Ignore ();
+                break;
+            }
+
+            if( GetDocSh() && (GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED))
+                GetDocSh()->SetModified();
+
+            SwitchPage(nSelectedPage, bAllowFocusChange);
+
+            if(HasCurrentFunction(SID_BEZIER_EDIT))
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+
+            Invalidate();
+            InvalidateWindows();
+            rReq.Done ();
             break;
         }
 
@@ -432,16 +414,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 if (pBookmark)
                 {
                     OUString sBookmark(INetURLObject::decode(pBookmark->GetValue(), INetURLObject::DecodeMechanism::WithCharset));
-
-                    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-                    if(xSlideshow.is() && xSlideshow->isRunning())
-                    {
-                        xSlideshow->jumpToBookmark(sBookmark);
-                    }
-                    else
-                    {
-                        GotoBookmark(sBookmark);
-                    }
+                    GotoBookmark(sBookmark);
                 }
             }
             rReq.Done();
@@ -537,10 +510,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
 void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
-    if(HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     CheckLineTo (rReq);
 
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -1082,10 +1051,6 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
 void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
-    if(HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     CheckLineTo (rReq);
 
     switch ( rReq.GetSlot() )

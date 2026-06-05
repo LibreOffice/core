@@ -1870,9 +1870,6 @@ void CustomAnimationPane::onAdd()
     mrBase.GetDocShell()->SetModified();
 
     updateControls();
-
-    if (!SlideShow::IsInteractiveSlideshow(mrBase)) // IASS
-        SlideShow::Stop( mrBase );
 }
 
 void CustomAnimationPane::onRemove()
@@ -2429,52 +2426,6 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     // No preview in COKit.
     if (comphelper::COKit::isActive())
         return;
-
-    if( maListSelection.empty() )
-    {
-        rtl::Reference< MotionPathTag > xMotionPathTag;
-        auto aIter = std::find_if(maMotionPathTags.begin(), maMotionPathTags.end(),
-            [](const MotionPathTagVector::value_type& rxMotionPathTag) { return rxMotionPathTag->isSelected(); });
-        if (aIter != maMotionPathTags.end())
-            xMotionPathTag = *aIter;
-
-        if( xMotionPathTag.is() )
-        {
-            MainSequencePtr pSequence = std::make_shared<MainSequence>();
-            pSequence->append( xMotionPathTag->getEffect()->clone() );
-            preview( pSequence->getRootNode() );
-        }
-        else
-        {
-            Reference< XAnimationNodeSupplier > xNodeSupplier( mxCurrentPage, UNO_QUERY );
-            if( !xNodeSupplier.is() )
-                return;
-
-            preview( xNodeSupplier->getAnimationNode() );
-        }
-    }
-    else
-    {
-        MainSequencePtr pSequence = std::make_shared<MainSequence>();
-
-        for( const CustomAnimationEffectPtr& pEffect : maListSelection )
-        {
-            pSequence->append( pEffect->clone() );
-        }
-
-        preview( pSequence->getRootNode() );
-    }
-}
-
-void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimationNode )
-{
-    Reference< XParallelTimeContainer > xRoot = ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() );
-    Sequence< css::beans::NamedValue > aUserData
-        { { u"node-type"_ustr, cpo::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
-    xRoot->setUserData( aUserData );
-    xRoot->appendChild( xAnimationNode );
-
-    SlideShow::StartPreview( mrBase, mxCurrentPage, xRoot );
 }
 
 // ICustomAnimationListController

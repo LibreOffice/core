@@ -45,10 +45,6 @@ namespace sd {
 
 void DrawViewShell::ExecIMap( SfxRequest const & rReq )
 {
-    // during a slide show, nothing is executed!
-    if(HasCurrentFunction(SID_PRESENTATION) )
-        return;
-
     if ( rReq.GetSlot() != SID_IMAP_EXEC )
         return;
 
@@ -102,10 +98,6 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
 void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 {
-    // during a slide show, nothing is executed!
-    if(HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     bool   bDefault = false;
     sal_uInt16 nSlot = rReq.GetSlot();
 

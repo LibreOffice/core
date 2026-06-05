@@ -2686,42 +2686,6 @@ SfxBoolItem PickThrough SID_PICK_THROUGH
     GroupId = SfxGroupId::Modify;
 ]
 
-SfxVoidItem Presentation SID_PRESENTATION
-(SfxUInt16Item StartingSlide FN_PARAM_1)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::View;
-]
-
-SfxVoidItem PresentationCurrentSlide SID_PRESENTATION_CURRENT_SLIDE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::View;
-]
-
 SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
 ()
 [
@@ -2859,23 +2823,6 @@ SfxVoidItem RectangleToolbox SID_DRAWTBX_RECTANGLES
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Drawing;
-]
-
-SfxVoidItem RehearseTimings SID_REHEARSE_TIMINGS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Modify;
 ]
 
 SfxVoidItem RenameLayer SID_RENAMELAYER

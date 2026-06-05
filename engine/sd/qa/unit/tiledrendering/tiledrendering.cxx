@@ -2846,21 +2846,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
 }
 
-CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testStartPresentation)
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("test.ppsx");
-    SdTestViewCallback aView;
-    CPPUNIT_ASSERT(pXImpressDocument->GetDoc()->GetStartWithPresentation());
-    Scheduler::ProcessEventsToIdle();
-
-    const auto it = aView.m_aStateChanges.find(".uno:StartWithPresentation");
-    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
-
-    const auto value = it->second;
-    CPPUNIT_ASSERT(value.get_child_optional("state").has_value());
-    CPPUNIT_ASSERT_EQUAL(std::string("true"), value.get_child("state").get_value<std::string>());
-}
-
 namespace
 {
 

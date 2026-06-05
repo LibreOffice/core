@@ -27,23 +27,6 @@
 */
 published interface XPresentation: com::sun::star::uno::XInterface
 {
-
-    /** The presentation is shown in full-screen and started from the
-        beginning.
-     */
-    void start();
-
-
-    /** The presentation is stopped and the full-screen mode will end.
-     */
-    void end();
-
-
-    /** Starts the presentation from the beginning and shows the
-        actual running time to the user.
-     */
-    void rehearseTimings();
-
 };
 
 

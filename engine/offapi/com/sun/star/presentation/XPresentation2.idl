@@ -36,21 +36,6 @@ interface XPresentation2
     /** gives access to the properties of the slide show.
     */
     interface com::sun::star::beans::XPropertySet;
-
-
-    /** start the slide show with the given arguments.
-        All arguments override the values from Presentation.
-    */
-    void startWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments );
-
-
-    /** returns true if the slide show is currently running */
-    boolean isRunning();
-
-
-    /** if the slide show is running, this returns a controller object to
-        control the running slide show. */
-    XSlideShowController getController();
 };
 
 

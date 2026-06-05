@@ -9391,9 +9391,6 @@ module com {
     };
     published interface XPresentation {
      interface ::com::sun::star::uno::XInterface;
-     void start();
-     void end();
-     void rehearseTimings();
     };
     published service Presentation {
      interface ::com::sun::star::presentation::XPresentation;

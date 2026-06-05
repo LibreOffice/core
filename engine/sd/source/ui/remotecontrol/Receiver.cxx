@@ -62,20 +62,20 @@ void Receiver::Invoke()
 void Receiver::executeCommand( const std::vector<OString> &aCommand )
 {
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
-    uno::Reference<presentation::XPresentation2> xPresentation;
+//    uno::Reference<presentation::XPresentation2> xPresentation;
     uno::Reference<presentation::XSlideShow> xSlideShow;
-    try {
-        uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_SET_THROW );
-        uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
-        xPresentation.set( xPS->getPresentation(), uno::UNO_QUERY_THROW);
-        // Throws an exception if no slideshow running
-        xSlideShowController.set( xPresentation->getController(), uno::UNO_SET_THROW );
-        xSlideShow.set( xSlideShowController->getSlideShow(), uno::UNO_SET_THROW );
-    }
-    catch (uno::RuntimeException &)
-    {
-    }
+//    try {
+//        uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+//        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_SET_THROW );
+//        uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
+//        xPresentation.set( xPS->getPresentation(), uno::UNO_QUERY_THROW);
+//        // Throws an exception if no slideshow running
+//        xSlideShowController.set( xPresentation->getController(), uno::UNO_SET_THROW );
+//        xSlideShow.set( xSlideShowController->getSlideShow(), uno::UNO_SET_THROW );
+//    }
+//    catch (uno::RuntimeException &)
+//    {
+//    }
 
     if (aCommand.empty())
     {
@@ -110,13 +110,13 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if ( aCommand[0] == "presentation_start" )
     {
-        if ( xPresentation.is() )
-            xPresentation->start();
+//        if ( xPresentation.is() )
+//            xPresentation->start();
     }
     else if ( aCommand[0] == "presentation_stop" )
     {
-        if ( xPresentation.is() )
-            xPresentation->end();
+//        if ( xPresentation.is() )
+//            xPresentation->end();
     }
     else if ( aCommand[0] == "presentation_blank_screen" )
     {

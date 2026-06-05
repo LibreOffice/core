@@ -47,7 +47,6 @@ class VclSimpleEvent;
 
 namespace sd
 {
-class SlideShowView;
 class AnimationSlideController;
 class PaneHider;
 
@@ -128,7 +127,6 @@ typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowContro
 class SlideshowImpl final : public SlideshowImplBase, public SfxListener
 {
 friend class SlideShow;
-friend class SlideShowView;
 
 public:
     explicit SlideshowImpl( const css::uno::Reference< css::presentation::XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow);
@@ -190,7 +188,6 @@ public:
     /// @throws css::uno::RuntimeException
     void hyperLinkClicked(const OUString & hyperLink);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape);
-    bool swipe(const CommandGestureSwipeData &rSwipeData);
     bool longpress(const CommandGestureLongPressData& rLongPressData);
 
     /// ends the presentation async
@@ -202,7 +199,6 @@ public:
 
     ViewShell* getViewShell() const { return mpViewShell; }
 
-    void paint();
     bool keyInput(const KeyEvent& rKEvt);
     void mouseButtonUp(const MouseEvent& rMEvt);
 
@@ -225,18 +221,8 @@ private:
     // disposed, do it here.
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // internal
-    bool startShow( PresentationSettingsEx const * pPresSettings );
-    bool startPreview(
-        const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
-        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
-        vcl::Window* pParent );
-
     // methods for InterActiveSlideShow that support to
     // re-use a running FullScreen presentation for previews IASS
-    void startInteractivePreview(
-        const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
-        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode);
     void endInteractivePreview();
     bool isInteractiveSetup() const;
 
@@ -278,9 +264,6 @@ private:
     ::tools::Long getRestoreSlide() const { return mnRestoreSlide; }
 
 private:
-    bool startShowImpl(
-        const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
-
     SAL_RET_MAYBENULL SfxViewFrame* getViewFrame() const;
     SAL_RET_MAYBENULL SfxDispatcher* getDispatcher() const;
     SAL_RET_MAYBENULL SfxBindings* getBindings() const;
@@ -305,7 +288,6 @@ private:
     void updateSlideShow();
 
     css::uno::Reference< css::presentation::XSlideShow > mxShow;
-    rtl::Reference<sd::SlideShowView> mxView;
     rtl::Reference< SdXImpressDocument > mxModel;
 
     Timer maUpdateTimer;
@@ -367,7 +349,6 @@ private:
 
     // local variables to support preview for a running SlideShow IASS
     css::uno::Reference< css::presentation::XSlideShow > mxShow2;
-    rtl::Reference<sd::SlideShowView> mxView2;
     AnimationMode   meAnimationMode2;
     bool            mbInterActiveSetup;
     PresentationSettings maPresSettings2;

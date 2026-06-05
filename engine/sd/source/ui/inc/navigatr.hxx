@@ -159,7 +159,6 @@ private:
                                 DECL_DLLPRIVATE_LINK( SelectDocumentHdl, weld::ComboBox&, void );
                                 DECL_DLLPRIVATE_LINK( MenuSelectHdl, const OUString&, void );
                                 DECL_DLLPRIVATE_LINK( ShapeFilterCallback, const OUString&, void );
-                                DECL_DLLPRIVATE_LINK( KeyInputHdl, const KeyEvent&, bool );
     DECL_DLLPRIVATE_STATIC_LINK(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
 

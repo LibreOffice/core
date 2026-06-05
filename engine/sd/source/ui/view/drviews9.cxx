@@ -64,10 +64,6 @@ namespace sd {
 
 void DrawViewShell::ExecGallery(SfxRequest const & rReq)
 {
-    // nothing is executed during a slide show!
-    if(HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     const SvxGalleryItem* pGalleryItem = SfxItemSet::GetItem<SvxGalleryItem>(pArgs, SID_GALLERY_FORMATS, false);
@@ -194,10 +190,6 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
    5. insert item into set      */
 void DrawViewShell::AttrExec (SfxRequest &rReq)
 {
-    // nothing is executed during a slide show!
-    if(HasCurrentFunction(SID_PRESENTATION))
-        return;
-
     CheckLineTo (rReq);
 
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();

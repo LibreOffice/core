@@ -65,7 +65,6 @@
 #include <AnimationChildWindow.hxx>
 #include <notifydocumentevent.hxx>
 #include "slideshowimpl.hxx"
-#include "slideshowviewimpl.hxx"
 #include "PaneHider.hxx"
 
 #include <bitmaps.hlst>
@@ -134,7 +133,6 @@ public:
     AnimationSlideController( Reference< XIndexAccess > const & xSlides, Mode eMode );
 
     void setStartSlideNumber( sal_Int32 nSlideNumber ) { mnStartSlideNumber = nSlideNumber; }
-    sal_Int32 getStartSlideIndex() const;
 
     sal_Int32 getCurrentSlideNumber() const;
     sal_Int32 getCurrentSlideIndex() const;
@@ -145,7 +143,6 @@ public:
     sal_Int32 getSlideNumber( sal_Int32 nSlideIndex ) const;
 
     void insertSlideNumber( sal_Int32 nSlideNumber, bool bVisible = true );
-    void setPreviewNode( const Reference< XAnimationNode >& xPreviewNode );
 
     bool jumpToSlideIndex( sal_Int32 nNewSlideIndex );
     bool jumpToSlideNumber( sal_Int32 nNewSlideIndex );
@@ -166,11 +163,8 @@ public:
 
     sal_Int32 getNextSlideNumber() const;
 
-    bool hasSlides() const { return !maSlideNumbers.empty(); }
-
     // for InteractiveSlideShow we need to temporarily change the program
     // and mode, so allow save/restore that settings
-    void pushForPreview();
     void popFromPreview();
 private:
     bool getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode );
@@ -198,19 +192,6 @@ private:
     Reference< XAnimationNode > mxPreviewNode2;
     Mode meMode2;
 };
-
-void AnimationSlideController::pushForPreview()
-{
-    maSlideNumbers2 = maSlideNumbers;
-    maSlideVisible2 = maSlideVisible;
-    maSlideVisited2 = maSlideVisited;
-    maSlideNumbers.clear();
-    maSlideVisible.clear();
-    maSlideVisited.clear();
-    mxPreviewNode2 = mxPreviewNode;
-    meMode2 = meMode;
-    meMode = AnimationSlideController::PREVIEW;
-}
 
 void AnimationSlideController::popFromPreview()
 {
@@ -242,11 +223,6 @@ bool AnimationSlideController::isVisibleSlideNumber( sal_Int32 nSlideNumber ) co
         return false;
 }
 
-void AnimationSlideController::setPreviewNode( const Reference< XAnimationNode >& xPreviewNode )
-{
-    mxPreviewNode = xPreviewNode;
-}
-
 AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > const & xSlides, Mode eMode  )
 :   meMode( eMode )
 ,   mnStartSlideNumber(-1)
@@ -258,23 +234,6 @@ AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > co
 {
     if( mxSlides.is() )
         mnSlideCount = xSlides->getCount();
-}
-
-sal_Int32 AnimationSlideController::getStartSlideIndex() const
-{
-    if( mnStartSlideNumber >= 0 )
-    {
-        sal_Int32 nIndex;
-        const sal_Int32 nCount = maSlideNumbers.size();
-
-        for( nIndex = 0; nIndex < nCount; nIndex++ )
-        {
-            if( maSlideNumbers[nIndex] == mnStartSlideNumber )
-                return nIndex;
-        }
-    }
-
-    return 0;
 }
 
 sal_Int32 AnimationSlideController::getCurrentSlideNumber() const
@@ -528,7 +487,6 @@ constexpr OUString gsVerb( u"Verb"_ustr );
 
 SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
 : mxShow()
-, mxView()
 , mxModel(pDoc->getUnoModel())
 , maUpdateTimer("SlideShowImpl maUpdateTimer")
 , maInputFreezeTimer("SlideShowImpl maInputFreezeTimer")
@@ -573,7 +531,6 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mxPresentation( xPresentation )
 , mxListenerProxy()
 , mxShow2()
-, mxView2()
 , meAnimationMode2()
 , mbInterActiveSetup(false)
 , maPresSettings2()
@@ -678,9 +635,6 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
     if( !mxShow.is() )
         return;
 
-    if( mxPresentation.is() )
-        mxPresentation->end();
-
     maUpdateTimer.Stop();
 
     removeShapeEvents();
@@ -690,15 +644,9 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
 
     try
     {
-        if( mxView.is() )
-            mxShow->removeView( mxView );
-
         Reference< XComponent > xComponent( mxShow, UNO_QUERY );
         if( xComponent.is() )
             xComponent->dispose();
-
-        if( mxView.is() )
-            mxView->dispose();
     }
     catch( Exception& )
     {
@@ -706,7 +654,6 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
     }
 
     mxShow.clear();
-    mxView.clear();
     mxListenerProxy.clear();
     mpSlideController.reset();
 
@@ -813,71 +760,6 @@ bool SlideshowImpl::isInteractiveSetup() const
     return mbInterActiveSetup;
 }
 
-void SlideshowImpl::startInteractivePreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
-{
-    // set flag that we are in IASS mode
-    mbInterActiveSetup = true;
-
-    // save stuff that will be replaced temporarily
-    mxShow2 = mxShow;
-    mxView2 = mxView;
-    mxPreviewDrawPage2 = mxPreviewDrawPage;
-    mxPreviewAnimationNode2 = mxPreviewAnimationNode;
-    meAnimationMode2 = meAnimationMode;
-    maPresSettings2 = maPresSettings;
-
-    // remember slide shown before preview
-    mnSlideIndex = getCurrentSlideIndex();
-
-    // set DrawPage/AnimationNode
-    mxPreviewDrawPage = xDrawPage;
-    mxPreviewAnimationNode = xAnimationNode;
-    meAnimationMode = ANIMATIONMODE_PREVIEW;
-
-    // set PresSettings for preview
-    maPresSettings.mbAll = false;
-    maPresSettings.mbEndless = false;
-    maPresSettings.mbCustomShow = false;
-    maPresSettings.mbManual = false;
-    maPresSettings.mbMouseVisible = false;
-    maPresSettings.mbMouseAsPen = false;
-    maPresSettings.mbLockedPages = false;
-    maPresSettings.mbAlwaysOnTop = false;
-    maPresSettings.mbFullScreen = false;
-    maPresSettings.mbAnimationAllowed = true;
-    maPresSettings.mnPauseTimeout = 0;
-    maPresSettings.mbShowPauseLogo = false;
-
-    // create a new temporary AnimationSlideController
-    mpSlideController->pushForPreview();
-    // Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
-    // Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-    // mpSlideController = std::make_shared<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
-    sal_Int32 nSlideNumber = 0;
-    Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
-    xSet->getPropertyValue( u"Number"_ustr ) >>= nSlideNumber;
-    mpSlideController->insertSlideNumber( nSlideNumber-1 );
-    mpSlideController->setPreviewNode( xAnimationNode );
-
-    // prepare properties
-    sal_Int32 nPropertyCount = 1;
-    if( xAnimationNode.is() )
-        nPropertyCount++;
-    Sequence< beans::PropertyValue > aProperties(nPropertyCount);
-    auto pProperties = aProperties.getArray();
-    pProperties[0].Name = u"AutomaticAdvancement"_ustr;
-    pProperties[0].Value <<= 1.0; // one second timeout
-
-    if( xAnimationNode.is() )
-    {
-        pProperties[1].Name = u"NoSlideTransitions"_ustr;
-        pProperties[1].Value <<= true;
-    }
-
-    // start preview
-    startShowImpl( aProperties );
-}
-
 void SlideshowImpl::endInteractivePreview()
 {
     if (!mbInterActiveSetup)
@@ -887,23 +769,15 @@ void SlideshowImpl::endInteractivePreview()
     // cleanup Show/View
     try
     {
-        if( mxView.is() )
-            mxShow->removeView( mxView );
-
         Reference< XComponent > xComponent( mxShow, UNO_QUERY );
         if( xComponent.is() )
             xComponent->dispose();
-
-        if( mxView.is() )
-            mxView->dispose();
     }
     catch( Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::stop()" );
     }
     mxShow.clear();
-    mxView.clear();
-    mxView = mxView2;
     mxShow = mxShow2;
 
     // restore SlideController
@@ -924,455 +798,6 @@ void SlideshowImpl::endInteractivePreview()
     mbInterActiveSetup = false;
 }
 
-bool SlideshowImpl::startPreview(
-        const Reference< XDrawPage >& xDrawPage,
-        const Reference< XAnimationNode >& xAnimationNode,
-        vcl::Window * pParent )
-{
-    bool bRet = false;
-
-    try
-    {
-        const Reference<lang::XServiceInfo> xServiceInfo( xDrawPage, UNO_QUERY );
-        if (xServiceInfo.is()) {
-            const Sequence<OUString> supportedServices(
-                xServiceInfo->getSupportedServiceNames() );
-            if (comphelper::findValue(supportedServices, "com.sun.star.drawing.MasterPage") != -1) {
-                OSL_FAIL("sd::SlideshowImpl::startPreview() "
-                          "not allowed on master page!");
-                return false;
-            }
-        }
-
-        mxPreviewDrawPage = xDrawPage;
-        mxPreviewAnimationNode = xAnimationNode;
-        meAnimationMode = ANIMATIONMODE_PREVIEW;
-
-        maPresSettings.mbAll = false;
-        maPresSettings.mbEndless = false;
-        maPresSettings.mbCustomShow = false;
-        maPresSettings.mbManual = false;
-        maPresSettings.mbMouseVisible = false;
-        maPresSettings.mbMouseAsPen = false;
-        maPresSettings.mbLockedPages = false;
-        maPresSettings.mbAlwaysOnTop = false;
-        maPresSettings.mbFullScreen = false;
-        maPresSettings.mbAnimationAllowed = true;
-        maPresSettings.mnPauseTimeout = 0;
-        maPresSettings.mbShowPauseLogo = false;
-
-        rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
-        Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-        mpSlideController = std::make_unique<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
-
-        sal_Int32 nSlideNumber = 0;
-        Reference< XPropertySet > xSet( mxPreviewDrawPage, UNO_QUERY_THROW );
-        xSet->getPropertyValue( u"Number"_ustr ) >>= nSlideNumber;
-        mpSlideController->insertSlideNumber( nSlideNumber-1 );
-        mpSlideController->setPreviewNode( xAnimationNode );
-
-        mpShowWindow = VclPtr<ShowWindow>::Create( this, ((pParent == nullptr) && mpViewShell) ?  mpParentWindow.get() : pParent );
-        if( mpViewShell )
-        {
-            mpViewShell->SetActiveWindow( mpShowWindow );
-            mpShowWindow->SetViewShell (mpViewShell);
-            mpViewShell->ShowUIControls (false);
-        }
-
-        if( mpView )
-        {
-            mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev() );
-            mpView->SetAnimationPause( true );
-        }
-
-        // call resize handler
-        if( pParent )
-        {
-            maPresSize = pParent->GetSizePixel();
-        }
-        else if( mpViewShell )
-        {
-            ::tools::Rectangle aContentRect (mpViewShell->GetViewShellBase().getClientRectangle());
-            if (AllSettings::GetLayoutRTL())
-            {
-                aContentRect.SetLeft( aContentRect.Right() );
-                aContentRect.AdjustRight(aContentRect.Right() );
-            }
-            maPresSize = aContentRect.GetSize();
-            mpShowWindow->SetPosPixel( aContentRect.TopLeft() );
-        }
-        else
-        {
-            OSL_FAIL("sd::SlideshowImpl::startPreview(), I need either a parent window or a viewshell!");
-        }
-        resize( maPresSize );
-
-        sal_Int32 nPropertyCount = 1;
-        if( mxPreviewAnimationNode.is() )
-            nPropertyCount++;
-
-        Sequence< beans::PropertyValue > aProperties(nPropertyCount);
-        auto pProperties = aProperties.getArray();
-        pProperties[0].Name = u"AutomaticAdvancement"_ustr;
-        pProperties[0].Value <<= 1.0; // one second timeout
-
-        if( mxPreviewAnimationNode.is() )
-        {
-            pProperties[1].Name = u"NoSlideTransitions"_ustr;
-            pProperties[1].Value <<= true;
-        }
-
-        bRet = startShowImpl( aProperties );
-
-        if( mpShowWindow != nullptr && meAnimationMode == ANIMATIONMODE_PREVIEW )
-            mpShowWindow->SetPreviewMode();
-
-    }
-    catch( Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::startPreview()" );
-        bRet = false;
-    }
-
-    return bRet;
-}
-
-bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
-{
-    const rtl::Reference<SlideshowImpl> xKeepAlive(this);
-
-    DBG_ASSERT( !mxShow.is(), "sd::SlideshowImpl::startShow(), called twice!" );
-    if( mxShow.is() )
-        return true;
-    DBG_ASSERT( mpParentWindow!=nullptr, "sd::SlideshowImpl::startShow() called without parent window" );
-    if (mpParentWindow == nullptr)
-        return false;
-
-    // Autoplay (pps/ppsx)
-    if (mpViewShell->GetDoc()->GetStartWithPresentation())
-    {
-        mpViewShell->GetDoc()->SetExitAfterPresenting(true);
-    }
-
-    bool bRet = false;
-
-    try
-    {
-        if( pPresSettings )
-        {
-            maPresSettings = *pPresSettings;
-            mbRehearseTimings = pPresSettings->mbRehearseTimings;
-        }
-
-        OUString  aPresSlide( maPresSettings.maPresPage );
-        SdPage* pStartPage = mpViewShell->GetActualPage();
-        bool    bStartWithActualSlide =  pStartPage;
-
-        // times should be measured?
-        if( mbRehearseTimings )
-        {
-            maPresSettings.mbEndless = false;
-            maPresSettings.mbManual = true;
-            maPresSettings.mbMouseVisible = true;
-            maPresSettings.mbMouseAsPen = false;
-            maPresSettings.mnPauseTimeout = 0;
-            maPresSettings.mbShowPauseLogo = false;
-        }
-
-        if( pStartPage )
-        {
-            if( pStartPage->GetPageKind() == PageKind::Notes )
-            {
-                // we are in notes page mode, so get
-                // the corresponding draw page
-                const sal_uInt16 nNotePgNum = pStartPage->GetPageNum();
-                assert(nNotePgNum >= 2);
-                const sal_uInt16 nPgNum = ( nNotePgNum - 2 ) >> 1;
-                pStartPage = mpDoc->GetSdPage( nPgNum, PageKind::Standard );
-            }
-        }
-
-        if( bStartWithActualSlide )
-        {
-            if ( aPresSlide.isEmpty())
-            {
-                // no preset slide yet, so pick current on one
-                aPresSlide = pStartPage->GetName();
-                // if the starting slide is hidden, we can't set slide controller to ALL mode
-                maPresSettings.mbAll = !pStartPage->IsExcluded();
-            }
-
-            if( meAnimationMode != ANIMATIONMODE_SHOW )
-            {
-                if( pStartPage->GetPageKind() == PageKind::Standard )
-                {
-                    maPresSettings.mbAll = false;
-                }
-            }
-        }
-
-        // build page list
-        createSlideList( maPresSettings.mbAll, aPresSlide );
-
-        // remember Slide number from where the show was started
-        if( pStartPage )
-            mnRestoreSlide = ( pStartPage->GetPageNum() - 1 ) / 2;
-
-        if( mpSlideController->hasSlides() )
-        {
-            // hide child windows
-            hideChildWindows();
-
-            mpShowWindow = VclPtr<ShowWindow>::Create( this, mpParentWindow );
-            mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
-            mpViewShell->SetActiveWindow( mpShowWindow );
-            mpShowWindow->SetViewShell (mpViewShell);
-            mpViewShell->GetViewShellBase().ShowUIControls (false);
-            // Hide the side panes for in-place presentations.
-            if ( ! maPresSettings.mbFullScreen)
-                mpPaneHider.reset(new PaneHider(*mpViewShell,this));
-
-            // these Slots are forbidden in other views for this document
-            if( mpDocSh && pPresSettings && !pPresSettings->mbInteractive) // IASS
-            {
-                mpDocSh->SetSlotFilter( true, pAllowed );
-                mpDocSh->ApplySlotFilter();
-            }
-
-            Help::DisableContextHelp();
-            Help::DisableExtHelp();
-
-            if( maPresSettings.mbFullScreen )
-            {
-#if HAVE_FEATURE_SCRIPTING
-                // disable basic ide error handling
-                maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
-                StarBASIC::SetGlobalErrorHdl( Link<StarBASIC*,bool>() );
-#endif
-            }
-
-            // call resize handler
-            maPresSize = mpParentWindow->GetSizePixel();
-            if (!maPresSettings.mbFullScreen)
-            {
-                const ::tools::Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
-                maPresSize = aClientRect.GetSize();
-                mpShowWindow->SetPosPixel( aClientRect.TopLeft() );
-                resize( maPresSize );
-            }
-
-            // #i41824#
-            // Note: In FullScreen Mode the OS (window manager) sends a resize to
-            // the WorkWindow once it actually resized it to full size.  The
-            // WorkWindow propagates the resize to the DrawViewShell which calls
-            // resize() at the SlideShow (this).  Calling resize here results in a
-            // temporary display of a black window in the window's default size
-
-            if( mpView )
-            {
-                mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev() );
-                mpView->SetAnimationPause( true );
-            }
-
-            SfxBindings* pBindings = getBindings();
-            if( pBindings )
-            {
-                pBindings->Invalidate( SID_PRESENTATION );
-                pBindings->Invalidate( SID_REHEARSE_TIMINGS );
-            }
-
-            // Defer the sd::ShowWindow's GrabFocus to SlideShow::activate. so that the accessible event can be fired correctly.
-            //mpShowWindow->GrabFocus();
-
-            std::vector<beans::PropertyValue> aProperties;
-            aProperties.reserve( 4 );
-
-            aProperties.emplace_back( "AdvanceOnClick" ,
-                    -1, Any( !maPresSettings.mbLockedPages ),
-                    beans::PropertyState_DIRECT_VALUE );
-
-            aProperties.emplace_back( "ImageAnimationsAllowed" ,
-                    -1, Any( maPresSettings.mbAnimationAllowed ),
-                    beans::PropertyState_DIRECT_VALUE );
-
-            const bool bZOrderEnabled(
-                SdModule::get()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
-            aProperties.emplace_back( "DisableAnimationZOrder" ,
-                    -1, Any( !bZOrderEnabled ),
-                    beans::PropertyState_DIRECT_VALUE );
-
-            aProperties.emplace_back( "ForceManualAdvance" ,
-                    -1, Any( maPresSettings.mbManual ),
-                    beans::PropertyState_DIRECT_VALUE );
-
-            if( mbUsePen )
-            {
-                aProperties.emplace_back( "UserPaintColor" ,
-                        // User paint color is black by default.
-                        -1, Any( mnUserPaintColor ),
-                        beans::PropertyState_DIRECT_VALUE );
-
-                aProperties.emplace_back( "UserPaintStrokeWidth" ,
-                        // User paint color is black by default.
-                        -1, Any( mdUserPaintStrokeWidth ),
-                        beans::PropertyState_DIRECT_VALUE );
-            }
-
-            if (mbRehearseTimings) {
-                aProperties.emplace_back( "RehearseTimings" ,
-                        -1, Any(true), beans::PropertyState_DIRECT_VALUE );
-            }
-
-            bRet = startShowImpl( Sequence<beans::PropertyValue>(
-                                      aProperties.data(), aProperties.size() ) );
-
-        }
-
-        setActiveXToolbarsVisible( false );
-    }
-    catch (const Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::startShow()" );
-        bRet = false;
-    }
-
-    return bRet;
-}
-
-bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProperties )
-{
-    try
-    {
-        mxShow.set( createSlideShow(), UNO_SET_THROW );
-
-        mxView = new SlideShowView(
-                                             *mpShowWindow,
-                                             mpDoc,
-                                             meAnimationMode,
-                                             this,
-                                             maPresSettings.mbFullScreen);
-
-        // try add wait symbol to properties:
-        const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
-            mxView->getCanvas() );
-        if (xSpriteCanvas.is())
-        {
-            Bitmap waitSymbolBitmap(BMP_WAIT_ICON);
-            const Reference<rendering::XBitmap> xBitmap(
-                vcl::unotools::xBitmapFromBitmap( waitSymbolBitmap ) );
-            if (xBitmap.is())
-            {
-                mxShow->setProperty(
-                    beans::PropertyValue( u"WaitSymbolBitmap"_ustr ,
-                        -1,
-                        Any( xBitmap ),
-                        beans::PropertyState_DIRECT_VALUE ) );
-            }
-
-            Bitmap pointerSymbolBitmap(BMP_POINTER_ICON);
-            const Reference<rendering::XBitmap> xPointerBitmap(
-                vcl::unotools::xBitmapFromBitmap( pointerSymbolBitmap ) );
-            if (xPointerBitmap.is())
-            {
-                mxShow->setProperty(
-                    beans::PropertyValue( u"PointerSymbolBitmap"_ustr ,
-                        -1,
-                        Any( xPointerBitmap ),
-                        beans::PropertyState_DIRECT_VALUE ) );
-            }
-            if (officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::get())
-            {
-                NavbarButtonSize btnScale = static_cast<NavbarButtonSize>(officecfg::Office::Impress::Layout::Display::NavigationBtnScale::get());
-                OUString prevSlidePath = u""_ustr;
-                OUString nextSlidePath = u""_ustr;
-                OUString menuPath = u""_ustr;
-                switch (btnScale)
-                {
-                    case NavbarButtonSize::Large:
-                    {
-                        prevSlidePath = BMP_PREV_SLIDE_LARGE;
-                        nextSlidePath = BMP_NEXT_SLIDE_LARGE;
-                        menuPath = BMP_MENU_SLIDE_LARGE;
-                        break;
-                    }
-                    case NavbarButtonSize::XLarge:
-                    {
-                        prevSlidePath = BMP_PREV_SLIDE_EXTRALARGE;
-                        nextSlidePath = BMP_NEXT_SLIDE_EXTRALARGE;
-                        menuPath = BMP_MENU_SLIDE_EXTRALARGE;
-                        break;
-                    }
-                    case NavbarButtonSize::Auto:
-                    case NavbarButtonSize::Small:
-                    default:
-                    {
-                        prevSlidePath = BMP_PREV_SLIDE_SMALL;
-                        nextSlidePath = BMP_NEXT_SLIDE_SMALL;
-                        menuPath = BMP_MENU_SLIDE_SMALL;
-                        break;
-                    }
-                }
-                Bitmap prevSlideBm(prevSlidePath);
-                const Reference<rendering::XBitmap> xPrevSBitmap(
-                    vcl::unotools::xBitmapFromBitmap(prevSlideBm));
-                if (xPrevSBitmap.is())
-                {
-                    mxShow->setProperty(beans::PropertyValue(u"NavigationSlidePrev"_ustr, -1,
-                                                             Any(xPrevSBitmap),
-                                                             beans::PropertyState_DIRECT_VALUE));
-                }
-                Bitmap menuSlideBm(menuPath);
-                const Reference<rendering::XBitmap> xMenuSBitmap(
-                    vcl::unotools::xBitmapFromBitmap(menuSlideBm));
-                if (xMenuSBitmap.is())
-                {
-                    mxShow->setProperty(beans::PropertyValue(u"NavigationSlideMenu"_ustr, -1,
-                                                             Any(xMenuSBitmap),
-                                                             beans::PropertyState_DIRECT_VALUE));
-                }
-                Bitmap nextSlideBm(nextSlidePath);
-                const Reference<rendering::XBitmap> xNextSBitmap(
-                    vcl::unotools::xBitmapFromBitmap(nextSlideBm));
-                if (xNextSBitmap.is())
-                {
-                    mxShow->setProperty(beans::PropertyValue(u"NavigationSlideNext"_ustr, -1,
-                                                             Any(xNextSBitmap),
-                                                             beans::PropertyState_DIRECT_VALUE));
-                }
-            }
-        }
-
-        for( const auto& rProp : aProperties )
-            mxShow->setProperty( rProp );
-
-        mxShow->addView( mxView );
-
-        mxListenerProxy.set( new SlideShowListenerProxy( this, mxShow ) );
-        mxListenerProxy->addAsSlideShowListener();
-
-        // IASS: Do only startup the PresenterConsole if this is not
-        // the SlideShow Preview mode (else would be double)
-        if (!mbInterActiveSetup)
-        {
-            // IASS: This is the central methodology to 'steer' the
-            // PresenterConsole - in this case, to start it up and make
-            // it visible (if activated)
-            NotifyDocumentEvent(
-                *mpDoc,
-                u"OnStartPresentation"_ustr);
-        }
-
-        displaySlideIndex( mpSlideController->getStartSlideIndex() );
-
-        return true;
-    }
-    catch( Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::startShowImpl()" );
-        return false;
-    }
-}
-
 /** called only by the slideshow view when the first paint event occurs.
     This actually starts the slideshow. */
 void SlideshowImpl::onFirstPaint()
@@ -1389,20 +814,6 @@ void SlideshowImpl::onFirstPaint()
     SolarMutexGuard aSolarGuard;
     maUpdateTimer.SetTimeout( sal_uLong(100) );
     maUpdateTimer.Start();
-}
-
-void SlideshowImpl::paint()
-{
-    if( mxView.is() ) try
-    {
-        awt::PaintEvent aEvt;
-        // aEvt.UpdateRect = TODO
-        mxView->paint( aEvt );
-    }
-    catch( Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::paint()" );
-    }
 }
 
 void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowListener >& xListener )
@@ -1423,28 +834,6 @@ void SlideshowImpl::slideEnded(const bool bReverse)
         gotoPreviousSlide(true);
     else
         gotoNextSlide();
-}
-
-bool SlideshowImpl::swipe(const CommandGestureSwipeData &rSwipeData)
-{
-    if (mbUsePen || mnContextMenuEvent)
-        return false;
-    double nVelocityX = rSwipeData.getVelocityX();
-    // tdf#108475 make it swipe only if some reasonable movement was involved
-    if (fabs(nVelocityX) < 50)
-        return false;
-    if (nVelocityX > 0)
-    {
-        gotoPreviousSlide();
-    }
-    else
-    {
-        gotoNextEffect();
-    }
-    //a swipe is followed by a mouse up, tell the view to ignore that mouse up as we've reacted
-    //to the swipe instead
-    mxView->ignoreNextMouseReleased();
-    return true;
 }
 
 bool SlideshowImpl::longpress(const CommandGestureLongPressData &rLongPressData)
@@ -1620,9 +1009,6 @@ IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl, void*, void)
     mnEndShowEvent = nullptr;
 
     stopSound();
-
-    if( mxPresentation.is() )
-        mxPresentation->end();
 }
 
 void SAL_CALL SlideshowImpl::pause()
@@ -2334,9 +1720,6 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
     weld::Window* pParent = weld::GetPopupParent(*mpShowWindow, aRect);
     ContextMenuSelectHdl(xMenu->popup_at_rect(pParent, aRect));
 
-    if( mxView.is() )
-        mxView->ignoreNextMouseReleased();
-
     if( !mbWasPaused )
         resume();
 }
@@ -2467,7 +1850,7 @@ void SlideshowImpl::ContextMenuSelectHdl(std::u16string_view rMenuId)
         const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
         if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
         {
-            mpShowWindow->RestartShow( nPageNumber );
+            mpShowWindow->RestartShow();
         }
         else if( nPageNumber != mpSlideController->getCurrentSlideNumber() )
         {
@@ -2659,16 +2042,6 @@ void SlideshowImpl::resize( const Size& rSize )
     {
         mpShowWindow->SetSizePixel( maPresSize );
         mpShowWindow->Show();
-    }
-
-    if( mxView.is() ) try
-    {
-        awt::WindowEvent aEvt;
-        mxView->windowResized(aEvt);
-    }
-    catch( Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::resize()" );
     }
 }
 
@@ -3047,7 +2420,7 @@ void SAL_CALL SlideshowImpl::gotoFirstSlide(  )
     if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
     {
         if( mpSlideController->getSlideIndexCount() )
-            mpShowWindow->RestartShow( 0);
+            mpShowWindow->RestartShow();
     }
     else
     {
@@ -3146,7 +2519,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
         const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
         if( eMode == SHOWWINDOWMODE_END )
         {
-            mpShowWindow->RestartShow( mpSlideController->getCurrentSlideIndex() );
+            mpShowWindow->RestartShow();
         }
         else if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
         {
@@ -3193,7 +2566,7 @@ void SAL_CALL SlideshowImpl::gotoLastSlide()
     {
         if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
         {
-            mpShowWindow->RestartShow( nLastSlideIndex );
+            mpShowWindow->RestartShow();
         }
         else
         {

@@ -716,10 +716,7 @@ bool View::SdrBeginTextEdit(
 
     if (mpViewSh)
     {
-        // check if we have IASS active and propagate that info to the view with the active TextEdit
-        rtl::Reference< SlideShow > xSlideshow(SlideShow::GetSlideShow(mpViewSh->GetViewShellBase()));
-        const bool bIASS(xSlideshow.is() && xSlideshow->isRunning() && xSlideshow->IsInteractiveSlideshow());
-        setInteractiveSlideShow(bIASS);
+        setInteractiveSlideShow(false);
     }
 
     bool bReturn = FmFormView::SdrBeginTextEdit(

@@ -1025,25 +1025,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // is starting the presentation possible?
-    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PRESENTATION ) )
-    {
-        bool bDisable = true;
-        sal_uInt16 nCount = GetDoc()->GetSdPageCount( PageKind::Standard );
-
-        for( sal_uInt16 i = 0; i < nCount && bDisable; i++ )
-        {
-            SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
-
-            if( !pPage->IsExcluded() )
-                bDisable = false;
-        }
-        if( bDisable || GetDocSh()->IsPreview())
-        {
-            rSet.DisableItem( SID_PRESENTATION );
-        }
-    }
-
     FuBullet::GetSlotState( rSet, this, GetViewFrame() );
 
 }

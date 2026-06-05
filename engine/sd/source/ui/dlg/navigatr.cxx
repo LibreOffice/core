@@ -98,13 +98,9 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
 
     // DragTypeListBox
     mxLbDocs->set_size_request(42, -1); // set a nominal width so it takes width of surroundings
-    mxLbDocs->connect_changed(LINK(this, SdNavigatorWin, SelectDocumentHdl));
 
     SetDragImage();
 
-    mxToolbox->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
-    mxTlbObjects->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
-    mxLbDocs->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     if(comphelper::COKit::isActive())
     {
         mxToolbox->hide();
@@ -199,11 +195,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 
     // Disable the shape filter drop down menu when there is a running slide
     // show.
-    if (sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() )
-        && !sd::SlideShow::IsInteractiveSlideshow( pViewShell->GetViewShellBase() ) ) // IASS
-        mxToolbox->set_item_sensitive(u"shapes"_ustr, false);
-    else
-        mxToolbox->set_item_sensitive(u"shapes"_ustr, true);
+    mxToolbox->set_item_sensitive(u"shapes"_ustr, true);
 
     if( !mxTlbObjects->IsEqualToDoc( pDoc ) )
     {
@@ -734,26 +726,6 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
     }
 
     return nPos < maDocList.size() ? &(maDocList[ nPos ]) : nullptr;
-}
-
-/**
- * catch ESCAPE in order to end show
- */
-IMPL_LINK(SdNavigatorWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
-{
-    bool bConsumed = false;
-
-    if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
-    {
-        ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
-        if (pBase && sd::SlideShow::IsRunning(*pBase))
-        {
-            sd::SlideShow::Stop(*pBase);
-            bConsumed = true;
-        }
-    }
-
-    return bConsumed;
 }
 
 void SdNavigatorWin::SetDragImage()

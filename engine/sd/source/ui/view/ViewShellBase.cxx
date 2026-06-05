@@ -273,8 +273,6 @@ ViewShellBase::~ViewShellBase()
     sfx2::SfxNotebookBar::CloseMethod(GetFrame()->GetBindings());
 
     rtl::Reference<SlideShow> xSlideShow(SlideShow::GetSlideShow(*this));
-    if (xSlideShow.is() && xSlideShow->dependsOn(this))
-        SlideShow::Stop(*this);
     xSlideShow.clear();
 
     // Tell the controller that the ViewShellBase is not available anymore.
@@ -411,27 +409,7 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
     const SfxHintId nHintId = rHint.GetId();
 
-    if (nHintId == SfxHintId::ThisIsAnSfxEventHint)
-    {
-        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
-        {
-            case SfxEventHintId::OpenDoc:
-            {
-                const sal_uInt16 nStartingSlide
-                    = GetDocument() ? GetDocument()->GetStartWithPresentation() : 0;
-                if (nStartingSlide)
-                {
-                    SfxUInt16Item aItem(FN_PARAM_1, nStartingSlide);
-                    GetViewFrame().GetDispatcher()->ExecuteList(
-                        SID_PRESENTATION, SfxCallMode::ASYNCHRON, { &aItem });
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    else
+    if (nHintId != SfxHintId::ThisIsAnSfxEventHint)
     {
         switch (nHintId)
         {

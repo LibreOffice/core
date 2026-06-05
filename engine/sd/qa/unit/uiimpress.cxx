@@ -2092,20 +2092,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123658_SearchAfterSlideChange)
 }
 #endif
 
-CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
-{
-    createSdImpressDoc();
-
-    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
-
-    SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_PRESENTATION);
-    pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow = true;
-    pImpressDocument->GetDoc()->getPresentationSettings().mbStartCustomShow = true;
-    sd::slideshowhelp::ShowSlideShow(aRequest, *pImpressDocument->GetDoc());
-    CPPUNIT_ASSERT_EQUAL(false, pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow);
-}
-
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
 {
     // Given an Impress document with a shape, with its text selected:
@@ -2405,25 +2391,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
     xShape->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4), nFillColor);
-}
-
-CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166647_userpaint)
-{
-    // The document contains two shapes on layer DrawnInSlideshow and is empty besides that. The
-    // running slideshow is displayed in window mode, otherwise its additional window would be
-    // suppressed by the test environment.
-    createSdImpressDoc("odp/tdf166647_userpaint.odp");
-    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-
-    // Go in slideshow mode and back to edit mode
-    dispatchCommand(mxComponent, u".uno:Presentation"_ustr, {});
-    typeKey(pXImpressDocument, KEY_ESCAPE);
-
-    // Count shapes. Error was, that the shapes were duplicated and thus count was 4.
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    CPPUNIT_ASSERT(pViewShell);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), pViewShell->GetActualPage()->GetObjCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf168835)

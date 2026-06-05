@@ -351,13 +351,6 @@ void ViewShell::Activate(bool bIsMDIActivate)
         SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();
         rBindings.Invalidate( SID_3D_STATE, true );
 
-        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        if (xSlideShow.is() && xSlideShow->isRunning()) //IASS
-        {
-            bool bSuccess = xSlideShow->activate(GetViewShellBase());
-            assert(bSuccess && "can only return false with a PresentationViewShell"); (void)bSuccess;
-        }
-
         if(HasCurrentFunction())
             GetCurrentFunction()->Activate();
 
@@ -403,10 +396,6 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
 
     if (bIsMDIActivate)
     {
-        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        if(xSlideShow.is() && xSlideShow->isRunning() ) //IASS
-            xSlideShow->deactivate();
-
         if(HasCurrentFunction())
             GetCurrentFunction()->Deactivate();
     }
@@ -480,34 +469,6 @@ void ViewShell::Shutdown()
     Exit ();
 }
 
-// IASS: Check if commands should be used for SlideShow
-// This is the case when IASS is on, SlideShow is active
-// and the SlideShow Window has the focus
-bool ViewShell::useInputForSlideShow() const
-{
-    rtl::Reference< SlideShow > xSlideShow(SlideShow::GetSlideShow(GetViewShellBase()));
-
-    if (!xSlideShow.is())
-        // no SlideShow, do not use
-        return false;
-
-    if (!xSlideShow->isRunning())
-        // SlideShow not running, do not use
-        return false;
-
-    if(!xSlideShow->IsInteractiveSlideshow())
-        // if IASS is deactivated, do what was done before when
-        // SlideSHow is running: use for SlideShow
-        return true;
-
-    // else, check if SlideShow Window has the focus
-    OutputDevice* pShOut(xSlideShow->getShowWindow());
-    vcl::Window* pShWin(pShOut ? pShOut->GetOwnerWindow() : nullptr);
-
-    // return true if we got the SlideShow Window and it has the focus
-    return nullptr != pShWin && pShWin->HasFocus();
-}
-
 bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
     bool bReturn(false);
@@ -526,34 +487,24 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         const size_t OriCount = rMarkList.GetMarkCount();
         if(!bReturn)
         {
-            if(useInputForSlideShow()) //IASS
-            {
-                // use for SlideShow
-                rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-                bReturn = xSlideShow->keyInput(rKEvt);
-            }
-            else
-            {
-                bool bConsumed = false;
-                bConsumed = pView->getSmartTags().KeyInput(rKEvt);
+            bool bConsumed = pView->getSmartTags().KeyInput(rKEvt);
 
-                if( !bConsumed )
+            if( !bConsumed )
+            {
+                rtl::Reference< sdr::SelectionController > xSelectionController( pView->getSelectionController() );
+                if( !xSelectionController.is() || !xSelectionController->onKeyInput( rKEvt, pWin ) )
                 {
-                    rtl::Reference< sdr::SelectionController > xSelectionController( pView->getSelectionController() );
-                    if( !xSelectionController.is() || !xSelectionController->onKeyInput( rKEvt, pWin ) )
+                    if(HasCurrentFunction())
+                        bReturn = GetCurrentFunction()->KeyInput(rKEvt);
+                }
+                else
+                {
+                    bReturn = true;
+                    if (HasCurrentFunction())
                     {
-                        if(HasCurrentFunction())
-                            bReturn = GetCurrentFunction()->KeyInput(rKEvt);
-                    }
-                    else
-                    {
-                        bReturn = true;
-                        if (HasCurrentFunction())
-                        {
-                            FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
-                            if(pTextFunction != nullptr)
-                                pTextFunction->InvalidateBindings();
-                        }
+                        FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
+                        if(pTextFunction != nullptr)
+                            pTextFunction->InvalidateBindings();
                     }
                 }
             }
@@ -854,50 +805,11 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
     switch( rCEvt.GetCommand() )
     {
         case CommandEventId::GestureSwipe:
-            {
-                if(useInputForSlideShow()) //IASS
-                {
-                    // use for SlideShow
-                    rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-                    const CommandGestureSwipeData* pSwipeData = rCEvt.GetGestureSwipeData();
-                    bDone = xSlideShow->swipe(*pSwipeData);
-                }
-            }
             break;
         case CommandEventId::GestureLongPress:
-            {
-                if(useInputForSlideShow()) //IASS
-                {
-                    // use for SlideShow
-                    rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-                    const CommandGestureLongPressData* pLongPressData = rCEvt.GetLongPressData();
-                    bDone = xSlideShow->longpress(*pLongPressData);
-                }
-            }
             break;
 
         case CommandEventId::Wheel:
-            {
-                Reference< XSlideShowController > xSlideShowController( SlideShow::GetSlideShowController(GetViewShellBase() ) );
-                if( xSlideShowController.is() )
-                {
-                    if(useInputForSlideShow()) //IASS
-                    {
-                        // use for SlideShow
-                        // We ignore zooming with control+mouse wheel.
-                        const CommandWheelData* pData = rCEvt.GetWheelData();
-                        if( pData && !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) && !pData->IsHorz() )
-                        {
-                            ::tools::Long nDelta = pData->GetDelta();
-                            if( nDelta > 0 )
-                                xSlideShowController->gotoPreviousSlide();
-                            else if( nDelta < 0 )
-                                xSlideShowController->gotoNextEffect();
-                        }
-                        break;
-                    }
-                }
-            }
             [[fallthrough]];
         case CommandEventId::StartAutoScroll:
         case CommandEventId::AutoScroll:
@@ -973,7 +885,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 double deltaBetweenEvents = (pData->mfScaleDelta - mfLastZoomScale) / mfLastZoomScale;
                 mfLastZoomScale = pData->mfScaleDelta;
 
-                if (!GetDocSh()->IsUIActive() && !useInputForSlideShow()) //IASS
+                if (!GetDocSh()->IsUIActive())
                 {
                     const ::tools::Long nOldZoom = GetActiveWindow()->GetZoom();
                     ::tools::Long nNewZoom;
@@ -1013,9 +925,6 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 void ViewShell::SetupRulers()
 {
     if(!mbHasRulers || !mpContentWindow )
-        return;
-
-    if( SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())) // IASS
         return;
 
     ::tools::Long nHRulerOfs = 0;
@@ -1232,17 +1141,12 @@ void ViewShell::ArrangeGUIElements()
 
     // The size of the window of the center pane is set differently from
     // that of the windows in the docking windows.
-    bool bSlideShowActive = (xSlideShow.is() && xSlideShow->isRunning()) //IASS
-        && !xSlideShow->isFullScreen() && xSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
-    if ( !bSlideShowActive)
-    {
-        OSL_ASSERT (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
 
-        if (mpContentWindow)
-            mpContentWindow->SetPosSizePixel(
-                Point(nLeft,nTop),
-                Size(nRight-nLeft,nBottom-nTop));
-    }
+    if (mpContentWindow)
+        mpContentWindow->SetPosSizePixel(
+            Point(nLeft,nTop),
+            Size(nRight-nLeft,nBottom-nTop));
 
     // Windows in the center and rulers at the left and top side.
     maAllWindowRectangle = ::tools::Rectangle(

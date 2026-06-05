@@ -178,7 +178,6 @@ public:
     void testSheetDragDrop();
     void testContextMenuCalc();
     void testContextMenuWriter();
-    void testContextMenuImpress();
     void testNotificationCompression();
     void testTileInvalidationCompression();
     void testPartInInvalidation();
@@ -264,7 +263,6 @@ public:
     CPPUNIT_TEST(testSheetDragDrop);
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
-    CPPUNIT_TEST(testContextMenuImpress);
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
@@ -1667,130 +1665,6 @@ void DesktopKitTest::testContextMenuWriter()
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
         CPPUNIT_ASSERT(aEnabled);
         CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
-    }
-}
-
-void DesktopKitTest::testContextMenuImpress()
-{
-    LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp", KIT_DOCTYPE_PRESENTATION);
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
-
-    // random point where we don't hit an underlying comment or text box
-    Point aRandomPoint(10, 1150);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      aRandomPoint.X(), aRandomPoint.Y(),
-                                      1, 4, 0);
-    Scheduler::ProcessEventsToIdle();
-
-    TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
-    m_aContextMenuCondition.wait(aTimeValue);
-
-    CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
-    boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
-    CPPUNIT_ASSERT( aMenu );
-    verifyContextMenuStructure( aMenu.get() );
-
-    // tests for impress specific context menu
-    // Cut is disabled
-    {
-        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:Cut");
-        CPPUNIT_ASSERT(aMenuItem);
-
-        boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
-        CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
-    }
-
-    // Copy is disabled
-    {
-        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:Copy");
-        CPPUNIT_ASSERT(aMenuItem);
-
-        boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
-        CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
-    }
-
-    // Paste is enabled
-    {
-        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:Paste");
-        CPPUNIT_ASSERT(aMenuItem);
-
-        boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
-        CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("true"));
-    }
-
-    // SaveBackground is disabled
-    {
-        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:SaveBackground");
-        CPPUNIT_ASSERT(aMenuItem);
-
-        boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
-        CPPUNIT_ASSERT(aEnabled);
-        CPPUNIT_ASSERT_EQUAL(aEnabled.get().data(), std::string("false"));
-    }
-
-    // checkbutton tests
-    {
-        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:ShowRuler");
-        CPPUNIT_ASSERT(aMenuItem);
-
-        boost::optional<boost::property_tree::ptree&> aChecktype = aMenuItem.get().get_child_optional("checktype");
-        CPPUNIT_ASSERT(aChecktype);
-        CPPUNIT_ASSERT_EQUAL(aChecktype.get().data(), std::string("checkmark"));
-
-        boost::optional<boost::property_tree::ptree&> aChecked = aMenuItem.get().get_child_optional("checked");
-        CPPUNIT_ASSERT(aChecked);
-        CPPUNIT_ASSERT_EQUAL(aChecked.get().data(), std::string("false"));
-    }
-
-    // Checkbutton tests inside SnapLines submenu
-    {
-        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:SnapLinesMenu");
-        CPPUNIT_ASSERT(aMenuItem);
-
-        boost::optional<boost::property_tree::ptree&> aSubmenu = aMenuItem.get().get_child_optional("menu");
-        CPPUNIT_ASSERT(aSubmenu);
-
-        boost::optional<boost::property_tree::ptree> aMenuItemHelpVis = getContextMenuItem(aSubmenu.get(), ".uno:HelplinesVisible");
-        CPPUNIT_ASSERT(aMenuItemHelpVis);
-
-        boost::optional<boost::property_tree::ptree> aMenuItemHelpUse = getContextMenuItem(aSubmenu.get(), ".uno:HelplinesUse");
-        CPPUNIT_ASSERT(aMenuItemHelpUse);
-
-        boost::optional<boost::property_tree::ptree> aMenuItemHelpFront = getContextMenuItem(aSubmenu.get(), ".uno:HelplinesFront");
-        CPPUNIT_ASSERT(aMenuItemHelpFront);
-
-        // these are checkmarks
-        boost::optional<boost::property_tree::ptree&> aChecktypeHelpVis = aMenuItemHelpVis.get().get_child_optional("checktype");
-        CPPUNIT_ASSERT(aChecktypeHelpVis);
-        CPPUNIT_ASSERT_EQUAL(aChecktypeHelpVis.get().data(), std::string("checkmark"));
-
-        boost::optional<boost::property_tree::ptree&> aChecktypeHelpUse = aMenuItemHelpUse.get().get_child_optional("checktype");
-        CPPUNIT_ASSERT(aChecktypeHelpUse);
-        CPPUNIT_ASSERT_EQUAL(aChecktypeHelpUse.get().data(), std::string("checkmark"));
-
-        boost::optional<boost::property_tree::ptree&> aChecktypeHelpFront = aMenuItemHelpFront.get().get_child_optional("checktype");
-        CPPUNIT_ASSERT(aChecktypeHelpFront);
-        CPPUNIT_ASSERT_EQUAL(aChecktypeHelpFront.get().data(), std::string("checkmark"));
-
-        // HelplineVisible is unchecked
-        boost::optional<boost::property_tree::ptree&> aCheckedHelpVis = aMenuItemHelpVis.get().get_child_optional("checked");
-        CPPUNIT_ASSERT(aCheckedHelpVis);
-        CPPUNIT_ASSERT_EQUAL(aCheckedHelpVis.get().data(), std::string("false"));
-
-        // HelplineUse is checked
-        boost::optional<boost::property_tree::ptree&> aCheckedHelpUse = aMenuItemHelpUse.get().get_child_optional("checked");
-        CPPUNIT_ASSERT(aCheckedHelpUse);
-        CPPUNIT_ASSERT_EQUAL(aCheckedHelpUse.get().data(), std::string("true"));
-
-        // HelplineFront is checked
-        boost::optional<boost::property_tree::ptree&> aCheckedHelpFront = aMenuItemHelpFront.get().get_child_optional("checked");
-        CPPUNIT_ASSERT(aCheckedHelpFront);
-        CPPUNIT_ASSERT_EQUAL(aCheckedHelpFront.get().data(), std::string("true"));
     }
 }
 

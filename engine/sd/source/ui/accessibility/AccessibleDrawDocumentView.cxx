@@ -338,22 +338,6 @@ void SAL_CALL
             //mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
             //    xView->getCurrentPage(), uno::UNO_QUERY));
             rtl::Reference< sd::SlideShow > xSlideshow( sd::SlideShow::GetSlideShow( mpSdViewSh->GetViewShellBase() ) );
-            if( xSlideshow.is() && (xSlideshow->isRunning() && !xSlideshow->IsInteractiveSlideshow()) //IASS
-                && xSlideshow->isFullScreen() )
-            {
-                css::uno::Reference< drawing::XDrawPage > xSlide;
-                // MT IA2: Not used...
-                // sal_Int32 currentPageIndex = xSlideshow->getCurrentPageIndex();
-                css::uno::Reference< css::presentation::XSlideShowController > xSlideController = xSlideshow->getController();
-                if( xSlideController.is() )
-                {
-                    xSlide = xSlideController->getCurrentSlide();
-                    if (xSlide.is())
-                    {
-                        mpChildrenManager->SetShapeList (xSlide);
-                    }
-                }
-            }
             rtl::Reference<AccessiblePageShape> xPage(CreateDrawPageShape ());
             if (xPage.is())
             {

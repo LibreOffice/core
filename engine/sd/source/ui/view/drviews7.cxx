@@ -484,28 +484,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // is it possible to start the presentation?
-    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PRESENTATION ) ||
-        SfxItemState::DEFAULT == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
-    {
-        bool bDisable = true;
-        sal_uInt16 nCount = GetDoc()->GetSdPageCount( PageKind::Standard );
-
-        for( sal_uInt16 i = 0; i < nCount && bDisable; i++ )
-        {
-            SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
-
-            if( !pPage->IsExcluded() )
-                bDisable = false;
-        }
-
-        if( bDisable || GetDocSh()->IsPreview())
-        {
-            rSet.DisableItem( SID_PRESENTATION );
-            rSet.DisableItem( SID_REHEARSE_TIMINGS );
-        }
-    }
-
     // gluepoints
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_GLUE_EDITMODE ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_GLUE_INSERT_POINT ) ||
@@ -1336,11 +1314,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-    if( (xSlideshow.is() && xSlideshow->isRunning() && !xSlideshow->IsInteractiveSlideshow() // IASS
-        && (xSlideshow->getAnimationMode() != ANIMATIONMODE_PREVIEW) ) || GetDocSh()->IsPreview() )
+    if( GetDocSh()->IsPreview() )
     {
         // Own Slots
-        rSet.DisableItem( SID_PRESENTATION );
         rSet.DisableItem( SID_ZOOM_IN );
         rSet.DisableItem( SID_ZOOM_OUT );
         rSet.DisableItem( SID_ZOOM_PANNING );
@@ -1359,39 +1335,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_RENAMEPAGE_QUICK );
         rSet.DisableItem( SID_DELETE_PAGE );
         rSet.DisableItem( SID_PAGESETUP );
-
-        if( xSlideshow.is() && xSlideshow->isRunning() && !xSlideshow->IsInteractiveSlideshow() ) // IASS
-        {
-            rSet.ClearItem(SID_INSERTFILE);
-            rSet.ClearItem(SID_OBJECT_ROTATE);
-            rSet.ClearItem(SID_FM_CONFIG);
-            rSet.ClearItem(SID_ANIMATION_EFFECTS);
-            rSet.ClearItem(SID_EXECUTE_ANIMATION_EFFECT);
-            rSet.ClearItem(SID_ANIMATION_OBJECTS);
-            rSet.ClearItem(SID_3D_WIN);
-
-            rSet.DisableItem(SID_OBJECT_ALIGN);
-            rSet.DisableItem(SID_ALIGN_PAGE);
-            rSet.DisableItem(SID_ZOOM_TOOLBOX);
-            rSet.DisableItem(SID_OBJECT_CHOOSE_MODE);
-            rSet.DisableItem(SID_DRAWTBX_TEXT);
-            rSet.DisableItem(SID_DRAWTBX_RECTANGLES);
-            rSet.DisableItem(SID_DRAWTBX_ELLIPSES);
-            rSet.DisableItem(SID_DRAWTBX_LINES);
-            rSet.DisableItem(SID_DRAWTBX_ARROWS);
-            rSet.DisableItem(SID_DRAWTBX_3D_OBJECTS);
-            rSet.DisableItem(SID_DRAWTBX_CONNECTORS);
-            rSet.DisableItem(SID_OBJECT_CHOOSE_MODE );
-            rSet.DisableItem(SID_DRAWTBX_INSERT);
-            rSet.DisableItem(SID_INSERTFILE);
-            rSet.DisableItem(SID_OBJECT_ROTATE);
-            rSet.DisableItem(SID_POSITION);
-            rSet.DisableItem(SID_FM_CONFIG);
-            rSet.DisableItem(SID_ANIMATION_EFFECTS);
-            rSet.DisableItem(SID_EXECUTE_ANIMATION_EFFECT);
-            rSet.DisableItem(SID_ANIMATION_OBJECTS);
-            rSet.DisableItem(SID_3D_WIN);
-        }
     }
 
     // Menuoption: Change->Convert->To Bitmap, Change->Convert->To Metafile
@@ -1700,12 +1643,10 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
-    const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow(GetViewShellBase()); // IASS
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     const bool bIsInPlace = pViewFrame && pViewFrame->GetFrame().IsInPlace() ? true : false;
-    if (bIsInPlace || bIsRunning)
+    if (bIsInPlace)
     {
         if (!bIsInPlace)
         {
@@ -1996,13 +1937,6 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
 
 void DrawViewShell::Execute (SfxRequest& rReq)
 {
-    if(SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())) // IASS
-    {
-        // Do not execute anything during a native slide show.
-        return;
-    }
-
     switch (rReq.GetSlot())
     {
         case FID_SEARCH_NOW:

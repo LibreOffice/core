@@ -89,12 +89,6 @@ void DrawViewShell::Resize()
     {
         SetZoomRect(GetDocSh()->GetVisArea(ASPECT_CONTENT));
     }
-
-    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-    if( xSlideshow.is() && xSlideshow->isRunning() && !xSlideshow->isFullScreen() )
-    {
-        xSlideshow->resize(maViewSize);
-    }
 }
 
 void DrawViewShell::ArrangeGUIElements()
