@@ -10,22 +10,6 @@ window.L.CRS = {
 	transformation: new cool.Transformation(1, 0, -1, 0),
 	SCALE: 1.2,
 
-	// converts geo coords to pixel ones
-	latLngToPoint: function (latlng, zoom) {
-		var projectedPoint = this.projection.project(latlng),
-		    scale = this.scale(zoom);
-
-		return this.transformation._transform(projectedPoint, scale);
-	},
-
-	// converts pixel coords to geo coords
-	pointToLatLng: function (point, zoom) {
-		var scale = this.scale(zoom),
-		    untransformedPoint = this.transformation.untransform(point, scale);
-
-		return this.projection.unproject(untransformedPoint);
-	},
-
 	// converts geo coords to projection-specific coords (e.g. in meters)
 	project: function (latlng) {
 		return this.projection.project(latlng);

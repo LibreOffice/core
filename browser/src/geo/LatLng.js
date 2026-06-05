@@ -1,5 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
-/* global app */
+/* global app cool */
 /*
  * window.L.LatLng represents a geographical point with latitude and longitude coordinates.
  */
@@ -45,6 +45,30 @@ window.L.LatLng.prototype = {
 	},
 };
 
+window.L.LatLng.SCALE = 1.2;
+
+// Private static members [[
+// (number) -> number
+window.L.LatLng.scale = function(zoom) {
+	return zoom ? Math.pow(window.L.LatLng.SCALE, zoom) : 1;
+}
+// ]]
+
+// Needed in Map.prototype.unproject()
+// constructs LatLng from css pixel point at a given zoom.
+// (cool.Point, number) -> LatLng
+window.L.LatLng.pointToLatLng = function(point, zoom) {
+	const scale = window.L.LatLng.scale(zoom);
+	return new window.L.LatLng(-point.y / scale, point.x / scale);
+};
+
+// Needed in Map.prototype.project()
+// constructs css pixel point from LatLng at a given zoom.
+// (LatLng, number) -> cool.Point
+window.L.LatLng.latLngToPoint = function(latlng, zoom) {
+	const scale = window.L.LatLng.scale(zoom);
+	return new cool.Point(latlng.lng * scale, -latlng.lat * scale);
+};
 
 // constructs LatLng with different signatures
 // (LatLng) or ([Number, Number]) or (Number, Number) or (Object)

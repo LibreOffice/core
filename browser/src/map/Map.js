@@ -589,7 +589,7 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	zoomToFactor: function (zoom) {
-		return Math.pow(this.options.crs.SCALE, (zoom - this.options.zoom));
+		return Math.pow(window.L.LatLng.SCALE, (zoom - this.options.zoom));
 	},
 
 	getDesktopCalcZoomCenter: function() {
@@ -1137,13 +1137,13 @@ window.L.Map = window.L.Evented.extend({
 
 	project: function (latlng, zoom) { // (LatLng[, Number]) -> Point
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		var projectedPoint = this.options.crs.latLngToPoint(window.L.latLng(latlng), zoom);
+		var projectedPoint = window.L.LatLng.latLngToPoint(window.L.latLng(latlng), zoom);
 		return new cool.Point(app.util.round(projectedPoint.x, 1e-6), app.util.round(projectedPoint.y, 1e-6));
 	},
 
 	unproject: function (point, zoom) { // (Point[, Number]) -> LatLng
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		return this.options.crs.pointToLatLng(new cool.Point(point.x, point.y), zoom);
+		return window.L.LatLng.pointToLatLng(new cool.Point(point.x, point.y), zoom);
 	},
 
 	// rescaling
