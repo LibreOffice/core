@@ -883,17 +883,16 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
 
     const SwSortedObjs *pSorted = m_pPage->GetSortedObjs();
     const size_t nCount = pSorted ? pSorted->size() : 0;
-    // --> #108724# Page header/footer content doesn't have to wrap around
-    //              floating screen objects
-    //              which was added simply to be compatible with MS Office.
-    // MSO still allows text to wrap around in-table-flies in headers/footers/footnotes
     const bool bFooterHeader = nullptr != m_pCurrFrame->FindFooterOrHeader();
     const IDocumentSettingAccess* pIDSA = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
     const bool bAllowCompatWrap = m_pCurrFrame->IsInTab() && (bFooterHeader || m_pCurrFrame->IsInFootnote());
-    const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
-                                    bAllowCompatWrap ||
-                                    (!m_pCurrFrame->IsInFootnote() && !bFooterHeader));
+    const bool bWordCompatibility = !pIDSA->get(DocumentSettingId::TAB_OVER_MARGIN)
+                                    && pIDSA->get(DocumentSettingId::TAB_OVER_SPACING);
+    const bool bWrapAllowed
+        = (pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) || bAllowCompatWrap
+           || (!m_pCurrFrame->IsInFootnote() && !bFooterHeader)
+           || (bFooterHeader && bWordCompatibility));
 
     m_bOn = false;
 
@@ -924,14 +923,44 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
             // #i20505# Do not consider oversized objects
             SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
             assert(pAnchoredObj);
-            if ( !pAnchoredObj ||
-                 !rIDDMA.IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
-                 !pAnchoredObj->ConsiderForTextWrap() ||
-                 ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
-                   pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) ||
-                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue() ) ||
-                 ( pAnchoredObj->DynCastFlyFrame()  && pAnchoredObj->DynCastFlyFrame()->IsSplitButNotYetMovedFollow() )
-               )
+
+            // #108724# -> MS Word lays out the text of the paragraph that
+            // anchors a "Word text frame" wrapping around it, unlike
+            // floating images/shapes, which it ignores.
+            // Check if the Object is a "Word text frame" with wrap around.
+            bool bSkipHdrFtrObj = bFooterHeader && !bAllowCompatWrap
+                                  && !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING);
+
+            if (bSkipHdrFtrObj && pAnchoredObj->GetAnchorFrame() == m_pCurrFrame)
+            {
+                if (const SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame())
+                {
+                    const css::text::WrapTextMode eSurround
+                        = pFly->GetFormat()->GetSurround().GetSurround();
+
+                    const bool bExplicitSideWrap = eSurround == css::text::WrapTextMode_PARALLEL
+                                                   || eSurround == css::text::WrapTextMode_LEFT
+                                                   || eSurround == css::text::WrapTextMode_RIGHT;
+
+                    // a framePr frame has text content (not a floating image/OLE)
+                    const bool bTextContent = pFly->Lower() && !pFly->Lower()->IsNoTextFrame();
+                    // and is not the textbox companion of a draw shape
+                    const bool bDrawTextBox
+                        = SwTextBoxHelper::isTextBox(pFly->GetFormat(), RES_FLYFRMFMT);
+
+                    if (bExplicitSideWrap && bTextContent && !bDrawTextBox)
+                        bSkipHdrFtrObj = false;
+                }
+            }
+
+            if (!pAnchoredObj || !rIDDMA.IsVisibleLayerId(pAnchoredObj->GetDrawObj()->GetLayer())
+                || !pAnchoredObj->ConsiderForTextWrap() || bSkipHdrFtrObj
+                || (mbIgnoreObjsInHeaderFooter && !bFooterHeader
+                    && pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader())
+                || (bAllowCompatWrap
+                    && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue())
+                || (pAnchoredObj->DynCastFlyFrame()
+                    && pAnchoredObj->DynCastFlyFrame()->IsSplitButNotYetMovedFollow()))
             {
                 continue;
             }
