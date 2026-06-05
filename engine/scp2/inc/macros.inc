@@ -180,26 +180,6 @@ End
     End
 
 #define SCP2_URE_DL_DIR GID_DIR_URE_LIB
-#if defined WNT
-#define SCP2_URE_DL_NORMAL(n) n ".dll"
-#define SCP2_URE_DL_VER(n, v) n v ".dll"
-#define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
-#define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
-#else
-#define SCP2_URE_DL_NORMAL(n) "lib" n STRING(UNXSUFFIX)
-#define SCP2_URE_DL_VER(n, v) "lib" n STRING(UNXSUFFIX) "." v
-#define SCP2_URE_DL_UNO_VER(n, v) "libuno_" n STRING(UNXSUFFIX) "." v
-#define SCP2_URE_DL_UNO_NORMAL(n) "libuno_" n STRING(UNXSUFFIX)
-#define SCP2_URE_DL_UNO_COMID_VER(n, v)	\
-    "libuno_" n STRING(COMID) STRING(UNXSUFFIX) "." v
-#define SCP2_URE_DL_UNO_COMID_NORMAL(n)	\
-    "libuno_" n STRING(COMID) STRING(UNXSUFFIX)
-#endif
-#if defined MACOSX
-#define SCP2_URE_JDL_NORMAL(n) "lib" n ".jnilib"
-#else
-#define SCP2_URE_JDL_NORMAL(n) SCP2_URE_DL_NORMAL(n)
-#endif
 
 #if defined MACOSX
 #define FILELIST_DIR PREDEFINED_PROGDIR
