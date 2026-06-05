@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-06-04 08:20+0000\n"
+"PO-Revision-Date: 2026-06-05 13:51+0000\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hant/>\n"
@@ -1498,7 +1498,7 @@ msgstr "新增自訂語音語氣"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr ""
+msgstr "Emojify"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1513,271 +1513,269 @@ msgstr "關閉"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
-msgstr ""
+msgstr "切換 emojify"
 
 #: src/control/Control.AIChatSidebar.ts:1189
 msgid "Use icon"
-msgstr ""
+msgstr "使用圖示"
 
 #: src/control/Control.AIChatSidebar.ts:1199
 msgid "Pick another emoji"
-msgstr ""
+msgstr "挑選其他表情符號"
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
-msgstr ""
+msgstr "回到語氣"
 
 #: src/control/Control.AIChatSidebar.ts:1226
 msgid "Icon"
-msgstr ""
+msgstr "圖示"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
-msgstr ""
+msgstr "命名您的語氣"
 
 #: src/control/Control.AIChatSidebar.ts:1245
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "例如：快速回覆"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr ""
+msgstr "語氣名稱"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "說明人工智慧應如何書寫"
 
 #: src/control/Control.AIChatSidebar.ts:1260
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
-msgstr ""
+msgstr "請使用簡短、直接的句子。採用淺白易懂的語言，避免寒暄。"
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "語氣描述"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "刪除語氣"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr ""
+msgstr "刪除此語氣"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "儲存語音"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr ""
+msgstr "儲存語音語氣"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "搜尋表情符號"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "選擇表情符號"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "刪除語氣確認"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "將會刪除此語音語氣"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "取消刪除"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "您已達到 {0} 個自訂語氣的上限。"
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
-msgstr ""
+msgstr "將選定的文字作為脈絡"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "診斷公式錯誤"
 
 #: src/control/Control.AIChatSidebar.ts:1645
 msgid "Sanity check data"
-msgstr ""
+msgstr "資料一致性檢查"
 
 #: src/control/Control.AIChatSidebar.ts:1651
 msgid "Create a formula"
-msgstr ""
+msgstr "建立公式"
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "建立投影片"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "顯示較少資訊"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "顯示更多資訊"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "在游標位置插入影像"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "在游標位置插入文字"
 
 #: src/control/Control.AIChatSidebar.ts:1893
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "訊息長度即將達到上限"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
-msgstr ""
+msgstr "請求逾時"
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2797
 msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
-msgstr ""
+msgstr "選取範圍包含圖片或其他非文字內容，無法作為脈絡傳送。"
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "訊息過長。請縮短內容後再試一次。"
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
-msgstr ""
+msgstr "錯誤： "
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "產生的影像"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
-msgstr ""
+msgstr "人工智慧請求失敗"
 
 #: src/control/Control.AIChatSidebar.ts:2154
 msgid "The AI assistant"
-msgstr ""
+msgstr "人工智慧小幫手"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "您想要繼續嗎？"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 想要檢查您的文件。您要繼續嗎？"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "Modify document structure"
-msgstr ""
+msgstr "修改文件結構"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 想要修改您的文件："
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "您想要套用此變更嗎？"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
-msgstr ""
+msgstr "設定儲存格公式"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 想要在您的試算表中設定公式："
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 想要執行動作。您想要繼續嗎？"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "核准"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "核准動作"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
-msgstr ""
+msgstr "回絕"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
-msgstr ""
+msgstr "回絕動作"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Applying changes..."
-msgstr ""
+msgstr "正在套用變更……"
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Change rejected"
-msgstr ""
+msgstr "變更遭拒"
 
 #: src/control/Control.AIChatSidebar.ts:2304
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "擷取選取內容逾時"
 
 #: src/control/Control.AIChatSidebar.ts:2323
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "解析選取內容失敗"
 
 #: src/control/Control.AIChatSidebar.ts:2569
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "公式分析逾時"
 
 #: src/control/Control.AIChatSidebar.ts:2588
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "正在分析公式依賴關係……"
 
 #: src/control/Control.AIChatSidebar.ts:2596
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "分析公式逾時。"
 
 #: src/control/Control.AIChatSidebar.ts:2606
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "選定的儲存格不包含公式。"
 
 #: src/control/Control.AIChatSidebar.ts:2608
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "選定的儲存格不包含公式錯誤。"
 
 #: src/control/Control.AIChatSidebar.ts:2617
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "診斷公式錯誤於"
 
 #: src/control/Control.AIChatSidebar.ts:2638
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "我的試算表中出現了公式錯誤。"
 
 #: src/control/Control.AIChatSidebar.ts:2640
-#, fuzzy
 msgid "Cell"
 msgstr "儲存格"
 
 #: src/control/Control.AIChatSidebar.ts:2644
-#, fuzzy
 msgid "Sheet"
 msgstr "工作表"
 
 #: src/control/Control.AIChatSidebar.ts:2648
 msgid "contains"
-msgstr ""
+msgstr "包含"
 
 #: src/control/Control.AIChatSidebar.ts:2650
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1788,124 +1786,125 @@ msgstr "公式"
 
 #: src/control/Control.AIChatSidebar.ts:2654
 msgid "Referenced cells"
-msgstr ""
+msgstr "所參照的儲存格"
 
 #: src/control/Control.AIChatSidebar.ts:2660
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "請診斷為何此公式會產生"
 
 #: src/control/Control.AIChatSidebar.ts:2664
 msgid "error."
-msgstr ""
+msgstr "錯誤。"
 
 #: src/control/Control.AIChatSidebar.ts:2666
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "請說明根本原因，並提出解決方案。"
 
 #: src/control/Control.AIChatSidebar.ts:2670
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
-msgstr ""
+msgstr "在參照特定儲存格時，請將每個儲存格位址格式化為可點擊的連結：[A1](cell://A1)。"
 
 #: src/control/Control.AIChatSidebar.ts:2685
-#, fuzzy
 msgid "formula"
 msgstr "公式"
 
 #: src/control/Control.AIChatSidebar.ts:2687
 msgid "ERROR"
-msgstr ""
+msgstr "錯誤"
 
 #: src/control/Control.AIChatSidebar.ts:2701
 msgid "value"
-msgstr ""
+msgstr "值"
 
 #: src/control/Control.AIChatSidebar.ts:2711
-#, fuzzy
 msgid "text"
 msgstr "文字"
 
 #: src/control/Control.AIChatSidebar.ts:2716
 msgid "empty"
-msgstr ""
+msgstr "空"
 
 #: src/control/Control.AIChatSidebar.ts:2718
-#, fuzzy
 msgid "range"
 msgstr "範圍"
 
 #: src/control/Control.AIChatSidebar.ts:2720
 msgid "errors in"
-msgstr ""
+msgstr "錯誤於"
 
 #: src/control/Control.AIChatSidebar.ts:2723
 msgid "only partially scanned"
-msgstr ""
+msgstr "僅部份掃描"
 
 #: src/control/Control.AIChatSidebar.ts:2732
 msgid "circular reference"
-msgstr ""
+msgstr "循環參照"
 
 #: src/control/Control.AIChatSidebar.ts:2782
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "請先選取您要進行一致性檢查的資料。"
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "正在分析選定的資料……"
 
 #: src/control/Control.AIChatSidebar.ts:2800
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "擷取試算表資料失敗。"
 
 #: src/control/Control.AIChatSidebar.ts:2809
 msgid "No data found in selection."
-msgstr ""
+msgstr "選取範圍中找不到資料。"
 
 #: src/control/Control.AIChatSidebar.ts:2839
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"請描述您想要製作的簡報內容。例如：「關於再生能源的 5 張簡報概述」或「團隊介紹"
+"」。"
 
 #: src/control/Control.AIChatSidebar.ts:2866
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"描述您需要什麼樣的公式。例如：「計算 B 欄的平均值」或「將 A 欄大於 100 的所有"
+"數值相加」。"
 
 #: src/control/Control.AIChatSidebar.ts:2876
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
-msgstr ""
+msgstr "請從「列」欄位讀取列號，請勿自行計算或估算列位置。"
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
-msgstr ""
+msgstr "要辨識儲存格所在的欄位，請將該值與標題列中的欄位字母對應起來，切勿憑空猜測。"
 
 #: src/control/Control.AIChatSidebar.ts:2884
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
-msgstr ""
+msgstr "將欄位標題與列號結合來參照儲存格（例如：B 欄 + 第 2 列 = B2）。"
 
 #: src/control/Control.AIChatSidebar.ts:2887
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
-msgstr ""
+msgstr "在參照特定儲存格時，請將每個儲存格格式化為可點擊的連結：[B2](cell://B2)。"
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "請對以下試算表資料進行一致性檢查。"
 
 #: src/control/Control.AIChatSidebar.ts:2894
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "請針對以下資料進行分析："
 
 #: src/control/Control.AIChatSidebar.ts:2898
 msgid ""
@@ -1913,18 +1912,20 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"違反班佛定律：檢查數值的首位數字分佈是否與預期分佈有顯著偏差，這可能暗示資料"
+"被篡改。"
 
 #: src/control/Control.AIChatSidebar.ts:2904
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
-msgstr ""
+msgstr "統計異常值：辨識那些與其所在欄位或群組有顯著偏差的數值。"
 
 #: src/control/Control.AIChatSidebar.ts:2910
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
-msgstr ""
+msgstr "一般異常情況：可疑模式、意外的重複、不一致或格式問題。"
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -2809,7 +2810,7 @@ msgstr "EPUB (.epub)"
 #: src/control/Control.NotebookbarBuilder.js:414
 #: src/control/Control.NotebookbarBuilder.js:604
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/control/Control.Menubar.ts:111 src/control/Control.UIManager.ts:414
 msgid "Rename Document"
@@ -3019,7 +3020,7 @@ msgstr "螢幕閱讀"
 #: src/control/Control.NotebookbarImpress.js:163
 #: src/control/Control.NotebookbarWriter.js:116
 msgid "Extensions"
-msgstr ""
+msgstr "擴充套件"
 
 #: src/control/Control.Menubar.ts:424 src/control/Control.Menubar.ts:612
 #: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1063
@@ -3330,7 +3331,7 @@ msgstr "其他……"
 
 #: src/control/Control.Menubar.ts:1724
 msgid "(No extensions installed)"
-msgstr ""
+msgstr "（未安裝擴充套件）"
 
 #: src/control/Control.Menubar.ts:2078
 msgid "Use Compact view"
@@ -3523,7 +3524,7 @@ msgstr "動畫"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "未安裝擴充套件。"
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
