@@ -22,6 +22,23 @@ class Dispatcher {
 	private actionsMap: any = {};
 
 	private addGeneralCommands() {
+		// Page the view by one screenful. Used by PageUp/PageDown in read-only
+		// mode, where the keys must scroll the view rather than move the
+		// (hidden) cursor in core.
+		this.actionsMap['scrollpageup'] = function () {
+			app.map.fire('scrollby', {
+				x: 0,
+				y: -app.activeDocument.activeLayout.viewedRectangle.pHeight,
+			});
+		};
+
+		this.actionsMap['scrollpagedown'] = function () {
+			app.map.fire('scrollby', {
+				x: 0,
+				y: app.activeDocument.activeLayout.viewedRectangle.pHeight,
+			});
+		};
+
 		this.actionsMap['save'] = function (source?: string) {
 			// Save only when not read-only.
 			if (!app.map.isReadOnlyMode() && !app.map['wopi'].HideSaveOption) {
@@ -626,11 +643,19 @@ class Dispatcher {
 		};
 
 		this.actionsMap['previouspart'] = function () {
-			app.map._docLayer._preview._scrollViewByDirection('prev');
+			// In file based view all parts are in one endless scroll; in the
+			// part based view (e.g. Viewing mode entered from an edit
+			// session) scrolling within the single visible part is a no-op,
+			// so switch the part instead.
+			if (app.file.fileBasedView)
+				app.map._docLayer._preview._scrollViewByDirection('prev');
+			else app.map.setPart('prev');
 		};
 
 		this.actionsMap['nextpart'] = function () {
-			app.map._docLayer._preview._scrollViewByDirection('next');
+			if (app.file.fileBasedView)
+				app.map._docLayer._preview._scrollViewByDirection('next');
+			else app.map.setPart('next');
 		};
 
 		this.actionsMap['lastpart'] = function () {
