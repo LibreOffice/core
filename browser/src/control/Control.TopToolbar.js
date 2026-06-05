@@ -80,7 +80,12 @@ class TopToolbar extends JSDialog.Toolbar {
 		}
 		if (object.id === 'styles') {
 			if (eventType === 'selected') {
-				this.onStyleSelect({target: {value: data.substr(data.indexOf(';') + 1)}});
+				const pos = parseInt(data.substr(0, data.indexOf(';')), 10);
+				const label = data.substr(data.indexOf(';') + 1);
+				const style = (this.styleProgNames && this.styleProgNames[pos] !== undefined)
+					? this.styleProgNames[pos]
+					: label;
+				this.onStyleSelect({target: {value: style}});
 				return 'focusHandled';
 			} else if (eventType === 'change') {
 				this.onStyleSelect({target: {value: data}});
@@ -488,6 +493,7 @@ class TopToolbar extends JSDialog.Toolbar {
 		}
 
 		var entries = [];
+		this.styleProgNames = [];
 		var commands = commandValues.Commands;
 		if (commands && commands.length > 0) {
 			commands.forEach(function (command) {
@@ -496,7 +502,8 @@ class TopToolbar extends JSDialog.Toolbar {
 					translated = window.L.Styles.styleMappings[command.text].toLocaleString();
 				}
 				entries.push(translated);
-			});
+				this.styleProgNames.push(command.id);
+			}, this);
 		}
 
 		var styles = [];
@@ -511,7 +518,8 @@ class TopToolbar extends JSDialog.Toolbar {
 
 		topStyles.forEach(function (style) {
 			entries.push(window.L.Styles.styleMappings[style].toLocaleString());
-		});
+			this.styleProgNames.push(style);
+		}, this);
 
 		if (styles !== undefined && styles.length > 0) {
 			styles.forEach(function (style) {
@@ -524,7 +532,8 @@ class TopToolbar extends JSDialog.Toolbar {
 					localeStyle = localeStyle === undefined ? style : localeStyle.toLocaleString();
 				}
 				entries.push(localeStyle);
-			});
+				this.styleProgNames.push(style);
+			}, this);
 		}
 
 		var container = document.getElementById('styles');

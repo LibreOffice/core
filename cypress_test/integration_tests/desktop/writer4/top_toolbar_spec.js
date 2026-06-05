@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require Cypress */
+/* global describe it cy beforeEach require Cypress expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -496,5 +496,49 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		helper.copy();
 		cy.cGet('#copy-paste-container p').should('exist');
 		cy.cGet('#copy-paste-container p b').should('not.exist');
+	});
+});
+
+describe(['tagdesktop'], 'Top toolbar tests (German locale).', function() {
+	beforeEach(function() {
+		cy.viewport(1920,1080);
+		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, 'de');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	it('Compact styles combobox sends programmatic style name, not the localized label.', function() {
+		desktopHelper.switchUIToCompact();
+
+		const capturedStyles = [];
+		cy.getFrameWindow().then((win) => {
+			const map = win.app.map;
+			const original = map.applyStyle.bind(map);
+			map.applyStyle = function(style, family) {
+				capturedStyles.push(style);
+				return original(style, family);
+			};
+		});
+
+		helper.typeIntoDocument('{ctrl+End}{enter}P2{enter}P3{enter}P4{enter}P5');
+		helper.processToIdle(this.win);
+
+		const labels = ['Überschrift 1', 'Überschrift 2', 'Überschrift 1', 'Überschrift 3', 'Überschrift 1'];
+		const expected = ['Heading 1', 'Heading 2', 'Heading 1', 'Heading 3', 'Heading 1'];
+
+		labels.forEach((label, i) => {
+			helper.typeIntoDocument('{ctrl+Home}');
+			for (let j = 0; j < i; j++) helper.typeIntoDocument('{downArrow}');
+			helper.typeIntoDocument('{home}{shift+end}');
+
+			cy.cGet('#styles .ui-combobox-button').click();
+			cy.cGet('[id^="styles-dropdown"].modalpopup')
+				.contains('.ui-combobox-entry span', label).click();
+		});
+
+		cy.wrap(null).should(() => {
+			expect(capturedStyles).to.deep.equal(expected);
+		});
 	});
 });
