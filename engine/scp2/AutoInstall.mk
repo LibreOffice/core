@@ -31,7 +31,6 @@ $(eval $(call gb_AutoInstall_add_module,python,LIBO_LIB_FILE,LIBO_EXECUTABLE,,PA
 $(eval $(call gb_AutoInstall_add_module,python_scriptprovider,,,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,python_librelogo,,,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,pdfimport,LIBO_LIB_FILE,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
-$(eval $(call gb_AutoInstall_add_module,sdk,,SDK_EXECUTABLE,,SDK_PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,ure,URE_PRIVATE_LIB,URE_EXECUTABLE,URE_JAR_FILE,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,writer_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))

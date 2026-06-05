@@ -130,13 +130,6 @@ End
 #define PACKAGE_FILELIST_FONT PACKAGE_FILELIST
 #endif // WNT
 
-#define SDK_PACKAGE_FILELIST(id,name) \
-File id \
-    Dir = FILELIST_SDK_DIR; \
-    Name = name; \
-    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED); \
-End
-
 #define PACKED_LIB_FILE_BODY \
         LIB_FILE_BODY; \
         Styles = (PACKED); \
@@ -210,14 +203,8 @@ End
 
 #if defined MACOSX
 #define FILELIST_DIR PREDEFINED_PROGDIR
-#define FILELIST_SDK_DIR PREDEFINED_PROGDIR
 #else
 #define FILELIST_DIR gid_Dir_Brand_Root
-#if defined WNT
-#define FILELIST_SDK_DIR gid_Dir_Sdkoo_Root
-#else
-#define FILELIST_SDK_DIR PREDEFINED_PROGDIR
-#endif
 #endif
 
 #define UI_FILELIST(name, file) \
@@ -269,14 +256,6 @@ End
         Name = name; \
         Styles = (PACKED); \
         ComponentCondition = cond; \
-    End
-
-#define SDK_EXECUTABLE(id,name) \
-    File id \
-        BIN_FILE_BODY; \
-        Dir = gid_Dir_Sdkoo_Bin; \
-        Name = name; \
-        Styles = (PACKED); \
     End
 
 #define GALLERY_NAME(id) \

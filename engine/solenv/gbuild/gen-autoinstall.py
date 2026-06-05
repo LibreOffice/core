@@ -70,7 +70,7 @@ for (gid, libfile) in autolibs:
         raise Exception("invalid scp2libtemplate \"" + scp2libtemplate + "\"")
     print(scp2libtemplate + "(" + gid + "," + libfile + scp2componentcondition + ")")
 
-scp2exetemplates = set([ "URE_EXECUTABLE", "LIBO_EXECUTABLE", "LIBO_EXECUTABLE_COMPONENTCONDITION", "SDK_EXECUTABLE" ])
+scp2exetemplates = set([ "URE_EXECUTABLE", "LIBO_EXECUTABLE", "LIBO_EXECUTABLE_COMPONENTCONDITION" ])
 for (gid, exefile) in autoexes:
     if scp2exetemplate not in scp2exetemplates:
         raise Exception("invalid scp2exetemplate \"" + scp2exetemplate + "\"")
@@ -82,7 +82,7 @@ for (gid, jarfile) in autojars:
         raise Exception("invalid scp2jartemplate \"" + scp2jartemplate + "\"")
     print(scp2jartemplate + "(" + gid + "," + jarfile + scp2componentcondition + ")")
 
-scp2pkgtemplates = set([ "PACKAGE_FILELIST", "PACKAGE_FILELIST_COMPONENTCONDITION","PACKAGE_FILELIST_FONT", "SDK_PACKAGE_FILELIST" ])
+scp2pkgtemplates = set([ "PACKAGE_FILELIST", "PACKAGE_FILELIST_COMPONENTCONDITION","PACKAGE_FILELIST_FONT" ])
 for (gid, pkgfilelist) in autopkgs:
     if scp2pkgtemplate not in scp2pkgtemplates:
         raise Exception("invalid scp2pkgtemplate \"" + scp2pkgtemplate + "\"")
