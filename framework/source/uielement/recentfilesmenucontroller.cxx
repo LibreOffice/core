@@ -273,7 +273,8 @@ void RecentFilesMenuController::fillPopupMenu(std::unique_lock<std::mutex>& /*rG
             else
             {
                 // In all other URLs show the protocol name before the file name
-                aMenuTitle   = INetURLObject::GetSchemeName(aURL.GetProtocol()) + ": " + aURL.getName();
+                aMenuTitle = INetURLObject::GetSchemeName(aURL.GetProtocol()) + ": "
+                             + aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
             }
 
             aMenuShortCut.append( aMenuTitle );
