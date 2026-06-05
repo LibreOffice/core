@@ -234,7 +234,8 @@ void RequestDetails::processURI()
     }
 
     _fields[Field::Type] = _uriString.substr(off, posDocUri - off); // The first is always the type.
-    std::string uriRes = _uriString.substr(posDocUri + 1);
+    const std::string uriRes =
+        (posDocUri == std::string::npos) ? std::string() : _uriString.substr(posDocUri + 1);
 
     // Cool URI 2.0 starts with /cool/ws.
     const bool isCool2 = _pathSegs.equals(0, "cool") && _pathSegs.equals(1, "ws");
