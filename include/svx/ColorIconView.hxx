@@ -47,6 +47,10 @@ public:
     void remove(int nIndex);
     virtual void clear() override;
 
+    void grab_focus();
+
+    void set_help_id(const OUString& rName);
+
     void setColorActivatedHdl(const Link<const Color&, void>& rLink)
     {
         m_aColorActivatedHdl = rLink;

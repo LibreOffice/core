@@ -93,9 +93,10 @@ class Test(UITestCase):
                 floatWindow = self.xUITest.getFloatWindow()
                 paletteSelector = floatWindow.getChild("palette_listbox")
                 select_by_text(paletteSelector, "Theme colors")
-                colorSet = floatWindow.getChild("colorset")
-                # 4 would be accent1, +12 is the first from the effect variants.
-                colorSet.executeAction("CHOOSE", mkPropertyValues({"POS": "16"}))
+                colorIconView = floatWindow.getChild("coloriconview")
+                # 3 would be accent1, +12 is the first from the effect variants.
+                colorIconView.executeAction("SELECT", mkPropertyValues({"POS": "15"}))
+                colorIconView.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
             # Then make sure the doc model has the correct color theme index:
             drawPage = component.getDrawPages()[0]

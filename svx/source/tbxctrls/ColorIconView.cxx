@@ -59,6 +59,10 @@ void ColorIconView::remove(int nIndex) { m_pIconView->remove(nIndex); }
 
 void ColorIconView::clear() { m_pIconView->clear(); }
 
+void ColorIconView::grab_focus() { m_pIconView->grab_focus(); }
+
+void ColorIconView::set_help_id(const OUString& rName) { m_pIconView->set_help_id(rName); }
+
 IMPL_LINK(ColorIconView, ItemActivatedHdl, const weld::TreeIter&, rIter, bool)
 {
     Color aColor = getColor(m_pIconView->get_iter_index_in_parent(rIter));

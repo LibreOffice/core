@@ -21,7 +21,7 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/SvxColorValueSet.hxx>
+#include <svx/ColorIconView.hxx>
 #include <svx/Palette.hxx>
 #include <vcl/toolboxid.hxx>
 #include <vcl/weld/Button.hxx>
@@ -91,27 +91,25 @@ private:
     TopLevelParentFunction maTopLevelParentFunction;
     ColorSelectFunction maColorSelectFunction;
 
-    std::unique_ptr<SvxColorValueSet> mxColorSet;
-    std::unique_ptr<SvxColorValueSet> mxRecentColorSet;
+    ColorIconView maColorIconView;
+    ColorIconView maRecentColorIconView;
     std::unique_ptr<weld::ComboBox> mxPaletteListBox;
     std::unique_ptr<weld::Button> mxButtonAutoColor;
     std::unique_ptr<weld::Button> mxButtonNoneColor;
     std::unique_ptr<weld::Button> mxButtonPicker;
     std::unique_ptr<weld::Widget> mxAutomaticSeparator;
-    std::unique_ptr<weld::CustomWeld> mxColorSetWin;
-    std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
     weld::Button* mpDefaultButton;
 
-    DECL_DLLPRIVATE_LINK(ColorSelectHdl, ValueSet*, void);
-    DECL_DLLPRIVATE_LINK(RecentColorSelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(ColorSelectHdl, const Color&, void);
+    DECL_DLLPRIVATE_LINK(RecentColorSelectHdl, const Color&, void);
     DECL_DLLPRIVATE_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(OpenPickerClickHdl, weld::Button&, void);
 
-    static bool SelectValueSetEntry(SvxColorValueSet& rColorSet, const Color& rColor);
-    static NamedColor GetSelectEntryColor(const ValueSet& rColorSet);
+    static bool SelectIconViewEntry(ColorIconView& rColorIconView, const Color& rColor);
+    static NamedColor GetSelectEntryColor(const ColorIconView& rColorIconView);
     NamedColor GetAutoColor() const;
-    void ApplySelectedColor(ValueSet& rColorSet);
+    void ApplySelectedColor(ColorIconView& rColorIconView);
 
 public:
     ColorWindow(OUString  rCommand,
