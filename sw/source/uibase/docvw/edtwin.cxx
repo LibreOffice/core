@@ -69,6 +69,7 @@
 #include <editeng/colritem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/datetime.hxx>
+#include <unotools/lingucfg.hxx>
 
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -5755,6 +5756,22 @@ void SwEditWin::LoseFocus()
         s_pQuickHlpData->Stop( m_rView.GetWrtShell() );
 }
 
+namespace
+{
+bool lcl_ComplexLanguageIsRightToLeft()
+{
+    SvtLinguConfig aLinguCfg;
+    css::lang::Locale aLocale;
+    LanguageType nLang;
+
+    css::uno::Any aLang = aLinguCfg.GetProperty(u"DefaultLocale_CTL");
+    aLang >>= aLocale;
+    nLang = MsLangId::resolveSystemLanguageByScriptType(
+        LanguageTag::convertToLanguageType(aLocale, false), i18n::ScriptType::COMPLEX);
+    return MsLangId::isRightToLeft(nLang);
+}
+}
+
 bool SwEditWin::IsViewReadonly() const
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -6073,7 +6090,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT;
                 else if(!pCommandData->IsLeftShift() && pCommandData->IsRightShift())
                     nSlot = SID_ATTR_PARA_RIGHT_TO_LEFT;
-                if(nSlot && SvtCTLOptions::IsCTLFontEnabled())
+                if (nSlot && lcl_ComplexLanguageIsRightToLeft())
                     GetView().GetViewFrame().GetDispatcher()->Execute(nSlot);
             }
         }
