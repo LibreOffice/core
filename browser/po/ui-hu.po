@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-02 14:06+0000\n"
+"PO-Revision-Date: 2026-06-06 15:01+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hu/>\n"
-"Language: \n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -887,6 +887,10 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"A dokumentummal végzett műveletekhez (olvasás, szerkesztés) olyan modellt "
+"válasszon, amely képes az eszközhasználatra. Ilyen például a gpt-4o, a "
+"llama3.1, vagy a qwen2.5. Az egyéb modellek (pl. az alap llama3, gemma) csak "
+"beszélgetni tudnak, de a dokumentummal nem tudnak dolgozni."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2255
 #: admin/src/integrator/AdminIntegratorSettings.ts:2373
@@ -940,6 +944,8 @@ msgstr "Nincs (képgenerálás letiltva)"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Ne sikerült lehúzni a modellek listáját (HTTP {0}). Ellenőrizze a "
+"szolgáltató címét és az API-kulcsot."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1783,7 +1789,7 @@ msgstr "Módosítás elutasítva"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
-msgstr ""
+msgstr "Szakasz használata: "
 
 #: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
@@ -3014,7 +3020,7 @@ msgstr "Helyi kép..."
 #: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
 #: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
 msgid "Shapes ..."
-msgstr ""
+msgstr "Alakzatok ..."
 
 #: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
 #: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
@@ -5606,17 +5612,19 @@ msgstr "Bejegyzések szűrése"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "{n}. pozíció, felosztás beállítva"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "{n}. pozíció, nincs felosztás"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
 msgstr ""
+"Oszlopfelosztás. A nyílbillentyűkkel mozgathatja a kurzort és a szóközzel "
+"állíthatja be a felosztás helyét."
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
