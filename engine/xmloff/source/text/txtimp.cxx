@@ -1385,7 +1385,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 sal_Int32 length = aGrabBag.getLength();
                 aGrabBag.realloc(length + 1);
                 auto pGrabBag = aGrabBag.getArray();
-                pGrabBag[length].Name = "OutlineContentVisibleAttr";
+                pGrabBag[length].Name = u"OutlineContentVisibleAttr"_ustr;
                 pGrabBag[length].Value <<= bool(bOutlineContentVisible);
                 xPropSet->setPropertyValue(u"ParaInteropGrabBag"_ustr, uno::Any(aGrabBag));
             }
@@ -1608,7 +1608,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
     // Trashed outline numbering in ODF 1.1 text document created by OOo 3.x (#i106218#)
     Sequence < PropertyValue > aProps( 1 );
     PropertyValue *pProps = aProps.getArray();
-    pProps->Name = "HeadingStyleName";
+    pProps->Name = u"HeadingStyleName"_ustr;
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         // Paragraph style assignments in Outline of template lost from second level on (#i107610#)

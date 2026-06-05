@@ -163,7 +163,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
             if (GetExport().getSaneDefaultVersion() < SvtSaveOptions::ODFSVER_013
                 && value == "0") // tdf#91306 ODF 1.3 OFFICE-3923
             {
-                value = "auto";
+                value = u"auto"_ustr;
             }
             OUString const name = rNamespaceMap.GetQNameByKey(
                 getPropertySetMapper()->GetEntryNameSpace(rProperty.mnIndex),

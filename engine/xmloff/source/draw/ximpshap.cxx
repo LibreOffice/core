@@ -1413,22 +1413,22 @@ void SdXMLPathShapeContext::startFastElement (sal_Int32 nElement,
     {
         if(aPolyPolygon.isClosed())
         {
-            service = "com.sun.star.drawing.ClosedBezierShape";
+            service = u"com.sun.star.drawing.ClosedBezierShape"_ustr;
         }
         else
         {
-            service = "com.sun.star.drawing.OpenBezierShape";
+            service = u"com.sun.star.drawing.OpenBezierShape"_ustr;
         }
     }
     else
     {
         if(aPolyPolygon.isClosed())
         {
-            service = "com.sun.star.drawing.PolyPolygonShape";
+            service = u"com.sun.star.drawing.PolyPolygonShape"_ustr;
         }
         else
         {
-            service = "com.sun.star.drawing.PolyLineShape";
+            service = u"com.sun.star.drawing.PolyLineShape"_ustr;
         }
     }
 
@@ -1534,46 +1534,46 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
             if( IsXMLToken( maPresentationClass, XML_SUBTITLE ))
             {
                 // XmlShapeType::PresSubtitleShape
-                service = "com.sun.star.presentation.SubtitleShape";
+                service = u"com.sun.star.presentation.SubtitleShape"_ustr;
             }
             else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OUTLINE ) )
             {
                 // XmlShapeType::PresOutlinerShape
-                service = "com.sun.star.presentation.OutlinerShape";
+                service = u"com.sun.star.presentation.OutlinerShape"_ustr;
             }
             else if( IsXMLToken( maPresentationClass, XML_NOTES ) )
             {
                 // XmlShapeType::PresNotesShape
-                service = "com.sun.star.presentation.NotesShape";
+                service = u"com.sun.star.presentation.NotesShape"_ustr;
             }
             else if( IsXMLToken( maPresentationClass, XML_HEADER ) )
             {
                 // XmlShapeType::PresHeaderShape
-                service = "com.sun.star.presentation.HeaderShape";
+                service = u"com.sun.star.presentation.HeaderShape"_ustr;
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_FOOTER ) )
             {
                 // XmlShapeType::PresFooterShape
-                service = "com.sun.star.presentation.FooterShape";
+                service = u"com.sun.star.presentation.FooterShape"_ustr;
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_PAGE_NUMBER ) )
             {
                 // XmlShapeType::PresSlideNumberShape
-                service = "com.sun.star.presentation.SlideNumberShape";
+                service = u"com.sun.star.presentation.SlideNumberShape"_ustr;
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_DATE_TIME ) )
             {
                 // XmlShapeType::PresDateTimeShape
-                service = "com.sun.star.presentation.DateTimeShape";
+                service = u"com.sun.star.presentation.DateTimeShape"_ustr;
                 bClearText = true;
             }
             else //  IsXMLToken( maPresentationClass, XML_TITLE ) )
             {
                 // XmlShapeType::PresTitleTextShape
-                service = "com.sun.star.presentation.TitleTextShape";
+                service = u"com.sun.star.presentation.TitleTextShape"_ustr;
             }
             bIsPresShape = true;
         }
@@ -1582,7 +1582,7 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
     if( service.isEmpty() )
     {
         // normal text shape
-        service = "com.sun.star.drawing.TextShape";
+        service = u"com.sun.star.drawing.TextShape"_ustr;
     }
 
     // Add, set Style and properties from base shape
@@ -2395,11 +2395,11 @@ void SdXMLGraphicObjectShapeContext::startFastElement (sal_Int32 nElement,
 
     if( IsXMLToken( maPresentationClass, XML_GRAPHIC ) && GetImport().GetShapeImport()->IsPresentationShapesSupported() )
     {
-        service = "com.sun.star.presentation.GraphicObjectShape";
+        service = u"com.sun.star.presentation.GraphicObjectShape"_ustr;
     }
     else
     {
-        service = "com.sun.star.drawing.GraphicObjectShape";
+        service = u"com.sun.star.drawing.GraphicObjectShape"_ustr;
     }
 
     AddShape(service);
@@ -2652,15 +2652,15 @@ void SdXMLObjectShapeContext::startFastElement (sal_Int32 /*nElement*/,
     {
         if( IsXMLToken( maPresentationClass, XML_CHART ) )
         {
-            service = "com.sun.star.presentation.ChartShape";
+            service = u"com.sun.star.presentation.ChartShape"_ustr;
         }
         else if( IsXMLToken( maPresentationClass, XML_TABLE ) )
         {
-            service = "com.sun.star.presentation.CalcShape";
+            service = u"com.sun.star.presentation.CalcShape"_ustr;
         }
         else if( IsXMLToken( maPresentationClass, XML_OBJECT ) )
         {
-            service = "com.sun.star.presentation.OLE2Shape";
+            service = u"com.sun.star.presentation.OLE2Shape"_ustr;
         }
     }
 
@@ -2854,19 +2854,19 @@ void SdXMLPluginShapeContext::startFastElement (sal_Int32 /*nElement*/,
 
     if( mbMedia )
     {
-        service = "com.sun.star.drawing.MediaShape";
+        service = u"com.sun.star.drawing.MediaShape"_ustr;
 
         bIsPresShape = !maPresentationClass.isEmpty() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
         if( bIsPresShape )
         {
             if( IsXMLToken( maPresentationClass, XML_OBJECT ) )
             {
-                service = "com.sun.star.presentation.MediaShape";
+                service = u"com.sun.star.presentation.MediaShape"_ustr;
             }
         }
     }
     else
-        service = "com.sun.star.drawing.PluginShape";
+        service = u"com.sun.star.drawing.PluginShape"_ustr;
 
     AddShape(service);
 
@@ -3788,7 +3788,7 @@ void SdXMLTableShapeContext::startFastElement (sal_Int32 nElement,
     {
         if( IsXMLToken( maPresentationClass, XML_TABLE ) )
         {
-            service = "com.sun.star.presentation.TableShape";
+            service = u"com.sun.star.presentation.TableShape"_ustr;
         }
     }
 

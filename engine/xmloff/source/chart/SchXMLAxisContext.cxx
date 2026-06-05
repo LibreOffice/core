@@ -155,18 +155,18 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape() const
     {
         case SCH_XML_AXIS_X:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = "HasXAxisTitle";
+                aPropName = u"HasXAxisTitle"_ustr;
             else
-                aPropName = "HasSecondaryXAxisTitle";
+                aPropName = u"HasSecondaryXAxisTitle"_ustr;
             break;
         case SCH_XML_AXIS_Y:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = "HasYAxisTitle";
+                aPropName = u"HasYAxisTitle"_ustr;
             else
-                aPropName = "HasSecondaryYAxisTitle";
+                aPropName = u"HasSecondaryYAxisTitle"_ustr;
             break;
         case SCH_XML_AXIS_Z:
-            aPropName = "HasZAxisTitle";
+            aPropName = u"HasZAxisTitle"_ustr;
             break;
         case SCH_XML_AXIS_UNDEF:
             SAL_INFO("xmloff.chart", "Invalid axis" );
@@ -189,21 +189,21 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
     {
         case SCH_XML_AXIS_X:
             if( bIsMajor )
-                aPropName = "HasXAxisGrid";
+                aPropName = u"HasXAxisGrid"_ustr;
             else
-                aPropName = "HasXAxisHelpGrid";
+                aPropName = u"HasXAxisHelpGrid"_ustr;
             break;
         case SCH_XML_AXIS_Y:
             if( bIsMajor )
-                aPropName = "HasYAxisGrid";
+                aPropName = u"HasYAxisGrid"_ustr;
             else
-                aPropName = "HasYAxisHelpGrid";
+                aPropName = u"HasYAxisHelpGrid"_ustr;
             break;
         case SCH_XML_AXIS_Z:
             if( bIsMajor )
-                aPropName = "HasZAxisGrid";
+                aPropName = u"HasZAxisGrid"_ustr;
             else
-                aPropName = "HasZAxisHelpGrid";
+                aPropName = u"HasZAxisHelpGrid"_ustr;
             break;
         case SCH_XML_AXIS_UNDEF:
             SAL_INFO("xmloff.chart", "Invalid axis" );
@@ -347,19 +347,19 @@ void SchXMLAxisContext::CreateAxis()
     {
         case SCH_XML_AXIS_X:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = "HasXAxis";
+                aPropName = u"HasXAxis"_ustr;
             else
-                aPropName = "HasSecondaryXAxis";
+                aPropName = u"HasSecondaryXAxis"_ustr;
             break;
         case SCH_XML_AXIS_Y:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = "HasYAxis";
+                aPropName = u"HasYAxis"_ustr;
             else
-                aPropName = "HasSecondaryYAxis";
+                aPropName = u"HasSecondaryYAxis"_ustr;
             break;
         case SCH_XML_AXIS_Z:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-                aPropName = "HasZAxis";
+                aPropName = u"HasZAxis"_ustr;
             break;
         case SCH_XML_AXIS_UNDEF:
             SAL_INFO("xmloff.chart", "Invalid axis" );

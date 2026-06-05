@@ -170,13 +170,13 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
     if( bChapterInfoOK )
     {
         // chapter info field
-        pValues[nIndex].Name = "ChapterFormat";
+        pValues[nIndex].Name = u"ChapterFormat"_ustr;
         pValues[nIndex].Value <<= nChapterInfo;
         nIndex++;
     }
     if( bOutlineLevelOK )
     {
-        pValues[nIndex].Name = "ChapterLevel";
+        pValues[nIndex].Name = u"ChapterLevel"_ustr;
         pValues[nIndex].Value <<= nOutlineLevel;
     }
 }

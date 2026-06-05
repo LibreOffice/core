@@ -83,9 +83,9 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
     if( !sShow.isEmpty() && sTargetFrameName.isEmpty() )
     {
         if( IsXMLToken( sShow, XML_NEW ) )
-            sTargetFrameName = "_blank";
+            sTargetFrameName = u"_blank"_ustr;
         else if( IsXMLToken( sShow, XML_REPLACE ) )
-            sTargetFrameName = "_self";
+            sTargetFrameName = u"_self"_ustr;
     }
 }
 

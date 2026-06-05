@@ -266,11 +266,11 @@ void SvXMLMetaDocumentContext::setBuildId(std::u16string_view i_rBuildId, const 
             ||  o3tl::starts_with(i_rBuildId, u"StarSuite 6")
             ||  o3tl::starts_with(i_rBuildId, u"OpenOffice.org 1"))
         {
-            sBuildId = "645$8687";
+            sBuildId = u"645$8687"_ustr;
         }
         else if (o3tl::starts_with(i_rBuildId, u"NeoOffice/2"))
         {
-            sBuildId = "680$9134"; // fake NeoOffice as OpenOffice.org 2.2 release
+            sBuildId = u"680$9134"_ustr; // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
 

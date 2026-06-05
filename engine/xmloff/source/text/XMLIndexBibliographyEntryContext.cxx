@@ -147,7 +147,7 @@ void XMLIndexBibliographyEntryContext::FillPropertyValues(
     // bibliography data field
     sal_Int32 nIndex = m_bCharStyleNameOK ? 2 : 1;
     auto pValues = rValues.getArray();
-    pValues[nIndex].Name = "BibliographyDataField";
+    pValues[nIndex].Name = u"BibliographyDataField"_ustr;
     pValues[nIndex].Value <<= nBibliographyInfo;
 }
 

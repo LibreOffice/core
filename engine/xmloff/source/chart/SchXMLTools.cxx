@@ -290,13 +290,13 @@ XMLTokenEnum getTokenByChartType(
 
     if( bUseOldNames )
     {
-        aPrefix = "com.sun.star.chart.";
-        aPostfix = "Diagram";
+        aPrefix = u"com.sun.star.chart."_ustr;
+        aPostfix = u"Diagram"_ustr;
     }
     else
     {
-        aPrefix = "com.sun.star.chart2.";
-        aPostfix = "ChartType";
+        aPrefix = u"com.sun.star.chart2."_ustr;
+        aPostfix = u"ChartType"_ustr;
     }
 
     if( o3tl::starts_with(rChartTypeService, aPrefix))

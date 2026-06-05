@@ -294,7 +294,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
 {
     if( aGlobalChartTypeName == "com.sun.star.chart2.DonutChartType" )
     {
-        maSeriesChartTypeName = "com.sun.star.chart2.PieChartType";
+        maSeriesChartTypeName = u"com.sun.star.chart2.PieChartType"_ustr;
         maGlobalChartTypeName = maSeriesChartTypeName;
     }
 }
@@ -409,7 +409,7 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
                 && m_bStockHasVolume
                 && mnSeriesIndex == 0 )
             {
-                maSeriesChartTypeName = "com.sun.star.chart2.ColumnChartType";
+                maSeriesChartTypeName = u"com.sun.star.chart2.ColumnChartType"_ustr;
                 bIsCandleStick = false;
             }
             else
@@ -466,7 +466,7 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
         {
             OUString aMainRole(u"values-y"_ustr);
             if (maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType")
-                aMainRole = "values-size";
+                aMainRole = u"values-size"_ustr;
             xSeqProp->setPropertyValue(u"Role"_ustr, uno::Any(aMainRole));
         }
         xLabeledSeq->setValues(xSequenceValues);

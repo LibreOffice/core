@@ -141,9 +141,9 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
             OUString aFormat = rMimeType;
 
             if (aGraphic.IsAnimated())
-                aFormat = "image/gif";
+                aFormat = u"image/gif"_ustr;
             else if (aFormat.isEmpty())
-                aFormat = "image/png";
+                aFormat = u"image/png"_ustr;
 
             bRet = (rFilter.ExportGraphic(aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
         }
@@ -723,21 +723,21 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
         {
             switch (aGfxLink.GetType())
             {
-                case GfxLinkType::EpsBuffer: aExtension = ".eps"; break;
-                case GfxLinkType::NativeGif: aExtension = ".gif"; break;
+                case GfxLinkType::EpsBuffer: aExtension = u".eps"_ustr; break;
+                case GfxLinkType::NativeGif: aExtension = u".gif"_ustr; break;
                 // #i15508# added BMP type for better exports (checked, works)
-                case GfxLinkType::NativeBmp: aExtension = ".bmp"; break;
-                case GfxLinkType::NativeJpg: aExtension = ".jpg"; break;
-                case GfxLinkType::NativePng: aExtension = ".png"; break;
-                case GfxLinkType::NativeTif: aExtension = ".tif"; break;
+                case GfxLinkType::NativeBmp: aExtension = u".bmp"_ustr; break;
+                case GfxLinkType::NativeJpg: aExtension = u".jpg"_ustr; break;
+                case GfxLinkType::NativePng: aExtension = u".png"_ustr; break;
+                case GfxLinkType::NativeTif: aExtension = u".tif"_ustr; break;
                 case GfxLinkType::NativeWmf:
                     if (aGfxLink.IsEMF())
-                        aExtension = ".emf";
+                        aExtension = u".emf"_ustr;
                     else
-                        aExtension = ".wmf";
+                        aExtension = u".wmf"_ustr;
                     break;
-                case GfxLinkType::NativeMet: aExtension = ".met"; break;
-                case GfxLinkType::NativePct: aExtension = ".pct"; break;
+                case GfxLinkType::NativeMet: aExtension = u".met"_ustr; break;
+                case GfxLinkType::NativePct: aExtension = u".pct"_ustr; break;
                 case GfxLinkType::NativeSvg:
                 {
                     // backward-compat kludge: since no released OOo
@@ -750,19 +750,19 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                         || nSaneVersion == SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
                     {
                         bUseGfxLink = false;
-                        aExtension = ".svm";
+                        aExtension = u".svm"_ustr;
                     }
                     else
                     {
-                        aExtension = ".svg";
+                        aExtension = u".svg"_ustr;
                     }
                     break;
                 }
-                case GfxLinkType::NativePdf: aExtension = ".pdf"; break;
-                case GfxLinkType::NativeWebp: aExtension = ".webp"; break;
+                case GfxLinkType::NativePdf: aExtension = u".pdf"_ustr; break;
+                case GfxLinkType::NativeWebp: aExtension = u".webp"_ustr; break;
 
                 default:
-                    aExtension = ".grf";
+                    aExtension = u".grf"_ustr;
                 break;
             }
         }
@@ -772,9 +772,9 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             if (aGraphicObject.GetType() == GraphicType::Bitmap)
             {
                 if (aGraphicObject.IsAnimated())
-                    aExtension = ".gif";
+                    aExtension = u".gif"_ustr;
                 else
-                    aExtension = ".png";
+                    aExtension = u".png"_ustr;
             }
             else if (aGraphicObject.GetType() == GraphicType::GdiMetafile)
             {
@@ -782,9 +782,9 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 GDIMetaFile& rMetafile(const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()));
 
                 if (ImplCheckForEPS(rMetafile))
-                    aExtension = ".eps";
+                    aExtension = u".eps"_ustr;
                 else
-                    aExtension = ".svm";
+                    aExtension = u".svm"_ustr;
             }
         }
 
@@ -865,11 +865,11 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
 
                     if (aGraphic.IsAnimated())
                     {
-                        aFormat = "gif";
+                        aFormat = u"gif"_ustr;
                     }
                     else
                     {
-                        aFormat = "png";
+                        aFormat = u"png"_ustr;
                     }
                     rOutSavedMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aFormat.toUtf8());
 

@@ -547,24 +547,24 @@ void XMLChartExportPropertyMapper::ContextFilter(
             // if Auto... is set the corresponding properties mustn't be exported
             case XML_SCH_CONTEXT_MIN:
                 bCheckAuto = true;
-                aAutoPropName = "AutoMin";
+                aAutoPropName = u"AutoMin"_ustr;
                 break;
             case XML_SCH_CONTEXT_MAX:
                 bCheckAuto = true;
-                aAutoPropName = "AutoMax";
+                aAutoPropName = u"AutoMax"_ustr;
                 break;
             case XML_SCH_CONTEXT_STEP_MAIN:
                 bCheckAuto = true;
-                aAutoPropName = "AutoStepMain";
+                aAutoPropName = u"AutoStepMain"_ustr;
                 break;
             case XML_SCH_CONTEXT_STEP_HELP_COUNT:
                 bCheckAuto = true;
-                aAutoPropName = "AutoStepHelp";
+                aAutoPropName = u"AutoStepHelp"_ustr;
                 break;
 
             case XML_SCH_CONTEXT_ORIGIN:
                 bCheckAuto = true;
-                aAutoPropName = "AutoOrigin";
+                aAutoPropName = u"AutoOrigin"_ustr;
                 break;
 
             // the following property is deprecated

@@ -498,13 +498,13 @@ void XMLTableExport::exportTableStyles()
     OUString sCellStyleName;
     if (mbWriter)
     {
-        sCellStyleName = "CellStyles";
+        sCellStyleName = u"CellStyles"_ustr;
         aStEx.set(new XMLCellStyleExport(mrExport));
     }
     else
     {
         // write graphic family styles
-        sCellStyleName = "cell";
+        sCellStyleName = u"cell"_ustr;
         aStEx.set(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
     }
 
@@ -586,9 +586,9 @@ void XMLTableExport::exportTableTemplates()
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
         OUString sFamilyName;
         if (mbWriter)
-            sFamilyName = "TableStyles";
+            sFamilyName = u"TableStyles"_ustr;
         else
-            sFamilyName = "table";
+            sFamilyName = u"table"_ustr;
 
         Reference< XIndexAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
 

@@ -227,7 +227,7 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
                         else
                         {
                             if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                                sCurrencySymbol = "EUR";
+                                sCurrencySymbol = u"EUR"_ustr;
                         }
                     }
                     return true;
@@ -311,7 +311,7 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
                     else
                     {
                         if ( rCurrencySymbol.getLength() == 1 && rCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                            rCurrencySymbol = "EUR";
+                            rCurrencySymbol = u"EUR"_ustr;
                     }
                 }
                 return true;

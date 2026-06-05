@@ -414,7 +414,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
             aAny = m_xPropSet->getPropertyValue(sPropName);
             aAny >>= sRelPath;
         }
-        sPropName = "StreamName";
+        sPropName = u"StreamName"_ustr;
         if( xPropSetInfo->hasPropertyByName(sPropName) )
         {
             aAny = m_xPropSet->getPropertyValue(sPropName);
@@ -422,7 +422,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         }
         if( !sName.isEmpty() )
         {
-            m_aExtPathPrefix = "../";
+            m_aExtPathPrefix = u"../"_ustr;
 
             // If there is a rel path within a package, then append
             // additional '../'. If the rel path contains an ':', then it is

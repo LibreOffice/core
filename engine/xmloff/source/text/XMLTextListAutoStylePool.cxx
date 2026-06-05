@@ -155,7 +155,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     SvXMLExportFlags nExportFlags = m_rExport.getExportFlags();
     bool bStylesOnly = (nExportFlags & SvXMLExportFlags::STYLES) && !(nExportFlags & SvXMLExportFlags::CONTENT);
     if( bStylesOnly )
-        m_sPrefix = "ML";
+        m_sPrefix = u"ML"_ustr;
 
     Reference<XStyleFamiliesSupplier> xFamiliesSupp(m_rExport.GetModel(), UNO_QUERY);
     if (!xFamiliesSupp.is())

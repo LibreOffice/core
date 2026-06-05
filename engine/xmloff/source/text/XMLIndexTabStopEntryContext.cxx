@@ -121,14 +121,14 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
     PropertyValue* pValues = rValues.getArray();
 
     // right aligned?
-    pValues[nNextEntry].Name = "TabStopRightAligned";
+    pValues[nNextEntry].Name = u"TabStopRightAligned"_ustr;
     pValues[nNextEntry].Value <<= bTabRightAligned;
     nNextEntry++;
 
     // position
     if (bTabPositionOK)
     {
-        pValues[nNextEntry].Name = "TabStopPosition";
+        pValues[nNextEntry].Name = u"TabStopPosition"_ustr;
         pValues[nNextEntry].Value <<= nTabPosition;
         nNextEntry++;
     }
@@ -136,13 +136,13 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
     // leader char
     if (bLeaderCharOK)
     {
-        pValues[nNextEntry].Name = "TabStopFillCharacter";
+        pValues[nNextEntry].Name = u"TabStopFillCharacter"_ustr;
         pValues[nNextEntry].Value <<= sLeaderChar;
         nNextEntry++;
     }
 
     // tab character #i21237#
-    pValues[nNextEntry].Name = "WithTab";
+    pValues[nNextEntry].Name = u"WithTab"_ustr;
     pValues[nNextEntry].Value <<= bWithTab;
     nNextEntry++;
 

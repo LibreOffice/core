@@ -50,16 +50,16 @@ void XMLComplexColorExport::doExport(model::ComplexColor const& rComplexColor, s
         switch (rTransform.meType)
         {
             case model::TransformationType::Tint:
-                aType = "tint";
+                aType = u"tint"_ustr;
                 break;
             case model::TransformationType::Shade:
-                aType = "shade";
+                aType = u"shade"_ustr;
                 break;
             case model::TransformationType::LumMod:
-                aType = "lummod";
+                aType = u"lummod"_ustr;
                 break;
             case model::TransformationType::LumOff:
-                aType = "lumoff";
+                aType = u"lumoff"_ustr;
                 break;
             default:
                 break;

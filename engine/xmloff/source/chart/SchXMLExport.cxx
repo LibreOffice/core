@@ -1244,12 +1244,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         {
             OUString aDataProviderURL(  u".."_ustr  );
             if( xNewDoc->hasInternalDataProvider() )
-                aDataProviderURL = ".";
+                aDataProviderURL = u"."_ustr;
             else //special handling for data base data provider necessary
             {
                 Reference< chart2::data::XDatabaseDataProvider > xDBDataProvider( xNewDoc->getDataProvider(), uno::UNO_QUERY );
                 if( xDBDataProvider.is() )
-                    aDataProviderURL = ".";
+                    aDataProviderURL = u"."_ustr;
             }
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
@@ -1282,7 +1282,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                     {
                         if (rChartType.is() && rChartType->getChartType() == u"com.sun.star.chart2.HistogramChartType"_ustr)
                         {
-                            sChartType = "com.sun.star.chart.HistogramDiagram";
+                            sChartType = u"com.sun.star.chart.HistogramDiagram"_ustr;
                             break;
                         }
                     }

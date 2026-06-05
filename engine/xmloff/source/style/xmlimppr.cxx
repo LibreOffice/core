@@ -751,16 +751,16 @@ bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
             switch (rResult.Result)
             {
             case TolerantPropertySetResultType::UNKNOWN_PROPERTY :
-                sMessage = "UNKNOWN_PROPERTY";
+                sMessage = u"UNKNOWN_PROPERTY"_ustr;
                 break;
             case TolerantPropertySetResultType::ILLEGAL_ARGUMENT :
-                sMessage = "ILLEGAL_ARGUMENT";
+                sMessage = u"ILLEGAL_ARGUMENT"_ustr;
                 break;
             case TolerantPropertySetResultType::PROPERTY_VETO :
-                sMessage = "PROPERTY_VETO";
+                sMessage = u"PROPERTY_VETO"_ustr;
                 break;
             case TolerantPropertySetResultType::WRAPPED_TARGET :
-                sMessage = "WRAPPED_TARGET";
+                sMessage = u"WRAPPED_TARGET"_ustr;
                 break;
             }
             rImport.SetError(

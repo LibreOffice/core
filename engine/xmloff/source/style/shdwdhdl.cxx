@@ -51,7 +51,7 @@ bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, c
     {
         if( bValue )
         {
-            rStrExpValue = "1pt 1pt";
+            rStrExpValue = u"1pt 1pt"_ustr;
         }
         else
         {

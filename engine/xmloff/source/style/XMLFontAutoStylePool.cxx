@@ -186,7 +186,7 @@ OUString XMLFontAutoStylePool::Add(
         }
 
         if( sName.isEmpty() )
-            sName = "F";
+            sName = u"F"_ustr;
 
         if( m_aNames.find(sName) != m_aNames.end() )
         {
@@ -254,10 +254,10 @@ OUString FontWeightToString(FontWeight eWeight)
     switch (eWeight)
     {
     case WEIGHT_BOLD:
-        aRet = "bold";
+        aRet = u"bold"_ustr;
         break;
     default:
-        aRet = "normal";
+        aRet = u"normal"_ustr;
         break;
     }
 
@@ -272,10 +272,10 @@ OUString FontItalicToString(FontItalic eWeight)
     switch (eWeight)
     {
     case ITALIC_NORMAL:
-        aRet = "italic";
+        aRet = u"italic"_ustr;
         break;
     default:
-        aRet = "normal";
+        aRet = u"normal"_ustr;
         break;
     }
 

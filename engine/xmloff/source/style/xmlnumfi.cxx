@@ -848,7 +848,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     }
 
     if ( aNumInfo.aIntegerFractionDelimiter.isEmpty() )
-        aNumInfo.aIntegerFractionDelimiter = " ";
+        aNumInfo.aIntegerFractionDelimiter = u" "_ustr;
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLNumFmtElementContext::createFastChildContext(
@@ -975,7 +975,7 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                 if ( !sBlankWidthString.isEmpty() )
                 {
                     lcl_InsertBlankWidthChars( sBlankWidthString, aContent );
-                    sBlankWidthString = "";
+                    sBlankWidthString = u""_ustr;
                 }
                 rParent.AddToCode( aContent );
                 aContent.setLength(0);

@@ -302,7 +302,7 @@ void setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, O
                     bool bHasDataPilotSource = !sDataPilotSource.isEmpty();
                     OUString aDataProviderServiceName(u"com.sun.star.chart2.data.DataProvider"_ustr);
                     if (bHasDataPilotSource)
-                        aDataProviderServiceName = "com.sun.star.chart2.data.PivotTableDataProvider";
+                        aDataProviderServiceName = u"com.sun.star.chart2.data.PivotTableDataProvider"_ustr;
 
                     if (lcl_hasServiceName(xFact, aDataProviderServiceName))
                     {
@@ -868,7 +868,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
         xNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
     }
     if( bHasOwnData )
-        msChartAddress = "all";
+        msChartAddress = u"all"_ustr;
 
     bool bSwitchRangesFromOuterToInternalIfNecessary = false;
     if(!bHasOwnData && mbIsStockChart)
@@ -914,7 +914,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
                 if(!bHasOwnData)
                 {
                     bHasOwnData = true;
-                    msChartAddress = "all";
+                    msChartAddress = u"all"_ustr;
                     if( !xNewDoc->hasInternalDataProvider() )
                     {
                         xNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );

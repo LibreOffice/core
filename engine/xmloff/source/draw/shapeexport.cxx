@@ -425,7 +425,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         {
             // Shapes with a Writer TextBox always have a parent style.
             // If there would be none, then assign the default one.
-            aParentName = "Frame";
+            aParentName = u"Frame"_ustr;
         }
 
         // filter propset
@@ -1423,16 +1423,16 @@ void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xSha
     OUString temp;
     switch(aBarCode.ErrorCorrection){
         case css::drawing::BarCodeErrorCorrection::LOW :
-            temp = "low";
+            temp = u"low"_ustr;
             break;
         case css::drawing::BarCodeErrorCorrection::MEDIUM:
-            temp = "medium";
+            temp = u"medium"_ustr;
             break;
         case css::drawing::BarCodeErrorCorrection::QUARTILE:
-            temp = "quartile";
+            temp = u"quartile"_ustr;
             break;
         case css::drawing::BarCodeErrorCorrection::HIGH:
-            temp = "high";
+            temp = u"high"_ustr;
             break;
     }
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_ERROR_CORRECTION, temp);
@@ -3543,14 +3543,14 @@ void XMLShapeExport::ImpExportMediaShape(
     xPropSet->getPropertyValue(u"Zoom"_ustr) >>= eZoom;
     switch( eZoom )
     {
-        case media::ZoomLevel_ZOOM_1_TO_4  : aZoomValue = "25%"; break;
-        case media::ZoomLevel_ZOOM_1_TO_2  : aZoomValue = "50%"; break;
-        case media::ZoomLevel_ORIGINAL     : aZoomValue = "100%"; break;
-        case media::ZoomLevel_ZOOM_2_TO_1  : aZoomValue = "200%"; break;
-        case media::ZoomLevel_ZOOM_4_TO_1  : aZoomValue = "400%"; break;
-        case media::ZoomLevel_FIT_TO_WINDOW: aZoomValue = "fit"; break;
-        case media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT: aZoomValue = "fixedfit"; break;
-        case media::ZoomLevel_FULLSCREEN   : aZoomValue = "fullscreen"; break;
+        case media::ZoomLevel_ZOOM_1_TO_4  : aZoomValue = u"25%"_ustr; break;
+        case media::ZoomLevel_ZOOM_1_TO_2  : aZoomValue = u"50%"_ustr; break;
+        case media::ZoomLevel_ORIGINAL     : aZoomValue = u"100%"_ustr; break;
+        case media::ZoomLevel_ZOOM_2_TO_1  : aZoomValue = u"200%"_ustr; break;
+        case media::ZoomLevel_ZOOM_4_TO_1  : aZoomValue = u"400%"_ustr; break;
+        case media::ZoomLevel_FIT_TO_WINDOW: aZoomValue = u"fit"_ustr; break;
+        case media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT: aZoomValue = u"fixedfit"_ustr; break;
+        case media::ZoomLevel_FULLSCREEN   : aZoomValue = u"fullscreen"_ustr; break;
 
         default:
         break;
@@ -4638,9 +4638,9 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         {
                                             // LibreOffice had used the same values as later specified in ODF 1.4
                                             if (eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible)
-                                                aStr = "loext:MetalMSCompatible";
+                                                aStr = u"loext:MetalMSCompatible"_ustr;
                                             else
-                                                aStr = "draw:MetalODF";
+                                                aStr = u"draw:MetalODF"_ustr;
 
                                             SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
                                             if (eVersion >= SvtSaveOptions::ODFSVER_014)

@@ -203,31 +203,31 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     switch( nElementToken & TOKEN_MASK )
     {
     case XML_LENGTH:
-        sPropertyName = "Length";
+        sPropertyName = u"Length"_ustr;
         pConvert = &xforms_int32;
         break;
     case XML_MINLENGTH:
-        sPropertyName = "MinLength";
+        sPropertyName = u"MinLength"_ustr;
         pConvert = &xforms_int32;
         break;
     case XML_MAXLENGTH:
-        sPropertyName = "MaxLength";
+        sPropertyName = u"MaxLength"_ustr;
         pConvert = &xforms_int32;
         break;
     case XML_TOTALDIGITS:
-        sPropertyName = "TotalDigits";
+        sPropertyName = u"TotalDigits"_ustr;
         pConvert = &xforms_int32;
         break;
     case XML_FRACTIONDIGITS:
-        sPropertyName = "FractionDigits";
+        sPropertyName = u"FractionDigits"_ustr;
         pConvert = &xforms_int32;
         break;
     case XML_PATTERN:
-        sPropertyName = "Pattern";
+        sPropertyName = u"Pattern"_ustr;
         pConvert = &xforms_string;
         break;
     case XML_WHITESPACE:
-        sPropertyName = "WhiteSpace";
+        sPropertyName = u"WhiteSpace"_ustr;
         pConvert = &xforms_whitespace;
         break;
     case XML_MININCLUSIVE:
@@ -244,16 +244,16 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             switch( nElementToken & TOKEN_MASK )
             {
             case XML_MININCLUSIVE:
-                sPropertyName = "MinInclusive";
+                sPropertyName = u"MinInclusive"_ustr;
                 break;
             case XML_MINEXCLUSIVE:
-                sPropertyName = "MinExclusive";
+                sPropertyName = u"MinExclusive"_ustr;
                 break;
             case XML_MAXINCLUSIVE:
-                sPropertyName = "MaxInclusive";
+                sPropertyName = u"MaxInclusive"_ustr;
                 break;
             case XML_MAXEXCLUSIVE:
-                sPropertyName = "MaxExclusive";
+                sPropertyName = u"MaxExclusive"_ustr;
                 break;
             }
 

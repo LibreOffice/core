@@ -1476,7 +1476,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     m_xTextPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
     sFamily = GetXMLToken(XML_TEXT);
-    aPrefix = "T";
+    aPrefix = u"T"_ustr;
     m_rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_TEXT, sFamily,
                               m_xTextPropMapper, aPrefix );
 
@@ -1484,7 +1484,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     m_xAutoFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                                   GetExport() );
     sFamily = XML_STYLE_FAMILY_SD_GRAPHICS_NAME;
-    aPrefix = "fr";
+    aPrefix = u"fr"_ustr;
     m_rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_FRAME, sFamily,
                               m_xAutoFramePropMapper, aPrefix );
 
@@ -1492,14 +1492,14 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     m_xSectionPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
     sFamily = GetXMLToken( XML_SECTION );
-    aPrefix = "Sect" ;
+    aPrefix = u"Sect"_ustr ;
     m_rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_SECTION, sFamily,
                               m_xSectionPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TextPropMap::RUBY, true );
     m_xRubyPropMapper = new SvXMLExportPropertyMapper( xPropMapper );
     sFamily = GetXMLToken( XML_RUBY );
-    aPrefix = "Ru";
+    aPrefix = u"Ru"_ustr;
     m_rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_RUBY, sFamily,
                               m_xRubyPropMapper, aPrefix );
 

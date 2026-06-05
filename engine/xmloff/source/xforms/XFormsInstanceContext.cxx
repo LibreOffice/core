@@ -106,11 +106,11 @@ void XFormsInstanceContext::endFastElement(sal_Int32 )
 {
     Sequence<PropertyValue> aSequence( 3 );
     PropertyValue* pSequence = aSequence.getArray();
-    pSequence[0].Name = "Instance";
+    pSequence[0].Name = u"Instance"_ustr;
     pSequence[0].Value <<= mxInstance;
-    pSequence[1].Name = "ID";
+    pSequence[1].Name = u"ID"_ustr;
     pSequence[1].Value <<= msId;
-    pSequence[2].Name = "URL";
+    pSequence[2].Name = u"URL"_ustr;
     pSequence[2].Value <<= msURL;
 
     mxModel->getInstances()->insert( Any( aSequence ) );
@@ -120,11 +120,11 @@ void XFormsInstanceContext::endUnknownElement(const OUString & /*Namespace*/, co
 {
     Sequence<PropertyValue> aSequence( 3 );
     PropertyValue* pSequence = aSequence.getArray();
-    pSequence[0].Name = "Instance";
+    pSequence[0].Name = u"Instance"_ustr;
     pSequence[0].Value <<= mxInstance;
-    pSequence[1].Name = "ID";
+    pSequence[1].Name = u"ID"_ustr;
     pSequence[1].Value <<= msId;
-    pSequence[2].Name = "URL";
+    pSequence[2].Name = u"URL"_ustr;
     pSequence[2].Value <<= msURL;
 
     mxModel->getInstances()->insert( Any( aSequence ) );

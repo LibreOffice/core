@@ -1682,7 +1682,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                         sDashStr = OUString::Concat(RepeatedUChar('-', nPrecision));
                                     // "?" in decimal part are replaced by space character
                                     if (bDecAlign && nPrecision > 0)
-                                        sDashStr = " ";
+                                        sDashStr = u" "_ustr;
 
                                     WriteNumberElement_Impl(nDecimals, nMinDecimals, nInteger, nBlankInteger, sDashStr,
                                         bThousand, nTrailingThousands, aEmbeddedEntries);

@@ -305,7 +305,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
-                    pProps->Name = "ParaStyleName";
+                    pProps->Name = u"ParaStyleName"_ustr;
                     OUString sParent( GetParentName() );
                     if( !sParent.isEmpty() )
                     {
@@ -320,10 +320,10 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                         }
                     }
                     else
-                        sParent = "Standard";
+                        sParent = u"Standard"_ustr;
                     pProps->Value <<= sParent;
                     ++pProps;
-                    pProps->Name = "ParaConditionalStyleName";
+                    pProps->Name = u"ParaConditionalStyleName"_ustr;
                     pProps->Value <<= sParent;
                 }
 

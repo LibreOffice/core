@@ -110,7 +110,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptContext::crea
             sal_Int32 nNewLen = aMedDescr.getLength() + 1;
             aMedDescr.realloc( nNewLen );
             auto pMedDescr = aMedDescr.getArray();
-            pMedDescr[nNewLen-1].Name = "BreakMacroSignature";
+            pMedDescr[nNewLen-1].Name = u"BreakMacroSignature"_ustr;
             pMedDescr[nNewLen-1].Value <<= true;
             m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
 

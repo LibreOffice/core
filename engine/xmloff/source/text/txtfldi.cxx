@@ -1493,7 +1493,7 @@ OUString XMLSimpleDocInfoImportContext::MapTokenToServiceName(
     switch(nElementToken)
     {
         case XML_ELEMENT(TEXT, XML_INITIAL_CREATOR):
-            pServiceName = "DocInfo.CreateAuthor";
+            pServiceName = u"DocInfo.CreateAuthor"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_CREATION_DATE):
             pServiceName = sAPI_docinfo_create_date_time;
@@ -1502,16 +1502,16 @@ OUString XMLSimpleDocInfoImportContext::MapTokenToServiceName(
             pServiceName = sAPI_docinfo_create_date_time;
             break;
         case XML_ELEMENT(TEXT, XML_DESCRIPTION):
-            pServiceName = "DocInfo.Description";
+            pServiceName = u"DocInfo.Description"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_EDITING_DURATION):
-            pServiceName = "DocInfo.EditTime";
+            pServiceName = u"DocInfo.EditTime"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_USER_DEFINED):
             pServiceName = sAPI_docinfo_custom;
             break;
         case XML_ELEMENT(TEXT, XML_PRINTED_BY):
-            pServiceName = "DocInfo.PrintAuthor";
+            pServiceName = u"DocInfo.PrintAuthor"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_PRINT_DATE):
             pServiceName = sAPI_docinfo_print_date_time;
@@ -1520,16 +1520,16 @@ OUString XMLSimpleDocInfoImportContext::MapTokenToServiceName(
             pServiceName = sAPI_docinfo_print_date_time;
             break;
         case XML_ELEMENT(TEXT, XML_KEYWORDS):
-            pServiceName = "DocInfo.KeyWords";
+            pServiceName = u"DocInfo.KeyWords"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_SUBJECT):
-            pServiceName = "DocInfo.Subject";
+            pServiceName = u"DocInfo.Subject"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_EDITING_CYCLES):
-            pServiceName = "DocInfo.Revision";
+            pServiceName = u"DocInfo.Revision"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_CREATOR):
-            pServiceName = "DocInfo.ChangeAuthor";
+            pServiceName = u"DocInfo.ChangeAuthor"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_MODIFICATION_DATE):
             pServiceName = sAPI_docinfo_change_date_time;
@@ -1538,7 +1538,7 @@ OUString XMLSimpleDocInfoImportContext::MapTokenToServiceName(
             pServiceName = sAPI_docinfo_change_date_time;
             break;
         case XML_ELEMENT(TEXT, XML_TITLE):
-            pServiceName = "DocInfo.Title";
+            pServiceName = u"DocInfo.Title"_ustr;
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElementToken);
@@ -2219,28 +2219,28 @@ OUString XMLCountFieldImportContext::MapTokenToServiceName(
     switch (nElement)
     {
         case XML_ELEMENT(TEXT, XML_WORD_COUNT):
-            pServiceName = "WordCount";
+            pServiceName = u"WordCount"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_PARAGRAPH_COUNT):
-            pServiceName = "ParagraphCount";
+            pServiceName = u"ParagraphCount"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_TABLE_COUNT):
-            pServiceName = "TableCount";
+            pServiceName = u"TableCount"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_CHARACTER_COUNT):
-            pServiceName = "CharacterCount";
+            pServiceName = u"CharacterCount"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_IMAGE_COUNT):
-            pServiceName = "GraphicObjectCount";
+            pServiceName = u"GraphicObjectCount"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_OBJECT_COUNT):
-            pServiceName = "EmbeddedObjectCount";
+            pServiceName = u"EmbeddedObjectCount"_ustr;
             break;
         case XML_ELEMENT(TEXT, XML_PAGE_COUNT):
-            pServiceName = "PageCount";
+            pServiceName = u"PageCount"_ustr;
             break;
         case XML_ELEMENT(LO_EXT, XML_PAGE_COUNT_RANGE):
-            pServiceName = "PageCountRange";
+            pServiceName = u"PageCountRange"_ustr;
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);

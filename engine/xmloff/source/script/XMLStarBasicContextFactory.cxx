@@ -69,7 +69,7 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
         o3tl::equalsIgnoreAsciiCase(sMacroNameVal.subView(0,rApp.getLength()), rApp ) &&
         ':' == sMacroNameVal[rApp.getLength()] )
     {
-        sLibraryVal = "StarOffice";
+        sLibraryVal = u"StarOffice"_ustr;
         sMacroNameVal = sMacroNameVal.copy( rApp.getLength()+1 );
     }
     else if( sMacroNameVal.getLength() > rDoc.getLength()+1 &&

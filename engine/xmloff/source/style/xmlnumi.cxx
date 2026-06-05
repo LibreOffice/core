@@ -474,7 +474,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
                 bStarSymbol = true;
             }
             if( bStarSymbol )
-                aFDesc.Name = "StarSymbol" ;
+                aFDesc.Name = u"StarSymbol"_ustr ;
         }
 
         // Must append 'cBullet' even if it is zero
@@ -1055,7 +1055,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     Sequence<beans::PropertyValue> aPropSeq( bOrdered ? 1 : 4  );
     beans::PropertyValue *pProps = aPropSeq.getArray();
 
-    pProps->Name = "NumberingType";
+    pProps->Name = u"NumberingType"_ustr;
     (pProps++)->Value <<= static_cast<sal_Int16>(bOrdered ? NumberingType::ARABIC
                                                  : NumberingType::CHAR_SPECIAL );
     if( !bOrdered )
@@ -1066,19 +1066,19 @@ void SvxXMLListStyleContext::SetDefaultStyle(
 #ifdef _WIN32
                         "StarBats"
 #else
-                        "starbats"
+                        u"starbats"_ustr
 #endif
                                         ;
         aFDesc.Family = FAMILY_DONTKNOW ;
         aFDesc.Pitch = PITCH_DONTKNOW ;
         aFDesc.CharSet = RTL_TEXTENCODING_SYMBOL ;
         aFDesc.Weight = WEIGHT_DONTKNOW;
-        pProps->Name = "BulletFont";
+        pProps->Name = u"BulletFont"_ustr;
         (pProps++)->Value <<= aFDesc;
 
-        pProps->Name = "BulletChar";
+        pProps->Name = u"BulletChar"_ustr;
         (pProps++)->Value <<= OUString(sal_Unicode(0xF000 + 149));
-        pProps->Name = "CharStyleName";
+        pProps->Name = u"CharStyleName"_ustr;
         (pProps++)->Value <<= u"Numbering Symbols"_ustr;
     }
 

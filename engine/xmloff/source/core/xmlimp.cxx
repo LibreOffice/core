@@ -523,7 +523,7 @@ namespace {
                         nLine++;
                         if (aStr.getLength() < 1 || aStr[0] == '#')
                         {
-                            aKeyString = "";
+                            aKeyString = u""_ustr;
                             continue;
                         }
 
@@ -1196,7 +1196,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     aAny >>= mxNumberStyles;
                 }
 
-                sPropName = "PrivateData";
+                sPropName = u"PrivateData"_ustr;
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
                     Reference < XInterface > xIfc;
@@ -1210,7 +1210,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     }
                 }
                 OUString sBaseURI;
-                sPropName = "BaseURI";
+                sPropName = u"BaseURI"_ustr;
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
@@ -1219,14 +1219,14 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     mpImpl->aDocBase.SetURL( sBaseURI );
                 }
                 OUString sRelPath;
-                sPropName = "StreamRelPath";
+                sPropName = u"StreamRelPath"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= sRelPath;
                 }
                 OUString sName;
-                sPropName = "StreamName";
+                sPropName = u"StreamName"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
@@ -1240,20 +1240,20 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 }
                 mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
                 // Retrieve property <ShapePositionInHoriL2R> (#i28749#)
-                sPropName = "ShapePositionInHoriL2R";
+                sPropName = u"ShapePositionInHoriL2R"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= mpImpl->mbShapePositionInHoriL2R;
                 }
-                sPropName = "TextDocInOOoFileFormat";
+                sPropName = u"TextDocInOOoFileFormat"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= mpImpl->mbTextDocInOOoFileFormat;
                 }
 
-                sPropName = "SourceStorage";
+                sPropName = u"SourceStorage"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                     mxImportInfo->getPropertyValue(sPropName) >>= mpImpl->mxSourceStorage;
             }
@@ -2375,7 +2375,7 @@ void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comp
         const OUString& rNamespaceURI = aNamespaceDefine.m_aNamespaceURI;
         OUString sDecl;
         if ( rPrefix.isEmpty() )
-            sDecl = "xmlns";
+            sDecl = u"xmlns"_ustr;
         else
             sDecl = "xmlns:" + rPrefix;
         rAttrList->AddAttribute( sDecl, rNamespaceURI );

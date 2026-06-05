@@ -598,7 +598,7 @@ void XMLTextStyleContext::FillPropertySet(
                              sFontName.equalsIgnoreAsciiCase( "StarMath" ) )
                         {
                             // construct new value
-                            sFontName = "StarSymbol";
+                            sFontName = u"StarSymbol"_ustr;
                             Any aAny(rAny);
                             aAny <<= sFontName;
 

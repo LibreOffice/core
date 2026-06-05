@@ -54,7 +54,7 @@ void XMLIndexSpanEntryContext::FillPropertyValues(
 
     // content
     auto pValues = rValues.getArray();
-    pValues[m_nValues-1].Name = "Text";
+    pValues[m_nValues-1].Name = u"Text"_ustr;
     pValues[m_nValues-1].Value <<= sContent.makeStringAndClear();
 }
 

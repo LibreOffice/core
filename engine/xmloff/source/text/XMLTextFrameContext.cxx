@@ -516,8 +516,8 @@ void XMLTextFrameContext_Impl::Create()
                 OUString sServiceName;
                 switch( nType )
                 {
-                    case XML_TEXT_FRAME_TEXTBOX: sServiceName = "com.sun.star.text.TextFrame"; break;
-                    case XML_TEXT_FRAME_GRAPHIC: sServiceName = "com.sun.star.text.GraphicObject"; break;
+                    case XML_TEXT_FRAME_TEXTBOX: sServiceName = u"com.sun.star.text.TextFrame"_ustr; break;
+                    case XML_TEXT_FRAME_GRAPHIC: sServiceName = u"com.sun.star.text.GraphicObject"_ustr; break;
                 }
                 Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
                 SAL_WARN_IF( !xIfc.is(), "xmloff.text", "couldn't create frame" );

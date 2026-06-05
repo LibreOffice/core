@@ -1035,7 +1035,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_ELEMENT(TEXT, XML_TOC_MARK_START):
         case XML_ELEMENT(TEXT, XML_TOC_MARK_END):
         {
-            sServiceName = "com.sun.star.text.ContentIndexMark";
+            sServiceName = u"com.sun.star.text.ContentIndexMark"_ustr;
             break;
         }
 
@@ -1043,7 +1043,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_ELEMENT(TEXT, XML_USER_INDEX_MARK_START):
         case XML_ELEMENT(TEXT, XML_USER_INDEX_MARK_END):
         {
-            sServiceName = "com.sun.star.text.UserIndexMark";
+            sServiceName = u"com.sun.star.text.UserIndexMark"_ustr;
             break;
         }
 
@@ -1051,7 +1051,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_MARK_START):
         case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_MARK_END):
         {
-            sServiceName = "com.sun.star.text.DocumentIndexMark";
+            sServiceName = u"com.sun.star.text.DocumentIndexMark"_ustr;
             break;
         }
 

@@ -1100,18 +1100,18 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const tools:
     // prepare presentation-placeholder attributes, presentation:object
     switch(ePl)
     {
-        case XmlPlaceholderTitle: aStr = "title"; break;
-        case XmlPlaceholderOutline: aStr = "outline"; break;
-        case XmlPlaceholderSubtitle: aStr = "subtitle"; break;
-        case XmlPlaceholderGraphic: aStr = "graphic"; break;
-        case XmlPlaceholderObject: aStr = "object"; break;
-        case XmlPlaceholderChart: aStr = "chart"; break;
-        case XmlPlaceholderTable: aStr = "table"; break;
-        case XmlPlaceholderPage: aStr = "page"; break;
-        case XmlPlaceholderNotes: aStr = "notes"; break;
-        case XmlPlaceholderHandout: aStr = "handout"; break;
-        case XmlPlaceholderVerticalTitle: aStr = "vertical_title"; break;
-        case XmlPlaceholderVerticalOutline: aStr = "vertical_outline"; break;
+        case XmlPlaceholderTitle: aStr = u"title"_ustr; break;
+        case XmlPlaceholderOutline: aStr = u"outline"_ustr; break;
+        case XmlPlaceholderSubtitle: aStr = u"subtitle"_ustr; break;
+        case XmlPlaceholderGraphic: aStr = u"graphic"_ustr; break;
+        case XmlPlaceholderObject: aStr = u"object"_ustr; break;
+        case XmlPlaceholderChart: aStr = u"chart"_ustr; break;
+        case XmlPlaceholderTable: aStr = u"table"_ustr; break;
+        case XmlPlaceholderPage: aStr = u"page"_ustr; break;
+        case XmlPlaceholderNotes: aStr = u"notes"_ustr; break;
+        case XmlPlaceholderHandout: aStr = u"handout"_ustr; break;
+        case XmlPlaceholderVerticalTitle: aStr = u"vertical_title"_ustr; break;
+        case XmlPlaceholderVerticalOutline: aStr = u"vertical_outline"_ustr; break;
     }
 
     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_OBJECT, aStr);
@@ -2462,13 +2462,13 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     rProps.realloc(4);
     beans::PropertyValue* pProps = rProps.getArray();
 
-    pProps[0].Name = "VisibleAreaTop";
+    pProps[0].Name = u"VisibleAreaTop"_ustr;
     pProps[0].Value <<= aVisArea.Y;
-    pProps[1].Name = "VisibleAreaLeft";
+    pProps[1].Name = u"VisibleAreaLeft"_ustr;
     pProps[1].Value <<= aVisArea.X;
-    pProps[2].Name = "VisibleAreaWidth";
+    pProps[2].Name = u"VisibleAreaWidth"_ustr;
     pProps[2].Value <<= aVisArea.Width;
-    pProps[3].Name = "VisibleAreaHeight";
+    pProps[3].Name = u"VisibleAreaHeight"_ustr;
     pProps[3].Value <<= aVisArea.Height;
 
 }

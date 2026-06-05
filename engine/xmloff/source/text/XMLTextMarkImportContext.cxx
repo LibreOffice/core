@@ -162,7 +162,7 @@ void XMLTextMarkImportContext::startFastElement( sal_Int32 nElement,
     {
         if (m_sBookmarkName.isEmpty())
         {
-            m_sBookmarkName = "Unknown";
+            m_sBookmarkName = u"Unknown"_ustr;
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
