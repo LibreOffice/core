@@ -192,7 +192,6 @@ parts:
         --without-system-abseil \
         --without-system-argon2 \
         --without-system-boost \
-        --without-system-box2d \
         --without-system-cairo \
         --without-system-clucene \
         --without-system-coinmp \

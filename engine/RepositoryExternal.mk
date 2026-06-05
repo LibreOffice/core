@@ -3737,41 +3737,6 @@ endef
 
 endif
 
-ifneq ($(SYSTEM_BOX2D),)
-
-define gb_LinkTarget__use_box2d
-$(call gb_LinkTarget_set_include,$(1),\
-	-DSYSTEM_BOX2D \
-	$$(INCLUDE) \
-	$(BOX2D_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(BOX2D_LIBS))
-
-endef
-
-gb_ExternalProject__use_box2d :=
-
-else # !SYSTEM_BOX2D
-
-define gb_LinkTarget__use_box2d
-$(call gb_LinkTarget_use_unpacked,$(1),box2d)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/box2d/include/\
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	box2d \
-)
-
-endef
-
-define gb_ExternalProject__use_box2d
-$(call gb_ExternalProject_use_static_libraries,$(1),box2d)
-
-endef
-
-endif # SYSTEM_BOX2D
-
 ifneq ($(SYSTEM_ZXCVBN),)
 define gb_LinkTarget__use_zxcvbn-c
 $(call gb_LinkTarget_set_include,$(1),\

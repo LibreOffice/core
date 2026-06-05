@@ -319,7 +319,6 @@ class Parser:
             "shell" : 1,
             "setup_native" : 1,
             "sot" : 1,
-            "slideshow" : 1,
             "smoketest" : 1,
             "solenv" : 1,
             "soltools" : 1,

@@ -188,14 +188,7 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     if (isInUnoIncludeFile(functionDecl)) {
         return;
     }
-    // these functions are passed as parameters to another function
     auto dc = loplugin::DeclCheck(functionDecl);
-    if (dc.MemberFunction()
-        .Class("ShapeAttributeLayer").Namespace("internal")
-        .Namespace("slideshow").GlobalNamespace())
-    {
-        return;
-    }
     // template function
     if (dc.Function("toString").Struct("assertion_traits"))
         return;
@@ -274,11 +267,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (dc.Function("sameDistColor").GlobalNamespace()
         || dc.Function("sameColor").GlobalNamespace()
         || (dc.Operator(OO_Call).Struct("StringIdentity").AnonymousNamespace()
-            .Namespace("pcr").GlobalNamespace())
-        || (dc.Function("accumulate").Namespace("internal")
-            .Namespace("slideshow").GlobalNamespace())
-        || (dc.Function("lerp").Namespace("internal").Namespace("slideshow")
-            .GlobalNamespace()))
+            .Namespace("pcr").GlobalNamespace()))
         return;
     // depends on a define
     if (dc.Function("GetSharedFileURL").Class("SfxObjectShell")

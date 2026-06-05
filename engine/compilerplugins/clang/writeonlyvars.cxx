@@ -410,9 +410,6 @@ void WriteOnlyVars::run()
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sdext/source/presenter/PresenterTheme.cxx"))
             return;
-        if (loplugin::isSamePathname(fn, SRCDIR
-                                     "/slideshow/source/engine/animationnodes/generateevent.cxx"))
-            return;
         if (loplugin::isSamePathname(fn, SRCDIR "/starmath/source/mathmlimport.cxx"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/starmath/source/eqnolefilehdr.cxx"))

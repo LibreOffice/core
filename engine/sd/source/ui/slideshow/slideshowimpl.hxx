@@ -275,8 +275,6 @@ private:
     /// @throws css::uno::Exception
     void registerShapeEvents( css::uno::Reference< css::drawing::XShapes > const & xShapes );
 
-    static css::uno::Reference< css::presentation::XSlideShow > createSlideShow();
-
     static void setAutoSaveState( bool bOn );
     void gotoPreviousSlide (const bool bSkipAllMainSequenceEffects);
 

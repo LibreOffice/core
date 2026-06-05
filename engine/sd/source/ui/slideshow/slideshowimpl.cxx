@@ -35,7 +35,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Recovery.hxx>
@@ -1858,25 +1857,6 @@ void SlideshowImpl::ContextMenuSelectHdl(std::u16string_view rMenuId)
         }
         mbWasPaused = false;
     }
-}
-
-Reference< XSlideShow > SlideshowImpl::createSlideShow()
-{
-    Reference< XSlideShow > xShow;
-
-    try
-    {
-        const Reference< uno::XComponentContext >& xContext =
-            ::comphelper::getProcessComponentContext();
-
-        xShow.set( presentation::SlideShow::create(xContext), UNO_SET_THROW );
-    }
-    catch( uno::Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::createSlideShow()" );
-    }
-
-    return xShow;
 }
 
 void SlideshowImpl::createSlideList( bool bAll, std::u16string_view rPresSlide )

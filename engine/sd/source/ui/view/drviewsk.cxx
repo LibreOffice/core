@@ -11,8 +11,6 @@
 #include <ViewShellBase.hxx>
 #include <sdmod.hxx>
 
-#include <com/sun/star/presentation/SlideShow.hpp>
-
 #include <comphelper/kit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
@@ -66,25 +64,6 @@ void DrawViewShell::ConfigureAppBackgroundColor( svtools::ColorConfig *pColorCon
     SdViewOptions aViewOptions = GetViewOptions();
     aViewOptions.mnAppBackgroundColor = aFillColor;
     SetViewOptions(aViewOptions);
-}
-
-void DrawViewShell::destroyXSlideShowInstance()
-{
-    if (!mxSlideShow.is())
-        return;
-
-    try
-    {
-        uno::Reference<lang::XComponent> xComponent(mxSlideShow, uno::UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-    }
-    catch (uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "DrawViewShell::destroyXSlideShowInstance dispose");
-    }
-
-    mxSlideShow.clear();
 }
 
 }

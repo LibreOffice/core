@@ -388,8 +388,6 @@ public:
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 
-    void destroyXSlideShowInstance();
-
     virtual void RememberCanvasPageVisArea(const ::tools::Rectangle &aRect) override;
 
     DECL_LINK(SearchDialogHdl, SfxRequest&, void);

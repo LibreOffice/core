@@ -233,9 +233,6 @@ bool containsOWeakObjectSubclass(const clang::Type* pType0) {
             dc.Class("OBookmarkContainer").Namespace("dbaccess")
                 .GlobalNamespace())
             return false;
-        // slideshow playing games here
-        if (dc.Class("SlideView").AnonymousNamespace().Namespace("internal").Namespace("slideshow").GlobalNamespace())
-            return false;
         // svx playing acquire/release games here in OWeakSubObject
         if (dc.Class("FmXUpdateMultiplexer").GlobalNamespace() ||
             dc.Class("FmXContainerMultiplexer").GlobalNamespace() ||

@@ -160,8 +160,6 @@ DrawViewShell::~DrawViewShell()
 
 void DrawViewShell::ImplDestroy()
 {
-    destroyXSlideShowInstance();
-
     SdModule::get()->GetColorConfig().RemoveListener(this);
 
     mpSelectionChangeHandler->Disconnect();

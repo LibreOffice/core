@@ -382,12 +382,6 @@ certain functionality.
 @li @c sfx.view
 @li @c sfx.yrs
 
-@section slideshow
-
-@li @c slideshow
-@li @c slideshow.eventqueue
-@li @c slideshow.verbose
-
 @section sot
 
 @li @c sot - COM structured storage

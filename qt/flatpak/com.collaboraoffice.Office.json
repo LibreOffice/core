@@ -938,13 +938,6 @@
           "dest-filename": "fast_float-8.2.2.tar.gz"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/box2d-2.4.1.tar.gz",
-          "sha256": "d6b4650ff897ee1ead27cf77a5933ea197cbeef6705638dd181adc2e816b23c2",
-          "type": "file",
-          "dest": "engine/external/tarballs",
-          "dest-filename": "box2d-2.4.1.tar.gz"
-        },
-        {
           "url": "https://dev-www.libreoffice.org/src/zxing-cpp-2.3.0.tar.gz",
           "sha256": "64e4139103fdbc57752698ee15b5f0b0f7af9a0331ecbdc492047e0772c417ba",
           "type": "file",

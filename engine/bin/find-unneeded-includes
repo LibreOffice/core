@@ -99,8 +99,6 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         return True
     if include == "libetonyek/libetonyek.h" and "libetonyek/EtonyekDocument.h" in toAdd:
         return True
-    if include == "box2d/box2d.h" and "box2d/b2_world.h" in toAdd:
-        return True
 
     # Skip forward declaration of versioned namespaces
     # see https://gerrit.libreoffice.org/c/core/+/72972
@@ -371,7 +369,6 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'frm|'
                                     'http_dav_ucp|tdoc_ucp|package_ucp|hierarchy_ucp|gio|fileaccess|ucb_impl|hcp_impl|ucb_cmdenv|' # for ucb internal
                                     'i18npool|'
-                                    'internal|ColorComponentTag|' # for slideshow internals
                                     'jfw_plugin|'
                                     'jni_uno|'
                                     'librevenge|'

@@ -173,7 +173,6 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
         // these appear to be cross-file log areas
         else if (  area == "chart2"
                 || area == "oox.cscode" || area == "oox.csdata"
-                || area == "slideshow.verbose"
                 || area == "sc.opencl"
                 || area == "sc.core.formulagroup"
                 || area == "sw.pageframe" || area == "sw.idle" || area == "sw.level2"

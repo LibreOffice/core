@@ -623,13 +623,6 @@
         "dest-filename": "@FAST_FLOAT_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@BOX2D_TARBALL@",
-        "sha256": "@BOX2D_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@BOX2D_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@ZXING_TARBALL@",
         "sha256": "@ZXING_SHA256SUM@",
         "type": "file",

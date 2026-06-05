@@ -5468,15 +5468,6 @@ bool SdXImpressDocument::createSlideRenderer(
     return true;
 }
 
-void SdXImpressDocument::postSlideshowCleanup()
-{
-    DrawViewShell* pViewSh = GetViewShell();
-    if (!pViewSh)
-        return;
-
-    pViewSh->destroyXSlideShowInstance();
-}
-
 bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, OUString& rJsonMsg)
 {
     bool bDone = true;
