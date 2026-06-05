@@ -777,26 +777,6 @@ window.L.Map.include({
 		return str;
 	},
 
-	getTextForLink: function() {
-		var map = this;
-		var text = '';
-		if (this.hyperlinkUnderCursor && this.hyperlinkUnderCursor.text) {
-			text = this.hyperlinkUnderCursor.text;
-		} else if (this._clip && this._clip._selectionType == 'text') {
-			if (map['stateChangeHandler'].getItemValue('.uno:Copy') === 'enabled') {
-				if (window.L.Browser.clipboardApiAvailable) {
-					// Async copy, trigger fetching the text selection.
-					app.socket.sendMessage('gettextselection mimetype=text/html,text/plain;charset=utf-8');
-				} else {
-					text = this.extractContent(this._clip._selectionContent);
-				}
-			}
-		} else if (this._docLayer._selectedTextContent) {
-			text = this.extractContent(this._docLayer._selectedTextContent);
-		}
-		return text;
-	},
-
 	cancelSearch: function() {
 		var toolbar = window.mode.isSmallScreenDevice() ? app.map.mobileSearchBar: app.map.statusBar;
 		var searchInput = window.L.DomUtil.get('search-input');
