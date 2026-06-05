@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-02 13:03+0200\n"
+"POT-Creation-Date: 2026-06-05 15:53+0200\n"
 "PO-Revision-Date: 2026-06-01 21:01+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
@@ -30,7 +30,7 @@ msgstr "Socruithe"
 
 #: admin/admin.strings.js:17 src/control/Control.StatusBar.js:270
 #: src/control/Control.StatusBar.js:271
-#: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:36
+#: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:39
 msgid "Overview"
 msgstr "Foramharc"
 
@@ -145,19 +145,19 @@ msgid "Network Graph"
 msgstr "Graf Líonra"
 
 #: admin/admin.strings.js:45
-#: admin/src/integrator/AdminIntegratorSettings.ts:1210
-#: admin/src/integrator/AdminIntegratorSettings.ts:3145
+#: admin/src/integrator/AdminIntegratorSettings.ts:1307
+#: admin/src/integrator/AdminIntegratorSettings.ts:3318
 #: admin/src/integrator/WordBook.ts:394 admin/src/integrator/Xcu.ts:411
-#: src/canvas/sections/CommentListSection.ts:744
+#: src/canvas/sections/CommentListSection.ts:745
 #: src/canvas/sections/CommentSection.ts:191
-#: src/canvas/sections/CommentSection.ts:640
-#: src/canvas/sections/CommentSection.ts:1611
+#: src/canvas/sections/CommentSection.ts:638
+#: src/canvas/sections/CommentSection.ts:1609
 #: src/control/Control.BackstageView.ts:136
-#: src/control/Control.Notebookbar.js:343
+#: src/control/Control.Notebookbar.js:346
 #: src/control/Control.NotebookbarDraw.js:29
 #: src/control/Control.NotebookbarDraw.js:178
 #: src/control/Control.NotebookbarImpress.js:30
-#: src/map/handler/Map.Settings.ts:84
+#: src/map/handler/Map.Settings.ts:83
 msgid "Save"
 msgstr "Sábháil"
 
@@ -225,7 +225,7 @@ msgstr "Scagaire Cainéil:"
 
 #: admin/admin.strings.js:61 src/app/TableStylesService.ts:264
 #: src/app/TableStylesService.ts:418
-#: src/control/Control.JSDialogBuilder.js:387
+#: src/control/Control.JSDialogBuilder.js:395
 #: src/control/Control.StatusBar.js:211 src/control/Control.StatusBar.js:216
 msgid "None"
 msgstr "Ceann ar bith"
@@ -238,11 +238,11 @@ msgstr "Socraigh Leibhéil Logála"
 msgid "Log Levels"
 msgstr "Leibhéil Logála"
 
-#: admin/admin.strings.js:64 src/control/Control.AIChatSidebar.ts:590
+#: admin/admin.strings.js:64 src/control/Control.AIChatSidebar.ts:614
 #: src/control/Control.AlertDialog.js:32 src/control/Control.AlertDialog.js:38
 #: src/control/Control.AlertDialog.js:103
 #: src/control/Control.AlertDialog.js:110 src/control/Control.Zotero.js:191
-#: src/app/Socket.ts:935 src/app/Socket.ts:2335 src/app/Socket.ts:2346
+#: src/app/Socket.ts:935 src/app/Socket.ts:2357 src/app/Socket.ts:2368
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div:51-7
 msgid "Close"
 msgstr "Dún"
@@ -260,10 +260,10 @@ msgid "License"
 msgstr "Ceadúnas"
 
 #: admin/admin.strings.js:68 src/control/Control.BackstageView.ts:189
-#: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:623
-#: src/control/Control.Menubar.ts:768 src/control/Control.Menubar.ts:1074
-#: src/control/Control.Menubar.ts:1144 src/control/Control.Menubar.ts:1209
-#: src/control/Control.Menubar.ts:1264 src/control/Control.Menubar.ts:1339
+#: src/control/Control.Menubar.ts:436 src/control/Control.Menubar.ts:625
+#: src/control/Control.Menubar.ts:771 src/control/Control.Menubar.ts:1078
+#: src/control/Control.Menubar.ts:1148 src/control/Control.Menubar.ts:1213
+#: src/control/Control.Menubar.ts:1268 src/control/Control.Menubar.ts:1343
 #: src/control/Control.NotebookbarWriter.js:590
 msgid "About"
 msgstr "Maidir"
@@ -299,26 +299,26 @@ msgstr "Rabhadh"
 #: admin/src/AdminClusterOverview.js:560 admin/src/AdminSocketBase.js:63
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
 #: admin/src/AdminSocketOverview.js:431 admin/src/AdminSocketSettings.js:47
-#: admin/src/integrator/AdminIntegratorSettings.ts:3256 src/app/Debug.ts:1580
-#: src/canvas/sections/CommentListSection.ts:1847
+#: admin/src/integrator/AdminIntegratorSettings.ts:3429 src/app/Debug.ts:1580
+#: src/canvas/sections/CommentListSection.ts:1893
 #: src/control/Control.AboutDialog.ts:245
 #: src/control/Control.AlertDialog.js:56
 #: src/control/Control.DocumentRepair.js:77
 #: src/control/Control.ESignatureDialog.ts:132
 #: src/control/Control.LanguageDialog.js:120
-#: src/control/Control.PartsPreview.js:893
+#: src/control/Control.PartsPreview.js:897
 #: src/control/Control.ServerAuditDialog.ts:342
-#: src/control/Control.Tabs.js:547 src/control/Control.Tabs.js:556
+#: src/control/Control.Tabs.js:555 src/control/Control.Tabs.js:564
 #: src/control/Control.Zotero.js:365 src/control/Control.Zotero.js:411
 #: src/control/Parts.js:529 src/control/Permission.js:98
 #: src/control/Permission.js:108 src/control/Permission.js:165
-#: src/control/Toolbar.js:728 src/app/Socket.ts:1001 src/app/Socket.ts:1656
-#: src/app/Socket.ts:1831 src/app/Socket.ts:2292 src/app/Socket.ts:2392
-#: src/docdispatcher.ts:622 src/main.js:108 src/main.js:111 src/main.js:148
-#: src/map/Clipboard.js:1470 src/map/handler/Map.Feedback.js:96
+#: src/control/Toolbar.js:728 src/app/Socket.ts:1001 src/app/Socket.ts:1678
+#: src/app/Socket.ts:1853 src/app/Socket.ts:2314 src/app/Socket.ts:2414
+#: src/docdispatcher.ts:619 src/main.js:108 src/main.js:111 src/main.js:148
+#: src/map/Clipboard.js:1473 src/map/handler/Map.Feedback.js:96
 #: src/map/handler/Map.SlideShow.js:60 src/map/handler/Map.SlideShow.js:169
 #: src/map/handler/Map.SlideShow.js:297 src/map/handler/Map.SlideShow.js:308
-#: src/map/handler/Map.WOPI.js:869 src/slideshow/SlideShowPresenter.ts:1292
+#: src/map/handler/Map.WOPI.js:871 src/slideshow/SlideShowPresenter.ts:1292
 #: src/slideshow/SlideShowPresenter.ts:1307
 #: src/slideshow/SlideShowPresenter.ts:1322
 #: src/slideshow/SlideShowPresenter.ts:1345
@@ -328,22 +328,22 @@ msgstr "Ceart go leor"
 #: admin/src/AdminClusterOverview.js:561 admin/src/AdminSocketOverview.js:109
 #: admin/src/AdminSocketOverview.js:432 admin/src/AdminSocketSettings.js:48
 #: admin/src/integrator/WordBook.ts:386
-#: src/canvas/sections/CommentListSection.ts:739
+#: src/canvas/sections/CommentListSection.ts:740
 #: src/canvas/sections/CommentSection.ts:190
 #: src/canvas/sections/CommentSection.ts:193
-#: src/canvas/sections/CommentSection.ts:1612
-#: src/canvas/sections/CommentSection.ts:1617
-#: src/control/Control.AIChatSidebar.ts:1281
-#: src/control/Control.AIChatSidebar.ts:1283
-#: src/control/Control.AIChatSidebar.ts:1368
+#: src/canvas/sections/CommentSection.ts:1610
+#: src/canvas/sections/CommentSection.ts:1615
+#: src/control/Control.AIChatSidebar.ts:1311
+#: src/control/Control.AIChatSidebar.ts:1313
+#: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.DocumentRepair.js:71
 #: src/control/Control.DownloadProgress.js:81
 #: src/control/Control.LanguageDialog.js:114
 #: src/control/Control.MobileTopBar.ts:43
 #: src/control/Control.UIManager.ts:2115 src/control/Control.UIManager.ts:2196
 #: src/control/Control.UIManager.ts:2350 src/control/Control.UIManager.ts:2528
-#: src/control/Control.Zotero.js:360 src/app/Socket.ts:1601
-#: src/map/handler/Map.Settings.ts:79
+#: src/control/Control.Zotero.js:360 src/app/Socket.ts:1623
+#: src/map/handler/Map.Settings.ts:78
 msgid "Cancel"
 msgstr "Cealaigh"
 
@@ -380,15 +380,15 @@ msgstr ""
 msgid "Are you sure you want to shut down the server?"
 msgstr "An bhfuil tú cinnte go bhfuil fonn ort an freastalaí a mhúchadh?"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:265
+#: admin/src/integrator/AdminIntegratorSettings.ts:284
 msgid "Shared Config URL is missing in initial variables."
 msgstr "Tá URL Cumraíochta Comhroinnte ar iarraidh sna hathróga tosaigh."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:269
+#: admin/src/integrator/AdminIntegratorSettings.ts:288
 msgid "Access token is missing in initial variables."
 msgstr "Tá comhartha rochtana ar iarraidh sna hathróga tosaigh."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:347
+#: admin/src/integrator/AdminIntegratorSettings.ts:366
 msgid ""
 "Something went wrong while fetching setting file. Please try to refresh the "
 "page."
@@ -396,217 +396,217 @@ msgstr ""
 "Tharla fadhb agus comhad na socruithe á fháil. Déan iarracht an leathanach a "
 "athnuachan."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:488
+#: admin/src/integrator/AdminIntegratorSettings.ts:513
 msgid "Signature Certificate"
 msgstr "Teastas Sínithe"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:489
+#: admin/src/integrator/AdminIntegratorSettings.ts:514
 msgid "Signature Key"
 msgstr "Eochair Shínithe"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:490
+#: admin/src/integrator/AdminIntegratorSettings.ts:515
 msgid "Signature CA"
 msgstr "Síniú CA"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:491
-#: admin/src/integrator/AdminIntegratorSettings.ts:495
+#: admin/src/integrator/AdminIntegratorSettings.ts:516
+#: admin/src/integrator/AdminIntegratorSettings.ts:520
 msgid "Provider"
 msgstr "Soláthraí"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:492
-#: admin/src/integrator/AdminIntegratorSettings.ts:496
+#: admin/src/integrator/AdminIntegratorSettings.ts:517
+#: admin/src/integrator/AdminIntegratorSettings.ts:521
 msgid "API Key"
 msgstr "Eochair API"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:493
-#: admin/src/integrator/AdminIntegratorSettings.ts:498
+#: admin/src/integrator/AdminIntegratorSettings.ts:518
+#: admin/src/integrator/AdminIntegratorSettings.ts:523
 msgid "Model"
 msgstr "Samhail"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:494
-#: admin/src/integrator/AdminIntegratorSettings.ts:497
+#: admin/src/integrator/AdminIntegratorSettings.ts:519
+#: admin/src/integrator/AdminIntegratorSettings.ts:522
 msgid "Base URL"
 msgstr "Bun-URL"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:499
+#: admin/src/integrator/AdminIntegratorSettings.ts:524
 msgid "Image Size"
 msgstr "Méid na hÍomhá"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:500
+#: admin/src/integrator/AdminIntegratorSettings.ts:525
 msgid "Request Timeout (seconds)"
 msgstr "Am Teorann Iarratais (soicindí)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:503
+#: admin/src/integrator/AdminIntegratorSettings.ts:528
 msgid "In-document Screen Reader"
 msgstr "Léitheoir Scáileáin In-Doiciméad"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:504
-#: src/control/Control.Menubar.ts:179 src/control/Control.Menubar.ts:509
-#: src/control/Control.Menubar.ts:678 src/control/Control.Menubar.ts:831
-#: src/control/Control.Menubar.ts:1128 src/control/Control.Menubar.ts:1181
-#: src/control/Control.Menubar.ts:1242 src/control/Control.Menubar.ts:1302
+#: admin/src/integrator/AdminIntegratorSettings.ts:529
+#: src/control/Control.Menubar.ts:179 src/control/Control.Menubar.ts:510
+#: src/control/Control.Menubar.ts:680 src/control/Control.Menubar.ts:834
+#: src/control/Control.Menubar.ts:1132 src/control/Control.Menubar.ts:1185
+#: src/control/Control.Menubar.ts:1246 src/control/Control.Menubar.ts:1306
 #: src/control/Control.NotebookbarCalc.js:1659
 #: src/control/Control.NotebookbarDraw.js:571
 #: src/control/Control.NotebookbarImpress.js:738
-#: src/control/Control.NotebookbarWriter.js:1791
+#: src/control/Control.NotebookbarWriter.js:1815
 msgid "Dark Mode"
 msgstr "Mód Dorcha"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:505
+#: admin/src/integrator/AdminIntegratorSettings.ts:530
 msgid "Smart Zoom"
 msgstr "Zúmáil Chliste"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:506
+#: admin/src/integrator/AdminIntegratorSettings.ts:531
 msgid "Default Zoom"
 msgstr "Súmáil Réamhshocraithe"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:507
+#: admin/src/integrator/AdminIntegratorSettings.ts:532
 msgid "Compact layout"
 msgstr "Leagan amach dlúth"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:508
+#: admin/src/integrator/AdminIntegratorSettings.ts:533
 msgid "Show status bar"
 msgstr "Taispeáin barra stádais"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:509
-#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:505
+#: admin/src/integrator/AdminIntegratorSettings.ts:534
+#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:506
 msgid "Show Ruler"
 msgstr "Taispeáin Rialóir"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:510
+#: admin/src/integrator/AdminIntegratorSettings.ts:535
 msgid "Accessibility Checker"
 msgstr "Seiceálaí Inrochtaineachta"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:511
-#: src/control/Control.NavigatorPanel.ts:292
+#: admin/src/integrator/AdminIntegratorSettings.ts:536
+#: src/control/Control.NavigatorPanel.ts:302
 msgid "Navigator"
 msgstr "Loingseoir"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:512
+#: admin/src/integrator/AdminIntegratorSettings.ts:537
 msgid "Show Sidebar"
 msgstr "Taispeáin an Barra Taoibh"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:513
+#: admin/src/integrator/AdminIntegratorSettings.ts:538
 msgid "Custom Animation"
 msgstr "Beochan Saincheaptha"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:516
+#: admin/src/integrator/AdminIntegratorSettings.ts:541
 msgid "Style List"
 msgstr "Liosta Stíle"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:519
+#: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.NotebookbarCalc.js:1186
 #: src/control/Control.NotebookbarDraw.js:542
 #: src/control/Control.NotebookbarImpress.js:709
 msgid "Grid"
 msgstr "Eangach"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:520
+#: admin/src/integrator/AdminIntegratorSettings.ts:545
 #: src/control/Control.BackstageView.ts:152
 msgid "Print"
 msgstr "Priontáil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:521
+#: admin/src/integrator/AdminIntegratorSettings.ts:546
 msgid "Other"
 msgstr "Eile"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:522
+#: admin/src/integrator/AdminIntegratorSettings.ts:547
 #: src/control/Control.NotebookbarImpress.js:718
 msgid "Show Grid"
 msgstr "Taispeáin Greille"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:523
+#: admin/src/integrator/AdminIntegratorSettings.ts:548
 msgid "Snap to grid"
 msgstr "Snapáil chuig an ngreille"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:524
-#: admin/src/integrator/AdminIntegratorSettings.ts:530
+#: admin/src/integrator/AdminIntegratorSettings.ts:549
+#: admin/src/integrator/AdminIntegratorSettings.ts:555
 msgid "Size to grid"
 msgstr "Méid go dtí an eangach"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:525
+#: admin/src/integrator/AdminIntegratorSettings.ts:550
 msgid "Synchronize axes"
 msgstr "Sioncrónaigh aiseanna"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:526
+#: admin/src/integrator/AdminIntegratorSettings.ts:551
 msgid "Snap grid"
 msgstr "Greille snap"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:527
+#: admin/src/integrator/AdminIntegratorSettings.ts:552
 msgid "Empty Pages"
 msgstr "Leathanaigh Fholmha"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:528
+#: admin/src/integrator/AdminIntegratorSettings.ts:553
 msgid "Force Breaks"
 msgstr "Briseadh Fórsa"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:529
-#: src/control/Control.Menubar.ts:800 src/control/Control.TopToolbar.js:139
+#: admin/src/integrator/AdminIntegratorSettings.ts:554
+#: src/control/Control.Menubar.ts:803 src/control/Control.TopToolbar.js:139
 #: src/control/jsdialog/Definitions.Menu.ts:1588
 msgid "All Sheets"
 msgstr "Gach Bileog"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:531
+#: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Content"
 msgstr "Ábhar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:532
+#: admin/src/integrator/AdminIntegratorSettings.ts:557
 #: src/control/Control.BackstageView.ts:552
 msgid "Drawing"
 msgstr "Líníocht"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:533
+#: admin/src/integrator/AdminIntegratorSettings.ts:558
 #: src/control/Control.NotebookbarDraw.js:1245
 #: src/control/Control.NotebookbarDraw.js:1445
 #: src/control/Control.NotebookbarWriter.js:1242
 msgid "Page"
 msgstr "Leathanach"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:534
+#: admin/src/integrator/AdminIntegratorSettings.ts:559
 msgid "Fit to page"
 msgstr "Oiriúnaigh don leathanach"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:535
+#: admin/src/integrator/AdminIntegratorSettings.ts:560
 msgid "Tile pages"
 msgstr "Leathanaigh tíleanna"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:536
+#: admin/src/integrator/AdminIntegratorSettings.ts:561
 msgid "Booklet"
 msgstr "Leabhrán"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:537
+#: admin/src/integrator/AdminIntegratorSettings.ts:562
 msgid "Booklet front"
 msgstr "Tosaigh an leabhráin"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:538
+#: admin/src/integrator/AdminIntegratorSettings.ts:563
 msgid "Booklet back"
 msgstr "Ar ais an leabhair"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:539
+#: admin/src/integrator/AdminIntegratorSettings.ts:564
 msgid "Page name"
 msgstr "Ainm leathanaigh"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:540
+#: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.NotebookbarCalc.js:817
 #: src/control/Control.NotebookbarWriter.js:1645
 #: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Date"
 msgstr "Dáta"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:541
+#: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.NotebookbarCalc.js:818
 msgid "Time"
 msgstr "Am"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:542
+#: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Hidden pages"
 msgstr "Leathanaigh i bhfolach"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:543
+#: admin/src/integrator/AdminIntegratorSettings.ts:568
 msgid "From printer setup"
 msgstr "Ó shocrú printéara"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:544
+#: admin/src/integrator/AdminIntegratorSettings.ts:569
 #: src/control/Control.BackstageView.ts:551 templates/templates.js:80
 #: templates/templates.js:90 templates/templates.js:100
 #: templates/templates.js:110 templates/templates.js:120
@@ -622,81 +622,81 @@ msgstr "Ó shocrú printéara"
 msgid "Presentation"
 msgstr "Cur i láthair"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:545
+#: admin/src/integrator/AdminIntegratorSettings.ts:570
 #: src/control/Control.Zotero.js:1341 src/slideshow/PresenterConsole.js:34
 msgid "Notes"
 msgstr "Nótaí"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:546
+#: admin/src/integrator/AdminIntegratorSettings.ts:571
 msgid "Handouts"
 msgstr "Lámhleabhair"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:547
-#: src/control/Control.NavigatorPanel.ts:213
+#: admin/src/integrator/AdminIntegratorSettings.ts:572
+#: src/control/Control.NavigatorPanel.ts:223
 msgid "Outline"
 msgstr "Imlíne"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:548
+#: admin/src/integrator/AdminIntegratorSettings.ts:573
 msgid "Handout horizontal"
 msgstr "Láimhseáil chothrománach"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:549
+#: admin/src/integrator/AdminIntegratorSettings.ts:574
 msgid "Images"
 msgstr "Íomhánna"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:550
+#: admin/src/integrator/AdminIntegratorSettings.ts:575
 msgid "Tables"
 msgstr "Táblaí"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:551
+#: admin/src/integrator/AdminIntegratorSettings.ts:576
 msgid "Controls"
 msgstr "Rialuithe"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:552
+#: admin/src/integrator/AdminIntegratorSettings.ts:577
 msgid "Background"
 msgstr "Cúlra"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:553
+#: admin/src/integrator/AdminIntegratorSettings.ts:578
 msgid "Print Black"
 msgstr "Priontáil Dubh"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:554
+#: admin/src/integrator/AdminIntegratorSettings.ts:579
 msgid "Hidden text"
 msgstr "Téacs i bhfolach"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:555
+#: admin/src/integrator/AdminIntegratorSettings.ts:580
 msgid "Placeholders"
 msgstr "Coinnitheoirí áite"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:556
+#: admin/src/integrator/AdminIntegratorSettings.ts:581
 msgid "Left pages"
 msgstr "Leathanaigh chlé"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:557
+#: admin/src/integrator/AdminIntegratorSettings.ts:582
 msgid "Right pages"
 msgstr "Leathanaigh ar dheis"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:558
+#: admin/src/integrator/AdminIntegratorSettings.ts:583
 msgid "Brochure"
 msgstr "Bróisiúr"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:559
+#: admin/src/integrator/AdminIntegratorSettings.ts:584
 msgid "Brochure Right to Left"
 msgstr "Bróisiúr ó Dheas go Clé"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:745
+#: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid "Invalid JSON file"
 msgstr "Comhad JSON neamhbhailí"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:749
+#: admin/src/integrator/AdminIntegratorSettings.ts:793
 msgid "Error reading file"
 msgstr "Earráid ag léamh an chomhaid"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:761
+#: admin/src/integrator/AdminIntegratorSettings.ts:805
 msgid "Autotext"
 msgstr "Uaththéacs"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:763
+#: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
@@ -705,15 +705,15 @@ msgstr ""
 "i do dhoiciméad, clóscríobh an aicearra le haghaidh iontráil Uaththéacs agus "
 "brúigh F3."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:769
+#: admin/src/integrator/AdminIntegratorSettings.ts:813
 msgid "Upload Autotext"
 msgstr "Uaslódáil Uaththéacs"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:774
+#: admin/src/integrator/AdminIntegratorSettings.ts:819
 msgid "Custom dictionaries"
 msgstr "Foclóirí saincheaptha"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:776
+#: admin/src/integrator/AdminIntegratorSettings.ts:821
 msgid ""
 "Add or edit words in a spell check dictionary. Words in your wordbook (."
 "dic) will be available for spelling checks."
@@ -721,15 +721,15 @@ msgstr ""
 "Cuir focail leis i bhfoclóir litrithe nó cuir focail in eagar iad. Beidh "
 "focail i do leabhar focal (.dic) ar fáil le haghaidh seiceálacha litrithe."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:782
+#: admin/src/integrator/AdminIntegratorSettings.ts:827
 msgid "Upload Wordbook"
 msgstr "Uaslódáil Leabhar Focal"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:787
+#: admin/src/integrator/AdminIntegratorSettings.ts:833
 msgid "Document themes"
 msgstr "Téamaí doiciméad"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:789
+#: admin/src/integrator/AdminIntegratorSettings.ts:835
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
@@ -737,15 +737,15 @@ msgstr ""
 "Uaslódáil téamaí doiciméad saincheaptha (.theme). Sainmhíníonn siad seo "
 "pailéid dathanna atá ar fáil faoi Formáid > Téama."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:795
+#: admin/src/integrator/AdminIntegratorSettings.ts:841
 msgid "Upload Theme"
 msgstr "Uaslódáil Téama"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:850
+#: admin/src/integrator/AdminIntegratorSettings.ts:918
 msgid "Something went wrong. Please try to refresh the page."
 msgstr "Chuaigh rud éigin mícheart. Déan iarracht an leathanach a athnuachan."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1006
+#: admin/src/integrator/AdminIntegratorSettings.ts:1104
 msgid ""
 "Something went wrong while fetching wordbook. Please try to refresh the "
 "page."
@@ -753,44 +753,45 @@ msgstr ""
 "Tharla fadhb agus an leabhar focal á fháil. Déan iarracht an leathanach a "
 "athnuachan."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1020
+#: admin/src/integrator/AdminIntegratorSettings.ts:1118
+#: admin/src/integrator/AdminIntegratorSettings.ts:2945
 msgid "Interface Settings"
 msgstr "Socruithe Comhéadain"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1022
+#: admin/src/integrator/AdminIntegratorSettings.ts:1120
 msgid "Set default interface preferences."
 msgstr "Socraigh roghanna comhéadain réamhshocraithe."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1173
+#: admin/src/integrator/AdminIntegratorSettings.ts:1270
 msgid "Select a tab to browser settings."
 msgstr "Roghnaigh cluaisín chuig socruithe an bhrabhsálaí."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1190
+#: admin/src/integrator/AdminIntegratorSettings.ts:1287
 #: admin/src/integrator/Xcu.ts:374
 msgid "Reset to default Document settings"
 msgstr "Athshocraigh chuig socruithe réamhshocraithe an Doiciméid"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1194
+#: admin/src/integrator/AdminIntegratorSettings.ts:1291
 #: admin/src/integrator/Xcu.ts:388
 msgid "Are you sure you want to reset Document settings?"
 msgstr "An bhfuil tú cinnte gur mian leat socruithe an Doiciméid a athshocrú?"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1211
+#: admin/src/integrator/AdminIntegratorSettings.ts:1308
 #: admin/src/integrator/Xcu.ts:403
 msgid "Save Document settings"
 msgstr "Socruithe Sábháil Doiciméid"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1488
+#: admin/src/integrator/AdminIntegratorSettings.ts:1610
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr ""
 "(Rabhadh: Ní mór inrochtaineacht an fhreastalaí a bheith cumasaithe chun "
 "lascadh)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1585
+#: admin/src/integrator/AdminIntegratorSettings.ts:1707
 msgid "Notebookbar view"
 msgstr "Radharc barra leabhar nótaí"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1592
+#: admin/src/integrator/AdminIntegratorSettings.ts:1714
 #: src/control/Control.NotebookbarCalc.js:1620
 #: src/control/Control.NotebookbarDraw.js:496
 #: src/control/Control.NotebookbarImpress.js:640
@@ -798,21 +799,21 @@ msgstr "Radharc barra leabhar nótaí"
 msgid "Compact view"
 msgstr "Amharc dlúth"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1698
+#: admin/src/integrator/AdminIntegratorSettings.ts:1820
 msgid "Something went wrong while uploading the file. Please try again."
 msgstr "Tharla fadhb agus an comhad á uaslódáil. Déan iarracht arís."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1774
-#: src/canvas/sections/CommentSection.ts:1525
-#: src/canvas/sections/CommentSection.ts:1530
-#: src/control/Control.AIChatSidebar.ts:1375
-#: src/control/jsdialog/Control.ContextMenu.ts:292
+#: admin/src/integrator/AdminIntegratorSettings.ts:1896
+#: src/canvas/sections/CommentSection.ts:1523
+#: src/canvas/sections/CommentSection.ts:1528
+#: src/control/Control.AIChatSidebar.ts:1405
+#: src/control/jsdialog/Control.ContextMenu.ts:293
 #: src/control/jsdialog/Definitions.DialogModification.ts:155
-#: src/docdispatcher.ts:619
+#: src/docdispatcher.ts:616
 msgid "Delete"
 msgstr "Scrios"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1785
+#: admin/src/integrator/AdminIntegratorSettings.ts:1907
 msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
@@ -820,12 +821,12 @@ msgstr ""
 "Tharla fadhb agus an comhad á scriosadh. Déan iarracht an leathanach a "
 "athnuachan."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1800
+#: admin/src/integrator/AdminIntegratorSettings.ts:1922
 #: src/control/Control.BackstageView.ts:568
 msgid "Edit"
 msgstr "Cuir in Eagar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1820
+#: admin/src/integrator/AdminIntegratorSettings.ts:1940
 msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
@@ -833,15 +834,16 @@ msgstr ""
 "Chun Zotero a úsáid, sonraigh d’eochair API anseo. Is féidir leat d’eochair "
 "API a chruthú i do "
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1829
+#: admin/src/integrator/AdminIntegratorSettings.ts:1949
 msgid "Zotero account API settings"
 msgstr "Socruithe API cuntais Zotero"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1890
+#: admin/src/integrator/AdminIntegratorSettings.ts:2006
+#: admin/src/integrator/AdminIntegratorSettings.ts:3060
 msgid "Document Signing"
 msgstr "Síniú Doiciméad"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1894
+#: admin/src/integrator/AdminIntegratorSettings.ts:2010
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
@@ -849,20 +851,21 @@ msgstr ""
 "Chun síniú doiciméad a úsáid, sonraigh do theastas sínithe, d'eochair agus "
 "do shlabhra CA anseo."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1955
-#: src/control/Control.AIChatSidebar.ts:575 src/control/Control.Menubar.ts:227
-#: src/control/Control.Menubar.ts:534 src/control/Control.Menubar.ts:694
-#: src/control/Control.Menubar.ts:861
+#: admin/src/integrator/AdminIntegratorSettings.ts:2069
+#: admin/src/integrator/AdminIntegratorSettings.ts:3024
+#: src/control/Control.AIChatSidebar.ts:599 src/control/Control.Menubar.ts:228
+#: src/control/Control.Menubar.ts:536 src/control/Control.Menubar.ts:697
+#: src/control/Control.Menubar.ts:865
 #: src/control/Control.NotebookbarCalc.js:1687
 #: src/control/Control.NotebookbarCalc.js:1688
 #: src/control/Control.NotebookbarImpress.js:759
 #: src/control/Control.NotebookbarImpress.js:760
-#: src/control/Control.NotebookbarWriter.js:1819
-#: src/control/Control.NotebookbarWriter.js:1820
+#: src/control/Control.NotebookbarWriter.js:1804
+#: src/control/Control.NotebookbarWriter.js:1805
 msgid "AI Assistant"
 msgstr "Cúntóir AI"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1959
+#: admin/src/integrator/AdminIntegratorSettings.ts:2073
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
@@ -870,74 +873,90 @@ msgstr ""
 "Cumraigh dintiúir agus samhail sholáthraí na hintleachta saorga. Faightear "
 "samhlacha go huathoibríoch nuair a athraíonn dintiúir."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2060
+#: admin/src/integrator/AdminIntegratorSettings.ts:2174
 msgid "Text Generation"
 msgstr "Giniúint Téacs"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2110
-#: admin/src/integrator/AdminIntegratorSettings.ts:2216
+#: admin/src/integrator/AdminIntegratorSettings.ts:2224
+#: admin/src/integrator/AdminIntegratorSettings.ts:2342
 msgid "e.g."
 msgstr "m.sh."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2129
-#: admin/src/integrator/AdminIntegratorSettings.ts:2247
-#: admin/src/integrator/AdminIntegratorSettings.ts:2727
-#: admin/src/integrator/AdminIntegratorSettings.ts:2743
+#: admin/src/integrator/AdminIntegratorSettings.ts:2246
+msgid ""
+"For document actions (inspecting and editing), choose a model with native "
+"function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
+"it (e.g. base llama3, gemma) can still chat but cannot use document tools."
+msgstr ""
+
+#: admin/src/integrator/AdminIntegratorSettings.ts:2255
+#: admin/src/integrator/AdminIntegratorSettings.ts:2373
+#: admin/src/integrator/AdminIntegratorSettings.ts:2848
+#: admin/src/integrator/AdminIntegratorSettings.ts:2864
 msgid "Fetch models to select"
 msgstr "Faigh samhlacha le roghnú"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2158
+#: admin/src/integrator/AdminIntegratorSettings.ts:2284
 msgid "Image Generation"
 msgstr "Giniúint Íomhánna"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2163
+#: admin/src/integrator/AdminIntegratorSettings.ts:2289
 msgid "Same as Text AI"
 msgstr "Mar an gcéanna le Téacs AI"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2232
+#: admin/src/integrator/AdminIntegratorSettings.ts:2358
 msgid "Leave empty to use Text AI key"
 msgstr "Fág folamh chun eochair Téacs AI a úsáid"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2494
-#: admin/src/integrator/AdminIntegratorSettings.ts:2602
+#: admin/src/integrator/AdminIntegratorSettings.ts:2621
+#: admin/src/integrator/AdminIntegratorSettings.ts:2726
 msgid "Fetching models..."
 msgstr "Ag fáil samhlacha..."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2539
-#: admin/src/integrator/AdminIntegratorSettings.ts:2554
-#: admin/src/integrator/AdminIntegratorSettings.ts:2642
-#: admin/src/integrator/AdminIntegratorSettings.ts:2656
+#: admin/src/integrator/AdminIntegratorSettings.ts:2663
+#: admin/src/integrator/AdminIntegratorSettings.ts:2678
+#: admin/src/integrator/AdminIntegratorSettings.ts:2763
+#: admin/src/integrator/AdminIntegratorSettings.ts:2777
 msgid "No models found"
 msgstr "Níor aimsíodh aon mhúnlaí"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2564
-#: admin/src/integrator/AdminIntegratorSettings.ts:2666
+#: admin/src/integrator/AdminIntegratorSettings.ts:2688
+#: admin/src/integrator/AdminIntegratorSettings.ts:2787
 msgid "Models fetched successfully"
 msgstr "Fuarthas samhlacha go rathúil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2570
-#: admin/src/integrator/AdminIntegratorSettings.ts:2672
+#: admin/src/integrator/AdminIntegratorSettings.ts:2694
+#: admin/src/integrator/AdminIntegratorSettings.ts:2793
 msgid "Failed to fetch models"
 msgstr "Theip ar shamhlacha a fháil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2580
+#: admin/src/integrator/AdminIntegratorSettings.ts:2704
 msgid "Invalid provider configuration"
 msgstr "Cumraíocht sholáthraí neamhbhailí"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2707
+#: admin/src/integrator/AdminIntegratorSettings.ts:2828
 msgid "None (disable image generation)"
 msgstr "Gan aon cheann (díchumasaigh giniúint íomhá)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2926
+#: admin/src/integrator/AdminIntegratorSettings.ts:2880
+msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
+msgstr ""
+
+#: admin/src/integrator/AdminIntegratorSettings.ts:2972
+#: admin/src/integrator/Xcu.ts:310
+msgid "Document Settings"
+msgstr "Socruithe Doiciméid"
+
+#: admin/src/integrator/AdminIntegratorSettings.ts:3099
 msgid "Upload Xcu"
 msgstr "Uaslódáil Xcu"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:3125
+#: admin/src/integrator/AdminIntegratorSettings.ts:3298
 msgid "Reset"
 msgstr "Athshocraigh"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:3244
-#: src/control/Control.AIChatSidebar.ts:2651 src/map/handler/Map.WOPI.js:869
+#: admin/src/integrator/AdminIntegratorSettings.ts:3417
+#: src/control/Control.AIChatSidebar.ts:2771 src/map/handler/Map.WOPI.js:871
 msgid "Error"
 msgstr "Earráid"
 
@@ -981,10 +1000,6 @@ msgstr "Tharla fadhb agus comhad foclóra á uaslódáil"
 #: admin/src/integrator/Xcu.ts:155 admin/src/integrator/Xcu.ts:167
 msgid "Something went wrong while loading Document settings."
 msgstr "Tharla fadhb agus socruithe an Doiciméid á lódáil."
-
-#: admin/src/integrator/Xcu.ts:310
-msgid "Document Settings"
-msgstr "Socruithe Doiciméid"
 
 #: admin/src/integrator/Xcu.ts:314
 msgid "Adjust how office documents behave."
@@ -1073,11 +1088,11 @@ msgstr ""
 "Cuireadh moill ar láimhseáil imeachtaí ar feadh tréimhse fada gan choinne: "
 "{0}ms"
 
-#: src/app/LOUtil.ts:981
+#: src/app/LOUtil.ts:976
 msgid "{0} website, opens in new tab"
 msgstr "Suíomh Gréasáin {0}, osclaítear i gcluaisín nua"
 
-#: src/app/LOUtil.ts:984
+#: src/app/LOUtil.ts:979
 msgid "file type icon"
 msgstr "deilbhín de chineál comhaid"
 
@@ -1103,16 +1118,16 @@ msgstr "Saincheaptha"
 msgid "Table Styles"
 msgstr "Stíleanna Tábla"
 
-#: src/canvas/sections/CommentListSection.ts:1845
-#: src/canvas/sections/CommentListSection.ts:1858
+#: src/canvas/sections/CommentListSection.ts:1891
+#: src/canvas/sections/CommentListSection.ts:1904
 msgid "Comments Updated"
 msgstr "Tuairimí Nuashonraithe"
 
-#: src/canvas/sections/CommentListSection.ts:1846
+#: src/canvas/sections/CommentListSection.ts:1892
 msgid "Another user has removed this comment."
 msgstr "Bhain úsáideoir eile an trácht seo."
 
-#: src/canvas/sections/CommentListSection.ts:1859
+#: src/canvas/sections/CommentListSection.ts:1905
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
@@ -1120,11 +1135,11 @@ msgstr ""
 "Tá úsáideoir eile tar éis an trácht a nuashonrú. Ar mhaith leat na "
 "hathruithe sin a fhorscríobh?"
 
-#: src/canvas/sections/CommentListSection.ts:1860 src/app/Socket.ts:1605
+#: src/canvas/sections/CommentListSection.ts:1906 src/app/Socket.ts:1627
 msgid "Overwrite"
 msgstr "Forscríobh"
 
-#: src/canvas/sections/CommentListSection.ts:1861
+#: src/canvas/sections/CommentListSection.ts:1907
 msgid "Update"
 msgstr "Nuashonrú"
 
@@ -1141,9 +1156,9 @@ msgid "Open menu"
 msgstr "Oscail roghchlár"
 
 #: src/canvas/sections/CommentSection.ts:194
-#: src/canvas/sections/CommentSection.ts:644
-#: src/canvas/sections/CommentSection.ts:1215
-#: src/canvas/sections/CommentSection.ts:1616
+#: src/canvas/sections/CommentSection.ts:642
+#: src/canvas/sections/CommentSection.ts:1213
+#: src/canvas/sections/CommentSection.ts:1614
 msgid "Reply"
 msgstr "Freagair"
 
@@ -1151,78 +1166,78 @@ msgstr "Freagair"
 msgid "Press Ctrl + Enter to post"
 msgstr "Brúigh Ctrl + Enter le postáil"
 
-#: src/canvas/sections/CommentSection.ts:539
-#: src/canvas/sections/CommentSection.ts:540
+#: src/canvas/sections/CommentSection.ts:537
+#: src/canvas/sections/CommentSection.ts:538
 msgid "Accept change"
 msgstr "Glac le hathrú"
 
-#: src/canvas/sections/CommentSection.ts:546
-#: src/canvas/sections/CommentSection.ts:547
+#: src/canvas/sections/CommentSection.ts:544
+#: src/canvas/sections/CommentSection.ts:545
 msgid "Reject change"
 msgstr "Diúltaigh athrú"
 
-#: src/canvas/sections/CommentSection.ts:571
+#: src/canvas/sections/CommentSection.ts:569
 msgid "Resolved"
 msgstr "Réitithe"
 
-#: src/canvas/sections/CommentSection.ts:581
+#: src/canvas/sections/CommentSection.ts:579
 msgid "Removed"
 msgstr "Bainte"
 
-#: src/canvas/sections/CommentSection.ts:1202
+#: src/canvas/sections/CommentSection.ts:1200
 #: src/control/jsdialog/Widget.Comment.ts:177
-#: src/layer/tile/CanvasTileLayer.js:3593
-#: src/layer/tile/CanvasTileLayer.js:3604
+#: src/layer/tile/CanvasTileLayer.js:3601
+#: src/layer/tile/CanvasTileLayer.js:3612
 msgid "Comment"
 msgstr "Nóta Tráchta"
 
-#: src/canvas/sections/CommentSection.ts:1212
+#: src/canvas/sections/CommentSection.ts:1210
 msgid "Modify"
 msgstr "Mionathraigh"
 
-#: src/canvas/sections/CommentSection.ts:1218
+#: src/canvas/sections/CommentSection.ts:1216
 #: src/control/Notebookbar.ImpressAnimationTab.ts:83
 msgid "Remove"
 msgstr "Bain"
 
-#: src/canvas/sections/CommentSection.ts:1222
+#: src/canvas/sections/CommentSection.ts:1220
 msgid "Remove Thread"
 msgstr "Bain Snáithe"
 
-#: src/canvas/sections/CommentSection.ts:1229
+#: src/canvas/sections/CommentSection.ts:1227
 msgid "Resolve"
 msgstr "Réiteach"
 
-#: src/canvas/sections/CommentSection.ts:1229
+#: src/canvas/sections/CommentSection.ts:1227
 msgid "Unresolve"
 msgstr "Gan réiteach"
 
-#: src/canvas/sections/CommentSection.ts:1236
+#: src/canvas/sections/CommentSection.ts:1234
 msgid "Unresolve Thread"
 msgstr "Snáithe Gan Réiteach"
 
-#: src/canvas/sections/CommentSection.ts:1236
+#: src/canvas/sections/CommentSection.ts:1234
 msgid "Resolve Thread"
 msgstr "Réitigh Snáithe"
 
-#: src/canvas/sections/CommentSection.ts:1242
+#: src/canvas/sections/CommentSection.ts:1240
 msgid "Promote to top comment"
 msgstr "Cuir chun cinn go dtí an trácht is fearr"
 
-#: src/canvas/sections/CommentSection.ts:1247
+#: src/canvas/sections/CommentSection.ts:1245
 msgid "Show on the side"
 msgstr "Taispeáin ar an taobh"
 
-#: src/canvas/sections/CommentSection.ts:1247
+#: src/canvas/sections/CommentSection.ts:1245
 msgid "Open in full view"
 msgstr "Oscail i radharc iomlán"
 
-#: src/canvas/sections/CommentSection.ts:1254
+#: src/canvas/sections/CommentSection.ts:1252
 msgid "Show in navigator"
 msgstr "Taispeáin sa loingseoir"
 
-#: src/canvas/sections/CommentSection.ts:1524
-#: src/canvas/sections/CommentSection.ts:1529
+#: src/canvas/sections/CommentSection.ts:1522
+#: src/canvas/sections/CommentSection.ts:1527
 #: src/control/Control.SaveState.ts:67
 msgid "Saved"
 msgstr "Sábháilte"
@@ -1314,7 +1329,7 @@ msgid "Automatic color"
 msgstr "Dath uathoibríoch"
 
 #: src/control/Control.AboutDialog.ts:89
-#: src/control/jsdialog/Widget.TreeView.ts:786
+#: src/control/jsdialog/Widget.TreeView.ts:826
 msgid "(opens in new tab)"
 msgstr "(osclaítear i gcluaisín nua)"
 
@@ -1338,11 +1353,11 @@ msgstr "Crios ama:"
 msgid "Copy all version information in English"
 msgstr "Cóipeáil gach eolas faoin leagan i mBéarla"
 
-#: src/control/Control.AboutDialog.ts:391
+#: src/control/Control.AboutDialog.ts:393
 msgid "Version information has been copied"
 msgstr "Tá faisnéis an leagain cóipeáilte"
 
-#: src/control/Control.AboutDialog.ts:433
+#: src/control/Control.AboutDialog.ts:437
 msgid "Version:"
 msgstr "Leagan:"
 
@@ -1350,51 +1365,51 @@ msgstr "Leagan:"
 msgid "cell address"
 msgstr "seoladh cille"
 
-#: src/control/Control.AIChatSidebar.ts:79
+#: src/control/Control.AIChatSidebar.ts:90
 msgid "Make the following text more concise"
 msgstr "Déan an téacs seo a leanas níos gonta"
 
-#: src/control/Control.AIChatSidebar.ts:83
+#: src/control/Control.AIChatSidebar.ts:94
 msgid "Summarize the key points of this text"
 msgstr "Achoimrigh príomhphointí an téacs seo"
 
-#: src/control/Control.AIChatSidebar.ts:87
+#: src/control/Control.AIChatSidebar.ts:98
 msgid "Expand and add more detail to this text"
 msgstr "Leathnaigh agus cuir tuilleadh sonraí leis an téacs seo"
 
-#: src/control/Control.AIChatSidebar.ts:91
+#: src/control/Control.AIChatSidebar.ts:102
 msgid "Fix grammar, spelling, and punctuation errors"
 msgstr "Deisigh earráidí gramadaí, litrithe agus poncaíochta"
 
-#: src/control/Control.AIChatSidebar.ts:107
+#: src/control/Control.AIChatSidebar.ts:118
 msgid "Natural"
 msgstr "Nádúrtha"
 
-#: src/control/Control.AIChatSidebar.ts:108
+#: src/control/Control.AIChatSidebar.ts:119
 msgid "Formal"
 msgstr "Foirmiúil"
 
-#: src/control/Control.AIChatSidebar.ts:109
+#: src/control/Control.AIChatSidebar.ts:120
 msgid "Short"
 msgstr "Gearr"
 
-#: src/control/Control.AIChatSidebar.ts:110
+#: src/control/Control.AIChatSidebar.ts:121
 msgid "Friendly"
 msgstr "Cairdiúil"
 
-#: src/control/Control.AIChatSidebar.ts:111
+#: src/control/Control.AIChatSidebar.ts:122
 msgid "Professional"
 msgstr "Gairmiúil"
 
-#: src/control/Control.AIChatSidebar.ts:112
+#: src/control/Control.AIChatSidebar.ts:123
 msgid "Casual"
 msgstr "Ócáideach"
 
-#: src/control/Control.AIChatSidebar.ts:338
+#: src/control/Control.AIChatSidebar.ts:362
 msgid "Unknown"
 msgstr "Anaithnid"
 
-#: src/control/Control.AIChatSidebar.ts:340
+#: src/control/Control.AIChatSidebar.ts:364
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
@@ -1402,290 +1417,290 @@ msgstr ""
 "Rátáil eiticiúil AI: {0} ({1}). Bunaithe ar cheadúnú foinse oscailte, "
 "féinóstáil, agus sonraí oiliúna."
 
-#: src/control/Control.AIChatSidebar.ts:423
+#: src/control/Control.AIChatSidebar.ts:447
 msgid "Your message"
 msgstr "Do theachtaireacht"
 
-#: src/control/Control.AIChatSidebar.ts:425
+#: src/control/Control.AIChatSidebar.ts:449
 msgid "Action requiring approval"
 msgstr "Gníomh a éilíonn formheas"
 
-#: src/control/Control.AIChatSidebar.ts:427
+#: src/control/Control.AIChatSidebar.ts:451
 msgid "Error message"
 msgstr "Teachtaireacht earráide"
 
-#: src/control/Control.AIChatSidebar.ts:428
+#: src/control/Control.AIChatSidebar.ts:452
 msgid "AI response"
 msgstr "Freagairt AI"
 
-#: src/control/Control.AIChatSidebar.ts:502
+#: src/control/Control.AIChatSidebar.ts:526
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
 "Ábhar arna ghiniúint ag seirbhís sheachtrach AI ({0}). Déan athbhreithniú "
 "air le do thoil roimh úsáid."
 
-#: src/control/Control.AIChatSidebar.ts:505
+#: src/control/Control.AIChatSidebar.ts:529
 msgid "Content generated by an external AI service. Please review before use."
 msgstr ""
 "Ábhar arna ghiniúint ag seirbhís sheachtrach AI. Déan athbhreithniú air "
 "roimh úsáid le do thoil."
 
-#: src/control/Control.AIChatSidebar.ts:583
+#: src/control/Control.AIChatSidebar.ts:607
 msgid "New conversation"
 msgstr "Comhrá nua"
 
-#: src/control/Control.AIChatSidebar.ts:614
+#: src/control/Control.AIChatSidebar.ts:638
 msgid "Ask AI anything about your document..."
 msgstr "Cuir ceist ar rud ar bith faoi do dhoiciméad ar AI..."
 
-#: src/control/Control.AIChatSidebar.ts:672
+#: src/control/Control.AIChatSidebar.ts:696
 msgid "Loading"
 msgstr "Ag luchtú"
 
-#: src/control/Control.AIChatSidebar.ts:685
+#: src/control/Control.AIChatSidebar.ts:709
 msgid "Chat messages"
 msgstr "Teachtaireachtaí comhrá"
 
-#: src/control/Control.AIChatSidebar.ts:711
+#: src/control/Control.AIChatSidebar.ts:735
 msgid "AI generated image"
 msgstr "Íomhá a ghintear le hintleacht shaorga"
 
-#: src/control/Control.AIChatSidebar.ts:746
+#: src/control/Control.AIChatSidebar.ts:770
 msgid "Retry"
 msgstr "Déan iarracht arís"
 
-#: src/control/Control.AIChatSidebar.ts:770
-#: src/control/Control.AIChatSidebar.ts:803
+#: src/control/Control.AIChatSidebar.ts:794
+#: src/control/Control.AIChatSidebar.ts:827
 msgid "Insert at cursor"
 msgstr "Cuir isteach ag an gcúrsóir"
 
-#: src/control/Control.AIChatSidebar.ts:779
-#: src/control/Control.AIChatSidebar.ts:810
+#: src/control/Control.AIChatSidebar.ts:803
+#: src/control/Control.AIChatSidebar.ts:834
 msgid "Copy to clipboard"
 msgstr "Cóipeáil chuig an ghearrthaisce"
 
-#: src/control/Control.AIChatSidebar.ts:831
+#: src/control/Control.AIChatSidebar.ts:854
+msgid "Using selected text as context"
+msgstr "Ag baint úsáide as téacs roghnaithe mar chomhthéacs"
+
+#: src/control/Control.AIChatSidebar.ts:861
 msgid "Ask AI..."
 msgstr "Iarr ar AI..."
 
-#: src/control/Control.AIChatSidebar.ts:834
+#: src/control/Control.AIChatSidebar.ts:864
 msgid "Message input"
 msgstr "Ionchur teachtaireachta"
 
-#: src/control/Control.AIChatSidebar.ts:850
+#: src/control/Control.AIChatSidebar.ts:880
 msgid "Stop generating"
 msgstr "Stop a ghiniúint"
 
-#: src/control/Control.AIChatSidebar.ts:851
+#: src/control/Control.AIChatSidebar.ts:881
 msgid "Send message"
 msgstr "Seol teachtaireacht"
 
-#: src/control/Control.AIChatSidebar.ts:865
-#: src/control/Control.AIChatSidebar.ts:878
+#: src/control/Control.AIChatSidebar.ts:895
+#: src/control/Control.AIChatSidebar.ts:908
 msgid "Set tone"
 msgstr "Socraigh ton"
 
-#: src/control/Control.AIChatSidebar.ts:889
+#: src/control/Control.AIChatSidebar.ts:919
 msgid "Set tone of voice"
 msgstr "Socraigh ton gutha"
 
-#: src/control/Control.AIChatSidebar.ts:890
+#: src/control/Control.AIChatSidebar.ts:920
 msgid "Tone of voice: {0}{1}"
 msgstr "Ton gutha: {0}{1}"
 
-#: src/control/Control.AIChatSidebar.ts:892
+#: src/control/Control.AIChatSidebar.ts:922
 msgid "with emoji"
 msgstr "le emoji"
 
-#: src/control/Control.AIChatSidebar.ts:934
-#: src/control/Control.AIChatSidebar.ts:984
-#: src/control/Control.AIChatSidebar.ts:1356
+#: src/control/Control.AIChatSidebar.ts:964
+#: src/control/Control.AIChatSidebar.ts:1014
+#: src/control/Control.AIChatSidebar.ts:1386
 msgid "tone"
 msgstr "ton"
 
-#: src/control/Control.AIChatSidebar.ts:947
-#: src/control/Control.AIChatSidebar.ts:1218
+#: src/control/Control.AIChatSidebar.ts:977
+#: src/control/Control.AIChatSidebar.ts:1248
 msgid "Tone of voice"
 msgstr "Ton gutha"
 
-#: src/control/Control.AIChatSidebar.ts:953
+#: src/control/Control.AIChatSidebar.ts:983
 msgid "Reset voice"
 msgstr "Athshocraigh an guth"
 
-#: src/control/Control.AIChatSidebar.ts:956
+#: src/control/Control.AIChatSidebar.ts:986
 msgid "Reset tone of voice"
 msgstr "Athshocraigh ton gutha"
 
-#: src/control/Control.AIChatSidebar.ts:972
+#: src/control/Control.AIChatSidebar.ts:1002
 msgid "Your tones"
 msgstr "Do thonna"
 
-#: src/control/Control.AIChatSidebar.ts:989
+#: src/control/Control.AIChatSidebar.ts:1019
 msgid "Edit tone"
 msgstr "Cuir ton in eagar"
 
-#: src/control/Control.AIChatSidebar.ts:1006
+#: src/control/Control.AIChatSidebar.ts:1036
 msgid "+ Add my own voice"
 msgstr "+ Cuir mo ghlór féin leis"
 
-#: src/control/Control.AIChatSidebar.ts:1008
+#: src/control/Control.AIChatSidebar.ts:1038
 msgid "Add a custom tone of voice"
 msgstr "Cuir ton gutha saincheaptha leis"
 
-#: src/control/Control.AIChatSidebar.ts:1019
+#: src/control/Control.AIChatSidebar.ts:1049
 msgid "Emojify"
 msgstr "Emojify"
 
-#: src/control/Control.AIChatSidebar.ts:1025
+#: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:162
 msgid "On"
 msgstr "Ar"
 
-#: src/control/Control.AIChatSidebar.ts:1025
+#: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:164
 #: src/control/jsdialog/Definitions.Menu.ts:1824
 msgid "Off"
 msgstr "As"
 
-#: src/control/Control.AIChatSidebar.ts:1028
+#: src/control/Control.AIChatSidebar.ts:1058
 msgid "Toggle emojify"
 msgstr "Scoránaigh emojify"
 
-#: src/control/Control.AIChatSidebar.ts:1189
+#: src/control/Control.AIChatSidebar.ts:1219
 msgid "Use icon"
 msgstr "Úsáid deilbhín"
 
-#: src/control/Control.AIChatSidebar.ts:1199
+#: src/control/Control.AIChatSidebar.ts:1229
 msgid "Pick another emoji"
 msgstr "Roghnaigh emoji eile"
 
-#: src/control/Control.AIChatSidebar.ts:1213
+#: src/control/Control.AIChatSidebar.ts:1243
 msgid "Back to tones"
 msgstr "Ar ais chuig na toin"
 
-#: src/control/Control.AIChatSidebar.ts:1226
+#: src/control/Control.AIChatSidebar.ts:1256
 msgid "Icon"
 msgstr "Deilbhín"
 
-#: src/control/Control.AIChatSidebar.ts:1238
+#: src/control/Control.AIChatSidebar.ts:1268
 msgid "Name your tone"
 msgstr "Ainmnigh do thón"
 
-#: src/control/Control.AIChatSidebar.ts:1245
+#: src/control/Control.AIChatSidebar.ts:1275
 msgid "e.g. Quick reply"
 msgstr "m.sh. Freagra tapa"
 
-#: src/control/Control.AIChatSidebar.ts:1247
+#: src/control/Control.AIChatSidebar.ts:1277
 msgid "Tone name"
 msgstr "Ainm an toin"
 
-#: src/control/Control.AIChatSidebar.ts:1252
+#: src/control/Control.AIChatSidebar.ts:1282
 msgid "Describe how AI should write"
 msgstr "Déan cur síos ar an gcaoi ar cheart do AI scríobh"
 
-#: src/control/Control.AIChatSidebar.ts:1260
+#: src/control/Control.AIChatSidebar.ts:1290
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
 "Scríobh abairtí gearra díreacha. Bain úsáid as teanga shimplí agus seachain "
 "an chaint bheag."
 
-#: src/control/Control.AIChatSidebar.ts:1264
+#: src/control/Control.AIChatSidebar.ts:1294
 msgid "Tone description"
 msgstr "Cur síos ar an ton"
 
-#: src/control/Control.AIChatSidebar.ts:1273
-#: src/control/Control.AIChatSidebar.ts:1335
-#: src/control/Control.AIChatSidebar.ts:1377
+#: src/control/Control.AIChatSidebar.ts:1303
+#: src/control/Control.AIChatSidebar.ts:1365
+#: src/control/Control.AIChatSidebar.ts:1407
 msgid "Delete tone"
 msgstr "Scrios an ton"
 
-#: src/control/Control.AIChatSidebar.ts:1275
+#: src/control/Control.AIChatSidebar.ts:1305
 msgid "Delete this tone"
 msgstr "Scrios an ton seo"
 
-#: src/control/Control.AIChatSidebar.ts:1288
+#: src/control/Control.AIChatSidebar.ts:1318
 msgid "Save voice"
 msgstr "Sábháil guth"
 
-#: src/control/Control.AIChatSidebar.ts:1290
+#: src/control/Control.AIChatSidebar.ts:1320
 msgid "Save tone of voice"
 msgstr "Sábháil ton gutha"
 
-#: src/control/Control.AIChatSidebar.ts:1305
+#: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
 msgstr "Cuardaigh emojis"
 
-#: src/control/Control.AIChatSidebar.ts:1306
+#: src/control/Control.AIChatSidebar.ts:1336
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
 msgstr "Roghnaigh emoji"
 
-#: src/control/Control.AIChatSidebar.ts:1330
+#: src/control/Control.AIChatSidebar.ts:1360
 msgid "Delete tone confirmation"
 msgstr "Deimhniú scriosadh ton"
 
-#: src/control/Control.AIChatSidebar.ts:1341
+#: src/control/Control.AIChatSidebar.ts:1371
 msgid "This tone of voice will be deleted"
 msgstr "Scriosfar an ton gutha seo"
 
-#: src/control/Control.AIChatSidebar.ts:1370
+#: src/control/Control.AIChatSidebar.ts:1400
 msgid "Cancel delete"
 msgstr "Cealaigh scriosadh"
 
-#: src/control/Control.AIChatSidebar.ts:1397
-#: src/control/Control.AIChatSidebar.ts:1457
+#: src/control/Control.AIChatSidebar.ts:1427
+#: src/control/Control.AIChatSidebar.ts:1487
 msgid "You have reached the maximum of {0} custom tones."
 msgstr "Tá an uasmhéid de {0} toin saincheaptha sroichte agat."
 
-#: src/control/Control.AIChatSidebar.ts:1631
-msgid "Using selected text as context"
-msgstr "Ag baint úsáide as téacs roghnaithe mar chomhthéacs"
-
-#: src/control/Control.AIChatSidebar.ts:1639
+#: src/control/Control.AIChatSidebar.ts:1661
 msgid "Diagnose formula error"
 msgstr "Diagnóisigh earráid foirmle"
 
-#: src/control/Control.AIChatSidebar.ts:1645
+#: src/control/Control.AIChatSidebar.ts:1667
 msgid "Sanity check data"
 msgstr "Sonraí seiceála sláinteachais"
 
-#: src/control/Control.AIChatSidebar.ts:1651
+#: src/control/Control.AIChatSidebar.ts:1673
 msgid "Create a formula"
 msgstr "Cruthaigh foirmle"
 
-#: src/control/Control.AIChatSidebar.ts:1658
+#: src/control/Control.AIChatSidebar.ts:1680
 msgid "Create slides"
 msgstr "Cruthaigh sleamhnáin"
 
-#: src/control/Control.AIChatSidebar.ts:1690
+#: src/control/Control.AIChatSidebar.ts:1712
 msgid "See less"
 msgstr "Féach níos lú"
 
-#: src/control/Control.AIChatSidebar.ts:1690
+#: src/control/Control.AIChatSidebar.ts:1712
 msgid "See more"
 msgstr "Féach níos mó"
 
-#: src/control/Control.AIChatSidebar.ts:1800
+#: src/control/Control.AIChatSidebar.ts:1822
 msgid "Image inserted at cursor"
 msgstr "Íomhá curtha isteach ag an gcúrsóir"
 
-#: src/control/Control.AIChatSidebar.ts:1819
+#: src/control/Control.AIChatSidebar.ts:1841
 msgid "Text inserted at cursor"
 msgstr "Téacs curtha isteach ag an gcúrsóir"
 
-#: src/control/Control.AIChatSidebar.ts:1893
+#: src/control/Control.AIChatSidebar.ts:1920
 msgid "Approaching message length limit"
 msgstr "Ag druidim le teorainn faid an teachtaireachta"
 
-#: src/control/Control.AIChatSidebar.ts:1947
+#: src/control/Control.AIChatSidebar.ts:1974
 msgid "Request timeout"
 msgstr "Iarratas ar theorainn ama"
 
-#: src/control/Control.AIChatSidebar.ts:1962
-#: src/control/Control.AIChatSidebar.ts:2797
+#: src/control/Control.AIChatSidebar.ts:1989
+#: src/control/Control.AIChatSidebar.ts:2917
 msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
@@ -1693,157 +1708,161 @@ msgstr ""
 "Tá íomhánna nó ábhar eile nach téacs é sa rogha nach féidir a sheoladh mar "
 "chomhthéacs."
 
-#: src/control/Control.AIChatSidebar.ts:2049
+#: src/control/Control.AIChatSidebar.ts:2076
 msgid "Message is too long. Please shorten it and try again."
 msgstr "Tá an teachtaireacht rófhada. Giorraigh í agus déan iarracht arís."
 
-#: src/control/Control.AIChatSidebar.ts:2104
+#: src/control/Control.AIChatSidebar.ts:2131
 msgid "Error: "
 msgstr "Earráid: "
 
-#: src/control/Control.AIChatSidebar.ts:2126
+#: src/control/Control.AIChatSidebar.ts:2161
 msgid "Generated image"
 msgstr "Íomhá ginte"
 
-#: src/control/Control.AIChatSidebar.ts:2137
+#: src/control/Control.AIChatSidebar.ts:2173
 msgid "AI request failed"
 msgstr "Theip ar iarratas AI"
 
-#: src/control/Control.AIChatSidebar.ts:2154
+#: src/control/Control.AIChatSidebar.ts:2190
 msgid "The AI assistant"
 msgstr "An cúntóir AI"
 
-#: src/control/Control.AIChatSidebar.ts:2167
+#: src/control/Control.AIChatSidebar.ts:2203
 msgid "Do you want to proceed?"
 msgstr "Ar mhaith leat dul ar aghaidh?"
 
-#: src/control/Control.AIChatSidebar.ts:2170
+#: src/control/Control.AIChatSidebar.ts:2206
 msgid "%1 wants to inspect your document. Do you want to proceed?"
 msgstr ""
 "Tá %1 ag iarraidh do dhoiciméad a iniúchadh. Ar mhaith leat dul ar aghaidh?"
 
-#: src/control/Control.AIChatSidebar.ts:2174
+#: src/control/Control.AIChatSidebar.ts:2210
 msgid "Modify document structure"
 msgstr "Modhnaigh struchtúr an doiciméid"
 
-#: src/control/Control.AIChatSidebar.ts:2176
+#: src/control/Control.AIChatSidebar.ts:2212
 msgid "%1 wants to modify your document:"
 msgstr "Tá %1 ag iarraidh do dhoiciméad a mhodhnú:"
 
-#: src/control/Control.AIChatSidebar.ts:2180
-#: src/control/Control.AIChatSidebar.ts:2191
+#: src/control/Control.AIChatSidebar.ts:2216
+#: src/control/Control.AIChatSidebar.ts:2227
 msgid "Do you want to apply this change?"
 msgstr "Ar mhaith leat an t-athrú seo a chur i bhfeidhm?"
 
-#: src/control/Control.AIChatSidebar.ts:2182
+#: src/control/Control.AIChatSidebar.ts:2218
 msgid "Set cell formula"
 msgstr "Socraigh foirmle na cille"
 
-#: src/control/Control.AIChatSidebar.ts:2184
+#: src/control/Control.AIChatSidebar.ts:2220
 msgid "%1 wants to set a formula in your spreadsheet:"
 msgstr "Tá %1 ag iarraidh foirmle a shocrú i do scarbhileog:"
 
-#: src/control/Control.AIChatSidebar.ts:2194
+#: src/control/Control.AIChatSidebar.ts:2230
 msgid "%1 wants to perform an action. Do you want to proceed?"
 msgstr ""
 "Tá %1 ag iarraidh gníomh a dhéanamh. Ar mhaith leat leanúint ar aghaidh?"
 
-#: src/control/Control.AIChatSidebar.ts:2225
+#: src/control/Control.AIChatSidebar.ts:2261
 msgid "Approve"
 msgstr "Ceadaigh"
 
-#: src/control/Control.AIChatSidebar.ts:2227
+#: src/control/Control.AIChatSidebar.ts:2263
 msgid "Approve action"
 msgstr "Gníomh a cheadú"
 
-#: src/control/Control.AIChatSidebar.ts:2234
+#: src/control/Control.AIChatSidebar.ts:2270
 msgid "Reject"
 msgstr "Diúltaigh"
 
-#: src/control/Control.AIChatSidebar.ts:2236
+#: src/control/Control.AIChatSidebar.ts:2272
 msgid "Reject action"
 msgstr "Diúltaigh gníomh"
 
-#: src/control/Control.AIChatSidebar.ts:2255
+#: src/control/Control.AIChatSidebar.ts:2291
 msgid "Applying changes..."
 msgstr "Ag cur athruithe i bhfeidhm..."
 
-#: src/control/Control.AIChatSidebar.ts:2258
+#: src/control/Control.AIChatSidebar.ts:2294
 msgid "Change rejected"
 msgstr "Athrú diúltaithe"
 
-#: src/control/Control.AIChatSidebar.ts:2304
+#: src/control/Control.AIChatSidebar.ts:2384
+msgid "Use section: "
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
 msgstr "Am críochnaithe le haghaidh aisghabháil an roghnúcháin"
 
-#: src/control/Control.AIChatSidebar.ts:2323
+#: src/control/Control.AIChatSidebar.ts:2441
 msgid "Failed to parse selection content"
 msgstr "Theip ar ábhar an roghnúcháin a pharsáil"
 
-#: src/control/Control.AIChatSidebar.ts:2569
+#: src/control/Control.AIChatSidebar.ts:2689
 msgid "Formula analysis timeout"
 msgstr "Am críochnaithe anailíse foirmle"
 
-#: src/control/Control.AIChatSidebar.ts:2588
+#: src/control/Control.AIChatSidebar.ts:2708
 msgid "Analyzing formula dependencies..."
 msgstr "Ag anailísiú spleáchais foirmle..."
 
-#: src/control/Control.AIChatSidebar.ts:2596
+#: src/control/Control.AIChatSidebar.ts:2716
 msgid "Failed to analyze formula."
 msgstr "Theip ar an fhoirmle a anailísiú."
 
-#: src/control/Control.AIChatSidebar.ts:2606
+#: src/control/Control.AIChatSidebar.ts:2726
 msgid "The selected cell does not contain a formula."
 msgstr "Níl foirmle sa chill roghnaithe."
 
-#: src/control/Control.AIChatSidebar.ts:2608
+#: src/control/Control.AIChatSidebar.ts:2728
 msgid "The selected cell does not have a formula error."
 msgstr "Níl earráid foirmle sa chill roghnaithe."
 
-#: src/control/Control.AIChatSidebar.ts:2617
+#: src/control/Control.AIChatSidebar.ts:2737
 msgid "Diagnose formula error in"
 msgstr "Diagnóisigh earráid foirmle i"
 
-#: src/control/Control.AIChatSidebar.ts:2638
+#: src/control/Control.AIChatSidebar.ts:2758
 msgid "I have a formula error in my spreadsheet."
 msgstr "Tá earráid foirmle i mo scarbhileog."
 
-#: src/control/Control.AIChatSidebar.ts:2640
+#: src/control/Control.AIChatSidebar.ts:2760
 msgid "Cell"
 msgstr "Cill"
 
-#: src/control/Control.AIChatSidebar.ts:2644
+#: src/control/Control.AIChatSidebar.ts:2764
 msgid "Sheet"
 msgstr "Bileog"
 
-#: src/control/Control.AIChatSidebar.ts:2648
+#: src/control/Control.AIChatSidebar.ts:2768
 msgid "contains"
 msgstr "ina bhfuil"
 
-#: src/control/Control.AIChatSidebar.ts:2650
+#: src/control/Control.AIChatSidebar.ts:2770
 #: src/control/Control.FormulaBarJSDialog.js:83
 #: src/control/Control.NotebookbarWriter.js:128
 #: src/control/Control.NotebookbarWriter.js:1585
 msgid "Formula"
 msgstr "Foirmle"
 
-#: src/control/Control.AIChatSidebar.ts:2654
+#: src/control/Control.AIChatSidebar.ts:2774
 msgid "Referenced cells"
 msgstr "Cealla tagartha"
 
-#: src/control/Control.AIChatSidebar.ts:2660
+#: src/control/Control.AIChatSidebar.ts:2780
 msgid "Please diagnose why this formula produces the"
 msgstr "Déan diagnóis le do thoil ar an gcúis a tháirgeann an fhoirmle seo"
 
-#: src/control/Control.AIChatSidebar.ts:2664
+#: src/control/Control.AIChatSidebar.ts:2784
 msgid "error."
 msgstr "earráid."
 
-#: src/control/Control.AIChatSidebar.ts:2666
+#: src/control/Control.AIChatSidebar.ts:2786
 msgid "Explain the root cause and suggest how to fix it."
 msgstr "Mínigh an chúis bhunúsach agus mol conas í a réiteach."
 
-#: src/control/Control.AIChatSidebar.ts:2670
+#: src/control/Control.AIChatSidebar.ts:2790
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
@@ -1851,60 +1870,60 @@ msgstr ""
 "Agus tú ag tagairt do chealla sonracha, formáidigh gach seoladh cille mar "
 "nasc inchliceáilte: [A1](cill://A1)."
 
-#: src/control/Control.AIChatSidebar.ts:2685
+#: src/control/Control.AIChatSidebar.ts:2805
 msgid "formula"
 msgstr "foirmle"
 
-#: src/control/Control.AIChatSidebar.ts:2687
+#: src/control/Control.AIChatSidebar.ts:2807
 msgid "ERROR"
 msgstr "EARRÁID"
 
-#: src/control/Control.AIChatSidebar.ts:2701
+#: src/control/Control.AIChatSidebar.ts:2821
 msgid "value"
 msgstr "luach"
 
-#: src/control/Control.AIChatSidebar.ts:2711
+#: src/control/Control.AIChatSidebar.ts:2831
 msgid "text"
 msgstr "téacs"
 
-#: src/control/Control.AIChatSidebar.ts:2716
+#: src/control/Control.AIChatSidebar.ts:2836
 msgid "empty"
 msgstr "folamh"
 
-#: src/control/Control.AIChatSidebar.ts:2718
+#: src/control/Control.AIChatSidebar.ts:2838
 msgid "range"
 msgstr "raon"
 
-#: src/control/Control.AIChatSidebar.ts:2720
+#: src/control/Control.AIChatSidebar.ts:2840
 msgid "errors in"
 msgstr "earráidí i"
 
-#: src/control/Control.AIChatSidebar.ts:2723
+#: src/control/Control.AIChatSidebar.ts:2843
 msgid "only partially scanned"
 msgstr "scanadh páirteach amháin"
 
-#: src/control/Control.AIChatSidebar.ts:2732
+#: src/control/Control.AIChatSidebar.ts:2852
 msgid "circular reference"
 msgstr "tagairt chiorclach"
 
-#: src/control/Control.AIChatSidebar.ts:2782
+#: src/control/Control.AIChatSidebar.ts:2902
 msgid "Select the data you want to sanity-check first."
 msgstr ""
 "Roghnaigh na sonraí ar mhaith leat seiceáil sláine a dhéanamh orthu ar dtús."
 
-#: src/control/Control.AIChatSidebar.ts:2787
+#: src/control/Control.AIChatSidebar.ts:2907
 msgid "Analyzing selected data..."
 msgstr "Ag anailísiú sonraí roghnaithe..."
 
-#: src/control/Control.AIChatSidebar.ts:2800
+#: src/control/Control.AIChatSidebar.ts:2920
 msgid "Failed to extract spreadsheet data."
 msgstr "Theip ar shonraí scarbhileog a bhaint amach."
 
-#: src/control/Control.AIChatSidebar.ts:2809
+#: src/control/Control.AIChatSidebar.ts:2929
 msgid "No data found in selection."
 msgstr "Níor aimsíodh aon sonraí sa roghnú."
 
-#: src/control/Control.AIChatSidebar.ts:2839
+#: src/control/Control.AIChatSidebar.ts:2959
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
@@ -1913,7 +1932,7 @@ msgstr ""
 "\"Forbhreathnú 5 shleamhnán ar fhuinneamh in-athnuaite\" nó \"Réamhrá dár "
 "bhfoireann\"."
 
-#: src/control/Control.AIChatSidebar.ts:2866
+#: src/control/Control.AIChatSidebar.ts:2986
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
@@ -1921,7 +1940,7 @@ msgstr ""
 "Déan cur síos ar an bhfoirmle atá uait. Mar shampla: \"Ríomh meán cholún B\" "
 "nó \"Suimigh na luachanna uile ina bhfuil colún A níos mó ná 100\"."
 
-#: src/control/Control.AIChatSidebar.ts:2876
+#: src/control/Control.AIChatSidebar.ts:2996
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
@@ -1929,7 +1948,7 @@ msgstr ""
 "Léigh uimhreacha na sraitheanna ón gcolún \"Ró\" — ná déan suíomhanna na "
 "sraitheanna a chomhaireamh ná a mheas."
 
-#: src/control/Control.AIChatSidebar.ts:2880
+#: src/control/Control.AIChatSidebar.ts:3000
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
@@ -1937,7 +1956,7 @@ msgstr ""
 "Chun colún cille a aithint, meaitseáil an luach leis an litir cholúin sa ró "
 "ceanntásca — ná buille faoi thuairim."
 
-#: src/control/Control.AIChatSidebar.ts:2884
+#: src/control/Control.AIChatSidebar.ts:3004
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
@@ -1945,7 +1964,7 @@ msgstr ""
 "Déan tagairt do chill trí cheanntásc a colúin a chomhcheangal le huimhir an "
 "ró (m.sh., colún B + ró 2 = B2)."
 
-#: src/control/Control.AIChatSidebar.ts:2887
+#: src/control/Control.AIChatSidebar.ts:3007
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
@@ -1953,15 +1972,15 @@ msgstr ""
 "Agus tú ag tagairt do chealla sonracha, formáidigh gach cill mar nasc "
 "inchliceáilte: [B2](cell://B2)."
 
-#: src/control/Control.AIChatSidebar.ts:2893
+#: src/control/Control.AIChatSidebar.ts:3013
 msgid "Sanity check the following spreadsheet data."
 msgstr "Seiceáil go ciallmhar na sonraí scarbhileog seo a leanas."
 
-#: src/control/Control.AIChatSidebar.ts:2894
+#: src/control/Control.AIChatSidebar.ts:3014
 msgid "Please analyze this data for:"
 msgstr "Déan anailís ar na sonraí seo le haghaidh:"
 
-#: src/control/Control.AIChatSidebar.ts:2898
+#: src/control/Control.AIChatSidebar.ts:3018
 msgid ""
 "Benford's Law violations — check if leading digit distribution of numeric "
 "values deviates significantly from the expected distribution, which may "
@@ -1971,7 +1990,7 @@ msgstr ""
 "luachanna uimhriúla ag diall go suntasach ón dáileadh ionchais, rud a "
 "d'fhéadfadh a thabhairt le fios go bhfuil ionramháil sonraí ann."
 
-#: src/control/Control.AIChatSidebar.ts:2904
+#: src/control/Control.AIChatSidebar.ts:3024
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
@@ -1979,7 +1998,7 @@ msgstr ""
 "Eiseachtaigh staitistiúla — aithnigh luachanna a imríonn go suntasach óna "
 "gcolún nó óna ngrúpa."
 
-#: src/control/Control.AIChatSidebar.ts:2910
+#: src/control/Control.AIChatSidebar.ts:3030
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
@@ -2030,7 +2049,7 @@ msgstr ""
 "Tá cosc ar fhoinse sonraí seachtracha roghnaithe. Téigh i dteagmháil le "
 "riarthóir an chórais."
 
-#: src/control/Control.AlertDialog.js:88 src/map/Clipboard.js:1471
+#: src/control/Control.AlertDialog.js:88 src/map/Clipboard.js:1474
 msgid "Don’t show this again"
 msgstr "Ná taispeáin é seo arís"
 
@@ -2059,7 +2078,7 @@ msgid "Open"
 msgstr "Oscail"
 
 #: src/control/Control.BackstageView.ts:120
-#: src/control/Control.Notebookbar.js:725
+#: src/control/Control.Notebookbar.js:730
 #: src/control/Control.NotebookbarCalc.js:217
 #: src/control/Control.NotebookbarCalc.js:251
 #: src/control/Control.NotebookbarDraw.js:224
@@ -2096,13 +2115,13 @@ msgid "Sign"
 msgstr ""
 
 #: src/control/Control.BackstageView.ts:182 src/control/Control.Menubar.ts:126
-#: src/control/Control.Menubar.ts:469 src/control/Control.Menubar.ts:646
-#: src/control/Control.Menubar.ts:796
+#: src/control/Control.Menubar.ts:470 src/control/Control.Menubar.ts:648
+#: src/control/Control.Menubar.ts:799
 #: src/control/Control.NotebookbarCalc.js:398
 #: src/control/Control.NotebookbarDraw.js:421
 #: src/control/Control.NotebookbarImpress.js:455
 #: src/control/Control.NotebookbarWriter.js:431 src/control/IFrameDialog.js:35
-#: src/map/handler/Map.Settings.ts:75
+#: src/map/handler/Map.Settings.ts:74
 msgid "Options"
 msgstr "Roghanna"
 
@@ -2150,7 +2169,7 @@ msgid "Sheets"
 msgstr "Bileoga"
 
 #: src/control/Control.BackstageView.ts:551
-#: src/control/Control.NavigatorPanel.ts:192
+#: src/control/Control.NavigatorPanel.ts:202
 #: src/control/Control.NotebookbarImpress.js:1475
 #: src/slideshow/PresenterConsole.js:35
 msgid "Slides"
@@ -2214,6 +2233,7 @@ msgid "More Templates"
 msgstr "Tuilleadh Teimpléid"
 
 #: src/control/backstage/HomeView.tsx:70
+#: src/control/jsdialog/Widget.TreeView.ts:378
 msgid "Name"
 msgstr "Name"
 
@@ -2229,8 +2249,8 @@ msgstr "Níl aon teimpléid a oireann chun do chuardach."
 msgid "Search templates"
 msgstr "Cuardaigh teimpléid"
 
-#: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:390
-#: src/control/Control.Menubar.ts:1389
+#: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:391
+#: src/control/Control.Menubar.ts:1393
 #: src/control/Control.NotebookbarCalc.js:351
 #: src/control/Control.NotebookbarDraw.js:371
 #: src/control/Control.NotebookbarImpress.js:408
@@ -2315,7 +2335,7 @@ msgstr "Ábhar na gearrthaisce á íosluchtú"
 
 #: src/control/Control.DownloadProgress.js:87
 #: src/control/Control.DownloadProgress.js:112
-#: src/control/Control.PartsPreview.js:347 src/map/Clipboard.js:1532
+#: src/control/Control.PartsPreview.js:351 src/map/Clipboard.js:1535
 msgid "Copy"
 msgstr "Cóip"
 
@@ -2688,112 +2708,112 @@ msgstr ""
 "Doiciméad díomhaoin - tapáil le do thoil chun eagarthóireacht a athluchtú "
 "agus a atosú"
 
-#: src/control/Control.JSDialog.js:408
+#: src/control/Control.JSDialog.js:414
 msgid "Close dialog"
 msgstr "Dún dialóg"
 
-#: src/control/Control.JSDialogBuilder.js:390
+#: src/control/Control.JSDialogBuilder.js:398
 msgid "Solid"
 msgstr "Solad"
 
-#: src/control/Control.JSDialogBuilder.js:393
+#: src/control/Control.JSDialogBuilder.js:401
 msgid "Linear"
 msgstr "Líneach"
 
-#: src/control/Control.JSDialogBuilder.js:396
+#: src/control/Control.JSDialogBuilder.js:404
 msgid "Axial"
 msgstr "Aiseach"
 
-#: src/control/Control.JSDialogBuilder.js:399
+#: src/control/Control.JSDialogBuilder.js:407
 msgid "Radial"
 msgstr "Gathacha"
 
-#: src/control/Control.JSDialogBuilder.js:402
+#: src/control/Control.JSDialogBuilder.js:410
 msgid "Ellipsoid"
 msgstr "Éilipsóideach"
 
-#: src/control/Control.JSDialogBuilder.js:406
+#: src/control/Control.JSDialogBuilder.js:414
 msgid "Quadratic"
 msgstr "Ceathairshleasach"
 
-#: src/control/Control.JSDialogBuilder.js:409
+#: src/control/Control.JSDialogBuilder.js:417
 msgid "Square"
 msgstr "Cearnóg"
 
-#: src/control/Control.JSDialogBuilder.js:412
+#: src/control/Control.JSDialogBuilder.js:420
 msgid "Fixed size"
 msgstr "Méid seasta"
 
-#: src/control/Control.JSDialogBuilder.js:1137
+#: src/control/Control.JSDialogBuilder.js:1145
 msgid "From"
 msgstr "Ó"
 
-#: src/control/Control.JSDialogBuilder.js:1140
+#: src/control/Control.JSDialogBuilder.js:1148
 msgid "To"
 msgstr "Chun"
 
-#: src/control/Control.JSDialogBuilder.js:1143
+#: src/control/Control.JSDialogBuilder.js:1151
 #: src/control/jsdialog/Widget.ColorPicker.ts:226
 msgid "Color"
 msgstr "Dath"
 
-#: src/control/Control.JSDialogBuilder.js:1178
+#: src/control/Control.JSDialogBuilder.js:1186
 #: src/control/Control.NotebookbarBuilder.js:165
 msgid "Font Name"
 msgstr "Ainm an Chló"
 
-#: src/control/Control.JSDialogBuilder.js:1180
+#: src/control/Control.JSDialogBuilder.js:1188
 msgid "Font Size"
 msgstr "Clómhéid"
 
-#: src/control/Control.JSDialogBuilder.js:1182
+#: src/control/Control.JSDialogBuilder.js:1190
 #: src/control/Control.NotebookbarCalc.js:982
-#: src/control/Control.NotebookbarCalc.js:2753
+#: src/control/Control.NotebookbarCalc.js:2760
 #: src/control/Control.NotebookbarDraw.js:1773
 #: src/control/Control.NotebookbarImpress.js:1376
 #: src/control/Control.NotebookbarWriter.js:1082
 msgid "Style"
 msgstr "Stíl"
 
-#: src/control/Control.JSDialogBuilder.js:1568
+#: src/control/Control.JSDialogBuilder.js:1601
 msgid "Toggle dropdown"
 msgstr "Anuas an roghchlár anuas"
 
-#: src/control/Control.JSDialogBuilder.js:1570
+#: src/control/Control.JSDialogBuilder.js:1603
 msgid "Dialog dropdown"
 msgstr "Anuas-liosta dialóige"
 
-#: src/control/Control.JSDialogBuilder.js:1572
+#: src/control/Control.JSDialogBuilder.js:1605
 #: src/control/Control.NotebookbarWriter.js:1629
 msgid "Dropdown"
 msgstr "Anuas"
 
-#: src/control/Control.JSDialogBuilder.js:1574
+#: src/control/Control.JSDialogBuilder.js:1607
 msgid "Apply action dropdown"
 msgstr "Cuir an roghchlár anuas gníomhaíochta i bhfeidhm"
 
-#: src/control/Control.JSDialogBuilder.js:1600
+#: src/control/Control.JSDialogBuilder.js:1633
 msgid "Open {name}"
 msgstr "Oscail {name}"
 
-#: src/control/Control.JSDialogBuilder.js:1886
-#: src/control/Control.Menubar.ts:962
+#: src/control/Control.JSDialogBuilder.js:1919
+#: src/control/Control.Menubar.ts:966
 msgid "Rows"
 msgstr "Rónna"
 
-#: src/control/Control.JSDialogBuilder.js:1887
-#: src/control/Control.Menubar.ts:965
+#: src/control/Control.JSDialogBuilder.js:1920
+#: src/control/Control.Menubar.ts:969
 msgid "Columns"
 msgstr "Colúin"
 
-#: src/control/Control.JSDialogBuilder.js:1907
+#: src/control/Control.JSDialogBuilder.js:1940
 msgid "Insert Table"
 msgstr "Ionsáigh Tábla"
 
-#: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:402
-#: src/control/Control.Menubar.ts:404 src/control/Control.Menubar.ts:406
-#: src/control/Control.Menubar.ts:605 src/control/Control.Menubar.ts:753
-#: src/control/Control.Menubar.ts:1055 src/control/Control.StatusBar.js:713
+#: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:403
+#: src/control/Control.Menubar.ts:405 src/control/Control.Menubar.ts:407
+#: src/control/Control.Menubar.ts:607 src/control/Control.Menubar.ts:756
+#: src/control/Control.Menubar.ts:1059 src/control/Control.StatusBar.js:713
 msgid "None (Do not check spelling)"
 msgstr "Ceann ar bith (Ná seiceáil litriú)"
 
@@ -2811,41 +2831,41 @@ msgid "No search results found!"
 msgstr "Níor aimsíodh aon torthaí cuardaigh!"
 
 #: src/control/Control.Menubar.ts:101 src/control/Control.Menubar.ts:117
-#: src/control/Control.Menubar.ts:1097
+#: src/control/Control.Menubar.ts:1101
 #: src/control/Control.NotebookbarBuilder.js:379
 #: src/control/Control.NotebookbarBuilder.js:535
 msgid "ODF text document (.odt)"
 msgstr "Doiciméad téacs ODF (.odt)"
 
 #: src/control/Control.Menubar.ts:102 src/control/Control.Menubar.ts:118
-#: src/control/Control.Menubar.ts:1098
+#: src/control/Control.Menubar.ts:1102
 #: src/control/Control.NotebookbarBuilder.js:391
 #: src/control/Control.NotebookbarBuilder.js:547
 msgid "Word 2003 Document (.doc)"
 msgstr "Doiciméad Word 2003 (.doc)"
 
 #: src/control/Control.Menubar.ts:103 src/control/Control.Menubar.ts:119
-#: src/control/Control.Menubar.ts:1099
+#: src/control/Control.Menubar.ts:1103
 #: src/control/Control.NotebookbarBuilder.js:387
 #: src/control/Control.NotebookbarBuilder.js:543
 msgid "Word Document (.docx)"
 msgstr "Doiciméad Word (.docx)"
 
 #: src/control/Control.Menubar.ts:104 src/control/Control.Menubar.ts:120
-#: src/control/Control.Menubar.ts:1100
+#: src/control/Control.Menubar.ts:1104
 #: src/control/Control.NotebookbarBuilder.js:383
 #: src/control/Control.NotebookbarBuilder.js:539
 msgid "Rich Text (.rtf)"
 msgstr "Téacs Saibhir (.rtf)"
 
 #: src/control/Control.Menubar.ts:106 src/control/Control.Menubar.ts:114
-#: src/control/Control.Menubar.ts:448 src/control/Control.Menubar.ts:454
-#: src/control/Control.Menubar.ts:632 src/control/Control.Menubar.ts:639
-#: src/control/Control.Menubar.ts:781 src/control/Control.Menubar.ts:786
-#: src/control/Control.Menubar.ts:1084 src/control/Control.Menubar.ts:1094
-#: src/control/Control.Menubar.ts:1152 src/control/Control.Menubar.ts:1160
-#: src/control/Control.Menubar.ts:1217 src/control/Control.Menubar.ts:1224
-#: src/control/Control.Menubar.ts:1272 src/control/Control.Menubar.ts:1282
+#: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:455
+#: src/control/Control.Menubar.ts:634 src/control/Control.Menubar.ts:641
+#: src/control/Control.Menubar.ts:784 src/control/Control.Menubar.ts:789
+#: src/control/Control.Menubar.ts:1088 src/control/Control.Menubar.ts:1098
+#: src/control/Control.Menubar.ts:1156 src/control/Control.Menubar.ts:1164
+#: src/control/Control.Menubar.ts:1221 src/control/Control.Menubar.ts:1228
+#: src/control/Control.Menubar.ts:1276 src/control/Control.Menubar.ts:1286
 #: src/control/Control.NotebookbarCalc.js:320
 #: src/control/Control.NotebookbarImpress.js:377
 #: src/control/Control.NotebookbarWriter.js:338
@@ -2853,13 +2873,13 @@ msgid "Export as"
 msgstr "Easpórtáil mar"
 
 #: src/control/Control.Menubar.ts:107 src/control/Control.Menubar.ts:115
-#: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:455
-#: src/control/Control.Menubar.ts:633 src/control/Control.Menubar.ts:640
-#: src/control/Control.Menubar.ts:782 src/control/Control.Menubar.ts:787
-#: src/control/Control.Menubar.ts:1085 src/control/Control.Menubar.ts:1095
-#: src/control/Control.Menubar.ts:1153 src/control/Control.Menubar.ts:1161
-#: src/control/Control.Menubar.ts:1218 src/control/Control.Menubar.ts:1225
-#: src/control/Control.Menubar.ts:1273 src/control/Control.Menubar.ts:1283
+#: src/control/Control.Menubar.ts:450 src/control/Control.Menubar.ts:456
+#: src/control/Control.Menubar.ts:635 src/control/Control.Menubar.ts:642
+#: src/control/Control.Menubar.ts:785 src/control/Control.Menubar.ts:790
+#: src/control/Control.Menubar.ts:1089 src/control/Control.Menubar.ts:1099
+#: src/control/Control.Menubar.ts:1157 src/control/Control.Menubar.ts:1165
+#: src/control/Control.Menubar.ts:1222 src/control/Control.Menubar.ts:1229
+#: src/control/Control.Menubar.ts:1277 src/control/Control.Menubar.ts:1287
 #: src/control/Control.NotebookbarBuilder.js:400
 #: src/control/Control.NotebookbarBuilder.js:441
 #: src/control/Control.NotebookbarBuilder.js:474
@@ -2872,14 +2892,14 @@ msgid "PDF Document (.pdf)"
 msgstr "Doiciméad PDF (.pdf)"
 
 #: src/control/Control.Menubar.ts:108 src/control/Control.Menubar.ts:121
-#: src/control/Control.Menubar.ts:1086 src/control/Control.Menubar.ts:1101
+#: src/control/Control.Menubar.ts:1090 src/control/Control.Menubar.ts:1105
 #: src/control/Control.NotebookbarBuilder.js:395
 #: src/control/Control.NotebookbarBuilder.js:600
 msgid "EPUB (.epub)"
 msgstr "EPUB (.epub)"
 
 #: src/control/Control.Menubar.ts:109 src/control/Control.Menubar.ts:123
-#: src/control/Control.Menubar.ts:1087 src/control/Control.Menubar.ts:1102
+#: src/control/Control.Menubar.ts:1091 src/control/Control.Menubar.ts:1106
 #: src/control/Control.NotebookbarBuilder.js:414
 #: src/control/Control.NotebookbarBuilder.js:604
 msgid "Markdown (.md)"
@@ -2889,48 +2909,48 @@ msgstr ""
 msgid "Rename Document"
 msgstr "Athainmnigh Cáipéis"
 
-#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:452
-#: src/control/Control.Menubar.ts:636 src/control/Control.Menubar.ts:784
-#: src/control/Control.Menubar.ts:1089 src/control/Control.Menubar.ts:1155
-#: src/control/Control.Menubar.ts:1220 src/control/Control.Menubar.ts:1275
+#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:453
+#: src/control/Control.Menubar.ts:638 src/control/Control.Menubar.ts:787
+#: src/control/Control.Menubar.ts:1093 src/control/Control.Menubar.ts:1159
+#: src/control/Control.Menubar.ts:1224 src/control/Control.Menubar.ts:1279
 msgid "Share..."
 msgstr "Comhroinn..."
 
-#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:453
-#: src/control/Control.Menubar.ts:638 src/control/Control.Menubar.ts:785
-#: src/control/Control.Menubar.ts:1090 src/control/Control.Menubar.ts:1156
-#: src/control/Control.Menubar.ts:1222 src/control/Control.Menubar.ts:1276
+#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:454
+#: src/control/Control.Menubar.ts:640 src/control/Control.Menubar.ts:788
+#: src/control/Control.Menubar.ts:1094 src/control/Control.Menubar.ts:1160
+#: src/control/Control.Menubar.ts:1226 src/control/Control.Menubar.ts:1280
 msgid "See revision history"
 msgstr "Féach stair an athbhreithnithe"
 
-#: src/control/Control.Menubar.ts:114 src/control/Control.Menubar.ts:454
-#: src/control/Control.Menubar.ts:639 src/control/Control.Menubar.ts:786
-#: src/control/Control.Menubar.ts:1094 src/control/Control.Menubar.ts:1160
-#: src/control/Control.Menubar.ts:1224 src/control/Control.Menubar.ts:1282
+#: src/control/Control.Menubar.ts:114 src/control/Control.Menubar.ts:455
+#: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:789
+#: src/control/Control.Menubar.ts:1098 src/control/Control.Menubar.ts:1164
+#: src/control/Control.Menubar.ts:1228 src/control/Control.Menubar.ts:1286
 msgid "Download as"
 msgstr "Íoslódáil mar"
 
-#: src/control/Control.Menubar.ts:116 src/control/Control.Menubar.ts:456
-#: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:788
-#: src/control/Control.Menubar.ts:1096 src/control/Control.Menubar.ts:1162
-#: src/control/Control.Menubar.ts:1226 src/control/Control.Menubar.ts:1284
+#: src/control/Control.Menubar.ts:116 src/control/Control.Menubar.ts:457
+#: src/control/Control.Menubar.ts:643 src/control/Control.Menubar.ts:791
+#: src/control/Control.Menubar.ts:1100 src/control/Control.Menubar.ts:1166
+#: src/control/Control.Menubar.ts:1230 src/control/Control.Menubar.ts:1288
 msgid "PDF Document (.pdf) as..."
 msgstr "Doiciméad PDF (.pdf) mar..."
 
-#: src/control/Control.Menubar.ts:122 src/control/Control.Menubar.ts:793
+#: src/control/Control.Menubar.ts:122 src/control/Control.Menubar.ts:796
 msgid "HTML file (.html)"
 msgstr "Comhad HTML (.html)"
 
-#: src/control/Control.Menubar.ts:129 src/control/Control.Menubar.ts:475
-#: src/control/Control.Menubar.ts:648 src/control/Control.Menubar.ts:802
+#: src/control/Control.Menubar.ts:129 src/control/Control.Menubar.ts:476
+#: src/control/Control.Menubar.ts:650 src/control/Control.Menubar.ts:805
 #: src/control/Control.Toolbar.js:1176
 msgid "Close document"
 msgstr "Dún an cháipéis"
 
-#: src/control/Control.Menubar.ts:134 src/control/Control.Menubar.ts:480
-#: src/control/Control.Menubar.ts:653 src/control/Control.Menubar.ts:807
-#: src/control/Control.Menubar.ts:1107 src/control/Control.Menubar.ts:1171
-#: src/control/Control.Menubar.ts:1232 src/control/Control.Menubar.ts:1292
+#: src/control/Control.Menubar.ts:134 src/control/Control.Menubar.ts:481
+#: src/control/Control.Menubar.ts:655 src/control/Control.Menubar.ts:810
+#: src/control/Control.Menubar.ts:1111 src/control/Control.Menubar.ts:1175
+#: src/control/Control.Menubar.ts:1236 src/control/Control.Menubar.ts:1296
 #: src/control/Control.NotebookbarCalc.js:336
 #: src/control/Control.NotebookbarDraw.js:357
 #: src/control/Control.NotebookbarImpress.js:393
@@ -2942,10 +2962,10 @@ msgstr "Deisiú"
 msgid "Compare Changes"
 msgstr "Déan Comparáid idir Athruithe"
 
-#: src/control/Control.Menubar.ts:165 src/control/Control.Menubar.ts:492
-#: src/control/Control.Menubar.ts:498 src/control/Control.Menubar.ts:665
-#: src/control/Control.Menubar.ts:671 src/control/Control.Menubar.ts:819
-#: src/control/Control.Menubar.ts:825
+#: src/control/Control.Menubar.ts:165 src/control/Control.Menubar.ts:493
+#: src/control/Control.Menubar.ts:499 src/control/Control.Menubar.ts:667
+#: src/control/Control.Menubar.ts:673 src/control/Control.Menubar.ts:822
+#: src/control/Control.Menubar.ts:828
 #: src/control/Control.NotebookbarCalc.js:1580
 #: src/control/Control.NotebookbarDraw.js:456
 #: src/control/Control.NotebookbarImpress.js:600
@@ -2957,8 +2977,8 @@ msgstr "Athshocraigh súmáil"
 msgid "Fit to Screen"
 msgstr "Oiriúnaigh don Scáileán"
 
-#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:504
-#: src/control/Control.Menubar.ts:677 src/control/Control.Menubar.ts:828
+#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:505
+#: src/control/Control.Menubar.ts:679 src/control/Control.Menubar.ts:831
 msgid "Toggle UI Mode"
 msgstr "Scoránaigh mód chomhéadain"
 
@@ -2968,47 +2988,52 @@ msgstr "Scoránaigh mód chomhéadain"
 msgid "Multi Page View"
 msgstr "Amharc Il-Leathanaigh"
 
-#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:506
-#: src/control/Control.Menubar.ts:682 src/control/Control.Menubar.ts:829
+#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:507
+#: src/control/Control.Menubar.ts:684 src/control/Control.Menubar.ts:832
 msgid "Show Status Bar"
 msgstr "Taispeáin Barra Stádais"
 
-#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:508
-#: src/control/Control.Menubar.ts:683 src/control/Control.Menubar.ts:830
+#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:509
+#: src/control/Control.Menubar.ts:685 src/control/Control.Menubar.ts:833
 msgid "Hide Menu Bar"
 msgstr "Folaigh an Barra Roghchláir"
 
-#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:510
-#: src/control/Control.Menubar.ts:679 src/control/Control.Menubar.ts:832
-#: src/control/Control.Menubar.ts:1129 src/control/Control.Menubar.ts:1182
-#: src/control/Control.Menubar.ts:1243 src/control/Control.Menubar.ts:1303
+#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:511
+#: src/control/Control.Menubar.ts:681 src/control/Control.Menubar.ts:835
+#: src/control/Control.Menubar.ts:1133 src/control/Control.Menubar.ts:1186
+#: src/control/Control.Menubar.ts:1247 src/control/Control.Menubar.ts:1307
 #: src/control/Control.NotebookbarCalc.js:1666
 #: src/control/Control.NotebookbarDraw.js:578
 #: src/control/Control.NotebookbarImpress.js:745
-#: src/control/Control.NotebookbarWriter.js:1798
+#: src/control/Control.NotebookbarWriter.js:1822
 msgid "Invert Background"
 msgstr "Cúlra Inbhéartaithe"
 
-#: src/control/Control.Menubar.ts:182 src/control/Control.Menubar.ts:835
-#: src/control/Control.NotebookbarCalc.js:2780
+#: src/control/Control.Menubar.ts:182 src/control/Control.Menubar.ts:838
+#: src/control/Control.NotebookbarCalc.js:2787
 #: src/control/Control.NotebookbarWriter.js:1109
 msgid "Style list"
 msgstr "Liosta stíleanna"
 
-#: src/control/Control.Menubar.ts:190 src/control/Control.Menubar.ts:522
-#: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:846
-#: src/control/Control.Menubar.ts:1345 src/control/Control.Menubar.ts:1395
-#: src/control/Control.Menubar.ts:1409 src/control/Control.Menubar.ts:1432
+#: src/control/Control.Menubar.ts:190 src/control/Control.Menubar.ts:523
+#: src/control/Control.Menubar.ts:688 src/control/Control.Menubar.ts:849
+#: src/control/Control.Menubar.ts:1349 src/control/Control.Menubar.ts:1399
+#: src/control/Control.Menubar.ts:1413 src/control/Control.Menubar.ts:1436
 msgid "Local Image..."
 msgstr "Íomhá Logánta..."
 
-#: src/control/Control.Menubar.ts:214 src/control/Control.Menubar.ts:216
-#: src/control/Control.Menubar.ts:1362 src/control/Control.Menubar.ts:1364
+#: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
+#: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
+msgid "Shapes ..."
+msgstr ""
+
+#: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
+#: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
 msgid "All"
 msgstr "Gach"
 
-#: src/control/Control.Menubar.ts:226 src/control/Control.Menubar.ts:533
-#: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:860
+#: src/control/Control.Menubar.ts:227 src/control/Control.Menubar.ts:535
+#: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:864
 #: src/control/Control.NotebookbarCalc.js:1924
 #: src/control/Control.NotebookbarDraw.js:1604
 #: src/control/Control.NotebookbarImpress.js:1666
@@ -3016,78 +3041,78 @@ msgstr "Gach"
 msgid "Smart Picker"
 msgstr "Roghnóir Cliste"
 
-#: src/control/Control.Menubar.ts:268
+#: src/control/Control.Menubar.ts:269
 msgid "Text orientation"
 msgstr "Treoshuíomh téacs"
 
-#: src/control/Control.Menubar.ts:339
+#: src/control/Control.Menubar.ts:340
 #: src/control/Notebookbar.WriterReferencesTab.ts:25
 msgid "References"
 msgstr "Tagairtí"
 
-#: src/control/Control.Menubar.ts:342
+#: src/control/Control.Menubar.ts:343
 #: src/control/Notebookbar.WriterReferencesTab.ts:72
 msgid "Update Index"
 msgstr "Nuashonraigh an tInnéacs"
 
-#: src/control/Control.Menubar.ts:351
+#: src/control/Control.Menubar.ts:352
 #: src/control/Notebookbar.WriterReferencesTab.ts:220
 msgid "Add Citation"
 msgstr "Cuir Lua Leis"
 
-#: src/control/Control.Menubar.ts:352
+#: src/control/Control.Menubar.ts:353
 #: src/control/Notebookbar.WriterReferencesTab.ts:237
 msgid "Add Citation Note"
 msgstr "Cuir Nóta Lua Leis"
 
-#: src/control/Control.Menubar.ts:353
+#: src/control/Control.Menubar.ts:354
 #: src/control/Notebookbar.WriterReferencesTab.ts:203
 msgid "Add Bibliography"
 msgstr "Cuir Leabharliosta Leis"
 
-#: src/control/Control.Menubar.ts:355
+#: src/control/Control.Menubar.ts:356
 #: src/control/Notebookbar.WriterReferencesTab.ts:262
 msgid "Refresh Citations"
 msgstr "Athnuaigh Luanna"
 
-#: src/control/Control.Menubar.ts:356
+#: src/control/Control.Menubar.ts:357
 #: src/control/Notebookbar.WriterReferencesTab.ts:279
 #: src/control/Control.Zotero.js:1541
 msgid "Unlink Citations"
 msgstr "Dícheangail Lua"
 
-#: src/control/Control.Menubar.ts:357
+#: src/control/Control.Menubar.ts:358
 #: src/control/Notebookbar.WriterReferencesTab.ts:296
 msgid "Citation Preferences"
 msgstr "Sainroghanna Lua"
 
-#: src/control/Control.Menubar.ts:385 src/control/Control.Menubar.ts:1384
+#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1388
 msgid "Insert Rich Text"
 msgstr "Ionsáigh Téacs Saibhir"
 
-#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1385
+#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1389
 msgid "Insert Checkbox"
 msgstr "Ionsáigh Ticbhosca"
 
-#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1386
+#: src/control/Control.Menubar.ts:388 src/control/Control.Menubar.ts:1390
 msgid "Insert Dropdown"
 msgstr "Ionsáigh Anuas"
 
-#: src/control/Control.Menubar.ts:388 src/control/Control.Menubar.ts:1387
+#: src/control/Control.Menubar.ts:389 src/control/Control.Menubar.ts:1391
 msgid "Insert Picture"
 msgstr "Ionsáigh Pictiúr"
 
-#: src/control/Control.Menubar.ts:389 src/control/Control.Menubar.ts:1388
+#: src/control/Control.Menubar.ts:390 src/control/Control.Menubar.ts:1392
 msgid "Insert Date"
 msgstr "Ionsáigh Dáta"
 
-#: src/control/Control.Menubar.ts:410 src/control/Control.Menubar.ts:1133
+#: src/control/Control.Menubar.ts:411 src/control/Control.Menubar.ts:1137
 #: src/control/Control.NotebookbarWriter.js:551
 msgid "Screen Reading"
 msgstr "Léamh Scáileáin"
 
-#: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
-#: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
+#: src/control/Control.Menubar.ts:423 src/control/Control.Menubar.ts:612
+#: src/control/Control.Menubar.ts:758 src/control/Control.Menubar.ts:1065
 #: src/control/Control.NotebookbarCalc.js:113
 #: src/control/Control.NotebookbarDraw.js:128
 #: src/control/Control.NotebookbarImpress.js:163
@@ -3095,277 +3120,277 @@ msgstr "Léamh Scáileáin"
 msgid "Extensions"
 msgstr "Síneadh"
 
-#: src/control/Control.Menubar.ts:424 src/control/Control.Menubar.ts:612
-#: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1063
+#: src/control/Control.Menubar.ts:425 src/control/Control.Menubar.ts:614
+#: src/control/Control.Menubar.ts:760 src/control/Control.Menubar.ts:1067
 #: src/control/Control.NotebookbarWriter.js:456
 msgid "Online Help"
 msgstr "Cabhair Ar Líne"
 
-#: src/control/Control.Menubar.ts:426 src/control/Control.Menubar.ts:614
-#: src/control/Control.Menubar.ts:759 src/control/Control.Menubar.ts:1065
+#: src/control/Control.Menubar.ts:427 src/control/Control.Menubar.ts:616
+#: src/control/Control.Menubar.ts:762 src/control/Control.Menubar.ts:1069
 #: src/control/Control.NotebookbarWriter.js:469
 msgid "Keyboard shortcuts"
 msgstr "Aicearraí méarchláir"
 
-#: src/control/Control.Menubar.ts:428 src/control/Control.Menubar.ts:616
-#: src/control/Control.Menubar.ts:761 src/control/Control.Menubar.ts:1067
+#: src/control/Control.Menubar.ts:429 src/control/Control.Menubar.ts:618
+#: src/control/Control.Menubar.ts:764 src/control/Control.Menubar.ts:1071
 #: src/control/Control.NotebookbarWriter.js:482
 msgid "Forum"
 msgstr "Fóram"
 
-#: src/control/Control.Menubar.ts:429 src/control/Control.Menubar.ts:617
-#: src/control/Control.Menubar.ts:762 src/control/Control.Menubar.ts:1068
+#: src/control/Control.Menubar.ts:430 src/control/Control.Menubar.ts:619
+#: src/control/Control.Menubar.ts:765 src/control/Control.Menubar.ts:1072
 #: src/control/Control.NotebookbarWriter.js:494
 msgid "Report an issue"
 msgstr "Tuairiscigh saincheist"
 
-#: src/control/Control.Menubar.ts:430 src/control/Control.Menubar.ts:618
-#: src/control/Control.Menubar.ts:763 src/control/Control.Menubar.ts:1069
-#: src/control/Control.Menubar.ts:1142 src/control/Control.Menubar.ts:1207
-#: src/control/Control.Menubar.ts:1262 src/control/Control.Menubar.ts:1337
+#: src/control/Control.Menubar.ts:431 src/control/Control.Menubar.ts:620
+#: src/control/Control.Menubar.ts:766 src/control/Control.Menubar.ts:1073
+#: src/control/Control.Menubar.ts:1146 src/control/Control.Menubar.ts:1211
+#: src/control/Control.Menubar.ts:1266 src/control/Control.Menubar.ts:1341
 #: src/control/Control.NotebookbarWriter.js:507
 msgid "Latest Updates"
 msgstr "Nuashonruithe is déanaí"
 
-#: src/control/Control.Menubar.ts:431 src/control/Control.Menubar.ts:619
-#: src/control/Control.Menubar.ts:764 src/control/Control.Menubar.ts:1070
-#: src/control/Control.Menubar.ts:1143 src/control/Control.Menubar.ts:1208
-#: src/control/Control.Menubar.ts:1263 src/control/Control.Menubar.ts:1338
+#: src/control/Control.Menubar.ts:432 src/control/Control.Menubar.ts:621
+#: src/control/Control.Menubar.ts:767 src/control/Control.Menubar.ts:1074
+#: src/control/Control.Menubar.ts:1147 src/control/Control.Menubar.ts:1212
+#: src/control/Control.Menubar.ts:1267 src/control/Control.Menubar.ts:1342
 #: src/control/Control.NotebookbarWriter.js:521
 msgid "Send Feedback"
 msgstr "Seol Aiseolas"
 
-#: src/control/Control.Menubar.ts:433 src/control/Control.Menubar.ts:621
-#: src/control/Control.Menubar.ts:766 src/control/Control.Menubar.ts:1072
+#: src/control/Control.Menubar.ts:434 src/control/Control.Menubar.ts:623
+#: src/control/Control.Menubar.ts:769 src/control/Control.Menubar.ts:1076
 #: src/control/Control.NotebookbarWriter.js:537
 #: src/control/Control.ServerAuditDialog.ts:299
 #: src/control/Control.ServerAuditDialog.ts:300
 msgid "Server audit"
 msgstr "Iniúchadh freastalaí"
 
-#: src/control/Control.Menubar.ts:437 src/control/Control.Menubar.ts:625
-#: src/control/Control.Menubar.ts:770 src/control/Control.Menubar.ts:1076
+#: src/control/Control.Menubar.ts:438 src/control/Control.Menubar.ts:627
+#: src/control/Control.Menubar.ts:773 src/control/Control.Menubar.ts:1080
 msgid "Last modification"
 msgstr "Mionathrú is déanaí"
 
-#: src/control/Control.Menubar.ts:444 src/control/Control.Menubar.ts:457
-#: src/control/Control.Menubar.ts:1163
+#: src/control/Control.Menubar.ts:445 src/control/Control.Menubar.ts:458
+#: src/control/Control.Menubar.ts:1167
 #: src/control/Control.NotebookbarBuilder.js:454
 #: src/control/Control.NotebookbarBuilder.js:569
 msgid "ODF presentation (.odp)"
 msgstr "Cur i láthair an ODF (.odp)"
 
-#: src/control/Control.Menubar.ts:445 src/control/Control.Menubar.ts:458
-#: src/control/Control.Menubar.ts:1164
+#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:459
+#: src/control/Control.Menubar.ts:1168
 #: src/control/Control.NotebookbarBuilder.js:466
 #: src/control/Control.NotebookbarBuilder.js:577
 msgid "PowerPoint 2003 Presentation (.ppt)"
 msgstr "Cur i láthair PowerPoint 2003 (.ppt)"
 
-#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:459
-#: src/control/Control.Menubar.ts:1165
+#: src/control/Control.Menubar.ts:447 src/control/Control.Menubar.ts:460
+#: src/control/Control.Menubar.ts:1169
 #: src/control/Control.NotebookbarBuilder.js:462
 #: src/control/Control.NotebookbarBuilder.js:573
 msgid "PowerPoint Presentation (.pptx)"
 msgstr "Cur i láthair PowerPoint (.pptx)"
 
-#: src/control/Control.Menubar.ts:451 src/control/Control.Menubar.ts:635
+#: src/control/Control.Menubar.ts:452 src/control/Control.Menubar.ts:637
 msgid "Save Comments"
 msgstr "Sábháil Tuairimí"
 
-#: src/control/Control.Menubar.ts:460
+#: src/control/Control.Menubar.ts:461
 #: src/control/Control.NotebookbarBuilder.js:470
 msgid "HTML Document (.html)"
 msgstr "Doiciméad HTML (.html)"
 
-#: src/control/Control.Menubar.ts:461
+#: src/control/Control.Menubar.ts:462
 #: src/control/Control.NotebookbarBuilder.js:486
 msgid "Scalable Vector Graphics (.svg)"
 msgstr "Grafaic Veicteoir Inscálaithe (.svg)"
 
-#: src/control/Control.Menubar.ts:462
+#: src/control/Control.Menubar.ts:463
 #: src/control/Control.NotebookbarBuilder.js:491
 msgid "Current slide as Bitmap (.bmp)"
 msgstr "Sleamhnán reatha mar Mhapa Giotán (.bmp)"
 
-#: src/control/Control.Menubar.ts:463
+#: src/control/Control.Menubar.ts:464
 #: src/control/Control.NotebookbarBuilder.js:496
 msgid "Current slide as Graphics Interchange Format (.gif)"
 msgstr "Sleamhnán reatha mar Fhormáid Idirmhalartaithe Grafaice (.gif)"
 
-#: src/control/Control.Menubar.ts:464
+#: src/control/Control.Menubar.ts:465
 #: src/control/Control.NotebookbarBuilder.js:501
 msgid "Current slide as Portable Network Graphics (.png)"
 msgstr "Sleamhnán reatha mar Ghrafaic Líonra Iniompartha (.png)"
 
-#: src/control/Control.Menubar.ts:465
+#: src/control/Control.Menubar.ts:466
 #: src/control/Control.NotebookbarBuilder.js:506
 msgid "Current slide as Tag Image File Format (.tiff)"
 msgstr "Sleamhnán reatha mar Fhormáid Comhaid Íomhá Clibe (.tiff)"
 
-#: src/control/Control.Menubar.ts:472
+#: src/control/Control.Menubar.ts:473
 #: src/control/Control.NotebookbarBuilder.js:644
 msgid "Full Page Slides"
 msgstr "Sleamhnáin Leathanaigh Iomlána"
 
-#: src/control/Control.Menubar.ts:473
+#: src/control/Control.Menubar.ts:474
 #: src/control/Control.NotebookbarBuilder.js:648
 msgid "Notes Pages"
 msgstr "Leathanaigh Nótaí"
 
-#: src/control/Control.Menubar.ts:507
+#: src/control/Control.Menubar.ts:508
 #: src/control/Control.NotebookbarImpress.js:693
 msgid "Notes View"
 msgstr "Amharc Nótaí"
 
-#: src/control/Control.Menubar.ts:511
+#: src/control/Control.Menubar.ts:512
 #: src/control/Control.NotebookbarImpress.js:699
 msgid "Master View"
 msgstr "Máistir-amharc"
 
-#: src/control/Control.Menubar.ts:524
+#: src/control/Control.Menubar.ts:525
 msgid "Local Multimedia..."
 msgstr "Ilmheáin Logánta..."
 
-#: src/control/Control.Menubar.ts:593 src/control/Control.Menubar.ts:1206
+#: src/control/Control.Menubar.ts:595 src/control/Control.Menubar.ts:1210
 #: src/control/Control.PresentationBar.js:128
 msgid "Fullscreen presentation"
 msgstr "Láithreoireacht lánscáileáin"
 
-#: src/control/Control.Menubar.ts:594
+#: src/control/Control.Menubar.ts:596
 msgid "Present current slide"
 msgstr "Cuir an sleamhnán reatha i láthair"
 
-#: src/control/Control.Menubar.ts:595
+#: src/control/Control.Menubar.ts:597
 msgid "Present in new window"
 msgstr "I láthair i bhfuinneog nua"
 
-#: src/control/Control.Menubar.ts:597 src/slideshow/PresenterConsole.js:270
+#: src/control/Control.Menubar.ts:599 src/slideshow/PresenterConsole.js:270
 msgid "Presenter Console"
 msgstr "Consól an Láithreora"
 
-#: src/control/Control.Menubar.ts:642 src/control/Control.Menubar.ts:1166
-#: src/control/Control.Menubar.ts:1227
+#: src/control/Control.Menubar.ts:644 src/control/Control.Menubar.ts:1170
+#: src/control/Control.Menubar.ts:1231
 #: src/control/Control.NotebookbarBuilder.js:458
 #: src/control/Control.NotebookbarBuilder.js:512
 msgid "ODF Drawing (.odg)"
 msgstr "Líníocht an ODF (.odg)"
 
-#: src/control/Control.Menubar.ts:777 src/control/Control.Menubar.ts:789
-#: src/control/Control.Menubar.ts:1285
+#: src/control/Control.Menubar.ts:780 src/control/Control.Menubar.ts:792
+#: src/control/Control.Menubar.ts:1289
 #: src/control/Control.NotebookbarBuilder.js:421
 #: src/control/Control.NotebookbarBuilder.js:554
 msgid "ODF spreadsheet (.ods)"
 msgstr "Scarbhileog ODF (.ods)"
 
-#: src/control/Control.Menubar.ts:778 src/control/Control.Menubar.ts:790
-#: src/control/Control.Menubar.ts:1286
+#: src/control/Control.Menubar.ts:781 src/control/Control.Menubar.ts:793
+#: src/control/Control.Menubar.ts:1290
 #: src/control/Control.NotebookbarBuilder.js:429
 #: src/control/Control.NotebookbarBuilder.js:562
 msgid "Excel 2003 Spreadsheet (.xls)"
 msgstr "Scarbhileog Excel 2003 (.xls)"
 
-#: src/control/Control.Menubar.ts:779 src/control/Control.Menubar.ts:791
-#: src/control/Control.Menubar.ts:1287
+#: src/control/Control.Menubar.ts:782 src/control/Control.Menubar.ts:794
+#: src/control/Control.Menubar.ts:1291
 #: src/control/Control.NotebookbarBuilder.js:425
 #: src/control/Control.NotebookbarBuilder.js:558
 msgid "Excel Spreadsheet (.xlsx)"
 msgstr "Scarbhileog Excel (.xlsx)"
 
-#: src/control/Control.Menubar.ts:792
+#: src/control/Control.Menubar.ts:795
 msgid "CSV file (.csv)"
 msgstr "Comhad CSV (.csv)"
 
-#: src/control/Control.Menubar.ts:799
+#: src/control/Control.Menubar.ts:802
 #: src/control/jsdialog/Definitions.Menu.ts:1587
 msgid "Active sheet"
 msgstr "Bileog ghníomhach"
 
-#: src/control/Control.Menubar.ts:838
+#: src/control/Control.Menubar.ts:841
 #: src/control/Control.NotebookbarCalc.js:1551
 msgid "Focus Cell"
 msgstr "Cill Fócais"
 
-#: src/control/Control.Menubar.ts:934
+#: src/control/Control.Menubar.ts:938
 #: src/control/jsdialog/Definitions.Menu.ts:1877
 msgid "Highlight cells with..."
 msgstr "Aibhsigh cealla le..."
 
-#: src/control/Control.Menubar.ts:935
+#: src/control/Control.Menubar.ts:939
 #: src/control/jsdialog/Definitions.Menu.ts:1880
 msgid "Values greater than..."
 msgstr "Luachanna níos mó ná..."
 
-#: src/control/Control.Menubar.ts:936
+#: src/control/Control.Menubar.ts:940
 #: src/control/jsdialog/Definitions.Menu.ts:1884
 msgid "Values less than..."
 msgstr "Luachanna níos lú ná ..."
 
-#: src/control/Control.Menubar.ts:937
+#: src/control/Control.Menubar.ts:941
 #: src/control/jsdialog/Definitions.Menu.ts:1888
 msgid "Values equal to..."
 msgstr "Luachanna cothrom le..."
 
-#: src/control/Control.Menubar.ts:938
+#: src/control/Control.Menubar.ts:942
 #: src/control/jsdialog/Definitions.Menu.ts:1892
 msgid "Values between..."
 msgstr "Luachanna idir..."
 
-#: src/control/Control.Menubar.ts:939
+#: src/control/Control.Menubar.ts:943
 #: src/control/jsdialog/Definitions.Menu.ts:1896
 msgid "Values duplicate..."
 msgstr "Luachanna dúblach..."
 
-#: src/control/Control.Menubar.ts:940
+#: src/control/Control.Menubar.ts:944
 #: src/control/jsdialog/Definitions.Menu.ts:1900
 msgid "Containing text..."
 msgstr "Téacs ann..."
 
-#: src/control/Control.Menubar.ts:942 src/control/Control.Menubar.ts:952
+#: src/control/Control.Menubar.ts:946 src/control/Control.Menubar.ts:956
 #: src/control/jsdialog/Definitions.Menu.ts:1904
 #: src/control/jsdialog/Definitions.Menu.ts:1935
 msgid "More highlights..."
 msgstr "Tuilleadh buaicphointí..."
 
-#: src/control/Control.Menubar.ts:944
+#: src/control/Control.Menubar.ts:948
 #: src/control/jsdialog/Definitions.Menu.ts:1908
 msgid "Top/Bottom Rules..."
 msgstr "Rialacha Barr / Bun..."
 
-#: src/control/Control.Menubar.ts:945
+#: src/control/Control.Menubar.ts:949
 #: src/control/jsdialog/Definitions.Menu.ts:1911
 msgid "Top N elements..."
 msgstr "Barr N eilimintí..."
 
-#: src/control/Control.Menubar.ts:946
+#: src/control/Control.Menubar.ts:950
 #: src/control/jsdialog/Definitions.Menu.ts:1915
 msgid "Top N percent..."
 msgstr "Barr N faoin gcéad..."
 
-#: src/control/Control.Menubar.ts:947
+#: src/control/Control.Menubar.ts:951
 #: src/control/jsdialog/Definitions.Menu.ts:1919
 msgid "Bottom N elements..."
 msgstr "Eilimintí bun N..."
 
-#: src/control/Control.Menubar.ts:948
+#: src/control/Control.Menubar.ts:952
 #: src/control/jsdialog/Definitions.Menu.ts:1923
 msgid "Bottom N percent..."
 msgstr "Bun N faoin gcéad..."
 
-#: src/control/Control.Menubar.ts:949
+#: src/control/Control.Menubar.ts:953
 #: src/control/jsdialog/Definitions.Menu.ts:1927
 msgid "Above Average..."
 msgstr "Os cionn an mheáin..."
 
-#: src/control/Control.Menubar.ts:950
+#: src/control/Control.Menubar.ts:954
 #: src/control/jsdialog/Definitions.Menu.ts:1931
 msgid "Below Average..."
 msgstr "Faoi bhun an mheáin..."
 
-#: src/control/Control.Menubar.ts:1080 src/control/Control.Menubar.ts:1148
-#: src/control/Control.Menubar.ts:1213 src/control/Control.Menubar.ts:1268
+#: src/control/Control.Menubar.ts:1084 src/control/Control.Menubar.ts:1152
+#: src/control/Control.Menubar.ts:1217 src/control/Control.Menubar.ts:1272
 #: src/control/Control.MobileSearchBar.ts:30
-#: src/control/Control.NavigatorPanel.ts:532
+#: src/control/Control.NavigatorPanel.ts:546
 #: src/control/Control.NotebookbarCalc.js:1072
 #: src/control/Control.NotebookbarDraw.js:1192
 #: src/control/Control.NotebookbarDraw.js:1205
@@ -3378,51 +3403,47 @@ msgstr "Faoi bhun an mheáin..."
 msgid "Search"
 msgstr "Cuardaigh"
 
-#: src/control/Control.Menubar.ts:1135
+#: src/control/Control.Menubar.ts:1139
 #: src/control/Control.NotebookbarCalc.js:1137
 #: src/control/Control.NotebookbarWriter.js:1835
 msgid "Page Setup"
 msgstr "Socrú Leathanaigh"
 
-#: src/control/Control.Menubar.ts:1279
+#: src/control/Control.Menubar.ts:1283
 msgid "Define print area"
 msgstr "Sainmhínigh an limistéar priontála"
 
-#: src/control/Control.Menubar.ts:1280
+#: src/control/Control.Menubar.ts:1284
 msgid "Remove print area"
 msgstr "Bain an limistéar priontála"
 
-#: src/control/Control.Menubar.ts:1640 src/control/Control.StatusBar.js:712
+#: src/control/Control.Menubar.ts:1644 src/control/Control.StatusBar.js:712
 msgid "Reset to Default Language"
 msgstr "Athshocraigh go Teanga Réamhshocraithe"
 
-#: src/control/Control.Menubar.ts:1671 src/control/Control.Menubar.ts:1672
-#: src/control/Control.Menubar.ts:1673 src/control/Control.Toolbar.js:256
+#: src/control/Control.Menubar.ts:1675 src/control/Control.Menubar.ts:1676
+#: src/control/Control.Menubar.ts:1677 src/control/Control.Toolbar.js:256
 #: src/control/jsdialog/Definitions.Menu.ts:2157
 msgid "More..."
 msgstr "Níos mó ..."
 
-#: src/control/Control.Menubar.ts:1724
-msgid "(No extensions installed)"
-msgstr "(Gan aon síntí suiteáilte)"
-
-#: src/control/Control.Menubar.ts:2078
+#: src/control/Control.Menubar.ts:2083
 msgid "Use Compact view"
 msgstr "Úsáid amharc dlúth"
 
-#: src/control/Control.Menubar.ts:2080
+#: src/control/Control.Menubar.ts:2085
 msgid "Use Tabbed view"
 msgstr "Úsáid amharc tabbed"
 
-#: src/control/Control.Menubar.ts:2312
+#: src/control/Control.Menubar.ts:2342
 msgid "Insert Shape"
 msgstr "Ionsáigh Cruth"
 
-#: src/control/Control.Menubar.ts:2397
+#: src/control/Control.Menubar.ts:2427
 msgid "The signature line can now be moved or resized as needed."
 msgstr "Is féidir an líne sínithe a bhogadh nó a athrú de réir mar is gá anois."
 
-#: src/control/Control.Menubar.ts:2402
+#: src/control/Control.Menubar.ts:2432
 msgid "Finish electronic signing"
 msgstr "Críochnaigh síniú leictreonach"
 
@@ -3458,25 +3479,25 @@ msgstr "Tús an Ghrádáin"
 msgid "Gradient End"
 msgstr "Deireadh an Ghrádáin"
 
-#: src/control/Control.NavigatorPanel.ts:41
+#: src/control/Control.NavigatorPanel.ts:46
 msgid "Navigation Panel"
 msgstr "Painéal Loingseoireachta"
 
-#: src/control/Control.NavigatorPanel.ts:115
+#: src/control/Control.NavigatorPanel.ts:125
 msgid "Navigation"
 msgstr "Loingseoireacht"
 
-#: src/control/Control.NavigatorPanel.ts:136
+#: src/control/Control.NavigatorPanel.ts:146
 msgid "Close Navigation"
 msgstr "Dún Nascleanúint"
 
-#: src/control/Control.NavigatorPanel.ts:230
+#: src/control/Control.NavigatorPanel.ts:240
 msgid "Results"
 msgstr "Torthaí"
 
-#: src/control/Control.NavigatorPanel.ts:518
+#: src/control/Control.NavigatorPanel.ts:532
 #: src/control/jsdialog/Widget.Combobox.js:376
-#: src/control/jsdialog/Widget.TreeView.ts:2054
+#: src/control/jsdialog/Widget.TreeView.ts:2543
 msgid "Search..."
 msgstr "Cuardaigh..."
 
@@ -3553,7 +3574,7 @@ msgid "Transition"
 msgstr "Aistriú"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:41
-#: src/control/Sidebar.FromNotebookbarPanel.ts:108
+#: src/control/Sidebar.FromNotebookbarPanel.ts:109
 msgid "Transitions"
 msgstr "Aistrithe"
 
@@ -3591,13 +3612,9 @@ msgstr "Nóta Fos/Nóta Deiridh"
 msgid "Field"
 msgstr "Réimse"
 
-#: src/control/Sidebar.FromNotebookbarPanel.ts:121
+#: src/control/Sidebar.FromNotebookbarPanel.ts:123
 msgid "Animations"
 msgstr "Beochana"
-
-#: src/control/Control.Notebookbar.js:292
-msgid "No extensions are installed."
-msgstr "Níl aon síntí suiteáilte."
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
@@ -3717,7 +3734,7 @@ msgstr "Amharc"
 
 #: src/control/Control.NotebookbarCalc.js:105
 #: src/control/Control.NotebookbarCalc.js:1837
-#: src/control/Control.NotebookbarCalc.js:2841
+#: src/control/Control.NotebookbarCalc.js:2848
 msgid "Sparkline"
 msgstr "SparklineName"
 
@@ -3928,28 +3945,28 @@ msgid "Delete Columns"
 msgstr "Scrios Colúin"
 
 #: src/control/Control.NotebookbarCalc.js:1306
-#: src/control/Control.NotebookbarCalc.js:3023
-#: src/control/Control.NotebookbarCalc.js:3380
+#: src/control/Control.NotebookbarCalc.js:3030
+#: src/control/Control.NotebookbarCalc.js:3396
 #: src/control/Control.NotebookbarDraw.js:1319
 #: src/control/Control.NotebookbarImpress.js:2413
 #: src/control/Control.NotebookbarImpress.js:2620
-#: src/control/Control.NotebookbarImpress.js:2924
+#: src/control/Control.NotebookbarImpress.js:2933
 #: src/control/Control.NotebookbarWriter.js:2076
 #: src/control/Control.NotebookbarWriter.js:3073
-#: src/control/Control.NotebookbarWriter.js:3396
+#: src/control/Control.NotebookbarWriter.js:3403
 msgid "Align"
 msgstr "Ailínigh"
 
 #: src/control/Control.NotebookbarCalc.js:1376
-#: src/control/Control.NotebookbarCalc.js:3090
-#: src/control/Control.NotebookbarCalc.js:3447
+#: src/control/Control.NotebookbarCalc.js:3097
+#: src/control/Control.NotebookbarCalc.js:3463
 #: src/control/Control.NotebookbarDraw.js:1386
 #: src/control/Control.NotebookbarImpress.js:2480
 #: src/control/Control.NotebookbarImpress.js:2687
-#: src/control/Control.NotebookbarImpress.js:2991
+#: src/control/Control.NotebookbarImpress.js:3000
 #: src/control/Control.NotebookbarWriter.js:2147
 #: src/control/Control.NotebookbarWriter.js:3132
-#: src/control/Control.NotebookbarWriter.js:3455
+#: src/control/Control.NotebookbarWriter.js:3462
 msgid "Arrange"
 msgstr "Eagraigh"
 
@@ -3998,25 +4015,25 @@ msgstr "Mód léite"
 #: src/control/Control.NotebookbarCalc.js:1633
 #: src/control/Control.NotebookbarDraw.js:535
 #: src/control/Control.NotebookbarImpress.js:679
-#: src/control/Control.NotebookbarWriter.js:1783
+#: src/control/Control.NotebookbarWriter.js:1751
 msgid "Collapse Tabs"
 msgstr "Laghdaigh Cluaisíní"
 
 #: src/control/Control.NotebookbarCalc.js:1646
 #: src/control/Control.NotebookbarDraw.js:523
 #: src/control/Control.NotebookbarImpress.js:667
-#: src/control/Control.NotebookbarWriter.js:1771
+#: src/control/Control.NotebookbarWriter.js:1786
 msgid "Status Bar"
 msgstr "Barra Stádais"
 
 #: src/control/Control.NotebookbarCalc.js:1717
 #: src/control/Control.NotebookbarCalc.js:2492
-#: src/control/Control.NotebookbarCalc.js:3143
-#: src/control/Control.NotebookbarCalc.js:3500
+#: src/control/Control.NotebookbarCalc.js:3150
+#: src/control/Control.NotebookbarCalc.js:3516
 #: src/control/Control.NotebookbarImpress.js:2740
-#: src/control/Control.NotebookbarImpress.js:3044
+#: src/control/Control.NotebookbarImpress.js:3053
 #: src/control/Control.NotebookbarWriter.js:3181
-#: src/control/Control.NotebookbarWriter.js:3504
+#: src/control/Control.NotebookbarWriter.js:3511
 msgid "Group"
 msgstr "Grúpa"
 
@@ -4125,46 +4142,46 @@ msgstr "Sórtáil"
 msgid "Filter"
 msgstr "Scagaire"
 
-#: src/control/Control.NotebookbarCalc.js:2616
+#: src/control/Control.NotebookbarCalc.js:2623
 msgid "Proofing"
 msgstr "Cruthúnas"
 
-#: src/control/Control.NotebookbarCalc.js:2644
+#: src/control/Control.NotebookbarCalc.js:2651
 #: src/control/Control.NotebookbarImpress.js:2049
 #: src/control/Control.NotebookbarWriter.js:2271
 msgid "Auto Spell Check"
 msgstr "Seiceáil Litrithe Uathoibríoch"
 
-#: src/control/Control.NotebookbarCalc.js:2676
+#: src/control/Control.NotebookbarCalc.js:2683
 #: src/control/Control.NotebookbarImpress.js:2079
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Comments"
 msgstr "Tráchtanna"
 
-#: src/control/Control.NotebookbarCalc.js:2727
+#: src/control/Control.NotebookbarCalc.js:2734
 msgid "Protection"
 msgstr "Cosaint"
 
-#: src/control/Control.NotebookbarCalc.js:2790
+#: src/control/Control.NotebookbarCalc.js:2797
 msgid "Format Cells"
 msgstr "Formáidigh Cealla"
 
-#: src/control/Control.NotebookbarCalc.js:2850
+#: src/control/Control.NotebookbarCalc.js:2857
 #: src/control/Control.NotebookbarImpress.js:1897
 msgid "Themes"
 msgstr "Téamaí"
 
-#: src/control/Control.NotebookbarCalc.js:2956
-#: src/control/Control.NotebookbarCalc.js:3313
+#: src/control/Control.NotebookbarCalc.js:2963
+#: src/control/Control.NotebookbarCalc.js:3329
 #: src/control/Control.NotebookbarWriter.js:1978
 #: src/control/Control.NotebookbarWriter.js:3018
-#: src/control/Control.NotebookbarWriter.js:3341
+#: src/control/Control.NotebookbarWriter.js:3348
 msgid "Wrap"
 msgstr "Timfhill"
 
-#: src/control/Control.NotebookbarCalc.js:3195
-#: src/control/Control.NotebookbarImpress.js:2800
-#: src/control/Control.NotebookbarWriter.js:3227
+#: src/control/Control.NotebookbarCalc.js:3211
+#: src/control/Control.NotebookbarImpress.js:2809
+#: src/control/Control.NotebookbarWriter.js:3234
 msgid "Image Controls"
 msgstr "Rialuithe Íomhá"
 
@@ -4179,7 +4196,7 @@ msgstr "Doiciméad PDF (.pdf) - Saineolaí"
 
 #: src/control/Control.NotebookbarDraw.js:510
 #: src/control/Control.NotebookbarImpress.js:654
-#: src/control/Control.NotebookbarWriter.js:1758
+#: src/control/Control.NotebookbarWriter.js:1773
 msgid "Ruler"
 msgstr "Rialóir"
 
@@ -4333,7 +4350,7 @@ msgstr "Roghnaigh"
 msgid "Merge & Split"
 msgstr "Cumaisc & Scoilt"
 
-#: src/control/Control.NotebookbarImpress.js:2833
+#: src/control/Control.NotebookbarImpress.js:2842
 msgid "Effects"
 msgstr "Éifeachtaí"
 
@@ -4429,45 +4446,45 @@ msgstr "réamhamharc ar leathanach %1"
 msgid "Slide %1"
 msgstr "Sleamhnán %1"
 
-#: src/control/Control.PartsPreview.js:283
-#: src/control/Control.PartsPreview.js:355 src/map/Clipboard.js:1532
+#: src/control/Control.PartsPreview.js:287
+#: src/control/Control.PartsPreview.js:359 src/map/Clipboard.js:1535
 msgid "Paste"
 msgstr "Greamaigh"
 
-#: src/control/Control.PartsPreview.js:423
+#: src/control/Control.PartsPreview.js:427
 msgid "Add Section"
 msgstr "Cuir Roinn leis"
 
-#: src/control/Control.PartsPreview.js:598
+#: src/control/Control.PartsPreview.js:602
 msgid "Toggle section %1"
 msgstr "Scoraigh an roinn %1"
 
-#: src/control/Control.PartsPreview.js:789
-#: src/control/Control.PartsPreview.js:890
+#: src/control/Control.PartsPreview.js:793
+#: src/control/Control.PartsPreview.js:894
 msgid "Rename Section"
 msgstr "Athainmnigh an Rannóg"
 
-#: src/control/Control.PartsPreview.js:796
+#: src/control/Control.PartsPreview.js:800
 msgid "Remove Section"
 msgstr "Bain an Roinn"
 
-#: src/control/Control.PartsPreview.js:804
+#: src/control/Control.PartsPreview.js:808
 msgid "Move Section Up"
 msgstr "Bog an Roinn Suas"
 
-#: src/control/Control.PartsPreview.js:813
+#: src/control/Control.PartsPreview.js:817
 msgid "Move Section Down"
 msgstr "Bog an Roinn Síos"
 
-#: src/control/Control.PartsPreview.js:822
+#: src/control/Control.PartsPreview.js:826
 msgid "Collapse All Sections"
 msgstr "Laghdaigh Gach Roinn"
 
-#: src/control/Control.PartsPreview.js:830
+#: src/control/Control.PartsPreview.js:834
 msgid "Expand All Sections"
 msgstr "Leathnaigh Gach Roinn"
 
-#: src/control/Control.PartsPreview.js:891
+#: src/control/Control.PartsPreview.js:895
 msgid "Enter new section name:"
 msgstr "Cuir isteach ainm nua na rannóige:"
 
@@ -4714,31 +4731,31 @@ msgstr "Ionsáigh bileog roimh seo"
 msgid "Insert sheet after this"
 msgstr "Ionsáigh bileog i ndiaidh seo"
 
-#: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
+#: src/control/Control.Tabs.js:106 src/control/Control.Tabs.js:113
 msgid "Reset Tab Color"
 msgstr "Athshocraigh Dath an Chluaisín"
 
-#: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
+#: src/control/Control.Tabs.js:133 src/control/Control.Tabs.js:137
 msgid "Move Sheet Left"
 msgstr "Bog an Bhileog Ar Chlé"
 
-#: src/control/Control.Tabs.js:135 src/control/Control.Tabs.js:139
+#: src/control/Control.Tabs.js:141 src/control/Control.Tabs.js:145
 msgid "Move Sheet Right"
 msgstr "Bog Bileog Ar Dheis"
 
-#: src/control/Control.Tabs.js:149 src/control/Control.Tabs.js:155
+#: src/control/Control.Tabs.js:155 src/control/Control.Tabs.js:161
 msgid "Copy Sheet..."
 msgstr "Cóipeáil Bileog..."
 
-#: src/control/Control.Tabs.js:545
+#: src/control/Control.Tabs.js:553
 msgid "Are you sure you want to delete sheet, {sheet}?"
 msgstr "An bhfuil tú cinnte go bhfuil fonn ort bileog a scriosadh, {sheet}?"
 
-#: src/control/Control.Tabs.js:556
+#: src/control/Control.Tabs.js:564
 msgid "Rename sheet"
 msgstr "Athainmnigh bileog"
 
-#: src/control/Control.Tabs.js:556
+#: src/control/Control.Tabs.js:564
 msgid "Enter new sheet name"
 msgstr "Iontráil ainm na bileoige nua"
 
@@ -4855,7 +4872,7 @@ msgstr ""
 "gréasáin. D'fhéadfadh sé roinnt fadhbanna a chruthú agus eagarthóireacht á "
 "déanamh ar luanna nó leabharliosta."
 
-#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2480
+#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2502
 msgid "Loading..."
 msgstr "Á Luchtú..."
 
@@ -5138,19 +5155,19 @@ msgstr "Mód Eagarthóireachta"
 msgid "Viewing"
 msgstr "Ag féachaint"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:311
+#: src/control/jsdialog/Control.ContextMenu.ts:312
 msgid "Save Image to Server"
 msgstr "Sábháil Íomhá chuig an bhFreastalaí"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:349
+#: src/control/jsdialog/Control.ContextMenu.ts:350
 msgid "Paste Special"
 msgstr "Greamú Speisialta"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:360
+#: src/control/jsdialog/Control.ContextMenu.ts:361
 msgid "Copy Cells"
 msgstr "Cóipeáil Cealla"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:369
+#: src/control/jsdialog/Control.ContextMenu.ts:370
 msgid "Fill Series"
 msgstr "Líon Sraith"
 
@@ -5602,19 +5619,29 @@ msgstr "Oscail an liosta"
 msgid "Filter entries"
 msgstr "Scag iontrálacha"
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:186
-msgid "CSV column ruler: click to toggle a column split"
-msgstr "Rialóir colún CSV: cliceáil chun scoilt colún a athrú"
+#: src/control/jsdialog/Widget.CsvGrid.ts:64
+msgid "Position {n}, split set"
+msgstr ""
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:315
+#: src/control/jsdialog/Widget.CsvGrid.ts:65
+msgid "Position {n}, no split"
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:228
+msgid ""
+"Column split ruler. Use the arrow keys to move the cursor and Space to "
+"toggle a split."
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
 msgstr "Réamhamharc ar allmhairiú CSV"
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:337
+#: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
 msgstr "Uimhir líne"
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:349
+#: src/control/jsdialog/Widget.CsvGrid.ts:451
 msgid "Column {index}"
 msgstr "Colún {index}"
 
@@ -5784,13 +5811,25 @@ msgstr "Laghdaigh luach"
 msgid "More options for {1}"
 msgstr "Tuilleadh roghanna le haghaidh {1}"
 
-#: src/control/jsdialog/Widget.TreeView.ts:2004
+#: src/control/jsdialog/Widget.TreeView.ts:1738
+msgid "Cell value"
+msgstr ""
+
+#: src/control/jsdialog/Widget.TreeView.ts:1742
+msgid "row %1"
+msgstr ""
+
+#: src/control/jsdialog/Widget.TreeView.ts:1751
+msgid "%1, %2"
+msgstr ""
+
+#: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
 msgstr ""
 "Beidh ceannteidil agus réada a chuireann tú leis an doiciméad le feiceáil "
 "anseo"
 
-#: src/control/jsdialog/Widget.TreeView.ts:2052
+#: src/control/jsdialog/Widget.TreeView.ts:2541
 msgid "Search items"
 msgstr "Cuardaigh míreanna"
 
@@ -5822,19 +5861,27 @@ msgstr "Easpórtáilte chuig stóráil"
 msgid "Successfully exported: "
 msgstr "D' éirigh le heaspórtáil: "
 
-#: src/app/Socket.ts:1604
+#: src/app/Socket.ts:1113
+msgid "This document has links to external content."
+msgstr ""
+
+#: src/app/Socket.ts:1114
+msgid "Allow"
+msgstr ""
+
+#: src/app/Socket.ts:1626
 msgid "Discard"
 msgstr "Ná Sábháil"
 
-#: src/app/Socket.ts:1622
+#: src/app/Socket.ts:1644
 msgid "Save to new file"
 msgstr "Sábháil go comhad nua"
 
-#: src/app/Socket.ts:1635
+#: src/app/Socket.ts:1657
 msgid "Document has been changed"
 msgstr "Athraíodh an cháipéis"
 
-#: src/app/Socket.ts:1637
+#: src/app/Socket.ts:1659
 msgid ""
 "Document has been changed in storage. What would you like to do with your "
 "unsaved changes?"
@@ -5842,110 +5889,110 @@ msgstr ""
 "Athraíodh an doiciméad sa stóráil. Cad ba mhaith leat a dhéanamh le do chuid "
 "athruithe gan sábháil?"
 
-#: src/app/Socket.ts:1789
+#: src/app/Socket.ts:1811
 msgid "Server is now reachable. We have to refresh the page now."
 msgstr ""
 "Tá an freastalaí inrochtana anois. Caithfimid an leathanach a athnuachan "
 "anois."
 
-#: src/app/Socket.ts:1792
+#: src/app/Socket.ts:1814
 msgid "Server is now reachable..."
 msgstr "Is féidir an freastalaí a bhaint amach anois..."
 
-#: src/app/Socket.ts:1800
+#: src/app/Socket.ts:1822
 msgid "RELOAD"
 msgstr "ATHLUCHTAIGH"
 
-#: src/app/Socket.ts:1828
+#: src/app/Socket.ts:1850
 msgid "Cluster configuration warning"
 msgstr "Rabhadh cumraíochta braisle"
 
-#: src/app/Socket.ts:1837
+#: src/app/Socket.ts:1859
 msgid "Wrong server, reconnecting..."
 msgstr "Freastalaí mícheart, ag athcheangal..."
 
-#: src/app/Socket.ts:1855
+#: src/app/Socket.ts:1877
 msgid "Unsupported server version."
 msgstr "Leagan freastalaí gan tacaíocht."
 
-#: src/app/Socket.ts:1999
+#: src/app/Socket.ts:2021
 msgid "Document is getting migrated"
 msgstr "Tá an cháipéis ag dul ar imirce"
 
-#: src/app/Socket.ts:2238
+#: src/app/Socket.ts:2260
 msgid "Document requires password to view."
 msgstr "Tá pasfhocal de dhíth ar an gcáipéis le hamharc air."
 
-#: src/app/Socket.ts:2240
+#: src/app/Socket.ts:2262
 msgid "Document requires password to modify."
 msgstr "Tá pasfhocal de dhíth ar an gcáipéis le mionathrú."
 
-#: src/app/Socket.ts:2242
+#: src/app/Socket.ts:2264
 msgid "Hit Cancel to open in view-only mode."
 msgstr "Buail Cealaigh le hoscailt i mód amhairc amháin."
 
-#: src/app/Socket.ts:2246
+#: src/app/Socket.ts:2268
 msgid "Wrong password provided. Please try again."
 msgstr "Pasfhocal mícheart curtha ar fáil. Bain triail eile as."
 
-#: src/app/Socket.ts:2291
+#: src/app/Socket.ts:2313
 msgid "Only the document owner can change the password."
 msgstr "Ní féidir ach le húinéir an doiciméid an pasfhocal a athrú."
 
-#: src/app/Socket.ts:2332 src/app/Socket.ts:2343
+#: src/app/Socket.ts:2354 src/app/Socket.ts:2365
 msgid "Missing Fonts"
 msgstr "Clónna ar iarraidh"
 
-#: src/app/Socket.ts:2381
+#: src/app/Socket.ts:2403
 msgid "Someone"
 msgstr "Duine éigin"
 
-#: src/app/Socket.ts:2383
+#: src/app/Socket.ts:2405
 msgid "{username} saved this document as {filename}. Do you want to join?"
 msgstr ""
 "Shábháil {username} an doiciméad seo mar {filename}. An bhfuil fonn ort "
 "páirt a ghlacadh?"
 
-#: src/app/Socket.ts:2406
+#: src/app/Socket.ts:2428
 msgid "The document is being renamed and will reload shortly"
 msgstr "Tá an doiciméad á athainmniú agus athluchtófar é go luath"
 
-#: src/app/Socket.ts:2409
+#: src/app/Socket.ts:2431
 msgid "The document is switching to Offline mode and will reload shortly"
 msgstr "Tá an doiciméad ag athrú go mód as líne agus athluchtóidh sé go luath"
 
-#: src/app/Socket.ts:2480
+#: src/app/Socket.ts:2502
 msgid "Connecting..."
 msgstr "Ag ceangal..."
 
-#: src/app/Socket.ts:2496
+#: src/app/Socket.ts:2518
 msgid "Server is shutting down"
 msgstr "Tá an freastalaí ag múchadh"
 
-#: src/docdispatcher.ts:378 src/docdispatcher.ts:391
+#: src/docdispatcher.ts:375 src/docdispatcher.ts:388
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
 "Níl an AI cumraithe. Téigh go Comhad > Roghanna > Socruithe Amhairc chun é a "
 "shocrú."
 
-#: src/docdispatcher.ts:612
+#: src/docdispatcher.ts:609
 msgid "Are you sure you want to delete this slide?"
 msgstr "An bhfuil tú cinnte go bhfuil fonn ort an sleamhnán seo a scriosadh?"
 
-#: src/docdispatcher.ts:615
+#: src/docdispatcher.ts:612
 msgid "Are you sure you want to delete this page?"
 msgstr "An bhfuil tú cinnte gur mhaith leat an leathanach seo a scriosadh?"
 
-#: src/docstate.ts:149
+#: src/docstate.ts:150
 msgid "Standard"
 msgstr "Caighdeán"
 
-#: src/docstate.ts:294
+#: src/docstate.ts:295
 msgid "Theme colors"
 msgstr "Dathanna téama"
 
-#: src/docstate.ts:295
+#: src/docstate.ts:296
 msgid "Document colors"
 msgstr "Dathanna na cáipéise"
 
@@ -5975,7 +6022,11 @@ msgid ""
 "that it is suitable for deployment in enterprises, this message appears "
 "when more than {docs} documents or {connections} connections are in use "
 "concurrently."
-msgstr "Seo leagan nach dtacaítear leis de {productname}. Chun an tuiscint go bhfuil sé oiriúnach le himscaradh i bhfiontair a sheachaint, feictear an teachtaireacht seo nuair a bhíonn níos mó ná doiciméid {docs} nó naisc {connections} in úsáid i gcomhthráth."
+msgstr ""
+"Seo leagan nach dtacaítear leis de {productname}. Chun an tuiscint go bhfuil "
+"sé oiriúnach le himscaradh i bhfiontair a sheachaint, feictear an "
+"teachtaireacht seo nuair a bhíonn níos mó ná doiciméid {docs} nó naisc "
+"{connections} in úsáid i gcomhthráth."
 
 #: src/errormessages.js:25
 msgid "More information and support"
@@ -6278,15 +6329,15 @@ msgstr "an roghchlár Amharc"
 msgid "Online Editor"
 msgstr "Eagarthóir Ar Líne"
 
-#: src/layer/tile/CanvasTileLayer.js:1536
+#: src/layer/tile/CanvasTileLayer.js:1544
 msgid "Functions"
 msgstr "Feidhmeanna"
 
-#: src/layer/tile/CanvasTileLayer.js:1813
+#: src/layer/tile/CanvasTileLayer.js:1821
 msgid "Named Range"
 msgstr "Raon Ainmnithe"
 
-#: src/layer/tile/CanvasTileLayer.js:3621
+#: src/layer/tile/CanvasTileLayer.js:3629
 msgid "No Comments"
 msgstr "Uimh Tuairimí"
 
@@ -6313,7 +6364,7 @@ msgstr "rabhadh: cuireadh deireadh leis an iarratas cóipe/greamaigh"
 msgid "Failed to download clipboard, please re-copy"
 msgstr "Theip ar an ngearrthaisce a íoslódáil, déan cóip arís"
 
-#: src/map/Clipboard.js:1492
+#: src/map/Clipboard.js:1495
 msgid ""
 "Your browser has very limited access to the clipboard, so please use the "
 "paste buttons on your on-screen keyboard instead."
@@ -6321,7 +6372,7 @@ msgstr ""
 "Tá rochtain an-teoranta ag do bhrabhsálaí ar an ngearrthaisce, mar sin bain "
 "úsáid as na cnaipí greamaigh ar do mhéarchlár ar an scáileán ina ionad."
 
-#: src/map/Clipboard.js:1498
+#: src/map/Clipboard.js:1501
 msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
@@ -6329,11 +6380,11 @@ msgstr ""
 "Tá rochtain an-teoranta ag do bhrabhsálaí ar an ngearrthaisce, mar sin bain "
 "úsáid as na haicearraí méarchláir seo:"
 
-#: src/map/Clipboard.js:1532
+#: src/map/Clipboard.js:1535
 msgid "Cut"
 msgstr "Gearr"
 
-#: src/map/Clipboard.js:1548
+#: src/map/Clipboard.js:1551
 msgid ""
 "A download due to a large copy/paste operation has already started. Please, "
 "wait for the current download or cancel it before starting a new one"
@@ -6342,25 +6393,25 @@ msgstr ""
 "la/greamaigh. Le do thoil, fan leis an íoslódáil reatha nó cealaigh é sula "
 "dtosaíonn tú ar cheann nua"
 
-#: src/map/Clipboard.js:1576
+#: src/map/Clipboard.js:1579
 msgid "Paste from this document"
 msgstr "Greamaigh ón doiciméad seo"
 
-#: src/map/Clipboard.js:1576
+#: src/map/Clipboard.js:1579
 msgid "Cancel paste special"
 msgstr "Cealaigh greamaigh speisialta"
 
-#: src/map/Clipboard.js:1598
+#: src/map/Clipboard.js:1601
 msgid "Your browser has very limited access to the clipboard"
 msgstr "Tá rochtain an-teoranta ag do bhrabhsálaí ar an ngearrthaisce"
 
-#: src/map/Clipboard.js:1603
+#: src/map/Clipboard.js:1606
 msgid "Please use following combination to see more options:"
 msgstr ""
 "Bain úsáid as an meascán seo a leanas le do thoil chun tuilleadh roghanna a "
 "fheiceáil:"
 
-#: src/map/Clipboard.js:1621
+#: src/map/Clipboard.js:1624
 msgid "Close popup to ignore paste special"
 msgstr "Dún aníos chun neamhaird a dhéanamh ar ghreamú speisialta"
 
@@ -6502,17 +6553,21 @@ msgstr "Comhad nua á chruthú as teimpléad..."
 msgid "Compare Document..."
 msgstr "Déan comparáid idir an Doiciméad..."
 
-#: src/map/handler/Map.WOPI.js:869
+#: src/map/handler/Map.WOPI.js:871
 msgid "File name should contain an extension."
 msgstr "Ba cheart go mbeadh iarmhír san ainm comhaid."
 
-#: src/map/handler/Map.WOPI.js:878
+#: src/map/handler/Map.WOPI.js:880
 msgid "Creating copy..."
 msgstr "Ag cruthú cóipe..."
 
 #: src/map/handler/Map.Welcome.js:118
 msgid "Welcome Dialog"
 msgstr "Dialóg Fáilte"
+
+#: src/map/handler/Map.Settings.ts:143
+msgid "Settings saved"
+msgstr ""
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
@@ -6849,6 +6904,15 @@ msgstr ""
 "translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
+
+#~ msgid "(No extensions installed)"
+#~ msgstr "(Gan aon síntí suiteáilte)"
+
+#~ msgid "No extensions are installed."
+#~ msgstr "Níl aon síntí suiteáilte."
+
+#~ msgid "CSV column ruler: click to toggle a column split"
+#~ msgstr "Rialóir colún CSV: cliceáil chun scoilt colún a athrú"
 
 #~ msgid "Document settings"
 #~ msgstr "Socruithe doiciméad"

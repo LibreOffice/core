@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-02 13:03+0200\n"
+"POT-Creation-Date: 2026-06-05 15:53+0200\n"
 "PO-Revision-Date: 2026-06-03 14:43+0000\n"
 "Last-Translator: Ardev Prisec <prisecardev@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/collabora-"
-"online/collabora-ui/uk/>\n"
-"Language: uk\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
+"collabora-online/collabora-ui/uk/>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
@@ -30,7 +30,7 @@ msgstr "Налаштування"
 
 #: admin/admin.strings.js:17 src/control/Control.StatusBar.js:270
 #: src/control/Control.StatusBar.js:271
-#: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:36
+#: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:39
 msgid "Overview"
 msgstr "Огляд"
 
@@ -145,19 +145,19 @@ msgid "Network Graph"
 msgstr "Графік мережі"
 
 #: admin/admin.strings.js:45
-#: admin/src/integrator/AdminIntegratorSettings.ts:1210
-#: admin/src/integrator/AdminIntegratorSettings.ts:3145
+#: admin/src/integrator/AdminIntegratorSettings.ts:1307
+#: admin/src/integrator/AdminIntegratorSettings.ts:3318
 #: admin/src/integrator/WordBook.ts:394 admin/src/integrator/Xcu.ts:411
-#: src/canvas/sections/CommentListSection.ts:744
+#: src/canvas/sections/CommentListSection.ts:745
 #: src/canvas/sections/CommentSection.ts:191
-#: src/canvas/sections/CommentSection.ts:640
-#: src/canvas/sections/CommentSection.ts:1611
+#: src/canvas/sections/CommentSection.ts:638
+#: src/canvas/sections/CommentSection.ts:1609
 #: src/control/Control.BackstageView.ts:136
-#: src/control/Control.Notebookbar.js:343
+#: src/control/Control.Notebookbar.js:346
 #: src/control/Control.NotebookbarDraw.js:29
 #: src/control/Control.NotebookbarDraw.js:178
 #: src/control/Control.NotebookbarImpress.js:30
-#: src/map/handler/Map.Settings.ts:84
+#: src/map/handler/Map.Settings.ts:83
 msgid "Save"
 msgstr "Зберегти"
 
@@ -227,7 +227,7 @@ msgstr "Фільтр Каналу:"
 
 #: admin/admin.strings.js:61 src/app/TableStylesService.ts:264
 #: src/app/TableStylesService.ts:418
-#: src/control/Control.JSDialogBuilder.js:387
+#: src/control/Control.JSDialogBuilder.js:395
 #: src/control/Control.StatusBar.js:211 src/control/Control.StatusBar.js:216
 msgid "None"
 msgstr "Нічого"
@@ -240,11 +240,11 @@ msgstr "Встановити Рівні Логування"
 msgid "Log Levels"
 msgstr "Рівні Логування"
 
-#: admin/admin.strings.js:64 src/control/Control.AIChatSidebar.ts:590
+#: admin/admin.strings.js:64 src/control/Control.AIChatSidebar.ts:614
 #: src/control/Control.AlertDialog.js:32 src/control/Control.AlertDialog.js:38
 #: src/control/Control.AlertDialog.js:103
 #: src/control/Control.AlertDialog.js:110 src/control/Control.Zotero.js:191
-#: src/app/Socket.ts:935 src/app/Socket.ts:2335 src/app/Socket.ts:2346
+#: src/app/Socket.ts:935 src/app/Socket.ts:2357 src/app/Socket.ts:2368
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div:51-7
 msgid "Close"
 msgstr "Закрити"
@@ -262,10 +262,10 @@ msgid "License"
 msgstr "Ліцензія"
 
 #: admin/admin.strings.js:68 src/control/Control.BackstageView.ts:189
-#: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:623
-#: src/control/Control.Menubar.ts:768 src/control/Control.Menubar.ts:1074
-#: src/control/Control.Menubar.ts:1144 src/control/Control.Menubar.ts:1209
-#: src/control/Control.Menubar.ts:1264 src/control/Control.Menubar.ts:1339
+#: src/control/Control.Menubar.ts:436 src/control/Control.Menubar.ts:625
+#: src/control/Control.Menubar.ts:771 src/control/Control.Menubar.ts:1078
+#: src/control/Control.Menubar.ts:1148 src/control/Control.Menubar.ts:1213
+#: src/control/Control.Menubar.ts:1268 src/control/Control.Menubar.ts:1343
 #: src/control/Control.NotebookbarWriter.js:590
 msgid "About"
 msgstr "Про програму"
@@ -302,26 +302,26 @@ msgstr "Попередження"
 #: admin/src/AdminClusterOverview.js:560 admin/src/AdminSocketBase.js:63
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
 #: admin/src/AdminSocketOverview.js:431 admin/src/AdminSocketSettings.js:47
-#: admin/src/integrator/AdminIntegratorSettings.ts:3256 src/app/Debug.ts:1580
-#: src/canvas/sections/CommentListSection.ts:1847
+#: admin/src/integrator/AdminIntegratorSettings.ts:3429 src/app/Debug.ts:1580
+#: src/canvas/sections/CommentListSection.ts:1893
 #: src/control/Control.AboutDialog.ts:245
 #: src/control/Control.AlertDialog.js:56
 #: src/control/Control.DocumentRepair.js:77
 #: src/control/Control.ESignatureDialog.ts:132
 #: src/control/Control.LanguageDialog.js:120
-#: src/control/Control.PartsPreview.js:893
+#: src/control/Control.PartsPreview.js:897
 #: src/control/Control.ServerAuditDialog.ts:342
-#: src/control/Control.Tabs.js:547 src/control/Control.Tabs.js:556
+#: src/control/Control.Tabs.js:555 src/control/Control.Tabs.js:564
 #: src/control/Control.Zotero.js:365 src/control/Control.Zotero.js:411
 #: src/control/Parts.js:529 src/control/Permission.js:98
 #: src/control/Permission.js:108 src/control/Permission.js:165
-#: src/control/Toolbar.js:728 src/app/Socket.ts:1001 src/app/Socket.ts:1656
-#: src/app/Socket.ts:1831 src/app/Socket.ts:2292 src/app/Socket.ts:2392
-#: src/docdispatcher.ts:622 src/main.js:108 src/main.js:111 src/main.js:148
-#: src/map/Clipboard.js:1470 src/map/handler/Map.Feedback.js:96
+#: src/control/Toolbar.js:728 src/app/Socket.ts:1001 src/app/Socket.ts:1678
+#: src/app/Socket.ts:1853 src/app/Socket.ts:2314 src/app/Socket.ts:2414
+#: src/docdispatcher.ts:619 src/main.js:108 src/main.js:111 src/main.js:148
+#: src/map/Clipboard.js:1473 src/map/handler/Map.Feedback.js:96
 #: src/map/handler/Map.SlideShow.js:60 src/map/handler/Map.SlideShow.js:169
 #: src/map/handler/Map.SlideShow.js:297 src/map/handler/Map.SlideShow.js:308
-#: src/map/handler/Map.WOPI.js:869 src/slideshow/SlideShowPresenter.ts:1292
+#: src/map/handler/Map.WOPI.js:871 src/slideshow/SlideShowPresenter.ts:1292
 #: src/slideshow/SlideShowPresenter.ts:1307
 #: src/slideshow/SlideShowPresenter.ts:1322
 #: src/slideshow/SlideShowPresenter.ts:1345
@@ -331,22 +331,22 @@ msgstr "OK"
 #: admin/src/AdminClusterOverview.js:561 admin/src/AdminSocketOverview.js:109
 #: admin/src/AdminSocketOverview.js:432 admin/src/AdminSocketSettings.js:48
 #: admin/src/integrator/WordBook.ts:386
-#: src/canvas/sections/CommentListSection.ts:739
+#: src/canvas/sections/CommentListSection.ts:740
 #: src/canvas/sections/CommentSection.ts:190
 #: src/canvas/sections/CommentSection.ts:193
-#: src/canvas/sections/CommentSection.ts:1612
-#: src/canvas/sections/CommentSection.ts:1617
-#: src/control/Control.AIChatSidebar.ts:1281
-#: src/control/Control.AIChatSidebar.ts:1283
-#: src/control/Control.AIChatSidebar.ts:1368
+#: src/canvas/sections/CommentSection.ts:1610
+#: src/canvas/sections/CommentSection.ts:1615
+#: src/control/Control.AIChatSidebar.ts:1311
+#: src/control/Control.AIChatSidebar.ts:1313
+#: src/control/Control.AIChatSidebar.ts:1398
 #: src/control/Control.DocumentRepair.js:71
 #: src/control/Control.DownloadProgress.js:81
 #: src/control/Control.LanguageDialog.js:114
 #: src/control/Control.MobileTopBar.ts:43
 #: src/control/Control.UIManager.ts:2115 src/control/Control.UIManager.ts:2196
 #: src/control/Control.UIManager.ts:2350 src/control/Control.UIManager.ts:2528
-#: src/control/Control.Zotero.js:360 src/app/Socket.ts:1601
-#: src/map/handler/Map.Settings.ts:79
+#: src/control/Control.Zotero.js:360 src/app/Socket.ts:1623
+#: src/map/handler/Map.Settings.ts:78
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -382,15 +382,15 @@ msgstr "Ви справді бажаєте закінчити цей сеанс?
 msgid "Are you sure you want to shut down the server?"
 msgstr "Ви справді бажаєте вимкнути сервер?"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:265
+#: admin/src/integrator/AdminIntegratorSettings.ts:284
 msgid "Shared Config URL is missing in initial variables."
 msgstr "URL-адреса спільної конфігурації відсутня у початкових змінних."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:269
+#: admin/src/integrator/AdminIntegratorSettings.ts:288
 msgid "Access token is missing in initial variables."
 msgstr "У початкових змінних відсутній маркер доступу."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:347
+#: admin/src/integrator/AdminIntegratorSettings.ts:366
 msgid ""
 "Something went wrong while fetching setting file. Please try to refresh the "
 "page."
@@ -398,217 +398,217 @@ msgstr ""
 "Під час отримання файлу налаштувань сталася помилка. Спробуйте оновити "
 "сторінку."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:488
+#: admin/src/integrator/AdminIntegratorSettings.ts:513
 msgid "Signature Certificate"
 msgstr "Сертифікат Підпису"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:489
+#: admin/src/integrator/AdminIntegratorSettings.ts:514
 msgid "Signature Key"
 msgstr "Ключ Підпису"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:490
+#: admin/src/integrator/AdminIntegratorSettings.ts:515
 msgid "Signature CA"
 msgstr "Signature CA"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:491
-#: admin/src/integrator/AdminIntegratorSettings.ts:495
+#: admin/src/integrator/AdminIntegratorSettings.ts:516
+#: admin/src/integrator/AdminIntegratorSettings.ts:520
 msgid "Provider"
 msgstr "Провайдер"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:492
-#: admin/src/integrator/AdminIntegratorSettings.ts:496
+#: admin/src/integrator/AdminIntegratorSettings.ts:517
+#: admin/src/integrator/AdminIntegratorSettings.ts:521
 msgid "API Key"
 msgstr "Ключ API"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:493
-#: admin/src/integrator/AdminIntegratorSettings.ts:498
+#: admin/src/integrator/AdminIntegratorSettings.ts:518
+#: admin/src/integrator/AdminIntegratorSettings.ts:523
 msgid "Model"
 msgstr "Модель"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:494
-#: admin/src/integrator/AdminIntegratorSettings.ts:497
+#: admin/src/integrator/AdminIntegratorSettings.ts:519
+#: admin/src/integrator/AdminIntegratorSettings.ts:522
 msgid "Base URL"
 msgstr "Базова URL-адреса"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:499
+#: admin/src/integrator/AdminIntegratorSettings.ts:524
 msgid "Image Size"
 msgstr "Розмір Зображення"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:500
+#: admin/src/integrator/AdminIntegratorSettings.ts:525
 msgid "Request Timeout (seconds)"
 msgstr "Час Очікування Запиту (секунди)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:503
+#: admin/src/integrator/AdminIntegratorSettings.ts:528
 msgid "In-document Screen Reader"
 msgstr "Документний Зчитувач Екрану"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:504
-#: src/control/Control.Menubar.ts:179 src/control/Control.Menubar.ts:509
-#: src/control/Control.Menubar.ts:678 src/control/Control.Menubar.ts:831
-#: src/control/Control.Menubar.ts:1128 src/control/Control.Menubar.ts:1181
-#: src/control/Control.Menubar.ts:1242 src/control/Control.Menubar.ts:1302
+#: admin/src/integrator/AdminIntegratorSettings.ts:529
+#: src/control/Control.Menubar.ts:179 src/control/Control.Menubar.ts:510
+#: src/control/Control.Menubar.ts:680 src/control/Control.Menubar.ts:834
+#: src/control/Control.Menubar.ts:1132 src/control/Control.Menubar.ts:1185
+#: src/control/Control.Menubar.ts:1246 src/control/Control.Menubar.ts:1306
 #: src/control/Control.NotebookbarCalc.js:1659
 #: src/control/Control.NotebookbarDraw.js:571
 #: src/control/Control.NotebookbarImpress.js:738
-#: src/control/Control.NotebookbarWriter.js:1791
+#: src/control/Control.NotebookbarWriter.js:1815
 msgid "Dark Mode"
 msgstr "Темний Режим"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:505
+#: admin/src/integrator/AdminIntegratorSettings.ts:530
 msgid "Smart Zoom"
 msgstr "Розумний Зум"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:506
+#: admin/src/integrator/AdminIntegratorSettings.ts:531
 msgid "Default Zoom"
 msgstr "Типовий Зум"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:507
+#: admin/src/integrator/AdminIntegratorSettings.ts:532
 msgid "Compact layout"
 msgstr "Компактне планування"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:508
+#: admin/src/integrator/AdminIntegratorSettings.ts:533
 msgid "Show status bar"
 msgstr "Показати рядок стану"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:509
-#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:505
+#: admin/src/integrator/AdminIntegratorSettings.ts:534
+#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:506
 msgid "Show Ruler"
 msgstr "Показати лінійку"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:510
+#: admin/src/integrator/AdminIntegratorSettings.ts:535
 msgid "Accessibility Checker"
 msgstr "Перевірка Доступності"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:511
-#: src/control/Control.NavigatorPanel.ts:292
+#: admin/src/integrator/AdminIntegratorSettings.ts:536
+#: src/control/Control.NavigatorPanel.ts:302
 msgid "Navigator"
 msgstr "Навігатор"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:512
+#: admin/src/integrator/AdminIntegratorSettings.ts:537
 msgid "Show Sidebar"
 msgstr "Показати Бічну Панель"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:513
+#: admin/src/integrator/AdminIntegratorSettings.ts:538
 msgid "Custom Animation"
 msgstr "Користувацька Анімація"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:516
+#: admin/src/integrator/AdminIntegratorSettings.ts:541
 msgid "Style List"
 msgstr "Список Стилів"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:519
+#: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.NotebookbarCalc.js:1186
 #: src/control/Control.NotebookbarDraw.js:542
 #: src/control/Control.NotebookbarImpress.js:709
 msgid "Grid"
 msgstr "Сітка"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:520
+#: admin/src/integrator/AdminIntegratorSettings.ts:545
 #: src/control/Control.BackstageView.ts:152
 msgid "Print"
 msgstr "Друк"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:521
+#: admin/src/integrator/AdminIntegratorSettings.ts:546
 msgid "Other"
 msgstr "Інше"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:522
+#: admin/src/integrator/AdminIntegratorSettings.ts:547
 #: src/control/Control.NotebookbarImpress.js:718
 msgid "Show Grid"
 msgstr "Показати Сітку"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:523
+#: admin/src/integrator/AdminIntegratorSettings.ts:548
 msgid "Snap to grid"
 msgstr "Прив’язати до сітки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:524
-#: admin/src/integrator/AdminIntegratorSettings.ts:530
+#: admin/src/integrator/AdminIntegratorSettings.ts:549
+#: admin/src/integrator/AdminIntegratorSettings.ts:555
 msgid "Size to grid"
 msgstr "Розмір до сітки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:525
+#: admin/src/integrator/AdminIntegratorSettings.ts:550
 msgid "Synchronize axes"
 msgstr "Синхронізувати осі"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:526
+#: admin/src/integrator/AdminIntegratorSettings.ts:551
 msgid "Snap grid"
 msgstr "Сітка прив'язки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:527
+#: admin/src/integrator/AdminIntegratorSettings.ts:552
 msgid "Empty Pages"
 msgstr "Порожні Сторінки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:528
+#: admin/src/integrator/AdminIntegratorSettings.ts:553
 msgid "Force Breaks"
 msgstr "Примусові Перерви"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:529
-#: src/control/Control.Menubar.ts:800 src/control/Control.TopToolbar.js:139
+#: admin/src/integrator/AdminIntegratorSettings.ts:554
+#: src/control/Control.Menubar.ts:803 src/control/Control.TopToolbar.js:139
 #: src/control/jsdialog/Definitions.Menu.ts:1588
 msgid "All Sheets"
 msgstr "Усі Аркуші"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:531
+#: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Content"
 msgstr "Зміст"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:532
+#: admin/src/integrator/AdminIntegratorSettings.ts:557
 #: src/control/Control.BackstageView.ts:552
 msgid "Drawing"
 msgstr "Малювання"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:533
+#: admin/src/integrator/AdminIntegratorSettings.ts:558
 #: src/control/Control.NotebookbarDraw.js:1245
 #: src/control/Control.NotebookbarDraw.js:1445
 #: src/control/Control.NotebookbarWriter.js:1242
 msgid "Page"
 msgstr "Сторінка"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:534
+#: admin/src/integrator/AdminIntegratorSettings.ts:559
 msgid "Fit to page"
 msgstr "Підігнати до розміру сторінки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:535
+#: admin/src/integrator/AdminIntegratorSettings.ts:560
 msgid "Tile pages"
 msgstr "Сторінки плитки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:536
+#: admin/src/integrator/AdminIntegratorSettings.ts:561
 msgid "Booklet"
 msgstr "Буклет"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:537
+#: admin/src/integrator/AdminIntegratorSettings.ts:562
 msgid "Booklet front"
 msgstr "Лицьова сторона брошури"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:538
+#: admin/src/integrator/AdminIntegratorSettings.ts:563
 msgid "Booklet back"
 msgstr "Задня сторона брошури"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:539
+#: admin/src/integrator/AdminIntegratorSettings.ts:564
 msgid "Page name"
 msgstr "Назва сторінки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:540
+#: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.NotebookbarCalc.js:817
 #: src/control/Control.NotebookbarWriter.js:1645
 #: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Date"
 msgstr "Дата"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:541
+#: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.NotebookbarCalc.js:818
 msgid "Time"
 msgstr "Час"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:542
+#: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Hidden pages"
 msgstr "Приховані сторінки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:543
+#: admin/src/integrator/AdminIntegratorSettings.ts:568
 msgid "From printer setup"
 msgstr "З налаштувань принтера"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:544
+#: admin/src/integrator/AdminIntegratorSettings.ts:569
 #: src/control/Control.BackstageView.ts:551 templates/templates.js:80
 #: templates/templates.js:90 templates/templates.js:100
 #: templates/templates.js:110 templates/templates.js:120
@@ -624,81 +624,81 @@ msgstr "З налаштувань принтера"
 msgid "Presentation"
 msgstr "Презентація"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:545
+#: admin/src/integrator/AdminIntegratorSettings.ts:570
 #: src/control/Control.Zotero.js:1341 src/slideshow/PresenterConsole.js:34
 msgid "Notes"
 msgstr "Примітки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:546
+#: admin/src/integrator/AdminIntegratorSettings.ts:571
 msgid "Handouts"
 msgstr "Роздаткові матеріали"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:547
-#: src/control/Control.NavigatorPanel.ts:213
+#: admin/src/integrator/AdminIntegratorSettings.ts:572
+#: src/control/Control.NavigatorPanel.ts:223
 msgid "Outline"
 msgstr "Контур"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:548
+#: admin/src/integrator/AdminIntegratorSettings.ts:573
 msgid "Handout horizontal"
 msgstr "Роздатковий матеріал горизонтальний"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:549
+#: admin/src/integrator/AdminIntegratorSettings.ts:574
 msgid "Images"
 msgstr "Зображення"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:550
+#: admin/src/integrator/AdminIntegratorSettings.ts:575
 msgid "Tables"
 msgstr "Таблиці"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:551
+#: admin/src/integrator/AdminIntegratorSettings.ts:576
 msgid "Controls"
 msgstr "Елементи керування"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:552
+#: admin/src/integrator/AdminIntegratorSettings.ts:577
 msgid "Background"
 msgstr "Тло"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:553
+#: admin/src/integrator/AdminIntegratorSettings.ts:578
 msgid "Print Black"
 msgstr "Друкувати Чорним"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:554
+#: admin/src/integrator/AdminIntegratorSettings.ts:579
 msgid "Hidden text"
 msgstr "Прихований текст"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:555
+#: admin/src/integrator/AdminIntegratorSettings.ts:580
 msgid "Placeholders"
 msgstr "Заповнювачі"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:556
+#: admin/src/integrator/AdminIntegratorSettings.ts:581
 msgid "Left pages"
 msgstr "Ліві сторінки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:557
+#: admin/src/integrator/AdminIntegratorSettings.ts:582
 msgid "Right pages"
 msgstr "Праві сторінки"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:558
+#: admin/src/integrator/AdminIntegratorSettings.ts:583
 msgid "Brochure"
 msgstr "Брошура"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:559
+#: admin/src/integrator/AdminIntegratorSettings.ts:584
 msgid "Brochure Right to Left"
 msgstr "Брошура справа наліво"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:745
+#: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid "Invalid JSON file"
 msgstr "Недійсний JSON-файл"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:749
+#: admin/src/integrator/AdminIntegratorSettings.ts:793
 msgid "Error reading file"
 msgstr "Помилка читання файлу"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:761
+#: admin/src/integrator/AdminIntegratorSettings.ts:805
 msgid "Autotext"
 msgstr "Автотекст"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:763
+#: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
@@ -707,15 +707,15 @@ msgstr ""
 "вставити текст у документ, введіть ярлик для запису автотексту та натисніть "
 "клавішу F3."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:769
+#: admin/src/integrator/AdminIntegratorSettings.ts:813
 msgid "Upload Autotext"
 msgstr "Завантажити Автотекст"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:774
+#: admin/src/integrator/AdminIntegratorSettings.ts:819
 msgid "Custom dictionaries"
 msgstr "Користувацькі словники"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:776
+#: admin/src/integrator/AdminIntegratorSettings.ts:821
 msgid ""
 "Add or edit words in a spell check dictionary. Words in your wordbook (."
 "dic) will be available for spelling checks."
@@ -723,15 +723,15 @@ msgstr ""
 "Додавайте або редагуйте слова в словнику перевірки орфографії. Слова у "
 "вашому словнику (.dic) будуть доступні для перевірки правопису."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:782
+#: admin/src/integrator/AdminIntegratorSettings.ts:827
 msgid "Upload Wordbook"
 msgstr "Завантажити Словник"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:787
+#: admin/src/integrator/AdminIntegratorSettings.ts:833
 msgid "Document themes"
 msgstr "Теми документа"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:789
+#: admin/src/integrator/AdminIntegratorSettings.ts:835
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
@@ -739,56 +739,57 @@ msgstr ""
 "Завантажити кастомізовані теми документа (.theme). Вони визначають колірні "
 "палітри які доступні під Формат > Тема."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:795
+#: admin/src/integrator/AdminIntegratorSettings.ts:841
 msgid "Upload Theme"
 msgstr "Завантажити Тему"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:850
+#: admin/src/integrator/AdminIntegratorSettings.ts:918
 msgid "Something went wrong. Please try to refresh the page."
 msgstr "Щось пішло не так. Спробуйте оновити сторінку."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1006
+#: admin/src/integrator/AdminIntegratorSettings.ts:1104
 msgid ""
 "Something went wrong while fetching wordbook. Please try to refresh the "
 "page."
 msgstr "Під час отримання словника сталася помилка. Спробуйте оновити сторінку."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1020
+#: admin/src/integrator/AdminIntegratorSettings.ts:1118
+#: admin/src/integrator/AdminIntegratorSettings.ts:2945
 msgid "Interface Settings"
 msgstr "Налаштування Інтерфейсу"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1022
+#: admin/src/integrator/AdminIntegratorSettings.ts:1120
 msgid "Set default interface preferences."
 msgstr "Встановити типові параметри інтерфейсу."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1173
+#: admin/src/integrator/AdminIntegratorSettings.ts:1270
 msgid "Select a tab to browser settings."
 msgstr "Виберіть вкладку для налаштувань браузера."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1190
+#: admin/src/integrator/AdminIntegratorSettings.ts:1287
 #: admin/src/integrator/Xcu.ts:374
 msgid "Reset to default Document settings"
 msgstr "Скинути налаштування Документа до типового"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1194
+#: admin/src/integrator/AdminIntegratorSettings.ts:1291
 #: admin/src/integrator/Xcu.ts:388
 msgid "Are you sure you want to reset Document settings?"
 msgstr "Ви впевнені, що хочете скинути налаштування Документа?"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1211
+#: admin/src/integrator/AdminIntegratorSettings.ts:1308
 #: admin/src/integrator/Xcu.ts:403
 msgid "Save Document settings"
 msgstr "Зберегти налаштування Документа"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1488
+#: admin/src/integrator/AdminIntegratorSettings.ts:1610
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr "(Попередження: Для перемикання необхідно увімкнути доступність сервера)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1585
+#: admin/src/integrator/AdminIntegratorSettings.ts:1707
 msgid "Notebookbar view"
 msgstr "Вигляд панелі блокнота"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1592
+#: admin/src/integrator/AdminIntegratorSettings.ts:1714
 #: src/control/Control.NotebookbarCalc.js:1620
 #: src/control/Control.NotebookbarDraw.js:496
 #: src/control/Control.NotebookbarImpress.js:640
@@ -796,32 +797,32 @@ msgstr "Вигляд панелі блокнота"
 msgid "Compact view"
 msgstr "Компактний вигляд"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1698
+#: admin/src/integrator/AdminIntegratorSettings.ts:1820
 msgid "Something went wrong while uploading the file. Please try again."
 msgstr "Під час завантаження файлу сталася помилка. Спробуйте ще раз."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1774
-#: src/canvas/sections/CommentSection.ts:1525
-#: src/canvas/sections/CommentSection.ts:1530
-#: src/control/Control.AIChatSidebar.ts:1375
-#: src/control/jsdialog/Control.ContextMenu.ts:292
+#: admin/src/integrator/AdminIntegratorSettings.ts:1896
+#: src/canvas/sections/CommentSection.ts:1523
+#: src/canvas/sections/CommentSection.ts:1528
+#: src/control/Control.AIChatSidebar.ts:1405
+#: src/control/jsdialog/Control.ContextMenu.ts:293
 #: src/control/jsdialog/Definitions.DialogModification.ts:155
-#: src/docdispatcher.ts:619
+#: src/docdispatcher.ts:616
 msgid "Delete"
 msgstr "Видалити"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1785
+#: admin/src/integrator/AdminIntegratorSettings.ts:1907
 msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
 msgstr "Під час видалення файлу сталася помилка. Спробуйте оновити сторінку."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1800
+#: admin/src/integrator/AdminIntegratorSettings.ts:1922
 #: src/control/Control.BackstageView.ts:568
 msgid "Edit"
 msgstr "Редагувати"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1820
+#: admin/src/integrator/AdminIntegratorSettings.ts:1940
 msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
@@ -829,15 +830,16 @@ msgstr ""
 "Щоб використовувати Zotero, вкажіть тут свій ключ API. Ви можете створити "
 "свій ключ API у своєму "
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1829
+#: admin/src/integrator/AdminIntegratorSettings.ts:1949
 msgid "Zotero account API settings"
 msgstr "Налаштування API облікового запису Zotero"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1890
+#: admin/src/integrator/AdminIntegratorSettings.ts:2006
+#: admin/src/integrator/AdminIntegratorSettings.ts:3060
 msgid "Document Signing"
 msgstr "Підписання Документів"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1894
+#: admin/src/integrator/AdminIntegratorSettings.ts:2010
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
@@ -845,20 +847,21 @@ msgstr ""
 "Щоб використовувати підпис документів, укажіть тут свій сертифікат підпису, "
 "ключ і ланцюжок ЦС."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1955
-#: src/control/Control.AIChatSidebar.ts:575 src/control/Control.Menubar.ts:227
-#: src/control/Control.Menubar.ts:534 src/control/Control.Menubar.ts:694
-#: src/control/Control.Menubar.ts:861
+#: admin/src/integrator/AdminIntegratorSettings.ts:2069
+#: admin/src/integrator/AdminIntegratorSettings.ts:3024
+#: src/control/Control.AIChatSidebar.ts:599 src/control/Control.Menubar.ts:228
+#: src/control/Control.Menubar.ts:536 src/control/Control.Menubar.ts:697
+#: src/control/Control.Menubar.ts:865
 #: src/control/Control.NotebookbarCalc.js:1687
 #: src/control/Control.NotebookbarCalc.js:1688
 #: src/control/Control.NotebookbarImpress.js:759
 #: src/control/Control.NotebookbarImpress.js:760
-#: src/control/Control.NotebookbarWriter.js:1819
-#: src/control/Control.NotebookbarWriter.js:1820
+#: src/control/Control.NotebookbarWriter.js:1804
+#: src/control/Control.NotebookbarWriter.js:1805
 msgid "AI Assistant"
 msgstr "Помічник з ШІ"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1959
+#: admin/src/integrator/AdminIntegratorSettings.ts:2073
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
@@ -866,74 +869,90 @@ msgstr ""
 "Налаштуйте автентифікаційні данні постачальника ШІ та моделі. Моделі "
 "отримуються автоматично при зміні автентифікаційні даних."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2060
+#: admin/src/integrator/AdminIntegratorSettings.ts:2174
 msgid "Text Generation"
 msgstr "Генерація Тексту"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2110
-#: admin/src/integrator/AdminIntegratorSettings.ts:2216
+#: admin/src/integrator/AdminIntegratorSettings.ts:2224
+#: admin/src/integrator/AdminIntegratorSettings.ts:2342
 msgid "e.g."
 msgstr "приклад."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2129
-#: admin/src/integrator/AdminIntegratorSettings.ts:2247
-#: admin/src/integrator/AdminIntegratorSettings.ts:2727
-#: admin/src/integrator/AdminIntegratorSettings.ts:2743
+#: admin/src/integrator/AdminIntegratorSettings.ts:2246
+msgid ""
+"For document actions (inspecting and editing), choose a model with native "
+"function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
+"it (e.g. base llama3, gemma) can still chat but cannot use document tools."
+msgstr ""
+
+#: admin/src/integrator/AdminIntegratorSettings.ts:2255
+#: admin/src/integrator/AdminIntegratorSettings.ts:2373
+#: admin/src/integrator/AdminIntegratorSettings.ts:2848
+#: admin/src/integrator/AdminIntegratorSettings.ts:2864
 msgid "Fetch models to select"
 msgstr "Отримати моделі для обрання"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2158
+#: admin/src/integrator/AdminIntegratorSettings.ts:2284
 msgid "Image Generation"
 msgstr "Генерація Зображень"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2163
+#: admin/src/integrator/AdminIntegratorSettings.ts:2289
 msgid "Same as Text AI"
 msgstr "Таке саме як і Текстовий ШІ"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2232
+#: admin/src/integrator/AdminIntegratorSettings.ts:2358
 msgid "Leave empty to use Text AI key"
 msgstr "Залишити порожнім для використання Текстового ШІ ключа"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2494
-#: admin/src/integrator/AdminIntegratorSettings.ts:2602
+#: admin/src/integrator/AdminIntegratorSettings.ts:2621
+#: admin/src/integrator/AdminIntegratorSettings.ts:2726
 msgid "Fetching models..."
 msgstr "Отримання моделей..."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2539
-#: admin/src/integrator/AdminIntegratorSettings.ts:2554
-#: admin/src/integrator/AdminIntegratorSettings.ts:2642
-#: admin/src/integrator/AdminIntegratorSettings.ts:2656
+#: admin/src/integrator/AdminIntegratorSettings.ts:2663
+#: admin/src/integrator/AdminIntegratorSettings.ts:2678
+#: admin/src/integrator/AdminIntegratorSettings.ts:2763
+#: admin/src/integrator/AdminIntegratorSettings.ts:2777
 msgid "No models found"
 msgstr "Ніяких моделей не знайдено"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2564
-#: admin/src/integrator/AdminIntegratorSettings.ts:2666
+#: admin/src/integrator/AdminIntegratorSettings.ts:2688
+#: admin/src/integrator/AdminIntegratorSettings.ts:2787
 msgid "Models fetched successfully"
 msgstr "Моделі отримані успішно"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2570
-#: admin/src/integrator/AdminIntegratorSettings.ts:2672
+#: admin/src/integrator/AdminIntegratorSettings.ts:2694
+#: admin/src/integrator/AdminIntegratorSettings.ts:2793
 msgid "Failed to fetch models"
 msgstr "Помилка при отримані моделей"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2580
+#: admin/src/integrator/AdminIntegratorSettings.ts:2704
 msgid "Invalid provider configuration"
 msgstr "Неправильні налаштування постачальника"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2707
+#: admin/src/integrator/AdminIntegratorSettings.ts:2828
 msgid "None (disable image generation)"
 msgstr "Нічого (вимкнути генерацію зображення)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2926
+#: admin/src/integrator/AdminIntegratorSettings.ts:2880
+msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
+msgstr ""
+
+#: admin/src/integrator/AdminIntegratorSettings.ts:2972
+#: admin/src/integrator/Xcu.ts:310
+msgid "Document Settings"
+msgstr "Налаштування документа"
+
+#: admin/src/integrator/AdminIntegratorSettings.ts:3099
 msgid "Upload Xcu"
 msgstr "Завантажити Xcu"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:3125
+#: admin/src/integrator/AdminIntegratorSettings.ts:3298
 msgid "Reset"
 msgstr "Скинути"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:3244
-#: src/control/Control.AIChatSidebar.ts:2651 src/map/handler/Map.WOPI.js:869
+#: admin/src/integrator/AdminIntegratorSettings.ts:3417
+#: src/control/Control.AIChatSidebar.ts:2771 src/map/handler/Map.WOPI.js:871
 msgid "Error"
 msgstr "Помилка"
 
@@ -977,10 +996,6 @@ msgstr "Під час завантаження файлу словника ст�
 #: admin/src/integrator/Xcu.ts:155 admin/src/integrator/Xcu.ts:167
 msgid "Something went wrong while loading Document settings."
 msgstr "Під час завантаження налаштувань Документа сталася помилка."
-
-#: admin/src/integrator/Xcu.ts:310
-msgid "Document Settings"
-msgstr "Налаштування документа"
 
 #: admin/src/integrator/Xcu.ts:314
 msgid "Adjust how office documents behave."
@@ -1066,11 +1081,11 @@ msgstr "Ctrl+Shift+Alt+D, щоб вийти"
 msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
 msgstr "Обробку події було відкладено на несподівано тривалий час: {0} мс"
 
-#: src/app/LOUtil.ts:981
+#: src/app/LOUtil.ts:976
 msgid "{0} website, opens in new tab"
 msgstr "{0} вебсайт, відкривається у новій вкладці"
 
-#: src/app/LOUtil.ts:984
+#: src/app/LOUtil.ts:979
 msgid "file type icon"
 msgstr "піктограма типу файлу"
 
@@ -1096,26 +1111,26 @@ msgstr "Користувацька"
 msgid "Table Styles"
 msgstr "Стилі Таблиць"
 
-#: src/canvas/sections/CommentListSection.ts:1845
-#: src/canvas/sections/CommentListSection.ts:1858
+#: src/canvas/sections/CommentListSection.ts:1891
+#: src/canvas/sections/CommentListSection.ts:1904
 msgid "Comments Updated"
 msgstr "Коментарі Оновлено"
 
-#: src/canvas/sections/CommentListSection.ts:1846
+#: src/canvas/sections/CommentListSection.ts:1892
 msgid "Another user has removed this comment."
 msgstr "Інший користувач вилучив цей коментар."
 
-#: src/canvas/sections/CommentListSection.ts:1859
+#: src/canvas/sections/CommentListSection.ts:1905
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
 msgstr "Інший користувач оновив коментар. Бажаєте перезаписати ці зміни?"
 
-#: src/canvas/sections/CommentListSection.ts:1860 src/app/Socket.ts:1605
+#: src/canvas/sections/CommentListSection.ts:1906 src/app/Socket.ts:1627
 msgid "Overwrite"
 msgstr "Перезаписати"
 
-#: src/canvas/sections/CommentListSection.ts:1861
+#: src/canvas/sections/CommentListSection.ts:1907
 msgid "Update"
 msgstr "Оновити"
 
@@ -1132,9 +1147,9 @@ msgid "Open menu"
 msgstr "Відкрити меню"
 
 #: src/canvas/sections/CommentSection.ts:194
-#: src/canvas/sections/CommentSection.ts:644
-#: src/canvas/sections/CommentSection.ts:1215
-#: src/canvas/sections/CommentSection.ts:1616
+#: src/canvas/sections/CommentSection.ts:642
+#: src/canvas/sections/CommentSection.ts:1213
+#: src/canvas/sections/CommentSection.ts:1614
 msgid "Reply"
 msgstr "Відповідь"
 
@@ -1142,78 +1157,78 @@ msgstr "Відповідь"
 msgid "Press Ctrl + Enter to post"
 msgstr "Натисніть Ctrl + Enter, щоб опублікувати"
 
-#: src/canvas/sections/CommentSection.ts:539
-#: src/canvas/sections/CommentSection.ts:540
+#: src/canvas/sections/CommentSection.ts:537
+#: src/canvas/sections/CommentSection.ts:538
 msgid "Accept change"
 msgstr "Прийняти зміну"
 
-#: src/canvas/sections/CommentSection.ts:546
-#: src/canvas/sections/CommentSection.ts:547
+#: src/canvas/sections/CommentSection.ts:544
+#: src/canvas/sections/CommentSection.ts:545
 msgid "Reject change"
 msgstr "Відкинути зміну"
 
-#: src/canvas/sections/CommentSection.ts:571
+#: src/canvas/sections/CommentSection.ts:569
 msgid "Resolved"
 msgstr "Вирішено"
 
-#: src/canvas/sections/CommentSection.ts:581
+#: src/canvas/sections/CommentSection.ts:579
 msgid "Removed"
 msgstr "Вилучено"
 
-#: src/canvas/sections/CommentSection.ts:1202
+#: src/canvas/sections/CommentSection.ts:1200
 #: src/control/jsdialog/Widget.Comment.ts:177
-#: src/layer/tile/CanvasTileLayer.js:3593
-#: src/layer/tile/CanvasTileLayer.js:3604
+#: src/layer/tile/CanvasTileLayer.js:3601
+#: src/layer/tile/CanvasTileLayer.js:3612
 msgid "Comment"
 msgstr "Коментар"
 
-#: src/canvas/sections/CommentSection.ts:1212
+#: src/canvas/sections/CommentSection.ts:1210
 msgid "Modify"
 msgstr "Змінити"
 
-#: src/canvas/sections/CommentSection.ts:1218
+#: src/canvas/sections/CommentSection.ts:1216
 #: src/control/Notebookbar.ImpressAnimationTab.ts:83
 msgid "Remove"
 msgstr "Вилучити"
 
-#: src/canvas/sections/CommentSection.ts:1222
+#: src/canvas/sections/CommentSection.ts:1220
 msgid "Remove Thread"
 msgstr "Вилучити ланцюжок"
 
-#: src/canvas/sections/CommentSection.ts:1229
+#: src/canvas/sections/CommentSection.ts:1227
 msgid "Resolve"
 msgstr "Вирішити"
 
-#: src/canvas/sections/CommentSection.ts:1229
+#: src/canvas/sections/CommentSection.ts:1227
 msgid "Unresolve"
 msgstr "Позначити не вирішеним"
 
-#: src/canvas/sections/CommentSection.ts:1236
+#: src/canvas/sections/CommentSection.ts:1234
 msgid "Unresolve Thread"
 msgstr "Позначити Ланцюжок Не Вирішеним"
 
-#: src/canvas/sections/CommentSection.ts:1236
+#: src/canvas/sections/CommentSection.ts:1234
 msgid "Resolve Thread"
 msgstr "Позначити Ланцюжок Вирішеним"
 
-#: src/canvas/sections/CommentSection.ts:1242
+#: src/canvas/sections/CommentSection.ts:1240
 msgid "Promote to top comment"
 msgstr "Підвищити до верхнього коментаря"
 
-#: src/canvas/sections/CommentSection.ts:1247
+#: src/canvas/sections/CommentSection.ts:1245
 msgid "Show on the side"
 msgstr "Показати збоку"
 
-#: src/canvas/sections/CommentSection.ts:1247
+#: src/canvas/sections/CommentSection.ts:1245
 msgid "Open in full view"
 msgstr "Відкрити на весь екран"
 
-#: src/canvas/sections/CommentSection.ts:1254
+#: src/canvas/sections/CommentSection.ts:1252
 msgid "Show in navigator"
 msgstr "Показати в навігаторі"
 
-#: src/canvas/sections/CommentSection.ts:1524
-#: src/canvas/sections/CommentSection.ts:1529
+#: src/canvas/sections/CommentSection.ts:1522
+#: src/canvas/sections/CommentSection.ts:1527
 #: src/control/Control.SaveState.ts:67
 msgid "Saved"
 msgstr "Збережено"
@@ -1304,7 +1319,7 @@ msgid "Automatic color"
 msgstr "Автоколір"
 
 #: src/control/Control.AboutDialog.ts:89
-#: src/control/jsdialog/Widget.TreeView.ts:786
+#: src/control/jsdialog/Widget.TreeView.ts:826
 msgid "(opens in new tab)"
 msgstr "(відкривається у новій вкладці)"
 
@@ -1328,11 +1343,11 @@ msgstr "Часовий пояс:"
 msgid "Copy all version information in English"
 msgstr "Скопіювати всю інформацію про версію Англійською мовою"
 
-#: src/control/Control.AboutDialog.ts:391
+#: src/control/Control.AboutDialog.ts:393
 msgid "Version information has been copied"
 msgstr "Інформація по версії була скопійована"
 
-#: src/control/Control.AboutDialog.ts:433
+#: src/control/Control.AboutDialog.ts:437
 msgid "Version:"
 msgstr "Версія:"
 
@@ -1340,51 +1355,51 @@ msgstr "Версія:"
 msgid "cell address"
 msgstr "адреса комірки"
 
-#: src/control/Control.AIChatSidebar.ts:79
+#: src/control/Control.AIChatSidebar.ts:90
 msgid "Make the following text more concise"
 msgstr "Зробити наступний текст більш лаконічним"
 
-#: src/control/Control.AIChatSidebar.ts:83
+#: src/control/Control.AIChatSidebar.ts:94
 msgid "Summarize the key points of this text"
 msgstr "Підсумувати ключові моменти цього тексту"
 
-#: src/control/Control.AIChatSidebar.ts:87
+#: src/control/Control.AIChatSidebar.ts:98
 msgid "Expand and add more detail to this text"
 msgstr "Розширити та додати більше подробиць до цього тексту"
 
-#: src/control/Control.AIChatSidebar.ts:91
+#: src/control/Control.AIChatSidebar.ts:102
 msgid "Fix grammar, spelling, and punctuation errors"
 msgstr "Полагодити граматичні, правописні та пунктуаційні помилки"
 
-#: src/control/Control.AIChatSidebar.ts:107
+#: src/control/Control.AIChatSidebar.ts:118
 msgid "Natural"
 msgstr "Природний"
 
-#: src/control/Control.AIChatSidebar.ts:108
+#: src/control/Control.AIChatSidebar.ts:119
 msgid "Formal"
 msgstr "Формальний"
 
-#: src/control/Control.AIChatSidebar.ts:109
+#: src/control/Control.AIChatSidebar.ts:120
 msgid "Short"
 msgstr "Короткий"
 
-#: src/control/Control.AIChatSidebar.ts:110
+#: src/control/Control.AIChatSidebar.ts:121
 msgid "Friendly"
 msgstr "Дружній"
 
-#: src/control/Control.AIChatSidebar.ts:111
+#: src/control/Control.AIChatSidebar.ts:122
 msgid "Professional"
 msgstr "Професійний"
 
-#: src/control/Control.AIChatSidebar.ts:112
+#: src/control/Control.AIChatSidebar.ts:123
 msgid "Casual"
 msgstr "Звичайний"
 
-#: src/control/Control.AIChatSidebar.ts:338
+#: src/control/Control.AIChatSidebar.ts:362
 msgid "Unknown"
 msgstr "Невідомий"
 
-#: src/control/Control.AIChatSidebar.ts:340
+#: src/control/Control.AIChatSidebar.ts:364
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
@@ -1392,290 +1407,290 @@ msgstr ""
 "Етичний рейтинг ШІ: {0} ({1}). Засновуючись на ліцензії з відкритим кодом, "
 "власним-хостингом та на даних для тренування."
 
-#: src/control/Control.AIChatSidebar.ts:423
+#: src/control/Control.AIChatSidebar.ts:447
 msgid "Your message"
 msgstr "Ваше повідомлення"
 
-#: src/control/Control.AIChatSidebar.ts:425
+#: src/control/Control.AIChatSidebar.ts:449
 msgid "Action requiring approval"
 msgstr "Дія потребує підтвердження"
 
-#: src/control/Control.AIChatSidebar.ts:427
+#: src/control/Control.AIChatSidebar.ts:451
 msgid "Error message"
 msgstr "Повідомлення з помилкою"
 
-#: src/control/Control.AIChatSidebar.ts:428
+#: src/control/Control.AIChatSidebar.ts:452
 msgid "AI response"
 msgstr "Відповідь ШІ"
 
-#: src/control/Control.AIChatSidebar.ts:502
+#: src/control/Control.AIChatSidebar.ts:526
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
 "Зміст згенерований за допомогою зовнішнього ШІ сервісу ({0}). Будь-ласка "
 "перегляньте перед використанням."
 
-#: src/control/Control.AIChatSidebar.ts:505
+#: src/control/Control.AIChatSidebar.ts:529
 msgid "Content generated by an external AI service. Please review before use."
 msgstr ""
 "Зміст згенерований за допомогою зовнішнього ШІ сервісу. Будь-ласка "
 "перегляньте перед використанням."
 
-#: src/control/Control.AIChatSidebar.ts:583
+#: src/control/Control.AIChatSidebar.ts:607
 msgid "New conversation"
 msgstr "Нова розмова"
 
-#: src/control/Control.AIChatSidebar.ts:614
+#: src/control/Control.AIChatSidebar.ts:638
 msgid "Ask AI anything about your document..."
 msgstr "Запитайте ШІ будь-що про ваш документ..."
 
-#: src/control/Control.AIChatSidebar.ts:672
+#: src/control/Control.AIChatSidebar.ts:696
 msgid "Loading"
 msgstr "Завантаження"
 
-#: src/control/Control.AIChatSidebar.ts:685
+#: src/control/Control.AIChatSidebar.ts:709
 msgid "Chat messages"
 msgstr "Повідомлення чату"
 
-#: src/control/Control.AIChatSidebar.ts:711
+#: src/control/Control.AIChatSidebar.ts:735
 msgid "AI generated image"
 msgstr "Зображення згенероване ШІ"
 
-#: src/control/Control.AIChatSidebar.ts:746
+#: src/control/Control.AIChatSidebar.ts:770
 msgid "Retry"
 msgstr "Повторити"
 
-#: src/control/Control.AIChatSidebar.ts:770
-#: src/control/Control.AIChatSidebar.ts:803
+#: src/control/Control.AIChatSidebar.ts:794
+#: src/control/Control.AIChatSidebar.ts:827
 msgid "Insert at cursor"
 msgstr "Вставити на курсорі"
 
-#: src/control/Control.AIChatSidebar.ts:779
-#: src/control/Control.AIChatSidebar.ts:810
+#: src/control/Control.AIChatSidebar.ts:803
+#: src/control/Control.AIChatSidebar.ts:834
 msgid "Copy to clipboard"
 msgstr "Скопіювати до буферу"
 
-#: src/control/Control.AIChatSidebar.ts:831
+#: src/control/Control.AIChatSidebar.ts:854
+msgid "Using selected text as context"
+msgstr "Використання виділеного тексту як змісту"
+
+#: src/control/Control.AIChatSidebar.ts:861
 msgid "Ask AI..."
 msgstr "Запитати ШІ..."
 
-#: src/control/Control.AIChatSidebar.ts:834
+#: src/control/Control.AIChatSidebar.ts:864
 msgid "Message input"
 msgstr "Введення повідомлення"
 
-#: src/control/Control.AIChatSidebar.ts:850
+#: src/control/Control.AIChatSidebar.ts:880
 msgid "Stop generating"
 msgstr "Зупинити генерацію"
 
-#: src/control/Control.AIChatSidebar.ts:851
+#: src/control/Control.AIChatSidebar.ts:881
 msgid "Send message"
 msgstr "Відправити повідомлення"
 
-#: src/control/Control.AIChatSidebar.ts:865
-#: src/control/Control.AIChatSidebar.ts:878
+#: src/control/Control.AIChatSidebar.ts:895
+#: src/control/Control.AIChatSidebar.ts:908
 msgid "Set tone"
 msgstr "Встановити тон"
 
-#: src/control/Control.AIChatSidebar.ts:889
+#: src/control/Control.AIChatSidebar.ts:919
 msgid "Set tone of voice"
 msgstr "Встановити тон голосу"
 
-#: src/control/Control.AIChatSidebar.ts:890
+#: src/control/Control.AIChatSidebar.ts:920
 msgid "Tone of voice: {0}{1}"
 msgstr "Тон голосу: {0}{1}"
 
-#: src/control/Control.AIChatSidebar.ts:892
+#: src/control/Control.AIChatSidebar.ts:922
 msgid "with emoji"
 msgstr "з емодзі"
 
-#: src/control/Control.AIChatSidebar.ts:934
-#: src/control/Control.AIChatSidebar.ts:984
-#: src/control/Control.AIChatSidebar.ts:1356
+#: src/control/Control.AIChatSidebar.ts:964
+#: src/control/Control.AIChatSidebar.ts:1014
+#: src/control/Control.AIChatSidebar.ts:1386
 msgid "tone"
 msgstr "тон"
 
-#: src/control/Control.AIChatSidebar.ts:947
-#: src/control/Control.AIChatSidebar.ts:1218
+#: src/control/Control.AIChatSidebar.ts:977
+#: src/control/Control.AIChatSidebar.ts:1248
 msgid "Tone of voice"
 msgstr "Тон голосу"
 
-#: src/control/Control.AIChatSidebar.ts:953
+#: src/control/Control.AIChatSidebar.ts:983
 msgid "Reset voice"
 msgstr "Скинути голос"
 
-#: src/control/Control.AIChatSidebar.ts:956
+#: src/control/Control.AIChatSidebar.ts:986
 msgid "Reset tone of voice"
 msgstr "Скинути тон голосу"
 
-#: src/control/Control.AIChatSidebar.ts:972
+#: src/control/Control.AIChatSidebar.ts:1002
 msgid "Your tones"
 msgstr "Ваші тони"
 
-#: src/control/Control.AIChatSidebar.ts:989
+#: src/control/Control.AIChatSidebar.ts:1019
 msgid "Edit tone"
 msgstr "Редагувати тон"
 
-#: src/control/Control.AIChatSidebar.ts:1006
+#: src/control/Control.AIChatSidebar.ts:1036
 msgid "+ Add my own voice"
 msgstr "+ Додати мій власний голос"
 
-#: src/control/Control.AIChatSidebar.ts:1008
+#: src/control/Control.AIChatSidebar.ts:1038
 msgid "Add a custom tone of voice"
 msgstr "Додати користувацький тон голосу"
 
-#: src/control/Control.AIChatSidebar.ts:1019
+#: src/control/Control.AIChatSidebar.ts:1049
 msgid "Emojify"
 msgstr "Емодзіювати"
 
-#: src/control/Control.AIChatSidebar.ts:1025
+#: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:162
 msgid "On"
 msgstr "Увімкнено"
 
-#: src/control/Control.AIChatSidebar.ts:1025
+#: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:164
 #: src/control/jsdialog/Definitions.Menu.ts:1824
 msgid "Off"
 msgstr "Вимкнено"
 
-#: src/control/Control.AIChatSidebar.ts:1028
+#: src/control/Control.AIChatSidebar.ts:1058
 msgid "Toggle emojify"
 msgstr "Перемикач емодзіювання"
 
-#: src/control/Control.AIChatSidebar.ts:1189
+#: src/control/Control.AIChatSidebar.ts:1219
 msgid "Use icon"
 msgstr "Використовувати піктограму"
 
-#: src/control/Control.AIChatSidebar.ts:1199
+#: src/control/Control.AIChatSidebar.ts:1229
 msgid "Pick another emoji"
 msgstr "Обрати іншу емодзі"
 
-#: src/control/Control.AIChatSidebar.ts:1213
+#: src/control/Control.AIChatSidebar.ts:1243
 msgid "Back to tones"
 msgstr "Назад до тонів"
 
-#: src/control/Control.AIChatSidebar.ts:1226
+#: src/control/Control.AIChatSidebar.ts:1256
 msgid "Icon"
 msgstr "Піктограма"
 
-#: src/control/Control.AIChatSidebar.ts:1238
+#: src/control/Control.AIChatSidebar.ts:1268
 msgid "Name your tone"
 msgstr "Назвіть ваш тон"
 
-#: src/control/Control.AIChatSidebar.ts:1245
+#: src/control/Control.AIChatSidebar.ts:1275
 msgid "e.g. Quick reply"
 msgstr "приклад - Швидка відповідь"
 
-#: src/control/Control.AIChatSidebar.ts:1247
+#: src/control/Control.AIChatSidebar.ts:1277
 msgid "Tone name"
 msgstr "Назва тону"
 
-#: src/control/Control.AIChatSidebar.ts:1252
+#: src/control/Control.AIChatSidebar.ts:1282
 msgid "Describe how AI should write"
 msgstr "Опишіть як ШІ повинен писати"
 
-#: src/control/Control.AIChatSidebar.ts:1260
+#: src/control/Control.AIChatSidebar.ts:1290
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
 "Писати короткі, прямі речення. Використовувати просту мову та оминати "
 "маленькі розмови."
 
-#: src/control/Control.AIChatSidebar.ts:1264
+#: src/control/Control.AIChatSidebar.ts:1294
 msgid "Tone description"
 msgstr "Опис тону"
 
-#: src/control/Control.AIChatSidebar.ts:1273
-#: src/control/Control.AIChatSidebar.ts:1335
-#: src/control/Control.AIChatSidebar.ts:1377
+#: src/control/Control.AIChatSidebar.ts:1303
+#: src/control/Control.AIChatSidebar.ts:1365
+#: src/control/Control.AIChatSidebar.ts:1407
 msgid "Delete tone"
 msgstr "Видалити тон"
 
-#: src/control/Control.AIChatSidebar.ts:1275
+#: src/control/Control.AIChatSidebar.ts:1305
 msgid "Delete this tone"
 msgstr "Видалити цей тон"
 
-#: src/control/Control.AIChatSidebar.ts:1288
+#: src/control/Control.AIChatSidebar.ts:1318
 msgid "Save voice"
 msgstr "Зберегти голос"
 
-#: src/control/Control.AIChatSidebar.ts:1290
+#: src/control/Control.AIChatSidebar.ts:1320
 msgid "Save tone of voice"
 msgstr "Зберегти тон голосу"
 
-#: src/control/Control.AIChatSidebar.ts:1305
+#: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
 msgstr "Пошук емодзі"
 
-#: src/control/Control.AIChatSidebar.ts:1306
+#: src/control/Control.AIChatSidebar.ts:1336
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
 msgstr "Обрати емодзі"
 
-#: src/control/Control.AIChatSidebar.ts:1330
+#: src/control/Control.AIChatSidebar.ts:1360
 msgid "Delete tone confirmation"
 msgstr "Видалити підтвердження тону"
 
-#: src/control/Control.AIChatSidebar.ts:1341
+#: src/control/Control.AIChatSidebar.ts:1371
 msgid "This tone of voice will be deleted"
 msgstr "Цей тон голосу буде видалений"
 
-#: src/control/Control.AIChatSidebar.ts:1370
+#: src/control/Control.AIChatSidebar.ts:1400
 msgid "Cancel delete"
 msgstr "Скасувати видалення"
 
-#: src/control/Control.AIChatSidebar.ts:1397
-#: src/control/Control.AIChatSidebar.ts:1457
+#: src/control/Control.AIChatSidebar.ts:1427
+#: src/control/Control.AIChatSidebar.ts:1487
 msgid "You have reached the maximum of {0} custom tones."
 msgstr "Ви досягли максимуму з {0} користувацьких тонів."
 
-#: src/control/Control.AIChatSidebar.ts:1631
-msgid "Using selected text as context"
-msgstr "Використання виділеного тексту як змісту"
-
-#: src/control/Control.AIChatSidebar.ts:1639
+#: src/control/Control.AIChatSidebar.ts:1661
 msgid "Diagnose formula error"
 msgstr "Діагностувати помилку формули"
 
-#: src/control/Control.AIChatSidebar.ts:1645
+#: src/control/Control.AIChatSidebar.ts:1667
 msgid "Sanity check data"
 msgstr "Перевірка даних на осудність"
 
-#: src/control/Control.AIChatSidebar.ts:1651
+#: src/control/Control.AIChatSidebar.ts:1673
 msgid "Create a formula"
 msgstr "Створити формулу"
 
-#: src/control/Control.AIChatSidebar.ts:1658
+#: src/control/Control.AIChatSidebar.ts:1680
 msgid "Create slides"
 msgstr "Створити слайди"
 
-#: src/control/Control.AIChatSidebar.ts:1690
+#: src/control/Control.AIChatSidebar.ts:1712
 msgid "See less"
 msgstr "Бачити менше"
 
-#: src/control/Control.AIChatSidebar.ts:1690
+#: src/control/Control.AIChatSidebar.ts:1712
 msgid "See more"
 msgstr "Бачити більше"
 
-#: src/control/Control.AIChatSidebar.ts:1800
+#: src/control/Control.AIChatSidebar.ts:1822
 msgid "Image inserted at cursor"
 msgstr "Зображення вставлене на курсорі"
 
-#: src/control/Control.AIChatSidebar.ts:1819
+#: src/control/Control.AIChatSidebar.ts:1841
 msgid "Text inserted at cursor"
 msgstr "Текст вставлений на курсорі"
 
-#: src/control/Control.AIChatSidebar.ts:1893
+#: src/control/Control.AIChatSidebar.ts:1920
 msgid "Approaching message length limit"
 msgstr "Наближення до ліміту довжини повідомлення"
 
-#: src/control/Control.AIChatSidebar.ts:1947
+#: src/control/Control.AIChatSidebar.ts:1974
 msgid "Request timeout"
 msgstr "Тайм-аут запиту"
 
-#: src/control/Control.AIChatSidebar.ts:1962
-#: src/control/Control.AIChatSidebar.ts:2797
+#: src/control/Control.AIChatSidebar.ts:1989
+#: src/control/Control.AIChatSidebar.ts:2917
 msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
@@ -1683,157 +1698,161 @@ msgstr ""
 "Виділення містить зображення та інший не текстовий вміст, який не може бути "
 "відправлений як контекст."
 
-#: src/control/Control.AIChatSidebar.ts:2049
+#: src/control/Control.AIChatSidebar.ts:2076
 msgid "Message is too long. Please shorten it and try again."
 msgstr ""
 "Повідомлення занадто довге. Будь-ласка зробіть його меншим та спробуйте ще "
 "раз."
 
-#: src/control/Control.AIChatSidebar.ts:2104
+#: src/control/Control.AIChatSidebar.ts:2131
 msgid "Error: "
 msgstr "Помилка: "
 
-#: src/control/Control.AIChatSidebar.ts:2126
+#: src/control/Control.AIChatSidebar.ts:2161
 msgid "Generated image"
 msgstr "Згенероване зображення"
 
-#: src/control/Control.AIChatSidebar.ts:2137
+#: src/control/Control.AIChatSidebar.ts:2173
 msgid "AI request failed"
 msgstr "Запит до ШІ був невдалий"
 
-#: src/control/Control.AIChatSidebar.ts:2154
+#: src/control/Control.AIChatSidebar.ts:2190
 msgid "The AI assistant"
 msgstr "ШІ асистент"
 
-#: src/control/Control.AIChatSidebar.ts:2167
+#: src/control/Control.AIChatSidebar.ts:2203
 msgid "Do you want to proceed?"
 msgstr "Чи ви бажаєте продовжити?"
 
-#: src/control/Control.AIChatSidebar.ts:2170
+#: src/control/Control.AIChatSidebar.ts:2206
 msgid "%1 wants to inspect your document. Do you want to proceed?"
 msgstr "%1 хоче переглянути ваш документ. Чи ви бажаєте продовжити?"
 
-#: src/control/Control.AIChatSidebar.ts:2174
+#: src/control/Control.AIChatSidebar.ts:2210
 msgid "Modify document structure"
 msgstr "Модифікувати структуру документу"
 
-#: src/control/Control.AIChatSidebar.ts:2176
+#: src/control/Control.AIChatSidebar.ts:2212
 msgid "%1 wants to modify your document:"
 msgstr "%1 хоче модифікувати ваш документ:"
 
-#: src/control/Control.AIChatSidebar.ts:2180
-#: src/control/Control.AIChatSidebar.ts:2191
+#: src/control/Control.AIChatSidebar.ts:2216
+#: src/control/Control.AIChatSidebar.ts:2227
 msgid "Do you want to apply this change?"
 msgstr "Чи ви бажаєте застосувати ці зміни?"
 
-#: src/control/Control.AIChatSidebar.ts:2182
+#: src/control/Control.AIChatSidebar.ts:2218
 msgid "Set cell formula"
 msgstr "Встановити формулу клітинки"
 
-#: src/control/Control.AIChatSidebar.ts:2184
+#: src/control/Control.AIChatSidebar.ts:2220
 msgid "%1 wants to set a formula in your spreadsheet:"
 msgstr "%1 хоче встановити формулу в вашій електронній таблиці:"
 
-#: src/control/Control.AIChatSidebar.ts:2194
+#: src/control/Control.AIChatSidebar.ts:2230
 msgid "%1 wants to perform an action. Do you want to proceed?"
 msgstr "%1 хоче зробити дію. Чи ви бажаєте продовжити?"
 
-#: src/control/Control.AIChatSidebar.ts:2225
+#: src/control/Control.AIChatSidebar.ts:2261
 msgid "Approve"
 msgstr "Дозволити"
 
-#: src/control/Control.AIChatSidebar.ts:2227
+#: src/control/Control.AIChatSidebar.ts:2263
 msgid "Approve action"
 msgstr "Дозволити дію"
 
-#: src/control/Control.AIChatSidebar.ts:2234
+#: src/control/Control.AIChatSidebar.ts:2270
 msgid "Reject"
 msgstr "Відмовити"
 
-#: src/control/Control.AIChatSidebar.ts:2236
+#: src/control/Control.AIChatSidebar.ts:2272
 msgid "Reject action"
 msgstr "Відмовити дію"
 
-#: src/control/Control.AIChatSidebar.ts:2255
+#: src/control/Control.AIChatSidebar.ts:2291
 msgid "Applying changes..."
 msgstr "Застосування змін..."
 
-#: src/control/Control.AIChatSidebar.ts:2258
+#: src/control/Control.AIChatSidebar.ts:2294
 msgid "Change rejected"
 msgstr "Зміну відмовлено"
 
-#: src/control/Control.AIChatSidebar.ts:2304
+#: src/control/Control.AIChatSidebar.ts:2384
+msgid "Use section: "
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
 msgstr "Тайм-аут обраного фрагменту"
 
-#: src/control/Control.AIChatSidebar.ts:2323
+#: src/control/Control.AIChatSidebar.ts:2441
 msgid "Failed to parse selection content"
 msgstr "При спробі обробити обраний зміст сталася помилка"
 
-#: src/control/Control.AIChatSidebar.ts:2569
+#: src/control/Control.AIChatSidebar.ts:2689
 msgid "Formula analysis timeout"
 msgstr "Тайм-аут аналізу формули"
 
-#: src/control/Control.AIChatSidebar.ts:2588
+#: src/control/Control.AIChatSidebar.ts:2708
 msgid "Analyzing formula dependencies..."
 msgstr "Аналіз залежностей формули..."
 
-#: src/control/Control.AIChatSidebar.ts:2596
+#: src/control/Control.AIChatSidebar.ts:2716
 msgid "Failed to analyze formula."
 msgstr "При аналізі формули сталася помилка."
 
-#: src/control/Control.AIChatSidebar.ts:2606
+#: src/control/Control.AIChatSidebar.ts:2726
 msgid "The selected cell does not contain a formula."
 msgstr "Обрана клітинка не містить формули."
 
-#: src/control/Control.AIChatSidebar.ts:2608
+#: src/control/Control.AIChatSidebar.ts:2728
 msgid "The selected cell does not have a formula error."
 msgstr "Обрана клітинка не містить помилки формули."
 
-#: src/control/Control.AIChatSidebar.ts:2617
+#: src/control/Control.AIChatSidebar.ts:2737
 msgid "Diagnose formula error in"
 msgstr "Діагностувати помилку формули в"
 
-#: src/control/Control.AIChatSidebar.ts:2638
+#: src/control/Control.AIChatSidebar.ts:2758
 msgid "I have a formula error in my spreadsheet."
 msgstr "Я маю помилку формули в моїй електронній таблиці."
 
-#: src/control/Control.AIChatSidebar.ts:2640
+#: src/control/Control.AIChatSidebar.ts:2760
 msgid "Cell"
 msgstr "Комірка"
 
-#: src/control/Control.AIChatSidebar.ts:2644
+#: src/control/Control.AIChatSidebar.ts:2764
 msgid "Sheet"
 msgstr "Аркуш"
 
-#: src/control/Control.AIChatSidebar.ts:2648
+#: src/control/Control.AIChatSidebar.ts:2768
 msgid "contains"
 msgstr "містить"
 
-#: src/control/Control.AIChatSidebar.ts:2650
+#: src/control/Control.AIChatSidebar.ts:2770
 #: src/control/Control.FormulaBarJSDialog.js:83
 #: src/control/Control.NotebookbarWriter.js:128
 #: src/control/Control.NotebookbarWriter.js:1585
 msgid "Formula"
 msgstr "Формула"
 
-#: src/control/Control.AIChatSidebar.ts:2654
+#: src/control/Control.AIChatSidebar.ts:2774
 msgid "Referenced cells"
 msgstr "Посилання на комірки"
 
-#: src/control/Control.AIChatSidebar.ts:2660
+#: src/control/Control.AIChatSidebar.ts:2780
 msgid "Please diagnose why this formula produces the"
 msgstr "Будь-ласка діагностуйте чому ця формула створює"
 
-#: src/control/Control.AIChatSidebar.ts:2664
+#: src/control/Control.AIChatSidebar.ts:2784
 msgid "error."
 msgstr "помилку."
 
-#: src/control/Control.AIChatSidebar.ts:2666
+#: src/control/Control.AIChatSidebar.ts:2786
 msgid "Explain the root cause and suggest how to fix it."
 msgstr "Поясніть основну причини та порадьте як її полагодити."
 
-#: src/control/Control.AIChatSidebar.ts:2670
+#: src/control/Control.AIChatSidebar.ts:2790
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
@@ -1841,59 +1860,59 @@ msgstr ""
 "Коли посилаєтесь на певні комірки, зробіть формат адреси клітинки як "
 "посилання на яке можна натиснути: [A1](cell://A1)."
 
-#: src/control/Control.AIChatSidebar.ts:2685
+#: src/control/Control.AIChatSidebar.ts:2805
 msgid "formula"
 msgstr "формула"
 
-#: src/control/Control.AIChatSidebar.ts:2687
+#: src/control/Control.AIChatSidebar.ts:2807
 msgid "ERROR"
 msgstr "ПОМИЛКА"
 
-#: src/control/Control.AIChatSidebar.ts:2701
+#: src/control/Control.AIChatSidebar.ts:2821
 msgid "value"
 msgstr "значення"
 
-#: src/control/Control.AIChatSidebar.ts:2711
+#: src/control/Control.AIChatSidebar.ts:2831
 msgid "text"
 msgstr "текст"
 
-#: src/control/Control.AIChatSidebar.ts:2716
+#: src/control/Control.AIChatSidebar.ts:2836
 msgid "empty"
 msgstr "порожньо"
 
-#: src/control/Control.AIChatSidebar.ts:2718
+#: src/control/Control.AIChatSidebar.ts:2838
 msgid "range"
 msgstr "діапазон"
 
-#: src/control/Control.AIChatSidebar.ts:2720
+#: src/control/Control.AIChatSidebar.ts:2840
 msgid "errors in"
 msgstr "помилки в"
 
-#: src/control/Control.AIChatSidebar.ts:2723
+#: src/control/Control.AIChatSidebar.ts:2843
 msgid "only partially scanned"
 msgstr "тільки частково скановані"
 
-#: src/control/Control.AIChatSidebar.ts:2732
+#: src/control/Control.AIChatSidebar.ts:2852
 msgid "circular reference"
 msgstr "циклічне посилання"
 
-#: src/control/Control.AIChatSidebar.ts:2782
+#: src/control/Control.AIChatSidebar.ts:2902
 msgid "Select the data you want to sanity-check first."
 msgstr "Оберіть дані які ви хочете спершу перевірити на осудність."
 
-#: src/control/Control.AIChatSidebar.ts:2787
+#: src/control/Control.AIChatSidebar.ts:2907
 msgid "Analyzing selected data..."
 msgstr "Аналіз обраних даних..."
 
-#: src/control/Control.AIChatSidebar.ts:2800
+#: src/control/Control.AIChatSidebar.ts:2920
 msgid "Failed to extract spreadsheet data."
 msgstr "Помилка при отримані даних з електронної таблиці."
 
-#: src/control/Control.AIChatSidebar.ts:2809
+#: src/control/Control.AIChatSidebar.ts:2929
 msgid "No data found in selection."
 msgstr "Не знайдено даних у виділені."
 
-#: src/control/Control.AIChatSidebar.ts:2839
+#: src/control/Control.AIChatSidebar.ts:2959
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
@@ -1901,7 +1920,7 @@ msgstr ""
 "Опишіть слайди які ви хочете створити. Наприклад: \"5 слайдів з переглядом "
 "відновлювальної енергії\" або \"Знайомство з нашою командою\"."
 
-#: src/control/Control.AIChatSidebar.ts:2866
+#: src/control/Control.AIChatSidebar.ts:2986
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
@@ -1910,7 +1929,7 @@ msgstr ""
 "стовпчика B\" або \"Сума всіх значень де в стовпчику А значення більше ніж "
 "100\"."
 
-#: src/control/Control.AIChatSidebar.ts:2876
+#: src/control/Control.AIChatSidebar.ts:2996
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
@@ -1918,7 +1937,7 @@ msgstr ""
 "Прочитати номери рядків з колонки \"Рядок\" - не рахувати чи оцінювати "
 "позиції рядків."
 
-#: src/control/Control.AIChatSidebar.ts:2880
+#: src/control/Control.AIChatSidebar.ts:3000
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
@@ -1926,7 +1945,7 @@ msgstr ""
 "Щоб визначити стовпчик комірки, знайдіть значення яке підходить під літеру "
 "стовпчика у рядку заголовку - не вгадуйте."
 
-#: src/control/Control.AIChatSidebar.ts:2884
+#: src/control/Control.AIChatSidebar.ts:3004
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
@@ -1934,7 +1953,7 @@ msgstr ""
 "Зробіть посилання на комірку за допомогою поєднання його заголовку стовпчика "
 "та номеру рядку (наприклад, стовпчик B + рядок 2 = B2)."
 
-#: src/control/Control.AIChatSidebar.ts:2887
+#: src/control/Control.AIChatSidebar.ts:3007
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
@@ -1942,15 +1961,15 @@ msgstr ""
 "Коли посилаєтесь на якісь певні клітинки, зробіть кожну клітинку у форматі "
 "посилання на яке можна натиснути: [B2](cell://B2)."
 
-#: src/control/Control.AIChatSidebar.ts:2893
+#: src/control/Control.AIChatSidebar.ts:3013
 msgid "Sanity check the following spreadsheet data."
 msgstr "Перевірка на осудність наступних даних електронної таблиці."
 
-#: src/control/Control.AIChatSidebar.ts:2894
+#: src/control/Control.AIChatSidebar.ts:3014
 msgid "Please analyze this data for:"
 msgstr "Будь-ласка проаналізуйте ці дані на:"
 
-#: src/control/Control.AIChatSidebar.ts:2898
+#: src/control/Control.AIChatSidebar.ts:3018
 msgid ""
 "Benford's Law violations — check if leading digit distribution of numeric "
 "values deviates significantly from the expected distribution, which may "
@@ -1960,7 +1979,7 @@ msgstr ""
 "значень суттєво відхиляється від очікуваного розподілу, що може свідчити про "
 "маніпуляції з даними."
 
-#: src/control/Control.AIChatSidebar.ts:2904
+#: src/control/Control.AIChatSidebar.ts:3024
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
@@ -1968,7 +1987,7 @@ msgstr ""
 "Статистичні викиди - визначте значення які суттєво відхиляються від їх "
 "стовпчиків або груп."
 
-#: src/control/Control.AIChatSidebar.ts:2910
+#: src/control/Control.AIChatSidebar.ts:3030
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
@@ -2018,7 +2037,7 @@ msgstr ""
 "Вибране зовнішнє джерело даних заборонено. Зверніться до системного "
 "адміністратора."
 
-#: src/control/Control.AlertDialog.js:88 src/map/Clipboard.js:1471
+#: src/control/Control.AlertDialog.js:88 src/map/Clipboard.js:1474
 msgid "Don’t show this again"
 msgstr "Більше не показувати"
 
@@ -2047,7 +2066,7 @@ msgid "Open"
 msgstr "Відкрити"
 
 #: src/control/Control.BackstageView.ts:120
-#: src/control/Control.Notebookbar.js:725
+#: src/control/Control.Notebookbar.js:730
 #: src/control/Control.NotebookbarCalc.js:217
 #: src/control/Control.NotebookbarCalc.js:251
 #: src/control/Control.NotebookbarDraw.js:224
@@ -2084,13 +2103,13 @@ msgid "Sign"
 msgstr "Підписати"
 
 #: src/control/Control.BackstageView.ts:182 src/control/Control.Menubar.ts:126
-#: src/control/Control.Menubar.ts:469 src/control/Control.Menubar.ts:646
-#: src/control/Control.Menubar.ts:796
+#: src/control/Control.Menubar.ts:470 src/control/Control.Menubar.ts:648
+#: src/control/Control.Menubar.ts:799
 #: src/control/Control.NotebookbarCalc.js:398
 #: src/control/Control.NotebookbarDraw.js:421
 #: src/control/Control.NotebookbarImpress.js:455
 #: src/control/Control.NotebookbarWriter.js:431 src/control/IFrameDialog.js:35
-#: src/map/handler/Map.Settings.ts:75
+#: src/map/handler/Map.Settings.ts:74
 msgid "Options"
 msgstr "Параметри"
 
@@ -2138,7 +2157,7 @@ msgid "Sheets"
 msgstr "Аркуші"
 
 #: src/control/Control.BackstageView.ts:551
-#: src/control/Control.NavigatorPanel.ts:192
+#: src/control/Control.NavigatorPanel.ts:202
 #: src/control/Control.NotebookbarImpress.js:1475
 #: src/slideshow/PresenterConsole.js:35
 msgid "Slides"
@@ -2202,6 +2221,7 @@ msgid "More Templates"
 msgstr "Більше Шаблонів"
 
 #: src/control/backstage/HomeView.tsx:70
+#: src/control/jsdialog/Widget.TreeView.ts:378
 msgid "Name"
 msgstr "Назва"
 
@@ -2217,8 +2237,8 @@ msgstr "Немає шаблонів, що відповідають вашому 
 msgid "Search templates"
 msgstr "Пошук шаблонів"
 
-#: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:390
-#: src/control/Control.Menubar.ts:1389
+#: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:391
+#: src/control/Control.Menubar.ts:1393
 #: src/control/Control.NotebookbarCalc.js:351
 #: src/control/Control.NotebookbarDraw.js:371
 #: src/control/Control.NotebookbarImpress.js:408
@@ -2303,7 +2323,7 @@ msgstr "Звантажити вміст буферу обміну"
 
 #: src/control/Control.DownloadProgress.js:87
 #: src/control/Control.DownloadProgress.js:112
-#: src/control/Control.PartsPreview.js:347 src/map/Clipboard.js:1532
+#: src/control/Control.PartsPreview.js:351 src/map/Clipboard.js:1535
 msgid "Copy"
 msgstr "Скопіювати"
 
@@ -2674,112 +2694,112 @@ msgstr ""
 "Неактивний документ - будь-ласка натисніть для перезавантаження і "
 "відновлення редагування"
 
-#: src/control/Control.JSDialog.js:408
+#: src/control/Control.JSDialog.js:414
 msgid "Close dialog"
 msgstr "Закрити діалогове вікно"
 
-#: src/control/Control.JSDialogBuilder.js:390
+#: src/control/Control.JSDialogBuilder.js:398
 msgid "Solid"
 msgstr "Суцільний"
 
-#: src/control/Control.JSDialogBuilder.js:393
+#: src/control/Control.JSDialogBuilder.js:401
 msgid "Linear"
 msgstr "Лінійний"
 
-#: src/control/Control.JSDialogBuilder.js:396
+#: src/control/Control.JSDialogBuilder.js:404
 msgid "Axial"
 msgstr "Осьовий"
 
-#: src/control/Control.JSDialogBuilder.js:399
+#: src/control/Control.JSDialogBuilder.js:407
 msgid "Radial"
 msgstr "Радіальний"
 
-#: src/control/Control.JSDialogBuilder.js:402
+#: src/control/Control.JSDialogBuilder.js:410
 msgid "Ellipsoid"
 msgstr "Еліпсоїд"
 
-#: src/control/Control.JSDialogBuilder.js:406
+#: src/control/Control.JSDialogBuilder.js:414
 msgid "Quadratic"
 msgstr "Квадратичний"
 
-#: src/control/Control.JSDialogBuilder.js:409
+#: src/control/Control.JSDialogBuilder.js:417
 msgid "Square"
 msgstr "Прямокутний"
 
-#: src/control/Control.JSDialogBuilder.js:412
+#: src/control/Control.JSDialogBuilder.js:420
 msgid "Fixed size"
 msgstr "Фіксований розмір"
 
-#: src/control/Control.JSDialogBuilder.js:1137
+#: src/control/Control.JSDialogBuilder.js:1145
 msgid "From"
 msgstr "Від"
 
-#: src/control/Control.JSDialogBuilder.js:1140
+#: src/control/Control.JSDialogBuilder.js:1148
 msgid "To"
 msgstr "До"
 
-#: src/control/Control.JSDialogBuilder.js:1143
+#: src/control/Control.JSDialogBuilder.js:1151
 #: src/control/jsdialog/Widget.ColorPicker.ts:226
 msgid "Color"
 msgstr "Колір"
 
-#: src/control/Control.JSDialogBuilder.js:1178
+#: src/control/Control.JSDialogBuilder.js:1186
 #: src/control/Control.NotebookbarBuilder.js:165
 msgid "Font Name"
 msgstr "Назва Шрифту"
 
-#: src/control/Control.JSDialogBuilder.js:1180
+#: src/control/Control.JSDialogBuilder.js:1188
 msgid "Font Size"
 msgstr "Розмір Шрифту"
 
-#: src/control/Control.JSDialogBuilder.js:1182
+#: src/control/Control.JSDialogBuilder.js:1190
 #: src/control/Control.NotebookbarCalc.js:982
-#: src/control/Control.NotebookbarCalc.js:2753
+#: src/control/Control.NotebookbarCalc.js:2760
 #: src/control/Control.NotebookbarDraw.js:1773
 #: src/control/Control.NotebookbarImpress.js:1376
 #: src/control/Control.NotebookbarWriter.js:1082
 msgid "Style"
 msgstr "Стиль"
 
-#: src/control/Control.JSDialogBuilder.js:1568
+#: src/control/Control.JSDialogBuilder.js:1601
 msgid "Toggle dropdown"
 msgstr "Перемкнути спадний список"
 
-#: src/control/Control.JSDialogBuilder.js:1570
+#: src/control/Control.JSDialogBuilder.js:1603
 msgid "Dialog dropdown"
 msgstr "Діалоговий спадний список"
 
-#: src/control/Control.JSDialogBuilder.js:1572
+#: src/control/Control.JSDialogBuilder.js:1605
 #: src/control/Control.NotebookbarWriter.js:1629
 msgid "Dropdown"
 msgstr "Спадний список"
 
-#: src/control/Control.JSDialogBuilder.js:1574
+#: src/control/Control.JSDialogBuilder.js:1607
 msgid "Apply action dropdown"
 msgstr "Спадний список застосувати дію"
 
-#: src/control/Control.JSDialogBuilder.js:1600
+#: src/control/Control.JSDialogBuilder.js:1633
 msgid "Open {name}"
 msgstr "Відкрити {name}"
 
-#: src/control/Control.JSDialogBuilder.js:1886
-#: src/control/Control.Menubar.ts:962
+#: src/control/Control.JSDialogBuilder.js:1919
+#: src/control/Control.Menubar.ts:966
 msgid "Rows"
 msgstr "Рядки"
 
-#: src/control/Control.JSDialogBuilder.js:1887
-#: src/control/Control.Menubar.ts:965
+#: src/control/Control.JSDialogBuilder.js:1920
+#: src/control/Control.Menubar.ts:969
 msgid "Columns"
 msgstr "Стовпчики"
 
-#: src/control/Control.JSDialogBuilder.js:1907
+#: src/control/Control.JSDialogBuilder.js:1940
 msgid "Insert Table"
 msgstr "Вставити таблицю"
 
-#: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:402
-#: src/control/Control.Menubar.ts:404 src/control/Control.Menubar.ts:406
-#: src/control/Control.Menubar.ts:605 src/control/Control.Menubar.ts:753
-#: src/control/Control.Menubar.ts:1055 src/control/Control.StatusBar.js:713
+#: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:403
+#: src/control/Control.Menubar.ts:405 src/control/Control.Menubar.ts:407
+#: src/control/Control.Menubar.ts:607 src/control/Control.Menubar.ts:756
+#: src/control/Control.Menubar.ts:1059 src/control/Control.StatusBar.js:713
 msgid "None (Do not check spelling)"
 msgstr "Немає (не перевіряти правопис)"
 
@@ -2797,41 +2817,41 @@ msgid "No search results found!"
 msgstr "Нічого не знайдено!"
 
 #: src/control/Control.Menubar.ts:101 src/control/Control.Menubar.ts:117
-#: src/control/Control.Menubar.ts:1097
+#: src/control/Control.Menubar.ts:1101
 #: src/control/Control.NotebookbarBuilder.js:379
 #: src/control/Control.NotebookbarBuilder.js:535
 msgid "ODF text document (.odt)"
 msgstr "ODF текстовий документ (.odt)"
 
 #: src/control/Control.Menubar.ts:102 src/control/Control.Menubar.ts:118
-#: src/control/Control.Menubar.ts:1098
+#: src/control/Control.Menubar.ts:1102
 #: src/control/Control.NotebookbarBuilder.js:391
 #: src/control/Control.NotebookbarBuilder.js:547
 msgid "Word 2003 Document (.doc)"
 msgstr "Документ Word 2003 (.doc)"
 
 #: src/control/Control.Menubar.ts:103 src/control/Control.Menubar.ts:119
-#: src/control/Control.Menubar.ts:1099
+#: src/control/Control.Menubar.ts:1103
 #: src/control/Control.NotebookbarBuilder.js:387
 #: src/control/Control.NotebookbarBuilder.js:543
 msgid "Word Document (.docx)"
 msgstr "Документ Word (.docx)"
 
 #: src/control/Control.Menubar.ts:104 src/control/Control.Menubar.ts:120
-#: src/control/Control.Menubar.ts:1100
+#: src/control/Control.Menubar.ts:1104
 #: src/control/Control.NotebookbarBuilder.js:383
 #: src/control/Control.NotebookbarBuilder.js:539
 msgid "Rich Text (.rtf)"
 msgstr "Текстовий документ Rich Text (.rtf)"
 
 #: src/control/Control.Menubar.ts:106 src/control/Control.Menubar.ts:114
-#: src/control/Control.Menubar.ts:448 src/control/Control.Menubar.ts:454
-#: src/control/Control.Menubar.ts:632 src/control/Control.Menubar.ts:639
-#: src/control/Control.Menubar.ts:781 src/control/Control.Menubar.ts:786
-#: src/control/Control.Menubar.ts:1084 src/control/Control.Menubar.ts:1094
-#: src/control/Control.Menubar.ts:1152 src/control/Control.Menubar.ts:1160
-#: src/control/Control.Menubar.ts:1217 src/control/Control.Menubar.ts:1224
-#: src/control/Control.Menubar.ts:1272 src/control/Control.Menubar.ts:1282
+#: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:455
+#: src/control/Control.Menubar.ts:634 src/control/Control.Menubar.ts:641
+#: src/control/Control.Menubar.ts:784 src/control/Control.Menubar.ts:789
+#: src/control/Control.Menubar.ts:1088 src/control/Control.Menubar.ts:1098
+#: src/control/Control.Menubar.ts:1156 src/control/Control.Menubar.ts:1164
+#: src/control/Control.Menubar.ts:1221 src/control/Control.Menubar.ts:1228
+#: src/control/Control.Menubar.ts:1276 src/control/Control.Menubar.ts:1286
 #: src/control/Control.NotebookbarCalc.js:320
 #: src/control/Control.NotebookbarImpress.js:377
 #: src/control/Control.NotebookbarWriter.js:338
@@ -2839,13 +2859,13 @@ msgid "Export as"
 msgstr "Експортувати як"
 
 #: src/control/Control.Menubar.ts:107 src/control/Control.Menubar.ts:115
-#: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:455
-#: src/control/Control.Menubar.ts:633 src/control/Control.Menubar.ts:640
-#: src/control/Control.Menubar.ts:782 src/control/Control.Menubar.ts:787
-#: src/control/Control.Menubar.ts:1085 src/control/Control.Menubar.ts:1095
-#: src/control/Control.Menubar.ts:1153 src/control/Control.Menubar.ts:1161
-#: src/control/Control.Menubar.ts:1218 src/control/Control.Menubar.ts:1225
-#: src/control/Control.Menubar.ts:1273 src/control/Control.Menubar.ts:1283
+#: src/control/Control.Menubar.ts:450 src/control/Control.Menubar.ts:456
+#: src/control/Control.Menubar.ts:635 src/control/Control.Menubar.ts:642
+#: src/control/Control.Menubar.ts:785 src/control/Control.Menubar.ts:790
+#: src/control/Control.Menubar.ts:1089 src/control/Control.Menubar.ts:1099
+#: src/control/Control.Menubar.ts:1157 src/control/Control.Menubar.ts:1165
+#: src/control/Control.Menubar.ts:1222 src/control/Control.Menubar.ts:1229
+#: src/control/Control.Menubar.ts:1277 src/control/Control.Menubar.ts:1287
 #: src/control/Control.NotebookbarBuilder.js:400
 #: src/control/Control.NotebookbarBuilder.js:441
 #: src/control/Control.NotebookbarBuilder.js:474
@@ -2858,14 +2878,14 @@ msgid "PDF Document (.pdf)"
 msgstr "Документ PDF (.pdf)"
 
 #: src/control/Control.Menubar.ts:108 src/control/Control.Menubar.ts:121
-#: src/control/Control.Menubar.ts:1086 src/control/Control.Menubar.ts:1101
+#: src/control/Control.Menubar.ts:1090 src/control/Control.Menubar.ts:1105
 #: src/control/Control.NotebookbarBuilder.js:395
 #: src/control/Control.NotebookbarBuilder.js:600
 msgid "EPUB (.epub)"
 msgstr "EPUB (.epub)"
 
 #: src/control/Control.Menubar.ts:109 src/control/Control.Menubar.ts:123
-#: src/control/Control.Menubar.ts:1087 src/control/Control.Menubar.ts:1102
+#: src/control/Control.Menubar.ts:1091 src/control/Control.Menubar.ts:1106
 #: src/control/Control.NotebookbarBuilder.js:414
 #: src/control/Control.NotebookbarBuilder.js:604
 msgid "Markdown (.md)"
@@ -2875,48 +2895,48 @@ msgstr "Документ Markdown (.md)"
 msgid "Rename Document"
 msgstr "Переназвати Документ"
 
-#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:452
-#: src/control/Control.Menubar.ts:636 src/control/Control.Menubar.ts:784
-#: src/control/Control.Menubar.ts:1089 src/control/Control.Menubar.ts:1155
-#: src/control/Control.Menubar.ts:1220 src/control/Control.Menubar.ts:1275
+#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:453
+#: src/control/Control.Menubar.ts:638 src/control/Control.Menubar.ts:787
+#: src/control/Control.Menubar.ts:1093 src/control/Control.Menubar.ts:1159
+#: src/control/Control.Menubar.ts:1224 src/control/Control.Menubar.ts:1279
 msgid "Share..."
 msgstr "Поширити..."
 
-#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:453
-#: src/control/Control.Menubar.ts:638 src/control/Control.Menubar.ts:785
-#: src/control/Control.Menubar.ts:1090 src/control/Control.Menubar.ts:1156
-#: src/control/Control.Menubar.ts:1222 src/control/Control.Menubar.ts:1276
+#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:454
+#: src/control/Control.Menubar.ts:640 src/control/Control.Menubar.ts:788
+#: src/control/Control.Menubar.ts:1094 src/control/Control.Menubar.ts:1160
+#: src/control/Control.Menubar.ts:1226 src/control/Control.Menubar.ts:1280
 msgid "See revision history"
 msgstr "Подивитись історію змін"
 
-#: src/control/Control.Menubar.ts:114 src/control/Control.Menubar.ts:454
-#: src/control/Control.Menubar.ts:639 src/control/Control.Menubar.ts:786
-#: src/control/Control.Menubar.ts:1094 src/control/Control.Menubar.ts:1160
-#: src/control/Control.Menubar.ts:1224 src/control/Control.Menubar.ts:1282
+#: src/control/Control.Menubar.ts:114 src/control/Control.Menubar.ts:455
+#: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:789
+#: src/control/Control.Menubar.ts:1098 src/control/Control.Menubar.ts:1164
+#: src/control/Control.Menubar.ts:1228 src/control/Control.Menubar.ts:1286
 msgid "Download as"
 msgstr "Звантажити як"
 
-#: src/control/Control.Menubar.ts:116 src/control/Control.Menubar.ts:456
-#: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:788
-#: src/control/Control.Menubar.ts:1096 src/control/Control.Menubar.ts:1162
-#: src/control/Control.Menubar.ts:1226 src/control/Control.Menubar.ts:1284
+#: src/control/Control.Menubar.ts:116 src/control/Control.Menubar.ts:457
+#: src/control/Control.Menubar.ts:643 src/control/Control.Menubar.ts:791
+#: src/control/Control.Menubar.ts:1100 src/control/Control.Menubar.ts:1166
+#: src/control/Control.Menubar.ts:1230 src/control/Control.Menubar.ts:1288
 msgid "PDF Document (.pdf) as..."
 msgstr "Документ PDF (.pdf) як..."
 
-#: src/control/Control.Menubar.ts:122 src/control/Control.Menubar.ts:793
+#: src/control/Control.Menubar.ts:122 src/control/Control.Menubar.ts:796
 msgid "HTML file (.html)"
 msgstr "Файл HTML (.html)"
 
-#: src/control/Control.Menubar.ts:129 src/control/Control.Menubar.ts:475
-#: src/control/Control.Menubar.ts:648 src/control/Control.Menubar.ts:802
+#: src/control/Control.Menubar.ts:129 src/control/Control.Menubar.ts:476
+#: src/control/Control.Menubar.ts:650 src/control/Control.Menubar.ts:805
 #: src/control/Control.Toolbar.js:1176
 msgid "Close document"
 msgstr "Закрити документ"
 
-#: src/control/Control.Menubar.ts:134 src/control/Control.Menubar.ts:480
-#: src/control/Control.Menubar.ts:653 src/control/Control.Menubar.ts:807
-#: src/control/Control.Menubar.ts:1107 src/control/Control.Menubar.ts:1171
-#: src/control/Control.Menubar.ts:1232 src/control/Control.Menubar.ts:1292
+#: src/control/Control.Menubar.ts:134 src/control/Control.Menubar.ts:481
+#: src/control/Control.Menubar.ts:655 src/control/Control.Menubar.ts:810
+#: src/control/Control.Menubar.ts:1111 src/control/Control.Menubar.ts:1175
+#: src/control/Control.Menubar.ts:1236 src/control/Control.Menubar.ts:1296
 #: src/control/Control.NotebookbarCalc.js:336
 #: src/control/Control.NotebookbarDraw.js:357
 #: src/control/Control.NotebookbarImpress.js:393
@@ -2928,10 +2948,10 @@ msgstr "Полагодити"
 msgid "Compare Changes"
 msgstr "Порівняти Зміни"
 
-#: src/control/Control.Menubar.ts:165 src/control/Control.Menubar.ts:492
-#: src/control/Control.Menubar.ts:498 src/control/Control.Menubar.ts:665
-#: src/control/Control.Menubar.ts:671 src/control/Control.Menubar.ts:819
-#: src/control/Control.Menubar.ts:825
+#: src/control/Control.Menubar.ts:165 src/control/Control.Menubar.ts:493
+#: src/control/Control.Menubar.ts:499 src/control/Control.Menubar.ts:667
+#: src/control/Control.Menubar.ts:673 src/control/Control.Menubar.ts:822
+#: src/control/Control.Menubar.ts:828
 #: src/control/Control.NotebookbarCalc.js:1580
 #: src/control/Control.NotebookbarDraw.js:456
 #: src/control/Control.NotebookbarImpress.js:600
@@ -2943,8 +2963,8 @@ msgstr "Скинути масштаб"
 msgid "Fit to Screen"
 msgstr "Допасувати до екрана"
 
-#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:504
-#: src/control/Control.Menubar.ts:677 src/control/Control.Menubar.ts:828
+#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:505
+#: src/control/Control.Menubar.ts:679 src/control/Control.Menubar.ts:831
 msgid "Toggle UI Mode"
 msgstr "Перемкнути Режим Інтерфейсу Користувача"
 
@@ -2954,47 +2974,52 @@ msgstr "Перемкнути Режим Інтерфейсу Користува�
 msgid "Multi Page View"
 msgstr "Перегляд Кількох Сторінок"
 
-#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:506
-#: src/control/Control.Menubar.ts:682 src/control/Control.Menubar.ts:829
+#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:507
+#: src/control/Control.Menubar.ts:684 src/control/Control.Menubar.ts:832
 msgid "Show Status Bar"
 msgstr "Показати Панель Стану"
 
-#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:508
-#: src/control/Control.Menubar.ts:683 src/control/Control.Menubar.ts:830
+#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:509
+#: src/control/Control.Menubar.ts:685 src/control/Control.Menubar.ts:833
 msgid "Hide Menu Bar"
 msgstr "Сховати Панель Меню"
 
-#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:510
-#: src/control/Control.Menubar.ts:679 src/control/Control.Menubar.ts:832
-#: src/control/Control.Menubar.ts:1129 src/control/Control.Menubar.ts:1182
-#: src/control/Control.Menubar.ts:1243 src/control/Control.Menubar.ts:1303
+#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:511
+#: src/control/Control.Menubar.ts:681 src/control/Control.Menubar.ts:835
+#: src/control/Control.Menubar.ts:1133 src/control/Control.Menubar.ts:1186
+#: src/control/Control.Menubar.ts:1247 src/control/Control.Menubar.ts:1307
 #: src/control/Control.NotebookbarCalc.js:1666
 #: src/control/Control.NotebookbarDraw.js:578
 #: src/control/Control.NotebookbarImpress.js:745
-#: src/control/Control.NotebookbarWriter.js:1798
+#: src/control/Control.NotebookbarWriter.js:1822
 msgid "Invert Background"
 msgstr "Інвертувати Тло"
 
-#: src/control/Control.Menubar.ts:182 src/control/Control.Menubar.ts:835
-#: src/control/Control.NotebookbarCalc.js:2780
+#: src/control/Control.Menubar.ts:182 src/control/Control.Menubar.ts:838
+#: src/control/Control.NotebookbarCalc.js:2787
 #: src/control/Control.NotebookbarWriter.js:1109
 msgid "Style list"
 msgstr "Список стилів"
 
-#: src/control/Control.Menubar.ts:190 src/control/Control.Menubar.ts:522
-#: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:846
-#: src/control/Control.Menubar.ts:1345 src/control/Control.Menubar.ts:1395
-#: src/control/Control.Menubar.ts:1409 src/control/Control.Menubar.ts:1432
+#: src/control/Control.Menubar.ts:190 src/control/Control.Menubar.ts:523
+#: src/control/Control.Menubar.ts:688 src/control/Control.Menubar.ts:849
+#: src/control/Control.Menubar.ts:1349 src/control/Control.Menubar.ts:1399
+#: src/control/Control.Menubar.ts:1413 src/control/Control.Menubar.ts:1436
 msgid "Local Image..."
 msgstr "Локальне зображення..."
 
-#: src/control/Control.Menubar.ts:214 src/control/Control.Menubar.ts:216
-#: src/control/Control.Menubar.ts:1362 src/control/Control.Menubar.ts:1364
+#: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
+#: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
+msgid "Shapes ..."
+msgstr ""
+
+#: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
+#: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
 msgid "All"
 msgstr "Все"
 
-#: src/control/Control.Menubar.ts:226 src/control/Control.Menubar.ts:533
-#: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:860
+#: src/control/Control.Menubar.ts:227 src/control/Control.Menubar.ts:535
+#: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:864
 #: src/control/Control.NotebookbarCalc.js:1924
 #: src/control/Control.NotebookbarDraw.js:1604
 #: src/control/Control.NotebookbarImpress.js:1666
@@ -3002,78 +3027,78 @@ msgstr "Все"
 msgid "Smart Picker"
 msgstr "Розумний Оглядач"
 
-#: src/control/Control.Menubar.ts:268
+#: src/control/Control.Menubar.ts:269
 msgid "Text orientation"
 msgstr "Напрямок тексту"
 
-#: src/control/Control.Menubar.ts:339
+#: src/control/Control.Menubar.ts:340
 #: src/control/Notebookbar.WriterReferencesTab.ts:25
 msgid "References"
 msgstr "Посилання"
 
-#: src/control/Control.Menubar.ts:342
+#: src/control/Control.Menubar.ts:343
 #: src/control/Notebookbar.WriterReferencesTab.ts:72
 msgid "Update Index"
 msgstr "Оновити Індекс"
 
-#: src/control/Control.Menubar.ts:351
+#: src/control/Control.Menubar.ts:352
 #: src/control/Notebookbar.WriterReferencesTab.ts:220
 msgid "Add Citation"
 msgstr "Додати Цитату"
 
-#: src/control/Control.Menubar.ts:352
+#: src/control/Control.Menubar.ts:353
 #: src/control/Notebookbar.WriterReferencesTab.ts:237
 msgid "Add Citation Note"
 msgstr "Додати Цитовану Примітку"
 
-#: src/control/Control.Menubar.ts:353
+#: src/control/Control.Menubar.ts:354
 #: src/control/Notebookbar.WriterReferencesTab.ts:203
 msgid "Add Bibliography"
 msgstr "Додати Бібліографію"
 
-#: src/control/Control.Menubar.ts:355
+#: src/control/Control.Menubar.ts:356
 #: src/control/Notebookbar.WriterReferencesTab.ts:262
 msgid "Refresh Citations"
 msgstr "Оновити Цитати"
 
-#: src/control/Control.Menubar.ts:356
+#: src/control/Control.Menubar.ts:357
 #: src/control/Notebookbar.WriterReferencesTab.ts:279
 #: src/control/Control.Zotero.js:1541
 msgid "Unlink Citations"
 msgstr "Від'єднати Посилання на Цитати"
 
-#: src/control/Control.Menubar.ts:357
+#: src/control/Control.Menubar.ts:358
 #: src/control/Notebookbar.WriterReferencesTab.ts:296
 msgid "Citation Preferences"
 msgstr "Налаштування Цитування"
 
-#: src/control/Control.Menubar.ts:385 src/control/Control.Menubar.ts:1384
+#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1388
 msgid "Insert Rich Text"
 msgstr "Вставити текст Rich Text"
 
-#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1385
+#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1389
 msgid "Insert Checkbox"
 msgstr "Вставити Прапорець"
 
-#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1386
+#: src/control/Control.Menubar.ts:388 src/control/Control.Menubar.ts:1390
 msgid "Insert Dropdown"
 msgstr "Вставити Спадне Меню"
 
-#: src/control/Control.Menubar.ts:388 src/control/Control.Menubar.ts:1387
+#: src/control/Control.Menubar.ts:389 src/control/Control.Menubar.ts:1391
 msgid "Insert Picture"
 msgstr "Вставити Зображення"
 
-#: src/control/Control.Menubar.ts:389 src/control/Control.Menubar.ts:1388
+#: src/control/Control.Menubar.ts:390 src/control/Control.Menubar.ts:1392
 msgid "Insert Date"
 msgstr "Вставити Дату"
 
-#: src/control/Control.Menubar.ts:410 src/control/Control.Menubar.ts:1133
+#: src/control/Control.Menubar.ts:411 src/control/Control.Menubar.ts:1137
 #: src/control/Control.NotebookbarWriter.js:551
 msgid "Screen Reading"
 msgstr "Читання Екрану"
 
-#: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
-#: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
+#: src/control/Control.Menubar.ts:423 src/control/Control.Menubar.ts:612
+#: src/control/Control.Menubar.ts:758 src/control/Control.Menubar.ts:1065
 #: src/control/Control.NotebookbarCalc.js:113
 #: src/control/Control.NotebookbarDraw.js:128
 #: src/control/Control.NotebookbarImpress.js:163
@@ -3081,277 +3106,277 @@ msgstr "Читання Екрану"
 msgid "Extensions"
 msgstr "Розширення"
 
-#: src/control/Control.Menubar.ts:424 src/control/Control.Menubar.ts:612
-#: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1063
+#: src/control/Control.Menubar.ts:425 src/control/Control.Menubar.ts:614
+#: src/control/Control.Menubar.ts:760 src/control/Control.Menubar.ts:1067
 #: src/control/Control.NotebookbarWriter.js:456
 msgid "Online Help"
 msgstr "Онлайн-довідка"
 
-#: src/control/Control.Menubar.ts:426 src/control/Control.Menubar.ts:614
-#: src/control/Control.Menubar.ts:759 src/control/Control.Menubar.ts:1065
+#: src/control/Control.Menubar.ts:427 src/control/Control.Menubar.ts:616
+#: src/control/Control.Menubar.ts:762 src/control/Control.Menubar.ts:1069
 #: src/control/Control.NotebookbarWriter.js:469
 msgid "Keyboard shortcuts"
 msgstr "Комбінації клавіш"
 
-#: src/control/Control.Menubar.ts:428 src/control/Control.Menubar.ts:616
-#: src/control/Control.Menubar.ts:761 src/control/Control.Menubar.ts:1067
+#: src/control/Control.Menubar.ts:429 src/control/Control.Menubar.ts:618
+#: src/control/Control.Menubar.ts:764 src/control/Control.Menubar.ts:1071
 #: src/control/Control.NotebookbarWriter.js:482
 msgid "Forum"
 msgstr "Форум"
 
-#: src/control/Control.Menubar.ts:429 src/control/Control.Menubar.ts:617
-#: src/control/Control.Menubar.ts:762 src/control/Control.Menubar.ts:1068
+#: src/control/Control.Menubar.ts:430 src/control/Control.Menubar.ts:619
+#: src/control/Control.Menubar.ts:765 src/control/Control.Menubar.ts:1072
 #: src/control/Control.NotebookbarWriter.js:494
 msgid "Report an issue"
 msgstr "Повідомити про проблему"
 
-#: src/control/Control.Menubar.ts:430 src/control/Control.Menubar.ts:618
-#: src/control/Control.Menubar.ts:763 src/control/Control.Menubar.ts:1069
-#: src/control/Control.Menubar.ts:1142 src/control/Control.Menubar.ts:1207
-#: src/control/Control.Menubar.ts:1262 src/control/Control.Menubar.ts:1337
+#: src/control/Control.Menubar.ts:431 src/control/Control.Menubar.ts:620
+#: src/control/Control.Menubar.ts:766 src/control/Control.Menubar.ts:1073
+#: src/control/Control.Menubar.ts:1146 src/control/Control.Menubar.ts:1211
+#: src/control/Control.Menubar.ts:1266 src/control/Control.Menubar.ts:1341
 #: src/control/Control.NotebookbarWriter.js:507
 msgid "Latest Updates"
 msgstr "Останні Зміни"
 
-#: src/control/Control.Menubar.ts:431 src/control/Control.Menubar.ts:619
-#: src/control/Control.Menubar.ts:764 src/control/Control.Menubar.ts:1070
-#: src/control/Control.Menubar.ts:1143 src/control/Control.Menubar.ts:1208
-#: src/control/Control.Menubar.ts:1263 src/control/Control.Menubar.ts:1338
+#: src/control/Control.Menubar.ts:432 src/control/Control.Menubar.ts:621
+#: src/control/Control.Menubar.ts:767 src/control/Control.Menubar.ts:1074
+#: src/control/Control.Menubar.ts:1147 src/control/Control.Menubar.ts:1212
+#: src/control/Control.Menubar.ts:1267 src/control/Control.Menubar.ts:1342
 #: src/control/Control.NotebookbarWriter.js:521
 msgid "Send Feedback"
 msgstr "Надіслати Відгук"
 
-#: src/control/Control.Menubar.ts:433 src/control/Control.Menubar.ts:621
-#: src/control/Control.Menubar.ts:766 src/control/Control.Menubar.ts:1072
+#: src/control/Control.Menubar.ts:434 src/control/Control.Menubar.ts:623
+#: src/control/Control.Menubar.ts:769 src/control/Control.Menubar.ts:1076
 #: src/control/Control.NotebookbarWriter.js:537
 #: src/control/Control.ServerAuditDialog.ts:299
 #: src/control/Control.ServerAuditDialog.ts:300
 msgid "Server audit"
 msgstr "Аудит сервера"
 
-#: src/control/Control.Menubar.ts:437 src/control/Control.Menubar.ts:625
-#: src/control/Control.Menubar.ts:770 src/control/Control.Menubar.ts:1076
+#: src/control/Control.Menubar.ts:438 src/control/Control.Menubar.ts:627
+#: src/control/Control.Menubar.ts:773 src/control/Control.Menubar.ts:1080
 msgid "Last modification"
 msgstr "Остання зміна"
 
-#: src/control/Control.Menubar.ts:444 src/control/Control.Menubar.ts:457
-#: src/control/Control.Menubar.ts:1163
+#: src/control/Control.Menubar.ts:445 src/control/Control.Menubar.ts:458
+#: src/control/Control.Menubar.ts:1167
 #: src/control/Control.NotebookbarBuilder.js:454
 #: src/control/Control.NotebookbarBuilder.js:569
 msgid "ODF presentation (.odp)"
 msgstr "ODF презентація (.odp)"
 
-#: src/control/Control.Menubar.ts:445 src/control/Control.Menubar.ts:458
-#: src/control/Control.Menubar.ts:1164
+#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:459
+#: src/control/Control.Menubar.ts:1168
 #: src/control/Control.NotebookbarBuilder.js:466
 #: src/control/Control.NotebookbarBuilder.js:577
 msgid "PowerPoint 2003 Presentation (.ppt)"
 msgstr "Презентація PowerPoint 2003 (.ppt)"
 
-#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:459
-#: src/control/Control.Menubar.ts:1165
+#: src/control/Control.Menubar.ts:447 src/control/Control.Menubar.ts:460
+#: src/control/Control.Menubar.ts:1169
 #: src/control/Control.NotebookbarBuilder.js:462
 #: src/control/Control.NotebookbarBuilder.js:573
 msgid "PowerPoint Presentation (.pptx)"
 msgstr "Презентація PowerPoint (.pptx)"
 
-#: src/control/Control.Menubar.ts:451 src/control/Control.Menubar.ts:635
+#: src/control/Control.Menubar.ts:452 src/control/Control.Menubar.ts:637
 msgid "Save Comments"
 msgstr "Зберегти Коментарі"
 
-#: src/control/Control.Menubar.ts:460
+#: src/control/Control.Menubar.ts:461
 #: src/control/Control.NotebookbarBuilder.js:470
 msgid "HTML Document (.html)"
 msgstr "Документ HTML (.html)"
 
-#: src/control/Control.Menubar.ts:461
+#: src/control/Control.Menubar.ts:462
 #: src/control/Control.NotebookbarBuilder.js:486
 msgid "Scalable Vector Graphics (.svg)"
 msgstr "Scalable Vector Graphics (.svg)"
 
-#: src/control/Control.Menubar.ts:462
+#: src/control/Control.Menubar.ts:463
 #: src/control/Control.NotebookbarBuilder.js:491
 msgid "Current slide as Bitmap (.bmp)"
 msgstr "Поточний слайд як Bitmap (.bmp)"
 
-#: src/control/Control.Menubar.ts:463
+#: src/control/Control.Menubar.ts:464
 #: src/control/Control.NotebookbarBuilder.js:496
 msgid "Current slide as Graphics Interchange Format (.gif)"
 msgstr "Поточний слайд як Graphics Interchange Format (.gif)"
 
-#: src/control/Control.Menubar.ts:464
+#: src/control/Control.Menubar.ts:465
 #: src/control/Control.NotebookbarBuilder.js:501
 msgid "Current slide as Portable Network Graphics (.png)"
 msgstr "Поточний слайд як Portable Network Graphics (.png)"
 
-#: src/control/Control.Menubar.ts:465
+#: src/control/Control.Menubar.ts:466
 #: src/control/Control.NotebookbarBuilder.js:506
 msgid "Current slide as Tag Image File Format (.tiff)"
 msgstr "Поточний слайд як Tag Image File Format (.tiff)"
 
-#: src/control/Control.Menubar.ts:472
+#: src/control/Control.Menubar.ts:473
 #: src/control/Control.NotebookbarBuilder.js:644
 msgid "Full Page Slides"
 msgstr "Слайди на Всю Сторінку"
 
-#: src/control/Control.Menubar.ts:473
+#: src/control/Control.Menubar.ts:474
 #: src/control/Control.NotebookbarBuilder.js:648
 msgid "Notes Pages"
 msgstr "Сторінки Приміток"
 
-#: src/control/Control.Menubar.ts:507
+#: src/control/Control.Menubar.ts:508
 #: src/control/Control.NotebookbarImpress.js:693
 msgid "Notes View"
 msgstr "Перегляд Приміток"
 
-#: src/control/Control.Menubar.ts:511
+#: src/control/Control.Menubar.ts:512
 #: src/control/Control.NotebookbarImpress.js:699
 msgid "Master View"
 msgstr "Головний Вигляд"
 
-#: src/control/Control.Menubar.ts:524
+#: src/control/Control.Menubar.ts:525
 msgid "Local Multimedia..."
 msgstr "Локальні Мультимедіа..."
 
-#: src/control/Control.Menubar.ts:593 src/control/Control.Menubar.ts:1206
+#: src/control/Control.Menubar.ts:595 src/control/Control.Menubar.ts:1210
 #: src/control/Control.PresentationBar.js:128
 msgid "Fullscreen presentation"
 msgstr "Повноекранна презентація"
 
-#: src/control/Control.Menubar.ts:594
+#: src/control/Control.Menubar.ts:596
 msgid "Present current slide"
 msgstr "Показати поточний слайд"
 
-#: src/control/Control.Menubar.ts:595
+#: src/control/Control.Menubar.ts:597
 msgid "Present in new window"
 msgstr "Показати в новому вікні"
 
-#: src/control/Control.Menubar.ts:597 src/slideshow/PresenterConsole.js:270
+#: src/control/Control.Menubar.ts:599 src/slideshow/PresenterConsole.js:270
 msgid "Presenter Console"
 msgstr "Консоль Доповідача"
 
-#: src/control/Control.Menubar.ts:642 src/control/Control.Menubar.ts:1166
-#: src/control/Control.Menubar.ts:1227
+#: src/control/Control.Menubar.ts:644 src/control/Control.Menubar.ts:1170
+#: src/control/Control.Menubar.ts:1231
 #: src/control/Control.NotebookbarBuilder.js:458
 #: src/control/Control.NotebookbarBuilder.js:512
 msgid "ODF Drawing (.odg)"
 msgstr "ODF Графіка (.odg)"
 
-#: src/control/Control.Menubar.ts:777 src/control/Control.Menubar.ts:789
-#: src/control/Control.Menubar.ts:1285
+#: src/control/Control.Menubar.ts:780 src/control/Control.Menubar.ts:792
+#: src/control/Control.Menubar.ts:1289
 #: src/control/Control.NotebookbarBuilder.js:421
 #: src/control/Control.NotebookbarBuilder.js:554
 msgid "ODF spreadsheet (.ods)"
 msgstr "ODF ел.таблиця (.ods)"
 
-#: src/control/Control.Menubar.ts:778 src/control/Control.Menubar.ts:790
-#: src/control/Control.Menubar.ts:1286
+#: src/control/Control.Menubar.ts:781 src/control/Control.Menubar.ts:793
+#: src/control/Control.Menubar.ts:1290
 #: src/control/Control.NotebookbarBuilder.js:429
 #: src/control/Control.NotebookbarBuilder.js:562
 msgid "Excel 2003 Spreadsheet (.xls)"
 msgstr "Електронна таблиця Excel 2003 (.xls)"
 
-#: src/control/Control.Menubar.ts:779 src/control/Control.Menubar.ts:791
-#: src/control/Control.Menubar.ts:1287
+#: src/control/Control.Menubar.ts:782 src/control/Control.Menubar.ts:794
+#: src/control/Control.Menubar.ts:1291
 #: src/control/Control.NotebookbarBuilder.js:425
 #: src/control/Control.NotebookbarBuilder.js:558
 msgid "Excel Spreadsheet (.xlsx)"
 msgstr "Електронна таблиця Excel (.xlsx)"
 
-#: src/control/Control.Menubar.ts:792
+#: src/control/Control.Menubar.ts:795
 msgid "CSV file (.csv)"
 msgstr "Файл CSV (.csv)"
 
-#: src/control/Control.Menubar.ts:799
+#: src/control/Control.Menubar.ts:802
 #: src/control/jsdialog/Definitions.Menu.ts:1587
 msgid "Active sheet"
 msgstr "Активний аркуш"
 
-#: src/control/Control.Menubar.ts:838
+#: src/control/Control.Menubar.ts:841
 #: src/control/Control.NotebookbarCalc.js:1551
 msgid "Focus Cell"
 msgstr "Сфокусуватися на Комірці"
 
-#: src/control/Control.Menubar.ts:934
+#: src/control/Control.Menubar.ts:938
 #: src/control/jsdialog/Definitions.Menu.ts:1877
 msgid "Highlight cells with..."
 msgstr "Виділити комірки з..."
 
-#: src/control/Control.Menubar.ts:935
+#: src/control/Control.Menubar.ts:939
 #: src/control/jsdialog/Definitions.Menu.ts:1880
 msgid "Values greater than..."
 msgstr "Значення понад за..."
 
-#: src/control/Control.Menubar.ts:936
+#: src/control/Control.Menubar.ts:940
 #: src/control/jsdialog/Definitions.Menu.ts:1884
 msgid "Values less than..."
 msgstr "Значення менше за..."
 
-#: src/control/Control.Menubar.ts:937
+#: src/control/Control.Menubar.ts:941
 #: src/control/jsdialog/Definitions.Menu.ts:1888
 msgid "Values equal to..."
 msgstr "Значення, що дорівнюють..."
 
-#: src/control/Control.Menubar.ts:938
+#: src/control/Control.Menubar.ts:942
 #: src/control/jsdialog/Definitions.Menu.ts:1892
 msgid "Values between..."
 msgstr "Значення між..."
 
-#: src/control/Control.Menubar.ts:939
+#: src/control/Control.Menubar.ts:943
 #: src/control/jsdialog/Definitions.Menu.ts:1896
 msgid "Values duplicate..."
 msgstr "Дубльовані значення..."
 
-#: src/control/Control.Menubar.ts:940
+#: src/control/Control.Menubar.ts:944
 #: src/control/jsdialog/Definitions.Menu.ts:1900
 msgid "Containing text..."
 msgstr "Містить текст..."
 
-#: src/control/Control.Menubar.ts:942 src/control/Control.Menubar.ts:952
+#: src/control/Control.Menubar.ts:946 src/control/Control.Menubar.ts:956
 #: src/control/jsdialog/Definitions.Menu.ts:1904
 #: src/control/jsdialog/Definitions.Menu.ts:1935
 msgid "More highlights..."
 msgstr "Більше підсвічувань..."
 
-#: src/control/Control.Menubar.ts:944
+#: src/control/Control.Menubar.ts:948
 #: src/control/jsdialog/Definitions.Menu.ts:1908
 msgid "Top/Bottom Rules..."
 msgstr "Правила Верх/Низ..."
 
-#: src/control/Control.Menubar.ts:945
+#: src/control/Control.Menubar.ts:949
 #: src/control/jsdialog/Definitions.Menu.ts:1911
 msgid "Top N elements..."
 msgstr "Верхні N елементів..."
 
-#: src/control/Control.Menubar.ts:946
+#: src/control/Control.Menubar.ts:950
 #: src/control/jsdialog/Definitions.Menu.ts:1915
 msgid "Top N percent..."
 msgstr "Верхні N відсотків..."
 
-#: src/control/Control.Menubar.ts:947
+#: src/control/Control.Menubar.ts:951
 #: src/control/jsdialog/Definitions.Menu.ts:1919
 msgid "Bottom N elements..."
 msgstr "Нижні N елементів..."
 
-#: src/control/Control.Menubar.ts:948
+#: src/control/Control.Menubar.ts:952
 #: src/control/jsdialog/Definitions.Menu.ts:1923
 msgid "Bottom N percent..."
 msgstr "Нижні N відсотків..."
 
-#: src/control/Control.Menubar.ts:949
+#: src/control/Control.Menubar.ts:953
 #: src/control/jsdialog/Definitions.Menu.ts:1927
 msgid "Above Average..."
 msgstr "Вище середнього..."
 
-#: src/control/Control.Menubar.ts:950
+#: src/control/Control.Menubar.ts:954
 #: src/control/jsdialog/Definitions.Menu.ts:1931
 msgid "Below Average..."
 msgstr "Нижче середнього..."
 
-#: src/control/Control.Menubar.ts:1080 src/control/Control.Menubar.ts:1148
-#: src/control/Control.Menubar.ts:1213 src/control/Control.Menubar.ts:1268
+#: src/control/Control.Menubar.ts:1084 src/control/Control.Menubar.ts:1152
+#: src/control/Control.Menubar.ts:1217 src/control/Control.Menubar.ts:1272
 #: src/control/Control.MobileSearchBar.ts:30
-#: src/control/Control.NavigatorPanel.ts:532
+#: src/control/Control.NavigatorPanel.ts:546
 #: src/control/Control.NotebookbarCalc.js:1072
 #: src/control/Control.NotebookbarDraw.js:1192
 #: src/control/Control.NotebookbarDraw.js:1205
@@ -3364,51 +3389,47 @@ msgstr "Нижче середнього..."
 msgid "Search"
 msgstr "Пошук"
 
-#: src/control/Control.Menubar.ts:1135
+#: src/control/Control.Menubar.ts:1139
 #: src/control/Control.NotebookbarCalc.js:1137
 #: src/control/Control.NotebookbarWriter.js:1835
 msgid "Page Setup"
 msgstr "Параметри Сторінки"
 
-#: src/control/Control.Menubar.ts:1279
+#: src/control/Control.Menubar.ts:1283
 msgid "Define print area"
 msgstr "Визначте ділянку для друку"
 
-#: src/control/Control.Menubar.ts:1280
+#: src/control/Control.Menubar.ts:1284
 msgid "Remove print area"
 msgstr "Вилучити ділянку для друку"
 
-#: src/control/Control.Menubar.ts:1640 src/control/Control.StatusBar.js:712
+#: src/control/Control.Menubar.ts:1644 src/control/Control.StatusBar.js:712
 msgid "Reset to Default Language"
 msgstr "Відновити до Типової Мови"
 
-#: src/control/Control.Menubar.ts:1671 src/control/Control.Menubar.ts:1672
-#: src/control/Control.Menubar.ts:1673 src/control/Control.Toolbar.js:256
+#: src/control/Control.Menubar.ts:1675 src/control/Control.Menubar.ts:1676
+#: src/control/Control.Menubar.ts:1677 src/control/Control.Toolbar.js:256
 #: src/control/jsdialog/Definitions.Menu.ts:2157
 msgid "More..."
 msgstr "Більше..."
 
-#: src/control/Control.Menubar.ts:1724
-msgid "(No extensions installed)"
-msgstr "(Ніяких розширень не встановлено)"
-
-#: src/control/Control.Menubar.ts:2078
+#: src/control/Control.Menubar.ts:2083
 msgid "Use Compact view"
 msgstr "Використати Компактний вигляд"
 
-#: src/control/Control.Menubar.ts:2080
+#: src/control/Control.Menubar.ts:2085
 msgid "Use Tabbed view"
 msgstr "Використовувати Вкладений вигляд"
 
-#: src/control/Control.Menubar.ts:2312
+#: src/control/Control.Menubar.ts:2342
 msgid "Insert Shape"
 msgstr "Вставити Фігуру"
 
-#: src/control/Control.Menubar.ts:2397
+#: src/control/Control.Menubar.ts:2427
 msgid "The signature line can now be moved or resized as needed."
 msgstr "Рядок підпису тепер можна переміщувати або змінювати розмір за потреби."
 
-#: src/control/Control.Menubar.ts:2402
+#: src/control/Control.Menubar.ts:2432
 msgid "Finish electronic signing"
 msgstr "Завершити електронний підпис"
 
@@ -3444,25 +3465,25 @@ msgstr "Початок Градієнту"
 msgid "Gradient End"
 msgstr "Кінець Градієнту"
 
-#: src/control/Control.NavigatorPanel.ts:41
+#: src/control/Control.NavigatorPanel.ts:46
 msgid "Navigation Panel"
 msgstr "Панель Навігації"
 
-#: src/control/Control.NavigatorPanel.ts:115
+#: src/control/Control.NavigatorPanel.ts:125
 msgid "Navigation"
 msgstr "Навігація"
 
-#: src/control/Control.NavigatorPanel.ts:136
+#: src/control/Control.NavigatorPanel.ts:146
 msgid "Close Navigation"
 msgstr "Закрити Навігацію"
 
-#: src/control/Control.NavigatorPanel.ts:230
+#: src/control/Control.NavigatorPanel.ts:240
 msgid "Results"
 msgstr "Результати"
 
-#: src/control/Control.NavigatorPanel.ts:518
+#: src/control/Control.NavigatorPanel.ts:532
 #: src/control/jsdialog/Widget.Combobox.js:376
-#: src/control/jsdialog/Widget.TreeView.ts:2054
+#: src/control/jsdialog/Widget.TreeView.ts:2543
 msgid "Search..."
 msgstr "Пошук..."
 
@@ -3539,7 +3560,7 @@ msgid "Transition"
 msgstr "Перехід"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:41
-#: src/control/Sidebar.FromNotebookbarPanel.ts:108
+#: src/control/Sidebar.FromNotebookbarPanel.ts:109
 msgid "Transitions"
 msgstr "Переходи"
 
@@ -3577,13 +3598,9 @@ msgstr "Виноска/Кінцева виноска"
 msgid "Field"
 msgstr "Поле"
 
-#: src/control/Sidebar.FromNotebookbarPanel.ts:121
+#: src/control/Sidebar.FromNotebookbarPanel.ts:123
 msgid "Animations"
 msgstr "Анімації"
-
-#: src/control/Control.Notebookbar.js:292
-msgid "No extensions are installed."
-msgstr "Ніяких розширень не встановлено."
 
 #: src/control/Control.NotebookbarBase.ts:149
 #, fuzzy
@@ -3704,7 +3721,7 @@ msgstr "Вигляд"
 
 #: src/control/Control.NotebookbarCalc.js:105
 #: src/control/Control.NotebookbarCalc.js:1837
-#: src/control/Control.NotebookbarCalc.js:2841
+#: src/control/Control.NotebookbarCalc.js:2848
 msgid "Sparkline"
 msgstr "Спарклайн"
 
@@ -3915,28 +3932,28 @@ msgid "Delete Columns"
 msgstr "Видалити Стовпчики"
 
 #: src/control/Control.NotebookbarCalc.js:1306
-#: src/control/Control.NotebookbarCalc.js:3023
-#: src/control/Control.NotebookbarCalc.js:3380
+#: src/control/Control.NotebookbarCalc.js:3030
+#: src/control/Control.NotebookbarCalc.js:3396
 #: src/control/Control.NotebookbarDraw.js:1319
 #: src/control/Control.NotebookbarImpress.js:2413
 #: src/control/Control.NotebookbarImpress.js:2620
-#: src/control/Control.NotebookbarImpress.js:2924
+#: src/control/Control.NotebookbarImpress.js:2933
 #: src/control/Control.NotebookbarWriter.js:2076
 #: src/control/Control.NotebookbarWriter.js:3073
-#: src/control/Control.NotebookbarWriter.js:3396
+#: src/control/Control.NotebookbarWriter.js:3403
 msgid "Align"
 msgstr "Вирівняти"
 
 #: src/control/Control.NotebookbarCalc.js:1376
-#: src/control/Control.NotebookbarCalc.js:3090
-#: src/control/Control.NotebookbarCalc.js:3447
+#: src/control/Control.NotebookbarCalc.js:3097
+#: src/control/Control.NotebookbarCalc.js:3463
 #: src/control/Control.NotebookbarDraw.js:1386
 #: src/control/Control.NotebookbarImpress.js:2480
 #: src/control/Control.NotebookbarImpress.js:2687
-#: src/control/Control.NotebookbarImpress.js:2991
+#: src/control/Control.NotebookbarImpress.js:3000
 #: src/control/Control.NotebookbarWriter.js:2147
 #: src/control/Control.NotebookbarWriter.js:3132
-#: src/control/Control.NotebookbarWriter.js:3455
+#: src/control/Control.NotebookbarWriter.js:3462
 msgid "Arrange"
 msgstr "Упорядкувати"
 
@@ -3985,25 +4002,25 @@ msgstr "Режим читання"
 #: src/control/Control.NotebookbarCalc.js:1633
 #: src/control/Control.NotebookbarDraw.js:535
 #: src/control/Control.NotebookbarImpress.js:679
-#: src/control/Control.NotebookbarWriter.js:1783
+#: src/control/Control.NotebookbarWriter.js:1751
 msgid "Collapse Tabs"
 msgstr "Згорнути Вкладки"
 
 #: src/control/Control.NotebookbarCalc.js:1646
 #: src/control/Control.NotebookbarDraw.js:523
 #: src/control/Control.NotebookbarImpress.js:667
-#: src/control/Control.NotebookbarWriter.js:1771
+#: src/control/Control.NotebookbarWriter.js:1786
 msgid "Status Bar"
 msgstr "Панель Стану"
 
 #: src/control/Control.NotebookbarCalc.js:1717
 #: src/control/Control.NotebookbarCalc.js:2492
-#: src/control/Control.NotebookbarCalc.js:3143
-#: src/control/Control.NotebookbarCalc.js:3500
+#: src/control/Control.NotebookbarCalc.js:3150
+#: src/control/Control.NotebookbarCalc.js:3516
 #: src/control/Control.NotebookbarImpress.js:2740
-#: src/control/Control.NotebookbarImpress.js:3044
+#: src/control/Control.NotebookbarImpress.js:3053
 #: src/control/Control.NotebookbarWriter.js:3181
-#: src/control/Control.NotebookbarWriter.js:3504
+#: src/control/Control.NotebookbarWriter.js:3511
 msgid "Group"
 msgstr "Група"
 
@@ -4112,46 +4129,46 @@ msgstr "Сортувати"
 msgid "Filter"
 msgstr "Фільтр"
 
-#: src/control/Control.NotebookbarCalc.js:2616
+#: src/control/Control.NotebookbarCalc.js:2623
 msgid "Proofing"
 msgstr "Коректура"
 
-#: src/control/Control.NotebookbarCalc.js:2644
+#: src/control/Control.NotebookbarCalc.js:2651
 #: src/control/Control.NotebookbarImpress.js:2049
 #: src/control/Control.NotebookbarWriter.js:2271
 msgid "Auto Spell Check"
 msgstr "Автоматична Перевірка Правопису"
 
-#: src/control/Control.NotebookbarCalc.js:2676
+#: src/control/Control.NotebookbarCalc.js:2683
 #: src/control/Control.NotebookbarImpress.js:2079
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Comments"
 msgstr "Коментарі"
 
-#: src/control/Control.NotebookbarCalc.js:2727
+#: src/control/Control.NotebookbarCalc.js:2734
 msgid "Protection"
 msgstr "Захист"
 
-#: src/control/Control.NotebookbarCalc.js:2790
+#: src/control/Control.NotebookbarCalc.js:2797
 msgid "Format Cells"
 msgstr "Форматування комірок"
 
-#: src/control/Control.NotebookbarCalc.js:2850
+#: src/control/Control.NotebookbarCalc.js:2857
 #: src/control/Control.NotebookbarImpress.js:1897
 msgid "Themes"
 msgstr "Теми"
 
-#: src/control/Control.NotebookbarCalc.js:2956
-#: src/control/Control.NotebookbarCalc.js:3313
+#: src/control/Control.NotebookbarCalc.js:2963
+#: src/control/Control.NotebookbarCalc.js:3329
 #: src/control/Control.NotebookbarWriter.js:1978
 #: src/control/Control.NotebookbarWriter.js:3018
-#: src/control/Control.NotebookbarWriter.js:3341
+#: src/control/Control.NotebookbarWriter.js:3348
 msgid "Wrap"
 msgstr "Обгортка"
 
-#: src/control/Control.NotebookbarCalc.js:3195
-#: src/control/Control.NotebookbarImpress.js:2800
-#: src/control/Control.NotebookbarWriter.js:3227
+#: src/control/Control.NotebookbarCalc.js:3211
+#: src/control/Control.NotebookbarImpress.js:2809
+#: src/control/Control.NotebookbarWriter.js:3234
 msgid "Image Controls"
 msgstr "Елементи керування зображенням"
 
@@ -4166,7 +4183,7 @@ msgstr "Документ PDF (.pdf) - Експерт"
 
 #: src/control/Control.NotebookbarDraw.js:510
 #: src/control/Control.NotebookbarImpress.js:654
-#: src/control/Control.NotebookbarWriter.js:1758
+#: src/control/Control.NotebookbarWriter.js:1773
 msgid "Ruler"
 msgstr "Лінійка"
 
@@ -4321,7 +4338,7 @@ msgstr "Оберіть"
 msgid "Merge & Split"
 msgstr "Об'єднати та Розділити"
 
-#: src/control/Control.NotebookbarImpress.js:2833
+#: src/control/Control.NotebookbarImpress.js:2842
 msgid "Effects"
 msgstr "Ефекти"
 
@@ -4417,45 +4434,45 @@ msgstr "попередній перегляд сторінки %1"
 msgid "Slide %1"
 msgstr "Слайд %1"
 
-#: src/control/Control.PartsPreview.js:283
-#: src/control/Control.PartsPreview.js:355 src/map/Clipboard.js:1532
+#: src/control/Control.PartsPreview.js:287
+#: src/control/Control.PartsPreview.js:359 src/map/Clipboard.js:1535
 msgid "Paste"
 msgstr "Вставити"
 
-#: src/control/Control.PartsPreview.js:423
+#: src/control/Control.PartsPreview.js:427
 msgid "Add Section"
 msgstr "Додати Розділ"
 
-#: src/control/Control.PartsPreview.js:598
+#: src/control/Control.PartsPreview.js:602
 msgid "Toggle section %1"
 msgstr "Перемкнути секцію %1"
 
-#: src/control/Control.PartsPreview.js:789
-#: src/control/Control.PartsPreview.js:890
+#: src/control/Control.PartsPreview.js:793
+#: src/control/Control.PartsPreview.js:894
 msgid "Rename Section"
 msgstr "Переназвати Розділ"
 
-#: src/control/Control.PartsPreview.js:796
+#: src/control/Control.PartsPreview.js:800
 msgid "Remove Section"
 msgstr "Вилучити Розділ"
 
-#: src/control/Control.PartsPreview.js:804
+#: src/control/Control.PartsPreview.js:808
 msgid "Move Section Up"
 msgstr "Пересунути Розділ Вище"
 
-#: src/control/Control.PartsPreview.js:813
+#: src/control/Control.PartsPreview.js:817
 msgid "Move Section Down"
 msgstr "Пересунути Розділ Нижче"
 
-#: src/control/Control.PartsPreview.js:822
+#: src/control/Control.PartsPreview.js:826
 msgid "Collapse All Sections"
 msgstr "Згорнути Всі Секції"
 
-#: src/control/Control.PartsPreview.js:830
+#: src/control/Control.PartsPreview.js:834
 msgid "Expand All Sections"
 msgstr "Розширити Всі Секції"
 
-#: src/control/Control.PartsPreview.js:891
+#: src/control/Control.PartsPreview.js:895
 msgid "Enter new section name:"
 msgstr "Ввести нову назву розділу:"
 
@@ -4698,31 +4715,31 @@ msgstr "Вставити аркуш перед цим"
 msgid "Insert sheet after this"
 msgstr "Вставити аркуш після цього"
 
-#: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
+#: src/control/Control.Tabs.js:106 src/control/Control.Tabs.js:113
 msgid "Reset Tab Color"
 msgstr "Скинути Колір Вкладки"
 
-#: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
+#: src/control/Control.Tabs.js:133 src/control/Control.Tabs.js:137
 msgid "Move Sheet Left"
 msgstr "Пересунути Аркуш Ліворуч"
 
-#: src/control/Control.Tabs.js:135 src/control/Control.Tabs.js:139
+#: src/control/Control.Tabs.js:141 src/control/Control.Tabs.js:145
 msgid "Move Sheet Right"
 msgstr "Пересунути Аркуш Праворуч"
 
-#: src/control/Control.Tabs.js:149 src/control/Control.Tabs.js:155
+#: src/control/Control.Tabs.js:155 src/control/Control.Tabs.js:161
 msgid "Copy Sheet..."
 msgstr "Копіювати Аркуш..."
 
-#: src/control/Control.Tabs.js:545
+#: src/control/Control.Tabs.js:553
 msgid "Are you sure you want to delete sheet, {sheet}?"
 msgstr "Ви дійсно бажаєте видалити аркуш {sheet}?"
 
-#: src/control/Control.Tabs.js:556
+#: src/control/Control.Tabs.js:564
 msgid "Rename sheet"
 msgstr "Перейменувати аркуш"
 
-#: src/control/Control.Tabs.js:556
+#: src/control/Control.Tabs.js:564
 msgid "Enter new sheet name"
 msgstr "Введіть нову назву аркуша"
 
@@ -4839,7 +4856,7 @@ msgstr ""
 "API. Це може спричинити певні проблеми під час редагування цитат або "
 "бібліографії."
 
-#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2480
+#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2502
 msgid "Loading..."
 msgstr "Завантаження…"
 
@@ -5118,19 +5135,19 @@ msgstr "Режим Редагування"
 msgid "Viewing"
 msgstr "Перегляд"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:311
+#: src/control/jsdialog/Control.ContextMenu.ts:312
 msgid "Save Image to Server"
 msgstr "Зберегти Зображення на Сервері"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:349
+#: src/control/jsdialog/Control.ContextMenu.ts:350
 msgid "Paste Special"
 msgstr "Вставити як"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:360
+#: src/control/jsdialog/Control.ContextMenu.ts:361
 msgid "Copy Cells"
 msgstr "Копіювати комірки"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:369
+#: src/control/jsdialog/Control.ContextMenu.ts:370
 msgid "Fill Series"
 msgstr "Заповнити ряди"
 
@@ -5582,19 +5599,29 @@ msgstr "Відкрити список"
 msgid "Filter entries"
 msgstr "Фільтрувати записи"
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:186
-msgid "CSV column ruler: click to toggle a column split"
-msgstr "Лінійка стовпців CSV: натисніть щоб перемкнути розділення стовпчика"
+#: src/control/jsdialog/Widget.CsvGrid.ts:64
+msgid "Position {n}, split set"
+msgstr ""
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:315
+#: src/control/jsdialog/Widget.CsvGrid.ts:65
+msgid "Position {n}, no split"
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:228
+msgid ""
+"Column split ruler. Use the arrow keys to move the cursor and Space to "
+"toggle a split."
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
 msgstr "Попередній перегляд імпорту CSV"
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:337
+#: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
 msgstr "Номер рядку"
 
-#: src/control/jsdialog/Widget.CsvGrid.ts:349
+#: src/control/jsdialog/Widget.CsvGrid.ts:451
 msgid "Column {index}"
 msgstr "Стовпчик {index}"
 
@@ -5764,11 +5791,23 @@ msgstr "Значення декременту"
 msgid "More options for {1}"
 msgstr "Більше опцій для {1}"
 
-#: src/control/jsdialog/Widget.TreeView.ts:2004
+#: src/control/jsdialog/Widget.TreeView.ts:1738
+msgid "Cell value"
+msgstr ""
+
+#: src/control/jsdialog/Widget.TreeView.ts:1742
+msgid "row %1"
+msgstr ""
+
+#: src/control/jsdialog/Widget.TreeView.ts:1751
+msgid "%1, %2"
+msgstr ""
+
+#: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
 msgstr "Тут з'являться заголовки та об'єкти, які ви додасте до документа"
 
-#: src/control/jsdialog/Widget.TreeView.ts:2052
+#: src/control/jsdialog/Widget.TreeView.ts:2541
 msgid "Search items"
 msgstr "Пошукові елементи"
 
@@ -5800,126 +5839,134 @@ msgstr "Експортовано в сховище"
 msgid "Successfully exported: "
 msgstr "Успішно експортовано: "
 
-#: src/app/Socket.ts:1604
+#: src/app/Socket.ts:1113
+msgid "This document has links to external content."
+msgstr ""
+
+#: src/app/Socket.ts:1114
+msgid "Allow"
+msgstr ""
+
+#: src/app/Socket.ts:1626
 msgid "Discard"
 msgstr "Відхилити"
 
-#: src/app/Socket.ts:1622
+#: src/app/Socket.ts:1644
 msgid "Save to new file"
 msgstr "Зберегти в новий файл"
 
-#: src/app/Socket.ts:1635
+#: src/app/Socket.ts:1657
 msgid "Document has been changed"
 msgstr "Документ було змінено"
 
-#: src/app/Socket.ts:1637
+#: src/app/Socket.ts:1659
 msgid ""
 "Document has been changed in storage. What would you like to do with your "
 "unsaved changes?"
 msgstr ""
 "Документ було змінено у сховищі. Що зробити зі своїми незбереженими змінами?"
 
-#: src/app/Socket.ts:1789
+#: src/app/Socket.ts:1811
 msgid "Server is now reachable. We have to refresh the page now."
 msgstr "Сервер тепер доступний. Ми мусимо оновити сторінку зараз."
 
-#: src/app/Socket.ts:1792
+#: src/app/Socket.ts:1814
 msgid "Server is now reachable..."
 msgstr "Сервер уже доступний..."
 
-#: src/app/Socket.ts:1800
+#: src/app/Socket.ts:1822
 msgid "RELOAD"
 msgstr "ПЕРЕЗАВАНТАЖИТИ"
 
-#: src/app/Socket.ts:1828
+#: src/app/Socket.ts:1850
 msgid "Cluster configuration warning"
 msgstr "Попередження конфігурації кластера"
 
-#: src/app/Socket.ts:1837
+#: src/app/Socket.ts:1859
 msgid "Wrong server, reconnecting..."
 msgstr "Неправильний сервер, повторне з'єднання..."
 
-#: src/app/Socket.ts:1855
+#: src/app/Socket.ts:1877
 msgid "Unsupported server version."
 msgstr "Непідтримувана версія сервера."
 
-#: src/app/Socket.ts:1999
+#: src/app/Socket.ts:2021
 msgid "Document is getting migrated"
 msgstr "Документ переноситься"
 
-#: src/app/Socket.ts:2238
+#: src/app/Socket.ts:2260
 msgid "Document requires password to view."
 msgstr "Документ вимагає пароль для перегляду."
 
-#: src/app/Socket.ts:2240
+#: src/app/Socket.ts:2262
 msgid "Document requires password to modify."
 msgstr "Документ вимагає пароль для редагування."
 
-#: src/app/Socket.ts:2242
+#: src/app/Socket.ts:2264
 msgid "Hit Cancel to open in view-only mode."
 msgstr "Натисніть Скасувати для відкриття у режимі перегляду."
 
-#: src/app/Socket.ts:2246
+#: src/app/Socket.ts:2268
 msgid "Wrong password provided. Please try again."
 msgstr "Надано неправильний пароль. Спробуйте знову."
 
-#: src/app/Socket.ts:2291
+#: src/app/Socket.ts:2313
 msgid "Only the document owner can change the password."
 msgstr "Лише власник документа може змінити пароль."
 
-#: src/app/Socket.ts:2332 src/app/Socket.ts:2343
+#: src/app/Socket.ts:2354 src/app/Socket.ts:2365
 msgid "Missing Fonts"
 msgstr "Відсутні шрифти"
 
-#: src/app/Socket.ts:2381
+#: src/app/Socket.ts:2403
 msgid "Someone"
 msgstr "Хтось"
 
-#: src/app/Socket.ts:2383
+#: src/app/Socket.ts:2405
 msgid "{username} saved this document as {filename}. Do you want to join?"
 msgstr "{username} зберіг цей документ як {filename}. Бажаєте приєднатися?"
 
-#: src/app/Socket.ts:2406
+#: src/app/Socket.ts:2428
 msgid "The document is being renamed and will reload shortly"
 msgstr "Документ перейменовується і незабаром його буде перезавантажено"
 
-#: src/app/Socket.ts:2409
+#: src/app/Socket.ts:2431
 msgid "The document is switching to Offline mode and will reload shortly"
 msgstr ""
 "Документ переходить в офлайн-режим і незабаром його буде перезавантажено"
 
-#: src/app/Socket.ts:2480
+#: src/app/Socket.ts:2502
 msgid "Connecting..."
 msgstr "З'єднання..."
 
-#: src/app/Socket.ts:2496
+#: src/app/Socket.ts:2518
 msgid "Server is shutting down"
 msgstr "Сервер вимикається"
 
-#: src/docdispatcher.ts:378 src/docdispatcher.ts:391
+#: src/docdispatcher.ts:375 src/docdispatcher.ts:388
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
 "ШІ не налаштовано. Перейдіть до Файл > Опції > Переглянути Налаштування , "
 "щоб налаштувати його."
 
-#: src/docdispatcher.ts:612
+#: src/docdispatcher.ts:609
 msgid "Are you sure you want to delete this slide?"
 msgstr "Ви дійсно бажаєте видалити цей слайд?"
 
-#: src/docdispatcher.ts:615
+#: src/docdispatcher.ts:612
 msgid "Are you sure you want to delete this page?"
 msgstr "Ви дійсно бажаєте видалити цю сторінку?"
 
-#: src/docstate.ts:149
+#: src/docstate.ts:150
 msgid "Standard"
 msgstr "Стандартно"
 
-#: src/docstate.ts:294
+#: src/docstate.ts:295
 msgid "Theme colors"
 msgstr "Кольори теми"
 
-#: src/docstate.ts:295
+#: src/docstate.ts:296
 msgid "Document colors"
 msgstr "Кольори документа"
 
@@ -6249,15 +6296,15 @@ msgstr "меню Перегляду"
 msgid "Online Editor"
 msgstr "Онлайн Редактор"
 
-#: src/layer/tile/CanvasTileLayer.js:1536
+#: src/layer/tile/CanvasTileLayer.js:1544
 msgid "Functions"
 msgstr "Функції"
 
-#: src/layer/tile/CanvasTileLayer.js:1813
+#: src/layer/tile/CanvasTileLayer.js:1821
 msgid "Named Range"
 msgstr "Іменований діапазон"
 
-#: src/layer/tile/CanvasTileLayer.js:3621
+#: src/layer/tile/CanvasTileLayer.js:3629
 msgid "No Comments"
 msgstr "Коментарі відсутні"
 
@@ -6282,7 +6329,7 @@ msgstr "попередження: закінчився термін дії за�
 msgid "Failed to download clipboard, please re-copy"
 msgstr "Не вдалося звантажити буфер обміну, будь-ласка повторіть копіювання"
 
-#: src/map/Clipboard.js:1492
+#: src/map/Clipboard.js:1495
 msgid ""
 "Your browser has very limited access to the clipboard, so please use the "
 "paste buttons on your on-screen keyboard instead."
@@ -6290,7 +6337,7 @@ msgstr ""
 "Ваш браузер має дуже обмежений доступ до буферу обміну, тому будь-ласка "
 "використовуйте кнопки вставки на вашій екранній клавіатурі."
 
-#: src/map/Clipboard.js:1498
+#: src/map/Clipboard.js:1501
 msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
@@ -6298,11 +6345,11 @@ msgstr ""
 "Ваш браузер має дуже обмежений доступ до буферу обміну, тому використовуйте "
 "ці скорочення клавіатури:"
 
-#: src/map/Clipboard.js:1532
+#: src/map/Clipboard.js:1535
 msgid "Cut"
 msgstr "Вирізати"
 
-#: src/map/Clipboard.js:1548
+#: src/map/Clipboard.js:1551
 msgid ""
 "A download due to a large copy/paste operation has already started. Please, "
 "wait for the current download or cancel it before starting a new one"
@@ -6311,24 +6358,24 @@ msgstr ""
 "дочекайтесь завершення поточного звантаження або скасуйте його, щоб "
 "розпочати нове"
 
-#: src/map/Clipboard.js:1576
+#: src/map/Clipboard.js:1579
 msgid "Paste from this document"
 msgstr "Вставити з цього документа"
 
-#: src/map/Clipboard.js:1576
+#: src/map/Clipboard.js:1579
 msgid "Cancel paste special"
 msgstr "Скасувати спеціальне вставлення"
 
-#: src/map/Clipboard.js:1598
+#: src/map/Clipboard.js:1601
 msgid "Your browser has very limited access to the clipboard"
 msgstr "Ваш браузер має дуже обмежений доступ до буферу обміну"
 
-#: src/map/Clipboard.js:1603
+#: src/map/Clipboard.js:1606
 msgid "Please use following combination to see more options:"
 msgstr ""
 "Будь ласка, використовуйте таку комбінацію, щоб побачити більше варіантів:"
 
-#: src/map/Clipboard.js:1621
+#: src/map/Clipboard.js:1624
 msgid "Close popup to ignore paste special"
 msgstr "Закрийте спливне вікно, щоб ігнорувати спеціальне вставлення"
 
@@ -6467,17 +6514,21 @@ msgstr "Створити новий файл із шаблона..."
 msgid "Compare Document..."
 msgstr "Порівняти Документ..."
 
-#: src/map/handler/Map.WOPI.js:869
+#: src/map/handler/Map.WOPI.js:871
 msgid "File name should contain an extension."
 msgstr "Назва файлу повинна містити розширення."
 
-#: src/map/handler/Map.WOPI.js:878
+#: src/map/handler/Map.WOPI.js:880
 msgid "Creating copy..."
 msgstr "Створення копії..."
 
 #: src/map/handler/Map.Welcome.js:118
 msgid "Welcome Dialog"
 msgstr "Діалогове Вікно Привітання"
+
+#: src/map/handler/Map.Settings.ts:143
+msgid "Settings saved"
+msgstr ""
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
@@ -6815,6 +6866,15 @@ msgstr ""
 "translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
+
+#~ msgid "(No extensions installed)"
+#~ msgstr "(Ніяких розширень не встановлено)"
+
+#~ msgid "No extensions are installed."
+#~ msgstr "Ніяких розширень не встановлено."
+
+#~ msgid "CSV column ruler: click to toggle a column split"
+#~ msgstr "Лінійка стовпців CSV: натисніть щоб перемкнути розділення стовпчика"
 
 #~ msgid "Document settings"
 #~ msgstr "Налаштування Документа"
