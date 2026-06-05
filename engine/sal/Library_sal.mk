@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 	-DSAL_DLLIMPLEMENTATION \
 	-DRTL_OS="\"$(RTL_OS)\"" \
 	-DRTL_ARCH="\"$(RTL_ARCH)\"" \
-	-DSRCDIR="\"$(SRCDIR)\"" \
+	$(if $(filter TRUE,$(HAVE_GCC_FMACRO_PREFIX_MAP)),,-DSRCDIR="\"$(SRCDIR)\"") \
     $(call gb_CondLibSalTextenc,-DCOND_LIB_SAL_TEXTENC) \
 ))
 

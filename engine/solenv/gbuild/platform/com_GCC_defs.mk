@@ -117,6 +117,14 @@ gb_CXXFLAGS_Wundef = -Wno-undef
 
 gb_CXXFLAGS_include := -include$(gb_SPACE)
 
+# where the compiler supports it, make __FILE__ relative to the source
+# tree root (keeps the build location out of the binary, and lets a
+# translation unit hash the same from any worktree)
+ifeq ($(HAVE_GCC_FMACRO_PREFIX_MAP),TRUE)
+gb_CFLAGS_COMMON += -fmacro-prefix-map=$(SRCDIR)/=
+gb_CXXFLAGS_COMMON += -fmacro-prefix-map=$(SRCDIR)/=
+endif
+
 ifeq ($(ENABLE_GCOV),TRUE)
 gb_GCOV_LDFLAGS := -fprofile-arcs -lgcov
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage

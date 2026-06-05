@@ -321,10 +321,16 @@ void sal_detail_log(
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
         s << ' ';
     } else {
+#ifdef SRCDIR
+        // MSVC keeps an absolute __FILE__; strip the source-tree prefix
         const size_t nStrLen(std::strlen(SRCDIR "/"));
         s << (where
               + (std::strncmp(where, SRCDIR "/", nStrLen) == 0
                  ? nStrLen : 0));
+#else
+        // __FILE__ is already relative to the source tree
+        s << where;
+#endif
     }
     s << message;
     if (backtraceDepth != 0) {

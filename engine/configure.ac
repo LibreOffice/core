@@ -4645,6 +4645,21 @@ if test "$GCC" = "yes" -a "$_os" != "Emscripten"; then
 fi
 AC_SUBST(HAVE_GCC_GGDB2)
 
+HAVE_GCC_FMACRO_PREFIX_MAP=
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING([whether $CC_BASE supports -fmacro-prefix-map])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -fmacro-prefix-map=.=."
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FMACRO_PREFIX_MAP=TRUE ],[])
+    CFLAGS=$save_CFLAGS
+    if test "$HAVE_GCC_FMACRO_PREFIX_MAP" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(HAVE_GCC_FMACRO_PREFIX_MAP)
+
 dnl ===================================================================
 dnl  Test the gcc version
 dnl ===================================================================
