@@ -60,10 +60,6 @@ endif
 # Make has no support for 'or' clauses in conditionals,
 # we use a filter expression instead.
 ifneq (,$(filter SOLARIS GCC,$(OS) $(COM)))
-gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst purpenvhelper:libpurpen%,purpenvhelper:libuno_purpen%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
-
 ifeq ($(OS),MACOSX)
 # libpyuno_wrapper.dylib => pyuno.so
 gb_Library_FILENAMES := $(patsubst pyuno_wrapper:libpyuno_wrapper.dylib,pyuno_wrapper:pyuno.so,$(gb_Library_FILENAMES))

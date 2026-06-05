@@ -674,15 +674,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexp
 
 endif # WNT
 
-$(eval $(call gb_Helper_register_libraries_for_install,RTVERLIBS,ure, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ure, \
+	cppu \
 	cppuhelper \
 	purpenvhelper \
-	salhelper \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,UNOVERLIBS,ure, \
-	cppu \
 	sal \
+	salhelper \
 ))
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \

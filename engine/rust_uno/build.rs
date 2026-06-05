@@ -21,9 +21,9 @@ fn main() {
     } else {
         println!("cargo:rustc-link-lib=rust_uno-cpplo");
         // requires sal & co to link
-        println!("cargo:rustc-link-lib=uno_cppu");
-        println!("cargo:rustc-link-lib=uno_sal");
-        println!("cargo:rustc-link-lib=uno_salhelpergcc3");
+        println!("cargo:rustc-link-lib=cppulo");
+        println!("cargo:rustc-link-lib=sallo");
+        println!("cargo:rustc-link-lib=salhelperlo");
 
     }
 

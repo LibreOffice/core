@@ -364,8 +364,6 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OXT),$(lib):OXT) \
 	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_SHLXTHDL),$(lib):SHLXTHDL) \
 
@@ -373,7 +371,6 @@ gb_Library_ILIBFILENAMES :=\
 	$(foreach lib,$(gb_Library_KNOWNLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 gb_Library_DLLEXT := .dll
-gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 
@@ -385,8 +382,6 @@ gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_OXT),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_SHLXTHDL),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):$(lib)$(gb_Library_OOOEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTEXT)) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
 # An assembly is a special kind of library for CLI

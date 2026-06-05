@@ -125,13 +125,13 @@ fi
 
 if [[ -n "${MERGELIBS}" ]]; then
     make_autoload merged program libmergedlo."$DYLIB" merge svl tl basegfx vcl utl
-    make_autoload cppu program libuno_cppu."$DYLIB".3
-    make_autoload sal program libuno_sal."$DYLIB".3
+    make_autoload cppu program libcppulo."$DYLIB"
+    make_autoload sal program libsallo."$DYLIB"
     make_autoload sw program libswlo."$DYLIB"
 else
     make_autoload basegfx program libbasegfxlo."$DYLIB"
-    make_autoload cppu program libuno_cppu."$DYLIB".3
-    make_autoload sal program libuno_sal."$DYLIB".3
+    make_autoload cppu program libcppulo."$DYLIB"
+    make_autoload sal program libsallo."$DYLIB"
     make_autoload svl program libsvllo."$DYLIB"
     make_autoload sw program libswlo."$DYLIB"
     make_autoload tl program libtllo."$DYLIB"
