@@ -1382,7 +1382,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
         WriteFromTo( rStrm, *this );
         bool bWriteAsShape(true);
 
-        if (pObject->isDiagram())
+        if (pObject && pObject->isDiagram())
         {
             bool bSaveAsDiagram(false);
             const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(pObject->getDiagramHelper());
