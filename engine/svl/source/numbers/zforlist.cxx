@@ -921,43 +921,43 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
     // nowhere defined. See tdf#126773
     // Use lower case for all date and time keywords where known. See OOXML
     // ECMA-376-1:2016 18.8.31 numFmts (Number Formats)
-    rKeywords[ NF_KEY_MI ]    = "m";
-    rKeywords[ NF_KEY_MMI ]   = "mm";
-    rKeywords[ NF_KEY_M ]     = "m";
-    rKeywords[ NF_KEY_MM ]    = "mm";
-    rKeywords[ NF_KEY_MMM ]   = "mmm";
-    rKeywords[ NF_KEY_MMMM ]  = "mmmm";
-    rKeywords[ NF_KEY_MMMMM ] = "mmmmm";
-    rKeywords[ NF_KEY_H ]     = "h";
-    rKeywords[ NF_KEY_HH ]    = "hh";
-    rKeywords[ NF_KEY_S ]     = "s";
-    rKeywords[ NF_KEY_SS ]    = "ss";
+    rKeywords[ NF_KEY_MI ]    = u"m"_ustr;
+    rKeywords[ NF_KEY_MMI ]   = u"mm"_ustr;
+    rKeywords[ NF_KEY_M ]     = u"m"_ustr;
+    rKeywords[ NF_KEY_MM ]    = u"mm"_ustr;
+    rKeywords[ NF_KEY_MMM ]   = u"mmm"_ustr;
+    rKeywords[ NF_KEY_MMMM ]  = u"mmmm"_ustr;
+    rKeywords[ NF_KEY_MMMMM ] = u"mmmmm"_ustr;
+    rKeywords[ NF_KEY_H ]     = u"h"_ustr;
+    rKeywords[ NF_KEY_HH ]    = u"hh"_ustr;
+    rKeywords[ NF_KEY_S ]     = u"s"_ustr;
+    rKeywords[ NF_KEY_SS ]    = u"ss"_ustr;
     /* XXX: not defined in OOXML: rKeywords[ NF_KEY_Q ]     = "q"; */
     /* XXX: not defined in OOXML: rKeywords[ NF_KEY_QQ ]    = "qq"; */
-    rKeywords[ NF_KEY_D ]     = "d";
-    rKeywords[ NF_KEY_DD ]    = "dd";
-    rKeywords[ NF_KEY_DDD ]   = "ddd";
-    rKeywords[ NF_KEY_DDDD ]  = "dddd";
-    rKeywords[ NF_KEY_YY ]    = "yy";
-    rKeywords[ NF_KEY_YYYY ]  = "yyyy";
+    rKeywords[ NF_KEY_D ]     = u"d"_ustr;
+    rKeywords[ NF_KEY_DD ]    = u"dd"_ustr;
+    rKeywords[ NF_KEY_DDD ]   = u"ddd"_ustr;
+    rKeywords[ NF_KEY_DDDD ]  = u"dddd"_ustr;
+    rKeywords[ NF_KEY_YY ]    = u"yy"_ustr;
+    rKeywords[ NF_KEY_YYYY ]  = u"yyyy"_ustr;
     /* XXX: not defined in OOXML: rKeywords[ NF_KEY_AAA ]   = "aaa"; */
     /* XXX: not defined in OOXML: rKeywords[ NF_KEY_AAAA ]  = "aaaa"; */
-    rKeywords[ NF_KEY_EC ]    = "e";
-    rKeywords[ NF_KEY_EEC ]   = "ee";
-    rKeywords[ NF_KEY_G ]     = "g";
-    rKeywords[ NF_KEY_GG ]    = "gg";
-    rKeywords[ NF_KEY_GGG ]   = "ggg";
-    rKeywords[ NF_KEY_R ]     = "r";
-    rKeywords[ NF_KEY_RR ]    = "rr";
+    rKeywords[ NF_KEY_EC ]    = u"e"_ustr;
+    rKeywords[ NF_KEY_EEC ]   = u"ee"_ustr;
+    rKeywords[ NF_KEY_G ]     = u"g"_ustr;
+    rKeywords[ NF_KEY_GG ]    = u"gg"_ustr;
+    rKeywords[ NF_KEY_GGG ]   = u"ggg"_ustr;
+    rKeywords[ NF_KEY_R ]     = u"r"_ustr;
+    rKeywords[ NF_KEY_RR ]    = u"rr"_ustr;
     /* XXX: not defined in OOXML: rKeywords[ NF_KEY_WW ]    = "ww"; */
 
     // Remap codes unknown to Excel.
-    rKeywords[ NF_KEY_NN ] = "ddd";
-    rKeywords[ NF_KEY_NNN ] = "dddd";
+    rKeywords[ NF_KEY_NN ] = u"ddd"_ustr;
+    rKeywords[ NF_KEY_NNN ] = u"dddd"_ustr;
     // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
-    rKeywords[ NF_KEY_NNNN ] = "dddd";
+    rKeywords[ NF_KEY_NNNN ] = u"dddd"_ustr;
     // Export the Thai T NatNum modifier. This must be uppercase for internal reasons.
-    rKeywords[ NF_KEY_THAI_T ] = "T";
+    rKeywords[ NF_KEY_THAI_T ] = u"T"_ustr;
 }
 
 static OUString lcl_buildBooleanStringFormat(const SvNumberformat* pEntry, const NativeNumberWrapper& rNatNum, const SvNFLanguageData& rCurrentLang)
@@ -1045,7 +1045,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
     }
 
     if (aFormatStr.isEmpty())
-        aFormatStr = "General";
+        aFormatStr = u"General"_ustr;
     return aFormatStr;
 }
 
@@ -2633,18 +2633,18 @@ OUString SvNFFormatData::GetCalcCellReturn(sal_uInt32 nFormat) const
     {
         case SvNumFormatType::NUMBER:
             if (bThousand)
-                aStr = ",";
+                aStr = u","_ustr;
             else
-                aStr = "F";
+                aStr = u"F"_ustr;
         break;
         case SvNumFormatType::CURRENCY:
-            aStr = "C";
+            aStr = u"C"_ustr;
         break;
         case SvNumFormatType::SCIENTIFIC:
-            aStr = "S";
+            aStr = u"S"_ustr;
         break;
         case SvNumFormatType::PERCENT:
-            aStr = "P";
+            aStr = u"P"_ustr;
         break;
         default:
             {
@@ -2658,19 +2658,19 @@ OUString SvNFFormatData::GetCalcCellReturn(sal_uInt32 nFormat) const
                     case NF_DATE_SYS_DMMMYYYY:
                     case NF_DATE_DIN_DMMMYYYY:
                     case NF_DATE_SYS_DMMMMYYYY:
-                    case NF_DATE_DIN_DMMMMYYYY: aStr = "D1"; break;
-                    case NF_DATE_SYS_DDMMM:     aStr = "D2"; break;
-                    case NF_DATE_SYS_MMYY:      aStr = "D3"; break;
+                    case NF_DATE_DIN_DMMMMYYYY: aStr = u"D1"_ustr; break;
+                    case NF_DATE_SYS_DDMMM:     aStr = u"D2"_ustr; break;
+                    case NF_DATE_SYS_MMYY:      aStr = u"D3"_ustr; break;
                     case NF_DATETIME_SYSTEM_SHORT_HHMM:
                     case NF_DATETIME_SYS_DDMMYYYY_HHMM:
                     case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
-                                                aStr = "D4"; break;
-                    case NF_DATE_DIN_MMDD:      aStr = "D5"; break;
-                    case NF_TIME_HHMMSSAMPM:    aStr = "D6"; break;
-                    case NF_TIME_HHMMAMPM:      aStr = "D7"; break;
-                    case NF_TIME_HHMMSS:        aStr = "D8"; break;
-                    case NF_TIME_HHMM:          aStr = "D9"; break;
-                    default:                    aStr = "G";
+                                                aStr = u"D4"_ustr; break;
+                    case NF_DATE_DIN_MMDD:      aStr = u"D5"_ustr; break;
+                    case NF_TIME_HHMMSSAMPM:    aStr = u"D6"_ustr; break;
+                    case NF_TIME_HHMMAMPM:      aStr = u"D7"_ustr; break;
+                    case NF_TIME_HHMMSS:        aStr = u"D8"_ustr; break;
+                    case NF_TIME_HHMM:          aStr = u"D9"_ustr; break;
+                    default:                    aStr = u"G"_ustr;
                 }
             }
     }
@@ -2963,7 +2963,7 @@ void SvNFFormatData::ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage, cons
         }
 
         // Text
-        aFormatCode = "@";
+        aFormatCode = u"@"_ustr;
         pNewFormat.reset(new SvNumberformat( aFormatCode, rCurrentLanguage.pFormatScanner.get(),
                                              rCurrentLanguage.pStringScanner.get(), rNatNum, nCheckPos, rCurrentLanguage.ActLnge ));
         pNewFormat->SetType(SvNumFormatType::TEXT);
@@ -3315,49 +3315,49 @@ void SvNFFormatData::ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage, cons
     aSingleFormatCode.Usage = i18n::KNumberFormatUsage::FRACTION_NUMBER;
 
      // # ?/?
-    aSingleFormatCode.Code = "# ?/?";
+    aSingleFormatCode.Code = u"# ?/?"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION /* NF_FRACTION_1D */ );
 
     // # ??/??
     //! "??/" would be interpreted by the compiler as a trigraph for '\'
-    aSingleFormatCode.Code = "# ?\?/?\?";
+    aSingleFormatCode.Code = u"# ?\?/?\?"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+1 /* NF_FRACTION_2D */ );
 
     // # ???/???
     //! "??/" would be interpreted by the compiler as a trigraph for '\'
-    aSingleFormatCode.Code = "# ?\?\?/?\?\?";
+    aSingleFormatCode.Code = u"# ?\?\?/?\?\?"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+2 /* NF_FRACTION_3D */ );
 
     // # ?/2
-    aSingleFormatCode.Code = "# ?/2";
+    aSingleFormatCode.Code = u"# ?/2"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+3 /* NF_FRACTION_2 */ );
 
     // # ?/4
-    aSingleFormatCode.Code = "# ?/4";
+    aSingleFormatCode.Code = u"# ?/4"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+4 /* NF_FRACTION_4 */ );
 
     // # ?/8
-    aSingleFormatCode.Code = "# ?/8";
+    aSingleFormatCode.Code = u"# ?/8"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+5 /* NF_FRACTION_8 */ );
 
     // # ??/16
-    aSingleFormatCode.Code = "# ?\?/16";
+    aSingleFormatCode.Code = u"# ?\?/16"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+6 /* NF_FRACTION_16 */ );
 
     // # ??/10
-    aSingleFormatCode.Code = "# ?\?/10";
+    aSingleFormatCode.Code = u"# ?\?/10"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+7 /* NF_FRACTION_10 */ );
 
     // # ??/100
-    aSingleFormatCode.Code = "# ?\?/100";
+    aSingleFormatCode.Code = u"# ?\?/100"_ustr;
     ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+8 /* NF_FRACTION_100 */ );
 

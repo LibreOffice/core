@@ -301,21 +301,21 @@ void Test::testNumberFormat()
     sal_uInt32 nKey;
     OUString aCode;
     // Thai date format (implicit locale).
-    aCode = "[$-1070000]d/mm/yyyy;@";
+    aCode = u"[$-1070000]d/mm/yyyy;@"_ustr;
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-1070000]d/mm/yyyy;@'", false);
     }
 
     // Thai date format (explicit locale)
-    aCode = "[$-107041E]d/mm/yyyy;@";
+    aCode = u"[$-107041E]d/mm/yyyy;@"_ustr;
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-107041E]d/mm/yyyy;@'", false);
     }
 
     // Thai date format (using buddhist calendar type).
-    aCode = "[~buddhist]D MMMM YYYY";
+    aCode = u"[~buddhist]D MMMM YYYY"_ustr;
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[~buddhist]D MMMM YYYY'", false);
@@ -480,17 +480,17 @@ void Test::testFdo60915()
     double fPreviewNumber = 36486; // equals 1999-11-22 (2542 B.E.)
     SvNumberFormatter aFormatter(m_xContext, eLang);
     {
-        sCode = "[~buddhist]D/MM/YYYY";
-        sExpected = "22/11/2542";
+        sCode = u"[~buddhist]D/MM/YYYY"_ustr;
+        sExpected = u"22/11/2542"_ustr;
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
     {
-        sCode = "[~buddhist]D/MM/YY";
-        sExpected = "22/11/42";
+        sCode = u"[~buddhist]D/MM/YY"_ustr;
+        sExpected = u"22/11/42"_ustr;
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
     {
-        sCode = "[NatNum1][$-41E][~buddhist]D/MM/YYYY";
+        sCode = u"[NatNum1][$-41E][~buddhist]D/MM/YYYY"_ustr;
         sal_Unicode sTemp[] =
         {
             0x0E52, 0x0E52, 0x002F,
@@ -501,7 +501,7 @@ void Test::testFdo60915()
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
     {
-        sCode = "[NatNum1][$-41E][~buddhist]D/MM/YY";
+        sCode = u"[NatNum1][$-41E][~buddhist]D/MM/YY"_ustr;
         sal_Unicode sTemp[] =
         {
             0x0E52, 0x0E52, 0x002F,
@@ -562,13 +562,13 @@ void Test::testTdf103060()
     OUString sCode, sExpected;
     double fPreviewNumber = 42655; // equals 2016-10-12
     SvNumberFormatter aFormatter(m_xContext, eLang);
-    sCode = "G";
-    sExpected = "H"; // Heisei era
+    sCode = u"G"_ustr;
+    sExpected = u"H"_ustr; // Heisei era
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
-    sCode = "GG";
+    sCode = u"GG"_ustr;
     sExpected = u"\u5E73"_ustr;
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
-    sCode = "GGG";
+    sCode = u"GGG"_ustr;
     sExpected = u"\u5E73\u6210"_ustr;
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
 }
@@ -1395,216 +1395,216 @@ void Test::testUserDefinedNumberFormats()
     // tdf#158890 replace '?' with figure blank (0x2007)
     static constexpr OUString sBlankDigit = u" "_ustr;
     {  // tdf#97835: suppress decimal separator
-        sCode = "0.##\" m\"";
-        sExpected = "12 m";
+        sCode = u"0.##\" m\""_ustr;
+        sExpected = u"12 m"_ustr;
         checkPreviewString(aFormatter, sCode, 12.0, eLang, sExpected);
     }
     {  // tdf#61996: skip quoted text
-        sCode = "0.00\" ;\"";
-        sExpected = "-12.00 ;";
+        sCode = u"0.00\" ;\""_ustr;
+        sExpected = u"-12.00 ;"_ustr;
         checkPreviewString(aFormatter, sCode, -12.0, eLang, sExpected);
     }
     {  // tdf#100755
-        sCode = "000\" \"000/000";
-        sExpected = "003 016/113";
+        sCode = u"000\" \"000/000"_ustr;
+        sExpected = u"003 016/113"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#100834
-        sCode = "#\" string \"?/???";
-        sExpected = "3 string 16/113";
+        sCode = u"#\" string \"?/???"_ustr;
+        sExpected = u"3 string 16/113"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#129878
-        sCode =     "[HH]";
-        sExpected = "#FMT";
+        sCode =     u"[HH]"_ustr;
+        sExpected = u"#FMT"_ustr;
         checkPreviewString(aFormatter, sCode, 2E+306, eLang, sExpected);
     }
     {  // tdf#144697
-        sCode =     "YYYY-MM-DD";
-        sExpected = "#FMT";
+        sCode =     u"YYYY-MM-DD"_ustr;
+        sExpected = u"#FMT"_ustr;
         checkPreviewString(aFormatter, sCode, -12662108.0, eLang, sExpected);
     }
     {  // tdf#122991
-        sCode =     "[HH]:MM:SS";
-        sExpected = "08:47:00";
+        sCode =     u"[HH]:MM:SS"_ustr;
+        sExpected = u"08:47:00"_ustr;
         checkPreviewString(aFormatter, sCode, 0.365972222222222, eLang, sExpected);
 
-        sCode =     "HH:MM:SS";
+        sCode =     u"HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, 0.365972222222222, eLang, sExpected);
     }
     {  // tdf#100122
-        sCode =     "?/?";
-        sExpected = "-1/2";
+        sCode =     u"?/?"_ustr;
+        sExpected = u"-1/2"_ustr;
         checkPreviewString(aFormatter, sCode, -0.5, eLang, sExpected);
     }
     {  // tdf#167892: hang formatting as fraction
-        sCode =     "#/?";
-        sExpected = "0/1";
+        sCode =     u"#/?"_ustr;
+        sExpected = u"0/1"_ustr;
         checkPreviewString(aFormatter, sCode, 0.0000000000000000001, eLang, sExpected);
     }
     {  // tdf#52510
-        sCode =     "_($* #,##0.00_);_($* (#,##0.00);";
-        sExpected = "";
+        sCode =     u"_($* #,##0.00_);_($* (#,##0.00);"_ustr;
+        sExpected = u""_ustr;
         checkPreviewString(aFormatter, sCode, 0.0, eLang, sExpected);
     }
     {  // tdf#95339: detect SSMM as second minute
-        sCode =     "SS:MM:HH DD/MM/YY"; // Month not detected by Excel, but we do not follow that.
-        sExpected = "53:23:03 02/01/00";
+        sCode =     u"SS:MM:HH DD/MM/YY"_ustr; // Month not detected by Excel, but we do not follow that.
+        sExpected = u"53:23:03 02/01/00"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#101147: detect SSMM as second month
-        sCode =     "HH:MM:SS MM/DD";
-        sExpected = "03:23:53 01/02";
+        sCode =     u"HH:MM:SS MM/DD"_ustr;
+        sExpected = u"03:23:53 01/02"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#123748
-        sCode =     "HH:MM:SS.000000";
-        sExpected = "12:54:00.000000";
+        sCode =     u"HH:MM:SS.000000"_ustr;
+        sExpected = u"12:54:00.000000"_ustr;
         checkPreviewString(aFormatter, sCode, 43521.5375, eLang, sExpected);
     }
     {  // tdf#101096: different detection of month/minute with Excel
-        sCode =     "HH DD MM"; // month detected because of previous DD
-        sExpected = "03 02 01";
+        sCode =     u"HH DD MM"_ustr; // month detected because of previous DD
+        sExpected = u"03 02 01"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "HH:MM HH DD/MM"; // month detected because of previous DD
-        sExpected = "03:23 03 02/01";
+        sCode =     u"HH:MM HH DD/MM"_ustr; // month detected because of previous DD
+        sExpected = u"03:23 03 02/01"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "SS:DD-MM-YY SS:MM"; // 1st is month, because of previous DD; 2nd is minute as SS has not minute
-        sExpected = "53:02-01-00 53:23";
+        sCode =     u"SS:DD-MM-YY SS:MM"_ustr; // 1st is month, because of previous DD; 2nd is minute as SS has not minute
+        sExpected = u"53:02-01-00 53:23"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#99996: better algorithm for fraction representation
-        sCode = "# ?/???";
-        sExpected = "-575 540/697";
+        sCode = u"# ?/???"_ustr;
+        sExpected = u"-575 540/697"_ustr;
         checkPreviewString(aFormatter, sCode, -575.774749601315, eLang, sExpected);
     }
     {  // tdf#153887: integer value without integer part displayed
-        sCode = "#/?";
-        sExpected = "2/1";
+        sCode = u"#/?"_ustr;
+        sExpected = u"2/1"_ustr;
         checkPreviewString(aFormatter, sCode, 1.95, eLang, sExpected);
         checkPreviewString(aFormatter, sCode, 2.00, eLang, sExpected);
         checkPreviewString(aFormatter, sCode, 2.05, eLang, sExpected);
-        sCode = "0/8";
-        sExpected = "16/8";
+        sCode = u"0/8"_ustr;
+        sExpected = u"16/8"_ustr;
         checkPreviewString(aFormatter, sCode, 1.95, eLang, sExpected);
         checkPreviewString(aFormatter, sCode, 2.00, eLang, sExpected);
         checkPreviewString(aFormatter, sCode, 2.05, eLang, sExpected);
     }
     {  // tdf#102507: left alignment of denominator
-        sCode = "# ?/???";
+        sCode = u"# ?/???"_ustr;
         sExpected = OUString::Concat( u"3 1/2"_ustr ) + sBlankDigit + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 3.5, eLang, sExpected);
     }
     {  // tdf#100594: forced denominator
-        sCode = "# ?/100";
-        sExpected = " 6/100";
+        sCode = u"# ?/100"_ustr;
+        sExpected = u" 6/100"_ustr;
         checkPreviewString(aFormatter, sCode, 0.06, eLang, sExpected);
     }
     {  // tdf#100754: forced denominator with text after fraction
-        sCode = "# ?/16\" inch\"";
-        sExpected = "2 6/16 inch";
+        sCode = u"# ?/16\" inch\""_ustr;
+        sExpected = u"2 6/16 inch"_ustr;
         checkPreviewString(aFormatter, sCode, 2.379, eLang, sExpected);
     }
     {  // tdf#100842: text before/after fraction
-        sCode = "\"before \"?/?\" after\"";
-        sExpected = "before 11/9 after";
+        sCode = u"\"before \"?/?\" after\""_ustr;
+        sExpected = u"before 11/9 after"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "\"before \"# ?/?\" after\"";
-        sExpected = "before 1 2/9 after";
+        sCode = u"\"before \"# ?/?\" after\""_ustr;
+        sExpected = u"before 1 2/9 after"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "\"before \"0.0\"inside\"0E+0\"middle\"0\" after\"";
-        sExpected = "before 1.2inside3E+0middle4 after";
+        sCode = u"\"before \"0.0\"inside\"0E+0\"middle\"0\" after\""_ustr;
+        sExpected = u"before 1.2inside3E+0middle4 after"_ustr;
         checkPreviewString(aFormatter, sCode, 12345.667, eLang, sExpected);
     }
     {  // tdf#106190: text after fraction bar
-        sCode = "?/ ?";
-        sExpected = "11/ 9";
+        sCode = u"?/ ?"_ustr;
+        sExpected = u"11/ 9"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "?/ 12";
-        sExpected = "15/ 12";
+        sCode = u"?/ 12"_ustr;
+        sExpected = u"15/ 12"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "# ?/\" divisor \"?";
-        sExpected = "1 2/ divisor 9";
+        sCode = u"# ?/\" divisor \"?"_ustr;
+        sExpected = u"1 2/ divisor 9"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "# ?/\"divided by \"?";
-        sExpected = "1 2/divided by 9";
+        sCode = u"# ?/\"divided by \"?"_ustr;
+        sExpected = u"1 2/divided by 9"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "?/\" \"12";
-        sExpected = "15/ 12";
+        sCode = u"?/\" \"12"_ustr;
+        sExpected = u"15/ 12"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "?/\\ 12";
-        sExpected = "15/ 12";
+        sCode = u"?/\\ 12"_ustr;
+        sExpected = u"15/ 12"_ustr;
         checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
-        sCode = "# ?/ ???";
+        sCode = u"# ?/ ???"_ustr;
         sExpected = OUString::Concat( u"3 1/ 2"_ustr ) + sBlankDigit + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 3.5, eLang, sExpected);
     }
     {  // Display 1.96 as 2 and not 1 1/1
-        sCode = "# ?/?";
+        sCode = u"# ?/?"_ustr;
         sExpected = OUString::Concat( u"2 "_ustr ) + sBlankDigit + u" "_ustr + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
-        sCode = "# ?/ ?";
+        sCode = u"# ?/ ?"_ustr;
         sExpected = OUString::Concat( u"2 "_ustr ) + sBlankDigit + u"  "_ustr + sBlankDigit;
         checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
-        sCode = "# #/#";
-        sExpected = "2";
+        sCode = u"# #/#"_ustr;
+        sExpected = u"2"_ustr;
         checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
     }
     {  // tdf#79399 tdf#101462 Native Number Formats
-        sCode = "[NatNum5][$-0404]General\\ ";
+        sCode = u"[NatNum5][$-0404]General\\ "_ustr;
         // Chinese upper case number characters for 120
         sExpected = u"\u58F9\u4F70\u8CB3\u62FE "_ustr;
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
-        sCode = "[DBNum2][$-0404]General\\ ";
+        sCode = u"[DBNum2][$-0404]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
         // tdf#115007 - cardinal/ordinal number names/indicators
-        sCode = "[NatNum12]0";
-        sExpected = "one hundred twenty-three";
+        sCode = u"[NatNum12]0"_ustr;
+        sExpected = u"one hundred twenty-three"_ustr;
         checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
-        sCode = "[NatNum12]0.00";
-        sExpected = "one hundred twenty-three point four five";
+        sCode = u"[NatNum12]0.00"_ustr;
+        sExpected = u"one hundred twenty-three point four five"_ustr;
         checkPreviewString(aFormatter, sCode, 123.45, eLang, sExpected);
-        sCode = "[NatNum12 ordinal]0";
-        sExpected = "one hundred twenty-third";
+        sCode = u"[NatNum12 ordinal]0"_ustr;
+        sExpected = u"one hundred twenty-third"_ustr;
         checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
-        sCode = "[NatNum12 ordinal-number]0";
-        sExpected = "123rd";
+        sCode = u"[NatNum12 ordinal-number]0"_ustr;
+        sExpected = u"123rd"_ustr;
         checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
-        sCode = "[NatNum12 capitalize]0";
-        sExpected = "One hundred twenty-three";
+        sCode = u"[NatNum12 capitalize]0"_ustr;
+        sExpected = u"One hundred twenty-three"_ustr;
         checkPreviewString(aFormatter, sCode, 123, eLang, sExpected);
-        sCode = "[NatNum12 title ordinal]0";
-        sExpected = "One Thousand Two Hundred Thirty-Fourth";
+        sCode = u"[NatNum12 title ordinal]0"_ustr;
+        sExpected = u"One Thousand Two Hundred Thirty-Fourth"_ustr;
         checkPreviewString(aFormatter, sCode, 1234, eLang, sExpected);
-        sCode = "[NatNum12 upper ordinal-number]0";
-        sExpected = "12345TH";
+        sCode = u"[NatNum12 upper ordinal-number]0"_ustr;
+        sExpected = u"12345TH"_ustr;
         checkPreviewString(aFormatter, sCode, 12345, eLang, sExpected);
-        sCode = "[NatNum12 D=ordinal-number]D\" of \"MMMM";
-        sExpected = "2nd of January";
+        sCode = u"[NatNum12 D=ordinal-number]D\" of \"MMMM"_ustr;
+        sExpected = u"2nd of January"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 D=ordinal-number,YYYY=year]D\" of \"MMMM\", \"YYYY";
-        sExpected = "2nd of January, nineteen hundred";
+        sCode = u"[NatNum12 D=ordinal-number,YYYY=year]D\" of \"MMMM\", \"YYYY"_ustr;
+        sExpected = u"2nd of January, nineteen hundred"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 YYYY=title year, D=capitalize ordinal]D\" of \"MMMM\", \"YYYY";
-        sExpected = "Second of January, Nineteen Hundred";
+        sCode = u"[NatNum12 YYYY=title year, D=capitalize ordinal]D\" of \"MMMM\", \"YYYY"_ustr;
+        sExpected = u"Second of January, Nineteen Hundred"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 MMMM=upper MMM=upper MMMMM=upper]MMMM MMM MMMMM";
-        sExpected = "JANUARY JAN J";
+        sCode = u"[NatNum12 MMMM=upper MMM=upper MMMMM=upper]MMMM MMM MMMMM"_ustr;
+        sExpected = u"JANUARY JAN J"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 DDDD=upper DDD=upper]DDDD DDD";
-        sExpected = "TUESDAY TUE";
+        sCode = u"[NatNum12 DDDD=upper DDD=upper]DDDD DDD"_ustr;
+        sExpected = u"TUESDAY TUE"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 NNN=upper NN=upper]NNN NN";
-        sExpected = "TUESDAY TUE";
+        sCode = u"[NatNum12 NNN=upper NN=upper]NNN NN"_ustr;
+        sExpected = u"TUESDAY TUE"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 MMMM=lower MMM=lower MMMMM=lower]MMMM MMM MMMMM";
-        sExpected = "january jan j";
+        sCode = u"[NatNum12 MMMM=lower MMM=lower MMMMM=lower]MMMM MMM MMMMM"_ustr;
+        sExpected = u"january jan j"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 DDDD=lower DDD=lower]DDDD DDD";
-        sExpected = "tuesday tue";
+        sCode = u"[NatNum12 DDDD=lower DDD=lower]DDDD DDD"_ustr;
+        sExpected = u"tuesday tue"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode = "[NatNum12 NNN=lower NN=lower]NNN NN";
-        sExpected = "tuesday tue";
+        sCode = u"[NatNum12 NNN=lower NN=lower]NNN NN"_ustr;
+        sExpected = u"tuesday tue"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     { // tdf#130193 tdf#130140 Native Number Formats mapping for Chinese (Traditional), Japanese, Korean
@@ -1614,26 +1614,26 @@ void Test::testUserDefinedNumberFormats()
         // 一億二千三百四十五萬六千七百八十九
         sExpected = u"\u4e00\u5104\u4e8c\u5343\u4e09\u767e\u56db\u5341\u4e94\u842c\u516d\u5343"
                     u"\u4e03\u767e\u516b\u5341\u4e5d "_ustr;
-        sCode = "[NatNum4][$-0404]General\\ ";
+        sCode = u"[NatNum4][$-0404]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum1][$-0404]General\\ ";
+        sCode = u"[DBNum1][$-0404]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum2 -> NatNum5: Chinese upper case text
         // 壹億貳仟參佰肆拾伍萬陸仟柒佰捌拾玖
         sExpected = u"\u58f9\u5104\u8cb3\u4edf\u53c3\u4f70\u8086\u62fe\u4f0d\u842c\u9678\u4edf"
                     u"\u67d2\u4f70\u634c\u62fe\u7396 "_ustr;
-        sCode = "[NatNum5][$-0404]General\\ ";
+        sCode = u"[NatNum5][$-0404]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum2][$-0404]General\\ ";
+        sCode = u"[DBNum2][$-0404]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum3 -> NatNum3: fullwidth text
         // １２３４５６７８９
         sExpected = u"\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19 "_ustr;
-        sCode = "[NatNum3][$-0404]General\\ ";
+        sCode = u"[NatNum3][$-0404]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum3][$-0404]General\\ ";
+        sCode = u"[DBNum3][$-0404]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // -- Japanese: DBNum1 -> NatNum4, DBNum2 -> NatNum5, DBnum3 -> NatNum3
@@ -1642,26 +1642,26 @@ void Test::testUserDefinedNumberFormats()
         // 一億二千三百四十五万六千七百八十九
         sExpected = u"\u4e00\u5104\u4e8c\u5343\u4e09\u767e\u56db\u5341\u4e94\u4e07\u516d\u5343"
                     u"\u4e03\u767e\u516b\u5341\u4e5d "_ustr;
-        sCode = "[NatNum4][$-0411]General\\ ";
+        sCode = u"[NatNum4][$-0411]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum1][$-0411]General\\ ";
+        sCode = u"[DBNum1][$-0411]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum2 -> NatNum5: traditional long Kanji text
         // 壱億弐阡参百四拾伍萬六阡七百八拾九
         sExpected = u"\u58f1\u5104\u5f10\u9621\u53c2\u767e\u56db\u62fe\u4f0d\u842c\u516d\u9621"
                     u"\u4e03\u767e\u516b\u62fe\u4e5d "_ustr;
-        sCode = "[NatNum5][$-0411]General\\ ";
+        sCode = u"[NatNum5][$-0411]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum2][$-0411]General\\ ";
+        sCode = u"[DBNum2][$-0411]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum3 -> NatNum3: fullwidth Arabic digits
         // １２３４５６７８９
         sExpected = u"\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19 "_ustr;
-        sCode = "[NatNum3][$-0411]General\\ ";
+        sCode = u"[NatNum3][$-0411]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum3][$-0411]General\\ ";
+        sCode = u"[DBNum3][$-0411]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // -- Korean: DBNum1 -> NatNum4, DBNum2 -> NatNum5, DBNum3 -> NatNum6, DBNum4 -> NatNum10
@@ -1669,191 +1669,191 @@ void Test::testUserDefinedNumberFormats()
         // DBNum1 -> NatNum4: Korean lower case characters
         // 一億二千三百四十五万六千七百八十九
         sExpected = u"\u4e00\u5104\u4e8c\u5343\u4e09\u767e\u56db\u5341\u4e94\u4e07\u516d\u5343\u4e03\u767e\u516b\u5341\u4e5d "_ustr;
-        sCode = "[NatNum4][$-0412]General\\ ";
+        sCode = u"[NatNum4][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum1][$-0412]General\\ ";
+        sCode = u"[DBNum1][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum2 -> NatNum5: Korean upper case characters
         // 壹億貳阡參佰四拾伍萬六阡七佰八拾九
         sExpected = u"\u58f9\u5104\u8cb3\u9621\u53c3\u4f70\u56db\u62fe\u4f0d\u842c\u516d\u9621\u4e03\u4f70\u516b\u62fe\u4e5d "_ustr;
-        sCode = "[NatNum5][$-0412]General\\ ";
+        sCode = u"[NatNum5][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum2][$-0412]General\\ ";
+        sCode = u"[DBNum2][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum3 -> NatNum6: fullwidth Arabic digits
         // １억２천３백４십５만６천７백８십９
         sExpected = u"\uff11\uc5b5\uff12\ucc9c\uff13\ubc31\uff14\uc2ed\uff15\ub9cc\uff16\ucc9c\uff17\ubc31\uff18\uc2ed\uff19 "_ustr;
-        sCode = "[NatNum6][$-0412]General\\ ";
+        sCode = u"[NatNum6][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum3][$-0412]General\\ ";
+        sCode = u"[DBNum3][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum4 -> NatNum10: Hangul characters
         // 일억이천삼백사십오만육천칠백팔십구
         sExpected = u"\uc77c\uc5b5\uc774\ucc9c\uc0bc\ubc31\uc0ac\uc2ed\uc624\ub9cc\uc721\ucc9c\uce60\ubc31\ud314\uc2ed\uad6c "_ustr;
-        sCode = "[NatNum10][$-0412]General\\ ";
+        sCode = u"[NatNum10][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
-        sCode = "[DBNum4][$-0412]General\\ ";
+        sCode = u"[DBNum4][$-0412]General\\ "_ustr;
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
     }
     {  // tdf#105968 engineering format with value rounded up to next magnitude
-        sCode = "##0.00E+00";
-        sExpected = "100.00E+00";
+        sCode = u"##0.00E+00"_ustr;
+        sExpected = u"100.00E+00"_ustr;
         checkPreviewString(aFormatter, sCode, 99.995, eLang, sExpected);
         // test '1'=='1' assumption
         checkPreviewString(aFormatter, sCode, 100.0, eLang, sExpected);
-        sExpected = "199.99E+00";
+        sExpected = u"199.99E+00"_ustr;
         checkPreviewString(aFormatter, sCode, 199.99, eLang, sExpected);
-        sExpected = "1.00E+03";
+        sExpected = u"1.00E+03"_ustr;
         checkPreviewString(aFormatter, sCode, 1000.0, eLang, sExpected);
         // and another just "normally" rounded value
-        sExpected = "894.55E-06";
+        sExpected = u"894.55E-06"_ustr;
         checkPreviewString(aFormatter, sCode, 0.000894549, eLang, sExpected);
         // not expecting rounding into another magnitude
-        sExpected = "999.99E-06";
+        sExpected = u"999.99E-06"_ustr;
         checkPreviewString(aFormatter, sCode, 0.000999991, eLang, sExpected);
         // expecting rounding into another magnitude
-        sExpected = "1.00E-03";
+        sExpected = u"1.00E-03"_ustr;
         checkPreviewString(aFormatter, sCode, 0.000999999, eLang, sExpected);
 
         // Now the same all negative values.
-        sExpected = "-100.00E+00";
+        sExpected = u"-100.00E+00"_ustr;
         checkPreviewString(aFormatter, sCode, -99.995, eLang, sExpected);
         checkPreviewString(aFormatter, sCode, -100.0, eLang, sExpected);
-        sExpected = "-199.99E+00";
+        sExpected = u"-199.99E+00"_ustr;
         checkPreviewString(aFormatter, sCode, -199.99, eLang, sExpected);
-        sExpected = "-1.00E+03";
+        sExpected = u"-1.00E+03"_ustr;
         checkPreviewString(aFormatter, sCode, -1000.0, eLang, sExpected);
-        sExpected = "-894.55E-06";
+        sExpected = u"-894.55E-06"_ustr;
         checkPreviewString(aFormatter, sCode, -0.000894549, eLang, sExpected);
-        sExpected = "-999.99E-06";
+        sExpected = u"-999.99E-06"_ustr;
         checkPreviewString(aFormatter, sCode, -0.000999991, eLang, sExpected);
-        sExpected = "-1.00E-03";
+        sExpected = u"-1.00E-03"_ustr;
         checkPreviewString(aFormatter, sCode, -0.000999999, eLang, sExpected);
     }
     {   // tdf#112933 one decimal seconds fraction
-        sCode =     "MM:SS.0";
-        sExpected = "23:53.6";
+        sCode =     u"MM:SS.0"_ustr;
+        sExpected = u"23:53.6"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Two decimals.
-        sCode =     "MM:SS.00";
-        sExpected = "23:53.61";
+        sCode =     u"MM:SS.00"_ustr;
+        sExpected = u"23:53.61"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Three decimals.
-        sCode =     "MM:SS.000";
-        sExpected = "23:53.605";
+        sCode =     u"MM:SS.000"_ustr;
+        sExpected = u"23:53.605"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
 
         // Same with date+time.
-        sCode =     "YYYY-MM-DD MM:SS.0";
-        sExpected = "1900-01-02 23:53.6";
+        sCode =     u"YYYY-MM-DD MM:SS.0"_ustr;
+        sExpected = u"1900-01-02 23:53.6"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "YYYY-MM-DD MM:SS.00";
-        sExpected = "1900-01-02 23:53.61";
+        sCode =     u"YYYY-MM-DD MM:SS.00"_ustr;
+        sExpected = u"1900-01-02 23:53.61"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "YYYY-MM-DD MM:SS.000";
-        sExpected = "1900-01-02 23:53.605";
+        sCode =     u"YYYY-MM-DD MM:SS.000"_ustr;
+        sExpected = u"1900-01-02 23:53.605"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {   // tdf#150028 decimals of seconds fraction without truncate on overflow
-        sCode =     "[SS]";
-        sExpected = "271434";
+        sCode =     u"[SS]"_ustr;
+        sExpected = u"271434"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // One decimal.
-        sCode =     "[SS].0";
-        sExpected = "271433.6";
+        sCode =     u"[SS].0"_ustr;
+        sExpected = u"271433.6"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Two decimals.
-        sCode =     "[SS].00";
-        sExpected = "271433.61";
+        sCode =     u"[SS].00"_ustr;
+        sExpected = u"271433.61"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // Three decimals.
-        sCode =     "[SS].000";
-        sExpected = "271433.605";
+        sCode =     u"[SS].000"_ustr;
+        sExpected = u"271433.605"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {   // tdf#156449 Use '?' in exponent of scientific number
-        sCode =     "0.00E+?0";
+        sCode =     u"0.00E+?0"_ustr;
         sExpected = OUString::Concat( u"3.14E+"_ustr ) + sBlankDigit + u"0"_ustr; // before change it was "3.14E+00"
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         // There should be at least one '0' in exponent
-        sCode =     "0.00E+??";
+        sCode =     u"0.00E+??"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {   // tdf#33689 use English NfKeywords in non-English language
         eLang = LANGUAGE_DUTCH;
-        sExpected = "Dutch: 1900/01/02 03:23:53";
-        sCode =     "\"Dutch:\" JJJJ/MM/DD UU:MM:SS";
+        sExpected = u"Dutch: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"Dutch:\" JJJJ/MM/DD UU:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"Dutch: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"Dutch: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_GERMAN;
-        sExpected = "German: 1900/01/02 03:23:53";
-        sCode =     "\"German: \"JJJJ/MM/TT HH:MM:SS";
+        sExpected = u"German: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"German: \"JJJJ/MM/TT HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"German: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"German: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_FRENCH;
-        sExpected = "French: 1900/01/02 03:23:53";
-        sCode =     "\"French: \"AAAA/MM/JJ HH:MM:SS";
+        sExpected = u"French: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"French: \"AAAA/MM/JJ HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"French: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"French: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_ITALIAN;
-        sExpected = "Italian: 1900/01/02 03:23:53";
-        sCode =     "\"Italian: \"AAAA/MM/GG HH:MM:SS";
+        sExpected = u"Italian: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"Italian: \"AAAA/MM/GG HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"Italian: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"Italian: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_PORTUGUESE;
-        sExpected = "Portuguese: 1900/01/02 03:23:53";
-        sCode =     "\"Portuguese: \"AAAA/MM/DD HH:MM:SS";
+        sExpected = u"Portuguese: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"Portuguese: \"AAAA/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"Portuguese: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"Portuguese: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_SPANISH_MODERN;
-        sExpected = "Spanish: 1900/01/02 03:23:53";
-        sCode =     "\"Spanish: \"AAAA/MM/DD HH:MM:SS";
+        sExpected = u"Spanish: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"Spanish: \"AAAA/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"Spanish: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"Spanish: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_DANISH;
-        sExpected = "Danish: 1900/01/02 03:23:53";
-        sCode =     "\"Danish: \"YYYY/MM/DD TT:MM:SS";
+        sExpected = u"Danish: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"Danish: \"YYYY/MM/DD TT:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"Danish: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"Danish: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
         eLang = LANGUAGE_FINNISH;
-        sExpected = "Finnish: 1900/01/02 03:23:53";
-        sCode =     "\"Finnish: \"VVVV/KK/PP TT:MM:SS";
+        sExpected = u"Finnish: 1900/01/02 03:23:53"_ustr;
+        sCode =     u"\"Finnish: \"VVVV/KK/PP TT:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-        sCode =     "\"Finnish: \"YYYY/MM/DD HH:MM:SS";
+        sCode =     u"\"Finnish: \"YYYY/MM/DD HH:MM:SS"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {   // tdf#117819 wrong separator positions when displaying integers with
         // more decimals than rtl::math::doubleToUString delivers.
-        sCode = "#,##0.00000000000000000000";
-        sExpected = "117,669,030,460,994.00000000000000000000";
+        sCode = u"#,##0.00000000000000000000"_ustr;
+        sExpected = u"117,669,030,460,994.00000000000000000000"_ustr;
         checkPreviewString(aFormatter, sCode, 117669030460994.0, LANGUAGE_ENGLISH_US, sExpected);
     }
     {   // tdf#117575 treat thousand separator with '?' in integer part
-        sCode = "\"Value= \"?,??0.00";
+        sCode = u"\"Value= \"?,??0.00"_ustr;
         sExpected = OUString::Concat( u"Value= "_ustr ) + sBlankDigit + u" "_ustr + sBlankDigit + sBlankDigit + u"3.14"_ustr;
         checkPreviewString(aFormatter, sCode, M_PI, LANGUAGE_ENGLISH_US, sExpected);
         sExpected = OUString::Concat( u"Value= "_ustr ) + sBlankDigit + u" "_ustr + sBlankDigit + u"12.00"_ustr;
         checkPreviewString(aFormatter, sCode, 12, LANGUAGE_ENGLISH_US, sExpected);
         sExpected = OUString::Concat( u"Value= "_ustr ) + sBlankDigit + u" 123.00"_ustr;
         checkPreviewString(aFormatter, sCode, 123, LANGUAGE_ENGLISH_US, sExpected);
-        sExpected = "Value= 1,234.00";
+        sExpected = u"Value= 1,234.00"_ustr;
         checkPreviewString(aFormatter, sCode, 1234, LANGUAGE_ENGLISH_US, sExpected);
-        sExpected = "Value= 12,345.00";
+        sExpected = u"Value= 12,345.00"_ustr;
         checkPreviewString(aFormatter, sCode, 12345, LANGUAGE_ENGLISH_US, sExpected);
     }
     {   // tdf#159930 no digit in integer part
-        sCode = "+.000;-.000";
-        sExpected = "+3.142"; // without the patch is would display "3+.142"
+        sCode = u"+.000;-.000"_ustr;
+        sExpected = u"+3.142"_ustr; // without the patch is would display "3+.142"
         checkPreviewString(aFormatter, sCode, M_PI, LANGUAGE_ENGLISH_US, sExpected);
     }
 }
@@ -1988,14 +1988,14 @@ void Test::testExcelExportFormats()
     SvNumFormatType eType;
     sal_uInt32 nKey1, nKey2;
 
-    aCode = "00.00";
+    aCode = u"00.00"_ustr;
     aFormatter.PutandConvertEntry( aCode, nCheckPos, eType, nKey1,
             LANGUAGE_ENGLISH_US, LANGUAGE_ENGLISH_SAFRICA, false);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", sal_Int32(0), nCheckPos);
     CPPUNIT_ASSERT_MESSAGE("Key should be greater than system locale's keys.",
             nKey1 > SV_COUNTRY_LANGUAGE_OFFSET);
 
-    aCode = "[$R-1C09] #,##0.0;[$R-1C09]-#,##0.0";
+    aCode = u"[$R-1C09] #,##0.0;[$R-1C09]-#,##0.0"_ustr;
     aFormatter.PutandConvertEntry( aCode, nCheckPos, eType, nKey2,
             LANGUAGE_ENGLISH_US, LANGUAGE_ENGLISH_SAFRICA, false);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("CheckPos should be 0.", sal_Int32(0), nCheckPos);

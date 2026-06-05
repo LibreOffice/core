@@ -142,8 +142,8 @@ void FSStorage::CopyContentToStorage_Impl(ucbhelper::Content& rContent,
     // create cursor for access to children
     uno::Sequence< OUString > aProps( 2 );
     OUString* pProps = aProps.getArray();
-    pProps[0] = "TargetURL";
-    pProps[1] = "IsFolder";
+    pProps[0] = u"TargetURL"_ustr;
+    pProps[1] = u"IsFolder"_ustr;
 
     try
     {

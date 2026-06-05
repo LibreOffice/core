@@ -54,7 +54,7 @@ bool SfxVoidItem::GetPresentation(SfxItemPresentation /*ePresentation*/, MapUnit
                                   MapUnit /*ePresentationMetric*/, OUString& rText,
                                   const IntlWrapper&) const
 {
-    rText = "Void";
+    rText = u"Void"_ustr;
     return true;
 }
 

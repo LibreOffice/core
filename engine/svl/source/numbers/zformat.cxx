@@ -458,7 +458,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
             }
             break;
         case 0x05 : // Korean Dangi calendar
-            sCalendar = "[~dangi]";
+            sCalendar = u"[~dangi]"_ustr;
             // Only Korean language support dangi calendar
             if ( nLocaleLang != LANGUAGE_KOREAN )
             {
@@ -467,7 +467,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
             break;
         case 0x06 : // Hijri calendar
         case 0x17 : // same?
-            sCalendar = "[~hijri]";
+            sCalendar = u"[~hijri]"_ustr;
             // Only Arabic or Farsi languages support Hijri calendar
             if ( ( primary( nLocaleLang ) != LANGUAGE_ARABIC_PRIMARY_ONLY )
                   && nLocaleLang != LANGUAGE_FARSI )
@@ -484,7 +484,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
             }
             break;
         case 0x07 : // Buddhist calendar
-            sCalendar="[~buddhist]";
+            sCalendar=u"[~buddhist]"_ustr;
             // Only Thai or Lao languages support Buddhist calendar
             if ( nLocaleLang != LANGUAGE_THAI && nLocaleLang != LANGUAGE_LAO )
             {
@@ -499,7 +499,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
             }
             break;
         case 0x08 : // Hebrew calendar
-            sCalendar = "[~jewish]";
+            sCalendar = u"[~jewish]"_ustr;
             // Many languages (but not all) support Jewish calendar
             // Unable to find any logic => keep same language
             break;
@@ -966,7 +966,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         if (nNum == 12)
                         {
                             if (sParams.isEmpty())
-                                sParams = "cardinal"; // default NatNum12 format is "cardinal"
+                                sParams = u"cardinal"_ustr; // default NatNum12 format is "cardinal"
                             else if (sParams.indexOf("CURRENCY") >= 0)
                                 sParams = sParams.replaceAll("CURRENCY",
                                     rLoc().getCurrBankSymbol());
@@ -2147,7 +2147,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString,
     {
         if (fNumber == 0.0)
         {
-            OutString = "0%";
+            OutString = u"0%"_ustr;
             return;
         }
         fNumber *= 100;
@@ -2156,7 +2156,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString,
 
     if (fNumber == 0.0)
     {
-        OutString = "0";
+        OutString = u"0"_ustr;
         return;
     }
 
@@ -2547,7 +2547,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 }
                 if (fNumber == 0.0)
                 {
-                    OutString = "0";
+                    OutString = u"0"_ustr;
                 }
                 else if (fNumber < 1.0 && fNumber > -1.0)
                 {
@@ -5241,22 +5241,22 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
     switch ( eOp )
     {
     case NUMBERFORMAT_OP_EQ :
-        rStr = "[=";
+        rStr = u"[="_ustr;
         break;
     case NUMBERFORMAT_OP_NE :
-        rStr = "[<>";
+        rStr = u"[<>"_ustr;
         break;
     case NUMBERFORMAT_OP_LT :
-        rStr = "[<";
+        rStr = u"[<"_ustr;
         break;
     case NUMBERFORMAT_OP_LE :
-        rStr = "[<=";
+        rStr = u"[<="_ustr;
         break;
     case NUMBERFORMAT_OP_GT :
-        rStr = "[>";
+        rStr = u"[>"_ustr;
         break;
     case NUMBERFORMAT_OP_GE :
-        rStr = "[>=";
+        rStr = u"[>="_ustr;
         break;
     default:
         SAL_WARN( "svl.numbers", "unsupported number format" );

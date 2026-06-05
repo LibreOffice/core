@@ -337,7 +337,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     // case comparison not matching but length does in conversion mode. Ugly.
     if (eLang == LANGUAGE_THAI)
     {
-        sKeyword[NF_KEY_THAI_T] = "T";
+        sKeyword[NF_KEY_THAI_T] = u"T"_ustr;
     }
     else
     {
@@ -374,20 +374,20 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             LANGUAGE_GERMAN_LIECHTENSTEIN))
     {
         //! all capital letters
-        sKeyword[NF_KEY_M] =         "M";     // month 1
-        sKeyword[NF_KEY_MM] =        "MM";    // month 01
-        sKeyword[NF_KEY_MMM] =       "MMM";   // month Jan
-        sKeyword[NF_KEY_MMMM] =      "MMMM";  // month Januar
-        sKeyword[NF_KEY_MMMMM] =     "MMMMM"; // month J
-        sKeyword[NF_KEY_H] =         "H";     // hour 2
-        sKeyword[NF_KEY_HH] =        "HH";    // hour 02
-        sKeyword[NF_KEY_D] =         "T";
-        sKeyword[NF_KEY_DD] =        "TT";
-        sKeyword[NF_KEY_DDD] =       "TTT";
-        sKeyword[NF_KEY_DDDD] =      "TTTT";
-        sKeyword[NF_KEY_YY] =        "JJ";
-        sKeyword[NF_KEY_YYYY] =      "JJJJ";
-        sKeyword[NF_KEY_BOOLEAN] =   "LOGISCH";
+        sKeyword[NF_KEY_M] =         u"M"_ustr;     // month 1
+        sKeyword[NF_KEY_MM] =        u"MM"_ustr;    // month 01
+        sKeyword[NF_KEY_MMM] =       u"MMM"_ustr;   // month Jan
+        sKeyword[NF_KEY_MMMM] =      u"MMMM"_ustr;  // month Januar
+        sKeyword[NF_KEY_MMMMM] =     u"MMMMM"_ustr; // month J
+        sKeyword[NF_KEY_H] =         u"H"_ustr;     // hour 2
+        sKeyword[NF_KEY_HH] =        u"HH"_ustr;    // hour 02
+        sKeyword[NF_KEY_D] =         u"T"_ustr;
+        sKeyword[NF_KEY_DD] =        u"TT"_ustr;
+        sKeyword[NF_KEY_DDD] =       u"TTT"_ustr;
+        sKeyword[NF_KEY_DDDD] =      u"TTTT"_ustr;
+        sKeyword[NF_KEY_YY] =        u"JJ"_ustr;
+        sKeyword[NF_KEY_YYYY] =      u"JJJJ"_ustr;
+        sKeyword[NF_KEY_BOOLEAN] =   u"LOGISCH"_ustr;
         sKeyword[NF_KEY_COLOR] =     GermanColorName(NF_KEY_COLOR - NF_KEY_COLOR);
         sKeyword[NF_KEY_BLACK] =     GermanColorName(NF_KEY_BLACK - NF_KEY_COLOR);
         sKeyword[NF_KEY_BLUE] =      GermanColorName(NF_KEY_BLUE - NF_KEY_COLOR);
@@ -407,14 +407,14 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                 LANGUAGE_ITALIAN,
                 LANGUAGE_ITALIAN_SWISS))
         {
-            sKeyword[NF_KEY_D] = "G";
-            sKeyword[NF_KEY_DD] = "GG";
-            sKeyword[NF_KEY_DDD] = "GGG";
-            sKeyword[NF_KEY_DDDD] = "GGGG";
+            sKeyword[NF_KEY_D] = u"G"_ustr;
+            sKeyword[NF_KEY_DD] = u"GG"_ustr;
+            sKeyword[NF_KEY_DDD] = u"GGG"_ustr;
+            sKeyword[NF_KEY_DDDD] = u"GGGG"_ustr;
             // must exchange the era code, same as Xcl
-            sKeyword[NF_KEY_G] = "X";
-            sKeyword[NF_KEY_GG] = "XX";
-            sKeyword[NF_KEY_GGG] = "XXX";
+            sKeyword[NF_KEY_G] = u"X"_ustr;
+            sKeyword[NF_KEY_GG] = u"XX"_ustr;
+            sKeyword[NF_KEY_GGG] = u"XXX"_ustr;
         }
         else if ( eLang.anyOf(
                  LANGUAGE_FRENCH,
@@ -424,27 +424,27 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                  LANGUAGE_FRENCH_LUXEMBOURG,
                  LANGUAGE_FRENCH_MONACO))
         {
-            sKeyword[NF_KEY_D] = "J";
-            sKeyword[NF_KEY_DD] = "JJ";
-            sKeyword[NF_KEY_DDD] = "JJJ";
-            sKeyword[NF_KEY_DDDD] = "JJJJ";
+            sKeyword[NF_KEY_D] = u"J"_ustr;
+            sKeyword[NF_KEY_DD] = u"JJ"_ustr;
+            sKeyword[NF_KEY_DDD] = u"JJJ"_ustr;
+            sKeyword[NF_KEY_DDDD] = u"JJJJ"_ustr;
         }
         else if ( eLang == LANGUAGE_FINNISH )
         {
-            sKeyword[NF_KEY_D] = "P";
-            sKeyword[NF_KEY_DD] = "PP";
-            sKeyword[NF_KEY_DDD] = "PPP";
-            sKeyword[NF_KEY_DDDD] = "PPPP";
+            sKeyword[NF_KEY_D] = u"P"_ustr;
+            sKeyword[NF_KEY_DD] = u"PP"_ustr;
+            sKeyword[NF_KEY_DDD] = u"PPP"_ustr;
+            sKeyword[NF_KEY_DDDD] = u"PPPP"_ustr;
         }
 
         // month
         if ( eLang == LANGUAGE_FINNISH )
         {
-            sKeyword[NF_KEY_M] = "K";
-            sKeyword[NF_KEY_MM] = "KK";
-            sKeyword[NF_KEY_MMM] = "KKK";
-            sKeyword[NF_KEY_MMMM] = "KKKK";
-            sKeyword[NF_KEY_MMMMM] = "KKKKK";
+            sKeyword[NF_KEY_M] = u"K"_ustr;
+            sKeyword[NF_KEY_MM] = u"KK"_ustr;
+            sKeyword[NF_KEY_MMM] = u"KKK"_ustr;
+            sKeyword[NF_KEY_MMMM] = u"KKKK"_ustr;
+            sKeyword[NF_KEY_MMMMM] = u"KKKKK"_ustr;
         }
 
         // year
@@ -480,23 +480,23 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             LANGUAGE_SPANISH_NICARAGUA,
             LANGUAGE_SPANISH_PUERTO_RICO))
         {
-            sKeyword[NF_KEY_YY] = "AA";
-            sKeyword[NF_KEY_YYYY] = "AAAA";
+            sKeyword[NF_KEY_YY] = u"AA"_ustr;
+            sKeyword[NF_KEY_YYYY] = u"AAAA"_ustr;
             // must exchange the day of week name code, same as Xcl
-            sKeyword[NF_KEY_AAA] =   "OOO";
-            sKeyword[NF_KEY_AAAA] =  "OOOO";
+            sKeyword[NF_KEY_AAA] =   u"OOO"_ustr;
+            sKeyword[NF_KEY_AAAA] =  u"OOOO"_ustr;
         }
         else if ( eLang.anyOf(
              LANGUAGE_DUTCH,
              LANGUAGE_DUTCH_BELGIAN))
         {
-            sKeyword[NF_KEY_YY] = "JJ";
-            sKeyword[NF_KEY_YYYY] = "JJJJ";
+            sKeyword[NF_KEY_YY] = u"JJ"_ustr;
+            sKeyword[NF_KEY_YYYY] = u"JJJJ"_ustr;
         }
         else if ( eLang == LANGUAGE_FINNISH )
         {
-            sKeyword[NF_KEY_YY] = "VV";
-            sKeyword[NF_KEY_YYYY] = "VVVV";
+            sKeyword[NF_KEY_YY] = u"VV"_ustr;
+            sKeyword[NF_KEY_YYYY] = u"VVVV"_ustr;
         }
 
         // hour
@@ -504,8 +504,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
              LANGUAGE_DUTCH,
              LANGUAGE_DUTCH_BELGIAN))
         {
-            sKeyword[NF_KEY_H] = "U";
-            sKeyword[NF_KEY_HH] = "UU";
+            sKeyword[NF_KEY_H] = u"U"_ustr;
+            sKeyword[NF_KEY_HH] = u"UU"_ustr;
         }
         else if ( eLang.anyOf(
             LANGUAGE_FINNISH,
@@ -516,8 +516,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             LANGUAGE_NORWEGIAN_BOKMAL,
             LANGUAGE_NORWEGIAN_NYNORSK))
         {
-            sKeyword[NF_KEY_H] = "T";
-            sKeyword[NF_KEY_HH] = "TT";
+            sKeyword[NF_KEY_H] = u"T"_ustr;
+            sKeyword[NF_KEY_HH] = u"TT"_ustr;
         }
     }
 }
@@ -1744,7 +1744,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     if ( (sOldThousandSep[0] == cNoBreakSpace || sOldThousandSep[0] == cNarrowNoBreakSpace) &&
             sOldThousandSep.getLength() == 1 )
     {
-        sOldThousandSep = " ";
+        sOldThousandSep = u" "_ustr;
     }
     bool bNewDateOrder = false;
     // change locale data et al

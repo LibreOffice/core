@@ -84,7 +84,7 @@ bool SfxStringListItem::GetPresentation
     const IntlWrapper&
 )   const
 {
-    rText = "(List)";
+    rText = u"(List)"_ustr;
     return false;
 }
 

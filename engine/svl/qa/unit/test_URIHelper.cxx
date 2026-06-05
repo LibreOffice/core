@@ -457,7 +457,7 @@ void Test::testResolveIdnaHost() {
     input = u"Foo.M\u00FCnchen.de"_ustr;
     CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
 
-    input = "foo://Muenchen.de";
+    input = u"foo://Muenchen.de"_ustr;
     CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
 
     input = u"foo://-M\u00FCnchen.de"_ustr;
