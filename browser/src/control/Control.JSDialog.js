@@ -75,14 +75,26 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		const dialogInfo = this.dialogs[id];
 		const builder = dialogInfo.builder;
 
-		app.layoutingService.appendLayoutingTask(() => {
-			window.L.DomUtil.remove(dialogInfo.container);
+		// The open task attaches this instance's container, replacing the one
+		// already on screen when this is a rebuild. If it has not run yet,
+		// cancel it and remove that on-screen container here, because this
+		// instance's own container is not attached yet. A popup reopened under
+		// the same id in the same message batch then gets a fresh entry with
+		// nothing left to remove it.
+		if (dialogInfo.openLayoutingTaskId != null) {
+			app.layoutingService.cancelLayoutingTask(dialogInfo.openLayoutingTaskId);
+			dialogInfo.openLayoutingTaskId = null;
 
-			if (dialogInfo.overlay && !dialogInfo.isSubmenu)
-				window.L.DomUtil.remove(dialogInfo.overlay);
+			if (dialogInfo.replacedContainer)
+				window.L.DomUtil.remove(dialogInfo.replacedContainer);
+		}
 
-			delete this.dialogs[id];
-		});
+		window.L.DomUtil.remove(dialogInfo.container);
+
+		if (dialogInfo.overlay && !dialogInfo.isSubmenu)
+			window.L.DomUtil.remove(dialogInfo.overlay);
+
+		delete this.dialogs[id];
 
 		return builder;
 	},
@@ -90,10 +102,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	close: function(id, sendCloseEvent, focusHandled) {
 		if (id !== undefined && this.dialogs[id]) {
 			const dialog = this.dialogs[id];
-			if (!sendCloseEvent && dialog.overlay && !dialog.isSubmenu) {
-				app.layoutingService.appendLayoutingTask(
-					() => { window.L.DomUtil.remove(dialog.overlay); });
-			}
 
 			if (dialog.timeoutId)
 				clearTimeout(dialog.timeoutId);
@@ -1102,6 +1110,14 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				return;
 
 			if (existingNode) {
+				// A previous open for this id may still be queued and not yet on
+				// screen. This update takes its place, so drop that pending open
+				// to stop it attaching an orphan container once it runs.
+				if (existingNode.openLayoutingTaskId != null) {
+					app.layoutingService.cancelLayoutingTask(existingNode.openLayoutingTaskId);
+					existingNode.openLayoutingTaskId = null;
+				}
+
 				instance.posx = existingNode.startX;
 				instance.posy = existingNode.startY;
 
@@ -1154,12 +1170,32 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			// FIXME: remove this auto-bound instance so it will be clear what is passed
 			instance.updatePos = this.setPosition.bind(this, instance);
 
-			app.layoutingService.appendLayoutingTask(() => {
+			// Container already on screen that this rebuild supersedes, or null
+			// on a fresh open. When the predecessor is itself still pending (its
+			// own container not attached yet), carry its superseded container
+			// forward so the on-screen one stays reachable across a run of
+			// rebuilds that arrive before any of them are shown.
+			instance.replacedContainer = !existingNode
+				? null
+				: existingNode.container && existingNode.container.isConnected
+					? existingNode.container
+					: existingNode.replacedContainer;
+
+			instance.openLayoutingTaskId = app.layoutingService.appendLayoutingTask(() => {
+				// The popup is about to be attached to the document, so from here
+				// on it counts as shown and can no longer be cancelled as a
+				// not-yet-shown open.
+				instance.openLayoutingTaskId = null;
+
 				app.console.debug('JSDialog: put items inside container for "' + instance.id + '"');
 
-				// dialog built - add to DOM now
-				if (existingNode) {
-					existingNode.container.replaceWith(instance.container);
+				// dialog built - add to DOM now. Replace the container currently
+				// on screen, which replacedContainer tracks even across a run of
+				// rebuilds that arrive before any of them is shown, so a rebuild
+				// never leaves an earlier container orphaned. With nothing on
+				// screen yet, append fresh.
+				if (instance.replacedContainer && instance.replacedContainer.isConnected) {
+					instance.replacedContainer.replaceWith(instance.container);
 				} else {
 					instance.container.classList.add('fadein');
 					dialogDomParent.append(instance.container);
