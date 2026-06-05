@@ -428,12 +428,15 @@ export class Comment extends CanvasSectionObject {
 		top += canvasContainerBounds.top;
 
 		if (this.isSelected() || this.isEdit()) {
+			// Gap kept between the comment and the toolbar/canvas edges.
+			const margin = this.sectionProperties.commentListSection.sectionProperties.marginY / app.dpiScale;
+
 			if (left < canvasContainerBounds.left) {
 				left = canvasContainerBounds.left;
 			}
 
-			if (top < canvasContainerBounds.top) {
-				top = canvasContainerBounds.top;
+			if (top < canvasContainerBounds.top + margin) {
+				top = canvasContainerBounds.top + margin;
 			}
 
 			const width = this.getCommentWidth() / app.dpiScale;
@@ -442,8 +445,14 @@ export class Comment extends CanvasSectionObject {
 			}
 
 			const height = this.getCommentHeight();
-			if (top + height > canvasContainerBounds.bottom) {
-				top = canvasContainerBounds.bottom - height;
+			if (top + height > canvasContainerBounds.bottom - margin) {
+				top = canvasContainerBounds.bottom - height - margin;
+			}
+
+			// A comment taller than the view would be pushed up by the line above until
+			// its top slips under the toolbar; keep the top below the toolbar.
+			if (top < canvasContainerBounds.top + margin) {
+				top = canvasContainerBounds.top + margin;
 			}
 		}
 

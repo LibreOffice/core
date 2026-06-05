@@ -2751,11 +2751,16 @@ export class CommentSection extends CanvasSectionObject {
 							const comment = this.sectionProperties.commentList[i];
 							const contentNode = comment.sectionProperties.contentNode;
 							const oldMaxHeight = parseFloat(contentNode.style.maxHeight) || minMaxHeight;
+							const oldContent = Math.min(actHeight, oldMaxHeight);
+
+							// Don't let a comment grow past the visible area; its text scrolls instead.
+							// Reserve marginY at both the top and bottom (setContainerPos leaves a gap there).
+							const chrome = comment.getCommentHeight(false) - oldContent;
+							maxSize = Math.min(maxSize, this.sectionProperties.canvasContainerBounds.height - chrome - 2 * this.sectionProperties.marginY / app.dpiScale);
 							contentNode.style.maxHeight = Math.round(maxSize) + 'px';
 
 							// Without this, a later layout(false) would reuse a stale value.
 							if (comment.cachedCommentHeight !== null) {
-								const oldContent = Math.min(actHeight, oldMaxHeight);
 								const newContent = Math.min(actHeight, maxSize);
 								comment.cachedCommentHeight += newContent - oldContent;
 							}
