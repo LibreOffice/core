@@ -74,7 +74,7 @@ std::string LockManager::getLockedCommandListString()
     return LockedCommandListString;
 }
 
-void LockManager::parseLockedHost(Poco::Util::LayeredConfiguration& conf)
+void LockManager::parseLockedHost()
 {
     readOnlyWopiHosts.clear();
     disabledCommandWopiHosts.clear();
@@ -86,10 +86,10 @@ void LockManager::parseLockedHost(Poco::Util::LayeredConfiguration& conf)
         for (size_t i = 0;; i++)
         {
             const std::string path = "feature_lock.locked_hosts.host[" + std::to_string(i) + ']';
-            const std::string host = conf.getString(path, "");
+            const std::string host = ConfigUtil::getString(path, "");
             if (!host.empty())
             {
-                if (conf.getBool(path + "[@read_only]", false))
+                if (ConfigUtil::getBool(path + "[@read_only]", false))
                 {
                     readOnlyWopiHosts.allow(host);
                 }
@@ -98,7 +98,7 @@ void LockManager::parseLockedHost(Poco::Util::LayeredConfiguration& conf)
                     readOnlyWopiHosts.deny(host);
                 }
 
-                if (conf.getBool(path + "[@disabled_commands]", false))
+                if (ConfigUtil::getBool(path + "[@disabled_commands]", false))
                 {
                     disabledCommandWopiHosts.allow(host);
                 }
@@ -107,7 +107,7 @@ void LockManager::parseLockedHost(Poco::Util::LayeredConfiguration& conf)
                     disabledCommandWopiHosts.deny(host);
                 }
             }
-            else if (!conf.has(path))
+            else if (!ConfigUtil::has(path))
             {
                 break;
             }

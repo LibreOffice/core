@@ -163,8 +163,7 @@ bool isPamAuthOk(const std::string& userProvidedUsr, const std::string& userProv
 /// Check for user / password set in coolwsd.xml.
 bool isConfigAuthOk(const std::string& userProvidedUsr, const std::string& userProvidedPwd)
 {
-    const auto& config = Application::instance().config();
-    const std::string& user = config.getString("admin_console.username", std::string());
+    const std::string& user = ConfigUtil::getString("admin_console.username", std::string());
 
     // Check for the username
     if (user.empty())
@@ -182,10 +181,10 @@ bool isConfigAuthOk(const std::string& userProvidedUsr, const std::string& userP
     const char useCoolconfig[] = " Use coolconfig to configure the admin password.";
 
     // do we have secure_password?
-    if (config.has("admin_console.secure_password"))
+    if (ConfigUtil::has("admin_console.secure_password"))
     {
         std::string securePass =
-            config.getString("admin_console.secure_password", std::string());
+            ConfigUtil::getString("admin_console.secure_password", std::string());
         if (securePass.empty())
         {
             LOG_ERR("Admin Console secure password is empty, denying access." << useCoolconfig);
@@ -217,7 +216,7 @@ bool isConfigAuthOk(const std::string& userProvidedUsr, const std::string& userP
         return tokens.equals(4, stream.str());
     }
 
-    const std::string pass = config.getString("admin_console.password", "");
+    const std::string pass = ConfigUtil::getString("admin_console.password", "");
     if (pass.empty())
     {
         LOG_ERR("Admin Console password is empty, denying access." << useCoolconfig);
@@ -412,8 +411,6 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
             response.setConnectionToken(http::Header::ConnectionToken::Close);
         hstsHeaders(response);
 
-        const auto& config = Application::instance().config();
-
         Poco::URI requestUri(request.getURI());
         LOG_TRC("Fileserver request: " << requestUri.toString());
         requestUri.normalize(); // avoid .'s and ..'s
@@ -435,8 +432,8 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
         const std::string relPath = getRequestPathname(request, requestDetails);
         const std::string endPoint = requestSegments[requestSegments.size() - 1];
 
-        static std::string etagString = "\"" COOLWSD_VERSION_HASH +
-            config.getString("ver_suffix", "") + "\"";
+        static std::string etagString =
+            "\"" COOLWSD_VERSION_HASH + ConfigUtil::getString("ver_suffix", "") + "\"";
 
         // handle here:
 
@@ -456,7 +453,7 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
 #endif
         if (request.getMethod() == HTTPRequest::HTTP_POST && endPoint == "browser-logging")
         {
-            const std::string coolLogging = config.getString("browser_logging", "false");
+            const std::string coolLogging = ConfigUtil::getString("browser_logging", "false");
             if (coolLogging == "false")
             {
                 sendError(http::StatusCode::Forbidden, requestUri.toString(), socket,
@@ -2377,8 +2374,7 @@ void FileServerRequestHandler::preprocessAdminFile(const HTTPRequest& request,
 
     if constexpr (ConfigUtil::isSupportKeyEnabled())
     {
-        const auto& config = Application::instance().config();
-        const std::string keyString = config.getString("support_key", "");
+        const std::string keyString = ConfigUtil::getString("support_key", "");
         SupportKey key(keyString);
 
         if (!key.verify() || key.validDaysRemaining() <= 0)

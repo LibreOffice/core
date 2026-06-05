@@ -38,23 +38,23 @@ std::string HostUtil::FirstHost;
 bool HostUtil::WopiEnabled;
 std::set<std::string> HostUtil::AllowedWSOriginList;
 
-void HostUtil::parseWopiHost(const Poco::Util::LayeredConfiguration& conf)
+void HostUtil::parseWopiHost()
 {
     // Parse the WOPI settings.
     WopiHosts.clear();
-    WopiEnabled = conf.getBool("storage.wopi[@allow]", false);
+    WopiEnabled = ConfigUtil::getBool("storage.wopi[@allow]", false);
     if (WopiEnabled)
     {
         for (size_t i = 0;; ++i)
         {
             const std::string path = "storage.wopi.host[" + std::to_string(i) + ']';
-            if (!conf.has(path))
+            if (!ConfigUtil::has(path))
             {
                 break;
             }
 
-            HostUtil::addWopiHost(conf.getString(path, ""),
-                                      conf.getBool(path + "[@allow]", false));
+            HostUtil::addWopiHost(ConfigUtil::getString(path, ""),
+                                  ConfigUtil::getBool(path + "[@allow]", false));
         }
     }
 }
@@ -298,18 +298,18 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
     }
 }
 
-void HostUtil::parseAllowedWSOrigins(Poco::Util::LayeredConfiguration& conf)
+void HostUtil::parseAllowedWSOrigins()
 {
     for (size_t i = 0;; i++)
     {
         const std::string path =
             "indirection_endpoint.geolocation_setup.allowed_websocket_origins.origin[" +
             std::to_string(i) + ']';
-        if (!conf.has(path))
+        if (!ConfigUtil::has(path))
         {
             break;
         }
-        std::string origin = conf.getString(path, "");
+        std::string origin = ConfigUtil::getString(path, "");
         if (!origin.empty())
         {
             LOG_INF("Adding Origin[" << origin << "] to allowed websocket origin list");

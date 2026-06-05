@@ -48,13 +48,13 @@ private:
 
 public:
     /// parse wopi.storage.host
-    static void parseWopiHost(const Poco::Util::LayeredConfiguration& conf);
+    static void parseWopiHost();
 
     /// parse wopi.storage.alias_groups.group
     static void parseAliases(Poco::Util::LayeredConfiguration& conf);
 
     /// parse indirection_endpoint.geolocation_setup.allowed_websocket_origins
-    static void parseAllowedWSOrigins(Poco::Util::LayeredConfiguration& conf);
+    static void parseAllowedWSOrigins();
 
     /// if request uri is an alias, replace request uri host and port with
     /// original hostname and port defined by group tag from coolwsd.xml

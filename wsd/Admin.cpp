@@ -1305,14 +1305,13 @@ void Admin::start()
 
 std::vector<std::pair<std::string, int>> Admin::getMonitorList() const
 {
-    const auto& config = Application::instance().config();
     std::vector<std::pair<std::string, int>> monitorList;
     for (size_t i = 0;; ++i)
     {
         const std::string path = "monitors.monitor[" + std::to_string(i) + ']';
-        const std::string uri = config.getString(path, "");
+        const std::string uri = ConfigUtil::getString(path, "");
         const auto retryInterval = ConfigUtil::getConfigValue<int>(path + "[@retryInterval]", 20);
-        if (!config.has(path))
+        if (!ConfigUtil::has(path))
             break;
         if (!uri.empty())
         {

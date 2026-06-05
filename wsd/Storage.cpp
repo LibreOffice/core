@@ -106,26 +106,26 @@ std::string StorageBase::getJailPresetsPath() const
 void StorageBase::initialize()
 {
 #if !MOBILEAPP
-    const auto& app = Poco::Util::Application::instance();
 
 #if ENABLE_LOCAL_FILESYSTEM
-    FilesystemEnabled = app.config().getBool("storage.filesystem[@allow]", false);
+    FilesystemEnabled = ConfigUtil::getBool("storage.filesystem[@allow]", false);
 #endif
 
     //parse wopi.storage.host only when there is no storage.wopi.alias_groups entry in config
-    if (!app.config().has("storage.wopi.alias_groups"))
+    if (!ConfigUtil::has("storage.wopi.alias_groups"))
     {
-        HostUtil::parseWopiHost(app.config());
+        HostUtil::parseWopiHost();
     }
 
 #if ENABLE_FEATURE_LOCK
-    CommandControl::LockManager::parseLockedHost(app.config());
+    CommandControl::LockManager::parseLockedHost();
 #endif
 
+    const auto& app = Poco::Util::Application::instance();
     HostUtil::parseAliases(app.config());
 
     if (COOLWSD::IndirectionServerEnabled && COOLWSD::GeolocationSetup)
-        HostUtil::parseAllowedWSOrigins(app.config());
+        HostUtil::parseAllowedWSOrigins();
 
 #else // MOBILEAPP
     FilesystemEnabled = true;

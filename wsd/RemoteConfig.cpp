@@ -181,7 +181,7 @@ void RemoteConfigPoll::handleJSON(const Poco::JSON::Object::Ptr& remoteJson)
 
     HostUtil::parseAliases(_conf);
 
-    HostUtil::parseAllowedWSOrigins(_conf);
+    HostUtil::parseAllowedWSOrigins();
 
     COOLWSD::setLokitEnvironmentVariables(_conf);
 

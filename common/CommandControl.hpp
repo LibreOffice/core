@@ -47,7 +47,7 @@ public:
     static std::string unlockLink;
     static bool lockHostEnabled;
 
-    static void parseLockedHost(Poco::Util::LayeredConfiguration& conf);
+    static void parseLockedHost();
 
     static bool isLockedUser() { return _isLockedUser; }
     static bool isLockReadOnly()
