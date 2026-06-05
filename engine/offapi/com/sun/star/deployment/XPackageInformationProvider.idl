@@ -34,19 +34,6 @@ interface XPackageInformationProvider
     */
     string getPackageLocation( [in] string extensionId );
 
-    /** check if there are updates available for an extension.
-
-        @param extensionId
-               the unique identifier of an extension. When the extensionId is empty,
-               the service looks checks all installed extensions for a newer version,
-               otherwise the service looks for updates for an installed package with
-               the given id.
-       If the service finds an update for an extension, a sequence containing the name
-            and the version will be returned for each extension which has an update.
-       If the service can not find a matching package, an empty sequence is returned.
-    */
-    sequence< sequence< string > > isUpdateAvailable( [in] string extensionId );
-
     /** returns a list of all installed extension with their version.
     */
     sequence< sequence< string > > getExtensionList();

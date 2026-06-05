@@ -47,7 +47,6 @@ $(eval $(call gb_Library_add_exception_objects,deploymentmisc,\
     desktop/source/deployment/misc/dp_platform \
     desktop/source/deployment/misc/dp_resource \
     desktop/source/deployment/misc/dp_ucb \
-    desktop/source/deployment/misc/dp_update \
     desktop/source/deployment/misc/dp_version \
     desktop/source/deployment/misc/lockfile \
 ))

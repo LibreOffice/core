@@ -1823,19 +1823,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHelp-SafeMode">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:SafeMode</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuHelp-separator3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuHelp-ShowLicense">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -3110,19 +3097,6 @@
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="MenuSettings-separator2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuSettings-Extensions">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuSettings-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>

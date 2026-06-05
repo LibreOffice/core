@@ -457,7 +457,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	ucptdoc1 \
 	unordf \
 	unoxml \
-	updatefeed \
 	utl \
 	uui \
 	$(call gb_Helper_optional,SCRIPTING, \
@@ -625,7 +624,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	$(call gb_Helper_optional,BREAKPAD,crashreport) \
 	deployment \
-	deploymentgui \
 	embobj \
 	$(if $(ENABLE_JAVA),hsqldb) \
 	i18nutil \
@@ -1042,7 +1040,6 @@ endif
 
 $(eval $(call gb_Helper_register_uiconfigs,\
 	cui \
-	desktop \
 	editeng \
 	filter \
 	formula \

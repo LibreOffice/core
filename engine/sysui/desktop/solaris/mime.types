@@ -63,7 +63,6 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.stardivision.math smf
 application/vnd.sun.xml.base odb
-application/vnd.openofficeorg.extension oxt
 application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
 application/vnd.ms-word.document.macroEnabled.12 docm
 application/vnd.openxmlformats-officedocument.wordprocessingml.template dotx

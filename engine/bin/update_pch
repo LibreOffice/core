@@ -67,7 +67,6 @@ DEFAULTS = \
     'dbaccess.dbu'                      : (12, EXCLUDE, EXCLUDE, EXCLUDE), #  23.6
     'dbaccess.sdbt'                     : ( 1, EXCLUDE, INCLUDE, EXCLUDE), #   2.9
     'desktop.deployment'                : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   6.1
-    'desktop.deploymentgui'             : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   5.7
     'desktop.deploymentmisc'            : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   3.4
     'desktop.sofficeapp'                : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   6.5
     'docmodel.docmodel'                 : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   3.8

@@ -42,7 +42,6 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/LicenseException.hpp>
-#include <com/sun/star/deployment/ui/LicenseDialog.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -129,27 +128,9 @@ Reference<ucb::XProgressHandler> SilentCommandEnv::getProgressHandler()
 // XInteractionHandler
 void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRequest )
 {
-    deployment::LicenseException licExc;
-
-    uno::Any request( xRequest->getRequest() );
+    // Bundled extensions are registered silently at startup; there is no GUI
+    // to prompt for license acceptance, so approve everything.
     bool bApprove = true;
-
-    if ( request >>= licExc )
-    {
-        uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
-            deployment::ui::LicenseDialog::create(
-            mxContext, VCLUnoHelper::GetInterface( nullptr ),
-            licExc.ExtensionName, licExc.Text ) );
-        sal_Int16 res = xDialog->execute();
-        if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
-            bApprove = false;
-        else if ( res == ui::dialogs::ExecutableDialogResults::OK )
-            bApprove = true;
-        else
-        {
-            OSL_ASSERT(false);
-        }
-    }
 
     // We approve everything here
     uno::Sequence< Reference< task::XInteractionContinuation > > conts( xRequest->getContinuations() );
@@ -209,24 +190,6 @@ void SilentCommandEnv::pop()
 
 
 constexpr OUString aAccessSrvc = u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
-
-static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > const &xContext )
-{
-    uno::Reference< uno::XInterface > xService;
-    sal_Int16 nRet = 0;
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager( xContext->getServiceManager() );
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            u"impl_showExtensionDialog(): unable to obtain service manager from component context"_ustr, uno::Reference< uno::XInterface > () );
-
-    xService = xServiceManager->createInstanceWithContext( u"com.sun.star.deployment.ui.UpdateRequiredDialog"_ustr, xContext );
-    uno::Reference< ui::dialogs::XExecutableDialog > xExecutable( xService, uno::UNO_QUERY );
-    if ( xExecutable.is() )
-        nRet = xExecutable->execute();
-
-    return nRet;
-}
 
 
 // Check dependencies of all packages
@@ -307,30 +270,6 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
 }
 
 
-// resets the 'check needed' flag (needed, if aborted)
-
-static void impl_setNeedsCompatCheck()
-{
-    try {
-        Reference< XMultiServiceFactory > theConfigProvider(
-            configuration::theDefaultProvider::get(
-                comphelper::getProcessComponentContext() ) );
-
-        beans::NamedValue v( u"nodepath"_ustr,
-                      Any( u"org.openoffice.Setup/Office"_ustr ) );
-        Sequence< Any > theArgs{ Any(v) };
-        Reference< beans::XPropertySet > pset(
-            theConfigProvider->createInstanceWithArguments( aAccessSrvc, theArgs ), UNO_QUERY_THROW );
-
-        Any value( u"never"_ustr );
-
-        pset->setPropertyValue(u"LastCompatibilityCheckID"_ustr, value );
-        Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
-    }
-    catch (const Exception&) {}
-}
-
-
 // to check if we need checking the dependencies of the extensions again, we compare
 // the build id of the office with the one of the last check
 
@@ -384,20 +323,9 @@ bool Desktop::CheckExtensionDependencies()
     const uno::Reference< uno::XComponentContext >& xContext(
         comphelper::getProcessComponentContext());
 
-    bool bDependenciesValid = impl_checkDependencies( xContext );
+    impl_checkDependencies( xContext );
 
-    short nRet = 0;
-
-    if ( !bDependenciesValid )
-        nRet = impl_showExtensionDialog( xContext );
-
-    if ( nRet == -1 )
-    {
-        impl_setNeedsCompatCheck();
-        return true;
-    }
-    else
-        return false;
+    return false;
 }
 
 void Desktop::SynchronizeExtensionRepositories(bool bCleanedExtensionCache, Desktop* pDesktop)

@@ -2792,23 +2792,6 @@ desktop/source/app/userinstall.cxx
 desktop/source/deployment/dp_log.cxx
 desktop/source/deployment/dp_persmap.cxx
 desktop/source/deployment/dp_xml.cxx
-desktop/source/deployment/gui/dp_gui.h
-desktop/source/deployment/gui/dp_gui_dialog2.cxx
-desktop/source/deployment/gui/dp_gui_dialog2.hxx
-desktop/source/deployment/gui/dp_gui_extensionboxwithbuttons.cxx
-desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx
-desktop/source/deployment/gui/dp_gui_extensioncmdqueue.hxx
-desktop/source/deployment/gui/dp_gui_extlistbox.cxx
-desktop/source/deployment/gui/dp_gui_extlistbox.hxx
-desktop/source/deployment/gui/dp_gui_service.cxx
-desktop/source/deployment/gui/dp_gui_theextmgr.cxx
-desktop/source/deployment/gui/dp_gui_theextmgr.hxx
-desktop/source/deployment/gui/dp_gui_updatedata.hxx
-desktop/source/deployment/gui/dp_gui_updatedialog.cxx
-desktop/source/deployment/gui/dp_gui_updatedialog.hxx
-desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx
-desktop/source/deployment/gui/dp_gui_updateinstalldialog.hxx
-desktop/source/deployment/gui/license_dialog.cxx
 desktop/source/deployment/inc/dp_dependencies.hxx
 desktop/source/deployment/inc/dp_descriptioninfoset.hxx
 desktop/source/deployment/inc/dp_identifier.hxx
@@ -2816,7 +2799,6 @@ desktop/source/deployment/inc/dp_interact.h
 desktop/source/deployment/inc/dp_package.hxx
 desktop/source/deployment/inc/dp_registry.hxx
 desktop/source/deployment/inc/dp_ucb.h
-desktop/source/deployment/inc/dp_update.hxx
 desktop/source/deployment/inc/dp_version.hxx
 desktop/source/deployment/inc/dp_xml.h
 desktop/source/deployment/inc/lockfile.hxx
@@ -2838,7 +2820,6 @@ desktop/source/deployment/misc/dp_interact.cxx
 desktop/source/deployment/misc/dp_misc.cxx
 desktop/source/deployment/misc/dp_platform.cxx
 desktop/source/deployment/misc/dp_ucb.cxx
-desktop/source/deployment/misc/dp_update.cxx
 desktop/source/deployment/misc/dp_version.cxx
 desktop/source/deployment/misc/lockfile.cxx
 desktop/source/deployment/registry/component/dp_compbackenddb.cxx
@@ -3462,8 +3443,6 @@ extensions/source/scanner/sanedlg.hxx
 extensions/source/scanner/scanner.cxx
 extensions/source/scanner/scanner.hxx
 extensions/source/scanner/scanunx.cxx
-extensions/source/update/feed/test/updatefeedtest.cxx
-extensions/source/update/feed/updatefeed.cxx
 extensions/test/ole/AxTestComponents/Basic.cpp
 extensions/test/ole/AxTestComponents/Basic.h
 extensions/test/ole/AxTestComponents/Foo.h
@@ -3912,7 +3891,6 @@ framework/inc/dispatch/dispatchinformationprovider.hxx
 framework/inc/dispatch/dispatchprovider.hxx
 framework/inc/dispatch/interceptionhelper.hxx
 framework/inc/dispatch/mailtodispatcher.hxx
-framework/inc/dispatch/oxt_handler.hxx
 framework/inc/dispatch/popupmenudispatcher.hxx
 framework/inc/dispatch/servicehandler.hxx
 framework/inc/dispatch/startmoduledispatcher.hxx
@@ -4026,7 +4004,6 @@ framework/source/dispatch/dispatchprovider.cxx
 framework/source/dispatch/interceptionhelper.cxx
 framework/source/dispatch/loaddispatcher.cxx
 framework/source/dispatch/mailtodispatcher.cxx
-framework/source/dispatch/oxt_handler.cxx
 framework/source/dispatch/popupmenudispatcher.cxx
 framework/source/dispatch/servicehandler.cxx
 framework/source/dispatch/startmoduledispatcher.cxx

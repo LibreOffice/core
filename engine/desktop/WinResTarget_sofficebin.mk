@@ -43,7 +43,6 @@ $(eval $(call gb_WinResTarget_add_dependencies,sofficebin/officeloader,\
 	sysui/desktop/icons/spreadsheet.ico \
 	sysui/desktop/icons/text-template.ico \
 	sysui/desktop/icons/text.ico \
-	sysui/desktop/icons/oxt-extension.ico \
 ))
 
 $(eval $(call gb_WinResTarget_set_rcfile,sofficebin/officeloader,desktop/util/officeloader))

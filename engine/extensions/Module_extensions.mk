@@ -55,14 +55,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 endif
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-ifeq (,$(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS))
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_updatefeed \
-))
-endif # !ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS
-endif
-
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,extensions,\

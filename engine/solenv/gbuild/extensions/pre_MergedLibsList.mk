@@ -161,7 +161,6 @@ gb_MERGE_LIBRARY_LIST := \
 	ucptdoc1 \
 	unordf \
 	unoxml \
-	updatefeed \
 	utl \
 	uui \
 	$(call gb_Helper_optional,SCRIPTING, \

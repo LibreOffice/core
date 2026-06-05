@@ -58,19 +58,6 @@
         <property name="action_name">AddonCommand</property>
       </object>
     </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="AddonSection-Separator">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="Menu-Extension-PackageManagerDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
-      </object>
-    </child>
   </object>
   <object class="GtkMenu" id="Menu Arrange">
     <property name="visible">True</property>
@@ -2934,19 +2921,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSettings-Extensions">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuSettings-separator3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuSettings-RunMacro">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -5098,16 +5072,6 @@
                                 <property name="can_focus">False</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
-                                <child>
-                                  <object class="GtkToolButton" id="Default-PackageManagerDialog">
-                                    <property name="visible">True</property>
-                                    <property name="action_name">.uno:ExtensionManager</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">False</property>
-                                  </packing>
-                                </child>
                                 <child>
                                   <object class="NotebookBarAddonsToolMergePoint" id="AddonCommand">
                                     <property name="visible">True</property>

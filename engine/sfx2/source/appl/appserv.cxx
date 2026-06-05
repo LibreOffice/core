@@ -20,7 +20,6 @@
 #include <config_features.h>
 #include <config_wasm_strip.h>
 
-#include <com/sun/star/deployment/ui/PackageManagerDialog.hpp>
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
@@ -890,21 +889,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialog(rReq.GetFrameWeld()));
             pDlg->StartExecuteAsync(nullptr);
-            bDone = true;
-            break;
-        }
-
-        case SID_EXTENSION_MANAGER:
-        {
-            css::uno::Reference<css::awt::XWindow> xParent;
-            if (weld::Window* pWindow = rReq.GetFrameWeld())
-                xParent = pWindow->GetXWindow();
-
-            Reference<ui::dialogs::XAsynchronousExecutableDialog> xDialog(
-                css::deployment::ui::PackageManagerDialog::create(
-                    comphelper::getProcessComponentContext(), xParent, OUString()));
-            assert(xDialog.is());
-            xDialog->startExecuteModal({});
             bDone = true;
             break;
         }

@@ -79,9 +79,6 @@ en-US = "OpenDocument Database"
 [oasis-web-template]
 en-US = "HTML Document Template"
 
-[extension]
-en-US = "%PRODUCTNAME Extension"
-
 [ms-excel-sheet]
 en-US = "Microsoft Excel Worksheet"
 

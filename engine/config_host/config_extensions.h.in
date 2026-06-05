@@ -10,6 +10,4 @@
 
 #define HAVE_FEATURE_EXTENSIONS 0
 
-#define ENABLE_EXTENSION_UPDATE 0
-
 #endif

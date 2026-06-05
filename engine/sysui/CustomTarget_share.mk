@@ -71,8 +71,7 @@ MIMELIST := \
     openxmlformats-officedocument-spreadsheetml-template \
     openxmlformats-officedocument-wordprocessingml-document \
     openxmlformats-officedocument-wordprocessingml-template \
-    ms-excel-sheet-binary-12	\
-    extension
+    ms-excel-sheet-binary-12
 
 MIMEICONLIST := \
     oasis-text \
@@ -98,8 +97,7 @@ MIMEICONLIST := \
     presentation-template \
     formula \
     master-document \
-    database \
-    extension
+    database
 
 share_ICONS := $(foreach size,16x16 32x32 48x48,\
 	$(foreach contrast,hicolor locolor,\

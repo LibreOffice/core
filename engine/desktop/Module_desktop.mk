@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     CustomTarget_desktop_unopackages_install \
     GeneratedPackage_desktop_unopackages_install \
     Library_deployment \
-    Library_deploymentgui \
     Library_deploymentmisc \
     Library_offacc \
     Library_sofficeapp \
@@ -23,7 +22,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     $(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,Library_spl) \
     Package_branding \
     $(if $(CUSTOM_BRAND_DIR),Package_branding_custom) \
-    UIConfig_deployment \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,desktop,\

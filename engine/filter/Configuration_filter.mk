@@ -265,7 +265,6 @@ $(eval $(call filter_Configuration_Configuration,fcfg_langpack))
 # fcfg_base
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_base_types.xcu,filter/source/config/fragments/types,\
 	writer_web_HTML_help \
-	oxt_OpenOffice_Extension \
 	wav_Wave_Audio_File \
 	component_Bibliography \
 	component_DB \
@@ -279,7 +278,6 @@ $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_base_others.xcu
 	frameloaders/com_sun_star_frame_Bibliography \
 	frameloaders/com_sun_star_sdb_ContentLoader \
 	contenthandlers/com_sun_star_comp_framework_SoundHandler \
-	contenthandlers/com_sun_star_comp_framework_oxt_handler \
 ))
 
 ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)

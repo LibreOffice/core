@@ -89,7 +89,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/dispatch/windowcommanddispatch \
     framework/source/dispatch/dispatchdisabler \
     framework/source/dispatch/mailtodispatcher \
-    framework/source/dispatch/oxt_handler \
     framework/source/dispatch/popupmenudispatcher \
     framework/source/dispatch/servicehandler \
     framework/source/dispatch/systemexec \

@@ -2028,11 +2028,6 @@ AC_ARG_ENABLE(z7-debug,
          more disk spaces but allows to use ccache. Final PDB files are created even with this option enabled.
          Enabled by default if ccache is detected.]))
 
-libo_FUZZ_ARG_ENABLE(extension-update,
-    AS_HELP_STRING([--disable-extension-update],
-        [Disable possibility to update installed extensions.]),
-,)
-
 libo_FUZZ_ARG_ENABLE(hardening-flags,
     AS_HELP_STRING([--enable-hardening-flags],
         [Enable automatically using hardening compiler flags. Distros typically
@@ -3155,7 +3150,6 @@ if test "$enable_wasm_strip" = "yes"; then
     test "${enable_dynamic_loading+set}" = set -o "$_os" != Emscripten || enable_dynamic_loading=no
     enable_extension_integration=no
     enable_extensions=no
-    enable_extension_update=no
     enable_gio=no
     enable_gpgmepp=no
     enable_ldap=no
@@ -3260,7 +3254,6 @@ if test "$enable_extensions" = yes; then
     AC_DEFINE(HAVE_FEATURE_EXTENSIONS)
 else
     enable_extension_integration=no
-    enable_extension_update=no
 fi
 
 # remember SYSBASE value
@@ -13478,21 +13471,6 @@ if test "$_os" != "Darwin" -a $enable_python = internal; then
     BUILD_TYPE="$BUILD_TYPE SQLITE3"
     libo_CHECK_SYSTEM_MODULE([sqlite3], [SQLITE3], [sqlite3])
 fi
-
-dnl ===================================================================
-dnl Test whether to enable extension update
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable extension update])
-ENABLE_EXTENSION_UPDATE=
-if test "x$enable_extension_update" = "xno"; then
-    AC_MSG_RESULT([no])
-else
-    AC_MSG_RESULT([yes])
-    ENABLE_EXTENSION_UPDATE="TRUE"
-    AC_DEFINE(ENABLE_EXTENSION_UPDATE)
-    SCPDEFS="$SCPDEFS -DENABLE_EXTENSION_UPDATE"
-fi
-AC_SUBST(ENABLE_EXTENSION_UPDATE)
 
 
 AC_MSG_CHECKING([whether and how to use Xinerama])

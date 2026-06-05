@@ -114,16 +114,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/deployment,\
 	ExtensionManager \
 	PackageInformationProvider \
 	PackageRegistryBackend \
-	UpdateInformationProvider \
 	thePackageManagerFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/deployment/test,\
 	SmoketestCommandEnvironment \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/deployment/ui,\
-	LicenseDialog \
-	PackageManagerDialog \
-	UpdateRequiredDialog \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/document,\
 	DocumentProperties \
@@ -2153,7 +2147,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/deployment,\
 	LicenseException \
 	PlatformException \
 	Prerequisites \
-	UpdateInformationEntry \
 	VersionException \
 	XExtensionManager \
 	XPackage \
@@ -2162,7 +2155,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/deployment,\
 	XPackageManagerFactory \
 	XPackageRegistry \
 	XPackageTypeInfo \
-	XUpdateInformationProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	AmbigousFilterRequest \

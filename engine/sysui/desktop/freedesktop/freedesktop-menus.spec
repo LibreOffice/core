@@ -157,7 +157,6 @@ do
   icon=${link_dir}/%iconprefix-spreadsheet-template.png;        test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.template.png
   icon=${link_dir}/%iconprefix-text.png;                        test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.png
   icon=${link_dir}/%iconprefix-text-template.png;               test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.template.png
-  icon=${link_dir}/%iconprefix-extension.png;                   test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.openofficeorg.extension.png
 done
 
 #run always
@@ -220,7 +219,6 @@ application/vnd.stardivision.draw sda
 application/vnd.sun.xml.math sxm
 application/vnd.sun.xml.base odb
 application/vnd.stardivision.math smf
-application/vnd.openofficeorg.extension oxt
 application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
 application/vnd.ms-word.document.macroEnabled.12 docm
 application/vnd.openxmlformats-officedocument.wordprocessingml.template dotx
@@ -309,7 +307,6 @@ application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
 application/vnd.oasis.opendocument.base; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
-application/vnd.openofficeorg.extension; %unixfilename %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; %unixfilename -view %s
 application/vnd.ms-word.document.macroEnabled.12;%unixfilename -view %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.template; %unixfilename -view %s

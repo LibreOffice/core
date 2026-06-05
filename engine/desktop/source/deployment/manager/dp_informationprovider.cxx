@@ -20,18 +20,14 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/xml/dom/XElement.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <osl/diagnose.h>
@@ -39,11 +35,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <dp_dependencies.hxx>
-#include <dp_descriptioninfoset.hxx>
 #include <dp_identifier.hxx>
-#include <dp_version.hxx>
-#include <dp_update.hxx>
 
 namespace beans      = css::beans ;
 namespace deployment = css::deployment ;
@@ -51,7 +43,6 @@ namespace lang       = css::lang ;
 namespace task       = css::task ;
 namespace css_ucb    = css::ucb ;
 namespace uno        = css::uno ;
-namespace xml = css::xml ;
 
 
 namespace dp_info {
@@ -72,7 +63,6 @@ class PackageInformationProvider :
 
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId ) override;
-    virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL isUpdateAvailable( const OUString& extensionId ) override;
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL getExtensionList() override;
 
 private:
@@ -81,15 +71,12 @@ private:
 
     OUString getPackageLocation( const OUString& repository,
                                       std::u16string_view _sExtensionId );
-
-    uno::Reference< deployment::XUpdateInformationProvider > mxUpdateInformation;
 };
 
 }
 
 PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
-    mxContext( xContext ),
-    mxUpdateInformation( deployment::UpdateInformationProvider::create( xContext ) )
+    mxContext( xContext )
 {
 }
 
@@ -172,115 +159,6 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     }
     return aLocationURL;
 }
-
-uno::Sequence< uno::Sequence< OUString > > SAL_CALL
-PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
-{
-    uno::Sequence< uno::Sequence< OUString > > aList;
-
-    uno::Reference<deployment::XExtensionManager> extMgr =
-        deployment::ExtensionManager::get(mxContext);
-
-    if (!extMgr.is())
-    {
-        OSL_ASSERT(false);
-        return aList;
-    }
-    std::vector<std::pair<uno::Reference<deployment::XPackage>, uno::Any > > errors;
-    dp_misc::UpdateInfoMap updateInfoMap;
-    if (!_sExtensionId.isEmpty())
-    {
-        std::vector<uno::Reference<deployment::XPackage> > vecExtensions;
-        uno::Reference<deployment::XPackage> extension;
-        try
-        {
-            extension = dp_misc::getExtensionWithHighestVersion(
-                extMgr->getExtensionsWithSameIdentifier(
-                    _sExtensionId, _sExtensionId, uno::Reference<css_ucb::XCommandEnvironment>()));
-            vecExtensions.push_back(extension);
-        }
-        catch (lang::IllegalArgumentException &)
-        {
-            OSL_ASSERT(false);
-        }
-        updateInfoMap = dp_misc::getOnlineUpdateInfos(
-            mxContext, extMgr, mxUpdateInformation, &vecExtensions, errors);
-    }
-    else
-    {
-        updateInfoMap = dp_misc::getOnlineUpdateInfos(
-            mxContext, extMgr, mxUpdateInformation, nullptr, errors);
-    }
-
-    int nCount = 0;
-    for (auto const& updateInfo : updateInfoMap)
-    {
-        dp_misc::UpdateInfo const & info = updateInfo.second;
-
-        OUString sOnlineVersion;
-        if (info.info.is())
-        {
-            // check, if there are unsatisfied dependencies and ignore this online update
-            dp_misc::DescriptionInfoset infoset(mxContext, info.info);
-            uno::Sequence< uno::Reference< xml::dom::XElement > >
-                ds( dp_misc::Dependencies::check( infoset ) );
-            if ( ! ds.hasElements() )
-                sOnlineVersion = info.version;
-        }
-
-        OUString sVersionUser;
-        OUString sVersionShared;
-        OUString sVersionBundled;
-        uno::Sequence< uno::Reference< deployment::XPackage> > extensions;
-        try {
-            extensions = extMgr->getExtensionsWithSameIdentifier(
-                dp_misc::getIdentifier(info.extension), info.extension->getName(),
-                uno::Reference<css_ucb::XCommandEnvironment>());
-        } catch (const lang::IllegalArgumentException&) {
-            TOOLS_WARN_EXCEPTION("desktop.deployment", "ignoring");
-            continue;
-        }
-        OSL_ASSERT(extensions.getLength() == 3);
-        if (extensions[0].is() )
-            sVersionUser = extensions[0]->getVersion();
-        if (extensions[1].is() )
-            sVersionShared = extensions[1]->getVersion();
-        if (extensions[2].is() )
-            sVersionBundled = extensions[2]->getVersion();
-
-        bool bSharedReadOnly = extMgr->isReadOnlyRepository(u"shared"_ustr);
-
-        dp_misc::UPDATE_SOURCE sourceUser = dp_misc::isUpdateUserExtension(
-            bSharedReadOnly, sVersionUser, sVersionShared, sVersionBundled, sOnlineVersion);
-        dp_misc::UPDATE_SOURCE sourceShared = dp_misc::isUpdateSharedExtension(
-            bSharedReadOnly, sVersionShared, sVersionBundled, sOnlineVersion);
-
-        OUString updateVersionUser;
-        OUString updateVersionShared;
-        if (sourceUser != dp_misc::UPDATE_SOURCE_NONE)
-            updateVersionUser = dp_misc::getHighestVersion(
-                sVersionShared, sVersionBundled, sOnlineVersion);
-        if (sourceShared  != dp_misc::UPDATE_SOURCE_NONE)
-            updateVersionShared = dp_misc::getHighestVersion(
-                OUString(), sVersionBundled, sOnlineVersion);
-        OUString updateVersion;
-        if (dp_misc::compareVersions(updateVersionUser, updateVersionShared) == dp_misc::GREATER)
-            updateVersion = updateVersionUser;
-        else
-            updateVersion = updateVersionShared;
-        if (!updateVersion.isEmpty())
-        {
-
-            OUString aNewEntry[2];
-            aNewEntry[0] = updateInfo.first;
-            aNewEntry[1] = updateVersion;
-            aList.realloc( ++nCount );
-            aList.getArray()[ nCount-1 ] = ::uno::Sequence< OUString >( aNewEntry, 2 );
-        }
-    }
-    return aList;
-}
-
 
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
 {

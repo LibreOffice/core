@@ -27,7 +27,6 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <osl/process.h>
-#include <osl/conditn.hxx>
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -37,7 +36,6 @@
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 
-#include <com/sun/star/deployment/ui/PackageManagerDialog.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/logging/ConsoleHandler.hpp>
 #include <com/sun/star/logging/FileHandler.hpp>
@@ -46,7 +44,6 @@
 #include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #if defined(UNX)
   #include <unistd.h>
 #endif
@@ -141,36 +138,6 @@ void logFatal(
     } else {
         logger->log(level, message, argument);
     }
-}
-
-class DialogClosedListenerImpl :
-    public ::cppu::WeakImplHelper< ui::dialogs::XDialogClosedListener >
-{
-    osl::Condition & m_rDialogClosedCondition;
-
-public:
-    explicit DialogClosedListenerImpl( osl::Condition & rDialogClosedCondition )
-        : m_rDialogClosedCondition( rDialogClosedCondition ) {}
-
-    // XEventListener (base of XDialogClosedListener)
-    virtual void SAL_CALL disposing( lang::EventObject const & Source ) override;
-
-    // XDialogClosedListener
-    virtual void SAL_CALL dialogClosed(
-        ui::dialogs::DialogClosedEvent const & aEvent ) override;
-};
-
-// XEventListener (base of XDialogClosedListener)
-void DialogClosedListenerImpl::disposing( lang::EventObject const & )
-{
-    // nothing to do
-}
-
-// XDialogClosedListener
-void DialogClosedListenerImpl::dialogClosed(
-    ui::dialogs::DialogClosedEvent const & )
-{
-    m_rDialogClosedCondition.set();
 }
 
 // If a package had been installed with a pre OOo 2.2, it could not normally be
@@ -581,23 +548,6 @@ extern "C" int unopkg_main()
                     xExtensionManager->checkPrerequisitesAndEnable(
                         extension, Reference<task::XAbortChannel>(), xCmdEnv);
             }
-        }
-        else if ( subCommand == "gui" )
-        {
-            Reference<ui::dialogs::XAsynchronousExecutableDialog> xDialog(
-                deployment::ui::PackageManagerDialog::createAndInstall(
-                    xComponentContext,
-                    !cmdPackages.empty() ? cmdPackages[0] : OUString() ));
-
-            osl::Condition dialogEnded;
-            dialogEnded.reset();
-
-            Reference< ui::dialogs::XDialogClosedListener > xListener(
-                new DialogClosedListenerImpl( dialogEnded ) );
-
-            xDialog->startExecuteModal(xListener);
-            dialogEnded.wait();
-            return 0;
         }
         else
         {

@@ -1535,19 +1535,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SafeModeD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:SafeMode</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator113">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="ShowLicenseD1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2220,19 +2207,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExtensionsD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator58">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="HelpIndexD1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2706,13 +2680,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenXMLFilterSettings</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="PackageManagerDialogD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
       </object>
     </child>
     <child>

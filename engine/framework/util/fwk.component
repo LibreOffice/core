@@ -278,10 +278,6 @@
     constructor="framework_NewMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.OXTFileHandler"
-    constructor="framework_Oxt_Handler_get_implementation">
-    <service name="com.sun.star.frame.ContentHandler"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.PopupMenuControllerDispatcher"
     constructor="framework_PopupMenuDispatcher_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>

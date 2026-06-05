@@ -13,19 +13,6 @@
         <property name="action_name">AddonCommand</property>
       </object>
     </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="AddonSection-Separator">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="Menu-Extension-PackageManagerDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
-      </object>
-    </child>
   </object>
   <object class="GtkMenu" id="Menu Data">
     <property name="visible">True</property>

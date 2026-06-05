@@ -92,19 +92,6 @@
         <property name="action_name">AddonCommand</property>
       </object>
     </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="AddonSection-Separator">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="Menu-Extension-PackageManagerDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
-      </object>
-    </child>
   </object>
   <object class="GtkMenu" id="Menu Draw">
     <property name="visible">True</property>
@@ -2420,13 +2407,6 @@
       <object class="GtkSeparatorMenuItem" id="MenuTools-Separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-PackageManagerDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExtensionManager</property>
       </object>
     </child>
     <child>
@@ -19059,16 +19039,6 @@
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="ExtensionMenu-ExtensionDialog">
-                                <property name="visible">True</property>
-                                <property name="action_name">.uno:ExtensionManager</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>

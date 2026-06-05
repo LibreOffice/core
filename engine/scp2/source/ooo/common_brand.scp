@@ -510,19 +510,6 @@ ProfileItem gid_Brand_Profileitem_Version_Vendor
     Value = "<vendor>";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 18;
-    Key = "ExtensionUpdateURL";
-    #if defined(ENABLE_EXTENSION_UPDATE)
-      Value = "https://updateexte.libreoffice.org/ExtensionUpdateService/check.Update";
-    #else
-      Value = "";
-    #endif
-End
-
 ProfileItem gid_Brand_Profileitem_Version_ReferenceOOoMajorMinor
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;

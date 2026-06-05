@@ -180,7 +180,6 @@ define instsetoo_native_genversionini
 [Version]
 AllLanguages=$(if $(gb_WITH_LANG),$(gb_WITH_LANG),en-US)
 buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)
-ExtensionUpdateURL=https://updateexte.libreoffice.org/ExtensionUpdateService/check.Update
 ReferenceOOoMajorMinor=4.1
 Vendor=$(OOO_VENDOR)
 endef
