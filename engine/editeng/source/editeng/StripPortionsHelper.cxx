@@ -91,7 +91,7 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
                           const basegfx::B2DHomMatrix& rNewTransform,
                           double fFillColorMaxAscentFraction = 0.0)
 {
-    ::std::vector<sal_Bool> aKashidaArray;
+    boost::container::vector< bool > aKashidaArray;
 
     if (!rInfo.mpKashidaArray.empty() && rInfo.mnTextLen)
     {
@@ -533,8 +533,8 @@ void DoCapitalsDrawPortionInfo::Do(const OUString& rSpanTxt, const sal_Int32 nSp
 
     auto aKashidaArray
         = !m_rInfo.mpKashidaArray.empty()
-              ? std::span<const sal_Bool>(m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen)
-              : std::span<const sal_Bool>();
+              ? std::span<const bool>(m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen)
+              : std::span<const bool>();
 
     DrawPortionInfo aInfo(
         aStartPos, rSpanTxt, nSpanIdx, nSpanLen, aDXArray, aKashidaArray, m_aFont, m_rInfo.mnPara,

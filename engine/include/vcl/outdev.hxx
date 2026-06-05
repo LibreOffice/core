@@ -965,12 +965,12 @@ public:
     bool                        GetTextBoundRect( tools::Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
-                                                  std::span<const sal_Bool> pKashidaArray = {},
+                                                  std::span<const bool> pKashidaArray = {},
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
     bool                        GetTextBoundRect( basegfx::B2DRectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
-                                                  std::span<const sal_Bool> pKashidaArray = {},
+                                                  std::span<const bool> pKashidaArray = {},
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
     tools::Rectangle            ImplGetTextBoundRect( const SalLayout& ) const;
@@ -982,13 +982,13 @@ public:
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
                                                  sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
-                                                 std::span<const sal_Bool> pKashidaArray = {} ) const;
+                                                 std::span<const bool> pKashidaArray = {} ) const;
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
                                                  sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
-                                                 std::span<const sal_Bool> pKashidaArray = {} ) const;
+                                                 std::span<const bool> pKashidaArray = {} ) const;
 
     /** Get outlines for raw glyph IDs (bypassing text shaping).
         Returns one B2DPolyPolygon per glyph. The outlines are in the
@@ -1063,7 +1063,7 @@ public:
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                                KernArraySpan aKernArray,
-                                               std::span<const sal_Bool> pKashidaAry,
+                                               std::span<const bool> pKashidaAry,
                                                sal_Int32 nIndex,
                                                sal_Int32 nLen,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
@@ -1077,7 +1077,7 @@ public:
                                        std::optional<tools::Rectangle>* pBounds = nullptr) const;
 
     void DrawPartialTextArray(const Point& rStartPt, const OUString& rStr, KernArraySpan aKernArray,
-                              std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex,
+                              std::span<const bool> pKashidaAry, sal_Int32 nIndex,
                               sal_Int32 nLen, sal_Int32 nPartIndex, sal_Int32 nPartLen,
                               SalLayoutFlags flags = SalLayoutFlags::NONE,
                               const SalLayoutGlyphs* pLayoutCache = nullptr);
@@ -1262,7 +1262,7 @@ public:
     std::unique_ptr<SalLayout> ImplLayout(
         const OUString&, sal_Int32 nIndex, sal_Int32 nLen, const Point& rLogicPos = Point(0, 0),
         tools::Long nLogicWidth = 0, KernArraySpan aKernArray = KernArraySpan(),
-        std::span<const sal_Bool> pKashidaArray = {}, SalLayoutFlags flags = SalLayoutFlags::NONE,
+        std::span<const bool> pKashidaArray = {}, SalLayoutFlags flags = SalLayoutFlags::NONE,
         vcl::text::TextLayoutCache const* = nullptr, const SalLayoutGlyphs* pGlyphs = nullptr,
         std::optional<sal_Int32> nDrawOriginCluster = std::nullopt,
         std::optional<sal_Int32> nDrawMinCharPos = std::nullopt,

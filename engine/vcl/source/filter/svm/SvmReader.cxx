@@ -595,8 +595,8 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
     if (nStrLen > aStr.getLength() - nStrIndex)
     {
         SAL_WARN("vcl.gdi", "inconsistent offset and len");
-        return new MetaTextArrayAction(aPoint, aStr, KernArray(), std::vector<sal_Bool>(), 0,
-                                       aStr.getLength());
+        return new MetaTextArrayAction(aPoint, aStr, KernArray(), boost::container::vector<bool>(),
+                                       0, aStr.getLength());
     }
 
     if (nAryLen)
@@ -623,8 +623,8 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         }
         else
         {
-            return new MetaTextArrayAction(aPoint, aStr, KernArray(), std::vector<sal_Bool>(),
-                                           nStrIndex, nStrLen);
+            return new MetaTextArrayAction(aPoint, aStr, KernArray(),
+                                           boost::container::vector<bool>(), nStrIndex, nStrLen);
         }
     }
 
@@ -641,7 +641,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         }
     }
 
-    std::vector<sal_Bool> aKashidaArray;
+    boost::container::vector<bool> aKashidaArray;
     if (aCompat.GetVersion() >= 3) // Version 3
     {
         sal_uInt32 nKashidaAryLen(0);
@@ -650,11 +650,13 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         if (nTmpLen)
         {
             // aKashidaArray, if not empty, must be the same size as aArray
-            aKashidaArray.resize(aArray.size(), 0);
+            aKashidaArray.resize(aArray.size(), false);
 
             for (sal_uInt32 i = 0; i < nTmpLen; i++)
             {
-                mrStream.ReadUChar(aKashidaArray[i]);
+                unsigned char nTmp = 0;
+                mrStream.ReadUChar(nTmp);
+                aKashidaArray[i] = nTmp != 0;
             }
         }
     }

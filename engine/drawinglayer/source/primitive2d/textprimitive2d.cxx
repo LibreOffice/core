@@ -203,10 +203,10 @@ Primitive2DReference TextSimplePortionPrimitive2D::create2DDecomposition(
 
 TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     basegfx::B2DHomMatrix rNewTransform, OUString rText, sal_Int32 nTextPosition,
-    sal_Int32 nTextLength, std::vector<double>&& rDXArray, std::vector<sal_Bool>&& rKashidaArray,
-    attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
-    const basegfx::BColor& rFontColor, const Color& rTextFillColor, short nLetterSpacing,
-    sal_uInt8 nProportionalFontSize, short nEscapement, bool bOpticalSizing,
+    sal_Int32 nTextLength, std::vector<double>&& rDXArray,
+    boost::container::vector<bool>&& rKashidaArray, attribute::FontAttribute aFontAttribute,
+    css::lang::Locale aLocale, const basegfx::BColor& rFontColor, const Color& rTextFillColor,
+    short nLetterSpacing, sal_uInt8 nProportionalFontSize, short nEscapement, bool bOpticalSizing,
     double fFillColorMaxAscentFraction)
     : maTextTransform(std::move(rNewTransform))
     , maText(std::move(rText))

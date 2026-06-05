@@ -2008,7 +2008,7 @@ namespace cppcanvas::internal
                                                    sal_Int32                        nStartPos,
                                                    sal_Int32                        nLen,
                                                    KernArraySpan                    pDXArray,
-                                                   std::span<const sal_Bool>        pKashidaArray,
+                                                   std::span<const bool>            pKashidaArray,
                                                    VirtualDevice&                   rVDev,
                                                    const CanvasSharedPtr&           rCanvas,
                                                    const OutDevState&               rState,
@@ -2162,7 +2162,7 @@ namespace cppcanvas::internal
                                                              sal_Int32                      nStartPos,
                                                              sal_Int32                      nLen,
                                                              KernArraySpan                  pDXArray,
-                                                             std::span<const sal_Bool>     pKashidaArray,
+                                                             std::span<const bool>          pKashidaArray,
                                                              VirtualDevice&                 rVDev,
                                                              const CanvasSharedPtr&         rCanvas,
                                                              const OutDevState&             rState,
@@ -2214,7 +2214,8 @@ namespace cppcanvas::internal
                               rVDev,
                               rState ));
 
-            const uno::Sequence< sal_Bool > aKashidas(pKashidaArray.data(), pKashidaArray.size());
+            static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
+            const uno::Sequence< sal_Bool > aKashidas(reinterpret_cast<const sal_Bool*>(pKashidaArray.data()), pKashidaArray.size());
 
             // determine type of text action to create
             // =======================================

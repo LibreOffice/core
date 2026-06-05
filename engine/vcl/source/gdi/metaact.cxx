@@ -604,7 +604,7 @@ MetaTextArrayAction::MetaTextArrayAction(const MetaTextArrayAction& rAction)
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           OUString aStr,
                                           KernArray aDXAry,
-                                          std::vector<sal_Bool> aKashidaAry,
+                                          boost::container::vector< bool > aKashidaAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
@@ -620,7 +620,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           OUString aStr,
                                           KernArraySpan pDXAry,
-                                          std::span<const sal_Bool> pKashidaAry,
+                                          std::span<const bool> pKashidaAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
@@ -634,7 +634,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 }
 
 MetaTextArrayAction::MetaTextArrayAction(const Point& rStartPt, OUString aStr, KernArraySpan pDXAry,
-                                         std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex,
+                                         std::span<const bool> pKashidaAry, sal_Int32 nIndex,
                                          sal_Int32 nLen, sal_Int32 nLayoutContextIndex,
                                          sal_Int32 nLayoutContextLen)
     : MetaAction(MetaActionType::TEXTARRAY)

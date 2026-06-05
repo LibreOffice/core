@@ -61,6 +61,7 @@
 #include "justify.hxx"
 #include <svtools/colorcfg.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <boost/container/vector.hpp>
 
 using namespace ::com::sun::star;
 
@@ -851,7 +852,7 @@ static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo
 }
 
 static void DrawTextArray(OutputDevice& rOutputDevice, const Point& rStartPt, const OUString& rStr,
-                          KernArray& aKernArray, std::span<const sal_Bool> pKashidaAry,
+                          KernArray& aKernArray, std::span<const bool> pKashidaAry,
                           sal_Int32 nIndex, sal_Int32 nLen,
                           std::optional<SwLinePortionLayoutContext> nLayoutContext)
 {
@@ -1165,7 +1166,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             KernArray aKernArray;
             GetTextArray(rInf.GetOut(), rInf, aKernArray);
-            std::vector<sal_Bool> aKashidaArray;
+            boost::container::vector< bool > aKashidaArray;
 
             if( bStretch )
             {
@@ -1415,7 +1416,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         KernArray aKernArray(nSubPixels);
         GetTextArray(*xFormattingDevice, rInf, aKernArray);
 
-        std::vector<sal_Bool> aKashidaArray;
+        boost::container::vector< bool > aKashidaArray;
 
         // Modify Printer and ScreenArrays for special justifications
 

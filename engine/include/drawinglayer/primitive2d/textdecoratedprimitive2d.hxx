@@ -23,6 +23,7 @@
 
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
+#include <boost/container/vector.hpp>
 
 namespace basegfx::utils {
     class B2DHomMatrixBufferedOnDemandDecompose;
@@ -69,7 +70,7 @@ namespace drawinglayer::primitive2d
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,
                 const ::std::vector< double >& rDXArray,
-                const ::std::vector< sal_Bool >& rKashidaArray,
+                const boost::container::vector< bool >& rKashidaArray,
                 const attribute::FontAttribute& rFontAttribute) const;
 
             /// local decomposition.
@@ -84,7 +85,7 @@ namespace drawinglayer::primitive2d
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,
                 std::vector< double >&& rDXArray,
-                std::vector< sal_Bool >&& rKashidaArray,
+                boost::container::vector< bool >&& rKashidaArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const css::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,

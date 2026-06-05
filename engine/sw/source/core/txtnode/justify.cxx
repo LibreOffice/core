@@ -297,7 +297,7 @@ void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidt
 }
 
 bool KashidaJustify(std::span<TextFrameIndex const> aKashPositions, KernArray& rKernArray,
-                    sal_Bool* pKashidaArray, sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd)
+                    bool* pKashidaArray, sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd)
 {
     SAL_WARN_IF(!nLen, "sw.core", "Kashida justification without text?!");
 

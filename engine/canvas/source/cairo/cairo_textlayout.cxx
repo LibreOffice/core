@@ -279,7 +279,8 @@ namespace cairocanvas
         if (maLogicalAdvancements.hasElements())
         {
             KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
-            std::span<const sal_Bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
+            static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
+            std::span<const bool> aKashidaArray(reinterpret_cast<const bool *>(maKashidaPositions.getConstArray()), maKashidaPositions.getLength());
 
             rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets, aKashidaArray,
                                    ::canvastools::numeric_cast<sal_uInt16>(maText.StartPosition),

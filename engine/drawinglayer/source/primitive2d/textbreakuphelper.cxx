@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
             // prepare values for new portion
             basegfx::B2DHomMatrix aNewTransform;
             std::vector< double > aNewDXArray;
-            std::vector< sal_Bool > aNewKashidaArray;
+            boost::container::vector< bool > aNewKashidaArray;
             const bool bNewStartIsNotOldStart(nIndex > mrSource.getTextPosition());
 
             if(!mbNoDXArray)
@@ -71,7 +71,7 @@ namespace drawinglayer::primitive2d
 
             if(!mbNoDXArray && !mrSource.getKashidaArray().empty())
             {
-                aNewKashidaArray = std::vector< sal_Bool >(
+                aNewKashidaArray = boost::container::vector< bool >(
                     mrSource.getKashidaArray().begin() + (nIndex - mrSource.getTextPosition()),
                     mrSource.getKashidaArray().begin() + ((nIndex + nLength) - mrSource.getTextPosition()));
             }

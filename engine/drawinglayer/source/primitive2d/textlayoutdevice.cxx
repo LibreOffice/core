@@ -262,7 +262,7 @@ double TextLayouterDevice::getTextWidth(const OUString& rText, sal_uInt32 nIndex
 void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
                                          const OUString& rText, sal_uInt32 nIndex,
                                          sal_uInt32 nLength, const std::vector<double>& rDXArray,
-                                         const std::vector<sal_Bool>& rKashidaArray) const
+                                         const boost::container::vector<bool>& rKashidaArray) const
 {
     const sal_uInt32 nDXArrayCount(rDXArray.size());
     sal_uInt32 nTextLength(nLength);
@@ -364,10 +364,11 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
     return aRetval;
 }
 
-std::unique_ptr<SalLayout>
-TextLayouterDevice::getSalLayout(const OUString& rText, sal_uInt32 nIndex, sal_uInt32 nLength,
-                                 const basegfx::B2DPoint& rStartPoint, const KernArray& rDXArray,
-                                 std::span<const sal_Bool> pKashidaAry) const
+std::unique_ptr<SalLayout> TextLayouterDevice::getSalLayout(const OUString& rText,
+                                                            sal_uInt32 nIndex, sal_uInt32 nLength,
+                                                            const basegfx::B2DPoint& rStartPoint,
+                                                            const KernArray& rDXArray,
+                                                            std::span<const bool> pKashidaAry) const
 {
     const SalLayoutGlyphs* pGlyphs(
         SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&mrDevice, rText, nIndex, nLength));

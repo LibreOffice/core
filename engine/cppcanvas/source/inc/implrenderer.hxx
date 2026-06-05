@@ -193,7 +193,7 @@ namespace cppcanvas::internal
                                    int                            nIndex,
                                    int                            nLength,
                                    KernArraySpan                pCharWidths,
-                                   std::span<const sal_Bool>     pKashidaArray,
+                                   std::span<const bool>          pKashidaArray,
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 

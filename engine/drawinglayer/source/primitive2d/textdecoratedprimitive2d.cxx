@@ -40,7 +40,7 @@ namespace drawinglayer::primitive2d
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
             const std::vector< double >& rDXArray,
-            const std::vector< sal_Bool >& rKashidaArray,
+            const boost::container::vector< bool >& rKashidaArray,
             const attribute::FontAttribute& rFontAttribute) const
         {
             // create the SimpleTextPrimitive needed in any case
@@ -51,7 +51,7 @@ namespace drawinglayer::primitive2d
                     nTextPosition,
                     nTextLength,
                     std::vector(rDXArray),
-                    std::vector(rKashidaArray),
+                    boost::container::vector< bool >(rKashidaArray),
                     rFontAttribute,
                     getLocale(),
                     getFontColor()));
@@ -458,7 +458,7 @@ namespace drawinglayer::primitive2d
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
             std::vector< double >&& rDXArray,
-            std::vector< sal_Bool >&& rKashidaArray,
+            boost::container::vector< bool >&& rKashidaArray,
             const attribute::FontAttribute& rFontAttribute,
             const css::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,

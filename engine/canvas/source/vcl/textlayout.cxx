@@ -121,7 +121,8 @@ namespace vclcanvas
             rendering::CompositeOperation::SOURCE);
 
         KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, aViewState, aRenderState));
-        std::span<const sal_Bool> aKashidaArray(maKashidaPositions.getArray(), maKashidaPositions.getLength());
+        static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
+        std::span<const bool> aKashidaArray(reinterpret_cast<const bool*>(maKashidaPositions.getArray()), maKashidaPositions.getLength());
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
         ::basegfx::B2DPolyPolygonVector aOutlines;
@@ -358,7 +359,8 @@ namespace vclcanvas
         {
             // TODO(P2): cache that
             KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
-            std::span<const sal_Bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
+            static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
+            std::span<const bool> aKashidaArray(reinterpret_cast<const bool*>(maKashidaPositions.getConstArray()), maKashidaPositions.getLength());
 
             // TODO(F3): ensure correct length and termination for DX
             // array (last entry _must_ contain the overall width)

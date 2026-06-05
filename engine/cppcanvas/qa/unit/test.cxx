@@ -39,7 +39,7 @@ static std::ostream& operator<<(std::ostream& rStream, const KernArray& rArray)
     return rStream;
 }
 
-static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Bool>& rVec)
+static std::ostream& operator<<(std::ostream& rStream, const boost::container::vector<bool>& rVec)
 {
     if (rVec.empty())
     {
@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
 {
     GDIMetaFile aInputMetaFile, aOutputMetaFile;
     KernArray aDXArray;
-    std::vector<sal_Bool> aKashidaArray;
+    boost::container::vector<bool> aKashidaArray;
 
     // First create a meta file with a text array action that has Kashida adjustments.
     {
@@ -194,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
         CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTARRAY, pOutputAction->GetType());
 
         MetaTextArrayAction* pOutputTextAction = static_cast<MetaTextArrayAction*>(pOutputAction);
-        std::vector<sal_Bool> aSubsetKashidaArray({ false, true });
+        boost::container::vector<bool> aSubsetKashidaArray({ false, true });
 
         CPPUNIT_ASSERT_EQUAL(aSubsetKashidaArray, pOutputTextAction->GetKashidaArray());
     }

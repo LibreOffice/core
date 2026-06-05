@@ -6431,7 +6431,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
 }
 
 void PDFWriterImpl::drawTextArray(const Point& rPos, const OUString& rText, KernArraySpan pDXArray,
-                                  std::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex,
+                                  std::span<const bool> pKashidaArray, sal_Int32 nIndex,
                                   sal_Int32 nLen, sal_Int32 nLayoutContextIndex,
                                   sal_Int32 nLayoutContextLen)
 {

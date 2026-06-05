@@ -29,6 +29,7 @@
 #include <tools/color.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <boost/container/vector.hpp>
 #include <memory>
 #include <vector>
 
@@ -118,7 +119,7 @@ private:
     std::vector<double> maDXArray;
 
     /// The Kashida array
-    std::vector<sal_Bool> maKashidaArray;
+    boost::container::vector<bool> maKashidaArray;
 
     /// The font definition
     attribute::FontAttribute maFontAttribute;
@@ -166,7 +167,7 @@ public:
     TextSimplePortionPrimitive2D(basegfx::B2DHomMatrix aNewTransform, OUString aText,
                                  sal_Int32 nTextPosition, sal_Int32 nTextLength,
                                  std::vector<double>&& rDXArray,
-                                 std::vector<sal_Bool>&& rKashidaArray,
+                                 boost::container::vector<bool>&& rKashidaArray,
                                  attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
                                  const basegfx::BColor& rFontColor,
                                  const Color& rTextFillColor = COL_TRANSPARENT,
@@ -186,7 +187,7 @@ public:
     sal_Int32 getTextPosition() const { return mnTextPosition; }
     sal_Int32 getTextLength() const { return mnTextLength; }
     const ::std::vector<double>& getDXArray() const { return maDXArray; }
-    const ::std::vector<sal_Bool>& getKashidaArray() const { return maKashidaArray; }
+    const boost::container::vector<bool>& getKashidaArray() const { return maKashidaArray; }
     const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
     const css::lang::Locale& getLocale() const { return maLocale; }
     const basegfx::BColor& getFontColor() const { return maFontColor; }

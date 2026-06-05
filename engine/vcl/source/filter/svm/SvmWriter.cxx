@@ -1004,7 +1004,7 @@ void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplM
     const auto& rKashidaArray = pAction->GetKashidaArray();
     mrStream.WriteUInt32(rKashidaArray.size());
     for (const auto& val : rKashidaArray)
-        mrStream.WriteUChar(val);
+        mrStream.WriteUChar(val ? 1 : 0);
 
     // Version 4
     bool bHasLayoutContext = (pAction->GetLayoutContextIndex() >= 0);

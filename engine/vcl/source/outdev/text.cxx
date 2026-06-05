@@ -670,7 +670,7 @@ float OutputDevice::approximate_digit_width() const
 
 void OutputDevice::DrawPartialTextArray(const Point& rStartPt, const OUString& rStr,
                                         KernArraySpan pDXArray,
-                                        std::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex,
+                                        std::span<const bool> pKashidaArray, sal_Int32 nIndex,
                                         sal_Int32 nLen, sal_Int32 nPartIndex, sal_Int32 nPartLen,
                                         SalLayoutFlags flags, const SalLayoutGlyphs* pLayoutCache)
 {
@@ -721,7 +721,7 @@ void OutputDevice::DrawPartialTextArray(const Point& rStartPt, const OUString& r
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   KernArraySpan pDXAry,
-                                  std::span<const sal_Bool> pKashidaAry,
+                                  std::span<const bool> pKashidaAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   const SalLayoutGlyphs* pSalLayoutCache )
 {
@@ -1106,7 +1106,7 @@ OutputDevice::FontMappingUseData OutputDevice::FinishTrackingFontMappingUse()
 
 std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
     const OUString& rOrigStr, sal_Int32 nMinIndex, sal_Int32 nLen, const Point& rLogicalPos,
-    tools::Long nLogicalWidth, KernArraySpan pDXArray, std::span<const sal_Bool> pKashidaArray,
+    tools::Long nLogicalWidth, KernArraySpan pDXArray, std::span<const bool> pKashidaArray,
     SalLayoutFlags flags, vcl::text::TextLayoutCache const* pLayoutCache,
     const SalLayoutGlyphs* pGlyphs, std::optional<sal_Int32> nDrawOriginCluster,
     std::optional<sal_Int32> nDrawMinCharPos, std::optional<sal_Int32> nDrawEndCharPos) const
@@ -2030,7 +2030,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
                                          sal_uLong nLayoutWidth, KernArraySpan pDXAry,
-                                         std::span<const sal_Bool> pKashidaAry,
+                                         std::span<const bool> pKashidaAry,
                                          const SalLayoutGlyphs* pGlyphs ) const
 {
     basegfx::B2DRectangle aRect;
@@ -2043,7 +2043,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
 bool OutputDevice::GetTextBoundRect(basegfx::B2DRectangle& rRect, const OUString& rStr,
                                     sal_Int32 nBase, sal_Int32 nIndex, sal_Int32 nLen,
                                     sal_uLong nLayoutWidth, KernArraySpan pDXAry,
-                                    std::span<const sal_Bool> pKashidaAry,
+                                    std::span<const bool> pKashidaAry,
                                     const SalLayoutGlyphs* pGlyphs) const
 {
     bool bRet = false;
@@ -2094,7 +2094,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth,
                                         KernArraySpan pDXArray,
-                                        std::span<const sal_Bool> pKashidaArray ) const
+                                        std::span<const bool> pKashidaArray ) const
 {
     if (!InitFont())
         return false;
@@ -2219,7 +2219,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth, KernArraySpan pDXArray,
-                                        std::span<const sal_Bool> pKashidaArray ) const
+                                        std::span<const bool> pKashidaArray ) const
 {
     rResultVector.clear();
 

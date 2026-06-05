@@ -209,7 +209,8 @@ namespace dxcanvas
             {
                 // create the DXArray
                 KernArraySpan DXArray( rLogicalAdvancements.getConstArray(), rLogicalAdvancements.getLength() );
-                std::span<const sal_Bool> aKashidaArray(rKashidaPositions.getConstArray(), rKashidaPositions.getLength());
+                static_assert(sizeof (sal_Bool) == sizeof (bool)); // validating the reinterpret_cast
+                std::span<const bool> aKashidaArray(reinterpret_cast<const bool*>(rKashidaPositions.getConstArray()), rKashidaPositions.getLength());
 
                 // draw the String
                 xVirtualDevice->DrawTextArray( aEmptyPoint,

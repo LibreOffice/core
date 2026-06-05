@@ -524,7 +524,7 @@ Size SvxFont::GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
 
 static void DrawTextArray( OutputDevice* pOut, const Point& rStartPt, const OUString& rStr,
                            KernArraySpan pDXAry,
-                           std::span<const sal_Bool> pKashidaAry,
+                           std::span<const bool> pKashidaAry,
                            sal_Int32 nIndex, sal_Int32 nLen )
 {
     const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(pOut, rStr, nIndex, nLen);
@@ -535,7 +535,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
     const sal_Int32 nIdx, const sal_Int32 nLen,
     KernArraySpan pDXArray,
-    std::span<const sal_Bool> pKashidaArray) const
+    std::span<const bool> pKashidaArray) const
 {
 
     // Font has to be selected in OutputDevice...
@@ -778,11 +778,11 @@ protected:
     Point aSpacePos;
     short nKern;
     KernArraySpan pDXArray;
-    std::span<const sal_Bool> pKashidaArray;
+    std::span<const bool> pKashidaArray;
 public:
     SvxDoDrawCapital( SvxFont *pFnt, OutputDevice *_pOut, const OUString &_rTxt,
                       KernArraySpan _pDXArray,
-                      std::span<const sal_Bool> _pKashidaArray,
+                      std::span<const bool> _pKashidaArray,
                       const sal_Int32 _nIdx, const sal_Int32 _nLen,
                       const Point &rPos, const short nKrn )
         : SvxDoCapitals( _rTxt, _nIdx, _nLen ),
@@ -873,8 +873,8 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 nSpanIdx,
             aDXArray[i] = pDXArray[nStartOffset + i] - nStartX;
 
         auto aKashidaArray = !pKashidaArray.empty() ?
-            std::span<const sal_Bool>(pKashidaArray.data() + nStartOffset, nSpanLen) :
-            std::span<const sal_Bool>();
+            std::span<const bool>(pKashidaArray.data() + nStartOffset, nSpanLen) :
+            std::span<const bool>();
 
         DrawTextArray(pOut, aStartPos, _rTxt, aDXArray, aKashidaArray, nSpanIdx, nSpanLen);
         // in this case we leave aPos at the start and use the DXArray to find the start
@@ -897,7 +897,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 nSpanIdx,
 void SvxFont::DrawCapital( OutputDevice *pOut,
                const Point &rPos, const OUString &rTxt,
                KernArraySpan pDXArray,
-               std::span<const sal_Bool> pKashidaArray,
+               std::span<const bool> pKashidaArray,
                const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
     SvxDoDrawCapital aDo(const_cast<SvxFont *>(this), pOut,

@@ -1033,7 +1033,7 @@ namespace wmfemfhelper
         sal_uInt16 nTextStart,
         sal_uInt16 nTextLength,
         std::vector< double >&& rDXArray,
-        std::vector< sal_Bool >&& rKashidaArray,
+        boost::container::vector< bool >&& rKashidaArray,
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
@@ -1759,7 +1759,7 @@ namespace wmfemfhelper
                         // prepare DXArray (if used)
                         std::vector< double > aDXArray;
                         const KernArray& rDXArray = pA->GetDXArray();
-                        std::vector< sal_Bool > aKashidaArray = pA->GetKashidaArray();
+                        boost::container::vector< bool > aKashidaArray = pA->GetKashidaArray();
 
                         if(!rDXArray.empty())
                         {

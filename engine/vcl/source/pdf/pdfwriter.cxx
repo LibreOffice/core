@@ -80,7 +80,7 @@ void PDFWriter::DrawTextLine(
 }
 
 void PDFWriter::DrawTextArray(const Point& rStartPt, const OUString& rStr, KernArraySpan pDXAry,
-                              std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex,
+                              std::span<const bool> pKashidaAry, sal_Int32 nIndex,
                               sal_Int32 nLen, sal_Int32 nLayoutContextIndex,
                               sal_Int32 nLayoutContextLen)
 {

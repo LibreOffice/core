@@ -48,7 +48,7 @@ public:
     sal_Int32 mnTextStart;
     sal_Int32 mnTextLen;
     KernArraySpan mpDXArray;
-    std::span<const sal_Bool> mpKashidaArray;
+    std::span<const bool> mpKashidaArray;
     const SvxFont& mrFont;
     sal_Int32 mnPara;
     sal_uInt8 mnBiDiLevel;
@@ -65,8 +65,8 @@ public:
     bool IsRTL() const { return mnBiDiLevel % 2 == 1; }
 
     DrawPortionInfo(const Point& rPos, OUString aTxt, sal_Int32 nTxtStart, sal_Int32 nTxtLen,
-                    KernArraySpan pDXArr, std::span<const sal_Bool> pKashidaArr,
-                    const SvxFont& rFnt, sal_Int32 nPar, sal_uInt8 nBiDiLevel,
+                    KernArraySpan pDXArr, std::span<const bool> pKashidaArr, const SvxFont& rFnt,
+                    sal_Int32 nPar, sal_uInt8 nBiDiLevel,
                     const EEngineData::WrongSpellVector* pWrongSpellVector,
                     const SvxFieldData* pFieldData, bool bEndOfLine, bool bEndOfParagraph,
                     bool bEndOfBullet, const com::sun::star::lang::Locale* pLocale,

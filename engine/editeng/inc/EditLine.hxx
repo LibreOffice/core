@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <tools/gen.hxx>
 #include <vcl/kernarray.hxx>
+#include <boost/container/vector.hpp>
 
 class ParaPortion;
 
@@ -30,7 +31,7 @@ class EditLine
 {
 private:
     KernArray maPositions;
-    std::vector<sal_Bool> maKashidaPositions;
+    boost::container::vector<bool> maKashidaPositions;
     sal_Int32 mnTextWidth = 0;
     sal_Int32 mnStartPosX = 0;
     sal_Int32 mnNextLinePosXDiff = 0;
@@ -115,8 +116,8 @@ public:
     KernArray& GetCharPosArray() { return maPositions; }
     const KernArray& GetCharPosArray() const { return maPositions; }
 
-    std::vector<sal_Bool>& GetKashidaArray() { return maKashidaPositions; }
-    const std::vector<sal_Bool>& GetKashidaArray() const { return maKashidaPositions; }
+    boost::container::vector<bool>& GetKashidaArray() { return maKashidaPositions; }
+    const boost::container::vector<bool>& GetKashidaArray() const { return maKashidaPositions; }
 
     EditLine* Clone() const;
 

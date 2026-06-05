@@ -83,7 +83,7 @@ public:
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                       KernArraySpan pDXArray,
-                      std::span<const sal_Bool> pKashidaArray,
+                      std::span<const bool> pKashidaArray,
                       const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
@@ -97,7 +97,7 @@ public:
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                         const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32,
                         KernArraySpan pDXArray = {},
-                        std::span<const sal_Bool> pKashidaArray = {} ) const;
+                        std::span<const bool> pKashidaArray = {} ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                            const sal_Int32 nIdx, const sal_Int32 nLen,

@@ -559,8 +559,8 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextSimplePortion)
 
     Primitive2DContainer aPrimitives;
     aPrimitives.append(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{}, std::vector<sal_Bool>{},
-        aFontAttr, aLocale, basegfx::BColor(0.0, 0.0, 0.0)));
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{}, {}, aFontAttr,
+        aLocale, basegfx::BColor(0.0, 0.0, 0.0)));
 
     auto aJson = writeReference(u"testTextSimplePortion", aPrimitives);
 
@@ -591,8 +591,8 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextDecoratedPortion)
 
     Primitive2DContainer aPrimitives;
     aPrimitives.append(new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{}, std::vector<sal_Bool>{},
-        aFontAttr, aLocale, basegfx::BColor(0.0, 0.0, 0.0), COL_TRANSPARENT, 0, 100, 0, false,
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{}, {}, aFontAttr,
+        aLocale, basegfx::BColor(0.0, 0.0, 0.0), COL_TRANSPARENT, 0, 100, 0, false,
         basegfx::BColor(0.0, 0.0, 0.0), basegfx::BColor(0.0, 0.0, 0.0),
         drawinglayer::primitive2d::TEXT_LINE_NONE, drawinglayer::primitive2d::TEXT_LINE_SINGLE,
         false, drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE));

@@ -1256,7 +1256,7 @@ public:
     /* actual drawing functions */
     void drawText( const Point& rPos, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
     void drawTextArray(const Point& rPos, const OUString& rText, KernArraySpan pDXArray,
-                       std::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex, sal_Int32 nLen,
+                       std::span<const bool> pKashidaArray, sal_Int32 nIndex, sal_Int32 nLen,
                        sal_Int32 nLayoutContextIndex, sal_Int32 nLayoutContextLen);
     void drawStretchText( const Point& rPos, sal_Int32 nWidth, const OUString& rText,
                           sal_Int32 nIndex, sal_Int32 nLen  );

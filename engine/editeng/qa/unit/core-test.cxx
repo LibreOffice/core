@@ -2307,7 +2307,7 @@ void Test::testTdf151748StaleKashidaArray()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rLine.GetEnd());
 
-        std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
+        boost::container::vector< bool > const& rArray = rLine.GetKashidaArray();
         CPPUNIT_ASSERT_EQUAL(size_t(19), rArray.size());
     }
 
@@ -2326,7 +2326,7 @@ void Test::testTdf151748StaleKashidaArray()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rLine.GetEnd());
 
-        std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
+        boost::container::vector< bool > const& rArray = rLine.GetKashidaArray();
 
         // Since there is no room for kashida, the kashida array should be empty.
         // Without the bug fix, this will be 17:
@@ -2369,7 +2369,7 @@ void Test::testTdf162803StaleKashidaArray()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rLine.GetEnd());
 
-        std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
+        boost::container::vector< bool > const& rArray = rLine.GetKashidaArray();
         CPPUNIT_ASSERT_EQUAL(size_t(19), rArray.size());
     }
 
@@ -2388,7 +2388,7 @@ void Test::testTdf162803StaleKashidaArray()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), rLine.GetEnd());
 
-        std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
+        boost::container::vector< bool > const& rArray = rLine.GetKashidaArray();
 
         // Since there is no room for kashida, the kashida array should be empty.
         // Without the bug fix, this will be 17:

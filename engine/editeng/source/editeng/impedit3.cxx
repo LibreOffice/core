@@ -2417,7 +2417,7 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
         {
             auto nChar = aPositions[nKashidaStart + i];
             if ( nChar < nLastChar )
-                rLine.GetKashidaArray()[nChar-nFirstChar] = 1 /*sal_True*/;
+                rLine.GetKashidaArray()[nChar-nFirstChar] = true;
         }
     }
 
@@ -3786,7 +3786,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
                                 KernArraySpan pDXArray;
-                                std::span<const sal_Bool> pKashidaArray;
+                                std::span<const bool> pKashidaArray;
                                 KernArray aTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )

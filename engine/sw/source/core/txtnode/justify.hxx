@@ -73,7 +73,7 @@ SW_DLLPUBLIC void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::L
 /// @param nLen Length of substring
 /// @param nSpaceAdd Amount of space to add to each kashida insertion opportunity
 SW_DLLPUBLIC bool KashidaJustify(std::span<TextFrameIndex const> aKashPositions,
-                                 KernArray& rKernArray, sal_Bool* pKashidaArray, sal_Int32 nStt,
+                                 KernArray& rKernArray, bool* pKashidaArray, sal_Int32 nStt,
                                  sal_Int32 nLen, tools::Long nSpaceAdd);
 
 /// tdf#88908: Perform a CJK space balancing on the kerning array

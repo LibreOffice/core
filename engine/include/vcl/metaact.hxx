@@ -42,6 +42,7 @@
 #include <vcl/wall.hxx>
 #include <basegfx/utils/bgradient.hxx>
 
+#include <boost/container/vector.hpp>
 #include <memory>
 #include <span>
 
@@ -465,7 +466,7 @@ private:
     Point       maStartPt;
     OUString    maStr;
     KernArray   maDXAry;
-    std::vector<sal_Bool> maKashidaAry;
+    boost::container::vector< bool > maKashidaAry;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
     sal_Int32 mnLayoutContextIndex = -1;
@@ -477,16 +478,16 @@ public:
     SAL_DLLPRIVATE                     MetaTextArrayAction( const MetaTextArrayAction& rAction );
     SAL_DLLPRIVATE MetaTextArrayAction( const Point& rStartPt, OUString aStr,
                          KernArray rDXAry,
-                         std::vector<sal_Bool> pKashidaAry,
+                         boost::container::vector< bool > pKashidaAry,
                          sal_Int32 nIndex,
                          sal_Int32 nLen );
     MetaTextArrayAction( const Point& rStartPt, OUString aStr,
                          KernArraySpan pDXAry,
-                         std::span<const sal_Bool> pKashidaAry,
+                         std::span<const bool> pKashidaAry,
                          sal_Int32 nIndex,
                          sal_Int32 nLen );
     MetaTextArrayAction(const Point& rStartPt, OUString aStr, KernArraySpan pDXAry,
-                        std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex, sal_Int32 nLen,
+                        std::span<const bool> pKashidaAry, sal_Int32 nIndex, sal_Int32 nLen,
                         sal_Int32 nLayoutContextIndex, sal_Int32 nLayoutContextLen);
 
     SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
@@ -503,7 +504,7 @@ public:
     sal_Int32 GetLayoutContextIndex() const { return mnLayoutContextIndex; }
     sal_Int32 GetLayoutContextLen() const { return mnLayoutContextLen; }
     const KernArray& GetDXArray() const { return maDXAry; }
-    const std::vector<sal_Bool> & GetKashidaArray() const { return maKashidaAry; }
+    const boost::container::vector< bool > & GetKashidaArray() const { return maKashidaAry; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction

@@ -436,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
 
     // Simulate Kashida insertion using Kashida array and extending text array
     // to have room for Kashida.
-    std::vector<sal_Bool> aKashidaArray{ false, false, false, true, false, false };
+    boost::container::vector< bool > aKashidaArray{ false, false, false, true, false, false };
     auto nKashida = 4000;
 
     aCharWidths[3] += nKashida;

@@ -27,6 +27,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/container/vector.hpp>
 #include <span>
 
 // predefines
@@ -102,7 +103,7 @@ public:
 
     void getTextOutlines(basegfx::B2DPolyPolygonVector&, const OUString& rText, sal_uInt32 nIndex,
                          sal_uInt32 nLength, const ::std::vector<double>& rDXArray,
-                         const ::std::vector<sal_Bool>& rKashidaArray) const;
+                         const boost::container::vector<bool>& rKashidaArray) const;
 
     basegfx::B2DRange getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
                                        sal_uInt32 nLength) const;
@@ -119,7 +120,7 @@ public:
                                             sal_uInt32 nLength,
                                             const basegfx::B2DPoint& rStartPoint,
                                             const KernArray& rDXArray,
-                                            std::span<const sal_Bool> pKashidaAry) const;
+                                            std::span<const bool> pKashidaAry) const;
     void createEmphasisMarks(
         const SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
         const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
