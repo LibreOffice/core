@@ -2534,8 +2534,21 @@ export class CommentSection extends CanvasSectionObject {
 				comment.setContainerPos(false, this.sectionProperties.canvasContainerBounds);
 			}
 		}
-		if (relayout)
+		if (relayout) {
 			this.resizeComments();
+			// resizeComments changes comment heights after they were positioned, which
+			// detaches replies from their (now resized) parent. Reposition once more
+			// with the final heights so replies sit right under the parent.
+			if (!this.commentsHiddenOrNotPresent()) {
+				if (selectedIndex)
+					lastY = this.loopDown(selectedIndex, x, yOrigin, false);
+				else
+					lastY = this.loopDown(0, x, topRight[1], false);
+				// Redraw indent lines for the repositioned replies (resizeComments drew
+				// them against the pre-reposition positions).
+				this.updateChildLines();
+			}
+		}
 
 		let horizontalScroll = app.activeDocument.fileSize.x;
 		if (availableSpace < this.sectionProperties.commentWidth && !this.isCollapsed)
