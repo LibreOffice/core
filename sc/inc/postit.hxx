@@ -117,7 +117,7 @@ public:
 
     /// Push the author/date footer band onto the linked caption (if any),
     /// gated by the "Comment authorship" officecfg toggle.
-    void RefreshCaptionData() const;
+    SC_DLLPUBLIC void RefreshCaptionData() const;
 
     /** Returns the pointer to the current outliner object, or null. */
     const OutlinerParaObject* GetOutlinerObject() const;

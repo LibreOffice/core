@@ -31,11 +31,12 @@
 #include <appoptio.hxx>
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
-#include <svtools/restartdialog.hxx>
 #include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <document.hxx>
+#include <postit.hxx>
 
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
     : SfxTabPage(pPage, pController, u"modules/scalc/ui/tpviewpage.ui"_ustr, u"TpViewPage"_ustr, &rArgSet)
@@ -212,14 +213,18 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pChange->commit();
         bRet = true;
 
-        // Existing on-screen captions have SDRATTR_TEXT_LOWERDIST baked into
-        // them at construction; the toggle only takes full effect after a
-        // rebuild. Prompt for restart rather than ship a half-applied state.
-        SolarMutexGuard aGuard;
-        if (svtools::executeRestartDialog(
-                comphelper::getProcessComponentContext(), GetFrameWeld(),
-                svtools::RESTART_REASON_UI_CHANGE))
-            GetDialogController()->response(RET_OK);
+        // Apply live to every open document so the toggle takes effect
+        // without a restart; hidden notes are no-op'd inside.
+        SfxObjectShell* pSh = SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>);
+        while (pSh)
+        {
+            std::vector<sc::NoteEntry> aNotes;
+            static_cast<ScDocShell*>(pSh)->GetDocument().GetAllNoteEntries(aNotes);
+            for (const auto& rEntry : aNotes)
+                if (rEntry.mpNote)
+                    rEntry.mpNote->RefreshCaptionData();
+            pSh = SfxObjectShell::GetNext(*pSh, checkSfxObjectShell<ScDocShell>);
+        }
     }
 
     return bRet;
