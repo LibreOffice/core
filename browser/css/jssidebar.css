@@ -673,6 +673,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	border-radius: 0px;
 	margin-bottom: 100px; /* reduce size by size of controls above in the panel */
 	padding-inline: 16px;
+	box-sizing: border-box;
 }
 
 #quickfind-dock-wrapper .ui-treeview-entry {
