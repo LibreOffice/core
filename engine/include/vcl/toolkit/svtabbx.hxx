@@ -59,7 +59,10 @@ private:
     // Whether the column-title headers act as clickable buttons (sort /
     // column-click). Defaults to true to preserve existing consumers; set
     // false for headers that are pure labels (e.g. chart Data Table).
-    bool                        m_bHeadersSortable = true;
+    bool                        m_bHeadersSortable;
+    // Accessible name announced for the editable header-name input boxes.
+    // Empty means no accessible name is sent for them.
+    OUString                    m_sHeaderNameAriaLabel;
 
 protected:
     static std::u16string_view  GetToken( std::u16string_view sStr, sal_Int32 &nIndex );
@@ -101,6 +104,7 @@ public:
     bool             HasColumnTitles() const { return !m_aColumnTitles.empty(); }
 
     void             SetHeadersSortable( bool bSortable ) { m_bHeadersSortable = bSortable; }
+    void             SetHeaderNameAriaLabel( const OUString& rLabel ) { m_sHeaderNameAriaLabel = rLabel; }
 
     void             SetColumnHeaderName( sal_uInt16 nCol, const OUString& rName );
 

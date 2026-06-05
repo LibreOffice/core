@@ -1619,6 +1619,9 @@ public:
     // column-click). Default no-op; backends that render clickable headers
     // override it.
     virtual void set_headers_sortable(bool /*bSortable*/) {}
+    // Accessible name announced for the editable header-name input boxes.
+    // Default no-op; backends that render those inputs override it.
+    virtual void set_header_name_aria_label(const OUString& /*rLabel*/) {}
 
     void set_editing_column(int nCol) { m_nEditingColumn = nCol; }
     int get_editing_column() const { return m_nEditingColumn; }

@@ -462,6 +462,8 @@ DataBrowser::DataBrowser(weld::TreeView& rTreeView, weld::Box* pColumns, weld::B
     // "Y-Values"); there is no sort or column-click action, so render them
     // as labels rather than focusable do-nothing buttons.
     m_rTreeView.set_headers_sortable(false);
+    // Accessible name for the editable series-name boxes in the headers.
+    m_rTreeView.set_header_name_aria_label(SchResId(STR_DATA_SERIES_NAME));
     RenewTable();
 }
 

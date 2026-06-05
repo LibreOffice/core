@@ -409,6 +409,7 @@ interface TreeHeaderJSON {
 	arrow?: 'up' | 'down'; // sorting arrow to show
 	color?: string; // series color as hex string (RRGGBB) for color bar indicator
 	headerName?: string; // series name for chart data table headers
+	headerNameAriaLabel?: string; // accessible name for the headerName input
 }
 
 interface TreeWidgetJSON extends WidgetJSON {

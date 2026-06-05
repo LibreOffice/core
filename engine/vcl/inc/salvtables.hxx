@@ -1582,6 +1582,8 @@ public:
 
     virtual void set_headers_sortable(bool bSortable) override;
 
+    virtual void set_header_name_aria_label(const OUString& rLabel) override;
+
     virtual void set_column_custom_renderer(int nColumn, bool bEnable) override;
 
     virtual void queue_draw() override;

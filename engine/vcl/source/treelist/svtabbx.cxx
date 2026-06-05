@@ -259,6 +259,9 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             if (i < m_aColumnHeaderNames.size() && !m_aColumnHeaderNames[i].isEmpty())
             {
                 rJsonWriter.put("headerName", m_aColumnHeaderNames[i]);
+                // Accessible name for the editable header-name input.
+                if (!m_sHeaderNameAriaLabel.isEmpty())
+                    rJsonWriter.put("headerNameAriaLabel", m_sHeaderNameAriaLabel);
             }
             if (i < m_aColumnColors.size() && m_aColumnColors[i] != COL_AUTO)
             {
@@ -319,6 +322,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
     , m_eRole(SvTabListBoxRole::Unknown)
+    , m_bHeadersSortable(true)
 {
     SetHighlightRange();    // select full width
 }

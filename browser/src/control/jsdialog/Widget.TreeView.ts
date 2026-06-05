@@ -372,9 +372,11 @@ class TreeViewControl {
 			) as HTMLInputElement;
 			nameInput.type = 'text';
 			nameInput.value = header.headerName;
-			// Editable series-name box; give it an accessible name since
-			// there is no associated visible <label> element.
-			nameInput.setAttribute('aria-label', _('Series name'));
+			// The header-name box has no visible label, so it needs an
+			// accessible name. Core sends one in headerNameAriaLabel; only
+			// fall back to a generic name if it is missing.
+			const headerNameLabel = header.headerNameAriaLabel || _('Name');
+			nameInput.setAttribute('aria-label', headerNameLabel);
 
 			if (data && columnIndex !== undefined) {
 				const commitEdit = () => {
