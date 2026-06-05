@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-03 14:43+0000\n"
+"PO-Revision-Date: 2026-06-06 15:01+0000\n"
 "Last-Translator: Ardev Prisec <prisecardev@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/uk/>\n"
-"Language: \n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
@@ -884,6 +884,10 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Для дій документу (перегляд та редагування), оберіть модель з нативним "
+"викликом функції/інструменту, такі як gpt-4o, llama3.1, або qwen2.5. Моделі "
+"без них (наприклад, базова llama3, gemma) все ще можуть спілкуватись з вами "
+"але не зможуть використовувати інструменти."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2255
 #: admin/src/integrator/AdminIntegratorSettings.ts:2373
@@ -937,6 +941,8 @@ msgstr "Нічого (вимкнути генерацію зображення)"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Неможливо отримати моделі (HTTP {0}). Перевірте URL та API ключ "
+"постачальника."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1779,7 +1785,7 @@ msgstr "Зміну відмовлено"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
-msgstr ""
+msgstr "Використовуйте секцію: "
 
 #: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
@@ -3011,7 +3017,7 @@ msgstr "Локальне зображення..."
 #: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
 #: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
 msgid "Shapes ..."
-msgstr ""
+msgstr "Фігури ..."
 
 #: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
 #: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
@@ -5601,17 +5607,19 @@ msgstr "Фільтрувати записи"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "Позиція {n}, розділити набір"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "Позиція {n}, нема розділення"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
 msgstr ""
+"Лінійка розділення стовпців. Використовуйте клавіші зі стрілочками щоб "
+"перемістити курсор та Пробіл, щоб перемкнути розділення."
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
@@ -5793,15 +5801,15 @@ msgstr "Більше опцій для {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1738
 msgid "Cell value"
-msgstr ""
+msgstr "Значення комірки"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1742
 msgid "row %1"
-msgstr ""
+msgstr "рядок %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1751
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
@@ -5841,11 +5849,11 @@ msgstr "Успішно експортовано: "
 
 #: src/app/Socket.ts:1113
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Цей документ має посилання на зовнішній контент."
 
 #: src/app/Socket.ts:1114
 msgid "Allow"
-msgstr ""
+msgstr "Дозволити"
 
 #: src/app/Socket.ts:1626
 msgid "Discard"
@@ -6528,7 +6536,7 @@ msgstr "Діалогове Вікно Привітання"
 
 #: src/map/handler/Map.Settings.ts:143
 msgid "Settings saved"
-msgstr ""
+msgstr "Налаштування збережено"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
