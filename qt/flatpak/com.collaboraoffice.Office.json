@@ -994,7 +994,6 @@
         "--disable-gui",
         "--disable-kf5",
         "--disable-ldap",
-        "--disable-lpsolve",
         "--disable-noto-font",
         "--disable-qt5",
         "--disable-randr",
