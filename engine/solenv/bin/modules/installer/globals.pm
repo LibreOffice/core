@@ -129,12 +129,6 @@ BEGIN
     %installer::globals::dependfilenames = ();
     $installer::globals::manufacturer = "";
     $installer::globals::longmanufacturer = "";
-    $installer::globals::codefilename = "codes.txt";
-    $installer::globals::componentfilename = "components.txt";
-    $installer::globals::productcode = "";
-    $installer::globals::upgradecode = "";
-    $installer::globals::msiproductversion = "";
-    $installer::globals::msimajorproductversion = "";
     @installer::globals::allddffiles = ();
     $installer::globals::infodirectory = "";
 
@@ -204,7 +198,6 @@ BEGIN
 
     @installer::globals::packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @installer::globals::featurecollector =();
-    $installer::globals::msiassemblyfiles = "";
     $installer::globals::macinstallfilename = $ENV{'WORKDIR'} . "/CustomTarget/setup_native/mac/macinstall.ulf";
     $installer::globals::extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @installer::globals::languagenames = ();

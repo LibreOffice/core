@@ -6,7 +6,6 @@ Globals
         {
             LIBO_VERSION_MAJOR @LIBO_VERSION_MAJOR@
             UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
-            URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 4.1
             WINDOWSBASISROOTNAME Collabora Office
             UNIXBASISROOTNAME collaboraoffice
@@ -24,15 +23,8 @@ Globals
             PROGRESSTEXTBASELINE 230
             PROGRESSTEXTCOLOR 255,255,255
             NATIVEPROGRESS false
-            REGISTRYLAYERNAME Layers
-            SERVICEPACK 1
-            UPDATE_DATABASE 1
-            UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
-            WINDOWSPATCHLEVEL @LIBO_VERSION_MICRO@
             OOOVENDOR Collabora Productivity Ltd.
-            64BITPRODUCT @WINDOWS_X64@
-            WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
             CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
         }
     }
@@ -59,10 +51,8 @@ CollaboraOffice
             PACKAGEREVISION @LIBO_VERSION_PATCH@
             LICENSENAME @LICENSE@
             ROOTMODULEGID gid_Module_Root
-            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             CHANGETARGETDIR 1
-            PATCHCODEFILE ooo_patchcodes.txt
         }
         active          1
         compression     5
@@ -94,7 +84,6 @@ LibreOfficeDev
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX libreofficedev
             SOLSUREPACKAGEPREFIX libreofficedev
-            REGISTRYLAYERNAME LayerDev
             UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
@@ -102,11 +91,8 @@ LibreOfficeDev
             PACKAGEREVISION {buildid}
             LICENSENAME @LICENSE@
             ROOTMODULEGID gid_Module_Root
-            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             CHANGETARGETDIR 1
-            PATCHCODEFILE ooodev_patchcodes.txt
-            CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
         }
         active          1
