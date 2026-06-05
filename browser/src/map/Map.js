@@ -12,7 +12,6 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	options: {
-		crs: window.L.CRS,
 		center: [0, 0],
 		docParams: {},
 		// Default zoom level in which the document will be loaded.
@@ -1151,7 +1150,7 @@ window.L.Map = window.L.Evented.extend({
 		oldZoom = oldZoom === undefined ? this.getZoom() : oldZoom;
 		newZoom = newZoom === undefined ? this.getZoom() : newZoom;
 
-		return this.options.crs.rescale(point, oldZoom, newZoom);
+		return window.L.LatLng.rescale(point, oldZoom, newZoom);
 	},
 
 	layerPointToLatLng: function (point) { // (Point)
@@ -1164,8 +1163,8 @@ window.L.Map = window.L.Evented.extend({
 		return projectedPoint._subtract(this.getPixelOrigin());
 	},
 
-	distance: function (latlng1, latlng2) {
-		return this.options.crs.distance(window.L.latLng(latlng1), window.L.latLng(latlng2));
+	distance: function (latlng1, latlng2) { // (LatLng, LatLng) -> number
+		return window.L.LatLng.distance(window.L.latLng(latlng1), window.L.latLng(latlng2));
 	},
 
 	containerPointToLayerPoint: function (point) { // (Point)

@@ -28,10 +28,6 @@ interface InteractiveCommentArgs {
 	[arg: string]: UnoCommandValue | boolean | undefined;
 }
 
-interface CRSInterface {
-	scale(zoom: number): number;
-}
-
 interface LatLngLike {
 	lat: number;
 	lng: number;
@@ -94,7 +90,6 @@ interface MapInterface extends Evented {
 		previousWopiSrc: string;
 		zoom: number;
 		defaultZoom: number;
-		crs: CRSInterface;
 	};
 
 	wopi: {

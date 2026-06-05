@@ -664,7 +664,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (!this._map.options._origMaxBounds) {
 				this._map.options._origMaxBounds = this._map.options.maxBounds;
 			}
-			scale = this._map.options.crs.scale(1);
+			scale = window.L.LatLng.scale(1);
 			this._map.setMaxBounds(new window.L.LatLngBounds(
 				this._map.unproject(new cool.Point(0, 0)),
 				this._map.unproject(new cool.Point(width * scale, height * scale))));
