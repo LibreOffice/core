@@ -121,8 +121,6 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     }
     // classes that have static data and some kind of weird reference-counting trick in its constructor
     if (cdc.Class("LinguOptions").GlobalNamespace()
-        || (cdc.Class("EditableExtendedColorConfig").Namespace("svtools")
-            .GlobalNamespace())
         || (cdc.Class("ExtendedColorConfig").Namespace("svtools")
             .GlobalNamespace())
         || cdc.Class("SvtMiscOptions").GlobalNamespace()

@@ -832,54 +832,6 @@ include/svtools/ctrlbox.hxx:485
     void FontSizeBox::set_size_request(int,int)
 include/svtools/DocumentToGraphicRenderer.hxx:106
     _Bool DocumentToGraphicRenderer::isImpress() const
-include/svtools/extcolorcfg.hxx:54
-    const rtl::OUString & svtools::ExtendedColorConfigValue::getDisplayName() const
-include/svtools/extcolorcfg.hxx:56
-    Color svtools::ExtendedColorConfigValue::getDefaultColor() const
-include/svtools/extcolorcfg.hxx:58
-    void svtools::ExtendedColorConfigValue::setColor(Color)
-include/svtools/extcolorcfg.hxx:74
-    int svtools::ExtendedColorConfig::GetComponentCount() const
-include/svtools/extcolorcfg.hxx:75
-    rtl::OUString svtools::ExtendedColorConfig::GetComponentName(unsigned int) const
-include/svtools/extcolorcfg.hxx:76
-    rtl::OUString svtools::ExtendedColorConfig::GetComponentDisplayName(const rtl::OUString &) const
-include/svtools/extcolorcfg.hxx:77
-    int svtools::ExtendedColorConfig::GetComponentColorCount(const rtl::OUString &) const
-include/svtools/extcolorcfg.hxx:78
-    svtools::ExtendedColorConfigValue svtools::ExtendedColorConfig::GetComponentColorConfigValue(const rtl::OUString &,unsigned int) const
-include/svtools/extcolorcfg.hxx:86
-     svtools::EditableExtendedColorConfig::EditableExtendedColorConfig()
-include/svtools/extcolorcfg.hxx:89
-    void svtools::EditableExtendedColorConfig::DeleteScheme(const rtl::OUString &)
-include/svtools/extcolorcfg.hxx:90
-    void svtools::EditableExtendedColorConfig::AddScheme(const rtl::OUString &)
-include/svtools/extcolorcfg.hxx:91
-    void svtools::EditableExtendedColorConfig::LoadScheme(const rtl::OUString &)
-include/svtools/extcolorcfg.hxx:92
-    void svtools::EditableExtendedColorConfig::SetCurrentSchemeName(const rtl::OUString &)
-include/svtools/extcolorcfg.hxx:94
-    int svtools::EditableExtendedColorConfig::GetComponentCount() const
-include/svtools/extcolorcfg.hxx:95
-    rtl::OUString svtools::EditableExtendedColorConfig::GetComponentName(unsigned int) const
-include/svtools/extcolorcfg.hxx:96
-    int svtools::EditableExtendedColorConfig::GetComponentColorCount(const rtl::OUString &) const
-include/svtools/extcolorcfg.hxx:97
-    svtools::ExtendedColorConfigValue svtools::EditableExtendedColorConfig::GetComponentColorConfigValue(const rtl::OUString &,unsigned int) const
-include/svtools/extcolorcfg.hxx:98
-    void svtools::EditableExtendedColorConfig::SetColorValue(const rtl::OUString &,const svtools::ExtendedColorConfigValue &)
-include/svtools/extcolorcfg.hxx:99
-    void svtools::EditableExtendedColorConfig::SetModified()
-include/svtools/extcolorcfg.hxx:100
-    void svtools::EditableExtendedColorConfig::ClearModified()
-include/svtools/extcolorcfg.hxx:101
-    _Bool svtools::EditableExtendedColorConfig::IsModified() const
-include/svtools/extcolorcfg.hxx:102
-    void svtools::EditableExtendedColorConfig::Commit()
-include/svtools/extcolorcfg.hxx:104
-    void svtools::EditableExtendedColorConfig::DisableBroadcast()
-include/svtools/extcolorcfg.hxx:105
-    void svtools::EditableExtendedColorConfig::EnableBroadcast()
 include/svtools/scrolladaptor.hxx:60
     _Bool ScrollAdaptor::IsHoriScroll() const
 include/svx/autoformathelper.hxx:145

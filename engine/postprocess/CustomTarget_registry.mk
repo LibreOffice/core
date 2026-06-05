@@ -136,7 +136,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/Draw.xcs \
 	$(postprocess_XCS)/Office/Embedding.xcs \
 	$(postprocess_XCS)/Office/Events.xcs \
-	$(postprocess_XCS)/Office/ExtendedColorScheme.xcs \
 	$(postprocess_XCS)/Office/ExtensionDependencies.xcs \
 	$(postprocess_XCS)/Office/ExtensionManager.xcs \
 	$(postprocess_XCS)/Office/Histories.xcs \

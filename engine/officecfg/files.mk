@@ -24,7 +24,6 @@ officecfg_XCSFILES := \
     Office/Draw \
     Office/Embedding \
     Office/Events \
-    Office/ExtendedColorScheme \
     Office/ExtensionDependencies \
     Office/ExtensionManager \
     Office/Histories \

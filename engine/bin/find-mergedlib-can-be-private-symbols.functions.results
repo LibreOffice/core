@@ -22391,21 +22391,6 @@ svtools::EditableColorConfig::LoadScheme(rtl::OUString const&)
 svtools::EditableColorConfig::SetCurrentSchemeName(rtl::OUString const&)
 svtools::EditableColorConfig::SetModified()
 svtools::EditableColorConfig::SetupTheme()
-svtools::EditableExtendedColorConfig::AddScheme(rtl::OUString const&)
-svtools::EditableExtendedColorConfig::Commit()
-svtools::EditableExtendedColorConfig::DeleteScheme(rtl::OUString const&)
-svtools::EditableExtendedColorConfig::DisableBroadcast()
-svtools::EditableExtendedColorConfig::EditableExtendedColorConfig()
-svtools::EditableExtendedColorConfig::EnableBroadcast()
-svtools::EditableExtendedColorConfig::GetComponentColorConfigValue(rtl::OUString const&, unsigned int) const
-svtools::EditableExtendedColorConfig::GetComponentColorCount(rtl::OUString const&) const
-svtools::EditableExtendedColorConfig::GetComponentCount() const
-svtools::EditableExtendedColorConfig::GetComponentName(unsigned int) const
-svtools::EditableExtendedColorConfig::LoadScheme(rtl::OUString const&)
-svtools::EditableExtendedColorConfig::SetColorValue(rtl::OUString const&, svtools::ExtendedColorConfigValue const&)
-svtools::EditableExtendedColorConfig::SetCurrentSchemeName(rtl::OUString const&)
-svtools::EditableExtendedColorConfig::SetModified()
-svtools::EditableExtendedColorConfig::~EditableExtendedColorConfig()
 svtools::GetFontSubstitutions()
 svtools::GetPrinterOptions(vcl::printer::Options&, bool)
 svtools::IsFontSubstitutionsEnabled()

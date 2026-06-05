@@ -310,7 +310,6 @@
 16 B3dTransformationSet
 15 vcl::unotools
 15 ucbhelper::InteractionSupplyAuthentication
-15 svtools::EditableExtendedColorConfig
 15 sfx2::sidebar::SidebarPanelBase
 15 sfx2::FileDialogHelper
 15 sdr::overlay::OverlayManager

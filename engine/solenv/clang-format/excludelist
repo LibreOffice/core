@@ -5294,7 +5294,6 @@ include/svtools/editbrowsebox.hxx
 include/svtools/ehdl.hxx
 include/svtools/embedhlp.hxx
 include/svtools/embedtransfer.hxx
-include/svtools/extcolorcfg.hxx
 include/svtools/filechangedchecker.hxx
 include/svtools/fontsubstconfig.hxx
 include/svtools/genericunodialog.hxx
@@ -10128,7 +10127,6 @@ svtools/source/brwbox/editbrowseboximpl.hxx
 svtools/source/config/accessibilityoptions.cxx
 svtools/source/config/apearcfg.cxx
 svtools/source/config/colorcfg.cxx
-svtools/source/config/extcolorcfg.cxx
 svtools/source/config/fontsubstconfig.cxx
 svtools/source/config/htmlcfg.cxx
 svtools/source/config/itemholder2.cxx
