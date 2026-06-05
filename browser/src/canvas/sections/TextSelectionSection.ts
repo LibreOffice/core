@@ -51,6 +51,15 @@ class TextSelectionSection extends CanvasSectionObject {
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
+		// In Calc this section also draws the cell-selection area. Calc can't
+		// follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
+		// Writer/Impress text selection keeps drawing (it follows via vX/vY).
+		if (
+			app.map.getDocType() === 'spreadsheet' &&
+			this.containerObject.isInZoomAnimation()
+		)
+			return;
+
 		Util.ensureValue(app.activeDocument);
 		Util.ensureValue(app.calc.splitCoordinate);
 
@@ -62,8 +71,11 @@ class TextSelectionSection extends CanvasSectionObject {
 		)
 			return;
 
-		// We will use vX and vY. Thus, we need to set the pen position to canvas's origin.
-		this.context.translate(-this.myTopLeft[0], -this.myTopLeft[1]);
+		// We will use vX and vY. Thus, we need to set the pen position to canvas's
+		// origin. Cancel the same top-left the container translated by
+		// (getDrawTopLeft, which tracks the zoom frame for non-Calc).
+		const drawTopLeft = this.getDrawTopLeft();
+		this.context.translate(-drawTopLeft[0], -drawTopLeft[1]);
 
 		this.context.globalAlpha = 0.25;
 		this.context.strokeStyle = this.color;
@@ -123,6 +135,6 @@ class TextSelectionSection extends CanvasSectionObject {
 		this.context.globalAlpha = 1.0;
 
 		// We are done. Set the pen back to its initial position. This is needed or all other sections can draw at unexpected coordinates.
-		this.context.translate(this.myTopLeft[0], this.myTopLeft[1]);
+		this.context.translate(drawTopLeft[0], drawTopLeft[1]);
 	}
 }

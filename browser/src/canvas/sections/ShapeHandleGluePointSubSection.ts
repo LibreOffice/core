@@ -26,6 +26,8 @@ class ShapeHandleGluePointSubSection extends CanvasSectionObject {
 	}
 
     onDraw(frameCount?: number, elapsedTime?: number): void {
+        // Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
+        if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
         this.context.fillStyle = '#EE3E3E';
         this.context.beginPath();
         this.context.arc(0, 0, this.size[0] * 0.5, 0, Math.PI * 2);

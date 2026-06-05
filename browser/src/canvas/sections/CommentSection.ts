@@ -1830,7 +1830,10 @@ export class Comment extends CanvasSectionObject {
 				if (rectangles) {
 					// We are using view coordinates and it ignores myTopLeft values.
 					// We set the pen position to canvas origin here. Then we set it back at the end of this block, after drawing.
-					this.context.translate(-this.myTopLeft[0], -this.myTopLeft[1]);
+					// Cancel the same top-left the container translated by
+					// (getDrawTopLeft tracks the zoom frame for non-Calc).
+					const drawTopLeft = this.getDrawTopLeft();
+					this.context.translate(-drawTopLeft[0], -drawTopLeft[1]);
 
 					this.context.fillStyle = this.sectionProperties.usedTextColor;
 					this.context.globalAlpha = 0.25;
@@ -1842,7 +1845,7 @@ export class Comment extends CanvasSectionObject {
 					}
 
 					this.context.globalAlpha = 1;
-					this.context.translate(this.myTopLeft[0], this.myTopLeft[1]);
+					this.context.translate(drawTopLeft[0], drawTopLeft[1]);
 				}
 			}
 			else if (app.map._docLayer._docType === 'spreadsheet' &&

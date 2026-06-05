@@ -50,6 +50,8 @@ class CellSelectionHandle extends CanvasSectionObject {
 	}
 
 	public onDraw() {
+		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
+		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
 		this.context.strokeStyle = (<any>window).prefs.getBoolean('darkTheme') ? 'white' : 'black';
 		this.context.lineWidth = 2;
 

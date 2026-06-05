@@ -56,6 +56,8 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
+		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
+		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
 		this.context.fillStyle = 'white';
 		this.context.strokeStyle = 'black';
 		this.context.beginPath();

@@ -1948,9 +1948,17 @@ class CanvasSectionContainer {
 	}
 
 	private shouldDrawSection (section: CanvasSectionObject) {
-	    // During a zoom animation app.twipsToPixels still holds the old zoom value,
-	    // so section would draw at the wrong size; skip them until it updates.
-	    if (this.inZoomAnimation && section.documentObject)
+	    // Settling phase (zoom ended but new tiles not in yet: zoomChanged true,
+	    // inZoomAnimation false): the tiles section waits and the canvas is not
+	    // cleared, so skip document sections to avoid stacking on the last frame.
+	    if (section.documentObject && this.zoomChanged && !this.inZoomAnimation)
+	        return false;
+	    // Calc document sections that paint via the container-drawn
+	    // backgroundColor/borderColor (autofill marker, math-object border) can't
+	    // be hidden by an onDraw guard, so skip them during a Calc zoom.
+	    if (section.documentObject && this.inZoomAnimation &&
+	        app.map.getDocType() === 'spreadsheet' &&
+	        (section.backgroundColor || section.borderColor))
 	        return false;
 	    return section.isLocated && section.showSection && (!section.documentObject || section.isVisible);
 	}
@@ -1973,7 +1981,11 @@ class CanvasSectionContainer {
 		this.context.font = String(20 * app.dpiScale) + 'px Verdana';
 		for (var i: number = 0; i < this.sections.length; i++) {
 			if (this.shouldDrawSection(this.sections[i])) {
-				this.context.translate(this.sections[i].myTopLeft[0], this.sections[i].myTopLeft[1]);
+				// Use getDrawTopLeft (not the cached myTopLeft) so non-Calc
+				// document objects follow a zoom animation via their live
+				// documentPosition.vX/vY. Equal to myTopLeft outside zoom.
+				var drawTopLeft = this.sections[i].getDrawTopLeft();
+				this.context.translate(drawTopLeft[0], drawTopLeft[1]);
 				if (this.sections[i].backgroundColor) {
 					this.context.globalAlpha = this.sections[i].backgroundOpacity;
 					this.context.fillStyle = this.sections[i].backgroundColor;
@@ -1989,7 +2001,7 @@ class CanvasSectionContainer {
 					this.context.strokeRect(offset, offset, this.sections[i].size[0], this.sections[i].size[1]);
 				}
 
-				this.context.translate(-this.sections[i].myTopLeft[0], -this.sections[i].myTopLeft[1]);
+				this.context.translate(-drawTopLeft[0], -drawTopLeft[1]);
 			}
 		}
 

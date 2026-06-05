@@ -107,6 +107,10 @@ class ViewLayoutBase {
 
 	public sendClientVisibleArea(forceUpdate: boolean = false): void {
 		if (!app.map._docLoaded) return;
+		// During a zoom animation app.twipsToPixels and the viewedRectangle are
+		// driven through intermediate frame values; do not push those to core.
+		// The real visible area is sent once the animation settles.
+		if (app.sectionContainer.isInZoomAnimation()) return;
 
 		var splitPos = app.map._docLayer._splitPanesContext
 			? app.map._docLayer._splitPanesContext.getSplitPos()
@@ -172,6 +176,14 @@ class ViewLayoutBase {
 
 		app.sectionContainer.onNewDocumentTopLeft();
 		app.sectionContainer.requestReDraw();
+	}
+
+	// Lightweight viewedRectangle update used per zoom frame. Unlike the setter
+	// it does not run onNewDocumentTopLeft, requestReDraw or touch
+	// lastViewedRectangle: the zoom RAF already redraws, and the document
+	// sections read this rectangle directly via documentToViewX/Y.
+	public setZoomFrameViewedRectangle(rectangle: cool.SimpleRectangle): void {
+		this._viewedRectangle = rectangle;
 	}
 
 	public get viewSize() {

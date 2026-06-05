@@ -209,6 +209,17 @@ class CanvasSectionObject {
 			this.containerObject.createUpdateSingleDivElement(this);
 	}
 
+	// Top-left used to position this section's drawing. Equals the cached
+	// myTopLeft, except for non-Calc document objects it is recomputed live from
+	// documentPosition.vX/vY so the section follows a zoom animation (Calc keeps
+	// myTopLeft: its frozen-pane/RTL mapping lives in setPosition).
+	getDrawTopLeft(): number[] {
+		if (this.documentObject && this.documentPosition &&
+			app.map.getDocType() !== 'spreadsheet')
+			return [this.documentPosition.vX, this.documentPosition.vY];
+		return this.myTopLeft;
+	}
+
 	/*
 		Allow locally to influence if this object is hit by the given point.
 		This can be used e.g. to have CanvasSectionObjects with 'holes',

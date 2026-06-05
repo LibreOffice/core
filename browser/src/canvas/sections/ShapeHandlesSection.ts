@@ -1260,16 +1260,23 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.context.strokeStyle = 'black';
 		this.context.setLineDash([3, 3]);
 
+		// Live rectangle size (pWidth/pHeight track the current scale) so the
+		// frame follows a zoom animation; this.size is fixed at selection time.
+		const width = GraphicSelection.rectangle ? GraphicSelection.rectangle.pWidth : this.size[0];
+		const height = GraphicSelection.rectangle ? GraphicSelection.rectangle.pHeight : this.size[1];
+
 		if (this.containerObject.isDraggingSomething() && this.containerObject.targetSection === this.name)
-			this.context.strokeRect(this.sectionProperties.lastDragDistance[0], this.sectionProperties.lastDragDistance[1], this.size[0], this.size[1]);
+			this.context.strokeRect(this.sectionProperties.lastDragDistance[0], this.sectionProperties.lastDragDistance[1], width, height);
 		else
-			this.context.strokeRect(0, 0, this.size[0], this.size[1]);
+			this.context.strokeRect(0, 0, width, height);
 
 		this.context.setLineDash([]);
 		this.context.closePath();
 	}
 
 	public onDraw() {
+		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
+		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
 		this.drawSelectionFrame();
 		if (!this.showSection || !this.isVisible)
 			this.hideSVG();

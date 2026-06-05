@@ -59,6 +59,8 @@ class CellCursorSection extends CanvasSectionObject {
 	}
 
 	public onDraw() {
+		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
+		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
 		if (app.calc.cellCursorVisible) {
 			this.context.lineJoin = 'miter';
 			this.context.lineCap = 'butt';

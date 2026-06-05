@@ -228,17 +228,14 @@ window.L.TileSectionManager = window.L.Class.extend({
 
 	_zoomAnimation: function () {
 		var painter = this;
-		var ctx = this._paintContext();
-		var canvasOverlay = this._layer._canvasOverlay;
 
 		var rafFunc = function (timeStamp, final) {
 			painter._layer._refreshRowColumnHeaders();
 
-			// Draw zoom frame with grids and directly from the tiles.
-			// This will clear the doc area first.
-			painter._tilesSection.drawZoomFrame(ctx);
-			// Draw the overlay objects.
-			canvasOverlay.onDraw();
+			// Redraw the section container each frame. The tiles section paints
+			// the scaled zoom frame from its own onDraw, and the overlay and
+			// document sections follow in the same pass instead of freezing.
+			app.sectionContainer.requestReDraw();
 
 			if (!final)
 				painter._zoomRAF = requestAnimationFrame(rafFunc);
@@ -4103,16 +4100,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	preZoomAnimation: function (pinchStartCenter) {
 		this._pinchStartCenter = this._map.project(pinchStartCenter).multiplyBy(app.dpiScale); // in core pixels
 		this._painter._offset = new cool.Point(0, 0);
+		// Snapshot the starting scale. Each zoom frame drives app.twipsToPixels
+		// to base * _zoomFrameScale (see TilesSection.drawZoomFrame) so vector
+		// document sections scale in lockstep with the tiles.
+		this._painter._zoomBaseTwipsToPixels = app.twipsToPixels;
 
 		if (this._cursorMarker && app.file.textCursor.visible) {
 			this._cursorMarker.setOpacity(0);
 		}
 		if (this._map._textInput._cursorHandler)
 			this._map._textInput._cursorHandler.setOpacity(0);
-
-		if (this.isCalc()) {
-			this._cellCursorSection.setShowSection(false);
-		}
 
 		TextSelections.hideHandles();
 
@@ -4126,10 +4123,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (this._map._textInput._cursorHandler)
 			this._map._textInput._cursorHandler.setOpacity(1);
-
-		if (this.isCalc()) {
-			this._cellCursorSection.setShowSection(true);
-		}
 
 		TextSelections.showHandles();
 
