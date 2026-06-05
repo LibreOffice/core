@@ -61,6 +61,10 @@
 #include <svx/xbtmpit.hxx>
 #include <test/commontesttools.hxx>
 #include <unomodel.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
+#include <svx/svdotext.hxx>
 
 using namespace ::com::sun::star;
 
@@ -75,6 +79,7 @@ public:
 
     void testTdf99396_UndoCellVerticalAlignment();
     void testTableObjectUndoTest();
+    void testSubtitleWithParaAnimationSave();
     void testFillColor();
     void testFillGradient();
     void testTdf44774_KeepStyleLinksOnSave();
@@ -106,6 +111,7 @@ public:
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396_UndoCellVerticalAlignment);
     CPPUNIT_TEST(testTableObjectUndoTest);
+    CPPUNIT_TEST(testSubtitleWithParaAnimationSave);
     CPPUNIT_TEST(testFillColor);
     CPPUNIT_TEST(testFillGradient);
     CPPUNIT_TEST(testTdf44774_KeepStyleLinksOnSave);
@@ -279,6 +285,44 @@ void SdMiscTest::testTableObjectUndoTest()
                          pDoc->GetUndoManager()->GetUndoActionComment(0));
     CPPUNIT_ASSERT_EQUAL(u"Grow font size"_ustr, pDoc->GetUndoManager()->GetUndoActionComment(1));
     CPPUNIT_ASSERT_EQUAL(u"Format cell"_ustr, pDoc->GetUndoManager()->GetUndoActionComment(2));
+}
+
+void SdMiscTest::testSubtitleWithParaAnimationSave()
+{
+    createSdImpressDoc("pptx/subtitle-animation-save.pptx");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    // Object 0 is the title, object 1 is the animated subtitle.
+    auto* pTextObj = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
+    CPPUNIT_ASSERT(pTextObj);
+    CPPUNIT_ASSERT_EQUAL(u"Original subtitle"_ustr,
+                         pTextObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
+
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTextObj, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pTextObj);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    auto* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    EditView& rEditView = pOutlinerView->GetEditView();
+    rEditView.SetSelection(ESelection(0, 0));
+    rEditView.InsertText(u"edited "_ustr);
+    pView->SdrEndTextEdit();
+    Scheduler::ProcessEventsToIdle();
+
+    saveAndReload(TestFilter::PPTX);
+
+    // The whole edited text must survive; before the fix the frozen marker
+    // truncated it at the imported length ("edited Original s").
+    uno::Reference<text::XText> xText(
+        uno::Reference<text::XTextRange>(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW)->getText());
+    CPPUNIT_ASSERT_EQUAL(u"edited Original subtitle"_ustr, xText->getString());
 }
 
 void SdMiscTest::testFillColor()
