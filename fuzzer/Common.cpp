@@ -24,6 +24,7 @@
 #include <common/Log.hpp>
 #include <net/Ssl.hpp>
 #include <wsd/COOLWSD.hpp>
+#include <wsd/COOLWSDServer.hpp>
 #include <wsd/FileServer.hpp>
 
 #include <Poco/AutoPtr.h>
@@ -43,6 +44,7 @@ bool DoInitialization()
     COOLWSD::SavedClipboards = std::make_unique<ClipboardCache>();
     COOLWSD::FileRequestHandler =
         std::make_unique<FileServerRequestHandler>(COOLWSD::FileServerRoot);
+    COOLWSDServer::WebServerPoll = std::make_unique<TerminatingPoll>("websrv_poll");
 
     const char* level = std::getenv("LOG_LEVEL");
     const std::string logLevel(level ? level : "fatal");
