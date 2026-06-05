@@ -10,6 +10,9 @@
 #include <test/unoapi_test.hxx>
 #include <tools/color.hxx>
 
+#include <salhelper/thread.hxx>
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -19,6 +22,7 @@
 #include <com/sun/star/sheet/DataBarEntryType.hpp>
 #include <com/sun/star/sheet/ColorScaleEntryType.hpp>
 #include <com/sun/star/sheet/XColorScaleEntry.hpp>
+#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 using namespace css;
 
@@ -39,6 +43,7 @@ public:
     void testCondFormatXIndex();
     void testDataBarProperties();
     void testColorScaleProperties();
+    void testThreadedCondFormat();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testRequestCondFormatListFromSheet);
@@ -48,6 +53,7 @@ public:
     CPPUNIT_TEST(testCondFormatXIndex);
     CPPUNIT_TEST(testDataBarProperties);
     CPPUNIT_TEST(testColorScaleProperties);
+    CPPUNIT_TEST(testThreadedCondFormat);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -429,6 +435,69 @@ void ScConditionalFormatTest::testColorScaleProperties()
                 sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, u"not used"_ustr, sal_uInt32(1),
                 sheet::ColorScaleEntryType::COLORSCALE_VALUE, u"10"_ustr, COL_BLACK);
     }
+}
+
+namespace
+{
+class TestThread : public salhelper::Thread
+{
+public:
+    TestThread(const uno::Reference<lang::XComponent>& xComponent, sal_Int32 nCell)
+        : salhelper::Thread("TestThread")
+        , m_xComponent(xComponent)
+        , m_nCell(nCell)
+    {
+    }
+
+protected:
+    void execute() override;
+
+private:
+    uno::Reference<lang::XComponent> m_xComponent;
+    sal_Int32 m_nCell;
+};
+
+void TestThread::execute()
+{
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XConditionalFormats> xCondFormats = getConditionalFormatList(xSheet);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xDoc, uno::UNO_QUERY_THROW);
+
+    // Add a conditional format to A{m_nCell}
+    uno::Reference<sheet::XSheetCellRangeContainer> xRanges(
+        xFactory->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY_THROW);
+    table::CellRangeAddress a1 = { 0, m_nCell, 0, m_nCell, 0 };
+    xRanges->addRangeAddress(a1, false);
+    xCondFormats->createByRange(xRanges);
+}
+}
+
+void ScConditionalFormatTest::testThreadedCondFormat()
+{
+    // Test that the API can be used from another thread without the solar mutex being held. See
+    // tdf#171950 comment #3.
+
+    std::vector<rtl::Reference<TestThread>> aThreads;
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+        aThreads.emplace_back(new TestThread(mxComponent, i));
+
+    {
+        for (auto& rThread : aThreads)
+            rThread->launch();
+
+        SolarMutexReleaser aReleaser;
+
+        for (auto& rThread : aThreads)
+            rThread->join();
+    }
+
+    uno::Reference<uno::XInterface> xSheet = init();
+    uno::Reference<sheet::XConditionalFormats> xCondFormats = getConditionalFormatList(xSheet);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(aThreads.size() + 4), xCondFormats->getLength());
 }
 
 void ScConditionalFormatTest::setUp()
