@@ -36,7 +36,6 @@ class FormulaAutoCompletePopup extends AutoCompletePopup {
 	}
 
 	openFormulaAutoCompletePopup(ev: FireEvent) {
-		this.map.fire('closepopup');
 		this.openPopup({ data: ev });
 	}
 
