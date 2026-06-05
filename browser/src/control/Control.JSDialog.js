@@ -172,21 +172,15 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			return;
 		}
 
-		var clickToClose = this.dialogs[id].clickToClose;
+		var clickToCloseElement = this.dialogs[id].clickToCloseElement;
 		var builder = this.dialogs[id].builder;
 
 		if (sendCloseEvent) {
-			// clickToClose may still be the raw string from the JSON (e.g. '_POPOVER_')
-			// when the popup is closed before the layouting task in onJSDialog
-			// resolved it to an element via addHandlers
-			if (typeof clickToClose === 'string')
-				clickToClose = null;
-
 			// first try to close the dropdown if exists
-			if (clickToClose && typeof clickToClose.closeDropdown === 'function')
-				clickToClose.closeDropdown();
-			if (clickToClose && window.L.DomUtil.hasClass(clickToClose, 'menubutton'))
-				clickToClose.click();
+			if (clickToCloseElement && typeof clickToCloseElement.closeDropdown === 'function')
+				clickToCloseElement.closeDropdown();
+			if (clickToCloseElement && window.L.DomUtil.hasClass(clickToCloseElement, 'menubutton'))
+				clickToCloseElement.click();
 			else if (builder)
 				builder.callback('popover', 'close', {id: '__POPOVER__'}, null, builder);
 			else
@@ -548,7 +542,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			// fallback
 			clickToCloseElement = window.L.DomUtil.get(clickToCloseId);
 		}
-		instance.clickToClose = clickToCloseElement;
+		// Keep instance.clickToClose as the raw string from the JSON and store
+		// the resolved DOM element separately, so readers never have to tell a
+		// string id apart from an element.
+		instance.clickToCloseElement = clickToCloseElement;
 
 		app.layoutingService.appendLayoutingTask(() => { this.setupInitialFocus(instance); });
 

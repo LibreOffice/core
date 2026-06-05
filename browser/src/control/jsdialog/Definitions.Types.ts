@@ -165,7 +165,9 @@ interface PopupData extends JSDialogJSON {
 	hasClose: boolean;
 	noOverlay: boolean;
 	popupParent?: string;
-	clickToClose?: string;
+	clickToClose?: string; // raw id of the element that closes the popup when clicked
+	clickToCloseElement?: HTMLElement; // clickToClose resolved to a DOM element by addHandlers
+	clickToCloseText?: string; // clickToClose text when the closing element is a treeview entry
 	persistKeyboard?: boolean;
 	serverSyncSelection?: boolean;
 	posx: number;
