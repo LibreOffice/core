@@ -8,7 +8,7 @@ endif
 all: link-so
 
 DISABLE_UI=TRUE
-BUILD_VARIANT=$(if $(DISABLE_UI),StrippedUI)$(if $(ENABLE_ANDROID_EDITING),Editing)$(if $(ENABLE_RELEASE_BUILD),Release,Debug)
+BUILD_VARIANT=$(if $(DISABLE_UI),StrippedUI)$(if $(ENABLE_ANDROID_EDITING),Editing)Release
 BOOTSTRAPDIR=../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 

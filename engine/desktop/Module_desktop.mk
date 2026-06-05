@@ -46,7 +46,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
         Pagein_impress \
         Pagein_writer \
     ) \
-    $(if $(filter MACOSX,$(OS)),CustomTarget_soffice) \
 ))
 
 ifneq (,$(filter-out EMSCRIPTEN HAIKU MACOSX WNT,$(OS)))

@@ -1005,7 +1005,6 @@
         "--enable-hardening-flags",
         "--enable-mergelibs",
         "--enable-mpl-subset",
-        "--enable-release-build",
         "--enable-symbols",
         "--with-branding=icon-themes/galaxy/brand_cp",
         "--with-docrepair-fonts",

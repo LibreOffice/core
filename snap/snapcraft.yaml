@@ -151,7 +151,6 @@ parts:
         --enable-hardening-flags \
         --enable-mergelibs \
         --enable-mpl-subset \
-        --enable-release-build \
         --with-branding=icon-themes/galaxy/brand_cp \
         --with-docrepair-fonts \
         --with-fonts \

@@ -522,9 +522,6 @@ PRODUCTNAME="AC_PACKAGE_NAME"
 if test -n "$with_product_name" -a "$with_product_name" != no; then
     PRODUCTNAME="$with_product_name"
 fi
-if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
-    PRODUCTNAME="AC_PACKAGE_NAME"
-fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
 PRODUCTNAME_WITHOUT_SPACES=$(printf %s "$PRODUCTNAME" | sed 's/ //g')
@@ -2036,14 +2033,6 @@ libo_FUZZ_ARG_ENABLE(extension-update,
         [Disable possibility to update installed extensions.]),
 ,)
 
-libo_FUZZ_ARG_ENABLE(release-build,
-    AS_HELP_STRING([--enable-release-build],
-        [Enable release build. Note that the "release build" choice is orthogonal to
-         whether symbols are present, debug info is generated, or optimization
-         is done.
-         See https://wiki.documentfoundation.org/Development/DevBuild]),
-,)
-
 libo_FUZZ_ARG_ENABLE(hardening-flags,
     AS_HELP_STRING([--enable-hardening-flags],
         [Enable automatically using hardening compiler flags. Distros typically
@@ -2980,21 +2969,9 @@ fi
 AC_SUBST(USE_LIBRARY_BIN_TAR)
 
 dnl ===================================================================
-dnl Test whether build target is Release Build
+dnl macOS get-task-allow entitlement (empty: we only build for release)
 dnl ===================================================================
-AC_MSG_CHECKING([whether build target is Release Build])
-if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_RELEASE_BUILD=
-    dnl Pu the value on one line as make (at least on macOS) seems to ignore
-    dnl the newlines and then complains about spaces.
-    GET_TASK_ALLOW_ENTITLEMENT='<!-- We want to be able to debug a hardened process when not building for release --><key>com.apple.security.get-task-allow</key><true/>'
-else
-    AC_MSG_RESULT([yes])
-    ENABLE_RELEASE_BUILD=TRUE
-    GET_TASK_ALLOW_ENTITLEMENT=
-fi
-AC_SUBST(ENABLE_RELEASE_BUILD)
+GET_TASK_ALLOW_ENTITLEMENT=
 AC_SUBST(GET_TASK_ALLOW_ENTITLEMENT)
 
 dnl ===================================================================
@@ -6988,12 +6965,7 @@ find_msms()
         msmdir="$formatted_path"
         AC_MSG_RESULT([$msmdir])
     else
-        if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
-            AC_MSG_FAILURE([not found])
-        else
-            AC_MSG_WARN([not found (check config.log)])
-            add_warning "MSM ${my_msm_file} not found"
-        fi
+        AC_MSG_FAILURE([not found])
     fi
 }
 
@@ -14115,7 +14087,7 @@ AC_MSG_CHECKING([which languages to be built])
 # get list of all languages
 # generate shell variable from completelangiso= from solenv/inc/langlist.mk
 # we want en-US at the beginning
-ALL_LANGS=$($GNUMAKE SRC_ROOT=$SRC_ROOT WITH_LANG="$with_lang" ENABLE_RELEASE_BUILD="$ENABLE_RELEASE_BUILD" -sr -f - <<'EOF' | tr -d '\r'
+ALL_LANGS=$($GNUMAKE SRC_ROOT=$SRC_ROOT WITH_LANG="$with_lang" -sr -f - <<'EOF' | tr -d '\r'
 include $(SRC_ROOT)/solenv/inc/langlist.mk
 all:
 	$(info en-US $(filter-out en-US,$(sort $(completelangiso))))
@@ -14192,10 +14164,6 @@ fi
 WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
 test -z "$WITH_LANG_LIST" && WITH_LANG_LIST="en-US"
 test "$WITH_LANG" = "en-US" && WITH_LANG=
-if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
-    test "$WITH_LANG_LIST" = "en-US" || WITH_LANG_LIST=`echo $WITH_LANG_LIST qtz`
-    ALL_LANGS=`echo $ALL_LANGS qtz`
-fi
 AC_SUBST(ALL_LANGS)
 AC_DEFINE_UNQUOTED(WITH_LANG,"$WITH_LANG")
 AC_SUBST(WITH_LANG)

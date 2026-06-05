@@ -143,13 +143,9 @@ zu
 
 # languages with low translation percentage, but still wish to have daily builds
 lowcompletion_langs = sun
-ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
-completelangiso += $(lowcompletion_langs)
-else
-# allow to manually specify even in release config
+# allow to manually specify the low-completion languages to build
 # (this bit is used from within configure.ac as well, without parsing config_host_lang.mk)
 completelangiso += $(foreach lang,$(WITH_LANG),$(filter $(lang),$(lowcompletion_langs)))
-endif
 
 # the stuff below is used by the actual build
 gb_HELP_LANGS = en-US

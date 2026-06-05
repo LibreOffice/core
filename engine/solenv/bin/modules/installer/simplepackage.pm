@@ -412,10 +412,7 @@ sub create_package
             installer::systemactions::rename_directory($oldappdir,$newappdir);
             my $subdir = "$newappdir/Contents/Resources";
             if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
-            # For non-release builds where no identity is, set entitlements
-            # to allow Xcode's Instruments application to connect to the
-            # application
-            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} || !$ENV{'ENABLE_RELEASE_BUILD'} )
+            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} )
             {
                 $newappdir =~ s/ /\\ /g;
                 $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $newappdir";

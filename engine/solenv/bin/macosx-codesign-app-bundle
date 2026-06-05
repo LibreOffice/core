@@ -45,10 +45,6 @@ else
 fi
 
 if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
-    if test -n "$ENABLE_RELEASE_BUILD"; then
-        echo "This is a release build! This should be run in a non-release build only"
-        exit 1
-    fi
 
     # Quick Look plugins will only load if with sandbox entitlements
     find "$APP_BUNDLE" -name 'QuickLook*.appex' -type d |

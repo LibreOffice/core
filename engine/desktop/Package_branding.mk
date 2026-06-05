@@ -11,10 +11,7 @@ $(eval $(call gb_Package_Package,desktop_branding,$(SRCDIR)/icon-themes/colibre)
 
 $(eval $(call gb_Package_add_files,desktop_branding,$(LIBO_ETC_FOLDER),\
     $(foreach image,$(filter $(BRAND_INTRO_IMAGES),$(DEFAULT_BRAND_IMAGES)),\
-		$(if $(filter intro.png,$(image)),\
-			$(if $(ENABLE_RELEASE_BUILD),brand,brand_dev)/$(image),\
-			brand/$(image) \
-		) \
+		brand/$(image) \
 	) \
 ))
 
