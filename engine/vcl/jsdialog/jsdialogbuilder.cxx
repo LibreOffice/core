@@ -1237,7 +1237,11 @@ void JSButton::set_label(const OUString& rText)
 void JSButton::set_from_icon_name(const OUString& rIconName)
 {
     SalInstanceButton::set_from_icon_name(rIconName);
-    sendUpdate();
+    if (!m_sIconName || *m_sIconName != rIconName)
+    {
+        m_sIconName = rIconName;
+        sendUpdate();
+    }
 }
 
 JSLinkButton::JSLinkButton(JSDialogSender* pSender, ::FixedHyperlink* pButton,

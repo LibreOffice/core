@@ -14,6 +14,7 @@
 #include <jsdialog/jsdialogsender.hxx>
 
 #include <tools/stream.hxx>
+#include <optional>
 #include <utility>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/weld.hxx>
@@ -530,6 +531,8 @@ public:
 
 class JSButton final : public JSWidget<SalInstanceButton, ::Button>
 {
+    std::optional<OUString> m_sIconName;
+
 public:
     JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
