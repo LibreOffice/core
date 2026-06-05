@@ -1,0 +1,13 @@
+--- a/boost/optional/detail/union_optional.hpp
++++ b/boost/optional/detail/union_optional.hpp
+@@ -597,7 +597,9 @@ namespace boost {
+ 
+     constexpr reference_const_type value() const&
+     {
+-      return this->is_initialized() ? this->get() : (boost::throw_exception(boost::bad_optional_access()), this->get());
++      if (!this->is_initialized())
++        boost::throw_exception(boost::bad_optional_access());
++      return this->get();
+     }
+ 
+     BOOST_CXX14_CONSTEXPR reference_type value() &

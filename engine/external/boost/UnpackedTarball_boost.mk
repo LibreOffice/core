@@ -37,6 +37,7 @@ boost_patches += boost.file_iterator.sharing_win.patch
 boost_patches += Wundef.patch.0
 
 boost_patches += boost.spirit.noreturn.patch
+boost_patches += unreachable_code.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
