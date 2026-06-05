@@ -68,7 +68,7 @@ namespace basegfx
         // In the impl before I took the memory aspect more into account, so I used
         // sqrt() to have less HoldTime the bigger the nBytes gets by using a flattening
         // curve. With having identified that remain time is important for those cases,
-        // we can go back to linear. This means that we can explicitely choose a
+        // we can go back to linear. This means that we can explicitly choose a
         // HoldTime, get a factor and simply apply that to all buffered data.
         // Setup:
         //  fHugeDataInBytes -> 300000000
