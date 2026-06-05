@@ -100,7 +100,8 @@ void Desktop::RegisterServices()
     CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
     // Headless mode for FAT Office, auto cancels any dialogs that popup
-    if (rCmdLine.IsHeadless())
+    // No auto cancel when --accept is used: used by uitests.
+    if (rCmdLine.IsHeadless() && rCmdLine.GetAccept().empty())
         Application::EnableHeadlessMode(false);
 
     // read accept string from configuration

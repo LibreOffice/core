@@ -2046,7 +2046,8 @@ void Desktop::OpenClients()
     if ( xList->hasElements() )
         return;
 
-    if ( rArgs.IsInvisible() || Application::AnyInput( VclInputFlags::APPEVENT ) )
+    // No early return for the invisible case when --accept is used: used by uitests.
+    if ( (rArgs.IsInvisible() && rArgs.GetAccept().empty()) || Application::AnyInput( VclInputFlags::APPEVENT ) )
     {
 #ifdef MACOSX
         // Related: tdf#41775 show Start Center before loading documents
