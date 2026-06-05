@@ -347,6 +347,11 @@ class NavigatorPanel extends SidebarBase {
 		if (navigatorData.action === 'close') {
 			this.closeSidebar();
 		} else if (navigatorData.children) {
+			// Whether the navigator was already open before this message, so
+			// focus is only moved into it on the closed-to-open transition and
+			// not pulled off the document each time it merely rebuilds.
+			const wasShown = app.showNavigator;
+
 			if (navigatorData.children.length) {
 				this.onResize();
 			}
@@ -372,6 +377,8 @@ class NavigatorPanel extends SidebarBase {
 				this.switchNavigationTab('tab-quick-find');
 				this.focusSearch();
 				this.focusQuickFind = false;
+			} else if (!wasShown) {
+				this.focusNavigatorOnShow();
 			}
 		} else {
 			this.closeSidebar();
@@ -491,6 +498,31 @@ class NavigatorPanel extends SidebarBase {
 			'.ui-treeview-tree [tabindex="0"]',
 		);
 		focusRow?.focus();
+	}
+
+	// Move keyboard focus into the navigator tree when the user opens it, the
+	// same way the sidebar focuses its first control on open. Deferred past the
+	// open animation so it does not shift the page, and skipped while a dialog
+	// is open so it does not steal focus from it.
+	focusNavigatorOnShow() {
+		app.timerRegistry.setTimeout(
+			'navigatorstealfocus',
+			() => {
+				app.layoutingService.appendLayoutingTask(() => {
+					if (
+						this.map.dialog.hasOpenedDialog() ||
+						(this.map.jsdialog && this.map.jsdialog.hasDialogOpened())
+					)
+						return;
+					// Focus may already have moved into the navigator before this
+					// deferred task runs (for example the user clicked the search
+					// box). Leave it where it is rather than yanking it to the tree.
+					if (this.navigationPanel.contains(document.activeElement)) return;
+					this.focusNavigationItem();
+				});
+			},
+			250,
+		);
 	}
 
 	isNavigationPanelVisible(): boolean {

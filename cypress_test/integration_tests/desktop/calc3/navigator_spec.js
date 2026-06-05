@@ -3,6 +3,30 @@
 var helper = require('../../common/helper');
 var { insertImage, deleteImage } = require('../../common/desktop_helper');
 
+describe(['tagdesktop'], 'Navigator focus when launched', function () {
+	var win;
+
+	beforeEach(function () {
+		helper.setupAndLoadDocument('calc/navigator.ods');
+		cy.getFrameWindow().then(function (w) {
+			win = w;
+		});
+		cy.then(function () {
+			win.app.map.sendUnoCommand('.uno:Navigator');
+		});
+		cy.cGet('#contentbox').should('be.visible');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+	});
+
+	it('the navigator takes keyboard focus when it is launched', function () {
+		// Launching the navigator should move keyboard focus into it so it can
+		// be operated by keyboard at once, the same way the sidebar does.
+		cy.cGet('#navigation-sidebar').find(':focus').should('exist');
+	});
+});
+
 describe.skip(['tagdesktop'], 'Navigator tests.', function () {
 
 	beforeEach(function () {
