@@ -140,6 +140,11 @@ namespace Log
     class ConsoleChannel : public Poco::Channel
     {
     public:
+        // Bring in the base Channel::log overloads (incl. log(Message&&) added
+        // in POCO 1.15) so the log() overloads below don't hide them
+        // (-Werror=overloaded-virtual).
+        using Poco::Channel::log;
+
         static constexpr std::size_t BufferSize = 64 * 1024;
 
         void close() override { flush(); }
@@ -336,6 +341,8 @@ namespace Log
         /// Flush buffers, if any.
         static void flush() { _tlb.flush(); }
 
+        using ConsoleChannel::log;
+
         void log(const Poco::Message& msg) override
         {
             const std::string& s = msg.getText();
@@ -364,6 +371,8 @@ namespace Log
             _colorByPriority.emplace(Message::PRIO_DEBUG, "\033[0;36m"); // Teal
             _colorByPriority.emplace(Message::PRIO_TRACE, "\033[0;37m"); // Grey
         }
+
+        using BufferedConsoleChannel::log;
 
         void log(const Poco::Message& msg) override
         {

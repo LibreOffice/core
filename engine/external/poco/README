@@ -1,0 +1,15 @@
+External package containing the POCO C++ Libraries from [https://pocoproject.org].
+
+POCO is not used by the engine itself.  It is built here, unconditionally,
+only so that the Collabora Online (COOL) and CODA applications, which live in
+the enclosing tree, can link against it without requiring a system or
+hand-built POCO installation.
+
+Only the components used by that code are built as static libraries:
+PocoFoundation, PocoXML, PocoJSON, PocoUtil, PocoCrypto, PocoNet and
+PocoNetSSL.  The bundled zlib, pcre2, utf8proc, pdjson and double-conversion
+copies are compiled in; expat and OpenSSL are taken from the engine's own
+externals instead of POCO's bundled copies.
+
+The assembled headers are delivered to workdir/UnpackedTarball/poco/include
+and the static archives to workdir/LinkTarget/StaticLibrary.

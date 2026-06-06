@@ -15,7 +15,7 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     libxcb-shm0 libxcb-render0 libxrender1 libxext6 \
     fonts-wqy-zenhei fonts-wqy-microhei fonts-droid-fallback \
     fonts-noto-cjk \
-    libpoco-dev python3-polib libcap-dev npm \
+    python3-polib libcap-dev npm \
     libpam-dev libzstd-dev wget git build-essential libtool \
     libcap2-bin python3-lxml libpng-dev libcppunit-dev \
     pkg-config fontconfig snapd chromium-browser \
@@ -27,13 +27,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && b
 
 RUN mkdir -p $BUILDDIR
 
-# Build poco separately to cache it
-ADD https://pocoproject.org/releases/poco-1.12.5p2/poco-1.12.5p2-all.tar.gz /build/builddir/poco-1.12.5p2-all.tar.gz
-
-RUN cd builddir && tar xf poco-1.12.5p2-all.tar.gz && cd poco-1.12.5p2-all/ && \
-    ./configure --static --no-tests --no-samples --no-sharedlibs --cflags="-fPIC" --omit=Zip,Data,Data/SQLite,Data/ODBC,Data/MySQL,MongoDB,PDF,CppParser,PageCompiler,Redis,Encodings,ActiveRecord --prefix=$BUILDDIR/poco && \
-    make -j $(nproc) && \
-    make install
+# POCO is built as part of the engine (engine/external/poco); no separate build.
 
 COPY / $BUILDDIR/
 

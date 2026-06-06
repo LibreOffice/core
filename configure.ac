@@ -243,8 +243,9 @@ AC_ARG_WITH(android-abi,
                             (when only one build dir is provided in --with-lo-builddir) or to all 4 supported ABIs at
                             the same time (when there are more builddirs provided in --with-lo-builddir, separated
                             by colons).  The supported ABIs are: armeabi-v7a, arm64-v8a, x86 and x86_64.
-                            Please note that you need to specify the parameters for --with-lo-builddir,
-                            --with-poco-includes and --with-poco-libs in the order of armeabi-v7a:arm64-v8a:x86:x86_64.
+                            Please note that you need to specify the build dirs for --with-lo-builddir
+                            in the order of armeabi-v7a:arm64-v8a:x86:x86_64 (POCO is taken from each
+                            engine build dir's workdir).
                             For example, when you use --with-android-abi="x86_64 x86",
                             you have to specify --with-lo-builddir=::/path/to/x86/builddir:/path/to/x86-64/builddir.
                             If you are building for only a single ABI you may omit the colons.]),
@@ -337,8 +338,10 @@ AC_ARG_WITH([trace-event-file],
 
 AC_ARG_WITH([poco-includes],
             AS_HELP_STRING([--with-poco-includes=<path>],
-                           [Path to the "include" directory with the Poco
-                            headers. For Android, this has the same format as --with-lo-builddir]))
+                           [Obsolete and ignored. POCO is now built as one of the engine's
+                            third-party libraries and is picked up from the engine's workdir
+                            automatically.]),
+            [AC_MSG_WARN([--with-poco-includes is obsolete and ignored; POCO is now built in the engine and taken from its workdir.])])
 
 AC_ARG_WITH([zstd-libs],
             AS_HELP_STRING([--with-zstd-libs=<path>],
@@ -354,8 +357,10 @@ AC_ARG_WITH([zstd-includes],
 
 AC_ARG_WITH([poco-libs],
             AS_HELP_STRING([--with-poco-libs=<path>],
-                           [Path to the "lib" directory with the Poco
-                            libraries.  For Android, this has the same format as --with-lo-builddir]))
+                           [Obsolete and ignored. POCO is now built as one of the engine's
+                            third-party libraries and is picked up from the engine's workdir
+                            automatically.]),
+            [AC_MSG_WARN([--with-poco-libs is obsolete and ignored; POCO is now built in the engine and taken from its workdir.])])
 
 AC_ARG_WITH([libpng-includes],
             AS_HELP_STRING([--with-libpng-includes=<path>],
@@ -483,11 +488,10 @@ AC_ARG_ENABLE([experimental],
               AS_HELP_STRING([--enable-experimental],
                              [Enable experimental features and behavior]))
 
-# Debug POCO libraries are named like 'PocoNetSSLd' instead of just 'PocoNetSSL',
-# but Homebrew does not have those, so avoid this suffix for macOS
-AS_IF([test "$enable_debug" = yes -a -n "$with_poco_libs" -a `uname -s` != Darwin],
-      [POCO_DEBUG_SUFFIX=d],
-      [POCO_DEBUG_SUFFIX=])
+# POCO is now built as a static library in the engine, with undecorated names
+# (libPocoFoundation.a etc.), so there is never a debug 'd' suffix.
+POCO_DEBUG_SUFFIX=
+POCODEBUG=
 
 ENABLE_DEBUG=false
 ENABLE_DEBUG_PROTOCOL=false
@@ -799,30 +803,28 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
 fi
 
 if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_macosapp" = "yes" \) -o \( "$enable_windowsapp" = "yes" \) -o \( "$enable_androidapp" = "yes" \) -o "$host_os" = "emscripten" ; then
-   AC_MSG_CHECKING([for Poco include directory to build against])
-   if test -z "$with_poco_includes"; then
-      AC_MSG_ERROR([You MUST use the --with-poco-includes option when configuring the mobile or Windows app build tree.])
+   # POCO is built as a third-party library in the engine; pick it up from the
+   # engine's workdir.  For Android there is one engine build tree per ABI.
+   # macOS builds against the in-tree engine like the desktop build, so its
+   # build dir is --with-lo-builddir (default "engine"), not $LOBUILDDIR (which
+   # is only set for the iOS/Android/Windows/wasm cross builds).
+   AC_MSG_CHECKING([for Poco built in the engine])
+   if test "$enable_macosapp" = "yes"; then
+      poco_engine_builddir=`readlink -f "${with_lo_builddir:-engine}"`
+   else
+      poco_engine_builddir="$LOBUILDDIR"
    fi
-
-   POCOINCLUDE="$with_poco_includes"
+   POCOINCLUDE="$poco_engine_builddir/workdir/UnpackedTarball/poco/include"
+   POCOLIB="$poco_engine_builddir/workdir/LinkTarget/StaticLibrary"
    if test "$enable_androidapp" = "yes" ; then
-      if echo "$POCOINCLUDE" | grep -qs ':' ; then
-         POCOINCLUDE=`echo $with_poco_includes | cut -d: -f1`
-         POCOINCLUDE_ARM64_V8A=`echo $with_poco_includes | cut -d: -f2`
-         POCOINCLUDE_X86=`echo $with_poco_includes | cut -d: -f3`
-         POCOINCLUDE_X86_64=`echo $with_poco_includes | cut -d: -f4`
-      fi
-
-      if test -z "$POCOINCLUDE_ARM64_V8A" ; then
-         POCOINCLUDE_ARM64_V8A="$POCOINCLUDE"
-      fi
-      if test -z "$POCOINCLUDE_X86" ; then
-         POCOINCLUDE_X86="$POCOINCLUDE"
-      fi
-      if test -z "$POCOINCLUDE_X86_64" ; then
-         POCOINCLUDE_X86_64="$POCOINCLUDE"
-      fi
+      POCOINCLUDE_ARM64_V8A="$LOBUILDDIR_ARM64_V8A/workdir/UnpackedTarball/poco/include"
+      POCOINCLUDE_X86="$LOBUILDDIR_X86/workdir/UnpackedTarball/poco/include"
+      POCOINCLUDE_X86_64="$LOBUILDDIR_X86_64/workdir/UnpackedTarball/poco/include"
+      POCOLIB_ARM64_V8A="$LOBUILDDIR_ARM64_V8A/workdir/LinkTarget/StaticLibrary"
+      POCOLIB_X86="$LOBUILDDIR_X86/workdir/LinkTarget/StaticLibrary"
+      POCOLIB_X86_64="$LOBUILDDIR_X86_64/workdir/LinkTarget/StaticLibrary"
    fi
+   AC_MSG_RESULT([$POCOLIB])
 
    # Sanity checks
    CHK_FILE_VAR(POCOINCLUDE,Poco/Poco.h,Poco include)
@@ -834,36 +836,12 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
       POCOINCLUDE_WINDOWS=`cd "$POCOINCLUDE" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
    fi
 
-   AC_MSG_CHECKING([for Poco lib directory to build against])
-   if test -z "$with_poco_libs"; then
-      AC_MSG_ERROR([You MUST use the --with-poco-libs option when configuring the mobile app build tree.])
-   fi
-
-   POCOLIB="$with_poco_libs"
-   if test "$enable_androidapp" = "yes" ; then
-      if echo "$POCOLIB" | grep -qs ':' ; then
-         POCOLIB=`echo $with_poco_libs | cut -d: -f1`
-         POCOLIB_ARM64_V8A=`echo $with_poco_libs | cut -d: -f2`
-         POCOLIB_X86=`echo $with_poco_libs | cut -d: -f3`
-         POCOLIB_X86_64=`echo $with_poco_libs | cut -d: -f4`
-      fi
-
-      if test -z "$POCOLIB_ARM64_V8A" ; then
-         POCOLIB_ARM64_V8A="$POCOLIB"
-      fi
-      if test -z "$POCOLIB_X86" ; then
-         POCOLIB_X86="$POCOLIB"
-      fi
-      if test -z "$POCOLIB_X86_64" ; then
-         POCOLIB_X86_64="$POCOLIB"
-      fi
-   fi
-
-   # Sanity checks
+   # Sanity checks; the engine builds undecorated static libraries
+   # (libPocoFoundation.a, or PocoFoundation.lib with MSVC).
    if test "$enable_windowsapp" = "yes"; then
-      CHK_FILE_VAR(POCOLIB,PocoFoundationmd.lib PocoFoundationmdd.lib,Poco lib)
+      CHK_FILE_VAR(POCOLIB,PocoFoundation.lib,Poco lib)
    else
-      CHK_FILE_VAR(POCOLIB,libPocoFoundation.a libPocoFoundation.so libPocoFoundation.dylib,Poco lib)
+      CHK_FILE_VAR(POCOLIB,libPocoFoundation.a,Poco lib)
       CHK_FILE_VAR(POCOLIB,libPocoFoundation.a,Poco lib,_ARM64_V8A)
       CHK_FILE_VAR(POCOLIB,libPocoFoundation.a,Poco lib,_X86)
       CHK_FILE_VAR(POCOLIB,libPocoFoundation.a,Poco lib,_X86_64)
@@ -871,10 +849,6 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
 
    if test "$enable_windowsapp" = "yes" ; then
       POCOLIB_WINDOWS=`cd "$POCOLIB" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
-   fi
-
-   if test "$ENABLE_DEBUG" = "true" ; then
-       POCODEBUG=d
    fi
 
    if test "$enable_windowsapp" = "yes"; then
@@ -1672,11 +1646,23 @@ AC_SUBST(CACHE_PATH)
 AC_SUBST(SYSTEMPLATE_PATH)
 AM_CONDITIONAL(HAVE_LO_PATH,[test "$have_lo_path" = "true"])
 
-AS_IF([test -n "$with_poco_includes"],
-      [CPPFLAGS="$CPPFLAGS -isystem ${with_poco_includes}"])
+dnl POCO is built as a third-party library in the engine.  For non-mobile
+dnl builds, POCOINCLUDE/POCOLIB are not set yet; derive them from the engine
+dnl build tree (the same one --with-lo-builddir points at, defaulting to
+dnl "engine").  Prefer POCO from the engine workdir, and fall back to a system
+dnl POCO if it has not been built there.
+AS_IF([test -z "$POCOINCLUDE" -a -n "$with_lo_builddir"],
+      [poco_engine_builddir=`readlink -f "$with_lo_builddir"`
+       POCOINCLUDE="$poco_engine_builddir/workdir/UnpackedTarball/poco/include"
+       POCOLIB="$poco_engine_builddir/workdir/LinkTarget/StaticLibrary"])
 
-AS_IF([test -n "$with_poco_libs"],
-      [LDFLAGS="$LDFLAGS -L${with_poco_libs}"])
+AS_IF([test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
+      [AC_MSG_NOTICE([using POCO built in the engine: $POCOLIB])
+       CPPFLAGS="$CPPFLAGS -isystem ${POCOINCLUDE}"
+       LDFLAGS="$LDFLAGS -L${POCOLIB}"],
+      [AC_MSG_NOTICE([POCO not found in the engine workdir, falling back to system POCO])
+       POCOINCLUDE=
+       POCOLIB=])
 
 AS_IF([test -n "$with_zstd_includes"],
       [CPPFLAGS="$CPPFLAGS -isystem ${with_zstd_includes}"])
@@ -1695,10 +1681,6 @@ AS_IF([test -n "$with_cppunit_includes"],
 
 AS_IF([test -n "$with_cppunit_libs"],
       [LDFLAGS="$LDFLAGS -L${with_cppunit_libs}"])
-
-AS_IF([test \( `uname -s` = Linux -o `uname -s` = FreeBSD \) -a "$host_os" != "emscripten"],
-      [AS_IF([test -n "$with_poco_libs" -a -f "$with_poco_libs/libPocoFoundation.so"],
-             [LDFLAGS="$LDFLAGS -Wl,-rpath,${with_poco_libs}"])])
 
 AS_IF([test \( `uname -s` = Linux -o `uname -s` = FreeBSD \) -a "$host_os" != "emscripten"],
       [AS_IF([test -n "$with_cppunit_libs"],
@@ -1904,7 +1886,18 @@ fi
 AC_SUBST(ENABLE_SUPPORT_KEY)
 
 if test "$host_os" != "emscripten"; then
-    LIBS="$LIBS -lPocoNetSSL${POCO_DEBUG_SUFFIX} -lPocoNet${POCO_DEBUG_SUFFIX} -lPocoUtil${POCO_DEBUG_SUFFIX} -lPocoJSON${POCO_DEBUG_SUFFIX} -lPocoXML${POCO_DEBUG_SUFFIX} -lPocoFoundation${POCO_DEBUG_SUFFIX} -lPocoCrypto${POCO_DEBUG_SUFFIX}"
+    # PocoNetSSL/PocoCrypto are only built and needed for SSL (the COOL server);
+    # link them only when SSL is enabled, and before the libraries they depend on
+    # (PocoNet/PocoCrypto/PocoUtil/PocoFoundation) for static-link ordering.
+    AS_IF([test "$ENABLE_SSL" = "true"],
+          [LIBS="$LIBS -lPocoNetSSL${POCO_DEBUG_SUFFIX} -lPocoCrypto${POCO_DEBUG_SUFFIX}"])
+    LIBS="$LIBS -lPocoNet${POCO_DEBUG_SUFFIX} -lPocoUtil${POCO_DEBUG_SUFFIX} -lPocoJSON${POCO_DEBUG_SUFFIX} -lPocoXML${POCO_DEBUG_SUFFIX} -lPocoFoundation${POCO_DEBUG_SUFFIX}"
+    # The engine builds PocoXML against the engine's expat (unbundled), so the
+    # PocoXML archive references expat and we must link it explicitly (after
+    # PocoXML for static-link ordering).  PocoFoundation bundles pcre2/zlib, so
+    # those need nothing extra here.
+    AS_IF([test -n "$POCOLIB"],
+          [LIBS="$LIBS -lexpat"])
 fi
 
 AS_IF([test "$ENABLE_SSL" = "true"],
@@ -1916,7 +1909,7 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
                         [AC_MSG_ERROR([header COKit/COKit.h not found, perhaps you want to use --with-lokit-path])])
        AC_CHECK_HEADERS([Poco/Net/WebSocket.h],
                         [],
-                        [AC_MSG_ERROR([header Poco/Net/WebSocket.h not found, perhaps you want to use --with-poco-includes])])
+                        [AC_MSG_ERROR([header Poco/Net/WebSocket.h not found; build the engine first (POCO is built there) or install a system POCO])])
        DISABLE_SECCOMP=
        if test "$enable_seccomp" != "no" -a `uname -s` = "Linux"; then
            AC_CHECK_HEADERS([linux/seccomp.h],
@@ -1970,7 +1963,7 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
             CPPFLAGS="$CPPFLAGS -DPOCO_UNBUNDLED"
             AC_CHECK_HEADERS([Poco/SAX/SAXParser.h],
                 [AC_MSG_RESULT([... with POCO_UNBUNDLED])],
-                [AC_MSG_ERROR([header Poco/SAX/SAXParser.h not found, perhaps you want to use --with-poco-includes])])
+                [AC_MSG_ERROR([header Poco/SAX/SAXParser.h not found; build the engine first (POCO is built there) or install a system POCO])])
        fi
 
        # If Poco is built with --unbundled, its static archives reference

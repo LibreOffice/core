@@ -100,7 +100,6 @@ parts:
     plugin: nil
     source: .
     source-type: local
-    after: [poco]
     build-snaps:
       - kde-qt6-core24-sdk
       - node/20/stable
@@ -259,8 +258,6 @@ parts:
         --disable-ssl \
         --with-lo-path=/usr/lib/collaboraoffice \
         --with-lokit-path=$(pwd)/engine/include \
-        --with-poco-includes="$CRAFT_STAGE/usr/include" \
-        --with-poco-libs="$CRAFT_STAGE/usr/lib" \
         --with-vendor="Collabora Productivity Limited" \
         --with-app-name="Collabora Office" \
         --with-info-url="https://collaboraoffice.com/"
@@ -465,42 +462,6 @@ parts:
       # branding part overrides these with branded versions (after: collabora-office)
       - -usr/share/coolwsd/browser/dist/welcome/welcome-slideshow.odp
       - -usr/share/coolwsd/browser/dist/welcome/welcome.svg
-  poco:
-    plugin: cmake
-    source: https://github.com/pocoproject/poco.git
-    source-tag: poco-1.12.5-release
-    source-depth: 1
-    cmake-generator: Ninja
-    cmake-parameters:
-      - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_SHARED_LIBS=OFF
-      - -DENABLE_TESTS=OFF
-      - -DENABLE_ACTIVERECORD=OFF
-      - -DENABLE_ACTIVERECORD_COMPILER=OFF
-      - -DENABLE_APACHECONNECTOR=OFF
-      - -DENABLE_DATA=OFF
-      - -DENABLE_DATA_MYSQL=OFF
-      - -DENABLE_DATA_ODBC=OFF
-      - -DENABLE_DATA_POSTGRESQL=OFF
-      - -DENABLE_DATA_SQLITE=OFF
-      - -DENABLE_ENCODINGS=OFF
-      - -DENABLE_JWT=OFF
-      - -DENABLE_MONGODB=OFF
-      - -DENABLE_PAGECOMPILER=OFF
-      - -DENABLE_PAGECOMPILER_FILE2PAGE=OFF
-      - -DENABLE_PROMETHEUS=OFF
-      - -DENABLE_REDIS=OFF
-      - -DPOCO_UNBUNDLED=ON
-    build-packages:
-      - libexpat1-dev
-      - libpcre2-dev
-      - zlib1g-dev
-    stage:
-      - usr/lib
-      - usr/include
-
   branding:
     plugin: nil
     source: https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-25.04.9.3.tar.gz

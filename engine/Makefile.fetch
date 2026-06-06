@@ -256,10 +256,14 @@ fetch_NOTO_TARBALLS := \
 fetch_OPENDYSLEXIC_TARBALLS := \
 	$(call fetch_Optional,MORE_FONTS,FONT_OPENDYSLEXIC_TARBALL)
 
+# POCO is built unconditionally (engine/external/poco) and is not on the
+# LibreOffice tarball mirror, so it is always fetched from its upstream release.
+fetch_POCO_TARBALLS := POCO_TARBALL
+
 # Print resolved filenames of all tarballs needed for the current build configuration.
 # Used by bin/cached-fetch.sh to populate from cache without re-downloading.
 fetch-names: $(BUILDDIR)/config_$(gb_Side).mk
-	@echo $(foreach item,$(fetch_SRC_TARBALLS) $(fetch_EXTERN_TARBALLS) $(fetch_NOTO_TARBALLS) $(fetch_OPENDYSLEXIC_TARBALLS),$($(item)))
+	@echo $(foreach item,$(fetch_SRC_TARBALLS) $(fetch_EXTERN_TARBALLS) $(fetch_NOTO_TARBALLS) $(fetch_OPENDYSLEXIC_TARBALLS) $(fetch_POCO_TARBALLS),$($(item)))
 
 download: $(WORKDIR)/download
 
@@ -270,6 +274,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	$(foreach item,$(fetch_EXTERN_TARBALLS),$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
 	$(foreach item,$(fetch_NOTO_TARBALLS),$(call fetch_Download_item,https://github.com/CollaboraOnline/online/releases/download/for-code-assets/,$(item)))
 	$(foreach item,$(fetch_OPENDYSLEXIC_TARBALLS),$(call fetch_Download_item,https://github.com/antijingoist/opendyslexic/releases/download/v0.91.12,$(item)))
+	$(foreach item,$(fetch_POCO_TARBALLS),$(call fetch_Download_item,https://pocoproject.org/releases/poco-1.15.3,$(item)))
 	-@mkdir -p $(TARFILE_LOCATION)/cargo
 	$(if $(call fetch_Optional,YRS,1),\
 		CARGO_HOME=$(TARFILE_LOCATION)/cargo cargo fetch $(if $(verbose),--verbose,) --locked --manifest-path $(SRCDIR)/external/y-crdt/Cargo.toml)

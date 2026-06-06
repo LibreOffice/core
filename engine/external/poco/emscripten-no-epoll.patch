@@ -1,0 +1,16 @@
+POCO maps Emscripten to POCO_OS_LINUX (Foundation/include/Poco/Platform.h), so
+Net.h would define POCO_HAVE_FD_EPOLL there, but Emscripten has no <sys/epoll.h>.
+Exclude Emscripten so PollSet/SocketImpl fall back to their select()-based
+implementation (the same approach as the older wasm/poco-*-emscripten.patch).
+
+--- a/Net/include/Poco/Net/Net.h
++++ b/Net/include/Poco/Net/Net.h
+@@ -137,7 +137,7 @@
+ #endif
+ 
+ 
+-#if (POCO_OS == POCO_OS_LINUX) || (POCO_OS == POCO_OS_WINDOWS_NT) || (POCO_OS == POCO_OS_ANDROID)
++#if ((POCO_OS == POCO_OS_LINUX) || (POCO_OS == POCO_OS_WINDOWS_NT) || (POCO_OS == POCO_OS_ANDROID)) && !defined(POCO_EMSCRIPTEN)
+ 	#define POCO_HAVE_FD_EPOLL 1
+ #endif
+ 

@@ -53,7 +53,7 @@
     {
       "SPDXID": "SPDXRef-poco",
       "name": "Poco",
-      "versionInfo": "1.12.5",
+      "versionInfo": "1.15.3",
       "filesAnalyzed": false,
       "downloadLocation": "NONE",
       "licenseConcluded": "BSL-1.0"

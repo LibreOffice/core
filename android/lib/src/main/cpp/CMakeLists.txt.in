@@ -153,12 +153,12 @@ target_link_libraries(androidapp
                       android
                       log
                       ${LOBUILDDIR_ABI}/workdir/LinkTarget/StaticLibrary/liblibpng.a
-                      ${POCOLIB_ABI}/libPocoEncodings@POCODEBUG@.a
                       ${POCOLIB_ABI}/libPocoNet@POCODEBUG@.a
                       ${POCOLIB_ABI}/libPocoUtil@POCODEBUG@.a
                       ${POCOLIB_ABI}/libPocoXML@POCODEBUG@.a
                       ${POCOLIB_ABI}/libPocoJSON@POCODEBUG@.a
                       ${POCOLIB_ABI}/libPocoFoundation@POCODEBUG@.a
+                      ${POCOLIB_ABI}/libexpat.a
                       ${ZSTDLIB_ABI}/libzstd.a
                       "${CMAKE_CURRENT_SOURCE_DIR}/lib/${ANDROID_ABI}/liblo-native-code.so"
 )

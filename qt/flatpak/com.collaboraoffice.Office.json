@@ -43,42 +43,6 @@
   },
   "modules": [
     {
-      "name": "poco",
-      "buildsystem": "cmake-ninja",
-      "builddir": true,
-      "config-opts": [
-        "-DCMAKE_BUILD_TYPE=Release",
-        "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
-        "-DBUILD_SHARED_LIBS=OFF",
-        "-DENABLE_TESTS=OFF",
-        "-DENABLE_ACTIVERECORD=OFF",
-        "-DENABLE_ACTIVERECORD_COMPILER=OFF",
-        "-DENABLE_APACHECONNECTOR=OFF",
-        "-DENABLE_DATA=OFF",
-        "-DENABLE_DATA_MYSQL=OFF",
-        "-DENABLE_DATA_ODBC=OFF",
-        "-DENABLE_DATA_POSTGRESQL=OFF",
-        "-DENABLE_DATA_SQLITE=OFF",
-        "-DENABLE_ENCODINGS=OFF",
-        "-DENABLE_JWT=OFF",
-        "-DENABLE_MONGODB=OFF",
-        "-DENABLE_PAGECOMPILER=OFF",
-        "-DENABLE_PAGECOMPILER_FILE2PAGE=OFF",
-        "-DENABLE_PROMETHEUS=OFF",
-        "-DENABLE_REDIS=OFF",
-        "-DPOCO_UNBUNDLED=ON"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/pocoproject/poco.git",
-          "tag": "poco-1.12.5-release",
-          "commit": "c04dfdbc37882f298d3178b3875cd67c38ea7d78"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
       "name": "python3-lxml",
       "buildsystem": "simple",
       "build-commands": [
@@ -426,6 +390,13 @@
           "type": "file",
           "dest": "external/tarballs",
           "dest-filename": "pdfium-7795.tar.bz2"
+        },
+        {
+          "url": "https://pocoproject.org/releases/poco-1.15.3/poco-1.15.3-all.tar.bz2",
+          "sha256": "562a1ba1a6db4665f81091c35e997b73f87e1b45e2ab2854cd720d2349518abc",
+          "type": "file",
+          "dest": "external/tarballs",
+          "dest-filename": "poco-1.15.3-all.tar.bz2"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/afdko-4.0.3.tar.gz",
@@ -1091,7 +1062,11 @@
       "post-install": [
         "make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh org.libreoffice.LibreOffice'",
         "mkdir -p /app/core/include",
-        "cp -r include/COKit /app/core/include/."
+        "cp -r include/COKit /app/core/include/.",
+        "mkdir -p /app/core/workdir/UnpackedTarball/poco",
+        "cp -r workdir/UnpackedTarball/poco/include /app/core/workdir/UnpackedTarball/poco/.",
+        "mkdir -p /app/core/workdir/LinkTarget/StaticLibrary",
+        "cp workdir/LinkTarget/StaticLibrary/libPoco*.a /app/core/workdir/LinkTarget/StaticLibrary/."
       ],
       "cleanup": [
         "/core",
@@ -1130,8 +1105,7 @@
         "--with-atspi-driver-path=/app/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py",
         "--enable-silent-rules",
         "--disable-ssl",
-        "--with-poco-includes=/app/include",
-        "--with-poco-libs=/app/lib",
+        "--with-lo-builddir=/app/core",
         "--with-lokit-path=/app/core/include",
         "--with-lo-path=/app/collaboraoffice",
         "--with-vendor=Collabora Productivity Limited",

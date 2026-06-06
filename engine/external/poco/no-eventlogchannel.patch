@@ -1,0 +1,27 @@
+EventLogChannel needs a message-compiler-generated pocomsg.h (and the Windows
+Event Log message resource), which we do not build; it is unused by COOL/CODA.
+Drop its include and its LoggingFactory registration on Windows so PocoFoundation
+builds without pocomsg.h.  WindowsConsoleChannel (ConsoleChannel/ColorConsole-
+Channel on Windows) is kept.  No-op on non-Windows (the code is in
+POCO_OS_FAMILY_WINDOWS blocks).
+
+--- a/Foundation/src/LoggingFactory.cpp
++++ b/Foundation/src/LoggingFactory.cpp
+@@ -25,7 +25,6 @@
+ #include "Poco/SyslogChannel.h"
+ #endif
+ #if defined(POCO_OS_FAMILY_WINDOWS)
+-#include "Poco/EventLogChannel.h"
+ #include "Poco/WindowsConsoleChannel.h"
+ #endif
+ #include "Poco/PatternFormatter.h"
+@@ -108,9 +107,6 @@
+ #endif
+ #endif
+ 
+-#if defined(POCO_OS_FAMILY_WINDOWS)
+-	_channelFactory.registerClass("EventLogChannel"s, new Instantiator<EventLogChannel, Channel>);
+-#endif
+ 
+ 	_formatterFactory.registerClass("PatternFormatter"s, new Instantiator<PatternFormatter, Formatter>);
+ 	_formatterFactory.registerClass("JSONFormatter"s, new Instantiator<JSONFormatter, Formatter>);

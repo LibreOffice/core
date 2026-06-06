@@ -44,13 +44,14 @@ $EXTSOURCES - adjust these to your preferences.
 
 == Build Online using dependencies from container ==
 
-The container contains prebuilt libzstd and POCO for convenience.
+The container contains prebuilt libzstd for convenience.  POCO is built as part
+of the CollaboraOffice core engine, so it no longer needs to be built separately.
 
 Note that here the LO core (and builddir, if separate) must be mapped to the
 same directory in the container as it was when building core, due to files
 containing absolute paths.
 
-    podman run -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && $ONLINEGITREPO/autogen.sh && emconfigure $ONLINEGITREPO/configure --disable-werror --with-lokit-path=$GITREPO/include --with-lo-path=$BUILDDIR/instdir --with-lo-builddir=$BUILDDIR --with-zstd-includes=/usr/local/include --with-zstd-libs=/usr/local/lib --with-poco-includes=/usr/local/include --with-poco-libs=/usr/local/lib --host=wasm32-local-emscripten"
+    podman run -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && $ONLINEGITREPO/autogen.sh && emconfigure $ONLINEGITREPO/configure --disable-werror --with-lokit-path=$GITREPO/include --with-lo-path=$BUILDDIR/instdir --with-lo-builddir=$BUILDDIR --with-zstd-includes=/usr/local/include --with-zstd-libs=/usr/local/lib --host=wasm32-local-emscripten"
     podman run -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && emmake make -rj8"
 
 == Build Online dependencies manually ==
@@ -63,22 +64,6 @@ Then build libzstd:
     cd zstd-1.5.2/
     podman run -v /data/lo/zstd-1.5.2:/data/lo/zstd-1.5.2:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c 'source /home/builder/emsdk/emsdk_env.sh && cd /data/lo/zstd-1.5.2/ && emmake make -j8 lib-nomt ZSTD_NO_ASM=1'
 
-Then build POCO:
-* this requires two patches (currently exists patch for 1.12.4 and untested "devel"
-  branch) plus renaming one source file (which actually is from expat but Poco includes)
-* note that the header Poco/Platform.h maps EMSCRIPTEN to POCO_OS_LINUX
-* it has both Makefiles and CMake but i couldn't get CMake to use CXXFLAGS to
-  disable some Linux-specific code; i tried variations on:
-    emcmake cmake -S .. -DENABLE_MONGODB=off -DENABLE_DATA_SQLITE=off -DENABLE_REDIS=off -DENABLE_PROMETHEUS=off -DENABLE_PDF=off -DENABLE_SEVENZIP=off -DENABLE_ZIP=off -DENABLE_CPPPARSER=off -DENABLE_POCODOC=off -DENABLE_PAGECOMPILER=off -DENABLE_PAGECOMPILER_FILE2PAGE=off -DENABLE_ACTIVERECORD=off -DENABLE_ACTIVERECORD_COMPILER=off -DENABLE_DATA=off -DENABLE_DATA_ODBC=off -DENABLE_DATA_POSTGRESQL=off -DENABLE_DATA_MYSQL=off -DENABLE_APACHECONNECTOR=off -DENABLE_JWT=off CXXFLAGS=-DPOCO_NO_LINUX_IF_PACKET_H
-* Online requires a single include directory so "make install" must be used
-
-    tar -xjvf ~/Downloads/poco-1.12.4-all.tar.bz2
-    cd poco-1.12.4-all
-    patch -p1 < $ONLINEGITREPO/wasm/poco-1.12.4-emscripten.patch
-    mv XML/src/xmlparse.cpp XML/src/xmlparse.c
-    patch -p0 < $ONLINEGITREPO/wasm/poco-no-special-expat-sauce.diff
-    podman run -v /data/lo/poco-1.12.4-all:/data/lo/poco-1.12.4-all:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c 'source /home/builder/emsdk/emsdk_env.sh && cd /data/lo/poco-1.12.4-all && emconfigure ./configure --static --no-samples --no-tests --omit=Crypto,NetSSL_OpenSSL,JWT,Data,Data/SQLite,Data/ODBC,Data/MySQL,Data/PostgreSQL,Zip,PageCompiler,PageCompiler/File2Page,MongoDB,Redis,ActiveRecord,ActiveRecord/Compiler,Prometheus && emmake make -j8 CC=/home/builder/emsdk/upstream/emscripten/emcc CXX=/home/builder/emsdk/upstream/emscripten/em++ LD=/home/builder/emsdk/upstream/emscripten/em++ CXXFLAGS="-DPOCO_NO_LINUX_IF_PACKET_H -DPOCO_NO_INOTIFY -pthread -s USE_PTHREADS=1 -fwasm-exceptions" && make -j8 install INSTALLDIR=/data/lo/poco-1.12.4-all/install'
-
 == Build Online with manually built dependencies ==
 
 Then build Online itself:
@@ -87,5 +72,5 @@ Note that here the LO core (and builddir, if separate) must be mapped to the
 same directory in the container as it was when building core, due to files
 containing absolute paths.
 
-    podman run -v /data/lo/zstd-1.5.2:/data/lo/zstd-1.5.2:ro -v /data/lo/poco-1.12.4-all:/data/lo/poco-1.12.4-all:ro -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && $ONLINEGITREPO/autogen.sh && emconfigure $ONLINEGITREPO/configure --with-lokit-path=$GITREPO/include --with-lo-path=$BUILDDIR/instdir --with-lo-builddir=$BUILDDIR --with-zstd-includes=/data/lo/zstd-1.5.2/lib --with-zstd-libs=/data/lo/zstd-1.5.2/lib --with-poco-includes=/data/lo/poco-1.12.4-all/install/include --with-poco-libs=/data/lo/poco-1.12.4-all/install/lib --host=wasm32-local-emscripten"
-    podman run -v /data/lo/zstd-1.5.2:/data/lo/zstd-1.5.2:ro -v /data/lo/poco-1.12.4-all:/data/lo/poco-1.12.4-all:ro -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && emmake make"
+    podman run -v /data/lo/zstd-1.5.2:/data/lo/zstd-1.5.2:ro -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && $ONLINEGITREPO/autogen.sh && emconfigure $ONLINEGITREPO/configure --with-lokit-path=$GITREPO/include --with-lo-path=$BUILDDIR/instdir --with-lo-builddir=$BUILDDIR --with-zstd-includes=/data/lo/zstd-1.5.2/lib --with-zstd-libs=/data/lo/zstd-1.5.2/lib --host=wasm32-local-emscripten"
+    podman run -v /data/lo/zstd-1.5.2:/data/lo/zstd-1.5.2:ro -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && emmake make"

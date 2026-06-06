@@ -5,8 +5,10 @@ without using the Allotropia container.
 
 # Collabora Online as WASM (COWASM)
 
-Before building Collabora Online as WASM you need to build three
-dependencies: CollaboraOffice core, Poco, and zstd.
+Before building Collabora Online as WASM you need to build two
+dependencies: CollaboraOffice core and zstd. (POCO is built as part of
+the CollaboraOffice core engine, so it no longer needs to be built
+separately.)
 
 The toolchain used is Emscripten. Versions >= 3.1.58 should generally work.
 
@@ -36,34 +38,12 @@ Build libzstd  with assembly code disable, and using the Makefile (didn't try it
 
 This will install the zstd headers and libraries in `/opt/zstd.emsc.3.1.30`.
 
-### Poco
-
-Poco requires two patches plus renaming one source file (which
-actually is from expat but Poco includes). Note that the header
-Poco/Platform.h maps EMSCRIPTEN to POCO_OS_LINUX. It has both
-Makefiles and CMake but I couldn't get CMake to work. Online requires
-a single include directory so "make install" must be used.
-
-Here we assume that the online repo is cloned at `$HOME/lo/online`,
-adapt as necessary.
-
-    tar -xzvf ~/Downloads/poco-1.12.4-release.tar.gz
-    cd poco-poco-1.12.4-release
-    patch -p1 < $HOME/lo/online/wasm/poco-1.12.4-emscripten.patch
-    mv XML/src/xmlparse.cpp XML/src/xmlparse.c
-    patch -p0 < $HOME/lo/online/wasm/poco-no-special-expat-sauce.diff
-    emconfigure ./configure --static --no-samples --no-tests --omit=Crypto,NetSSL_OpenSSL,JWT,Data,Data/SQLite,Data/ODBC,Data/MySQL,Data/PostgreSQL,Zip,PageCompiler,PageCompiler/File2Page,MongoDB,Redis,ActiveRecord,ActiveRecord/Compiler,Prometheus
-    emmake make CC=emcc CXX=em++  CXXFLAGS="-DPOCO_NO_LINUX_IF_PACKET_H -DPOCO_NO_INOTIFY -pthread -s USE_PTHREADS=1 -fwasm-exceptions"
-    make install INSTALLDIR=/opt/poco.emsc.3.1.30
-
-This will install into `/opt/poco.emsc.3.1.30`.
-
 ## Build Online itself
 
     # Update the directories in the command below to match your system.
 
     ./autogen.sh
-    emconfigure ./configure --disable-werror --with-lokit-path=/home/tml/lo/core-cool-wasm/include --with-lo-path=/home/tml/lo/core-cool-wasm/instdir --with-lo-builddir=/home/tml/lo/core-cool-wasm --with-zstd-includes=/opt/zstd.emsc.3.1.30/include --with-zstd-libs=/opt/zstd.emsc.3.1.30/lib --with-poco-includes=/opt/poco.emsc.3.1.30/include --with-poco-libs=/opt/poco.emsc.3.1.30/lib --host=wasm32-local-emscripten
+    emconfigure ./configure --disable-werror --with-lokit-path=/home/tml/lo/core-cool-wasm/include --with-lo-path=/home/tml/lo/core-cool-wasm/instdir --with-lo-builddir=/home/tml/lo/core-cool-wasm --with-zstd-includes=/opt/zstd.emsc.3.1.30/include --with-zstd-libs=/opt/zstd.emsc.3.1.30/lib --host=wasm32-local-emscripten
     emmake make CC=emcc CXX=em++
 
 ## Running WASM Online

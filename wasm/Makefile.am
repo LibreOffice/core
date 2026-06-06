@@ -98,12 +98,12 @@ endif
 
 # note cannot add content of .linkdeps to DEPENDENCIES because it contains -lFoo
 online_LDADD = \
-	${POCOLIB}/libPocoEncodings@POCODEBUG@.a \
 	${POCOLIB}/libPocoNet@POCODEBUG@.a \
 	${POCOLIB}/libPocoUtil@POCODEBUG@.a \
 	${POCOLIB}/libPocoXML@POCODEBUG@.a \
 	${POCOLIB}/libPocoJSON@POCODEBUG@.a \
 	${POCOLIB}/libPocoFoundation@POCODEBUG@.a \
+	${POCOLIB}/libexpat.a \
 	${ZSTDLIB}/libzstd.a \
 	-L@LOBUILDDIR@/instdir/program \
 	$(shell cat @LOBUILDDIR@/instdir/program/soffice.js.linkdeps)

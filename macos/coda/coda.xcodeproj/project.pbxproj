@@ -1118,6 +1118,7 @@
 					"-lPocoXML",
 					"-lPocoJSON",
 					"-lPocoNet",
+					"-lexpat",
 					"$(LIBPNG_LIBS)/$(LIBPNG_STATIC_LIB)",
 					"$(ZSTD_LIBS)/libzstd.a",
 				);
@@ -1202,6 +1203,7 @@
 					"-lPocoXML",
 					"-lPocoJSON",
 					"-lPocoNet",
+					"-lexpat",
 					"$(LIBPNG_LIBS)/$(LIBPNG_STATIC_LIB)",
 					"$(ZSTD_LIBS)/libzstd.a",
 				);
@@ -1256,6 +1258,7 @@
 					"-lPocoXML",
 					"-lPocoJSON",
 					"-lPocoNet",
+					"-lexpat",
 					"$(LIBPNG_LIBS)/$(LIBPNG_STATIC_LIB)",
 					"$(ZSTD_LIBS)/libzstd.a",
 					"-lz",
@@ -1318,6 +1321,7 @@
 					"-lPocoXML",
 					"-lPocoJSON",
 					"-lPocoNet",
+					"-lexpat",
 					"$(LIBPNG_LIBS)/$(LIBPNG_STATIC_LIB)",
 					"$(ZSTD_LIBS)/libzstd.a",
 					"-lz",

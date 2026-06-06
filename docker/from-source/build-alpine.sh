@@ -35,15 +35,8 @@ cd "$BUILDDIR"
 rm -rf "$INSTDIR" || true
 mkdir -p "$INSTDIR"
 
-##### build static poco #####
-
-wget https://pocoproject.org/releases/poco-1.12.5p2/poco-1.12.5p2-all.tar.gz
-tar -xzf poco-1.12.5p2-all.tar.gz
-cd poco-1.12.5p2-all/
-./configure --static --no-tests --no-samples --no-sharedlibs --cflags="-fPIC" --omit=Zip,Data,Data/SQLite,Data/ODBC,Data/MySQL,MongoDB,PDF,CppParser,PageCompiler,Redis,Encodings,ActiveRecord --prefix=$BUILDDIR/poco
-make -s -j $(nproc)
-make -s install
-cd ..
+# POCO is built as part of the engine (engine/external/poco) and picked up from
+# its workdir automatically by the cool configure below; no separate build.
 
 
 ##### cloning & updating #####
@@ -65,7 +58,7 @@ cp -a online/engine/instdir "$INSTDIR"/opt/collaboraoffice
 
 # build
 ( cd online && ./autogen.sh ) || exit 1
-( cd online && ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-silent-rules --disable-tests --with-lokit-path="$BUILDDIR"/online/engine/include --with-lo-path=/opt/collaboraoffice --with-poco-includes=$BUILDDIR/poco/include --with-poco-libs=$BUILDDIR/poco/lib $ONLINE_EXTRA_BUILD_OPTIONS) || exit 1
+( cd online && ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-silent-rules --disable-tests --with-lokit-path="$BUILDDIR"/online/engine/include --with-lo-path=/opt/collaboraoffice $ONLINE_EXTRA_BUILD_OPTIONS) || exit 1
 ( cd online && make -j $(nproc)) || exit 1
 
 # copy stuff

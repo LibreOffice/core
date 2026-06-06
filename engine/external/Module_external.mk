@@ -80,6 +80,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	$(call gb_Helper_optional,PAGEMAKER,libpagemaker) \
 	$(call gb_Helper_optional,PDFIUM,pdfium) \
+	poco \
 	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,QUICKJS,quickjs) \
 	$(call gb_Helper_optional,QXP,libqxp) \
