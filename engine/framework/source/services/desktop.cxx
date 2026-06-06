@@ -53,7 +53,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <desktop/crashreport.hxx>
 #include <vcl/scheduler.hxx>
 #include <sal/log.hxx>
 #include <comphelper/errcode.hxx>
@@ -274,8 +273,6 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     if (!bRestartableMainLoop)
     {
-        CrashReporter::addKeyValue(u"ShutDown"_ustr, OUString::boolean(true), CrashReporter::Write);
-
         // The clipboard listener needs to be the first. It can create copies of the
         // existing document which needs basically all the available infrastructure.
         impl_sendTerminateToClipboard();

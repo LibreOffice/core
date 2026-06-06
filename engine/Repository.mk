@@ -105,7 +105,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 endif
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
-	$(call gb_Helper_optional,BREAKPAD,minidump_upload) \
 	$(call gb_Helper_optional,FUZZERS,wmffuzzer) \
 	$(call gb_Helper_optional,FUZZERS,jpgfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,giffuzzer) \
@@ -622,7 +621,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	cached1 \
 	comphelper \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
-	$(call gb_Helper_optional,BREAKPAD,crashreport) \
 	deployment \
 	embobj \
 	$(if $(ENABLE_JAVA),hsqldb) \

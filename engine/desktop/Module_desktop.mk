@@ -16,9 +16,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_deploymentmisc \
     Library_offacc \
     Library_sofficeapp \
-    $(if $(ENABLE_BREAKPAD), \
-        Library_crashreport \
-        ) \
     $(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,Library_spl) \
     Package_branding \
     $(if $(CUSTOM_BRAND_DIR),Package_branding_custom) \
@@ -32,7 +29,6 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \
     $(call gb_CondExeUnopkg,Executable_unopkg_bin) \
-    $(if $(ENABLE_BREAKPAD),Executable_minidump_upload) \
     Library_migrationoo2 \
     Library_migrationoo3 \
     $(call gb_CondExeUnopkg,Library_unopkgapp) \

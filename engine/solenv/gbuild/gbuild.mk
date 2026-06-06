@@ -103,11 +103,6 @@ ifeq ($(origin dbglevel),command line)
 gb_ENABLE_SYMBOLS_FOR := all
 endif
 
-# note: ENABLE_BREAKPAD turns on symbols
-ifneq ($(strip $(ENABLE_BREAKPAD)),)
-gb_ENABLE_SYMBOLS_FOR := all
-endif
-
 # handle special cases
 ifeq ($(gb_ENABLE_SYMBOLS_FOR),1)
 gb_ENABLE_SYMBOLS_FOR := all

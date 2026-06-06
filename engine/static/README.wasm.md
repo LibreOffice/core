@@ -439,7 +439,6 @@ For instance, this autogen.input works for me:
 ```
 --disable-debug
 --enable-sal-log
---disable-crashdump
 --host=wasm32-local-emscripten
 --disable-gui
 --with-wasm-module=writer

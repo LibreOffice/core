@@ -75,7 +75,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 
-#include <desktop/crashreport.hxx>
 #include <vcl/threadex.hxx>
 
 #include <frozen/bits/defines.h>
@@ -569,10 +568,6 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
-    if ( aURL.Protocol == ".uno:")
-    {
-        CrashReporter::logUnoCommand(parseArguments(aURL.Path, aArgs));
-    }
     collectUIInformation(aURL, aArgs);
 
     SolarMutexGuard aGuard;

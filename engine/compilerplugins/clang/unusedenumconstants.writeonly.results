@@ -1610,12 +1610,6 @@ include/connectivity/sqliterator.hxx:51
     enum connectivity::TraversalParts All
 include/connectivity/sqlnode.hxx:223
     enum connectivity::OSQLParseNode::Rule null_predicate_part_2
-include/desktop/crashreport.hxx:47
-    CrashReporter::tAddKeyHandling AddItem
-include/desktop/crashreport.hxx:47
-    CrashReporter::tAddKeyHandling Create
-include/desktop/crashreport.hxx:47
-    CrashReporter::tAddKeyHandling Write
 include/desktop/exithelper.h:28
     enum EExitCodes EXITHELPER_FATAL_ERROR
 include/desktop/exithelper.h:30

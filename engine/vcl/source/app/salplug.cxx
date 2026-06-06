@@ -32,7 +32,6 @@
 #include <config_vclplug.h>
 
 #include <cstdio>
-#include <desktop/crashreport.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
 #include <salinst.hxx>
@@ -379,7 +378,6 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
     }
     else
     {
-        CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
         FatalAppExitW( 0, o3tl::toW(rErrorText.getStr()) );
@@ -395,7 +393,6 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         std::fprintf( stderr, "Unspecified Application Error\n" );
     else
     {
-        CrashReporter::addKeyValue(u"AbortMessage"_ustr, rErrorText, CrashReporter::Write);
         std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
     }
 #endif

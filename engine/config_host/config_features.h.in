@@ -87,11 +87,6 @@
  */
 #define HAVE_FEATURE_CURL 0
 
-/*
- * Whether we support breakpad as crash reporting lib.
- */
-#define HAVE_FEATURE_BREAKPAD 0
-
 /* BACKTRACE - whether a GNU backtrace implementation is available.
  */
 #define HAVE_FEATURE_BACKTRACE 0

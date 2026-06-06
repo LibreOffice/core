@@ -62,7 +62,6 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     comphelper \
     cppu \
     cppuhelper \
-    $(call gb_Helper_optional,BREAKPAD,crashreport) \
     drawinglayercore \
     i18nlangtag \
     i18nutil \

@@ -92,13 +92,6 @@ namespace
 
 long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 {
-#if HAVE_FEATURE_BREAKPAD
-    // we should make sure to call the breakpad handler as
-    // first step when we hit a problem
-    if (pPreviousHandler)
-        pPreviousHandler(lpEP);
-#endif
-
     static bool bNested = false;
 
     oslSignalInfo info;

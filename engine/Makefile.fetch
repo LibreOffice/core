@@ -101,7 +101,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,ARGON2,ARGON2_TARBALL) \
 	$(call fetch_Optional,BOOST,BOOST_TARBALL) \
 	$(call fetch_Optional,BOX2D,BOX2D_TARBALL) \
-	$(call fetch_Optional,BREAKPAD,BREAKPAD_TARBALL) \
 	$(call fetch_Optional,BZIP2,BZIP2_TARBALL) \
 	$(call fetch_Optional,CAIRO,CAIRO_TARBALL) \
 	$(call fetch_Optional,CAIRO,PIXMAN_TARBALL) \

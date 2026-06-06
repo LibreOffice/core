@@ -68,10 +68,9 @@ protected:
             xmlreader::XmlReader reader(getUIFileUrl());
             handleChild(pParent, nullptr, reader);
         }
-        catch (const css::uno::Exception& rExcept)
+        catch (const css::uno::Exception&)
         {
             TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << getUIFileUrl());
-            reportException(rExcept);
             assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
             throw;
         }

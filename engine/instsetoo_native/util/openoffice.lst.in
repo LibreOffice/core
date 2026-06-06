@@ -25,7 +25,6 @@ Globals
             NATIVEPROGRESS false
             PACKAGEMAP package_names.txt,package_names_ext.txt
             OOOVENDOR Collabora Productivity Ltd.
-            CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
         }
     }
 }

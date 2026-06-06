@@ -212,7 +212,6 @@
 		BE28F88A228CE04600C00C48 /* userinstall.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = userinstall.hxx; path = "../lobuilddir-symlink/desktop/source/app/userinstall.hxx"; sourceTree = "<group>"; };
 		BE28F88B228CE04600C00C48 /* check_ext_deps.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = check_ext_deps.cxx; path = "../lobuilddir-symlink/desktop/source/app/check_ext_deps.cxx"; sourceTree = "<group>"; };
 		BE28F88C228CE04600C00C48 /* app.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = app.cxx; path = "../lobuilddir-symlink/desktop/source/app/app.cxx"; sourceTree = "<group>"; };
-		BE28F88D228CE04600C00C48 /* crashreport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crashreport.cxx; path = "../lobuilddir-symlink/desktop/source/app/crashreport.cxx"; sourceTree = "<group>"; };
 		BE28F88F228CE04600C00C48 /* cmdlineargs.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = cmdlineargs.hxx; path = "../lobuilddir-symlink/desktop/source/app/cmdlineargs.hxx"; sourceTree = "<group>"; };
 		BE28F890228CE04600C00C48 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = "../lobuilddir-symlink/desktop/source/app/main.c"; sourceTree = "<group>"; };
 		BE28F891228CE04700C00C48 /* appinit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appinit.cxx; path = "../lobuilddir-symlink/desktop/source/app/appinit.cxx"; sourceTree = "<group>"; };
@@ -1709,7 +1708,6 @@
 				BE28F88F228CE04600C00C48 /* cmdlineargs.hxx */,
 				BE28F893228CE04700C00C48 /* cmdlinehelp.cxx */,
 				BE28F885228CE04600C00C48 /* cmdlinehelp.hxx */,
-				BE28F88D228CE04600C00C48 /* crashreport.cxx */,
 				BE28F886228CE04600C00C48 /* desktopcontext.cxx */,
 				BE28F884228CE04600C00C48 /* desktopcontext.hxx */,
 				BE28F889228CE04600C00C48 /* dispatchwatcher.cxx */,

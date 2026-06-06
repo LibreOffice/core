@@ -38,7 +38,6 @@ gb_MERGE_LIBRARY_LIST := \
 	comphelper \
 	configmgr \
 	cppcanvas \
-	$(call gb_Helper_optional,BREAKPAD,crashreport) \
 	ctl \
 	cui \
 	date \

@@ -29,7 +29,6 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
-#include <desktop/crashreport.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <watchdog.hxx>
 #include <skia/zone.hxx>
@@ -190,15 +189,6 @@ static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
     OUString driverVersionString = versionAsString(props.driverVersion);
     OUString apiVersion = versionAsString(props.apiVersion);
     const char* deviceType = types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)];
-
-    CrashReporter::addKeyValue(u"VulkanVendor"_ustr, vendorIdStr, CrashReporter::AddItem);
-    CrashReporter::addKeyValue(u"VulkanDevice"_ustr, deviceIdStr, CrashReporter::AddItem);
-    CrashReporter::addKeyValue(u"VulkanAPI"_ustr, apiVersion, CrashReporter::AddItem);
-    CrashReporter::addKeyValue(u"VulkanDriver"_ustr, driverVersionString, CrashReporter::AddItem);
-    CrashReporter::addKeyValue(u"VulkanDeviceType"_ustr, OUString::createFromAscii(deviceType),
-                               CrashReporter::AddItem);
-    CrashReporter::addKeyValue(u"VulkanDeviceName"_ustr,
-                               OUString::createFromAscii(props.deviceName), CrashReporter::Write);
 
     SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::WRITE | StreamMode::TRUNC);
     writeToLog(logFile, "RenderMethod", "vulkan");
@@ -466,8 +456,6 @@ static bool initVCLSkiaEnabled()
             WatchdogThread::start();
         }
     }
-
-    CrashReporter::addKeyValue(u"UseSkia"_ustr, OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
 }

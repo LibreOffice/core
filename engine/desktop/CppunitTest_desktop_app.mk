@@ -14,7 +14,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,desktop_app, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,desktop_app, \
-	$(if $(ENABLE_BREAKPAD),breakpad) \
     dbus \
     icu_headers \
     icui18n \
@@ -25,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     comphelper \
     cppu \
     cppuhelper \
-    $(if $(ENABLE_BREAKPAD),crashreport) \
     deploymentmisc \
     drawinglayercore \
     editeng \

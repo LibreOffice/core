@@ -46,8 +46,6 @@ $(eval $(call gb_Library_use_libraries,fwk,\
     comphelper \
     cppu \
     cppuhelper \
-    $(call gb_Helper_optional,BREAKPAD, \
-		crashreport) \
     i18nlangtag \
     sal \
     salhelper \

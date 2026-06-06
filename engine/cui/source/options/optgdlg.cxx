@@ -56,9 +56,6 @@
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#if HAVE_FEATURE_BREAKPAD
-#include <desktop/crashreport.hxx>
-#endif
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -172,11 +169,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xYearValueField(m_xBuilder->weld_spin_button(u"year"_ustr))
     , m_xToYearFT(m_xBuilder->weld_label(u"toyear"_ustr))
     , m_xYearFrameImg(m_xBuilder->weld_widget(u"lockyears"_ustr))
-#if HAVE_FEATURE_BREAKPAD
-    , m_xPrivacyFrame(m_xBuilder->weld_widget("privacyframe"))
-    , m_xCrashReport(m_xBuilder->weld_check_button("crashreport"))
-    , m_xCrashReportImg(m_xBuilder->weld_widget("lockcrashreport"))
-#endif
 #if defined(_WIN32)
     , m_xFileAssocFrame(m_xBuilder->weld_widget("fileassoc"))
     , m_xFileAssocBtn(m_xBuilder->weld_button("assocfiles"))
@@ -184,9 +176,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xPerformFileExtImg(m_xBuilder->weld_widget("lockcbPerformFileExtCheck"))
 #endif
 {
-#if HAVE_FEATURE_BREAKPAD
-    m_xPrivacyFrame->show();
-#endif
 
 #if defined(_WIN32)
     m_xFileAssocFrame->show();
@@ -222,7 +211,7 @@ OUString OfaMiscTabPage::GetAllStrings()
 
     OUString checkButton[]
         = { u"exthelp"_ustr,   u"popupnohelp"_ustr, u"cbShowTipOfTheDay"_ustr, u"filedlg"_ustr,
-            u"docstatus"_ustr, u"crashreport"_ustr, u"cbPerformFileExtCheck"_ustr };
+            u"docstatus"_ustr, u"cbPerformFileExtCheck"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -279,13 +268,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
-#if HAVE_FEATURE_BREAKPAD
-    if (m_xCrashReport->get_state_changed_from_saved())
-    {
-        officecfg::Office::Common::Misc::CrashReport::set(m_xCrashReport->get_active(), batch);
-        bModified = true;
-    }
-#endif
 
 #if defined(_WIN32)
     if (m_xPerformFileExtCheck->get_state_changed_from_saved())
@@ -356,12 +338,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     else
         m_xYearFrame->set_sensitive(false);
 
-#if HAVE_FEATURE_BREAKPAD
-    m_xCrashReport->set_active(officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::IsDumpEnable());
-    m_xCrashReport->set_sensitive(!officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
-    m_xCrashReportImg->set_visible(officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
-    m_xCrashReport->save_state();
-#endif
 
 #if defined(_WIN32)
     m_xPerformFileExtCheck->set_active(

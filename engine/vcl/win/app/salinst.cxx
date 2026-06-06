@@ -59,8 +59,6 @@
 
 #include <salsys.hxx>
 
-#include <desktop/crashreport.hxx>
-
 #include <prewin.h>
 
 #include <gdiplus.h>

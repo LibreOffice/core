@@ -28,9 +28,6 @@ $(if $(filter a,$(gb_DEBUG_STATIC)),$(error Abort after static.mk))
 endif
 endif
 
-upload-symbols:
-	bin/upload_symbols.py $(WORKDIR)/symbols.zip $(BREAKPAD_SYMBOL_CONFIG) "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)"
-
 # also possible to bypass the dependencies/the gbuild processing by just running
 # LD_LIBRARY_PATH=instdir/program make cmd cmd='ALL_LANGS="$(ALL_LANGS)" workdir/LinkTarget/Executable/pocheck'
 pocheck: | $(call gb_Executable_get_runtime_target,pocheck)

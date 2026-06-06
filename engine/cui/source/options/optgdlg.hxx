@@ -46,11 +46,6 @@ private:
     std::unique_ptr<weld::SpinButton> m_xYearValueField;
     std::unique_ptr<weld::Label> m_xToYearFT;
     std::unique_ptr<weld::Widget> m_xYearFrameImg;
-#if HAVE_FEATURE_BREAKPAD
-    std::unique_ptr<weld::Widget> m_xPrivacyFrame;
-    std::unique_ptr<weld::CheckButton> m_xCrashReport;
-    std::unique_ptr<weld::Widget> m_xCrashReportImg;
-#endif
 #if defined(_WIN32)
     std::unique_ptr<weld::Widget> m_xFileAssocFrame;
     std::unique_ptr<weld::Button> m_xFileAssocBtn;

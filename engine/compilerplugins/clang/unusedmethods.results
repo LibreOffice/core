@@ -576,10 +576,6 @@ include/connectivity/sqlparse.hxx:190
     rtl::OUString connectivity::OSQLParser::RuleIDToStr(unsigned int)
 include/connectivity/TTableHelper.hxx:153
     const rtl::OUString & connectivity::OTableHelper::getTableName()
-include/desktop/crashreport.hxx:104
-    rtl::OUString CrashReporter::getActiveSfxObjectName()
-include/desktop/crashreport.hxx:109
-    rtl::OUString CrashReporter::getLoggedUnoCommands()
 include/docmodel/color/ComplexColor.hxx:117
     void model::ComplexColor::setSystemColorType(enum model::SystemColorType)
 include/docmodel/color/ComplexColor.hxx:127

@@ -142,8 +142,6 @@ protected:
 
     virtual void resetParserState();
 
-    static void reportException(const css::uno::Exception& rExcept);
-
 private:
     struct ParserState
     {

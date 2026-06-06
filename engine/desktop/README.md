@@ -45,7 +45,7 @@ Splash screen for the LibreOffice `soffice` binary.
 
 The directory `test/deployment` contains some extensions to be used for testing:
 
-* `test/deployment/crashextension`: C++ extension to make LibreOffice crash. Useful for testing Crashreporter.
+* `test/deployment/crashextension`: C++ extension that deliberately crashes the application. Useful for testing crash handling and recovery.
   * Build with `Extension_test-crashextension`.
   * Extension can be found in `workdir/Extension/test-crashextension.oxt`
 * `test/deployment/passive`: C++, Java and Python extension samples with passive registration.

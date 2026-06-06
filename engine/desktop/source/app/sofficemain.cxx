@@ -40,10 +40,6 @@
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/svmain.hxx>
 
-#if HAVE_FEATURE_BREAKPAD
-#include <desktop/crashreport.hxx>
-#endif
-
 #include <postwin.h>
 
 #ifdef ANDROID
@@ -64,10 +60,6 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
 
     sal_detail_initialize(sal::detail::InitializeSoffice, nullptr);
-
-#if HAVE_FEATURE_BREAKPAD
-    CrashReporter::installExceptionHandler();
-#endif
 
 #if defined ANDROID
     try {

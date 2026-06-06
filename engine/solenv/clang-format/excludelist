@@ -2777,7 +2777,6 @@ desktop/source/app/check_ext_deps.cxx
 desktop/source/app/cmdlineargs.cxx
 desktop/source/app/cmdlineargs.hxx
 desktop/source/app/cmdlinehelp.cxx
-desktop/source/app/crashreport.cxx
 desktop/source/app/desktopcontext.hxx
 desktop/source/app/dispatchwatcher.cxx
 desktop/source/app/dispatchwatcher.hxx
@@ -2862,7 +2861,6 @@ desktop/source/migration/services/oo3extensionmigration.cxx
 desktop/source/migration/services/oo3extensionmigration.hxx
 desktop/source/migration/services/wordbookmigration.cxx
 desktop/source/migration/services/wordbookmigration.hxx
-desktop/source/minidump/minidump.cxx
 desktop/source/offacc/acceptor.cxx
 desktop/source/offacc/acceptor.hxx
 desktop/source/pkgchk/unopkg/unopkg_app.cxx
@@ -4682,7 +4680,6 @@ include/dbaccess/dataview.hxx
 include/dbaccess/dbaundomanager.hxx
 include/dbaccess/dbsubcomponentcontroller.hxx
 include/dbaccess/genericcontroller.hxx
-include/desktop/crashreport.hxx
 include/drawinglayer/XShapeDumper.hxx
 include/drawinglayer/animation/animationtiming.hxx
 include/drawinglayer/attribute/materialattribute3d.hxx
@@ -10405,7 +10402,6 @@ svx/source/dialog/connctrl.cxx
 svx/source/dialog/contimp.hxx
 svx/source/dialog/contwnd.cxx
 svx/source/dialog/contwnd.hxx
-svx/source/dialog/crashreportui.cxx
 svx/source/dialog/ctredlin.cxx
 svx/source/dialog/cuicharmap.cxx
 svx/source/dialog/databaseregistrationui.cxx

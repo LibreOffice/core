@@ -19,7 +19,6 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(call gb_Helper_get_rcfile,soffice) \
 	$(call gb_Helper_get_rcfile,uno) \
 	$(call gb_Helper_get_rcfile,version) \
-	$(call gb_Helper_get_rcfile,crashreport) \
 ))
 
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,bootstrap) \
@@ -30,7 +29,6 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,se
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,soffice) \
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,uno) \
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,version) \
-$(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,crashreport) \
 	: $(SRCDIR)/instsetoo_native/CustomTarget_setup.mk
 
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,bootstrap) :
@@ -137,8 +135,6 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,so
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	( \
 		echo '[Bootstrap]' \
-		&& echo 'CrashDirectory=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/crash' \
-		&& echo 'CrashDumpEnable=$(DEFAULT_CRASHDUMP_VALUE)' \
 		&& echo 'HideEula=1' \
 		&& echo 'Logo=1' \
 		&& echo 'NativeProgress=false' \

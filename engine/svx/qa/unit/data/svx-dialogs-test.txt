@@ -63,7 +63,6 @@ svx/ui/chinesedictionary.ui
 svx/ui/chineseconversiondialog.ui
 svx/ui/imapdialog.ui
 svx/ui/findreplacedialog.ui
-svx/ui/crashreportdlg.ui
 svx/ui/docrecoverysavedialog.ui
 svx/ui/docrecoveryrecoverdialog.ui
 svx/ui/querysavecontchangesdialog.ui

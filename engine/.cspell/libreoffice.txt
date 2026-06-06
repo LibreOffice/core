@@ -7,7 +7,6 @@ atspi
 autogen
 avahi
 avmedia
-breakpad
 buildall
 ccache
 checkall

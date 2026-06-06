@@ -1645,16 +1645,6 @@ libo_FUZZ_ARG_ENABLE(mergelibs,
         [Merge several of the smaller libraries into one big "merged" library.])
 )
 
-libo_FUZZ_ARG_ENABLE(breakpad,
-    AS_HELP_STRING([--enable-breakpad],
-        [Enables breakpad for crash reporting.])
-)
-
-libo_FUZZ_ARG_ENABLE(crashdump,
-    AS_HELP_STRING([--disable-crashdump],
-        [Disable dump.ini and dump-file, when --enable-breakpad])
-)
-
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
         [Disables fetching external tarballs from web sources.])
@@ -2630,12 +2620,6 @@ AC_ARG_WITH(ant-home,
          of the entire distribution.]),
 ,)
 
-AC_ARG_WITH(symbol-config,
-    AS_HELP_STRING([--with-symbol-config],
-        [Configuration for the crashreport symbol upload]),
-        [],
-        [with_symbol_config=no])
-
 AC_ARG_WITH(export-validation,
     AS_HELP_STRING([--without-export-validation],
         [Disable validating OOXML and ODF files as exported from in-tree tests.]),
@@ -2824,8 +2808,7 @@ AC_ARG_WITH(vendor,
 
 AC_ARG_WITH(privacy-policy-url,
     AS_HELP_STRING([--with-privacy-policy-url="https://yourdomain/privacy-policy"],
-        [The URL to your privacy policy (needed when
-         enabling online-update or crashreporting via breakpad)]),
+        [The URL to your privacy policy]),
         [if test "x$with_privacy_policy_url" = "xyes"; then
             AC_MSG_FAILURE([you need to specify an argument when using --with-privacy-policy-url])
          elif test "x$with_privacy_policy_url" = "xno"; then
@@ -10968,44 +10951,6 @@ if test "$enable_curl" = "yes"; then
     AC_DEFINE([HAVE_FEATURE_CURL])
 fi
 
-dnl ==================================================================
-dnl Breakpad
-dnl ==================================================================
-DEFAULT_CRASHDUMP_VALUE="true"
-AC_MSG_CHECKING([whether to enable breakpad])
-if test "$enable_breakpad" != yes; then
-    AC_MSG_RESULT([no])
-else
-    if test "$enable_curl" != "yes"; then
-        AC_MSG_ERROR([--disable-breakpad must be used when --disable-curl is used])
-    fi
-    AC_MSG_RESULT([yes])
-    ENABLE_BREAKPAD="TRUE"
-    AC_DEFINE(ENABLE_BREAKPAD)
-    AC_DEFINE(HAVE_FEATURE_BREAKPAD, 1)
-    BUILD_TYPE="$BUILD_TYPE BREAKPAD"
-
-    AC_MSG_CHECKING([for disable crash dump])
-    if test "$enable_crashdump" = no; then
-        DEFAULT_CRASHDUMP_VALUE="false"
-        AC_MSG_RESULT([yes])
-    else
-       AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([for crashreport config])
-    if test "$with_symbol_config" = "no"; then
-        BREAKPAD_SYMBOL_CONFIG="invalid"
-        AC_MSG_RESULT([no])
-    else
-        BREAKPAD_SYMBOL_CONFIG="$with_symbol_config"
-        AC_DEFINE(BREAKPAD_SYMBOL_CONFIG)
-        AC_MSG_RESULT([yes])
-    fi
-    AC_SUBST(BREAKPAD_SYMBOL_CONFIG)
-fi
-AC_SUBST(ENABLE_BREAKPAD)
-AC_SUBST(DEFAULT_CRASHDUMP_VALUE)
 
 dnl ==================================================================
 dnl libcmis
@@ -13404,11 +13349,6 @@ fi
 AC_SUBST(WITH_NOTO_FONT)
 
 PRIVACY_POLICY_URL="$with_privacy_policy_url"
-if test "$ENABLE_BREAKPAD" = "TRUE"; then
-    if test "x$with_privacy_policy_url" = "xundefined"; then
-        AC_MSG_FAILURE([breakpad/crashreporting is enabled, but no --with-privacy-policy-url=... was provided])
-    fi
-fi
 AC_SUBST(PRIVACY_POLICY_URL)
 dnl ===================================================================
 dnl Test whether we need bzip2

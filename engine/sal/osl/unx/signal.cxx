@@ -134,19 +134,6 @@ bool bSetILLHandler = false;
 
 void signalHandlerFunction(int, siginfo_t *, void *);
 
-#if HAVE_FEATURE_BREAKPAD
-bool is_unset_signal(int signal)
-{
-#ifdef DBG_UTIL
-    return (!bSetSEGVHandler && signal == SIGSEGV) ||
-        (!bSetWINCHHandler && signal == SIGWINCH) ||
-        (!bSetILLHandler && signal == SIGILL);
-#else
-    (void) signal;
-    return false;
-#endif
-}
-#endif
 
 }
 
@@ -411,14 +398,6 @@ void signalHandlerFunction(int signal, siginfo_t * info, void * context)
             break;
     }
 
-#if HAVE_FEATURE_BREAKPAD
-    if ((Info.Signal == osl_Signal_AccessViolation ||
-            Info.Signal == osl_Signal_IntegerDivideByZero ||
-            Info.Signal == osl_Signal_FloatDivideByZero) && !is_unset_signal(signal))
-    {
-        callSystemHandler(signal, info, context);
-    }
-#endif
 
     switch (callSignalHandler(&Info))
     {

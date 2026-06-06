@@ -111,7 +111,6 @@
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
-#include <desktop/crashreport.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svtools/fontsubstconfig.hxx>
@@ -897,27 +896,6 @@ void Desktop::HandleBootstrapErrors(
 namespace {
 
 
-#if HAVE_FEATURE_BREAKPAD
-void handleCrashReport()
-{
-    static constexpr OUStringLiteral SERVICENAME_CRASHREPORT = u"com.sun.star.comp.svx.CrashReportUI";
-
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-
-    Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
-        xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_CRASHREPORT, xContext),
-        css::uno::UNO_QUERY_THROW);
-
-    Reference< css::util::XURLTransformer > xURLParser =
-        css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
-
-    css::util::URL aURL;
-    css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
-    bool bRet = false;
-    aRet >>= bRet;
-}
-#endif
-
 #if !defined ANDROID
 void handleSafeMode()
 {
@@ -954,12 +932,7 @@ void impl_checkRecoveryState(bool& bCrashed           ,
                              bool& bRecoveryDataExists,
                              bool& bSessionDataExists )
 {
-    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get()
-#if HAVE_FEATURE_BREAKPAD
-        || CrashReporter::crashReportInfoExists();
-#else
-        ;
-#endif
+    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get();
     bool elements = officecfg::Office::Recovery::RecoveryList::get()->
         hasElements();
     bool session
@@ -1122,10 +1095,6 @@ void Desktop::Exception(ExceptionCategory nCategory)
 {
     // protect against recursive calls
     static bool bInException = false;
-
-#if HAVE_FEATURE_BREAKPAD
-    CrashReporter::removeExceptionHandler(); // disallow re-entry
-#endif
 
     SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
@@ -1871,11 +1840,6 @@ void Desktop::OpenClients()
     }
 #endif
 
-#if HAVE_FEATURE_BREAKPAD
-    if (officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::crashReportInfoExists())
-        handleCrashReport();
-#endif
-
     if ( ! bAllowRecoveryAndSessionManagement )
     {
         try
@@ -1953,9 +1917,6 @@ void Desktop::OpenClients()
             }
         }
     }
-
-    // write this information here to avoid depending on vcl in the crash reporter lib
-    CrashReporter::addKeyValue(u"Language"_ustr, Application::GetSettings().GetLanguageTag().getBcp47(), CrashReporter::Create);
 
     RequestHandler::EnableRequests();
 

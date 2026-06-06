@@ -22,7 +22,6 @@ $(eval $(call gb_Library_Library,svx))
 $(eval $(call gb_Library_set_componentfile,svx,svx/util/svx,services))
 
 $(eval $(call gb_Library_add_componentimpls,svx, \
-    $(call gb_Helper_optional,BREAKPAD,crashreport) \
     $(if $(ENABLE_WASM_STRIP_RECOVERYUI),,recoveryui) \
 ))
 
@@ -51,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,svx,\
     comphelper \
     cppuhelper \
     cppu \
-    $(call gb_Helper_optional,BREAKPAD, \
-		crashreport) \
     dbtools \
     docmodel \
     drawinglayercore \
@@ -79,8 +76,6 @@ $(eval $(call gb_Library_use_libraries,svx,\
 
 $(eval $(call gb_Library_use_externals,svx,\
 	boost_headers \
-    $(call gb_Helper_optional,BREAKPAD, \
-		curl) \
 	icuuc \
 	icu_headers \
 ))
@@ -129,9 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/contwnd \
     svx/source/dialog/gotodlg \
     svx/source/dialog/compressgraphicdialog \
-    $(call gb_Helper_optional,BREAKPAD, \
-		svx/source/dialog/crashreportdlg \
-		svx/source/dialog/crashreportui) \
     svx/source/dialog/ctredlin \
     svx/source/dialog/ClassificationCommon \
     svx/source/dialog/ClassificationDialog \

@@ -303,8 +303,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     // these are sometimes dummy classes
     if (dc.MemberFunction().Class("DdeService")
         || dc.MemberFunction().Class("DdeConnection")
-        || dc.MemberFunction().Class("DdeTopic")
-        || dc.MemberFunction().Class("CrashReporter"))
+        || dc.MemberFunction().Class("DdeTopic"))
         return;
     // function has its address taken and is used as a function pointer value
     if (dc.Function("xforms_bool"))

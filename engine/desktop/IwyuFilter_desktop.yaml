@@ -19,9 +19,6 @@ excludelist:
     desktop/source/app/cmdlinehelp.cxx:
     # Needed on WIN32
     - comphelper/string.hxx
-    desktop/source/app/crashreport.cxx:
-    # Needed on WIN32
-    - o3tl/char16_t2wchar_t.hxx
     desktop/source/app/sofficemain.cxx:
     # Might be needed on WIN32
     - prewin.h
@@ -33,9 +30,6 @@ excludelist:
     - boost/algorithm/string.hpp
     # Needed on IOS & ANDROID
     - officecfg/Office/Impress.hxx
-    desktop/source/minidump/minidump.cxx:
-    # Needed for ostringstream
-    - sstream
     desktop/source/deployment/manager/dp_properties.cxx:
     # Actually used
     - com/sun/star/ucb/XCommandEnvironment.hpp

@@ -3371,30 +3371,6 @@ endef
 
 endif # SYSTEM_NSS
 
-ifeq ($(ENABLE_BREAKPAD),TRUE)
-
-define gb_LinkTarget__use_breakpad
-$(call gb_LinkTarget_set_include,$(1),\
-    -I$(gb_UnpackedTarball_workdir)/breakpad/src \
-    $$(INCLUDE) \
-)
-
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-    breakpad \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/breakpad/src/client/linux/libbreakpad_client.a \
-)
-endif
-
-$(call gb_LinkTarget_use_external_project,$(1),breakpad)
-
-endef
-
-endif # ENABLE_BREAKPAD
-
 ifeq ($(ENABLE_GPGMEPP),TRUE)
 
 ifneq ($(SYSTEM_GPGMEPP),)

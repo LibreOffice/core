@@ -480,20 +480,6 @@ docs:
 findunusedheaders:
 	$(SRCDIR)/bin/find-unusedheaders.py
 
-symbols:
-	rm -fr $(WORKDIR)/symbols/
-	mkdir -p $(WORKDIR)/symbols/
-ifeq ($(OS),WNT)
-	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/windows/dump_syms/Release/dump_syms.exe $(WORKDIR)/symbols/ $(INSTDIR)/program/
-	$(SRCDIR)/bin/symstore.sh
-else
-	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/linux/dump_syms/dump_syms $(WORKDIR)/symbols/ $(INSTDIR)/program/*
-endif
-
-	cd $(WORKDIR)/symbols/ && zip -r $(WORKDIR)/symbols.zip *
-
-upload-symbols:
-	$(MAKE) -f $(SRCDIR)/Makefile.gbuild upload-symbols
 
 dump-deps:
 	@$(SRCDIR)/bin/module-deps.pl $(if $(verbose),-v) $(MAKE) $(SRCDIR)/Makefile.gbuild

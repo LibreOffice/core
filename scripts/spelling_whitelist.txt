@@ -172,7 +172,6 @@ Booleans
 Bools
 Bopomofo
 Boundsheet
-Breakpad
 Breakpoint
 Brk
 Broadcasted
@@ -2338,7 +2337,6 @@ brdwin
 breakiterator
 breakiterators
 breaklines
-breakpad
 breakpoint
 breakpos
 broadcasted
