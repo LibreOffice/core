@@ -3251,7 +3251,6 @@ void SvxStyleToolBoxControl::AppendStyles(std::vector<OUString>& rStyles, SfxSty
     auto xIter = m_pStyleSheetPool->CreateIterator(eFamily, eBits);
     SfxStyleSheetBase* pStyle = xIter->First();
 
-    pStyle = xIter->Next();
     while ( pStyle )
     {
         rStyles.push_back(pStyle->GetName());
