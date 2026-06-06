@@ -393,18 +393,9 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
         cy.cGet('#add_effect').should('be.visible');
         cy.then(() => helper.processToIdle(win));
 
-        // The pane re-broadcasts enable/disable as the kit replays selection
-        // and state-cache messages. Clear the disabled attribute on the
-        // pushbutton inner element before clicking so the JSDialog click
-        // handler fires regardless of what the kit just set.
         function clickSidebarPushButton(id) {
             cy.cGet('#' + id).scrollIntoView().should('be.visible');
-            cy.cGet('#' + id + ' button').then($btn => {
-                const btn = $btn[0];
-                btn.removeAttribute('disabled');
-                btn.disabled = false;
-                btn.click();
-            });
+            cy.cGet('#' + id + ' button').should('not.be.disabled').click();
         }
 
         clickSidebarPushButton('add_effect');
