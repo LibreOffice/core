@@ -486,6 +486,20 @@ public:
         return bmHasHiddenDetails;
     }
 
+    void LateInitFrom(LateInitParams& rParams, const ::std::vector<SCROW>& pItemData, size_t nPos,
+                      ScDPInitState& rInitState) override
+    {
+        Promote("LateInitFrom")->LateInitFrom(rParams, pItemData, nPos, rInitState);
+    }
+
+    void ResetChildDimension() override
+    {
+        // We don't store the child dimension, so promote
+        Promote("ResetChildDimension")->ResetChildDimension();
+    }
+
+    void SetAutoHidden() override { Promote("SetAutoHidden")->SetAutoHidden(); }
+
     void SetHasElements() override
     {
         if (bmPromoted)
@@ -551,6 +565,22 @@ public:
         // OK, it is 1 - do nothing
     }
 
+    void ProcessData(const ::std::vector<SCROW>& aChildMembers, const ScDPResultDimension* pDataDim,
+                     const ::std::vector<SCROW>& aDataMembers,
+                     const ::std::vector<ScDPValue>& aValues) override
+    {
+        // Looks pretty complicated and needs pDataRoot, lets try
+        // Promoting for now
+        Promote("ProcessData")->ProcessData(aChildMembers, pDataDim, aDataMembers, aValues);
+    }
+
+    void DoAutoShow(ScDPResultMember* pRefMember) override
+    {
+        Promote("DoAutoShow")->DoAutoShow(pRefMember);
+    }
+
+    void ResetResults() override { Promote("ResetResults")->ResetResults(); }
+
     const ScDPResultDimension* GetChildDimension() const override
     {
         if (bmPromoted)
@@ -594,6 +624,11 @@ public:
     {
         // mnOrder is never changed, and on promotion is passed to new version
         return mnOrder;
+    }
+
+    ScDPAggData* GetColTotal(tools::Long nMeasure) override
+    {
+        return Promote("GetColTotal")->GetColTotal(nMeasure);
     }
 };
 
