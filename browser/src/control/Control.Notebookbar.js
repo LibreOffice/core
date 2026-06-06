@@ -18,7 +18,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 
 	_showNotebookbar: false,
 	_RTL: false,
-	_lastContext: null,
+	_lastContexts: null,
 	_lastSelectedTabName: null,
 
 	container: null,
@@ -469,7 +469,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	},
 
 	refreshContextTabsVisibility: function() {
-		this.updateTabsVisibilityForContext(this._lastContext);
+		this.updateTabsVisibilityForContext(this._lastContexts);
 	},
 
 	updateButtonVisibilityForContext: function (context, tabId) {
@@ -523,7 +523,16 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		JSDialog.RefreshScrollables();
 	},
 
-	updateTabsVisibilityForContext: function(requestedContext) {
+	updateTabsVisibilityForContext: function(requestedContexts) {
+		// The first entry is the context of the selection itself, the
+		// remaining entries are the contexts of the structures that enclose
+		// the selection, for example the table around a selected image. The
+		// tabs of all listed contexts become visible, but only the first
+		// context's tab is switched to.
+		var allContexts = Array.isArray(requestedContexts)
+			? requestedContexts
+			: (requestedContexts ? [requestedContexts] : []);
+		var requestedContext = allContexts.length ? allContexts[0] : undefined;
 		var tabs = this.getTabs();
 		var contextTab = null;
 		var defaultTab = null;
@@ -560,6 +569,12 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 							contextTab = tabElement;
 						else
 							alreadySelected = tabElement;
+						tabMatched = true;
+					} else if (allContexts.indexOf(contexts[context]) > 0) {
+						// The tab belongs to a structure that encloses the
+						// selection: keep it reachable without switching to it.
+						tabElement.show();
+						tabElement.removeClass('hidden');
 						tabMatched = true;
 					} else if (this._isMasterView && contexts[context] === 'MasterPage') {
 						tabElement.show();
@@ -634,14 +649,16 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			this.createOptionsSection(childrenArray);
 		}
 
-		if (detail.context === detail.oldContext)
+		const contexts = detail.contexts || (detail.context ? [detail.context] : []);
+		const oldContexts = detail.oldContexts || (detail.oldContext ? [detail.oldContext] : []);
+		if (contexts.join(' ') === oldContexts.join(' '))
 			return;
 
 		if (this.shouldIgnoreContextChange([detail.context, detail.oldContext], detail.appId))
 			return;
 
-		this.updateTabsVisibilityForContext(detail.context);
-		this._lastContext = detail.context;
+		this.updateTabsVisibilityForContext(contexts);
+		this._lastContexts = contexts;
 	},
 
 	onSlideHideToggle: function() {

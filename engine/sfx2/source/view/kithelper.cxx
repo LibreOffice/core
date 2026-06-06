@@ -30,6 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
@@ -892,11 +893,21 @@ void KitHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEv
     if (!pViewShell)
         return;
 
-    OUString aBuffer =
+    OUStringBuffer aBuffer(
         rEvent.ApplicationName.replace(' ', '_') +
         " " +
-        rEvent.ContextName.replace(' ', '_');
-    pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_CHANGED, aBuffer.toUtf8());
+        rEvent.ContextName.replace(' ', '_'));
+
+    // Append the context names of the structures that enclose the selection
+    // (e.g. the table around a selected image), innermost first.
+    for (const OUString& rParent : pViewShell->GetParentContextNames())
+    {
+        if (rParent.isEmpty() || rParent == rEvent.ContextName)
+            continue;
+        aBuffer.append(" " + rParent.replace(' ', '_'));
+    }
+
+    pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_CHANGED, aBuffer.makeStringAndClear().toUtf8());
 }
 
 void KitHelper::notifyLog(const std::ostringstream& stream)

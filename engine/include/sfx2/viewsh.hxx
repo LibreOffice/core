@@ -36,6 +36,7 @@
 #include <functional>
 #include <unordered_set>
 #include <unordered_map>
+#include <vector>
 
 class SfxTabPage;
 class SfxBaseController;
@@ -435,6 +436,10 @@ public:
     void NotifyOtherView(OutlinerViewShell* pOtherShell, int nType, const OString& rKey, const OString& rPayload) override;
     /// Ask this view to send its cursor position to pViewShell.
     virtual void NotifyCursor(SfxViewShell* /*pViewShell*/) const;
+    /// Context names of the structures that enclose the current selection,
+    /// ordered from innermost to outermost. An empty list means the current
+    /// selection sits directly in the document body.
+    virtual std::vector<OUString> GetParentContextNames() const { return {}; }
     /// Where a new view can perform some update/initialization soon after the callback has been registered.
     virtual void afterCallbackRegistered();
     /// See OutlinerViewShell::GetEditWindowForActiveOLEObj().

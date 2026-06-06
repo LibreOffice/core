@@ -1112,12 +1112,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			message = message.split(' ');
 			if (message.length > 1) {
 				var old = this._map.context || {};
-				var newContext = {appId: message[0], context: message[1]};
-				if (old.appId !== newContext.appId || old.context !== newContext.context) {
+				// The context of the selection itself comes first, followed by
+				// the contexts of the structures that enclose the selection.
+				var newContext = {appId: message[0], context: message[1], contexts: message.slice(1)};
+				var oldContexts = old.contexts || (old.context ? [old.context] : []);
+				if (old.appId !== newContext.appId || oldContexts.join(' ') !== newContext.contexts.join(' ')) {
 					this._map.context = newContext;
 					app.events.fire('contextchange', {
-						appId: newContext.appId, context: newContext.context,
-						oldAppId: old.appId, oldContext: old.context
+						appId: newContext.appId, context: newContext.context, contexts: newContext.contexts,
+						oldAppId: old.appId, oldContext: old.context, oldContexts: oldContexts
 					});
 				}
 			}
