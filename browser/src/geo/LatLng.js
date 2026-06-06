@@ -4,18 +4,22 @@
  * window.L.LatLng represents a geographical point with latitude and longitude coordinates.
  */
 
-window.L.LatLng = function (lat, lng, alt) {
-	if (isNaN(lat) || isNaN(lng)) {
-		throw new Error('Invalid LatLng object: (' + lat + ', ' + lng + ')');
-	}
+class LatLngBase {
+	constructor(lat, lng, alt) {
+		if (isNaN(lat) || isNaN(lng)) {
+			throw new Error('Invalid LatLng object: (' + lat + ', ' + lng + ')');
+		}
 
-	this.lat = +lat;
-	this.lng = +lng;
+		this.lat = +lat;
+		this.lng = +lng;
 
-	if (alt !== undefined) {
-		this.alt = +alt;
+		if (alt !== undefined) {
+			this.alt = +alt;
+		}
 	}
-};
+}
+
+window.L.LatLng = LatLngBase;
 
 window.L.LatLng.prototype = {
 	equals: function (obj, maxMargin) {
