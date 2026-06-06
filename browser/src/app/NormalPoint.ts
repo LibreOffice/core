@@ -14,6 +14,35 @@ class NormalPoint {
 		this.lng = +lng;
 	}
 
+	// constructs LatLng with different signatures
+	// (NormalPoint) or ([Number, Number]) or (Number, Number) or (NormalPointLike)
+	public static flexConstruct(a: any, b?: number): NormalPoint | null {
+		if (a instanceof NormalPoint) {
+			return a;
+		}
+
+		if (Array.isArray(a) && typeof a[0] === 'number') {
+			if (a.length === 2) {
+				return new NormalPoint(a[0], a[1]);
+			}
+			return null;
+		}
+
+		if (a === undefined || a === null) {
+			return null;
+		}
+
+		if (typeof a === 'object' && 'lat' in a && 'lng' in a) {
+			return new NormalPoint(a.lat, a.lng);
+		}
+
+		if (typeof a === 'number' && typeof b === 'number') {
+			return new NormalPoint(a, b);
+		}
+
+		return null;
+	}
+
 	public equals(obj: any, maxMargin: number): boolean {
 		if (!obj) {
 			return false;

@@ -1,5 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
-/* global app cool NormalPoint */
+/* global cool NormalPoint */
 /*
  * window.L.LatLng represents a geographical point with latitude and longitude coordinates.
  */
@@ -51,28 +51,4 @@ window.L.LatLng.distance = function(latlng1, latlng2) {
 
 // constructs LatLng with different signatures
 // (LatLng) or ([Number, Number]) or (Number, Number) or (Object)
-
-window.L.latLng = function (a, b, c) {
-	if (a instanceof window.L.LatLng) {
-		return a;
-	}
-	if (app.util.isArray(a) && typeof a[0] !== 'object') {
-		if (a.length === 3) {
-			return new window.L.LatLng(a[0], a[1], a[2]);
-		}
-		if (a.length === 2) {
-			return new window.L.LatLng(a[0], a[1]);
-		}
-		return null;
-	}
-	if (a === undefined || a === null) {
-		return a;
-	}
-	if (typeof a === 'object' && 'lat' in a) {
-		return new window.L.LatLng(a.lat, 'lng' in a ? a.lng : a.lon, a.alt);
-	}
-	if (b === undefined) {
-		return null;
-	}
-	return new window.L.LatLng(a, b, c);
-};
+window.L.latLng = NormalPoint.flexConstruct;
