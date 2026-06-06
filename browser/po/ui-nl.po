@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
 "PO-Revision-Date: 2026-06-06 15:01+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -5623,7 +5623,7 @@ msgstr "Vermeldingen filteren"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr "Positie {n}, gesplitste reeks"
+msgstr "Positie {n}, splits reeks"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
