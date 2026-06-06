@@ -1485,9 +1485,7 @@ bool ClientRequestDispatcher::handleFaviconRequest(const RequestDetails& request
     response.setContentType("image/vnd.microsoft.icon");
     if( requestDetails.closeConnection() )
         response.setConnectionToken(http::Header::ConnectionToken::Close);
-    std::string faviconPath =
-        Poco::Path(Poco::Util::Application::instance().commandPath()).parent().toString() +
-        "favicon.ico";
+    std::string faviconPath = Poco::Path(Util::getApplicationPath(), "favicon.ico").toString();
     if (!Poco::File(faviconPath).exists())
         faviconPath = COOLWSD::FileServerRoot + "/favicon.ico";
 
@@ -2623,9 +2621,7 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
     // not needed for mobile
     return std::string();
 #else
-    std::string discoveryPath =
-        Poco::Path(Poco::Util::Application::instance().commandPath()).parent().toString() +
-        "discovery.xml";
+    std::string discoveryPath = Poco::Path(Util::getApplicationPath(), "discovery.xml").toString();
     if (!Poco::File(discoveryPath).exists())
     {
         // http://server/hosting/discovery.xml

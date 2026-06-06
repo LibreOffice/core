@@ -277,10 +277,7 @@ static std::string getPathFromConfig(const Poco::Util::AbstractConfiguration& co
     if (!Poco::Path(path).isAbsolute() && config.hasProperty(property + "[@relative]") &&
         config.getBool(property + "[@relative]"))
     {
-        path = Poco::Path(Poco::Util::Application::instance().commandPath())
-                   .parent()
-                   .append(path)
-                   .toString();
+        path = Poco::Path(Util::getApplicationPath()).append(path).toString();
     }
 
     return path;

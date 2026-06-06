@@ -2880,8 +2880,7 @@ bool COOLWSD::createForKit()
     std::unique_lock<std::mutex> newChildrenLock(NewChildrenMutex);
 
     StringVector args;
-    std::string parentPath =
-        Poco::Path(Poco::Util::Application::instance().commandPath()).parent().toString();
+    std::string parentPath = Util::getApplicationPath();
 
 #if STRACE_COOLFORKIT
     // if you want to use this, you need to sudo setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/strace
