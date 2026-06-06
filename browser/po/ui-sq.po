@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-05 13:51+0000\n"
+"PO-Revision-Date: 2026-06-06 15:01+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
-"Language-Team: Albanian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/sq/>\n"
-"Language: \n"
+"Language-Team: Albanian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/sq/>\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -519,9 +519,8 @@ msgid "Show Grid"
 msgstr "Shfaq Rrjetë"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:548
-#, fuzzy
 msgid "Snap to grid"
-msgstr "Madhësi sa rrjeta"
+msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:549
 #: admin/src/integrator/AdminIntegratorSettings.ts:555
@@ -945,6 +944,7 @@ msgstr "Asnjë (çaktivizo prodhim figurash)"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"S’u prunë dot modele (HTTP {0}). Kontrolloni URL dhe kyç API të shërbimit."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1318,7 +1318,7 @@ msgstr ""
 
 #: src/control/CalcNotifications.ts:51
 msgid "Find First"
-msgstr ""
+msgstr "Gjej të Parin"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1414,6 +1414,8 @@ msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Vlerësim etik IA: {0} ({1}). Bazuar në licencim burimi të hapët, vetëstrehim "
+"dhe të dhëna stërvitjeje."
 
 #: src/control/Control.AIChatSidebar.ts:447
 msgid "Your message"
@@ -1480,7 +1482,7 @@ msgstr "Kopjoje në të papastër"
 
 #: src/control/Control.AIChatSidebar.ts:854
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Me përdorim si kontekst të tekstit të përzgjedhur"
 
 #: src/control/Control.AIChatSidebar.ts:861
 msgid "Ask AI..."
@@ -1488,7 +1490,7 @@ msgstr "Pyetni IA-në…"
 
 #: src/control/Control.AIChatSidebar.ts:864
 msgid "Message input"
-msgstr ""
+msgstr "Dhënie mesazhesh"
 
 #: src/control/Control.AIChatSidebar.ts:880
 msgid "Stop generating"
@@ -1528,12 +1530,11 @@ msgstr "Ton i zërit"
 
 #: src/control/Control.AIChatSidebar.ts:983
 msgid "Reset voice"
-msgstr ""
+msgstr "Ricaktoni zërin"
 
 #: src/control/Control.AIChatSidebar.ts:986
-#, fuzzy
 msgid "Reset tone of voice"
-msgstr "Caktoni tonin e zërit"
+msgstr "Ricaktoni tonin e zërit"
 
 #: src/control/Control.AIChatSidebar.ts:1002
 msgid "Your tones"
@@ -1545,7 +1546,7 @@ msgstr "Përpunoni tonin"
 
 #: src/control/Control.AIChatSidebar.ts:1036
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Shto zërin tim"
 
 #: src/control/Control.AIChatSidebar.ts:1038
 msgid "Add a custom tone of voice"
@@ -1606,6 +1607,8 @@ msgstr "Përshkruani se si duhet të shkruajë IA-ja"
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Shkruaj togfjalësha të shkurtër, të drejtpërdrejtë. Përdor gjuhë të thjeshtë "
+"dhe anashkalo çikërrima."
 
 #: src/control/Control.AIChatSidebar.ts:1294
 msgid "Tone description"
@@ -1645,7 +1648,7 @@ msgstr "Ripohim fshirjeje toni"
 
 #: src/control/Control.AIChatSidebar.ts:1371
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Ky ton zëri do të fshihet"
 
 #: src/control/Control.AIChatSidebar.ts:1400
 msgid "Cancel delete"
@@ -1654,7 +1657,7 @@ msgstr "Anuloje fshirjen"
 #: src/control/Control.AIChatSidebar.ts:1427
 #: src/control/Control.AIChatSidebar.ts:1487
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Keni mbërritur në maksimumin e {0} toneve vetjakë."
 
 #: src/control/Control.AIChatSidebar.ts:1661
 msgid "Diagnose formula error"
@@ -1682,15 +1685,15 @@ msgstr "Shihni më tepër"
 
 #: src/control/Control.AIChatSidebar.ts:1822
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Figura u fut te pozicioni i kursorit"
 
 #: src/control/Control.AIChatSidebar.ts:1841
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Teksti u fut te pozicioni i kursorit"
 
 #: src/control/Control.AIChatSidebar.ts:1920
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Po mbërrihet te kufi gjatësie mesazhesh"
 
 #: src/control/Control.AIChatSidebar.ts:1974
 msgid "Request timeout"
@@ -1702,84 +1705,85 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"Përzgjedhja përmban figura dhe tjetër lëndë jo tekst që s’mund të dërgohet "
+"si kontekst."
 
 #: src/control/Control.AIChatSidebar.ts:2076
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Mesazhi është shumë i gjatë. Ju lutemi, shkurtojeni dhe riprovoni."
 
 #: src/control/Control.AIChatSidebar.ts:2131
 msgid "Error: "
-msgstr ""
+msgstr "Gabim: "
 
 #: src/control/Control.AIChatSidebar.ts:2161
-#, fuzzy
 msgid "Generated image"
-msgstr "Figurë e prodhuar nga IA"
+msgstr "Figurë e prodhuar"
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid "AI request failed"
-msgstr ""
+msgstr "Kërkesa ndaj IA-së dështoi"
 
 #: src/control/Control.AIChatSidebar.ts:2190
 msgid "The AI assistant"
-msgstr ""
+msgstr "Asistenti IA"
 
 #: src/control/Control.AIChatSidebar.ts:2203
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Doni të vazhdohet?"
 
 #: src/control/Control.AIChatSidebar.ts:2206
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 dëshiron të inspektojë dokumentin tuaj. Doni të vazhdohet?"
 
 #: src/control/Control.AIChatSidebar.ts:2210
 msgid "Modify document structure"
-msgstr ""
+msgstr "Ndrysho strukturë dokumenti"
 
 #: src/control/Control.AIChatSidebar.ts:2212
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 dëshiron të ndryshojë dokumentin tuaj:"
 
 #: src/control/Control.AIChatSidebar.ts:2216
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Doni të zbatohet ky ndryshim?"
 
 #: src/control/Control.AIChatSidebar.ts:2218
 msgid "Set cell formula"
-msgstr ""
+msgstr "Caktoni formulë kutizash"
 
 #: src/control/Control.AIChatSidebar.ts:2220
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 dëshiron të caktojë një formulë te fletëllogaritja juaj:"
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 dëshiron të kryejë një veprim. Doni të vazhdohet?"
 
 #: src/control/Control.AIChatSidebar.ts:2261
 msgid "Approve"
-msgstr ""
+msgstr "Miratojeni"
 
 #: src/control/Control.AIChatSidebar.ts:2263
 msgid "Approve action"
-msgstr ""
+msgstr "Miratoni veprimin"
 
 #: src/control/Control.AIChatSidebar.ts:2270
 msgid "Reject"
-msgstr ""
+msgstr "Hidhe poshtë"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Reject action"
-msgstr ""
+msgstr "Hidhe poshtë veprimin"
 
 #: src/control/Control.AIChatSidebar.ts:2291
 msgid "Applying changes..."
-msgstr ""
+msgstr "Po zbatohen ndryshimet…"
 
 #: src/control/Control.AIChatSidebar.ts:2294
 msgid "Change rejected"
-msgstr ""
+msgstr "Ndryshimi u hodh poshtë"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
@@ -1814,9 +1818,8 @@ msgid "The selected cell does not have a formula error."
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2737
-#, fuzzy
 msgid "Diagnose formula error in"
-msgstr "Diagnostiko gabim formule"
+msgstr "Diagnostiko gabim formule te"
 
 #: src/control/Control.AIChatSidebar.ts:2758
 msgid "I have a formula error in my spreadsheet."
@@ -5776,15 +5779,15 @@ msgstr "Më tepër mundësi për {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1738
 msgid "Cell value"
-msgstr ""
+msgstr "Vlerë kutize"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1742
 msgid "row %1"
-msgstr ""
+msgstr "rreshti %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1751
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
