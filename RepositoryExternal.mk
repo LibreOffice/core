@@ -137,7 +137,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_use_libraries,$(1),skia)
 $(call gb_LinkTarget_add_defs,$(1),\
-	-DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
+	-DSK_USER_CONFIG_HEADER="<config_skia.h>" \
 	-DSKIA_DLL \
 )
 endef
