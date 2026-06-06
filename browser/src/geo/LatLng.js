@@ -1,51 +1,10 @@
 /* -*- js-indent-level: 8 -*- */
-/* global app cool */
+/* global app cool NormalPoint */
 /*
  * window.L.LatLng represents a geographical point with latitude and longitude coordinates.
  */
 
-class LatLngBase {
-	constructor(lat, lng, alt) {
-		if (isNaN(lat) || isNaN(lng)) {
-			throw new Error('Invalid LatLng object: (' + lat + ', ' + lng + ')');
-		}
-
-		this.lat = +lat;
-		this.lng = +lng;
-
-		if (alt !== undefined) {
-			this.alt = +alt;
-		}
-	}
-
-	equals(obj, maxMargin) {
-		if (!obj) { return false; }
-
-		obj = window.L.latLng(obj);
-
-		const margin = Math.max(
-			Math.abs(this.lat - obj.lat),
-			Math.abs(this.lng - obj.lng));
-
-		return margin <= (maxMargin === undefined ? 1.0E-9 : maxMargin);
-	}
-
-	toString(precision) {
-		return 'LatLng(' +
-			app.util.formatNum(this.lat, precision) + ', ' +
-			app.util.formatNum(this.lng, precision) + ')';
-	}
-
-	distanceTo() {
-		return 0;
-	}
-
-	wrap() {
-		return null;
-	}
-}
-
-window.L.LatLng = LatLngBase;
+window.L.LatLng = NormalPoint;
 
 window.L.LatLng.SCALE = 1.2;
 
