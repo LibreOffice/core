@@ -47,6 +47,15 @@ describe(['tagdesktop'], 'Text Import (CSV) dialog', function () {
 		cy.cGet('.ui-pushbutton.jsdialog.button-primary').click();
 		cy.cGet('form.jsdialog-container.lokdialog_container').should('not.exist');
 
+		// The spreadsheet only starts loading once the import dialog is
+		// confirmed. Wait for it to load before touching the view-mode UI,
+		// otherwise entering edit mode runs against a document layer that
+		// does not exist yet and throws.
+		cy.cGet('.leaflet-canvas-container canvas').should('exist');
+		cy.getFrameWindow().then(function (win) {
+			helper.processToIdle(win);
+		});
+
 		// Enter edit mode
 		cy.cGet('#viewModeDropdownButton-button').click();
 		cy.cGet('#viewModeDropdownButton-entry-1').click();
