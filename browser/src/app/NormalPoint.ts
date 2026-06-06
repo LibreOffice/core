@@ -2,6 +2,8 @@
 
 /// Intermediate representation of a point position.
 class NormalPoint {
+	public static SCALE = 1.2;
+
 	public lat: number;
 	public lng: number;
 
@@ -41,6 +43,27 @@ class NormalPoint {
 		}
 
 		return null;
+	}
+
+	private static scale(zoom: number): number {
+		return zoom ? Math.pow(NormalPoint.SCALE, zoom) : 1;
+	}
+
+	// Needed in Map.prototype.unproject()
+	// constructs NormalPoint from css pixel point at a given zoom.
+	public static pointToLatLng(point: cool.Point, zoom: number): NormalPoint {
+		const scale = NormalPoint.scale(zoom);
+		return new NormalPoint(-point.y / scale, point.x / scale);
+	}
+
+	// Needed in Map.prototype.project()
+	// constructs css pixel point from LatLng at a given zoom.
+	public static latLngToPoint(
+		normPoint: NormalPoint,
+		zoom: number,
+	): cool.Point {
+		const scale = NormalPoint.scale(zoom);
+		return new cool.Point(normPoint.lng * scale, -normPoint.lat * scale);
 	}
 
 	public equals(obj: any, maxMargin: number): boolean {
