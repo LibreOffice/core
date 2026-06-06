@@ -1024,6 +1024,22 @@ ScDPResultMember* ScDPResultMemberSlim::Promote(const char* sReason)
     return pNewMember;
 }
 
+const ScDPDimension* ScDPResultMemberSlim::GetParentDim() const
+{
+    if (bmPromoted)
+        return GetPromote()->GetParentDim();
+    // We don't store the Parent information, ask our dimension
+    return mpOurDimension->GetParentDimForResult();
+}
+
+const ScDPLevel* ScDPResultMemberSlim::GetParentLevel() const
+{
+    if (bmPromoted)
+        return GetPromote()->GetParentLevel();
+    // We don't store the Parent information, ask our dimension
+    return mpOurDimension->GetParentLevelForResult();
+}
+
 ScDPResultMemberFull::ScDPResultMemberFull(
     const ScDPResultData* pData, const ScDPParentDimData& rParentDimData ) :
     pResultData( pData ),

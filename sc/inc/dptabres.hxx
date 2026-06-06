@@ -567,6 +567,9 @@ public:
         return nullptr;
     }
 
+    const ScDPDimension* GetParentDim() const override;
+    const ScDPLevel* GetParentLevel() const override;
+
     const ScDPMember* GetDPMember() const override
     {
         if (bmPromoted)
@@ -859,6 +862,10 @@ public:
     // Called by an ScDPResultMemberSlim when a member function needs
     // to do something which Slim can't represent
     ScDPResultMember* Promote(ScDPResultMemberSlim* pSlim, SCROW nOrder);
+
+    // Called by an ScDPResultMemberSlim to get it's parent information
+    ScDPDimension* GetParentDimForResult() { return mpDimension; };
+    ScDPLevel* GetParentLevelForResult() { return mpLevel; };
 };
 
 class ScDPDataDimension
