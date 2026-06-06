@@ -307,17 +307,25 @@ std::string SslStreamSocket::getSslCert(std::string& subjectHash)
 }
 #endif //ENABLE_SSL
 
-// help with initialization order
+// help with initialization AND destruction order.
+//
+// These are intentionally leaked (heap-allocated, never destroyed): a global or
+// static SocketPoll (e.g. a TerminatingPoll) can be torn down during exit-handler
+// processing, and SocketPoll::~SocketPoll -> removeFromWakeupArray() touches both
+// of these. A plain function-local static would already have been destroyed by
+// then, so the access would be a use-after-free (the vector) / UB (locking a
+// destroyed mutex). Leaking keeps them alive until the very end; because the
+// pointer is held in static storage, LeakSanitizer still sees them as reachable.
 namespace {
     std::vector<int> &getWakeupsArray()
     {
-        static std::vector<int> pollWakeups;
-        return pollWakeups;
+        static std::vector<int>* pollWakeups = new std::vector<int>();
+        return *pollWakeups;
     }
     std::mutex &getPollWakeupsMutex()
     {
-        static std::mutex pollWakeupsMutex;
-        return pollWakeupsMutex;
+        static std::mutex* pollWakeupsMutex = new std::mutex();
+        return *pollWakeupsMutex;
     }
 }
 
