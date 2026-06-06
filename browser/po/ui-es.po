@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
 "PO-Revision-Date: 2026-06-06 15:01+0000\n"
-"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
 "Language: es\n"
@@ -1482,7 +1482,7 @@ msgstr "Insertar en el cursor"
 #: src/control/Control.AIChatSidebar.ts:803
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Copy to clipboard"
-msgstr "Copiar al portapapeles"
+msgstr "Copiar en el portapapeles"
 
 #: src/control/Control.AIChatSidebar.ts:854
 msgid "Using selected text as context"
@@ -1519,7 +1519,7 @@ msgstr "Tono de voz: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:922
 msgid "with emoji"
-msgstr "con emoji"
+msgstr "con emoyis"
 
 #: src/control/Control.AIChatSidebar.ts:964
 #: src/control/Control.AIChatSidebar.ts:1014
@@ -5608,11 +5608,11 @@ msgstr "Paleta de colores"
 
 #: src/control/jsdialog/Widget.Combobox.js:245
 msgid "Open "
-msgstr "Abrir . "
+msgstr "Abrir "
 
 #: src/control/jsdialog/Widget.Combobox.js:245
 msgid " list"
-msgstr " . list"
+msgstr " lista"
 
 #: src/control/jsdialog/Widget.Combobox.js:246
 msgid "Open list"
@@ -5672,7 +5672,7 @@ msgstr "Usados recientemente"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr "No hay emojis que coincidan con \"{0}\""
+msgstr "No hay ningún emoyi que coincida con «{0}»"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5700,7 +5700,7 @@ msgstr "Más tamaños de papel…"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:31
 msgid "Number of Pages. Click to open the Go to Page dialog box."
-msgstr "Número de páginas. Pulse para abrir el cuadro de diálogo Ir a página."
+msgstr "Número de páginas. Pulse para abrir el diálogo Ir a página."
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:32
 #: src/control/jsdialog/Widget.HTMLContent.ts:62
@@ -6560,11 +6560,11 @@ msgstr "Creando una copia…"
 
 #: src/map/handler/Map.Welcome.js:118
 msgid "Welcome Dialog"
-msgstr "Ventana de bienvenida"
+msgstr "Diálogo de bienvenida"
 
 #: src/map/handler/Map.Settings.ts:143
 msgid "Settings saved"
-msgstr "Ajustes guardados"
+msgstr "Configuración guardada"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
