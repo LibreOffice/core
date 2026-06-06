@@ -18,6 +18,7 @@
  */
 
 #include <config_folders.h>
+#include <config_srcdir.h>
 
 #include <sal/config.h>
 #include <sal/log.hxx>

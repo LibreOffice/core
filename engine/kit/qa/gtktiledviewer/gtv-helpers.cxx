@@ -15,7 +15,7 @@
 #include "gtv-helpers.hxx"
 #include "gtv-signal-handlers.hxx"
 
-#include <config_folders.h>
+#include <config_srcdir.h>
 
 #include <boost/property_tree/ptree.hpp>
 

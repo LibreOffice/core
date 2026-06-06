@@ -1,0 +1,19 @@
+/*
+
+The absolute source-root and build directories of this build. Kept apart
+from config_folders.h, whose other macros are relative installation
+subfolder names, so that including those relative names does not also pull
+in these absolute build-tree paths.
+
+*/
+
+#ifndef CONFIG_SRCDIR_H
+#define CONFIG_SRCDIR_H
+
+/* the source root directory of the build */
+#undef SRC_ROOT
+
+/* the build directory of the build */
+#undef BUILDDIR
+
+#endif
