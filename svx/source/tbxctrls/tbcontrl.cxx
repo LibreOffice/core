@@ -221,6 +221,7 @@ private:
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
     DECL_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);
     DECL_LINK(CustomGetSizeHdl, OutputDevice&, Size);
@@ -904,6 +905,7 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     m_xWidget->connect_changed(LINK(this, SvxStyleBox_Base, SelectHdl));
     m_xWidget->connect_key_press(LINK(this, SvxStyleBox_Base, KeyInputHdl));
     m_xWidget->connect_entry_activate(LINK(this, SvxStyleBox_Base, ActivateHdl));
+    m_xWidget->connect_focus_in(LINK(this, SvxStyleBox_Base, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, SvxStyleBox_Base, FocusOutHdl));
     m_xWidget->set_help_id(HID_STYLE_LISTBOX);
     m_xWidget->set_entry_completion(true);
@@ -1081,6 +1083,11 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
 void SvxStyleBox_Base::SetFamily( SfxStyleFamily eNewFamily )
 {
     eStyleFamily = eNewFamily;
+}
+
+IMPL_LINK_NOARG(SvxStyleBox_Base, FocusInHdl, weld::Widget&, void)
+{
+    m_xWidget->select_entry_region(0, -1);
 }
 
 IMPL_LINK_NOARG(SvxStyleBox_Base, FocusOutHdl, weld::Widget&, void)
