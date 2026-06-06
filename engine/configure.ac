@@ -11840,6 +11840,11 @@ fi
 AC_PATH_PROG(UNZIP, unzip)
 test -z "$UNZIP" && AC_MSG_ERROR([unzip is required])
 
+AC_PATH_PROG(BSDTAR, bsdtar)
+if test -z "$BSDTAR"; then
+    AC_MSG_NOTICE([bsdtar not found - .zip tarballs will be unpacked with unzip. bsdtar unpacks them approx twice as fast.])
+fi
+
 dnl ===================================================================
 dnl Zip must be a specific type for different build types.
 dnl ===================================================================

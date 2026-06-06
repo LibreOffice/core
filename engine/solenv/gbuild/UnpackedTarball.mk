@@ -28,10 +28,12 @@ $(GNUTAR) \
 	-f $(call gb_Helper_cyg_path,$(UNPACKED_TARBALL))
 endef
 
+# Prefer bsdtar for zips, about twice as fast as Info-ZIP unzip. Some noto font
+# zips carry leading ".." entries that bsdtar refuses and that we do not
+# deliver, so --exclude drops them.
+# Fall back to plain unzip when bsdtar is not configured.
 define gb_UnpackedTarget__command_unzip
-unzip \
-	-qq \
-	-d $(UNPACKED_DIR) $(UNPACKED_TARBALL) \
+$(if $(BSDTAR),$(BSDTAR) -x --exclude='../*' -C $(UNPACKED_DIR) -f $(UNPACKED_TARBALL),unzip -qq -d $(UNPACKED_DIR) $(UNPACKED_TARBALL)) \
 $(if $(filter-out 0,$(UNPACKED_STRIP_COMPONENTS)),\
 	&& UNZIP_DIR=`ls $(UNPACKED_DIR)` \
 	&& mv $(UNPACKED_DIR)/$$UNZIP_DIR/* $(UNPACKED_DIR) \
