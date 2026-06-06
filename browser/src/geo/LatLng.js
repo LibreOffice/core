@@ -17,37 +17,35 @@ class LatLngBase {
 			this.alt = +alt;
 		}
 	}
-}
 
-window.L.LatLng = LatLngBase;
-
-window.L.LatLng.prototype = {
-	equals: function (obj, maxMargin) {
+	equals(obj, maxMargin) {
 		if (!obj) { return false; }
 
 		obj = window.L.latLng(obj);
 
-		var margin = Math.max(
-		        Math.abs(this.lat - obj.lat),
-		        Math.abs(this.lng - obj.lng));
+		const margin = Math.max(
+			Math.abs(this.lat - obj.lat),
+			Math.abs(this.lng - obj.lng));
 
 		return margin <= (maxMargin === undefined ? 1.0E-9 : maxMargin);
-	},
+	}
 
-	toString: function (precision) {
+	toString(precision) {
 		return 'LatLng(' +
-		        app.util.formatNum(this.lat, precision) + ', ' +
-		        app.util.formatNum(this.lng, precision) + ')';
-	},
+			app.util.formatNum(this.lat, precision) + ', ' +
+			app.util.formatNum(this.lng, precision) + ')';
+	}
 
-	distanceTo: function () {
+	distanceTo() {
 		return 0;
-	},
+	}
 
-	wrap: function () {
+	wrap() {
 		return null;
-	},
-};
+	}
+}
+
+window.L.LatLng = LatLngBase;
 
 window.L.LatLng.SCALE = 1.2;
 
