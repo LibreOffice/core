@@ -75,7 +75,8 @@ OUTPUT="/tmp/libfuzz-${TARGET}-output"
 mkdir -p "$OUTPUT"
 
 export LSAN_OPTIONS="detect_leaks=0"
-export ASAN_OPTIONS="strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:symbolize=1:allocator_may_return_null=1:detect_leaks=0:halt_on_error=0:suppressions=${SCRIPT_DIR}/../test/asan-suppressions.txt"
+export ASAN_OPTIONS="strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:symbolize=1:print_stacktrace=1:allocator_may_return_null=1:detect_leaks=0:halt_on_error=0:suppressions=${SCRIPT_DIR}/../test/asan-suppressions.txt"
+export UBSAN_OPTIONS="print_stacktrace=1"
 
 if test "$MODE" = "merge"; then
     # Merge findings from the work dir back into the seed corpus.
