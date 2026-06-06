@@ -102,7 +102,6 @@
 #include <sfx2/templatedlg.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/safemode.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <DevelopmentToolDockingWindow.hxx>
 
@@ -330,29 +329,6 @@ namespace
         response(RET_OK);
         showDocument("LICENSE");
     }
-
-
-    class SafeModeQueryDialog : public weld::MessageDialogController
-    {
-    public:
-        SafeModeQueryDialog(weld::Window* pParent)
-            : MessageDialogController(pParent, u"sfx/ui/safemodequerydialog.ui"_ustr, u"SafeModeQueryDialog"_ustr)
-        {
-        }
-
-        virtual short run() override
-        {
-            short nRet = MessageDialogController::run();
-            if (nRet == RET_OK)
-            {
-                sfx2::SafeMode::putFlag();
-                const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-                css::task::OfficeRestartManager::get(xContext)->requestRestart(
-                    css::uno::Reference< css::task::XInteractionHandler >());
-            }
-            return nRet;
-        }
-    };
 }
 
 weld::Window* SfxRequest::GetFrameWeld() const
@@ -1301,12 +1277,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
-        case SID_SAFE_MODE:
-        {
-            SafeModeQueryDialog aDialog(rReq.GetFrameWeld());
-            aDialog.run();
-            break;
-        }
         case SID_TOOLBAR_LOCK:
         {
             if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
@@ -1502,13 +1472,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         SfxBoolItem aItem( SID_MENUBAR, bState );
                         rSet.Put( aItem );
                     }
-                    break;
-                }
-                case SID_SAFE_MODE:
-                {
-                    // no restart in safe mode when already in safe mode
-                    if ( Application::IsSafeModeEnabled() )
-                       rSet.DisableItem( SID_SAFE_MODE );
                     break;
                 }
                 case SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW:

@@ -39,7 +39,6 @@
 #define STR_TOGGLE_CURRENT_MODULE_HELP              NC_("STR_TOGGLE_CURRENT_MODULE_HELP", "Shows only documents from the current module")
 #define STR_REMOTE_TITLE                            NC_("STR_REMOTE_TITLE", " (Remote)")
 #define STR_EMDASH_SEPARATOR                        NC_("STR_EMDASH_SEPARATOR", " — ")
-#define STR_SAFEMODE_TITLE                          NC_("STR_SAFEMODE_TITLE", " (Safe Mode)")
 #define STR_TOOLBAR_TITLE_ADDON                     NC_("STR_TOOLBAR_TITLE_ADDON", "Add-On %num%")
 #define STR_FULL_DISC_RETRY_BUTTON                  NC_("STR_FULL_DISC_RETRY_BUTTON", "Retry" )
 #define STR_FULL_DISC_MSG                           NC_("STR_FULL_DISC_MSG", "%PRODUCTNAME could not save important internal information due to insufficient free disk space at the following location:\n%PATH\n\nYou will not be able to continue working with %PRODUCTNAME without allocating more free disk space at that location.\n\nPress the 'Retry' button after you have allocated more free disk space to retry saving the data.\n\n" )

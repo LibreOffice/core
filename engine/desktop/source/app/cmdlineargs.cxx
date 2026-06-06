@@ -321,10 +321,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 setHeadless();
             }
-            else if ( oArg == "safe-mode" )
-            {
-                m_safemode = true;
-            }
             else if ( oArg == "cat" )
             {
                 m_textcat = true;
@@ -712,7 +708,6 @@ void CommandLineArgs::InitParamValues()
     m_bDocumentArgs  = false;
     m_textcat = false;
     m_scriptcat = false;
-    m_safemode = false;
 }
 
 bool CommandLineArgs::HasModuleParam() const

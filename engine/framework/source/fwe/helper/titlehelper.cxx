@@ -507,7 +507,6 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
         impl_appendDebugVersion     (sTitle);
     }
 #endif
-    impl_appendSafeMode         (sTitle);
 
     bool     bChanged;
     // SYNCHRONIZED ->
@@ -601,13 +600,6 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)
 {
 }
 #endif
-
-// static
-void TitleHelper::impl_appendSafeMode (OUStringBuffer& sTitle)
-{
-    if (Application::IsSafeModeEnabled())
-        sTitle.append(FwkResId (STR_SAFEMODE_TITLE));
-}
 
 void TitleHelper::impl_startListeningForModel (const css::uno::Reference< css::frame::XModel >& xModel)
 {

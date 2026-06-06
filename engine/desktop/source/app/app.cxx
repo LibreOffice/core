@@ -107,7 +107,6 @@
 #include <sfx2/flatpak.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
-#include <sfx2/safemode.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
@@ -433,19 +432,7 @@ void Desktop::Init()
         std::abort();
     }
 
-    // Check whether safe mode is enabled
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
-    // Check if we are restarting from safe mode - in that case we don't want to enter it again
-    if (sfx2::SafeMode::hasRestartFlag())
-        sfx2::SafeMode::removeRestartFlag();
-    else if (rCmdLineArgs.IsSafeMode() || sfx2::SafeMode::hasFlag())
-        Application::EnableSafeMode();
-
-    // When we are in SafeMode we need to do changes before the configuration
-    // gets read (langselect::prepareLocale() by UNO API -> Components::Components)
-    // This may prepare SafeMode or restore from it by moving data in
-    // the UserConfiguration directory
-    comphelper::BackupFileHelper::reactOnSafeMode(Application::IsSafeModeEnabled());
 
     // tdf117100: do not try to re-install extensions after the requested restart
     if (officecfg::Setup::Office::OfficeRestartInProgress::get())
@@ -849,9 +836,6 @@ void Desktop::HandleBootstrapErrors(
         // but end up in a _exit() call
         comphelper::BackupFileHelper::setExitWasCalled();
 
-        // enter safe mode, too
-        sfx2::SafeMode::putFlag();
-
         OUString msg(DpResId(STR_CONFIG_ERR_ACCESS_GENERAL));
         if (!aErrorMessage.isEmpty()) {
             msg += "\n(\"" + aErrorMessage + "\")";
@@ -896,22 +880,6 @@ void Desktop::HandleBootstrapErrors(
 namespace {
 
 
-#if !defined ANDROID
-void handleSafeMode()
-{
-    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-
-    Reference< css::frame::XSynchronousDispatch > xSafeModeUI(
-        xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.svx.SafeModeUI"_ustr, xContext),
-        css::uno::UNO_QUERY_THROW);
-
-    css::util::URL aURL;
-    css::uno::Any aRet = xSafeModeUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
-    bool bRet = false;
-    aRet >>= bRet;
-}
-#endif
-
 /** @short  check if recovery must be started or not.
 
     @param  bCrashed [boolean ... out!]
@@ -939,73 +907,6 @@ void impl_checkRecoveryState(bool& bCrashed           ,
         = officecfg::Office::Recovery::RecoveryInfo::SessionData::get();
     bRecoveryDataExists = elements && !session;
     bSessionDataExists = elements && session;
-}
-
-Reference< css::frame::XSynchronousDispatch > g_xRecoveryUI;
-
-template <class Ref>
-struct RefClearGuard
-{
-    Ref& m_Ref;
-    RefClearGuard(Ref& ref) : m_Ref(ref) {}
-    ~RefClearGuard() { m_Ref.clear(); }
-};
-
-/*  @short  start the recovery wizard.
-
-    @param  bEmergencySave
-            differs between EMERGENCY_SAVE and RECOVERY
-*/
-#if !ENABLE_WASM_STRIP_RECOVERYUI
-bool impl_callRecoveryUI(bool bEmergencySave     ,
-                         bool bExistsRecoveryData)
-{
-    static constexpr OUStringLiteral COMMAND_EMERGENCYSAVE = u"vnd.sun.star.autorecovery:/doEmergencySave";
-    static constexpr OUStringLiteral COMMAND_RECOVERY = u"vnd.sun.star.autorecovery:/doAutoRecovery";
-
-    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-
-    g_xRecoveryUI.set(
-        xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.svx.RecoveryUI"_ustr, xContext),
-        css::uno::UNO_QUERY_THROW);
-    RefClearGuard<Reference< css::frame::XSynchronousDispatch >> refClearGuard(g_xRecoveryUI);
-
-    Reference< css::util::XURLTransformer > xURLParser =
-        css::util::URLTransformer::create(xContext);
-
-    css::util::URL aURL;
-    if (bEmergencySave)
-        aURL.Complete = COMMAND_EMERGENCYSAVE;
-    else if (bExistsRecoveryData)
-        aURL.Complete = COMMAND_RECOVERY;
-    else
-        return false;
-
-    xURLParser->parseStrict(aURL);
-
-    css::uno::Any aRet = g_xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
-    bool bRet = false;
-    aRet >>= bRet;
-    return bRet;
-}
-#endif
-
-bool impl_bringToFrontRecoveryUI()
-{
-    Reference< css::frame::XSynchronousDispatch > xRecoveryUI(g_xRecoveryUI);
-    if (!xRecoveryUI.is())
-        return false;
-
-    css::util::URL aURL;
-    aURL.Complete = u"vnd.sun.star.autorecovery:/doBringToFront"_ustr;
-    Reference< css::util::XURLTransformer > xURLParser =
-        css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
-    xURLParser->parseStrict(aURL);
-
-    css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
-    bool bRet = false;
-    aRet >>= bRet;
-    return bRet;
 }
 
 }
@@ -1091,7 +992,7 @@ void restartOnMac(bool passArguments) {
 
 }
 
-void Desktop::Exception(ExceptionCategory nCategory)
+void Desktop::Exception(ExceptionCategory /*nCategory*/)
 {
     // protect against recursive calls
     static bool bInException = false;
@@ -1104,50 +1005,12 @@ void Desktop::Exception(ExceptionCategory nCategory)
     }
 
     bInException = true;
-    const CommandLineArgs& rArgs = GetCommandLineArgs();
-
-    // save all modified documents ... if it's allowed doing so.
-    bool bRestart                           = false;
-    bool bAllowRecoveryAndSessionManagement = (
-                                                    ( !rArgs.IsNoRestore()                    ) && // some use cases of office must work without recovery
-                                                    ( !rArgs.IsHeadless()                     ) &&
-                                                    ( nCategory != ExceptionCategory::UserInterface ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
-                                                    ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicate a corrupted installation...)
-                                                  );
-    if ( bAllowRecoveryAndSessionManagement )
-    {
-        // Save all open documents so they will be reopened
-        // the next time the application is started
-        // returns true if at least one document could be saved...
-#if !ENABLE_WASM_STRIP_RECOVERYUI
-        bRestart = impl_callRecoveryUI(
-                        true , // force emergency save
-                        false);
-#endif
-    }
 
     FlushConfiguration();
 
     m_xLockfile.reset();
 
-    if( bRestart )
-    {
-        RequestHandler::Disable();
-        if( pSignalHandler )
-            osl_removeSignalHandler( pSignalHandler );
-
-        restartOnMac(false);
-#if !ENABLE_WASM_STRIP_SPLASH
-        if ( m_rSplashScreen.is() )
-            m_rSplashScreen->reset();
-#endif
-
-        _exit( EXITHELPER_CRASH_WITH_RESTART );
-    }
-    else
-    {
-        Application::Abort( OUString() );
-    }
+    Application::Abort( OUString() );
 
     OSL_ASSERT(false); // unreachable
 }
@@ -1833,13 +1696,6 @@ void Desktop::OpenClients()
     // need some time, where the user won't see any results and wait for finishing the office startup...
     bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
 
-#if !defined ANDROID
-    // Enter safe mode if requested
-    if (Application::IsSafeModeEnabled()) {
-        handleSafeMode();
-    }
-#endif
-
     if ( ! bAllowRecoveryAndSessionManagement )
     {
         try
@@ -1861,35 +1717,6 @@ void Desktop::OpenClients()
     else
     {
         bool bExistsRecoveryData = false;
-#if !ENABLE_WASM_STRIP_RECOVERYUI
-        bool bCrashed            = false;
-        bool bExistsSessionData  = false;
-        bool const bDisableRecovery
-            = getenv("OOO_DISABLE_RECOVERY") != nullptr
-              || IsUseSystemEventLoop()
-              || !officecfg::Office::Recovery::RecoveryInfo::Enabled::get();
-
-        impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
-
-        if ( !bDisableRecovery &&
-            (
-                bExistsRecoveryData || // => crash with files    => recovery
-                bCrashed               // => crash without files => error report
-            )
-           )
-        {
-            try
-            {
-                impl_callRecoveryUI(
-                    false          , // false => force recovery instead of emergency save
-                    bExistsRecoveryData);
-            }
-            catch(const css::uno::Exception&)
-            {
-                TOOLS_WARN_EXCEPTION( "desktop.app", "Error during recovery");
-            }
-        }
-#endif
 
         Reference< XSessionManagerListener2 > xSessionListener;
         try
@@ -2157,7 +1984,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         createAcceptor(rAppEvent.GetStringData());
         break;
     case ApplicationEvent::Type::Appear:
-        if ( !GetCommandLineArgs().IsInvisible() && !impl_bringToFrontRecoveryUI() )
+        if ( !GetCommandLineArgs().IsInvisible() )
         {
             const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 

@@ -1334,8 +1334,6 @@ svx/source/form/formcontroller.cxx:208
     svxform::(anonymous namespace)::ColumnInfo nNullable sal_Int32
 svx/source/inc/datanavi.hxx:322
     svxform::DataNavigator m_xDataWin std::unique_ptr<DataNavigatorWindow>
-svx/source/inc/docrecovery.hxx:132
-    svx::DocRecovery::TURLInfo Module OUString
 svx/source/inc/galbrws1.hxx:114
     GalleryBrowser1 mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 svx/source/inc/StylesPreviewToolBoxControl.hxx:32

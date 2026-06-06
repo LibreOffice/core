@@ -46,8 +46,6 @@ svx/ui/optgridpage.ui
 svx/ui/xformspage.ui
 svx/ui/compressgraphicdialog.ui
 svx/ui/compressgraphicdialog.ui
-svx/ui/docrecoveryprogressdialog.ui
-svx/ui/docrecoverybrokendialog.ui
 svx/ui/passwd.ui
 svx/ui/adddataitemdialog.ui
 svx/ui/addconditiondialog.ui
@@ -63,8 +61,6 @@ svx/ui/chinesedictionary.ui
 svx/ui/chineseconversiondialog.ui
 svx/ui/imapdialog.ui
 svx/ui/findreplacedialog.ui
-svx/ui/docrecoverysavedialog.ui
-svx/ui/docrecoveryrecoverdialog.ui
 svx/ui/querysavecontchangesdialog.ui
 svx/ui/querydeletecontourdialog.ui
 svx/ui/queryunlinkgraphicsdialog.ui

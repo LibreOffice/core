@@ -754,8 +754,6 @@ svx/source/sidebar/media/MediaPlaybackPanel.hxx:57
 svx/source/tbxctrls/lboxctrl.cxx:51
     SvxPopupWindowListBox m_nVisRows
     10
-svx/source/unodraw/recoveryui.cxx:64
-    (anonymous namespace)::RecoveryUI m_pParentWindow
     0
 sw/inc/authfld.hxx:163
     SwAuthorityField m_nTempSequencePos

@@ -5304,12 +5304,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="OfferSafeMode" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Offer Safe Mode to the user.</desc>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="FreehandThresholdPixels" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Defines number of pixels the cursor can move before a new bezier point will be added when using Freehand tool.</desc>

@@ -44,10 +44,6 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/dockingcolorreplace \
 	svx/uiconfig/ui/dockingcolorwindow \
 	svx/uiconfig/ui/dockingfontwork \
-	svx/uiconfig/ui/docrecoverybrokendialog \
-	svx/uiconfig/ui/docrecoveryprogressdialog \
-	svx/uiconfig/ui/docrecoveryrecoverdialog \
-	svx/uiconfig/ui/docrecoverysavedialog \
 	svx/uiconfig/ui/extrustiondepthdialog \
 	svx/uiconfig/ui/fillctrlbox \
 	svx/uiconfig/ui/filtermenu \
@@ -117,7 +113,6 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/redlineviewpage \
 	svx/uiconfig/ui/rowsmenu \
 	svx/uiconfig/ui/rulermenu \
-	svx/uiconfig/ui/safemodedialog \
 	svx/uiconfig/ui/savemodifieddialog \
 	svx/uiconfig/ui/selectionmenu \
 	svx/uiconfig/ui/sidebararea \

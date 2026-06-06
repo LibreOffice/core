@@ -1230,12 +1230,6 @@ public:
 
     ///@}
 
-    /** Set safe mode to enabled */
-    static void                 EnableSafeMode();
-
-    /** Determines if safe mode is enabled */
-    static bool                 IsSafeModeEnabled();
-
     /** Collect what .ui files are used*/
     static void                 EnableUICoverage(bool bEnable);
 

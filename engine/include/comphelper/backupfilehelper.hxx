@@ -108,10 +108,6 @@ namespace comphelper
         // allow to set static global flag when app had to call _exit()
         static void setExitWasCalled();
 
-        // This call initializes the state of the UserDirectory as needed, it may
-        // initialize to SafeMode configuration or return from it by moving files
-        // in that directory
-        static void reactOnSafeMode(bool bSafeMode);
 
         /** tries to create a new backup, if there is none yet, or if the
          *  last differs from the base file. It will then put a new version

@@ -1569,54 +1569,6 @@ namespace comphelper
         mbExitWasCalled = true;
     }
 
-    void BackupFileHelper::reactOnSafeMode(bool bSafeMode)
-    {
-        // ensure existence of needed paths
-        getInitialBaseURL();
-
-        if (maUserConfigBaseURL.isEmpty())
-            return;
-
-        if (bSafeMode)
-        {
-            if (!mbSafeModeDirExists)
-            {
-                std::set< OUString > aExcludeList;
-
-                // do not move SafeMode directory itself
-                aExcludeList.insert(getSafeModeName());
-
-                // init SafeMode by creating the 'SafeMode' directory and moving
-                // all stuff there. All repairs will happen there. Both Dirs have to exist.
-                // extend maUserConfigWorkURL as needed
-                maUserConfigWorkURL = maUserConfigBaseURL + "/" + getSafeModeName();
-
-                osl::Directory::createPath(maUserConfigWorkURL);
-                DirectoryHelper::moveDirContent(maUserConfigBaseURL, maUserConfigWorkURL, aExcludeList);
-
-                // switch local flag, maUserConfigWorkURL is already reset
-                mbSafeModeDirExists = true;
-            }
-        }
-        else
-        {
-            if (mbSafeModeDirExists)
-            {
-                // SafeMode has ended, return to normal mode by moving all content
-                // from 'SafeMode' directory back to UserDirectory and deleting it.
-                // Both Dirs have to exist
-                std::set< OUString > aExcludeList;
-
-                DirectoryHelper::moveDirContent(maUserConfigWorkURL, maUserConfigBaseURL, aExcludeList);
-                osl::Directory::remove(maUserConfigWorkURL);
-
-                // switch local flag and reset maUserConfigWorkURL
-                mbSafeModeDirExists = false;
-                maUserConfigWorkURL = maUserConfigBaseURL;
-            }
-        }
-    }
-
     void BackupFileHelper::tryPush()
     {
         // no push when SafeModeDir exists, it may be Office's exit after SafeMode

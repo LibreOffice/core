@@ -5976,8 +5976,6 @@ svx/source/fmcomp/fmgridcl.cxx:812
     enum (anonymous namespace)::InspectorAction eOpenInspector
 svx/source/inc/datanavi.hxx:72
     enum svxform::DataItemType DITElement
-svx/source/inc/docrecovery.hxx:75
-    enum EDocStates Unknown
 svx/source/inc/fmdocumentclassification.hxx:31
     enum svxform::DocumentType eTextDocument
 svx/source/inc/fmdocumentclassification.hxx:32
@@ -6018,8 +6016,6 @@ svx/source/tbxctrls/tbcontrl.cxx:2543
     enum (anonymous namespace)::FrmValidFlags AllMask
 svx/source/tbxctrls/tbunosearchcontrollers.cxx:715
     enum (anonymous namespace)::UpDownSearchToolboxController::Type DOWN
-svx/source/unodraw/recoveryui.cxx:50
-    enum (anonymous namespace)::RecoveryUI::EJob E_JOB_UNKNOWN
 svx/source/xml/xmlxtimp.cxx:64
     enum (anonymous namespace)::SvxXMLTableImportContextEnum Gradient
 sw/inc/calbck.hxx:75

@@ -135,7 +135,6 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
         static void impl_appendProductName (OUStringBuffer& sTitle);
         void impl_appendModuleName (OUStringBuffer& sTitle);
         static void impl_appendDebugVersion (OUStringBuffer& sTitle);
-        static void impl_appendSafeMode (OUStringBuffer& sTitle);
 
         void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
 

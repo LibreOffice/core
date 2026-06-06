@@ -170,7 +170,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(if $(filter WNT,$(OS)), \
 		soffice_exe \
 		soffice_com \
-		soffice_safe \
 		unoinfo \
 		$(if $(filter-out AARCH64,$(CPUNAME)),twain32shim) \
 	) \

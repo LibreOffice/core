@@ -128,21 +128,8 @@ void TipOfTheDayDialog::UpdateTip()
 {
     constexpr sal_Int32 nNumberOfTips = std::size(TIPOFTHEDAY_STRINGARRAY);
 
-    for (;;)
-    {
-        if ((m_nCurrentTip >= nNumberOfTips) || (m_nCurrentTip < 0))
-            m_nCurrentTip = 0;
-        if (std::get<1>(TIPOFTHEDAY_STRINGARRAY[m_nCurrentTip])
-                == "svx/ui/safemodedialog/SafeModeDialog"
-            && !officecfg::Office::Common::Misc::OfferSafeMode::get())
-        {
-            ++m_nCurrentTip;
-        }
-        else
-        {
-            break;
-        }
-    }
+    if ((m_nCurrentTip >= nNumberOfTips) || (m_nCurrentTip < 0))
+        m_nCurrentTip = 0;
 
     //title
     m_xDialog->set_title(CuiResId(STR_TITLE)

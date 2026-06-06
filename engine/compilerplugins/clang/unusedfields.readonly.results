@@ -690,8 +690,6 @@ svx/source/inc/gridcell.hxx:509
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/svdpdf.hxx:60
     ImpSdrPdfImport maDash XDash
-svx/source/unodraw/recoveryui.cxx:64
-    (anonymous namespace)::RecoveryUI m_pParentWindow weld::Window *
 sw/inc/acmplwrd.hxx:41
     SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/breakit.hxx:38

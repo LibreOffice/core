@@ -74,7 +74,6 @@ sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-Documentation'
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-TipOfTheDay'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-QuestionAnswers'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-SendFeedback'] button-no-label
-sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-SafeMode'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-GetInvolved'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-Donation'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuHelp-ShowLicense'] button-no-label

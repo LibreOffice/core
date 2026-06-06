@@ -10391,8 +10391,6 @@ svx/source/diagram/datamodel_svx.cxx
 svx/source/dialog/ClassificationDialog.cxx
 svx/source/dialog/ClassificationEditView.cxx
 svx/source/dialog/ClassificationEditView.hxx
-svx/source/dialog/SafeModeDialog.cxx
-svx/source/dialog/SafeModeUI.cxx
 svx/source/dialog/SpellDialogChildWindow.cxx
 svx/source/dialog/_bmpmask.cxx
 svx/source/dialog/_contdlg.cxx
@@ -10409,7 +10407,6 @@ svx/source/dialog/dialcontrol.cxx
 svx/source/dialog/dlgctl3d.cxx
 svx/source/dialog/dlgctrl.cxx
 svx/source/dialog/dlgutil.cxx
-svx/source/dialog/docrecovery.cxx
 svx/source/dialog/fntctrl.cxx
 svx/source/dialog/fontwork.cxx
 svx/source/dialog/framelink.cxx
@@ -10536,7 +10533,6 @@ svx/source/inc/cell.hxx
 svx/source/inc/datalistener.hxx
 svx/source/inc/datanavi.hxx
 svx/source/inc/delayedevent.hxx
-svx/source/inc/docrecovery.hxx
 svx/source/inc/filtnav.hxx
 svx/source/inc/fmPropBrw.hxx
 svx/source/inc/fmcontrolbordermanager.hxx
@@ -10895,7 +10891,6 @@ svx/source/unodraw/UnoNameItemTable.hxx
 svx/source/unodraw/UnoNamespaceMap.cxx
 svx/source/unodraw/XPropertyTable.cxx
 svx/source/unodraw/gluepts.cxx
-svx/source/unodraw/recoveryui.cxx
 svx/source/unodraw/shapeimpl.hxx
 svx/source/unodraw/shapepropertynotifier.cxx
 svx/source/unodraw/tableshape.cxx

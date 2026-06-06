@@ -66,7 +66,6 @@ class SvxZoomItem;
 #define SID_QUITAPP                         (SID_SFX_START + 300)
 #define SID_ABOUT                           (SID_SFX_START + 301)
 #define SID_SETUPPRINTER                    (SID_SFX_START + 302)
-#define SID_SAFE_MODE                       (SID_SFX_START + 303)
 
 #define SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW (SID_SFX_START + 306)
 #define SID_INSPECT_SELECTED_OBJECT          (SID_SFX_START + 307)

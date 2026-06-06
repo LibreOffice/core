@@ -1250,16 +1250,6 @@ svl/source/numbers/zformat.cxx:338
     enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM18
 svl/source/numbers/zformat.cxx:339
     enum (anonymous namespace)::BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM19
-svx/source/inc/docrecovery.hxx:77
-    enum EDocStates TryLoadBackup
-svx/source/inc/docrecovery.hxx:78
-    enum EDocStates TryLoadOriginal
-svx/source/inc/docrecovery.hxx:83
-    enum EDocStates Damaged
-svx/source/inc/docrecovery.hxx:85
-    enum EDocStates Incomplete
-svx/source/inc/docrecovery.hxx:87
-    enum EDocStates Succeeded
 svx/source/tbxctrls/fillctrl.cxx:55
     enum (anonymous namespace)::eFillStyle SOLID
 svx/source/tbxctrls/fillctrl.cxx:56

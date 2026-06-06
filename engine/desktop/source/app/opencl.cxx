@@ -188,7 +188,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
 
 void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
 {
-    if (!openclwrapper::canUseOpenCL() || Application::IsSafeModeEnabled())
+    if (!openclwrapper::canUseOpenCL())
         return;
 
     SAL_INFO("opencl", "Initiating test of OpenCL device");

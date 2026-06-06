@@ -253,7 +253,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/notify/globalevents \
     sfx2/source/notify/hintpost \
     sfx2/source/notify/openurlhint \
-    sfx2/source/safemode/safemode \
     sfx2/source/sidebar/Sidebar \
     sfx2/source/sidebar/SidebarChildWindow \
     sfx2/source/sidebar/SidebarDockingWindow \

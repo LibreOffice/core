@@ -129,9 +129,6 @@ excludelist:
     svx/source/table/tablecolumns.cxx:
     # Complete type is needed for template class
     - tablecolumn.hxx
-    svx/source/unodraw/recoveryui.cxx:
-    # Needed for LIBO_ETC_FOLDER on WIN32
-    - config_folders.h
     svx/source/unodraw/unoprov.cxx:
     # Needed for UnoType instantiation
     - com/sun/star/lang/Locale.hpp

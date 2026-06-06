@@ -236,11 +236,6 @@ static RenderMethod initRenderMethodToUse()
 {
     if (Application::IsBitmapRendering())
         return RenderRaster;
-#if defined(MACOSX) || defined(_WIN32)
-    // macOS/win can __only__ render via skia - there, we can only disable HW acceleration
-    if (Application::IsSafeModeEnabled())
-        return RenderRaster;
-#endif
 
     if (const char* env = getenv("SAL_SKIA"))
     {
@@ -437,8 +432,7 @@ static bool initVCLSkiaEnabled()
         bRet = true; // macOS/win can __only__ render via skia
 #else
         bRet = bForceSkia;
-        // If not forced, don't enable in safe mode
-        if (!bRet && !Application::IsSafeModeEnabled())
+        if (!bRet)
         {
             bRet = getenv("SAL_ENABLESKIA") != nullptr
                    || officecfg::Office::Common::VCL::UseSkia::get();
