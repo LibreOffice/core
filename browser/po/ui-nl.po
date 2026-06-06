@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
 "PO-Revision-Date: 2026-06-06 15:01+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -891,6 +891,10 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Kies voor documentacties (inspecteren en bewerken) een model met eigen "
+"functie/toolaanroepen, zoals gpt-4o, llama3.1 of qwen2.5. Modellen zonder "
+"(bijv. base llama3, gemma) kunnen wel chatten maar geen documenthulpmiddelen "
+"gebruiken."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2255
 #: admin/src/integrator/AdminIntegratorSettings.ts:2373
@@ -944,6 +948,8 @@ msgstr "Geen (afbeeldingen niet genereren)"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Kan geen modellen ophalen (HTTP {0}). Controleer de URL van de provider en "
+"de API-sleutel."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1790,7 +1796,7 @@ msgstr "Wijziging afgewezen"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
-msgstr "Gebruiksgedeelte: "
+msgstr "Toepassingsgebied: "
 
 #: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
@@ -3024,7 +3030,7 @@ msgstr "Lokale afbeelding..."
 #: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
 #: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
 msgid "Shapes ..."
-msgstr ""
+msgstr "Vormen…"
 
 #: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
 #: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
@@ -5810,15 +5816,15 @@ msgstr "Meer opties voor {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1738
 msgid "Cell value"
-msgstr ""
+msgstr "Celwaarde"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1742
 msgid "row %1"
-msgstr ""
+msgstr "rij %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1751
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
@@ -5858,11 +5864,11 @@ msgstr "Succesvol geëxporteerd: "
 
 #: src/app/Socket.ts:1113
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Dit document bevat links naar externe inhoud."
 
 #: src/app/Socket.ts:1114
 msgid "Allow"
-msgstr ""
+msgstr "Toestaan"
 
 #: src/app/Socket.ts:1626
 msgid "Discard"
@@ -6555,7 +6561,7 @@ msgstr "Dialoogvenster Welkom"
 
 #: src/map/handler/Map.Settings.ts:143
 msgid "Settings saved"
-msgstr ""
+msgstr "Instellingen opgeslagen"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
