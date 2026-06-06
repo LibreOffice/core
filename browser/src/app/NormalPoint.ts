@@ -66,6 +66,27 @@ class NormalPoint {
 		return new cool.Point(normPoint.lng * scale, -normPoint.lat * scale);
 	}
 
+	// used in Map.prototype.rescale(), only makes sense for pixel points.
+	// (cool.Point, number, number) -> cool.Point
+	public static rescale(
+		point: cool.Point,
+		oldZoom: number,
+		newZoom: number,
+	): cool.Point {
+		const scale = NormalPoint.scale(newZoom - oldZoom);
+		return cool.Point.toPoint(point.x * scale, point.y * scale);
+	}
+
+	// used in Map.prototype.distance()
+	public static distance(
+		normPoint1: NormalPoint,
+		normPoint2: NormalPoint,
+	): number {
+		const dx = normPoint2.lng - normPoint1.lng;
+		const dy = normPoint2.lat - normPoint1.lat;
+		return Math.sqrt(dx * dx + dy * dy);
+	}
+
 	public equals(obj: any, maxMargin: number): boolean {
 		if (!obj) {
 			return false;
@@ -99,3 +120,6 @@ class NormalPoint {
 		return null;
 	}
 }
+
+window.L.LatLng = NormalPoint;
+window.L.latLng = NormalPoint.flexConstruct;
