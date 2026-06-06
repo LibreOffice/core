@@ -239,6 +239,45 @@ describe(['tagdesktop'], 'Notebookbar review operations.', function() {
 	});
 });
 
+describe(['tagdesktop'], 'Notebookbar contextual tabs.', function() {
+
+	it('Image inside a table offers both the Picture and the Table tab', function() {
+		helper.setupAndLoadDocument('writer/table_operation.odt');
+		desktopHelper.switchUIToNotebookbar();
+		cy.viewport(1920,1080);
+
+		// The document opens with the cursor in the first table cell. Insert
+		// an image there: it is anchored in the cell and stays selected.
+		desktopHelper.insertImage();
+
+		// The image's tab takes over, and the tab of the surrounding table is
+		// offered alongside it.
+		cy.cGet('#Picture-tab-label').should('be.visible');
+		cy.cGet('#Picture-tab-label').should('have.class', 'selected');
+		cy.cGet('#Table-tab-label').should('be.visible');
+
+		// The table tab is reachable while the image is still selected.
+		// (That its commands then operate on the cell holding the image is
+		// covered by the SwUibaseUiviewTest unit test.)
+		cy.cGet('#Table-tab-label').click();
+		cy.cGet('#Table-tab-label').should('have.class', 'selected');
+	});
+
+	it('Image not in a table does not offer the Table tab', function() {
+		// A document without any table.
+		helper.setupAndLoadDocument('writer/image_operation.odt');
+		desktopHelper.switchUIToNotebookbar();
+		cy.viewport(1920,1080);
+
+		desktopHelper.insertImage();
+
+		// Only the image's tab is offered, no table tab.
+		cy.cGet('#Picture-tab-label').should('be.visible');
+		cy.cGet('#Picture-tab-label').should('have.class', 'selected');
+		cy.cGet('#Table-tab-label').should('not.be.visible');
+	});
+});
+
 describe(['tagdesktop'], 'HideChangeTrackingControls mode tests.', function() {
 	it('Check that track change controls are not shown', function() {
 		helper.setupAndLoadDocument('writer/hide_change_tracking_controls.odt', /* isMultiUser */ false, /* copyCertificates copies .wopi.json */ true);

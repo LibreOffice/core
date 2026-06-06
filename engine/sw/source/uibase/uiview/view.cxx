@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <string_view>
 
 #include <config_features.h>
@@ -32,6 +33,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
 #include <svl/eitem.hxx>
@@ -81,7 +83,10 @@
 #include <DocumentFieldsManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <dcontact.hxx>
 #include <drawdoc.hxx>
+#include <fmtanchr.hxx>
+#include <node.hxx>
 #include <wdocsh.hxx>
 #include <wrtsh.hxx>
 #include <barcfg.hxx>
@@ -279,6 +284,51 @@ void SwView::HideUIElement(const OUString& sElementURL) const
     SetUIElementVisibility(sElementURL, false);
 }
 
+std::vector<OUString> SwView::GetParentContextNames() const
+{
+    std::vector<OUString> aParents;
+    if (!m_pWrtShell)
+        return aParents;
+
+    // OLE objects (formulas, charts, embedded spreadsheets) are left out. When
+    // such an object is edited in place its own context takes over the whole
+    // ribbon, and the selection state flips between selected and edited, which
+    // would make the reported parents change under a stable selection.
+    if (m_pWrtShell->GetSelectionType() & SelectionType::Ole)
+        return aParents;
+
+    // Find the object that holds the current selection: the shape whose text
+    // is being edited, the selected fly frame (image or text frame) or the
+    // selected drawing object.
+    const SwFrameFormat* pObjFormat = nullptr;
+    SdrView* pDrawView = GetDrawView();
+    if (pDrawView && pDrawView->IsTextEdit())
+    {
+        // Text typed into a shape still belongs to that shape.
+        aParents.push_back(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));
+        pObjFormat = ::FindFrameFormat(pDrawView->GetTextEditObject());
+    }
+    else if (m_pWrtShell->IsFrameSelected())
+    {
+        pObjFormat = m_pWrtShell->GetFlyFrameFormat();
+    }
+    else if (pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount() > 0)
+    {
+        pObjFormat
+            = ::FindFrameFormat(pDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+    }
+
+    if (pObjFormat)
+    {
+        const SwNode* pAnchorNode = pObjFormat->GetAnchor().GetAnchorNode();
+        if (pAnchorNode && pAnchorNode->FindTableNode())
+            aParents.push_back(
+                vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Table));
+    }
+
+    return aParents;
+}
+
 void SwView::SelectShell()
 {
     // Attention: Maintain the SelectShell for the WebView additionally
@@ -316,7 +366,15 @@ void SwView::SelectShell()
     if ( m_pFormShell && m_pFormShell->IsActiveControl() )
         nNewSelectionType |= SelectionType::FormControl;
 
-    if ( nNewSelectionType == m_nSelectionType &&
+    // The selection may move into or out of an enclosing structure without
+    // changing the selection type, for example from an image inside a table
+    // to an image outside of it. The shell stack and the broadcast contexts
+    // depend on those parents, so recompute the stack in that case.
+    bool bParentContextsChanged = false;
+    if (comphelper::COKit::isActive())
+        bParentContextsChanged = GetParentContextNames() != m_aLastParentContextNames;
+
+    if ( nNewSelectionType == m_nSelectionType && !bParentContextsChanged &&
         !(m_nSelectionType == SelectionType::Ole && m_pWrtShell->IsOLEMath()) )
     {
         GetViewFrame().GetBindings().InvalidateAll( false );
@@ -390,6 +448,20 @@ void SwView::SelectShell()
         m_pShell = new SwNavigationShell( *this );
         rDispatcher.Push( *m_pShell );
 
+        // An object whose anchor sits in a table cell keeps the table
+        // commands reachable: the table shell targets the cell that holds
+        // the object. Use the same anchor test as the context broadcast so
+        // a visible table tab always has a working shell behind it.
+        bool bObjectInTable = false;
+        if (comphelper::COKit::isActive())
+        {
+            const std::vector<OUString> aParents = GetParentContextNames();
+            bObjectInTable
+                = std::find(aParents.begin(), aParents.end(),
+                            vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Table))
+                  != aParents.end();
+        }
+
         if ( m_nSelectionType & SelectionType::Ole )
         {
             eShellMode = ShellMode::Object;
@@ -400,6 +472,8 @@ void SwView::SelectShell()
             || m_nSelectionType & SelectionType::Graphic)
         {
             eShellMode = ShellMode::Frame;
+            if (bObjectInTable)
+                rDispatcher.Push( *(new SwTableShell( *this )) );
             m_pShell = new SwFrameShell( *this );
             rDispatcher.Push( *m_pShell );
             if(m_nSelectionType & SelectionType::Graphic )
@@ -412,6 +486,8 @@ void SwView::SelectShell()
         else if ( m_nSelectionType & SelectionType::DrawObject )
         {
             eShellMode = ShellMode::Draw;
+            if (bObjectInTable)
+                rDispatcher.Push( *(new SwTableShell( *this )) );
             m_pShell = new SwDrawShell( *this );
             rDispatcher.Push( *m_pShell );
 
@@ -525,6 +601,12 @@ void SwView::SelectShell()
         if ( bInitFormShell && pDView )
             m_pFormShell->SetView(dynamic_cast<FmFormView*>( pDView) );
 
+        // The freshly pushed shells broadcast their contexts with the parent
+        // contexts of the new selection appended. Remember those parents so
+        // that a later selection change within the same shell stack can tell
+        // whether the parents changed.
+        if (comphelper::COKit::isActive())
+            m_aLastParentContextNames = GetParentContextNames();
     }
     // Opportune time for the communication with OLE objects?
     if ( GetDocShell()->GetDoc()->IsOLEPrtNotifyPending() )

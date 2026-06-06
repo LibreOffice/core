@@ -216,6 +216,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     const SwFrameFormat      *m_pLastTableFormat;
     const SwFrameFormat* m_pLastFlyFormat;
 
+    // parent context names that were current when the context was last
+    // broadcast, innermost first
+    std::vector<OUString> m_aLastParentContextNames;
+
     std::unique_ptr<SwFormatClipboard> m_pFormatClipboard; //holds data for format paintbrush
 
     std::unique_ptr<SwPostItMgr> m_pPostItMgr;
@@ -406,6 +410,7 @@ public:
 
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const override;
+    virtual std::vector<OUString> GetParentContextNames() const override;
     virtual bool            HasUIFeature(SfxShellFeature nFeature) const override;
     virtual void            ShowCursor( bool bOn = true ) override;
     virtual ErrCode         DoVerb(sal_Int32 nVerb) override;

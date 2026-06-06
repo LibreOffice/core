@@ -45,14 +45,18 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <fmturl.hxx>
+#include <comphelper/kit.hxx>
+#include <fmtanchr.hxx>
 #include <fmtclds.hxx>
 #include <fmtcnct.hxx>
+#include <node.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
 #include <uitool.hxx>
 #include <frmfmt.hxx>
 #include <frmsh.hxx>
+#include <tabsh.hxx>
 #include <frmmgr.hxx>
 #include <edtwin.hxx>
 #include <swdtflvr.hxx>
@@ -1084,9 +1088,46 @@ SwFrameShell::~SwFrameShell()
     SwTransferable::ClearSelection( GetShell(), this );
 }
 
+namespace
+{
+// When the selected fly frame is anchored in a table cell, the border
+// commands shown on the table tab apply to the cell, not to the object
+// frame. The fly shell sits above the table shell on the dispatcher stack
+// and would otherwise claim those slots. Returns the table shell to forward
+// them to, or nullptr when the object is not in a table.
+SwTableShell* lcl_GetTableShellForFlyInTable(SwWrtShell& rSh)
+{
+    if (!comphelper::COKit::isActive() || !rSh.IsFrameSelected())
+        return nullptr;
+
+    const SwFrameFormat* pFlyFormat = rSh.GetFlyFrameFormat();
+    const SwNode* pAnchorNode = pFlyFormat ? pFlyFormat->GetAnchor().GetAnchorNode() : nullptr;
+    if (!pAnchorNode || !pAnchorNode->FindTableNode())
+        return nullptr;
+
+    SfxDispatcher* pDispatcher = rSh.GetView().GetViewFrame().GetDispatcher();
+    if (!pDispatcher)
+        return nullptr;
+
+    for (sal_uInt16 i = 0;; ++i)
+    {
+        SfxShell* pShell = pDispatcher->GetShell(i);
+        if (!pShell)
+            return nullptr;
+        if (SwTableShell* pTableShell = dynamic_cast<SwTableShell*>(pShell))
+            return pTableShell;
+    }
+}
+}
+
 void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
 {
     SwWrtShell &rSh = GetShell();
+    if (SwTableShell* pTableShell = lcl_GetTableShellForFlyInTable(rSh))
+    {
+        pTableShell->ExecuteSlot(const_cast<SfxRequest&>(rReq));
+        return;
+    }
     bool bDefault = false;
     if (!rSh.IsFrameSelected())
         return;
@@ -1276,6 +1317,14 @@ static void lcl_FrameGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorder
 void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
+    if (SwTableShell* pTableShell = lcl_GetTableShellForFlyInTable(rSh))
+    {
+        // Report the cell borders, so the table tab reflects the cell the
+        // object is anchored in.
+        pTableShell->GetFrameBorderState(rSet);
+        pTableShell->GetLineStyleState(rSet);
+        return;
+    }
     bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
     if (bParentCntProt)

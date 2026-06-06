@@ -15,6 +15,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vcl/scheduler.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -30,10 +31,17 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <cmdid.h>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <frmatr.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -298,6 +306,97 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
     // - Actual  : 0
     // i.e. selecting the first image didn't result in a disabled UNO command.
     CPPUNIT_ASSERT_GREATEREQUAL(1, pInterceptor->m_nDisabled);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testParentContextNames)
+{
+    // A 1x1 table with an image anchored in its cell, plus a second image
+    // anchored in the paragraph below the table. COKit stays active for the
+    // whole process: resetting it while the document is still open would
+    // make the teardown broadcast contexts into a disposing view.
+    comphelper::COKit::setActive(true);
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+    uno::Reference<text::XTextTable> xTable(
+        xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), uno::UNO_QUERY);
+    xTable->initialize(1, 1);
+    xText->insertTextContent(xCursor, xTable, false);
+
+    auto insertGraphic = [&xMSF](const uno::Reference<text::XText>& xTarget) {
+        uno::Reference<beans::XPropertySet> xTextGraphic(
+            xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+        xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
+                                       uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+        xTextGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(5000, 5000)));
+        uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+        xTarget->insertTextContent(xTarget->createTextCursor(), xTextContent, false);
+    };
+    uno::Reference<text::XText> xCellText(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    insertGraphic(xCellText);
+    insertGraphic(xText);
+
+    SwView* pView = getSwDocShell()->GetView();
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
+        getSwTextDoc()->getCurrentController(), uno::UNO_QUERY);
+    auto selectImage = [&](std::u16string_view rName) {
+        xSelectionSupplier->select(uno::Any(getShapeByName(rName)));
+        pView->StopShellTimer();
+    };
+
+    // The image inside the table reports the table as its enclosing
+    // structure, and the table commands stay reachable.
+    selectImage(u"Image1");
+    std::vector<OUString> aParents = pView->GetParentContextNames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), aParents.size());
+    CPPUNIT_ASSERT_EQUAL(u"Table"_ustr, aParents[0]);
+    std::unique_ptr<SfxPoolItem> pState;
+    CPPUNIT_ASSERT(pView->GetViewFrame().GetBindings().QueryState(FN_TABLE_INSERT_ROW_BEFORE,
+                                                                  pState)
+                   != SfxItemState::DISABLED);
+
+    // A border command from the table tab applies to the cell that holds the
+    // image, not to the image frame. The frame shell would otherwise claim
+    // the slot, since it sits above the table shell.
+    {
+        editeng::SvxBorderLine aLine(nullptr, SvxBorderLineWidth::Medium);
+        SvxBoxItem aBox(RES_BOX);
+        aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
+        aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+        aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
+        aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
+        pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_ATTR_BORDER,
+                                                           SfxCallMode::SYNCHRON, { &aBox });
+    }
+    uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
+    uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
+    table::BorderLine2 aCellTop;
+    xCellProps->getPropertyValue(u"TopBorder"_ustr) >>= aCellTop;
+    CPPUNIT_ASSERT(aCellTop.LineWidth > 0);
+
+    // The image frame keeps its empty border.
+    const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
+    CPPUNIT_ASSERT(pFlyFormat);
+    CPPUNIT_ASSERT(!pFlyFormat->GetBox().GetTop());
+
+    // A table command with the image still selected works on the cell that
+    // holds the image.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xTable->getRows()->getCount());
+    dispatchCommand(mxComponent, u".uno:InsertRowsBefore"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xTable->getRows()->getCount());
+
+    // The image in the document body reports no enclosing structure and no
+    // table commands.
+    selectImage(u"Image2");
+    CPPUNIT_ASSERT(pView->GetParentContextNames().empty());
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED,
+                         pView->GetViewFrame().GetBindings().QueryState(
+                             FN_TABLE_INSERT_ROW_BEFORE, pState));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testPrintPreview)

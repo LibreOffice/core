@@ -36,6 +36,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
+#include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
@@ -50,10 +51,13 @@
 #include <editeng/itemtype.hxx>
 #include <osl/diagnose.h>
 
+#include <dcontact.hxx>
+#include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtfsize.hxx>
+#include <node.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <rootfrm.hxx>
@@ -136,6 +140,63 @@ static void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
     SfxItemSet aSet( rSh.GetView().GetPool(), rItem.Which(), rItem.Which());
     aSet.Put( rItem );
     rSh.SetTableAttr( aSet );
+}
+
+/// Anchor position of the selected fly frame or drawing object, when that
+/// anchor sits inside a table. Returns nullptr for any other selection.
+static const SwPosition* lcl_GetSelectedObjectAnchorInTable(SwWrtShell& rSh)
+{
+    const SwFrameFormat* pObjFormat = nullptr;
+    if (rSh.IsFrameSelected())
+        pObjFormat = rSh.GetFlyFrameFormat();
+    else if (const SdrView* pDrawView = rSh.GetDrawView())
+    {
+        const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() > 0)
+            pObjFormat = ::FindFrameFormat(rMarkList.GetMark(0)->GetMarkedSdrObj());
+    }
+
+    const SwPosition* pAnchor
+        = pObjFormat ? pObjFormat->GetAnchor().GetContentAnchor() : nullptr;
+    if (pAnchor && pAnchor->GetNode().FindTableNode())
+        return pAnchor;
+    return nullptr;
+}
+
+namespace
+{
+/// While a fly frame is selected the cursor stands inside the fly content,
+/// not in the cell the fly is anchored in. Parks the cursor at the anchor
+/// for the lifetime of this object, so that lookups of the table at the
+/// cursor find the table that holds the object.
+class CursorParkedAtObjectAnchor
+{
+    SwWrtShell* m_pShell = nullptr;
+
+public:
+    explicit CursorParkedAtObjectAnchor(SwWrtShell& rSh)
+    {
+        if (!comphelper::COKit::isActive() || rSh.IsCursorInTable())
+            return;
+        const SwPosition* pAnchor = lcl_GetSelectedObjectAnchorInTable(rSh);
+        if (!pAnchor)
+            return;
+        m_pShell = &rSh;
+        rSh.StartAction();
+        rSh.Push();
+        SwPaM* pCursor = rSh.GetCursor();
+        *pCursor->GetPoint() = *pAnchor;
+        pCursor->DeleteMark();
+    }
+
+    ~CursorParkedAtObjectAnchor()
+    {
+        if (!m_pShell)
+            return;
+        m_pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        m_pShell->EndAction();
+    }
+};
 }
 
 static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
@@ -485,6 +546,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
+
+    // A table command on an object that is anchored inside a table works on
+    // the cell that holds the object: run the slot with the cursor parked
+    // at the anchor. The object selection itself stays untouched.
+    CursorParkedAtObjectAnchor aParked(rSh);
 
     // At first the slots which doesn't need a FrameMgr.
     bool bMore = false;
@@ -1432,6 +1498,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter( rSet );
     SwWrtShell &rSh = GetShell();
+    CursorParkedAtObjectAnchor aParked(rSh);
     SwFrameFormat *pFormat = rSh.GetTableFormat();
     // os #124829# crash report: in case of an invalid shell selection return immediately
     if(!pFormat)
@@ -1755,6 +1822,7 @@ SwTableShell::SwTableShell(SwView &_rView) :
 
 void SwTableShell::GetFrameBorderState(SfxItemSet &rSet)
 {
+    CursorParkedAtObjectAnchor aParked(GetShell());
     SfxItemSetFixed<RES_BOX, RES_BOX,
                  SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>  aCoreSet( GetPool() );
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
@@ -1766,6 +1834,7 @@ void SwTableShell::GetFrameBorderState(SfxItemSet &rSet)
 void SwTableShell::ExecTableStyle(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
+    CursorParkedAtObjectAnchor aParked(rSh);
     const SfxItemSet *pArgs = rReq.GetArgs();
     if(!pArgs)
         return;
@@ -1820,6 +1889,7 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
 
 void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
 {
+    CursorParkedAtObjectAnchor aParked(GetShell());
     SfxItemSetFixed<RES_BOX, RES_BOX,
                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>  aCoreSet( GetPool() );
     SvxBoxInfoItem aCoreInfo( SID_ATTR_BORDER_INNER );
@@ -1839,6 +1909,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
+    CursorParkedAtObjectAnchor aParked(rSh);
 
     // At first the slots, which doesn't need a FrameMgr.
     const SfxPoolItem* pItem = nullptr;
