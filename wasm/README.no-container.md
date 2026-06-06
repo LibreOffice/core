@@ -5,10 +5,9 @@ without using the Allotropia container.
 
 # Collabora Online as WASM (COWASM)
 
-Before building Collabora Online as WASM you need to build two
-dependencies: CollaboraOffice core and zstd. (POCO is built as part of
-the CollaboraOffice core engine, so it no longer needs to be built
-separately.)
+Before building Collabora Online as WASM you only need to build the
+CollaboraOffice core. (POCO, zstd and libpng are built as part of the
+CollaboraOffice core engine, so they no longer need to be built separately.)
 
 The toolchain used is Emscripten. Versions >= 3.1.58 should generally work.
 
@@ -25,25 +24,12 @@ See the static/README.wasm.md file in CollaboraOffice core, especially the
 section "Building headless CollaboraOffice as WASM for use in another
 product".
 
-## Build other Online dependencies
-
-### zstd
-
-Build libzstd  with assembly code disable, and using the Makefile (didn't try its other build systems):
-
-    tar -xzvf ~/Downloads/zstd-1.5.2.tar.gz
-    cd zstd-1.5.2/
-    emmake make CC='emcc -pthread' CXX='em++ -pthread' lib-mt V=1 ZSTD_NO_ASM=1 PREFIX=/opt/zstd.emsc.3.1.30
-    (cd lib && emmake make install-static install-includes ZSTD_NO_ASM=1 PREFIX=/opt/zstd.emsc.3.1.30)
-
-This will install the zstd headers and libraries in `/opt/zstd.emsc.3.1.30`.
-
 ## Build Online itself
 
     # Update the directories in the command below to match your system.
 
     ./autogen.sh
-    emconfigure ./configure --disable-werror --with-lokit-path=/home/tml/lo/core-cool-wasm/include --with-lo-path=/home/tml/lo/core-cool-wasm/instdir --with-lo-builddir=/home/tml/lo/core-cool-wasm --with-zstd-includes=/opt/zstd.emsc.3.1.30/include --with-zstd-libs=/opt/zstd.emsc.3.1.30/lib --host=wasm32-local-emscripten
+    emconfigure ./configure --disable-werror --with-lokit-path=/home/tml/lo/core-cool-wasm/include --with-lo-path=/home/tml/lo/core-cool-wasm/instdir --with-lo-builddir=/home/tml/lo/core-cool-wasm --host=wasm32-local-emscripten
     emmake make CC=emcc CXX=em++
 
 ## Running WASM Online

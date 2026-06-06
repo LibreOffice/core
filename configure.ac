@@ -345,15 +345,17 @@ AC_ARG_WITH([poco-includes],
 
 AC_ARG_WITH([zstd-libs],
             AS_HELP_STRING([--with-zstd-libs=<path>],
-                           [Path to the directory containing libzstd.a
-                            libraries. For Android, this has the same format as --with-lo-builddir.
-                            Not needed or allowed for Windows, we always use the zstd built in engine.]))
+                           [Obsolete and ignored. zstd is taken from the engine's workdir
+                            (or the system, for desktop builds), like the other engine
+                            third-party libraries.]),
+            [AC_MSG_WARN([--with-zstd-libs is obsolete and ignored; zstd is taken from the engine or the system.])])
 
 AC_ARG_WITH([zstd-includes],
             AS_HELP_STRING([--with-zstd-includes=<path>],
-                           [Path to the "include" directory with the zstd
-                            headers. For Android, this has the same format as --with-lo-builddir.
-                            Not needed or allowed for Windows, we always use the zstd unpacked in engine.]))
+                           [Obsolete and ignored. zstd is taken from the engine's workdir
+                            (or the system, for desktop builds), like the other engine
+                            third-party libraries.]),
+            [AC_MSG_WARN([--with-zstd-includes is obsolete and ignored; zstd is taken from the engine or the system.])])
 
 AC_ARG_WITH([poco-libs],
             AS_HELP_STRING([--with-poco-libs=<path>],
@@ -364,15 +366,17 @@ AC_ARG_WITH([poco-libs],
 
 AC_ARG_WITH([libpng-includes],
             AS_HELP_STRING([--with-libpng-includes=<path>],
-                           [Path to the "include" directory with the libpng
-                            headers. Not used on Android.
-                            Ignored for Windows, we always use the libpng built in engine.]))
+                           [Obsolete and ignored. libpng is taken from the engine's workdir
+                            (or the system, for desktop builds), like the other engine
+                            third-party libraries.]),
+            [AC_MSG_WARN([--with-libpng-includes is obsolete and ignored; libpng is taken from the engine or the system.])])
 
 AC_ARG_WITH([libpng-libs],
             AS_HELP_STRING([--with-libpng-libs=<path>],
-                           [Path to the "lib" directory with the libpng
-                            libraries. Not used on Android.
-                            Ignored for Windows, we always use the libpng built in engine.]))
+                           [Obsolete and ignored. libpng is taken from the engine's workdir
+                            (or the system, for desktop builds), like the other engine
+                            third-party libraries.]),
+            [AC_MSG_WARN([--with-libpng-libs is obsolete and ignored; libpng is taken from the engine or the system.])])
 
 AC_ARG_WITH([cppunit-includes],
             AS_HELP_STRING([--with-cppunit-includes=<path>],
@@ -803,19 +807,19 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
 fi
 
 if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_macosapp" = "yes" \) -o \( "$enable_windowsapp" = "yes" \) -o \( "$enable_androidapp" = "yes" \) -o "$host_os" = "emscripten" ; then
-   # POCO is built as a third-party library in the engine; pick it up from the
-   # engine's workdir.  For Android there is one engine build tree per ABI.
-   # macOS builds against the in-tree engine like the desktop build, so its
+   # POCO, zstd and libpng are built as third-party libraries in the engine and
+   # picked up from its workdir.  For Android there is one engine build tree per
+   # ABI.  macOS builds against the in-tree engine like the desktop build, so its
    # build dir is --with-lo-builddir (default "engine"), not $LOBUILDDIR (which
    # is only set for the iOS/Android/Windows/wasm cross builds).
-   AC_MSG_CHECKING([for Poco built in the engine])
    if test "$enable_macosapp" = "yes"; then
-      poco_engine_builddir=`readlink -f "${with_lo_builddir:-engine}"`
+      engine_builddir=`readlink -f "${with_lo_builddir:-engine}"`
    else
-      poco_engine_builddir="$LOBUILDDIR"
+      engine_builddir="$LOBUILDDIR"
    fi
-   POCOINCLUDE="$poco_engine_builddir/workdir/UnpackedTarball/poco/include"
-   POCOLIB="$poco_engine_builddir/workdir/LinkTarget/StaticLibrary"
+   AC_MSG_CHECKING([for Poco built in the engine])
+   POCOINCLUDE="$engine_builddir/workdir/UnpackedTarball/poco/include"
+   POCOLIB="$engine_builddir/workdir/LinkTarget/StaticLibrary"
    if test "$enable_androidapp" = "yes" ; then
       POCOINCLUDE_ARM64_V8A="$LOBUILDDIR_ARM64_V8A/workdir/UnpackedTarball/poco/include"
       POCOINCLUDE_X86="$LOBUILDDIR_X86/workdir/UnpackedTarball/poco/include"
@@ -851,71 +855,28 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
       POCOLIB_WINDOWS=`cd "$POCOLIB" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
    fi
 
-   if test "$enable_windowsapp" = "yes"; then
-      # We know that zstd has been unpacked and built in engine; no need to look for it.
-      if test -n "$with_zstd_includes"; then
-         AC_MSG_WARN([Ignoring --with-zstd-includes when configuring the Windows app.])
-      fi
-      if test -n "$with_zstd_libs"; then
-         AC_MSG_WARN([Ignoring --with-zstd-libs when configuring the Windows app.])
-      fi
-   else
-      AC_MSG_CHECKING([for zstd include directory to build against])
-      if test -z "$with_zstd_includes"; then
-         AC_MSG_ERROR([You MUST use the --with-zstd-includes option when configuring the mobile app build tree.])
-      fi
-
-      if test -z "$with_zstd_libs"; then
-         AC_MSG_ERROR([You MUST use the --with-zstd-libs option when configuring the mobile app build tree.])
-      fi
-      ZSTDINCLUDE="$with_zstd_includes"
+   # zstd comes from the engine workdir too.  The Windows app links it via the
+   # vcxproj (MSVC zstd.lib), so only the other app targets need the configure
+   # variables here.
+   if test "$enable_windowsapp" != "yes"; then
+      AC_MSG_CHECKING([for zstd built in the engine])
+      ZSTDINCLUDE="$engine_builddir/workdir/UnpackedTarball/zstd/lib"
+      ZSTDLIB="$engine_builddir/workdir/LinkTarget/StaticLibrary"
       if test "$enable_androidapp" = "yes" ; then
-         if echo "$ZSTDINCLUDE" | grep -qs ':' ; then
-            ZSTDINCLUDE=`echo $with_zstd_includes | cut -d: -f1`
-            ZSTDINCLUDE_ARM64_V8A=`echo $with_zstd_includes | cut -d: -f2`
-            ZSTDINCLUDE_X86=`echo $with_zstd_includes | cut -d: -f3`
-            ZSTDINCLUDE_X86_64=`echo $with_zstd_includes | cut -d: -f4`
-         fi
-
-         if test -z "$ZSTDINCLUDE_ARM64_V8A" ; then
-            ZSTDINCLUDE_ARM64_V8A="$ZSTDINCLUDE"
-         fi
-         if test -z "$ZSTDINCLUDE_X86" ; then
-            ZSTDINCLUDE_X86="$ZSTDINCLUDE"
-         fi
-         if test -z "$ZSTDINCLUDE_X86_64" ; then
-            ZSTDINCLUDE_X86_64="$ZSTDINCLUDE"
-         fi
+         ZSTDINCLUDE_ARM64_V8A="$LOBUILDDIR_ARM64_V8A/workdir/UnpackedTarball/zstd/lib"
+         ZSTDINCLUDE_X86="$LOBUILDDIR_X86/workdir/UnpackedTarball/zstd/lib"
+         ZSTDINCLUDE_X86_64="$LOBUILDDIR_X86_64/workdir/UnpackedTarball/zstd/lib"
+         ZSTDLIB_ARM64_V8A="$LOBUILDDIR_ARM64_V8A/workdir/LinkTarget/StaticLibrary"
+         ZSTDLIB_X86="$LOBUILDDIR_X86/workdir/LinkTarget/StaticLibrary"
+         ZSTDLIB_X86_64="$LOBUILDDIR_X86_64/workdir/LinkTarget/StaticLibrary"
       fi
+      AC_MSG_RESULT([$ZSTDLIB])
 
       # Sanity checks
       CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include)
       CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_ARM64_V8A)
       CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_X86)
       CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_X86_64)
-
-      AC_MSG_CHECKING([for zstd lib directory to build against])
-
-      ZSTDLIB="$with_zstd_libs"
-      if test "$enable_androidapp" = "yes" ; then
-         if echo "$ZSTDLIB" | grep -qs ':' ; then
-            ZSTDLIB=`echo $with_zstd_libs | cut -d: -f1`
-            ZSTDLIB_ARM64_V8A=`echo $with_zstd_libs | cut -d: -f2`
-            ZSTDLIB_X86=`echo $with_zstd_libs | cut -d: -f3`
-            ZSTDLIB_X86_64=`echo $with_zstd_libs | cut -d: -f4`
-         fi
-
-         if test -z "$ZSTDLIB_ARM64_V8A" ; then
-            ZSTDLIB_ARM64_V8A="$ZSTDLIB"
-         fi
-         if test -z "$ZSTDLIB_X86" ; then
-            ZSTDLIB_X86="$ZSTDLIB"
-         fi
-         if test -z "$ZSTDLIB_X86_64" ; then
-            ZSTDLIB_X86_64="$ZSTDLIB"
-         fi
-      fi
-
       CHK_FILE_VAR(ZSTDLIB,libzstd.a,Zstd lib)
       CHK_FILE_VAR(ZSTDLIB,libzstd.a,Zstd lib,_ARM64_V8A)
       CHK_FILE_VAR(ZSTDLIB,libzstd.a,Zstd lib,_X86)
@@ -954,25 +915,24 @@ AC_SUBST([CORE_VERSION_HASH])
 
 AC_DEFINE_UNQUOTED([CORE_VERSION_HASH],[["$CORE_VERSION_HASH"]],[CollaboraOffice core git hash if present])
 
-if test "$enable_windowsapp" = "yes"; then
-   # We know that libpng has been unpacked and built in engine; no need to look for it.
-   if test -n "$with_libpng_includes"; then
-      AC_MSG_WARN([Ignoring --with-libpng-includes when configuring the Windows app.])
-   fi
-   if test -n "$with_libpng_libs"; then
-      AC_MSG_WARN([Ignoring --with-libpng-libs when configuring the Windows app.])
-   fi
-else
-   LIBPNG_INCLUDES="$with_libpng_includes"
-   LIBPNG_LIBS="$with_libpng_libs"
-   LIBPNG_STATIC_LIB=""
-fi
-
+# libpng comes from the engine workdir for the app targets, like zstd/POCO.
+# Windows links it via the vcxproj, and iOS/Android/wasm reference the engine
+# workdir directly in their own project files, so only macOS needs the configure
+# variables here.  Desktop builds leave these empty and use the system libpng
+# (pkg-config) instead.
 if test "$enable_macosapp" = "yes"; then
-   AC_MSG_CHECKING([for libpng include directory to build against])
+   AC_MSG_CHECKING([for libpng built in the engine])
+   LIBPNG_INCLUDES="$engine_builddir/workdir/UnpackedTarball/libpng"
+   LIBPNG_LIBS="$engine_builddir/workdir/LinkTarget/StaticLibrary"
+   # CollaboraOffice builds libpng as liblibpng.a (double "lib" prefix).
+   LIBPNG_STATIC_LIB="liblibpng.a"
+   AC_MSG_RESULT([$LIBPNG_LIBS])
    CHK_FILE_VAR(LIBPNG_INCLUDES,png.h,png.h include)
-   AC_MSG_CHECKING([for static libpng lib to build against])
-   CHK_FILE_VAR(LIBPNG_LIBS,libpng.a liblibpng.a,libpng,,LIBPNG_STATIC_LIB) dnl CollaboraOffice wrongly builds libpng as liblibpng.a
+   CHK_FILE_VAR(LIBPNG_LIBS,liblibpng.a,libpng lib)
+else
+   LIBPNG_INCLUDES=
+   LIBPNG_LIBS=
+   LIBPNG_STATIC_LIB=
 fi
 
 AC_SUBST(LIBPNG_INCLUDES)
@@ -994,12 +954,6 @@ if test "$enable_iosapp" != yes -a "$enable_windowsapp" != yes -a "$enable_andro
 fi
 
 if test "$enable_iosapp" = "yes" -o "$enable_androidapp" = "yes"; then
-   if test -n "$LIBPNG_INCLUDES" ; then
-      AC_MSG_ERROR([--with-libpng-includes is ignored on iOS / Android, please remove the parameter.])
-   fi
-   if test -n "$LIBPNG_LIBS" ; then
-      AC_MSG_ERROR([--with-libpng-libs is ignored on iOS / Android, please remove the parameter.])
-   fi
    if test -n "$LOKIT_PATH" ; then
       AC_MSG_ERROR([--with-lokit-path is ignored on iOS / Android, please remove the parameter.])
       LOKIT_PATH=`readlink -f $LOBUILDDIR/include`
@@ -1664,11 +1618,11 @@ AS_IF([test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
        POCOINCLUDE=
        POCOLIB=])
 
-AS_IF([test -n "$with_zstd_includes"],
-      [CPPFLAGS="$CPPFLAGS -isystem ${with_zstd_includes}"])
+AS_IF([test -n "$ZSTDINCLUDE"],
+      [CPPFLAGS="$CPPFLAGS -isystem ${ZSTDINCLUDE}"])
 
-AS_IF([test -n "$with_zstd_libs"],
-      [LDFLAGS="$LDFLAGS -L${with_zstd_libs}"])
+AS_IF([test -n "$ZSTDLIB"],
+      [LDFLAGS="$LDFLAGS -L${ZSTDLIB}"])
 
 AS_IF([test -n "$LIBPNG_INCLUDES"],
       [CPPFLAGS="$CPPFLAGS -isystem ${LIBPNG_INCLUDES}"])
