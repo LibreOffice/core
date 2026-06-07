@@ -1,0 +1,36 @@
+# Clang CFI sanitizer ignore list for the fuzzer builds.
+#
+# Suppresses a known-benign CFI "cfi-unrelated-cast" (a.k.a. cfi-bad-type)
+# false positive in libstdc++'s make_shared / allocate_shared machinery:
+# _Sp_counted_ptr_inplace stores the object in an __aligned_buffer and obtains a
+# typed pointer via _M_ptr(), whose `static_cast<T*>(void*)` (ext/aligned_buffer.h)
+# CFI instruments. The check can observe the storage before the object's vptr is
+# established, reporting an "invalid vtable" (0xbe... = ASan malloc-fill) for a
+# cast that is entirely internal to the standard library. Example:
+#
+#   ext/aligned_buffer.h:117: control flow integrity check for type
+#   'ClientRequestDispatcher' failed during cast to unrelated type
+#   (vtable address 0xbebebebebebebebe)
+#       #0 std::__shared_count<>::__shared_count<T, std::allocator<void>>(...)
+#       #3 std::make_shared<ClientRequestDispatcher>()
+#
+# A plain -fno-sanitize=cfi-unrelated-cast is not enough for the AFL `san`
+# variant: AFL_USE_CFISAN=1 makes afl-clang-fast append -fsanitize=cfi *after*
+# CXXFLAGS_san, and clang takes the last -f*sanitize token, re-enabling the
+# check. An ignore list is applied by the frontend regardless of -fsanitize
+# ordering, so it survives the injection.
+#
+# Scope:
+#  - The section header must be a top-level sanitizer name. Clang matches it
+#    against "cfi" (NOT against sub-checks like "cfi-unrelated-cast" -- such a
+#    section header matches nothing and silently suppresses nothing), so we use
+#    [cfi]. That disables ALL cfi checks for code whose source location is in
+#    these files, but ONLY these libstdc++ shared_ptr/make_shared headers -- our
+#    own code keeps full CFI. Clang attributes inlined header code to the header
+#    (not the instantiating .cpp), so matching by header path is what works.
+#  - ASan/UBSan still instrument these files; only cfi is dropped here.
+
+[cfi]
+src:*/ext/aligned_buffer.h
+src:*/bits/shared_ptr_base.h
+src:*/bits/shared_ptr.h

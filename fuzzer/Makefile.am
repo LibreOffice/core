@@ -141,9 +141,17 @@ noinst_PROGRAMS = \
                   httpresponse_fuzzer \
                   httpecho_fuzzer
 
+# Ignore list that suppresses the libstdc++ make_shared / _Sp_counted_ptr_inplace
+# ::_M_ptr() cfi-unrelated-cast false positive (see cfi-ignore.txt). Applied by the
+# frontend independently of -fsanitize ordering, so it survives afl-clang-fast's
+# AFL_USE_CFISAN=1 injection of a trailing -fsanitize=cfi (which the plain
+# -fno-sanitize=... below cannot, as the last -f*sanitize token wins).
+CFI_IGNORELIST_FLAGS = -fsanitize-ignorelist=$(srcdir)/cfi-ignore.txt
+
 # CFI for the libFuzzer build (see comment near ENV_san for details).
 LIBFUZZER_CFI_FLAGS = -fsanitize=cfi -fno-sanitize=cfi-derived-cast,cfi-unrelated-cast \
-                      -flto -fvisibility=hidden -fno-sanitize-trap=cfi
+                      -flto -fvisibility=hidden -fno-sanitize-trap=cfi \
+                      $(CFI_IGNORELIST_FLAGS)
 LIBFUZZER_CXXFLAGS_COMMON = $(AM_CXXFLAGS) $(LIBFUZZER_CFI_FLAGS)
 LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS)
 
@@ -262,14 +270,19 @@ CC_native = $(AFL_CC)
 # AFL_USE_CFISAN=1 makes afl-clang-fast add -fsanitize=cfi -flto
 # -fvisibility=hidden; we layer CXXFLAGS_san on top to:
 #  - subtract cfi-derived-cast and cfi-unrelated-cast (false positives on
-#    libstdc++'s _Sp_counted_ptr_inplace::_M_ptr() static_cast;
+#    libstdc++'s _Sp_counted_ptr_inplace::_M_ptr() static_cast). NOTE: the
+#    -fno-sanitize=... below is necessary but NOT sufficient here -- AFL_USE_CFISAN
+#    appends its own -fsanitize=cfi *after* these flags, and clang honors the last
+#    -f*sanitize token, re-enabling the check. $(CFI_IGNORELIST_FLAGS) is what
+#    actually suppresses it, since an ignore list is order-independent;
 #  - swap the silent ud1 trap for a runtime diagnostic that prints the
 #    offending type before aborting (-fno-sanitize-trap=cfi).
 ENV_san = AFL_LLVM_ONLY_FSRV=1 AFL_USE_ASAN=1 AFL_USE_UBSAN=1 AFL_USE_CFISAN=1
 CXX_san = $(AFL_CLANG_FAST_CXX)
 CC_san = $(AFL_CLANG_FAST_CC)
 CXXFLAGS_san = -fno-sanitize=cfi-derived-cast,cfi-unrelated-cast \
-               -fno-sanitize-trap=cfi
+               -fno-sanitize-trap=cfi \
+               $(CFI_IGNORELIST_FLAGS)
 
 ENV_cmpcov = AFL_LLVM_LAF_ALL=1
 CXX_cmpcov = $(AFL_CXX)
