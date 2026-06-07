@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 	$(call gb_Trace_StartRange,libnumbertext,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
-		$(SHELL) $(gb_RUN_CONFIGURE) ./configure --disable-shared --with-pic \
+		$(gb_RUN_CONFIGURE) ./configure --disable-shared --with-pic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(ENABLE_WERROR),--enable-werror,--disable-werror) \
 			$(gb_CONFIGURE_PLATFORMS) \
