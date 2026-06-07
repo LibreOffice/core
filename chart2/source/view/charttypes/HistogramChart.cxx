@@ -10,7 +10,7 @@
 #include "HistogramChart.hxx"
 
 #include <ChartType.hxx>
-#include <../chart2/inc/ChartModel.hxx>
+#include <ChartModel.hxx>
 
 #include <AxisIndexDefines.hxx>
 #include <Clipping.hxx>
