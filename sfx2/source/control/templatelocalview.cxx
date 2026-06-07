@@ -31,7 +31,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <unotools/ucbhelper.hxx>
 #include <sfxurlrelocator.hxx>
-#include <../doc/doctemplateslocal.hxx>
+#include <doctemplateslocal.hxx>
 
 using namespace ::com::sun::star;
 
