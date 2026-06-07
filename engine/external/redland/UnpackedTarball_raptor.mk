@@ -32,6 +32,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
 	$(if $(SYSTEM_ICU),,external/redland/raptor/raptor-icu.patch) \
 	external/redland/raptor/disable-libxml-cleanup.patch.1 \
 	external/redland/raptor/CVE-2024-57823.patch.1 \
+	external/redland/raptor/raptor-backport-unreleased-fixes.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
