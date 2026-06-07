@@ -966,6 +966,7 @@ define run_test_buffered
 		--spec $(3) \
 		--type $(4) \
 		--log-file $(5) \
+		$(if $(CYPRESS_NO_SECOND_CHANCE),,--second-chance) \
 		--config-file $(CYPRESS_CONFIG)
 endef
 

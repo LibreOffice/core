@@ -46,6 +46,7 @@ while test $# -gt 0; do
       --env)              TEST_ENV=$2; shift;;
       --type)             TEST_TYPE=$2; shift;;
       --browser)          BROWSER=$2; shift;;
+      --second-chance)    SECOND_CHANCE=true;;
       --help)             print_help ;;
   -*) ;; # ignore
   esac
@@ -142,6 +143,16 @@ mkdir -p `dirname ${TEST_LOG}`
 touch ${TEST_LOG}
 rm -rf ${TEST_ERROR}
 echo "`echo ${RUN_COMMAND} && ${RUN_COMMAND} || touch ${TEST_ERROR}`" > ${TEST_LOG} 2>&1
+
+# Cypress's own retries only re-run failed test bodies, not whole-spec
+# failures like a hook error or a process that dies at launch. Re-run the
+# spec process once before recording it as failed.
+if [ -f ${TEST_ERROR} ] && [ ${SECOND_CHANCE} = true ]; then
+    echo "Second chance!" > ${TEST_LOG}
+    rm -rf ${TEST_ERROR}
+    echo "`echo ${RUN_COMMAND} && ${RUN_COMMAND} || touch ${TEST_ERROR}`" >> ${TEST_LOG} 2>&1
+fi
+
 if [ ! -f ${TEST_ERROR} ];
     then cat ${TEST_LOG};
     else echo -e "Cypress test failed: ${TEST_FILE}\n" && \
