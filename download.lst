@@ -616,8 +616,8 @@ PYTHON_TARBALL := Python-3.13.13.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-QUICKJS_SHA256SUM := 43752d204423da6e86eb4a62f45de1cd3948bb23f2e06a04b150fcb32b5d5427
-QUICKJS_TARBALL := quickjs-0.15.0-amalgam.zip
+QUICKJS_SHA256SUM := d4dbf9cbf7a855c790d3c4c468ac45b00371d56fd8ae26e1aaa1d336efc589d8
+QUICKJS_TARBALL := quickjs-0.15.1-amalgam.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
