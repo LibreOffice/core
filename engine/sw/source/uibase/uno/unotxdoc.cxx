@@ -3962,6 +3962,8 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         {
             sAuthor = rValue.Value.get<OUString>();
             // Store the author name in the view.
+            pView->SetKitAuthor(sAuthor);
+            // Set the author also as redline author
             pView->SetRedlineAuthor(sAuthor);
             // Let the actual author name pick up the value from the current
             // view, which would normally happen only during the next view

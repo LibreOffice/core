@@ -604,7 +604,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText,
 
     OUString sAuthor;
     if (comphelper::COKit::isActive())
-        sAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
+        sAuthor = mrBase.GetKitAuthor();
     else
     {
         SvtUserOptions aUserOptions;
@@ -728,7 +728,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 
     OUString sReplyAuthor;
     if (comphelper::COKit::isActive())
-        sReplyAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
+        sReplyAuthor = mrBase.GetKitAuthor();
     else
     {
         SvtUserOptions aUserOptions;

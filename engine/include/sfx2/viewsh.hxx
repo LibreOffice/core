@@ -179,6 +179,7 @@ friend class SfxPrinterController;
     rtl::Reference<KitDocumentFocusListener>   mpKitDocumentFocusListener;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
     OUString maKitTimezone;
+    OUString maKitAuthor;
     bool maKitIsTimezoneSet;
     bool                        mbLOKColorPreviewEnabled;
 
@@ -468,6 +469,12 @@ public:
         maKitIsTimezoneSet = isSet;
         maKitTimezone = rTimezone;
     }
+
+    /// The server-provided author name supplied by the client when this view
+    /// was initialized. Empty when the client supplied none.
+    const OUString& GetKitAuthor() const { return maKitAuthor; }
+    /// Set the server-provided author name of this view.
+    void SetKitAuthor(const OUString& rAuthor) { maKitAuthor = rAuthor; }
 
     /// Set the COKit locale of this view.
     void SetKitLocale(const OUString& rBcp47LanguageTag);

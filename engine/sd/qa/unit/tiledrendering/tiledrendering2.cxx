@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     pImpressDocument->initializeForTiledRendering({});
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     sd::View* pView = pViewShell->GetView();
-    pView->SetAuthor("myauthor");
+    pViewShell->GetViewShell()->SetKitAuthor("myauthor");
     SdTestViewCallback aView;
 
     // When inserting a signature line for electronic (external) signing:

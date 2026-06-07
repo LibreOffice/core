@@ -4661,7 +4661,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
             if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
                 pDrawView->SetPageShadowVisible(rValue.Value.get<bool>());
             else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
-                pDrawView->SetAuthor(rValue.Value.get<OUString>());
+                pViewShell->GetViewShell()->SetKitAuthor(rValue.Value.get<OUString>());
             else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
                 mpDoc->SetOnlineSpell(rValue.Value.get<bool>());
             else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())

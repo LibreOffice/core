@@ -1659,6 +1659,12 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
             sThemeName = rValue.Value.get<OUString>();
         else if (rValue.Name == ".uno:InvertBackground" && rValue.Value.has<OUString>())
             sBackgroundThemeName = rValue.Value.get<OUString>();
+        else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
+        {
+            ScViewData* pViewData = ScDocShell::GetViewData();
+            if (ScTabViewShell* pTabViewShell = pViewData ? pViewData->GetViewShell() : nullptr)
+                pTabViewShell->SetKitAuthor(rValue.Value.get<OUString>());
+        }
     }
 
     // show us the text exactly

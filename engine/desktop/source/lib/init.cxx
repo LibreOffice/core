@@ -5605,6 +5605,21 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     assert(nView == pViewShell->GetViewShellId().get() && "otherwise we couldn't have found it");
     SfxObjectShell* pDocSh = pViewShell->GetObjectShell();
 
+    // These commands pre-existed online mode and have Author fields. Strip any
+    // incoming Authors and set the server-provided identity recorded when the
+    // view was initialized.
+    if (aCommand == ".uno:InsertAnnotation" ||
+        aCommand == ".uno:InsertThreadedComment" ||
+        aCommand == ".uno:EditAnnotation")
+    {
+        std::erase_if(aPropertyValuesVector,
+                      [](const beans::PropertyValue& rPropValue) { return rPropValue.Name == "Author"; });
+        beans::PropertyValue aAuthor;
+        aAuthor.Name = "Author";
+        aAuthor.Value <<= pViewShell->GetKitAuthor();
+        aPropertyValuesVector.push_back(aAuthor);
+    }
+
     if (gImpl && aCommand == ".uno:ToggleOrientation")
     {
         ExecuteOrientationChange();

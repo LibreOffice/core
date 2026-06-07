@@ -252,8 +252,6 @@ public:
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
     SdPage* GetPage();
     SdrObject* GetSelectedSingleObject(SdPage const * pPage);
-    void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }
-    const OUString& GetAuthor() const { return m_sAuthor; }
 
     SearchContext& getSearchContext() { return maSearchContext; }
 protected:
@@ -293,8 +291,6 @@ private:
     ::std::unique_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
     SearchContext maSearchContext;
-
-    OUString m_sAuthor;
 };
 
 SdDrawDocument& View::GetDoc() const

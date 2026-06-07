@@ -497,7 +497,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     }
                     else if (bExternal)
                     {
-                        aCertificateOrName.m_aName = mpDrawView->GetAuthor();
+                        aCertificateOrName.m_aName = pViewShell->GetKitAuthor();
                     }
                     // Always set the signing certificate, to clear data from a previous dispatch.
                     pViewShell->SetSigningCertificate(aCertificateOrName);
