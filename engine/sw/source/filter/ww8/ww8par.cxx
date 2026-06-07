@@ -95,7 +95,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentExternalData.hxx>
-#include <../../core/inc/DocumentRedlineManager.hxx>
+#include <DocumentRedlineManager.hxx>
 #include <docufld.hxx>
 #include <utility>
 #include <viewsh.hxx>
