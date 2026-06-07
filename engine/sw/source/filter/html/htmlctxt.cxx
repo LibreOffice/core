@@ -783,6 +783,12 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 void SwHTMLParser::InsertAttr( HTMLAttr **ppAttr, const SfxPoolItem & rItem,
                                HTMLAttrContext *pCntxt )
 {
+    if (bFuzzing && m_aContexts.size() > 16)
+    {
+        SAL_WARN("sw.html", "skipping deeply nested inline attribute for fuzzing performance");
+        return;
+    }
+
     if( !ppAttr )
     {
         ppAttr = GetAttrTabEntry( rItem.Which() );
