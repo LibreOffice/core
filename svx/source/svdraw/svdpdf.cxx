@@ -1741,8 +1741,9 @@ Color ImpSdrPdfImport::getStrokeColor(
         = pPageObject->getRenderedStrokePattern(*mpPdfDocument, *pPage))
     {
         Bitmap aBitmap(bitmap->createBitmapFromBuffer());
-        return aBitmap.GetPixelColor(aBitmap.GetSizePixel().Width() / 2,
-                                     aBitmap.GetSizePixel().Height() / 2);
+        if (!aBitmap.IsEmpty())
+            return aBitmap.GetPixelColor(aBitmap.GetSizePixel().Width() / 2,
+                                         aBitmap.GetSizePixel().Height() / 2);
     }
     return pPageObject->getStrokeColor();
 }
@@ -1756,8 +1757,9 @@ Color ImpSdrPdfImport::getFillColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> 
         = pPageObject->getRenderedFillPattern(*mpPdfDocument, *pPage))
     {
         Bitmap aBitmap(bitmap->createBitmapFromBuffer());
-        return aBitmap.GetPixelColor(aBitmap.GetSizePixel().Width() / 2,
-                                     aBitmap.GetSizePixel().Height() / 2);
+        if (!aBitmap.IsEmpty())
+            return aBitmap.GetPixelColor(aBitmap.GetSizePixel().Width() / 2,
+                                         aBitmap.GetSizePixel().Height() / 2);
     }
     return pPageObject->getFillColor();
 }
