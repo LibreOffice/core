@@ -953,6 +953,12 @@ static int process(struct hash* dep_hash, char* fn)
                     if(!memcmp(cursor, "/../", 4))
                     {
                         cancel_relative(base, &cursor, &cursor_out, end);
+                        // cancel_relative leaves cursor on the trailing '/' of
+                        // the consumed "/../". Re-examine it so a following "/./"
+                        // or "/../" is also collapsed. Without this a sequence
+                        // like ".././../" loses one level and names a directory
+                        // that does not exist.
+                        continue;
                     }
                 }
                 *cursor_out++ = *cursor++;
