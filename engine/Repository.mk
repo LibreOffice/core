@@ -318,7 +318,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	cppcanvas \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
-	simplecanvas \
 	vclcanvas \
 ))
 endif

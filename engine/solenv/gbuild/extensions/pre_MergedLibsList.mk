@@ -126,7 +126,6 @@ gb_MERGE_LIBRARY_LIST := \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
-	simplecanvas \
 	$(if $(filter WNT,$(OS)), \
 		smplmail \
 	) \

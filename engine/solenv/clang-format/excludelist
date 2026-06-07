@@ -518,7 +518,6 @@ canvas/source/directx/dx_vcltools.cxx
 canvas/source/directx/dx_vcltools.hxx
 canvas/source/directx/dx_winstuff.hxx
 canvas/source/factory/cf_service.cxx
-canvas/source/simplecanvas/simplecanvasimpl.cxx
 canvas/source/tools/cachedprimitivebase.cxx
 canvas/source/tools/canvascustomspritehelper.cxx
 canvas/source/tools/canvastools.cxx
