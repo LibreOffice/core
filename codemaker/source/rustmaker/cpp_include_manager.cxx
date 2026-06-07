@@ -151,7 +151,7 @@ OString CppIncludeManager::calculateRelativeIncludePath(const CppFile& file,
     // If they're in the same directory, just use the filename
     if (target.parent_path() == currentDir)
     {
-        std::string result = target.filename().string();
+        std::string result = target.filename().string<char>();
         return OString("\"" + result + "\"");
     }
 
@@ -167,7 +167,7 @@ OString CppIncludeManager::calculateRelativeIncludePath(const CppFile& file,
         rel = fs::relative(target, baseDir);
     }
 
-    std::string result = rel.generic_string();
+    std::string result = rel.generic_string<char>();
     return OString("\"" + result + "\"");
 }
 

@@ -23,7 +23,14 @@ RustFile::RustFile(std::string_view directory, std::string_view typeName)
 {
 }
 
-std::string RustFile::getPath() const { return m_filePath.string(); }
+std::string RustFile::getPath() const
+{
+#if defined __cpp_lib_format_path
+    return m_filePath.display_string();
+#else
+    return m_filePath.string<char>();
+#endif
+}
 
 void RustFile::openFile()
 {
@@ -255,7 +262,7 @@ void RustFile::addFileToModDeclaration()
 {
     std::filesystem::path parentDir = m_filePath.parent_path();
     std::filesystem::path modFile = parentDir / "mod.rs";
-    std::string fileName = m_filePath.stem().string(); // Get filename without extension
+    std::string fileName = m_filePath.stem().string<char>(); // Get filename without extension
 
     if (std::filesystem::exists(modFile))
     {
@@ -294,12 +301,12 @@ void RustFile::ensureModFileExists(const std::filesystem::path& dirPath)
             {
                 if (entry.is_directory())
                 {
-                    std::string dirName = entry.path().filename().string();
+                    std::string dirName = entry.path().filename().string<char>();
                     childModules.push_back(dirName);
                 }
                 else if (entry.is_regular_file() && entry.path().extension() == ".rs")
                 {
-                    std::string fileName = entry.path().stem().string();
+                    std::string fileName = entry.path().stem().string<char>();
                     if (fileName != "mod") // Don't include mod.rs itself
                     {
                         childModules.push_back(fileName);
@@ -327,7 +334,7 @@ void RustFile::ensureModFileExists(const std::filesystem::path& dirPath)
 
         if (parentDir >= outputRoot)
         {
-            std::string moduleName = dirPath.filename().string();
+            std::string moduleName = dirPath.filename().string<char>();
 
             if (parentDir.filename() == "src")
             {
@@ -452,9 +459,16 @@ CppFile::CppFile(std::string_view directory, std::string_view typeName, std::str
 {
 }
 
-std::string CppFile::getPathString() const { return m_filePath.string(); }
+std::string CppFile::getPathString() const
+{
+#if defined __cpp_lib_format_path
+    return m_filePath.display_string();
+#else
+    return m_filePath.string<char>();
+#endif
+}
 std::filesystem::path CppFile::getPath() const { return m_filePath; }
-std::string CppFile::getExtension() const { return m_filePath.extension().string(); }
+std::string CppFile::getExtension() const { return m_filePath.extension().string<char>(); }
 
 void CppFile::openFile()
 {
@@ -619,14 +633,14 @@ void RustFile::processDirectoryRecursively(const std::filesystem::path& currentD
         {
             if (entry.is_directory())
             {
-                std::string dirName = entry.path().filename().string();
+                std::string dirName = entry.path().filename().string<char>();
                 childModules.push_back(dirName);
                 // Recursively process subdirectory
                 processDirectoryRecursively(entry.path());
             }
             else if (entry.is_regular_file() && entry.path().extension() == ".rs")
             {
-                std::string fileName = entry.path().stem().string();
+                std::string fileName = entry.path().stem().string<char>();
                 if (fileName != "mod" && fileName != "lib") // Don't include mod.rs or lib.rs
                 {
                     childModules.push_back(fileName);
