@@ -161,6 +161,15 @@ private:
     std::vector<Bound> maBounds;
     std::vector<sheet::SolverConstraint> maNonBoundedConstraints;
 
+    // The document's variable values at the start of a solve, clamped into the
+    // bounds. Empty until solve captures it.
+    std::vector<double> maStartingValues;
+    // How many times variables have been initialized this solve.
+    size_t mnInitCount = 0;
+    // Number of population members seeded from maStartingValues. Set from the
+    // population size when a solve starts.
+    size_t mnSeedCount = 0;
+
     // Resolved cells, keyed by sheet, column and row. The search reads and
     // writes the same handful of cells many thousands of times, so resolving
     // each one only once is a large saving.
@@ -306,6 +315,9 @@ public:
 private:
     void applyVariables(std::vector<double> const& rVariables);
     bool doesViolateConstraints();
+    // Total amount by which the current cell values break the non-bounded
+    // constraints, summed over all of them. Zero when every constraint holds.
+    double constraintViolation();
     bool isSolutionFeasible(std::vector<double> const& rSolution);
 
 public:
@@ -377,33 +389,103 @@ double SwarmSolver::calculateFitness(std::vector<double> const& rVariables)
 {
     applyVariables(rVariables);
 
-    // An infeasible candidate must rank below every feasible one, including a
-    // feasible point whose objective is more negative than the float range can
-    // represent. Use the lowest double so the search is never drawn towards a
-    // point that breaks the constraints.
-    if (doesViolateConstraints())
-        return std::numeric_limits<double>::lowest();
-
     double x = getValue(maObjective);
+    double fFitness = mbMaximize ? x : -x;
 
-    if (mbMaximize)
-        return x;
-    else
-        return -x;
+    // Graded penalty: an infeasible candidate is pushed down in proportion to
+    // how badly it breaks the constraints, so a point close to feasible scores
+    // higher than one far off and the search has a slope to follow toward the
+    // feasible region. The strict feasibility test still decides what is
+    // reported as a solution, so a point that only nearly satisfies the
+    // constraints is never returned as the answer.
+    double fViolation = constraintViolation();
+    if (fViolation > 0.0)
+        fFitness -= 1.0e7 * fViolation;
+
+    return fFitness;
+}
+
+double SwarmSolver::constraintViolation()
+{
+    double fTotal = 0.0;
+    for (const sheet::SolverConstraint& rConstraint : maNonBoundedConstraints)
+    {
+        double fLeftValue = getValue(rConstraint.Left);
+        double fRightValue = 0.0;
+
+        table::CellAddress aCellAddress;
+
+        if (rConstraint.Right >>= aCellAddress)
+            fRightValue = getValue(aCellAddress);
+        else if (rConstraint.Right >>= fRightValue)
+        {
+            // The right hand side is a plain number.
+        }
+        else
+        {
+            // The right hand side is neither a cell nor a number, so this
+            // constraint cannot be evaluated. Skip it, matching the strict
+            // feasibility check.
+            continue;
+        }
+
+        switch (rConstraint.Operator)
+        {
+            case sheet::SolverConstraintOperator_LESS_EQUAL:
+                if (fLeftValue > fRightValue)
+                    fTotal += fLeftValue - fRightValue;
+                break;
+            case sheet::SolverConstraintOperator_GREATER_EQUAL:
+                if (fLeftValue < fRightValue)
+                    fTotal += fRightValue - fLeftValue;
+                break;
+            case sheet::SolverConstraintOperator_EQUAL:
+                if (!rtl::math::approxEqual(fLeftValue, fRightValue))
+                    fTotal += std::abs(fLeftValue - fRightValue);
+                break;
+            default:
+                break;
+        }
+    }
+    return fTotal;
 }
 
 void SwarmSolver::initializeVariables(std::vector<double>& rVariables, std::mt19937& rGenerator)
 {
+    size_t nVariables(maVariables.getLength());
+    rVariables.resize(nVariables);
+
+    size_t nIndex = mnInitCount++;
+
+    // The first seeded individual is the document's starting values unchanged, a
+    // feasible-scale anchor. The next seeded ones keep that scale but spread out
+    // with jitter scaled to each value's magnitude, so the search has diversity
+    // near the guess. Everything past mnSeedCount is drawn at random across the
+    // bounds for global exploration.
+    if (!maStartingValues.empty() && nIndex < mnSeedCount)
+    {
+        if (nIndex == 0)
+        {
+            for (size_t i = 0; i < nVariables; ++i)
+                rVariables[i] = clampVariable(i, maStartingValues[i]);
+            return;
+        }
+        std::normal_distribution<double> aJitter(0.0, 0.5);
+        for (size_t i = 0; i < nVariables; ++i)
+        {
+            double fBase = maStartingValues[i];
+            double fScale = std::max(1.0, std::abs(fBase));
+            rVariables[i] = clampVariable(i, fBase + fScale * aJitter(rGenerator));
+        }
+        return;
+    }
+
     int nTry = 1;
     bool bConstraintsOK = false;
 
     while (!bConstraintsOK && nTry < 10)
     {
-        size_t noVariables(maVariables.getLength());
-
-        rVariables.resize(noVariables);
-
-        for (size_t i = 0; i < noVariables; ++i)
+        for (size_t i = 0; i < nVariables; ++i)
         {
             Bound const& rBound = maBounds[i];
             if (rBound.lower >= rBound.upper)
@@ -570,6 +652,11 @@ private:
 
     static constexpr size_t mnPopulationSize = 40;
     static constexpr int constNumberOfGenerationsWithoutChange = 50;
+    // How many fresh restarts to try after the search stalls before giving up.
+    // An easy model converges and then stops after these few extra tries, while
+    // a hard one keeps finding better points across restarts and runs on until
+    // the time budget is gone.
+    static constexpr int constMaxStallRestarts = 3;
 
     std::chrono::high_resolution_clock::time_point maStart;
     std::chrono::high_resolution_clock::time_point maEnd;
@@ -593,15 +680,33 @@ public:
 
         maEnd = maStart = high_resolution_clock::now();
 
-        int nLastChange = 0;
+        int nStallRestarts = 0;
+        double fBestSoFar = mrAlgorithm.getBestFitness();
 
-        while ((mrAlgorithm.getGeneration() - nLastChange) < constNumberOfGenerationsWithoutChange
-               && duration_cast<milliseconds>(maEnd - maStart).count() < mfTimeout)
+        while (duration_cast<milliseconds>(maEnd - maStart).count() < mfTimeout)
         {
-            bool bChange = mrAlgorithm.next();
+            mrAlgorithm.next();
 
-            if (bChange)
-                nLastChange = mrAlgorithm.getGeneration();
+            // Any real improvement in the best fitness earns back the full
+            // restart budget, so a search that keeps making progress is never
+            // cut off early.
+            double fBest = mrAlgorithm.getBestFitness();
+            if (fBest > fBestSoFar)
+            {
+                fBestSoFar = fBest;
+                nStallRestarts = 0;
+            }
+
+            if ((mrAlgorithm.getGeneration() - mrAlgorithm.getLastChange())
+                >= constNumberOfGenerationsWithoutChange)
+            {
+                // The search has settled. Stop once a few fresh restarts have
+                // also failed to improve on the best point found.
+                if (nStallRestarts >= constMaxStallRestarts)
+                    break;
+                nStallRestarts++;
+                mrAlgorithm.restart();
+            }
 
             maEnd = high_resolution_clock::now();
         }
@@ -677,18 +782,35 @@ void SAL_CALL SwarmSolver::solve()
             maNonBoundedConstraints.push_back(rConstraint);
     }
 
+    // Capture the document's current variable values, clamped into the bounds,
+    // as a starting guess to seed part of the initial population from.
+    maStartingValues.assign(maVariables.getLength(), 0.0);
+    for (sal_Int32 i = 0; i < maVariables.getLength(); ++i)
+        maStartingValues[i] = clampVariable(i, getValue(maVariables[i]));
+    mnInitCount = 0;
+
+    // Scale the population with the number of variables. A fixed small
+    // population cannot keep enough diversity on a high-dimensional model, while
+    // the original sizes are kept for small models so their behaviour does not
+    // change. The cap keeps each generation's cost bounded.
+    const size_t nDimensions = maVariables.getLength();
+
     std::vector<double> aSolution;
 
     if (mnAlgorithm == 0)
     {
-        DifferentialEvolutionAlgorithm<SwarmSolver> aDE(*this, 50);
+        size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 50, 300);
+        mnSeedCount = nPopulation / 2;
+        DifferentialEvolutionAlgorithm<SwarmSolver> aDE(*this, nPopulation);
         SwarmRunner<DifferentialEvolutionAlgorithm<SwarmSolver>> aEvolution(aDE);
         aEvolution.setTimeout(mnTimeout);
         aSolution = aEvolution.solve();
     }
     else
     {
-        ParticleSwarmOptimizationAlgorithm<SwarmSolver> aPSO(*this, 100);
+        size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 100, 300);
+        mnSeedCount = nPopulation / 2;
+        ParticleSwarmOptimizationAlgorithm<SwarmSolver> aPSO(*this, nPopulation);
         SwarmRunner<ParticleSwarmOptimizationAlgorithm<SwarmSolver>> aSwarmSolver(aPSO);
         aSwarmSolver.setTimeout(mnTimeout);
         aSolution = aSwarmSolver.solve();

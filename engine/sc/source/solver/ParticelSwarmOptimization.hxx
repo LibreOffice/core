@@ -81,6 +81,46 @@ public:
 
     int getGeneration() { return mnGeneration; }
 
+    int getLastChange() { return mnLastChange; }
+
+    double getBestFitness() { return mfBestFitness; }
+
+    // Rebuild the swarm from a fresh random spread to escape a local optimum it
+    // has collapsed into, seeding one particle at the best position found so far
+    // so it is not lost. The no-change counter is reset to give the search a
+    // fresh window to improve in.
+    void restart()
+    {
+        mnLastChange = mnGeneration;
+
+        maSwarm.clear();
+        maSwarm.reserve(mnNumOfParticles);
+        for (size_t i = 0; i < mnNumOfParticles; i++)
+        {
+            maSwarm.emplace_back(mnDimensionality);
+            Particle& rParticle = maSwarm.back();
+
+            mrDataProvider.initializeVariables(rParticle.mPosition, maGenerator);
+            for (size_t k = 0; k < mnDimensionality; k++)
+                rParticle.mPosition[k] = mrDataProvider.clampVariable(k, rParticle.mPosition[k]);
+
+            rParticle.mCurrentFitness = mrDataProvider.calculateFitness(rParticle.mPosition);
+            rParticle.mBestPosition.assign(rParticle.mPosition.begin(), rParticle.mPosition.end());
+            rParticle.mBestFitness = rParticle.mCurrentFitness;
+        }
+
+        // Seed one particle at the global best so the swarm can keep refining
+        // it. The global best position and fitness are kept across the restart.
+        if (!maBestPosition.empty() && !maSwarm.empty())
+        {
+            Particle& rFirst = maSwarm.front();
+            rFirst.mPosition.assign(maBestPosition.begin(), maBestPosition.end());
+            rFirst.mBestPosition.assign(maBestPosition.begin(), maBestPosition.end());
+            rFirst.mCurrentFitness = mfBestFitness;
+            rFirst.mBestFitness = mfBestFitness;
+        }
+    }
+
     void initialize()
     {
         mnGeneration = 0;
