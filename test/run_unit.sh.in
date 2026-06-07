@@ -32,6 +32,10 @@ print_help ()
     echo "   --valgrind          Run under valgrind if enabled"
     echo "   --fail-fast         If a test fails, subsequent tests will not run and no report is generated"
     echo "   --verbose           Print out more stuff - if you run out of things to read"
+    echo ""
+    echo "Environment:"
+    echo "   ENABLE_CPULOAD      If set, run one busy loop per core alongside the"
+    echo "                       test to reproduce CI-like contention locally."
     exit 1
 }
 
@@ -73,6 +77,27 @@ fi
 
 # result logging
 echo > $test_output
+
+# Optionally saturate every core with busy loops while the test runs, so a
+# timing-sensitive test sees the same contention a loaded CI runner gives it.
+# Mirrors cypress_test's ENABLE_CPULOAD: set ENABLE_CPULOAD to any value to
+# turn it on. The spinners are torn down whenever this script exits.
+load_pids=
+stop_cpuload()
+{
+    for load_pid in $load_pids; do
+        kill "$load_pid" 2>/dev/null
+    done
+    load_pids=
+}
+if [ -n "$ENABLE_CPULOAD" ]; then
+    echo "Starting $(nproc) CPU load generators (ENABLE_CPULOAD)"
+    for i in $(seq 1 "$(nproc)"); do
+        ( while true; do :; done ) &
+        load_pids="$load_pids $!"
+    done
+    trap stop_cpuload EXIT
+fi
 
 printf "\nRunning $tst | $tst_log | $test_output $cmd_line\n";
 echo > $tst_log
