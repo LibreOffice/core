@@ -1,0 +1,58 @@
+--- a/src/raptor_ntriples.c
++++ b/src/raptor_ntriples.c
+@@ -212,7 +212,7 @@ raptor_ntriples_parse_term_internal(raptor_world* world,
+             locator->column--;
+             locator->byte--;
+           }
+-          if(term_class == RAPTOR_TERM_CLASS_BNODEID && dest[-1] == '.') {
++          if(term_class == RAPTOR_TERM_CLASS_BNODEID && position > 0 && dest[-1] == '.') {
+             /* If bnode id ended on '.' move back one */
+             dest--;
+
+--- a/src/raptor_rfc2396.c
++++ b/src/raptor_rfc2396.c
+@@ -351,6 +351,10 @@ raptor_uri_normalize_path(unsigned char* path_buffer, size_t path_len)
+           *dest++ = *s++;
+         *dest = '\0';
+         path_len -= len;
++        if(path_len <= 0) {
++          *path_buffer = '\0';
++          return 0;
++        }
+
+         if(p && p < prev) {
+           /* We know the previous prev path component and we didn't do
+@@ -390,6 +394,10 @@ raptor_uri_normalize_path(unsigned char* path_buffer, size_t path_len)
+     /* Remove <component>/.. at the end of the path */
+     *prev = '\0';
+     path_len -= (s-prev);
++    if(path_len <= 0) {
++      *path_buffer = '\0';
++      return 0;
++    }
+   }
+
+
+--- a/src/raptor_term.c
++++ b/src/raptor_term.c
+@@ -209,10 +209,16 @@ raptor_new_term_from_counted_literal(raptor_world* world,
+     }
+
+     l = new_language;
+-    while((c = *language++)) {
+-      if(c == '_')
+-        c = '-';
+-      *l++ = c;
++    {
++      size_t i;
++      for(i = 0; i < language_len; i++) {
++        c = *language++;
++        if(!c)
++          break;
++        if(c == '_')
++          c = '-';
++        *l++ = c;
++      }
+     }
+     *l = '\0';
+   } else
