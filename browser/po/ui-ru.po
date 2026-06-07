@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-01 21:01+0000\n"
-"Last-Translator: Fawlok <170857502+qopq1366@users.noreply.github.com>\n"
+"PO-Revision-Date: 2026-06-08 17:01+0000\n"
+"Last-Translator: Артур <atter192837@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
-"Language: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
@@ -490,23 +490,22 @@ msgstr "Навигатор"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:537
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Показать Боковую Панель"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:538
 msgid "Custom Animation"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:541
-#, fuzzy
 msgid "Style List"
-msgstr "Список стилей"
+msgstr "Список Стилей"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.NotebookbarCalc.js:1186
 #: src/control/Control.NotebookbarDraw.js:542
 #: src/control/Control.NotebookbarImpress.js:709
 msgid "Grid"
-msgstr ""
+msgstr "Сетка"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:545
 #: src/control/Control.BackstageView.ts:152
@@ -515,12 +514,12 @@ msgstr "Печать"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:546
 msgid "Other"
-msgstr ""
+msgstr "Другое"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:547
 #: src/control/Control.NotebookbarImpress.js:718
 msgid "Show Grid"
-msgstr "Показать сетку"
+msgstr "Показать Сетку"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:548
 #, fuzzy
@@ -544,7 +543,7 @@ msgstr "Привязка к сетке"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:552
 msgid "Empty Pages"
-msgstr ""
+msgstr "Пустые Страницы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:553
 msgid "Force Breaks"
@@ -554,16 +553,16 @@ msgstr ""
 #: src/control/Control.Menubar.ts:803 src/control/Control.TopToolbar.js:139
 #: src/control/jsdialog/Definitions.Menu.ts:1588
 msgid "All Sheets"
-msgstr "Все листы"
+msgstr "Все Листы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Content"
-msgstr ""
+msgstr "Содержимое"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:557
 #: src/control/Control.BackstageView.ts:552
 msgid "Drawing"
-msgstr ""
+msgstr "Рисунок"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:558
 #: src/control/Control.NotebookbarDraw.js:1245
@@ -594,7 +593,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:564
 msgid "Page name"
-msgstr ""
+msgstr "Название страницы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.NotebookbarCalc.js:817
@@ -610,7 +609,7 @@ msgstr "Время"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Hidden pages"
-msgstr ""
+msgstr "Скрытые страницы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 msgid "From printer setup"
@@ -656,7 +655,7 @@ msgstr "Изображения"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:575
 msgid "Tables"
-msgstr "Таблица"
+msgstr "Таблицы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:576
 msgid "Controls"
@@ -837,19 +836,20 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1949
 msgid "Zotero account API settings"
-msgstr ""
+msgstr "Настройки API аккаунта Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2006
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
-#, fuzzy
 msgid "Document Signing"
-msgstr "Настройки документа"
+msgstr "Подпись документа"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2010
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr ""
+"Чтобы подписывать документ, настройте ваш сертификат для подписи, ключ и "
+"цепь CA здесь."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2069
 #: admin/src/integrator/AdminIntegratorSettings.ts:3024
@@ -873,7 +873,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2174
 msgid "Text Generation"
-msgstr ""
+msgstr "Генерация текста"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2224
 #: admin/src/integrator/AdminIntegratorSettings.ts:2342
@@ -896,7 +896,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2284
 msgid "Image Generation"
-msgstr ""
+msgstr "Генерация изображений"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2289
 msgid "Same as Text AI"
@@ -916,7 +916,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:2763
 #: admin/src/integrator/AdminIntegratorSettings.ts:2777
 msgid "No models found"
-msgstr ""
+msgstr "Модели не найдены"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2688
 #: admin/src/integrator/AdminIntegratorSettings.ts:2787
@@ -951,7 +951,7 @@ msgstr "Загрузить Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3298
 msgid "Reset"
-msgstr ""
+msgstr "Сброс"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 #: src/control/Control.AIChatSidebar.ts:2771 src/map/handler/Map.WOPI.js:871
@@ -1158,7 +1158,7 @@ msgstr "Ответ"
 
 #: src/canvas/sections/CommentSection.ts:466
 msgid "Press Ctrl + Enter to post"
-msgstr ""
+msgstr "Нажмите Ctrl + Enter чтобы опубликовать"
 
 #: src/canvas/sections/CommentSection.ts:537
 #: src/canvas/sections/CommentSection.ts:538
@@ -1229,7 +1229,7 @@ msgstr "Открыть полностью"
 
 #: src/canvas/sections/CommentSection.ts:1252
 msgid "Show in navigator"
-msgstr ""
+msgstr "Показать в навигаторе"
 
 #: src/canvas/sections/CommentSection.ts:1522
 #: src/canvas/sections/CommentSection.ts:1527
@@ -1279,7 +1279,7 @@ msgstr ""
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Помочь с этой проблемой"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
@@ -1291,15 +1291,15 @@ msgstr ""
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Помочь решить эту проблему с помощью ИИ"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Колонтинул"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Подвал"
 
 #: src/control/CalcNotifications.ts:41
 msgid "A formula range was not extended to include the inserted cells."
@@ -3071,7 +3071,7 @@ msgstr "Вставить изображение"
 
 #: src/control/Control.Menubar.ts:390 src/control/Control.Menubar.ts:1392
 msgid "Insert Date"
-msgstr "Вставить дату"
+msgstr "Вставить Дату"
 
 #: src/control/Control.Menubar.ts:411 src/control/Control.Menubar.ts:1137
 #: src/control/Control.NotebookbarWriter.js:551
@@ -3085,7 +3085,7 @@ msgstr "Чтение вслух"
 #: src/control/Control.NotebookbarImpress.js:163
 #: src/control/Control.NotebookbarWriter.js:116
 msgid "Extensions"
-msgstr ""
+msgstr "Расширения"
 
 #: src/control/Control.Menubar.ts:425 src/control/Control.Menubar.ts:614
 #: src/control/Control.Menubar.ts:760 src/control/Control.Menubar.ts:1067
@@ -3641,7 +3641,7 @@ msgstr "Файл"
 #: src/control/Control.NotebookbarWriter.js:986
 #: src/control/Control.NotebookbarWriter.js:2554
 msgid "Insert"
-msgstr "Вставка"
+msgstr "Вставить"
 
 #: src/control/Control.NotebookbarCalc.js:48
 #: src/control/Control.NotebookbarDraw.js:1303
