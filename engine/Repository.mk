@@ -316,8 +316,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
 	canvasfactory \
 	cppcanvas \
-	$(if $(filter WNT,$(OS)),directx9canvas) \
-	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	vclcanvas \
 ))
 endif

@@ -33,14 +33,6 @@ $(eval $(call gb_Module_add_targets,canvas,\
 ))
 endif
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,canvas,\
-	Library_directx9canvas \
-	Library_gdipluscanvas \
-	StaticLibrary_directxcanvas \
-))
-endif
-
 $(eval $(call gb_Module_add_check_targets,canvas,\
     CppunitTest_canvas_test \
 ))

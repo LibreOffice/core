@@ -54,7 +54,6 @@ gb_MERGE_LIBRARY_LIST := \
 	deployment \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
-	$(if $(filter WNT,$(OS)),directx9canvas) \
 	docmodel \
 	drawinglayercore \
 	drawinglayer \
@@ -81,7 +80,6 @@ gb_MERGE_LIBRARY_LIST := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fsstorage \
 	fwk \
-	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	guesslang \
 	graphicfilter \
 	$(call gb_Helper_optionals_and,DESKTOP XMLHELP,helplinker) \
