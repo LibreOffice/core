@@ -47,6 +47,9 @@ public:
         StaticFileContentCache.clear();
 
         RequestVettingStations.clear();
+
+        NextRvsCleanupSize = RvsLowWatermark;
+        NextConnectionId = 1;
     }
 
 private:
