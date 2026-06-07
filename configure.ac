@@ -1452,7 +1452,26 @@ if test "x$with_sanitizer" != "x"; then
             AC_MSG_RESULT([no])
         fi
     done
-    SANITIZER_FLAGS="$OPT_FLAGS -fsanitize=$with_sanitizer $LIBSAN"
+    # Suppress library-only sanitizer noise (e.g. libstdc++'s well-defined
+    # unsigned wraparound flagged by UBSan's unsigned-integer-overflow) without
+    # disabling the checks for our own code; see sanitize-ignore.txt. The
+    # ignore list applies to every --with-sanitizer build (main build and all
+    # fuzzer variants). -fsanitize-ignorelist is a clang feature, so probe for
+    # it and skip it on compilers (e.g. GCC) that do not understand it.
+    SANITIZER_IGNORELIST="$(cd "$srcdir" && pwd)/sanitize-ignore.txt"
+    SANITIZER_IGNORELIST_FLAG=""
+    AC_MSG_CHECKING([whether $CXX supports -fsanitize-ignorelist])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -fsanitize=$with_sanitizer -fsanitize-ignorelist=$SANITIZER_IGNORELIST"
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [])],
+                      [SANITIZER_IGNORELIST_FLAG="-fsanitize-ignorelist=$SANITIZER_IGNORELIST"
+                       AC_MSG_RESULT([yes])],
+                      [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+
+    SANITIZER_FLAGS="$OPT_FLAGS -fsanitize=$with_sanitizer $SANITIZER_IGNORELIST_FLAG $LIBSAN"
     CXXFLAGS="$CXXFLAGS -frtti $SANITIZER_FLAGS"
     CFLAGS="$CFLAGS $SANITIZER_FLAGS"
 else

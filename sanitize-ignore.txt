@@ -1,0 +1,22 @@
+# Sanitizer ignore list applied to every --with-sanitizer build (wired in
+# configure.ac, so it covers the main build and all fuzzer variants).
+#
+# Purpose: silence library-only sanitizer noise WITHOUT disabling the checks
+# for our own code. Entries are scoped both by sanitizer (the [section] header)
+# and by source file (the src: globs), so only the named check is dropped, and
+# only for the matching library headers -- every other sanitizer, and the same
+# check in our own code, stays fully active.
+#
+# Note on section names: clang matches a [section] against the sanitizer check
+# name. For UBSan the leaf check name works (e.g. [unsigned-integer-overflow]);
+# for CFI only the umbrella [cfi] works, not sub-checks like
+# [cfi-unrelated-cast]. clang attributes inlined header code to the header, so
+# match by header path (matching the instantiating .cpp does nothing).
+
+# Well-defined unsigned wraparound the C++ standard library relies on
+# internally: the mt19937 LCG/tempering multiplies in <bits/random.tcc> and the
+# size_type arithmetic in <bits/basic_string.*>. Unsigned overflow is defined
+# behavior, so these are library noise, not bugs. The check stays on for our
+# own code.
+[unsigned-integer-overflow]
+src:*/include/c++/*
