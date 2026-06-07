@@ -1816,8 +1816,8 @@ libo_FUZZ_ARG_ENABLE(ooenv,
 AC_ARG_ENABLE(lto,
     AS_HELP_STRING([--enable-lto],
         [Enable link-time optimization. Suitable for (optimised) product builds. Building might take
-         longer but libraries and executables are optimized for speed. For GCC, best to use the 'gold'
-         linker.)]))
+         longer but libraries and executables are optimized for speed. For GCC, best to use a fast
+         linker such as lld or mold.)]))
 
 AC_ARG_ENABLE(gcov,
     AS_HELP_STRING([--enable-gcov],
@@ -4854,18 +4854,20 @@ if test "$enable_ld" != "no"; then
         elif test -n "$COM_IS_CLANG"; then
             check_use_ld lld
             if test $? -ne 0; then
-                check_use_ld gold
+                check_use_ld mold
                 if test $? -ne 0; then
-                    check_use_ld mold
+                    check_use_ld gold
                 fi
             fi
         else
-            # For gcc first try gold, new versions also support lld/mold.
-            check_use_ld gold
+            # Prefer the fast modern linkers. gold is deprecated and being
+            # removed from binutils, so try it only as a last resort before
+            # the slow default GNU ld.
+            check_use_ld lld
             if test $? -ne 0; then
-                check_use_ld lld
+                check_use_ld mold
                 if test $? -ne 0; then
-                    check_use_ld mold
+                    check_use_ld gold
                 fi
             fi
         fi
@@ -4879,8 +4881,8 @@ if test "$enable_ld" != "no"; then
         AC_MSG_RESULT([$ld_used])
         if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
             if echo "$ld_used" | grep -q "^GNU ld"; then
-                AC_MSG_WARN([The default GNU linker is slow, consider using LLD, mold or the GNU gold linker.])
-                add_warning "The default GNU linker is slow, consider using LLD, mold or the GNU gold linker."
+                AC_MSG_WARN([The default GNU linker is slow, consider using lld or mold.])
+                add_warning "The default GNU linker is slow, consider using lld or mold."
             fi
         fi
     else
