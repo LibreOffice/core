@@ -3019,6 +3019,7 @@ drawinglayer/source/processor2d/linegeometryextractor2d.cxx
 drawinglayer/source/processor2d/objectinfoextractor2d.cxx
 drawinglayer/source/processor2d/processor2dtools.cxx
 drawinglayer/source/processor2d/textaspolygonextractor2d.cxx
+drawinglayer/source/processor2d/vclprocessor2d.cxx
 drawinglayer/source/processor3d/baseprocessor3d.cxx
 drawinglayer/source/processor3d/cutfindprocessor3d.cxx
 drawinglayer/source/processor3d/defaultprocessor3d.cxx
@@ -3070,6 +3071,7 @@ editeng/source/accessibility/AccessibleStaticTextBase.cxx
 editeng/source/accessibility/AccessibleStringWrap.cxx
 editeng/source/editeng/ContentNode.cxx
 editeng/source/editeng/EditLine.cxx
+editeng/source/editeng/StripPortionsHelper.cxx
 editeng/source/editeng/TextPortionList.cxx
 editeng/source/editeng/editattr.cxx
 editeng/source/editeng/editdbg.cxx
@@ -5963,6 +5965,7 @@ include/vcl/inetimg.hxx
 include/vcl/inputctx.hxx
 include/vcl/inputtypes.hxx
 include/vcl/jobset.hxx
+include/vcl/jsdialog/executor.hxx
 include/vcl/keycod.hxx
 include/vcl/layout.hxx
 include/vcl/lineinfo.hxx
@@ -11344,6 +11347,7 @@ sw/source/core/doc/DocumentStateManager.cxx
 sw/source/core/doc/DocumentStatisticsManager.cxx
 sw/source/core/doc/DocumentStylePoolManager.cxx
 sw/source/core/doc/DocumentTimerManager.cxx
+sw/source/core/doc/FillBitmapLinkTracker.cxx
 sw/source/core/doc/SwDocIdle.cxx
 sw/source/core/doc/SwStyleNameMapper.cxx
 sw/source/core/doc/acmplwrd.cxx
