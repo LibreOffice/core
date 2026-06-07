@@ -21,165 +21,165 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="52"/>
         <source>Word 2003 Document (.doc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Документ Word 2003 (.doc)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="58"/>
         <source>ODF spreadsheet (.ods)</source>
-        <translation type="unfinished"></translation>
+        <translation>Электронная таблица ODF (.ods)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="59"/>
         <source>Excel Spreadsheet (.xlsx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Электронная таблица Excel (.xlsx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="60"/>
         <source>Excel 2003 Spreadsheet (.xls)</source>
-        <translation type="unfinished"></translation>
+        <translation>Электронная таблица Excel 2003 (.xls)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="66"/>
         <source>ODF presentation (.odp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Презентация ODF (.odp)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="67"/>
         <source>PowerPoint Presentation (.pptx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Презентация PowerPoint (.pptx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="68"/>
         <source>PowerPoint 2003 Presentation (.ppt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Презентация PowerPoint 2003 (.ppt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="74"/>
         <source>ODF drawing (.odg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Рисунок ODF (.odg)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="106"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Распечатать Документ</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="114"/>
         <source>Select Printer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать Принтер:</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="123"/>
         <location filename="../DocumentOperations.cpp" line="196"/>
         <source>Default Printer</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартный Принтер</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="128"/>
         <source>Print to File</source>
-        <translation type="unfinished"></translation>
+        <translation>Распечатать в Файл</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="132"/>
         <source>Enter file path...</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите путь к файлу...</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="144"/>
         <source>Save Print Output As</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить Вывод Принтера Как</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="146"/>
         <source>PDF Files (*.pdf);;All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы PDF (*.pdf);; Все Файлы (*)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="162"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Печать</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="163"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="187"/>
         <source>Print to File Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Вывести в Файл Ошибку</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="188"/>
         <source>Failed to save document to file. Please check the file path and permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось сохранить документ в файл. Пожалуйста, проверьте путь к файлу и разрешения.</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="232"/>
         <source>Print Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка Печати</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="233"/>
         <source>Failed to print document. Please check your printer settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось распечатать документ. Пожалуйста, проверьте настройки вашего принтера.</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="737"/>
         <location filename="../Bridge.cpp" line="805"/>
         <source>All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Все Файлы (*)</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="228"/>
         <source>Save Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить Документ</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="637"/>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть Файл</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="638"/>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Все Файлы (*);;Текстовые Документы (*.odt *.ott *.doc *.docx *.rtf *.txt);;Таблицы (*.ods *.ots *.xls *.xlsx *.csv);;Презентации (*.odp *.otp *.ppt *.pptx)</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="735"/>
         <source>Export As</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортировать Как</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="803"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить Файл</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="158"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Презентация</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="163"/>
         <location filename="../WebView.cpp" line="179"/>
         <source>Text Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовый Документ</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="168"/>
         <source>Spreadsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Таблица</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="173"/>
         <source>Drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Рисунок</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="304"/>
         <source>Presenting</source>
-        <translation type="unfinished"></translation>
+        <translation>Презентация</translation>
     </message>
 </context>
 <context>
@@ -187,7 +187,7 @@
     <message>
         <location filename="../WebView.cpp" line="599"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Старт</translation>
     </message>
 </context>
 </TS>
