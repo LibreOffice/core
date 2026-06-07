@@ -83,6 +83,10 @@ protected:
 
         std::unique_ptr<weld::TreeView> m_xFiltersTreeView;
         std::unique_ptr<weld::Button> m_xOKButton;
+
+        bool m_bIsParaFamily;
+
+        DECL_LINK(StyleFilterCheckHdl, const weld::TreeView::iter_col&, void);
     };
 
     bool bIsWater :1;
