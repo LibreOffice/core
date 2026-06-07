@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-06 15:01+0000\n"
+"PO-Revision-Date: 2026-06-07 16:01+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
@@ -4880,11 +4880,11 @@ msgstr "Immer dem Bearbeiter folgen"
 
 #: src/control/Control.Zotero.js:143
 msgid "Zotero API key is not configured"
-msgstr "Der Zotero API Schlüssel ist nicht konfiguriert"
+msgstr "Der Zotero-API-Schlüssel ist nicht konfiguriert"
 
 #: src/control/Control.Zotero.js:162
 msgid "Zotero API key is incorrect"
-msgstr "Der Zotero API Schlüssel ist nicht korrekt"
+msgstr "Der Zotero-API-Schlüssel ist nicht korrekt"
 
 #: src/control/Control.Zotero.js:189
 msgid "Zotero Warning"
