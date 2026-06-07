@@ -54,7 +54,7 @@
 #include <com/sun/star/ucb/AnyCompareFactory.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 
-#include "doctemplateslocal.hxx"
+#include <doctemplateslocal.hxx>
 #include <sfxurlrelocator.hxx>
 
 #include <sfx2/doctempl.hxx>

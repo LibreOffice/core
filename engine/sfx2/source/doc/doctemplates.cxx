@@ -81,7 +81,7 @@
 
 #include <sfx2/sfxresid.hxx>
 #include <sfxurlrelocator.hxx>
-#include "doctemplateslocal.hxx"
+#include <doctemplateslocal.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/strings.hrc>
 #include <doctempl.hrc>

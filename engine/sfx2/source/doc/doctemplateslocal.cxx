@@ -27,7 +27,7 @@
 #include <comphelper/attributelist.hxx>
 #include <rtl/ref.hxx>
 
-#include "doctemplateslocal.hxx"
+#include <doctemplateslocal.hxx>
 
 using namespace ::com::sun::star;
 

@@ -9442,7 +9442,6 @@ sfx2/source/doc/docstoragemodifylistener.cxx
 sfx2/source/doc/doctempl.cxx
 sfx2/source/doc/doctemplates.cxx
 sfx2/source/doc/doctemplateslocal.cxx
-sfx2/source/doc/doctemplateslocal.hxx
 sfx2/source/doc/docundomanager.cxx
 sfx2/source/doc/frmdescr.cxx
 sfx2/source/doc/graphhelp.cxx
@@ -9472,6 +9471,7 @@ sfx2/source/doc/zoomitem.cxx
 sfx2/source/explorer/nochaos.cxx
 sfx2/source/inc/appbaslib.hxx
 sfx2/source/inc/appdata.hxx
+sfx2/source/inc/doctemplateslocal.hxx
 sfx2/source/inc/docundomanager.hxx
 sfx2/source/inc/eventsupplier.hxx
 sfx2/source/inc/fltoptint.hxx
