@@ -67,6 +67,37 @@ public:
 
     int getGeneration() { return mnGeneration; }
 
+    int getLastChange() { return mnLastChange; }
+
+    double getBestFitness() { return mfBestFitness; }
+
+    // Rebuild the population from a fresh random spread to escape a local optimum
+    // it has collapsed into, keeping the best point found so far as one member so
+    // it is not lost. The no-change counter is reset to give the search a fresh
+    // window to improve in.
+    void restart()
+    {
+        mnLastChange = mnGeneration;
+
+        std::vector<Individual> aFresh;
+        aFresh.reserve(mnPopulationSize);
+
+        size_t nStart = 0;
+        if (!maBestCandidate.mVariables.empty())
+        {
+            aFresh.push_back(maBestCandidate);
+            nStart = 1;
+        }
+        for (size_t i = nStart; i < mnPopulationSize; ++i)
+        {
+            aFresh.emplace_back();
+            Individual& rIndividual = aFresh.back();
+            mrDataProvider.initializeVariables(rIndividual.mVariables, maGenerator);
+            rIndividual.mFitness = mrDataProvider.calculateFitness(rIndividual.mVariables);
+        }
+        maPopulation = std::move(aFresh);
+    }
+
     void initialize()
     {
         mnGeneration = 0;
