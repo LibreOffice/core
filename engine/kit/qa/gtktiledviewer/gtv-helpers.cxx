@@ -159,7 +159,7 @@ std::string GtvHelpers::getRelativePath(const std::string& aFilePath)
     if (err)
         return aFilePath;
 
-    return aRelPath.string();
+    return aRelPath.string<char>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

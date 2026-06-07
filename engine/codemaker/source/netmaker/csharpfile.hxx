@@ -25,7 +25,14 @@ public:
     }
 
 public:
-    std::string getPath() const { return m_filePath.string(); }
+    std::string getPath() const
+    {
+#if defined __cpp_lib_format_path
+        return m_filePath.display_string();
+#else
+        return m_filePath.string<char>();
+#endif
+    }
 
     void openFile()
     {
