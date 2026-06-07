@@ -11,8 +11,6 @@
 #include <sal/log.hxx>
 #include <osl/module.h>
 
-#include <config_cairo_canvas.h>
-
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
@@ -2821,25 +2819,6 @@ bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
     SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << static_cast<int>(nType) << ", Part" << static_cast<int>(nPart));
     return false;
 }
-#endif
-
-#if ENABLE_CAIRO_CANVAS
-
-bool GtkSalGraphics::SupportsCairo() const
-{
-    return true;
-}
-
-cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
-{
-    return std::make_shared<cairo::Gtk3Surface>(rSurface);
-}
-
-cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
-{
-    return std::make_shared<cairo::Gtk3Surface>(this, x, y, width, height);
-}
-
 #endif
 
 void GtkSalGraphics::WidgetQueueDraw() const

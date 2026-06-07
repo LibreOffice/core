@@ -27,12 +27,6 @@ $(eval $(call gb_Module_add_targets,canvas,\
         $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)),,Executable_canvasdemo)) \
 ))
 
-ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
-$(eval $(call gb_Module_add_targets,canvas,\
-	Library_cairocanvas \
-))
-endif
-
 $(eval $(call gb_Module_add_check_targets,canvas,\
     CppunitTest_canvas_test \
 ))

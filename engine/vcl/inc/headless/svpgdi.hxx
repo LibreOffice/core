@@ -27,7 +27,6 @@
 
 #include <osl/endian.h>
 #include <vcl/sysdata.hxx>
-#include <config_cairo_canvas.h>
 
 #include <salgdi.hxx>
 #include <sallayout.hxx>
@@ -84,14 +83,6 @@ public:
 #if USE_HEADLESS_CODE
     virtual void ApplyFullDamage() const override;
 #endif
-
-#if ENABLE_CAIRO_CANVAS
-    SAL_DLLPRIVATE virtual bool            SupportsCairo() const override;
-    SAL_DLLPRIVATE virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
-    SAL_DLLPRIVATE virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
-    virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const override;
-    virtual cpo::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
-#endif // ENABLE_CAIRO_CANVAS
 
     cairo_t* getCairoContext() const
     {

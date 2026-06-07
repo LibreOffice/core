@@ -115,9 +115,6 @@ local file="$1"
         */libcairo-lo.so.2)
             allowlist="${allowlist} ${x11allowlist} libxcb-shm.so.0 libxcb.so.1 libxcb-render.so.0"
         ;;
-        */libcairocanvaslo.so)
-            allowlist="${allowlist} libcairo.so.2"
-        ;;
         */libucpgio1lo.so|*/liblosessioninstalllo.so|*/libevoablo.so)
             allowlist="${allowlist} ${gioallowlist}"
         ;;

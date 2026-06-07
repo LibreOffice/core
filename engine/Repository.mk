@@ -313,7 +313,6 @@ endif
 ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
-	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
 	canvasfactory \
 	cppcanvas \
 	vclcanvas \

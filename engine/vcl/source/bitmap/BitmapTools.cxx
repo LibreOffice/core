@@ -33,9 +33,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#if ENABLE_CAIRO_CANVAS
-#include <cairo.h>
-#endif
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
@@ -300,85 +297,6 @@ void fillWithData(sal_uInt8* pData, Bitmap const& rBitmap)
         }
     }
 }
-
-
-#if ENABLE_CAIRO_CANVAS
-Bitmap CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
-{
-    // FIXME: if we could teach VCL/ about cairo handles, life could
-    // be significantly better here perhaps.
-
-    cairo_surface_t *pPixels = cairo_surface_create_similar_image(pSurface,
-            CAIRO_FORMAT_ARGB32, aSize.Width(), aSize.Height());
-    cairo_t *pCairo = cairo_create( pPixels );
-    if( !pPixels || !pCairo || cairo_status(pCairo) != CAIRO_STATUS_SUCCESS )
-        return Bitmap();
-
-    // suck ourselves from the X server to this buffer so then we can fiddle with
-    // Alpha to turn it into the ultra-lame vcl required format and then push it
-    // all back again later at vast expense [ urgh ]
-    cairo_set_source_surface( pCairo, pSurface, 0, 0 );
-    cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
-    cairo_paint( pCairo );
-
-    Bitmap aRGBA(aSize, vcl::PixelFormat::N32_BPP);
-
-    BitmapScopedWriteAccess pRGBAWrite(aRGBA);
-    assert(pRGBAWrite);
-    if (!pRGBAWrite)
-        return Bitmap();
-
-    cairo_surface_flush(pPixels);
-    unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
-    unsigned int nStride = cairo_image_surface_get_stride( pPixels );
-#if !ENABLE_WASM_STRIP_PREMULTIPLY
-    vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
-#endif
-    for( tools::Long y = 0; y < aSize.Height(); y++ )
-    {
-        sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
-        for( tools::Long x = 0; x < aSize.Width(); x++ )
-        {
-#if defined OSL_BIGENDIAN
-            sal_uInt8 nB = (*pPix >> 24);
-            sal_uInt8 nG = (*pPix >> 16) & 0xff;
-            sal_uInt8 nR = (*pPix >> 8) & 0xff;
-            sal_uInt8 nAlpha = *pPix & 0xff;
-#else
-            sal_uInt8 nAlpha = (*pPix >> 24);
-            sal_uInt8 nR = (*pPix >> 16) & 0xff;
-            sal_uInt8 nG = (*pPix >> 8) & 0xff;
-            sal_uInt8 nB = *pPix & 0xff;
-#endif
-            if( nAlpha != 0 && nAlpha != 255 )
-            {
-                // Cairo uses pre-multiplied alpha - we do not => re-multiply
-#if ENABLE_WASM_STRIP_PREMULTIPLY
-                nR = vcl::bitmap::unpremultiply(nR, nAlpha);
-                nG = vcl::bitmap::unpremultiply(nG, nAlpha);
-                nB = vcl::bitmap::unpremultiply(nB, nAlpha);
-#else
-                nR = unpremultiply_table[nAlpha][nR];
-                nG = unpremultiply_table[nAlpha][nG];
-                nB = unpremultiply_table[nAlpha][nB];
-#endif
-            }
-            pRGBAWrite->SetPixel( y, x, BitmapColor( ColorAlpha, nR, nG, nB, nAlpha ) );
-            pPix++;
-        }
-    }
-
-    pRGBAWrite.reset();
-
-    // ignore potential errors above. will get caller a
-    // uniformly white bitmap, but not that there would
-    // be error handling in calling code ...
-
-    cairo_destroy( pCairo );
-    cairo_surface_destroy( pPixels );
-    return aRGBA;
-}
-#endif
 
 Bitmap CanvasTransformBitmap( const Bitmap&                 rSrcBitmap,
                                 const ::basegfx::B2DHomMatrix&  rTransform,

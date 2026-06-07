@@ -596,33 +596,4 @@ bool AquaSharedAttributes::checkContext()
 
 #endif
 
-#if ENABLE_CAIRO_CANVAS
-
-bool AquaSalGraphics::SupportsCairo() const
-{
-    return false;
-}
-
-cairo::SurfaceSharedPtr AquaSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& /*rSurface*/) const
-{
-    return cairo::SurfaceSharedPtr();
-}
-
-cairo::SurfaceSharedPtr AquaSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
-{
-    return cairo::SurfaceSharedPtr();
-}
-
-cairo::SurfaceSharedPtr AquaSalGraphics::CreateBitmapSurface(const OutputDevice& /*rRefDevice*/, const BitmapSystemData& /*rData*/, const Size& /*rSize*/) const
-{
-    return cairo::SurfaceSharedPtr();
-}
-
-cpo::uno::Any AquaSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
-{
-    return cpo::uno::Any();
-}
-
-#endif // ENABLE_CAIRO_CANVAS
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

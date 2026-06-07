@@ -292,8 +292,6 @@ void WriteOnlyVars::run()
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/basctl/source/basicide/moduldl2.cxx"))
             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/canvas/source/cairo/cairo_spritecanvas.cxx"))
-            return;
         if (loplugin::isSamePathname(fn, SRCDIR "/chart2/source/tools/DiagramHelper.cxx"))
             return;
         if (loplugin::isSamePathname(fn,

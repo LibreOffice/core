@@ -1210,7 +1210,6 @@ linux-android*)
     with_gssapi=no
     disable_database_connectivity_dependencies
     enable_mpl_subset=yes
-    enable_cairo_canvas=no
     enable_coinmp=yes
     enable_python=no
     enable_xmlhelp=no
@@ -13204,16 +13203,10 @@ if test "$test_cairo" = "yes"; then
         # harfbuzz is now built using meson
         need_meson="yes"
     fi
-
-    if test "$enable_cairo_canvas" != no; then
-        AC_DEFINE(ENABLE_CAIRO_CANVAS)
-        ENABLE_CAIRO_CANVAS=TRUE
-    fi
 fi
 
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
-AC_SUBST(ENABLE_CAIRO_CANVAS)
 AC_SUBST(SYSTEM_CAIRO)
 
 dnl ===================================================================
@@ -14766,7 +14759,6 @@ AC_CONFIG_HEADERS([config_host/config_cups.h])
 AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extensions.h])
-AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_rgba.h])
 AC_CONFIG_HEADERS([config_host/config_collab.h])
 AC_CONFIG_HEADERS([config_host/config_cxxabi.h])

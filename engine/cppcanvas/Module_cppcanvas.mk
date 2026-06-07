@@ -29,12 +29,4 @@ $(eval $(call gb_Module_add_check_targets,cppcanvas,\
     CppunitTest_cppcanvas_test \
 ))
 
-ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
-ifneq ($(DISPLAY),)
-$(eval $(call gb_Module_add_slowcheck_targets,cppcanvas,\
-    CppunitTest_cppcanvas_emfplus \
-))
-endif
-endif
-
 # vim: set noet sw=4 ts=4:

@@ -10,14 +10,10 @@
 #ifndef INCLUDED_VCL_BITMAP_TOOLS_HXX
 #define INCLUDED_VCL_BITMAP_TOOLS_HXX
 
-#include <config_cairo_canvas.h>
 #include <config_wasm_strip.h>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/ImageTree.hxx>
-#if ENABLE_CAIRO_CANVAS
-#include <vcl/cairo.hxx>
-#endif
 #include <basegfx/range/b2drectangle.hxx>
 #include <array>
 #include <vcl/RawBitmap.hxx>
@@ -58,10 +54,6 @@ Bitmap VCL_DLLPUBLIC CreateFromData(sal_uInt8 const *pData,
 void VCL_DLLPUBLIC fillWithData(sal_uInt8* pData, Bitmap const& rBitmap);
 
 Bitmap VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
-
-#if ENABLE_CAIRO_CANVAS
-VCL_DLLPUBLIC Bitmap CreateFromCairoSurface(Size size, cairo_surface_t* pSurface);
-#endif
 
 VCL_DLLPUBLIC ::Bitmap CanvasTransformBitmap( const ::Bitmap& rBitmap,
                                   const ::basegfx::B2DHomMatrix&  rTransform,

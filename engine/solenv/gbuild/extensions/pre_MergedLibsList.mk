@@ -30,7 +30,6 @@ gb_MERGE_LIBRARY_LIST := \
 	basegfx \
 	bib \
 	cached1 \
-	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
 	canvasfactory \
 	canvastools \
 	chart2 \
