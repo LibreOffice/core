@@ -212,6 +212,12 @@ unlink ("configure");
 system ("$autoconf -I ${src_path}") && die "Failed to run autoconf";
 die "Failed to generate the configure script" if (! -f "configure");
 
+# Favor noticeably faster dash, when available
+if ($system eq 'Linux' and not defined $ENV{CONFIG_SHELL}) {
+    chomp(my $dash = `command -v dash 2>/dev/null`);
+    $ENV{CONFIG_SHELL} = $dash if $dash;
+}
+
 # Handle help arguments first, so we don't clobber autogen.lastrun
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {

@@ -27,4 +27,10 @@ ifneq ($(ATOMIC_LIB),)
 gb_STDLIBS_CXX := $(ATOMIC_LIB)
 endif
 
+# Favor noticeably faster dash, when available
+gb_DASH := $(shell command -v dash 2>/dev/null)
+ifneq ($(gb_DASH),)
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(gb_DASH)
+endif
+
 # vim: set noet sw=4 ts=4:
