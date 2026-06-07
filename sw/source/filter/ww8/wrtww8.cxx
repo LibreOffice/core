@@ -56,7 +56,7 @@
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
 #include <frmatr.hxx>
-#include <../../core/inc/rootfrm.hxx>
+#include <rootfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
