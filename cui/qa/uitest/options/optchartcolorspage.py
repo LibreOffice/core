@@ -23,7 +23,7 @@ class Test(UITestCase):
             chartsEntryDefaultColorsEntry.executeAction("SELECT", tuple())
 
             chartsColors = xDialog.getChild("colors")
-            colorTable = xDialog.getChild("table")
+            colorTable = xDialog.getChild("tableiconview")
 
             # Chart Data Series default colors
             dataSeriesDefaultColors = ["004586",
@@ -42,7 +42,8 @@ class Test(UITestCase):
             for i in range(len(dataSeriesDefaultColors)):
                 chartsColorsDataSeriesEntry = chartsColors.getChild(i)
                 chartsColorsDataSeriesEntry.executeAction("SELECT", tuple())
-                self.assertEqual(get_state_as_dict(colorTable)["CurrColorPos"], str(i))
-                self.assertEqual(get_state_as_dict(colorTable)["RGB"], self.hex_to_rgb(dataSeriesDefaultColors[i]))
+                self.assertEqual(get_state_as_dict(colorTable)["SelectedItemPos"], str(i))
+                # ID is the RGB color value in hex
+                self.assertEqual(get_state_as_dict(colorTable)["SelectedItemId"].lower(), dataSeriesDefaultColors[i])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

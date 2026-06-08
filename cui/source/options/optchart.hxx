@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svtools/valueset.hxx>
+#include <svx/ColorIconView.hxx>
 #include <svx/xtable.hxx>
 #include <svx/PaletteManager.hxx>
 #include <vcl/weld/Button.hxx>
@@ -47,13 +48,12 @@ private:
     std::unique_ptr<weld::Button> m_xPBDefault;
     std::unique_ptr<weld::Button> m_xPBAdd;
     std::unique_ptr<weld::Button> m_xPBRemove;
-    std::unique_ptr<SvxColorValueSet> m_xValSetColorBox;
-    std::unique_ptr<weld::CustomWeld> m_xValSetColorBoxWin;
+    ColorIconView m_aColorIconView;
 
     DECL_LINK(ResetToDefaults, weld::Button&, void);
     DECL_LINK(AddChartColor, weld::Button&, void);
     DECL_LINK(RemoveChartColor, weld::Button&, void);
-    DECL_LINK(BoxClickedHdl, ValueSet*, void);
+    DECL_LINK(ColorActivatedHdl, const Color&, void);
     DECL_LINK(SelectPaletteLbHdl, weld::ComboBox&, void);
     DECL_LINK(LbChartColorsSelectionChangedHdl, weld::ItemView&, void);
 

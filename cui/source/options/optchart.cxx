@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/IconView.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/MessageDialog.hxx>
@@ -112,18 +113,17 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl, weld::
             /*theme colors palette*/ aPaletteManager.IsThemePaletteSelected() ||
             /*document colors palette*/ nPalettePos == aPaletteManager.GetPaletteCount() - 1)
         {
-            aPaletteManager.ReloadColorSet(*m_xValSetColorBox);
+            aPaletteManager.ReloadColorSet(m_aColorIconView);
 
-            for (size_t nItemPos = 0, nItemCount = m_xValSetColorBox->GetItemCount();
+            for (size_t nItemPos = 0, nItemCount = m_aColorIconView.getItemCount();
                  nItemPos < nItemCount; nItemPos++)
             {
-                auto nItemId = m_xValSetColorBox->GetItemId(nItemPos);
-                if (m_xValSetColorBox->GetItemColor(nItemId) == rColor)
+                if (m_aColorIconView.getColor(nItemPos) == rColor)
                 {
                     m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
                     SelectPaletteLbHdl(*m_xLbPaletteSelector);
 
-                    m_xValSetColorBox->SelectItem(nItemId);
+                    m_aColorIconView.select(nItemPos);
 
                     return;
                 }
@@ -143,7 +143,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl, weld::
             m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
             SelectPaletteLbHdl(*m_xLbPaletteSelector);
 
-            m_xValSetColorBox->SelectItem(m_xValSetColorBox->GetItemId(nPos));
+            m_aColorIconView.select(nPos);
 
             return;
         }
@@ -151,7 +151,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl, weld::
 
     // color not found in any palette
     m_xLbPaletteSelector->set_active_text(OUString());
-    m_xValSetColorBox->Clear();
+    m_aColorIconView.clear();
 }
 
 SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
@@ -161,8 +161,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
     , m_xPBDefault(m_xBuilder->weld_button(u"default"_ustr))
     , m_xPBAdd(m_xBuilder->weld_button(u"add"_ustr))
     , m_xPBRemove(m_xBuilder->weld_button(u"delete"_ustr))
-    , m_xValSetColorBox(new SvxColorValueSet(m_xBuilder->weld_scrolled_window(u"tablewin"_ustr, true)))
-    , m_xValSetColorBoxWin(new weld::CustomWeld(*m_xBuilder, u"table"_ustr, *m_xValSetColorBox))
+    , m_aColorIconView(m_xBuilder->weld_icon_view(u"tableiconview"_ustr))
 {
     m_xLbChartColors->set_size_request(-1, m_xLbChartColors->get_height_rows(16));
 
@@ -174,17 +173,14 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
         m_xPBDefault->set_sensitive(false);
         m_xPBAdd->set_sensitive(false);
         m_xPBRemove->set_sensitive(false);
-        m_xValSetColorBoxWin->set_sensitive(false);
+        m_aColorIconView.set_sensitive(false);
     }
 
     m_xPBDefault->connect_clicked( LINK( this, SvxDefaultColorOptPage, ResetToDefaults ) );
     m_xPBAdd->connect_clicked( LINK( this, SvxDefaultColorOptPage, AddChartColor ) );
     m_xPBRemove->connect_clicked( LINK( this, SvxDefaultColorOptPage, RemoveChartColor ) );
-    m_xValSetColorBox->SetSelectHdl( LINK( this, SvxDefaultColorOptPage, BoxClickedHdl ) );
+    m_aColorIconView.setColorActivatedHdl(LINK(this, SvxDefaultColorOptPage, ColorActivatedHdl));
     m_xLbPaletteSelector->connect_changed( LINK( this, SvxDefaultColorOptPage, SelectPaletteLbHdl ) );
-
-    m_xValSetColorBox->SetStyle( m_xValSetColorBox->GetStyle()
-                                    | WB_ITEMBORDER | WB_NAMEFIELD | WB_VSCROLL );
 
     if ( const SvxChartColorTableItem* pEditOptionsItem = rInAttrs.GetItemIfSet( SID_SCH_EDITOPTIONS, false ) )
     {
@@ -203,8 +199,6 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
 
 SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 {
-    m_xValSetColorBoxWin.reset();
-    m_xValSetColorBox.reset();
 }
 
 void SvxDefaultColorOptPage::Construct()
@@ -348,16 +342,15 @@ IMPL_LINK_NOARG( SvxDefaultColorOptPage, SelectPaletteLbHdl, weld::ComboBox&, vo
 {
     sal_Int32 nPos = m_xLbPaletteSelector->get_active();
     aPaletteManager.SetPalette( nPos );
-    aPaletteManager.ReloadColorSet( *m_xValSetColorBox );
-    m_xValSetColorBox->Resize();
+    aPaletteManager.ReloadColorSet(m_aColorIconView);
 }
 
-IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)
+IMPL_LINK(SvxDefaultColorOptPage, ColorActivatedHdl, const Color&, rColor, void)
 {
     sal_Int32 nIdx = m_xLbChartColors->get_selected_index();
     if (nIdx != -1)
     {
-        const XColorEntry aEntry(m_xValSetColorBox->GetItemColor(m_xValSetColorBox->GetSelectedItemId()), m_xLbChartColors->get_selected_text());
+        const XColorEntry aEntry(rColor, m_xLbChartColors->get_selected_text());
 
         ModifyColorEntry(aEntry, nIdx);
         m_SvxChartColorTableUniquePtr->replace(nIdx, aEntry);

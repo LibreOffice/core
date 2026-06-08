@@ -61,6 +61,8 @@ void ColorIconView::clear() { m_pIconView->clear(); }
 
 void ColorIconView::grab_focus() { m_pIconView->grab_focus(); }
 
+void ColorIconView::set_sensitive(bool bSensitive) { m_pIconView->set_sensitive(bSensitive); }
+
 void ColorIconView::set_help_id(const OUString& rName) { m_pIconView->set_help_id(rName); }
 
 IMPL_LINK(ColorIconView, ItemActivatedHdl, const weld::TreeIter&, rIter, bool)
