@@ -184,7 +184,8 @@ public:
     void goToCell(const OUString& rCell);
     void typeString(std::u16string_view rStr);
     void insertStringToCell(const OUString& rCell, std::u16string_view rStr);
-    void insertArrayToCell(const OUString& rCell, std::u16string_view rStr);
+    void insertArrayToCell(const OUString& rCell, std::u16string_view rStr,
+                           bool bDynamicArrayMaster = false);
     void clearCell(const OUString& rCell);
     void insertNewSheet(const ScDocument& rDoc);
     void executeAutoSum();

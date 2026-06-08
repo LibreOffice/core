@@ -134,6 +134,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
                 {
                     ScRange maDestRange;   // destination range for the full matrix
                     const ScTokenArray* mpCode;  // token array from the origin formula cell
+                    bool mbDynamicArrayMaster;   // source was a dynamic-array master
                 };
                 std::vector<OriginMatrixInfo> aOriginInfos;
                 aOriginInfos.reserve(rClipParam.maOriginMatrixRanges.size());
@@ -153,11 +154,15 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
                     // to EnterMatrix ensures relative references are correctly
                     // shifted to the destination position.
                     const ScTokenArray* pCode = nullptr;
+                    bool bDynamic = false;
                     ScFormulaCell* pFC = pClipDoc->GetFormulaCell(rMat.aStart);
                     if (pFC)
+                    {
                         pCode = pFC->GetCode();
+                        bDynamic = pFC->IsDynamicArrayMaster();
+                    }
 
-                    aOriginInfos.push_back({ aDestMatRange, pCode });
+                    aOriginInfos.push_back({ aDestMatRange, pCode, bDynamic });
                 }
 
                 // Pre-check: detect existing matrices at the destination.
@@ -313,7 +318,9 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
                     pDocSh->GetDocFunc().EnterMatrix(
                             rDest, &aMark, rInfo.mpCode, OUString(),
                             true /*bApi*/, false /*bEnglish*/,
-                            OUString(), eGram);
+                            OUString(), eGram,
+                            false /*bCheckForSpill*/,
+                            rInfo.mbDynamicArrayMaster);
                 }
 
                 pUndoMgr->LeaveListAction();
