@@ -188,7 +188,7 @@ public:
         , mbNonNegative(false)
         , mbInteger(false)
         , mnTimeout(60000)
-        , mnAlgorithm(0)
+        , mnAlgorithm(2)
         , mbSuccess(false)
         , mfResultValue(0.0)
     {
