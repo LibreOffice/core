@@ -4251,7 +4251,7 @@ find_msvc()
     else
         vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
     fi
-    vswhere+="\\Microsoft Visual Studio\\Installer\\vswhere.exe"
+    vswhere="$vswhere\\Microsoft Visual Studio\\Installer\\vswhere.exe"
     PathFormat "$vswhere"
     vswhere=$formatted_path_unix
     for ver in $vsversions; do
