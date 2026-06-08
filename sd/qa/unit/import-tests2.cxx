@@ -1380,6 +1380,32 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf115394PPT)
     CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testBulletMarginIndentMapping)
+{
+    createSdImpressDoc("pptx/bullet-indent.pptx");
+
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(GetPage(1)->GetObj(1));
+    CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+    // Per-paragraph numbering (GetParaAttribs); the shape default would miss the per-para value.
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+
+    auto checkPara = [&aEdit](sal_Int32 nPara) {
+        const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(nPara).GetItem(EE_PARA_NUMBULLET);
+        CPPUNIT_ASSERT(pNumFmt);
+        // Bullet at 0, text at |indent| = 0.9cm. Without the fix in place, this test would have
+        // failed with
+        // - Expected: 900
+        // - Actual  : 0
+        // i.e. the text stayed at AbsLSpace=0, collapsing the bullet->text gap.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(900), pNumFmt->GetNumRule().GetLevel(0).GetAbsLSpace());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-900),
+                             pNumFmt->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    };
+
+    checkPara(0); // first-line indent (+0.9cm)
+    checkPara(1); // hanging indent (-0.9cm)
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf163343_brokenAnimation)
 {
     // File has <anim:animate smil:values="" smil:keyTimes="0;1"/>: empty values with non-empty
