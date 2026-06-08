@@ -69,6 +69,8 @@ public:
                          const SwRedlineData* pSwRedlineData = nullptr) override;
 
     void AppendBookmark(const OUString& rName) override;
+    void AppendBookmarkStart(const OUString& rName) override;
+    void AppendBookmarkEnd(const OUString& rName, bool bIsFinal) override;
 
     void AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos,
                                sal_Int32 nLen) override;

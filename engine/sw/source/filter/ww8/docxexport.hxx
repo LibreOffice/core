@@ -169,6 +169,8 @@ public:
     virtual void AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* pRedlineData = nullptr ) override;
 
     virtual void AppendBookmark( const OUString& rName ) override;
+    virtual void AppendBookmarkStart(const OUString& rName) override;
+    virtual void AppendBookmarkEnd(const OUString& rName, bool bIsFinal) override;
 
     virtual void AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
 

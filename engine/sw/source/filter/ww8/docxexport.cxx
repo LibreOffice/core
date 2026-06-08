@@ -233,6 +233,25 @@ void DocxExport::AppendBookmark( const OUString& rName )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
+void DocxExport::AppendBookmarkStart(const OUString& rName)
+{
+    std::vector<OUString> aStarts{ rName };
+    std::vector<OUString> aEnds{};
+
+    m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
+}
+
+void DocxExport::AppendBookmarkEnd(const OUString& rName, bool bIsFinal)
+{
+    std::vector<OUString> aStarts{};
+    std::vector<OUString> aEnds{ rName };
+
+    if (bIsFinal)
+        m_pAttrOutput->WriteFinalBookmarks_Impl(aStarts, aEnds);
+    else
+        m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
+}
+
 void DocxExport::AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos, sal_Int32 nLen )
 {
     std::vector< SwMarkName > aStarts;

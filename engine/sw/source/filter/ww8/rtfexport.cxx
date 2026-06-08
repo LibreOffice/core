@@ -154,6 +154,22 @@ void RtfExport::AppendBookmark(const OUString& rName)
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
 
+void RtfExport::AppendBookmarkStart(const OUString& rName)
+{
+    std::vector<OUString> aStarts{ rName };
+    std::vector<OUString> aEnds{};
+
+    m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
+}
+
+void RtfExport::AppendBookmarkEnd(const OUString& rName, bool /*bIsFinal*/)
+{
+    std::vector<OUString> aStarts{};
+    std::vector<OUString> aEnds{ rName };
+
+    m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
+}
+
 void RtfExport::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos,
                                       sal_Int32 nLen)
 {
