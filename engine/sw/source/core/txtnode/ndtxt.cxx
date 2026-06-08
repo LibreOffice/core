@@ -609,9 +609,14 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
         InvalidateInSwCache();
 
+        // Each node only has a hints array when it carries text attributes.
+        // After the split the two nodes can differ, so test them separately.
         if ( HasHints() )
         {
             MoveTextAttr_To_AttrSet();
+        }
+        if ( pNode->HasHints() )
+        {
             pNode->MoveTextAttr_To_AttrSet();
         }
         // in case there are frames, the RegisterToNode has set the merge flag
@@ -657,6 +662,11 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
                 }
             }
             MoveTextAttr_To_AttrSet();
+        }
+        // The split-off node has its own hints array, present only when it
+        // actually carries text attributes, so test it on its own.
+        if ( pNode->HasHints() )
+        {
             pNode->MoveTextAttr_To_AttrSet();
         }
 
