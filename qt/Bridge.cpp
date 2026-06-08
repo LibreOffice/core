@@ -272,8 +272,20 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
 
                          // Ensure file ends with the selected format's extension - save-as fails otherwise!
                          QString finalPath = destPath;
-                         if (!finalPath.endsWith("." + format, Qt::CaseInsensitive))
+                         const QString currentSuffix = QFileInfo(finalPath).suffix();
+                         if (currentSuffix.compare(format, Qt::CaseInsensitive) != 0)
                          {
+                             // The flatpak save dialog can return a name with the wrong
+                             // extension (e.g. .odt when saving as docx). Drop it before
+                             // adding the right one so we don't get "file.odt.docx".
+                             for (const auto& fmt : formats)
+                             {
+                                 if (currentSuffix.compare(fmt.extension, Qt::CaseInsensitive) == 0)
+                                 {
+                                     finalPath.chop(currentSuffix.length() + 1);
+                                     break;
+                                 }
+                             }
                              finalPath += "." + format;
                          }
 
