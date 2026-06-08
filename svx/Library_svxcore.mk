@@ -444,7 +444,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/tbxctrls/StylesPreviewWindow \
     svx/source/toolbars/extrusionbar \
     svx/source/toolbars/fontworkbar \
-    svx/source/uitest/sdrobject \
     svx/source/unodraw/gluepts \
     svx/source/unodraw/SvxXTextColumns \
     svx/source/unodraw/tableshape \

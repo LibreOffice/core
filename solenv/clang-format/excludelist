@@ -5744,7 +5744,6 @@ include/svx/tbxctl.hxx
 include/svx/transfrmhelper.hxx
 include/svx/txencbox.hxx
 include/svx/ucsubset.hxx
-include/svx/uiobject.hxx
 include/svx/unoapi.hxx
 include/svx/unobrushitemhelper.hxx
 include/svx/unofill.hxx

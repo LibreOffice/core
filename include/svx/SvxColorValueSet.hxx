@@ -40,8 +40,6 @@ public:
     Size layoutAllVisible(sal_uInt32 nEntryCount);
     void layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 
-    virtual FactoryFunction GetUITestFactory() const override;
-
     virtual void insert(int nIndex, const Color& rColor, const OUString& rColorName) override
     {
         InsertItem(nIndex + 1, rColor, rColorName);
