@@ -149,12 +149,12 @@ public:
     bool                IsTmpCurrencyFormat( const OUString& rFmtString );
     bool                FindEntry( const OUString& rFmtString, sal_uInt32* pAt = nullptr );
 
-    void                ValidateNewEntries() { bUndoAddList = false; }
+    void                ValidateNewEntries() { m_bUndoAddList = false; }
     std::vector<sal_uInt32> const & GetUpdateData() const;
 
-    void                SetCurNumFmtKey( sal_uInt32 nNew )  { nCurFormatKey = nNew; }
-    sal_uInt32          GetCurNumFmtKey() const             { return nCurFormatKey; }
-    LanguageType        GetCurLanguage() const              { return eCurLanguage; }
+    void                SetCurNumFmtKey( sal_uInt32 nNew )  { m_nCurFormatKey = nNew; }
+    sal_uInt32          GetCurNumFmtKey() const             { return m_nCurFormatKey; }
+    LanguageType        GetCurLanguage() const              { return m_eCurLanguage; }
 
                         /** Returns the name of Standard, General, ... for the
                             current language. */
@@ -167,7 +167,7 @@ public:
     void                SetComment4Entry(short nEntry, const OUString& aCommentString);
 
     void                SetCurrencySymbol(sal_uInt32 nPos);
-    sal_uInt32          GetCurrencySymbol() const { return nCurCurrencyEntryPos;}
+    sal_uInt32          GetCurrencySymbol() const { return m_nCurCurrencyEntryPos;}
     sal_uInt16          FindCurrencyFormat( const OUString& rFmtString );
     sal_uInt16          FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,bool bTmpBanking);
     void                SetCurCurrencyEntry(NfCurrencyEntry*);
@@ -179,27 +179,27 @@ public:
     bool                IsInTable(sal_uInt16 nPos, bool bTmpBanking,
                             std::u16string_view rFmtString) const;
 
-    void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
+    void                SetUseStarFormat( bool bUse ) { m_bUseStarFormat = bUse; }
 private:
-    SvNumberFormatter*      pFormatter;
-    SvNumberFormatTable*    pCurFmtTable;
-    SvxNumberValueType      eValType;
-    OUString                aValStr;
-    double                  nValNum;
-    bool                    bUndoAddList;
-    std::vector<sal_uInt32> aAddList;
-    std::vector<sal_uInt32> aDelList;
-    std::vector<sal_uInt32> aCurEntryList;
-    sal_uInt32              nCurFormatKey;
-    SvNumFormatType         nCurCategory;
-    LanguageType            eCurLanguage;
-    std::vector<sal_uInt16> aCurCurrencyList;
-    NfCurrencyEntry*        pCurCurrencyEntry;
-    bool                    bBankingSymbol;
-    sal_uInt32              nCurCurrencyEntryPos;
-    std::vector<OUString>   aCurrencyFormatList;
-    bool                    bUseStarFormat;
-    bool                    bIsDefaultValNum;
+    SvNumberFormatter*      m_pFormatter;
+    SvNumberFormatTable*    m_pCurFmtTable;
+    SvxNumberValueType      m_eValType;
+    OUString                m_aValStr;
+    double                  m_nValNum;
+    bool                    m_bUndoAddList;
+    std::vector<sal_uInt32> m_aAddList;
+    std::vector<sal_uInt32> m_aDelList;
+    std::vector<sal_uInt32> m_aCurEntryList;
+    sal_uInt32              m_nCurFormatKey;
+    SvNumFormatType         m_nCurCategory;
+    LanguageType            m_eCurLanguage;
+    std::vector<sal_uInt16> m_aCurCurrencyList;
+    NfCurrencyEntry*        m_pCurCurrencyEntry;
+    bool                    m_bBankingSymbol;
+    sal_uInt32              m_nCurCurrencyEntryPos;
+    std::vector<OUString>   m_aCurrencyFormatList;
+    bool                    m_bUseStarFormat;
+    bool                    m_bIsDefaultValNum;
 
     SVX_DLLPRIVATE short FillEntryList_Impl( std::vector<OUString>& rList );
     SVX_DLLPRIVATE void  FillEListWithStd_Impl( std::vector<OUString>& rList, SvNumFormatType eCategory, short &Pos,
