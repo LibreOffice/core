@@ -44,7 +44,11 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
+#include <comphelper/base64.hxx>
 #include <comphelper/kit.hxx>
+#include <tools/stream.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/cuicharmap.hxx>
@@ -232,6 +236,7 @@ void SvxCharacterMap::init()
     m_xShowSet->connect_selection_changed(LINK(this, SvxCharacterMap, CharSelectHdl));
     m_xShowSet->connect_key_press(LINK(this, SvxCharacterMap, CharKeyPressHdl));
     m_xShowSet->connect_query_tooltip(LINK(this, SvxCharacterMap, ShowCharQueryTooltipHdl));
+    m_xShowSet->connect_get_image(LINK(this, SvxCharacterMap, GetShowImageHdl));
     if(m_xShowSetArea)
         m_xShowSetArea->connect_vadjustment_value_changed(LINK(this, SvxCharacterMap, ShowSetScrollHdl));
 
@@ -239,6 +244,7 @@ void SvxCharacterMap::init()
     m_xSearchSet->connect_selection_changed(LINK(this, SvxCharacterMap, CharSelectHdl));
     m_xSearchSet->connect_key_press(LINK(this, SvxCharacterMap, CharKeyPressHdl));
     m_xSearchSet->connect_query_tooltip(LINK(this, SvxCharacterMap, SearchCharQueryTooltipHdl));
+    m_xSearchSet->connect_get_image(LINK(this, SvxCharacterMap, GetSearchImageHdl));
     if(m_xSearchSetArea)
         m_xSearchSetArea->connect_vadjustment_value_changed(LINK(this, SvxCharacterMap, SearchSetScrollHdl));
 
@@ -375,25 +381,48 @@ void SvxCharacterMap::populateShowCharModel()
     m_xShowSet->clear();
     m_xShowSet->freeze();
 
-    if (!m_xFontCharMap.is())
-        return;
-
-    sal_Int32 nId=0;
-    for (sal_UCS4 cChar = m_xFontCharMap->GetFirstChar(); ; cChar = m_xFontCharMap->GetNextChar(cChar))
+    if (m_xFontCharMap.is())
     {
-        OUString sId = OUString::number(cChar);
-        m_xShowSet->append(sId, u""_ustr, nullptr);
-        m_aShowCharPos[sId] = nId++;
+        // Online never paints the glyphs locally: the client fetches each
+        // visible cell through GetShowImageHdl. Drawing every glyph in the
+        // font up front would instead render thousands of bitmaps and ship
+        // them to no one, freezing the dialog. So give each cell a blank
+        // placeholder for sizing and the accessible name now, and leave the
+        // glyph itself to the on demand path.
+        const bool bRenderOnDemand = comphelper::COKit::isActive();
+        ScopedVclPtr<VirtualDevice> xPlaceholder
+            = bRenderOnDemand ? generatePlaceholderGraphic() : ScopedVclPtr<VirtualDevice>();
 
-        if (cChar == m_xFontCharMap->GetLastChar())
-            break;
+        sal_Int32 nId = 0;
+        for (sal_UCS4 cChar = m_xFontCharMap->GetFirstChar(); ;
+             cChar = m_xFontCharMap->GetNextChar(cChar))
+        {
+            OUString sId = OUString::number(cChar);
+            m_xShowSet->append(sId, u""_ustr, nullptr);
+            m_aShowCharPos[sId] = nId;
+
+            if (bRenderOnDemand)
+            {
+                m_xShowSet->set_image(nId, *xPlaceholder);
+                m_xShowSet->set_item_accessible_description(nId, getCharacterNameFromId(sId));
+            }
+            ++nId;
+
+            if (cChar == m_xFontCharMap->GetLastChar())
+                break;
+        }
     }
 
     m_xShowSet->thaw();
 
-    m_nShowSetRenderedCount = 0;
-    renderShowSetBatch(0, RENDER_BATCH_SIZE);
-    scheduleShowSetBackgroundRendering();
+    // The desktop iconview paints from the model, so it still needs the real
+    // glyph bitmaps; render them in background batches.
+    if (!comphelper::COKit::isActive())
+    {
+        m_nShowSetRenderedCount = 0;
+        renderShowSetBatch(0, RENDER_BATCH_SIZE);
+        scheduleShowSetBackgroundRendering();
+    }
 }
 
 void SvxCharacterMap::renderShowSetBatch(sal_Int32 nStartPos, sal_Int32 nCount)
@@ -429,6 +458,10 @@ IMPL_LINK_NOARG(SvxCharacterMap, ShowSetScrollHdl, weld::ScrolledWindow&, void)
 
 void SvxCharacterMap::scheduleShowSetBackgroundRendering()
 {
+    // Online fetches glyphs on demand, so there is nothing to render ahead.
+    if (comphelper::COKit::isActive())
+        return;
+
     // Only schedule if there are items left to render
     if (m_nShowRenderIdleEvent || m_nShowSetRenderedCount >= m_xShowSet->n_children())
         return;
@@ -459,19 +492,34 @@ void SvxCharacterMap::populateSearchCharModel()
     m_xSearchSet->clear();
     m_xSearchSet->freeze();
 
+    // See populateShowCharModel: online renders glyphs on demand.
+    const bool bRenderOnDemand = comphelper::COKit::isActive();
+    ScopedVclPtr<VirtualDevice> xPlaceholder
+        = bRenderOnDemand ? generatePlaceholderGraphic() : ScopedVclPtr<VirtualDevice>();
+
     sal_Int32 nId = 0;
     for (const auto& [nIndex, cChar] : m_aSearchItemList)
     {
         OUString sId = OUString::number(cChar);
         m_xSearchSet->append(sId, u""_ustr, nullptr);
-        m_aSearchCharPos[sId] = nId++;
+        m_aSearchCharPos[sId] = nId;
+
+        if (bRenderOnDemand)
+        {
+            m_xSearchSet->set_image(nId, *xPlaceholder);
+            m_xSearchSet->set_item_accessible_description(nId, getCharacterNameFromId(sId));
+        }
+        ++nId;
     }
 
     m_xSearchSet->thaw();
 
-    m_nSearchSetRenderedCount = 0;
-    renderSearchSetBatch(0, RENDER_BATCH_SIZE);
-    scheduleSearchSetBackgroundRendering();
+    if (!bRenderOnDemand)
+    {
+        m_nSearchSetRenderedCount = 0;
+        renderSearchSetBatch(0, RENDER_BATCH_SIZE);
+        scheduleSearchSetBackgroundRendering();
+    }
 }
 
 void SvxCharacterMap::renderSearchSetBatch(sal_Int32 nStartPos, sal_Int32 nCount)
@@ -503,6 +551,10 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchSetScrollHdl, weld::ScrolledWindow&, void
 
 void SvxCharacterMap::scheduleSearchSetBackgroundRendering()
 {
+    // Online fetches glyphs on demand, so there is nothing to render ahead.
+    if (comphelper::COKit::isActive())
+        return;
+
     // Only schedule if there are items left to render
     if (m_nSearchRenderIdleEvent || m_nSearchSetRenderedCount >= m_xSearchSet->n_children())
         return;
@@ -554,6 +606,63 @@ ScopedVclPtr<VirtualDevice> SvxCharacterMap::generateCharGraphic(sal_UCS4 cChar)
     pVirDev->DrawText(aPoint, sChar);
 
     return pVirDev;
+}
+
+ScopedVclPtr<VirtualDevice> SvxCharacterMap::generatePlaceholderGraphic()
+{
+    ScopedVclPtr<VirtualDevice> pVirDev = VclPtr<VirtualDevice>::Create();
+    pVirDev->SetOutputSizePixel(Size(48, 48));
+    pVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetWindowColor());
+    pVirDev->Erase();
+    return pVirDev;
+}
+
+OString SvxCharacterMap::encodeCharGraphic(sal_UCS4 cChar)
+{
+    ScopedVclPtr<VirtualDevice> pVirDev = generateCharGraphic(cChar);
+    Bitmap aBitmap = pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel());
+
+    SvMemoryStream aOStm(65535, 65535);
+    // Match the iconview's own encoding: fastest compression.
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
+    };
+    vcl::PngImageWriter aPNGWriter(aOStm);
+    aPNGWriter.setParameters(aFilterData);
+    if (!aPNGWriter.write(aBitmap))
+        return OString();
+
+    css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()), aOStm.Tell());
+    OStringBuffer aBuffer("data:image/png;base64,");
+    ::comphelper::Base64::encode(aBuffer, aSeq);
+    return aBuffer.makeStringAndClear();
+}
+
+bool SvxCharacterMap::getCharImageOnDemand(weld::IconView& rIconView,
+                                           const weld::encoded_image_query& rQuery)
+{
+    const weld::TreeIter& rIter = std::get<1>(rQuery);
+    OUString sId = rIconView.get_id(rIter);
+    if (sId.isEmpty())
+        return false;
+
+    OString sPng = encodeCharGraphic(getCharacterFromId(sId));
+    if (sPng.isEmpty())
+        return false;
+
+    OUString& rResult = std::get<0>(rQuery);
+    rResult = OStringToOUString(sPng, RTL_TEXTENCODING_ASCII_US);
+    return true;
+}
+
+IMPL_LINK(SvxCharacterMap, GetShowImageHdl, const weld::encoded_image_query&, rQuery, bool)
+{
+    return getCharImageOnDemand(*m_xShowSet, rQuery);
+}
+
+IMPL_LINK(SvxCharacterMap, GetSearchImageHdl, const weld::encoded_image_query&, rQuery, bool)
+{
+    return getCharImageOnDemand(*m_xSearchSet, rQuery);
 }
 
 void SvxCharacterMap::selectCharacter(sal_UCS4 cChar)

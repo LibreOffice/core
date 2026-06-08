@@ -94,6 +94,14 @@ private:
 
     // Character bitmap generation and model population
     ScopedVclPtr<VirtualDevice> generateCharGraphic(sal_UCS4 cChar);
+    // A blank icon of the same size as a real glyph icon. Online appends
+    // this so each cell has a size while the real glyph is fetched on
+    // demand. Its pixels are never sent to the client.
+    static ScopedVclPtr<VirtualDevice> generatePlaceholderGraphic();
+    // The base64 PNG data URL for a single glyph, produced when a visible
+    // cell asks the server to render it.
+    OString encodeCharGraphic(sal_UCS4 cChar);
+    bool getCharImageOnDemand(weld::IconView& rIconView, const weld::encoded_image_query& rQuery);
     void clearSearchCharModel();
     void populateShowCharModel();
     void populateSearchCharModel();
@@ -164,6 +172,8 @@ private:
     DECL_DLLPRIVATE_LINK(SearchCharMousePressHdl, const MouseEvent&, bool);
     DECL_DLLPRIVATE_LINK(ShowCharQueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_DLLPRIVATE_LINK(SearchCharQueryTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_DLLPRIVATE_LINK(GetShowImageHdl, const weld::encoded_image_query&, bool);
+    DECL_DLLPRIVATE_LINK(GetSearchImageHdl, const weld::encoded_image_query&, bool);
     DECL_DLLPRIVATE_LINK(DecimalCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(HexCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(CharClickHdl, SvxCharView*, void);
