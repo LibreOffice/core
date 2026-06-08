@@ -1065,6 +1065,15 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.HistogramChartType"_ustr,
                          xChartType->getChartType());
 
+    // Raw values-y must remain the source data; calculated-y is regenerated.
+    Reference<chart2::data::XDataSequence> xValuesY
+        = getDataSequenceFromDocByRole(xChartDoc, u"values-y");
+    CPPUNIT_ASSERT(xValuesY.is());
+
+    Reference<chart2::data::XDataSequence> xCalculatedY
+        = getDataSequenceFromDocByRole(xChartDoc, u"calculated-y");
+    CPPUNIT_ASSERT(!xCalculatedY.is());
+
     // The X axis must carry the bin range labels from the histogram template,
     // not the generic "1", "2", ... labels that the OOXML axis converter
     // produces by default.
