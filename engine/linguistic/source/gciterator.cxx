@@ -373,7 +373,9 @@ void GrammarCheckingIterator::AddEntry(
 
     // add new entry to the end of this queue
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
-    if (!m_thread)
+    // don't respawn mid-shutdown: the dying worker re-enters here to queue the
+    // next paragraph and would resurrect a thread TerminateThread just joined
+    if (!m_thread && !m_bEnd)
         m_thread = osl_createThread( lcl_workerfunc, this );
     m_aFPEntriesQueue.push_back( aNewFPEntry );
 
