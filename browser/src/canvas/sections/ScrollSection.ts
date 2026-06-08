@@ -125,7 +125,12 @@ export class ScrollSection extends CanvasSectionObject {
 	private updateAnimateWheelScroll(): void {
 		const reduceMotion = this.sectionProperties.reducedMotionQuery !== null
 			&& this.sectionProperties.reducedMotionQuery.matches;
-		this.sectionProperties.animateWheelScroll = (<any>window).mode.isDesktop() && !reduceMotion;
+		// macOS already smooths wheel and trackpad scrolling at the system
+		// level, so animating it again here scrolls too far and feels wrong.
+		// Always scroll in discrete steps there.
+		const isMac = window.L.Browser.mac;
+		this.sectionProperties.animateWheelScroll =
+			(<any>window).mode.isDesktop() && !reduceMotion && !isMac;
 	}
 
 	public completePendingScroll(): void {
