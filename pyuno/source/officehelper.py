@@ -28,6 +28,7 @@ This module supports the following environments:
 A configurable time-out allows to wait for LibO process to be completed.
 Multiple attempts can be set in order to connect to LibO as a service.
 Specific versions of the office suite can be started.
+`SessionManager` class takes care of process memory cleanup.
 Instructions:
 1.  Include one of the below examples in your Python macro
 2.  Run your LibreOffice script from your preferred IDE
@@ -38,6 +39,8 @@ Exceptions:
     OSError            - in `bootstrap`
     BootstrapException - in `bootstrap`
     NoConnectException - in `bootstrap`
+Classes:
+    `SessionManager`
 Functions:
     `bootstrap`
     `retry` decorator
@@ -62,11 +65,40 @@ import time
 import uno
 from com.sun.star.connection import NoConnectException
 from com.sun.star.uno import Exception as UnoException
+from com.sun.star.frame import theDesktop
 
 
 class BootstrapException(UnoException):
     pass
 
+
+class SessionManager():
+    r""" Bootstrap an 'LibreOffice' service via a Python
+    `context manager` taking care of process cleanup
+    Examples:
+    i.  Start LO as a service, get its remote component context
+        >>> import officehelper
+        >>> with SessionManager() as ctx:
+        >>>    # your code goes here
+    """
+    def __init__(self, soffice=None, delays=(1, 3, 5, 7)):
+        self.pgm = soffice
+        self.retries = delays
+        self.ctx = None  # ComponentContext
+
+    def __enter__(self):
+        # get the uno component context from the PyUNO runtime
+        self.ctx = bootstrap(soffice=self.pgm, delays=self.retries, report=print)
+        return self.ctx  # PyUNO is up & running
+    def __exit__(self, type,value,traceback):
+        #print(type,value,traceback)
+        if not self.ctx:
+            return False  # Exceptions get raised
+        desktop = theDesktop.get(self.ctx)
+        if not desktop:
+            return False  # Exceptions get raised
+        desktop.terminate()  # Stop soffice as a service
+        return False  # Exceptions get raised
 
 def retry(delays=(0, 1, 5, 30, 180, 600, 3600),
           exception=Exception,
@@ -94,7 +126,6 @@ def retry(delays=(0, 1, 5, 30, 180, 600, 3600),
         return wrapped
     return wrapper
 
-
 def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
     # 4 connection attempts; sleeping 1, 3, 5 and 7 seconds
     # no report to console
@@ -104,26 +135,20 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
     directly returns the remote component context, from whereon you can
     get the ServiceManager by calling getServiceManager() on the
     returned object.
-
     Examples:
     i.  Start LO as a service, get its remote component context
-
-        import officehelper
-        ctx = officehelper.bootstrap()
-        # your code goes here
-
+        >>> import officehelper
+        >>> ctx = officehelper.bootstrap()
+        >>> # your code goes here
     ii. Wait longer for LO to start, request context multiples times
       + Report processing in console
-
-        import officehelper as oh
-        ctx = oh.bootstrap(delays=(5,10,15,20),report=print)  # wait 5, 10, 15 and 20 sec.
-        # your code goes here
-
+        >>> import officehelper as oh
+        >>> ctx = oh.bootstrap(delays=(5,10,15,20),report=print)  # wait 5, 10, 15 and 20 sec.
+        >>> # your code goes here
     iii. Use a specific LibreOffice copy
-
-        from officehelper import bootstrap
-        ctx = bootstrap(soffice=r"USB:\PortableApps\libO-7.6\App\libreoffice\program\soffice.exe")
-        # your code goes here
+        >>> from officehelper import bootstrap
+        >>> ctx = bootstrap(soffice=r"USB:\PortableApps\libO-7.6\App\libreoffice\program\soffice.exe")
+        >>> # your code goes here
     """
     try:
         process = None  # used in except clause
@@ -164,13 +189,12 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
             return resolver.resolve(sConnect)  # may raise NoConnectException
         ctx = resolve()
         return ctx
-
     except Exception:
         time.sleep(10)
         if process:  # clean memory from soffice running process
             if platform.startswith("win") or platform == "darwin":
                 process.terminate()  # Send termination signal
-            elif platform == "linux":  
+            elif platform == "linux":
                 os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send termination signal to process group
         raise BootstrapException
 
