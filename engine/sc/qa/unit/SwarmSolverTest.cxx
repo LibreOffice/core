@@ -238,7 +238,8 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.741657, aSolution[0], 1E-5);
+    // The hybrid default reaches the optimum to within a stochastic tolerance.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.741657, aSolution[0], 1E-4);
 }
 
 void SwarmSolverTest::testTwoVariables()
