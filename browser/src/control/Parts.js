@@ -54,8 +54,12 @@ window.L.Map.include({
 			return;
 		}
 
-		if (docLayer.isCalc())
+		if (docLayer.isCalc()) {
 			docLayer._sheetSwitch.save(part /* toPart */);
+			// Drop the validity input help of the sheet we are leaving. The engine
+			// sends a fresh one for the new sheet when its active cell has input help.
+			app.definitions.validityInputHelpSection.removeValidityInputHelp();
+		}
 
 		docLayer._clearMsgReplayStore(true /* notOtherMsg*/);
 		docLayer._prevSelectedPart = docLayer._selectedPart;

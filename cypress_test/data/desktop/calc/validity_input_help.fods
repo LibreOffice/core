@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:body>
+  <office:spreadsheet>
+   <table:content-validations>
+    <table:content-validation table:name="val1">
+     <table:help-message table:title="Budget help" table:display="true">
+      <text:p>Enter your monthly budget in this cell.</text:p>
+     </table:help-message>
+    </table:content-validation>
+   </table:content-validations>
+   <table:table table:name="Sheet1">
+    <table:table-row>
+     <table:table-cell table:content-validation-name="val1" office:value-type="string">
+      <text:p>Budget</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="Sheet2">
+    <table:table-row>
+     <table:table-cell/>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

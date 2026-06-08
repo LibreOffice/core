@@ -31,6 +31,15 @@ class ValidityInputHelpSection extends HTMLObjectSection {
         const content = document.createElement('p');
         content.textContent = message.content;
         objectDiv.appendChild(content);
+
+        // The section was constructed without explicit dimensions, so its size
+        // stayed zero. A zero-size section whose anchor sits on the edge of the
+        // viewport is treated as not visible, which is what happens for input
+        // help on the top row or the first column (the anchor is at y or x zero).
+        // Adopt the rendered size of the content, in core pixels, so the section
+        // is a real rectangle that reaches into the viewport and stays shown.
+        const renderedSize = objectDiv.getBoundingClientRect();
+        section.size = [renderedSize.width * app.dpiScale, renderedSize.height * app.dpiScale];
     }
 
     public static removeValidityInputHelp() {

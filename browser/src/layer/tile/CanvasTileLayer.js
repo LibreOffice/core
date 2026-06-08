@@ -1779,8 +1779,17 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._onUpdateCellCursor(scrollToCursor, notJump);
 
-		// Remove input help if there is any:
-		app.definitions.validityInputHelpSection.removeValidityInputHelp();
+		// Remove the validity input help only when the cursor really moved away
+		// from the cell it belongs to, that is a different address or a hidden
+		// cursor. The kit resends the cellcursor for the unchanged cell on view
+		// updates and the engine never resends the help, so removing it on every
+		// cellcursor would make a help that should stay visible disappear right
+		// after it appears. Removal on a sheet change is handled where the sheet
+		// switch happens, because switching sheets does not always produce a
+		// cellcursor with a changed address.
+		var cursorHidden = !!textMsg.match('EMPTY');
+		if (!sameAddress || cursorHidden)
+			app.definitions.validityInputHelpSection.removeValidityInputHelp();
 
 		// Reposition formula error button with the updated cursor rect.
 		app.definitions.formulaErrorHelpSection.hide();
