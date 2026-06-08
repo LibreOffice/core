@@ -331,10 +331,13 @@ class NavigatorPanel extends SidebarBase {
 				this.showNavigationPanel(true);
 				if (app.map.isPresentationOrDrawing()) {
 					this.switchNavigationTab('tab-slide-sorter');
+					app.layoutingService.appendLayoutingTask(() => {
+						this.focusNavigationItem();
+					});
 				} else {
 					app.map.sendUnoCommand('.uno:Navigator');
+					this.focusSearch();
 				}
-				this.focusSearch();
 			}.bind(this),
 		);
 	}
@@ -494,6 +497,18 @@ class NavigatorPanel extends SidebarBase {
 	}
 
 	focusNavigationItem() {
+		// When the navigator contains a slide sorter focus the current
+		// slide, rather than a tree row that does not exist for
+		// presentations.
+		if (
+			app.map.isPresentationOrDrawing() &&
+			this.presentationControlsWrapper &&
+			// the wrapper's inline display is 'block' while its tab is shown, 'none' when hidden
+			this.presentationControlsWrapper.style.display === 'block'
+		) {
+			app.map._docLayer._preview?.focusCurrentSlide();
+			return;
+		}
 		const focusRow = this.navigationPanel.querySelector<HTMLElement>(
 			'.ui-treeview-tree [tabindex="0"]',
 		);
