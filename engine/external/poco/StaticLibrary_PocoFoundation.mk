@@ -11,6 +11,11 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,PocoFoundation))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,PocoFoundation,poco))
 
+# keep the default std::vector ABI - the non-dbgutil online server links this
+$(eval $(call gb_StaticLibrary_add_defs,PocoFoundation,\
+	-U_GLIBCXX_DEBUG \
+))
+
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,PocoFoundation))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,PocoFoundation,cpp))
