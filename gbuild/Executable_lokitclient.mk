@@ -55,7 +55,4 @@ $(eval $(call gb_Executable_add_generated_exception_objects,lokitclient, \
     tools/KitClient \
 ))
 
-#TODO: For now, engine builds Poco without the --enable-dbgutil debug libstdc++:
-$(eval $(call gb_Executable_add_defs,lokitclient,-U_GLIBCXX_DEBUG))
-
 # vim: set noet sw=4 ts=4:

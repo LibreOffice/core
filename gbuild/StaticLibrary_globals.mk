@@ -34,7 +34,4 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,globals, \
     common/Globals \
 ))
 
-#TODO: For now, engine builds Poco without the --enable-dbgutil debug libstdc++:
-$(eval $(call gb_StaticLibrary_add_defs,globals,-U_GLIBCXX_DEBUG))
-
 # vim: set noet sw=4 ts=4:

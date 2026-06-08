@@ -974,6 +974,24 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
    fi
 fi
 
+dnl Match the standard-library debug mode of the engine build whose static libraries online links
+dnl against.  This manually mirrors the logic in the engine's solenv/gbuild/platform/com_GCC_defs.mk
+dnl so the two stay in step.  $1 is the engine build directory the static libraries are taken from.
+m4_define([ONLINE_MATCH_ENGINE_STDLIB_ABI],
+[AS_IF([test ! -f "$1/config_host.mk"],
+       [AC_MSG_ERROR([$1/config_host.mk not found; build the engine first so its standard-library ABI can be matched])])
+ engine_enable_dbgutil=`sed -n 's/^export ENABLE_DBGUTIL=//p' "$1/config_host.mk"`
+ engine_have_libstdcpp=`sed -n 's/^export HAVE_LIBSTDCPP=//p' "$1/config_host.mk"`
+ engine_libcpp_debug=`sed -n 's/^export LIBCPP_DEBUG=//p' "$1/config_host.mk"`
+ engine_stdlib_debug=
+ AS_IF([test "$engine_enable_dbgutil" = TRUE],
+       [AS_IF([test -n "$engine_have_libstdcpp"],
+              [engine_stdlib_debug=-D_GLIBCXX_DEBUG],
+              [engine_stdlib_debug="$engine_libcpp_debug"])])
+ AS_IF([test -n "$engine_stdlib_debug"],
+       [AC_MSG_NOTICE([matching engine standard-library debug mode: $engine_stdlib_debug])
+        CXXFLAGS="$CXXFLAGS $engine_stdlib_debug"])])
+
 if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_macosapp" = "yes" \) -o \( "$enable_windowsapp" = "yes" \) -o \( "$enable_androidapp" = "yes" \) -o "$host_os" = "emscripten" ; then
    # POCO, zstd and libpng are built as third-party libraries in the engine and
    # picked up from its workdir; engine_builddir is that engine build tree.
@@ -999,6 +1017,8 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
       POCOLIB_X86_64="$LOBUILDDIR_X86_64/workdir/LinkTarget/StaticLibrary"
    fi
    AC_MSG_RESULT([$POCOLIB])
+
+   ONLINE_MATCH_ENGINE_STDLIB_ABI([$engine_builddir])
 
    # Sanity checks
    CHK_FILE_VAR(POCOINCLUDE,Poco/Poco.h,Poco include)
@@ -1850,12 +1870,14 @@ dnl POCO if it has not been built there.
 AS_IF([test -z "$POCOINCLUDE" -a -n "$with_lo_builddir"],
       [poco_engine_builddir=`readlink -f "$with_lo_builddir"`
        POCOINCLUDE="$poco_engine_builddir/workdir/UnpackedTarball/poco/include"
-       POCOLIB="$poco_engine_builddir/workdir/LinkTarget/StaticLibrary"])
+       POCOLIB="$poco_engine_builddir/workdir/LinkTarget/StaticLibrary"],
+      [poco_engine_builddir=$engine_builddir])
 
 AS_IF([test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
       [AC_MSG_NOTICE([using POCO built in the engine: $POCOLIB])
        CPPFLAGS="$CPPFLAGS -isystem ${POCOINCLUDE}"
-       LDFLAGS="$LDFLAGS -L${POCOLIB}"],
+       LDFLAGS="$LDFLAGS -L${POCOLIB}"
+       ONLINE_MATCH_ENGINE_STDLIB_ABI([$poco_engine_builddir])],
       [AC_MSG_NOTICE([POCO not found in the engine workdir, falling back to system POCO])
        POCOINCLUDE=
        POCOLIB=])
