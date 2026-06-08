@@ -9,7 +9,13 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <cmath>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -18,6 +24,10 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/table/XTableChart.hpp>
+#include <com/sun/star/table/XTableCharts.hpp>
+#include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -1137,6 +1147,43 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testXmlEscapeDirection)
 
     assertXPath(pXmlDoc, "//draw:glue-point[@draw:escape-direction]",
                 countXPathNodes(pXmlDoc, "//draw:glue-point"));
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testChartDateTimeCellImport)
+{
+    // Load an ODS chart fixture whose internal local table contains
+    // actual office:date-value and office:time-value attributes.
+    // Without the fix in SchXMLTableContext.cxx these cells become NaN.
+    loadFromFile(u"tdf87012_chart_date_time.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XTableChartsSupplier> xChartSupplier(xSheets->getByIndex(0),
+                                                               uno::UNO_QUERY_THROW);
+    uno::Reference<table::XTableCharts> xCharts = xChartSupplier->getCharts();
+    CPPUNIT_ASSERT(xCharts.is());
+
+    uno::Reference<container::XIndexAccess> xChartsIndex(xCharts, uno::UNO_QUERY_THROW);
+    uno::Reference<table::XTableChart> xChart(xChartsIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XEmbeddedObjectSupplier> xEmbeddedObjectSupplier(xChart,
+                                                                              uno::UNO_QUERY_THROW);
+    uno::Reference<chart::XChartDocument> xChartDoc(xEmbeddedObjectSupplier->getEmbeddedObject(),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
+
+    const uno::Sequence<uno::Sequence<double>> aData = xChartData->getData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aData.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aData[0].getLength());
+
+    const double fDate = aData[0][0];
+    const double fTime = aData[1][0];
+
+    // Regression target: date/time values in chart local table must not be dropped as NaN.
+    CPPUNIT_ASSERT(!std::isnan(fDate));
+    CPPUNIT_ASSERT(!std::isnan(fTime));
+    CPPUNIT_ASSERT(fDate > 10000.0);
+    CPPUNIT_ASSERT(fTime > 0.0);
+    CPPUNIT_ASSERT(fTime < 1.0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

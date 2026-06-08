@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmluconv.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -546,6 +547,8 @@ void SchXMLTableCellContext::startFastElement(
 {
     OUString aCellContent;
     SchXMLCellType eValueType = SCH_CELL_TYPE_UNKNOWN;
+    double fValue = 0.0;
+    bool bHasNumericValue = false;
 
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
@@ -556,10 +559,29 @@ void SchXMLTableCellContext::startFastElement(
                     eValueType = SCH_CELL_TYPE_FLOAT;
                 else if (IsXMLToken(aIter, XML_STRING))
                     eValueType = SCH_CELL_TYPE_STRING;
+                else if (IsXMLToken(aIter, XML_DATE) || IsXMLToken(aIter, XML_TIME))
+                    eValueType = SCH_CELL_TYPE_FLOAT;
                 break;
 
             case XML_ELEMENT(OFFICE, XML_VALUE):
                 aCellContent = aIter.toString();
+                break;
+
+            case XML_ELEMENT(OFFICE, XML_DATE_VALUE):
+                if (!aIter.isEmpty()
+                    && GetImport().GetMM100UnitConverter().convertDateTime(fValue, aIter.toView()))
+                {
+                    eValueType = SCH_CELL_TYPE_FLOAT;
+                    bHasNumericValue = true;
+                }
+                break;
+
+            case XML_ELEMENT(OFFICE, XML_TIME_VALUE):
+                if (!aIter.isEmpty() && ::sax::Converter::convertDuration(fValue, aIter.toView()))
+                {
+                    eValueType = SCH_CELL_TYPE_FLOAT;
+                    bHasNumericValue = true;
+                }
                 break;
 
             default:
@@ -573,11 +595,12 @@ void SchXMLTableCellContext::startFastElement(
 
     if (eValueType == SCH_CELL_TYPE_FLOAT)
     {
-        double fData;
-        // the result may be false if a NaN is read, but that's ok
-        ::sax::Converter::convertDouble(fData, aCellContent);
+        if (!bHasNumericValue)
+        {
+            ::sax::Converter::convertDouble(fValue, aCellContent);
+        }
 
-        aCell.fValue = fData;
+        aCell.fValue = fValue;
         // don't read text from following <text:p> or <text:list> element
         mbReadText = false;
     }
