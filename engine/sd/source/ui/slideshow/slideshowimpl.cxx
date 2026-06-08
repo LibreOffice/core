@@ -162,9 +162,6 @@ public:
 
     sal_Int32 getNextSlideNumber() const;
 
-    // for InteractiveSlideShow we need to temporarily change the program
-    // and mode, so allow save/restore that settings
-    void popFromPreview();
 private:
     bool getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode );
     sal_Int32 findSlideIndex( sal_Int32 nSlideNumber ) const;
@@ -183,26 +180,7 @@ private:
     sal_Int32 mnCurrentSlideIndex;
     sal_Int32 mnHiddenSlideNumber;
     Reference< XIndexAccess > mxSlides;
-
-    // IASS data for push/pop
-    std::vector< sal_Int32 > maSlideNumbers2;
-    std::vector< bool > maSlideVisible2;
-    std::vector< bool > maSlideVisited2;
-    Reference< XAnimationNode > mxPreviewNode2;
-    Mode meMode2;
 };
-
-void AnimationSlideController::popFromPreview()
-{
-    maSlideNumbers = maSlideNumbers2;
-    maSlideVisible = maSlideVisible2;
-    maSlideVisited = maSlideVisited2;
-    maSlideNumbers2.clear();
-    maSlideVisible2.clear();
-    maSlideVisited2.clear();
-    mxPreviewNode = mxPreviewNode2;
-    meMode = meMode2;
-}
 
 Reference< XDrawPage > AnimationSlideController::getSlideByNumber( sal_Int32 nSlideNumber ) const
 {
@@ -229,7 +207,6 @@ AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > co
 ,   mnCurrentSlideIndex(0)
 ,   mnHiddenSlideNumber( -1 )
 ,   mxSlides( xSlides )
-,   meMode2( eMode )
 {
     if( mxSlides.is() )
         mnSlideCount = xSlides->getCount();
@@ -529,9 +506,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mnEventPageOrderChange(nullptr)
 , mxPresentation( xPresentation )
 , mxListenerProxy()
-, mxShow2()
 , meAnimationMode2()
-, mbInterActiveSetup(false)
 , maPresSettings2()
 , mxPreviewDrawPage2()
 , mxPreviewAnimationNode2()
@@ -752,49 +727,6 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
     setActiveXToolbarsVisible( true );
 
     mbDisposed = true;
-}
-
-bool SlideshowImpl::isInteractiveSetup() const
-{
-    return mbInterActiveSetup;
-}
-
-void SlideshowImpl::endInteractivePreview()
-{
-    if (!mbInterActiveSetup)
-        // not in use, nothing to do
-        return;
-
-    // cleanup Show/View
-    try
-    {
-        Reference< XComponent > xComponent( mxShow, UNO_QUERY );
-        if( xComponent.is() )
-            xComponent->dispose();
-    }
-    catch( Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::stop()" );
-    }
-    mxShow.clear();
-    mxShow = mxShow2;
-
-    // restore SlideController
-    mpSlideController->popFromPreview();
-
-    // restore other settings and cleanup temporary incarnations
-    maPresSettings = maPresSettings2;
-    meAnimationMode = meAnimationMode2;
-    mxPreviewAnimationNode = mxPreviewAnimationNode2;
-    mxPreviewAnimationNode2.clear();
-    mxPreviewDrawPage = mxPreviewDrawPage2;
-    mxPreviewDrawPage2.clear();
-
-    // go back to slide shown before preview
-    gotoSlideIndex(mnSlideIndex);
-
-    // reset IASS mode flag
-    mbInterActiveSetup = false;
 }
 
 /** called only by the slideshow view when the first paint event occurs.

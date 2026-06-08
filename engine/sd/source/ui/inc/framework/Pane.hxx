@@ -85,16 +85,6 @@ protected:
     rtl::Reference<sd::framework::ResourceId> mxPaneId;
     VclPtr<vcl::Window> mpWindow;
     css::uno::Reference<css::awt::XWindow> mxWindow;
-    css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-
-    /** Override this method, not getCanvas(), when you want to provide a
-        different canvas.
-
-        @throws css::uno::RuntimeException
-    */
-    virtual css::uno::Reference<css::rendering::XCanvas>
-        CreateCanvas();
-
 };
 
 } // end of namespace sd::framework

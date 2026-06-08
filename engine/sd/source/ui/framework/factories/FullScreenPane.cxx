@@ -97,9 +97,6 @@ FullScreenPane::FullScreenPane (
     mpWindow->SetBackground(Wallpaper());
     mxWindow = VCLUnoHelper::GetInterface(mpWindow);
 
-    // Create the canvas.
-    mxCanvas = CreateCanvas();
-
     mpWindow->GrabFocus();
 }
 
@@ -138,27 +135,6 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 
         default: break;
     }
-}
-
-Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
-{
-    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(mxWindow);
-    if (!pWindow)
-        throw RuntimeException();
-
-    Sequence<Any> aArg{ // common: first any is VCL pointer to window (for VCL canvas)
-                        Any(reinterpret_cast<sal_Int64>(pWindow.get())),
-                        Any(css::awt::Rectangle()),
-                        Any(false),
-                        Any(mxWindow)
-    };
-
-    Reference<lang::XMultiServiceFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference<rendering::XCanvas>(
-        xFactory->createInstanceWithArguments(u"com.sun.star.rendering.SpriteCanvas.VCL"_ustr,
-            aArg),
-        UNO_QUERY);
 }
 
 void FullScreenPane::ExtractArguments (

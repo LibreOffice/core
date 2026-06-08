@@ -88,21 +88,6 @@ bool Pane::isAnchorOnly()
     return true;
 }
 
-Reference<rendering::XCanvas> Pane::CreateCanvas()
-{
-    Reference<rendering::XCanvas> xCanvas;
-
-    if (mpWindow != nullptr)
-    {
-        ::cppcanvas::SpriteCanvasSharedPtr pCanvas (
-            cppcanvas::VCLFactory::createSpriteCanvas(*mpWindow));
-        if (pCanvas)
-            xCanvas.set(pCanvas->getUNOSpriteCanvas());
-    }
-
-    return xCanvas;
-}
-
 ResourceFactory::~ResourceFactory() {}
 
 } // end of namespace sd::framework

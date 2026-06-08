@@ -221,11 +221,6 @@ private:
     // disposed, do it here.
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // methods for InterActiveSlideShow that support to
-    // re-use a running FullScreen presentation for previews IASS
-    void endInteractivePreview();
-    bool isInteractiveSetup() const;
-
         /** forces an async call to update in the main thread */
     void startUpdateTimer();
 
@@ -346,9 +341,7 @@ private:
     ::rtl::Reference< SlideShowListenerProxy > mxListenerProxy;
 
     // local variables to support preview for a running SlideShow IASS
-    css::uno::Reference< css::presentation::XSlideShow > mxShow2;
     AnimationMode   meAnimationMode2;
-    bool            mbInterActiveSetup;
     PresentationSettings maPresSettings2;
     css::uno::Reference< css::drawing::XDrawPage > mxPreviewDrawPage2;
     css::uno::Reference< css::animations::XAnimationNode > mxPreviewAnimationNode2;

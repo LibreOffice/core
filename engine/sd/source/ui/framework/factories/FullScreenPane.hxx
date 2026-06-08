@@ -61,10 +61,6 @@ public:
 
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 
-protected:
-    virtual css::uno::Reference<css::rendering::XCanvas>
-        CreateCanvas() override;
-
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     VclPtr<WorkWindow> mpWorkWindow;
