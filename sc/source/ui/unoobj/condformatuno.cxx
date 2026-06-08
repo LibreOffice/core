@@ -359,7 +359,11 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
 
     auto pNewFormat = std::make_unique<ScConditionalFormat>(0, mpDocShell->GetDocument());
     pNewFormat->SetRange(aCoreRange);
-    return mpDocShell->GetDocument().AddCondFormat(std::move(pNewFormat), nTab);
+    ScDocument& rDoc = mpDocShell->GetDocument();
+    sal_Int32 nIndex = rDoc.AddCondFormat(std::move(pNewFormat), nTab);
+    rDoc.AddCondFormatData(aCoreRange, nTab, nIndex);
+
+    return nIndex;
 }
 
 void ScCondFormatsObj::removeByID(const sal_Int32 nID)
