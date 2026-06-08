@@ -200,6 +200,8 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     , mxDonationRight(m_xBuilder->weld_image(u"imgDonationRight"_ustr))
     , mxDonationLink(m_xBuilder->weld_link_button(u"btnDonateLink"_ustr))
     , mxDonationBox(m_xBuilder->weld_container(u"gdDonation"_ustr))
+    , mxDonationBoxTitle(m_xBuilder->weld_label(u"lbDonateTitle"_ustr))
+    , mxDonationBoxText(m_xBuilder->weld_label(u"lbDonateText"_ustr))
     , mbLocalViewInitialized(false)
     , mbInitControls(false)
 {
@@ -262,9 +264,9 @@ void BackingWindow::initDonationBanner()
 {
     mxDonationLink->connect_activate_link(LINK(this, BackingWindow, OnDonateLinkClick));
 
-    mxDonationBox->set_background(Color(
-        ColorTransparency,
-        officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get()));
+    mxDonationBox->set_background(COL_WHITE);
+    mxDonationBoxTitle->set_font_color(COL_BLACK);
+    mxDonationBoxText->set_font_color(COL_BLACK);
 
     ScopedVclPtr<VirtualDevice> m_pVirDevLeft = mxDonationLeft->create_virtual_device();
     Graphic aGraphic;

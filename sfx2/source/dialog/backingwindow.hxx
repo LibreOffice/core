@@ -91,6 +91,8 @@ class BackingWindow : public InterimItemWindow
     std::unique_ptr<weld::Image> mxDonationRight;
     std::unique_ptr<weld::LinkButton> mxDonationLink;
     std::unique_ptr<weld::Container> mxDonationBox;
+    std::unique_ptr<weld::Label> mxDonationBoxTitle;
+    std::unique_ptr<weld::Label> mxDonationBoxText;
 
     bool mbLocalViewInitialized;
 
