@@ -633,4 +633,6 @@
 
 #define STR_SELECTEDENTRYNOTFOUND                   NC_("STR_SELECTEDENTRYNOTFOUND", "The selected entry doesn't exist. It will be removed from the list.")
 
+#define STR_NOT_SPECIFIED_RELEASE                   NC_("STR_NOT_SPECIFIED_RELEASE", "Not specified")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

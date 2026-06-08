@@ -121,6 +121,35 @@ void ucbDownload(const OUString& rURL, const OUString& sFolderURL, const OUStrin
     }
 }
 
+OUString lcl_readByKey(orcus::json::node& node, std::string_view key)
+{
+    OUString ret;
+    try
+    {
+        ret = OStringToOUString(node.child(key).string_value(), RTL_TEXTENCODING_UTF8);
+    }
+    catch (...)
+    {
+        ret = "";
+    }
+    return ret;
+}
+
+OUString lcl_readReleaseDetails(orcus::json::node& node, std::string_view key)
+{
+    OUString ret;
+    try
+    {
+        ret = OStringToOUString(node.child("releases").child(0).child(key).string_value(),
+                                RTL_TEXTENCODING_UTF8);
+    }
+    catch (...)
+    {
+        ret = "";
+    }
+    return ret;
+}
+
 void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdditions)
 {
     orcus::json::document_tree aJsonDoc;
@@ -160,21 +189,14 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
                 OStringToOUString(arrayElement.child("author").string_value(),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(arrayElement.child("url").string_value(), RTL_TEXTENCODING_UTF8),
-                OStringToOUString(arrayElement.child("screenshotURL").string_value(),
-                                  RTL_TEXTENCODING_UTF8),
+                lcl_readByKey(arrayElement, "screenshotURL"),
                 OStringToOUString(arrayElement.child("extensionIntroduction").string_value(),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(arrayElement.child("extensionDescription").string_value(),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    arrayElement.child("releases").child(0).child("compatibility").string_value(),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    arrayElement.child("releases").child(0).child("releaseName").string_value(),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    arrayElement.child("releases").child(0).child("license").string_value(),
-                    RTL_TEXTENCODING_UTF8),
+                lcl_readReleaseDetails(arrayElement, "compatibility"),
+                lcl_readReleaseDetails(arrayElement, "releaseName"),
+                lcl_readReleaseDetails(arrayElement, "license"),
                 OStringToOUString(arrayElement.child("commentNumber").string_value(),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(arrayElement.child("commentURL").string_value(),
@@ -675,9 +697,15 @@ AdditionsItem::AdditionsItem(weld::Box* pParentBox, AdditionsDialog* pParentDial
     if (!additionInfo.sAuthorName.equalsIgnoreAsciiCase("null"))
         m_xLabelAuthor->set_label(additionInfo.sAuthorName);
 
+    OUString license = additionInfo.sLicense.getLength() > 0 ? additionInfo.sLicense
+                                                             : CuiResId(STR_NOT_SPECIFIED_RELEASE);
+    OUString compatVersion = additionInfo.sCompatibleVersion.getLength() > 0
+                                 ? ">=" + additionInfo.sCompatibleVersion
+                                 : CuiResId(STR_NOT_SPECIFIED_RELEASE);
+
     m_xButtonInstall->set_label(CuiResId(RID_CUISTR_ADDITIONS_INSTALLBUTTON));
-    m_xLabelLicense->set_label(additionInfo.sLicense);
-    m_xLabelVersion->set_label(">=" + additionInfo.sCompatibleVersion);
+    m_xLabelLicense->set_label(license);
+    m_xLabelVersion->set_label(compatVersion);
     m_xLinkButtonComments->set_label(additionInfo.sCommentNumber);
     m_xLinkButtonComments->set_uri(additionInfo.sCommentURL);
     m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
