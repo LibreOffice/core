@@ -371,6 +371,8 @@ SLPSolver::solveTrustRegionQp(const ScSolverCellHashMap& rCells, const std::vect
 
     constexpr int nMaxFrankWolfe = 50;
     constexpr double fGapTolerance = 1.0e-9;
+    constexpr double fGapFraction = 1.0e-3;
+    double fInitialGap = 0.0;
     for (int nFrankWolfe = 0; nFrankWolfe < nMaxFrankWolfe; ++nFrankWolfe)
     {
         // Gradient of the quadratic model at the current step: B d + g.
@@ -397,7 +399,13 @@ SLPSolver::solveTrustRegionQp(const ScSolverCellHashMap& rCells, const std::vect
 
         // Duality gap: how much the linear model could still improve.
         double fGap = -dotProduct(aQuadraticGradient, aDirection);
-        if (fGap < fGapTolerance)
+        if (nFrankWolfe == 0)
+            fInitialGap = fGap;
+        // Stop once the subproblem is solved well enough: the gap has shrunk to
+        // a small fraction of its initial value, or below an absolute floor.
+        // Driving the gap all the way to zero is wasted work, because the outer
+        // trust-region loop re-samples and re-solves around the accepted step.
+        if (fGap < fGapTolerance || fGap < fGapFraction * fInitialGap)
             break;
 
         // Exact line search of the quadratic along the Frank-Wolfe direction.
