@@ -666,24 +666,21 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
         return false;
     }
 
+    bool bHasCustomColorOrLabel = false;
+    for ( const auto& it : m_aColors )
+    {
+        if ( COL_TRANSPARENT != std::get<1>(it) ||
+             !std::get<3>(it).isEmpty() )
+        {
+            bHasCustomColorOrLabel = true;
+            break;
+        }
+    }
+
     // without field shading, show only custom color or label,
     // but not plain bookmark boundary marks
-    bool bHasCustomColorOrLabel = false;
-    if ( !rTextPaintInfo.GetOpt().IsShowBookmarks() )
-    {
-        for ( const auto& it : m_aColors )
-        {
-            if ( COL_TRANSPARENT != std::get<1>(it) ||
-                 !std::get<3>(it).isEmpty() )
-            {
-                bHasCustomColorOrLabel = true;
-                break;
-            }
-        }
-
-        if ( !bHasCustomColorOrLabel )
-            return false;
-    }
+    if ( !rTextPaintInfo.GetOpt().IsShowBookmarks() && !bHasCustomColorOrLabel )
+        return false;
 
     rOutString = OUStringChar(mcChar);
 

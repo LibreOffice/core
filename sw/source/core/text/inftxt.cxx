@@ -1582,6 +1582,10 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         case PortionType::InputField:
             // input field shading also in read-only mode
             if (GetOpt().IsFieldShadings()
+                // tdf#172263 custom white color disables metadata shadings
+                // TODO add a new expert or UX option for it?
+                && ( PortionType::Meta != nWhich || !pColor
+                    || pColor->GetRGBColor() != COL_WHITE )
                 && ( PortionType::Number != nWhich
                     || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
             {
