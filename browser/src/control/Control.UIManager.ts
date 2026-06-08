@@ -809,7 +809,23 @@ class UIManager extends window.L.Control {
 		app.console.debug('UIManager: late components init');
 		this.initializeNotebookbarInCore();
 		this.initializeSidebar();
+		this.initializeNavigator();
 		this.initializeQuickFindInCore();
+	}
+
+	/**
+	 * Reopens the navigator panel on start when the saved state asks for it.
+	 * The navigator is the panel on the left of the document and is separate
+	 * from the sidebar on the right, so its restore does not depend on
+	 * whether the sidebar is shown.
+	 */
+	initializeNavigator(): void {
+		if (!window.mode.isDesktop() || window.ThisIsAMobileApp) return;
+
+		// .uno:Navigator toggles the panel, and it starts closed, so send it
+		// only when the saved state wants the navigator open.
+		if (this.getBooleanDocTypePref('ShowNavigator', false))
+			app.socket.sendMessage('uno .uno:Navigator');
 	}
 
 	/**

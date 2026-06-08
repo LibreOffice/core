@@ -47,7 +47,6 @@ class Sidebar extends SidebarBase {
 			'PropertyDeck',
 			'SdCustomAnimationDeck',
 			'SdMasterPagesDeck',
-			'NavigatorDeck',
 			'StyleListDeck',
 			'A11yCheckDeck',
 		];
@@ -108,7 +107,6 @@ class Sidebar extends SidebarBase {
 		if (deckId === 'PropertyDeck') return '.uno:SidebarDeck.PropertyDeck';
 		else if (deckId === 'SdCustomAnimationDeck') return '.uno:CustomAnimation';
 		else if (deckId === 'SdMasterPagesDeck') return '.uno:MasterSlidesPanel';
-		else if (deckId === 'NavigatorDeck') return '.uno:Navigator';
 		else if (deckId === 'StyleListDeck')
 			return '.uno:SidebarDeck.StyleListDeck';
 		else if (deckId === 'A11yCheckDeck')
