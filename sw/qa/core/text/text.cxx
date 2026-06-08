@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLastBibliographyPdfExport)
     CPPUNIT_ASSERT(true);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf156146)
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLegacyListStylePreservesParagraphMarginOverride)
 {
     createSwDoc("tdf156146.fodt");
 
