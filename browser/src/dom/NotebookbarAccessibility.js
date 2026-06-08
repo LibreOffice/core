@@ -284,7 +284,7 @@ var NotebookbarAccessibility = function() {
 		for (var i = 0; i < this.activeTabPointers.contentList.length; i++) {
 			const found = document.querySelector('[id^="' + this.activeTabPointers.contentList[i].id + '"]');
 			if (found)
-				found.accessKey = null;
+				found.removeAttribute('accesskey');
 			else
 				console.warn('Accessibility - no element with id:' + this.activeTabPointers.contentList[i].id);
 		}
