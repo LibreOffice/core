@@ -13,12 +13,15 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 
+#include <editeng/brushitem.hxx>
 #include <vcl/gdimtf.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <docsh.hxx>
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>
+#include <hintids.hxx>
+#include <ndtxt.hxx>
 #include <unotxdoc.hxx>
 #include <itabenum.hxx>
 #include <wrtsh.hxx>
@@ -256,6 +259,31 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSImport)
     // - Actual  : 3 (LEFT)
     // i.e. the table alignment was lost on import.
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, eHoriOrient);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSpanVendorBackground)
+{
+    // Given an HTML doc whose <span> style has color, an unknown vendor-prefixed property
+    // and background-color, in this order:
+    setImportFilterName(TestFilter::HTML_WRITER);
+    // When importing that document:
+    createSwDoc("span-vendor-background.html");
+
+    // Then make sure the background-color survives the unknown property and ends up
+    // as a SvxBrushItem in the last paragraph's direct format item set:
+    SwDoc* pDoc = getSwDoc();
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    const SfxItemSet* pAttrSet = pTextNode->GetpSwAttrSet();
+    CPPUNIT_ASSERT(pAttrSet);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 64 (SfxItemState::SET)
+    // - Actual  : 32 (SfxItemState::DEFAULT)
+    // i.e. the background color was lost.
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pAttrSet->GetItemState(RES_CHRATR_BACKGROUND, false));
+    const SvxBrushItem& rBrush = pAttrSet->Get(RES_CHRATR_BACKGROUND);
+    CPPUNIT_ASSERT_EQUAL(Color(41, 41, 41), rBrush.GetColor());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
