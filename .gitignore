@@ -269,3 +269,4 @@ qt/translations/*.qm
 /clang/plugin.so
 
 /engine/translations
+.envrc
