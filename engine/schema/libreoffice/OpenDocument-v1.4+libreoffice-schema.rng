@@ -2451,6 +2451,14 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       <rng:ref name="table-table-cell-content"/>
     </rng:element>
   </rng:define>
+  <!-- True on a formula cell that is a dynamic-array master. -->
+  <rng:define name="table-table-cell-attlist-extra" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:spill">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <rng:define name="loext-columns-and-groups">
     <rng:oneOrMore>
       <rng:choice>

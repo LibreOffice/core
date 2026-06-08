@@ -83,6 +83,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     sal_Int16   nCellType;
     bool        bIsMerged;
     bool        bIsMatrix;
+    bool mbDynamicArraySpill = false;
     bool        bIsCovered;
     bool        bIsEmpty;
     bool        mbNewValueType;

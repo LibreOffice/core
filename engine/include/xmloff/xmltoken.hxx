@@ -1858,6 +1858,7 @@ namespace xmloff::token {
         XML_SPECULAR_COLOR,
         XML_SPEED,
         XML_SPHERE,
+        XML_SPILL,
         XML_SPIRAL,
         XML_SPIRAL_IN,
         XML_SPIRAL_INWARD_LEFT,

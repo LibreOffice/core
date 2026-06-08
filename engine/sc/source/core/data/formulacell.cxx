@@ -54,6 +54,8 @@
 #include <comphelper/threadpool.hxx>
 #include <editeng/editobj.hxx>
 #include <formula/errorcodes.hxx>
+#include <formula/FormulaCompiler.hxx>
+#include <formula/token.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
 #include <formulagroup.hxx>
@@ -1052,7 +1054,9 @@ OUString ScFormulaCell::GetFormula( const FormulaGrammar::Grammar eGrammar, ScIn
     }
 
     buffer.insert( 0, '=');
-    if( cMatrixFlag != ScMatrixMode::NONE )
+    // Dynamic-array masters read back as plain formulas in the formula
+    // bar. Static array masters still get the {} wrapping.
+    if (cMatrixFlag != ScMatrixMode::NONE && !mbDynamicArrayMaster)
     {
         buffer.insert( 0, '{');
         buffer.append( '}');
@@ -1110,7 +1114,9 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, ScInterpret
     }
 
     aBuf.insert( 0, '=');
-    if( cMatrixFlag != ScMatrixMode::NONE )
+    // Dynamic-array masters read back as plain formulas in the formula
+    // bar. Static array masters still get the {} wrapping.
+    if (cMatrixFlag != ScMatrixMode::NONE && !mbDynamicArrayMaster)
     {
         aBuf.insert( 0, '{');
         aBuf.append( '}');
@@ -1412,6 +1418,12 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     //  (for external links warning, CompileXML is called at the end of loading XML file)
     rDocument.CheckLinkFormulaNeedingCheck(*pCode);
 
+    // Plain non-array cells whose RPN intends an array result get the @
+    // implicit-intersection marker baked in here, so the round trip
+    // preserves their single-value intent without leaning on a runtime
+    // flag.
+    ResolveImplicitIntersection();
+
     //volatile cells must be added here for import
     if( !pCode->IsRecalcModeNormal() || pCode->IsRecalcModeForced())
     {
@@ -1559,6 +1571,108 @@ private:
             mCell->GetDocument().GetRecursionHelper().CleanTemporaryGroupCells();
     }
 };
+
+// True when the RPN top is the @ implicit-intersection operator.
+bool rpnTopIsImplicitIntersection(const ScTokenArray& rCode)
+{
+    const sal_uInt16 nRpnLength = rCode.GetCodeLen();
+    if (nRpnLength == 0)
+        return false;
+    const formula::FormulaToken* pTop = rCode.GetCode()[nRpnLength - 1];
+    return pTop && pTop->GetOpCode() == ocSingleValue;
+}
+
+// Bottom-up RPN walk that decides whether the formula intends to produce
+// an array. A push of a range or inline matrix is an array on the stack.
+// Binary and unary operators preserve array-ness through any operand. A
+// function known to return a matrix (UNIQUE, TRANSPOSE, MMULT ...) pushes
+// an array, every other function reduces to a scalar. Returns false if
+// the walk cannot decide: jump commands, arity mismatch, null tokens.
+bool rpnIntendsArrayResult(const ScTokenArray& rCode)
+{
+    const sal_uInt16 nRpnLength = rCode.GetCodeLen();
+    if (nRpnLength == 0)
+        return false;
+    formula::FormulaToken* const* pRpn = rCode.GetCode();
+    std::vector<bool> aStackIsArray;
+    for (sal_uInt16 i = 0; i < nRpnLength; ++i)
+    {
+        const formula::FormulaToken* p = pRpn[i];
+        if (!p)
+            return false;
+        const OpCode eOp = p->GetOpCode();
+        if (eOp == ocPush)
+        {
+            const formula::StackVar eType = p->GetType();
+            aStackIsArray.push_back(eType == formula::svDoubleRef
+                                    || eType == formula::svMatrix);
+            continue;
+        }
+        // Jump commands like IF, CHOOSE, IFERROR, LET encode multiple
+        // branches with embedded jump tokens. The pop-N push-1 model
+        // below mis-counts their operands, so bail out.
+        if (formula::FormulaCompiler::IsOpCodeJumpCommand(eOp))
+            return false;
+        const sal_uInt8 nParameters = p->GetParamCount();
+        if (nParameters > aStackIsArray.size())
+            return false;
+        bool bAnyArrayArgument = false;
+        for (sal_uInt8 j = 0; j < nParameters; ++j)
+        {
+            if (aStackIsArray.back())
+                bAnyArrayArgument = true;
+            aStackIsArray.pop_back();
+        }
+        bool bResultArray = false;
+        if (formula::FormulaCompiler::IsMatrixFunction(eOp) || p->IsInForceArray())
+            bResultArray = true;
+        else if (eOp == ocRange || eOp == ocUnion || eOp == ocIntersect)
+            // The ODFF parser keeps A:B style range constructors as
+            // their own opcodes instead of folding them into a single
+            // svDoubleRef push. The result is always a multi-cell
+            // reference, so the array flag flows through.
+            bResultArray = true;
+        else if (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators
+                 && eOp != ocAnd && eOp != ocOr)
+            // ocAnd and ocOr share the binary-operator opcode range but
+            // reduce their arguments to a scalar boolean. Treat them as
+            // function-form reducers, not elementwise operators.
+            bResultArray = bAnyArrayArgument;
+        else if (ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators)
+            bResultArray = bAnyArrayArgument;
+        aStackIsArray.push_back(bResultArray);
+    }
+    return !aStackIsArray.empty() && aStackIsArray.back();
+}
+
+// Prepend @ to a token array. The parse array gets it at index 0 (a
+// prefix operator in the formula text). The RPN gets it at the end
+// (where ocSingleValue belongs in postfix).
+void prependImplicitIntersection(ScTokenArray& rCode)
+{
+    formula::FormulaToken* pSingleValue = rCode.AddOpCode(ocSingleValue);
+    if (!pSingleValue)
+        return;
+
+    // AddOpCode appended to the parse array. Rotate so the new token
+    // sits at index 0.
+    const sal_uInt16 nNewLength = rCode.GetLen();
+    formula::FormulaToken** pParse = rCode.GetArray();
+    formula::FormulaToken* pSaved = pParse[nNewLength - 1];
+    for (sal_uInt16 i = nNewLength - 1; i > 0; --i)
+        pParse[i] = pParse[i - 1];
+    pParse[0] = pSaved;
+
+    // Append to RPN, keeping the token's reference count balanced.
+    const sal_uInt16 nRpnLength = rCode.GetCodeLen();
+    formula::FormulaToken** pRpn = rCode.GetCode();
+    pSingleValue->IncRef();
+    std::vector<formula::FormulaToken*> aNewRpn(nRpnLength + 1);
+    for (sal_uInt16 i = 0; i < nRpnLength; ++i)
+        aNewRpn[i] = pRpn[i];
+    aNewRpn[nRpnLength] = pSingleValue;
+    rCode.CreateNewRPNArrayFromData(aNewRpn.data(), nRpnLength + 1);
+}
 
 } // namespace
 
@@ -2559,6 +2673,19 @@ void ScFormulaCell::SetDynamicArrayMaster(bool bDynamic)
         cMatrixFlag = ScMatrixMode::Formula;
         SetMatColsRows(1, 1);
     }
+}
+
+void ScFormulaCell::ResolveImplicitIntersection()
+{
+    if (!pCode
+        || cMatrixFlag != ScMatrixMode::NONE
+        || pCode->IsHyperLink() || mxGroup
+        || pCode->GetCodeLen() == 0)
+        return;
+    if (rpnTopIsImplicitIntersection(*pCode))
+        return;
+    if (rpnIntendsArrayResult(*pCode))
+        prependImplicitIntersection(*pCode);
 }
 
 void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows )
