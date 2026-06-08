@@ -223,6 +223,12 @@ class SlideShowNavigator {
 		}
 	}
 
+	private openExternalLink(url?: string) {
+		if (!url) return;
+		const map = this.presenter._map;
+		map.fire('warn', { url: url, map: map, cmd: 'openlink' });
+	}
+
 	private backToLastSlide(): boolean {
 		if (this.currentSlide >= this.theMetaPres.numberOfSlides) {
 			this.goToLastSlide();
@@ -572,6 +578,22 @@ class SlideShowNavigator {
 	onMouseMove(aEvent: MouseEvent) {
 		if (!this.isEnabled) return;
 
+		const canvas = this.presenter.getCanvas();
+		const width = canvas.clientWidth;
+		const height = canvas.clientHeight;
+
+		const x = (aEvent.offsetX / width) * this.theMetaPres.getDocWidth();
+		const y = (aEvent.offsetY / height) * this.theMetaPres.getDocHeight();
+
+		// Show a pointer cursor while hovering an interaction (hyperlink or
+		// shape click action)
+		const slideInfo = this.theMetaPres.getSlideInfoByIndex(this.currentSlide);
+		const overClickable =
+			!!slideInfo &&
+			!!slideInfo.interactions &&
+			slideInfo.interactions.some((shape) => hitTest(shape.bounds, x, y));
+		canvas.style.cursor = overClickable ? 'pointer' : 'default';
+
 		const metaSlide = this.theMetaPres.getMetaSlideByIndex(this.currentSlide);
 		if (!metaSlide)
 			window.app.console.log(
@@ -583,13 +605,6 @@ class SlideShowNavigator {
 			const aEventMultiplexer = metaSlide.animationsHandler.eventMultiplexer;
 			if (aEventMultiplexer) {
 				if (aEventMultiplexer.hasRegisteredMouseClickHandlers()) {
-					const canvas = this.presenter.getCanvas();
-					const width = canvas.clientWidth;
-					const height = canvas.clientHeight;
-
-					const x = (aEvent.offsetX / width) * this.theMetaPres.getDocWidth();
-					const y = (aEvent.offsetY / height) * this.theMetaPres.getDocHeight();
-
 					aEventMultiplexer.notifyMouseMove({ x: x, y: y });
 					return;
 				}
@@ -614,6 +629,9 @@ class SlideShowNavigator {
 					break;
 				case 'bookmark':
 					this.goToSlideAtBookmark(action.bookmark);
+					break;
+				case 'document':
+					this.openExternalLink(action.document);
 					break;
 				case 'stoppresentation':
 					this.quit();

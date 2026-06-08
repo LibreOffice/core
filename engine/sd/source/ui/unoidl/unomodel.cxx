@@ -5061,6 +5061,59 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
     }
 }
 
+static void getTextHyperlinkInteractions(const uno::Reference<drawing::XShape>& xShape,
+                                         ::tools::JsonWriter& rJsonWriter)
+{
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+    SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
+    if (!pTextObj)
+        return;
+
+    OutlinerParaObject* pOutlinerParaObject = pTextObj->GetOutlinerParaObject();
+    if (!pOutlinerParaObject
+        || !pOutlinerParaObject->GetTextObject().HasField(css::text::textfield::Type::URL))
+        return;
+
+    // Lay the text out in the model's shared draw outliner so we can query the
+    // bounding rectangle of each field.
+    SdrOutliner& rOutliner = pTextObj->getSdrModelFromSdrObject().GetDrawOutliner(pTextObj);
+    tools::Rectangle aTextRect;
+    pTextObj->TakeTextRect(rOutliner, aTextRect, false, nullptr);
+
+    const EditEngine& rEditEngine = rOutliner.GetEditEngine();
+    for (sal_Int32 nPara = 0; nPara < rEditEngine.GetParagraphCount(); ++nPara)
+    {
+        for (const EFieldInfo& rFieldInfo : rEditEngine.GetFieldInfo(nPara))
+        {
+            const SvxFieldData* pField
+                = rFieldInfo.pFieldItem ? rFieldInfo.pFieldItem->GetField() : nullptr;
+            const auto* pURLField = dynamic_cast<const SvxURLField*>(pField);
+            if (!pURLField)
+                continue;
+
+            // The field occupies a single (dummy) character in the text, map its
+            // bounds from text-relative to page coordinates and convert to twips.
+            tools::Rectangle aCharRect = rEditEngine.GetCharacterBounds(rFieldInfo.aPosition);
+            aCharRect.Move(aTextRect.Left(), aTextRect.Top());
+            auto aRect = o3tl::convert(aCharRect, o3tl::Length::mm100, o3tl::Length::twip);
+
+            auto aShape = rJsonWriter.startStruct();
+            {
+                auto aBounds = rJsonWriter.startNode("bounds");
+                rJsonWriter.put("x", aRect.Left());
+                rJsonWriter.put("y", aRect.Top());
+                rJsonWriter.put("width", aRect.GetWidth());
+                rJsonWriter.put("height", aRect.GetHeight());
+            }
+            auto aInteraction = rJsonWriter.startNode("clickAction");
+            rJsonWriter.put("action", "document");
+            rJsonWriter.put("document", pURLField->GetURL());
+        }
+    }
+
+    rOutliner.Clear();
+}
+
 OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 {
     ::tools::JsonWriter aJsonWriter;
@@ -5272,6 +5325,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         }
 
                         getShapeClickAction(xShape, aJsonWriter);
+                        getTextHyperlinkInteractions(xShape, aJsonWriter);
                     }
                 }
 
