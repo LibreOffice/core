@@ -43,7 +43,7 @@ public:
         : _name(name),
           _sub(sub),
           _aud(aud),
-          _digestEngine(*_key, "SHA256")
+          _digestEngine(*key(), "SHA256")
     {
     }
 
@@ -58,6 +58,8 @@ private:
 
     std::string createPayload();
 
+    static std::unique_ptr<Poco::Crypto::RSAKey>& key();
+
 private:
     const std::string _alg = "RS256";
     const std::string _typ = "JWT";
@@ -67,7 +69,6 @@ private:
     const std::string _sub;
     const std::string _aud;
 
-    static std::unique_ptr<Poco::Crypto::RSAKey> _key;
     Poco::Crypto::RSADigestEngine _digestEngine;
 };
 
