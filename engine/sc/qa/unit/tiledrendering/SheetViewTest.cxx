@@ -1465,6 +1465,56 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testInsertRowsOnSheetViewSyncsToDefault)
     CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 2, 1)));
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testDeleteRowsOnSheetViewSyncsToDefault)
+{
+    // Deleting a row while sitting on a sheet view tab redirects the
+    // delete to the source default-view tab. The shift then propagates
+    // to every sheet view holder through the sync at the end of the
+    // operation.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+
+    // Put recognisable values on Sheet1 before the sheet view exists, so
+    // the sheet view holder tab starts out with the same data.
+    pDocShell->GetDocFunc().SetValueCell(ScAddress(0, 0, 0), 1.0, false);
+    pDocShell->GetDocFunc().SetValueCell(ScAddress(0, 1, 0), 2.0, false);
+    pDocShell->GetDocFunc().SetValueCell(ScAddress(0, 2, 0), 3.0, false);
+
+    // Create a sheet view of Sheet1.
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    // Both tabs start with the same values.
+    CPPUNIT_ASSERT_EQUAL(1.0, rDocument.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDocument.GetValue(ScAddress(0, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(0, 2, 1)));
+
+    // Switch to the sheet view tab and delete row 1.
+    pTabView1->SetTabNo(1);
+    ScRange aRange(0, 0, 1, 0, 0, 1);
+    pDocShell->GetDocFunc().DeleteCells(aRange, nullptr, DelCellCmd::Rows, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Default tab must have shifted up by one.
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(0, 1, 0)));
+
+    // Sheet view tab must show the same shift.
+    CPPUNIT_ASSERT_EQUAL(2.0, rDocument.GetValue(ScAddress(0, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(0, 1, 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testTableGetSheetViewManagerNullOnHolder)
 {
     // ScTable::GetSheetViewManager must return a null shared_ptr on a

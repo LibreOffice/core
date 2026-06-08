@@ -153,11 +153,13 @@ bool DeleteCellsOperation::runImplementation()
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
 
+    ScRange aInputRange = convertRange(maRange);
+
     if (rDoc.GetChangeTrack()
         && ((meCmd == DelCellCmd::CellsUp
-             && (maRange.aStart.Col() != 0 || maRange.aEnd.Col() != rDoc.MaxCol()))
+             && (aInputRange.aStart.Col() != 0 || aInputRange.aEnd.Col() != rDoc.MaxCol()))
             || (meCmd == DelCellCmd::CellsLeft
-                && (maRange.aStart.Row() != 0 || maRange.aEnd.Row() != rDoc.MaxRow()))))
+                && (aInputRange.aStart.Row() != 0 || aInputRange.aEnd.Row() != rDoc.MaxRow()))))
     {
         // We should not reach this via UI disabled slots.
         assert(mbApi);
@@ -165,12 +167,12 @@ bool DeleteCellsOperation::runImplementation()
         return false;
     }
 
-    SCCOL nStartCol = maRange.aStart.Col();
-    SCROW nStartRow = maRange.aStart.Row();
-    SCTAB nStartTab = maRange.aStart.Tab();
-    SCCOL nEndCol = maRange.aEnd.Col();
-    SCROW nEndRow = maRange.aEnd.Row();
-    SCTAB nEndTab = maRange.aEnd.Tab();
+    SCCOL nStartCol = aInputRange.aStart.Col();
+    SCROW nStartRow = aInputRange.aStart.Row();
+    SCTAB nStartTab = aInputRange.aStart.Tab();
+    SCCOL nEndCol = aInputRange.aEnd.Col();
+    SCROW nEndRow = aInputRange.aEnd.Row();
+    SCTAB nEndTab = aInputRange.aEnd.Tab();
 
     if (!rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow))
     {
@@ -190,7 +192,7 @@ bool DeleteCellsOperation::runImplementation()
 
     ScMarkData aMark(rDoc.GetSheetLimits());
     if (mpTabMark)
-        aMark = *mpTabMark;
+        aMark = convertMark(*mpTabMark);
     else
     {
         SCTAB nCount = 0;
@@ -225,9 +227,9 @@ bool DeleteCellsOperation::runImplementation()
     SCCOL nUndoEndCol = nEndCol;
     SCROW nUndoEndRow = nEndRow;
 
-    ScRange aExtendMergeRange(maRange);
+    ScRange aExtendMergeRange(aInputRange);
 
-    if (maRange.aStart == maRange.aEnd && rDoc.HasAttrib(maRange, HasAttrFlags::Merged))
+    if (aInputRange.aStart == aInputRange.aEnd && rDoc.HasAttrib(aInputRange, HasAttrFlags::Merged))
     {
         rDoc.ExtendMerge(aExtendMergeRange);
         rDoc.ExtendOverlapped(aExtendMergeRange);
@@ -281,7 +283,7 @@ bool DeleteCellsOperation::runImplementation()
         return false;
     }
 
-    if (!canDeleteCellsByPivot(maRange, aMark, meCmd, rDoc))
+    if (!canDeleteCellsByPivot(aInputRange, aMark, meCmd, rDoc))
     {
         if (!mbApi)
             mrDocShell.ErrorMessage(STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE);
@@ -426,7 +428,7 @@ bool DeleteCellsOperation::runImplementation()
                         ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
                         pUndoDoc->InitUndo(rDoc, *aMark.begin(), *aMark.rbegin());
                         pUndoRemoveMerge.reset(
-                            new ScUndoRemoveMerge(mrDocShell, maRange, std::move(pUndoDoc)));
+                            new ScUndoRemoveMerge(mrDocShell, aInputRange, std::move(pUndoDoc)));
                     }
 
                     for (const ScRange& aRange : qDecreaseRange)
@@ -758,13 +760,15 @@ bool DeleteCellsOperation::runImplementation()
 
         if (bDeleteCols)
         {
-            pViewSh->OnKitInsertDeleteColumn(maRange.aStart.Col(),
-                                             -1 * (maRange.aEnd.Col() - maRange.aStart.Col() + 1));
+            pViewSh->OnKitInsertDeleteColumn(
+                aInputRange.aStart.Col(),
+                -1 * (aInputRange.aEnd.Col() - aInputRange.aStart.Col() + 1));
         }
         if (bDeleteRows)
         {
-            pViewSh->OnKitInsertDeleteRow(maRange.aStart.Row(),
-                                          -1 * (maRange.aEnd.Row() - maRange.aStart.Row() + 1));
+            pViewSh->OnKitInsertDeleteRow(
+                aInputRange.aStart.Row(),
+                -1 * (aInputRange.aEnd.Row() - aInputRange.aStart.Row() + 1));
         }
 
         // Update sheet view sort ranges to account for deleted rows/columns

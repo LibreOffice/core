@@ -147,8 +147,7 @@ public:
                                   InsCellCmd eCmd, bool bRecord, bool bApi, bool bPartOfPaste = false,
                                   size_t nInsertCount = 0);
 
-    bool            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
-                              DelCellCmd eCmd, bool bApi );
+    SC_DLLPUBLIC bool DeleteCells(const ScRange& rRange, const ScMarkData* pTabMark, DelCellCmd eCmd, bool bApi);
 
     SC_DLLPUBLIC bool MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                        bool bCut, bool bRecord, bool bPaint, bool bApi );
