@@ -81,7 +81,12 @@ class TextSelectionSection extends CanvasSectionObject {
 			}
 
 			this.context.closePath();
-			this.context.stroke();
+			// In Calc the selection has to line up with the cell grid. The 1px
+			// stroke is centred on the polygon edge, so its outer half is
+			// painted just outside the boundary and shows up as a faint band one
+			// pixel past the right and bottom grid lines. The fill already
+			// covers the selected cells exactly, so the stroke is dropped here.
+			if (!isCalc) this.context.stroke();
 			this.context.fill();
 		}
 

@@ -147,11 +147,13 @@ function testsForPart(partTestData: PartTestData, part: number, zoom: number, sg
 
     it('correctness of getTileTwipsPointFromPrint()', function () {
         var ttwips = sg.getTileTwipsPointFromPrint(partTestData.printTwipsToTile.inputPoint);
-        nodeassert.deepEqual(ttwips, partTestData.printTwipsToTile.outputPoint);
+        nodeassert.deepEqual(ttwips, partTestData.printTwipsToTile.gridAlignedOutputPoint);
     });
 
     it('correctness of getPrintTwipsPointFromTile()', function () {
-        // Use the data for getTileTwipsPointFromPrint.
+        // Feed the plain linear conversion of the input, not the grid-aligned
+        // result, so the print-twips-from-tile direction maps back exactly
+        // onto the original input point.
         var ptwips = sg.getPrintTwipsPointFromTile(partTestData.printTwipsToTile.outputPoint);
         nodeassert.deepEqual(ptwips, partTestData.printTwipsToTile.inputPoint);
     });

@@ -1062,11 +1062,22 @@ export class SheetDimension {
 		var elementDataTT = this._getElementDataAnyFromSpanByIndex(element.index, element.span, 'tiletwips');
 		var elementDataPT = this._getElementDataAnyFromSpanByIndex(element.index, element.span, 'printtwips');
 
-		var offset = posPT - elementDataPT.startpos;
-		console.assert(offset >= 0, 'offset should not be negative');
+		var offsetPT = posPT - elementDataPT.startpos;
+		console.assert(offsetPT >= 0, 'offset should not be negative');
 
-		// Preserve any offset from the matching column/row start position.
-		return elementDataTT.startpos + offset;
+		// offsetPT is how far the position sits inside the cell, measured in
+		// print twips. The result is built on a tile-twips start position, and
+		// a cell spans fewer tile twips than print twips because tile twips are
+		// floored to whole core pixels. Adding the print-twips offset unchanged
+		// therefore overshoots, so a position on the far edge of the cell lands
+		// one core pixel past the boundary. Scale the offset into tile twips so
+		// the within-cell fraction is preserved and a cell edge maps exactly
+		// onto the matching grid line.
+		var offsetTT =
+			elementDataPT.size > 0
+				? Math.round((offsetPT * elementDataTT.size) / elementDataPT.size)
+				: offsetPT;
+		return elementDataTT.startpos + offsetTT;
 	}
 
 	// Accepts a position in tile twips and returns the corresponding position in print twips.

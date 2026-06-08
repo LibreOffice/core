@@ -18,6 +18,13 @@ interface PointUnitCoversionTest {
     zoomScale?: number;
     inputPoint: cool.Point;
     outputPoint: cool.Point;
+    // Present only for printTwipsToTile. It is the tile-twips position for
+    // inputPoint after the within-cell offset is snapped onto whole core
+    // pixels, so a cell edge lands exactly on the grid line. It can differ
+    // from outputPoint by up to one core pixel. outputPoint stays the plain
+    // linear conversion that maps back onto inputPoint without snapping, so
+    // the print-twips-from-tile direction can round-trip against it.
+    gridAlignedOutputPoint?: cool.Point;
 }
 
 interface AreaUnitConversionTest {
@@ -188,6 +195,7 @@ var testDataForZoom10: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39885, 17202),
+            gridAlignedOutputPoint: new cool.Point(39883, 17201),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
@@ -257,6 +265,7 @@ var testDataForZoom10: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39855, 17225),
+            gridAlignedOutputPoint: new cool.Point(39854, 17224),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
@@ -326,6 +335,7 @@ var testDataForZoom10: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39860, 17213),
+            gridAlignedOutputPoint: new cool.Point(39858, 17213),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
@@ -417,6 +427,7 @@ var testDataForZoom10: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39845, 17213),
+            gridAlignedOutputPoint: new cool.Point(39844, 17213),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
@@ -489,6 +500,7 @@ var testDataForZoom7: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39703, 15974),
+            gridAlignedOutputPoint: new cool.Point(39699, 15959),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
@@ -558,6 +570,7 @@ var testDataForZoom7: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39693, 16001),
+            gridAlignedOutputPoint: new cool.Point(39691, 15982),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
@@ -627,6 +640,7 @@ var testDataForZoom7: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39692, 15758),
+            gridAlignedOutputPoint: new cool.Point(39689, 15747),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
@@ -718,6 +732,7 @@ var testDataForZoom7: PartTestData[] = [
         printTwipsToTile: {
             inputPoint: new cool.Point(40000, 17280),
             outputPoint: new cool.Point(39695, 15758),
+            gridAlignedOutputPoint: new cool.Point(39693, 15747),
         },
         printTwipsSheetAreatoTile: {
             inputArea: new cool.Bounds(
