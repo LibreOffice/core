@@ -751,6 +751,7 @@ void AIChatSession::callLLMAPI()
     if (!_toolLoop)
         return;
 
+#if !MOBILEAPP
     Poco::URI uri(_toolLoop->requestUrl);
     if (HostUtil::isForbiddenKitHost(uri.getHost()))
     {
@@ -761,6 +762,7 @@ void AIChatSession::callLLMAPI()
         _toolLoop.reset();
         return;
     }
+#endif
 
     Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
     payload->set("model", _toolLoop->model);
@@ -1812,12 +1814,14 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
 
     req.requestUrl = baseUrl + "/v1/images/generations";
 
+#if !MOBILEAPP
     Poco::URI uri(req.requestUrl);
     if (HostUtil::isForbiddenKitHost(uri.getHost()))
     {
         req.error = "Target host is not in the allowed host list, contact your administrator";
         return req;
     }
+#endif
 
     const std::string imageModel = _session.getAIImageModel();
     if (imageModel.empty())
