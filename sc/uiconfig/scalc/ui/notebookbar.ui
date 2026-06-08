@@ -2158,6 +2158,10 @@
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="sfxlo-NotebookbarTabControl" id="ContextContainer">
@@ -2832,7 +2836,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="File-FileButton:Menu File">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|FileMenuButton">_File</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|FileMenuButton">_File</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -2851,7 +2855,7 @@
                         </child>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="File-HelpButton:Menu Help">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|HelpMenuButton">_Help</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|HelpMenuButton">_Help</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -2889,7 +2893,7 @@
               <object class="GtkLabel" id="FileLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|FileLabel">~File</property>
+                <property name="label" translatable="yes" context="TabbedCalc|FileTabLabel">~File</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -4006,7 +4010,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Home-HomeButton:Menu Home">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|HomeMenuButton">_Home</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|HomeMenuButton">_Home</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -4098,7 +4102,7 @@
               <object class="GtkLabel" id="HomeLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|HomeLabel">~Home</property>
+                <property name="label" translatable="yes" context="TabbedCalc|HomeTabLabel">~Home</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-default"/>
@@ -4968,7 +4972,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Insert-InsertButton:Menu Insert">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|InsertMenuButton">_Insert</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|InsertMenuButton">_Insert</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -5059,7 +5063,7 @@
               <object class="GtkLabel" id="InsertLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|InsertLabel">~Insert</property>
+                <property name="label" translatable="yes" context="TabbedCalc|InsertTabLabel">~Insert</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -5794,7 +5798,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Layout-LayoutButton:Menu Page">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|LayoutMenuButton">_Layout</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|LayoutMenuButton">_Layout</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -5862,7 +5866,7 @@
               <object class="GtkLabel" id="LayoutLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|PageLayoutLabel">~Layout</property>
+                <property name="label" translatable="yes" context="TabbedCalc|LayoutTabLabel">~Layout</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -6708,9 +6712,6 @@
                         <property name="position">4</property>
                       </packing>
                     </child>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -6734,7 +6735,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Data-DataButton:Menu Data">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|DataMenuButton">_Data</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|DataMenuButton">_Data</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -6826,7 +6827,7 @@
               <object class="GtkLabel" id="DataLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|DataLabel">~Data</property>
+                <property name="label" translatable="yes" context="TabbedCalc|DataTabLabel">~Data</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -7402,7 +7403,7 @@
               <object class="GtkLabel" id="FunctionsLabel1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|LabelFunctions">~Functions</property>
+                <property name="label" translatable="yes" context="TabbedCalc|FunctionsTabLabel">~Functions</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -8055,7 +8056,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Review-ReviewButton:Menu Review">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|ReviewMenuButton">_Review</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|ReviewMenuButton">_Review</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -8124,7 +8125,7 @@
               <object class="GtkLabel" id="ReviewLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|ReviewLabel">~Review</property>
+                <property name="label" translatable="yes" context="TabbedCalc|ReviewTabLabel">~Review</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -8726,7 +8727,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="View-ViewButton:Menu View">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|ViewMenuButton">_View</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|ViewMenuButton">_View</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -8795,7 +8796,7 @@
               <object class="GtkLabel" id="ViewLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|ViewLabel">~View</property>
+                <property name="label" translatable="yes" context="TabbedCalc|ViewTabLabel">~View</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -9010,7 +9011,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedCalc|labelDrawFillBorder">Fill &amp; Border</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|labelImageFillBorder">Fill &amp; Border</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -9722,7 +9723,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Image-GraphicButton:Menu Image">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|ImageMenuButton">Ima_ge</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|ImageMenuButton">Ima_ge</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -9830,7 +9831,7 @@
               <object class="GtkLabel" id="ImageLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|ImageLabel">Ima~ge</property>
+                <property name="label" translatable="yes" context="TabbedCalc|ImageTabLabel">Ima~ge</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Graphic"/>
@@ -10232,7 +10233,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedCalc|labelImagePositioning">Positioning</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|labelDrawPositioning">Positioning</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -10775,7 +10776,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Draw-DrawButton:Menu Draw">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|DrawMenuButton">_Draw</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|DrawMenuButton">_Draw</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -10868,7 +10869,7 @@
               <object class="GtkLabel" id="DrawLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|DrawLabel">~Draw</property>
+                <property name="label" translatable="yes" context="TabbedCalc|DrawTabLabel">~Draw</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Draw"/>
@@ -11275,7 +11276,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedCalc|labelImagePositioning">Positioning</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|labelObjectPositioning">Positioning</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -11549,7 +11550,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Object-DrawMenu:Menu Draw">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|ObjectMenuButton">_Object</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|ObjectMenuButton">_Object</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -11633,23 +11634,6 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkSeparator" id="separator114">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="padding">5</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -11659,7 +11643,7 @@
               <object class="GtkLabel" id="ObjectLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|FrameLabel">~Object</property>
+                <property name="label" translatable="yes" context="TabbedCalc|ObjectTabLabel">~Object</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Frame"/>
@@ -12159,7 +12143,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="media:Menu Media">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|MediaMenuButton">_Media</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|MediaMenuButton">_Media</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -12241,23 +12225,6 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkSeparator" id="separator42">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="padding">5</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="position">11</property>
@@ -12267,7 +12234,7 @@
               <object class="GtkLabel" id="MediaLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|MediaLabel">~Media</property>
+                <property name="label" translatable="yes" context="TabbedCalc|MediaTabLabel">~Media</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Media"/>
@@ -12698,7 +12665,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="print:Menu Print">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|PrintMenuButton">_Print</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|PrintMenuButton">_Print</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -12765,7 +12732,7 @@
               <object class="GtkLabel" id="PrintLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|PrintLabel">~Print</property>
+                <property name="label" translatable="yes" context="TabbedCalc|PrintTabLabel">~Print</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Printpreview"/>
@@ -13465,7 +13432,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Form-FormButton:Menu Form">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|FormMenuButton">Fo_rm</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|FormMenuButton">Fo_rm</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -13533,7 +13500,7 @@
               <object class="GtkLabel" id="FormLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|FormLabel">Fo~rm</property>
+                <property name="label" translatable="yes" context="TabbedCalc|FormTabLabel">Fo~rm</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Form"/>
@@ -13706,7 +13673,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Tools-ToolsButton:Menu Tools">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|ToolsMenuButton">_Tools</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|ToolsMenuButton">_Tools</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -13774,7 +13741,7 @@
               <object class="GtkLabel" id="DevLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|ToolsLabel">~Tools</property>
+                <property name="label" translatable="yes" context="TabbedCalc|ToolsTabLabel">~Tools</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -13828,7 +13795,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Extension-ExtensionButton:Menu Addons">
-                            <property name="label" translatable="yes" context="CalcNotebookbar|ExtensionMenuButton">E_xtension</property>
+                            <property name="label" translatable="yes" context="TabbedCalc|ExtensionMenuButton">E_xtension</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -13902,7 +13869,7 @@
               <object class="GtkLabel" id="ExtensionLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="CalcNotebookbar|ExtensionLabel">E~xtension</property>
+                <property name="label" translatable="yes" context="TabbedCalc|ExtensionTabLabel">E~xtension</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>

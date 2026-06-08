@@ -2316,6 +2316,10 @@
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="sfxlo-NotebookbarTabControl" id="ContextContainer">
@@ -4149,7 +4153,7 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=4 n-rows=3 -->
+                      <!-- n-columns=3 n-rows=3 -->
                       <object class="GtkGrid" id="gdInsertData">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -4177,7 +4181,7 @@
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">2</property>
-                            <property name="width">3</property>
+                            <property name="width">2</property>
                           </packing>
                         </child>
                         <child>
@@ -4187,7 +4191,7 @@
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
-                            <property name="left-attach">3</property>
+                            <property name="left-attach">2</property>
                             <property name="top-attach">0</property>
                             <property name="height">3</property>
                           </packing>
@@ -4243,16 +4247,16 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertInsertObject">
+                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertInsertMath">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="toolbar-style">both-horiz</property>
                             <property name="show-arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="btnInsertInsertObject">
+                              <object class="GtkToolButton" id="btnInsertInsertMath">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="action-name">.uno:InsertObject</property>
+                                <property name="action-name">.uno:InsertMath</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -4263,33 +4267,6 @@
                           <packing>
                             <property name="left-attach">1</property>
                             <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertInsertObjectStarMath">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
-                            <property name="toolbar-style">both</property>
-                            <property name="show-arrow">False</property>
-                            <property name="icon_size">3</property>
-                            <child>
-                              <object class="GtkToolButton" id="btnInsertInsertObjectStarMath">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="action-name">.uno:InsertObjectStarMath</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">2</property>
-                            <property name="top-attach">0</property>
-                            <property name="height">2</property>
                           </packing>
                         </child>
                         <accessibility>
@@ -5752,23 +5729,6 @@
                     <property name="fill">False</property>
                     <property name="pack-type">end</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator18">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="padding">5</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -8632,7 +8592,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedImpress|labeImageImage">Image</property>
+                            <property name="label" translatable="yes" context="TabbedImpress|labeImage">Image</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -9583,7 +9543,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedImpress|labelDrawDraw">Drawing Object</property>
+                            <property name="label" translatable="yes" context="TabbedImpress|labelDraw">Drawing Object</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -10767,7 +10727,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedImpress|labelObjectObject">Object</property>
+                            <property name="label" translatable="yes" context="TabbedImpress|labelObject">Object</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -11417,23 +11377,6 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkSeparator" id="separator88">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="padding">5</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="position">11</property>
@@ -11482,7 +11425,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedImpress|labelMediaMedia">Media</property>
+                            <property name="label" translatable="yes" context="TabbedImpress|labelMedia">Media</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -11948,23 +11891,6 @@
                     <property name="fill">False</property>
                     <property name="pack-type">end</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator38">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="padding">5</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -13826,7 +13752,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="View2-OutlineButton:Menu View">
-                            <property name="label" translatable="yes" context="TabbedImpress|ViewMenuButton">_View</property>
+                            <property name="label" translatable="yes" context="TabbedImpress|OutlineMenuButton">_View</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -14514,7 +14440,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedImpress|label3D3D">3D</property>
+                            <property name="label" translatable="yes" context="TabbedImpress|label3D">3D</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -15064,7 +14990,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="DevLabel">
+              <object class="GtkLabel" id="ToolsLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="TabbedImpress|ToolsTabLabel">~Tools</property>

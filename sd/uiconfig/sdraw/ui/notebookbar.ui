@@ -2281,6 +2281,10 @@
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="sfxlo-NotebookbarTabControl" id="ContextContainer">
@@ -2316,7 +2320,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelFileFileNew">New</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelFileNew">New</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -4183,7 +4187,7 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=4 n-rows=3 -->
+                      <!-- n-columns=3 n-rows=3 -->
                       <object class="GtkGrid" id="gdInsertData">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -4211,7 +4215,7 @@
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">2</property>
-                            <property name="width">3</property>
+                            <property name="width">2</property>
                           </packing>
                         </child>
                         <child>
@@ -4221,7 +4225,7 @@
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
-                            <property name="left-attach">3</property>
+                            <property name="left-attach">2</property>
                             <property name="top-attach">0</property>
                             <property name="height">3</property>
                           </packing>
@@ -4277,16 +4281,16 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertInsertObject">
+                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertInsertMath">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="toolbar-style">both-horiz</property>
                             <property name="show-arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="btnInsertInsertObject">
+                              <object class="GtkToolButton" id="btnInsertInsertMath">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="action-name">.uno:InsertObject</property>
+                                <property name="action-name">.uno:InsertMath</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -4297,33 +4301,6 @@
                           <packing>
                             <property name="left-attach">1</property>
                             <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="bxInsertInsertObjectStarMath">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
-                            <property name="toolbar-style">both</property>
-                            <property name="show-arrow">False</property>
-                            <property name="icon_size">3</property>
-                            <child>
-                              <object class="GtkToolButton" id="btnInsertInsertObjectStarMath">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="action-name">.uno:InsertObjectStarMath</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">2</property>
-                            <property name="top-attach">0</property>
-                            <property name="height">2</property>
                           </packing>
                         </child>
                         <accessibility>
@@ -7254,7 +7231,7 @@
                           <object class="GtkLabel" id="lbTable">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelTableTable">Table</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelTable">Table</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -7928,7 +7905,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labeImageImage">Image</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelImage">Image</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -8881,7 +8858,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelDrawDraw">Drawing Object</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelDraw">Drawing Object</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -10063,7 +10040,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelObjectObject">Object</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelObject">Object</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -10761,7 +10738,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelMediaMedia">Media</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelMedia">Media</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -12066,7 +12043,7 @@
                           <object class="GtkLabel" id="lbMaster">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelMasterMaster">Master</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelMaster">Master</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -13661,7 +13638,7 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedDraw|labelToolsTools">Tools</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|labelTools">Tools</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="scale" value="0.9"/>
@@ -13872,7 +13849,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Extension-ExtensionButton:Menu Addons">
-                            <property name="label" translatable="yes" context="TabbedDraw|FormMenuButton">E_xtension</property>
+                            <property name="label" translatable="yes" context="TabbedDraw|ExtensionMenuButton">E_xtension</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -13946,7 +13923,7 @@
               <object class="GtkLabel" id="ExtensionLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="TabbedDraw|ExtensionLabel">E~xtension</property>
+                <property name="label" translatable="yes" context="TabbedDraw|ExtensionTabLabel">E~xtension</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>

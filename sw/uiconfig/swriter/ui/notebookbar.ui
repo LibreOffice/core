@@ -2387,6 +2387,10 @@
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="sfxlo-NotebookbarTabControl" id="ContextContainer">
@@ -2421,7 +2425,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelFileNew">New</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdFileNew"/>
@@ -2550,7 +2554,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelFileFile">File</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdFileFile"/>
@@ -2787,7 +2791,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelFilePrint">Print</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdFilePrint"/>
@@ -2977,7 +2981,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelFileProperties">Properties</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdFileProperties"/>
@@ -3022,7 +3026,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="File-FileButton:Menu File">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|FileMenuButton">_File</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|FileMenuButton">_File</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -3041,7 +3045,7 @@
                         </child>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="File-HelpButton:Menu Help">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|HelpMenuButton">_Help</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|HelpMenuButton">_Help</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -3079,7 +3083,7 @@
               <object class="GtkLabel" id="FileLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|FileLabel">~File</property>
+                <property name="label" translatable="yes" context="TabbedWriter|FileTabLabel">~File</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -3113,10 +3117,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelClipboard">Clipboard</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelHomeClipboard">Clipboard</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdHomeClipboard"/>
@@ -3240,10 +3244,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelFont">Font</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelHomeFont">Font</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdHomeFont"/>
@@ -3573,10 +3577,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelParagraph">Paragraph</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelHomeParagraph">Paragraph</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdHomeParagraph"/>
@@ -3906,10 +3910,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelStyle">Style</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelHomeStyle">Style</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdHomeStyle"/>
@@ -3992,7 +3996,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Home-HomeButton:Menu Home">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|HomeMenuButton">_Home</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|HomeMenuButton">_Home</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -4063,7 +4067,7 @@
               <object class="GtkLabel" id="HomeLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|HomeLabel">~Home</property>
+                <property name="label" translatable="yes" context="TabbedWriter|HomeTabLabel">~Home</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-default"/>
@@ -4102,10 +4106,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelPage">Page</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelInsertPage">Page</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdInsertPage"/>
@@ -4229,10 +4233,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelData">Data</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelInsertData">Data</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdInsertData"/>
@@ -4383,10 +4387,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelGraphic">Graphic</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelInsertGraphic">Graphic</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdInsertGraphic"/>
@@ -4510,10 +4514,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelReferences">References</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelInsertReferences">References</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdInsertReferences"/>
@@ -4663,10 +4667,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelText">Text</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelInsertText">Text</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdInsertText"/>
@@ -4831,7 +4835,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelInsertDrawingObjects">Drawing Objects</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdInsertDrawingObjects"/>
@@ -5075,7 +5079,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Insert-InsertButton:Menu Insert">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|InsertMenuButton">_Insert</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|InsertMenuButton">_Insert</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -5155,7 +5159,7 @@
               <object class="GtkLabel" id="InsertLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|InsertLabel">~Insert</property>
+                <property name="label" translatable="yes" context="TabbedWriter|InsertTabLabel">~Insert</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -5190,10 +5194,10 @@
                             <property name="can-focus">False</property>
                             <property name="valign">end</property>
                             <property name="vexpand">True</property>
-                            <property name="label" translatable="yes" context="TabbedWriter|labelLayoutLayoutPageLayout">Page</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|labelLayoutPageLayout">Page</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdLayoutPageLayout"/>
@@ -5355,7 +5359,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelLayoutBreaks">Breaks</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdLayoutBreaks"/>
@@ -5455,7 +5459,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelLayoutParagraphLayout">Paragraph</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdLayoutParagraphLayout"/>
@@ -5600,7 +5604,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelLayoutTools">Tools</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdLayoutTools"/>
@@ -5778,7 +5782,7 @@
                             <attributes>
                               <attribute name="style" value="italic"/>
                               <attribute name="weight" value="thin"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdLayoutObjects"/>
@@ -6109,7 +6113,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Layout-PageButton:Menu Page">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|LayoutMenuButton">_Layout</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|LayoutMenuButton">_Layout</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -6178,7 +6182,7 @@
               <object class="GtkLabel" id="LayoutLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|LayoutLabel">~Layout</property>
+                <property name="label" translatable="yes" context="TabbedWriter|LayoutTabLabel">~Layout</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -6214,7 +6218,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelReferencesIndex">Index</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdReferencesIndex"/>
@@ -6344,7 +6348,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelReferencesReference">References</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdReferencesReference"/>
@@ -6540,7 +6544,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelReferencesFields">Fields</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdReferencesFields"/>
@@ -6780,7 +6784,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="References-ReferencesButton:Menu References">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|ReferencesMenuButton">Reference_s</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|ReferencesMenuButton">Reference_s</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -6848,7 +6852,7 @@
               <object class="GtkLabel" id="ReferencesLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|ReferencesLabel">Reference~s</property>
+                <property name="label" translatable="yes" context="TabbedWriter|ReferencesTabLabel">Reference~s</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -6884,7 +6888,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelReviewSpelling">Spelling</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdReviewSpelling"/>
@@ -7025,7 +7029,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelReviewComments">Comments</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdReviewComments"/>
@@ -7159,7 +7163,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelReviewTrackChanges">Track Changes</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdReviewTrackChanges"/>
@@ -7253,7 +7257,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelReviewResolveChanges">Resolve Changes</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdReviewResolveChanges"/>
@@ -7497,7 +7501,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Review-ReviewButton:Menu Review">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|ReviewMenuButton">_Review</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|ReviewMenuButton">_Review</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -7566,7 +7570,7 @@
               <object class="GtkLabel" id="ReviewLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|ReviewLabel">~Review</property>
+                <property name="label" translatable="yes" context="TabbedWriter|ReviewTabLabel">~Review</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -7602,7 +7606,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelViewMode">Mode</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdViewMode"/>
@@ -7709,7 +7713,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelViewMarks">Marks</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdViewMarks"/>
@@ -7812,7 +7816,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelViewZoom">Zoom</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdViewZoom"/>
@@ -7988,7 +7992,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelViewWidgets">Widgets</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdViewWidgets"/>
@@ -8199,7 +8203,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelViewObjects">Objects</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdViewObjects"/>
@@ -8336,7 +8340,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="View-ViewButton:Menu View">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|ViewMenuButton">_View</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|ViewMenuButton">_View</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -8405,7 +8409,7 @@
               <object class="GtkLabel" id="ViewLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|ViewLabel">~View</property>
+                <property name="label" translatable="yes" context="TabbedWriter|ViewTabLabel">~View</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -8441,7 +8445,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelTableLayout">Layout</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdTableLayout"/>
@@ -8692,7 +8696,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelTableSelect">Selection</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdTableSelect"/>
@@ -8844,7 +8848,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelTableStyle">Style</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdTableStyle"/>
@@ -8996,7 +9000,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelTableAlignment">Alignment</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdTableAlignment"/>
@@ -9206,7 +9210,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelTableFunctions">Functions</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdTableFunctions"/>
@@ -9338,7 +9342,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelTableNumbers">Numbers</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdTableNumbers"/>
@@ -9493,7 +9497,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Table-TableButton:Menu Table">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|TableMenuButton">_Table</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|TableMenuButton">_Table</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -9561,7 +9565,7 @@
               <object class="GtkLabel" id="TableLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|TableLabel">~Table</property>
+                <property name="label" translatable="yes" context="TabbedWriter|TableTabLabel">~Table</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Table"/>
@@ -9600,7 +9604,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelImage">Image</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdImage"/>
@@ -9791,7 +9795,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelImageFillBorder">Fill &amp; Border</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdImageFillBorder"/>
@@ -9978,7 +9982,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelImageAnchorWrap">Anchor &amp; Wrap</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdImageAnchorWrap"/>
@@ -10200,7 +10204,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelImagePositioning">Positioning</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdImagePositioning"/>
@@ -10439,7 +10443,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelImageModify">Modify</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdImageModify"/>
@@ -10672,7 +10676,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Image-GraphicButton:Menu Image">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|ImageMenuButton">Ima_ge</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|ImageMenuButton">Ima_ge</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -10754,7 +10758,7 @@
               <object class="GtkLabel" id="ImageLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|ImageLabel">Ima~ge</property>
+                <property name="label" translatable="yes" context="TabbedWriter|ImageTabLabel">Ima~ge</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Graphic"/>
@@ -10793,7 +10797,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelDraw">Drawing Object</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdDraw"/>
@@ -10960,7 +10964,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelDrawFillBorder">Fill &amp; Border</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdDrawFillBorder"/>
@@ -11156,7 +11160,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelDrawAnchorWrap">Anchor &amp; Wrap</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdDrawAnchorWrap"/>
@@ -11378,7 +11382,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelDrawPositioning">Positioning</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdDrawPositioning"/>
@@ -11617,7 +11621,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelDrawGrouping">Grouping</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdDrawGrouping"/>
@@ -11751,7 +11755,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelDraw3D">3D</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdDraw3D"/>
@@ -11889,7 +11893,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Draw-DrawButton:Menu Draw">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|DrawMenuButton">_Draw</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|DrawMenuButton">_Draw</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -11982,7 +11986,7 @@
               <object class="GtkLabel" id="DrawLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|DrawLabel">~Draw</property>
+                <property name="label" translatable="yes" context="TabbedWriter|DrawTabLabel">~Draw</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Draw"/>
@@ -12024,7 +12028,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelObject">Object</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdObject"/>
@@ -12156,7 +12160,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelObjectFillBorder">Fill &amp; Border</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdObjectFillBorder"/>
@@ -12343,7 +12347,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelObjectAnchorWrap">Anchor &amp; Wrap</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdObjectAnchorWrap"/>
@@ -12565,7 +12569,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelObjectPositioning">Positioning</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdObjectPositioning"/>
@@ -12807,7 +12811,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Object-ObjectButton:Menu Object">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|ObjectMenuButton">_Object</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|ObjectMenuButton">_Object</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -12876,7 +12880,7 @@
               <object class="GtkLabel" id="ObjectLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|ObjectLabel">~Object</property>
+                <property name="label" translatable="yes" context="TabbedWriter|ObjectTabLabel">~Object</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Frame"/>
@@ -12916,7 +12920,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelMedia">Object</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdMedia"/>
@@ -13072,7 +13076,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelMediaAnchorWrap">Anchor &amp; Wrap</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdMediaAnchorWrap"/>
@@ -13294,7 +13298,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelMediaPositioning">Positioning</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdMediaPositioning"/>
@@ -13533,7 +13537,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelMediaPlayer">Media Player</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdMediaPlayer"/>
@@ -13638,7 +13642,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="media:Menu Media">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|MediaMenuButton">_Media</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|MediaMenuButton">_Media</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -13728,7 +13732,7 @@
               <object class="GtkLabel" id="MediaLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|MediaLabel">~Media</property>
+                <property name="label" translatable="yes" context="TabbedWriter|MediaTabLabel">~Media</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Media"/>
@@ -13767,7 +13771,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelPrintMode">Mode</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdPrintMode"/>
@@ -13924,7 +13928,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelPrintZoom">Zoom</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdPrintZoom"/>
@@ -14092,7 +14096,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelPrintPrint">Print</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdPrintPrint"/>
@@ -14204,7 +14208,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="print:Menu Print">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|PrintMenuButton">_Print</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|PrintMenuButton">_Print</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -14287,7 +14291,7 @@
               <object class="GtkLabel" id="PrintLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|PrintLabel">~Print</property>
+                <property name="label" translatable="yes" context="TabbedWriter|PrintTabLabel">~Print</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Printpreview"/>
@@ -14326,7 +14330,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelFormMode">Mode</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdFormMode"/>
@@ -14460,7 +14464,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelFormProperties">Properties</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdFormProperties"/>
@@ -14655,7 +14659,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelFormControls">Controls</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdFormControls"/>
@@ -14985,7 +14989,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Form-FormButton:Menu Form">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|FormMenuButton">Fo_rm</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|FormMenuButton">Fo_rm</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -15053,7 +15057,7 @@
               <object class="GtkLabel" id="FormLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|FormLabel">Fo~rm</property>
+                <property name="label" translatable="yes" context="TabbedWriter|FormTabLabel">Fo~rm</property>
                 <property name="use-underline">True</property>
                 <style>
                   <class name="context-Form"/>
@@ -15121,7 +15125,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Extension-ExtensionButton:Menu Addons">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|FormMenuButton">E_xtension</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|ExtensionMenuButton">E_xtension</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -15195,7 +15199,7 @@
               <object class="GtkLabel" id="ExtensionLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|ExtensionLabel">E~xtension</property>
+                <property name="label" translatable="yes" context="TabbedWriter|ExtensionLabel">E~xtension</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -15231,7 +15235,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelToolsMacro">Macro</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdToolsMacro"/>
@@ -15360,7 +15364,7 @@
                             <property name="label" translatable="yes" context="TabbedWriter|labelToolsMessage">Message</property>
                             <attributes>
                               <attribute name="style" value="italic"/>
-                              <attribute name="scale" value="0.90000000000000002"/>
+                              <attribute name="scale" value="0.9"/>
                             </attributes>
                             <accessibility>
                               <relation type="label-for" target="gdToolsMessage"/>
@@ -15497,7 +15501,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Tools-ToolsButton:Menu Tools">
-                            <property name="label" translatable="yes" context="WriterNotebookbar|ToolsMenuButton">_Tools</property>
+                            <property name="label" translatable="yes" context="TabbedWriter|ToolsMenuButton">_Tools</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -15565,7 +15569,7 @@
               <object class="GtkLabel" id="ToolsLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="WriterNotebookbar|ToolsLabel">~Tools</property>
+                <property name="label" translatable="yes" context="TabbedWriter|ToolsTabLabel">~Tools</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
