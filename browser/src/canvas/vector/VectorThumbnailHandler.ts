@@ -14,7 +14,9 @@ namespace cool {
 	export class VectorThumbnailHandler {
 		private _docLayer: CanvasTileLayerInterface;
 
-		private _renderer: VectorPrimitiveRenderer = new VectorPrimitiveRenderer();
+		private _renderer: VectorPrimitiveRenderer = new VectorPrimitiveRenderer(
+			(checksum) => this._bitmapCache.get(checksum),
+		);
 
 		// Cached parsed JSON primitive tree keyed by part number.
 		private _cache: Map<number, VectorTileData> = new Map();
@@ -24,6 +26,23 @@ namespace cool {
 
 		// Parts for which a JSON primitive tree request is in flight.
 		private _inFlightParts: Set<number> = new Set();
+
+		// Decoded bitmap images keyed by their checksum.
+		private _bitmapCache: Map<number, HTMLImageElement> = new Map();
+
+		// Checksums for which a .uno:VectorRenderingGraphics request is
+		// in flight.
+		private _bitmapsInFlight: Set<number> = new Set();
+
+		// Reverse index from bitmap checksum to the parts that reference
+		// it. Lets a freshly-decoded bitmap re-render only the affected
+		// thumbnails.
+		private _checksumToParts: Map<number, Set<number>> = new Map();
+
+		// Size and part of every preview that has been rendered. A redraw
+		// triggered by a decoded bitmap reuses these so the re-fired
+		// preview matches what the consumer originally asked for.
+		private _renderedPreviews: Map<PreviewId, RenderedPreview> = new Map();
 
 		constructor(docLayer: CanvasTileLayerInterface) {
 			this._docLayer = docLayer;
@@ -82,7 +101,73 @@ namespace cool {
 			};
 			this._cache.set(part, data);
 
+			const required = new Set<number>();
+			const walker = new VectorBitmapWalker(required);
+			walker.walkPrimitives(masterPage);
+			walker.walkObjects(objects);
+			this._indexChecksumsForPart(part, required);
+			this._requestMissingBitmaps(required);
+
 			this._drainPending(part, data);
+		}
+
+		/// Called when a bitmap arrives in response to an earlier
+		/// fetch request.
+		handleVectorRenderingGraphicsResponse(
+			values: VectorRenderingGraphicsResponse,
+		): void {
+			if (this._bitmapCache.has(values.checksum)) {
+				this._bitmapsInFlight.delete(values.checksum);
+				return;
+			}
+			const image = new Image();
+			// Add to the cache only on a successful decode. Clear
+			// the in-flight mark on either outcome.
+			image.onload = () => {
+				this._bitmapCache.set(values.checksum, image);
+				this._bitmapsInFlight.delete(values.checksum);
+				this._redrawPreviewsFor(values.checksum);
+			};
+			image.onerror = () => {
+				this._bitmapsInFlight.delete(values.checksum);
+			};
+			image.src = values.data;
+		}
+
+		private _indexChecksumsForPart(part: number, checksums: Set<number>): void {
+			for (const checksum of checksums) {
+				let parts = this._checksumToParts.get(checksum);
+				if (!parts) {
+					parts = new Set<number>();
+					this._checksumToParts.set(checksum, parts);
+				}
+				parts.add(part);
+			}
+		}
+
+		private _redrawPreviewsFor(checksum: number): void {
+			const parts = this._checksumToParts.get(checksum);
+			if (!parts) return;
+			for (const part of parts) {
+				const data = this._cache.get(part);
+				if (!data) continue;
+				for (const [id, info] of this._renderedPreviews) {
+					if (info.part !== part) continue;
+					this._renderAndFire(id, part, info.maxWidth, info.maxHeight, data);
+				}
+			}
+		}
+
+		private _requestMissingBitmaps(checksums: Set<number>): void {
+			for (const checksum of checksums) {
+				if (this._bitmapCache.has(checksum)) continue;
+				if (this._bitmapsInFlight.has(checksum)) continue;
+				this._bitmapsInFlight.add(checksum);
+				app.socket.sendMessage(
+					'commandvalues command=.uno:VectorRenderingGraphics?checksum=' +
+						String(checksum),
+				);
+			}
 		}
 
 		/// Drop cached data for a part and any in-flight state.
@@ -96,6 +181,10 @@ namespace cool {
 			this._cache.clear();
 			this._inFlightParts.clear();
 			this._pendingPreviews.clear();
+			this._bitmapCache.clear();
+			this._bitmapsInFlight.clear();
+			this._checksumToParts.clear();
+			this._renderedPreviews.clear();
 		}
 
 		private _drainPending(part: number, data: VectorTileData): void {
@@ -123,6 +212,12 @@ namespace cool {
 			data: VectorTileData,
 		): void {
 			if (data.slideWidth <= 0 || data.slideHeight <= 0) return;
+
+			this._renderedPreviews.set(id, {
+				part: part,
+				maxWidth: maxWidth,
+				maxHeight: maxHeight,
+			});
 
 			const pxW = Math.max(1, Math.round(maxWidth * app.roundedDpiScale));
 			const pxH = Math.max(1, Math.round(maxHeight * app.roundedDpiScale));

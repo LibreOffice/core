@@ -2283,6 +2283,7 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             auto itGraphic = maBitmapCache.find(nChecksum);
             if (itGraphic != maBitmapCache.end())
             {
+                rJsonWriter.put("type", "vectorrenderinggraphics");
                 rJsonWriter.put("checksum", nChecksum);
                 drawinglayer::Primitive2dJsonProcessor::writeGraphicBase64(
                     rJsonWriter, itGraphic->second);

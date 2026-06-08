@@ -410,6 +410,7 @@ COOL_JS_LST =\
 	src/canvas/sections/CalcRTLAwareDocumentPosition.ts \
 	src/canvas/vector/PendingPreview.ts \
 	src/canvas/vector/PreviewId.ts \
+	src/canvas/vector/RenderedPreview.ts \
 	src/canvas/vector/SlideObject.ts \
 	src/canvas/vector/primitive/BackgroundColorPrimitive.ts \
 	src/canvas/vector/primitive/BitmapPrimitive.ts \
@@ -433,8 +434,10 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/TextSimplePortionPrimitive.ts \
 	src/canvas/vector/primitive/TransformPrimitive.ts \
 	src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts \
+	src/canvas/vector/VectorBitmapWalker.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \
+	src/canvas/vector/VectorRenderingGraphicsResponse.ts \
 	src/canvas/vector/VectorThumbnailHandler.ts \
 	src/canvas/vector/VectorTileData.ts \
 	src/canvas/vector/VectorTileResponse.ts \

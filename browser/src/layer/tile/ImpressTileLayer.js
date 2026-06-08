@@ -395,6 +395,13 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
+		if (values.type === 'vectorrenderinggraphics') {
+			if (this._vectorThumbnails) {
+				this._vectorThumbnails.handleVectorRenderingGraphicsResponse(values);
+			}
+			return;
+		}
+
 		if (values.comments) {
 			var comments = Array.isArray(values.comments)
 				? values.comments

@@ -10,8 +10,8 @@
  */
 
 namespace cool {
-	/// A function that resolves a bitmap checksum to the decoded
-	/// image, or undefined when the image is not in the cache yet.
+	/// A function that resolves a bitmap checksum to the decoded image,
+	/// or undefined when the image is not in the cache yet.
 	export type BitmapLookup = (checksum: number) => HTMLImageElement | undefined;
 
 	/// Renders JSON primitives with Canvas 2D drawing operations.
@@ -390,9 +390,9 @@ namespace cool {
 			// being fetched.
 			const image = this._bitmapLookup(primitive.checksum);
 			if (!image) return;
-			// The image may still be decoding. drawImage requires a
-			// ready source, so skip this paint. A later redraw
-			// scheduled when the image finishes decoding picks it up.
+			// The image may still be decoding. drawImage requires a ready
+			// source, so skip this paint. A later redraw scheduled when
+			// the image finishes decoding picks it up.
 			if (!image.complete) return;
 
 			context.save();
