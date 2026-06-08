@@ -1107,6 +1107,88 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     CPPUNIT_ASSERT_EQUAL(2.5, fBinWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip)
+{
+    // ODF: fixed number of bins survives export/reload at the model level.
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<beans::XPropertySet> xProps(xChartType, uno::UNO_QUERY_THROW);
+    xProps->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(2)));
+    xProps->setPropertyValue(u"BinCount"_ustr, uno::Any(sal_Int32(3)));
+
+    saveAndReload(TestFilter::ODS);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    static constexpr char sHistogramProps[]
+        = "/office:document-content/office:automatic-styles/style:style[@style:family='chart']/"
+          "style:chart-properties[@coext:frequency-type]";
+    assertXPath(pXmlDoc, sHistogramProps, "frequency-type", u"2");
+    assertXPath(pXmlDoc, sHistogramProps, "bin-count", u"3");
+
+    xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<beans::XPropertySet> xReloadedProps(xChartType, uno::UNO_QUERY_THROW);
+
+    sal_Int32 nFrequencyType = -1;
+    CPPUNIT_ASSERT(xReloadedProps->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nFrequencyType);
+
+    sal_Int32 nBinCount = -1;
+    CPPUNIT_ASSERT(xReloadedProps->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nBinCount);
+
+    // XLSX: fixed number of bins is written as cx:binCount and survives reload.
+    loadFromFile(u"xlsx/SimpleHistogram.xlsx");
+
+    xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<beans::XPropertySet> xXlsxProps(xChartType, uno::UNO_QUERY_THROW);
+    xXlsxProps->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(2)));
+    xXlsxProps->setPropertyValue(u"BinCount"_ustr, uno::Any(sal_Int32(3)));
+
+    saveAndReload(TestFilter::XLSX);
+
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:layoutPr/"
+                "cx:binning/cx:binCount",
+                "val", u"3");
+
+    xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<beans::XPropertySet> xReloadedXlsxProps(xChartType, uno::UNO_QUERY_THROW);
+
+    nFrequencyType = -1;
+    CPPUNIT_ASSERT(xReloadedXlsxProps->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nFrequencyType);
+
+    nBinCount = -1;
+    CPPUNIT_ASSERT(xReloadedXlsxProps->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nBinCount);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
 {
     // Exporting an ODF-origin histogram to XLSX must write the raw
