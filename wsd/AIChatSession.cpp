@@ -755,7 +755,7 @@ void AIChatSession::callLLMAPI()
     if (HostUtil::isForbiddenKitHost(uri.getHost()))
     {
         LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
-                << COOLWSD::anonymizeUrl(_toolLoop->requestUrl) << ']');
+                << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
         sendChatResult(false, "Target host is not in the allowed host list, contact your administrator",
                        _toolLoop->requestId);
         _toolLoop.reset();
