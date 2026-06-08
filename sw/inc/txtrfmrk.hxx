@@ -26,7 +26,7 @@ class SwWrtShell;
 class SwTextNode;
 
 // Attribute for content-/position references in text.
-class SwTextRefMark final : public SwTextAttrEnd
+class SW_DLLPUBLIC SwTextRefMark final : public SwTextAttrEnd
 {
     SwTextNode * m_pTextNode;
     sal_Int32 * m_pEnd; // end is optional (point reference)

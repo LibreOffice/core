@@ -538,6 +538,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf148294_crossReferences)
+{
+    // Given a file with several cross-references in various edge cases
+    createSwDoc("tdf148294_crossReferences.odt");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:bookmarkStart", 4);
+    assertXPath(pXmlDoc, "//w:bookmarkEnd", 4);
+
+    // The second bookmark should be stradling the text 'DOCX'
+    assertXPathContent(pXmlDoc, "//w:p[3]/w:r/w:t", u"DOCX");
+    int n = countXPathNodes(pXmlDoc, "//w:p[3]/w:bookmarkStart/preceding::w:t");
+    CPPUNIT_ASSERT_EQUAL(n + 1, countXPathNodes(pXmlDoc, "//w:p[3]/w:bookmarkEnd/preceding::w:t"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText)
 {
     // Given a file with deleted text at the end of the paragraph just before anchored stuff

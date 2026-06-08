@@ -1520,6 +1520,16 @@ void WW8Export::AppendBookmark( const OUString& rName )
     m_pBkmks->Append( nSttCP, rName );
 }
 
+void WW8Export::AppendBookmarkStart(const OUString& rName)
+{
+    AppendBookmark(rName);
+}
+
+void WW8Export::AppendBookmarkEnd(const OUString& rName, bool /*bIsFinal*/)
+{
+    AppendBookmark(rName);
+}
+
 void WW8Export::AppendBookmarkEndWithCorrection( const OUString& rName )
 {
     sal_uInt64 nEndCP = Fc2Cp( Strm().Tell() );
