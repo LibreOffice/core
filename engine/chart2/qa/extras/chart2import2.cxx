@@ -1221,6 +1221,56 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
     CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.indexOf(u"$A$5") >= 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramMultiChartODSToXLSXExport)
+{
+    // Multi-chart export must not reuse the same ChartEx formula for all histograms.
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip_multi_chart.fods");
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Sheet1!$A$1:$A$6"_ustr,
+        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+
+    pXmlDoc = parseExport(u"xl/charts/chartEx2.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Sheet1!$B$1:$B$5"_ustr,
+        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+
+    pXmlDoc = parseExport(u"xl/charts/chartEx3.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Sheet1!$C$1:$C$6"_ustr,
+        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramMultiChartXLSXRoundtrip)
+{
+    // Native ChartEx roundtrip must keep each histogram bound to its own source range.
+    loadFromFile(u"xlsx/tdf163727_histogram_roundtrip_multi_chart.xlsx");
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Sheet1!$A$1:$A$6"_ustr,
+        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+
+    pXmlDoc = parseExport(u"xl/charts/chartEx2.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Sheet1!$B$1:$B$5"_ustr,
+        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+
+    pXmlDoc = parseExport(u"xl/charts/chartEx3.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Sheet1!$C$1:$C$6"_ustr,
+        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf60316)
 {
     loadFromFile(u"pptx/tdf60316.pptx");
