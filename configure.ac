@@ -1637,6 +1637,19 @@ AS_IF([test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
        POCOINCLUDE=
        POCOLIB=])
 
+dnl POCO's NetSSL and Crypto are compiled in the engine against its OpenSSL, so
+dnl link that bundled OpenSSL when present, else fall back to the system one.
+AS_IF([test -n "$with_lo_builddir"],
+      [openssl_engine_builddir=`readlink -f "$with_lo_builddir"`
+       OPENSSL_ENGINE_INCLUDE="$openssl_engine_builddir/workdir/UnpackedTarball/openssl/include"
+       OPENSSL_ENGINE_LIB="$openssl_engine_builddir/workdir/UnpackedTarball/openssl"])
+
+AS_IF([test -n "$OPENSSL_ENGINE_LIB" -a -f "$OPENSSL_ENGINE_LIB/libssl.a"],
+      [AC_MSG_NOTICE([using OpenSSL built in the engine: $OPENSSL_ENGINE_LIB])
+       CPPFLAGS="$CPPFLAGS -isystem ${OPENSSL_ENGINE_INCLUDE}"
+       LDFLAGS="$LDFLAGS -L${OPENSSL_ENGINE_LIB}"],
+      [AC_MSG_NOTICE([OpenSSL not built in the engine workdir, falling back to system OpenSSL])])
+
 AS_IF([test -n "$ZSTDINCLUDE"],
       [CPPFLAGS="$CPPFLAGS -isystem ${ZSTDINCLUDE}"])
 
