@@ -12,12 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-05 00:58+0000\n"
-"Last-Translator: Diego Nascimento <weblate@simplelogin.nascimentodiego.com."
-"br>\n"
+"PO-Revision-Date: 2026-06-08 17:01+0000\n"
+"Last-Translator: Isaki23 <isaquefonseca230706@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -474,7 +473,6 @@ msgid "Compact layout"
 msgstr "Layout compacto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:533
-#, fuzzy
 msgid "Show status bar"
 msgstr "Mostrar Barra de Status"
 
@@ -676,7 +674,7 @@ msgstr "Texto oculto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:580
 msgid "Placeholders"
-msgstr ""
+msgstr "Campos pré-preenchidos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:581
 msgid "Left pages"
@@ -797,7 +795,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1707
 msgid "Notebookbar view"
-msgstr ""
+msgstr "Visão da barra do caderno de notas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1714
 #: src/control/Control.NotebookbarCalc.js:1620
@@ -809,7 +807,7 @@ msgstr "Vista compacta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1820
 msgid "Something went wrong while uploading the file. Please try again."
-msgstr ""
+msgstr "Algo deu errado ao enviar esse arquivo. Por favor, tente novamente."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1896
 #: src/canvas/sections/CommentSection.ts:1523
@@ -822,13 +820,12 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1907
-#, fuzzy
 msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
 msgstr ""
-"Algo deu errado ao buscar o arquivo de configuração. Por favor, tente "
-"atualizar a página."
+"Algo deu errado ao tentar apagar o arquivo. Por favor, tente atualizar a "
+"página."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1922
 #: src/control/Control.BackstageView.ts:568
@@ -840,21 +837,25 @@ msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
+"Para usar o Zotero, especifique sua chave de API aqui. Você pode criar sua "
+"chave de API em seu "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1949
 msgid "Zotero account API settings"
-msgstr ""
+msgstr "Configurações da chave da API na conta Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2006
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 msgid "Document Signing"
-msgstr ""
+msgstr "Assinatura do documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2010
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr ""
+"Para usar a assinatura do documento, especifique seu certificado,chave e "
+"cadeia CA aqui."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2069
 #: admin/src/integrator/AdminIntegratorSettings.ts:3024
@@ -868,22 +869,24 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:1804
 #: src/control/Control.NotebookbarWriter.js:1805
 msgid "AI Assistant"
-msgstr ""
+msgstr "Assistente IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2073
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Configure as credenciais do provedor de IA e o modelo. Modelos são buscados "
+"automaticamente quando as credenciais mudam."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2174
 msgid "Text Generation"
-msgstr ""
+msgstr "Geração de texto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2224
 #: admin/src/integrator/AdminIntegratorSettings.ts:2342
 msgid "e.g."
-msgstr ""
+msgstr "Exemplo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2246
 msgid ""
