@@ -9,8 +9,10 @@
 
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/unoprnms.hxx>
+#include <unotools/saveopt.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <test/commontesttools.hxx>
@@ -451,6 +453,70 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf115005_FallBack_Images_Off)
 {
     const int nPNGFiles = testTdf115005_FallBack_Images(false);
     CPPUNIT_ASSERT_EQUAL(0, nPNGFiles);
+}
+
+namespace
+{
+struct SvgPngCounts
+{
+    int mnSvg = 0;
+    int mnPng = 0;
+};
+
+SvgPngCounts
+countSvgAndPngInPictures(const css::uno::Reference<css::packages::zip::XZipFileAccess2>& xZip)
+{
+    SvgPngCounts aCounts;
+    const uno::Sequence<OUString> aNames = xZip->getElementNames();
+    for (OUString const& rName : aNames)
+    {
+        if (!rName.startsWith("Pictures/"))
+            continue;
+        if (rName.endsWith(".svg"))
+            aCounts.mnSvg++;
+        else if (rName.endsWith(".png"))
+            aCounts.mnPng++;
+    }
+    return aCounts;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testSvgPngFallbackOdf14)
+{
+    // SvgImageTest.odp contains an SVG primary with a PNG fallback. Saving as
+    // ODF 1.4 (the default) must keep the SVG and drop the PNG fallback, since
+    // ODF 1.4 readers handle SVG natively.
+    ScopedConfigValue<officecfg::Office::Common::Save::Graphic::AddReplacementImages> aConfig(true);
+
+    createSdImpressDoc("odp/SvgImageTest.odp");
+    save(TestFilter::ODP);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xZip
+        = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
+
+    const SvgPngCounts aCounts = countSvgAndPngInPictures(xZip);
+    CPPUNIT_ASSERT_EQUAL(1, aCounts.mnSvg);
+    CPPUNIT_ASSERT_EQUAL(0, aCounts.mnPng);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testSvgPngFallbackOdf13)
+{
+    // The same document saved as ODF 1.3 must still emit the PNG fallback so
+    // that older readers without SVG support can still display the image.
+    comphelper::ScopeGuard aGuard([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+
+    ScopedConfigValue<officecfg::Office::Common::Save::Graphic::AddReplacementImages> aConfig(true);
+
+    createSdImpressDoc("odp/SvgImageTest.odp");
+    save(TestFilter::ODP);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xZip
+        = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
+
+    const SvgPngCounts aCounts = countSvgAndPngInPictures(xZip);
+    CPPUNIT_ASSERT_EQUAL(1, aCounts.mnSvg);
+    CPPUNIT_ASSERT_EQUAL(1, aCounts.mnPng);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118806)

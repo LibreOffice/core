@@ -3501,13 +3501,13 @@ void XMLTextParagraphExport::_exportTextGraphic(
     // original content
     SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_DRAW, XML_FRAME, false, true);
 
+    OUString sOutMimeType;
     {
         // xlink:href
         uno::Reference<graphic::XGraphic> xGraphic;
         rPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
 
         OUString sInternalURL;
-        OUString sOutMimeType;
 
         if (xGraphic.is())
         {
@@ -3555,7 +3555,18 @@ void XMLTextParagraphExport::_exportTextGraphic(
         }
     }
 
-    const bool bAddReplacementImages = officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
+    // SVG has been in ODF long enough that current readers handle it,
+    // so the PNG fallback is no longer worth carrying. ODF 1.4 is the
+    // cautious cutoff: from 1.4 onwards we drop the fallback, older
+    // targets still get it.
+    const bool bSkipSvgFallback
+        = sOutMimeType == "image/svg+xml"
+          && GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_014;
+
+    const bool bAddReplacementImages
+        = !bSkipSvgFallback
+          && officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
+
     if (bAddReplacementImages)
     {
         // replacement graphic for backwards compatibility, but
@@ -3564,13 +3575,13 @@ void XMLTextParagraphExport::_exportTextGraphic(
         rPropSet->getPropertyValue(u"ReplacementGraphic"_ustr) >>= xReplacementGraphic;
 
         OUString sInternalURL;
-        OUString sOutMimeType;
+        OUString sReplacementMimeType;
 
         //Resolves: fdo#62461 put preferred image first above, followed by
         //fallback here
         if (xReplacementGraphic.is())
         {
-            sInternalURL = GetExport().AddEmbeddedXGraphic(xReplacementGraphic, sOutMimeType);
+            sInternalURL = GetExport().AddEmbeddedXGraphic(xReplacementGraphic, sReplacementMimeType);
         }
 
         // If there is no url, then graphic is empty
@@ -3584,17 +3595,17 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
         if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
-            if (sOutMimeType.isEmpty())
+            if (sReplacementMimeType.isEmpty())
             {
-                GetExport().GetGraphicMimeTypeFromStream(xReplacementGraphic, sOutMimeType);
+                GetExport().GetGraphicMimeTypeFromStream(xReplacementGraphic, sReplacementMimeType);
             }
-            if (!sOutMimeType.isEmpty())
+            if (!sReplacementMimeType.isEmpty())
             {   // ODF 1.3 OFFICE-3943
                 GetExport().AddAttribute(
                     SvtSaveOptions::ODFSVER_013 <= GetExport().getSaneDefaultVersion()
                         ? XML_NAMESPACE_DRAW
                         : XML_NAMESPACE_LO_EXT,
-                    u"mime-type"_ustr, sOutMimeType);
+                    u"mime-type"_ustr, sReplacementMimeType);
             }
         }
 
