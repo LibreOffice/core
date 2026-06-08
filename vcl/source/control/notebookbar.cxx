@@ -176,8 +176,6 @@ Size NotebookBar::GetOptimalSize() const
 
 void NotebookBar::setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags)
 {
-    const sal_uInt8 cPadding = Application::GetToolkit() == Toolkit::Gtk ? 0 : 6;
-
     bool bCanHandleSmallerWidth = false;
     bool bCanHandleSmallerHeight = false;
 
@@ -194,8 +192,6 @@ void NotebookBar::setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nW
     }
 
     Size aSize(GetOptimalSize());
-    if (nHeight == 0)
-        aSize.extendBy(0, 2 * cPadding);
     if (!bCanHandleSmallerWidth)
         nWidth = std::max(nWidth, aSize.Width());
     if (!bCanHandleSmallerHeight)
@@ -204,7 +200,7 @@ void NotebookBar::setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nW
     Control::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 
     if (bIsLayoutEnabled && (nFlags & PosSizeFlags::Size))
-        VclContainer::setLayoutAllocation(*pChild, Point(cPadding, cPadding), Size(nWidth - 2 * cPadding, nHeight));
+        VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
 void NotebookBar::Resize()
