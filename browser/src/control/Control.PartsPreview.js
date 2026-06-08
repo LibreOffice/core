@@ -840,13 +840,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			img: 'removeslidesection',
 			pos: 0,
 		});
-		entries.push({
-			id: 'removeSectionAndSlides',
-			type: 'comboboxentry',
-			text: _('Remove Section & Slides'),
-			img: 'removesectionandslides',
-			pos: 0,
-		});
+		if (sections.length > 1) {
+			entries.push({
+				id: 'removeSectionAndSlides',
+				type: 'comboboxentry',
+				text: _('Remove Section & Slides'),
+				img: 'removesectionandslides',
+				pos: 0,
+			});
+		}
 		if (sectionIndex > 0) {
 			entries.push({
 				id: 'moveSectionUp',
