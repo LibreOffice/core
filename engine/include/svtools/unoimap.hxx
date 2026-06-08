@@ -22,7 +22,7 @@
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com :: sun :: star :: uno { class XInterface; }
+namespace com::sun::star::uno { class XInterface; }
 
 class ImageMap;
 struct SvEventDescription;

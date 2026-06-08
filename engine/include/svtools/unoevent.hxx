@@ -25,7 +25,7 @@
 #include <vector>
 #include <memory>
 
-namespace com :: sun :: star :: uno { class XInterface; }
+namespace com::sun::star::uno { class XInterface; }
 
 class SvxMacroTableDtor;
 class SvxMacroItem;

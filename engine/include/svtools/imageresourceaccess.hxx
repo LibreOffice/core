@@ -29,8 +29,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com :: sun :: star :: io { class XInputStream; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class SvStream;
 

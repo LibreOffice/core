@@ -24,11 +24,11 @@
 #include <svtools/svtdllapi.h>
 #include <vcl/weld.hxx>
 
-namespace com :: sun :: star :: container { class XNameAccess; }
-namespace com :: sun :: star :: sdbc { class XDataSource; }
-namespace com :: sun :: star :: sdb { class XDatabaseContext; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
-namespace com :: sun :: star :: util { struct AliasProgrammaticPair; }
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::sdbc { class XDataSource; }
+namespace com::sun::star::sdb { class XDatabaseContext; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { struct AliasProgrammaticPair; }
 
 #define FIELD_PAIRS_VISIBLE         5
 #define FIELD_CONTROLS_VISIBLE      2 * FIELD_PAIRS_VISIBLE

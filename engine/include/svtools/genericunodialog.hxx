@@ -31,8 +31,8 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <vcl/weld.hxx>
 
-namespace com :: sun :: star :: awt { class XWindow; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 
 namespace svt

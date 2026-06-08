@@ -12,7 +12,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 
-namespace com :: sun :: star :: ucb { class XCommandEnvironment; }
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;

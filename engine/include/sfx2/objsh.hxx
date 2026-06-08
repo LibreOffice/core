@@ -538,7 +538,7 @@ public:
 
        2 (==SFX_TITLE_FULLNAME)
        provides the logical file names with full path
-       (remote =>:: com:: sun:: star:: util:: URL)
+       (remote =>:: com::sun::star::util:: URL)
 
        3 (==SFX_TITLE_APINAME)
        provides the logical filename without path

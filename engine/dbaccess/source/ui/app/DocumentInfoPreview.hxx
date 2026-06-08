@@ -25,7 +25,7 @@
 
 #include <svx/weldeditview.hxx>
 
-namespace com :: sun :: star :: uno { template <typename > class Reference; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace com::sun::star {
     namespace document { class XDocumentProperties; }

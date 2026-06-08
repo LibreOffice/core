@@ -24,13 +24,10 @@
 
 class ThumbnailViewItem;
 
-namespace com
-{
-namespace sun::star::frame
+namespace com::sun::star::frame
 {
 class XDesktop2;
 class XModel;
-}
 }
 
 class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public weld::GenericDialogController

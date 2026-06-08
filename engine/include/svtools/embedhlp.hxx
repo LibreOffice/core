@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 
-namespace com :: sun :: star :: io { class XInputStream; }
+namespace com::sun::star::io { class XInputStream; }
 
 namespace comphelper
 {

@@ -410,7 +410,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     SwThreadJoiner::ReleaseThreadJoiner();
 }
 
-// ::com::sun:star::lang::XEventListener (inherited via css::frame::XTerminateListener)
+// ::com::sun::star::lang::XEventListener (inherited via css::frame::XTerminateListener)
 void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& )
 {
     // nothing to do, because instance doesn't hold any references of observed objects

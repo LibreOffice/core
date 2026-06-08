@@ -87,7 +87,7 @@ bool ignoreClass(StringRef s)
 {
     // ignore stuff in the standard library, and UNO stuff we can't touch.
     if (s.starts_with("rtl::") || s.starts_with("sal::")
-        || s.starts_with("com::sun::") || s.starts_with("std::")
+        || s.starts_with("com::sun::star::") || s.starts_with("std::")
         || s.starts_with("boost::")
         || s == "OString" || s == "OUString" || s == "bad_alloc")
     {

@@ -326,7 +326,7 @@ namespace xmloff
         */
         bool shouldExportProperty( const OUString& i_propertyName ) const;
 
-        /** tries to convert an arbitrary <type scope="com.sun:star.uno">Any</type> into an string
+        /** tries to convert an arbitrary <type scope="com.sun.star.uno">Any</type> into an string
 
             <p>If the type contained in the Any is not supported, the returned string will be empty. In the
             debug version, an additional assertion occurs.</p>

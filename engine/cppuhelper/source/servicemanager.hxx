@@ -38,8 +38,8 @@ namespace com::sun::star::lang {
     class XSingleComponentFactory;
 }
 namespace cppu { struct ContextEntry_Init; }
-namespace com :: sun :: star :: lang { class XSingleServiceFactory; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com::sun::star::lang { class XSingleServiceFactory; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class RegistryKey;
 

@@ -3269,7 +3269,7 @@ void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSet
 }
 
 
-// com::sun:star::form::XDatabaseParameterBroadcaster
+// com::sun::star::form::XDatabaseParameterBroadcaster
 
 void SAL_CALL ODatabaseForm::addDatabaseParameterListener(const Reference<XDatabaseParameterListener>& _rListener)
 {

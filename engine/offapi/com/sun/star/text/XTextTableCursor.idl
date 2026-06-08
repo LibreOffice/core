@@ -38,7 +38,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
                  concatenated by ":" with the table cell name of the bottom left table cell of the cell range.
                 If the range consists of one table cell only then the name of that table cell is returned.
              </p>
-        @see com::sun:star::text::CellRange
+        @see com::sun::star::text::CellRange
      */
     string getRangeName();
 

@@ -27,13 +27,13 @@
 #include <unordered_map>
 #include <utility>
 
-namespace com :: sun :: star :: awt { class XWindow; }
-namespace com :: sun :: star :: beans { struct PropertyValue; }
-namespace com :: sun :: star :: frame { class XDispatch; }
-namespace com :: sun :: star :: frame { class XFrame; }
-namespace com :: sun :: star :: ui { class XStatusbarItem; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
-namespace com :: sun :: star :: util { class XURLTransformer; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::ui { class XStatusbarItem; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XURLTransformer; }
 
 namespace svt
 {

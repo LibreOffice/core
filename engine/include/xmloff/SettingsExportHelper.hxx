@@ -34,12 +34,9 @@ namespace com::sun::star::formula { struct SymbolDescriptor; }
 namespace com::sun::star::i18n { class XForbiddenCharacters; }
 namespace com::sun::star::util { class XStringSubstitution; }
 
-namespace com
-{
-    namespace sun::star {
-        namespace container { class XNameAccess; class XIndexAccess; }
-        namespace util { struct DateTime; }
-    }
+namespace com::sun::star {
+    namespace container { class XNameAccess; class XIndexAccess; }
+    namespace util { struct DateTime; }
 }
 
 namespace xmloff

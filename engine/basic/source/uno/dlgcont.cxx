@@ -375,7 +375,7 @@ Reference< css::resource::XStringResourcePersistence >
     bool bReadOnly = pDialogLibrary->mbReadOnly;
 
     // get ui locale
-    ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
     OUString aComment= aResourceFileCommentBase + aLibName;
 

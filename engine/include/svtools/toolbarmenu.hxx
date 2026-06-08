@@ -27,8 +27,8 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/weld.hxx>
 
-namespace com :: sun :: star :: frame { class XFrame; }
-namespace com :: sun :: star :: frame { struct FeatureStateEvent; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { struct FeatureStateEvent; }
 namespace svt { class FrameStatusListener; }
 
 class SVT_DLLPUBLIC WeldToolbarPopup

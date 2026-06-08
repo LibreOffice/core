@@ -35,7 +35,7 @@ constants EnhancedCustomShapeGluePointType
     const short SEGMENTS = 1;
 
     /** only gluepoints of the GluePoints property from the
-        com::sun:star::drawing::EnhancedCustomShapePath are offered
+        com::sun::star::drawing::EnhancedCustomShapePath are offered
      */
     const short CUSTOM = 2;
 

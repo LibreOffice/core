@@ -66,7 +66,7 @@ public class RecoveryTest extends ComplexTestCase {
     /**
      * All office windows will be placed by this test on randomized positions.
      * This positions was stored in this Hashmap. The keys are the frame names
-     * and the values are com sun.star.awt.Rectangle.
+     * and the values are com.sun.star.awt.Rectangle.
      * @see com.sun.star.awt.Rectangle
      */
     private final HashMap<String, Rectangle> windowsPosSize = new HashMap<String, Rectangle>();

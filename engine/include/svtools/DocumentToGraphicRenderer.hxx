@@ -26,10 +26,10 @@
 
 #include <svtools/svtdllapi.h>
 
-namespace com :: sun :: star :: awt { class XToolkit; }
-namespace com :: sun :: star :: frame { class XModel; }
-namespace com :: sun :: star :: lang { class XComponent; }
-namespace com :: sun :: star :: view { class XRenderable; }
+namespace com::sun::star::awt { class XToolkit; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::view { class XRenderable; }
 
 namespace com::sun::star {
     namespace drawing {

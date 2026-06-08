@@ -60,7 +60,7 @@ public:
     virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
 
-    // ::com::sun:star::lang::XEventListener (inherited via css::frame::XTerminateListener)
+    // ::com::sun::star::lang::XEventListener (inherited via css::frame::XTerminateListener)
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 private:

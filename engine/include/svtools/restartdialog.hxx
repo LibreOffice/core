@@ -13,7 +13,7 @@
 
 #include <svtools/svtdllapi.h>
 
-namespace com :: sun :: star :: uno { template <typename > class Reference; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace weld { class Window; }
 namespace com::sun::star::uno {

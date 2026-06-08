@@ -317,11 +317,11 @@ public:
     virtual void SAL_CALL addRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener>& _rxListener) override;
     virtual void SAL_CALL removeRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener>& _rxListener) override;
 
-    // com::sun:star::form::XDatabaseParameterBroadcaster2
+    // com::sun::star::form::XDatabaseParameterBroadcaster2
     virtual void SAL_CALL addDatabaseParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
     virtual void SAL_CALL removeDatabaseParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
 
-    // com::sun:star::form::XDatabaseParameterBroadcaster
+    // com::sun::star::form::XDatabaseParameterBroadcaster
     virtual void SAL_CALL addParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
     virtual void SAL_CALL removeParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
 

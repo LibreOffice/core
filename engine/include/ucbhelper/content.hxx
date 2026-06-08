@@ -281,7 +281,7 @@ public:
       *         - Any other exception derived from
       *           css::uno::Exception indicates, that the value was
       *           not set successfully. For example, this can be a
-      *           com::sun:star::ucb::InteractiveAugmentedIOException
+      *           com::sun::star::ucb::InteractiveAugmentedIOException
       *           transporting the error code
       *           css::ucb::IOErrorCode::ACCESS_DENIED.
       * @throws css::ucb::CommandAbortedException
@@ -340,7 +340,7 @@ public:
       *         - Any other exception derived from
       *           css::uno::Exception indicates, that the value was
       *           not set successfully. For example, this can be a
-      *           com::sun:star::ucb::InteractiveAugmentedIOException
+      *           com::sun::star::ucb::InteractiveAugmentedIOException
       *           transporting the error code
       *           css::ucb::IOErrorCode::ACCESS_DENIED.
       * @throws css::ucb::CommandAbortedException

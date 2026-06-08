@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module ui {
     function. The module specifier can be retrieved from the
     com::sun::star::frame::ModuleManager
     service. The interface provides references to
-    com::sun:star::ui::ModuleUICommandDescription.
+    com::sun::star::ui::ModuleUICommandDescription.
     </p>
 
     @see com::sun::star::frame::ModuleManager
