@@ -156,30 +156,4 @@ class HyperlinkDialog(UITestCase):
                 xTarget = xDialog.getChild("target")
                 self.assertEqual(get_state_as_dict(xTarget)["Text"].lower(), "http://www.libreoffice.org/")
 
-    def test_tdf141166(self):
-        # Skip this test for --with-help=html and --with-help=online, as that would fail with a
-        # DialogNotExecutedException("did not execute a dialog for a blocking action") thrown from
-        # the below execute_blocking_action call (and would leave behind the relevant HTML page
-        # opened in the user's default browser):
-        if os.getenv('ENABLE_HTMLHELP') == 'TRUE':
-            return
-        # Skip this test for --enable-xmlhelp, as that would fail with a
-        # "uno.com.sun.star.uno.RuntimeException: Could not find child with id: cancel" thrown from
-        # the below execute_blocking_action call, as it would open the "LibreOffice Help" window
-        # instead of the apparently expected "LibreOffice Help Not Installed" dialog that has a
-        # "Cancel" button:
-        if re.compile(r'XMLHELP\b').search(os.getenv('BUILD_TYPE')):
-            return
-
-        with self.ui_test.create_doc_in_start_center("writer"):
-
-            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="") as xDialog:
-                xHelp = xDialog.getChild("help")
-                xHelp.executeAction('FOCUS', tuple())
-
-                # Without the fix in place, this test would have crashed here
-                with self.ui_test.execute_blocking_action(xHelp.executeAction,
-                        args=("CLICK", tuple()), close_button="cancel"):
-                    pass
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

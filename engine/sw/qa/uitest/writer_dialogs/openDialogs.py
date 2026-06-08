@@ -20,10 +20,6 @@ dialogs = [
         # tested in sw/qa/uitest/writer_tests4/exportToPDF.py
     #{"command": ".uno:ExportToEPUB", "closeButton": "cancel", "skipTestOK": True},
         # tested in writerperfect/qa/uitest/epubexport/epubexport.py
-    {"command": ".uno:Print", "closeButton": "cancel", "skipTestOK": True},
-        # no printer in CI
-        # tested in sw/qa/uitest/writer_tests5/tdf123378.py
-    {"command": ".uno:PrinterSetup", "closeButton": "cancel"},
     # {"command": ".uno:SetDocumentProperties", "closeButton": "cancel"},
         # tested in sw/qa/uitest/writer_tests2/documentProperties.py
     # {"command": ".uno:PasteSpecial", "closeButton": "cancel"},

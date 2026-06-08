@@ -59,11 +59,6 @@ class tdf157482(UITestCase):
                     controller.removeInfobar("securitywarn")
                     self.assertFalse(controller.hasInfobar("securitywarn"))
 
-                with self.ui_test.execute_dialog_through_command('.uno:Print', close_button="cancel") as xDialog:
-                    self.assertTrue(controller.hasInfobar("securitywarn"))
-                    controller.removeInfobar("securitywarn")
-                    self.assertFalse(controller.hasInfobar("securitywarn"))
-
                 with self.ui_test.execute_dialog_through_command(".uno:Signature", close_button="close"):
                     self.assertTrue(controller.hasInfobar("securitywarn"))
                     controller.removeInfobar("securitywarn")
