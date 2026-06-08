@@ -20,6 +20,8 @@
 #include <drawingml/textparagraphproperties.hxx>
 #include <drawingml/textliststyle.hxx>
 
+#include <algorithm>
+
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -443,19 +445,35 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
 
     if ( nNumberingType != NumberingType::NUMBER_NONE )
     {
-        if ( noParaLeftMargin )
+        if ( noFirstLineIndentation )
+        {
+            // DrawingML 'indent' is signed (< 0 hanging, > 0 first-line) and relative to 'marL'.
+            // editeng's numbering can only represent a bullet that hangs to the left
+            // (FirstLineOffset <= 0) and never sits at a negative position. Map (marL, indent) the
+            // way PowerPoint lays it out: clamp the bullet to >= 0 and place the text |indent| to its
+            // right, so the bullet->text gap survives even when marL < |indent| (e.g. marL == 0).
+            // This is identical to the previous naive mapping whenever marL >= |indent| (the normal
+            // hanging bullet); it only corrects the marL < |indent| and positive-indent cases that
+            // used to collapse the gap (and which feed editeng an out-of-contract numbering rule).
+            const sal_Int32 nMarL = noParaLeftMargin.value_or(0);
+            const sal_Int32 nIndent = *noFirstLineIndentation;
+            const sal_Int32 nAbsIndent = nIndent < 0 ? -nIndent : nIndent;
+            const sal_Int32 nBulletX = std::max<sal_Int32>(0, std::min(nMarL, nMarL + nIndent));
+
+            // Force Paragraph property as zero - impress seems to use the value from previous
+            // (non) bullet line if not set to zero explicitly :(
+            aPropSet.setProperty<sal_Int32>( PROP_ParaLeftMargin, 0);
+            aPropSet.setProperty<sal_Int32>( PROP_ParaFirstLineIndent, 0);
+            rioBulletMap.setProperty( PROP_LeftMargin, nBulletX + nAbsIndent);
+            rioBulletMap.setProperty( PROP_FirstLineOffset, -nAbsIndent);
+            noParaLeftMargin.reset();
+            noFirstLineIndentation.reset();
+        }
+        else if ( noParaLeftMargin )
         {
             aPropSet.setProperty<sal_Int32>( PROP_ParaLeftMargin, 0);
             rioBulletMap.setProperty( PROP_LeftMargin, *noParaLeftMargin);
             noParaLeftMargin.reset();
-        }
-        if ( noFirstLineIndentation )
-        {
-            // Force Paragraph property as zero - impress seems to use the value from previous
-            // (non) bullet line if not set to zero explicitly :(
-            aPropSet.setProperty<sal_Int32>( PROP_ParaFirstLineIndent, 0);
-            rioBulletMap.setProperty( PROP_FirstLineOffset, *noFirstLineIndentation);
-            noFirstLineIndentation.reset();
         }
         if ( nNumberingType != NumberingType::BITMAP && !rioBulletMap.hasProperty( PROP_BulletColor ) && pFilterBase )
             rioBulletMap.setProperty( PROP_BulletColor, maTextCharacterProperties.maFillProperties.getBestSolidColor().getColor( pFilterBase->getGraphicHelper()));
