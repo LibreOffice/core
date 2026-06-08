@@ -182,11 +182,13 @@ bool InsertCellsOperation::runImplementation()
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
 
+    ScRange aInputRange = convertRange(maRange);
+
     if (mrDocShell.GetDocument().GetChangeTrack()
         && ((meCmd == INS_CELLSDOWN
-             && (maRange.aStart.Col() != 0 || maRange.aEnd.Col() != rDoc.MaxCol()))
+             && (aInputRange.aStart.Col() != 0 || aInputRange.aEnd.Col() != rDoc.MaxCol()))
             || (meCmd == INS_CELLSRIGHT
-                && (maRange.aStart.Row() != 0 || maRange.aEnd.Row() != rDoc.MaxRow()))))
+                && (aInputRange.aStart.Row() != 0 || aInputRange.aEnd.Row() != rDoc.MaxRow()))))
     {
         // We should not reach this via UI disabled slots.
         assert(mbApi);
@@ -194,15 +196,15 @@ bool InsertCellsOperation::runImplementation()
         return false;
     }
 
-    ScRange aTargetRange(maRange);
+    ScRange aTargetRange(aInputRange);
 
     // If insertion is for full cols/rows and after the current
     // selection, then shift the range accordingly
     if (meCmd == INS_INSROWS_AFTER)
     {
         ScRange aErrorRange(ScAddress::UNINITIALIZED);
-        if (!aTargetRange.Move(0, maRange.aEnd.Row() - maRange.aStart.Row() + 1, 0, aErrorRange,
-                               rDoc))
+        if (!aTargetRange.Move(0, aInputRange.aEnd.Row() - aInputRange.aStart.Row() + 1, 0,
+                               aErrorRange, rDoc))
         {
             return false;
         }
@@ -210,8 +212,8 @@ bool InsertCellsOperation::runImplementation()
     if (meCmd == INS_INSCOLS_AFTER)
     {
         ScRange aErrorRange(ScAddress::UNINITIALIZED);
-        if (!aTargetRange.Move(maRange.aEnd.Col() - maRange.aStart.Col() + 1, 0, 0, aErrorRange,
-                               rDoc))
+        if (!aTargetRange.Move(aInputRange.aEnd.Col() - aInputRange.aStart.Col() + 1, 0, 0,
+                               aErrorRange, rDoc))
         {
             return false;
         }
@@ -252,7 +254,7 @@ bool InsertCellsOperation::runImplementation()
 
     ScMarkData aMark(rDoc.GetSheetLimits());
     if (mpTabMark)
-        aMark = *mpTabMark;
+        aMark = convertMark(*mpTabMark);
     else
     {
         SCTAB nCount = 0;
@@ -520,7 +522,7 @@ bool InsertCellsOperation::runImplementation()
                         ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
                         pUndoDoc->InitUndo(rDoc, *aMark.begin(), *aMark.rbegin());
                         pUndoRemoveMerge.reset(
-                            new ScUndoRemoveMerge(mrDocShell, maRange, std::move(pUndoDoc)));
+                            new ScUndoRemoveMerge(mrDocShell, aInputRange, std::move(pUndoDoc)));
                     }
 
                     for (const ScRange& aRange : qIncreaseRange)
@@ -743,13 +745,13 @@ bool InsertCellsOperation::runImplementation()
         if (bInsertCols)
         {
             pViewSh->OnKitInsertDeleteColumn(
-                maRange.aStart.Col() - (meCmd == INS_INSCOLS_BEFORE ? 1 : 0), 1);
+                aInputRange.aStart.Col() - (meCmd == INS_INSCOLS_BEFORE ? 1 : 0), 1);
         }
 
         if (bInsertRows)
         {
             pViewSh->OnKitInsertDeleteRow(
-                maRange.aStart.Row() - (meCmd == INS_INSROWS_BEFORE ? 1 : 0), 1);
+                aInputRange.aStart.Row() - (meCmd == INS_INSROWS_BEFORE ? 1 : 0), 1);
         }
 
         // Update sheet view sort ranges to account for inserted rows/columns
