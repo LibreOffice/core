@@ -15000,7 +15000,6 @@ xmloff/source/chart/SchXMLRegressionCurveObjectContext.hxx
 xmloff/source/chart/SchXMLSeries2Context.cxx
 xmloff/source/chart/SchXMLSeries2Context.hxx
 xmloff/source/chart/SchXMLSeriesHelper.cxx
-xmloff/source/chart/SchXMLTableContext.cxx
 xmloff/source/chart/SchXMLTableContext.hxx
 xmloff/source/chart/SchXMLTextListContext.cxx
 xmloff/source/chart/SchXMLTextListContext.hxx
