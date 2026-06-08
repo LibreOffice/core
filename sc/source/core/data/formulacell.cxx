@@ -814,6 +814,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     mbIsExtRef(false),
     mbSeenInPath(false),
     mbFreeFlying(false),
+    mbDynamicArrayMaster(rCell.mbDynamicArrayMaster),
     cMatrixFlag ( rCell.cMatrixFlag ),
     nSeenInIteration(0),
     nFormatType( rCell.nFormatType ),
@@ -2316,15 +2317,16 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                 bool bSpillBlocked = false;
                 // Auto resize fires for matrix formulas whose result wants
                 // more cells than declared, in two situations:
-                //  - the formula uses a dynamic array function.
+                //  - the cell is a dynamic-array master.
                 //  - the cell is currently in spill state. Re-checking lets
                 //    the matrix auto expand the next time the user clears
                 //    the blocking cell.
-                // Conventional matrix formulas where the user explicitly
-                // picked the range fall outside both cases - their declared
-                // dimensions are intentional.
+                // Static array masters where the user explicitly picked the
+                // range fall outside both - their declared dimensions are
+                // intentional.
                 const bool bShouldCheckSpill
-                    = pCode->HasDynamicArrayFunction() || rDocument.IsFormulaSpilled(aPos);
+                    = mbDynamicArrayMaster
+                      || rDocument.IsFormulaSpilled(aPos);
                 if (bShouldCheckSpill && nDeclCols > 0 && nDeclRows > 0
                     && (o3tl::make_unsigned(nDeclCols) < nResCols
                         || o3tl::make_unsigned(nDeclRows) < nResRows))
@@ -2522,6 +2524,19 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpre
 void ScFormulaCell::SetCompile( bool bVal )
 {
     bCompile = bVal;
+}
+
+void ScFormulaCell::SetDynamicArrayMaster(bool bDynamic)
+{
+    mbDynamicArrayMaster = bDynamic;
+    // A plain single-cell formula that opts into the dynamic-array flag
+    // becomes a 1x1 matrix master so the first interpret can expand it
+    // through the auto-resize gate.
+    if (bDynamic && cMatrixFlag == ScMatrixMode::NONE)
+    {
+        cMatrixFlag = ScMatrixMode::Formula;
+        SetMatColsRows(1, 1);
+    }
 }
 
 void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows )

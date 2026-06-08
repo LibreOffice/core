@@ -137,6 +137,9 @@ private:
     bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
     bool            mbSeenInPath     : 1; // For detecting cycle involving formula groups and singleton formulacells
     bool            mbFreeFlying     : 1; // Cell is out of sheets interpreted, like in conditional format
+    // Matrix master that recomputes its range at interpret time. False on a
+    // static array master, which keeps its declared range frozen.
+    bool mbDynamicArrayMaster : 1 = false;
     ScMatrixMode    cMatrixFlag      : 8;
     sal_uInt16      nSeenInIteration : 16;   // Iteration cycle in which the cell was last encountered
     SvNumFormatType nFormatType      : 16;
@@ -355,6 +358,8 @@ public:
     SC_DLLPUBLIC sc::FormulaResultValue GetResult();
     SC_DLLPUBLIC sc::FormulaResultValue GetResult() const;
     ScMatrixMode    GetMatrixFlag() const { return cMatrixFlag;}
+    bool IsDynamicArrayMaster() const { return mbDynamicArrayMaster; }
+    SC_DLLPUBLIC void SetDynamicArrayMaster( bool bDynamic );
     ScTokenArray*   GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
 

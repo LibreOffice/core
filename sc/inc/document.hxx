@@ -1360,7 +1360,8 @@ public:
                                         const OUString& rFormula,
                                         const ScTokenArray* p = nullptr,
                                         const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                                        bool bCheckForSpill = false);
+                                        bool bCheckForSpill = false,
+                                        bool bDynamicArrayMaster = false);
     /** Returns true if any cell inside input range (rRange) other than the cells
         already covered by the declared nDeclCols x nDeclRows sub-range holds any
         data. */

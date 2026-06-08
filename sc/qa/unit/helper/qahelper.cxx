@@ -318,7 +318,8 @@ void ScModelTestBase::insertStringToCell(const OUString& rCell, std::u16string_v
     Scheduler::ProcessEventsToIdle();
 }
 
-void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_view rStr)
+void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_view rStr,
+                                        bool bDynamicArrayMaster)
 {
     goToCell(rCell);
 
@@ -328,6 +329,27 @@ void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_vi
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
+
+    if (!bDynamicArrayMaster)
+        return;
+
+    // The Ctrl+Shift+Enter path creates a static array master. When the
+    // caller asks for dynamic behaviour, opt the master into the auto-
+    // resize gate so the matrix grows or shrinks with the source data.
+    // A dirty flag plus a full recalc applies the gate to the result
+    // already on the cell.
+    ScDocShell* pDocSh = getScDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScAddress aAddr;
+    sal_Int32 nOffset = 0;
+    ScRangeStringConverter::GetAddressFromString(aAddr, rCell, rDoc,
+                                                 formula::FormulaGrammar::CONV_OOO, nOffset);
+    if (ScFormulaCell* pMaster = rDoc.GetFormulaCell(aAddr))
+    {
+        pMaster->SetDynamicArrayMaster(true);
+        pMaster->SetDirty();
+        rDoc.CalcAll();
+    }
 }
 
 void ScModelTestBase::clearCell(const OUString& rCell)

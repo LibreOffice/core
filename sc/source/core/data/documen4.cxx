@@ -332,7 +332,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      const OUString& rFormula,
                                      const ScTokenArray* pArr,
                                      const formula::FormulaGrammar::Grammar eGram,
-                                     bool bCheckForSpill)
+                                     bool bCheckForSpill,
+                                     bool bDynamicArrayMaster)
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
@@ -362,6 +363,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     else
         pCell = new ScFormulaCell(*this, aPos, rFormula, eGram, ScMatrixMode::Formula);
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
+    if (bDynamicArrayMaster)
+        pCell->SetDynamicArrayMaster(true);
     SCTAB nMax = GetTableCount();
     for (const auto& rTab : rMark)
     {
