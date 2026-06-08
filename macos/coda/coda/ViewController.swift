@@ -78,10 +78,9 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
 
         // Setup jsHandler as the entry point to call back from JavaScript
         let contentController = WKUserContentController()
-        contentController.addScriptMessageHandler(self, contentWorld: .page, name: "debug")
         contentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
-        contentController.addScriptMessageHandler(self, contentWorld: .page, name: "error")
         contentController.addScriptMessageHandler(self, contentWorld: .page, name: "clipboard")
+        ViewController.addDiagnosticMessageHandlers(to: contentController, handler: self)
 
         let config = WKWebViewConfiguration()
         config.preferences.isElementFullscreenEnabled = true
@@ -170,17 +169,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
      * Receive message from JavaScript, with the possibility to reply
      */
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+        if ViewController.handleDiagnosticMessage(message) {
+            return (nil, nil)
+        }
+
         switch message.name {
-
-        case "error":
-            if let body = message.body as? String {
-                COWrapper.LOG_ERR("Error from WebView: \(body)")
-            }
-
-        case "debug":
-            if let body = message.body as? String {
-                print("==> \(body)")
-            }
 
         case "clipboard":
             if let body = message.body as? String {
@@ -490,6 +483,36 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
 
         return (nil, nil)
+    }
+
+    /**
+     * The macOS JavaScript routes postMobileError and postMobileDebug to the "error" and "debug"
+     * message handlers. Registers both on the given content controller.
+     */
+    static func addDiagnosticMessageHandlers(to contentController: WKUserContentController,
+                                             handler: WKScriptMessageHandlerWithReply) {
+        contentController.addScriptMessageHandler(handler, contentWorld: .page, name: "error")
+        contentController.addScriptMessageHandler(handler, contentWorld: .page, name: "debug")
+    }
+
+    /** Counterpart to addDiagnosticMessageHandlers, for use when tearing a web view down. */
+    static func removeDiagnosticMessageHandlers(from contentController: WKUserContentController?) {
+        contentController?.removeScriptMessageHandler(forName: "error")
+        contentController?.removeScriptMessageHandler(forName: "debug")
+    }
+
+    /** Logs an "error" or "debug" message from a web view. Returns true if it was one of those. */
+    static func handleDiagnosticMessage(_ message: WKScriptMessage) -> Bool {
+        switch message.name {
+        case "error":
+            COWrapper.LOG_ERR("Error from WebView: \(message.body as? String ?? "")")
+            return true
+        case "debug":
+            COWrapper.LOG_DBG("Debug from WebView: \(message.body as? String ?? "")")
+            return true
+        default:
+            return false
+        }
     }
 
     /**

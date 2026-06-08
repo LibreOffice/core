@@ -39,6 +39,7 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
         // Setup jsHandler as the entry point to call back from JavaScript
         let contentController = WKUserContentController()
         contentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
+        ViewController.addDiagnosticMessageHandlers(to: contentController, handler: self)
 
         let cfg = WKWebViewConfiguration()
         cfg.userContentController = contentController
@@ -89,6 +90,10 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
      * Receives “lok” messages from cool.html buttons and handles them.
      */
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+        if ViewController.handleDiagnosticMessage(message) {
+            return (nil, nil)
+        }
+
         guard message.name == "lok", let body = message.body as? String else { return (nil, nil) }
 
         // Handle, and potentially close the window with the Backstage
@@ -103,7 +108,9 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
      * Removes the message handler to avoid leaks or lingering callbacks after deallocation.
      */
     deinit {
-        webView?.configuration.userContentController.removeScriptMessageHandler(forName: "lok")
+        let contentController = webView?.configuration.userContentController
+        contentController?.removeScriptMessageHandler(forName: "lok")
+        ViewController.removeDiagnosticMessageHandlers(from: contentController)
         if let h = webDriverHandle {
             WebDriverManager.shared.unregister(handle: h)
         }
