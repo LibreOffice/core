@@ -189,7 +189,13 @@ properties:
               [user]
               default=ubuntu
 
-          packages: [pkg-config, automake, make, gperf, bison, nasm, flex, zip, libfont-ttf-perl]
+          packages: [pkg-config, automake, autoconf, libtool, build-essential, make, gperf, bison, nasm, flex, zip, git, ca-certificates, curl, gnupg, libfont-ttf-perl, python3-lxml, python3-polib]
+
+          # Ubuntu 24.04 ships Node.js 18, but Collabora Online needs >= 20 (with npm >= 9),
+          # so install it from NodeSource after the apt packages above are in place.
+          runcmd:
+            - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+            - apt-get install -y nodejs
           '
     - resource: xPSDesiredStateConfiguration/xScript
       id: install-Ubuntu
