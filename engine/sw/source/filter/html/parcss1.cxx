@@ -1176,6 +1176,15 @@ void CSS1Parser::ParseStyleOption( const OUString& rIn )
                 DeclarationParsed( aProperty, std::move(pExp) );
             }
         }
+        else
+        {
+            // Unknown declaration (e.g. a property name like '-webkit-text-stroke-width'): skip to
+            // the next ';'.
+            while (CSS1_SEMICOLON != m_nToken && IsParserWorking())
+            {
+                m_nToken = GetNextToken();
+            }
+        }
     }
 }
 
