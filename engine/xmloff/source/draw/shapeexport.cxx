@@ -2571,9 +2571,18 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 ImpExportText(xShape);
         }
 
+        // SVG has been in ODF long enough that current readers handle it,
+        // so the PNG fallback is no longer worth carrying. ODF 1.4 is the
+        // cautious cutoff: from 1.4 onwards we drop the fallback, older
+        // targets still get it.
+        const bool bSkipSvgFallback
+            = sOutMimeType == "image/svg+xml"
+              && GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_014;
+
         //Resolves: fdo#62461 put preferred image first above, followed by
         //fallback here
         if (!bIsEmptyPresObj
+            && !bSkipSvgFallback
             && officecfg::Office::Common::Save::Graphic::AddReplacementImages::get())
         {
             uno::Reference<graphic::XGraphic> xReplacementGraphic;
