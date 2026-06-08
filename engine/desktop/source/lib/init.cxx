@@ -5339,7 +5339,10 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         if (!SfxViewShell::Current() && jsdialog::ExecuteAction(u"0"_ustr, sControlId, aMap))
             return;
 
-        assert(false && "we should not be here - invalid message");
+        SAL_WARN(
+            "kit",
+            "sendDialogEvent: no widget for id '" << sControlId << "' on shell "
+                << sCurrentShellId << " or window " << sWindowId);
     }
     catch (std::out_of_range& e)
     {
