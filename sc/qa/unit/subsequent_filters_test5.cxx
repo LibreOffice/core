@@ -16,6 +16,7 @@
 #include <dbdocfun.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <formulacell.hxx>
 #include <sc.hrc>
 #include <sortparam.hxx>
 #include <tabvwsh.hxx>
@@ -103,6 +104,233 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf167134_LOOKUP_extRef)
         OUString aExpected = pDoc->GetString(ScAddress(1, nRow, 0));
         CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testLoextSpillImport)
+{
+    // A table-cell with loext:spill="true" comes back as a dynamic-array
+    // master and spills its result into the rows below. A cell with the
+    // same formula but no attribute is a plain single-value cell that
+    // shows only the upper-left of the result.
+
+    createScDoc("fods/DynamicArraySpill.fods");
+
+    ScDocument* pDoc = getScDoc();
+
+    ScFormulaCell* pMarked = pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pMarked);
+    CPPUNIT_ASSERT(pMarked->IsDynamicArrayMaster());
+
+    // The master at A1 spills UNIQUE(B1:B4) into A1:A4.
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    ScFormulaCell* pPlain = pDoc->GetFormulaCell(ScAddress(0, 4, 0));
+    CPPUNIT_ASSERT(pPlain);
+    CPPUNIT_ASSERT(!pPlain->IsDynamicArrayMaster());
+
+    // The plain cell at A5 shows only the first value with no spill below.
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(0, 5, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testLoextSpillExportFODS)
+{
+    // Saving as FODS writes loext:spill="true" on the marked formula
+    // cell and leaves it off on the plain one.
+
+    createScDoc("fods/DynamicArraySpill.fods");
+
+    save(TestFilter::FODS);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "//table:table/table:table-row[1]/table:table-cell[1]", "spill", u"true");
+    assertXPath(pXmlDoc, "//table:table/table:table-row[1]/table:table-cell[1]", "formula",
+                u"of:=COM.MICROSOFT.UNIQUE([.B1:.B4])");
+
+    assertXPathNoAttribute(pXmlDoc, "//table:table/table:table-row[5]/table:table-cell[1]",
+                           "spill");
+    assertXPath(pXmlDoc, "//table:table/table:table-row[5]/table:table-cell[1]", "formula",
+                u"of:=COM.MICROSOFT.UNIQUE([.B1:.B4])");
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testPlainImplicitIntersectionResolved)
+{
+    // A plain non-array formula whose RPN intends to produce an
+    // array picks up @ in the formula text as soon as the cell is
+    // asked to resolve it. ODS import drives this on every plain
+    // non-array, non-loext:spill cell at the end of formula
+    // compilation.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    pDoc->SetValue(ScAddress(0, 2, 0), 3.0);
+
+    pDoc->SetFormula(ScAddress(1, 0, 0), u"=A1:A3"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    pCell->ResolveImplicitIntersection();
+
+    // The call resolves the decision in-place. No recalc needed.
+    CPPUNIT_ASSERT_EQUAL(u"=@A1:A3"_ustr, pDoc->GetFormula(1, 0, 0));
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testPlainScalarStaysWithoutImplicitIntersection)
+{
+    // A plain formula whose RPN does not intend an array (a pure
+    // scalar like =SUM(A1:A3)) keeps its text unchanged when the
+    // cell is asked to resolve implicit intersection. The walk
+    // finds no array intent and leaves the formula alone.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    pDoc->SetValue(ScAddress(0, 2, 0), 3.0);
+
+    pDoc->SetFormula(ScAddress(1, 0, 0), u"=SUM(A1:A3)"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    pCell->ResolveImplicitIntersection();
+    pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:A3)"_ustr, pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(ScAddress(1, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testDynamicSpillStateExportFODS)
+{
+    // A dynamic-array master in spill state collapses to 1x1. FODS
+    // export writes it as a plain non-array formula (no matrix dims)
+    // carrying loext:spill="true" so a round trip can re-instate the
+    // master and re-check the blockers.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Source data and a blocker that will trigger #SPILL!.
+    pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+    pDoc->SetString(ScAddress(0, 1, 0), u"blocker"_ustr);
+
+    ScMarkData aMark(pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
+                              formula::FormulaGrammar::GRAM_DEFAULT, true /*bCheckForSpill*/,
+                              true /*bDynamicArrayMaster*/);
+
+    ScFormulaCell* pMaster = pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pMaster);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pMaster->GetErrCode()));
+
+    save(TestFilter::FODS);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "//table:table/table:table-row[1]/table:table-cell[1]", "spill", u"true");
+    assertXPathNoAttribute(pXmlDoc, "//table:table/table:table-row[1]/table:table-cell[1]",
+                           "number-matrix-columns-spanned");
+    assertXPathNoAttribute(pXmlDoc, "//table:table/table:table-row[1]/table:table-cell[1]",
+                           "number-matrix-rows-spanned");
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testLoextSpillRoundTripODS)
+{
+    // The dynamic-array marker and the spilled values survive an ODS
+    // save and reload when the file is written in the extended ODF
+    // flavour.
+
+    createScDoc("fods/DynamicArraySpill.fods");
+
+    saveAndReload(TestFilter::ODS);
+
+    ScDocument* pDoc = getScDoc();
+
+    ScFormulaCell* pMarked = pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pMarked);
+    CPPUNIT_ASSERT(pMarked->IsDynamicArrayMaster());
+
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    ScFormulaCell* pPlain = pDoc->GetFormulaCell(ScAddress(0, 4, 0));
+    CPPUNIT_ASSERT(pPlain);
+    CPPUNIT_ASSERT(!pPlain->IsDynamicArrayMaster());
+
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(0, 5, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testArrayFormulasStaticRoundTrip)
+{
+    // Static array formulas in a legacy ODS file round-trip with
+    // every value-check still TRUE.
+
+    auto checkSheet = [](ScDocument* pDoc) {
+        // B1 = AND(C4:C52) summarises 49 per-row equality checks.
+        CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+        for (SCROW nRow = 3; nRow <= 51; ++nRow)
+        {
+            OString aMessage = "C" + OString::number(nRow + 1) + " must be TRUE";
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), u"TRUE"_ustr,
+                                         pDoc->GetString(ScAddress(2, nRow, 0)));
+        }
+
+        // Plain non-array cells with a bare range carry an explicit @.
+        CPPUNIT_ASSERT_EQUAL(u"=@H10:H13"_ustr, pDoc->GetFormula(5, 8, 0)); // F9
+        CPPUNIT_ASSERT_EQUAL(u"=@H10:H13"_ustr, pDoc->GetFormula(5, 9, 0)); // F10
+        CPPUNIT_ASSERT_EQUAL(u"=@H10:H13"_ustr, pDoc->GetFormula(9, 12, 0)); // J13
+
+        // The five matrix masters stay static (no loext:spill in the
+        // source file), so GetFormula keeps the {} wrapping.
+        struct Master
+        {
+            ScAddress maPosition;
+            OUString maFormula;
+        };
+        const Master aMasters[] = {
+            { ScAddress(11, 15, 0), u"{=H10:H13}"_ustr }, // L16
+            { ScAddress(12, 15, 0), u"{=H10:H13}"_ustr }, // M16
+            { ScAddress(13, 15, 0), u"{=TRANSPOSE(TRANSPOSE(H10:H13))}"_ustr }, // N16
+            { ScAddress(11, 22, 0), u"{=SORT(H10:H13)}"_ustr }, // L23
+            { ScAddress(12, 22, 0), u"{=UNIQUE(H10:H13)}"_ustr }, // M23
+        };
+        for (const Master& rMaster : aMasters)
+        {
+            ScFormulaCell* pCell = pDoc->GetFormulaCell(rMaster.maPosition);
+            CPPUNIT_ASSERT(pCell);
+            CPPUNIT_ASSERT(!pCell->IsDynamicArrayMaster());
+            CPPUNIT_ASSERT_EQUAL(rMaster.maFormula, pDoc->GetFormula(rMaster.maPosition.Col(),
+                                                                     rMaster.maPosition.Row(), 0));
+        }
+    };
+
+    createScDoc("ods/ArrayFormulasStatic.ods");
+    checkSheet(getScDoc());
+
+    saveAndReload(TestFilter::ODS);
+    checkSheet(getScDoc());
+
+    // No @ in any saved formula, and the matrix masters do not get
+    // loext:spill="true" because they stayed static.
+    xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXml);
+    assertXPath(pXml, "//table:table-cell[contains(@table:formula, '@')]", 0);
+    assertXPath(pXml, "//table:table-cell[@loext:spill='true']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf122336)

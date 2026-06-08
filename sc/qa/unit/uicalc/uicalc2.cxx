@@ -2252,7 +2252,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSpillMatrixContractionOnPaste)
         pDoc->SetValue(3, nR, 0, nR <= 7 ? 7.0 : 8.0); // D2..D15
 
     insertArrayToCell(u"E2:E5"_ustr, u"=UNIQUE(B$2:B$15)", /*bDynamicArrayMaster*/ true);
-    CPPUNIT_ASSERT_EQUAL(u"{=UNIQUE(B$2:B$15)}"_ustr, pDoc->GetFormula(4, 1, 0)); // E2
+    // Dynamic-array masters read back without the {} wrapping that
+    // static Ctrl+Shift+Enter masters use.
+    CPPUNIT_ASSERT_EQUAL(u"=UNIQUE(B$2:B$15)"_ustr, pDoc->GetFormula(4, 1, 0)); // E2
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(4, 1, 0))); // E2
     CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(4, 4, 0))); // E5
 
@@ -2263,7 +2265,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSpillMatrixContractionOnPaste)
     goToCell(u"G2"_ustr);
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(u"{=UNIQUE(D$2:D$15)}"_ustr, pDoc->GetFormula(6, 1, 0)); // G2
+    CPPUNIT_ASSERT_EQUAL(u"=UNIQUE(D$2:D$15)"_ustr, pDoc->GetFormula(6, 1, 0)); // G2
     CPPUNIT_ASSERT_EQUAL(7.0, pDoc->GetValue(ScAddress(6, 1, 0))); // G2
     CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(ScAddress(6, 2, 0))); // G3
     // G4:G5 are outside the now 2-row matrix, so they are empty.
@@ -2282,7 +2284,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSpillMatrixContractionOnEdit)
         pDoc->SetValue(1, 1 + static_cast<SCROW>(i), 0, aB[i]); // B2..B15
 
     insertArrayToCell(u"D2:D5"_ustr, u"=UNIQUE(B$2:B$15)", /*bDynamicArrayMaster*/ true);
-    CPPUNIT_ASSERT_EQUAL(u"{=UNIQUE(B$2:B$15)}"_ustr, pDoc->GetFormula(3, 1, 0)); // D2
+    CPPUNIT_ASSERT_EQUAL(u"=UNIQUE(B$2:B$15)"_ustr, pDoc->GetFormula(3, 1, 0)); // D2
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(3, 1, 0))); // D2
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(3, 2, 0))); // D3
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(3, 3, 0))); // D4

@@ -360,6 +360,7 @@ public:
     ScMatrixMode    GetMatrixFlag() const { return cMatrixFlag;}
     bool IsDynamicArrayMaster() const { return mbDynamicArrayMaster; }
     SC_DLLPUBLIC void SetDynamicArrayMaster( bool bDynamic );
+    SC_DLLPUBLIC void ResolveImplicitIntersection();
     ScTokenArray*   GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
 

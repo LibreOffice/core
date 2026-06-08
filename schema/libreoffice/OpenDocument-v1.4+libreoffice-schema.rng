@@ -2450,6 +2450,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       <rng:ref name="table-table-cell-content"/>
     </rng:element>
   </rng:define>
+  <!-- True on a formula cell that is a dynamic-array master. -->
+  <rng:define name="table-table-cell-attlist-extra" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:spill">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <rng:define name="loext-columns-and-groups">
     <rng:oneOrMore>
       <rng:choice>

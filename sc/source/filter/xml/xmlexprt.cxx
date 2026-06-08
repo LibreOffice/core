@@ -3185,13 +3185,37 @@ void ScXMLExport::WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 n
         AddAttribute(sAttrStyleName, pCellStyles->GetStyleNameByIndex(aCell.nStyleIndex, aCell.bIsAutoStyle));
     if (aCell.nValidationIndex > -1)
         AddAttribute(XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME, pValidationsContainer->GetValidationName(aCell.nValidationIndex));
-    const bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
+    // A dynamic-array master in spill state has collapsed to 1x1.
+    // Write it as a plain non-array formula carrying loext:spill="true"
+    // so the next import re-instates it as a dynamic master and re-
+    // checks the blockers. Other matrix masters keep their declared
+    // size.
+    ScFormulaCell* pFormulaCell = nullptr;
+    if (aCell.nType == table::CellContentType_FORMULA
+        && aCell.maBaseCell.getType() == CELLTYPE_FORMULA)
+    {
+        pFormulaCell = aCell.maBaseCell.getFormula();
+    }
+    const bool bDynamicSpilling
+        = pFormulaCell
+          && pFormulaCell->IsDynamicArrayMaster()
+          && pFormulaCell->GetErrCode() == FormulaError::Spill;
+    const bool bIsFirstMatrixCell(aCell.bIsMatrixBase && !bDynamicSpilling);
     if (bIsFirstMatrixCell)
     {
         SCCOL nColumns( aCell.aMatrixRange.aEnd.Col() - aCell.aMatrixRange.aStart.Col() + 1 );
         SCROW nRows( aCell.aMatrixRange.aEnd.Row() - aCell.aMatrixRange.aStart.Row() + 1 );
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED, OUString::number(nColumns));
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED, OUString::number(nRows));
+    }
+    // loext:spill="true" marks a matrix master as dynamic. Plain ODF has no
+    // place to record the dynamic-vs-static distinction, so the attribute
+    // only lands in extended ODF.
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+        && pFormulaCell
+        && pFormulaCell->IsDynamicArrayMaster())
+    {
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_SPILL, XML_TRUE);
     }
     bool bIsEmpty(false);
     switch (aCell.nType)
@@ -3227,7 +3251,8 @@ void ScXMLExport::WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 n
                 if (aCell.maBaseCell.getType() == CELLTYPE_FORMULA)
                 {
                     const bool bIsMatrix(bIsFirstMatrixCell || aCell.bIsMatrixCovered);
-                    ScFormulaCell* pFormulaCell = aCell.maBaseCell.getFormula();
+                    if (!pFormulaCell)
+                        pFormulaCell = aCell.maBaseCell.getFormula();
                     if (!bIsMatrix || bIsFirstMatrixCell)
                     {
                         if (!mpCompileFormulaCxt)
@@ -3240,14 +3265,19 @@ void ScXMLExport::WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 n
                         sal_uInt16 nNamespacePrefix =
                             (mpCompileFormulaCxt->getGrammar() == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
 
-                        if (!bIsMatrix)
-                        {
-                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey(nNamespacePrefix, aFormula, false));
-                        }
-                        else
-                        {
-                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey(nNamespacePrefix, aFormula.copy(1, aFormula.getLength()-2), false));
-                        }
+                        // GetFormula wraps static array masters as
+                        // {=FORMULA} but leaves dynamic-array masters as
+                        // =FORMULA. Strip the {} wrapping only when it
+                        // is actually present.
+                        const bool bWrapped
+                            = bIsMatrix && aFormula.startsWith("{")
+                              && aFormula.endsWith("}");
+                        const OUString aText = bWrapped
+                            ? aFormula.copy(1, aFormula.getLength() - 2)
+                            : aFormula;
+                        AddAttribute(sAttrFormula,
+                                     GetNamespaceMap().GetQNameByKey(
+                                         nNamespacePrefix, aText, false));
                     }
                     if (pFormulaCell->GetErrCode() != FormulaError::NONE)
                     {

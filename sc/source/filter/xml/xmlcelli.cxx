@@ -179,6 +179,10 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     bIsMatrix = true;
                     nMatrixRows = static_cast<SCROW>(it.toInt32());
                 break;
+                case XML_ELEMENT(LO_EXT, XML_SPILL):
+                case XML_ELEMENT(COL_EXT, XML_SPILL):
+                    mbDynamicArraySpill = IsXMLToken(it, XML_TRUE);
+                break;
                 case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
                 {
                     if (ScDocument* pDoc = rImport.GetDocument())
@@ -1423,9 +1427,28 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         }
     }
 
-    ScFormulaCell* pNewCell = new ScFormulaCell(*pDoc, rCellPos, std::move(pCode), eGrammar, ScMatrixMode::NONE);
-    SetFormulaCell(pNewCell);
-    rDocImport.setFormulaCell(rCellPos, pNewCell);
+    if (mbDynamicArraySpill)
+    {
+        // A non-array cell with loext:spill="true" was saved while in
+        // spill state. Re-instate as a 1x1 dynamic-array master and
+        // mark the position spilled so the next interpret re-checks
+        // the blockers and either expands the matrix or stays in
+        // #SPILL!.
+        ScFormulaCell* pNewCell = new ScFormulaCell(*pDoc, rCellPos, std::move(pCode), eGrammar, ScMatrixMode::NONE);
+        pNewCell->SetDynamicArrayMaster(true);
+        SetFormulaCell(pNewCell);
+        rDocImport.setFormulaCell(rCellPos, pNewCell);
+        pDoc->MarkFormulaSpilled(rCellPos);
+    }
+    else
+    {
+        // Plain non-array formula. The @ implicit-intersection
+        // decision is resolved once the XML placeholder has been
+        // compiled into native tokens.
+        ScFormulaCell* pNewCell = new ScFormulaCell(*pDoc, rCellPos, std::move(pCode), eGrammar, ScMatrixMode::NONE);
+        SetFormulaCell(pNewCell);
+        rDocImport.setFormulaCell(rCellPos, pNewCell);
+    }
 }
 
 void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
@@ -1463,6 +1486,13 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 ScFormulaCell* pFCell = pDoc->GetFormulaCell(rCellPos);
                 if (pFCell)
                 {
+                    // loext:spill="true" promotes the matrix master to
+                    // a dynamic-array master. Without the marker the
+                    // cell stays a static Ctrl+Shift+Enter (CSE)
+                    // master, so legacy files keep their iteration-
+                    // and-pad behaviour.
+                    if (mbDynamicArraySpill)
+                        pFCell->SetDynamicArrayMaster(true);
                     ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
                     if (bFormulaTextResult && maStringValue)
                     {

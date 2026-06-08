@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1">
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell table:formula="of:=COM.MICROSOFT.UNIQUE([.B1:.B4])" loext:spill="true"/>
+     <table:table-cell office:value-type="float" office:value="10"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="20"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="30"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="40"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:formula="of:=COM.MICROSOFT.UNIQUE([.B1:.B4])"/>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

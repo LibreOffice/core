@@ -1772,6 +1772,7 @@ specular
 specular-color
 speed
 sphere
+spill
 spiral
 spiral-in
 spiral-inward-left

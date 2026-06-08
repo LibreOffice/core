@@ -24,6 +24,7 @@
 
 #include <svl/broadcast.hxx>
 #include <sfx2/docfile.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <memory>
 #include <functional>
@@ -5813,6 +5814,29 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayMasterSurvivesCellCopy)
     std::unique_ptr<ScFormulaCell> pPlainClone(pCell->Clone());
     CPPUNIT_ASSERT(pPlainClone);
     CPPUNIT_ASSERT(!pPlainClone->IsDynamicArrayMaster());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSingleValueDroppedOnOdfSave)
+{
+    // ODF has no place for the @ implicit-intersection operator. The
+    // formula compiler strips @ on save regardless of the ODF version.
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetFormula(ScAddress(0, 0, 0), u"=@TRANSPOSE(B1:B4)"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE);
+    ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(pCell->GetCode());
+
+    sc::CompileFormulaContext aContext(*m_pDoc, formula::FormulaGrammar::GRAM_ODFF);
+    aContext.setODFSavingVersion(SvtSaveOptions::ODFSVER_014_EXTENDED);
+    ScCompiler aCompiler(aContext, pCell->aPos, *pCell->GetCode());
+    OUStringBuffer aBuffer;
+    aCompiler.CreateStringFromTokenArray(aBuffer);
+    CPPUNIT_ASSERT_EQUAL(u"TRANSPOSE([.B1:.B4])"_ustr, aBuffer.makeStringAndClear());
 
     m_pDoc->DeleteTab(0);
 }

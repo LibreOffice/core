@@ -1873,6 +1873,7 @@ namespace xmloff::token {
         TOKEN( "specular-color",                  XML_SPECULAR_COLOR ),
         TOKEN( "speed",                           XML_SPEED ),
         TOKEN( "sphere",                          XML_SPHERE ),
+        TOKEN( "spill",                           XML_SPILL ),
         TOKEN( "spiral",                          XML_SPIRAL ),
         TOKEN( "spiral-in",                       XML_SPIRAL_IN ),
         TOKEN( "spiral-inward-left",              XML_SPIRAL_INWARD_LEFT ),

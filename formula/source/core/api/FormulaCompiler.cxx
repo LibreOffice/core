@@ -2736,6 +2736,16 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         else
             rBuffer.append(mxSymbols->getSymbol(eOp));
     }
+    else if (eOp == ocSingleValue)
+    {
+        // The @ implicit-intersection operator is an in-memory marker
+        // for plain non-array formulas. ODF saves drop it. The next
+        // import re-adds it for any plain non-array, non-loext:spill
+        // cell whose RPN intends to produce an array. OOXML keeps the
+        // @ as the format does carry the operator.
+        if (!m_oODFSavingVersion.has_value())
+            rBuffer.append(mxSymbols->getSymbol(eOp));
+    }
     else if (eOp == ocNoName && FormulaGrammar::isOOXML(meGrammar))
     {
         // Don't export "#name!" in OOXML
