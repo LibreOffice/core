@@ -39,6 +39,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		this._container = container;
 		this._partsPreviewCont = preview;
+		this._partsPreviewCont.setAttribute('role', 'listbox');
+		this._partsPreviewCont.setAttribute('aria-multiselectable', 'true');
+		this._partsPreviewCont.setAttribute('aria-label', _('Slides'));
 		this._partsPreviewCont.onscroll = this._onScroll.bind(this);
 		this._idNum = 0;
 		this._width = 0;
@@ -106,6 +109,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				this._addDnDHandlers(frame);
 				frame.setAttribute('draggable', false);
 				frame.setAttribute('id', 'first-drop-site');
+				// reorder-only drop target, not a slide - keep it out of the listbox
+				frame.setAttribute('aria-hidden', 'true');
 
 				if (window.mode.isDesktop()) {
 					window.L.DomUtil.setStyle(frame, 'height', '20px');
@@ -140,6 +145,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				this._updateSelectedSection();
 			}
 
+			this._updateA11ySelection();
+
 			if (!this.options.allowOrientation) {
 				return;
 			}
@@ -171,6 +178,25 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 			// re-create scrollbar with new direction
 			this._direction = !window.mode.isDesktop() && !window.mode.isTablet() && window.L.DomUtil.isPortrait() ? 'x' : 'y';
+		}
+	},
+
+	// Keep the listbox selection state current: aria-selected on every
+	// selected slide, and the roving tab stop (tabindex 0) on the current one.
+	_updateA11ySelection: function () {
+		var selectedPart = this._map._docLayer._selectedPart;
+		var partList = (app.impress && app.impress.partList) || [];
+		var activeTab = (selectedPart >= 0 && selectedPart < this._previewTiles.length)
+			? selectedPart : 0;
+		for (var i = 0; i < this._previewTiles.length; i++) {
+			var img = this._previewTiles[i];
+			if (!img)
+				continue;
+			var selected = app.file.fileBasedView
+				? i === activeTab
+				: (i === selectedPart || (partList[i] && partList[i].selected));
+			img.setAttribute('aria-selected', selected ? 'true' : 'false');
+			img.setAttribute('tabindex', i === activeTab ? '0' : '-1');
 		}
 	},
 
@@ -213,7 +239,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var imgClassName = 'preview-img ' + this.options.imageClass;
 		var img = window.L.DomUtil.create('img', imgClassName, frame);
 		img.setAttribute('alt', _('preview of page %1').replace('%1', String(i + 1)));
-		img.setAttribute('tabindex', '0');
+		img.setAttribute('role', 'option');
+		img.setAttribute('aria-selected', 'false');
+		// roving tabindex - only the current slide is a tab stop so Tab
+		// enters the list once and the arrow keys move within it
+		img.setAttribute('tabindex', '-1');
 		img.setAttribute('data-cooltip', _('Slide %1').replace('%1', String(i + 1)));
 		window.L.control.attachTooltipEventListener(img, this._map);
 		img.id = 'preview-img-part-' + this._idNum;
