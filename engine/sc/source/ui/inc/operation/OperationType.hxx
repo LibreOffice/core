@@ -35,6 +35,7 @@ enum class OperationType
     PutData,
     SetNoteText,
     ReplaceNoteText,
+    InsertThreadedComment,
     ShowNote,
     ImportNote,
     InsertColumnsBefore,

@@ -112,6 +112,7 @@
 #include <operation/DeleteCellsOperation.hxx>
 #include <operation/ApplyStyleOperation.hxx>
 #include <operation/ImportNoteOperation.hxx>
+#include <operation/InsertThreadedCommentOperation.hxx>
 #include <operation/PutDataOperation.hxx>
 #include <operation/SetCellTextOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
@@ -777,6 +778,12 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
 void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi )
 {
     sc::ReplaceNoteTextOperation aOperation(rDocShell, rPos, rNoteText, pAuthor, pDate, bApi);
+    aOperation.run();
+}
+
+void ScDocFunc::InsertThreadedComment( const ScAddress& rPos, const OUString& rText, const OUString* pAuthor, bool bApi )
+{
+    sc::InsertThreadedCommentOperation aOperation(rDocShell, rPos, rText, pAuthor, bApi);
     aOperation.run();
 }
 
