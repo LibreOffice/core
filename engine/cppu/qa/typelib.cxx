@@ -13,10 +13,10 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/script/FinishReason.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -73,13 +73,13 @@ public:
     void testStruct()
     {
         auto const t0 = cppu::UnoType<css::lang::EventObject>::get();
-        auto const t1 = cppu::UnoType<css::script::FinishReason>::get();
-        auto const t2 = cppu::UnoType<OUString>::get();
-        auto const t3 = cppu::UnoType<css::uno::Any>::get();
+        auto const t1 = cppu::UnoType<OUString>::get();
+        auto const t2 = cppu::UnoType<sal_Int32>::get();
+        auto const t3 = cppu::UnoType<sal_Int32>::get();
         typelib_TypeDescriptionReference* ref = nullptr;
         typelib_TypeDescriptionReference* members[3]
             = { t1.getTypeLibType(), t2.getTypeLibType(), t3.getTypeLibType() };
-        typelib_static_struct_type_init(&ref, "com.sun.star.script.FinishEngineEvent",
+        typelib_static_struct_type_init(&ref, "com.sun.star.beans.PropertySetInfoChangeEvent",
                                         t0.getTypeLibType(), 3, members, nullptr);
         CPPUNIT_ASSERT(ref != nullptr);
         typelib_TypeDescription* td = ref->pType;
@@ -110,10 +110,9 @@ public:
         CPPUNIT_ASSERT_EQUAL(t2, css::uno::Type(t->aBase.ppTypeRefs[1]));
         CPPUNIT_ASSERT_EQUAL(t3, css::uno::Type(t->aBase.ppTypeRefs[2]));
         CPPUNIT_ASSERT(t->aBase.ppMemberNames != nullptr);
-        CPPUNIT_ASSERT_EQUAL(u"Finish"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[0]));
-        CPPUNIT_ASSERT_EQUAL(u"ErrorMessage"_ustr,
-                             OUString::unacquired(&t->aBase.ppMemberNames[1]));
-        CPPUNIT_ASSERT_EQUAL(u"Return"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[2]));
+        CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[0]));
+        CPPUNIT_ASSERT_EQUAL(u"Handle"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[1]));
+        CPPUNIT_ASSERT_EQUAL(u"Reason"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[2]));
         CPPUNIT_ASSERT(t->pParameterizedTypes == nullptr);
         // `offsets` and `typerefs` must still be valid:
         CPPUNIT_ASSERT_EQUAL(t->aBase.pMemberOffsets[0], offsets[0]);

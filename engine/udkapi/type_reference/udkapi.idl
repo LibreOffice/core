@@ -1468,38 +1468,12 @@ module com {
     };
     published exception CannotCreateAdapterException: ::com::sun::star::uno::Exception {
     };
-    /** @deprecated */ published struct ContextInformation {
-     string Name;
-     string SourceCode;
-     long StartLine;
-     long StartColumn;
-     long EndLine;
-     long EndColumn;
-     sequence< string > LocalVariableNames;
-    };
     published interface XTypeConverter {
      interface ::com::sun::star::uno::XInterface;
      any convertTo([in] any aFrom, [in] type xDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
      any convertToSimpleType([in] any aFrom, [in] ::com::sun::star::uno::TypeClass aDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
     };
     published service Converter: ::com::sun::star::script::XTypeConverter;
-    published interface XEngineListener;
-    published interface XLibraryAccess;
-    /** @deprecated */ published interface XEngine {
-     interface ::com::sun::star::uno::XInterface;
-     void setRoot([in] ::com::sun::star::uno::XInterface xRoot);
-     ::com::sun::star::uno::XInterface getRoot();
-     void setLibraryAccess([in] ::com::sun::star::script::XLibraryAccess Library);
-     boolean compile([in] string ModuleName, [in] string Script, [in] boolean CreateDebugInfo);
-     any run([in] string aScript, [in] ::com::sun::star::uno::XInterface xThis, [in] sequence< any > aArgs);
-     void runAsync([in] string acript, [in] ::com::sun::star::uno::XInterface xThis, [in] sequence< any > args, [in] ::com::sun::star::script::XEngineListener xCallback);
-     void cancel();
-     void addEngineListener([in] ::com::sun::star::script::XEngineListener Listener);
-     void removeEngineListener([in] ::com::sun::star::script::XEngineListener Listener);
-    };
-    /** @deprecated */ published service Engine {
-     interface ::com::sun::star::script::XEngine;
-    };
     published constants FailReason {
      const long INVALID = 8;
      const long IS_NOT_BOOL = 4;
@@ -1511,36 +1485,6 @@ module com {
      const long SOURCE_IS_NO_DERIVED_TYPE = 6;
      const long TYPE_NOT_SUPPORTED = 7;
      /** @deprecated */ const long UNKNOWN = 10;
-    };
-    /** @deprecated */ published enum FinishReason {
-     OK = 0,
-     Cancel = 1,
-     Error = 2
-    };
-    /** @deprecated */ published struct FinishEngineEvent: ::com::sun::star::lang::EventObject {
-     ::com::sun::star::script::FinishReason Finish;
-     string ErrorMessage;
-     any Return;
-    };
-    /** @deprecated */ published enum InterruptReason {
-     Cancel = 0,
-     RuntimeError = 1,
-     CompileError = 2,
-     BreakPoint = 3,
-     Step = 4,
-     StepOver = 5,
-     StepOut = 6,
-     StepStatement = 7
-    };
-    /** @deprecated */ published struct InterruptEngineEvent: ::com::sun::star::lang::EventObject {
-     string Name;
-     string SourceCode;
-     long StartLine;
-     long StartColumn;
-     long EndLine;
-     long EndColumn;
-     string ErrorMessage;
-     ::com::sun::star::script::InterruptReason Reason;
     };
     published service Invocation: ::com::sun::star::lang::XSingleServiceFactory;
     published interface XInvocation;
@@ -1561,9 +1505,6 @@ module com {
      type aType;
      sequence< type > aParamTypes;
      sequence< ::com::sun::star::reflection::ParamMode > aParamModes;
-    };
-    /** @deprecated */ published service JavaScript {
-     service ::com::sun::star::script::Engine;
     };
     published struct ScriptEvent: ::com::sun::star::script::AllEventObject {
      string ScriptType;
@@ -1590,32 +1531,10 @@ module com {
      boolean hasMethod([in] string aName);
      boolean hasProperty([in] string aName);
     };
-    /** @deprecated */ published interface XDebugging {
-     interface ::com::sun::star::uno::XInterface;
-     long setBreakPoint([in] string aModuleName, [in] long nSourceCodeLine, [in] boolean bOn);
-     void clearAllBreakPoints([in] string aModuleName);
-     string eval([in] string aSourceCode, [in] short nCallStackPos);
-     sequence< string > getStackTrace();
-     ::com::sun::star::script::ContextInformation getContextInformation([in] short nCallStackPos);
-     string dumpVariable([in] string aVariableName, [in] short nCallStackPos);
-     void setVariable([in] string aVariableName, [in] string aValue, [in] short nCallStackPos);
-     boolean isVariable([in] string aVariableName, [in] short nCallStackPos);
-     void stop();
-     void stepOver();
-     void stepIn();
-     void stepOut();
-     void doContinue();
-    };
     published interface XDirectInvocation {
      interface ::com::sun::star::uno::XInterface;
      any directInvoke([in] string aName, [in] sequence< any > aParams) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
      boolean hasMember([in] string aName);
-    };
-    /** @deprecated */ published interface XEngineListener {
-     interface ::com::sun::star::lang::XEventListener;
-     void interrupt([in] ::com::sun::star::script::InterruptEngineEvent Evt);
-     void running([in] ::com::sun::star::lang::EventObject Evt);
-     void finished([in] ::com::sun::star::script::FinishEngineEvent Evt);
     };
     published interface XEventAttacher {
      interface ::com::sun::star::uno::XInterface;
@@ -1647,16 +1566,6 @@ module com {
     /** @deprecated */ published interface XInvocationAdapterFactory {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] type aType);
-    };
-    /** @deprecated */ published interface XLibraryAccess {
-     interface ::com::sun::star::uno::XInterface;
-     boolean isFunction([in] string aFunctionName);
-     boolean isValidPath([in] string aPathName);
-     sequence< string > getModuleNames();
-     string getModuleSource([in] string aModulName);
-     sequence< byte > getModuleCode([in] string aModuleName);
-     string getFunctionSource([in] string aFunctionName);
-     sequence< byte > getFunctionCode([in] string FunctionName);
     };
     published interface XScriptEventsAttacher {
      interface ::com::sun::star::uno::XInterface;

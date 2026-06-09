@@ -67,10 +67,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/registry,\
 	DefaultRegistry \
 	NestedRegistry \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/script,\
-	Engine \
-	JavaScript \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/util,\
 	BootstrapMacroExpander \
 ))
@@ -427,13 +423,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/script,\
 	BasicErrorException \
 	CannotConvertException \
 	CannotCreateAdapterException \
-	ContextInformation \
 	EventListener \
 	FailReason \
-	FinishEngineEvent \
-	FinishReason \
-	InterruptEngineEvent \
-	InterruptReason \
 	InvocationInfo \
 	MemberType \
 	ScriptEvent \
@@ -441,12 +432,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/script,\
 	XAllListener \
 	XAllListenerAdapterService \
     XAutomationInvocation \
-	XDebugging \
 	XDefaultMethod \
 	XDefaultProperty \
 	XDirectInvocation \
-	XEngine \
-	XEngineListener \
 	XErrorQuery \
 	XEventAttacher \
 	XEventAttacher2 \
@@ -455,7 +443,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/script,\
 	XInvocation2 \
 	XInvocationAdapterFactory \
 	XInvocationAdapterFactory2 \
-	XLibraryAccess \
 	XScriptEventsAttacher \
 	XScriptEventsSupplier \
 	XScriptListener \
