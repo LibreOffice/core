@@ -1233,6 +1233,39 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_XLSX)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nBinCount);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramUnderflowOverflowBins)
+{
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<beans::XPropertySet> xProps(xChartType, uno::UNO_QUERY_THROW);
+    xProps->setPropertyValue(u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(1)));
+    xProps->setPropertyValue(u"BinWidth"_ustr, cpo::uno::Any(2.0));
+    xProps->setPropertyValue(u"UseUnderflowBin"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"UnderflowBinValue"_ustr, cpo::uno::Any(11.0));
+    xProps->setPropertyValue(u"UseOverflowBin"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"OverflowBinValue"_ustr, cpo::uno::Any(14.0));
+
+    Reference<chart2::data::XDataSequence> xCategories
+        = getDataSequenceFromDocByRole(xChartDoc, u"categories");
+    CPPUNIT_ASSERT(xCategories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xCategoriesText(xCategories, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCategoriesText.is());
+
+    const Sequence<OUString> aBinLabels = xCategoriesText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"<= 11"_ustr, aBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(11-13]"_ustr, aBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13-14]"_ustr, aBinLabels[2]);
+    CPPUNIT_ASSERT_EQUAL(u"> 14"_ustr, aBinLabels[3]);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
 {
     // Exporting an ODF-origin histogram to XLSX must write the raw

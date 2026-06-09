@@ -25,6 +25,14 @@ service HistogramDiagram
 
     /** Specifies the type of frequency representation (count or density). */
     [property] long FrequencyType;
+
+    /** Specifies whether to use an underflow bin for values below the first bin. */
+    [property] boolean UseUnderflowBin;
+    [property] double UnderflowBinValue;
+
+    /** Specifies whether to use an overflow bin for values above the last bin. */
+    [property] boolean UseOverflowBin;
+    [property] double OverflowBinValue;
 };
 
 }; }; }; };

@@ -51,7 +51,11 @@ enum
     PROP_HISTOGRAMCHARTTYPE_BINCOUNT,
     PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE,
     PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE,
-    PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE
+    PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE,
+    PROP_HISTOGRAMCHARTTYPE_USEUNDERFLOWBIN,
+    PROP_HISTOGRAMCHARTTYPE_UNDERFLOWBINVALUE,
+    PROP_HISTOGRAMCHARTTYPE_USEOVERFLOWBIN,
+    PROP_HISTOGRAMCHARTTYPE_OVERFLOWBINVALUE
 };
 
 void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
@@ -77,6 +81,23 @@ void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
                                 cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back(
+        "UseUnderflowBin", PROP_HISTOGRAMCHARTTYPE_USEUNDERFLOWBIN, cppu::UnoType<bool>::get(),
+        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back("UnderflowBinValue", PROP_HISTOGRAMCHARTTYPE_UNDERFLOWBINVALUE,
+                                cppu::UnoType<double>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back(
+        "UseOverflowBin", PROP_HISTOGRAMCHARTTYPE_USEOVERFLOWBIN, cppu::UnoType<bool>::get(),
+        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back(
+        "OverflowBinValue", PROP_HISTOGRAMCHARTTYPE_OVERFLOWBINVALUE, cppu::UnoType<double>::get(),
+        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 }
 
 ::cppu::OPropertyArrayHelper& StaticHistogramChartTypeInfoHelper()
@@ -169,11 +190,19 @@ void HistogramChartType::createCalculatedDataSeries()
     sal_Int32 nFrequencyType = 0;
     double fBinWidth = 0.0;
     sal_Int32 nBinCount = 0;
+    bool bUseUnderflowBin = false;
+    double fUnderflowBinValue = 0.0;
+    bool bUseOverflowBin = false;
+    double fOverflowBinValue = 0.0;
     try
     {
         getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType;
         getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth;
         getPropertyValue(u"BinCount"_ustr) >>= nBinCount;
+        getPropertyValue(u"UseUnderflowBin"_ustr) >>= bUseUnderflowBin;
+        getPropertyValue(u"UnderflowBinValue"_ustr) >>= fUnderflowBinValue;
+        getPropertyValue(u"UseOverflowBin"_ustr) >>= bUseOverflowBin;
+        getPropertyValue(u"OverflowBinValue"_ustr) >>= fOverflowBinValue;
     }
     catch (const uno::Exception&)
     {
@@ -205,15 +234,17 @@ void HistogramChartType::createCalculatedDataSeries()
         }
 
         // 2. Regenerate the calculated-y frequencies
-        rtl::Reference<HistogramDataSequence> xCalcSeq
-            = new HistogramDataSequence(xValuesY, false, nFrequencyType, fBinWidth, nBinCount);
+        rtl::Reference<HistogramDataSequence> xCalcSeq = new HistogramDataSequence(
+            xValuesY, false, nFrequencyType, fBinWidth, nBinCount, bUseUnderflowBin,
+            fUnderflowBinValue, bUseOverflowBin, fOverflowBinValue);
         uno::Reference<chart2::data::XLabeledDataSequence> xLabeledCalc
             = new LabeledDataSequence(xCalcSeq);
         xSeries->setCalculatedYSequence(xLabeledCalc);
 
         // 3. Regenerate the categories (bins)
-        rtl::Reference<HistogramDataSequence> xCatSeq
-            = new HistogramDataSequence(xValuesY, true, nFrequencyType, fBinWidth, nBinCount);
+        rtl::Reference<HistogramDataSequence> xCatSeq = new HistogramDataSequence(
+            xValuesY, true, nFrequencyType, fBinWidth, nBinCount, bUseUnderflowBin,
+            fUnderflowBinValue, bUseOverflowBin, fOverflowBinValue);
 
         uno::Reference<chart2::data::XDataSequence> xCatDataSeq(xCatSeq);
         uno::Reference<beans::XPropertySet> xCatProp(xCatDataSeq, uno::UNO_QUERY);
@@ -285,6 +316,14 @@ void HistogramChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny)
             aTmp, PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE, aSeq);
         ::chart::PropertyHelper::setPropertyValueDefault(
             aTmp, PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE, aSeq);
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_HISTOGRAMCHARTTYPE_USEUNDERFLOWBIN, false);
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_HISTOGRAMCHARTTYPE_UNDERFLOWBINVALUE, 0.0);
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_HISTOGRAMCHARTTYPE_USEOVERFLOWBIN, false);
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_HISTOGRAMCHARTTYPE_OVERFLOWBINVALUE, 0.0);
 
         return aTmp;
     }();

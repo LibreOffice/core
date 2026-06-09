@@ -148,7 +148,11 @@ enum
     // Exposed here so the ODF/OOXML exporters can pick them up via the chart property map
     PROP_DIAGRAM_BIN_WIDTH,
     PROP_DIAGRAM_BIN_COUNT,
-    PROP_DIAGRAM_FREQUENCY_TYPE
+    PROP_DIAGRAM_FREQUENCY_TYPE,
+    PROP_DIAGRAM_USE_UNDERFLOW_BIN,
+    PROP_DIAGRAM_UNDERFLOW_BIN_VALUE,
+    PROP_DIAGRAM_USE_OVERFLOW_BIN,
+    PROP_DIAGRAM_OVERFLOW_BIN_VALUE
 };
 
 void lcl_AddPropertiesToVector(
@@ -237,6 +241,22 @@ void lcl_AddPropertiesToVector(
     rOutProperties.emplace_back("FrequencyType",
                   PROP_DIAGRAM_FREQUENCY_TYPE,
                   cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back("UseUnderflowBin",
+                  PROP_DIAGRAM_USE_UNDERFLOW_BIN,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back("UnderflowBinValue",
+                  PROP_DIAGRAM_UNDERFLOW_BIN_VALUE,
+                  cppu::UnoType<double>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back("UseOverflowBin",
+                  PROP_DIAGRAM_USE_OVERFLOW_BIN,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back("OverflowBinValue",
+                  PROP_DIAGRAM_OVERFLOW_BIN_VALUE,
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
     //new for XY charts
@@ -2034,6 +2054,14 @@ std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedPro
         u"BinCount"_ustr, cpo::uno::Any(sal_Int32(0)), m_spChart2ModelContact));
     aWrappedProperties.emplace_back(new WrappedHistogramProperty(
         u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(0)), m_spChart2ModelContact));
+    aWrappedProperties.emplace_back(new WrappedHistogramProperty(
+        u"UseUnderflowBin"_ustr, cpo::uno::Any(false), m_spChart2ModelContact));
+    aWrappedProperties.emplace_back(new WrappedHistogramProperty(
+        u"UnderflowBinValue"_ustr, cpo::uno::Any(0.0), m_spChart2ModelContact));
+    aWrappedProperties.emplace_back(new WrappedHistogramProperty(
+        u"UseOverflowBin"_ustr, cpo::uno::Any(false), m_spChart2ModelContact));
+    aWrappedProperties.emplace_back(new WrappedHistogramProperty(
+        u"OverflowBinValue"_ustr, cpo::uno::Any(0.0), m_spChart2ModelContact));
 
     return aWrappedProperties;
 }
