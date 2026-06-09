@@ -86,6 +86,36 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		});
 	});
 
+	it('Undo reaches core after inserting on a non-last slide', function() {
+		var win = this.win;
+
+		// Add a second slide so the first slide is no longer the last one.
+		cy.cGet('#insertpage-button').click();
+		impressHelper.assertSlidePreviewCountAfterIdle(win, 2);
+
+		// Select the first (non-last) slide in the sorter.
+		cy.cGet('#preview-frame-part-0').click();
+		cy.then(() => {
+			expect(win.app.map._docLayer._preview.partsFocused).to.equal(true);
+		});
+
+		// Insert after the first slide; focus moves to the new slide's preview.
+		cy.cGet('#insertpage-button').click();
+		helper.processToIdle(win);
+
+		cy.then(() => {
+			// The slide sorter must still be considered focused.
+			expect(win.app.map._docLayer._preview.partsFocused).to.equal(true);
+			cy.spy(win.app.socket, 'sendMessage').as('sendMessage');
+		});
+
+		cy.cGet('#slide-sorter').trigger('keydown', {
+			ctrlKey: true, key: 'z', code: 'KeyZ', keyCode: 90, which: 90, bubbles: true,
+		});
+
+		cy.get('@sendMessage').should('have.been.calledWith', 'uno .uno:Undo');
+	});
+
 	it('Duplicate slide', function() {
 		// Also check if comments are getting duplicated
 		desktopHelper.closeNavigatorSidebar();

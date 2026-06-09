@@ -45,9 +45,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._height = 0;
 		this.scrollTimer = null;
 		this._menuPosEl = null;
+		this.partsFocusedApplied = false;
 
-		document.body.addEventListener('click', (e) => {
-			if (!e.partsFocusedApplied && this.partsFocused)
+		// A click clears the slide sorter focus mode, unless that same click
+		// re-focused a preview.
+		document.addEventListener('click', () => {
+			this.partsFocusedApplied = false;
+		}, true);
+		document.body.addEventListener('click', () => {
+			if (!this.partsFocusedApplied && this.partsFocused)
 				this.partsFocused = false;
 		});
 	},
@@ -249,11 +255,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}, this);
 
 		var that = this;
-		img.onfocus = function (e) {
+		img.onfocus = function () {
 			that._map._clip.clearSelection();
 			that._map._clip.setTextSelectionType('slide');
 			that.partsFocused = true;
-			e.partsFocusedApplied = true;
+			that.partsFocusedApplied = true;
 		};
 
 		var that = this;
