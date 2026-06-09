@@ -586,7 +586,7 @@ public:
     // edit links
     void            EditLinkDlg();
     void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = nullptr);
-    void            InsertCaption(const InsCaptionOpt *pOpt);
+    void            InsertCaption(const InsCaptionOpt *pOpt, sal_uInt16 nCntType = 0);
 
     // Async call by Core
     void UpdatePageNums();

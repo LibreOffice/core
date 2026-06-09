@@ -202,11 +202,11 @@ void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
     {
         const InsCaptionOpt *pOpt = pModOpt->GetCapOption(bWeb, static_cast<SwCapObjType>(nType), pOleId);
         if (pOpt && pOpt->UseCaption())
-            InsertCaption(pOpt);
+            InsertCaption(pOpt, nType);
     }
 }
 
-void SwView::InsertCaption(const InsCaptionOpt *pOpt)
+void SwView::InsertCaption(const InsCaptionOpt *pOpt, sal_uInt16 nCntType)
 {
     if (!pOpt)
         return;
@@ -229,7 +229,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         }
     }
 
-    SelectionType eType = rSh.GetSelectionType();
+    SelectionType eType = nCntType == OLE_CAP ? SelectionType::Ole : rSh.GetSelectionType();
     if (eType & SelectionType::Ole)
         eType = SelectionType::Graphic;
 
