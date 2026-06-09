@@ -1148,9 +1148,6 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis,
                                   unsigned nLOKWindowId,
                                   int nCharBefore,
                                   int nCharAfter);
-static void doc_sendDialogEvent(LibreOfficeKitDocument* pThis,
-                               unsigned long long int nLOKWindowId,
-                               const char* pArguments);
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
                                    unsigned nLOKWindowId,
                                    int nType,
@@ -1469,7 +1466,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
         m_pDocumentClass->postWindowMouseEvent = doc_postWindowMouseEvent;
-        m_pDocumentClass->sendDialogEvent = doc_sendDialogEvent;
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->setWindowTextSelection = doc_setWindowTextSelection;
@@ -2721,10 +2717,6 @@ static void lo_registerAnyInputCallback(LibreOfficeKit* pThis,
 static void lo_registerFileSaveDialogCallback(LibreOfficeKit* pThis,
                        LibreOfficeKitFileSaveDialogCallback pFileSaveDialogCallback);
 
-static void lo_sendDialogEvent(LibreOfficeKit* pThis,
-                               unsigned long long int nLOKWindowId,
-                               const char* pArguments);
-
 static void lo_setOption(LibreOfficeKit* pThis, const char* pOption, const char* pValue);
 
 static void lo_dumpState(LibreOfficeKit* pThis, const char* pOptions, char** pState);
@@ -2758,7 +2750,6 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->runMacro = lo_runMacro;
         m_pOfficeClass->signDocument = lo_signDocument;
         m_pOfficeClass->runLoop = lo_runLoop;
-        m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
         m_pOfficeClass->setOption = lo_setOption;
         m_pOfficeClass->dumpState = lo_dumpState;
         m_pOfficeClass->extractRequest = lo_extractRequest;
@@ -5119,16 +5110,6 @@ public:
 };
 
 } // anonymous namespace
-
-static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long long int /*nWindowId*/, const char* /*pArguments*/)
-{
-    return;
-}
-
-static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int /*nWindowId*/, const char* /*pArguments*/)
-{
-    return;
-}
 
 static void reInitDictionaryList()
 {

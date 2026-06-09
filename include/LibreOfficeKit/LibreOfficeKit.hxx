@@ -314,17 +314,6 @@ public:
     }
 
     /**
-     * Posts a dialog event for the window with given id
-     *
-     * @param nWindowId id of the window to notify
-     * @param pArguments arguments of the event.
-     */
-    void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
-    {
-        mpDoc->pClass->sendDialogEvent(mpDoc, nWindowId, pArguments);
-    }
-
-    /**
      * Posts a UNO command to the document.
      *
      * Example argument string:
@@ -1142,17 +1131,6 @@ public:
                  void* pData)
     {
         mpThis->pClass->runLoop(mpThis, pPollCallback, pWakeCallback, pData);
-    }
-
-    /**
-     * Posts a dialog event for the window with given id
-     *
-     * @param nWindowId id of the window to notify
-     * @param pArguments arguments of the event.
-     */
-    void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
-    {
-        mpThis->pClass->sendDialogEvent(mpThis, nWindowId, pArguments);
     }
 
     /**

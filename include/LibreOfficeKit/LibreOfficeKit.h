@@ -129,11 +129,6 @@ struct LibreOfficeKitClassStruct
                      LibreOfficeKitWakeCallback pWakeCallback,
                      void* pData);
 
-    /// @see lok::Office::sendDialogEvent
-    void (*sendDialogEvent) (LibreOfficeKit* pThis,
-                            unsigned long long int nLOKWindowId,
-                            const char* pArguments);
-
     /// @see lok::Office::setOption
     void (*setOption) (LibreOfficeKit* pThis, const char* pOption, const char* pValue);
 
@@ -475,11 +470,6 @@ struct LibreOfficeKitDocumentClassStruct
                                unsigned nWindowId,
                                int nBefore,
                                int nAfter);
-
-    /// @see lok::Document::sendDialogEvent
-    void (*sendDialogEvent) (LibreOfficeKitDocument* pThis,
-                            unsigned long long int nLOKWindowId,
-                            const char* pArguments);
 
     /// @see lok::Document::renderFontOrientation().
     unsigned char* (*renderFontOrientation) (LibreOfficeKitDocument* pThis,

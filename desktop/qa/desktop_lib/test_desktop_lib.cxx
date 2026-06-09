@@ -3752,24 +3752,23 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(classOffset(10), offsetof(LibreOfficeKitClass, runMacro));
     CPPUNIT_ASSERT_EQUAL(classOffset(11), offsetof(LibreOfficeKitClass, signDocument));
     CPPUNIT_ASSERT_EQUAL(classOffset(12), offsetof(LibreOfficeKitClass, runLoop));
-    CPPUNIT_ASSERT_EQUAL(classOffset(13), offsetof(LibreOfficeKitClass, sendDialogEvent));
-    CPPUNIT_ASSERT_EQUAL(classOffset(14), offsetof(LibreOfficeKitClass, setOption));
-    CPPUNIT_ASSERT_EQUAL(classOffset(15), offsetof(LibreOfficeKitClass, dumpState));
-    CPPUNIT_ASSERT_EQUAL(classOffset(16), offsetof(LibreOfficeKitClass, extractRequest));
-    CPPUNIT_ASSERT_EQUAL(classOffset(17), offsetof(LibreOfficeKitClass, trimMemory));
-    CPPUNIT_ASSERT_EQUAL(classOffset(18), offsetof(LibreOfficeKitClass, startURP));
-    CPPUNIT_ASSERT_EQUAL(classOffset(19), offsetof(LibreOfficeKitClass, stopURP));
-    CPPUNIT_ASSERT_EQUAL(classOffset(20), offsetof(LibreOfficeKitClass, joinThreads));
-    CPPUNIT_ASSERT_EQUAL(classOffset(21), offsetof(LibreOfficeKitClass, startThreads));
-    CPPUNIT_ASSERT_EQUAL(classOffset(22), offsetof(LibreOfficeKitClass, setForkedChild));
-    CPPUNIT_ASSERT_EQUAL(classOffset(23), offsetof(LibreOfficeKitClass, extractDocumentStructureRequest));
-    CPPUNIT_ASSERT_EQUAL(classOffset(24), offsetof(LibreOfficeKitClass, registerAnyInputCallback));
-    CPPUNIT_ASSERT_EQUAL(classOffset(25), offsetof(LibreOfficeKitClass, getDocsCount));
-    CPPUNIT_ASSERT_EQUAL(classOffset(26), offsetof(LibreOfficeKitClass, registerFileSaveDialogCallback));
+    CPPUNIT_ASSERT_EQUAL(classOffset(13), offsetof(LibreOfficeKitClass, setOption));
+    CPPUNIT_ASSERT_EQUAL(classOffset(14), offsetof(LibreOfficeKitClass, dumpState));
+    CPPUNIT_ASSERT_EQUAL(classOffset(15), offsetof(LibreOfficeKitClass, extractRequest));
+    CPPUNIT_ASSERT_EQUAL(classOffset(16), offsetof(LibreOfficeKitClass, trimMemory));
+    CPPUNIT_ASSERT_EQUAL(classOffset(17), offsetof(LibreOfficeKitClass, startURP));
+    CPPUNIT_ASSERT_EQUAL(classOffset(18), offsetof(LibreOfficeKitClass, stopURP));
+    CPPUNIT_ASSERT_EQUAL(classOffset(19), offsetof(LibreOfficeKitClass, joinThreads));
+    CPPUNIT_ASSERT_EQUAL(classOffset(20), offsetof(LibreOfficeKitClass, startThreads));
+    CPPUNIT_ASSERT_EQUAL(classOffset(21), offsetof(LibreOfficeKitClass, setForkedChild));
+    CPPUNIT_ASSERT_EQUAL(classOffset(22), offsetof(LibreOfficeKitClass, extractDocumentStructureRequest));
+    CPPUNIT_ASSERT_EQUAL(classOffset(23), offsetof(LibreOfficeKitClass, registerAnyInputCallback));
+    CPPUNIT_ASSERT_EQUAL(classOffset(24), offsetof(LibreOfficeKitClass, getDocsCount));
+    CPPUNIT_ASSERT_EQUAL(classOffset(25), offsetof(LibreOfficeKitClass, registerFileSaveDialogCallback));
 
     // When extending LibreOfficeKit with a new function pointer,  add new assert for the offsetof the
     // new function pointer and bump this assert for the size of the class.
-    CPPUNIT_ASSERT_EQUAL(classOffset(27), sizeof(LibreOfficeKitClass));
+    CPPUNIT_ASSERT_EQUAL(classOffset(26), sizeof(LibreOfficeKitClass));
 
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(LibreOfficeKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(LibreOfficeKitDocumentClass, saveAs));
@@ -3832,32 +3831,31 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(53), offsetof(LibreOfficeKitDocumentClass, setClipboard));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(54), offsetof(LibreOfficeKitDocumentClass, getSelectionType));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(55), offsetof(LibreOfficeKitDocumentClass, removeTextContext));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(56), offsetof(LibreOfficeKitDocumentClass, sendDialogEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(57), offsetof(LibreOfficeKitDocumentClass, renderFontOrientation));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(58), offsetof(LibreOfficeKitDocumentClass, paintWindowForView));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(59), offsetof(LibreOfficeKitDocumentClass, completeFunction));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(60), offsetof(LibreOfficeKitDocumentClass, setWindowTextSelection));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(61), offsetof(LibreOfficeKitDocumentClass, sendFormFieldEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(62), offsetof(LibreOfficeKitDocumentClass, setBlockedCommandList));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(63), offsetof(LibreOfficeKitDocumentClass, renderSearchResult));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(64), offsetof(LibreOfficeKitDocumentClass, sendContentControlEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(65), offsetof(LibreOfficeKitDocumentClass, getSelectionTypeAndText));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(66), offsetof(LibreOfficeKitDocumentClass, getDataArea));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), offsetof(LibreOfficeKitDocumentClass, getEditMode));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(68), offsetof(LibreOfficeKitDocumentClass, setViewTimezone));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), offsetof(LibreOfficeKitDocumentClass, setAccessibilityState));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(70), offsetof(LibreOfficeKitDocumentClass, getA11yFocusedParagraph));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(71), offsetof(LibreOfficeKitDocumentClass, getA11yCaretPosition));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(72), offsetof(LibreOfficeKitDocumentClass, setViewReadOnly));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(73), offsetof(LibreOfficeKitDocumentClass, getPresentationInfo));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(74), offsetof(LibreOfficeKitDocumentClass, createSlideRenderer));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(75), offsetof(LibreOfficeKitDocumentClass, postSlideshowCleanup));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(76), offsetof(LibreOfficeKitDocumentClass, renderNextSlideLayer));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(77), offsetof(LibreOfficeKitDocumentClass, setViewOption));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), offsetof(LibreOfficeKitDocumentClass, setColorPreviewState));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(56), offsetof(LibreOfficeKitDocumentClass, renderFontOrientation));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(57), offsetof(LibreOfficeKitDocumentClass, paintWindowForView));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(58), offsetof(LibreOfficeKitDocumentClass, completeFunction));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(59), offsetof(LibreOfficeKitDocumentClass, setWindowTextSelection));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(60), offsetof(LibreOfficeKitDocumentClass, sendFormFieldEvent));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(61), offsetof(LibreOfficeKitDocumentClass, setBlockedCommandList));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(62), offsetof(LibreOfficeKitDocumentClass, renderSearchResult));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(63), offsetof(LibreOfficeKitDocumentClass, sendContentControlEvent));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(64), offsetof(LibreOfficeKitDocumentClass, getSelectionTypeAndText));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(65), offsetof(LibreOfficeKitDocumentClass, getDataArea));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(66), offsetof(LibreOfficeKitDocumentClass, getEditMode));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), offsetof(LibreOfficeKitDocumentClass, setViewTimezone));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(68), offsetof(LibreOfficeKitDocumentClass, setAccessibilityState));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), offsetof(LibreOfficeKitDocumentClass, getA11yFocusedParagraph));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(70), offsetof(LibreOfficeKitDocumentClass, getA11yCaretPosition));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(71), offsetof(LibreOfficeKitDocumentClass, setViewReadOnly));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(72), offsetof(LibreOfficeKitDocumentClass, getPresentationInfo));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(73), offsetof(LibreOfficeKitDocumentClass, createSlideRenderer));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(74), offsetof(LibreOfficeKitDocumentClass, postSlideshowCleanup));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(75), offsetof(LibreOfficeKitDocumentClass, renderNextSlideLayer));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(76), offsetof(LibreOfficeKitDocumentClass, setViewOption));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(77), offsetof(LibreOfficeKitDocumentClass, setColorPreviewState));
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), sizeof(LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), sizeof(LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
