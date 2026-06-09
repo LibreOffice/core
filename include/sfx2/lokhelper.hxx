@@ -129,10 +129,6 @@ public:
     static void setAccessibilityState(int nId, bool nEnabled);
     // Set the readonly state of the view.
     static void setViewReadOnly(int nId, bool readOnly);
-    // In readonly view, can user add / modify comments or not.
-    static void setAllowChangeComments(int nId, bool allow);
-    // In readonly view, can user accept / reject tracked changes or not.
-    static void setAllowManageRedlines(int nId, bool allow);
     /// Get the language used by the loading view (used for all save operations).
     static const LanguageTag & getLoadLanguage();
     /// Set the language used by the loading view (used for all save operations).

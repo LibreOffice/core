@@ -872,26 +872,6 @@ public:
         mpDoc->pClass->setViewReadOnly(mpDoc, nId, readOnly);
     }
 
-    /** Set if the view can edit comments on readonly mode or not.
-     *
-     * @param nId view ID
-     * @param allow
-    */
-    void setAllowChangeComments(int nId, const bool allow)
-    {
-        mpDoc->pClass->setAllowChangeComments(mpDoc, nId, allow);
-    }
-
-    /** Set if the view can manage redlines in readonly mode or not.
-     *
-     * @param nId view ID
-     * @param allow
-    */
-    void setAllowManageRedlines(int nId, bool allow)
-    {
-        mpDoc->pClass->setAllowManageRedlines(mpDoc, nId, allow);
-    }
-
     /**
      * Enable/Disable accessibility support for the window with the specified nId.
      *

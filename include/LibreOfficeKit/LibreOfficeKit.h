@@ -557,9 +557,6 @@ struct LibreOfficeKitDocumentClassStruct
     /// @see lok::Document::setViewReadOnly().
     void (*setViewReadOnly) (LibreOfficeKitDocument* pThis, int nId, const bool readOnly);
 
-    /// @see lok::Document::setAllowChangeComments().
-    void (*setAllowChangeComments) (LibreOfficeKitDocument* pThis, int nId, const bool allow);
-
     /// @see lok::Document::getPresentationInfo
     char* (*getPresentationInfo) (LibreOfficeKitDocument* pThis);
 
@@ -582,9 +579,6 @@ struct LibreOfficeKitDocumentClassStruct
 
     /// @see lok::Document::setColorPreviewState().
     void (*setColorPreviewState) (LibreOfficeKitDocument* pThis, int nId, bool nEnabled);
-
-    /// @see lok::Document::setAllowManageRedlines().
-    void (*setAllowManageRedlines)(LibreOfficeKitDocument* pThis, int nId, bool allow);
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };

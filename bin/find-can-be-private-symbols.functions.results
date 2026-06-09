@@ -3592,7 +3592,6 @@ SfxDispatcher::GetSlot(rtl::OUString const&)
 SfxDispatcher::HideUI(bool)
 SfxDispatcher::IsActive(SfxShell const&)
 SfxDispatcher::IsAppDispatcher() const
-SfxDispatcher::IsCommandAllowedInLokReadOnlyViewMode(rtl::OUString)
 SfxDispatcher::IsFlushed() const
 SfxDispatcher::PostMsgHandler(std::unique_ptr<SfxRequest, std::default_delete<SfxRequest> >)
 SfxDispatcher::SfxDispatcher()

@@ -189,8 +189,6 @@ public:
     void testCommentsImpress();
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
-    void testCommentsInReadOnlyMode();
-    void testRedlinesInReadOnlyMode();
     void testCalcValidityDropdownInReadonlyMode();
     void testRunMacro();
     void testExtractParameter();
@@ -264,8 +262,6 @@ public:
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
-    CPPUNIT_TEST(testCommentsInReadOnlyMode);
-    CPPUNIT_TEST(testRedlinesInReadOnlyMode);
     CPPUNIT_TEST(testCalcValidityDropdownInReadonlyMode);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
@@ -2220,49 +2216,6 @@ void DesktopLOKTest::testRedlineCalc()
 
 namespace {
 
-struct RedlineInfo
-{
-    std::string action;
-    std::string index;
-    std::string author;
-    std::string type;
-    std::string comment;
-    std::string description;
-    std::string dateTime;
-};
-
-std::vector<RedlineInfo> getRedlineInfo(const boost::property_tree::ptree& redlineNode)
-{
-    std::vector<RedlineInfo> result;
-    result.reserve(redlineNode.size());
-    for (const auto& redline : redlineNode)
-    {
-        result.emplace_back();
-        result.back().index = redline.second.get<std::string>("index");
-        result.back().author = redline.second.get<std::string>("author");
-        result.back().type = redline.second.get<std::string>("type");
-        result.back().comment = redline.second.get<std::string>("comment");
-        result.back().description = redline.second.get<std::string>("description");
-        result.back().dateTime = redline.second.get<std::string>("dateTime");
-        if (auto oAction = redline.second.get_optional<std::string>("action"))
-            result.back().action = *oAction;
-    }
-
-    return result;
-}
-
-std::vector<RedlineInfo> getRedlineInfo(LibLODocument_Impl* pDocument)
-{
-    char* json
-        = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
-    std::stringstream stream(json);
-    free(json);
-    CPPUNIT_ASSERT(!stream.str().empty());
-    boost::property_tree::ptree tree;
-    boost::property_tree::read_json(stream, tree);
-    return getRedlineInfo(tree.get_child("redlines"));
-}
-
 class ViewCallback
 {
     LibLODocument_Impl* mpDocument;
@@ -2277,7 +2230,6 @@ public:
     bool m_stateBold;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
-    RedlineInfo m_aLastRedlineInfo;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
@@ -2345,17 +2297,6 @@ public:
         {
             m_bEmptyTableSelection = (std::string(pPayload).compare("{ }") == 0);
             ++m_nTableSelectionCount;
-        }
-        break;
-        case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
-        case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
-        {
-            std::stringstream aStream(pPayload);
-            boost::property_tree::ptree tree;
-            boost::property_tree::read_json(aStream, tree);
-            auto redlines = getRedlineInfo(tree);
-            CPPUNIT_ASSERT_EQUAL(size_t(1), redlines.size());
-            m_aLastRedlineInfo = redlines[0];
         }
         break;
         case LOK_CALLBACK_STATE_CHANGED:
@@ -2892,174 +2833,6 @@ void DesktopLOKTest::testCommentsAddEditDeleteDraw()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("id"));
-}
-
-void DesktopLOKTest::testCommentsInReadOnlyMode()
-{
-    // Comments callback are emitted only if tiled annotations are off
-    comphelper::LibreOfficeKit::setTiledAnnotations(false);
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-
-    int viewId = pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->setView(pDocument, viewId);
-
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{\".uno:Author\":{\"type\":\"string\",\"value\":\"LOK User1\"}}");
-
-    SfxLokHelper::setViewReadOnly(viewId, true);
-    SfxLokHelper::setAllowChangeComments(viewId, true);
-
-    Scheduler::ProcessEventsToIdle();
-
-    ViewCallback aView(pDocument);
-
-    // Add a new comment
-    OString aCommandArgs;
-    {
-        tools::JsonWriter aJson;
-        addParameter(aJson, "Text", "string", "Comment");
-        addParameter(aJson, "Author", "string", "LOK User1");
-        aCommandArgs = aJson.finishAndGetAsOString();
-    }
-
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
-    int nCommentId = aView.m_aCommentCallbackResult.get<int>("id");
-
-    // Edit the previously added comment
-    {
-        tools::JsonWriter aJson;
-        addParameter(aJson, "Id", "string", OString::number(nCommentId));
-        addParameter(aJson, "Text", "string", "Edited comment");
-        aCommandArgs = aJson.finishAndGetAsOString();
-    }
-
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
-
-    // Delete Comment
-    {
-        tools::JsonWriter aJson;
-        addParameter(aJson, "Id", "string", OString::number(nCommentId));
-        aCommandArgs = aJson.finishAndGetAsOString();
-    }
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // Result is not sent for delete operation for some reason. But it is sent when debugging with online.
-    // TODO: Enable below 2 checks.
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
-    //CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView.m_aCommentCallbackResult.get<std::string>("action"));
-    //CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
-}
-
-void DesktopLOKTest::testRedlinesInReadOnlyMode()
-{
-    // In AllowManageRedlines mode, it must be possible to perform redline editing commands,
-    // even in read-only mode.
-
-    using namespace std::string_literals;
-
-    LibLODocument_Impl* pDocument = loadDoc("three-changes.fodt");
-
-    int viewId = pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->setView(pDocument, viewId);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aCallback(pDocument);
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(size_t(3), getRedlineInfo(pDocument).size());
-
-    // Activate read-only mode
-    SfxLokHelper::setViewReadOnly(viewId, true);
-
-    // Go to the 1st tracked change: "Delete “Donec”"
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
-    Scheduler::ProcessEventsToIdle();
-
-    // Check that redline management commands don't work in pure read-only
-    // Try to reject current redline
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:RejectTrackedChange", {}, false);
-    Scheduler::ProcessEventsToIdle();
-    // Nothing happened
-    CPPUNIT_ASSERT_EQUAL(size_t(3), getRedlineInfo(pDocument).size());
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.action);
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.author);
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.type);
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.comment);
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.description);
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.dateTime);
-
-    // Activate the AllowManageRedlines mode
-    SfxLokHelper::setAllowManageRedlines(viewId, true);
-
-    // Try to reject current redline
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:RejectTrackedChange", {}, false);
-    Scheduler::ProcessEventsToIdle();
-    // One change gone; it is recorded "Remove"d in aCallback.m_aLastRedlineInfo
-    CPPUNIT_ASSERT_EQUAL(size_t(2), getRedlineInfo(pDocument).size());
-    CPPUNIT_ASSERT_EQUAL("Remove"s, aCallback.m_aLastRedlineInfo.action);
-    CPPUNIT_ASSERT_EQUAL("Mike"s, aCallback.m_aLastRedlineInfo.author);
-    CPPUNIT_ASSERT_EQUAL("Delete"s, aCallback.m_aLastRedlineInfo.type);
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.comment);
-    CPPUNIT_ASSERT_EQUAL("Delete “Donec”"s, aCallback.m_aLastRedlineInfo.description);
-    CPPUNIT_ASSERT_EQUAL("2025-06-16T14:08:27"s, aCallback.m_aLastRedlineInfo.dateTime);
-
-    // Go to the 2nd tracked change: "Attributes changed"
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
-    Scheduler::ProcessEventsToIdle();
-
-    // Comment on it
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:CommentChangeTracking",
-                                      R"({"Text":{"type":"string","value":"Some comment"}})",
-                                      false);
-    Scheduler::ProcessEventsToIdle();
-    // One change got a comment; it is recorded "Modify"ed in aCallback.m_aLastRedlineInfo
-    CPPUNIT_ASSERT_EQUAL(size_t(2), getRedlineInfo(pDocument).size());
-    CPPUNIT_ASSERT_EQUAL("Modify"s, aCallback.m_aLastRedlineInfo.action);
-    CPPUNIT_ASSERT_EQUAL("Mike"s, aCallback.m_aLastRedlineInfo.author);
-    CPPUNIT_ASSERT_EQUAL("Format"s, aCallback.m_aLastRedlineInfo.type);
-    CPPUNIT_ASSERT_EQUAL("Some comment"s, aCallback.m_aLastRedlineInfo.comment);
-    CPPUNIT_ASSERT_EQUAL("Attributes changed"s, aCallback.m_aLastRedlineInfo.description);
-    CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:00"s, aCallback.m_aLastRedlineInfo.dateTime);
-
-    // Go to the 3rd tracked change: "Insert “ Sapienti sat.”"
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
-    Scheduler::ProcessEventsToIdle();
-
-    // Accept it
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:AcceptTrackedChange", {}, false);
-    Scheduler::ProcessEventsToIdle();
-    // One change gone; it is recorded "Remove"d in aCallback.m_aLastRedlineInfo
-    CPPUNIT_ASSERT_EQUAL(size_t(1), getRedlineInfo(pDocument).size());
-    CPPUNIT_ASSERT_EQUAL("Remove"s, aCallback.m_aLastRedlineInfo.action);
-    CPPUNIT_ASSERT_EQUAL("Mike"s, aCallback.m_aLastRedlineInfo.author);
-    CPPUNIT_ASSERT_EQUAL("Insert"s, aCallback.m_aLastRedlineInfo.type);
-    CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.comment);
-    CPPUNIT_ASSERT_EQUAL("Insert “ Sapienti sat.”"s, aCallback.m_aLastRedlineInfo.description);
-    CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:19"s, aCallback.m_aLastRedlineInfo.dateTime);
-
-    // Make sure that another (unrelated to redline management) editing command is not working
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
-                                      R"({"Text":{"type":"string","value":"Comment"}})",
-                                      false);
-    Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(aCallback.m_aCommentCallbackResult.empty());
-
-    // Check that the same command would succeed in AllowChangeComments mode
-    SfxLokHelper::setAllowChangeComments(viewId, true);
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
-                                      R"({"Text":{"type":"string","value":"Comment"}})",
-                                      false);
-    Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(!aCallback.m_aCommentCallbackResult.empty());
 }
 
 void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
@@ -4076,17 +3849,15 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(70), offsetof(LibreOfficeKitDocumentClass, getA11yFocusedParagraph));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(71), offsetof(LibreOfficeKitDocumentClass, getA11yCaretPosition));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(72), offsetof(LibreOfficeKitDocumentClass, setViewReadOnly));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(73), offsetof(LibreOfficeKitDocumentClass, setAllowChangeComments));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(74), offsetof(LibreOfficeKitDocumentClass, getPresentationInfo));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(75), offsetof(LibreOfficeKitDocumentClass, createSlideRenderer));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(76), offsetof(LibreOfficeKitDocumentClass, postSlideshowCleanup));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(77), offsetof(LibreOfficeKitDocumentClass, renderNextSlideLayer));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), offsetof(LibreOfficeKitDocumentClass, setViewOption));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), offsetof(LibreOfficeKitDocumentClass, setColorPreviewState));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(80), offsetof(LibreOfficeKitDocumentClass, setAllowManageRedlines));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(73), offsetof(LibreOfficeKitDocumentClass, getPresentationInfo));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(74), offsetof(LibreOfficeKitDocumentClass, createSlideRenderer));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(75), offsetof(LibreOfficeKitDocumentClass, postSlideshowCleanup));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(76), offsetof(LibreOfficeKitDocumentClass, renderNextSlideLayer));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(77), offsetof(LibreOfficeKitDocumentClass, setViewOption));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), offsetof(LibreOfficeKitDocumentClass, setColorPreviewState));
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(81), sizeof(LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), sizeof(LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

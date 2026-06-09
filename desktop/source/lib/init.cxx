@@ -1299,10 +1299,6 @@ static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const ch
 
 static void doc_setViewReadOnly(LibreOfficeKitDocument* pThis, int nId, const bool readonly);
 
-static void doc_setAllowChangeComments(LibreOfficeKitDocument* pThis, int nId, const bool allow);
-
-static void doc_setAllowManageRedlines(LibreOfficeKitDocument* pThis, int nId, bool allow);
-
 static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
 
 static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
@@ -1536,9 +1532,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->getA11yCaretPosition = doc_getA11yCaretPosition;
 
         m_pDocumentClass->setViewReadOnly = doc_setViewReadOnly;
-
-        m_pDocumentClass->setAllowChangeComments = doc_setAllowChangeComments;
-        m_pDocumentClass->setAllowManageRedlines = doc_setAllowManageRedlines;
 
         m_pDocumentClass->getPresentationInfo = doc_getPresentationInfo;
         m_pDocumentClass->createSlideRenderer = doc_createSlideRenderer;
@@ -5311,11 +5304,6 @@ static bool isCommandAllowed(std::u16string_view command)
     if (!pViewShell || !pViewShell->IsLokReadOnlyView())
         return true;
 
-    if (command == u".uno:Save")
-    {
-        return pViewShell->IsAllowChangeComments() || pViewShell->IsAllowManageRedlines();
-    }
-
     if (command == u".uno:TransformDialog")
     {
         // If the just added signature line shape is selected, allow moving it.
@@ -7555,26 +7543,6 @@ static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SetLastExceptionMsg();
 
     SfxLokHelper::setViewReadOnly(nId, readOnly);
-}
-
-static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const bool allow)
-{
-    comphelper::ProfileZone aZone("doc_setAllowChangeComments");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SfxLokHelper::setAllowChangeComments(nId, allow);
-}
-
-static void doc_setAllowManageRedlines(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, bool allow)
-{
-    comphelper::ProfileZone aZone("doc_setAllowManageRedlines");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    SfxLokHelper::setAllowManageRedlines(nId, allow);
 }
 
 static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
