@@ -159,7 +159,12 @@ class CompareChangesLabelSection extends HTMLObjectSection {
 		// firstPage has its dimensions as x, y, w, h; in twips.
 		const pageX = firstPage[0];
 		const pageY = firstPage[1];
-		const pageWidth = Math.round(firstPage[2] * app.twipsToPixels);
+		// documentToViewX/Y and twipsToPixels return core (device) pixels, but
+		// the labels are positioned via DOM styles which use CSS pixels. Divide
+		// by dpiScale to convert, matching HTMLObjectSection.adjustHTMLObjectPosition.
+		const pageWidth = Math.round(
+			(firstPage[2] * app.twipsToPixels) / app.dpiScale,
+		);
 
 		// Left page label position.
 		const part = -1;
@@ -169,8 +174,9 @@ class CompareChangesLabelSection extends HTMLObjectSection {
 			part,
 			TileMode.LeftSide,
 		);
-		const leftX = layout.documentToViewX(leftOrigin);
-		const topY = layout.documentToViewY(leftOrigin) - this.labelHeight;
+		const leftX = layout.documentToViewX(leftOrigin) / app.dpiScale;
+		const topY =
+			layout.documentToViewY(leftOrigin) / app.dpiScale - this.labelHeight;
 
 		// Right page label position.
 		const rightOrigin = new cool.SimplePoint(
@@ -179,7 +185,7 @@ class CompareChangesLabelSection extends HTMLObjectSection {
 			part,
 			TileMode.RightSide,
 		);
-		const rightX = layout.documentToViewX(rightOrigin);
+		const rightX = layout.documentToViewX(rightOrigin) / app.dpiScale;
 
 		const props = app.writer.compareDocumentProperties;
 		if (props) {
