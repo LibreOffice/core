@@ -153,7 +153,7 @@ window.L.Map.include({
 
 	showComments: function(on: boolean = false) {
 		app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).setView(on);
-		this.uiManager.setDocTypePref('showannotations', on);
+		this.uiManager.setDocTypePref('ShowAnnotations', on);
 		this.fire('commandstatechanged', {commandName : 'showannotations', state : on ? 'true': 'false'});
 		this.fire('showannotationschanged', {state: on ? 'true': 'false'});
 	}

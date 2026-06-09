@@ -687,13 +687,11 @@ class UIManager extends window.L.Control {
 				selectBackground.parentNode?.removeChild(selectBackground);
 
 			this.initializeRuler();
+			this.initializeFormattingMarks();
 
 			var showResolved = this.getBooleanDocTypePref('ShowResolved', true);
 			if (showResolved === false)
 				this.map.sendUnoCommand('.uno:ShowResolvedAnnotations');
-			// Notify the initial status of comments
-			var initialCommentState = this.map['stateChangeHandler'].getItemValue('showannotations');
-			this._map.fire('commandstatechanged', {commandName : 'showannotations', state : initialCommentState});
 			this.map.mention = new Mention(this.map);
 
 			if (!window.mode.isSmallScreenDevice()) {
@@ -727,6 +725,8 @@ class UIManager extends window.L.Control {
 		if (window.mode.isTablet() || window.mode.isDesktop()) {
 			this.map.navigator.initializeNavigator(docType);
 		}
+
+		if (docType !== 'spreadsheet') this.initializeComments();
 
 		this.map.on('changeuimode', this.onChangeUIMode, this);
 		window.addEventListener('browsersettingchanged', () => {
@@ -896,6 +896,44 @@ class UIManager extends window.L.Control {
 			this.map['stateChangeHandler'].setItemValue('showruler', rulerState);
 			this._map.fire('commandstatechanged', {commandName : 'showruler', state : rulerState});
 		}
+	}
+
+	initializeComments(): void {
+		// Record the saved on or off state before comments are imported. The
+		// comment list reads this value as it imports and shows or hides itself
+		// accordingly, so there is no comment section to act on here yet.
+		const showComments = this.getBooleanDocTypePref('ShowAnnotations', true);
+		const state = showComments ? 'true' : 'false';
+		this.map['stateChangeHandler'].setItemValue('showannotations', state);
+		this._map.fire('commandstatechanged', {commandName : 'showannotations', state : state});
+	}
+
+	initializeFormattingMarks(): void {
+		// Formatting marks are toggled with .uno:ControlCodes, and core reports
+		// the on or off result through that command's state. Capture the saved
+		// preference now, before any state arrives, so the value to restore is
+		// not lost when the state events start updating the preference.
+		const wantMarks = this.getBooleanDocTypePref('ShowFormattingMarks', false);
+		let initialStateSeen = false;
+
+		this.map.on('commandstatechanged', (e: any) => {
+			if (e.commandName !== '.uno:ControlCodes') return;
+			const isOn = e.state === 'true';
+
+			// The first state is core's starting value once the document view
+			// is ready. Sending the toggle any earlier is lost. Correct the
+			// state here with a single toggle when it does not match the saved
+			// preference, and let the resulting change be persisted below.
+			if (!initialStateSeen) {
+				initialStateSeen = true;
+				if (isOn !== wantMarks) {
+					this.map.sendUnoCommand('.uno:ControlCodes');
+					return;
+				}
+			}
+
+			this.setDocTypePref('ShowFormattingMarks', isOn);
+		});
 	}
 
 	/**
