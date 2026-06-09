@@ -1,3 +1,153 @@
+--- Cbc/src/CbcModel.cpp
++++ Cbc/src/CbcModel.cpp
+@@ -7107,7 +7107,7 @@
+ {
+     CbcCutGenerator ** temp = generator_;
+     generator_ = new CbcCutGenerator * [numberCutGenerators_+1];
+-    memcpy(generator_, temp, numberCutGenerators_*sizeof(CbcCutGenerator *));
++    if (numberCutGenerators_ != 0) memcpy(generator_, temp, numberCutGenerators_*sizeof(CbcCutGenerator *));
+     delete[] temp ;
+     generator_[numberCutGenerators_] =
+         new CbcCutGenerator(this, generator, howOften, name,
+@@ -7116,7 +7116,7 @@
+     // and before any changes
+     temp = virginGenerator_;
+     virginGenerator_ = new CbcCutGenerator * [numberCutGenerators_+1];
+-    memcpy(virginGenerator_, temp, numberCutGenerators_*sizeof(CbcCutGenerator *));
++    if (numberCutGenerators_ != 0) memcpy(virginGenerator_, temp, numberCutGenerators_*sizeof(CbcCutGenerator *));
+     delete[] temp ;
+     virginGenerator_[numberCutGenerators_++] =
+         new CbcCutGenerator(this, generator, howOften, name,
+@@ -7131,7 +7131,7 @@
+ {
+     CbcHeuristic ** temp = heuristic_;
+     heuristic_ = new CbcHeuristic * [numberHeuristics_+1];
+-    memcpy(heuristic_, temp, numberHeuristics_*sizeof(CbcHeuristic *));
++    if (numberHeuristics_ != 0) memcpy(heuristic_, temp, numberHeuristics_*sizeof(CbcHeuristic *));
+     delete [] temp;
+     int where;
+     if (before < 0 || before >= numberHeuristics_) {
+@@ -9329,8 +9329,8 @@
+           adjustment should be made for calling frequency.
+         */
+         int iProbing = -1;
+-        double smallProblem = (0.2 * totalCuts) /
+-                              static_cast<double> (numberActiveGenerators) ;
++        double smallProblem = numberActiveGenerators == 0 ? 0.0 : (0.2 * totalCuts) /
++                              static_cast<double> (numberActiveGenerators);
+         for (i = 0; i < numberCutGenerators_; i++) {
+             int howOften = generator_[i]->howOften() ;
+             /*  Probing can be set to just do column cuts in treee.
+@@ -9350,7 +9350,7 @@
+             bool probingWasOnBut = false;
+             CglProbing * probing = dynamic_cast<CglProbing*>(generator_[i]->generator());
+             if (probing && !numberNodes_) {
+-                if (generator_[i]->numberCutsInTotal()) {
++                if (generator_[i]->numberCutsInTotal() && numberActiveGenerators != 1) {
+                     // If large number of probing - can be biased
+                     smallProblem = (0.2 * (totalCuts - generator_[i]->numberCutsInTotal())) /
+                                    static_cast<double> (numberActiveGenerators - 1) ;
+@@ -11501,7 +11501,7 @@
+     }
+     delete [] mark;
+     // Now append other objects
+-    memcpy(object_ + numberIntegers_, oldObject, nObjects*sizeof(OsiObject *));
++    if (nObjects != 0) memcpy(object_ + numberIntegers_, oldObject, nObjects*sizeof(OsiObject *));
+     // Delete old array (just array)
+     delete [] oldObject;
+ 
+--- Cgl/src/CglClique/CglCliqueHelper.cpp
++++ Cgl/src/CglClique/CglCliqueHelper.cpp
+@@ -293,7 +293,7 @@
+       nodes[i].nbrs = all_nbr + old_total;
+    }
+ 
+-   fgraph.density = static_cast<double> (total_deg) / (sp_numcols * (sp_numcols-1));
++   fgraph.density = sp_numcols == 1 ? 0.0 : static_cast<double> (total_deg) / (sp_numcols * (sp_numcols-1));
+ 
+    /*========================================================================*
+      Compute the min and max degree.
+--- Cgl/src/CglGomory/CglGomory.cpp
++++ Cgl/src/CglGomory/CglGomory.cpp
+@@ -2,6 +2,8 @@
+ // Corporation and others.  All Rights Reserved.
+ // This code is licensed under the terms of the Eclipse Public License (EPL).
+ 
++#include <algorithm>
++#include <limits>
+ #include <cstdlib>
+ #include <cstdio>
+ #include <cmath>
+@@ -1314,7 +1316,7 @@
+ 	      for (j=0; j<number+1;j++) {
+ 		double value = fabs(packed[j]);
+ 		double dxInt = value*multiplier;
+-		xInt[j]= static_cast<int> (dxInt+0.5); 
++		xInt[j]= static_cast<int> (std::min<double>(std::max<double>(dxInt, std::numeric_limits<int>::min()), std::numeric_limits<int>::max())+0.5);
+ #if CGL_DEBUG>1
+ 		printf("%g => %g   \n",value,dxInt);
+ #endif
+--- Cgl/src/CglKnapsackCover/CglKnapsackCover.cpp
++++ Cgl/src/CglKnapsackCover/CglKnapsackCover.cpp
+@@ -3,6 +3,8 @@
+ // Corporation and others.  All Rights Reserved.
+ // This code is licensed under the terms of the Eclipse Public License (EPL).
+ 
++#include <algorithm>
++#include <limits>
+ #include <cstdlib>
+ #include <cstdio>
+ #include <cmath>
+@@ -3905,7 +3907,7 @@
+       }
+     }
+     int iUpper = static_cast<int> (floor(upperValue+1.0e-5));
+-    int iLower = static_cast<int> (ceil(lowerValue-1.0e-5));
++    int iLower = static_cast<int> (ceil(std::min<double>(std::max<double>(lowerValue, std::numeric_limits<int>::min()), std::numeric_limits<int>::max())-1.0e-5));
+     int state=0;
+     if (upperValue<1.0e6) {
+       if (iUpper==1-numberM1)
+--- Cgl/src/CglPreProcess/CglPreProcess.cpp
++++ Cgl/src/CglPreProcess/CglPreProcess.cpp
+@@ -7,6 +7,7 @@
+ #include <cmath>
+ #include <vector>
+ #include <algorithm>
++#include <limits>
+ #include <cfloat>
+ 
+ #include "CoinPragma.hpp"
+@@ -1718,8 +1719,8 @@
+     }
+     if (allPlus)
+       nPossible++;
+-    int iUpper = static_cast<int> (floor(upperValue+1.0e-5));
+-    int iLower = static_cast<int> (ceil(lowerValue-1.0e-5));
++    int iUpper = static_cast<int> (floor(std::min<double>(std::max<double>(upperValue, std::numeric_limits<int>::min()), std::numeric_limits<int>::max())+1.0e-5));
++    int iLower = static_cast<int> (ceil(std::min<double>(std::max<double>(lowerValue, std::numeric_limits<int>::min()), std::numeric_limits<int>::max())-1.0e-5));
+     int state=0;
+     if (upperValue<1.0e6) {
+       if (iUpper==1-numberM1)
+@@ -6429,7 +6430,7 @@
+ {
+   CglCutGenerator ** temp = generator_;
+   generator_ = new CglCutGenerator * [numberCutGenerators_+1];
+-  memcpy(generator_,temp,numberCutGenerators_*sizeof(CglCutGenerator *));
++  if (numberCutGenerators_ != 0) memcpy(generator_,temp,numberCutGenerators_*sizeof(CglCutGenerator *));
+   delete[] temp ;
+   generator_[numberCutGenerators_++]=generator->clone(); 
+ }
+--- Cgl/src/CglTwomir/CglTwomir.cpp
++++ Cgl/src/CglTwomir/CglTwomir.cpp
+@@ -1779,7 +1779,7 @@
+       norm_val += (cut->coeff[i]*cut->coeff[i]);
+     }
+ 
+-    norm_val /= cut->rhs * cut->rhs;
++    norm_val = cut->rhs == 0 ? COIN_DBL_MAX : norm_val / (cut->rhs * cut->rhs);
+          
+     if (rc_val < best_rc_val )  {	
+       best_rc_val = rc_val; best_rc_alpha = alpha;  }
 --- Clp/src/ClpParameters.hpp
 +++ Clp/src/ClpParameters.hpp
 @@ -81,7 +81,7 @@
@@ -9,3 +159,23 @@
  }
  /// And set
  template <class T> inline void
+--- Clp/src/ClpSimplex.cpp
++++ Clp/src/ClpSimplex.cpp
+@@ -2557,14 +2557,14 @@
+                numberTotal = 2 * (maximumInternalColumns_ + maximumInternalRows_);
+           }
+           lower_ = ClpCopyOfArray(rhs.lower_, numberTotal);
+-          rowLowerWork_ = lower_ + numberColumns_;
++          rowLowerWork_ = lower_ == nullptr ? nullptr : lower_ + numberColumns_;
+           columnLowerWork_ = lower_;
+           upper_ = ClpCopyOfArray(rhs.upper_, numberTotal);
+-          rowUpperWork_ = upper_ + numberColumns_;
++          rowUpperWork_ = upper_ == nullptr ? nullptr : upper_ + numberColumns_;
+           columnUpperWork_ = upper_;
+           cost_ = ClpCopyOfArray(rhs.cost_, numberTotal);
+           objectiveWork_ = cost_;
+-          rowObjectiveWork_ = cost_ + numberColumns_;
++          rowObjectiveWork_ = cost_ == nullptr ? nullptr : cost_ + numberColumns_;
+           dj_ = ClpCopyOfArray(rhs.dj_, numberTotal);
+           if (dj_) {
+                reducedCostWork_ = dj_;
