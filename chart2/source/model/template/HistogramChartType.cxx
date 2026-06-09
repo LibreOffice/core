@@ -229,7 +229,7 @@ void HistogramChartType::createCalculatedDataSeries()
         bool bHasCategories = false;
         for (auto& seq : aSeqs)
         {
-            if (seq.is() && DataSeriesHelper::getRole(seq) == "categories")
+            if (seq.is() && DataSeriesHelper::getRole(seq) == u"categories"_ustr)
             {
                 seq = xLabeledCat;
                 bHasCategories = true;
@@ -294,6 +294,14 @@ void HistogramChartType::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) cons
         rAny.clear();
     else
         rAny = (*aFound).second;
+}
+
+// HistogramDataSequence snapshots binning settings, so changing histogram
+// bin properties must rebuild the derived frequency and category sequences.
+void HistogramChartType::firePropertyChangeEvent()
+{
+    createCalculatedDataSeries();
+    ChartType::firePropertyChangeEvent();
 }
 
 // ____ XPropertySet ____

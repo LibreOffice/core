@@ -44,6 +44,7 @@ protected:
     // ____ OPropertySet ____
     void GetDefaultValue(sal_Int32 nHandle, css::uno::Any& rAny) const override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual void firePropertyChangeEvent() override;
 
     // ____ XPropertySet ____
     css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;

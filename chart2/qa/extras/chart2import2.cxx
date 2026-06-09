@@ -1088,7 +1088,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     const Sequence<OUString> aAxisBinLabels = xAxisCatText->getTextualData();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAxisBinLabels.getLength());
     CPPUNIT_ASSERT_EQUAL(u"[10-13.94]"_ustr, aAxisBinLabels[0]);
-    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.87]"_ustr, aAxisBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.88]"_ustr, aAxisBinLabels[1]);
 
     // Round trip 2: non-default binning parameters survive save + reload.
     Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
@@ -1158,6 +1158,19 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_ODS)
     sal_Int32 nBinCount = -1;
     CPPUNIT_ASSERT(xReloadedProps->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nBinCount);
+
+    Reference<chart2::data::XDataSequence> xCategories
+        = getDataSequenceFromDocByRole(xChartDoc, u"categories");
+    CPPUNIT_ASSERT(xCategories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xCategoriesText(xCategories, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCategoriesText.is());
+
+    const Sequence<OUString> aBinLabels = xCategoriesText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"[10-11.67]"_ustr, aBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(11.67-13.33]"_ustr, aBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.33-15]"_ustr, aBinLabels[2]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogram_COExt)
@@ -1210,6 +1223,22 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_XLSX)
 
     xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
     CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    chart2::ScaleData aScaleData = xXAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xAxisCatText(aScaleData.Categories->getValues(),
+                                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisCatText.is());
+
+    const Sequence<OUString> aAxisBinLabels = xAxisCatText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aAxisBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"[10-11.67]"_ustr, aAxisBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(11.67-13.33]"_ustr, aAxisBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.33-15]"_ustr, aAxisBinLabels[2]);
 
     Reference<beans::XPropertySet> xReloadedXlsxProps(xChartType, uno::UNO_QUERY_THROW);
 
