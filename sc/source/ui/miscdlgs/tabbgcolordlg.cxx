@@ -34,7 +34,6 @@
 ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle)
     : GenericDialogController(pParent, u"modules/scalc/ui/tabcolordialog.ui"_ustr,
                               u"TabColorDialog"_ustr)
-    , m_aTabBgColor(COL_AUTO)
     , m_xSelectPalette(m_xBuilder->weld_combo_box(u"paletteselector"_ustr))
     , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window(u"colorsetwin"_ustr, true)))
     , m_xTabBgColorSetWin(new weld::CustomWeld(*m_xBuilder, u"colorset"_ustr, *m_xTabBgColorSet))
@@ -68,7 +67,9 @@ ScTabBgColorDlg::~ScTabBgColorDlg()
 
 Color ScTabBgColorDlg::GetSelectedColor() const
 {
-    return m_aTabBgColor;
+    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
+    Color aColor = nItemId ? (m_xTabBgColorSet->GetItemColor(nItemId)) : COL_AUTO;
+    return aColor;
 }
 
 void ScTabBgColorDlg::FillPaletteLB()
@@ -87,13 +88,6 @@ void ScTabBgColorDlg::FillPaletteLB()
     }
 }
 
-void ScTabBgColorDlg::UpdateColor()
-{
-    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? (m_xTabBgColorSet->GetItemColor(nItemId)) : COL_AUTO;
-    m_aTabBgColor = aColor;
-}
-
 IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
 {
     m_xTabBgColorSet->Clear();
@@ -107,14 +101,12 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
 //    Handler, called when color selection is changed
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 {
-    UpdateColor();
     m_xDialog->response(RET_OK);
 }
 
 //    Handler, called when the OK button is pushed
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
 {
-    UpdateColor();
     m_xDialog->response(RET_OK);
 }
 
@@ -135,7 +127,6 @@ bool ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_SPACE:
         case KEY_RETURN:
         {
-            m_pTabBgColorDlg->UpdateColor();
             m_pTabBgColorDlg->response(RET_OK);
             return true;
         }

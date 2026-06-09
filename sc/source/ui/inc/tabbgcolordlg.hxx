@@ -51,7 +51,6 @@ public:
 
 private:
     PaletteManager          m_aPaletteManager;
-    Color                   m_aTabBgColor;
 
     std::unique_ptr<weld::ComboBox> m_xSelectPalette;
     std::unique_ptr<ScTabBgColorValueSet> m_xTabBgColorSet;
@@ -59,7 +58,6 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOk;
 
     void FillPaletteLB();
-    void UpdateColor();
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK(TabBgColorDblClickHdl_Impl, ValueSet*, void);
