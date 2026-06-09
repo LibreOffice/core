@@ -1544,6 +1544,9 @@ class DebugManager {
 	public reportEventDelay(delayMs: number): void {
 		if (!this.eventDelayWatchdog) return;
 
+		// a hidden tab clamps timers to ~1Hz, so the setTimeout(0) reports a false ~1s delay
+		if (document.hidden) return;
+
 		// Time in ms to prefer showing a large, slow event handling time
 		const slow_time_display_timeout = 3000;
 
