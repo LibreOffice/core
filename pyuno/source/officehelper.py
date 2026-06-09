@@ -158,10 +158,10 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
             sOffice = "soffice"
             if "UNO_PATH" in os.environ:
                 sOffice = os.path.join(os.environ["UNO_PATH"], sOffice)
-            if platform.startswith("win"):
-                sOffice += ".exe"
             elif platform == "darwin":  # any other un-hardcoded suggestion?
                 sOffice = "/Applications/LibreOffice.App/Contents/MacOS/soffice"
+            if platform.startswith("win"):
+                sOffice += ".exe"
         # Generate a random pipe name.
         random.seed()
         sPipeName = "uno" + str(random.random())[2:]
