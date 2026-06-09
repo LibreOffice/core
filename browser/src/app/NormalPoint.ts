@@ -87,7 +87,7 @@ class NormalPoint {
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 
-	public equals(obj: any, maxMargin: number): boolean {
+	public equals(obj: any, maxMargin?: number): boolean {
 		if (!obj) {
 			return false;
 		}

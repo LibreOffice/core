@@ -1,52 +1,13 @@
 /* -*- js-indent-level: 8 -*- */
-/* global NormalPoint */
+/* global NormalPoint NormalBoundsBase */
 /*
  * window.L.LatLngBounds represents a rectangular area on the map in geographical coordinates.
  */
 
-class NormalBounds {
+class NormalBounds extends NormalBoundsBase {
 
 	constructor(southWest, northEast) { // (LatLng, LatLng) or (LatLng[])
-		if (!southWest) { return; }
-
-		var latlngs = northEast ? [southWest, northEast] : southWest;
-
-		for (var i = 0, len = latlngs.length; i < len; i++) {
-			this.extend(latlngs[i]);
-		}
-	}
-
-	// extend the bounds to contain the given point or bounds
-	extend(obj) { // (LatLng) or (LatLngBounds)
-		var sw = this._southWest,
-		    ne = this._northEast,
-		    sw2, ne2;
-
-		if (obj instanceof NormalPoint) {
-			sw2 = obj;
-			ne2 = obj;
-
-		} else if (obj instanceof NormalBounds) {
-			sw2 = obj._southWest;
-			ne2 = obj._northEast;
-
-			if (!sw2 || !ne2) { return this; }
-
-		} else {
-			return obj ? this.extend(window.L.latLng(obj) || window.L.latLngBounds(obj)) : this;
-		}
-
-		if (!sw && !ne) {
-			this._southWest = new NormalPoint(sw2.lat, sw2.lng);
-			this._northEast = new NormalPoint(ne2.lat, ne2.lng);
-		} else {
-			sw.lat = Math.min(sw2.lat, sw.lat);
-			sw.lng = Math.min(sw2.lng, sw.lng);
-			ne.lat = Math.max(ne2.lat, ne.lat);
-			ne.lng = Math.max(ne2.lng, ne.lng);
-		}
-
-		return this;
+		super(southWest, northEast);
 	}
 
 	getCenter() { // -> LatLng
@@ -168,11 +129,13 @@ class NormalBounds {
 	}
 };
 
-window.L.LatLngBounds = NormalBounds;
-
-window.L.latLngBounds = function (a, b) { // (LatLngBounds) or (LatLng, LatLng)
+NormalBounds.flexConstruct = function (a, b) { // (LatLngBounds) or (LatLng, LatLng)
 	if (!a || a instanceof NormalBounds) {
 		return a;
 	}
 	return new NormalBounds(a, b);
 };
+
+
+window.L.LatLngBounds = NormalBounds;
+window.L.latLngBounds = NormalBounds.flexConstruct;
