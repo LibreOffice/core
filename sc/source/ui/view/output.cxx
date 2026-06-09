@@ -64,6 +64,7 @@
 #include <detfunc.hxx>
 #include <editutil.hxx>
 
+#include <MatrixResizeGuard.hxx>
 #include <SparklineRenderer.hxx>
 #include <colorscale.hxx>
 
@@ -1947,6 +1948,8 @@ void ScOutputData::FindChanged()
 
     if (bAnyDirty || bAnyChanged)
     {
+        sc::MatrixResizeGuard aGuard(*mpDoc);
+
         if (bAnyDirty)
             mpDoc->EnsureFormulaCellResults(ScRange(nCol1, nRow1, mnTab, nCol2, nRow2, mnTab), true);
 
