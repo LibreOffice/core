@@ -110,6 +110,7 @@
 #include <operation/DeleteSparklineOperation.hxx>
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/DeleteCellsOperation.hxx>
+#include <operation/InsertThreadedCommentOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
 #include <operation/SetValueOperation.hxx>
 #include <operation/SetStringOperation.hxx>
@@ -995,6 +996,12 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
 void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi )
 {
     sc::ReplaceNoteTextOperation aOperation(rDocShell, rPos, rNoteText, pAuthor, pDate, bApi);
+    aOperation.run();
+}
+
+void ScDocFunc::InsertThreadedComment( const ScAddress& rPos, const OUString& rText, const OUString* pAuthor, bool bApi )
+{
+    sc::InsertThreadedCommentOperation aOperation(rDocShell, rPos, rText, pAuthor, bApi);
     aOperation.run();
 }
 

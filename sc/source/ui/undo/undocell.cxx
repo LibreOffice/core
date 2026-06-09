@@ -776,11 +776,15 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocSh, const ScAddress& rPos,
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocSh, const ScAddress& rPos,
-        ScNoteData aOldData, ScNoteData aNewData, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
+        ScNoteData aOldData, ScNoteData aNewData, std::unique_ptr<SdrUndoAction> pDrawUndo,
+        std::unique_ptr<ScThreadedCommentData> pOldThreadedData,
+        std::unique_ptr<ScThreadedCommentData> pNewThreadedData ) :
     ScSimpleUndo( rDocSh ),
     maPos( rPos ),
     maOldData(std::move( aOldData )),
     maNewData(std::move( aNewData )),
+    mpOldThreadedData( std::move(pOldThreadedData) ),
+    mpNewThreadedData( std::move(pNewThreadedData) ),
     mpDrawUndo( std::move(pDrawUndo) )
 {
     OSL_ENSURE( maOldData.mxCaption || maNewData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
@@ -800,7 +804,7 @@ void ScUndoReplaceNote::Undo()
         Undo remove -> insert old note.
         Undo replace -> remove new note, insert old note. */
     DoRemoveNote( maNewData );
-    DoInsertNote( maOldData );
+    DoInsertNote( maOldData, mpOldThreadedData.get() );
     rDocShell.PostPaintCell( maPos );
     EndUndo();
 }
@@ -813,7 +817,7 @@ void ScUndoReplaceNote::Redo()
         Redo remove -> remove old note.
         Redo replace -> remove old note, insert new note. */
     DoRemoveNote( maOldData );
-    DoInsertNote( maNewData );
+    DoInsertNote( maNewData, mpNewThreadedData.get() );
     rDocShell.PostPaintCell( maPos );
     EndRedo();
 }
@@ -833,7 +837,7 @@ OUString ScUndoReplaceNote::GetComment() const
         (maOldData.mxCaption ? STR_UNDO_EDITNOTE : STR_UNDO_INSERTNOTE) : STR_UNDO_DELETENOTE );
 }
 
-void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
+void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData, const ScThreadedCommentData* pThreadedData )
 {
     if( rNoteData.mxCaption )
     {
@@ -841,6 +845,10 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
         OSL_ENSURE( !rDoc.GetNote(maPos), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
         ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
         rDoc.SetNote( maPos, std::unique_ptr<ScPostIt>(pNote) );
+        // Threaded-comment data lives on ScPostIt outside ScNoteData, so the new
+        // post-it carries none yet; reattach a fresh clone (undo/redo may fire again).
+        if (pThreadedData)
+            pNote->SetThreadedCommentData(std::make_unique<ScThreadedCommentData>(*pThreadedData));
         ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, rDoc, maPos, pNote);
     }
 }

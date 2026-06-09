@@ -44,6 +44,8 @@ std::string_view operationTypeString(OperationType eOperation)
             return "SetNoteText";
         case OperationType::ReplaceNoteText:
             return "ReplaceNoteText";
+        case OperationType::InsertThreadedComment:
+            return "InsertThreadedComment";
         case OperationType::InsertColumnsBefore:
             return "InsertColumnsBefore";
         case OperationType::InsertColumnsAfter:

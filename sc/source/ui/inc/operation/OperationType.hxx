@@ -30,6 +30,7 @@ enum class OperationType
     SetFormula,
     SetNoteText,
     ReplaceNoteText,
+    InsertThreadedComment,
     InsertColumnsBefore,
     InsertColumnsAfter,
     InsertRowsBefore,

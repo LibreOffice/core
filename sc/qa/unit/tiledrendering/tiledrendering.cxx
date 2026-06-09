@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <sc.hrc>
 #include <postit.hxx>
@@ -3832,6 +3833,139 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("false"), aView1.m_aCommentCallbackResult.get<std::string>("resolved"));
     }
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo)
+{
+    // Before the fix, .uno:InsertThreadedComment manipulated the note model
+    // directly and never set the document-modified flag or registered undo.
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    ScPostIt::mnLastPostItId = 1;
+
+    {
+        ScModelObj* pModelObj = createDoc("small.ods");
+        ScTestViewCallback aView;
+        ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+        CPPUNIT_ASSERT(pDocSh);
+        ScDocument* pDoc = pModelObj->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        CPPUNIT_ASSERT(pTabViewShell);
+        pTabViewShell->SetCursor(2, 3);
+
+        // Fresh document: not modified, no undo actions, no note at the target cell.
+        CPPUNIT_ASSERT(!pDocSh->IsModified());
+        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        CPPUNIT_ASSERT(pUndoMgr);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoMgr->GetUndoActionCount());
+        const ScAddress aPos(2, 3, 0);
+        CPPUNIT_ASSERT(!pDoc->GetNote(aPos));
+
+        // 1) Insert a threaded comment via .uno:InsertThreadedComment.
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        {
+            {"Text", uno::Any(u"Kit thread"_ustr)},
+            {"Author", uno::Any(u"Kit Author"_ustr)},
+        }));
+        aView.m_aStateChanges.clear();
+        dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
+
+        CPPUNIT_ASSERT(pDocSh->IsModified());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoMgr->GetUndoActionCount());
+
+        // The note exists with threaded data attached.
+        const ScPostIt* pNote = pDoc->GetNote(aPos);
+        CPPUNIT_ASSERT(pNote);
+        const ScThreadedCommentData* pThreaded = pNote->GetThreadedCommentData();
+        CPPUNIT_ASSERT(pThreaded);
+        CPPUNIT_ASSERT_EQUAL(u"Kit thread"_ustr, pThreaded->maRoot.maText);
+
+        // The bindings timer broadcasts the deferred .uno:ModifiedStatus state change.
+        pTabViewShell->GetViewFrame().GetBindings().GetTimer().Invoke();
+        pTabViewShell->GetViewFrame().GetBindings().GetTimer().Invoke();
+        auto it = aView.m_aStateChanges.find(".uno:ModifiedStatus");
+        CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), it->second.get<std::string>("state"));
+
+        // 2) Undo removes the note.
+        dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+        CPPUNIT_ASSERT(!pDoc->GetNote(aPos));
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoMgr->GetUndoActionCount());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoMgr->GetRedoActionCount());
+
+        // 3) Redo brings the note back, including the threaded payload. The undo
+        //    action stores a clone of ScThreadedCommentData (it lives outside
+        //    ScNoteData), so the redo path must reattach it.
+        dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+        pNote = pDoc->GetNote(aPos);
+        CPPUNIT_ASSERT(pNote);
+        pThreaded = pNote->GetThreadedCommentData();
+        CPPUNIT_ASSERT(pThreaded);
+        CPPUNIT_ASSERT_EQUAL(u"Kit thread"_ustr, pThreaded->maRoot.maText);
+    }
+
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo2)
+{
+    // Sub-case: when Online dispatches the command with no Author arg or with
+    // an Author arg that carries an empty string, the engine must fall back to
+    // SvtUserOptions().GetFullName() (which carries the WOPI UserFriendlyName
+    // in a Kit context) rather than landing on "Unknown Author". Before the
+    // fix the slot's pAuthorItem ternary checked "was the arg sent" rather
+    // than "is the value non-empty", so an empty Author short-circuited the
+    // user-options fallback.
+
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    ScPostIt::mnLastPostItId = 1;
+    {
+        SvtUserOptions aUserOpt;
+        const OUString aSavedFirstName = aUserOpt.GetFirstName();
+        const OUString aSavedLastName = aUserOpt.GetLastName();
+        aUserOpt.SetToken(UserOptToken::FirstName, u"WOPI"_ustr);
+        aUserOpt.SetToken(UserOptToken::LastName, u"Friendly"_ustr);
+
+        ScModelObj* pModelObj = createDoc("small.ods");
+        ScDocument* pDoc = pModelObj->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        CPPUNIT_ASSERT(pTabViewShell);
+
+        const ScAddress aPos(4, 5, 0);
+        pTabViewShell->SetCursor(aPos.Col(), aPos.Row());
+
+        // 1) No Author arg at all: pAuthorItem == nullptr in the slot.
+        uno::Sequence<beans::PropertyValue> aArgsNoAuthor(comphelper::InitPropertySequence(
+        {
+            {"Text", uno::Any(u"no author arg"_ustr)},
+        }));
+        dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgsNoAuthor);
+        const ScPostIt* pNote = pDoc->GetNote(aPos);
+        CPPUNIT_ASSERT(pNote);
+        CPPUNIT_ASSERT_EQUAL(u"WOPI Friendly"_ustr, pNote->GetAuthor());
+
+        // Roll back so the next dispatch operates on a fresh cell state.
+        dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+        CPPUNIT_ASSERT(!pDoc->GetNote(aPos));
+
+        // 2) Author arg present but empty: the regression case.
+        uno::Sequence<beans::PropertyValue> aArgsEmptyAuthor(comphelper::InitPropertySequence(
+        {
+            {"Text", uno::Any(u"empty author arg"_ustr)},
+            {"Author", uno::Any(u""_ustr)},
+        }));
+        dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgsEmptyAuthor);
+        pNote = pDoc->GetNote(aPos);
+        CPPUNIT_ASSERT(pNote);
+        CPPUNIT_ASSERT_EQUAL(u"WOPI Friendly"_ustr, pNote->GetAuthor());
+
+        aUserOpt.SetToken(UserOptToken::FirstName, aSavedFirstName);
+        aUserOpt.SetToken(UserOptToken::LastName, aSavedLastName);
+    }
+
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 

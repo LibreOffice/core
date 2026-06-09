@@ -252,13 +252,18 @@ public:
                         bool bInsert,
                         std::unique_ptr<SdrUndoAction> pDrawUndo );
 
-    /** Constructs an undo action for replacing a cell note with another. */
+    /** Constructs an undo action for replacing a cell note with another. The
+        threaded-comment payload lives on ScPostIt outside ScNoteData, so callers
+        rescuing a threaded note pass clones for either or both sides; classic
+        notes leave the defaults. */
                     ScUndoReplaceNote(
                         ScDocShell& rDocShell,
                         const ScAddress& rPos,
                         ScNoteData aOldData,
                         ScNoteData aNewData,
-                        std::unique_ptr<SdrUndoAction> pDrawUndo );
+                        std::unique_ptr<SdrUndoAction> pDrawUndo,
+                        std::unique_ptr<ScThreadedCommentData> pOldThreadedData = nullptr,
+                        std::unique_ptr<ScThreadedCommentData> pNewThreadedData = nullptr );
 
     virtual         ~ScUndoReplaceNote() override;
 
@@ -272,13 +277,15 @@ public:
     virtual std::optional<ScRange> getAffectedRange() const override { return ScRange(maPos); }
 
 private:
-    void            DoInsertNote( const ScNoteData& rNoteData );
+    void            DoInsertNote( const ScNoteData& rNoteData, const ScThreadedCommentData* pThreadedData );
     void            DoRemoveNote( const ScNoteData& rNoteData );
 
 private:
     ScAddress       maPos;
     ScNoteData      maOldData;
     ScNoteData      maNewData;
+    std::unique_ptr<ScThreadedCommentData> mpOldThreadedData;
+    std::unique_ptr<ScThreadedCommentData> mpNewThreadedData;
     std::unique_ptr<SdrUndoAction> mpDrawUndo;
 };
 
