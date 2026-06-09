@@ -162,7 +162,6 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
             sOffice = os.path.join(sOffice, "soffice")
             if platform.startswith("win"):
                 sOffice += ".exe"
-                sOffice = '"' + sOffice + '"'  # accommodate ' ' spaces in filename
             elif platform == "darwin":  # any other un-hardcoded suggestion?
                 sOffice = "/Applications/LibreOffice.App/Contents/MacOS/soffice"
         # Generate a random pipe name.
@@ -170,11 +169,11 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
         sPipeName = "uno" + str(random.random())[2:]
         # Start the office process
         connect_string = ''.join(['pipe,name=', sPipeName, ';urp;'])
-        command = ' '.join([sOffice, '--nologo', '--nodefault', '--accept="' + connect_string + '"'])
+        command = [sOffice, '--nologo', '--nodefault', "--accept=" + connect_string]
         if platform.startswith("win") or platform == "darwin":
-            process = subprocess.Popen(command, shell=True)
+            process = subprocess.Popen(command)
         elif platform == "linux":  # Use a process group to enable proper termination
-            process = subprocess.Popen(command, shell=True, preexec_fn=os.setsid)
+            process = subprocess.Popen(command, preexec_fn=os.setsid)
         else:
             raise OSError
         # Connect to a started office instance
