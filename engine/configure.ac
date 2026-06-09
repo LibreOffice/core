@@ -4391,10 +4391,12 @@ if test "$_os" = "WINNT"; then
     # Find the proper version of MSBuild.exe to use based on the VS version
     reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot MSBuildOverrideTasksPath
     if test -z "$regvalue" ; then
-        if test "$WIN_BUILD_ARCH" != "x64"; then
-            regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin"
-        else
+        if test "$WIN_BUILD_ARCH" = "x64"; then
             regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin/amd64"
+        elif test "$WIN_BUILD_ARCH" = "arm64"; then
+            regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin/arm64"
+        else
+            regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin"
         fi
     fi
     if test -d "$regvalue" ; then
