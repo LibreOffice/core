@@ -1883,11 +1883,16 @@ fi
 AC_SUBST(ENABLE_SUPPORT_KEY)
 
 if test "$host_os" != "emscripten"; then
-    # PocoNetSSL/PocoCrypto are only built and needed for SSL (the COOL server);
-    # link them only when SSL is enabled, and before the libraries they depend on
-    # (PocoNet/PocoCrypto/PocoUtil/PocoFoundation) for static-link ordering.
+    # PocoNetSSL implements the HTTPS transport, so it is linked only when SSL
+    # is enabled.  PocoCrypto provides the RSA used by the WOPI proof key and
+    # JWT signing (wsd/Auth.cpp, wsd/ProofKey.cpp), which every server build
+    # needs regardless of SSL; the mobile/desktop apps never reference it, so
+    # link it for server builds only.  Both must come before the libraries they
+    # depend on (PocoNet/PocoUtil/PocoFoundation) for static-link ordering.
     AS_IF([test "$ENABLE_SSL" = "true"],
-          [LIBS="$LIBS -lPocoNetSSL${POCO_DEBUG_SUFFIX} -lPocoCrypto${POCO_DEBUG_SUFFIX}"])
+          [LIBS="$LIBS -lPocoNetSSL${POCO_DEBUG_SUFFIX}"])
+    AS_IF([test "$mobile_app" != "true"],
+          [LIBS="$LIBS -lPocoCrypto${POCO_DEBUG_SUFFIX}"])
     LIBS="$LIBS -lPocoNet${POCO_DEBUG_SUFFIX} -lPocoUtil${POCO_DEBUG_SUFFIX} -lPocoJSON${POCO_DEBUG_SUFFIX} -lPocoXML${POCO_DEBUG_SUFFIX} -lPocoFoundation${POCO_DEBUG_SUFFIX}"
     # The engine builds PocoXML against the engine's expat (unbundled), so the
     # PocoXML archive references expat and we must link it explicitly (after
@@ -1970,8 +1975,16 @@ fi
 AC_SUBST([POCO_FUZZER_STATIC_LIBS])
 AM_CONDITIONAL([HAVE_POCO_STATIC_LIBS], [test -n "$POCO_FUZZER_STATIC_LIBS"])
 
+# libssl backs PocoNetSSL's HTTPS transport, so it is linked only when SSL is
+# enabled.  libcrypto resolves PocoCrypto's OpenSSL references and is therefore
+# needed by every server build (proof key / JWT) regardless of SSL; it must
+# come after both PocoCrypto and libssl for static-link ordering.  The OpenSSL
+# search path set up above is not gated on SSL, so libcrypto is found here even
+# in --disable-ssl server builds.
 AS_IF([test "$ENABLE_SSL" = "true"],
-      [LIBS="$LIBS -lssl -lcrypto"])
+      [LIBS="$LIBS -lssl"])
+AS_IF([test "$mobile_app" != "true"],
+      [LIBS="$LIBS -lcrypto"])
 
 AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true" -a "$ENABLE_MACOSAPP" != "true" -a "$host_os" != "emscripten"],
       [AC_CHECK_HEADERS([COKit/COKit.h],

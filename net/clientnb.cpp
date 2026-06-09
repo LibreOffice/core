@@ -65,10 +65,15 @@ public:
     Session(const char *session_name, bool https = false)
         : _session_name(session_name)
     {
+#if ENABLE_SSL
         if (https)
             _session = new Poco::Net::HTTPSClientSession(HostName, SslPortNumber);
         else
             _session = new Poco::Net::HTTPClientSession(HostName, HttpPortNumber);
+#else
+        (void)https;
+        _session = new Poco::Net::HTTPClientSession(HostName, HttpPortNumber);
+#endif
     }
     ~Session()
     {
@@ -262,6 +267,7 @@ public:
         EnableHttps = (args.size() > 0 && args[0] == "ssl");
         std::cerr << "Starting " << (EnableHttps ? "HTTPS" : "HTTP") << " client." << std::endl;
 
+#if ENABLE_SSL
         if (EnableHttps)
         {
             Poco::Net::initializeSSL();
@@ -272,6 +278,7 @@ public:
             Poco::Net::Context::Ptr sslContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, sslParams);
             Poco::Net::SSLManager::instance().initializeClient(nullptr, std::move(invalidCertHandler), std::move(sslContext));
         }
+#endif
 
         testWebsocketPingPong();
         testWebsocketEcho();

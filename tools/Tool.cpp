@@ -96,11 +96,15 @@ public:
     {
         Poco::URI uri(_app.getServerURI());
 
+#if ENABLE_SSL
         Poco::Net::HTTPClientSession *session;
         if (_app.getServerURI().compare(0, 5, "https") == 0)
             session = new Poco::Net::HTTPSClientSession(uri.getHost(), uri.getPort());
         else
             session = new Poco::Net::HTTPClientSession(uri.getHost(), uri.getPort());
+#else
+        Poco::Net::HTTPClientSession *session = new Poco::Net::HTTPClientSession(uri.getHost(), uri.getPort());
+#endif
 
         Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_POST, "/cool/convert-to");
 
@@ -194,12 +198,14 @@ void Tool::handleOption(const std::string& optionName,
         _serverURI = value;
     else if (optionName == "no-check-certificate")
     {
+#if ENABLE_SSL
         Poco::SharedPtr<Poco::Net::PrivateKeyPassphraseHandler> consoleClientHandler = new Poco::Net::KeyConsoleHandler(false);
         Poco::SharedPtr<Poco::Net::InvalidCertificateHandler> invalidClientCertHandler = new Poco::Net::AcceptCertificateHandler(false);
         Poco::Net::Context::Ptr sslClientContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "");
         Poco::Net::SSLManager::instance().initializeClient(std::move(consoleClientHandler),
                                                            std::move(invalidClientCertHandler),
                                                            std::move(sslClientContext));
+#endif
     }
 }
 
