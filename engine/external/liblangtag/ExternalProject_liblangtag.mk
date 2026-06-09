@@ -33,14 +33,14 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 		$(if $(CROSS_COMPILING),$(if $(filter WNT,$(OS)),"lt_cv_c99_vsnprintf=yes" "ac_cv_va_copy=yes","ac_cv_va_copy=no")) \
 		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
 		LIBXML2_LIBS="$(if $(filter WNT,$(OS)),-L$(gb_UnpackedTarball_workdir)/libxml2/win32/bin.msvc -llibxml2,$(LIBXML_LIBS))" \
-		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
+		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN) \
 		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN) \
 		&& $(if $(verbose),V=1) \
 		   $(MAKE) \
                 LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(gb_UnpackedTarball_workdir)/liblangtag/liblangtag/.libs)))' \
 		$(if $(filter MACOSX,$(OS)),\
-			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl URELIB \
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 				$(EXTERNAL_WORKDIR)/liblangtag/.libs/liblangtag.1.dylib \
 		) \
 	)

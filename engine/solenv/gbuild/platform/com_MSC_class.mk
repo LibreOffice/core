@@ -361,12 +361,12 @@ gb_Library_PLAINEXT_FOR_BUILD := .lib
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):NONE) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OXT),$(lib):OXT) \
-	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_SHLXTHDL),$(lib):SHLXTHDL) \
 

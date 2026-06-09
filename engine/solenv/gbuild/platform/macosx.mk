@@ -67,7 +67,6 @@ $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
 
 gb_LinkTarget__RPATHS := \
-	URELIB:@__________________________________________________URELIB/ \
 	UREBIN: \
 	OOO:@__________________________________________________OOO/ \
 	OXT: \
@@ -203,13 +202,13 @@ gb_Library_FILENAMES := \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OXT),$(lib):OXT) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):NONE) \
-	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 define gb_Library_get_rpath
@@ -293,10 +292,7 @@ endef
 
 gb_PythonTest_UNITTESTFAILED := $(GBUILDDIR)/platform/unittest-failed-MACOSX.sh
 gb_PythonTest_DEPS := $(call gb_GeneratedPackage_get_target,python3) $(call gb_Package_get_target,python_shell)
-gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)
-ifneq ($(LIBO_LIB_FOLDER),$(LIBO_URE_LIB_FOLDER))
-gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(INSTROOT)/$(LIBO_LIB_FOLDER)
-endif
+gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(INSTROOT)/$(LIBO_LIB_FOLDER)
 gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs
 
 # UITest class

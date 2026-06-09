@@ -72,12 +72,11 @@ gb_LinkTarget__get_cxxclrflags=$(call gb_LinkTarget__get_debugflags,$(1))
 gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_debugldflags,$(1)))
 
 gb_LinkTarget_LAYER_LINKPATHS := \
-	URELIB:URELIB. \
-	UREBIN:URELIB. \
-	OOO:URELIB+OOO. \
+	UREBIN:OOO. \
+	OOO:OOO. \
 	SHLXTHDL:. \
 	OXT:OXT. \
-	NONE:URELIB+OOO+NONE. \
+	NONE:OOO+NONE. \
 
 
 # Used to run a compiler plugin tool.

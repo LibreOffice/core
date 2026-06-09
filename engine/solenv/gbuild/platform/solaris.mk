@@ -87,7 +87,6 @@ $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
 
 gb_LinkTarget__RPATHS := \
-	URELIB:\dORIGIN \
 	UREBIN:\dORIGIN \
 	OOO:\dORIGIN \
 	OXT: \
@@ -187,13 +186,13 @@ gb_Library_FILENAMES := \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OXT),$(lib):OXT) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):NONE) \
-	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 define gb_Library__get_rpath

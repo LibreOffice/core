@@ -91,7 +91,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
-				URELIB \
+				OOO \
 				$(EXTERNAL_WORKDIR)/source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION) \
 				$(EXTERNAL_WORKDIR)/source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION) \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
