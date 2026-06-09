@@ -2567,6 +2567,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 // A table must not be dragged over another structure; same refusal as the
                 // total-row extend path, here also covering a right-drag.
                 mrViewData.GetDocShell()->ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
+                if (comphelper::COKit::isActive())
+                    UpdateAllOverlays();
             }
             else
             {
