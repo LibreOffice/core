@@ -6405,9 +6405,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
     CPPUNIT_ASSERT(pTextPage);
 
     int nPageObjectCount = pPdfPage->getObjectCount();
-    CPPUNIT_ASSERT_EQUAL(32, nPageObjectCount);
+    CPPUNIT_ASSERT_EQUAL(36, nPageObjectCount);
 
-    auto pContNoticeObject = pPdfPage->getObject(29);
+    auto pContNoticeObject = pPdfPage->getObject(33);
     CPPUNIT_ASSERT(pContNoticeObject);
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pContNoticeObject->getType());
 
@@ -6416,7 +6416,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
     // - Actual  : ມະນດ2
     CPPUNIT_ASSERT_EQUAL(u"ມະນດ"_ustr, pContNoticeObject->getText(pTextPage));
 
-    auto pPgNumObject = pPdfPage->getObject(30);
+    auto pPgNumObject = pPdfPage->getObject(34);
     CPPUNIT_ASSERT(pPgNumObject);
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pPgNumObject->getType());
     CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pPgNumObject->getText(pTextPage));

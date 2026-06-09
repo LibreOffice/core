@@ -192,7 +192,6 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         nLineWidth -= pLay->GetParaComposerBreak();
 
     SvxAdjustItem aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
-    const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
     // Maximum word spacing allows bigger spaces to limit hyphenation,
     // implement it based on the hyphenation zone: calculate a hyphenation zone
     // from maximum word spacing and space count of the line
@@ -816,20 +815,19 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 m_nBreakPos = rInf.GetIdx() - TextFrameIndex(1);
             }
 
-            if( aAdjust != SvxAdjust::ParaStart && aAdjust != SvxAdjust::Left )
+            // Delete any blanks at the end of a line, but be careful:
+            // If a field has been expanded, we do not want to delete any
+            // blanks inside the field portion. This would cause an unwanted
+            // underflow
+            TextFrameIndex nX = m_nBreakPos;
+            while (nX > rInf.GetLineStart()
+                   && (CH_TXTATR_BREAKWORD != cFieldChr || nX > rInf.GetIdx())
+                   && (CH_BLANK == rInf.GetChar(--nX) || CH_SIX_PER_EM == rInf.GetChar(nX)
+                       || CH_FULL_BLANK == rInf.GetChar(nX)))
             {
-                // Delete any blanks at the end of a line, but be careful:
-                // If a field has been expanded, we do not want to delete any
-                // blanks inside the field portion. This would cause an unwanted
-                // underflow
-                TextFrameIndex nX = m_nBreakPos;
-                while( nX > rInf.GetLineStart() &&
-                       ( CH_TXTATR_BREAKWORD != cFieldChr || nX > rInf.GetIdx() ) &&
-                       ( CH_BLANK == rInf.GetChar( --nX ) ||
-                         CH_SIX_PER_EM == rInf.GetChar( nX ) ||
-                         CH_FULL_BLANK == rInf.GetChar( nX ) ) )
-                    m_nBreakPos = nX;
+                m_nBreakPos = nX;
             }
+
             if( m_nBreakPos > rInf.GetIdx() )
                 nPorLen = m_nBreakPos - rInf.GetIdx();
         }

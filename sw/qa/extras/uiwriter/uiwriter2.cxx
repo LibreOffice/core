@@ -2908,7 +2908,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
 
     // This was the content of the next <text> (missing deletion on margin)
     // or only the first character of the deleted character sequence
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[9]/text", u" saved.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[11]/text", u" saved.");
 
     // this would crash due to bad redline range
     for (int i = 0; i < 6; ++i)

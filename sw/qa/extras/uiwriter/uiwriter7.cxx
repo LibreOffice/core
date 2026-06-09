@@ -2780,13 +2780,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
         {
             auto const& rPortionItem = aHandler.get(0);
             CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(91), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(90), rPortionItem.mnLength);
             CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
+        }
+
+        // Trailing whitespace portion
+        {
+            auto const& rPortionItem = aHandler.get(1);
+            CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
+            CPPUNIT_ASSERT_EQUAL(PortionType::Hole, rPortionItem.mnTextType);
         }
 
         // NEW LINE
         {
-            auto const& rPortionItem = aHandler.get(1);
+            auto const& rPortionItem = aHandler.get(2);
             CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
         }
 
@@ -2794,7 +2802,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
         // which is 16 chars + 2 hidden chars (start & end input field) = 18 chars
         // If this is correct then the input field is in one piece
         {
-            auto const& rPortionItem = aHandler.get(2);
+            auto const& rPortionItem = aHandler.get(3);
             CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(18), rPortionItem.mnLength);
             CPPUNIT_ASSERT_EQUAL(PortionType::InputField, rPortionItem.mnTextType);
@@ -2802,7 +2810,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
 
         // Text "."
         {
-            auto const& rPortionItem = aHandler.get(3);
+            auto const& rPortionItem = aHandler.get(4);
             CPPUNIT_ASSERT_EQUAL(u"text"_ustr, rPortionItem.msItemType);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rPortionItem.mnLength);
             CPPUNIT_ASSERT_EQUAL(PortionType::Text, rPortionItem.mnTextType);
@@ -2810,12 +2818,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77014)
 
         // NEW LINE
         {
-            auto const& rPortionItem = aHandler.get(4);
+            auto const& rPortionItem = aHandler.get(5);
             CPPUNIT_ASSERT_EQUAL(u"line_break"_ustr, rPortionItem.msItemType);
         }
 
         {
-            auto const& rPortionItem = aHandler.get(5);
+            auto const& rPortionItem = aHandler.get(6);
             CPPUNIT_ASSERT_EQUAL(u"finish"_ustr, rPortionItem.msItemType);
         }
     }

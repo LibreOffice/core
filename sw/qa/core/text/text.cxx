@@ -1409,8 +1409,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
-        nSectionAfterNBSPX_legacy_leftAligned = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
-        nSectionAfterNBSPX_legacy_justified = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
+        assertXPath(pXmlDoc, "//textarray[5]", "index", u"106");
+        nSectionAfterNBSPX_legacy_leftAligned = getXPath(pXmlDoc, "//textarray[5]", "x").toInt32();
+        assertXPath(pXmlDoc, "//textarray[12]", "index", u"106");
+        nSectionAfterNBSPX_legacy_justified = getXPath(pXmlDoc, "//textarray[12]", "x").toInt32();
         dispose();
     }
 
@@ -1422,10 +1424,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
+        assertXPath(pXmlDoc, "//textarray[5]", "index", u"106");
         nSectionAfterNBSPX_optionDisabled_leftAligned
-            = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
+            = getXPath(pXmlDoc, "//textarray[5]", "x").toInt32();
+        assertXPath(pXmlDoc, "//textarray[12]", "index", u"106");
         nSectionAfterNBSPX_optionDisabled_justified
-            = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
+            = getXPath(pXmlDoc, "//textarray[12]", "x").toInt32();
         dispose();
     }
 
@@ -1437,10 +1441,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
+        assertXPath(pXmlDoc, "//textarray[5]", "index", u"106");
         nSectionAfterNBSPX_optionEnabled_leftAligned
-            = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
+            = getXPath(pXmlDoc, "//textarray[5]", "x").toInt32();
+        assertXPath(pXmlDoc, "//textarray[12]", "index", u"106");
         nSectionAfterNBSPX_optionEnabled_justified
-            = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
+            = getXPath(pXmlDoc, "//textarray[12]", "x").toInt32();
     }
 
     // Assert left aligned NBSP for the legacy file is larger than zero

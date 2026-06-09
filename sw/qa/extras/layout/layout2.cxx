@@ -250,7 +250,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136220)
                     "expand", u"the subject is testing a text formatting bug");
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[2]/SwFieldPortion[2]",
-                    "expand", u"the subject is testing a text formatting ");
+                    "expand", u"the subject is testing a text formatting");
         assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout", 1);
         // the problem was that the field follow / rest portion was missing
         assertXPath(pXmlDoc,

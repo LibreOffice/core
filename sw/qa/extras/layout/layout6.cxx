@@ -2283,6 +2283,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf112256_paint_zero_width_glyphs)
     assertXPath(pXmlDoc, "//textarray", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf146572BidiWrapNoExtraSpace)
+{
+    createSwDoc("tdf146572-bidi-wrap-no-extra-space.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Root cause for the bug was Writer rolling line-final whitespace
+    // into the last bidi portion. Due to the fix, this whitespace should
+    // now be included in a separate hole portion. Check for both.
+    assertXPath(pXmlDoc, "//txt[1]//SwLineLayout[1]/SwMultiPortion", "portion", u"אאאא אאאא");
+    assertXPath(pXmlDoc, "//txt[1]//SwLineLayout[1]/SwHolePortion", "portion", u" ");
+
+    assertXPath(pXmlDoc, "//txt[2]//SwLineLayout[1]/SwMultiPortion", "portion", u"AAAA AAAA");
+    assertXPath(pXmlDoc, "//txt[2]//SwLineLayout[1]/SwHolePortion", "portion", u" ");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

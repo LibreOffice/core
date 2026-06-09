@@ -209,7 +209,7 @@ DECLARE_SHELL_MAILMERGE_TEST(exportDirectToPDF_shell, "linked-with-condition.odt
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
     CPPUNIT_ASSERT(pPdfPage);
-    CPPUNIT_ASSERT_EQUAL(4, pPdfPage->getObjectCount());
+    CPPUNIT_ASSERT_EQUAL(5, pPdfPage->getObjectCount());
 }
 
 DECLARE_SHELL_MAILMERGE_TEST(testTdf121168, "section_ps.odt", "4_v01.ods", "Tabelle1")
