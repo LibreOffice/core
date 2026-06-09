@@ -26,6 +26,7 @@
 #include <QEventLoop>
 #include <QFile>
 #include <QFileInfo>
+#include <QGuiApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMetaObject>
@@ -33,6 +34,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QScreen>
 #include <QSslConfiguration>
 #include <QSslServer>
 #include <QSslSocket>
@@ -467,7 +469,7 @@ void IntegratorFilePicker::attachEmbeddedDocument(
     };
 
     _bridge = coda::attachRemoteBridge(
-        _webView->page(), _document, this, _webView);
+        _webView->page(), _document, /*owner=*/nullptr, this, _webView);
 
     // Build the URL we rewrite the iframe to: our local HTTPS server's
     // /cool.html with CODA-local params added.  Preserve the UI
@@ -498,8 +500,8 @@ void IntegratorFilePicker::attachEmbeddedDocument(
     // Window title is generic until the page-JS resolves the doc
     // filename via /co/collab/fetch.
     setWindowTitle(APP_NAME);
-    auto size = coda::documentWindowSize(false);
-    resize(size.first, size.second);
+    const QRect available = QGuiApplication::primaryScreen()->availableGeometry();
+    resize(available.width(), available.height());
 }
 
 void IntegratorFilePicker::extractAccessTokenAsync(

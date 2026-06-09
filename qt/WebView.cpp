@@ -12,6 +12,9 @@
 #include <config.h>
 
 #include "WebView.hpp"
+#include "StandaloneWindow.hpp"
+#include "TabbedWindow.hpp"
+#include "TabManager.hpp"
 
 #include <QUrlQuery>
 
@@ -30,8 +33,6 @@
 #include <Poco/URI.h>
 
 #include <QApplication>
-#include <QCloseEvent>
-#include <QEvent>
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusMessage>
@@ -48,12 +49,10 @@
 #include <QFileInfo>
 #include <QMimeData>
 #include <QGuiApplication>
-#include <QKeySequence>
 #include <QMainWindow>
 #include <QObject>
 #include <QScreen>
 #include <QWindow>
-#include <QShortcut>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTimer>
@@ -270,102 +269,6 @@ QString findNextAvailableDocumentName(const QString& documentsDir, const QString
     return newFilePath;
 }
 
-class Window: public QMainWindow {
-public:
-    Window(QWidget * parent, WebView * owner): QMainWindow(parent), owner_(owner) {
-        auto* closeWindowShortcut = new QShortcut(QKeySequence::Quit, this);
-        closeWindowShortcut->setContext(Qt::WindowShortcut);
-        QObject::connect(closeWindowShortcut, &QShortcut::activated, this, &QMainWindow::close);
-    }
-    void setCloseCallback(const std::function<void()>& closeCallback)
-    {
-        closeCallback_ = closeCallback;
-    }
-
-private:
-    void closeEvent(QCloseEvent * ev) override {
-        if (closeCallback_)
-            closeCallback_();
-
-        // If the user clicked close while a save is still round-
-        // tripping (core's "Saving..." status indicator goes away
-        // before the .uno:Save COMMANDRESULT, and for remote docs
-        // also before the integrator upload completes), wait for
-        // that save to finish and then close - rather than asking
-        // about "unsaved changes" that are in fact already being
-        // saved.
-        if (owner_->isSaveInFlight())
-        {
-            LOG_TRC("Window::closeEvent: save in flight, deferring close");
-            // Acknowledge the close-click visually: busy cursor for
-            // immediate feedback (the in-page modal that we re-fire
-            // below has a 700ms paint delay - see
-            // Control.UIManager.ts openBusyPopup - so on a fast
-            // finish it might never appear, but the cursor change
-            // happens instantly).
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-            owner_->evalJS(
-                "if (window.app && window.app.map)"
-                "  window.app.map.fire('showbusy',"
-                "    {label: window._('Saving...')});");
-            owner_->onSaveComplete([this]() {
-                QApplication::restoreOverrideCursor();
-                // Clear the busy modal we raised in the deferral
-                // branch.  If the close completes cleanly the page
-                // is torn down anyway, but if the second closeEvent
-                // ends up re-prompting (save failed, doc still
-                // modified) we don't want the busy popup hanging
-                // behind the prompt.
-                if (owner_)
-                    owner_->evalJS(
-                        "if (window.app && window.app.map)"
-                        "  window.app.map.fire('hidebusy');");
-                // The save we waited for is the one for this close;
-                // skip the redundant save-if-dirty round-trip below.
-                if (owner_)
-                    owner_->markReadyToClose();
-                this->close();
-            });
-            ev->ignore();
-            return;
-        }
-
-        // First close click on a dirty doc: hand off to JS to save
-        // (writes through to disk locally and, for remote docs,
-        // uploads to the integrator via collabUploadFile) and post
-        // CLOSE_WINDOW on completion.  The CLOSE_WINDOW handler
-        // trips _readyToClose so this re-entry proceeds with
-        // teardown.  No-op for a clean doc or one with no bridge.
-        if (!owner_->isReadyToClose())
-        {
-            LOG_TRC("Window::closeEvent: save-if-dirty round-trip");
-            owner_->saveAndClose();
-            ev->ignore();
-            return;
-        }
-
-        auto const p = owner_;
-        // Announce the orderly close to the per-document collab
-        // broker (no-op for local-only docs) before the WebView is
-        // destroyed, so it can reach the bridge's _document while
-        // it is still alive.
-        p->sendCollabBye();
-        owner_ = nullptr;
-        assert(p != nullptr);
-        delete p;
-        QMainWindow::closeEvent(ev);
-    }
-
-    void changeEvent(QEvent * ev) override {
-        if (ev->type() == QEvent::ActivationChange && owner_)
-            owner_->onWindowActiveChanged(isActiveWindow());
-        QMainWindow::changeEvent(ev);
-    }
-
-    WebView * owner_;
-    std::function<void()> closeCallback_;
-};
-
 // Move a window onto a given screen and show it full screen there.
 //
 // On a Wayland move to another output, tear the platform window down first so
@@ -429,7 +332,7 @@ void CODAWebEngineView::arrangePresentationWindows()
     QScreen* presenterScreen = externalScreen ? externalScreen : laptopScreen;
     showWindowFullScreenOnScreen(presenterFSWindow, presenterScreen);
 
-    Window* consoleWindow = _presenterConsole ? static_cast<Window*>(_presenterConsole->mainWindow()) : nullptr;
+    QMainWindow* consoleWindow = _presenterConsole ? _presenterConsole->mainWindow() : nullptr;
     if (consoleWindow)
     {
         if (externalScreen)
@@ -649,18 +552,20 @@ QWebEngineView* CODAWebEngineView::createWindow(QWebEnginePage::WebWindowType /*
 {
     // A window.open from the page. The slideshow and the presenter console each
     // open their own top-level window, naming its role in the URL fragment they
-    // pass to window.open. The original document window is never touched, so its
+    // pass to window.open. The original document view is never touched, so its
     // content stays live.
     WebView* child = new WebView(Application::getProfile(), false);
+    // The standalone window owns the child WebView and deletes it on close.
+    StandaloneWindow* childWindow = StandaloneWindow::wrap(child);
 
     QWebEngineView* childView = child->webEngineView();
     QWebEnginePage* page = childView->page();
     QObject::connect(page, &QWebEnginePage::windowCloseRequested, page,
                      [child]() {
-                         child->mainWindow()->close();
+                         if (QMainWindow* window = child->mainWindow())
+                             window->close();
                      });
 
-    Window* childWindow = static_cast<Window*>(child->mainWindow());
     childWindow->setCloseCallback(
                      [this, child]() {
                          if (_presenterConsole == child)
@@ -756,6 +661,20 @@ void CODAWebEngineView::exchangeMonitors()
         showWindowFullScreenOnScreen(consoleWindow, screens[newConsoleScreen]);
 }
 
+void CODAWebEngineView::endPresentation()
+{
+    // These windows outlive the document view, and their close handlers refer
+    // back to this view, so clear the members before closing them.
+    WebView* presentationView = _presentationView;
+    WebView* presenterConsole = _presenterConsole;
+    _presentationView = nullptr;
+    _presenterConsole = nullptr;
+    if (presentationView && presentationView->mainWindow())
+        presentationView->mainWindow()->close();
+    if (presenterConsole && presenterConsole->mainWindow())
+        presenterConsole->mainWindow()->close();
+}
+
 CODAWebEngineView::~CODAWebEngineView()
 {
     if (_screenAdded)
@@ -763,42 +682,16 @@ CODAWebEngineView::~CODAWebEngineView()
     if (_screenRemoved)
         QObject::disconnect(_screenRemoved);
 
-    // These windows outlive the document window, and their close handlers refer
-    // back to this view, so close them while it is still valid.
-    WebView* presentationView = _presentationView;
-    WebView* presenterConsole = _presenterConsole;
-    _presentationView = nullptr;
-    _presenterConsole = nullptr;
-    if (presentationView)
-        presentationView->mainWindow()->close();
-    if (presenterConsole)
-        presenterConsole->mainWindow()->close();
+    endPresentation();
 }
 
-WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parentWindow)
-    : _mainWindow(new Window(parentWindow, this))
-    , _webView(std::make_unique<CODAWebEngineView>(_mainWindow))
+WebView::WebView(QWebEngineProfile* profile, bool isWelcome)
+    : QObject(nullptr)
+    , _mainWindow(nullptr)
+    , _webView(std::make_unique<CODAWebEngineView>(nullptr))
     , _isWelcome(isWelcome)
     , _bridge(nullptr)
 {
-    _mainWindow->setCentralWidget(_webView.get());
-
-    QScreen* screen = QGuiApplication::primaryScreen();
-    QRect screenGeometry = screen->availableGeometry();
-
-    if (_isWelcome)
-    {
-        _mainWindow->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
-        _mainWindow->setWindowModality(Qt::WindowModal);
-    }
-    else
-    {
-        // Use 1/3 of screen size, but enforce reasonable bounds
-        int minWidth = qBound(800, screenGeometry.width() / 3, 1400);
-        int minHeight = qBound(600, screenGeometry.height() / 3, 1000);
-        _mainWindow->setMinimumSize(minWidth, minHeight);
-    }
-
     QWebEnginePage* page = new LoggingWebEnginePage(profile, _webView.get());
     _webView->setPage(page);
 
@@ -820,6 +713,11 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parent
     QObject::connect(page, &QWebEnginePage::fullScreenRequested,
                      [this](QWebEngineFullScreenRequest request)
                      {
+                         if (!_mainWindow)
+                         {
+                             request.reject();
+                             return;
+                         }
                          if (request.toggleOn())
                              _mainWindow->showFullScreen();
                          else
@@ -851,7 +749,7 @@ void WebView::onWindowActiveChanged(bool active)
     // through its page's blur handler, unless its window is active again by then.
     constexpr int trimDelayMs = 5000;
     QTimer::singleShot(trimDelayMs, _webView.get(), [this]() {
-        if (!_bridge || _mainWindow->isActiveWindow())
+        if (!_bridge || (_mainWindow && _mainWindow->isActiveWindow()))
             return;
         LOG_TRC("trimming off-screen tiles of backgrounded document appDocId="
                 << _document._appDocId);
@@ -860,56 +758,84 @@ void WebView::onWindowActiveChanged(bool active)
     });
 }
 
-std::pair<int, int> coda::documentWindowSize(bool isWelcomeOrStarter)
+void WebView::setMainWindow(QMainWindow* window)
 {
-    QScreen* screen = QGuiApplication::primaryScreen();
-    const int viewportWidth = screen->availableGeometry().width();
-    const int viewportHeight = screen->availableGeometry().height();
-
-    if (!isWelcomeOrStarter)
-        return { viewportWidth, viewportHeight };
-
-    const int maxWidth = 1280;
-    const int maxHeight = 720;
-    const int minWidth = 800;
-    const int minHeight = 450;
-
-    int width = static_cast<int>(std::floor(viewportWidth * 0.4));
-    int height = static_cast<int>(std::floor((width * 9.0) / 16.0));
-
-    width = std::min(std::max(width, minWidth), maxWidth);
-    height = std::min(std::max(height, minHeight), maxHeight);
-
-    return { width, height };
+    _mainWindow = window;
+    if (_webView)
+        _webView->setMainWindow(window);
 }
 
-static std::pair<int, int> getWindowSize(bool isWelcome)
+void WebView::requestClose()
 {
-    return coda::documentWindowSize(isWelcome);
+    if (_onCloseRequest)
+    {
+        _onCloseRequest();
+        return;
+    }
+    if (_mainWindow)
+        _mainWindow->close();
 }
 
-std::optional<bool> portalPrefersDark() {
-    QDBusMessage message = QDBusMessage::createMethodCall(
-        "org.freedesktop.portal.Desktop",
-        "/org/freedesktop/portal/desktop",
-        "org.freedesktop.portal.Settings",
-        "Read"
-    );
-    message << "org.freedesktop.appearance" << "color-scheme";
+void WebView::updateTitle(const QString& docTitle)
+{
+    _docTitle = docTitle;
+    const QString windowTitle = composedWindowTitle();
+    if (_onTitleChange)
+        _onTitleChange(windowTitle);
+    else if (_mainWindow)
+        _mainWindow->setWindowTitle(windowTitle);
+}
 
-    QDBusReply<QVariant> reply = QDBusConnection::sessionBus().call(message);
-    if (!reply.isValid()) return std::nullopt;
+QString WebView::composedWindowTitle() const
+{
+    return _docTitle.isEmpty() ? QStringLiteral(APP_NAME)
+                               : (_docTitle + QStringLiteral(" - ") + QStringLiteral(APP_NAME));
+}
 
-    QVariant v = reply.value();
-    if (v.userType() == qMetaTypeId<QDBusVariant>())
-        v = qvariant_cast<QDBusVariant>(v).variant();
+std::optional<bool> portalPrefersDark()
+{
+    static const std::optional<bool> cached = []() -> std::optional<bool> {
+        QDBusMessage message = QDBusMessage::createMethodCall(
+            "org.freedesktop.portal.Desktop",
+            "/org/freedesktop/portal/desktop",
+            "org.freedesktop.portal.Settings",
+            "Read"
+        );
+        message << "org.freedesktop.appearance" << "color-scheme";
 
-    bool ok = false;
-    const uint code = v.toUInt(&ok);
-    if (!ok || code == 0) return std::nullopt;     // 0 = no preference
-    if (code == 1) return true;                    // 1 = prefer dark
-    if (code == 2) return false;                   // 2 = prefer light
-    return std::nullopt;
+        QDBusReply<QVariant> reply = QDBusConnection::sessionBus().call(message);
+        if (!reply.isValid()) return std::nullopt;
+
+        QVariant v = reply.value();
+        if (v.userType() == qMetaTypeId<QDBusVariant>())
+            v = qvariant_cast<QDBusVariant>(v).variant();
+
+        bool ok = false;
+        const uint code = v.toUInt(&ok);
+        if (!ok || code == 0) return std::nullopt;     // 0 = no preference
+        if (code == 1) return true;                    // 1 = prefer dark
+        if (code == 2) return false;                   // 2 = prefer light
+        return std::nullopt;
+    }();
+    return cached;
+}
+
+QString WebView::docTypeFromExtension(const QString& filePath)
+{
+    const QString ext = QFileInfo(filePath).suffix().toLower();
+    static const QStringList writerExt = { "odt", "ott", "doc", "docx", "rtf", "txt", "fodt" };
+    static const QStringList calcExt = { "ods", "ots", "xls", "xlsx", "csv", "fods" };
+    static const QStringList impressExt = { "odp", "otp", "ppt", "pptx", "fodp" };
+    static const QStringList drawExt = { "odg", "otg", "fodg" };
+    if (writerExt.contains(ext))
+        return QStringLiteral("writer");
+    if (calcExt.contains(ext))
+        return QStringLiteral("calc");
+    if (impressExt.contains(ext))
+        return QStringLiteral("impress");
+    if (drawExt.contains(ext))
+        return QStringLiteral("draw");
+    return QStringLiteral("other");
 }
 
 void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, bool requiresSaveAs)
@@ -922,6 +848,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
             ._fakeClientFd = -1,
             ._appDocId = 0,
         };
+        _docType = QStringLiteral("starter");
     }
     else
     {
@@ -931,6 +858,8 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
             ._fakeClientFd = fakeSocketSocket(),
             ._appDocId = coda::generateNewAppDocId(),
         };
+        _docType = _isWelcome ? QStringLiteral("welcome")
+                              : docTypeFromExtension(QString::fromStdString(fileURL.getPath()));
     }
 
     // setup js c++ communication
@@ -939,7 +868,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     queryGnomeFontScalingUpdateZoom();
 
     assert(_bridge == nullptr);
-    _bridge = new Bridge(channel, _document, _mainWindow, _webView.get());
+    _bridge = new Bridge(channel, this, _document, nullptr, _webView.get());
     if (requiresSaveAs)
         _bridge->setRequiresSaveAs(true);
     channel->registerObject("bridge", _bridge);
@@ -984,41 +913,26 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     const std::string urlAndQueryStr = urlAndQuery.toString();
     LOG_TRC("Open URL: " << urlAndQueryStr);
 
-    // Set window title
-    QString applicationTitle;
     if (isStarterMode)
     {
-        applicationTitle = QString(APP_NAME) + " - " + QApplication::translate("WebView", "Start");
+        updateTitle(QApplication::translate("WebView", "Start"));
     }
     else
     {
         Poco::Path uriPath(_document._fileURL.getPath());
-        QString fileName = QString::fromStdString(uriPath.getFileName());
-        applicationTitle = fileName + " - " APP_NAME;
+        updateTitle(QString::fromStdString(uriPath.getFileName()));
     }
-    if (_webView->window())
-        _webView->window()->setWindowTitle(applicationTitle);
 
     _webView->load(QUrl(QString::fromStdString(urlAndQueryStr)));
-
-    auto size = getWindowSize(_isWelcome || isStarterMode);
-
-    // TODO: Starter screen uses 1.5x welcome dimensions (width and height) as a temporary
-    // solution. This should be refined with proper sizing logic based on user feedback.
-    if (isStarterMode) {
-        size.first = 1.5 * size.first;
-        size.second = 1.5 * size.second;
-    }
-    _mainWindow->resize(size.first, size.second);
-    _mainWindow->show();
 }
 
 Bridge* coda::attachRemoteBridge(QWebEnginePage* page,
                                  coda::DocumentData& document,
-                                 QWidget* window, QWebEngineView* webView)
+                                 WebView* owner, QWidget* window,
+                                 QWebEngineView* webView)
 {
     QWebChannel* channel = new QWebChannel(page);
-    Bridge* bridge = new Bridge(channel, document, window, webView);
+    Bridge* bridge = new Bridge(channel, owner, document, window, webView);
     channel->registerObject("bridge", bridge);
     page->setWebChannel(channel);
     return bridge;
@@ -1055,11 +969,14 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
         ._appDocId = coda::generateNewAppDocId(),
         ._remoteInfo = std::move(remoteInfo),
     };
+    // The document type is unknown until the page-JS resolves the file;
+    // the tab falls back to the generic icon.
+    _docType = QStringLiteral("other");
 
     queryGnomeFontScalingUpdateZoom();
     assert(_bridge == nullptr);
     _bridge = coda::attachRemoteBridge(
-        _webView->page(), _document, _mainWindow, _webView.get());
+        _webView->page(), _document, this, nullptr, _webView.get());
 
     Poco::Path coolHtmlPath(getDataDir());
     coolHtmlPath.append("/browser/dist/cool.html");
@@ -1069,20 +986,15 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
 
     LOG_TRC("Open remote URL: " << urlAndQuery.toString().toStdString());
 
-    // Window title is set to a generic "<APP_NAME>" until the page-JS
+    // Tab/window title is a generic "<APP_NAME>" until the page-JS
     // resolves the actual filename via /co/collab/fetch - at which
     // point Permission.js or similar can update the title.
-    if (_webView->window())
-        _webView->window()->setWindowTitle(APP_NAME);
+    updateTitle(QString());
 
     _webView->load(urlAndQuery);
-
-    auto size = getWindowSize(false);
-    _mainWindow->resize(size.first, size.second);
-    _mainWindow->show();
 }
 
-WebView* WebView::createNewDocument(QWebEngineProfile* profile, const std::string& templateType, const std::string& templatePath, const std::string& basename)
+QString WebView::createNewDocumentFile(const std::string& templateType, const std::string& templatePath, const std::string& basename)
 {
     // Get template file path
     Poco::Path templatePathObj = getTemplatePath(templateType, templatePath);
@@ -1102,18 +1014,10 @@ WebView* WebView::createNewDocument(QWebEngineProfile* profile, const std::strin
     {
         LOG_ERR("Failed to copy template from " << templateFilePath.toStdString()
                 << " to " << newFilePath.toStdString());
-        return nullptr;
+        return {};
     }
 
-    // Open the new document
-    Poco::URI newDocumentURI(Poco::Path(newFilePath.toStdString()));
-    WebView* webViewInstance = new WebView(profile, false);
-    webViewInstance->load(newDocumentURI, true);
-
-    // Add to recent files
-    Application::getRecentFiles().add(newDocumentURI.toString());
-
-    return webViewInstance;
+    return newFilePath;
 }
 
 bool WebView::isTemplate(const std::string& fileName)
@@ -1164,9 +1068,11 @@ WebView* WebView::openTemplateAsNewDocument(QWebEngineProfile* profile,
     }
 
     Poco::URI workingCopyURI(Poco::Path(workingCopyPath.toStdString()));
-    WebView* webViewInstance = new WebView(profile, false);
+    TabbedWindow* window = TabbedWindow::getOrCreate(profile);
+    const int tabId = window->manager()->addDocumentTab(workingCopyURI, /*newFile*/ false,
+                                                        /*requiresSaveAs*/ true);
+    WebView* webViewInstance = window->manager()->webViewForTab(tabId);
     webViewInstance->_templateWorkingDir = std::move(workingDir);
-    webViewInstance->load(workingCopyURI, false, false, true);
 
     return webViewInstance;
 }
@@ -1186,21 +1092,11 @@ WebView* WebView::findOpenDocument(const Poco::URI& documentURI)
     return nullptr;
 }
 
-WebView* WebView::findStarterScreen()
-{
-    for (WebView* instance : s_instances)
-    {
-        if (instance->isStarterScreen())
-        {
-            return instance;
-        }
-    }
-    return nullptr;
-}
-
 void WebView::activateWindow()
 {
-    if (_mainWindow)
+    if (auto* tw = qobject_cast<TabbedWindow*>(_mainWindow))
+        tw->activateTabFor(this); // raises and activates the window itself
+    else if (_mainWindow)
     {
         _mainWindow->raise();
         _mainWindow->activateWindow();
@@ -1247,6 +1143,17 @@ void WebView::sendCollabBye()
 {
     if (_bridge)
         _bridge->sendCollabBye();
+}
+
+bool WebView::isDocumentModified() const
+{
+    return _bridge && _bridge->isModified();
+}
+
+void WebView::endPresentation()
+{
+    if (_webView)
+        _webView->endPresentation();
 }
 
 void WebView::queryGnomeFontScalingUpdateZoom()

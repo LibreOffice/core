@@ -203,7 +203,7 @@ export class CodaQtServiceLauncher {
 			!this.#codaQtProcess.signalCode
 		) {
 			await new Promise<void>((resolve) => {
-				const timeout = setTimeout(resolve, 5000);
+				const timeout = setTimeout(resolve, 20000);
 				this.#codaQtProcess!.once('exit', () => {
 					clearTimeout(timeout);
 					resolve();

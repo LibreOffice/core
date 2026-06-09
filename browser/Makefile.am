@@ -1032,6 +1032,14 @@ if ENABLE_WASM_FALLBACK
 WASM_FALLBACK_FILES += $(DIST_FOLDER)/wasm
 endif
 
+QTAPP_TABSTRIP_FILES =
+if ENABLE_QTAPP
+QTAPP_TABSTRIP_FILES += \
+	$(DIST_FOLDER)/qtapp-tabstrip.html \
+	$(DIST_FOLDER)/qtapp-tabstrip.css \
+	$(DIST_FOLDER)/qtapp-tabstrip.js
+endif
+
 TEMPLATE_MANIFEST = $(DIST_FOLDER)/templates/templates.js
 
 admin-tsc.done: $(patsubst %,$(srcdir)/%,$(COOL_ADMIN_TS))
@@ -1064,6 +1072,7 @@ build-cool: \
 	$(DIST_FOLDER)/color-palette-dark.css \
 	$(DIST_FOLDER)/bundle.js \
 	$(DIST_FOLDER)/cool.html \
+	$(QTAPP_TABSTRIP_FILES) \
 	$(WASM_FILES) \
 	$(WASM_FALLBACK_FILES) \
 	$(TEMPLATE_MANIFEST) \
@@ -1240,6 +1249,29 @@ $(DIST_FOLDER)/cool.html: $(srcdir)/html/cool.html.m4 \
 		-DVENDOR="$(VENDOR)" \
 		-DINFO_URL="$(INFO_URL)" \
 		$(srcdir)/html/cool.html.m4 > $@
+
+if ENABLE_QTAPP
+$(DIST_FOLDER)/qtapp-tabstrip.html: $(srcdir)/html/qtapp-tabstrip.html.m4
+	@mkdir -p $(DIST_FOLDER)
+	$(QUIET_M4) m4 -PE -I $(INTERMEDIATE_DIR) \
+		-DIOSAPP=$(ENABLE_IOSAPP) \
+		-DMACOSAPP=$(ENABLE_MACOSAPP) \
+		-DQTAPP=$(ENABLE_QTAPP) \
+		-DDEBUG=$(ENABLE_DEBUG) \
+		-DWINDOWSAPP=$(ENABLE_WINDOWSAPP) \
+		-DANDROIDAPP=$(ENABLE_ANDROIDAPP) \
+		-DEMSCRIPTENAPP=$(ENABLE_EMSCRIPTENAPP) \
+		-DMOBILEAPPNAME="$(APP_NAME)" \
+		$< > $@
+
+$(DIST_FOLDER)/qtapp-tabstrip.css: $(srcdir)/css/qtapp-tabstrip.css
+	@mkdir -p $(DIST_FOLDER)
+	@cp $< $@
+
+$(DIST_FOLDER)/qtapp-tabstrip.js: $(srcdir)/src/qtapp/tabstrip.js
+	@mkdir -p $(DIST_FOLDER)
+	@cp $< $@
+endif
 
 .PHONY: adminIntegratorSettings
 adminIntegratorSettings:

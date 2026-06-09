@@ -15,6 +15,8 @@
 
 #include <qt/Document.hpp>
 #include <qt/IntegratorFilePicker.hpp>
+#include <qt/TabManager.hpp>
+#include <qt/TabbedWindow.hpp>
 #include <qt/WebView.hpp>
 #include <common/Log.hpp>
 
@@ -58,8 +60,12 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
             remoteInfo->coolServer = coolServer;
             remoteInfo->coolPath = coolPath;
 
+            // The manager takes ownership of the WebView.
+            TabbedWindow* tw = TabbedWindow::getOrCreate(profile);
             WebView* webViewInstance = new WebView(profile);
+            tw->manager()->adoptTab(webViewInstance, /*insertAt*/ -1);
             webViewInstance->loadRemote(std::move(remoteInfo));
+            tw->activateTabFor(webViewInstance);
         });
     picker->show();
 }

@@ -81,12 +81,18 @@ cmake_list= \
 
 
 # Sources that will be created by Qt's MOC
-BUILT_SOURCES = bridge.moc.cpp DBusService.moc.cpp IntegratorFilePicker.moc.cpp
+BUILT_SOURCES = bridge.moc.cpp DBusService.moc.cpp IntegratorFilePicker.moc.cpp TabManager.moc.cpp TabShellBridge.moc.cpp TabbedWindow.moc.cpp
 bridge.moc.cpp: bridge.hpp
 	$(MOC) $(MOCFLAGS) -o $@ $<
 DBusService.moc.cpp: DBusService.hpp
 	$(MOC) $(MOCFLAGS) -o $@ $<
 IntegratorFilePicker.moc.cpp: IntegratorFilePicker.hpp
+	$(MOC) $(MOCFLAGS) -o $@ $<
+TabManager.moc.cpp: TabManager.hpp
+	$(MOC) $(MOCFLAGS) -o $@ $<
+TabShellBridge.moc.cpp: TabShellBridge.hpp
+	$(MOC) $(MOCFLAGS) -o $@ $<
+TabbedWindow.moc.cpp: TabbedWindow.hpp
 	$(MOC) $(MOCFLAGS) -o $@ $<
 
 CLEANFILES = $(BUILT_SOURCES)
@@ -98,7 +104,7 @@ coda_qt_CXXFLAGS += -mno-direct-extern-access
 endif
 endif
 
-coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CODocumentBroker.cpp CoolUrlSchemeHandler.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp IntegratorFilePicker.cpp RemoteOpen.cpp $(cmake_list)
+coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CODocumentBroker.cpp CoolUrlSchemeHandler.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp IntegratorFilePicker.cpp RemoteOpen.cpp StandaloneWindow.cpp TabbedWindow.cpp TabManager.cpp TabShellBridge.cpp $(cmake_list)
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
 
 metainfodir = $(datadir)/metainfo

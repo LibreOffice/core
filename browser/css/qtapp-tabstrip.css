@@ -1,0 +1,123 @@
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	font-family: var(--cool-font);
+	font-size: var(--default-font-size);
+	overflow: hidden;
+	user-select: none;
+}
+#strip {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	height: 100%;
+	overflow: hidden;
+}
+.tab {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 6px;
+	padding: 0 8px;
+	flex: 1 1 0;
+	min-width: 32px;
+	max-width: 220px;
+	height: 100%;
+	background: var(--color-background-tabs-group);
+	border-right: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
+	cursor: pointer;
+	overflow: hidden;
+	position: relative;
+}
+.tab[data-doctype] {
+	--tab-accent: rgb(var(--doc-type));
+}
+.tab.active {
+	background: var(--color-main-background);
+	/* padding-bottom reserves the 1px the inactive tab's border occupies, so
+	   becoming active does not shift the content up. */
+	border-bottom: 0;
+	padding-bottom: 1px;
+}
+/* Pseudo-element, not a border-bottom: a colored border-bottom miters
+   diagonally into the gray side border at the corner. */
+.tab.active::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 2px;
+	background: var(--tab-accent, var(--color-primary));
+}
+.tab .icon {
+	flex: 0 0 16px;
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.tab .title {
+	flex: 1 1 auto;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.tab .title.modified::after {
+	content: ' *';
+	color: var(--color-text-lighter);
+}
+.tab .close {
+	flex: 0 0 16px;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--color-text-lighter);
+	visibility: hidden;
+	font-size: 1.17em;
+	/* line-height: 0 keeps the X glyph optically centered; the flex
+       container's align-items alone leaves it sitting too low. */
+	line-height: 0;
+}
+.tab:hover .close,
+.tab.active .close { visibility: visible; }
+.tab .close:hover {
+	background: var(--color-background-hover);
+	color: var(--color-main-text);
+}
+.tab.dragging { opacity: 0.5; }
+.tab.drop-before { border-left: 2px solid var(--color-primary); }
+.tab.drop-after { border-right: 2px solid var(--color-primary); }
+#new-tab {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 28px;
+	width: 28px;
+	height: 100%;
+	border-bottom: 1px solid var(--color-border);
+	cursor: pointer;
+	color: var(--color-text-lighter);
+	font-size: 1.5em;
+	/* See .tab .close: keeps the + glyph optically centered. */
+	line-height: 0;
+}
+#new-tab:hover {
+	background: var(--color-background-tabs-group);
+	color: var(--color-main-text);
+}
+/* Continues the bottom separator across the strip's trailing empty space. */
+#strip::after {
+	content: '';
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	border-bottom: 1px solid var(--color-border);
+}

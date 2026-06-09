@@ -50,8 +50,9 @@ describe('Test harness', () => {
 				);
 			} else {
 				expect(source).toContain('accessibility-id="QApplication"');
-				expect(source).toContain(
-					'accessibility-id="QApplication.QMainWindow.QWebEngineView"',
+				// The WebView path varies by window type.
+				expect(source).toMatch(
+					/accessibility-id="QApplication\.[^"]*QWebEngineView"/,
 				);
 			}
 		});

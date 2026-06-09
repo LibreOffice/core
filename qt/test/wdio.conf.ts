@@ -18,11 +18,11 @@ import { CodaQtServiceLauncher } from './lib/coda-qt.service.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const REMOTE_DEBUGGING_PORT = process.env.REMOTE_DEBUGGING_PORT || 9222;
+const REMOTE_DEBUGGING_PORT = Number(process.env.REMOTE_DEBUGGING_PORT || 9222);
 const CODA_QT_BINARY =
 	process.env.CODA_QT_BINARY || join(__dirname, '..', 'coda-qt');
-const WEBENGINE_DRIVER_PORT = process.env.WEBENGINE_DRIVER_PORT || 9515;
-const AT_SPI_PORT = process.env.AT_SPI_PORT || 4723;
+const WEBENGINE_DRIVER_PORT = Number(process.env.WEBENGINE_DRIVER_PORT || 9515);
+const AT_SPI_PORT = Number(process.env.AT_SPI_PORT || 4723);
 
 const AT_SPI_DRIVER_PATH = process.env.AT_SPI_DRIVER_PATH;
 if (!AT_SPI_DRIVER_PATH) {

@@ -11,17 +11,20 @@
 
 #pragma once
 
-#include <string>
-
 #include <QObject>
 #include <QStringList>
 #include <QString>
+
+#include <string>
 
 namespace coda
 {
     // displayUris are used in a flatpak sandbox which contains real host locations
     void openFiles(const QStringList& files, const QStringList& displayUris = {});
-    void openNewDocument(const QString& templateType);
+    // Creates the document file, then opens it as a tab. Returns false (and
+    // opens no window) if the file could not be created.
+    bool openNewDocument(const std::string& templateType, const std::string& templatePath,
+                         const std::string& basename);
 
     // Returns the host filepath for sandboxed filepaths
     std::string hostDisplayUriForPath(const QString& path);

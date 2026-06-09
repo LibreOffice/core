@@ -26,6 +26,9 @@
 #include <qt/QtClipboard.hpp>
 #include <qt/qt.hpp>
 #include <common/Util.hpp>
+#include <qt/StandaloneWindow.hpp>
+#include <qt/TabManager.hpp>
+#include <qt/TabbedWindow.hpp>
 #include <qt/WebView.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/SettingsStorage.hpp>
@@ -62,17 +65,14 @@ static const int SHOW_JS_MAXLEN = 300;
 
 namespace
 {
-    void closeStarterScreen()
+    void closeStarterScreen(QPointer<WebView> starter)
     {
-        WebView* starterScreen = WebView::findStarterScreen();
-        if (starterScreen)
+        if (starter && starter->isStarterScreen())
         {
             LOG_TRC("Closing starter screen after document action");
-            QTimer::singleShot(0, [starterScreen]() {
-                if (starterScreen->getMainWindow())
-                {
-                    starterScreen->getMainWindow()->close();
-                }
+            QTimer::singleShot(0, [starter]() {
+                if (starter)
+                    starter->requestClose();
             });
         }
     }
@@ -116,10 +116,11 @@ bool coda::invokeOnBridge(unsigned appDocId, std::function<void(Bridge&)> fn)
     return true;
 }
 
-Bridge::Bridge(QObject* parent, coda::DocumentData& document, QWidget* window,
+Bridge::Bridge(QObject* parent, WebView* owner, coda::DocumentData& document, QWidget* window,
                QWebEngineView* webView)
     : QObject(parent)
     , _document(document)
+    , _owner(owner)
     , _window(window)
     , _webView(webView)
     , _closeNotificationPipeForForwardingThread{ -1, -1 }
@@ -227,7 +228,13 @@ void Bridge::createAndStartMessagePumpThread()
             else if (unexpectedClose)
             {
                 LOG_WRN("Unexpected closing of message pump thread; closing window now");
-                QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
+                // Post through the owner so Qt drops the call if the WebView is
+                // already gone by the time the event loop runs it.
+                if (WebView* owner = _owner.data())
+                    QMetaObject::invokeMethod(owner, [owner]() { owner->requestClose(); },
+                                              Qt::QueuedConnection);
+                else if (_window)
+                    QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
             }
         });
 }
@@ -255,7 +262,14 @@ void Bridge::retryLoadAfterUnloading()
     {
         LOG_WRN("Document [" << _document._fileURL.toString() << "] was still unloading after "
                              << maxRetries << " attempts; closing window");
-        QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
+        // The document never loaded, so there is nothing to save; don't let
+        // the close try a save round-trip through the failed page.
+        _readyToClose = true;
+        if (WebView* owner = _owner.data())
+            QMetaObject::invokeMethod(
+                owner, [owner]() { owner->requestClose(); }, Qt::QueuedConnection);
+        else if (_window)
+            QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
         return;
     }
 
@@ -718,12 +732,11 @@ QVariant Bridge::cool(const QString& messageStr)
                                    (" " + std::to_string(_document._appDocId)));
         fakeSocketWriteQueue(_document._fakeClientFd, initialMessage.c_str(), initialMessage.size());
 
-        // Update window title with new filename
+        // Update window/tab title with new filename
         Poco::Path uriPath(_document._fileURL.getPath());
         QString fileName = QString::fromStdString(uriPath.getFileName());
-        QString windowTitle = fileName + " - " APP_NAME;
-        if (_window)
-            _window->setWindowTitle(windowTitle);
+        if (_owner)
+            _owner->updateTitle(fileName);
 
         // Add the new document location to recent files.
         // For flatpak use the host location
@@ -741,10 +754,11 @@ QVariant Bridge::cool(const QString& messageStr)
         if (FileUtil::getStatOfFile(welcomePath, st) == 0)
         {
             Poco::URI fileURL{Poco::Path(welcomePath)};
-            QMainWindow* window = qobject_cast<QMainWindow*>(_window);
-            QTimer::singleShot(0, [fileURL, window]() {
-                WebView* webViewInstance = new WebView(Application::getProfile(), /*isWelcome*/ true, window);
-                webViewInstance->load(fileURL);
+            QPointer<QMainWindow> parent = _owner ? _owner->mainWindow() : nullptr;
+            QTimer::singleShot(0, [fileURL, parent]() {
+                WebView* wv = new WebView(Application::getProfile(), /*isWelcome*/ true);
+                StandaloneWindow::wrap(wv, parent);
+                wv->load(fileURL);
             });
             LOG_TRC_NOFILE("Opening welcome slideshow: " << welcomePath);
         }
@@ -786,8 +800,8 @@ QVariant Bridge::cool(const QString& messageStr)
         if (commandName != ".uno:ModifiedStatus")
             return {};
 
-        const bool modified = (object->get("state").toString() == "true");
-        LOG_TRC_NOFILE("Document modified status changed: " << (modified ? "modified" : "unmodified"));
+        _modified = (object->get("state").toString() == "true");
+        LOG_TRC_NOFILE("Document modified status changed: " << (_modified ? "modified" : "unmodified"));
     }
     else if (tokens.equals(0, "CLIPBOARDMIMETYPES"))
     {
@@ -863,7 +877,12 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "SETDARKMODE"))
     {
-        Desktop::setDarkMode(tokens.equals(1, "true"));
+        const bool dark = tokens.equals(1, "true");
+        Desktop::setDarkMode(dark);
+        // The tab strips follow the saved dark mode choice.
+        const QString theme = dark ? QStringLiteral("dark") : QStringLiteral("light");
+        for (TabbedWindow* tw : TabbedWindow::allWindows())
+            tw->manager()->applyTheme(theme);
         return {};
     }
     else if (tokens.equals(0, "FETCHAIMODELS"))
@@ -879,46 +898,27 @@ QVariant Bridge::cool(const QString& messageStr)
         _saveInFlight = true;
         LOG_TRC_NOFILE("Bridge::cool SAVESTARTED: _saveInFlight=true");
     }
-    else if (tokens.equals(0, "BYE"))
+    else if (tokens.equals(0, "BYE") || tokens.equals(0, "EXIT_TEST"))
     {
-        LOG_TRC_NOFILE("Document window terminating on JavaScript side → closing fake socket");
-
-        // Materialise lazy clipboard before destroying the document so that
-        // an external paste after the document closes still works.
+        const bool quitApp = tokens.equals(0, "EXIT_TEST");
+        LOG_INF((quitApp ? "EXIT_TEST" : "BYE") << " -- closing document"
+                                                << (quitApp ? " and quitting" : ""));
+        // Materialise the lazy clipboard before closing so an external paste
+        // after the document closes still works.
         materializeClipboard(_document._appDocId);
-
         fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
-
-        QTimer::singleShot(0, [this]() {
-            if (_webView)
-            {
-                QWidget* topLevel = _webView->window();
-                if (topLevel)
-                {
-                    LOG_INF("Closing document window");
-                    topLevel->hide();
-                    topLevel->close();
-                    topLevel->deleteLater();
-                }
-            }
-        });
-    }
-    else if (tokens.equals(0, "EXIT_TEST"))
-    {
-        LOG_INF("EXIT_TEST received -- closing document and quitting");
-        fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
-        QTimer::singleShot(0, [this]() {
-            if (_webView)
-            {
-                QWidget* topLevel = _webView->window();
-                if (topLevel)
-                {
-                    topLevel->hide();
-                    topLevel->close();
-                    topLevel->deleteLater();
-                }
-            }
-            QApplication::quit();
+        // The page-JS is already terminating, so the close below must not
+        // drive another save-if-dirty round-trip through it.
+        _readyToClose = true;
+        QPointer<WebView> owner = _owner;
+        QPointer<QWidget> window = _window;
+        QTimer::singleShot(0, [owner, window, quitApp]() {
+            if (owner)
+                owner->requestClose();
+            else if (window)
+                window->close();
+            if (quitApp)
+                QApplication::quit();
         });
     }
     else if (tokens.equals(0, "REMOTEBOOTSTRAPFAILED"))
@@ -1040,8 +1040,7 @@ QVariant Bridge::cool(const QString& messageStr)
                                      coda::hostDisplayUriForPath(filePath));
 
                              coda::openFiles(filePaths, displayUris);
-                             // Close starter screen if it exists
-                             closeStarterScreen();
+                             closeStarterScreen(_owner);
 
                              // The picked document opens in its own window; return the
                              // originating window to its document view.
@@ -1050,37 +1049,17 @@ QVariant Bridge::cool(const QString& messageStr)
 
         dialog->open();
     }
-    else if (message == "uno .uno:NewDoc" || message == "uno .uno:NewDocText")
+    else if (message == "uno .uno:NewDoc" || message == "uno .uno:NewDocText" ||
+             message == "uno .uno:NewDocSpreadsheet" ||
+             message == "uno .uno:NewDocPresentation" || message == "uno .uno:NewDocDraw")
     {
-        WebView* webViewInstance = WebView::createNewDocument(Application::getProfile(), "writer", {}, {});
-        if (!webViewInstance)
-        {
-            LOG_ERR("Failed to create new text document");
-        }
-    }
-    else if (message == "uno .uno:NewDocSpreadsheet")
-    {
-        WebView* webViewInstance = WebView::createNewDocument(Application::getProfile(), "calc", {}, {});
-        if (!webViewInstance)
-        {
-            LOG_ERR("Failed to create new spreadsheet");
-        }
-    }
-    else if (message == "uno .uno:NewDocPresentation")
-    {
-        WebView* webViewInstance = WebView::createNewDocument(Application::getProfile(), "impress", {}, {});
-        if (!webViewInstance)
-        {
-            LOG_ERR("Failed to create new presentation");
-        }
-    }
-    else if (message == "uno .uno:NewDocDraw")
-    {
-        WebView* webViewInstance = WebView::createNewDocument(Application::getProfile(), "draw", {}, {});
-        if (!webViewInstance)
-        {
-            LOG_ERR("Failed to create new drawing");
-        }
+        const char* docType = "writer";
+        if (message == "uno .uno:NewDocSpreadsheet") docType = "calc";
+        else if (message == "uno .uno:NewDocPresentation") docType = "impress";
+        else if (message == "uno .uno:NewDocDraw") docType = "draw";
+
+        if (coda::openNewDocument(docType, {}, {}))
+            closeStarterScreen(_owner);
     }
     else if (message == "uno .uno:SaveAs")
     {
@@ -1090,11 +1069,16 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (message == "uno .uno:CloseWin")
     {
-        // Close the main window associated with this web view
-        if (_webView && _webView->window())
-        {
-            _webView->window()->close();
-        }
+        // Defer: requestClose() may delete this WebView and Bridge, and we are
+        // still running inside the bridge here.
+        QPointer<WebView> owner = _owner;
+        QPointer<QWidget> window = _window;
+        QTimer::singleShot(0, [owner, window]() {
+            if (owner)
+                owner->requestClose();
+            else if (window)
+                window->close();
+        });
     }
     else if (tokens.equals(0, "EXCHANGEMONITORS"))
     {
@@ -1199,17 +1183,8 @@ QVariant Bridge::cool(const QString& messageStr)
         std::string decodedBasename;
         Poco::URI::decode(basenameToken, decodedBasename);
 
-        // Always create new window
-        WebView* webViewInstance = WebView::createNewDocument(Application::getProfile(), typeToken,
-                                                              templatePath, decodedBasename);
-        if (!webViewInstance)
-        {
-            LOG_ERR("Failed to create new document of type: " << typeToken);
-            return {};
-        }
-
-        // If this was triggered from a starter screen, close it
-        closeStarterScreen();
+        if (coda::openNewDocument(typeToken, templatePath, decodedBasename))
+            closeStarterScreen(_owner);
     }
     else if (tokens.equals(0, "switchToServerMode"))
     {
@@ -1252,10 +1227,14 @@ QVariant Bridge::cool(const QString& messageStr)
         // Page-JS is done with the save-if-dirty step initiated by
         // saveAndClose() (either because the save finished, or
         // because the doc was clean).  Trip _readyToClose so the
-        // re-entry into the window's closeEvent proceeds with
-        // teardown instead of looping back here.
+        // re-entry into TabManager::closeTab (or the standalone
+        // window's closeEvent) proceeds with teardown instead of
+        // looping back here.
         _readyToClose = true;
-        if (_window)
+        if (WebView* owner = _owner.data())
+            QMetaObject::invokeMethod(
+                owner, [owner]() { owner->requestClose(); }, Qt::QueuedConnection);
+        else if (_window)
             QMetaObject::invokeMethod(
                 _window, "close", Qt::QueuedConnection);
     }

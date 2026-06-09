@@ -14,11 +14,13 @@
 #include <QWebEngineView>
 #include <QObject>
 #include <QStringList>
+#include <QPointer>
 #include <QVariant>
 #include <functional>
 #include <string>
 #include <thread>
 #include "Document.hpp"
+#include "WebView.hpp"
 
 class QWidget;
 
@@ -34,10 +36,15 @@ class Bridge : public QObject
     Q_OBJECT
 
     coda::DocumentData& _document;
+    // The owning document view; null for bridges attached to other hosts
+    // (e.g. the IntegratorFilePicker's QDialog).
+    QPointer<WebView> _owner;
+    // Fallback host window for pages not owned by a WebView.
     QWidget* _window;
     QWebEngineView* _webView;
     int _closeNotificationPipeForForwardingThread[2];
     std::thread _app2js;
+    bool _modified = false;
     // true between sending a copy/cut command and receiving its COMMANDRESULT
     bool _copyInProgress = false;
     // How many times we have reloaded the page because the server was still
@@ -85,8 +92,8 @@ class Bridge : public QObject
 
 
 public:
-    explicit Bridge(QObject* parent, coda::DocumentData& document, QWidget* window,
-                    QWebEngineView* webView);
+    explicit Bridge(QObject* parent, WebView* owner, coda::DocumentData& document,
+                    QWidget* window, QWebEngineView* webView);
 
     ~Bridge() override;
 
@@ -150,6 +157,8 @@ public:
     /// The export failed: close the snackbar and show a warning. Runs on
     /// the GUI thread.
     void onExportFailed();
+
+    bool isModified() const { return _modified; }
 
 public slots: // called from JavaScript
     // Called from JS via window.postMobileMessage

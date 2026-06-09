@@ -12,6 +12,8 @@
 #include <config.h>
 
 #include "DBusService.hpp"
+#include <qt/TabbedWindow.hpp>
+#include <qt/TabManager.hpp>
 #include <qt/WebView.hpp>
 #include <qt/CodaConfig.hpp>
 #include <common/Log.hpp>
@@ -60,6 +62,10 @@ namespace coda
 
     void openFiles(const QStringList& files, const QStringList& displayUris)
     {
+        if (files.isEmpty())
+            return;
+
+        TabbedWindow* tw = nullptr;
         for (int i = 0; i < files.size(); ++i)
         {
             const QString& file = files[i];
@@ -92,23 +98,33 @@ namespace coda
                 continue;
             }
 
-            WebView* webViewInstance = new WebView(Application::getProfile());
-            webViewInstance->load(fileURL);
+            if (!tw)
+                tw = TabbedWindow::getOrCreate(Application::getProfile());
+            tw->openFile(fileURL);
 
             QFileInfo fileInfo(file);
             Poco::URI uri(Poco::Path(fileInfo.absoluteFilePath().toStdString()));
             const QString displayUri = i < displayUris.size() ? displayUris[i] : QString();
             Application::getRecentFiles().add(uri.toString(), displayUri.toStdString());
         }
+        if (tw)
+            tw->activateWindow();
     }
 
-    void openNewDocument(const QString& templateType)
+    bool openNewDocument(const std::string& templateType, const std::string& templatePath,
+                         const std::string& basename)
     {
-        WebView* webViewInstance = WebView::createNewDocument(Application::getProfile(), templateType.toStdString(), {}, {});
-        if (!webViewInstance)
+        QString path = WebView::createNewDocumentFile(templateType, templatePath, basename);
+        if (path.isEmpty())
         {
-            LOG_ERR("Failed to create new document");
+            LOG_ERR("Failed to create new " << templateType << " document");
+            return false;
         }
+        TabbedWindow* tw = TabbedWindow::getOrCreate(Application::getProfile());
+        Poco::URI newDocumentURI(Poco::Path(path.toStdString()));
+        tw->manager()->addDocumentTab(newDocumentURI, /*newFile*/ true);
+        Application::getRecentFiles().add(newDocumentURI.toString());
+        return true;
     }
 }
 
@@ -135,7 +151,7 @@ void DBusService::openFiles(const QStringList& files)
 
 void DBusService::openNewDocument(const QString& templateType)
 {
-    coda::openNewDocument(templateType);
+    coda::openNewDocument(templateType.toStdString(), {}, {});
 }
 
 void DBusService::activate()
