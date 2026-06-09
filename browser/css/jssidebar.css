@@ -305,11 +305,11 @@ button#button2.ui-pushbutton.jsdialog.sidebar {
 #TableEditPanel.sidebar.ui-grid #split_merge, #TableEditPanel.sidebar.ui-grid #select,
 #TableEditPanel.sidebar.ui-grid #rowsizing, #TableEditPanel.sidebar.ui-grid #columnsizing,
 #TableEditPanel.sidebar.ui-grid #misc {
-row-gap: 0px;
+	row-gap: 0px;
 }
 
 #TableEditPanel.sidebar.ui-grid label {
-text-align: left !important;
+	text-align: left !important;
 }
 
 /* calc */
