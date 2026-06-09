@@ -35,6 +35,7 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle)
     : GenericDialogController(pParent, u"modules/scalc/ui/tabcolordialog.ui"_ustr,
                               u"TabColorDialog"_ustr)
     , m_xSelectPalette(m_xBuilder->weld_combo_box(u"paletteselector"_ustr))
+    , m_xDefaultButton(m_xBuilder->weld_toggle_button(u"defaultbutton"_ustr))
     , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window(u"colorsetwin"_ustr, true)))
     , m_xTabBgColorSetWin(new weld::CustomWeld(*m_xBuilder, u"colorset"_ustr, *m_xTabBgColorSet))
     , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
@@ -44,9 +45,8 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle)
 
     m_xDialog->set_title(rTitle);
 
-    const WinBits nBits(m_xTabBgColorSet->GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT);
+    const WinBits nBits(m_xTabBgColorSet->GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_3DLOOK);
     m_xTabBgColorSet->SetStyle(nBits);
-    m_xTabBgColorSet->SetText(ScResId(SCSTR_NO_TAB_BG_COLOR));
 
     const sal_uInt32 nColCount = SvxColorValueSet::getColumnCount();
     const sal_uInt32 nRowCount(10);
@@ -57,6 +57,8 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle)
     FillPaletteLB();
 
     m_xSelectPalette->connect_changed(LINK(this, ScTabBgColorDlg, SelectPaletteLBHdl));
+    m_xDefaultButton->connect_toggled(LINK(this, ScTabBgColorDlg, DefaultButtonToggled));
+    m_xTabBgColorSet->SetSelectHdl(LINK(this, ScTabBgColorDlg, TabBgColorSelectHdl));
     m_xTabBgColorSet->SetDoubleClickHdl(LINK(this, ScTabBgColorDlg, TabBgColorDblClickHdl_Impl));
     m_xBtnOk->connect_clicked(LINK(this, ScTabBgColorDlg, TabBgColorOKHdl_Impl));
 }
@@ -67,6 +69,9 @@ ScTabBgColorDlg::~ScTabBgColorDlg()
 
 Color ScTabBgColorDlg::GetSelectedColor() const
 {
+    if (m_xDefaultButton->get_active())
+        return COL_AUTO;
+
     sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
     Color aColor = nItemId ? (m_xTabBgColorSet->GetItemColor(nItemId)) : COL_AUTO;
     return aColor;
@@ -95,10 +100,31 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
     m_aPaletteManager.SetPalette( nPos );
     m_aPaletteManager.ReloadColorSet(*m_xTabBgColorSet);
     m_xTabBgColorSet->Resize();
-    m_xTabBgColorSet->SelectItem(0);
+    m_xDefaultButton->set_active(true);
+    m_xTabBgColorSet->SetNoSelection();
+    m_xTabBgColorSet->SetCursor(nullptr);
+}
+
+IMPL_LINK_NOARG(ScTabBgColorDlg, DefaultButtonToggled, weld::Toggleable&, void)
+{
+    // Only allow toggling default color on, not off by clicking the button.
+    // Disabling instead happens by selecting another color.
+    if (!m_xDefaultButton->get_active())
+    {
+        m_xDefaultButton->set_active(true);
+        return;
+    }
+
+    m_xTabBgColorSet->SetNoSelection();
+    m_xTabBgColorSet->SetCursor(nullptr);
 }
 
 //    Handler, called when color selection is changed
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorSelectHdl, ValueSet*, void)
+{
+    m_xDefaultButton->set_active(false);
+}
+
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 {
     m_xDialog->response(RET_OK);

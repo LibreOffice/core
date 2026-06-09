@@ -55,7 +55,6 @@
 #define SCSTR_APDTABLE                              NC_("SCSTR_APDTABLE", "Append Sheet")
 #define SCSTR_RENAMETAB                             NC_("SCSTR_RENAMETAB", "Rename Sheet")
 #define SCSTR_SET_TAB_BG_COLOR                      NC_("SCSTR_SET_TAB_BG_COLOR", "Tab Color")
-#define SCSTR_NO_TAB_BG_COLOR                       NC_("SCSTR_NO_TAB_BG_COLOR", "Default")
 #define SCSTR_RENAMEOBJECT                          NC_("SCSTR_RENAMEOBJECT", "Name Object")
 #define STR_INSERTGRAPHIC                           NC_("STR_INSERTGRAPHIC", "Insert Image")
 #define SCSTR_TOTAL                                 NNC_("SCSTR_TOTAL", "One result found", "%1 results found")
