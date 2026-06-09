@@ -46,6 +46,8 @@ private:
 
     tools::Long            nWidth;
     tools::Long            nSmallWidth;
+    tools::Long            nMedWidth;
+    tools::Long            nLargeWidth;
     tools::Long            nBigWidth;
 
     SCCOLROW        nSize;
@@ -126,6 +128,8 @@ public:
 
     tools::Long    GetWidth() const                    { return nWidth; }
     tools::Long    GetSmallWidth() const               { return nSmallWidth; }
+    tools::Long    GetMedWidth() const                 { return nMedWidth; }
+    tools::Long    GetLargeWidth() const               { return nLargeWidth; }
     tools::Long    GetBigWidth() const                 { return nBigWidth; }
     void    SetWidth( tools::Long nNew );
     void    GetMarkRange(SCCOLROW& rStart, SCCOLROW& rEnd) const;
