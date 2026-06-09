@@ -29,7 +29,11 @@ UnitBase** UnitBase::linkAndCreateUnit([[maybe_unused]] UnitType type,
                                        [[maybe_unused]] const std::string& unitLibPath)
 {
 #if ENABLE_DEBUG
-    DlHandle = dlopen(unitLibPath.c_str(), RTLD_GLOBAL|RTLD_NOW);
+    // RTLD_NODELETE: the module statically links its own Poco, whose static
+    // destructors would otherwise run on dlclose and free the logger that
+    // coolwsd is still using during shutdown. This could be dropped if modules
+    // can avoid directly linking to Poco.
+    DlHandle = dlopen(unitLibPath.c_str(), RTLD_GLOBAL|RTLD_NOW|RTLD_NODELETE);
     if (!DlHandle)
     {
         const std::string error = std::string("Failed to load unit-test lib ") + dlerror();
