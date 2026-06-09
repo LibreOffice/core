@@ -416,6 +416,8 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/BitmapPrimitive.ts \
 	src/canvas/vector/primitive/ExclusiveEditViewPrimitive.ts \
 	src/canvas/vector/primitive/FilledRectanglePrimitive.ts \
+	src/canvas/vector/primitive/GraphicPrimitive.ts \
+	src/canvas/vector/primitive/GraphicResource.ts \
 	src/canvas/vector/primitive/GroupPrimitive.ts \
 	src/canvas/vector/primitive/HiddenGeometryPrimitive.ts \
 	src/canvas/vector/primitive/MaskPrimitive.ts \

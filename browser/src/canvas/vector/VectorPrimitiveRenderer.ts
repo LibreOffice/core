@@ -76,6 +76,9 @@ namespace cool {
 				case BitmapPrimitive.type:
 					this._renderBitmap(context, primitive as BitmapPrimitive);
 					break;
+				case GraphicPrimitive.type:
+					this._renderGraphic(context, primitive as GraphicPrimitive);
+					break;
 				case TextSimplePortionPrimitive.type:
 					this._renderTextSimplePortion(
 						context,
@@ -382,17 +385,34 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			primitive: BitmapPrimitive,
 		): void {
-			const matrix = primitive.matrix;
-			if (!matrix || matrix.length < 6) return;
-			if (typeof primitive.checksum !== 'number' || !this._bitmapLookup) return;
+			this._drawRaster(context, primitive.matrix, primitive.checksum);
+		}
 
-			// The lookup returns undefined while the bitmap is still
-			// being fetched.
-			const image = this._bitmapLookup(primitive.checksum);
+		private _renderGraphic(
+			context: CanvasRenderingContext2D,
+			primitive: GraphicPrimitive,
+		): void {
+			// Vector graphics arrive pre-decomposed. The children are
+			// already in slide coordinates, so let the post-switch
+			// recursion in renderPrimitive draw them.
+			if (primitive.vector) return;
+			this._drawRaster(context, primitive.matrix, primitive.checksum);
+		}
+
+		// Resolve the image through the checksum lookup and draw it
+		// into the unit square mapped by the wire matrix. Skips when
+		// the matrix is missing, no lookup is registered, the lookup
+		// has no entry yet, or the image is still decoding.
+		private _drawRaster(
+			context: CanvasRenderingContext2D,
+			matrix: number[] | undefined,
+			checksum: number,
+		): void {
+			if (!matrix || matrix.length < 6) return;
+			if (!this._bitmapLookup) return;
+
+			const image = this._bitmapLookup(checksum);
 			if (!image) return;
-			// The image may still be decoding. drawImage requires a ready
-			// source, so skip this paint. A later redraw scheduled when
-			// the image finishes decoding picks it up.
 			if (!image.complete) return;
 
 			context.save();

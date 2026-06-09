@@ -11,7 +11,7 @@
 
 namespace cool {
 	/// Walk a JSON primitive tree and collect the checksums of every
-	/// bitmap primitive seen. Recurses into the children container.
+	/// image-bearing primitive seen. Recurses into the children container.
 	export class VectorBitmapWalker {
 		private _checksums: Set<number>;
 
@@ -30,10 +30,8 @@ namespace cool {
 		}
 
 		private _walkPrimitive(primitive: Primitive): void {
-			if (primitive.type === BitmapPrimitive.type) {
-				const checksum = (primitive as BitmapPrimitive).checksum;
-				if (typeof checksum === 'number') this._checksums.add(checksum);
-			}
+			if (GraphicResource.is(primitive))
+				this._checksums.add(primitive.checksum);
 			if (primitive.children) this.walkPrimitives(primitive.children);
 		}
 	}

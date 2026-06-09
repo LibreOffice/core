@@ -26,8 +26,18 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 
+#include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/BinaryDataContainer.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
+#include <vcl/salctype.hxx>
+#include <vcl/vectorgraphicdata.hxx>
+#include <vcl/virdev.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
@@ -620,6 +630,115 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testBitmap)
     assertJsonPath(aJson, "/primitives/0/width", sal_Int64(4));
     assertJsonPath(aJson, "/primitives/0/height", sal_Int64(4));
     assertJsonPathExists(aJson, "/primitives/0/checksum");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphic)
+{
+    // A raster graphic places a bitmap-backed Graphic through a 2D
+    // affine transform. The wire carries the matrix, the source
+    // pixel dimensions and a checksum. The image bytes live in the
+    // bitmap cache and never travel inline.
+    Bitmap aBitmap(Size(8, 6), vcl::PixelFormat::N24_BPP);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(80.0, 60.0);
+    aTransform.translate(15.0, 25.0);
+
+    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject));
+
+    auto aJson = writeReference(u"testGraphic", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/width", sal_Int64(8));
+    assertJsonPath(aJson, "/primitives/0/height", sal_Int64(6));
+    assertJsonPathExists(aJson, "/primitives/0/checksum");
+    assertJsonPathMissing(aJson, "/primitives/0/vector");
+    assertJsonPathMissing(aJson, "/primitives/0/children");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvg)
+{
+    // An SVG-backed Graphic goes through the writer's SVG branch.
+    // The wire shape matches the raster case (matrix and checksum).
+    // The image bytes, including the SVG MIME type, live in the
+    // bitmap cache and never travel inline. No vector flag and no
+    // decomposed children.
+    static constexpr OString sSvg
+        = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\">"
+          "<rect width=\"10\" height=\"10\" fill=\"red\"/></svg>"_ostr;
+    SvMemoryStream aStream(const_cast<char*>(sSvg.getStr()), sSvg.getLength(), StreamMode::READ);
+    auto pVectorData = std::make_shared<VectorGraphicData>(
+        BinaryDataContainer(aStream, sSvg.getLength()), VectorGraphicDataType::Svg);
+    Graphic aGraphic(pVectorData);
+
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(100.0, 100.0);
+
+    GraphicObject aGraphicObject{ aGraphic };
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject));
+
+    auto aJson = writeReference(u"testGraphicSvg", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
+    assertJsonPathExists(aJson, "/primitives/0/checksum");
+    assertJsonPathMissing(aJson, "/primitives/0/vector");
+    assertJsonPathMissing(aJson, "/primitives/0/children");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicEmf)
+{
+    // An EMF-backed Graphic is decomposed by the writer. The wire
+    // carries vector=true and a children array already in slide
+    // coordinates. No matrix, no checksum and no data at the
+    // parent level.
+    //
+    // The EMF bytes come from exporting a small GDI metafile so
+    // the fixture does not need a hardcoded binary blob.
+    GDIMetaFile aMetaFile;
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+        pVirtualDev->SetConnectMetaFile(&aMetaFile);
+        pVirtualDev->SetOutputSizePixel(Size(10, 10));
+        pVirtualDev->DrawPixel(Point(4, 4));
+    }
+
+    SvMemoryStream aEmfStream;
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicConverter::Export(aEmfStream, Graphic(aMetaFile),
+                                                                ConvertDataFormat::EMF));
+    const sal_uInt64 nEmfSize = aEmfStream.Tell();
+    aEmfStream.Seek(0);
+
+    auto pVectorData = std::make_shared<VectorGraphicData>(
+        BinaryDataContainer(aEmfStream, nEmfSize), VectorGraphicDataType::Emf);
+    Graphic aGraphic(pVectorData);
+    CPPUNIT_ASSERT(aGraphic.getVectorGraphicData());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Emf, aGraphic.getVectorGraphicData()->getType());
+
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(100.0, 100.0);
+
+    GraphicObject aGraphicObject{ aGraphic };
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject));
+
+    auto aJson = writeReference(u"testGraphicEmf", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    assertJsonPathBool(aJson, "/primitives/0/vector", true);
+    assertJsonPathExists(aJson, "/primitives/0/children");
+    CPPUNIT_ASSERT(aJson.getSize("/primitives/0/children").value_or(0) > 0);
+    assertJsonPathMissing(aJson, "/primitives/0/matrix");
+    assertJsonPathMissing(aJson, "/primitives/0/checksum");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPointArray)

@@ -332,6 +332,91 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 
+		it('renders a raster graphic like a bitmap', function () {
+			// A raster graphic carries a matrix and a checksum. The
+			// renderer resolves the image through the same checksum
+			// lookup as a bitmap and draws it into the unit square.
+			const primitive = loadVectorRenderingReference('testGraphic')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.strictEqual(primitive.vector, undefined);
+			nodeassert.strictEqual(typeof primitive.checksum, 'number');
+			nodeassert.strictEqual(primitive.matrix.length, 6);
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const transform = recorder.findCall('transform');
+			nodeassert.ok(transform, 'transform not called');
+			for (let i = 0; i < 6; i++)
+				nodeassert.strictEqual(transform.args[i], primitive.matrix[i]);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+			nodeassert.deepStrictEqual(draw.args.slice(1), [0, 0, 1, 1]);
+		});
+
+		it('renders an SVG-backed graphic through the raster path', function () {
+			// The engine's SVG branch emits the same wire shape as a
+			// raster graphic. The renderer treats the primitive the
+			// same way and resolves the image through the checksum
+			// lookup.
+			const primitive = loadVectorRenderingReference('testGraphicSvg')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.strictEqual(primitive.vector, undefined);
+			nodeassert.strictEqual(typeof primitive.checksum, 'number');
+			nodeassert.strictEqual(primitive.matrix.length, 6);
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+			nodeassert.deepStrictEqual(draw.args.slice(1), [0, 0, 1, 1]);
+		});
+
+		it('descends into a vector graphic instead of drawing it', function () {
+			// An EMF-backed graphic arrives pre-decomposed. The
+			// renderer must not call drawImage. It descends into the
+			// children instead, so at least one canvas operation
+			// comes from inside the subtree.
+			const primitive = loadVectorRenderingReference('testGraphicEmf')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.strictEqual(primitive.vector, true);
+			nodeassert.ok(Array.isArray(primitive.children));
+			nodeassert.ok(primitive.children.length > 0);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(
+				recorder.findCall('drawImage'),
+				undefined,
+				'drawImage should not be called for a vector graphic',
+			);
+			nodeassert.ok(
+				recorder.calls.length > 0,
+				'expected the children subtree to produce canvas calls',
+			);
+		});
+
 		it('paints each point of a pointArray', function () {
 			// pointArray lays down a single-pixel mark at every point,
 			// all in the same colour.

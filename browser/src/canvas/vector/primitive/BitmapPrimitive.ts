@@ -18,12 +18,11 @@ namespace cool {
 	/// image lives in a separate cache, populated from a fetch.
 	/// width and height are the source pixel dimensions of the
 	/// original image.
-	export interface BitmapPrimitive extends Primitive {
+	export interface BitmapPrimitive extends Primitive, GraphicResource {
 		type: typeof BitmapPrimitive.type;
 		matrix?: number[];
 		width?: number;
 		height?: number;
-		checksum?: number;
 	}
 
 	export namespace BitmapPrimitive {
