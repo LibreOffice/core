@@ -44,7 +44,8 @@ namespace chart
 {
 HistogramDataSequence::HistogramDataSequence(
     const uno::Reference<chart2::data::XDataSequence>& xRawData, bool bIsCategory,
-    sal_Int32 nFrequencyType, double fBinWidth, sal_Int32 nBinCount)
+    sal_Int32 nFrequencyType, double fBinWidth, sal_Int32 nBinCount, bool bUseUnderflowBin,
+    double fUnderflowBinValue, bool bUseOverflowBin, double fOverflowBinValue)
     : ::comphelper::OPropertyContainer(GetBroadcastHelper())
     , m_xModifyEventForwarder(new ModifyEventForwarder())
     , m_xRawData(xRawData)
@@ -53,6 +54,10 @@ HistogramDataSequence::HistogramDataSequence(
     , m_nFrequencyType(nFrequencyType)
     , m_fBinWidth(fBinWidth)
     , m_nBinCount(nBinCount)
+    , m_bUseUnderflowBin(bUseUnderflowBin)
+    , m_fUnderflowBinValue(fUnderflowBinValue)
+    , m_bUseOverflowBin(bUseOverflowBin)
+    , m_fOverflowBinValue(fOverflowBinValue)
 {
     registerProperty(u"Role"_ustr, PROP_PROPOSED_ROLE,
                      0, // PropertyAttributes
@@ -183,7 +188,8 @@ void SAL_CALL HistogramDataSequence::disposing(const lang::EventObject& /* Sourc
 uno::Reference<util::XCloneable> SAL_CALL HistogramDataSequence::createClone()
 {
     rtl::Reference<HistogramDataSequence> pClone(new HistogramDataSequence(
-        m_xRawData, m_bIsCategory, m_nFrequencyType, m_fBinWidth, m_nBinCount));
+        m_xRawData, m_bIsCategory, m_nFrequencyType, m_fBinWidth, m_nBinCount, m_bUseUnderflowBin,
+        m_fUnderflowBinValue, m_bUseOverflowBin, m_fOverflowBinValue));
 
     ::osl::MutexGuard aGuard(GetMutex());
     pClone->mxLabels = mxLabels;
@@ -216,13 +222,16 @@ void HistogramDataSequence::ensureCalculated()
     }
 
     HistogramCalculator aCalculator;
-    aCalculator.computeBinFrequencyHistogram(rawData, m_nFrequencyType, m_fBinWidth, m_nBinCount);
+    aCalculator.computeBinFrequencyHistogram(rawData, m_nFrequencyType, m_fBinWidth, m_nBinCount,
+                                             m_bUseUnderflowBin, m_fUnderflowBinValue,
+                                             m_bUseOverflowBin, m_fOverflowBinValue);
 
     std::vector<uno::Any> aNewValues;
 
     if (m_bIsCategory)
     {
         const auto& binRanges = aCalculator.getBinRanges();
+        const auto& binTypes = aCalculator.getBinTypes();
 
         // keep ~3 significant figures relative to the bin width, so typical
         // widths (~1) get 2 decimals and small widths (~0.002) get 5
@@ -241,10 +250,25 @@ void HistogramDataSequence::ensureCalculated()
 
         for (size_t i = 0; i < binRanges.size(); ++i)
         {
-            OUString aLabel = (i == 0) ? u"["_ustr + formatBoundary(binRanges[i].first) + u"-"_ustr
-                                             + formatBoundary(binRanges[i].second) + u"]"_ustr
-                                       : u"("_ustr + formatBoundary(binRanges[i].first) + u"-"_ustr
-                                             + formatBoundary(binRanges[i].second) + u"]"_ustr;
+            OUString aLabel;
+            if (binTypes[i] == HistogramBinType::Underflow)
+            {
+                aLabel = u"<= "_ustr + formatBoundary(binRanges[i].second);
+            }
+            else if (binTypes[i] == HistogramBinType::Overflow)
+            {
+                aLabel = u"> "_ustr + formatBoundary(binRanges[i].first);
+            }
+            else
+            {
+                const bool bPreviousIsUnderflow
+                    = i > 0 && binTypes[i - 1] == HistogramBinType::Underflow;
+                const bool bUseClosedStart = i == 0 && !bPreviousIsUnderflow;
+
+                aLabel = (bUseClosedStart ? u"["_ustr : u"("_ustr)
+                         + formatBoundary(binRanges[i].first) + u"-"_ustr
+                         + formatBoundary(binRanges[i].second) + u"]"_ustr;
+            }
             aNewValues.push_back(uno::Any(aLabel));
         }
     }

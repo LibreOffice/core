@@ -14,6 +14,13 @@
 
 namespace chart
 {
+enum class HistogramBinType
+{
+    Normal,
+    Underflow,
+    Overflow
+};
+
 /** Partitions a data set into histogram bins and counts per-bin frequencies.
     Binning can be automatic, by fixed bin width, or by fixed bin count. */
 class HistogramCalculator
@@ -23,6 +30,7 @@ class HistogramCalculator
 
     std::vector<std::pair<double, double>> maBinRanges;
     std::vector<sal_Int32> maBinFrequencies;
+    std::vector<HistogramBinType> maBinTypes;
 
 public:
     HistogramCalculator();
@@ -32,10 +40,13 @@ public:
     // invalid values (<= 0) fall back to auto.
     void computeBinFrequencyHistogram(const std::vector<double>& dataPoints,
                                       sal_Int32 nFrequencyType = 0, double fFixedBinWidth = 0.0,
-                                      sal_Int32 nFixedBinCount = 0);
+                                      sal_Int32 nFixedBinCount = 0, bool bUseUnderflowBin = false,
+                                      double fUnderflowBinValue = 0.0, bool bUseOverflowBin = false,
+                                      double fOverflowBinValue = 0.0);
 
     const std::vector<std::pair<double, double>>& getBinRanges() const { return maBinRanges; }
     const std::vector<sal_Int32>& getBinFrequencies() const { return maBinFrequencies; }
+    const std::vector<HistogramBinType>& getBinTypes() const { return maBinTypes; }
 };
 
 } // namespace chart

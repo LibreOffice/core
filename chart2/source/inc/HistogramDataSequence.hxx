@@ -53,7 +53,9 @@ public:
     using ::comphelper::WeakComponentImplHelperBase::disposing;
     explicit HistogramDataSequence(
         const css::uno::Reference<css::chart2::data::XDataSequence>& xRawData, bool bIsCategory,
-        sal_Int32 nFrequencyType = 0, double fBinWidth = 0.0, sal_Int32 nBinCount = 0);
+        sal_Int32 nFrequencyType = 0, double fBinWidth = 0.0, sal_Int32 nBinCount = 0,
+        bool bUseUnderflowBin = false, double fUnderflowBinValue = 0.0,
+        bool bUseOverflowBin = false, double fOverflowBinValue = 0.0);
     virtual ~HistogramDataSequence() override;
 
     /// declare XServiceInfo methods
@@ -117,6 +119,10 @@ private:
     sal_Int32 m_nFrequencyType;
     double m_fBinWidth;
     sal_Int32 m_nBinCount;
+    bool m_bUseUnderflowBin;
+    double m_fUnderflowBinValue;
+    bool m_bUseOverflowBin;
+    double m_fOverflowBinValue;
 };
 
 } // namespace chart
