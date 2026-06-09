@@ -2041,7 +2041,7 @@ void JSIconView::insert_separator(int pos, const OUString* pId)
 
 void JSIconView::do_remove(int pos)
 {
-    SalInstanceIconView::remove(pos);
+    SalInstanceIconView::do_remove(pos);
     sendUpdate();
 }
 
