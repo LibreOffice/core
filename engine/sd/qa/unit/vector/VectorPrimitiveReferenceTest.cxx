@@ -34,6 +34,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/vectorgraphicdata.hxx>
@@ -658,6 +659,34 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphic)
     assertJsonPathExists(aJson, "/primitives/0/checksum");
     assertJsonPathMissing(aJson, "/primitives/0/vector");
     assertJsonPathMissing(aJson, "/primitives/0/children");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicCrop)
+{
+    // A raster graphic with crop attributes set. The engine emits a
+    // crop node with the four edge insets converted from 100ths of
+    // mm to twips. The scaled values are positive when the input is
+    // positive.
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(1000.0, 800.0);
+
+    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+    GraphicAttr aAttribute;
+    aAttribute.SetCrop(100, 200, 50, 25);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject, aAttribute));
+
+    auto aJson = writeReference(u"testGraphicCrop", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    assertJsonPathExists(aJson, "/primitives/0/crop");
+    assertJsonPathExists(aJson, "/primitives/0/crop/left");
+    assertJsonPathExists(aJson, "/primitives/0/crop/top");
+    assertJsonPathExists(aJson, "/primitives/0/crop/right");
+    assertJsonPathExists(aJson, "/primitives/0/crop/bottom");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvg)

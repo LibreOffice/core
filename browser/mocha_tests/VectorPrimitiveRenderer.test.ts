@@ -417,6 +417,60 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
+		it('draws only the cropped portion of a graphic', function () {
+			// A graphic with crop attributes is drawn with a source
+			// rectangle inset by the crop fractions of the image's
+			// natural pixel size, into a destination rectangle inset
+			// by the same fractions of the unit square. The crop
+			// fractions come from dividing the wire crop (in slide
+			// units) by the matrix-derived image size.
+			const primitive = loadVectorRenderingReference('testGraphicCrop')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.ok(primitive.crop, 'crop missing');
+			nodeassert.strictEqual(typeof primitive.checksum, 'number');
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(
+				draw.args.length,
+				9,
+				'expected the 9-argument drawImage form',
+			);
+
+			const m = primitive.matrix;
+			const imageW = Math.hypot(m[0], m[1]);
+			const imageH = Math.hypot(m[2], m[3]);
+			const left = (primitive.crop.left || 0) / imageW;
+			const top = (primitive.crop.top || 0) / imageH;
+			const right = (primitive.crop.right || 0) / imageW;
+			const bottom = (primitive.crop.bottom || 0) / imageH;
+
+			const expectedSx = Math.round(left * 100);
+			const expectedSy = Math.round(top * 100);
+			const expectedSw = Math.round((1 - left - right) * 100);
+			const expectedSh = Math.round((1 - top - bottom) * 100);
+
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+			nodeassert.strictEqual(draw.args[1], expectedSx);
+			nodeassert.strictEqual(draw.args[2], expectedSy);
+			nodeassert.strictEqual(draw.args[3], expectedSw);
+			nodeassert.strictEqual(draw.args[4], expectedSh);
+			nodeassert.strictEqual(draw.args[5], left);
+			nodeassert.strictEqual(draw.args[6], top);
+			nodeassert.strictEqual(draw.args[7], 1 - left - right);
+			nodeassert.strictEqual(draw.args[8], 1 - top - bottom);
+		});
+
 		it('paints each point of a pointArray', function () {
 			// pointArray lays down a single-pixel mark at every point,
 			// all in the same colour.

@@ -396,17 +396,29 @@ namespace cool {
 			// already in slide coordinates, so let the post-switch
 			// recursion in renderPrimitive draw them.
 			if (primitive.vector) return;
-			this._drawRaster(context, primitive.matrix, primitive.checksum);
+			this._drawRaster(
+				context,
+				primitive.matrix,
+				primitive.checksum,
+				primitive.crop,
+			);
 		}
 
 		// Resolve the image through the checksum lookup and draw it
 		// into the unit square mapped by the wire matrix. Skips when
 		// the matrix is missing, no lookup is registered, the lookup
 		// has no entry yet, or the image is still decoding.
+		//
+		// When crop is set, the source rectangle is the corresponding
+		// inset region of the image in pixels, and the destination is
+		// the same inset region of the unit square. The matrix was
+		// sized for the original image, so insetting both rectangles
+		// keeps the visible content aligned with the slide bounds.
 		private _drawRaster(
 			context: CanvasRenderingContext2D,
 			matrix: number[] | undefined,
 			checksum: number,
+			crop?: GraphicPrimitive['crop'],
 		): void {
 			if (!matrix || matrix.length < 6) return;
 			if (!this._bitmapLookup) return;
@@ -427,7 +439,34 @@ namespace cool {
 				matrix[4],
 				matrix[5],
 			);
-			context.drawImage(image, 0, 0, 1, 1);
+
+			if (crop && (crop.left || crop.top || crop.right || crop.bottom)) {
+				// Image bounds in slide units, from the matrix's two
+				// column vectors.
+				const imageW = Math.hypot(matrix[0], matrix[1]);
+				const imageH = Math.hypot(matrix[2], matrix[3]);
+				const left = (crop.left ?? 0) / imageW;
+				const top = (crop.top ?? 0) / imageH;
+				const right = (crop.right ?? 0) / imageW;
+				const bottom = (crop.bottom ?? 0) / imageH;
+				const sx = Math.round(left * image.naturalWidth);
+				const sy = Math.round(top * image.naturalHeight);
+				const sw = Math.round((1 - left - right) * image.naturalWidth);
+				const sh = Math.round((1 - top - bottom) * image.naturalHeight);
+				context.drawImage(
+					image,
+					sx,
+					sy,
+					sw,
+					sh,
+					left,
+					top,
+					1 - left - right,
+					1 - top - bottom,
+				);
+			} else {
+				context.drawImage(image, 0, 0, 1, 1);
+			}
 			context.restore();
 		}
 
