@@ -109,16 +109,29 @@ FillBitmapLinkTracker::~FillBitmapLinkTracker()
     for (const auto& rEntry : m_aNodeLinks)
         m_rLinkMgr.Remove(rEntry.second.get());
     m_aNodeLinks.clear();
+    drainPendingReleases();
+}
+
+void FillBitmapLinkTracker::drainPendingReleases()
+{
+    // Release through a local so the member is already empty if a freed link parks another:
+    std::vector<tools::SvRef<sfx2::SvBaseLink>> aReleasing;
+    aReleasing.swap(m_aPendingRelease);
 }
 
 template <typename Host>
 void FillBitmapLinkTracker::onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap,
                                              Host& rHost, std::u16string_view rNewURL)
 {
+    drainPendingReleases();
+
     auto it = rMap.find(&rHost);
     if (it != rMap.end())
     {
         m_rLinkMgr.Remove(it->second.get());
+        // Park rather than drop, since inside rHost's Dying broadcast the link must outlive the
+        // BroadcasterDying call still to come and so cannot be freed here:
+        m_aPendingRelease.push_back(std::move(it->second));
         rMap.erase(it);
     }
     if (rNewURL.empty())
