@@ -31,6 +31,7 @@
 
 #include <QApplication>
 #include <QCursor>
+#include <QEvent>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -42,6 +43,7 @@
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineView>
+#include <QWidget>
 
 #include <algorithm>
 #include <utility>
@@ -89,6 +91,12 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
                                currentTheme() == QStringLiteral("dark") ? "true" : "false");
     _shellView->load(QUrl(QString::fromStdString(stripUrl.toString())));
 
+    _shellView->setFocusPolicy(Qt::NoFocus);
+    // The strip's render widget (its focus proxy) is created lazily by Chromium
+    // and can be recreated, so watch the view's child events and (re)attach.
+    _shellView->installEventFilter(this);
+    attachStripFocusFilter();
+
     // Hidden until there are 2+ tabs; see emitTabsChangedNow().
     _shellView->hide();
 }
@@ -106,6 +114,40 @@ TabManager::~TabManager()
 }
 
 QWidget* TabManager::shellWidget() const { return _shellView; }
+
+void TabManager::attachStripFocusFilter()
+{
+    QWidget* proxy = _shellView->focusProxy();
+    if (!proxy || proxy == _stripProxy)
+        return;
+    if (_stripProxy)
+        _stripProxy->removeEventFilter(this);
+    _stripProxy = proxy;
+    proxy->installEventFilter(this);
+}
+
+void TabManager::focusActiveDocument()
+{
+    if (QWidget* w = _stack->currentWidget())
+        w->setFocus(Qt::OtherFocusReason);
+}
+
+bool TabManager::eventFilter(QObject* obj, QEvent* ev)
+{
+    if (obj == _shellView &&
+        (ev->type() == QEvent::ChildAdded || ev->type() == QEvent::ChildPolished))
+    {
+        attachStripFocusFilter();
+    }
+    else if (obj == _stripProxy && ev->type() == QEvent::FocusIn)
+    {
+        // Let the strip's focus change settle, then hand focus back to the
+        // document - doing it synchronously here gets undone.
+        QMetaObject::invokeMethod(this, &TabManager::focusActiveDocument,
+                                  Qt::QueuedConnection);
+    }
+    return QObject::eventFilter(obj, ev);
+}
 
 WebView* TabManager::webViewForTab(int tabId) const
 {
@@ -368,6 +410,7 @@ void TabManager::activateTab(int tabId)
     _stack->setCurrentWidget(wv->webEngineView());
     _window->setWindowTitle(wv->composedWindowTitle());
     emitTabsChangedNow();
+    focusActiveDocument();
 }
 
 void TabManager::reorderTab(int fromIndex, int toIndex)
@@ -394,6 +437,7 @@ void TabManager::reorderTab(int fromIndex, int toIndex)
         _stack->setCurrentWidget(view);
 
     emitTabsChangedNow();
+    focusActiveDocument();
 }
 
 void TabManager::onWebViewTitleChanged(WebView* wv, const QString& title)

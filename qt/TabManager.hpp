@@ -21,9 +21,11 @@
 #include <string>
 #include <vector>
 
+class QEvent;
 class QStackedWidget;
 class QWebEngineProfile;
 class QWebEngineView;
+class QWidget;
 class TabbedWindow;
 class TabShellBridge;
 class WebView;
@@ -37,6 +39,8 @@ class TabManager : public QObject
 public:
     TabManager(TabbedWindow* window, QWebEngineProfile* profile);
     ~TabManager() override;
+
+    bool eventFilter(QObject* obj, QEvent* ev) override;
 
     QWidget* shellWidget() const;
     QStackedWidget* stackWidget() const { return _stack; }
@@ -111,11 +115,17 @@ private:
     std::vector<Entry>::const_iterator findTab(int tabId) const;
     QString currentTabsJson() const;
 
+    // The strip page has no keyboard handling, so bounce focus back to the
+    // active document when the strip would take it - keeps shortcuts working.
+    void attachStripFocusFilter();
+    void focusActiveDocument();
+
     TabbedWindow* _window;
     QWebEngineProfile* _profile;
     QStackedWidget* _stack;
     QWebEngineView* _shellView;
     TabShellBridge* _shellBridge;
+    QPointer<QWidget> _stripProxy;
 
     std::vector<Entry> _tabs;
     static int s_nextTabId;
