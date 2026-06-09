@@ -285,17 +285,6 @@ module rdf {};
 /// Interfaces and data structures for rendering
 module rendering {};
 
-/// interfaces for reports generated from data sources.
-module report {
-
-    /// property handlers for reports.
-    module inspection {};
-
-    /// report meta data.
-    module meta {};
-
-};
-
 /// Interfaces to access (UI) resource files.
 module resource {};
 

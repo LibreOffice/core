@@ -277,25 +277,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/rendering,\
 	CanvasFactory \
 	MtfRenderer \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/report,\
-	FixedLine \
-	FixedText \
-	FormatCondition \
-	FormattedField \
-	Function \
-	Group \
-	Groups \
-	ImageControl \
-	ReportControlFormat \
-	ReportControlModel \
-	ReportDefinition \
-    ReportEngine \
-	Section \
-	Shape \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/report/inspection,\
-	DefaultComponentInspectorModel \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/resource,\
 	StringResource \
 	StringResourceWithLocation \
@@ -1026,10 +1007,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/presentation/t
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/rendering,\
 	BitmapCanvas \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/report/inspection,\
-	DataProviderHandler \
-	ReportComponentHandler \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/script/browse,\
 	BrowseNode \
@@ -3031,38 +3008,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XSpriteCanvas \
 	XTextLayout \
 	XVolatileBitmap \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/report,\
-	Calculation \
-	ForceNewPage \
-	GroupKeepTogether \
-	GroupOn \
-	KeepTogether \
-	ReportPrintOption \
-	SectionPageBreak \
-	XFixedLine \
-	XFixedText \
-	XFormatCondition \
-	XFormattedField \
-	XFunction \
-	XFunctions \
-	XFunctionsSupplier \
-	XGroup \
-	XGroups \
-	XImageControl \
-	XReportComponent \
-	XReportControlFormat \
-	XReportControlModel \
-	XReportDefinition \
-	XReportEngine \
-	XSection \
-	XShape \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/report/meta,\
-	XFormulaParser \
-	XFunctionCategory \
-	XFunctionDescription \
-	XFunctionManager \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/resource,\
 	MissingResourceException \

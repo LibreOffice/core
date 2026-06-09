@@ -40,8 +40,6 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <com/sun/star/report/XReportDefinition.hpp>
-#include <com/sun/star/report/XReportEngine.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
@@ -899,31 +897,16 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         return Any();
 
     Reference< XModel > xModel( getComponent(), UNO_QUERY );
-    Reference< report::XReportDefinition > xReportDefinition(xModel,UNO_QUERY);
 
     Reference< XModule > xModule( xModel, UNO_QUERY );
     if ( xModule.is() )
     {
         if ( m_bForm )
             xModule->setIdentifier( u"com.sun.star.sdb.FormDesign"_ustr );
-        else if ( !xReportDefinition.is() )
+        else
             xModule->setIdentifier( u"com.sun.star.text.TextDocument"_ustr );
 
         updateDocumentTitle();
-    }
-
-    bool bIsAliveNewStyleReport = ( !m_bOpenInDesign && xReportDefinition.is() );
-    if ( bIsAliveNewStyleReport )
-    {
-        // we are in ReadOnly mode
-        // we would like to open the Writer or Calc with the report direct, without design it.
-        Reference< report::XReportEngine > xReportEngine( m_aContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.report.OReportEngineJFree"_ustr, m_aContext), UNO_QUERY_THROW );
-
-        xReportEngine->setReportDefinition(xReportDefinition);
-        xReportEngine->setActiveConnection(m_xLastKnownConnection);
-        if ( bOpenHidden )
-            return Any( xReportEngine->createDocumentModel() );
-        return Any( xReportEngine->createDocumentAlive( nullptr ) );
     }
 
     if ( _bActivate && !bOpenHidden )
@@ -981,15 +964,8 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
             if ( bIsActive )
             {
-                // exception: new-style reports always create a new document when "open" is executed
-                Reference< report::XReportDefinition > xReportDefinition( impl_getComponent_throw( false ), UNO_QUERY );
-                bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
-
-                if ( !bIsAliveNewStyleReport )
-                {
-                    impl_onActivateEmbeddedObject_nothrow( true );
-                    return Any( getComponent() );
-                }
+                impl_onActivateEmbeddedObject_nothrow( true );
+                return Any( getComponent() );
             }
         }
 

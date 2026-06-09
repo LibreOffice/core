@@ -72,7 +72,6 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
-#include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
@@ -125,7 +124,6 @@ namespace pcr
     using namespace sdb;
     using namespace sdbc;
     using namespace sdbcx;
-    using namespace report;
     using namespace container;
     using namespace ui::dialogs;
     using namespace inspection;
@@ -2200,13 +2198,6 @@ namespace pcr
         }
     }
 
-    bool FormComponentPropertyHandler::isReportModel() const
-    {
-        Reference<XModel> xModel(impl_getContextDocument_nothrow());
-        Reference<XReportDefinition> xReportDef(xModel, css::uno::UNO_QUERY);
-        return xReportDef.is();
-    }
-
     bool FormComponentPropertyHandler::impl_shouldExcludeProperty_nothrow( const Property& _rProperty ) const
     {
         OSL_ENSURE( _rProperty.Handle == m_pInfoService->getPropertyId( _rProperty.Name ),
@@ -2290,9 +2281,6 @@ namespace pcr
         if ( ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0 )
             if (!SvtModuleOptions().IsDataBaseInstalled())
                 return true;
-
-        if ((nPropertyUIFlags & PROP_FLAG_REPORT_INVISIBLE) != 0 && isReportModel())
-            return true;
 
         return false;
     }
@@ -2755,12 +2743,6 @@ namespace pcr
         {
             Reference< XModel > xModel( impl_getContextDocument_nothrow() );
             bHandleNonLink = xModel.is();
-            // Not implemented in reports
-            if (bHandleNonLink)
-            {
-                Reference< XReportDefinition > xReportDef( xModel, css::uno::UNO_QUERY );
-                bHandleNonLink = !xReportDef.is();
-            }
         }
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);

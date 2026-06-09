@@ -137,8 +137,6 @@ namespace pcr
         */
         void    impl_classifyControlModel_throw();
 
-        bool isReportModel() const;
-
         /** const-version of ->getPropertyValue
         */
         css::uno::Any impl_getPropertyValue_throw( const OUString& _rPropertyName ) const;
