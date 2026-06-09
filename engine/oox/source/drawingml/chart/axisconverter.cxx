@@ -36,6 +36,9 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <drawingml/chart/axismodel.hxx>
 #include <drawingml/chart/titleconverter.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
@@ -163,9 +166,44 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         {
             try
             {
-                Reference< XAxis > xExistingAxis = rxCoordSystem->getAxisByDimension( nAxisIdx, nAxesSetIdx );
-                if( xExistingAxis.is() )
-                    xHistogramCategories = xExistingAxis->getScaleData().Categories;
+                Reference< XChartTypeContainer > xChartTypeContainer(rxCoordSystem, UNO_QUERY_THROW);
+                const Sequence< Reference< XChartType > > aChartTypes = xChartTypeContainer->getChartTypes();
+
+                if( aChartTypes.getLength() == 1 )
+                {
+                    Reference< XDataSeriesContainer > xSeriesContainer(aChartTypes[0], UNO_QUERY);
+                    if( xSeriesContainer.is() )
+                    {
+                        const Sequence< Reference< XDataSeries > > aSeries = xSeriesContainer->getDataSeries();
+                        if( aSeries.getLength() == 1 )
+                        {
+                            Reference< data::XDataSource > xDataSource(aSeries[0], UNO_QUERY);
+                            if( xDataSource.is() )
+                            {
+                                const Sequence< Reference< data::XLabeledDataSequence > > aDataSeqs
+                                    = xDataSource->getDataSequences();
+
+                                for( const auto& xSeq : aDataSeqs )
+                                {
+                                    if( !xSeq.is() || !xSeq->getValues().is() )
+                                        continue;
+
+                                    Reference< XPropertySet > xSeqProps(xSeq->getValues(), UNO_QUERY);
+                                    if( !xSeqProps.is() )
+                                        continue;
+
+                                    OUString aRole;
+                                    xSeqProps->getPropertyValue(u"Role"_ustr) >>= aRole;
+                                    if( aRole == "categories" )
+                                    {
+                                        xHistogramCategories = xSeq;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             catch( const Exception& )
             {
@@ -231,8 +269,9 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                     can not handle different category names on the primary and secondary category axis. */
                     if( nAxesSetIdx == 0 )
                     {
-                        // Histogram labels are generated bin ranges, not OOXML category data
-                        // Preserve them instead of synthesizing generic "1", "2", ... labels
+                        // Histogram labels are generated bin ranges on the data series. Use those
+                        // regenerated labels for the X axis instead of keeping stale axis categories
+                        // or synthesizing generic "1", "2", ... labels.
                         if( rTypeInfo.meTypeId == TYPEID_HISTO && xHistogramCategories.is() )
                             aScaleData.Categories = xHistogramCategories;
                         else

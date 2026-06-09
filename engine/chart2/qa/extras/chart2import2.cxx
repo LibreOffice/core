@@ -1090,7 +1090,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     const Sequence<OUString> aAxisBinLabels = xAxisCatText->getTextualData();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAxisBinLabels.getLength());
     CPPUNIT_ASSERT_EQUAL(u"[10-13.94]"_ustr, aAxisBinLabels[0]);
-    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.87]"_ustr, aAxisBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.88]"_ustr, aAxisBinLabels[1]);
 
     // Round trip 2: non-default binning parameters survive save + reload.
     Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
@@ -1119,7 +1119,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     CPPUNIT_ASSERT_EQUAL(2.5, fBinWidth);
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip)
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_ODS)
 {
     // ODF: fixed number of bins survives export/reload at the model level.
     loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
@@ -1161,13 +1161,29 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip)
     CPPUNIT_ASSERT(xReloadedProps->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nBinCount);
 
+    Reference<chart2::data::XDataSequence> xCategories
+        = getDataSequenceFromDocByRole(xChartDoc, u"categories");
+    CPPUNIT_ASSERT(xCategories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xCategoriesText(xCategories, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCategoriesText.is());
+
+    const Sequence<OUString> aBinLabels = xCategoriesText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"[10-11.67]"_ustr, aBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(11.67-13.33]"_ustr, aBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.33-15]"_ustr, aBinLabels[2]);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip_XLSX)
+{
     // XLSX: fixed number of bins is written as cx:binCount and survives reload.
     loadFromFile(u"xlsx/SimpleHistogram.xlsx");
 
-    xChartDoc = getChartDocFromSheet(0);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
     CPPUNIT_ASSERT(xChartType.is());
 
     Reference<beans::XPropertySet> xXlsxProps(xChartType, uno::UNO_QUERY_THROW);
@@ -1176,7 +1192,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip)
 
     saveAndReload(TestFilter::XLSX);
 
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc,
@@ -1190,13 +1206,29 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip)
     xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
     CPPUNIT_ASSERT(xChartType.is());
 
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    chart2::ScaleData aScaleData = xXAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xAxisCatText(aScaleData.Categories->getValues(),
+                                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisCatText.is());
+
+    const Sequence<OUString> aAxisBinLabels = xAxisCatText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aAxisBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"[10-11.67]"_ustr, aAxisBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(11.67-13.33]"_ustr, aAxisBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.33-15]"_ustr, aAxisBinLabels[2]);
+
     Reference<beans::XPropertySet> xReloadedXlsxProps(xChartType, uno::UNO_QUERY_THROW);
 
-    nFrequencyType = -1;
+    sal_Int32 nFrequencyType = -1;
     CPPUNIT_ASSERT(xReloadedXlsxProps->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nFrequencyType);
 
-    nBinCount = -1;
+    sal_Int32 nBinCount = -1;
     CPPUNIT_ASSERT(xReloadedXlsxProps->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nBinCount);
 }
