@@ -843,10 +843,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		if (this.sheetGeometry.autoFilterChanged) {
 			this.sheetGeometry.autoFilterChanged = false;
-			let firstVisibleRow = this.sheetGeometry.getFirstNewVisibleRow();
-			app.activeDocument.activeLayout.scrollTo(
-				this._map._getTopLeftPoint().x,
-				this.sheetGeometry.getRowsGeometry().getElementData(firstVisibleRow).startpos);
+			var targetRow = this.sheetGeometry.getViewRowRange().start;
+			var targetData = this.sheetGeometry.getRowsGeometry().getElementData(targetRow);
+			if (targetData) {
+				app.activeDocument.activeLayout.scrollTo(
+					this._map._getTopLeftPoint().x,
+					targetData.startpos);
+			}
 		} else {
 			this.sheetGeometry.setViewArea(
 				this._pixelsToTwips(this._map._getTopLeftPoint()),

@@ -209,51 +209,6 @@ export class SheetGeometry {
 		return true;
 	}
 
-	/**
-	 * Find which will be new first visible row after updating the sheet geometry
-	 */
-	public getFirstNewVisibleRow(): number {
-		// Find first the visible rows in current view (before new sheet geometry is applied)
-		const target: number = this.getViewRowRange().start;
-		const invisibleRows: BoolSpanList = this.getRowsGeometry().getInvisibleSpanList(); //(hidden rows list in new geometry)
-
-		if (target === 0)
-			return 0;
-
-		let start: number = 0;
-		let end: number = invisibleRows._spanlist.length - 1;
-		let ans: number = -1;
-
-		// Just one span means every row is visible
-		if (start === 0 && end === 0)
-			return target;
-
-		// Modified binary search to find next visible of after the target row
-		while (start <= end) {
-			const mid = Math.floor((start + end) / 2);
-			if (invisibleRows._spanlist[mid] <= target) {
-				start = mid + 1;
-			} else {
-				ans = mid;
-				end = mid - 1;
-			}
-		}
-
-		// InvisibleRows is list of ranges in form of
-		// Like: 5 8 10 20... -> Means that visible up  to 5 (including), hidden up to 8 (including), visible up to 10 (including), hidden up to 20 (including)...
-		if (ans !== -1) {
-			if (ans === 0)
-				return 0;
-			// If its hidden index then +1 will be visible
-			if (ans % 2 === 0 && (ans + 1 < invisibleRows._spanlist.length)) {
-				return invisibleRows._spanlist[ans + 1];
-			} else {
-				return invisibleRows._spanlist[ans];
-			}
-		}
-		return 0;
-	}
-
 	public getPart(): number {
 		return this._part;
 	}
@@ -587,7 +542,6 @@ export class SheetDimension {
 	private _filtered: BoolSpanList;
 	private _outlines: DimensionOutlines;
 	private _visibleSizes: SpanList;
-	private _invisibleSpanList: BoolSpanList;
 
 	private _maxIndex: number;
 	private _tileSizeTwips: number;
@@ -615,8 +569,6 @@ export class SheetDimension {
 	public getVisibleSizes(): SpanList {
 		return this._visibleSizes;
 	}
-
-	public getInvisibleSpanList(): BoolSpanList { return this._invisibleSpanList; }
 
 	public update(jsonObject: SheetDimensionCoreData): boolean {
 
@@ -682,8 +634,8 @@ export class SheetDimension {
 
 	private _updateVisible() {
 
-		this._invisibleSpanList = this._hidden.union(this._filtered); // this._hidden is not modified.
-		this._visibleSizes = this._sizes.applyZeroValues(this._invisibleSpanList); // this._sizes is not modified.
+		var invisibleSpanList = this._hidden.union(this._filtered); // this._hidden is not modified.
+		this._visibleSizes = this._sizes.applyZeroValues(invisibleSpanList); // this._sizes is not modified.
 		this._updatePositions();
 	}
 

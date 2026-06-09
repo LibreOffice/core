@@ -178,3 +178,65 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter', function() {
 
 	});
 });
+
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Scroll Position', function() {
+
+	function openAutoFilterAtCursor() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.socket.sendMessage('uno .uno:DataSelect');
+		});
+		cy.cGet('.autofilter .vertical').should('be.visible');
+	}
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/autofilter-complex.ods');
+		desktopHelper.switchUIToCompact();
+
+		cy.getFrameWindow().then(function(win) {
+			calcHelper.enterCellAddressAndConfirm(win, 'A1');
+			calcHelper.enterCellAddressAndConfirm(win, 'P100');
+		});
+		cy.cGet('#map').focus();
+
+		desktopHelper.assertScrollbarPosition('vertical', 180, 280);
+	});
+
+	it('View does not jump to top after applying filter', function() {
+		openAutoFilterAtCursor();
+
+		cy.cGet('#toggle_all-input').uncheck();
+		cy.cGet('#ok').click();
+		cy.cGet('div.autofilter').should('not.exist');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+
+		desktopHelper.assertScrollbarPosition('vertical', 180, 400);
+	});
+
+	it('View does not jump to top after clearing filter', function() {
+		openAutoFilterAtCursor();
+
+		cy.cGet('#toggle_all-input').uncheck();
+		cy.cGet('#ok').click();
+		cy.cGet('div.autofilter').should('not.exist');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+
+		openAutoFilterAtCursor();
+
+		cy.cGet('#toggle_all-input').check();
+		cy.cGet('#ok').click();
+		cy.cGet('div.autofilter').should('not.exist');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+
+		desktopHelper.assertScrollbarPosition('vertical', 180, 400);
+	});
+});
