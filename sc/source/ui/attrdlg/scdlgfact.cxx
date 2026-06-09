@@ -780,13 +780,11 @@ public:
 };
 }
 
-VclPtr<AbstractScTabBgColorDlg> ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg(
-                                                            weld::Window* pParent,
-                                                            const OUString& rTitle,
-                                                            const OUString& rTabBgColorNoColorText,
-                                                            const Color& rDefaultColor)
+VclPtr<AbstractScTabBgColorDlg>
+ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
+                                                    const Color& rDefaultColor)
 {
-    return VclPtr<AbstractScTabBgColorDlg_Impl>::Create(pParent, rTitle, rTabBgColorNoColorText, rDefaultColor);
+    return VclPtr<AbstractScTabBgColorDlg_Impl>::Create(pParent, rTitle, rDefaultColor);
 }
 
 namespace
