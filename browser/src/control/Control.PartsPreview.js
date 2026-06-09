@@ -41,7 +41,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._partsPreviewCont = preview;
 		this._partsPreviewCont.setAttribute('role', 'listbox');
 		this._partsPreviewCont.setAttribute('aria-multiselectable', 'true');
-		this._partsPreviewCont.setAttribute('aria-label', _('Slides'));
 		this._partsPreviewCont.onscroll = this._onScroll.bind(this);
 		this._idNum = 0;
 		this._width = 0;
@@ -97,6 +96,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (docType === 'presentation' || docType === 'drawing') {
 			if (!this._previewInitialized)
 			{
+				// Draw documents have pages, presentations have slides.
+				this._partsPreviewCont.setAttribute('aria-label',
+					docType === 'drawing' ? _('Pages') : _('Slides'));
+
 				// make room for the preview
 				var docContainer = this._map.options.documentContainer;
 
