@@ -82,7 +82,7 @@ class DrawBulletInfo;
 class StripPortionsHelper;
 
 namespace com::sun::star::linguistic2 {
-    class XSpellChecker1;
+    class XSpellChecker;
     class XHyphenator;
 }
 namespace svx{
@@ -848,8 +848,8 @@ public:
 
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle );
 
-    void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpeller );
-    css::uno::Reference< css::linguistic2::XSpellChecker1 > const &
+    void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker > const &xSpeller );
+    css::uno::Reference< css::linguistic2::XSpellChecker > const &
                     GetSpeller();
     void            SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator > const & xHyph );
 

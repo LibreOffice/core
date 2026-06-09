@@ -67,7 +67,7 @@
 #include <wrong.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <linguistic/misc.hxx>
 
 #include <workctrl.hxx>
@@ -2392,11 +2392,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
 
     // check available en_US dictionary and test spelling with it
     uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
-    uno::Reference<XSpellChecker1> xSpell;
-    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
-    LanguageType eLang
-        = LanguageTag::convertToLanguageType(lang::Locale(u"en"_ustr, u"US"_ustr, OUString()));
-    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    uno::Reference<XSpellChecker> xSpell = xLngSvcMgr->getSpellChecker();
+    lang::Locale aLocale(u"en"_ustr, u"US"_ustr, OUString());
+    if (xSpell.is() && xSpell->hasLocale(aLocale))
     {
         // Type a correct word
 
@@ -2441,11 +2439,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
 
     // check available en_US dictionary and test spelling with it
     uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
-    uno::Reference<XSpellChecker1> xSpell;
-    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
-    LanguageType eLang
-        = LanguageTag::convertToLanguageType(lang::Locale(u"en"_ustr, u"US"_ustr, OUString()));
-    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    uno::Reference<XSpellChecker> xSpell = xLngSvcMgr->getSpellChecker();
+    lang::Locale aLocale(u"en"_ustr, u"US"_ustr, OUString());
+    if (xSpell.is() && xSpell->hasLocale(aLocale))
     {
         emulateTyping(u"baaad http://www.baaad.org baaad");
         SwCursorShell* pShell(pDoc->GetEditShell());
@@ -2493,11 +2489,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
 
     // check available en_US dictionary and test spelling with it
     uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
-    uno::Reference<XSpellChecker1> xSpell;
-    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
-    LanguageType eLang
-        = LanguageTag::convertToLanguageType(lang::Locale(u"en"_ustr, u"US"_ustr, OUString()));
-    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    uno::Reference<XSpellChecker> xSpell = xLngSvcMgr->getSpellChecker();
+    lang::Locale aLocale(u"en"_ustr, u"US"_ustr, OUString());
+    if (xSpell.is() && xSpell->hasLocale(aLocale))
     {
         uno::Reference<linguistic2::XLinguProperties> xLinguProperties(
             LinguMgr::GetLinguPropertySet());
@@ -2532,11 +2526,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
 
     // check available en_US dictionary and test spelling with it
     uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
-    uno::Reference<XSpellChecker1> xSpell;
-    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
-    LanguageType eLang
-        = LanguageTag::convertToLanguageType(lang::Locale(u"en"_ustr, u"US"_ustr, OUString()));
-    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    uno::Reference<XSpellChecker> xSpell = xLngSvcMgr->getSpellChecker();
+    lang::Locale aLocale(u"en"_ustr, u"US"_ustr, OUString());
+    if (xSpell.is() && xSpell->hasLocale(aLocale))
     {
         // trigger online spell checking by (a few) spaces to be sure to get it
 

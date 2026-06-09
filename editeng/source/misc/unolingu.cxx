@@ -27,7 +27,7 @@
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -173,26 +173,25 @@ namespace {
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when it needs to be done only.
 class SpellDummy_Impl :
-    public cppu::WeakImplHelper< XSpellChecker1 >
+    public cppu::WeakImplHelper< XSpellChecker >
 {
-    uno::Reference< XSpellChecker1 >     xSpell;      // the real one...
+    uno::Reference< XSpellChecker >     xSpell;      // the real one...
 
     void    GetSpell_Impl();
 
 public:
 
-    // XSupportedLanguages (for XSpellChecker1)
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL
-        getLanguages() override;
+    // XSupportedLocales (for XSpellChecker)
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
+        getLocales() override;
     virtual sal_Bool SAL_CALL
-        hasLanguage( sal_Int16 nLanguage ) override;
+        hasLocale( const css::lang::Locale& ) override;
 
-    // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
     virtual sal_Bool SAL_CALL
-        isValid( const OUString& rWord, sal_Int16 nLanguage,
+        isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
                 const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL
-        spell( const OUString& rWord, sal_Int16 nLanguage,
+        spell( const OUString& rWord, const css::lang::Locale& nLanguage,
                 const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
@@ -203,35 +202,35 @@ void SpellDummy_Impl::GetSpell_Impl()
     if (!xSpell.is())
     {
         uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        xSpell = xLngSvcMgr->getSpellChecker();
     }
 }
 
 
-uno::Sequence< sal_Int16 > SAL_CALL
-    SpellDummy_Impl::getLanguages()
+uno::Sequence< css::lang::Locale > SAL_CALL
+    SpellDummy_Impl::getLocales()
 {
     GetSpell_Impl();
     if (xSpell.is())
-        return xSpell->getLanguages();
+        return xSpell->getLocales();
     else
-        return uno::Sequence< sal_Int16 >();
+        return {};
 }
 
 
 sal_Bool SAL_CALL
-    SpellDummy_Impl::hasLanguage( sal_Int16 nLanguage )
+    SpellDummy_Impl::hasLocale( const css::lang::Locale& nLanguage )
 {
     GetSpell_Impl();
     bool bRes = false;
     if (xSpell.is())
-        bRes = xSpell->hasLanguage( nLanguage );
+        bRes = xSpell->hasLocale( nLanguage );
     return bRes;
 }
 
 
 sal_Bool SAL_CALL
-    SpellDummy_Impl::isValid( const OUString& rWord, sal_Int16 nLanguage,
+    SpellDummy_Impl::isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
             const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetSpell_Impl();
@@ -243,7 +242,7 @@ sal_Bool SAL_CALL
 
 
 uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
-    SpellDummy_Impl::spell( const OUString& rWord, sal_Int16 nLanguage,
+    SpellDummy_Impl::spell( const OUString& rWord, const css::lang::Locale& nLanguage,
             const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetSpell_Impl();
@@ -440,7 +439,7 @@ void LinguMgrExitLstnr::AtExit()
 rtl::Reference<LinguMgrExitLstnr> LinguMgr::pExitLstnr;
 bool                            LinguMgr::bExiting      = false;
 uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr;
-uno::Reference< XSpellChecker1 >    LinguMgr::xSpell;
+uno::Reference< XSpellChecker >     LinguMgr::xSpell;
 uno::Reference< XHyphenator >       LinguMgr::xHyph;
 uno::Reference< XThesaurus >        LinguMgr::xThes;
 uno::Reference< XSearchableDictionaryList >   LinguMgr::xDicList;
@@ -464,7 +463,7 @@ uno::Reference< XLinguServiceManager2 > LinguMgr::GetLngSvcMgr()
 }
 
 
-uno::Reference< XSpellChecker1 > LinguMgr::GetSpellChecker()
+uno::Reference< XSpellChecker > LinguMgr::GetSpellChecker()
 {
     return xSpell.is() ? xSpell : GetSpell();
 }
@@ -507,7 +506,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAllList()
     return xChangeAll.is() ? xChangeAll : GetChangeAll();
 }
 
-uno::Reference< XSpellChecker1 > LinguMgr::GetSpell()
+uno::Reference< XSpellChecker > LinguMgr::GetSpell()
 {
     if (bExiting)
         return nullptr;

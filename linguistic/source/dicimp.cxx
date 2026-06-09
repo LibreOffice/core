@@ -40,7 +40,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 
 #include <algorithm>
 #include <utility>
@@ -715,19 +715,16 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDic
 
     // add word to the Hunspell dictionary using a sample word for affixation/compounding
     if (xDicEntry.is() && !xDicEntry->isNegative() && !xDicEntry->getReplacementText().isEmpty()) {
-        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        uno::Reference< XSpellChecker1 > xSpell;
-        Reference< XSpellAlternatives > xTmpRes;
-        xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        uno::Reference< XSpellChecker > xSpell = GetLngSvcMgr_Impl()->getSpellChecker();
         Sequence< css::beans::PropertyValue > aEmptySeq;
-        if (xSpell.is() && (xSpell->isValid( SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage), aEmptySeq )))
+        if (xSpell.is() && (xSpell->isValid( SPELLML_SUPPORT, LanguageTag::convertToLocale(nLanguage), aEmptySeq )))
         {
             // "Grammar By" sample word is a Hunspell dictionary word?
-            if (xSpell->isValid( xDicEntry->getReplacementText(), static_cast<sal_uInt16>(nLanguage), aEmptySeq ))
+            if (xSpell->isValid( xDicEntry->getReplacementText(), LanguageTag::convertToLocale(nLanguage), aEmptySeq ))
             {
-                xTmpRes = xSpell->spell( "<?xml?><query type='add'><word>" +
+                Reference< XSpellAlternatives > xTmpRes = xSpell->spell( "<?xml?><query type='add'><word>" +
                     xDicEntry->getDictionaryWord() + "</word><word>" + xDicEntry->getReplacementText() +
-                    "</word></query>", static_cast<sal_uInt16>(nLanguage), aEmptySeq );
+                    "</word></query>", LanguageTag::convertToLocale(nLanguage), aEmptySeq );
                 bRes = true;
             } else
                 bRes = false;

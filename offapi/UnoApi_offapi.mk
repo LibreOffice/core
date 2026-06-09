@@ -2819,8 +2819,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/linguistic2,\
 	XSetSpellAlternatives \
 	XSpellAlternatives \
 	XSpellChecker \
-	XSpellChecker1 \
-	XSupportedLanguages \
 	XSupportedLocales \
 	XThesaurus \
 ))

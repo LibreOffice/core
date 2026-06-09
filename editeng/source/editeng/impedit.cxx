@@ -1442,7 +1442,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             else
             {
                 // is cursor at a misspelled word ?
-                uno::Reference<linguistic2::XSpellChecker1>  xSpeller(getImpEditEngine().GetSpeller());
+                uno::Reference<linguistic2::XSpellChecker>  xSpeller(getImpEditEngine().GetSpeller());
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
                 EditView* pActiveView = GetEditViewPtr();
 
