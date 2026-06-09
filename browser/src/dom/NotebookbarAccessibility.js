@@ -55,6 +55,16 @@ var NotebookbarAccessibility = function() {
 
 		this.removeAllInfoBoxes();
 
+		// The content list is first built when Alt is pressed, while the target
+		// tab may still be hidden. A hidden tab's overflow groups are never
+		// folded, so the snapshot lists each group's child items. Selecting the
+		// tab then folds the groups that do not fit, hiding those children inside
+		// collapsed popups. Rebuild the list now that the tab is active so it
+		// reflects the settled overflow layout: a folded group contributes one
+		// shortcut on its visible overflow button instead of children that are no
+		// longer on screen.
+		this.tabInfoList = this.definitions.getDefinitions();
+
 		this.activeTabPointers.id = id;
 		this.activeTabPointers.contentList = this.tabInfoList[id].contentList;
 		this.activeTabPointers.infoBoxList = [];
