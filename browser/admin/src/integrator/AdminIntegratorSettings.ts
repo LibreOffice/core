@@ -1255,8 +1255,8 @@ class SettingIframe {
 					contentsContainer.appendChild(renderedTree);
 				} else {
 					contentsContainer.textContent = _(
-						`No settings available for ${tab.label}`,
-					);
+						'No settings available for {0}',
+					).replace('{0}', tab.label);
 				}
 			});
 			navContainer.appendChild(btn);
@@ -1971,7 +1971,7 @@ class SettingIframe {
 		zoteroContainer.appendChild(
 			this.createSettingsActions(
 				'zotero',
-				'Zotero Settings',
+				_('Zotero Settings'),
 				'viewsetting.json',
 				() => {
 					const defaultSettings = this.getDefaultViewSettings();
@@ -2028,7 +2028,7 @@ class SettingIframe {
 		docSigningContainer.appendChild(
 			this.createSettingsActions(
 				'document-signing',
-				'Document Signing Settings',
+				_('Document Signing Settings'),
 				'viewsetting.json',
 				() => {
 					const defaultSettings = this.getDefaultViewSettings();
@@ -2083,7 +2083,7 @@ class SettingIframe {
 		aiContainer.appendChild(
 			this.createSettingsActions(
 				'ai',
-				'AI Assistant',
+				_('AI Assistant'),
 				'viewsetting.json',
 				() => {
 					const defaultSettings = this.getDefaultViewSettings();
@@ -3253,7 +3253,7 @@ class SettingIframe {
 		if (isSignatureField) {
 			const textarea = this.createTextArea(
 				key as string,
-				_(`Enter ${label}`),
+				_('Enter {0}').replace('{0}', label),
 				value,
 				(textareaElement) => {
 					(data as any)[key] = textareaElement.value;
@@ -3263,7 +3263,7 @@ class SettingIframe {
 		} else {
 			const input = this.createTextInput(
 				key as string,
-				_(`Enter ${label}`),
+				_('Enter {0}').replace('{0}', label),
 				value,
 				(inputElement) => {
 					(data as any)[key] = inputElement.value;
@@ -3296,11 +3296,11 @@ class SettingIframe {
 		const resetButton = this.createButtonWithText(
 			`${prefix}-reset-button`,
 			_('Reset'),
-			_(`Reset to default ${settingsName}`),
+			_('Reset to default {0}').replace('{0}', settingsName),
 			['button--vue-secondary', `${prefix}-reset-icon`],
 			async (button) => {
 				const confirmed = window.confirm(
-					_(`Are you sure you want to reset ${settingsName}?`),
+					_('Are you sure you want to reset {0}?').replace('{0}', settingsName),
 				);
 				if (!confirmed) {
 					return;
@@ -3316,7 +3316,7 @@ class SettingIframe {
 		const saveButton = this.createButtonWithText(
 			`${prefix}-save-button`,
 			_('Save'),
-			_(`Save ${settingsName}`),
+			_('Save {0}').replace('{0}', settingsName),
 			['button-primary'],
 			async (button) => {
 				button.disabled = true;
