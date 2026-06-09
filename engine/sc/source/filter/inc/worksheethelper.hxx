@@ -284,13 +284,17 @@ public:
     /** Finalizes the import of named sheet views, by creating the sheet views from the data. */
     void finalizeNamedSheetViews();
 
-    void                setCellFormula( const ScAddress& rTokenAddress, const OUString&  );
+    void                setCellFormula( const ScAddress& rTokenAddress, const OUString&,
+                                        bool bDynamicArrayMaster = false );
 
     void setCellFormula(
         const ScAddress& rAddr, sal_Int32 nSharedId,
-        const OUString& rCellValue, sal_Int32 nValueType );
+        const OUString& rCellValue, sal_Int32 nValueType,
+        bool bDynamicArrayMaster = false );
 
-    void setCellArrayFormula(const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr, bool bCachedSpill = false);
+    void setCellArrayFormula(const ScRange& rRangeAddress, const ScAddress& rTokenAddress,
+                             const OUString& rTokenStr, bool bCachedSpill = false,
+                             bool bDynamicArrayMaster = false);
 
     void createSharedFormulaMapEntry(
         const ScAddress& rAddress,

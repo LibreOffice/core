@@ -849,6 +849,10 @@ void ImportExcel::Shrfmla()
 
     ScDocumentImport& rDoc = GetDocImport();
 
+    // XLS has no @ encoding. Bake an implicit @ into the RPN when the
+    // formula intends an array result so a TRANSPOSE-style call returns
+    // the upper-left value at the cell position.
+    ScFormulaCell::ResolveImplicitIntersection(*pResult, rD, aPos);
     ScFormulaCell* pCell = new ScFormulaCell(rD, aPos, std::move(pResult));
     pCell->GetCode()->WrapReference(aPos, EXC_MAXCOL8, EXC_MAXROW8);
     rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());

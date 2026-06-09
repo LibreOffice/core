@@ -2675,17 +2675,29 @@ void ScFormulaCell::SetDynamicArrayMaster(bool bDynamic)
     }
 }
 
+void ScFormulaCell::ResolveImplicitIntersection(ScTokenArray& rCode, ScDocument& rDoc,
+                                                const ScAddress& rPos)
+{
+    if (rCode.IsHyperLink() || rCode.GetLen() == 0)
+        return;
+    if (rCode.GetCodeLen() == 0)
+    {
+        // Parse has tokens but RPN was not built yet. Build it so the
+        // walk has post-fix order to inspect.
+        ScCompiler aComp(rDoc, rPos, rCode, formula::FormulaGrammar::GRAM_DEFAULT, true, false);
+        aComp.CompileTokenArray();
+    }
+    if (rpnTopIsImplicitIntersection(rCode))
+        return;
+    if (rpnIntendsArrayResult(rCode))
+        prependImplicitIntersection(rCode);
+}
+
 void ScFormulaCell::ResolveImplicitIntersection()
 {
-    if (!pCode
-        || cMatrixFlag != ScMatrixMode::NONE
-        || pCode->IsHyperLink() || mxGroup
-        || pCode->GetCodeLen() == 0)
+    if (!pCode || cMatrixFlag != ScMatrixMode::NONE || mxGroup)
         return;
-    if (rpnTopIsImplicitIntersection(*pCode))
-        return;
-    if (rpnIntendsArrayResult(*pCode))
-        prependImplicitIntersection(*pCode);
+    ResolveImplicitIntersection(*pCode, rDocument, aPos);
 }
 
 void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows )

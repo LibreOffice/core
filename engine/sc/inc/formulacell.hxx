@@ -361,6 +361,13 @@ public:
     bool IsDynamicArrayMaster() const { return mbDynamicArrayMaster; }
     SC_DLLPUBLIC void SetDynamicArrayMaster( bool bDynamic );
     SC_DLLPUBLIC void ResolveImplicitIntersection();
+    // Run this on the bare token array before it is wrapped in a cell.
+    // The cell constructor finalizes the parse array. Once finalized,
+    // appending a new token silently no-ops. The document and position
+    // arguments compile a missing RPN so the array-intent walk has the
+    // post-fix order it needs.
+    SC_DLLPUBLIC static void ResolveImplicitIntersection(ScTokenArray& rCode, ScDocument& rDoc,
+                                                        const ScAddress& rPos);
     ScTokenArray*   GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
 

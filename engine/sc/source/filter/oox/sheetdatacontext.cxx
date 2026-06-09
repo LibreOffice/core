@@ -143,7 +143,7 @@ void SheetDataContext::onEndElement()
             // master will create the matrix cells via setMatrixCells.
             if (!maFormulaStr.isEmpty() || mbCalcAlways)
             {
-                setCellFormula(maCellData.maCellAddr, maFormulaStr);
+                setCellFormula(maCellData.maCellAddr, maFormulaStr, mbCellMetadata);
                 mrSheetData.setCellFormat(maCellData);
 
                 // If a number cell has some preloaded value, stick it into the buffer
@@ -161,7 +161,8 @@ void SheetDataContext::onEndElement()
                 if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
                     createSharedFormulaMapEntry(maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr);
 
-                setCellFormula(maCellData.maCellAddr, maFmlaData.mnSharedId, maCellValue, maCellData.mnCellType);
+                setCellFormula(maCellData.maCellAddr, maFmlaData.mnSharedId, maCellValue, maCellData.mnCellType,
+                               mbCellMetadata);
                 mrSheetData.setCellFormat( maCellData );
             }
             else
@@ -181,7 +182,8 @@ void SheetDataContext::onEndElement()
                     = maCellData.mnCellType == XML_e
                       && mbCellMetadata
                       && maCellValue == u"#VALUE!";
-                setCellArrayFormula(maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr, bCachedSpill);
+                setCellArrayFormula(maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr,
+                                    bCachedSpill, mbCellMetadata);
             }
             // set cell formatting, but do not set result as cell value
             mrSheetData.setBlankCell( maCellData );

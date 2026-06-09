@@ -12,6 +12,7 @@
 #include <docsh.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
+#include <formulacell.hxx>
 #include <stlpool.hxx>
 #include <validat.hxx>
 #include <scresid.hxx>
@@ -19,6 +20,7 @@
 #include <subtotalparam.hxx>
 #include <globstr.hrc>
 #include <dpobject.hxx>
+#include <formula/errorcodes.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <editeng/wghtitem.hxx>
@@ -152,6 +154,33 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf120177)
                                           "table:table/office:forms/form:form/form:radio[2]",
                                           "group-name");
     CPPUNIT_ASSERT_EQUAL(sGroupName1, sGroupName2);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleValueDroppedOnXlsExport)
+{
+    // The @ implicit-intersection marker survives an XLS round trip
+    // even though the BIFF stream has no token for it.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    pDoc->SetFormula(ScAddress(0, 0, 0), u"=@TRANSPOSE(B1:B4)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    saveAndReload(TestFilter::XLS);
+
+    pDoc = getScDoc();
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"=@TRANSPOSE(B1:B4)"_ustr, pDoc->GetFormula(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf85553)

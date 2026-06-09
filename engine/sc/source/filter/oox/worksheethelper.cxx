@@ -1646,21 +1646,26 @@ void WorksheetHelper::finalizeNamedSheetViews()
     mrSheetGlob.finalizeNamedSheetViews();
 }
 
-void WorksheetHelper::setCellFormula( const ScAddress& rTokenAddress, const OUString& rTokenStr )
+void WorksheetHelper::setCellFormula(const ScAddress& rTokenAddress, const OUString& rTokenStr,
+                                     bool bDynamicArrayMaster)
 {
-    getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
+    getFormulaBuffer().setCellFormula(rTokenAddress, rTokenStr, bDynamicArrayMaster);
 }
 
 void WorksheetHelper::setCellFormula(
     const ScAddress& rAddr, sal_Int32 nSharedId,
-    const OUString& rCellValue, sal_Int32 nValueType )
+    const OUString& rCellValue, sal_Int32 nValueType,
+    bool bDynamicArrayMaster)
 {
-    getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
+    getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType, bDynamicArrayMaster);
 }
 
-void WorksheetHelper::setCellArrayFormula(const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr, bool bCachedSpill)
+void WorksheetHelper::setCellArrayFormula(const ScRange& rRangeAddress, const ScAddress& rTokenAddress,
+                                          const OUString& rTokenStr, bool bCachedSpill,
+                                          bool bDynamicArrayMaster)
 {
-    getFormulaBuffer().setCellArrayFormula(rRangeAddress,  rTokenAddress, rTokenStr, bCachedSpill);
+    getFormulaBuffer().setCellArrayFormula(rRangeAddress, rTokenAddress, rTokenStr, bCachedSpill,
+                                           bDynamicArrayMaster);
 }
 
 void WorksheetHelper::createSharedFormulaMapEntry(

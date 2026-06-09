@@ -154,6 +154,9 @@ void applySharedFormulas(
             else
                 pCell = new ScFormulaCell(rDoc.getDoc(), aPos, *pArray);
 
+            if (rDesc.mbDynamicArrayMaster)
+                pCell->SetDynamicArrayMaster(true);
+
             rDoc.setFormulaCell(aPos, pCell);
             const bool bNeedNumberFormat = ((rDoc.getDoc().GetNumberFormat(
                             aPos.Col(), aPos.Row(), aPos.Tab()) % SV_COUNTRY_LANGUAGE_OFFSET) == 0);
@@ -263,6 +266,9 @@ void applyCellFormulas(
             else
                 pCell = new ScFormulaCell(rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
 
+            if (rItem.mbDynamicArrayMaster)
+                pCell->SetDynamicArrayMaster(true);
+
             rDoc.setFormulaCell(aPos, pCell);
             if (rDoc.getDoc().GetNumberFormat(aPos.Col(), aPos.Row(), aPos.Tab()) % SV_COUNTRY_LANGUAGE_OFFSET == 0)
                 pCell->SetNeedNumberFormat(true);
@@ -282,6 +288,8 @@ void applyCellFormulas(
         aCompiler.CompileTokenArray(); // Generate RPN tokens.
 
         ScFormulaCell* pCell = new ScFormulaCell(rDoc.getDoc(), aPos, std::move(pCode));
+        if (rItem.mbDynamicArrayMaster)
+            pCell->SetDynamicArrayMaster(true);
         rDoc.setFormulaCell(aPos, pCell);
         if (rDoc.getDoc().GetNumberFormat(aPos.Col(), aPos.Row(), aPos.Tab()) % SV_COUNTRY_LANGUAGE_OFFSET == 0)
             pCell->SetNeedNumberFormat(true);
@@ -306,6 +314,12 @@ void applyArrayFormulas(
             rDoc.setMatrixCells(rAddressItem.maRange, *pArray,
                                 formula::FormulaGrammar::GRAM_OOXML,
                                 rAddressItem.mbCachedSpill);
+            if (rAddressItem.mbDynamicArrayMaster)
+            {
+                ScFormulaCell* pMaster = rDoc.getDoc().GetFormulaCell(aPos);
+                if (pMaster)
+                    pMaster->SetDynamicArrayMaster(true);
+            }
         }
     }
 }
@@ -422,9 +436,14 @@ FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
     maAddress(rAddr), maTokenStr(std::move(aTokenStr)), mnSharedId(nSharedId) {}
 
 FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
-    const ScAddress& rAddr, sal_Int32 nSharedId,
-    OUString aCellValue, sal_Int32 nValueType ) :
-    maAddress(rAddr), maCellValue(std::move(aCellValue)), mnSharedId(nSharedId), mnValueType(nValueType) {}
+        const ScAddress& rAddr, sal_Int32 nSharedId,
+        OUString aCellValue, sal_Int32 nValueType, bool bDynamicArrayMaster)
+    : maAddress(rAddr)
+    , maCellValue(std::move(aCellValue))
+    , mnSharedId(nSharedId)
+    , mnValueType(nValueType)
+    , mbDynamicArrayMaster(bDynamicArrayMaster)
+{}
 
 FormulaBuffer::SheetItem::SheetItem() :
     mpCellFormulas(nullptr),
@@ -513,25 +532,30 @@ void FormulaBuffer::createSharedFormulaMapEntry(
     rSharedFormulas.push_back( aEntry );
 }
 
-void FormulaBuffer::setCellFormula( const ScAddress& rAddress, const OUString& rTokenStr )
+void FormulaBuffer::setCellFormula(const ScAddress& rAddress, const OUString& rTokenStr,
+                                   bool bDynamicArrayMaster)
 {
     assert( rAddress.Tab() >= 0 && o3tl::make_unsigned(rAddress.Tab()) < maCellFormulas.size() );
-    maCellFormulas[ rAddress.Tab() ].emplace_back( rTokenStr, rAddress );
+    maCellFormulas[rAddress.Tab()].emplace_back(rTokenStr, rAddress, bDynamicArrayMaster);
 }
 
 void FormulaBuffer::setCellFormula(
-    const ScAddress& rAddress, sal_Int32 nSharedId, const OUString& rCellValue, sal_Int32 nValueType )
+    const ScAddress& rAddress, sal_Int32 nSharedId, const OUString& rCellValue, sal_Int32 nValueType,
+    bool bDynamicArrayMaster)
 {
     assert( rAddress.Tab() >= 0 && o3tl::make_unsigned(rAddress.Tab()) < maSharedFormulaIds.size() );
-    maSharedFormulaIds[rAddress.Tab()].emplace_back(rAddress, nSharedId, rCellValue, nValueType);
+    maSharedFormulaIds[rAddress.Tab()].emplace_back(rAddress, nSharedId, rCellValue, nValueType,
+                                                    bDynamicArrayMaster);
 }
 
-void FormulaBuffer::setCellArrayFormula( const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr, bool bCachedSpill)
+void FormulaBuffer::setCellArrayFormula(const ScRange& rRangeAddress, const ScAddress& rTokenAddress,
+                                        const OUString& rTokenStr, bool bCachedSpill,
+                                        bool bDynamicArrayMaster)
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
     assert( rRangeAddress.aStart.Tab() >= 0 && o3tl::make_unsigned(rRangeAddress.aStart.Tab()) < maCellArrayFormulas.size() );
-    maCellArrayFormulas[rRangeAddress.aStart.Tab()].emplace_back(tokenPair, rRangeAddress, bCachedSpill);
+    maCellArrayFormulas[rRangeAddress.aStart.Tab()].emplace_back(tokenPair, rRangeAddress, bCachedSpill, bDynamicArrayMaster);
 }
 
 void FormulaBuffer::setCellFormulaValue(

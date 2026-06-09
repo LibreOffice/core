@@ -42,17 +42,28 @@ public:
         OUString maCellValue;
         sal_Int32 mnSharedId;
         sal_Int32 mnValueType;
+        /// True when the XLSX cell carried cm="1", marking it as a dynamic-array
+        /// master.
+        bool mbDynamicArrayMaster = false;
 
         SharedFormulaDesc(
             const ScAddress& rAddr, sal_Int32 nSharedId,
-            OUString aCellValue, sal_Int32 nValueType );
+            OUString aCellValue, sal_Int32 nValueType,
+            bool bDynamicArrayMaster = false );
     };
 
     struct TokenAddressItem
     {
         OUString maTokenStr;
         ScAddress maAddress;
-        TokenAddressItem( OUString aTokenStr, const ScAddress& rAddress ) : maTokenStr(std::move( aTokenStr )), maAddress( rAddress ) {}
+        /// True when the XLSX cell carried cm="1", marking it as a dynamic-array
+        /// master.
+        bool mbDynamicArrayMaster = false;
+        TokenAddressItem( OUString aTokenStr, const ScAddress& rAddress,
+                          bool bDynamicArrayMaster = false )
+            : maTokenStr(std::move( aTokenStr ))
+            , maAddress( rAddress )
+            , mbDynamicArrayMaster(bDynamicArrayMaster) {}
     };
 
     struct TokenRangeAddressItem
@@ -64,12 +75,17 @@ public:
         /// blocker preservation so reference cells aren't materialised over
         /// real user data sitting in the matrix range.
         bool mbCachedSpill;
+        /// True when the XLSX cell carried cm="1", marking it as a dynamic-array
+        /// master.
+        bool mbDynamicArrayMaster = false;
 
         TokenRangeAddressItem(TokenAddressItem aTokenAndAddress, const ScRange& rRange,
-                              bool bCachedSpill = false)
+                              bool bCachedSpill = false,
+                              bool bDynamicArrayMaster = false)
             : maTokenAndAddress(std::move(aTokenAndAddress))
             , maRange(rRange)
-            , mbCachedSpill(bCachedSpill) 
+            , mbCachedSpill(bCachedSpill)
+            , mbDynamicArrayMaster(bDynamicArrayMaster)
         {}
     };
 
@@ -108,11 +124,13 @@ private:
 public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );
     void                finalizeImport();
-    void                setCellFormula( const ScAddress& rAddress, const OUString&  );
+    void                setCellFormula( const ScAddress& rAddress, const OUString&,
+                                        bool bDynamicArrayMaster = false );
 
     void setCellFormula(
         const ScAddress& rAddress, sal_Int32 nSharedId,
-        const OUString& rCellValue, sal_Int32 nValueType );
+        const OUString& rCellValue, sal_Int32 nValueType,
+        bool bDynamicArrayMaster = false );
 
     void setCellFormulaValue(
         const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
@@ -120,7 +138,8 @@ public:
     void setCellArrayFormula(const ScRange& rRangeAddress,
                              const ScAddress& rTokenAddress,
                              const OUString&,
-                             bool bCachedSpill = false);
+                             bool bCachedSpill = false,
+                             bool bDynamicArrayMaster = false);
 
     void                createSharedFormulaMapEntry( const ScAddress& rAddress,
                                                      sal_Int32 nSharedId, const OUString& rTokens );

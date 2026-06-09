@@ -119,7 +119,13 @@ void ImportExcel::Formula(
             if (pSharedCode)
             {
                 ScFormulaCell* pCell;
-                pCell = new ScFormulaCell(rD, aScPos, pSharedCode->Clone());
+                // XLS has no @ encoding. Bake an implicit @ into the
+                // RPN when the formula intends an array result so a
+                // TRANSPOSE-style call returns the upper-left value at
+                // the cell position.
+                std::unique_ptr<ScTokenArray> pTokens = pSharedCode->Clone();
+                ScFormulaCell::ResolveImplicitIntersection(*pTokens, rD, aScPos);
+                pCell = new ScFormulaCell(rD, aScPos, std::move(pTokens));
                 pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
                 rDoc.getDoc().EnsureTable(aScPos.Tab());
                 rDoc.setFormulaCell(aScPos, pCell);
@@ -147,6 +153,10 @@ void ImportExcel::Formula(
 
     if (pResult)
     {
+        // XLS has no @ encoding. Bake an implicit @ into the RPN when
+        // the formula intends an array result so a TRANSPOSE-style call
+        // returns the upper-left value at the cell position.
+        ScFormulaCell::ResolveImplicitIntersection(*pResult, rDoc.getDoc(), aScPos);
         pCell = new ScFormulaCell(rDoc.getDoc(), aScPos, std::move(pResult));
         pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
         rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());

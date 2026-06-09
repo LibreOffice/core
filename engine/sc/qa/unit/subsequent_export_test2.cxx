@@ -1878,6 +1878,36 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripXLSX)
     CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(0, 3, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testDynamicArraySpilledExportXLSX)
+{
+    // Spill.xlsx has C2 = UNIQUE(A2:A5) imported as a dynamic-array
+    // master that already spilled into C2:C5. Saving back to XLSX must
+    // write cm="1" on the master cell, t="array" with ref="C2:C5" on
+    // the formula, and the matching dynamic-array metadata block.
+    // Slave cells in the spilled range must not carry cm.
+
+    createScDoc("xlsx/Spill.xlsx");
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[@r='C2']", "cm", u"1");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[@r='C2']/x:f", "t", u"array");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[@r='C2']/x:f", "ref", u"C2:C5");
+    assertXPathNoAttribute(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[@r='C3']", "cm");
+    assertXPathNoAttribute(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[@r='C4']", "cm");
+    assertXPathNoAttribute(pSheet, "/x:worksheet/x:sheetData/x:row[5]/x:c[@r='C5']", "cm");
+
+    xmlDocUniquePtr pMetadata = parseExport(u"xl/metadata.xml"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("xl/metadata.xml must be written", pMetadata);
+    assertXPath(pMetadata,
+                "/x:metadata/x:futureMetadata[@name='XLDAPR']/x:bk/x:extLst/x:ext"
+                "/xda:dynamicArrayProperties",
+                "fDynamic", u"1");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripODS)
 {
     // Same scenario as testArrayFormulaSpillRoundtripXLSX but for ODS.

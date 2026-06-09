@@ -844,9 +844,16 @@ bool XclExpFmlaCompImpl::GetNextToken( XclExpScToken& rTokData )
     rTokData.mpScToken = GetNextRawToken();
     rTokData.mnSpaces = 0;
     /* TODO: handle ocWhitespace characters? */
-    while (rTokData.GetOpCode() == ocSpaces || rTokData.GetOpCode() == ocWhitespace)
+    // XLS predates the @ implicit-intersection operator. The BIFF token
+    // stream has no encoding for ocSingleValue, so drop it on the way out
+    // and let the operand flow through unchanged. XLS does not auto-spill
+    // anyway, so the saved formula evaluates to the same upper-left value
+    // it did before.
+    while (rTokData.GetOpCode() == ocSpaces || rTokData.GetOpCode() == ocWhitespace
+           || rTokData.GetOpCode() == ocSingleValue)
     {
-        rTokData.mnSpaces += static_cast<const FormulaByteToken*>(rTokData.mpScToken)->GetByte();
+        if (rTokData.GetOpCode() != ocSingleValue)
+            rTokData.mnSpaces += static_cast<const FormulaByteToken*>(rTokData.mpScToken)->GetByte();
         rTokData.mpScToken = GetNextRawToken();
     }
     return rTokData.Is();

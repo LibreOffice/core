@@ -1638,6 +1638,39 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNonAsciiWithDotXLSX)
     CPPUNIT_ASSERT_EQUAL(5.0, aValue);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCmImportSetsDynamicArrayMaster)
+{
+    // The cm="1" attribute on an XLSX cell lands as a dynamic-array master.
+
+    createScDoc("xlsx/Spill.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // C2 carries cm="1" with t="array" ref="C2:C5", the spilled master.
+    ScFormulaCell* pSpilled = pDoc->GetFormulaCell(ScAddress(2, 1, 0));
+    CPPUNIT_ASSERT(pSpilled);
+    CPPUNIT_ASSERT(pSpilled->IsDynamicArrayMaster());
+
+    // A2 is a plain value cell, so the document holds no formula at A2.
+    ScFormulaCell* pValueCell = pDoc->GetFormulaCell(ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT(!pValueCell);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCmRoundTripXLSX)
+{
+    // The dynamic-array marker survives an XLSX save and reload through
+    // the cm="1" attribute on the master cell.
+
+    createScDoc("xlsx/Spill.xlsx");
+
+    saveAndReload(TestFilter::XLSX);
+
+    ScDocument* pDoc = getScDoc();
+
+    ScFormulaCell* pMaster = pDoc->GetFormulaCell(ScAddress(2, 1, 0));
+    CPPUNIT_ASSERT(pMaster);
+    CPPUNIT_ASSERT(pMaster->IsDynamicArrayMaster());
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testArrayFormulaSpillXLSX)
 {
     // D2 holds =UNIQUE(A2:A5) imported in #SPILL! state with blocker text
