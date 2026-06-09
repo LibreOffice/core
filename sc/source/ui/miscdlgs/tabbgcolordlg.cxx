@@ -88,6 +88,13 @@ void ScTabBgColorDlg::FillPaletteLB()
     }
 }
 
+void ScTabBgColorDlg::UpdateColor()
+{
+    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
+    Color aColor = nItemId ? (m_xTabBgColorSet->GetItemColor(nItemId)) : COL_AUTO;
+    m_aTabBgColor = aColor;
+}
+
 IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
 {
     m_xTabBgColorSet->Clear();
@@ -101,18 +108,14 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
 //    Handler, called when color selection is changed
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 {
-    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? ( m_xTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
-    m_aTabBgColor = aColor;
+    UpdateColor();
     m_xDialog->response(RET_OK);
 }
 
 //    Handler, called when the OK button is pushed
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
 {
-    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? ( m_xTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
-    m_aTabBgColor = aColor;
+    UpdateColor();
     m_xDialog->response(RET_OK);
 }
 
@@ -133,9 +136,7 @@ bool ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_SPACE:
         case KEY_RETURN:
         {
-            sal_uInt16 nItemId = GetSelectedItemId();
-            const Color aColor = nItemId ? ( GetItemColor( nItemId ) ) : COL_AUTO;
-            m_pTabBgColorDlg->m_aTabBgColor = aColor;
+            m_pTabBgColorDlg->UpdateColor();
             m_pTabBgColorDlg->response(RET_OK);
             return true;
         }

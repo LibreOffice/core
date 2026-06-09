@@ -59,6 +59,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOk;
 
     void FillPaletteLB();
+    void UpdateColor();
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK(TabBgColorDblClickHdl_Impl, ValueSet*, void);
