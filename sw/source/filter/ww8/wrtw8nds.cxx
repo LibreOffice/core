@@ -1448,7 +1448,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
     }
 }
 
-int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
+int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
 {
     int nRet = 0;
     if ( const SwpHints* pTextAttrs = m_rNode.GetpSwpHints() )
@@ -1482,7 +1482,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos != pHt->GetStart())
                     {
-                        m_rExport.AttrOutput().EndRuby(rNode, nPos, false);
+                        m_rExport.AttrOutput().EndRuby(m_rNode, nPos, false);
                         --nRet;
                     }
                     break;
@@ -2573,7 +2573,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 AppendSmartTags(rNode);
 
             bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
-            nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nCurrentPos );
+            nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nCurrentPos);
 
             sal_Int32 nLen = nNextAttr - nCurrentPos;
 
@@ -2840,7 +2840,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 bool bAttrWithRange = (nOpenAttrWithRange > 0);
                 if ( nCurrentPos != nEnd )
                 {
-                    nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nEnd );
+                    nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nEnd);
                     OSL_ENSURE(nOpenAttrWithRange == 0,
                             "odd to see this happening, expected 0");
                 }
