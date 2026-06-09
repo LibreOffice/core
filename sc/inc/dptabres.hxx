@@ -477,14 +477,19 @@ public:
     void CheckShowEmpty( bool bShow = false );
     OUString GetName() const;
     OUString GetDisplayName( bool bLocaleIndependent ) const;
+    const ScDPResultData* GetResultData() const { return pResultData; }
 
     ScDPItemData FillItemData() const;
+    bool IsAutoHidden() const { return bAutoHidden; };
+    bool GetForceSubTotal() const { return bForceSubTotal; };
+    bool IsInitialized() const { return bInitialized; };
     bool IsValid() const;
     bool IsVisible() const;
     tools::Long                GetSize(tools::Long nMeasure) const;
     // bHasHiddenDetails is set only if the "show details" flag is off,
     // and there was a child dimension to skip
     bool HasHiddenDetails() const { return bHasHiddenDetails; }
+    void SetHasHiddenDetails() { bHasHiddenDetails = true; }
     bool IsSubTotalInTitle(tools::Long nMeasure) const;
 
     tools::Long                GetSubTotalCount( tools::Long* pUserSubStart = nullptr ) const;
@@ -492,8 +497,13 @@ public:
     bool IsNamedItem( SCROW nIndex ) const;
     bool IsValidEntry( const ::std::vector< SCROW >& aMembers ) const;
 
+    bool GetHasElements() const { return bHasElements; };
     void SetHasElements() { bHasElements = true; }
+    void SetInitialized() { bInitialized = true; }
     void SetAutoHidden() { bAutoHidden = true; }
+
+    sal_uInt16 GetMemberStep(void) { return nMemberStep; }
+    void SetMemberStep(sal_uInt16 nStep) { nMemberStep = nStep; }
 
     void                ProcessData( const ::std::vector<SCROW>& aChildMembers,
                                         const ScDPResultDimension* pDataDim,
