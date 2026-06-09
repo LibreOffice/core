@@ -849,8 +849,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     size_t nItemCount = mItemList.size();
     WinBits nStyle = GetStyle();
     tools::Long nTxtHeight = rRenderContext.GetTextHeight();
-    tools::Long nNoneHeight;
-    tools::Long nNoneSpace;
 
     if (mxScrolledWindow && !(nStyle & WB_VSCROLL) && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
         TurnOffScrollBar();
@@ -878,8 +876,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     mnTextOffset += mnMargin;
 
-    nNoneHeight = 0;
-    nNoneSpace = 0;
     mpNoneItem.reset();
 
     // calculate number of columns
@@ -912,14 +908,14 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     auto nOldVisLines = mnVisLines;
 
-    tools::Long nCalcHeight = aWinSize.Height() - nNoneHeight;
+    tools::Long nCalcHeight = aWinSize.Height();
     if (mnUserVisLines)
     {
         mnVisLines = mnUserVisLines;
     }
     else if (mnUserItemHeight)
     {
-        mnVisLines = (nCalcHeight - nNoneSpace + mnSpacing) / (mnUserItemHeight + mnSpacing);
+        mnVisLines = (nCalcHeight + mnSpacing) / (mnUserItemHeight + mnSpacing);
         if (!mnVisLines)
             mnVisLines = 1;
     }
@@ -942,7 +938,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     // calculate item size
     const tools::Long nColSpace  = (mnCols - 1) * static_cast<tools::Long>(mnSpacing);
-    const tools::Long nLineSpace = ((mnVisLines - 1) * mnSpacing) + nNoneSpace;
+    const tools::Long nLineSpace = (mnVisLines - 1) * mnSpacing;
     if (mnUserItemWidth && !mnUserCols)
     {
         mnItemWidth = mnUserItemWidth;
@@ -954,8 +950,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     if (mnUserItemHeight && !mnUserVisLines)
     {
         mnItemHeight = mnUserItemHeight;
-        if (mnItemHeight > nCalcHeight - nNoneSpace)
-            mnItemHeight = nCalcHeight - nNoneSpace;
+        if (mnItemHeight > nCalcHeight)
+            mnItemHeight = nCalcHeight;
     }
     else
     {
@@ -1013,7 +1009,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         if (mbFullMode)
         {
             tools::Long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
-            tools::Long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
+            tools::Long nAllItemHeight = (mnItemHeight * mnVisLines) + nLineSpace;
             nStartX = (aWinSize.Width() - nAllItemWidth) / 2;
             nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
         }
