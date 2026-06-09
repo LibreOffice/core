@@ -1129,6 +1129,9 @@ class SlideShowPresenter {
 			'keydown',
 			this._onKeyDownHandler,
 		);
+		// Also listen on the top window, so keys still reach the slideshow when
+		// focus is outside its iframe.
+		window.addEventListener('keydown', this._onKeyDownHandler, true);
 		this._slideShowWindowProxy.addEventListener(
 			'unload',
 			window.L.bind(this._closeSlideShowWindow, this),
