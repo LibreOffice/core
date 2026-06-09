@@ -114,7 +114,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
         }
     }
 
-    if (maIdCache.find(rId) != maIdCache.end())
+    if (maIdCache.contains(rId))
     {
         rDocumentTarget = maIdCache[rId];
         return true;

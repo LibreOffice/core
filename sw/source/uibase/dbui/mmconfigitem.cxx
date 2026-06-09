@@ -983,7 +983,7 @@ bool SwMailMergeConfigItem::IsRecordIncluded(sal_uInt32 nRecord) const
     { return nRecord > m_nBegin && nRecord <= m_nEnd; }
 
 bool SwMailMergeConfigItem::IsRecordExcluded(sal_uInt32 nRecord) const
-    { return m_aExcludedRecords.find(nRecord) != m_aExcludedRecords.end(); }
+    { return m_aExcludedRecords.contains(nRecord); }
 
 void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
 {

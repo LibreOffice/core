@@ -2240,7 +2240,7 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
         mxWrappedContext->startFastElement(Element, Attribs);
     if (!mxShadowContext.is())
     {
-        bool bInTokens = mMyTokens.find(Element) != mMyTokens.end();
+        bool bInTokens = mMyTokens.contains(Element);
         if ((mxShapeHandler->isDMLGroupShape()
             && (Element == Token_t(NMSP_wps | XML_txbx)
                 || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
@@ -2260,7 +2260,7 @@ void OOXMLFastContextHandlerWrapper::lcl_endFastElement
 
     if (!mxShadowContext.is())
     {
-        bool bInTokens = mMyTokens.find(Element) != mMyTokens.end();
+        bool bInTokens = mMyTokens.contains(Element);
         if ((mxShapeHandler->isDMLGroupShape()
             && (Element == Token_t(NMSP_wps | XML_txbx)
                 || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
@@ -2282,8 +2282,8 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
         return mxShadowContext->createFastChildContext(Element, Attribs);
     }
 
-    bool bInNamespaces = mMyNamespaces.find(oox::getNamespace(Element)) != mMyNamespaces.end();
-    bool bInTokens = mMyTokens.find( Element ) != mMyTokens.end( );
+    bool bInNamespaces = mMyNamespaces.contains(oox::getNamespace(Element));
+    bool bInTokens = mMyTokens.contains( Element );
 
     // We have methods to _add_ individual tokens or whole namespaces to be
     // processed by writerfilter (instead of oox), but we have no method to
