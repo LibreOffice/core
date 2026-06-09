@@ -1736,6 +1736,12 @@ img.context-menu-icon {
 	justify-content: space-around;
 }
 
+/* Greyed out, non-interactive iconview */
+.ui-iconview.disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
 @supports (display: flex) {
 	.ui-iconview-entry {
 		flex: 1;

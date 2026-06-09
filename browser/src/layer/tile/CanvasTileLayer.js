@@ -2238,7 +2238,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (json) {
 			// json.state as empty string is fine, for example it means no selection
 			// when json.commandName is '.uno:RowColSelCount'.
-			if (json.commandName && json.state !== undefined) {
+			// A command may only carry 'enabled' flag (.uno:DatabaseSettings).
+			if (json.commandName && (json.state !== undefined || json.enabled !== undefined)) {
 				this._map.fire('commandstatechanged', json);
 				if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp) {
 					window.postMobileMessage('COMMANDSTATECHANGED ' + JSON.stringify(json));

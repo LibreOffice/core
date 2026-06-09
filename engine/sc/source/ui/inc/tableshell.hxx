@@ -27,6 +27,7 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
     const ScDBData* GetTableDBDataAtCursor();
+    bool IsTableEditable(const ScDBData& rDBData) const;
 
 public:
     ScTableShell(ScTabViewShell* pView);

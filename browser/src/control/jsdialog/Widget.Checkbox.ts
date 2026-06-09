@@ -191,7 +191,7 @@ JSDialog.Checkbox = function (
 		function (e: any) {
 			if (e.commandName === data.command) {
 				toggleFunction();
-				setDisabled(e.disabled || e.state == 'disabled');
+				setDisabled(e.disabled || e.enabled === false || e.state == 'disabled');
 			}
 		},
 		this,

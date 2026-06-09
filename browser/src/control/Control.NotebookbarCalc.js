@@ -1812,7 +1812,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 							: _('Insert a styled table'),
 						'disabledTooltip': app.LOUtil.isFileODF(this.map)
 							? _('Table styles are only available in .xlsx files')
-							: _('Select a cell range first to insert a styled table'),
+							: _('Select an editable cell range to insert a styled table'),
 						'accessibility': { focusBack: true,	combination: 'IT', de: null }
 					}
 				]

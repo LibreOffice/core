@@ -46,6 +46,7 @@
 #include <scmod.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <editable.hxx>
 #include <uiitems.hxx>
 #include <dbdocfun.hxx>
 #include <reffact.hxx>
@@ -1472,6 +1473,17 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                                     }
                                 }
                             }
+                        }
+
+                        // Check if the selected cell range is protected
+                        if (!bDisable)
+                        {
+                            const SCCOL nTestEndCol = bSelected ? nEndCol : nStartCol;
+                            const SCROW nTestEndRow = bSelected ? nEndRow : nStartRow;
+                            ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
+                                rDoc, nStartTab, nStartCol, nStartRow, nTestEndCol, nTestEndRow);
+                            if (!aTester.IsEditable())
+                                bDisable = true;
                         }
                     }
 

@@ -111,6 +111,16 @@ void ScDatabasePropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eSt
     switch (nSID)
     {
         case SID_DATABASE_SETTINGS:
+        {
+            // Grey out the design controls when the command is disabled
+            const bool bSensitive = eState != SfxItemState::DISABLED;
+            m_xChkHeaderRow->set_sensitive(bSensitive);
+            m_xChkFilterButtons->set_sensitive(bSensitive);
+            m_xChkBandedRows->set_sensitive(bSensitive);
+            m_xChkBandedColumns->set_sensitive(bSensitive);
+            m_xChkFirstColumn->set_sensitive(bSensitive);
+            m_xChkLastColumn->set_sensitive(bSensitive);
+            m_xCmbStyle->set_sensitive(bSensitive);
             if (eState >= SfxItemState::DEFAULT
                 && dynamic_cast<const ScDatabaseSettingItem*>(pState))
             {
@@ -138,6 +148,7 @@ void ScDatabasePropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eSt
                 }
             }
             break;
+        }
         case SID_TABLE_TOTALROW:
             m_xChkTotalRow->set_sensitive(eState != SfxItemState::DISABLED);
             if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pState))

@@ -79,6 +79,9 @@ function darkenColor(hex: string, factor: number): string {
 class TableStylesService {
 	private styles = new Array<TableStyleEntry>();
 
+	// Whether the table-style picker is enabled/disabled
+	private enabled = true;
+
 	private static readonly groupOrder: Record<string, number> = {
 		light: 1,
 		medium: 2,
@@ -187,6 +190,20 @@ class TableStylesService {
 				} as JSDialogJSON,
 			});
 		} else if (e.commandName === '.uno:DatabaseSettings') {
+			const enabled = e.enabled !== false;
+			if (enabled !== this.enabled) {
+				this.enabled = enabled;
+				app.map.fire('jsdialogupdate', {
+					data: {
+						id: WindowId.Notebookbar + '',
+						type: '',
+						jsontype: 'notebookbar',
+						action: 'update',
+						control: this.generateTableStylesJSON(),
+					} as JSDialogJSON,
+				});
+			}
+
 			const currentStyle = e.state as TableStyleInfo;
 
 			let position = -1;
@@ -242,6 +259,7 @@ class TableStylesService {
 							type: 'iconview',
 							text: _('Table Styles'),
 							command: '.uno:DatabaseSettings',
+							enabled: this.enabled,
 							aria: { label: _('Table Styles') },
 							accessibility: {
 								focusBack: true,
