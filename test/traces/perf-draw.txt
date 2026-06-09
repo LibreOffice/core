@@ -165,7 +165,6 @@
 >+54005>CAeY2MgSGPItVNJY>063>clientvisiblearea x=-4605 y=0 width=21120 height=13695 splitx=0 splity=0
 >+306735>CAeY2MgSGPItVNJY>063>mouse type=move x=16005 y=1395 count=1 buttons=0 modifier=0
 >+631892>CAeY2MgSGPItVNJY>063>tile nviewid=0 part=1 width=127 height=180 tileposx=0 tileposy=0 tilewidth=11906 tileheight=16838 id=1
->+380937>CAeY2MgSGPItVNJY>063>dialogevent 0 {"id":"fillstylearea", "cmd": "selected", "data": "3;Hatching", "type": "combobox"}
 >+439886>CAeY2MgSGPItVNJY>063>mouse type=move x=2070 y=255 count=1 buttons=0 modifier=0
 >+215975>CAeY2MgSGPItVNJY>063>mouse type=move x=4455 y=195 count=1 buttons=0 modifier=0
 >+351638>CAeY2MgSGPItVNJY>063>tile nviewid=0 part=1 width=127 height=180 tileposx=0 tileposy=0 tilewidth=11906 tileheight=16838 id=1
