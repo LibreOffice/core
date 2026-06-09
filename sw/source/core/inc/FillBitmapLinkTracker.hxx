@@ -13,6 +13,7 @@
 #include <tools/ref.hxx>
 #include <map>
 #include <string_view>
+#include <vector>
 
 class SwContentNode;
 class SwFormat;
@@ -51,9 +52,13 @@ private:
     void onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap, Host& rHost,
                           std::u16string_view rNewURL);
 
+    void drainPendingReleases();
+
     sfx2::LinkManager& m_rLinkMgr;
     std::map<SwFormat*, tools::SvRef<sfx2::SvBaseLink>> m_aLinks;
     std::map<SwContentNode*, tools::SvRef<sfx2::SvBaseLink>> m_aNodeLinks;
+    // Links pulled from the maps but not yet freed, since removal may run inside a Dying broadcast:
+    std::vector<tools::SvRef<sfx2::SvBaseLink>> m_aPendingRelease;
 };
 }
 
