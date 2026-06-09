@@ -630,6 +630,11 @@ public:
     {
         return Promote("GetColTotal")->GetColTotal(nMeasure);
     }
+
+#if DUMP_PIVOT_TABLE
+    void DumpState(const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos) const override;
+    void Dump(int nIndent) const override;
+#endif
 };
 
 class ScDPResultMemberFull : public ScDPResultMember

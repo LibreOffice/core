@@ -267,7 +267,6 @@ void ScDPInitState::RemoveMember()
 }
 
 namespace {
-
 #if DUMP_PIVOT_TABLE
 void dumpRow(
     const OUString& rType, const OUString& rName, const ScDPAggData* pAggData,
@@ -1906,10 +1905,31 @@ void ScDPResultMember::UpdateRunningTotals(ScDPResultMember* pRefMember, tools::
 }
 
 #if DUMP_PIVOT_TABLE
-void ScDPResultMemberFull::DumpState(const ScDPResultMember* pRefMember, ScDocument* pDoc,
-                                     ScAddress& rPos) const
+void ScDPResultMemberSlim::DumpState(const ScDPResultMember*, ScDocument* pDoc, ScAddress& rPos) const
 {
-    dumpRow(u"ScDPResultMember"_ustr, GetName(), nullptr, pDoc, rPos);
+    dumpRow(u"ScDPResultMemberSlim"_ustr, GetName(), nullptr, pDoc, rPos);
+    SCROW nStartRow = rPos.Row();
+
+    indent(pDoc, nStartRow, rPos);
+}
+
+void ScDPResultMemberSlim::Dump(int nIndent) const
+{
+    std::string aIndent(nIndent*2, ' ');
+    std::cout << aIndent << "-- result member(Slim) '" << GetName() << "'" << std::endl;
+    std::cout << aIndent << " Order: " << mnOrder << " Flags: "
+        << (bmHasElements?"E":"")
+        << (bmHasHiddenDetails?"H":"")
+        << (bmInitialized?"I":"")
+        << (bmPromoted?"P":"")
+        << std::endl;
+}
+#endif
+
+#if DUMP_PIVOT_TABLE
+void ScDPResultMemberFull::DumpState(const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos) const
+{
+    dumpRow(u"ScDPResultMemberFull"_ustr, GetName(), nullptr, pDoc, rPos);
     SCROW nStartRow = rPos.Row();
 
     if (pDataRoot)
@@ -1924,7 +1944,7 @@ void ScDPResultMemberFull::DumpState(const ScDPResultMember* pRefMember, ScDocum
 void ScDPResultMemberFull::Dump(int nIndent) const
 {
     std::string aIndent(nIndent*2, ' ');
-    std::cout << aIndent << "-- result member '" << GetName() << "'" << std::endl;
+    std::cout << aIndent << "-- result member(Full) '" << GetName() << "'" << std::endl;
 
     std::cout << aIndent << " column totals" << std::endl;
     for (const ScDPAggData* p = pColTotal.get(); p; p = p->GetExistingChild())
