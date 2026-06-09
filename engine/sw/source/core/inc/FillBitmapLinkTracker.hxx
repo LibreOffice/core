@@ -15,11 +15,11 @@
 #include <string_view>
 
 class SwContentNode;
-class SwDoc;
 class SwFormat;
 
 namespace sfx2
 {
+class LinkManager;
 class SvBaseLink;
 }
 
@@ -35,7 +35,7 @@ namespace sw
 class FillBitmapLinkTracker final
 {
 public:
-    explicit FillBitmapLinkTracker(SwDoc& rDoc);
+    explicit FillBitmapLinkTracker(sfx2::LinkManager& rLinkMgr);
     ~FillBitmapLinkTracker();
 
     // Called by SwFormat::SwClientNotify / SwContentNode::SwClientNotify
@@ -51,7 +51,7 @@ private:
     void onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap, Host& rHost,
                           std::u16string_view rNewURL);
 
-    SwDoc& m_rDoc;
+    sfx2::LinkManager& m_rLinkMgr;
     std::map<SwFormat*, tools::SvRef<sfx2::SvBaseLink>> m_aLinks;
     std::map<SwContentNode*, tools::SvRef<sfx2::SvBaseLink>> m_aNodeLinks;
 };

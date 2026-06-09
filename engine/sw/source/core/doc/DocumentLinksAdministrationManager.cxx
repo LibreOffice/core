@@ -167,7 +167,7 @@ DocumentLinksAdministrationManager::DocumentLinksAdministrationManager( SwDoc& i
     : mbVisibleLinks(true)
     , mbLinksUpdated( false ) //#i38810#
     , m_pLinkMgr( new sfx2::LinkManager(nullptr) )
-    , m_pFillBitmapLinkTracker( new FillBitmapLinkTracker(i_rSwdoc) )
+    , m_pFillBitmapLinkTracker( new FillBitmapLinkTracker(*m_pLinkMgr) )
     , m_rDoc( i_rSwdoc )
 {
 }

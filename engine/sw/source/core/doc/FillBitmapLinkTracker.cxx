@@ -9,8 +9,6 @@
 
 #include <FillBitmapLinkTracker.hxx>
 
-#include <IDocumentLinksAdministration.hxx>
-#include <doc.hxx>
 #include <format.hxx>
 #include <node.hxx>
 
@@ -98,19 +96,18 @@ public:
 
 namespace sw
 {
-FillBitmapLinkTracker::FillBitmapLinkTracker(SwDoc& rDoc)
-    : m_rDoc(rDoc)
+FillBitmapLinkTracker::FillBitmapLinkTracker(sfx2::LinkManager& rLinkMgr)
+    : m_rLinkMgr(rLinkMgr)
 {
 }
 
 FillBitmapLinkTracker::~FillBitmapLinkTracker()
 {
-    sfx2::LinkManager& rLinkMgr = m_rDoc.getIDocumentLinksAdministration().GetLinkManager();
     for (const auto& rEntry : m_aLinks)
-        rLinkMgr.Remove(rEntry.second.get());
+        m_rLinkMgr.Remove(rEntry.second.get());
     m_aLinks.clear();
     for (const auto& rEntry : m_aNodeLinks)
-        rLinkMgr.Remove(rEntry.second.get());
+        m_rLinkMgr.Remove(rEntry.second.get());
     m_aNodeLinks.clear();
 }
 
@@ -118,17 +115,16 @@ template <typename Host>
 void FillBitmapLinkTracker::onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap,
                                              Host& rHost, std::u16string_view rNewURL)
 {
-    sfx2::LinkManager& rLinkMgr = m_rDoc.getIDocumentLinksAdministration().GetLinkManager();
     auto it = rMap.find(&rHost);
     if (it != rMap.end())
     {
-        rLinkMgr.Remove(it->second.get());
+        m_rLinkMgr.Remove(it->second.get());
         rMap.erase(it);
     }
     if (rNewURL.empty())
         return;
-    tools::SvRef<sfx2::SvBaseLink> xLink(new SwHostFillBitmapLink<Host>(*this, rHost, rLinkMgr));
-    rLinkMgr.InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, rNewURL);
+    tools::SvRef<sfx2::SvBaseLink> xLink(new SwHostFillBitmapLink<Host>(*this, rHost, m_rLinkMgr));
+    m_rLinkMgr.InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, rNewURL);
     rMap.emplace(&rHost, std::move(xLink));
 }
 

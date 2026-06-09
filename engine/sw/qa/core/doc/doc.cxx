@@ -1171,6 +1171,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCloseDocWithFillBitmapLinkTracker)
+{
+    // Closing a freshly created document must not crash while its fill-bitmap
+    // link tracker is torn down.
+    createSwDoc();
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Without the accompanying fix in place, this crashed in
+    // ~FillBitmapLinkTracker as the document was destroyed.
+    mxComponent->dispose();
+    mxComponent.clear();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
