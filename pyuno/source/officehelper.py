@@ -155,11 +155,9 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
         if soffice:  # soffice fully qualified path as parm
             sOffice = soffice
         else:  # soffice script used on *ix, Mac; soffice.exe used on Win
+            sOffice = "soffice"
             if "UNO_PATH" in os.environ:
-                sOffice = os.environ["UNO_PATH"]
-            else:
-                sOffice = ""  # let's hope for the best
-            sOffice = os.path.join(sOffice, "soffice")
+                sOffice = os.path.join(os.environ["UNO_PATH"], sOffice)
             if platform.startswith("win"):
                 sOffice += ".exe"
             elif platform == "darwin":  # any other un-hardcoded suggestion?
