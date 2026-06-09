@@ -767,7 +767,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     }
     if(!m_pSpellState->m_aTextObjects.empty())
     {
-        Reference< XSpellChecker1 >  xSpell( GetSpellChecker() );
+        Reference< XSpellChecker >  xSpell( GetSpellChecker() );
         while(!bNextDoc && !m_pSpellState->m_aTextObjects.empty())
         {
             std::list<SdrTextObj*>::iterator aStart = m_pSpellState->m_aTextObjects.begin();

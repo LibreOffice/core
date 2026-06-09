@@ -35,7 +35,7 @@
 #include <osl/diagnose.h>
 
 namespace com::sun::star::linguistic2 { class XHyphenator; }
-namespace com::sun::star::linguistic2 { class XSpellChecker1; }
+namespace com::sun::star::linguistic2 { class XSpellChecker; }
 
 using namespace ::com::sun::star;
 
@@ -76,7 +76,7 @@ DrawModelWrapper::DrawModelWrapper()
         if( xHyphenator.is() )
             rOutliner.SetHyphenator( xHyphenator );
 
-        uno::Reference< linguistic2::XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
+        uno::Reference< linguistic2::XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
             rOutliner.SetSpeller( xSpellChecker );
     }

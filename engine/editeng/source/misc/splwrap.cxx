@@ -29,7 +29,7 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
@@ -167,7 +167,7 @@ SvxSpellWrapper::SvxSpellWrapper( weld::Widget* pWn,
 
 
 sal_Int16 SvxSpellWrapper::CheckSpellLang(
-        Reference< XSpellChecker1 > const & xSpell, LanguageType nLang)
+        Reference< XSpellChecker > const & xSpell, LanguageType nLang)
 {
     LangCheckState_map_t &rLCS = GetLangCheckState();
 
@@ -180,7 +180,7 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
     if (SVX_LANG_NEED_CHECK == (nVal & 0x00FF))
     {
         sal_uInt16 nTmpVal = SVX_LANG_MISSING_DO_WARN;
-        if (xSpell.is()  &&  xSpell->hasLanguage( static_cast<sal_uInt16>(nLang) ))
+        if (xSpell.is()  &&  xSpell->hasLocale( LanguageTag::convertToLocale(nLang) ))
             nTmpVal = SVX_LANG_OK;
         nVal &= 0xFF00;
         nVal |= nTmpVal;

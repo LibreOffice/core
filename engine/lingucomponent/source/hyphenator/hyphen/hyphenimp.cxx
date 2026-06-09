@@ -27,7 +27,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
@@ -462,22 +462,22 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 if ( bCompoundHyphenation && minCompoundLead > 2 && nHyphenationPos > -1 && i - nHyphenationPos < minCompoundLead )
                 {
                     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
-                    uno::Reference< XSpellChecker1 > xSpell;
+                    uno::Reference< XSpellChecker > xSpell;
 
                     LanguageType nLanguage = LinguLocaleToLanguage( aLocale );
 
-                    xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+                    xSpell = xLngSvcMgr->getSpellChecker();
 
                     // get morphological analysis of the word
                     if ( ( bAnalyzed && xTmpRes.is() ) || ( xSpell.is() && xSpell->isValid(
-                            SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage),
+                            SPELLML_SUPPORT, LanguageTag::convertToLocale(nLanguage),
                             uno::Sequence< beans::PropertyValue >() ) ) )
                     {
                         if ( !bAnalyzed )
                         {
                             xTmpRes = xSpell->spell( "<?xml?><query type='analyze'><word>" +
                                                        aWord + "</word></query>",
-                                               static_cast<sal_uInt16>(nLanguage),
+                                               LanguageTag::convertToLocale(nLanguage),
                                                uno::Sequence< beans::PropertyValue >() );
                             bAnalyzed = true;
 

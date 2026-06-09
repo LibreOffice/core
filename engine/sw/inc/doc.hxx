@@ -176,7 +176,7 @@ namespace com::sun::star {
     namespace embed { class XStorage; }
     namespace linguistic2 { class XHyphenatedWord; }
     namespace linguistic2 { class XProofreadingIterator; }
-    namespace linguistic2 { class XSpellChecker1; }
+    namespace linguistic2 { class XSpellChecker; }
     namespace script::vba { class XVBAEventProcessor; }
 }
 
@@ -662,7 +662,7 @@ public:
         spell-checking/hyphenating/word-counting
     */
     css::uno::Any
-            Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker1 > const &,
+            Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker > const &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
                    SwRootFrame const* pLayout, // for grammar-check
                    SwConversionArgs *pConvArgs = nullptr ) const;

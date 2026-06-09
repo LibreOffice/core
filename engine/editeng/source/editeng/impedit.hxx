@@ -45,7 +45,7 @@
 #include <svl/ondemand.hxx>
 #include <svl/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -586,7 +586,7 @@ private:
     EEHorizontalTextDirection meDefaultHorizontalTextDirection;
 
     sal_Int32 mnBigTextObjectStart;
-    css::uno::Reference<css::linguistic2::XSpellChecker1> mxSpeller;
+    css::uno::Reference<css::linguistic2::XSpellChecker>  mxSpeller;
     css::uno::Reference<css::linguistic2::XHyphenator>    mxHyphenator;
     std::unique_ptr<SpellInfo> mpSpellInfo;
     mutable css::uno::Reference <css::i18n::XBreakIterator> mxBI;
@@ -1206,9 +1206,9 @@ public:
     EditView*           GetActiveView() const   { return mpActiveView; }
     void                SetActiveView( EditView* pView );
 
-    css::uno::Reference< css::linguistic2::XSpellChecker1 > const &
+    css::uno::Reference< css::linguistic2::XSpellChecker > const &
                         GetSpeller();
-    void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpl )
+    void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker > const &xSpl )
                             { mxSpeller = xSpl; }
     const css::uno::Reference< css::linguistic2::XHyphenator >&
                         GetHyphenator() const { return mxHyphenator; }

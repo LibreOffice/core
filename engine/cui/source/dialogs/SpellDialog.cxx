@@ -40,7 +40,7 @@
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/cuicharmap.hxx>
@@ -814,7 +814,7 @@ IMPL_LINK_NOARG(SpellDialog, LanguageSelectHdl, weld::ComboBox&, void)
     if (!sError.isEmpty())
     {
         LanguageType eLanguage = m_xLanguageLB->get_active_id();
-        Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, static_cast<sal_uInt16>(eLanguage),
+        Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, LanguageTag::convertToLocale(eLanguage),
                                             Sequence< PropertyValue >() );
         if( xAlt.is() )
             m_xSentenceED->SetAlternatives( xAlt );
@@ -1730,7 +1730,7 @@ IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OUString&, rCurItemId, void
     }
 }
 
-bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker1>& xSpell )
+bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker>& xSpell )
 {
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );
@@ -1807,7 +1807,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         }
         else if(pSpellErrorDescription && !bGrammarError &&
                 xSpell->isValid(GetErrorText(),
-                                static_cast<sal_uInt16>(LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale )),
+                                LanguageTag::convertToLocale(LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale )),
                                 Sequence< PropertyValue >() ))
         {
             ++nCursor;

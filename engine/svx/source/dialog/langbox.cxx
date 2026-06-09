@@ -24,7 +24,7 @@
 
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <linguistic/misc.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -345,9 +345,14 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
     }
     if (SvxLanguageListFlags::SPELL_USED & nLangList)
     {
-        Reference< XSpellChecker1 > xTmp1 = LinguMgr::GetSpellChecker();
+        Reference< XSpellChecker > xTmp1 = LinguMgr::GetSpellChecker();
         if (xTmp1.is())
-            aSpellUsedLang = xTmp1->getLanguages();
+        {
+            css::uno::Sequence<css::lang::Locale> aLocales = xTmp1->getLocales();
+            aSpellUsedLang = css::uno::Sequence<sal_Int16>(aLocales.getLength());
+            for (int i=0; i < aLocales.getLength(); ++i)
+                aSpellUsedLang.getArray()[i] = static_cast<sal_Int16>(LanguageTag::convertToLanguageType(aLocales[i]).get());
+        }
     }
 
     std::vector<LanguageType> aKnown;
@@ -448,9 +453,14 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
     {
         if (!m_xSpellUsedLang)
         {
-            Reference<XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+            Reference<XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
             if (xSpell.is())
-                m_xSpellUsedLang.reset(new Sequence<sal_Int16>(xSpell->getLanguages()));
+            {
+                css::uno::Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
+                m_xSpellUsedLang.reset(new Sequence<sal_Int16>(aLocales.getLength()));
+                for (int i=0; i < aLocales.getLength(); ++i)
+                    m_xSpellUsedLang->getArray()[i] = static_cast<sal_Int16>(LanguageTag::convertToLanguageType(aLocales[i]).get());
+            }
         }
 
         bool bFound = m_xSpellUsedLang && lcl_SeqHasLang(*m_xSpellUsedLang, static_cast<sal_uInt16>(nRealLang));
