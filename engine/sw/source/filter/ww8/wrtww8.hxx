@@ -1588,7 +1588,7 @@ public:
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
     template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const { return MSWordAttrIter::GetItem(nWhich); }
-    int OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos);
+    int OutAttrWithRange(sal_Int32 nPos);
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
     FlyProcessingState OutFlys(sal_Int32 nSwPos);
