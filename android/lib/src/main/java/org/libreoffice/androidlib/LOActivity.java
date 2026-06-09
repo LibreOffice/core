@@ -321,11 +321,15 @@ public class LOActivity extends AppCompatActivity {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 isDocEditable = true;
 
-                // is it read-only?
+                // The launching app did not grant write access, so we were
+                // handed a read-only copy and cannot save changes back to the
+                // original. This is the sending app's choice and there is no
+                // way to upgrade the grant from here, so tell the user where
+                // the restriction comes from and point them at the copy flow.
                 if ((getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0) {
                     isDocEditable = false;
                     Log.d(TAG, "Disabled editing: Read-only");
-                    Toast.makeText(this, getResources().getString(R.string.temp_file_saving_disabled), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
                 }
 
                 // turns out that on ChromeOS, it is not possible to save back

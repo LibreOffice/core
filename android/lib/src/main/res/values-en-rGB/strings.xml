@@ -5,7 +5,7 @@
     <string name="failed_to_insert_image">Failed to insert image</string>
     <string name="failed_to_load_file">Failed to determine the file to load</string>
     <string name="storage_permission_required">Storage permission is required</string>
-    <string name="temp_file_saving_disabled">This file is read-only, saving is disabled.</string>
+    <string name="temp_file_saving_disabled">Shared as read-only by the source app. Use \"Edit a copy\" to make changes.</string>
     <string name="preparing_for_the_first_start_after_an_update">Preparing for the first start after an update.</string>
     <string name="saving">Saving...</string>
     <string name="exiting">Exiting...</string>

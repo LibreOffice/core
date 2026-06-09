@@ -100,7 +100,7 @@
     <string name="storage_permission_required">Storage permission is required</string>
     <string name="file_creation_failed">File creation failed</string>
     <string name="file_exists_warning">A file with this name already exists, and will be overwritten.</string>
-    <string name="temp_file_saving_disabled">This file is read-only, saving is disabled.</string>
+    <string name="temp_file_saving_disabled">Shared as read-only by the source app. Use \"Edit a copy\" to make changes.</string>
     <string name="app_vendor">This release was supplied by $VENDOR.</string>
     <string name="app_description">$APP_NAME is a modern, easy-to-use, open source productivity suite for word processing, spreadsheets, presentations and more.</string>
     <string name="app_version_and_hash">Version: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>

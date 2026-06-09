@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">This file is read-only, saving is disabled.</string>
+    <string name="temp_file_saving_disabled">Shared as read-only by the source app. Use \"Edit a copy\" to make changes.</string>
     <string name="file_chromeos_read_only">This file cannot be saved in this location, opening it read-only. Move it to the "Play files" for full read/write access.</string>
     <string name="storage_permission_required">Storage permission is required</string>
     <string name="failed_to_load_file">Failed to determine the file to load</string>
