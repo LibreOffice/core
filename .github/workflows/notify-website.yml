@@ -1,0 +1,29 @@
+name: Notify website of build instruction changes
+
+# When a build README changes on the GitHub mirror, ask the website repository
+# to regenerate the matching build-instruction page from it. The website holds
+# the receiving workflow and the page layout; this workflow only sends the
+# signal. The WEBSITE_DISPATCH_TOKEN secret is a token that is allowed to send a
+# repository_dispatch to CollaboraOnline.github.io.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'macos/README.md'
+      - 'qt/README.md'
+      - 'windows/coda/README.md'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ask the website to sync the build instructions
+        run: |
+          curl -fsS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.WEBSITE_DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/CollaboraOnline/CollaboraOnline.github.io/dispatches \
+            -d '{"event_type":"readme-sync"}'
