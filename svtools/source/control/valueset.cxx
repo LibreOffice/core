@@ -1061,7 +1061,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
                 }
 
                 pItem->mbVisible = true;
-                ImplFormatItem(rRenderContext, pItem, tools::Rectangle(Point(x, y), Size(mnItemWidth, mnItemHeight)));
+                ImplFormatItem(rRenderContext, *pItem,
+                               tools::Rectangle(Point(x, y), Size(mnItemWidth, mnItemHeight)));
 
                 if (!((i + 1) % mnCols))
                 {
@@ -1314,7 +1315,8 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
     ImplDrawItemText(rRenderContext, pItem->maText);
 }
 
-void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
+void ValueSet::ImplFormatItem(vcl::RenderContext const& rRenderContext, ValueSetItem& rItem,
+                              tools::Rectangle aRect)
 {
     WinBits nStyle = GetStyle();
     if (nStyle & WB_ITEMBORDER)
@@ -1340,15 +1342,15 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         }
     }
 
-    if (pItem == mpNoneItem.get())
-        pItem->maText = GetText();
+    if (&rItem == mpNoneItem.get())
+        rItem.maText = GetText();
 
     if ((aRect.GetHeight() <= 0) || (aRect.GetWidth() <= 0))
         return;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if (pItem == mpNoneItem.get())
+    if (&rItem == mpNoneItem.get())
     {
         maVirDev->SetFont(rRenderContext.GetFont());
         maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
@@ -1356,19 +1358,19 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         maVirDev->SetFillColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor());
         maVirDev->DrawRect(aRect);
         Point aTxtPos(aRect.Left() + 2, aRect.Top());
-        tools::Long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
+        tools::Long nTxtWidth = rRenderContext.GetTextWidth(rItem.maText);
         if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
         {
             maVirDev->SetClipRegion(vcl::Region(aRect));
-            maVirDev->DrawText(aTxtPos, pItem->maText);
+            maVirDev->DrawText(aTxtPos, rItem.maText);
             maVirDev->SetClipRegion();
         }
         else
-            maVirDev->DrawText(aTxtPos, pItem->maText);
+            maVirDev->DrawText(aTxtPos, rItem.maText);
     }
-    else if (pItem->meType == ValueSetItemType::Color)
+    else if (rItem.meType == ValueSetItemType::Color)
     {
-        maVirDev->SetFillColor(pItem->maColor);
+        maVirDev->SetFillColor(rItem.maColor);
         maVirDev->DrawRect(aRect);
     }
     else
@@ -1383,19 +1385,19 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             maVirDev->SetFillColor(rStyleSettings.GetFaceColor());
         maVirDev->DrawRect(aRect);
 
-        if (pItem->meType == ValueSetItemType::UserDraw)
+        if (rItem.meType == ValueSetItemType::UserDraw)
         {
-            UserDrawEvent aUDEvt(maVirDev.get(), aRect, pItem->mnId);
+            UserDrawEvent aUDEvt(maVirDev.get(), aRect, rItem.mnId);
             UserDraw(aUDEvt);
         }
         else
         {
-            Size aImageSize = pItem->maImage.GetSizePixel();
+            Size aImageSize = rItem.maImage.GetSizePixel();
             Size  aRectSize = aRect.GetSize();
             Point aPos(aRect.Left(), aRect.Top());
             aPos.AdjustX((aRectSize.Width() - aImageSize.Width()) / 2 );
 
-            if (pItem->meType != ValueSetItemType::ImageAndText)
+            if (rItem.meType != ValueSetItemType::ImageAndText)
                 aPos.AdjustY((aRectSize.Height() - aImageSize.Height()) / 2 );
 
             DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
@@ -1406,27 +1408,26 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
                 aImageSize.Height() > aRectSize.Height())
             {
                 maVirDev->SetClipRegion(vcl::Region(aRect));
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+                maVirDev->DrawImage(aPos, rItem.maImage, nImageStyle);
                 maVirDev->SetClipRegion();
             }
             else
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+                maVirDev->DrawImage(aPos, rItem.maImage, nImageStyle);
 
-            if (pItem->meType == ValueSetItemType::ImageAndText)
+            if (rItem.meType == ValueSetItemType::ImageAndText)
             {
                 maVirDev->SetFont(rRenderContext.GetFont());
                 maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
                 maVirDev->SetTextFillColor();
 
-                tools::Long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
+                tools::Long nTxtWidth = maVirDev->GetTextWidth(rItem.maText);
 
                 if (nTxtWidth > aRect.GetWidth())
                     maVirDev->SetClipRegion(vcl::Region(aRect));
 
-                maVirDev->DrawText(Point(aRect.Left() +
-                                         (aRect.GetWidth() - nTxtWidth) / 2,
+                maVirDev->DrawText(Point(aRect.Left() + (aRect.GetWidth() - nTxtWidth) / 2,
                                          aRect.Bottom() - maVirDev->GetTextHeight()),
-                                   pItem->maText);
+                                   rItem.maText);
 
                 if (nTxtWidth > aRect.GetWidth())
                     maVirDev->SetClipRegion();
