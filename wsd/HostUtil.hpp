@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include <config.h>
+
 // HostUtil is only used in non-mobile apps.
 #if !MOBILEAPP
 
