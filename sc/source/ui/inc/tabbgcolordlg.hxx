@@ -28,7 +28,7 @@
 class ScTabBgColorDlg : public weld::GenericDialogController
 {
 public:
-    ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle, const Color& rDefaultColor);
+    ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle);
     virtual ~ScTabBgColorDlg() override;
 
     Color GetSelectedColor() const;

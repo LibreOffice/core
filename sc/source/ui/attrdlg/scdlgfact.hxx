@@ -145,8 +145,7 @@ public:
 
     virtual VclPtr<AbstractScTabBgColorDlg>
     CreateScTabBgColorDlg(weld::Window* pParent,
-                          const OUString& rTitle, //Dialog Title
-                          const Color& rDefaultColor) override; //Currently selected Color
+                          const OUString& rTitle) override; //Dialog Title
 
     virtual VclPtr<AbstractScImportOptionsDlg> CreateScImportOptionsDlg(weld::Window* pParent, bool bAscii,
                                                                         const ScImportOptions* pOptions,

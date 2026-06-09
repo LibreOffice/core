@@ -1244,11 +1244,11 @@ void ScTabViewShell::ExecuteSetTableBackgroundCol(SfxRequest& rReq)
     }
     else
     {
-        Color aTabBgColor = rDoc.GetTabBgColor( nCurrentTab );
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        VclPtr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
-            GetFrameWeld(), ScResId(SCSTR_SET_TAB_BG_COLOR), aTabBgColor));
+        VclPtr<AbstractScTabBgColorDlg> pDlg(
+            pFact->CreateScTabBgColorDlg(GetFrameWeld(), ScResId(SCSTR_SET_TAB_BG_COLOR)));
 
+        Color aTabBgColor = rDoc.GetTabBgColor(nCurrentTab);
         auto xRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more
         ExecuteTableBackgroundDialog(pDlg, xRequest, aTabBgColor, nSlot);
