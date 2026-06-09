@@ -202,10 +202,7 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
 
 ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
 {
-    if (nPos == VALUESET_ITEM_NONEITEM)
-        return nullptr;
-    else
-        return (nPos < mItemList.size()) ? mItemList[nPos].get() : nullptr;
+    return (nPos < mItemList.size()) ? mItemList[nPos].get() : nullptr;
 }
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
@@ -314,27 +311,13 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
             break;
 
         case KEY_LEFT:
-            if (nCurPos != VALUESET_ITEM_NONEITEM)
-            {
-                if (nCurPos)
-                {
-                    nItemPos = nCurPos-1;
-                }
-            }
+            if (nCurPos)
+                nItemPos = nCurPos - 1;
             break;
 
         case KEY_RIGHT:
             if (nCurPos < nLastItem)
-            {
-                if (nCurPos == VALUESET_ITEM_NONEITEM)
-                {
-                    nItemPos = 0;
-                }
-                else
-                {
-                    nItemPos = nCurPos+1;
-                }
-            }
+                nItemPos = nCurPos + 1;
             break;
 
         case KEY_PAGEUP:
@@ -345,27 +328,24 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
             nVStep *= mnVisLines;
             [[fallthrough]];
         case KEY_UP:
-            if (nCurPos != VALUESET_ITEM_NONEITEM)
+            if (nCurPos == nLastItem)
             {
-                if (nCurPos == nLastItem)
+                const size_t nCol = mnCols ? nLastItem % mnCols : 0;
+                if (nCol < mnCurCol)
                 {
-                    const size_t nCol = mnCols ? nLastItem % mnCols : 0;
-                    if (nCol < mnCurCol)
-                    {
-                        // Move to previous row/page, keeping the old column
-                        nVStep -= mnCurCol - nCol;
-                    }
+                    // Move to previous row/page, keeping the old column
+                    nVStep -= mnCurCol - nCol;
                 }
-                if (nCurPos >= nVStep)
-                {
-                    // Go up of a whole page
-                    nItemPos = nCurPos-nVStep;
-                }
-                else if (nCurPos > mnCols)
-                {
-                    // Go to same column in first row
-                    nItemPos = nCurPos % mnCols;
-                }
+            }
+            if (nCurPos >= nVStep)
+            {
+                // Go up of a whole page
+                nItemPos = nCurPos - nVStep;
+            }
+            else if (nCurPos > mnCols)
+            {
+                // Go to same column in first row
+                nItemPos = nCurPos % mnCols;
             }
             break;
 
@@ -379,14 +359,7 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
         case KEY_DOWN:
             if (nCurPos != nLastItem)
             {
-                if (nCurPos == VALUESET_ITEM_NONEITEM)
-                {
-                    nItemPos = nVStep-mnCols+mnCurCol;
-                }
-                else
-                {
-                    nItemPos = nCurPos+nVStep;
-                }
+                nItemPos = nCurPos + nVStep;
                 if (nItemPos > nLastItem)
                 {
                     nItemPos = nLastItem;
@@ -399,12 +372,9 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
             {
                 // tdf#142479 on return select the entry the cursor is in
                 // before calling Select
-                if (nCurPos != VALUESET_ITEM_NONEITEM)
-                {
-                    const sal_uInt16 nItemId = GetItemId(nCurPos);
-                    if (nItemId != mnSelItemId)
-                        SelectItem(nItemId);
-                }
+                const sal_uInt16 nItemId = GetItemId(nCurPos);
+                if (nItemId != mnSelItemId)
+                    SelectItem(nItemId);
                 Select();
                 break;
             }
@@ -416,13 +386,13 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
     if ( nItemPos == VALUESET_ITEM_NOTFOUND )
         return true;
 
-    if ( nItemPos!=VALUESET_ITEM_NONEITEM && nItemPos<nLastItem )
+    if (nItemPos < nLastItem)
     {
         // update current column only in case of a new position
         // which is also not a "specially" handled one.
         mnCurCol = mnCols ? nItemPos % mnCols : 0;
     }
-    const sal_uInt16 nItemId = (nItemPos != VALUESET_ITEM_NONEITEM) ? GetItemId( nItemPos ) : 0;
+    const sal_uInt16 nItemId = GetItemId(nItemPos);
     if ( nItemId != mnSelItemId )
     {
         SelectItem( nItemId );

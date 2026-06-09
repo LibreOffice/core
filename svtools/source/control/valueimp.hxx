@@ -27,8 +27,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#define VALUESET_ITEM_NONEITEM      0xFFFE
-
 enum class ValueSetItemType
 {
     None,

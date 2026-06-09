@@ -474,9 +474,6 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
         return nullptr;
 
     const size_t nItemPos = mpValueSet->GetItemPos(nItemId);
-    if( VALUESET_ITEM_NONEITEM == nItemPos )
-        return nullptr;
-
     ValueSetItem* const pItem = mpValueSet->mItemList[nItemPos].get();
     return pItem->GetAccessible();
 }
