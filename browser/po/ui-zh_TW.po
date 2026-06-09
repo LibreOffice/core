@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-05 13:51+0000\n"
+"PO-Revision-Date: 2026-06-09 21:01+0000\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hant/>\n"
-"Language: \n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -866,6 +866,9 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"若要執行文件操作（檢視與編輯），請選擇具備原生函式／工具呼叫功能的模型，例如 "
+"gpt-4o、llama3.1 或 qwen2.5。不具備此功能的模型（例如基礎版 llama3、gemma）仍"
+"可進行對話，但無法使用文件工具。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2255
 #: admin/src/integrator/AdminIntegratorSettings.ts:2373
@@ -918,7 +921,7 @@ msgstr "無（停用影像產生）"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
-msgstr ""
+msgstr "無法擷取模型 (HTTP {0})。請檢查提供者 URL 與 API 金鑰。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1746,7 +1749,7 @@ msgstr "變更遭拒"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
-msgstr ""
+msgstr "使用區塊： "
 
 #: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
@@ -2944,12 +2947,12 @@ msgstr "樣式清單"
 #: src/control/Control.Menubar.ts:1349 src/control/Control.Menubar.ts:1399
 #: src/control/Control.Menubar.ts:1413 src/control/Control.Menubar.ts:1436
 msgid "Local Image..."
-msgstr "本機影像……"
+msgstr "本機影像…"
 
 #: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
 #: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
 msgid "Shapes ..."
-msgstr ""
+msgstr "形狀…"
 
 #: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
 #: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
@@ -3542,7 +3545,7 @@ msgstr "動畫"
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "大綱 %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -4067,7 +4070,7 @@ msgstr "篩選"
 
 #: src/control/Control.NotebookbarCalc.js:2623
 msgid "Proofing"
-msgstr ""
+msgstr "校對"
 
 #: src/control/Control.NotebookbarCalc.js:2651
 #: src/control/Control.NotebookbarImpress.js:2049
@@ -4083,7 +4086,7 @@ msgstr "評註"
 
 #: src/control/Control.NotebookbarCalc.js:2734
 msgid "Protection"
-msgstr ""
+msgstr "保護"
 
 #: src/control/Control.NotebookbarCalc.js:2797
 msgid "Format Cells"
@@ -4400,11 +4403,11 @@ msgstr "將區塊向下移動"
 
 #: src/control/Control.PartsPreview.js:826
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "折疊所有區塊"
 
 #: src/control/Control.PartsPreview.js:834
 msgid "Expand All Sections"
-msgstr ""
+msgstr "展開所有區塊"
 
 #: src/control/Control.PartsPreview.js:895
 msgid "Enter new section name:"
@@ -5048,7 +5051,7 @@ msgstr "檢視"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:312
 msgid "Save Image to Server"
-msgstr ""
+msgstr "將影像儲存至伺服器"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:350
 msgid "Paste Special"
@@ -5495,72 +5498,70 @@ msgid "Color palette"
 msgstr "色彩調色盤"
 
 #: src/control/jsdialog/Widget.Combobox.js:245
-#, fuzzy
 msgid "Open "
-msgstr "開啟"
+msgstr "開啟 "
 
 #: src/control/jsdialog/Widget.Combobox.js:245
 msgid " list"
-msgstr ""
+msgstr " 清單"
 
 #: src/control/jsdialog/Widget.Combobox.js:246
-#, fuzzy
 msgid "Open list"
-msgstr "開啟連結"
+msgstr "開啟清單"
 
 #: src/control/jsdialog/Widget.Combobox.js:377
 msgid "Filter entries"
-msgstr ""
+msgstr "篩選條目"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "位置 {n}，分割集合"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "位置 {n}，未分割"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
-msgstr ""
+msgstr "欄位分割尺規。使用方向鍵移動游標，並按空格鍵切換分割狀態。"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
-msgstr ""
+msgstr "CSV 匯入預覽"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
-msgstr ""
+msgstr "行號"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:451
 msgid "Column {index}"
-msgstr ""
+msgstr "欄 {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "表情符號"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "人物與手勢"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "物件"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "自然與食物"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "最近使用"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "沒有符合「{0}」的表情符號"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5664,7 +5665,7 @@ msgstr "儲存格邊框"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "開啟樣式側邊欄"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -5676,7 +5677,7 @@ msgstr "向下捲動"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "更多選項"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -5704,15 +5705,15 @@ msgstr "{1} 的更多選項"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1738
 msgid "Cell value"
-msgstr ""
+msgstr "儲存格值"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1742
 msgid "row %1"
-msgstr ""
+msgstr "列 %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1751
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
@@ -5750,11 +5751,11 @@ msgstr "成功匯出： "
 
 #: src/app/Socket.ts:1113
 msgid "This document has links to external content."
-msgstr ""
+msgstr "本文件包含外部內容的連結。"
 
 #: src/app/Socket.ts:1114
 msgid "Allow"
-msgstr ""
+msgstr "允許"
 
 #: src/app/Socket.ts:1626
 msgid "Discard"
@@ -6350,11 +6351,11 @@ msgstr "此文件的簡報模式已停用"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "將此順序套用至您的簡報嗎？"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "更新投影片"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6382,23 +6383,23 @@ msgstr "歡迎對話方塊"
 
 #: src/map/handler/Map.Settings.ts:143
 msgid "Settings saved"
-msgstr ""
+msgstr "設定已儲存"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "跳過"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "第一張"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "跳過全部"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "第一張投影片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6406,14 +6407,12 @@ msgid "Next Slide"
 msgstr "下一張投影片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "上一張投影片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "貼上投影片"
+msgstr "最後一張投影片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:845
@@ -6422,15 +6421,15 @@ msgstr "結束放映"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "動畫開始： "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "轉場開始： "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "轉場結束： "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -6517,7 +6516,7 @@ msgstr "停止追蹤"
 
 #: src/control/Control.Extension.ts:268
 msgid "Close extension"
-msgstr ""
+msgstr "關閉擴充套件"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
