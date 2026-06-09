@@ -166,8 +166,8 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
         random.seed()
         sPipeName = "uno" + str(random.random())[2:]
         # Start the office process
-        connect_string = ''.join(['pipe,name=', sPipeName, ';urp;'])
-        command = [sOffice, '--nologo', '--nodefault', "--accept=" + connect_string]
+        connect_string = f"pipe,name={sPipeName};urp;"
+        command = [sOffice, '--nologo', '--nodefault', f"--accept={connect_string}"]
         if platform.startswith("win") or platform == "darwin":
             process = subprocess.Popen(command)
         elif platform == "linux":  # Use a process group to enable proper termination
@@ -178,7 +178,7 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
         xLocalContext = uno.getComponentContext()
         resolver = xLocalContext.ServiceManager.createInstanceWithContext(
             "com.sun.star.bridge.UnoUrlResolver", xLocalContext)
-        sConnect = "".join(['uno:', connect_string, 'StarOffice.ComponentContext'])
+        sConnect = f"uno:{connect_string}StarOffice.ComponentContext"
         @retry(delays=delays,
                exception=NoConnectException,
                report=report)
