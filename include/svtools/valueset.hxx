@@ -76,12 +76,6 @@ WB_DOUBLEBORDER     Items will be bordered twice. Additionally WB_ITEMBORDER
                     recognizable.
 WB_NAMEFIELD        There is a namefield, where the name of an item will be
                     shown.
-WB_NONEFIELD        There is a NoSelection field which can be selected if
-                    0 is passed along with SelectItem. Respectively
-                    GetSelectedItemId() returns 0 if this field or nothing
-                    is selected. This field shows the text which is specified
-                    by SetText() respectively no one, if no text was set. With
-                    SetNoSelection() the selection can be disabled.
 WB_VSCROLL          A scrollbar will be always shown. The visible number of
                     lines have to be specified with SetLineCount() if this
                     flag is set.
@@ -171,7 +165,6 @@ to be set (before Show) with SetStyle().
 #define WB_ITEMBORDER           (WinBits(0x00010000))
 #define WB_DOUBLEBORDER         (WinBits(0x00020000))
 #define WB_NAMEFIELD            (WinBits(0x00040000))
-#define WB_NONEFIELD            (WinBits(0x00080000))
 #define WB_FLATVALUESET         (WinBits(0x02000000))
 #define WB_NO_DIRECTSELECT      (WinBits(0x04000000))
 #define WB_MENUSTYLEVALUESET    (WinBits(0x08000000))

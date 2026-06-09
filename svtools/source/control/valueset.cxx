@@ -849,23 +849,11 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     size_t nItemCount = mItemList.size();
     WinBits nStyle = GetStyle();
     tools::Long nTxtHeight = rRenderContext.GetTextHeight();
-    tools::Long nOff;
     tools::Long nNoneHeight;
     tools::Long nNoneSpace;
 
     if (mxScrolledWindow && !(nStyle & WB_VSCROLL) && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
         TurnOffScrollBar();
-
-    // calculate item offset
-    if (nStyle & WB_ITEMBORDER)
-    {
-        if (nStyle & WB_DOUBLEBORDER)
-            nOff = ITEM_OFFSET_DOUBLE;
-        else
-            nOff = ITEM_OFFSET;
-    }
-    else
-        nOff = 0;
 
     if ( mnMargin )
     {
@@ -890,18 +878,9 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     mnTextOffset += mnMargin;
 
-    // consider offset and size, if NoneField does exist
-    if (nStyle & WB_NONEFIELD)
-    {
-        nNoneHeight = nTxtHeight + nOff;
-        nNoneSpace = mnSpacing;
-    }
-    else
-    {
-        nNoneHeight = 0;
-        nNoneSpace = 0;
-        mpNoneItem.reset();
-    }
+    nNoneHeight = 0;
+    nNoneSpace = 0;
+    mpNoneItem.reset();
 
     // calculate number of columns
     if (!mnUserCols)
@@ -999,12 +978,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     {
         mbHasVisibleItems = false;
 
-        if ((nStyle & WB_NONEFIELD) && mpNoneItem)
-        {
-            mpNoneItem->mbVisible = false;
-            mpNoneItem->maText = GetText();
-        }
-
         for (size_t i = 0; i < nItemCount; i++)
         {
             mItemList[i]->mbVisible = false;
@@ -1057,25 +1030,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         maVirDev->SetLineColor();
         tools::Long x = nStartX;
         tools::Long y = nStartY;
-
-        // create NoSelection field and show it
-        if (nStyle & WB_NONEFIELD)
-        {
-            if (!mpNoneItem)
-                mpNoneItem.reset(new ValueSetItem(*this));
-
-            mpNoneItem->mnId = 0;
-            mpNoneItem->meType = ValueSetItemType::None;
-            mpNoneItem->mbVisible = true;
-            maNoneItemRect.SetLeft( x );
-            maNoneItemRect.SetTop( y );
-            maNoneItemRect.SetRight( maNoneItemRect.Left() + aWinSize.Width() - x - 1 );
-            maNoneItemRect.SetBottom( y + nNoneHeight - 1 );
-
-            ImplFormatItem(rRenderContext, mpNoneItem.get(), maNoneItemRect);
-
-            y += nNoneHeight + nNoneSpace;
-        }
 
         // draw items
         size_t nFirstItem = static_cast<size_t>(mnFirstLine) * mnCols;
@@ -1654,11 +1608,6 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
         aSize.AdjustHeight(nTxtHeight + NAME_OFFSET );
         if ( !(nStyle & WB_FLATVALUESET) )
             aSize.AdjustHeight(NAME_LINE_HEIGHT + NAME_LINE_OFF_Y );
-    }
-
-    if ( nStyle & WB_NONEFIELD )
-    {
-        aSize.AdjustHeight(nTxtHeight + n + mnSpacing );
     }
 
     if ( mnMargin )

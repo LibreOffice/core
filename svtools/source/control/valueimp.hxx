@@ -143,14 +143,6 @@ private:
         @throws css::lang::DisposedException
     */
     void ThrowIfDisposed();
-
-    /** Check whether the value set has a 'none' field, i.e. a field (button)
-        that deselects any items (selects none of them).
-        @return
-            Returns <true/> if there is a 'none' field and <false/> if it is
-            missing.
-    */
-    bool HasNoneField() const;
 };
 
 class ValueItemAcc : public comphelper::OAccessible
