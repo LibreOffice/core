@@ -178,9 +178,7 @@ private:
     ScopedVclPtr<VirtualDevice> maVirDev;
     rtl::Reference<ValueSetAcc> mxAccessible;
     std::vector<std::unique_ptr<ValueSetItem>> mItemList;
-    std::unique_ptr<ValueSetItem> mpNoneItem;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
-    tools::Rectangle  maNoneItemRect;
     tools::Rectangle  maItemListRect;
     tools::Long            mnItemWidth;
     tools::Long            mnItemHeight;

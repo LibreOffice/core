@@ -175,11 +175,6 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
         return VALUESET_ITEM_NOTFOUND;
     }
 
-    if (mpNoneItem && maNoneItemRect.Contains(rPos))
-    {
-        return VALUESET_ITEM_NONEITEM;
-    }
-
     if (maItemListRect.Contains(rPos))
     {
         const int xc = rPos.X() - maItemListRect.Left();
@@ -208,7 +203,7 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
 ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
 {
     if (nPos == VALUESET_ITEM_NONEITEM)
-        return mpNoneItem.get();
+        return nullptr;
     else
         return (nPos < mItemList.size()) ? mItemList[nPos].get() : nullptr;
 }
@@ -304,14 +299,14 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
     --nLastItem;
 
     const size_t nCurPos
-        = mnSelItemId ? GetItemPos(mnSelItemId) : (mpNoneItem ? VALUESET_ITEM_NONEITEM : 0);
+        = mnSelItemId ? GetItemPos(mnSelItemId) : 0;
     size_t nItemPos = VALUESET_ITEM_NOTFOUND;
     size_t nVStep = mnCols;
 
     switch (rKeyEvent.GetKeyCode().GetCode())
     {
         case KEY_HOME:
-            nItemPos = mpNoneItem ? VALUESET_ITEM_NONEITEM : 0;
+            nItemPos = 0;
             break;
 
         case KEY_END:
@@ -324,10 +319,6 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 if (nCurPos)
                 {
                     nItemPos = nCurPos-1;
-                }
-                else if (mpNoneItem)
-                {
-                    nItemPos = VALUESET_ITEM_NONEITEM;
                 }
             }
             break;
@@ -369,10 +360,6 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     // Go up of a whole page
                     nItemPos = nCurPos-nVStep;
-                }
-                else if (mpNoneItem)
-                {
-                    nItemPos = VALUESET_ITEM_NONEITEM;
                 }
                 else if (nCurPos > mnCols)
                 {
@@ -798,11 +785,9 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         // focus event (select)
         const size_t nPos = GetItemPos(mnSelItemId);
 
-        ValueSetItem* pItem;
+        ValueSetItem* pItem = nullptr;
         if (nPos != VALUESET_ITEM_NOTFOUND)
             pItem = mItemList[nPos].get();
-        else
-            pItem = mpNoneItem.get();
 
         ValueItemAcc* pItemAcc = nullptr;
         if (pItem != nullptr)
@@ -875,8 +860,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         mnTextOffset = 0;
 
     mnTextOffset += mnMargin;
-
-    mpNoneItem.reset();
 
     // calculate number of columns
     if (!mnUserCols)
@@ -1157,11 +1140,6 @@ ValueSetItem* ValueSet::ImplGetDrawSelectItem(sal_uInt16 nItemId, const bool bFo
         pItem = mItemList[ nPos ].get();
         rRect = ImplGetItemRect( nPos );
     }
-    else if (mpNoneItem)
-    {
-        pItem = mpNoneItem.get();
-        rRect = maNoneItemRect;
-    }
     else if (bFocus && (pItem = ImplGetFirstItem()))
     {
         rRect = ImplGetItemRect(0);
@@ -1342,33 +1320,12 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const& rRenderContext, ValueSet
         }
     }
 
-    if (&rItem == mpNoneItem.get())
-        rItem.maText = GetText();
-
     if ((aRect.GetHeight() <= 0) || (aRect.GetWidth() <= 0))
         return;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if (&rItem == mpNoneItem.get())
-    {
-        maVirDev->SetFont(rRenderContext.GetFont());
-        maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
-        maVirDev->SetTextFillColor();
-        maVirDev->SetFillColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor());
-        maVirDev->DrawRect(aRect);
-        Point aTxtPos(aRect.Left() + 2, aRect.Top());
-        tools::Long nTxtWidth = rRenderContext.GetTextWidth(rItem.maText);
-        if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
-        {
-            maVirDev->SetClipRegion(vcl::Region(aRect));
-            maVirDev->DrawText(aTxtPos, rItem.maText);
-            maVirDev->SetClipRegion();
-        }
-        else
-            maVirDev->DrawText(aTxtPos, rItem.maText);
-    }
-    else if (rItem.meType == ValueSetItemType::Color)
+    if (rItem.meType == ValueSetItemType::Color)
     {
         maVirDev->SetFillColor(rItem.maColor);
         maVirDev->DrawRect(aRect);
