@@ -4775,7 +4775,8 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
             const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(/*bAfterRedline=*/true) &&
                     m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
-            if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments())
+            if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments()
+                && !m_pImpl->IsInHeaderFooter())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
