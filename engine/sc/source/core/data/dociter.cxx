@@ -1434,7 +1434,12 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
                 pHorizEnd[nPos] = rDoc.MaxCol()+1; // only for assert()
             }
             else
-                nIndex = ++pIndices[nPos];
+            {
+                // a column can be more than one run behind nRow, so re-search
+                // rather than stepping a single run
+                pArray.Search(nRow, nIndex, pIndices[nPos]);
+                pIndices[nPos] = nIndex;
+            }
 
             if ( !nIndex && !pArray.Count() )
             {
