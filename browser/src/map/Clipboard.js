@@ -327,7 +327,8 @@ window.L.Clipboard = window.L.Class.extend({
 			}
 
 			request.open(type, url, true /* isAsync */);
-			request.timeout = 30 * 1000; // 30 secs ...
+			// 5 minutes, same as network.http.response.timeout's default in Firefox.
+			request.timeout = 300 * 1000;
 			request.responseType = 'blob';
 			if (optionalFormData !== null)
 				request.send(optionalFormData);
