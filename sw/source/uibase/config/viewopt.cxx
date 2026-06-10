@@ -602,6 +602,15 @@ bool SwViewOption::IsAllowDragDropText()
     return gAllowDragDrop.get();
 }
 
+bool SwViewOption::IsTypingReplacesSelection()
+{
+    if (comphelper::IsFuzzing())
+        return true;
+    static comphelper::ConfigurationListenerProperty<bool> gTypingReplacesSelection(
+        getWCOptionListener(), u"TypingReplacesSelection"_ustr);
+    return gTypingReplacesSelection.get();
+}
+
 void SwViewOption::SyncLayoutRelatedViewOptions(const SwViewOption& rOpt)
 {
     SetFieldName(rOpt.IsFieldName());

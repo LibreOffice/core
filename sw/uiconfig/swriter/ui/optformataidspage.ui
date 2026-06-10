@@ -904,6 +904,77 @@
                 <property name="position">3</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkFrame" id="frmTyping">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
+                <child>
+                  <!-- n-columns=2 n-rows=1 -->
+                  <object class="GtkGrid" id="grid8">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
+                    <property name="row-spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="typingreplacesselection">
+                        <property name="label" translatable="yes" context="optformataidspage|typingreplacesselection">Typing replaces selection</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="typingreplacesselection-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|typingreplacesselection">Specifies whether typing replaces the selected text.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="locktypingreplacesselection">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">res/lock.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="locktypingreplacesselection-atkobject">
+                            <property name="AtkObject::accessible-description">Specifies whether typing replaces the selected text.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="lbTyping">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optformataidspage|lbTyping">Typing</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>

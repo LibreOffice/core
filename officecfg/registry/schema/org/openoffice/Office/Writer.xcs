@@ -2202,6 +2202,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="TypingReplacesSelection" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether typing replaces the selected text.</desc>
+            <label>Typing replaces selection</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
     </group>
     <group oor:name="FmtAidsAutocomplete">

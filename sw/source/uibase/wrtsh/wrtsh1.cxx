@@ -249,6 +249,14 @@ void SwWrtShell::Insert( const OUString &rStr )
          bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
+    // tdf#169913 - insert at cursor position without overwriting the selection
+    if (bHasSel && !SwViewOption::IsTypingReplacesSelection())
+    {
+        NormalizePam(false);
+        ClearMark();
+        bHasSel = false;
+    }
+
     if( bHasSel || ( !m_bIns && IsInHiddenRange(/*bSelect=*/true) ) )
     {
             // Only here parenthesizing, because the normal

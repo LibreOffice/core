@@ -346,6 +346,9 @@ class SwShdwCursorOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xDragDropCB;
     std::unique_ptr<weld::Widget> m_xDragDropImg;
 
+    std::unique_ptr<weld::CheckButton> m_xTypingReplacesSelectionCB;
+    std::unique_ptr<weld::Widget> m_xTypingReplacesSelectionImg;
+
     std::unique_ptr<weld::CheckButton> m_xTextBoundariesCB;
     std::unique_ptr<weld::CheckButton> m_xSectionBoundariesCB;
     std::unique_ptr<weld::CheckButton> m_xTableBoundariesCB;

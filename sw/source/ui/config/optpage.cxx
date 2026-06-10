@@ -1749,6 +1749,8 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xDragDropFrame(m_xBuilder->weld_frame(u"frmDragDrop"_ustr))
     , m_xDragDropCB(m_xBuilder->weld_check_button(u"allowdragdrop"_ustr))
     , m_xDragDropImg(m_xBuilder->weld_widget(u"lockallowdragdrop"_ustr))
+    , m_xTypingReplacesSelectionCB(m_xBuilder->weld_check_button(u"typingreplacesselection"_ustr))
+    , m_xTypingReplacesSelectionImg(m_xBuilder->weld_widget(u"locktypingreplacesselection"_ustr))
     , m_xTextBoundariesCB(m_xBuilder->weld_check_button(u"cbTextBoundaries"_ustr))
     , m_xSectionBoundariesCB(m_xBuilder->weld_check_button(u"cbSectionBoundaries"_ustr))
     , m_xTableBoundariesCB(m_xBuilder->weld_check_button(u"cbTableBoundaries"_ustr))
@@ -1881,6 +1883,15 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
         xChanges->commit();
     }
 
+    if (m_xTypingReplacesSelectionCB->get_state_changed_from_saved())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::Cursor::Option::TypingReplacesSelection::set(
+            m_xTypingReplacesSelectionCB->get_active(), xChanges);
+        xChanges->commit();
+    }
+
     SwFmtAidsAutoComplItem aFmtAidsAutoComplOpt;
     aFmtAidsAutoComplOpt.SetEncloseWithCharactersOn(m_xEncloseWithCharactersCB->get_active());
     if (const SwFmtAidsAutoComplItem* pFmtAidsAutoComplItem
@@ -1972,6 +1983,14 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     m_xDragDropCB->set_sensitive(!bReadOnly);
     m_xDragDropImg->set_visible(bReadOnly);
     m_xDragDropCB->save_state();
+
+    const bool bTypingReplacesSelection
+        = officecfg::Office::Writer::Cursor::Option::TypingReplacesSelection::get();
+    m_xTypingReplacesSelectionCB->set_active(bTypingReplacesSelection);
+    bReadOnly = officecfg::Office::Writer::Cursor::Option::TypingReplacesSelection::isReadOnly();
+    m_xTypingReplacesSelectionCB->set_sensitive(!bReadOnly);
+    m_xTypingReplacesSelectionImg->set_visible(bReadOnly);
+    m_xTypingReplacesSelectionCB->save_state();
 
     const SwDocDisplayItem* pDocDisplayAttr = rSet->GetItemIfSet( FN_PARAM_DOCDISP, false );
     if(pDocDisplayAttr)

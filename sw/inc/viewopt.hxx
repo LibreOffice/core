@@ -641,6 +641,8 @@ public:
 
     static bool IsAllowDragDropText();
 
+    static bool IsTypingReplacesSelection();
+
     bool IsPDFExport() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::PdfExport); }
 
