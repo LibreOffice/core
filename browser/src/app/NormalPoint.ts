@@ -123,6 +123,14 @@ class NormalPoint {
 	public isNaN(): boolean {
 		return isNaN(this.lat) || isNaN(this.lng);
 	}
+
+	public getX(): number {
+		return this.lng;
+	}
+
+	public getY(): number {
+		return this.lat;
+	}
 }
 
 window.L.LatLng = NormalPoint;

@@ -752,8 +752,8 @@ window.L.Map = window.L.Evented.extend({
 			// position stays the same.
 			var zoomScale = 1.0 / this.getZoomScale(zoom, this._zoom);
 			var caretPos = this._docLayer._twipsToLatLng({ x: app.file.textCursor.rectangle.center[0], y: app.file.textCursor.rectangle.center[1] });
-			var newCenter = new window.L.LatLng(curCenter.lat + (caretPos.lat - curCenter.lat) * (1.0 - zoomScale),
-						     curCenter.lng + (caretPos.lng - curCenter.lng) * (1.0 - zoomScale));
+			var newCenter = new window.L.LatLng(curCenter.getY() + (caretPos.getY() - curCenter.getY()) * (1.0 - zoomScale),
+						     curCenter.getX() + (caretPos.getX() - curCenter.getX()) * (1.0 - zoomScale));
 
 			mapUpdater = function() {
 				thisObj.setView(newCenter, zoom);
@@ -767,9 +767,9 @@ window.L.Map = window.L.Evented.extend({
 					// pinchCenter
 					new window.L.LatLng(
 						// Use the current y-center if there is a top margin.
-						cssBounds.min.y < 0 ? curCenter.lat : caretPos.lat,
+						cssBounds.min.y < 0 ? curCenter.getY() : caretPos.getY(),
 						// Use the current x-center if there is a left margin.
-						cssBounds.min.x < 0 ? curCenter.lng : caretPos.lng),
+						cssBounds.min.x < 0 ? curCenter.getX() : caretPos.getX()),
 					mapUpdater,
 					runAtFinish);
 			} else {

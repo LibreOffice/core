@@ -58,7 +58,7 @@ window.L.Map.Scroll = window.L.Handler.extend({
 			var viewBounds = this._map.getPixelBoundsCore();
 			var useMouseXCenter = viewBounds.min.x >= 0 && viewBounds.max.x <= maxX;
 
-			this._zoomCenter = new window.L.LatLng(mousePos.lat, useMouseXCenter ? mousePos.lng : viewCenter.lng);
+			this._zoomCenter = new window.L.LatLng(mousePos.getY(), useMouseXCenter ? mousePos.getX() : viewCenter.getX());
 
 		} else {
 			this._zoomCenter = viewCenter;
@@ -157,7 +157,7 @@ window.L.Map.Scroll = window.L.Handler.extend({
 	_stopZoomAnimation: function () {
 		cancelAnimationFrame(this._zoomInterpolateRAF); // Already cancelled by now ?
 		var zoom = this._zoom;
-		var lastCenter = new window.L.LatLng(this._zoomCenter.lat, this._zoomCenter.lng);
+		var lastCenter = new window.L.LatLng(this._zoomCenter.getY(), this._zoomCenter.getX());
 		var map = this._map;
 		map._docLayer.zoomStepEnd(zoom, lastCenter,
 			// mapUpdater
