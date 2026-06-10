@@ -474,7 +474,6 @@
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/Palette.hxx>
-#include <svx/SvxColorValueSet.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/autoformathelper.hxx>
 #include <svx/charmap.hxx>

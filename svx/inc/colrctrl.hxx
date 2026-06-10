@@ -18,10 +18,11 @@
  */
 #pragma once
 
+#include "SvxColorValueSet.hxx"
+
 #include <sal/types.h>
 #include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
-#include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
