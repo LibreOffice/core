@@ -30,6 +30,8 @@
 #include <filter/WebpReader.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/outdev.hxx>
+
+#include <cstdint>
 #include <utility>
 
 constexpr sal_uInt32 SVG_CHECK_SIZE = 8192;

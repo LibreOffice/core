@@ -13,6 +13,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+
+#include <cstdint>
 #include <vector>
 
 #pragma once
