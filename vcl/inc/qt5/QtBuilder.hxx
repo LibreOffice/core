@@ -103,6 +103,7 @@ private:
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     void setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rProps);
+    void setToggleButtonProperties(QToolButton& rButton, stringmap& rProps, QWidget* pParentWidget);
     static void setWidgetProperties(QWidget& rWidget, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
 

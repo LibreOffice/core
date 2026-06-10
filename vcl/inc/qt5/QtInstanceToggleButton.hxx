@@ -26,8 +26,12 @@ class QtInstanceToggleButton : public QtInstanceButton, public virtual weld::Tog
 public:
     QtInstanceToggleButton(QToolButton* pButton);
 
+    virtual void set_label(const OUString& rText) override;
+
     virtual void do_set_active(bool bActive) override;
     virtual bool get_active() const override;
+
+    static void updateToolButtonStyle(QToolButton& rToolButton);
 
 protected:
     QToolButton& getToolButton() const;

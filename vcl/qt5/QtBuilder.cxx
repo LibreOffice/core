@@ -379,7 +379,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     {
         QToolButton* pButton = new QToolButton(pParentWidget);
         pButton->setCheckable(true);
-        setButtonProperties(*pButton, rProps, pParentWidget);
+        setToggleButtonProperties(*pButton, rProps, pParentWidget);
         pObject = pButton;
     }
     else if (rClass == u"GtkToolbar")
@@ -994,8 +994,7 @@ void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps,
         rButton.setMenu(pMenu);
     }
 
-    setButtonProperties(rButton, rProps, pParentWidget);
-    QtInstanceMenuButton::updateToolButtonStyle(rButton);
+    setToggleButtonProperties(rButton, rProps, pParentWidget);
 }
 
 void QtBuilder::setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& rProps)
@@ -1107,6 +1106,13 @@ void QtBuilder::setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rPro
             rTextEdit.setReadOnly(!toBool(rValue));
         }
     }
+}
+
+void QtBuilder::setToggleButtonProperties(QToolButton& rButton, stringmap& rProps,
+                                          QWidget* pParentWidget)
+{
+    setButtonProperties(rButton, rProps, pParentWidget);
+    QtInstanceToggleButton::updateToolButtonStyle(rButton);
 }
 
 void QtBuilder::setWidgetProperties(QWidget& rWidget, stringmap& rProps)
