@@ -13,6 +13,7 @@
 #include <tools/ref.hxx>
 #include <map>
 #include <string_view>
+#include <variant>
 #include <vector>
 
 class SwContentNode;
@@ -47,6 +48,12 @@ public:
     void onFillBitmapURLChanged(SwFormat& rFormat, std::u16string_view rNewURL);
     void onFillBitmapURLChanged(SwContentNode& rNode, std::u16string_view rNewURL);
 
+    // Suppress the onFillBitmapURLChanged that a link's own write-back of the
+    // resolved graphic would otherwise raise for its host. The host is held by
+    // its own type so a write-back is matched only against the same host type.
+    template <typename Host> void setUpdatingHost(Host* pHost) { m_aUpdatingHost = pHost; }
+    void clearUpdatingHost() { m_aUpdatingHost = std::monostate{}; }
+
 private:
     template <typename Host>
     void onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap, Host& rHost,
@@ -54,7 +61,15 @@ private:
 
     void drainPendingReleases();
 
+    template <typename Host> bool isUpdatingHost(Host* pHost) const
+    {
+        auto const* ppHost = std::get_if<Host*>(&m_aUpdatingHost);
+        return ppHost && *ppHost == pHost;
+    }
+
     sfx2::LinkManager& m_rLinkMgr;
+    /// std::monostate is there to indicate no host is being updated
+    std::variant<std::monostate, SwFormat*, SwContentNode*> m_aUpdatingHost;
     std::map<SwFormat*, tools::SvRef<sfx2::SvBaseLink>> m_aLinks;
     std::map<SwContentNode*, tools::SvRef<sfx2::SvBaseLink>> m_aNodeLinks;
     // Links pulled from the maps but not yet freed, since removal may run inside a Dying broadcast:
