@@ -39,7 +39,6 @@ module org.libreoffice.uno
     exports com.sun.star.datatransfer.dnd;
     exports com.sun.star.deployment;
     exports com.sun.star.deployment.test;
-    exports com.sun.star.deployment.ui;
     exports com.sun.star.document;
     exports com.sun.star.drawing;
     exports com.sun.star.drawing.framework;
