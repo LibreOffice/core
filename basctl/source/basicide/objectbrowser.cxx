@@ -224,22 +224,22 @@ void FormatMethodSignature(rtl::OUStringBuffer& rBuffer, const basctl::IdeSymbol
             const auto& param = rSymbol.aParameters[i];
             if (param.bIsOptional)
             {
-                rBuffer.append(IDEResId(RID_STR_OB_OPTIONAL) + u" ");
+                rBuffer.append(u"Optional ");
             }
             if (!param.bIsByVal)
             {
-                rBuffer.append(IDEResId(RID_STR_OB_BYREF) + u" ");
+                rBuffer.append(u"ByRef ");
             }
             if (param.bIsOut && !param.bIsIn)
             {
-                rBuffer.append(IDEResId(RID_STR_OB_OUT_PARAM) + u" ");
+                rBuffer.append(u"[out] ");
             }
             else if (param.bIsOut && param.bIsIn)
             {
-                rBuffer.append(IDEResId(RID_STR_OB_INOUT_PARAM) + u" ");
+                rBuffer.append(u"[inout] ");
             }
 
-            rBuffer.append(param.sName + IDEResId(RID_STR_OB_AS) + param.sTypeName);
+            rBuffer.append(param.sName + u" As " + param.sTypeName);
             if (i < rSymbol.aParameters.size() - 1)
             {
                 rBuffer.append(u", ");
@@ -249,7 +249,7 @@ void FormatMethodSignature(rtl::OUStringBuffer& rBuffer, const basctl::IdeSymbol
     rBuffer.append(u")");
     if (!rSymbol.sReturnTypeName.isEmpty() && rSymbol.sReturnTypeName != "Void")
     {
-        rBuffer.append(IDEResId(RID_STR_OB_AS) + rSymbol.sReturnTypeName);
+        rBuffer.append(u" As " + rSymbol.sReturnTypeName);
     }
 }
 
@@ -259,7 +259,7 @@ void FormatPropertySignature(rtl::OUStringBuffer& rBuffer, const basctl::IdeSymb
     OUString sType = !rSymbol.sTypeName.isEmpty() ? rSymbol.sTypeName : rSymbol.sReturnTypeName;
     if (!sType.isEmpty())
     {
-        rBuffer.append(IDEResId(RID_STR_OB_AS) + sType);
+        rBuffer.append(u" As " + sType);
     }
 }
 
@@ -325,22 +325,19 @@ OUString FormatSymbolSignature(const IdeSymbolInfo& rSymbol)
             rtl::OUStringBuffer sModifiers;
             if (param.bIsOptional)
             {
-                sModifiers.append(IDEResId(RID_STR_OB_OPTIONAL));
+                sModifiers.append(u"Optional");
             }
             if (param.bIsOut && !param.bIsIn)
             {
-                OUString sOut = IDEResId(RID_STR_OB_OUT_PARAM);
-                sModifiers.append(sModifiers.getLength() ? (u", "_ustr + sOut) : sOut);
+                sModifiers.append(sModifiers.getLength() ? u", [out]" : u"[out]");
             }
             else if (param.bIsOut && param.bIsIn)
             {
-                OUString sInOut = IDEResId(RID_STR_OB_INOUT_PARAM);
-                sModifiers.append(sModifiers.getLength() ? (u", "_ustr + sInOut) : sInOut);
+                sModifiers.append(sModifiers.getLength() ? u", [inout]" : u"[inout]");
             }
             if (!param.bIsByVal)
             {
-                OUString sByRef = IDEResId(RID_STR_OB_BYREF);
-                sModifiers.append(sModifiers.getLength() ? (u", "_ustr + sByRef) : sByRef);
+                sModifiers.append(sModifiers.getLength() ? u", ByRef" : u"ByRef");
             }
             if (sModifiers.getLength() > 0)
             {
