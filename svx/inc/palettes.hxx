@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_INC_PALETTE_HXX
 
 #include <svx/Palette.hxx>
-#include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
 
 class SvFileStream;

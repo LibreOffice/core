@@ -18,7 +18,6 @@
  */
 
 #include "optchart.hxx"
-#include <svx/SvxColorValueSet.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>

@@ -25,8 +25,6 @@
 
 #include <functional>
 
-class SvxColorValueSet;
-
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
 class Palette
