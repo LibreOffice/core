@@ -298,16 +298,12 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
         return;
 
     SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyle = nullptr;
-
     if (!pPool)
         return;
 
-    pStyle = pPool->First(m_eStyleFamily);
-    while (pStyle && pStyle->GetName() != m_aStyleName.commonName
-           && pStyle->GetName() != m_aStyleName.translatedName)
-        pStyle = pPool->Next();
-
+    SfxStyleSheetBase* pStyle = pPool->Find(m_aStyleName.translatedName, m_eStyleFamily);
+    if (!pStyle)
+        pStyle = pPool->Find(m_aStyleName.commonName, m_eStyleFamily);
     if (!pStyle)
         return;
 
