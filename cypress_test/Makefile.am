@@ -30,6 +30,11 @@ export COOLWSD_VERSION_HASH
 
 BUFFERED_SCRIPT = $(abs_srcdir)/run_buffered.sh
 
+# Render the browser UI with DejaVu Sans on every host, so jsdialogs drawn
+# as HTML match the pixel baselines regardless of the distribution's default
+# sans font. Only affect the cypress process, so it does not reach the kit.
+CYPRESS_FONTCONFIG = FONTCONFIG_FILE=$(abs_srcdir)/fontconfig/cypress-fonts.conf
+
 PID_FILE=$(abs_builddir)/workdir/coolwsd.pid
 ERROR_LOG=$(abs_builddir)/workdir/error.log
 COOLWSD_LOG=$(abs_builddir)/cypress/wsd_logs/coolwsd.log
@@ -959,6 +964,7 @@ endef
 # 5 - log:    log file path
 # 6 - config-file: cypress configuration file (e.g. cypress.config.ts)
 define run_test_buffered
+	$(CYPRESS_FONTCONFIG) \
 	$(BUFFERED_SCRIPT) \
 		--browser $(BROWSER) \
 		--config $(1) \
@@ -995,6 +1001,7 @@ LOAD_STOP_CMD = $(if $(ENABLE_CPULOAD),\
 # 4 - spec (optional):   test file path (e.g. cypress' --spec argument)
 define run_test_headless
 	$(LOAD_START_CMD) \
+	$(CYPRESS_FONTCONFIG) \
 	$(SETSID) $(CYPRESS_BINARY) run \
 		--browser $(BROWSER) \
 		--headless \
