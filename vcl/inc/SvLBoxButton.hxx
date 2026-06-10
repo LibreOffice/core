@@ -67,9 +67,9 @@ public:
 
 class SvLBoxButton final : public SvLBoxItem
 {
-    bool isVis;
-    SvLBoxButtonData* pData;
-    SvItemStateFlags nItemFlags;
+    bool m_bIsVis;
+    SvLBoxButtonData* m_pData;
+    SvItemStateFlags m_nItemFlags;
 
     static void ImplAdjustBoxSize(Size& io_rCtrlSize, ControlType i_eType,
                                   vcl::RenderContext const& pRenderContext);
@@ -90,11 +90,11 @@ public:
 
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const* pSource) const override;
 
-    SvItemStateFlags GetButtonFlags() const { return nItemFlags; }
-    bool IsStateChecked() const { return bool(nItemFlags & SvItemStateFlags::CHECKED); }
-    bool IsStateUnchecked() const { return bool(nItemFlags & SvItemStateFlags::UNCHECKED); }
-    bool IsStateTristate() const { return bool(nItemFlags & SvItemStateFlags::TRISTATE); }
-    bool IsStateHilighted() const { return bool(nItemFlags & SvItemStateFlags::HIGHLIGHTED); }
+    SvItemStateFlags GetButtonFlags() const { return m_nItemFlags; }
+    bool IsStateChecked() const { return bool(m_nItemFlags & SvItemStateFlags::CHECKED); }
+    bool IsStateUnchecked() const { return bool(m_nItemFlags & SvItemStateFlags::UNCHECKED); }
+    bool IsStateTristate() const { return bool(m_nItemFlags & SvItemStateFlags::TRISTATE); }
+    bool IsStateHilighted() const { return bool(m_nItemFlags & SvItemStateFlags::HIGHLIGHTED); }
     void SetStateChecked();
     void SetStateUnchecked();
     void SetStateTristate();
@@ -103,26 +103,26 @@ public:
 
 inline void SvLBoxButton::SetStateChecked()
 {
-    nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
-    nItemFlags |= SvItemStateFlags::CHECKED;
+    m_nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
+    m_nItemFlags |= SvItemStateFlags::CHECKED;
 }
 
 inline void SvLBoxButton::SetStateUnchecked()
 {
-    nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
-    nItemFlags |= SvItemStateFlags::UNCHECKED;
+    m_nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
+    m_nItemFlags |= SvItemStateFlags::UNCHECKED;
 }
 inline void SvLBoxButton::SetStateTristate()
 {
-    nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
-    nItemFlags |= SvItemStateFlags::TRISTATE;
+    m_nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
+    m_nItemFlags |= SvItemStateFlags::TRISTATE;
 }
 inline void SvLBoxButton::SetStateHilighted(bool bHilight)
 {
     if (bHilight)
-        nItemFlags |= SvItemStateFlags::HIGHLIGHTED;
+        m_nItemFlags |= SvItemStateFlags::HIGHLIGHTED;
     else
-        nItemFlags &= ~SvItemStateFlags::HIGHLIGHTED;
+        m_nItemFlags &= ~SvItemStateFlags::HIGHLIGHTED;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
