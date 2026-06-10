@@ -71,15 +71,12 @@ SvBmp SvLBoxButtonData::GetIndex( SvItemStateFlags nItemState )
 const Size & SvLBoxButtonData::GetSize()
 {
     if (!bDataOk)
-        SetWidthAndHeight();
+    {
+        m_aSize = aBmps.at(SvBmp::UNCHECKED).GetSizePixel();
+        bDataOk = true;
+    }
 
     return m_aSize;
-}
-
-void SvLBoxButtonData::SetWidthAndHeight()
-{
-    m_aSize = aBmps.at(SvBmp::UNCHECKED).GetSizePixel();
-    bDataOk = true;
 }
 
 void SvLBoxButtonData::StoreButtonState(SvTreeListEntry* pActEntry, SvLBoxButton* pActBox)

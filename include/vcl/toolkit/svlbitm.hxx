@@ -70,7 +70,6 @@ private:
     SvLBoxButton* m_pBox;
     bool m_bShowRadioButton;
 
-    void                    SetWidthAndHeight();
 public:
                             // include creating default images (CheckBox or RadioButton)
                             SvLBoxButtonData(const Control& rControlForSettings, bool _bRadioBtn);
