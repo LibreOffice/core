@@ -433,7 +433,10 @@ void RtfAttributeOutput::EndParagraphProperties(
     const SwRedlineData* /*pRedlineParagraphMarkerInserted*/)
 {
     const OString aProperties = MoveProperties(StyleDefinition);
-    m_rExport.Strm().WriteOString(aProperties);
+    if (!m_bBufferSectionHeaders)
+        m_rExport.Strm().WriteOString(aProperties);
+    else
+        m_aSectionHeaders.append(aProperties);
 
     ApplyCharFormatItems(rParagraphMarkerProperties);
     m_aParagraphMarkerProperties = MoveProperties(StyleDefinition);
@@ -1463,9 +1466,17 @@ void RtfAttributeOutput::StartTableRow(
         return;
     // Empty the previous row closing buffer before starting the new one,
     // necessary for subtables.
-    m_rExport.Strm().WriteOString(m_aAfterRuns);
+    if (!m_bBufferSectionHeaders)
+    {
+        m_rExport.Strm().WriteOString(m_aAfterRuns);
+        m_rExport.Strm().WriteOString(m_aRowDefs);
+    }
+    else
+    {
+        m_aSectionHeaders.append(m_aAfterRuns);
+        m_aSectionHeaders.append(m_aRowDefs);
+    }
     m_aAfterRuns.setLength(0);
-    m_rExport.Strm().WriteOString(m_aRowDefs);
     m_aRowDefs.setLength(0);
 }
 
