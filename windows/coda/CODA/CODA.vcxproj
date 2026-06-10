@@ -168,11 +168,11 @@
   <ItemDefinitionGroup>
     <PostBuildEvent>
       <Command>
-        copy ..\..\..\coolkitconfig.xcu $(OutDir)..
-        robocopy ..\..\..\browser\dist $(OutDir)..\cool *.* /E /XF debug.html framed.doc.html framed.html load.doc.html multidocs.html tsconfig.tsbuildinfo l10n-all.js wasm.html /XD src
-        xcopy ..\..\..\browser\dist\src\layer\tile\CanvasTileUtils.js $(OutDir)..\cool\src\layer\tile\ /f /y
-        xcopy ..\..\..\browser\dist\src\app\TaskWorker.js $(OutDir)..\cool\src\app\ /f /y
-        xcopy $(LO_PATH) $(OutDir)..\ /s /f /y /exclude:..\xcopy.excludes
+        xcopy ..\..\..\coolkitconfig.xcu $(OutDir)..\ /q /y
+        robocopy ..\..\..\browser\dist $(OutDir)..\cool *.* /E /XF debug.html framed.doc.html framed.html load.doc.html multidocs.html tsconfig.tsbuildinfo l10n-all.js wasm.html /XD src /NFL /NDL /NJH /NJS /NP
+        xcopy ..\..\..\browser\dist\src\layer\tile\CanvasTileUtils.js $(OutDir)..\cool\src\layer\tile\ /q /y
+        xcopy ..\..\..\browser\dist\src\app\TaskWorker.js $(OutDir)..\cool\src\app\ /q /y
+        xcopy $(LO_PATH) $(OutDir)..\ /s /q /y /exclude:..\xcopy.excludes
         del $(OutDir)*.com
         del $(OutDir)..\..\Release\program\gengal.exe
         del $(OutDir)..\..\Release\program\odbcconfig.exe
@@ -285,7 +285,7 @@
         del $(OutDir)..\..\Release\program\xsltdlglo.dll
         del $(OutDir)..\..\Release\program\xsltfilterlo.dll
         del $(OutDir)..\..\Release\program\xstor.dll
-        xcopy ..\..\..\browser\templates $(OutDir)..\templates\ /s /f /y
+        xcopy ..\..\..\browser\templates $(OutDir)..\templates\ /s /q /y
       </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
