@@ -345,6 +345,8 @@ public:
     virtual void LateInitFrom(LateInitParams& rParams, const ::std::vector<SCROW>& pItemData,
                               size_t nPos, ScDPInitState& rInitState) = 0;
 
+    virtual void ResetChildDimension() = 0;
+
     virtual void CheckShowEmpty(bool bShow = false) = 0;
 
     virtual OUString GetName() const = 0;
@@ -537,6 +539,8 @@ public:
                         //! this will be removed!
     const ScDPResultDimension*  GetChildDimension() const   { return pChildDimension.get(); }
     ScDPResultDimension*        GetChildDimension()         { return pChildDimension.get(); }
+
+    void ResetChildDimension();
 
     ScDPDataMember*         GetDataRoot() const             { return pDataRoot.get(); }
 

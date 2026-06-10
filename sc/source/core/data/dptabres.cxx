@@ -1101,7 +1101,7 @@ void ScDPResultMemberFull::InitFrom(const std::vector<ScDPDimension*>& ppDim,
             if (  ppDim[nPos]->getIsDataLayoutDimension() )
             {
                 if ( !pChildDimension )
-                    pChildDimension.reset( new ScDPResultDimension( pResultData ) );
+                    ResetChildDimension();
                 pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState , false );
                 return;
             }
@@ -1117,9 +1117,14 @@ void ScDPResultMemberFull::InitFrom(const std::vector<ScDPDimension*>& ppDim,
 
     if ( bInitChild )
     {
-        pChildDimension.reset( new ScDPResultDimension( pResultData ) );
+        ResetChildDimension();
         pChildDimension->InitFrom(ppDim, ppLev, nPos, rInitState);
     }
+}
+
+void ScDPResultMemberFull::ResetChildDimension()
+{
+    pChildDimension.reset(new ScDPResultDimension(pResultData));
 }
 
 void ScDPResultMemberFull::LateInitFrom(LateInitParams& rParams,
