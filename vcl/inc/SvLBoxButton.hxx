@@ -68,14 +68,14 @@ public:
 class SvLBoxButton final : public SvLBoxItem
 {
     bool m_bIsVis;
-    SvLBoxButtonData* m_pData;
+    SvLBoxButtonData& m_rData;
     SvItemStateFlags m_nItemFlags;
 
     static void ImplAdjustBoxSize(Size& io_rCtrlSize, ControlType i_eType,
                                   vcl::RenderContext const& pRenderContext);
 
 public:
-    SvLBoxButton(SvLBoxButtonData* pBData, bool bIsVis = true);
+    SvLBoxButton(SvLBoxButtonData& rBData, bool bIsVis = true);
     virtual ~SvLBoxButton() override;
     virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
                               SvViewDataItem* pViewData = nullptr) override;

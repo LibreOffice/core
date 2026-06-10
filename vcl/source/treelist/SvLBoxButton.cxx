@@ -128,9 +128,9 @@ void SvLBoxButtonData::SetDefaultImages(const Control& rCtrl)
 
 bool SvLBoxButtonData::IsRadio() const { return m_bShowRadioButton; }
 
-SvLBoxButton::SvLBoxButton(SvLBoxButtonData* pBData, bool bIsVis)
+SvLBoxButton::SvLBoxButton(SvLBoxButtonData& rBData, bool bIsVis)
     : m_bIsVis(bIsVis)
-    , m_pData(pBData)
+    , m_rData(rBData)
     , m_nItemFlags(SvItemStateFlags::NONE)
 {
     SetStateUnchecked();
@@ -146,8 +146,8 @@ void SvLBoxButton::ClickHdl(SvTreeListEntry* pEntry)
         SetStateUnchecked();
     else
         SetStateChecked();
-    m_pData->StoreButtonState(pEntry, this);
-    m_pData->CallLink();
+    m_rData.StoreButtonState(pEntry, this);
+    m_rData.CallLink();
 }
 
 void SvLBoxButton::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
@@ -159,10 +159,10 @@ void SvLBoxButton::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCont
 
     //Native drawing
     bool bNativeOK = false;
-    ControlType eCtrlType = (m_pData->IsRadio()) ? ControlType::Radiobutton : ControlType::Checkbox;
+    ControlType eCtrlType = (m_rData.IsRadio()) ? ControlType::Radiobutton : ControlType::Checkbox;
     if (rRenderContext.IsNativeControlSupported(eCtrlType, ControlPart::Entire))
     {
-        Size aSize = m_pData->GetSize();
+        Size aSize = m_rData.GetSize();
         ImplAdjustBoxSize(aSize, eCtrlType, rRenderContext);
         ImplControlValue aControlValue;
         tools::Rectangle aCtrlRegion(rPos, aSize);
@@ -186,12 +186,12 @@ void SvLBoxButton::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCont
     }
 
     if (!bNativeOK && m_bIsVis)
-        rRenderContext.DrawImage(rPos, m_pData->GetImage(nIndex), nStyle);
+        rRenderContext.DrawImage(rPos, m_rData.GetImage(nIndex), nStyle);
 }
 
 std::unique_ptr<SvLBoxItem> SvLBoxButton::Clone(SvLBoxItem const* pSource) const
 {
-    return std::make_unique<SvLBoxButton>(static_cast<SvLBoxButton const*>(pSource)->m_pData,
+    return std::make_unique<SvLBoxButton>(static_cast<SvLBoxButton const*>(pSource)->m_rData,
                                           false);
 }
 
@@ -226,9 +226,9 @@ void SvLBoxButton::InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
 {
     if (!pViewData)
         pViewData = &rView.GetViewDataItem(pEntry, *this);
-    Size aSize = m_pData->GetSize();
+    Size aSize = m_rData.GetSize();
 
-    ControlType eCtrlType = (m_pData->IsRadio()) ? ControlType::Radiobutton : ControlType::Checkbox;
+    ControlType eCtrlType = (m_rData.IsRadio()) ? ControlType::Radiobutton : ControlType::Checkbox;
     ImplAdjustBoxSize(aSize, eCtrlType, *rView.GetOutDev());
     pViewData->mnWidth = aSize.Width();
     pViewData->mnHeight = aSize.Height();

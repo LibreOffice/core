@@ -3691,8 +3691,8 @@ void SalInstanceTreeView::do_set_toggle(SvTreeListEntry& rEntry, TriState eState
     // if it's the placeholder to allow a blank column, replace it now
     if (rEntry.GetItem(col).GetType() != SvLBoxItemType::Button)
     {
-        SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
-        rEntry.ReplaceItem(std::make_unique<SvLBoxButton>(pData), 0);
+        SvLBoxButtonData& rData = m_bTogglesAsRadio ? m_aRadioButtonData : m_aCheckButtonData;
+        rEntry.ReplaceItem(std::make_unique<SvLBoxButton>(rData), 0);
         update_checkbutton_column_width(rEntry);
     }
     SvLBoxItem& rItem = rEntry.GetItem(col);
@@ -4259,8 +4259,8 @@ void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eStat
 
     if (static_cast<size_t>(col) == rEntry.ItemCount())
     {
-        SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
-        rEntry.AddItem(std::make_unique<SvLBoxButton>(pData));
+        SvLBoxButtonData& rData = m_bTogglesAsRadio ? m_aRadioButtonData : m_aCheckButtonData;
+        rEntry.AddItem(std::make_unique<SvLBoxButton>(rData));
         update_checkbutton_column_width(rEntry);
     }
 

@@ -1793,7 +1793,8 @@ void SvTreeListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& aStr,
 {
     if (m_nTreeFlags & SvTreeFlags::CHKBTN)
     {
-        rEntry.AddItem(std::make_unique<SvLBoxButton>(m_pCheckButtonData));
+        assert(m_pCheckButtonData);
+        rEntry.AddItem(std::make_unique<SvLBoxButton>(*m_pCheckButtonData));
     }
 
     rEntry.AddItem(
