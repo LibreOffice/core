@@ -21,10 +21,8 @@
 
 #include <svtools/valueset.hxx>
 #include <svx/IColorSet.hxx>
-#include <svx/svxdllapi.h>
-#include <set>
 
-class SVXCORE_DLLPUBLIC SvxColorValueSet : public ValueSet, public IColorSet
+class SvxColorValueSet : public ValueSet, public IColorSet
 {
 public:
     SvxColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);

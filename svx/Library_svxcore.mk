@@ -439,7 +439,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/tbxctrls/PaletteManager \
     svx/source/tbxctrls/tbcontrl \
     svx/source/tbxctrls/tbxcolorupdate \
-    svx/source/tbxctrls/SvxColorValueSet \
     svx/source/tbxctrls/StylesPreviewToolBoxControl \
     svx/source/tbxctrls/StylesPreviewWindow \
     svx/source/toolbars/extrusionbar \
