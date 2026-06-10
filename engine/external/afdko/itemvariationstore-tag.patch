@@ -1,0 +1,17 @@
+The type is defined as a class in varsupport.h and forward declared as a
+class in cffread_abs.h. absfont.h forward declared it as a struct, which
+trips -Wmismatched-tags on clang and C4099 on MSVC when both headers are
+pulled into the same translation unit. absfont.h is only ever included by
+C++ sources, so the class keyword is safe here.
+
+--- afdko/c/shared/include/absfont.h
++++ afdko/c/shared/include/absfont.h
+@@ -102,7 +102,7 @@
+ };
+ 
+ /* item variation store  */
+-struct itemVariationStore;
++class itemVariationStore;
+ 
+ /* Top dictionary data. Comments indicate default/initial values. */
+ typedef struct {

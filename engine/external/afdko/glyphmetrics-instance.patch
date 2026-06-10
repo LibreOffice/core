@@ -1,0 +1,11 @@
+--- afdko/c/addfeatures/hotconv/glyphmetrics.cpp
++++ afdko/c/addfeatures/hotconv/glyphmetrics.cpp
+@@ -294,7 +294,7 @@
+ }
+ 
+ void GlyphMetrics::processGlyphs(const std::vector<uint16_t> &gids) {
+-    static abfGlyphCallbacks glyphcb = {
++    abfGlyphCallbacks glyphcb = {
+         (void *)this,
+         NULL,
+         NULL,

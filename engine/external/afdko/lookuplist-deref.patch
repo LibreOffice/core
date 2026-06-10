@@ -1,0 +1,21 @@
+--- afdko/c/addfeatures/hotconv/otl.cpp
++++ afdko/c/addfeatures/hotconv/otl.cpp
+@@ -674,15 +674,15 @@ void OTL::prepLookupList() {
+ 
+     auto prevl = subtables.begin();
+     for (auto sl = prevl + 1; sl <= subtables.end(); sl++) {
+-        auto &slr = *sl;
++        Subtable *slr = sl == subtables.end() ? nullptr : sl->get();
+         auto &prevlr = *prevl;
+-        if (sl == subtables.end() || slr->isRef() || slr->isParam() ||
++        if (slr == nullptr || slr->isRef() || slr->isParam() ||
+             slr->index.lookup != prevlr->index.lookup) {
+             /* Lookup index change */
+             prevlr->span.lookup = sl;
+             prevl = sl;
+         }
+-        if (sl != subtables.end() && (slr->isRef() || slr->isParam()))
++        if (slr != nullptr && (slr->isRef() || slr->isParam()))
+             break;
+     }
+ }

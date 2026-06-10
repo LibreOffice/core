@@ -17,19 +17,26 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,afdko,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,afdko,1))
 
-# mergeFonts_crash.patch upstream attempt as:
-# https://github.com/adobe-type-tools/afdko/pull/1806
+# lookuplist-deref.patch upstream attempt as:
+# https://github.com/adobe-type-tools/afdko/pull/1840
+# glyphmetrics-instance.patch upstream attempt as:
+# https://github.com/adobe-type-tools/afdko/pull/1841
 
 $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
-    external/afdko/extern_tx.patch \
-    external/afdko/extern_tx_shared.patch \
     external/afdko/extern_mergefonts.patch \
-    external/afdko/extern_makeotf.patch \
-    external/afdko/warnings.patch \
-    external/afdko/mergeFonts_crash.patch \
-    external/afdko/noverbose.patch \
+    external/afdko/extern_addfeatures.patch \
+    external/afdko/fatal-callback.patch \
+    external/afdko/glyphmetrics-instance.patch \
+    external/afdko/lookuplist-deref.patch \
+    external/afdko/pastend-iterators.patch \
+    external/afdko/itemvariationstore-tag.patch \
+    external/afdko/sfnt-named-structs.patch \
     external/afdko/antlr4-chrono.patch \
     external/afdko/ubsan.patch.0 \
 ))
+
+# static replacement for the cmake-generated version files
+$(eval $(call gb_UnpackedTarball_add_file,afdko,c/shared/include/afdko_version.h,external/afdko/afdko_version.h))
+$(eval $(call gb_UnpackedTarball_add_file,afdko,c/shared/afdko_version.cpp,external/afdko/afdko_version.cpp))
 
 # vim: set noet sw=4 ts=4:

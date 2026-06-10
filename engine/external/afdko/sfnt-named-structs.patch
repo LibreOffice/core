@@ -1,0 +1,25 @@
+Give these two structs a tag name. C++20 forbids default member
+initializers in an unnamed class that is given a typedef name for linkage
+purposes, which MSVC reports as the hard error C7626. Naming the class
+takes it out of that rule. clang and gcc accept it either way.
+
+--- afdko/c/addfeatures/hotconv/sfnt.cpp
++++ afdko/c/addfeatures/hotconv/sfnt.cpp
+@@ -77,7 +77,7 @@
+ 
+ /* ---------------------------- Table Definition --------------------------- */
+ 
+-typedef struct {
++typedef struct Entry {
+     int32_t tag = 0;
+     uint32_t checksum = 0;
+     uint32_t offset = 0;
+@@ -85,7 +85,7 @@
+ } Entry;
+ #define ENTRY_SIZE (uint32 * 4)
+ 
+-typedef struct {
++typedef struct sfntTbl {
+     Fixed version = 0;
+     uint16_t numTables = 0;
+     uint16_t searchRange = 0;

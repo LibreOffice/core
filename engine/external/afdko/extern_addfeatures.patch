@@ -1,0 +1,80 @@
+--- afdko/c/addfeatures/cb.h
++++ afdko/c/addfeatures/cb.h
+@@ -19,7 +19,8 @@
+ 
+ /* --- Basic functions --- */
+ cbCtx cbNew(const char *progname, const char *indir, const char *outdir,
+-            const char *cmapdir, const char *featdir, dnaCtx mainDnaCtx);
++            const char *cmapdir, const char *featdir, dnaCtx mainDnaCtx,
++            void (*fatal)(void *ctx));
+ void cbConvert(cbCtx h, int flags, const char *clientVers,
+                const char *infile, const char *outfile,
+                const char *featurefile, const char *hcmapfile,
+--- afdko/c/addfeatures/cb.cpp
++++ afdko/c/addfeatures/cb.cpp
+@@ -91,6 +91,7 @@
+     std::shared_ptr<GOADB> goadb;
+     std::shared_ptr<Designspace> ds;
+     std::shared_ptr<slogger> logger;
++    void (*clientFatal)(void *ctx) = NULL; /* Called by myfatal() in place of process exit. Must not return. */
+ };
+ 
+ /* ----------------------------- Error Handling ---------------------------- */
+@@ -98,6 +99,8 @@
+ /* Fatal exception handler */
+ static void myfatal(void *ctx) {
+     cbCtx h = (cbCtx) ctx;
++    if (h->clientFatal != NULL)
++        h->clientFatal(ctx);
+     /*This seems to cause all kinds of crashes on Windows and OSX*/
+     /* hotFree(h->hot.ctx);*/ /* Free library context */
+ 
+@@ -468,9 +471,12 @@
+ 
+ /* Create new callback context */
+ cbCtx cbNew(const char *progname, const char *indir, const char *outdir,
+-            const char *cmapdir, const char *featdir, dnaCtx mainDnaCtx) {
++            const char *cmapdir, const char *featdir, dnaCtx mainDnaCtx,
++            void (*fatal)(void *ctx)) {
+     cbCtx h = new cbCtx_;
+ 
++    h->clientFatal = fatal;
++
+     hotcbInit(h);
+ 
+     stmClear(&h->in);
+@@ -808,3 +814,12 @@
+ 
+     delete h;
+ }
++
++/* Defined in main.cpp upstream, which is not compiled here. */
++extern "C" const char *curdir() {
++    return ".";
++}
++
++extern "C" const char *sep() {
++    return "/";
++}
+--- afdko/c/addfeatures/pstoken/pstoken.c
++++ afdko/c/addfeatures/pstoken/pstoken.c
+@@ -7,7 +7,7 @@
+  */
+ 
+ #include <stdint.h>
+-#include "pstoken.h"
++#include "../include/pstoken.h"
+ 
+ #include <stdarg.h>
+ #include <stdlib.h>
+--- afdko/c/addfeatures/hotconv/map.cpp
++++ afdko/c/addfeatures/hotconv/map.cpp
+@@ -23,7 +23,7 @@
+ #include "otl.h"
+ #include "FeatCtx.h"
+ 
+-#include "pstoken.h"
++#include "../include/pstoken.h"
+ 
+ #define SET_BIT_ARR(a, b) (a[(b) / 32] |= 1UL << (b) % 32)
+ #define TEST_BIT_ARR(a, b) (a[(b) / 32] & 1UL << (b) % 32)

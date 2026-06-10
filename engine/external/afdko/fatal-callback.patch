@@ -1,0 +1,21 @@
+--- afdko/c/shared/include/tx_shared.h
++++ afdko/c/shared/include/tx_shared.h
+@@ -288,6 +288,7 @@
+     int mode;                         /* Current mode */
+     const char *modename;             /* Name of current mode */
+     txExtCtx ext;                     /* Extension context (if any) */
++    void (*fatalCallback)(struct txCtx_ *h); /* Called by fatal() in place of process exit. Must not return. */
+     abfTopDict *top;                  /* Top dictionary */
+     struct {                          /* Source data */
+         int type;                        /* Font technology type */
+--- afdko/c/shared/tx_shared.cpp
++++ afdko/c/shared/tx_shared.cpp
+@@ -33,6 +33,8 @@
+     } else {
+         h->logger->msg(sFATAL, "fatal error");
+     }
++    if (h->fatalCallback != NULL)
++        h->fatalCallback(h);
+     txFree(h);
+     exit(EXIT_FAILURE);
+ }
