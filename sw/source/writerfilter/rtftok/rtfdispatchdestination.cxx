@@ -289,6 +289,15 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         }
                     }
                     m_aSuperBuffer.clear();
+                    // Clearing m_aSuperBuffer discards everything buffered into
+                    // it, including a tracked-change start. The states still
+                    // pointing at it can no longer replay that start, so clear
+                    // StartedTrackchange on them to drop the matching end.
+                    for (std::size_t i = 0; i < m_aStates.size(); ++i)
+                    {
+                        if (m_aStates[i].getCurrentBuffer() == &m_aSuperBuffer)
+                            m_aStates[i].setStartedTrackchange(false);
+                    }
                     m_aStates.top().setDestination(Destination::FOOTNOTE);
                     Mapper().startCharacterGroup();
                     runProps();
