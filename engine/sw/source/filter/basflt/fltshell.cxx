@@ -612,14 +612,20 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 {
                     SwPostItField const*const pPostIt(
                         dynamic_cast<SwPostItField const*>(pField->GetFormatField().GetField()));
-                    if (pPostIt)
+                    if (pPostIt && !pPostIt->GetName().isEmpty())
                     {
-                        assert(pPostIt->GetName().isEmpty());
-
+                        // A mark ending at the same position already claimed
+                        // this field, and AnnotationMark::InitDoc binds by end
+                        // position, so a second mark would alias the name of
+                        // the first. Keep this annotation as a point comment.
+                        SAL_WARN("sw", "RES_FLTR_ANNOTATIONMARK: field already has an annotation mark");
+                    }
+                    else if (pPostIt)
+                    {
                         if (!aRegion.HasMark())
                         {
                             // Annotation range was found in the file, but start/end is the same,
-                            // pointing after the postit placeholder (see assert above).
+                            // pointing after the postit placeholder.
                             // Adjust the start of the range to actually cover the comment, similar
                             // to what the UI and the UNO API does.
                             aRegion.SetMark();
