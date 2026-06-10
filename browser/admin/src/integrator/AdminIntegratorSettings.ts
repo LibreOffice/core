@@ -1246,8 +1246,23 @@ class SettingIframe {
 			return;
 		}
 
+		const defaultZoomLabel: HTMLHeadingElement | null = document.querySelector(
+			'#common-defaultZoom > .view-setting-small-label',
+		);
+		if (!defaultZoomLabel) {
+			console.error(
+				'#common-defaultZoom > .view-setting-small-label does not exist!',
+			);
+			return;
+		}
+
 		const updateDropdownState = () => {
 			defaultZoomDropdown.disabled = smartZoomCheckbox.checked;
+			if (smartZoomCheckbox.checked) {
+				defaultZoomLabel.classList.add('disabled-label');
+			} else {
+				defaultZoomLabel.classList.remove('disabled-label');
+			}
 		};
 
 		smartZoomCheckbox.addEventListener('change', () => {

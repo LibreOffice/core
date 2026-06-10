@@ -867,6 +867,11 @@ ul {
     margin-right: 10px;
 }
 
+.view-setting-small-label.disabled-label {
+  opacity: 0.5;
+  filter: saturate(0.7);
+}
+
 .signature-textarea {
 	width: 100%;
 	max-width: 80vw;
