@@ -7,16 +7,25 @@
     <property name="can-focus">False</property>
     <property name="icon-name">cmd/sc_square_unfilled.png</property>
   </object>
+  <object class="GtkTreeStore" id="coloriconview_model">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="TabColorDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
     <property name="modal">True</property>
-    <property name="default-width">0</property>
-    <property name="default-height">0</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can-focus">False</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
@@ -125,26 +134,25 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="hscrollbar-policy">never</property>
-            <property name="vscrollbar-policy">never</property>
             <property name="shadow-type">in</property>
+            <property name="propagate-natural-width">True</property>
+            <property name="propagate-natural-height">True</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkIconView" id="coloriconview">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <object class="GtkDrawingArea" id="colorset">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                  </object>
-                </child>
+                <property name="can-focus">True</property>
+                <property name="margin">6</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">coloriconview_model</property>
+                <property name="columns">12</property>
+                <property name="pixbuf-column">0</property>
+                <property name="tooltip-column">2</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">2</property>
           </packing>

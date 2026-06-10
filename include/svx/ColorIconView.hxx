@@ -19,6 +19,7 @@ class VirtualDevice;
 namespace weld
 {
 class IconView;
+class ItemView;
 class TreeIter;
 }
 
@@ -27,8 +28,10 @@ class SVXCORE_DLLPUBLIC ColorIconView : public IColorSet
     std::unique_ptr<weld::IconView> m_pIconView;
 
     Link<const Color&, void> m_aColorActivatedHdl;
+    Link<const ColorIconView&, void> m_aSelectionChangedHdl;
 
     DECL_LINK(ItemActivatedHdl, const weld::TreeIter&, bool);
+    DECL_LINK(SelectionChangedHdl, weld::ItemView&, void);
 
 public:
     ColorIconView(std::unique_ptr<weld::IconView> pIconView);
@@ -56,6 +59,11 @@ public:
     void setColorActivatedHdl(const Link<const Color&, void>& rLink)
     {
         m_aColorActivatedHdl = rLink;
+    }
+
+    void setSelectionChangedHdl(const Link<const ColorIconView&, void>& rLink)
+    {
+        m_aSelectionChangedHdl = rLink;
     }
 
 private:

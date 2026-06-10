@@ -28,6 +28,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/IconView.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -36,30 +37,17 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle)
                               u"TabColorDialog"_ustr)
     , m_xSelectPalette(m_xBuilder->weld_combo_box(u"paletteselector"_ustr))
     , m_xDefaultButton(m_xBuilder->weld_toggle_button(u"defaultbutton"_ustr))
-    , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window(u"colorsetwin"_ustr, true)))
-    , m_xTabBgColorSetWin(new weld::CustomWeld(*m_xBuilder, u"colorset"_ustr, *m_xTabBgColorSet))
+    , m_aTabBgColorIconView(m_xBuilder->weld_icon_view(u"coloriconview"_ustr))
     , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
 {
-    m_xTabBgColorSet->SetDialog(this);
-    m_xTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
-
     m_xDialog->set_title(rTitle);
-
-    const WinBits nBits(m_xTabBgColorSet->GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_3DLOOK);
-    m_xTabBgColorSet->SetStyle(nBits);
-
-    const sal_uInt32 nColCount = SvxColorValueSet::getColumnCount();
-    const sal_uInt32 nRowCount(10);
-    const sal_uInt32 nLength = SvxColorValueSet::getEntryEdgeLength();
-    Size aSize(m_xTabBgColorSet->CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
-    m_xTabBgColorSetWin->set_size_request(aSize.Width() + 8, aSize.Height() + 8);
 
     FillPaletteLB();
 
     m_xSelectPalette->connect_changed(LINK(this, ScTabBgColorDlg, SelectPaletteLBHdl));
     m_xDefaultButton->connect_toggled(LINK(this, ScTabBgColorDlg, DefaultButtonToggled));
-    m_xTabBgColorSet->SetSelectHdl(LINK(this, ScTabBgColorDlg, TabBgColorSelectHdl));
-    m_xTabBgColorSet->SetDoubleClickHdl(LINK(this, ScTabBgColorDlg, TabBgColorDblClickHdl_Impl));
+    m_aTabBgColorIconView.setSelectionChangedHdl(LINK(this, ScTabBgColorDlg, TabBgColorSelectHdl));
+    m_aTabBgColorIconView.setColorActivatedHdl(LINK(this, ScTabBgColorDlg, TabBgColorActivatedHdl));
     m_xBtnOk->connect_clicked(LINK(this, ScTabBgColorDlg, TabBgColorOKHdl_Impl));
 }
 
@@ -72,8 +60,8 @@ Color ScTabBgColorDlg::GetSelectedColor() const
     if (m_xDefaultButton->get_active())
         return COL_AUTO;
 
-    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? (m_xTabBgColorSet->GetItemColor(nItemId)) : COL_AUTO;
+    const int nIndex = m_aTabBgColorIconView.get_selected_index();
+    Color aColor = nIndex >= 0 ? (m_aTabBgColorIconView.getColor(nIndex)) : COL_AUTO;
     return aColor;
 }
 
@@ -95,14 +83,12 @@ void ScTabBgColorDlg::FillPaletteLB()
 
 IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
 {
-    m_xTabBgColorSet->Clear();
+    m_aTabBgColorIconView.clear();
     sal_Int32 nPos = m_xSelectPalette->get_active();
     m_aPaletteManager.SetPalette( nPos );
-    m_aPaletteManager.ReloadColorSet(*m_xTabBgColorSet);
-    m_xTabBgColorSet->Resize();
+    m_aPaletteManager.ReloadColorSet(m_aTabBgColorIconView);
     m_xDefaultButton->set_active(true);
-    m_xTabBgColorSet->SetNoSelection();
-    m_xTabBgColorSet->SetCursor(nullptr);
+    m_aTabBgColorIconView.unselect_all();
 }
 
 IMPL_LINK_NOARG(ScTabBgColorDlg, DefaultButtonToggled, weld::Toggleable&, void)
@@ -115,17 +101,16 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, DefaultButtonToggled, weld::Toggleable&, void)
         return;
     }
 
-    m_xTabBgColorSet->SetNoSelection();
-    m_xTabBgColorSet->SetCursor(nullptr);
+    m_aTabBgColorIconView.unselect_all();
 }
 
 //    Handler, called when color selection is changed
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorSelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorSelectHdl, const ColorIconView&, void)
 {
     m_xDefaultButton->set_active(false);
 }
 
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorActivatedHdl, const Color&, void)
 {
     m_xDialog->response(RET_OK);
 }
@@ -134,31 +119,6 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
 {
     m_xDialog->response(RET_OK);
-}
-
-ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
-    : SvxColorValueSet(std::move(pWindow))
-    , m_pTabBgColorDlg(nullptr)
-{
-}
-
-ScTabBgColorDlg::ScTabBgColorValueSet::~ScTabBgColorValueSet()
-{
-}
-
-bool ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
-{
-    switch ( rKEvt.GetKeyCode().GetCode() )
-    {
-        case KEY_SPACE:
-        case KEY_RETURN:
-        {
-            m_pTabBgColorDlg->response(RET_OK);
-            return true;
-        }
-        break;
-    }
-    return SvxColorValueSet::KeyInput(rKEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
