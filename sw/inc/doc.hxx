@@ -323,6 +323,7 @@ private:
     bool mbInWriterfilterImport  : 1;    //< TRUE: writerfilter import (DOCX,RTF)
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
+    bool mbHasFillBitmapLinks    : 1;    //< TRUE: the fill-bitmap link tracker has registered links.
     bool mbIsAutoFormatRedline   : 1;    //< TRUE: Redlines are recorded by Autoformat.
     bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of View
                                                 notification of OLE-Objects PrtOLENotify() is required. */
@@ -1407,6 +1408,10 @@ public:
     // Query / set flag indicating if document is loaded asynchronously at this moment.
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
     void SetInLoadAsynchron( bool bFlag )       { mbInLoadAsynchron = bFlag; }
+
+    // True while the fill-bitmap link tracker holds at least one link.
+    bool HasFillBitmapLinks() const            { return mbHasFillBitmapLinks; }
+    void SetHasFillBitmapLinks( bool bFlag )    { mbHasFillBitmapLinks = bFlag; }
 
     // For Drag&Move: (e.g. allow "moving" of RefMarks)
     bool IsCopyIsMove() const              { return mbCopyIsMove; }
