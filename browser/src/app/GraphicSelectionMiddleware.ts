@@ -102,14 +102,6 @@ class GraphicSelection {
 		var topLeft = new cool.Point(this.rectangle.pX1, this.rectangle.pY1);
 		var bottomRight = new cool.Point(this.rectangle.pX2, this.rectangle.pY2);
 
-		if (app.map._docLayer.isCalcRTL()) {
-			// Dark overlays (like any other overlay) need regular document coordinates.
-			// But in calc-rtl mode, charts (like shapes) have negative x document coordinate
-			// internal representation.
-			topLeft.x = Math.abs(topLeft.x);
-			bottomRight.x = Math.abs(bottomRight.x);
-		}
-
 		var bounds = new cool.Bounds(topLeft, bottomRight);
 
 		app.map._docLayer._oleCSelections.setPointSet(CPointSet.fromBounds(bounds));
@@ -128,7 +120,6 @@ class GraphicSelection {
 	}
 
 	static extractAndSetGraphicSelection(messageJSON: any) {
-		var signX = app.map._docLayer.isCalcRTL() ? -1 : 1;
 		var hasExtraInfo = messageJSON.length > 5;
 		var hasGridOffset = false;
 		var extraInfo = null;
@@ -136,19 +127,21 @@ class GraphicSelection {
 			extraInfo = messageJSON[5];
 			if (extraInfo.gridOffsetX || extraInfo.gridOffsetY) {
 				app.map._docLayer._shapeGridOffset = new cool.SimplePoint(
-					signX * extraInfo.gridOffsetX,
+					extraInfo.gridOffsetX,
 					extraInfo.gridOffsetY,
 				);
 				hasGridOffset = true;
 			}
 		}
 
-		// Calc RTL: Negate positive X coordinates from core if grid offset is available.
-		signX = hasGridOffset && app.map._docLayer.isCalcRTL() ? -1 : 1;
+		const rawWidth = Math.abs(messageJSON[2]);
+		const rectX =
+			messageJSON[0] < 0 ? Math.abs(messageJSON[0]) - rawWidth : messageJSON[0];
+
 		this.rectangle = new cool.SimpleRectangle(
-			signX * messageJSON[0],
+			rectX,
 			messageJSON[1],
-			signX * messageJSON[2],
+			rawWidth,
 			messageJSON[3],
 		);
 

@@ -1012,8 +1012,7 @@ export class TilesSection extends CanvasSectionObject {
 		// position in lockstep with the tiles. Skip for Calc: its sections are
 		// hidden during zoom, and mutating the globals there corrupts the
 		// pixel-cached Calc geometry (cell cursor, shape frame).
-		if (freeDocRange && tsManager._zoomBaseTwipsToPixels &&
-			app.map.getDocType() !== 'spreadsheet') {
+		if (freeDocRange && tsManager._zoomBaseTwipsToPixels) {
 			const baseTwipsToPixels = tsManager._zoomBaseTwipsToPixels;
 			const basePixelsToTwips = 1 / baseTwipsToPixels;
 

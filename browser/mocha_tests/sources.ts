@@ -32,6 +32,7 @@
 /// <reference path="../src/app/ViewLayout.ts" />
 /// <reference path="../src/app/ViewLayoutNewBase.ts" />
 /// <reference path="../src/app/ViewLayoutWriter.ts" />
+/// <reference path="../src/app/ViewLayoutCalc.ts" />
 /// <reference path="../src/app/ViewLayoutMultiPage.ts" />
 /// <reference path="../src/app/ViewLayoutFileBased.ts" />
 /// <reference path="../src/app/DocumentBase.ts" />

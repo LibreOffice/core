@@ -914,6 +914,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			// Force update of the splitter lines.
 			this.setSplitPosFromCell(true);
 		}
+
+		var splitPos = spContext.getSplitPos();
+		app.calc.splitCoordinate.pX = Math.round(splitPos.x * app.dpiScale);
+		app.calc.splitCoordinate.pY = Math.round(splitPos.y * app.dpiScale);
 	},
 
 	_onRowColSelCount: function (state) {

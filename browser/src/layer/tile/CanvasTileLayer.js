@@ -902,7 +902,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 			// update tiles and selection because mode could be changed
 			TileManager.update();
-			app.definitions.otherViewGraphicSelectionSection.updateVisibilities();
+			OtherViewGraphicSelectionSection.updateVisibilities();
 			TextCursorSection.updateVisibilities();
 		}
 		else if (textMsg.startsWith('partstatus:')) {
@@ -1728,7 +1728,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		var strTwips = obj.selection.match(/\d+/g);
 
-		app.definitions.otherViewGraphicSelectionSection.addOrUpdateGraphicSelectionIndicator(viewId, strTwips, parseInt(obj.part), obj.mode !== undefined ? parseInt(obj.mode): 0);
+		OtherViewGraphicSelectionSection.addOrUpdateGraphicSelectionIndicator(viewId, strTwips, parseInt(obj.part), obj.mode !== undefined ? parseInt(obj.mode): 0);
 
 		if (app.getFollowedViewId() === viewId && app.isFollowingUser()) {
 			if (this.isImpress() || this.isDraw() || this.isWriter()) {
@@ -2077,7 +2077,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		TextCursorSection.removeView(viewId);
 
 		OtherViewCellCursorSection.removeView(viewId);
-		app.definitions.otherViewGraphicSelectionSection.removeView(viewId);
+		OtherViewGraphicSelectionSection.removeView(viewId);
 		this._map.removeView(viewId);
 	},
 
@@ -3584,14 +3584,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return this.sheetGeometry.getTileTwipsSheetAreaFromPrint(rectangle);
 	},
 
-	_convertCalcTileTwips: function (point, offset) {
-		if (!this.options.printTwipsMsgsEnabled || !this.sheetGeometry)
-			return point;
-		var newPoint = new cool.Point(parseInt(point.x), parseInt(point.y));
-		var _offset = offset ? new cool.Point(parseInt(offset.x), parseInt(offset.y)) : new cool.Point(this._shapeGridOffset.x, this._shapeGridOffset.y);
-		return newPoint.add(_offset);
-	},
-
 	_getEditCursorRectangle: function (msgObj) {
 
 		if (typeof msgObj !== 'object' || !Object.prototype.hasOwnProperty.call(msgObj,'rectangle')) {
@@ -4380,11 +4372,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	isLayoutRTL: function () {
-		return !!this._layoutIsRTL;
+		return !!(this.isCalc() && app.calc && app.calc.isRTL && app.calc.isRTL());
 	},
 
 	isCalcRTL: function () {
-		return this.isCalc() && this.isLayoutRTL();
+		return this.isLayoutRTL();
 	}
 
 });

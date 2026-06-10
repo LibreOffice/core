@@ -1102,23 +1102,7 @@ class CanvasSectionContainer {
 
 	private getMyTopLeftForDocumentObject(section: CanvasSectionObject): number[] {
 		if (this.documentAnchor === null) return;
-
-		if (app.map._docLayer._docType === 'spreadsheet') {
-			return [
-				this.documentAnchor[0] +
-					section.position[0] -
-					(app.isXOrdinateInFrozenPane(section.position[0])
-						? 0
-						: app.activeDocument.activeLayout.viewedRectangle.pX1),
-				this.documentAnchor[1] +
-					section.position[1] -
-					(app.isYOrdinateInFrozenPane(section.position[1])
-						? 0
-						: app.activeDocument.activeLayout.viewedRectangle.pY1),
-			];
-		}
-		else
-			return [section.documentPosition.vX, section.documentPosition.vY];
+		return [section.documentPosition.vX, section.documentPosition.vY];
 	}
 
 	// Called when document position is changed.
@@ -1912,12 +1896,14 @@ class CanvasSectionContainer {
 	private drawSectionBorders () {
 		this.context.lineWidth = 2 * app.dpiScale;
 		this.context.strokeStyle = 'blue';
+
 		for (var i: number = 0; i < this.sections.length; i++) {
 			var section = this.sections[i];
+			const multiplier = section.documentObject && app.map._docLayer.isCalcRTL() ? -1 : 1;
 
 			if (section.isLocated && section.showSection && (!section.documentObject || section.isVisible)) {
 				var xStart = section.myTopLeft[0];
-				var xEnd = xStart + section.size[0];
+				var xEnd = xStart + section.size[0] * multiplier;
 
 				var yStart = section.myTopLeft[1];
 				var yEnd = yStart + section.size[1];
@@ -1953,13 +1939,7 @@ class CanvasSectionContainer {
 	    // cleared, so skip document sections to avoid stacking on the last frame.
 	    if (section.documentObject && this.zoomChanged && !this.inZoomAnimation)
 	        return false;
-	    // Calc document sections that paint via the container-drawn
-	    // backgroundColor/borderColor (autofill marker, math-object border) can't
-	    // be hidden by an onDraw guard, so skip them during a Calc zoom.
-	    if (section.documentObject && this.inZoomAnimation &&
-	        app.map.getDocType() === 'spreadsheet' &&
-	        (section.backgroundColor || section.borderColor))
-	        return false;
+
 	    return section.isLocated && section.showSection && (!section.documentObject || section.isVisible);
 	}
 
@@ -1980,28 +1960,29 @@ class CanvasSectionContainer {
 
 		this.context.font = String(20 * app.dpiScale) + 'px Verdana';
 		for (var i: number = 0; i < this.sections.length; i++) {
-			if (this.shouldDrawSection(this.sections[i])) {
-				// Use getDrawTopLeft (not the cached myTopLeft) so non-Calc
-				// document objects follow a zoom animation via their live
-				// documentPosition.vX/vY. Equal to myTopLeft outside zoom.
-				var drawTopLeft = this.sections[i].getDrawTopLeft();
-				this.context.translate(drawTopLeft[0], drawTopLeft[1]);
-				if (this.sections[i].backgroundColor) {
-					this.context.globalAlpha = this.sections[i].backgroundOpacity;
-					this.context.fillStyle = this.sections[i].backgroundColor;
-					this.context.fillRect(0, 0, this.sections[i].size[0], this.sections[i].size[1]);
+			const section = this.sections[i];
+			if (this.shouldDrawSection(section)) {
+				if (section.backgroundColor) {
+					this.context.globalAlpha = section.backgroundOpacity;
+					this.context.fillStyle = section.backgroundColor;
+
+					if (section.documentObject) section.drawViewRectangle(section.boundingRectangle, true);
+					else this.context.fillRect(section.myTopLeft[0], section.myTopLeft[1], section.size[0], section.size[1]);
+
 					this.context.globalAlpha = 1;
 				}
 
-				this.sections[i].onDraw(frameCount, elapsedTime);
-				if (this.sections[i].borderColor) { // If section's border is set, draw its borders after section's "onDraw" function is called.
-					var offset = this.sections[i].getLineOffset();
-					this.context.lineWidth = this.sections[i].getLineWidth();
-					this.context.strokeStyle = this.sections[i].borderColor;
-					this.context.strokeRect(offset, offset, this.sections[i].size[0], this.sections[i].size[1]);
+				this.context.translate(section.myTopLeft[0], section.myTopLeft[1]);
+
+				section.onDraw(frameCount, elapsedTime);
+				if (section.borderColor) { // If section's border is set, draw its borders after section's "onDraw" function is called.
+					var offset = section.getLineOffset();
+					this.context.lineWidth = section.getLineWidth();
+					this.context.strokeStyle = section.borderColor;
+					this.context.strokeRect(offset, offset, section.size[0], section.size[1]);
 				}
 
-				this.context.translate(-drawTopLeft[0], -drawTopLeft[1]);
+				this.context.translate(-section.myTopLeft[0], -section.myTopLeft[1]);
 			}
 		}
 

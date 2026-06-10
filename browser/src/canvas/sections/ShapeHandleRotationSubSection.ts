@@ -64,12 +64,11 @@ class ShapeHandleRotationSubSection extends CanvasSectionObject {
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
-		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
+		const addition = (this.documentObject === true && app.map._docLayer.isCalcRTL()) ? -this.size[0] : 0;
 		this.context.fillStyle = 'white';
 		this.context.strokeStyle = 'black';
 		this.context.beginPath();
-		this.context.arc(this.size[0] * 0.5, this.size[1] * 0.5, this.size[0] * 0.5, 0, Math.PI * 2);
+		this.context.arc(this.size[0] * 0.5 + addition, this.size[1] * 0.5, this.size[0] * 0.5, 0, Math.PI * 2);
 		this.context.closePath();
 		this.context.fill();
 		this.context.stroke();

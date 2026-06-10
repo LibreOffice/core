@@ -51,15 +51,6 @@ class TextSelectionSection extends CanvasSectionObject {
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
-		// In Calc this section also draws the cell-selection area. Calc can't
-		// follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-		// Writer/Impress text selection keeps drawing (it follows via vX/vY).
-		if (
-			app.map.getDocType() === 'spreadsheet' &&
-			this.containerObject.isInZoomAnimation()
-		)
-			return;
-
 		Util.ensureValue(app.activeDocument);
 		Util.ensureValue(app.calc.splitCoordinate);
 
@@ -71,27 +62,11 @@ class TextSelectionSection extends CanvasSectionObject {
 		)
 			return;
 
-		// We will use vX and vY. Thus, we need to set the pen position to canvas's
-		// origin. Cancel the same top-left the container translated by
-		// (getDrawTopLeft, which tracks the zoom frame for non-Calc).
-		const drawTopLeft = this.getDrawTopLeft();
-		this.context.translate(-drawTopLeft[0], -drawTopLeft[1]);
+		this.context.translate(-this.myTopLeft[0], -this.myTopLeft[1]);
 
 		this.context.globalAlpha = 0.25;
 		this.context.strokeStyle = this.color;
 		this.context.fillStyle = this.color;
-
-		// In Calc RTL, polygons come from core in LTR document coords; mirror
-		// each x around the tile section's right edge so the rectangle lands
-		// on the visible cells that the user actually selected.
-		const mirrorX = app.calc.isRTL();
-		const mirrorAxis = mirrorX
-			? 2 * app.sectionContainer.getDocumentAnchor()[0] +
-				app.sectionContainer.getDocumentAnchorSection().size[0]
-			: 0;
-		const toCanvasX = (vX: number) => (mirrorX ? mirrorAxis - vX : vX);
-
-		const isCalc = app.map._docLayer.isCalc();
 
 		for (let i = 0; i < this.polygons.length; i++) {
 			const polygon = this.polygons[i];
@@ -101,30 +76,8 @@ class TextSelectionSection extends CanvasSectionObject {
 			for (let j = 0; j < polygon.length; j++) {
 				const point = polygon[j].clone();
 
-				if (isCalc) {
-					if (point.x < app.calc.splitCoordinate.x)
-						point.x += app.activeDocument.activeLayout.viewedRectangle.x1;
-					else if (
-						point.x - app.activeDocument.activeLayout.viewedRectangle.x1 <
-						app.calc.splitCoordinate.x
-					)
-						point.x =
-							app.calc.splitCoordinate.x +
-							app.activeDocument.activeLayout.viewedRectangle.x1;
-
-					if (point.y < app.calc.splitCoordinate.y)
-						point.y += app.activeDocument.activeLayout.viewedRectangle.y1;
-					else if (
-						point.y - app.activeDocument.activeLayout.viewedRectangle.y1 <
-						app.calc.splitCoordinate.y
-					)
-						point.y =
-							app.calc.splitCoordinate.y +
-							app.activeDocument.activeLayout.viewedRectangle.y1;
-				}
-
-				if (j === 0) this.context.moveTo(toCanvasX(point.vX), point.vY);
-				else this.context.lineTo(toCanvasX(point.vX), point.vY);
+				if (j === 0) this.context.moveTo(point.vX, point.vY);
+				else this.context.lineTo(point.vX, point.vY);
 			}
 
 			this.context.closePath();
@@ -135,6 +88,6 @@ class TextSelectionSection extends CanvasSectionObject {
 		this.context.globalAlpha = 1.0;
 
 		// We are done. Set the pen back to its initial position. This is needed or all other sections can draw at unexpected coordinates.
-		this.context.translate(drawTopLeft[0], drawTopLeft[1]);
+		this.context.translate(this.myTopLeft[0], this.myTopLeft[1]);
 	}
 }

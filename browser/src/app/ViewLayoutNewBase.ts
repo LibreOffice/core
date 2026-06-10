@@ -41,12 +41,8 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 			this.viewedRectangle.height;
 
 		app.socket.sendMessage(visibleAreaCommand);
-		if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar(); // hide context toolbar when scroll/window resize etc...
 
-		return new cool.Bounds(
-			new cool.Point(this.viewedRectangle.pX1, this.viewedRectangle.pY1),
-			new cool.Point(this.viewedRectangle.pX2, this.viewedRectangle.pY2),
-		);
+		if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar(); // hide context toolbar when scroll/window resize etc...
 	}
 
 	public refreshScrollProperties(): any {

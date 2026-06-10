@@ -857,23 +857,35 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		}
 
 		const documentAnchor = app.sectionContainer.getDocumentAnchor();
+		const layout = app.activeDocument.activeLayout;
+		const isRTL = app.map._docLayer.isCalcRTL();
 
-		if (!app.isXOrdinateInFrozenPane(cellRectangle.pX1))
-			cellRectangle.pX1 += documentAnchor[0] - app.activeDocument.activeLayout.viewedRectangle.pX1;
-		else
-			cellRectangle.pX1 += documentAnchor[0];
+		const trailingPoint = new cool.SimplePoint(cellRectangle.x2, cellRectangle.y2);
 
-		if (!app.isYOrdinateInFrozenPane(cellRectangle.pY1))
-			cellRectangle.pY1 += documentAnchor[1] - app.activeDocument.activeLayout.viewedRectangle.pY1;
-		else
-			cellRectangle.pY1 += documentAnchor[1];
+		let canvasTrailX;
+		if (app.isXOrdinateInFrozenPane(cellRectangle.pX1)) {
+			canvasTrailX = isRTL
+				? documentAnchor[0] + app.sectionContainer.getDocumentAnchorSection().size[0] - trailingPoint.pX
+				: trailingPoint.pX + documentAnchor[0];
+		} else {
+			canvasTrailX = layout.documentToViewX(trailingPoint);
+		}
+
+		let canvasTrailY;
+		if (app.isYOrdinateInFrozenPane(cellRectangle.pY1)) {
+			canvasTrailY = trailingPoint.pY + documentAnchor[1];
+		} else {
+			canvasTrailY = layout.documentToViewY(trailingPoint);
+		}
 
 		app.calc.autoFilterCell = null; // Set to null after using to ensure it doesn't confuse consequent calls.
 		app.calc.pivotTableFilterCell = null;
 
 		const canvasEl = this.map._docLayer._canvas.getBoundingClientRect();
-		instance.posy = cellRectangle.cY2 + canvasEl.top;
-		instance.posx =  cellRectangle.cX2 + canvasEl.left - instance.container.offsetWidth;
+		instance.posy = canvasTrailY / app.dpiScale + canvasEl.top;
+		instance.posx = canvasTrailX / app.dpiScale + canvasEl.left;
+		if (!isRTL)
+			instance.posx -= instance.container.offsetWidth;
 
 		this.updateAutoPopPosition(instance.container, instance.posx, instance.posy);
 	},

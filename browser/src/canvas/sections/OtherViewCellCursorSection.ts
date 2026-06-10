@@ -41,21 +41,16 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     }
 
     onDraw(frameCount?: number, elapsedTime?: number): void {
-        // Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-        if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
-        if (app.map._docLayer._isZooming)
-            return;
-
         this.adjustPopUpPosition();
 
-        const tempSizePos = CellCursorSection.adjustSizePos([this.position[0], this.position[1], this.size[0], this.size[1]]);
-
-        const x: number = (tempSizePos[0] - this.position[0]);
-        const y: number = (tempSizePos[1] - this.position[1]);
-
+        this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
         this.context.strokeStyle = this.sectionProperties.color;
         this.context.lineWidth = 2;
-        this.context.strokeRect(x - 0.5, y - 0.5, tempSizePos[2], tempSizePos[3]);
+
+        this.drawViewRectangle(this.boundingRectangle);
+
+        this.context.restore();
     }
 
     checkMyVisibility() {

@@ -21,8 +21,9 @@ class CanvasSectionObject {
 	borderColor: string = null; // Default is null (no borders).
 	boundToSection: string = null;
 	anchor: Array<string> | Array<Array<string>> = [];
-	documentObject: boolean; // If true, the section is a document object.
+	documentObject: boolean = false; // If true, the section is a document object.
 	documentPosition: cool.SimplePoint = new cool.SimplePoint(0, 0); // Used with document objects.
+	boundingRectangle: cool.SimpleRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
 	// When section is a document object, its position should be the real position inside the document, in core pixels.
 	isVisible: boolean = false; // Is section visible on the viewed area of the document? This property is valid for document objects. This is managed by the section container.
 	showSection: boolean = true; // Show / hide section.
@@ -45,8 +46,10 @@ class CanvasSectionObject {
 	constructor(name: string) {
 		this.name = name;
 
-		if (this.documentObject)
+		if (this.documentObject) {
 			this.documentPosition = cool.SimplePoint.fromCorePixels([...this.position]);
+			this.boundingRectangle = cool.SimpleRectangle.fromCorePixels([...this.position, ...this.size]);
+		}
 	}
 
 	onInitialize(): void { return; }
@@ -171,32 +174,10 @@ class CanvasSectionObject {
 		this.position[0] = x;
 		this.position[1] = y;
 		this.documentPosition = cool.SimplePoint.fromCorePixels([x, y]);
+		this.boundingRectangle = cool.SimpleRectangle.fromCorePixels([...[x, y], ...this.size]);
 
-		// myTopLeft calculation. Keep Calc separate for now, until we have a ViewLayout class for Calc.
-		if (app.map.getDocType() === 'spreadsheet') {
-			let sectionXcoord = x;
-
-			if (this.isCalcRTL()) {
-				// the document coordinates are not always in sync(fixing that is non-trivial!), so use the latest from map.
-				sectionXcoord = app.sectionContainer.getWidth() - sectionXcoord - this.size[0];
-			}
-
-			const positionAddition = app.activeDocument.activeLayout.viewedRectangle.clone();
-			const documentAnchor = this.containerObject.getDocumentAnchor();
-
-			if (app.isXOrdinateInFrozenPane(sectionXcoord))
-				positionAddition.pX1 = 0;
-
-			if (app.isYOrdinateInFrozenPane(y))
-				positionAddition.pY1 = 0;
-
-			this.myTopLeft[0] = documentAnchor[0] + sectionXcoord - positionAddition.pX1;
-			this.myTopLeft[1] = documentAnchor[1] + y - positionAddition.pY1;
-		}
-		else {
-			this.myTopLeft[0] = this.documentPosition.vX;
-			this.myTopLeft[1] = this.documentPosition.vY;
-		}
+		this.myTopLeft[0] = this.documentPosition.vX;
+		this.myTopLeft[1] = this.documentPosition.vY;
 
 		// Visibility check.
 		const isVisible = this.containerObject.isDocumentObjectVisible(this);
@@ -209,27 +190,19 @@ class CanvasSectionObject {
 			this.containerObject.createUpdateSingleDivElement(this);
 	}
 
-	// Top-left used to position this section's drawing. Equals the cached
-	// myTopLeft, except for non-Calc document objects it is recomputed live from
-	// documentPosition.vX/vY so the section follows a zoom animation (Calc keeps
-	// myTopLeft: its frozen-pane/RTL mapping lives in setPosition).
-	getDrawTopLeft(): number[] {
-		if (this.documentObject && this.documentPosition &&
-			app.map.getDocType() !== 'spreadsheet')
-			return [this.documentPosition.vX, this.documentPosition.vY];
-		return this.myTopLeft;
-	}
-
 	/*
 		Allow locally to influence if this object is hit by the given point.
 		This can be used e.g. to have CanvasSectionObjects with 'holes',
 		e.g. a frame around something and you only want the frame to be hittable
 	*/
 	isHit(point: number[]): boolean {
+		const addition = (this.documentObject === true && app.map._docLayer.isCalcRTL()) ? -this.size[0] : 0;
+
 		// return result of inside local range (position, size) check
 		return (
-			(point[0] >= this.myTopLeft[0] && point[0] <= this.myTopLeft[0] + this.size[0]) &&
-			(point[1] >= this.myTopLeft[1] && point[1] <= this.myTopLeft[1] + this.size[1]))
+			(point[0] >= this.myTopLeft[0] + addition && point[0] <= this.myTopLeft[0] + addition + this.size[0]) &&
+			(point[1] >= this.myTopLeft[1] && point[1] <= this.myTopLeft[1] + this.size[1])
+		);
 	}
 
 	goToSection() {
@@ -322,6 +295,26 @@ class CanvasSectionObject {
 			return app.roundedDpiScale % 2 === 0 ? 0 : 0.5;
 		} else {
 			return 0.5;
+		}
+	}
+
+	public drawViewRectangle(rectangle: cool.SimpleRectangle, fill = false) {
+		if (fill) {
+			this.context.beginPath();
+			this.context.moveTo(rectangle.v1X, rectangle.v1Y);
+			this.context.lineTo(rectangle.v2X, rectangle.v2Y);
+			this.context.lineTo(rectangle.v4X, rectangle.v4Y);
+			this.context.lineTo(rectangle.v3X, rectangle.v3Y);
+			this.context.closePath();
+			this.context.fill();
+		} else {
+			this.context.beginPath();
+			this.context.moveTo(rectangle.v1X - 0.5, rectangle.v1Y - 0.5);
+			this.context.lineTo(rectangle.v2X - 0.5, rectangle.v2Y - 0.5);
+			this.context.lineTo(rectangle.v4X - 0.5, rectangle.v4Y - 0.5);
+			this.context.lineTo(rectangle.v3X - 0.5, rectangle.v3Y - 0.5);
+			this.context.closePath();
+			this.context.stroke();
 		}
 	}
 }

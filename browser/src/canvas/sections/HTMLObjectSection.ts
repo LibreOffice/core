@@ -62,11 +62,8 @@ class HTMLObjectSection extends CanvasSectionObject {
 	}
 
 	adjustHTMLObjectPosition() {
-		// getDrawTopLeft tracks the zoom frame for non-Calc (live vX/vY); equals
-		// myTopLeft outside zoom and for Calc.
-		const drawTopLeft = this.getDrawTopLeft();
-		const leftNumber = Math.round(drawTopLeft[0] / app.dpiScale);
-		const topNumber = Math.round(drawTopLeft[1] / app.dpiScale);
+		const leftNumber = Math.round(this.myTopLeft[0] / app.dpiScale);
+		const topNumber = Math.round(this.myTopLeft[1] / app.dpiScale);
 
 		// setup model data now and schedule DOM update during animation frame
 		this.htmlPosition = [leftNumber, topNumber];
@@ -88,11 +85,6 @@ class HTMLObjectSection extends CanvasSectionObject {
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
-		// Calc HTML objects can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) {
-			this.sectionProperties.objectDiv.style.display = 'none';
-			return;
-		}
 		this.adjustHTMLObjectPosition();
 	}
 

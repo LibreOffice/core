@@ -16,7 +16,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 	it('Scrolling to bottom/top', function() {
 		desktopHelper.assertScrollbarPosition('vertical', 25, 40);
 		desktopHelper.pressKey(3,'pagedown');
-		desktopHelper.assertScrollbarPosition('vertical', 110, 130);
+		desktopHelper.assertScrollbarPosition('vertical', 110, 135);
 		desktopHelper.pressKey(3,'pageup');
 		desktopHelper.assertScrollbarPosition('vertical', 50, 105);
 		desktopHelper.pressKey(3,'downArrow');
@@ -29,7 +29,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		desktopHelper.assertScrollbarPosition('horizontal', 48, 60);
 		helper.typeIntoDocument('{end}');
 		helper.processToIdle(this.win);
-		desktopHelper.assertScrollbarPosition('horizontal', 180, 300);
+		desktopHelper.assertScrollbarPosition('horizontal', 180, 320);
 	});
 
 	it('Scroll while selecting vertically', function() {
@@ -74,7 +74,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		}
 
 		// Document should scroll
-		desktopHelper.assertScrollbarPosition('horizontal', 80, 155);
+		desktopHelper.assertScrollbarPosition('horizontal', 80, 180);
 	});
 
 	it('Scroll while selecting with mouse', function () {

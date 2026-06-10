@@ -32,12 +32,11 @@ class ShapeHandleCustomSubSection extends CanvasSectionObject {
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
-		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
+		const rtlShift = app.map._docLayer.isCalcRTL() ? this.size[0] : 0;
 		this.context.fillStyle = 'yellow';
 		this.context.strokeStyle = 'black';
 		this.context.beginPath();
-		this.context.arc(this.size[0] * 0.5, this.size[1] * 0.5, this.size[0] * 0.5, 0, Math.PI * 2);
+		this.context.arc(this.size[0] * 0.5 - rtlShift, this.size[1] * 0.5, this.size[0] * 0.5, 0, Math.PI * 2);
 		this.context.closePath();
 		this.context.fill();
 		this.context.stroke();
@@ -53,9 +52,11 @@ class ShapeHandleCustomSubSection extends CanvasSectionObject {
 
 	onMouseUp(point: cool.SimplePoint, e: MouseEvent): void {
 		if (this.containerObject.isDraggingSomething()) {
+			const isRTL = app.map._docLayer.isCalcRTL();
+			const docX = isRTL ? this.position[0] - point.pX : this.position[0] + point.pX;
 			const parameters = {
 				HandleNum: { type: 'long', value: this.sectionProperties.ownInfo.id },
-				NewPosX: { type: 'long', value: Math.round((point.pX + this.position[0]) * app.pixelsToTwips) },
+				NewPosX: { type: 'long', value: Math.round(docX * app.pixelsToTwips) },
 				NewPosY: { type: 'long', value: Math.round((point.pY + this.position[1]) * app.pixelsToTwips) }
 			};
 

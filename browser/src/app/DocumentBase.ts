@@ -35,6 +35,8 @@ class DocumentBase {
 			this.activeLayout = new ViewLayoutWriter();
 		} else if (app.file.fileBasedView) {
 			this.activeLayout = new ViewLayoutFileBased();
+		} else if (app.map._docLayer._docType === 'spreadsheet') {
+			this.activeLayout = new ViewLayoutCalc();
 		} else {
 			this.activeLayout = new ViewLayoutBase();
 		}

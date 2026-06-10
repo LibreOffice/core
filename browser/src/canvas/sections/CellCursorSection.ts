@@ -59,33 +59,38 @@ class CellCursorSection extends CanvasSectionObject {
 	}
 
 	public onDraw() {
-		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
 		if (app.calc.cellCursorVisible) {
+			Util.ensureValue(app.activeDocument);
+
+			this.context.save();
+			this.context.setTransform(1, 0, 0, 1, 0, 0);
+
 			this.context.lineJoin = 'miter';
 			this.context.lineCap = 'butt';
 			this.context.lineWidth = 1;
 
 			this.context.strokeStyle = this.sectionProperties.color;
 
-			const tempSizePos = CellCursorSection.adjustSizePos([this.position[0], this.position[1], this.size[0], this.size[1]]);
+			const cursorRect: cool.SimpleRectangle = (app.calc.cellCursorRectangle?? new cool.SimpleRectangle(0, 0, 0, 0)).clone();
 
-			let x: number = (tempSizePos[0] - this.position[0]);
-			const y: number = (tempSizePos[1] - this.position[1]);
-			if (app.calc.isRTL()) {
-				const rightMost = this.containerObject.getDocumentAnchor()[0] + this.containerObject.getDocumentAnchorSection().size[0];
-				x = rightMost - tempSizePos[2] + (tempSizePos[0] - this.position[0]);
+			for (let i: number = 0; i < this.sectionProperties.weight; i++) {
+				this.drawViewRectangle(cursorRect);
+
+				// Slighyly modify rectangle in each cycle, for thickness.
+				cursorRect.pX1 -= i;
+				cursorRect.pY1 -= i;
+				cursorRect.pWidth += 2 * i;
+				cursorRect.pHeight += 2 * i;
 			}
-
-			for (let i: number = 0; i < this.sectionProperties.weight; i++)
-				this.context.strokeRect(x + -0.5 - i, y - 0.5 - i, tempSizePos[2] + i * 2, tempSizePos[3] + i * 2);
 
 			if (window.prefs.getBoolean('darkTheme')) {
 				this.context.strokeStyle = 'white';
 				const diff = 1;
-				this.context.strokeRect(x + -0.5 + diff, y - 0.5 + diff, tempSizePos[2] - 2 * diff, tempSizePos[3] - 2 * diff);
-				this.context.strokeRect(x + -0.5 + diff, y - 0.5 + diff, tempSizePos[2] - 2 * diff, tempSizePos[3] - 2 * diff);
+				this.context.strokeRect(cursorRect.v1X + -0.5 + diff, cursorRect.v1Y - 0.5 + diff, cursorRect.pWidth - 2 * diff, cursorRect.pHeight - 2 * diff);
+				this.context.strokeRect(cursorRect.v1X + -0.5 + diff, cursorRect.v1Y - 0.5 + diff, cursorRect.pWidth - 2 * diff, cursorRect.pHeight - 2 * diff);
 			}
+
+			this.context.restore();
 		}
 	}
 }

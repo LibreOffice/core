@@ -176,9 +176,6 @@ class CalcGridSection extends CanvasSectionObject {
 	}
 
     onDraw(frameCount?: number, elapsedTime?: number): void {
-		if (this.containerObject.isInZoomAnimation() || this.sectionProperties.tsManager.waitForTiles())
-			return;
-
 		// We don't show the sheet grid, so we don't draw it.
 		if (!this.sectionProperties.docLayer._sheetGrid)
 			return;

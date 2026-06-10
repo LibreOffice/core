@@ -1027,7 +1027,10 @@ export class Comment extends CanvasSectionObject {
 
 	public positionCalcComment(): void {
 		if (!(<any>window).mode.isSmallScreenDevice()) {
-			const startX = this.isCalcRTL() ? this.myTopLeft[0] - this.getCommentWidth() : this.myTopLeft[0] + this.calcOptimumSizeForCalc()[0] - 3;
+			const cellSize = this.calcOptimumSizeForCalc()[0];
+			const startX = this.isCalcRTL()
+				? this.myTopLeft[0] - cellSize - this.getCommentWidth() + 3
+				: this.myTopLeft[0] + cellSize - 3;
 
 			var pos: Array<number> = [Math.round(startX / app.dpiScale), Math.round(this.myTopLeft[1] / app.dpiScale)];
 			this.sectionProperties.container.style.transform = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px, 0px)';
@@ -1828,12 +1831,7 @@ export class Comment extends CanvasSectionObject {
 			if (app.map._docLayer._docType === 'text') {
 				const rectangles: Array<cool.SimpleRectangle> = this.sectionProperties.data.rectangles;
 				if (rectangles) {
-					// We are using view coordinates and it ignores myTopLeft values.
-					// We set the pen position to canvas origin here. Then we set it back at the end of this block, after drawing.
-					// Cancel the same top-left the container translated by
-					// (getDrawTopLeft tracks the zoom frame for non-Calc).
-					const drawTopLeft = this.getDrawTopLeft();
-					this.context.translate(-drawTopLeft[0], -drawTopLeft[1]);
+					this.context.translate(-this.myTopLeft[0], -this.myTopLeft[1]);
 
 					this.context.fillStyle = this.sectionProperties.usedTextColor;
 					this.context.globalAlpha = 0.25;
@@ -1845,7 +1843,7 @@ export class Comment extends CanvasSectionObject {
 					}
 
 					this.context.globalAlpha = 1;
-					this.context.translate(drawTopLeft[0], drawTopLeft[1]);
+					this.context.translate(this.myTopLeft[0], this.myTopLeft[1]);
 				}
 			}
 			else if (app.map._docLayer._docType === 'spreadsheet' &&
@@ -1868,8 +1866,12 @@ export class Comment extends CanvasSectionObject {
 					const isRTL = this.isCalcRTL();
 
 					// this.size may currently have an artificially wide size if mouseEnter without moveLeave seen
-					// so fetch the real size
-					var x = isRTL ? margin : cellSize[0] - squareDim - margin;
+					// so fetch the real size.
+					// In RTL the section anchors at the cell's visual-right
+					// edge and extends leftward (per CanvasSectionObject.isHit),
+					// so the visual top-left corner of the cell sits at
+					// section-local x = -cellSize[0].
+					var x = isRTL ? -cellSize[0] + margin : cellSize[0] - squareDim - margin;
 					var commentColor = getComputedStyle(document.body).getPropertyValue('--color-calc-comment');
 					this.context.fillStyle = commentColor;
 					var region = new Path2D();

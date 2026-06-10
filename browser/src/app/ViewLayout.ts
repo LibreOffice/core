@@ -43,7 +43,7 @@ class ScrollProperties {
 class ViewLayoutBase {
 	public readonly type: string = 'ViewLayoutBase';
 
-	private lastViewedRectangle: cool.SimpleRectangle; // Previously viewed rectangle.
+	protected lastViewedRectangle: cool.SimpleRectangle; // Previously viewed rectangle.
 
 	protected clientVisibleAreaCommand: string = ''; // Last visible area command. Checked to avoid sending the same command multiple times.
 	protected _viewedRectangle: cool.SimpleRectangle; // Currently viewed rectangle.
@@ -105,6 +105,15 @@ class ViewLayoutBase {
 		this.lastViewedRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
 	}
 
+	protected getVisibleAreaBounds() {
+		let visibleArea = app.map.getPixelBounds();
+		visibleArea = new cool.Bounds(
+			app.map._docLayer._pixelsToTwips(visibleArea.min),
+			app.map._docLayer._pixelsToTwips(visibleArea.max),
+		);
+		return visibleArea;
+	}
+
 	public sendClientVisibleArea(forceUpdate: boolean = false): void {
 		if (!app.map._docLoaded) return;
 		// During a zoom animation app.twipsToPixels and the viewedRectangle are
@@ -116,12 +125,8 @@ class ViewLayoutBase {
 			? app.map._docLayer._splitPanesContext.getSplitPos()
 			: new cool.Point(0, 0);
 
-		var visibleArea = app.map.getPixelBounds();
-		visibleArea = new cool.Bounds(
-			app.map._docLayer._pixelsToTwips(visibleArea.min),
-			app.map._docLayer._pixelsToTwips(visibleArea.max),
-		);
-		splitPos = app.map._docLayer._corePixelsToTwips(splitPos);
+		const visibleArea = this.getVisibleAreaBounds();
+
 		var size = visibleArea.getSize();
 		var visibleTopLeft = visibleArea.min;
 		var newClientVisibleAreaCommand =
@@ -132,23 +137,12 @@ class ViewLayoutBase {
 			' width=' +
 			Math.round(size.x) +
 			' height=' +
-			Math.round(size.y) +
-			' splitx=' +
-			Math.round(splitPos.x) +
-			' splity=' +
-			Math.round(splitPos.y);
+			Math.round(size.y);
 
 		if (
 			this.clientVisibleAreaCommand !== newClientVisibleAreaCommand ||
 			forceUpdate
 		) {
-			// Only update on some change
-			if (app.map._docLayer._ySplitter) {
-				app.map._docLayer._ySplitter.onPositionChange();
-			}
-			if (app.map._docLayer._xSplitter) {
-				app.map._docLayer._xSplitter.onPositionChange();
-			}
 			// Visible area is dirty, update it on the server
 			app.socket.sendMessage(newClientVisibleAreaCommand);
 			if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar(); // hide context toolbar when scroll/window resize etc...

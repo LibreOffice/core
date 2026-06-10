@@ -36,9 +36,12 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
     }
 
     onDraw(frameCount?: number, elapsedTime?: number): void {
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
         this.context.strokeStyle = this.sectionProperties.color;
         this.context.lineWidth = 2;
-        this.context.strokeRect(-0.5, -0.5, this.size[0], this.size[1]);
+        this.drawViewRectangle(this.boundingRectangle);
+        this.context.restore();
     }
 
     checkMyVisibility() {
@@ -62,7 +65,7 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
             rectangle = new cool.SimpleRectangle(parseInt(rectangleData[0]), parseInt(rectangleData[1]), parseInt(rectangleData[2]), parseInt(rectangleData[3]));
 
         if (app.map._docLayer.isCalc() && app.map._docLayer.sheetGeometry)
-            app.map._docLayer.sheetGeometry.convertRectangleToTileTwips(rectangle);
+            app.map._docLayer.sheetGeometry.convertRectangleToTileTwipsWithoutGridSnap(rectangle);
 
         const sectionName = OtherViewGraphicSelectionSection.sectionNamePrefix + viewId;
         let section: OtherViewGraphicSelectionSection;
@@ -132,5 +135,3 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
         app.sectionContainer.requestReDraw();
     }
 }
-
-app.definitions.otherViewGraphicSelectionSection = OtherViewGraphicSelectionSection;

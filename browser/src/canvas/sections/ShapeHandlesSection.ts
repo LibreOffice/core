@@ -127,10 +127,23 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	private convertToTileTwipsIfNeeded() {
-		if (app.map._docLayer._docType !== 'spreadsheet') return;
+		if (app.map._docLayer._docType !== 'spreadsheet' || !app.map._docLayer.sheetGeometry)
+			return;
 
 		const kinds = this.sectionProperties.info?.handles?.kinds;
 		if (!kinds) return;
+
+		// Core can send handle X coordinates as negative print twips in RTL
+		// (its internal sign convention). Normalize to positive so the
+		// downstream print->tile conversion and doc->view mapping work.
+		const normalize = (entry: any): void => {
+			const rawX = parseInt(entry.point.x);
+			const rawY = parseInt(entry.point.y);
+			const point = new cool.SimplePoint(Math.abs(rawX), rawY);
+			app.map._docLayer.sheetGeometry.convertToTileTwips(point);
+			entry.point.x = point.x;
+			entry.point.y = point.y;
+		};
 
 		// Core groups handles into rectangle / poly / custom / anchor / others
 		// (see SdrMarkView in svdmrkv.cxx). Convert positions for every group,
@@ -142,12 +155,16 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			for (const handles of Object.values(group)) {
 				if (!Array.isArray(handles)) continue;
 				for (const handle of handles) {
-					const point = new cool.SimplePoint(parseInt(handle.point.x), parseInt(handle.point.y));
+					const point = new cool.SimplePoint(Math.abs(parseInt(handle.point.x)), parseInt(handle.point.y));
 					app.map._docLayer.sheetGeometry.convertToTileTwips(point);
 					handle.point.x = point.x;
 					handle.point.y = point.y;
 				}
 			}
+		}
+
+		if (Array.isArray(kinds.custom?.['22'])) {
+			for (const entry of kinds.custom['22']) normalize(entry);
 		}
 	}
 
@@ -157,12 +174,18 @@ class ShapeHandlesSection extends CanvasSectionObject {
 				shapeRecProps = this.sectionProperties.shapeRectangleProperties;
 
 			const halfDiagonal = Math.pow(Math.pow(shapeRecProps.width * 0.5, 2) + Math.pow(shapeRecProps.height * 0.5, 2), 0.5);
+			// In Calc RTL, convertToTileTwipsIfNeeded's abs flips the handle
+			// doc-X: core's internal topLeft (min internal X) becomes the
+			// shape's doc-max-X (= visual top-left on the mirrored canvas).
+			// So kind '1' is at (+w/2, +h/2) relative to center, not (-w/2, +h/2).
+			// Flip the X factor for every non-vertical handle.
+			const xSign = app.map._docLayer.isCalcRTL() ? 1 : -1;
 			for (let i = 0; i < this.sectionProperties.subSections.length; i++) {
 				const subSection = this.sectionProperties.subSections[i];
 
 				if (subSection.sectionProperties.ownInfo.kind === '1') {
 					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(shapeRecProps.height * 0.5, -shapeRecProps.width * 0.5);
+					subSection.sectionProperties.initialAngle = Math.atan2(shapeRecProps.height * 0.5, xSign * shapeRecProps.width * 0.5);
 				}
 				else if (subSection.sectionProperties.ownInfo.kind === '2') {
 					subSection.sectionProperties.distanceToCenter = shapeRecProps.height * 0.5;
@@ -170,19 +193,19 @@ class ShapeHandlesSection extends CanvasSectionObject {
 				}
 				else if (subSection.sectionProperties.ownInfo.kind === '3') {
 					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(shapeRecProps.height * 0.5, shapeRecProps.width * 0.5);
+					subSection.sectionProperties.initialAngle = Math.atan2(shapeRecProps.height * 0.5, -xSign * shapeRecProps.width * 0.5);
 				}
 				else if (subSection.sectionProperties.ownInfo.kind === '4') {
 					subSection.sectionProperties.distanceToCenter = shapeRecProps.width * 0.5;
-					subSection.sectionProperties.initialAngle = Math.atan2(0, -shapeRecProps.width * 0.5);
+					subSection.sectionProperties.initialAngle = Math.atan2(0, xSign * shapeRecProps.width * 0.5);
 				}
 				else if (subSection.sectionProperties.ownInfo.kind === '5') {
 					subSection.sectionProperties.distanceToCenter = shapeRecProps.width * 0.5;
-					subSection.sectionProperties.initialAngle = Math.atan2(0, shapeRecProps.width * 0.5);
+					subSection.sectionProperties.initialAngle = Math.atan2(0, -xSign * shapeRecProps.width * 0.5);
 				}
 				else if (subSection.sectionProperties.ownInfo.kind === '6') {
 					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(-shapeRecProps.height * 0.5, -shapeRecProps.width * 0.5);
+					subSection.sectionProperties.initialAngle = Math.atan2(-shapeRecProps.height * 0.5, xSign * shapeRecProps.width * 0.5);
 				}
 				else if (subSection.sectionProperties.ownInfo.kind === '7') {
 					subSection.sectionProperties.distanceToCenter = shapeRecProps.height * 0.5;
@@ -190,7 +213,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 				}
 				else if (subSection.sectionProperties.ownInfo.kind === '8') {
 					subSection.sectionProperties.distanceToCenter = halfDiagonal;
-					subSection.sectionProperties.initialAngle = Math.atan2(-shapeRecProps.height * 0.5, shapeRecProps.width * 0.5);
+					subSection.sectionProperties.initialAngle = Math.atan2(-shapeRecProps.height * 0.5, -xSign * shapeRecProps.width * 0.5);
 				}
 			}
 		}
@@ -439,6 +462,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (GraphicSelection.hasActiveSelection())
 			this.size = [GraphicSelection.rectangle.pWidth, GraphicSelection.rectangle.pHeight];
 
+		this.boundingRectangle = cool.SimpleRectangle.fromCorePixels([...this.position, ...this.size]);
+
 		if (this.sectionProperties.svg)
 			this.adjustSVGProperties();
 	}
@@ -614,7 +639,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		let newSubSection = app.sectionContainer.getSectionWithName(this.sectionProperties.subSectionPrefix + handle.info.id);
 
 		if (!newSubSection) {
-			newSubSection = new app.definitions.shapeHandleScalingSubSection(
+			newSubSection = new ShapeHandleScalingSubSection(
 				this,
 				this.sectionProperties.subSectionPrefix + handle.info.id,
 				[this.sectionProperties.handleWidth, this.sectionProperties.handleHeight],
@@ -803,6 +828,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			yTwips -= verticalOffset;
 		}
 
+		if (app.map._docLayer.isCalcRTL())
+			x = -this.size[0] + this.sectionProperties.lastDragDistance[0] - this.position[0];
+
 		const parameters = {
 			'TransformPosX': {
 				'type': 'long',
@@ -911,6 +939,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	public onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
+		Util.ensureValue(app.activeDocument);
+
 		this.sectionProperties.viewedRectangleOnMouseDown = app.activeDocument.activeLayout.viewedRectangle.clone();
 		this.sectionProperties.initialPosition = this.position.slice();
 		this.sectionProperties.positionOnMouseDown = point.clone();
@@ -927,19 +957,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (this.containerObject.isDraggingSomething()) {
 			app.map.fire('scrollvelocity', { vx: 0, vy: 0 });
 
-			if (app.map._docLayer._docType !== 'spreadsheet') {
-				point.x += app.activeDocument.activeLayout.viewedRectangle.x1 - this.sectionProperties.viewedRectangleOnMouseDown.x1;
-				point.y += app.activeDocument.activeLayout.viewedRectangle.y1 - this.sectionProperties.viewedRectangleOnMouseDown.y1;
-				this.sendTransformCommand(point);
-			}
-			else {
-				const lastPosition = cool.SimplePoint.fromCorePixels([this.position[0] + point.pX, this.position[1] + point.pY]);
-
-				// Send mouse down and up events.
-				app.map._docLayer._postMouseEvent('buttondown', this.sectionProperties.positionOnMouseDown.x, this.sectionProperties.positionOnMouseDown.y, 1, 1, 0);
-				app.map._docLayer._postMouseEvent('move', lastPosition.x, lastPosition.y, 1, 1, 0);
-				app.map._docLayer._postMouseEvent('buttonup', lastPosition.x, lastPosition.y, 1, 1, 0);
-			}
+			point.x += app.activeDocument.activeLayout.viewedRectangle.x1 - this.sectionProperties.viewedRectangleOnMouseDown.x1;
+			point.y += app.activeDocument.activeLayout.viewedRectangle.y1 - this.sectionProperties.viewedRectangleOnMouseDown.y1;
+			this.sendTransformCommand(point);
 		}
 	}
 
@@ -1178,7 +1198,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			}
 
 			if (this.sectionProperties.svg) {
-				this.sectionProperties.svg.style.left = String((this.myTopLeft[0] + dragDistance[0]) / app.dpiScale) + 'px';
+				const addition = app.map._docLayer.isCalcRTL() ? -this.size[0] : 0;
+				this.sectionProperties.svg.style.left = String((this.myTopLeft[0] + dragDistance[0] + addition) / app.dpiScale) + 'px';
 				this.sectionProperties.svg.style.top = String((this.myTopLeft[1] + dragDistance[1]) / app.dpiScale) + 'px';
 				this.sectionProperties.svg.style.opacity = 0.5;
 			}
@@ -1244,25 +1265,15 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	private updateSVGPosition(): void {
 		if (!this.sectionProperties.svg || !GraphicSelection.hasActiveSelection()) return;
 
-		if (app.map._docLayer.isCalc()) {
-			const left = GraphicSelection.rectangle.pX1;
-			const top = GraphicSelection.rectangle.pY1;
+		const left = GraphicSelection.rectangle.v1X;
+		const top = GraphicSelection.rectangle.v1Y;
 
-			this.sectionProperties.svg.style.left = Math.round((left - app.activeDocument.activeLayout.viewedRectangle.pX1 + this.containerObject.getDocumentAnchor()[0]) / app.dpiScale) + 'px';
-			this.sectionProperties.svg.style.top = Math.round((top - app.activeDocument.activeLayout.viewedRectangle.pY1 + this.containerObject.getDocumentAnchor()[1]) / app.dpiScale) + 'px';
-			this.sectionProperties.svgPosition = [left, top];
-		}
-		else {
-			const left = GraphicSelection.rectangle.v1X;
-			const top = GraphicSelection.rectangle.v1Y;
+		const leftAddition = app.activeDocument.activeLayout.type === 'ViewLayoutBase' ? 0 : this.containerObject.getDocumentAnchor()[0];
+		const topAddition = app.activeDocument.activeLayout.type === 'ViewLayoutBase' ? 0 : this.containerObject.getDocumentAnchor()[1];
 
-			const leftAddition = app.activeDocument.activeLayout.type === 'ViewLayoutBase' ? 0 : this.containerObject.getDocumentAnchor()[0];
-			const topAddition = app.activeDocument.activeLayout.type === 'ViewLayoutBase' ? 0 : this.containerObject.getDocumentAnchor()[1];
-
-			this.sectionProperties.svg.style.left = Math.round((left + leftAddition) / app.dpiScale) + 'px';
-			this.sectionProperties.svg.style.top = Math.round((top + topAddition) / app.dpiScale) + 'px';
-			this.sectionProperties.svgPosition = [left, top];
-		}
+		this.sectionProperties.svg.style.left = Math.round((left + leftAddition) / app.dpiScale) + 'px';
+		this.sectionProperties.svg.style.top = Math.round((top + topAddition) / app.dpiScale) + 'px';
+		this.sectionProperties.svgPosition = [left, top];
 	}
 
 	onNewDocumentTopLeft(): void {
@@ -1351,27 +1362,29 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	private drawSelectionFrame() {
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+
 		this.context.beginPath();
 		this.context.strokeStyle = 'black';
 		this.context.setLineDash([3, 3]);
 
-		// Live rectangle size (pWidth/pHeight track the current scale) so the
-		// frame follows a zoom animation; this.size is fixed at selection time.
-		const width = GraphicSelection.rectangle ? GraphicSelection.rectangle.pWidth : this.size[0];
-		const height = GraphicSelection.rectangle ? GraphicSelection.rectangle.pHeight : this.size[1];
-
-		if (this.containerObject.isDraggingSomething() && this.containerObject.targetSection === this.name)
-			this.context.strokeRect(this.sectionProperties.lastDragDistance[0], this.sectionProperties.lastDragDistance[1], width, height);
+		if (this.containerObject.isDraggingSomething() && this.containerObject.targetSection === this.name) {
+			const rectangle = this.boundingRectangle.clone();
+			rectangle.pX1 += app.calc.isRTL() ? -this.sectionProperties.lastDragDistance[0] : this.sectionProperties.lastDragDistance[0];
+			rectangle.pY1 += this.sectionProperties.lastDragDistance[1];
+			this.drawViewRectangle(rectangle);
+		}
 		else
-			this.context.strokeRect(0, 0, width, height);
+			this.drawViewRectangle(this.boundingRectangle);
 
 		this.context.setLineDash([]);
 		this.context.closePath();
+
+		this.context.restore();
 	}
 
 	public onDraw() {
-		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
 		this.drawSelectionFrame();
 		this.drawShapeDragPreview();
 		if (!this.showSection || !this.isVisible)
@@ -1392,8 +1405,10 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	onContextMenu(point: cool.SimplePoint, e: MouseEvent): void {
-		point.pX += this.position[0];
-		point.pY += this.position[1];
+		const viewed = app.activeDocument.activeLayout.viewedRectangle;
+		const anchor = this.containerObject.getDocumentAnchor();
+		point.pX = this.myTopLeft[0] + point.pX + viewed.pX1 - anchor[0];
+		point.pY = this.myTopLeft[1] + point.pY + viewed.pY1 - anchor[1];
 		app.activeDocument.mouseControl.setMousePosition(point);
 		app.activeDocument.mouseControl.onContextMenu(point, e);
 	}

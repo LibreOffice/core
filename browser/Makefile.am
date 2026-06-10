@@ -337,6 +337,7 @@ COOL_JS_LST =\
 	src/app/ViewLayout.ts \
 	src/app/ViewLayoutNewBase.ts \
 	src/app/ViewLayoutWriter.ts \
+	src/app/ViewLayoutCalc.ts \
 	src/app/ViewLayoutMultiPage.ts \
 	src/app/ViewLayoutFileBased.ts \
 	src/app/ViewLayoutCompareChanges.ts \

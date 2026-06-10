@@ -56,18 +56,25 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
-		// Calc can't follow the zoom scale yet (no ViewLayoutCalc); hide while zooming.
-		if (app.map.getDocType() === 'spreadsheet' && this.containerObject.isInZoomAnimation()) return;
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+
 		this.context.fillStyle = 'white';
 		this.context.strokeStyle = 'black';
 		this.context.beginPath();
+
+		const multiplier = app.map._docLayer.isCalcRTL() ? -1 : 1;
+
 		if (this.sectionProperties.cropModeEnabled)
 			this.drawCropHandles();
 		else
-			this.context.rect(0, 0, this.size[0], this.size[1]);
+			this.context.rect(this.documentPosition.vX, this.documentPosition.vY, this.size[0] * multiplier, this.size[1]);
+
 		this.context.closePath();
 		this.context.fill();
 		this.context.stroke();
+
+		this.context.restore();
 	}
 
 	drawCropCornerHandle() {
@@ -192,26 +199,40 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 	}
 
 	private getNewPosition(handleID: string, rectangle: cool.SimpleRectangle): number[] {
+		const isRTL = app.map._docLayer.isCalcRTL();
+		const leftHandleX = isRTL ? rectangle.x2 : rectangle.x1;
+		const rightHandleX = isRTL ? rectangle.x1 : rectangle.x2;
+
 		if (handleID === '0')
-			return [rectangle.x1, rectangle.y1];
+			return [leftHandleX, rectangle.y1];
 		else if (handleID === '1')
 			return [rectangle.center[0], rectangle.y1];
 		else if (handleID === '2')
-			return [rectangle.x2, rectangle.y1];
+			return [rightHandleX, rectangle.y1];
 		else if (handleID === '3')
-			return [rectangle.x1, rectangle.center[1]];
+			return [leftHandleX, rectangle.center[1]];
 		else if (handleID === '4')
-			return [rectangle.x2, rectangle.center[1]];
+			return [rightHandleX, rectangle.center[1]];
 		else if (handleID === '5')
-			return [rectangle.x1, rectangle.y2];
+			return [leftHandleX, rectangle.y2];
 		else if (handleID === '6')
 			return [rectangle.center[0], rectangle.y2];
 		else // handleID === '7'
-			return [rectangle.x2, rectangle.y2];
+			return [rightHandleX, rectangle.y2];
+	}
+	// In Calc RTL the canvas is mirrored, so the section-local mouse offset
+	// runs opposite to the doc-X axis. Convert the section-local point.pX
+	// into the doc-pixel X of the mouse cursor, the same coordinate system
+	// that this.position[0] and shapeRectangleProperties live in.
+	private mouseToDocX(point: cool.SimplePoint): number {
+		return app.map._docLayer.isCalcRTL()
+			? this.position[0] - point.pX
+			: this.position[0] + point.pX;
 	}
 
 	onMouseUp(point: cool.SimplePoint, e: MouseEvent): void {
 		if (this.containerObject.isDraggingSomething()) {
+			Util.ensureValue(app.activeDocument);
 			this.stopPropagating();
 			e.stopPropagation();
 
@@ -219,7 +240,7 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 			const parentHandlerSection = this.sectionProperties.parentHandlerSection;
 
 			const p = point.clone();
-			p.pX += this.position[0];
+			p.pX = this.mouseToDocX(point);
 			p.pY += this.position[1];
 
 			const shapeRecProps = this.calculateNewShapeRectangleProperties(p, e);
@@ -233,7 +254,7 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 			const newPoint = this.getNewPosition(handleId, tempRectangle);
 
 			if (!this.doWeKeepRatio(e) || ["1", "3", "4", "6"].includes(handleId)) {
-				newPoint[0] = Math.round((parentHandlerSection.sectionProperties.closestX ?? point.pX + this.position[0]) * app.pixelsToTwips);
+				newPoint[0] = Math.round((parentHandlerSection.sectionProperties.closestX ?? this.mouseToDocX(point)) * app.pixelsToTwips);
 				newPoint[1] = Math.round((parentHandlerSection.sectionProperties.closestY ?? point.pY + this.position[1]) * app.pixelsToTwips);
 			}
 
@@ -279,7 +300,13 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 			? shapeRecProps.width / shapeRecProps.height
 			: shapeRecProps.height / shapeRecProps.width;
 
-		const secondaryDelta = primaryDelta * aspectRatio;
+		// The kind-based direction table assumes LTR doc-X. In RTL, the abs in
+		// convertToTileTwipsIfNeeded mirrors the X axis (kinds 1/4/6 sit at
+		// doc-max-X, 3/5/8 at doc-min-X), so the secondary axis runs opposite
+		// to user intent.
+		let secondaryDelta = primaryDelta * aspectRatio;
+		if (app.map._docLayer.isCalcRTL())
+			secondaryDelta = -secondaryDelta;
 
 		const direction = ['3', '4', '6', '2'].includes(this.sectionProperties.ownInfo.kind) ? -1 : 1;
 
@@ -312,12 +339,23 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 
 		const oldpCenter = rectangle.pCenter;
 
-		if (['1', '4', '6'].includes(this.sectionProperties.ownInfo.kind)) {
+		// In RTL, convertToTileTwipsIfNeeded's abs flips handle doc-X: kinds
+		// 1/4/6 land at doc-max-X (= pX2 side) and 3/5/8 at doc-min-X (pX1).
+		// So the edge each handle modifies is swapped relative to LTR.
+		const isRTL = app.map._docLayer.isCalcRTL();
+		const isMinXHandle = isRTL
+			? ['3', '5', '8'].includes(this.sectionProperties.ownInfo.kind)
+			: ['1', '4', '6'].includes(this.sectionProperties.ownInfo.kind);
+		const isMaxXHandle = isRTL
+			? ['1', '4', '6'].includes(this.sectionProperties.ownInfo.kind)
+			: ['3', '5', '8'].includes(this.sectionProperties.ownInfo.kind);
+
+		if (isMinXHandle) {
 			const pX2 = rectangle.pX2;
 			rectangle.pX1 = point.pX;
 			rectangle.pX2 = pX2;
 		}
-		else if (['3', '5', '8'].includes(this.sectionProperties.ownInfo.kind))
+		else if (isMaxXHandle)
 			rectangle.pX2 = point.pX;
 
 		if (['1', '2', '3'].includes(this.sectionProperties.ownInfo.kind)) {
@@ -332,7 +370,13 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 			if (['4', '5'].includes(this.sectionProperties.ownInfo.kind)) {
 				rectangle.pY2 = point.pY;
 			} else if (['2', '7'].includes(this.sectionProperties.ownInfo.kind)) {
-				rectangle.pX2 = point.pX;
+				if (isRTL) {
+					const pX2 = rectangle.pX2;
+					rectangle.pX1 = point.pX;
+					rectangle.pX2 = pX2;
+				} else {
+					rectangle.pX2 = point.pX;
+				}
 			}
 		}
 
@@ -355,7 +399,7 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 		Util.ensureValue(app.activeDocument);
 
 		const p = point.clone();
-		p.pX += this.position[0];
+		p.pX = this.mouseToDocX(point);
 		p.pY += this.position[1];
 
 		const shapeRecProps = this.calculateNewShapeRectangleProperties(p, e);
@@ -397,5 +441,3 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 		}
 	}
 }
-
-app.definitions.shapeHandleScalingSubSection = ShapeHandleScalingSubSection;

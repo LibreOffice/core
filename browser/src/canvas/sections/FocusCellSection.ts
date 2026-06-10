@@ -102,6 +102,9 @@ class FocusCellSection extends CanvasSectionObject {
 		const rowY = adjusted[1] - cursor.pY1;
 		const rowHeight = adjusted[3];
 
+		const colSign = app.map._docLayer.isCalcRTL() ? -1 : 1;
+		const colDrawWidth = colWidth * colSign;
+
 		this.context.globalAlpha = 0.3;
 
 		// In RTL the cell sits on the right of the tile, so -pX1 lands
@@ -115,18 +118,23 @@ class FocusCellSection extends CanvasSectionObject {
 			this.context.fillRect(
 				colX,
 				-cursor.pY1,
-				colWidth,
+				colDrawWidth,
 				this.sectionProperties.maxCol,
 			);
 		}
 
+		// LTR anchors the row strip at the cell's visual-left edge and
+		// extends rightward by maxRow, covering everything to the right of
+		// that anchor. In RTL the anchor is the cell's visual-right edge, so
+		// the same one-sided sweep leaves the visual-left half of the row
+		// uncovered. Start the strip maxRow before the anchor and double
+		// its width so both directions get covered; off-canvas pixels are
+		// clipped, so LTR is unaffected.
+		const rowStripX = -cursor.pX1 - this.sectionProperties.maxRow;
+		const rowStripWidth = this.sectionProperties.maxRow * 2;
+
 		if (drawRow) {
-			this.context.fillRect(
-				rowX,
-				rowY,
-				this.sectionProperties.maxRow,
-				rowHeight,
-			);
+			this.context.fillRect(rowStripX, rowY, rowStripWidth, rowHeight);
 		}
 
 		this.context.globalAlpha = 1;
@@ -136,18 +144,13 @@ class FocusCellSection extends CanvasSectionObject {
 			this.context.strokeRect(
 				colX,
 				-cursor.pY1,
-				colWidth,
+				colDrawWidth,
 				this.sectionProperties.maxCol,
 			);
 		}
 
 		if (drawRow) {
-			this.context.strokeRect(
-				rowX,
-				rowY,
-				this.sectionProperties.maxRow,
-				rowHeight,
-			);
+			this.context.strokeRect(rowStripX, rowY, rowStripWidth, rowHeight);
 		}
 	}
 }

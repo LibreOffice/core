@@ -66,10 +66,6 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		);
 	}
 
-	setPosition(x: number, y: number): void {
-		setCalcRTLAwareDocumentObjectPosition(this, x, y);
-	}
-
 	protected setMarkerPosition() {
 		var center: number = 0;
 		if (!(<any>window).mode.isDesktop()) {
