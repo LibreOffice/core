@@ -165,7 +165,7 @@
     <message>
         <location filename="../Bridge.cpp" line="803"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa el fitxer</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="158"/>
