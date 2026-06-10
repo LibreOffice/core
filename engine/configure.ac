@@ -3342,8 +3342,8 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
             # check that it has MSVC support (it should recognize it in CCACHE_COMPILERTYPE)
             rm -f conftest.txt
             AC_MSG_CHECKING([whether $CCACHE has MSVC support])
-            CCACHE_COMPILERTYPE=cl CCACHE_LOGFILE=conftest.txt $CCACHE echo >/dev/null 2>/dev/null
-            if grep -q 'Config: (environment) compiler_type = cl' conftest.txt; then
+            CCACHE_COMPILERTYPE=msvc CCACHE_LOGFILE=conftest.txt $CCACHE echo >/dev/null 2>/dev/null
+            if grep -q 'Config: (environment) compiler_type = msvc' conftest.txt; then
                 AC_MSG_RESULT(yes)
             else
                 AC_MSG_RESULT(no)
