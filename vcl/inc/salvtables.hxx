@@ -1702,7 +1702,7 @@ public:
 
     virtual void end_editing() override;
 
-    void set_image(SvTreeListEntry* pEntry, const Image& rImage, int col);
+    void set_image(const weld::TreeIter& rIter, const Image& rImage, int col);
 
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
                            int col = -1) override;

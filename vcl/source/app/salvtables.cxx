@@ -4348,8 +4348,11 @@ void SalInstanceTreeView::start_editing(const weld::TreeIter& rIter)
 
 void SalInstanceTreeView::end_editing() { m_xTreeView->EndEditing(); }
 
-void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage, int col)
+void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const Image& rImage, int col)
 {
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    SvTreeListEntry* pEntry = rVclIter.iter;
+
     if (col == -1 || col == 0)
     {
         m_xTreeView->SetExpandedEntryBmp(pEntry, rImage);
@@ -4384,22 +4387,19 @@ void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage
 
 void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int col)
 {
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_image(rVclIter.iter, createImage(rImage), col);
+    set_image(rIter, createImage(rImage), col);
 }
 
 void SalInstanceTreeView::set_image(const weld::TreeIter& rIter,
                                     const css::uno::Reference<css::graphic::XGraphic>& rImage,
                                     int col)
 {
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_image(rVclIter.iter, Image(rImage), col);
+    set_image(rIter, Image(rImage), col);
 }
 
 void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& rImage, int col)
 {
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_image(rVclIter.iter, createImage(rImage), col);
+    set_image(rIter, createImage(rImage), col);
 }
 
 void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
