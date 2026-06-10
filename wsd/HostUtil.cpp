@@ -138,6 +138,12 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
             return;
         }
     }
+    else if (Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"),
+                          "groups"))
+    {
+        LOG_WRN("alias_groups mode is 'groups' but no <group> is defined; all WOPI "
+                "hosts will be denied. Define at least one group, or use mode='first'.");
+    }
 
     AliasHosts.clear();
     WopiHosts.clear();
