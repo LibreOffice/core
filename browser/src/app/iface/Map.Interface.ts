@@ -64,7 +64,7 @@ interface MapInterface extends Evented {
 
 	getDocSize(): cool.Point;
 	getSize(): cool.Point;
-	getCenter(): NormalPointLike;
+	getCenter(): NormalPoint;
 	getContainer(): Element;
 	_getCurrentFontName(): string;
 

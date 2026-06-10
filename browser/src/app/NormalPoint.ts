@@ -119,6 +119,10 @@ class NormalPoint {
 	public wrap(): NormalPoint | null {
 		return null;
 	}
+
+	public isNaN(): boolean {
+		return isNaN(this.lat) || isNaN(this.lng);
+	}
 }
 
 window.L.LatLng = NormalPoint;

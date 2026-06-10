@@ -832,7 +832,7 @@ class Socket {
 		}
 
 		const center = this._map.getCenter();
-		if (isNaN(center.lat) || isNaN(center.lng) || isNaN(this._map.getZoom())) {
+		if (center.isNaN() || isNaN(this._map.getZoom())) {
 			return false;
 		}
 
