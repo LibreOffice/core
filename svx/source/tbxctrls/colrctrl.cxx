@@ -90,7 +90,6 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
 void SvxColorValueSet_docking::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     SvxColorValueSet::SetDrawingArea(pDrawingArea);
-    SetAccessibleName(SvxResId(STR_COLORTABLE));
     SetStyle(GetStyle() | WB_ITEMBORDER);
 
     m_xHelper.set(new SvxColorValueSetData);
@@ -192,6 +191,7 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
     SetHelpId(HID_CTRL_COLOR);
 
     m_pColorSet->SetSelectHdl(LINK(this, SvxColorDockingWindow, SelectHdl));
+    m_pColorSet->SetAccessibleName(SvxResId(STR_COLORTABLE));
     m_pColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
