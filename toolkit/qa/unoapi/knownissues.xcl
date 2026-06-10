@@ -257,3 +257,7 @@ toolkit.UnoControlDialogModel::com::sun::star::io::XPersistObject
 
 ### fd#35772 ###
 toolkit.Toolkit::com::sun::star::awt::XMessageBoxFactory
+
+# getDragSource yields no XDragSource without a drag-and-drop capable VCL
+# backend, as when the unoapi soffice runs the svp plugin without --headless:
+toolkit.Toolkit::com::sun::star::awt::XDataTransferProviderAccess
