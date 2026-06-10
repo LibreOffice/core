@@ -41,7 +41,7 @@ void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
     Move( nPos, nDiff );
     if( maSentence.empty() )
         return;
-    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+    auto pIter = std::ranges::find_if(maSentence,
         [nPos](const sal_Int32& rPos) { return rPos >= nPos; });
     const sal_Int32 nEnd = nDiff < 0 ? nPos-nDiff : nPos;
     while( pIter != maSentence.end() )
@@ -59,7 +59,7 @@ std::unique_ptr<SwGrammarMarkUp> SwGrammarMarkUp::SplitGrammarList( sal_Int32 nS
     std::unique_ptr<SwGrammarMarkUp> pNew( static_cast<SwGrammarMarkUp*>(SplitList( nSplitPos ).release()) );
     if( maSentence.empty() )
         return pNew;
-    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+    auto pIter = std::ranges::find_if(maSentence,
         [nSplitPos](const sal_Int32& rPos) { return rPos >= nSplitPos; });
     if( pIter != maSentence.begin() )
     {
@@ -112,7 +112,7 @@ void SwGrammarMarkUp::ClearGrammarList( sal_Int32 nSentenceEnd )
 
 void SwGrammarMarkUp::setSentence( sal_Int32 nStart )
 {
-    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+    auto pIter = std::ranges::find_if(maSentence,
         [nStart](const sal_Int32& rPos) { return rPos >= nStart; });
     if( pIter == maSentence.end() || *pIter > nStart )
         maSentence.insert( pIter, nStart );
@@ -122,7 +122,7 @@ sal_Int32 SwGrammarMarkUp::getSentenceStart( sal_Int32 nPos )
 {
     if( maSentence.empty() )
         return 0;
-    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+    auto pIter = std::ranges::find_if(maSentence,
         [nPos](const sal_Int32& rPos) { return rPos >= nPos; });
     if( pIter != maSentence.begin() )
         --pIter;
@@ -135,7 +135,7 @@ sal_Int32 SwGrammarMarkUp::getSentenceEnd( sal_Int32 nPos )
 {
     if( maSentence.empty() )
         return COMPLETE_STRING;
-    auto pIter = std::find_if(maSentence.begin(), maSentence.end(),
+    auto pIter = std::ranges::find_if(maSentence,
         [nPos](const sal_Int32& rPos) { return rPos > nPos; });
     if( pIter != maSentence.end() )
         return *pIter;
