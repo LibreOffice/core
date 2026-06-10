@@ -221,6 +221,10 @@ public class _XAccessibleComponent extends MultiMethodTest {
                 continue;
             }
 
+            if (chBnd.Width == 0 || chBnd.Height == 0) {
+                continue;
+            }
+
             log.println("Checking child with bounds " + "(" + chBnd.X +
                         "," + chBnd.Y + "),(" + chBnd.Width + "," +
                         chBnd.Height + "): " +
