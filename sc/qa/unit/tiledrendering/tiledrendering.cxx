@@ -1160,6 +1160,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLanguageStatus)
 
     // view #1
     SfxViewShell* pView1 = SfxViewShell::Current();
+    pView1->SetLOKLocale(u"en-US"_ustr);
 
     // view #2
     int nView1 = SfxLokHelper::getCurrentView();
@@ -3693,6 +3694,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLOKLanguageStatus)
     }
 
     {
+        pView->SetLOKLocale(u"en-US"_ustr);
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
                 { "Language", uno::Any(u"Default_English (USA)"_ustr) },
             }));
