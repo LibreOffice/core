@@ -4104,9 +4104,6 @@ void ScDocument::CalcAll()
     // presented with outdated data.
     if (GetHardRecalcState() == HardRecalcState::ETERNAL)
         ClearLookupCaches();
-
-    // Process any dynamic-array expansions queued during interpretation.
-    ProcessPendingMatrixResizes();
 }
 
 void ScDocument::CompileAll()

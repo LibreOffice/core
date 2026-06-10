@@ -27,6 +27,7 @@
 #include <drwlayer.hxx>
 #include <olinetab.hxx>
 #include <stlpool.hxx>
+#include <MatrixResizeGuard.hxx>
 #include <attarray.hxx>
 #include <markdata.hxx>
 #include <dociter.hxx>
@@ -2229,6 +2230,11 @@ void ScTable::SetLoadingMedium(bool bLoading)
 
 void ScTable::CalcAll()
 {
+    // Interpreting a dynamic-array formula here can resize it, deleting or
+    // inserting reference cells in the columns this loop walks. Defer any
+    // such resize to the end of the whole-table walk so the cell store is
+    // not mutated underneath the iteration.
+    sc::MatrixResizeGuard aMatrixResizeGuard(rDocument);
     for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].CalcAll();
 
