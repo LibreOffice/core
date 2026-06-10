@@ -14,7 +14,6 @@
 #include <map>
 #include <string_view>
 #include <variant>
-#include <vector>
 
 class SwContentNode;
 class SwFormat;
@@ -32,8 +31,10 @@ namespace sw
 // the deferred item is set.
 //
 // When the graphic resolves, DataChanged calls SetFormatAttr / SetAttr on the
-// host with the fetched graphic. Each link also listens to its host's notifier
-// and self-deregisters on Dying so a link never outlives its host.
+// host with the fetched graphic. A host destroyed while the document lives
+// reports its death here with an empty URL, so a link never outlives its
+// host. During ~SwDoc the hosts stay silent and the tracker destructor
+// releases the remaining links instead.
 class FillBitmapLinkTracker final
 {
 public:
@@ -42,11 +43,13 @@ public:
 
     // Called by SwFormat::SwClientNotify / SwContentNode::SwClientNotify
     // when XATTR_FILLBITMAP changes in the host's own attribute set, and
-    // from the link itself on host-Dying to drop the stale entry. rNewURL
-    // is the deferred origin URL of the new item, or empty when the item
-    // is absent, already resolved, or the host is going away.
+    // by the host's destructor to drop the stale entry. rNewURL is the
+    // deferred origin URL of the new item, or empty when the item is
+    // absent, already resolved, or the host is being destroyed.
     void onFillBitmapURLChanged(SwFormat& rFormat, std::u16string_view rNewURL);
     void onFillBitmapURLChanged(SwContentNode& rNode, std::u16string_view rNewURL);
+
+    bool hasLinks() const { return !m_aLinks.empty() || !m_aNodeLinks.empty(); }
 
     // Suppress the onFillBitmapURLChanged that a link's own write-back of the
     // resolved graphic would otherwise raise for its host. The host is held by
@@ -59,8 +62,6 @@ private:
     void onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap, Host& rHost,
                           std::u16string_view rNewURL);
 
-    void drainPendingReleases();
-
     template <typename Host> bool isUpdatingHost(Host* pHost) const
     {
         auto const* ppHost = std::get_if<Host*>(&m_aUpdatingHost);
@@ -72,8 +73,6 @@ private:
     std::variant<std::monostate, SwFormat*, SwContentNode*> m_aUpdatingHost;
     std::map<SwFormat*, tools::SvRef<sfx2::SvBaseLink>> m_aLinks;
     std::map<SwContentNode*, tools::SvRef<sfx2::SvBaseLink>> m_aNodeLinks;
-    // Links pulled from the maps but not yet freed, since removal may run inside a Dying broadcast:
-    std::vector<tools::SvRef<sfx2::SvBaseLink>> m_aPendingRelease;
 };
 }
 

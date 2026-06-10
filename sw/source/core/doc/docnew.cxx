@@ -271,6 +271,7 @@ SwDoc::SwDoc()
     mbInWriterfilterImport(false),
     mbUpdateTOX(false),
     mbInLoadAsynchron(false),
+    mbHasFillBitmapLinks(false),
     mbIsAutoFormatRedline(false),
     mbOLEPrtNotifyPending(false),
     mbAllOLENotify(false),

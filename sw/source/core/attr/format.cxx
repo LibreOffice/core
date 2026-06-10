@@ -211,6 +211,11 @@ void SwFormat::Destr()
 
 SwFormat::~SwFormat()
 {
+    // release any fill-bitmap link that has this format as its target
+    SwDoc& rDoc = GetDoc();
+    if (rDoc.HasFillBitmapLinks() && !rDoc.IsInDtor())
+        rDoc.getIDocumentLinksAdministration().onFillBitmapURLChanged(*this, u"");
+
     Destr();
 }
 
