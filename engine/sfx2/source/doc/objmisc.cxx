@@ -346,9 +346,13 @@ void SfxObjectShell::ModifyChanged()
     // Don't wait to get this important state via binding notification timeout.
     if ( comphelper::COKit::isActive() )
     {
-        OString aStatus = ".uno:ModifiedStatus="_ostr;
-        aStatus += IsModified() ? "true" : "false";
-        KitHelper::notifyAllViews(KIT_CALLBACK_STATE_CHANGED, aStatus);
+        SfxViewShell* pCurrent = SfxViewShell::Current();
+        if ( pCurrent && pCurrent->GetObjectShell() == this )
+        {
+            OString aStatus = ".uno:ModifiedStatus="_ostr;
+            aStatus += IsModified() ? "true" : "false";
+            KitHelper::notifyAllViews(KIT_CALLBACK_STATE_CHANGED, aStatus);
+        }
     }
 }
 
