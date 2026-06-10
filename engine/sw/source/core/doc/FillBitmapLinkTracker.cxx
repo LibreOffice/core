@@ -14,7 +14,6 @@
 
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <svl/listener.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
 #include <vcl/graph.hxx>
@@ -41,15 +40,11 @@ template <> struct HostOps<SwContentNode>
 };
 
 // One link per XFillBitmapItem-owner that currently has a deferred
-// XFillBitmapItem. The link listens to the XFillBitmapItem-owner for
-// SfxHintId::Dying and asks the tracker to drop it, so links never outlive
-// their host.
-//
-// When the remote graphic resolves, DataChanged writes the fetched bitmap back
-// via setAttr; XFillBitmapItem-owner fires SwClientNotify, which calls back
-// through onFillBitmapURLChanged with an empty URL and the tracker removes us.
+// XFillBitmapItem. The owner's destructor reports its death to the tracker,
+// which releases the link while m_rHost is still valid, so the link itself
+// observes nothing and m_rHost cannot dangle.
 template <typename Host>
-class SwHostFillBitmapLink final : public sfx2::SvBaseLink, public SvtListener
+class SwHostFillBitmapLink final : public sfx2::SvBaseLink
 {
     sw::FillBitmapLinkTracker& m_rTracker;
     Host& m_rHost;
@@ -63,7 +58,6 @@ public:
         , m_rHost(rHost)
         , m_rLinkMgr(rLinkMgr)
     {
-        StartListening(rHost.GetNotifier());
     }
 
     UpdateResult DataChanged(const OUString& rMimeType, const css::uno::Any& rValue) override
@@ -83,20 +77,13 @@ public:
         // Write the resolved graphic back to this one host. The write
         // re-enters onFillBitmapURLChanged with a now-resolved item, so tell
         // the tracker to ignore that notification for this host and keep us
-        // registered (like the svx tracker's resolved links), so our
-        // LinkManager entry survives SvBaseLink::Update.
+        // registered (like the svx tracker's resolved links). Removing us
+        // here instead would free the link inside SvBaseLink::Update, which
+        // still reads its members after DataChanged returns.
         m_rTracker.setUpdatingHost(&m_rHost);
         HostOps<Host>::setAttr(m_rHost, XFillBitmapItem(aName, aGrf));
         m_rTracker.clearUpdatingHost();
         return SUCCESS;
-    }
-
-    void Notify(const SfxHint& rHint) override
-    {
-        if (rHint.GetId() != SfxHintId::Dying)
-            return;
-        tools::SvRef<SvBaseLink> xSelf(this);
-        m_rTracker.onFillBitmapURLChanged(m_rHost, OUString());
     }
 };
 }
@@ -116,14 +103,6 @@ FillBitmapLinkTracker::~FillBitmapLinkTracker()
     for (const auto& rEntry : m_aNodeLinks)
         m_rLinkMgr.Remove(rEntry.second.get());
     m_aNodeLinks.clear();
-    drainPendingReleases();
-}
-
-void FillBitmapLinkTracker::drainPendingReleases()
-{
-    // Release through a local so the member is already empty if a freed link parks another:
-    std::vector<tools::SvRef<sfx2::SvBaseLink>> aReleasing;
-    aReleasing.swap(m_aPendingRelease);
 }
 
 template <typename Host>
@@ -134,15 +113,10 @@ void FillBitmapLinkTracker::onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::
     if (isUpdatingHost(&rHost))
         return;
 
-    drainPendingReleases();
-
     auto it = rMap.find(&rHost);
     if (it != rMap.end())
     {
         m_rLinkMgr.Remove(it->second.get());
-        // Park rather than drop, since inside rHost's Dying broadcast the link must outlive the
-        // BroadcasterDying call still to come and so cannot be freed here:
-        m_aPendingRelease.push_back(std::move(it->second));
         rMap.erase(it);
     }
     if (rNewURL.empty())

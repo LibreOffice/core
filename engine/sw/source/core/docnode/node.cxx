@@ -1094,6 +1094,15 @@ SwContentNode::SwContentNode( const SwNode& rWhere, const SwNodeType nNdType,
 
 void SwContentNode::ImplDestroy()
 {
+    // release any fill-bitmap link that has this node as its target,
+    // disconnected working copies have no SwDoc and no links
+    if (!IsDisconnected())
+    {
+        SwDoc& rDoc = GetDoc();
+        if (rDoc.HasFillBitmapLinks() && !rDoc.IsInDtor())
+            rDoc.getIDocumentLinksAdministration().onFillBitmapURLChanged(*this, u"");
+    }
+
     // The base class SwClient of SwFrame excludes itself from the dependency list!
     // Thus, we need to delete all Frames in the dependency list.
     if (!IsTextNode()) // see ~SwTextNode

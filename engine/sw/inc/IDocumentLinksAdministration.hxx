@@ -71,9 +71,9 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
 
     // Called by SwFormat::SwClientNotify / SwContentNode::SwClientNotify
     // when XATTR_FILLBITMAP changes in the host's own attribute set, and
-    // from the registered SvBaseLink itself on host-Dying. rNewURL is the
-    // deferred origin URL of the new item, or empty if the item is absent,
-    // already resolved, or the host is being destroyed.
+    // by the host's destructor. rNewURL is the deferred origin URL of the
+    // new item, or empty if the item is absent, already resolved, or the
+    // host is being destroyed.
     virtual void onFillBitmapURLChanged(SwFormat& rFormat, std::u16string_view rNewURL) = 0;
     virtual void onFillBitmapURLChanged(SwContentNode& rNode, std::u16string_view rNewURL) = 0;
 

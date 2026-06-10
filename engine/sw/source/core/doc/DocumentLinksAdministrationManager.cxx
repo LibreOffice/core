@@ -423,12 +423,14 @@ void DocumentLinksAdministrationManager::onFillBitmapURLChanged(SwFormat& rForma
                                                                 std::u16string_view rNewURL)
 {
     m_pFillBitmapLinkTracker->onFillBitmapURLChanged(rFormat, rNewURL);
+    m_rDoc.SetHasFillBitmapLinks(m_pFillBitmapLinkTracker->hasLinks());
 }
 
 void DocumentLinksAdministrationManager::onFillBitmapURLChanged(SwContentNode& rNode,
                                                                 std::u16string_view rNewURL)
 {
     m_pFillBitmapLinkTracker->onFillBitmapURLChanged(rNode, rNewURL);
+    m_rDoc.SetHasFillBitmapLinks(m_pFillBitmapLinkTracker->hasLinks());
 }
 
 DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()

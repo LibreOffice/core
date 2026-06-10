@@ -30,7 +30,9 @@
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
 
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <svx/fillbitmaplink.hxx>
 #include <svx/xbtmpit.hxx>
@@ -40,6 +42,7 @@
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <docsh.hxx>
@@ -1000,6 +1003,66 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleBackgroundImageRemo
     pDevice->SetOutputSizePixel(Size(1024, 1024));
     static_cast<SwViewShell*>(pWrtShell)->Paint(
         *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleDeleteReleasesBackgroundImageLink)
+{
+    // Deleting the paragraph style that carries the remote background must
+    // drop the style's entry from the link manager, so Edit > Links no
+    // longer offers a link whose target style is gone.
+    comphelper::COKit::setActive(false);
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"paragraph-style-background-link.fodt"), aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    sfx2::LinkManager& rLinkMgr
+        = pDocShell->GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
+    CPPUNIT_ASSERT_MESSAGE("paragraph-style background image link should be registered",
+                           !rLinkMgr.GetLinks().empty());
+
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xParaStyles(
+        xSupplier->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    xParaStyles->removeByName(u"LinkBackground"_ustr);
+
+    CPPUNIT_ASSERT_MESSAGE("deleting the style should release its link",
+                           rLinkMgr.GetLinks().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphDeleteReleasesBackgroundImageLink)
+{
+    // Joining away a paragraph with its own remote background must drop that
+    // paragraph's entry from the link manager once the undo history no
+    // longer keeps the deleted paragraph alive.
+    comphelper::COKit::setActive(false);
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"two-paragraph-background-links.fodt"), aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    sfx2::LinkManager& rLinkMgr
+        = pDocShell->GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rLinkMgr.GetLinks().size());
+
+    // forward-delete at the end of the first paragraph joins the second
+    // paragraph into it
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->EndPara();
+    pWrtShell->DelRight();
+
+    // the deleted paragraph may survive in the undo history and keep its
+    // link until the history lets go of it
+    pDocShell->GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkMgr.GetLinks().size());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageLinkSurvivesUpdate)
