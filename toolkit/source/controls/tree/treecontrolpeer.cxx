@@ -221,36 +221,35 @@ void TreeControlPeer::disposeControl()
 
 UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uInt32 nPos /* = TREELIST_APPEND */ )
 {
-    UnoTreeListEntry* pEntry = nullptr;
-    if( mpTreeImpl )
+    if (!mpTreeImpl)
+        return nullptr;
+
+    Image aImage;
+    UnoTreeListEntry* pEntry = new UnoTreeListEntry(xNode, this);
+    pEntry->AddItem(std::make_unique<ImplContextGraphicItem>(aImage, aImage, true));
+
+    std::unique_ptr<UnoTreeListItem> pUnoItem(new UnoTreeListItem);
+
+    if (!xNode->getNodeGraphicURL().isEmpty())
     {
-        Image aImage;
-        pEntry = new UnoTreeListEntry( xNode, this );
-        pEntry->AddItem(std::make_unique<ImplContextGraphicItem>(aImage, aImage, true));
-
-        std::unique_ptr<UnoTreeListItem> pUnoItem(new UnoTreeListItem);
-
-        if( !xNode->getNodeGraphicURL().isEmpty() )
-        {
-            pUnoItem->SetGraphicURL( xNode->getNodeGraphicURL() );
-            Image aNodeImage;
-            loadImage( xNode->getNodeGraphicURL(), aNodeImage );
-            pUnoItem->SetImage( aNodeImage );
-            mpTreeImpl->AdjustEntryHeight( aNodeImage );
-        }
-
-        pEntry->AddItem(std::move(pUnoItem));
-
-        mpTreeImpl->insert( pEntry, pParent, nPos );
-
-        if( !msDefaultExpandedGraphicURL.isEmpty() )
-            mpTreeImpl->SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
-
-        if( !msDefaultCollapsedGraphicURL.isEmpty() )
-            mpTreeImpl->SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
-
-        updateEntry( pEntry );
+        pUnoItem->SetGraphicURL(xNode->getNodeGraphicURL());
+        Image aNodeImage;
+        loadImage(xNode->getNodeGraphicURL(), aNodeImage);
+        pUnoItem->SetImage(aNodeImage);
+        mpTreeImpl->AdjustEntryHeight(aNodeImage);
     }
+
+    pEntry->AddItem(std::move(pUnoItem));
+
+    mpTreeImpl->insert(pEntry, pParent, nPos);
+
+    if (!msDefaultExpandedGraphicURL.isEmpty())
+        mpTreeImpl->SetExpandedEntryBmp(pEntry, maDefaultExpandedImage);
+
+    if (!msDefaultCollapsedGraphicURL.isEmpty())
+        mpTreeImpl->SetCollapsedEntryBmp(pEntry, maDefaultCollapsedImage);
+
+    updateEntry(pEntry);
     return pEntry;
 }
 
