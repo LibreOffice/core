@@ -14,8 +14,8 @@ on:
       - 'macos/README.md'
       - 'qt/README.md'
       - 'windows/coda/README.md'
-      - 'ios/README'
-      - 'android/README'
+      - 'ios/README.md'
+      - 'android/README.md'
 
 jobs:
   notify:
