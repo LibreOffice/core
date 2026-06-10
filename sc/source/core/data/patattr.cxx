@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
 #include <memory>
 #include <utility>
 #include <scitems.hxx>
@@ -467,6 +468,7 @@ bool ScPatternAttr::operator==(const ScPatternAttr& rCmp) const
 
 void ScPatternAttr::CalcHashCode() const
 {
+    assert(!ScGlobal::bThreadedGroupCalcInProgress);
     size_t nHash = 0;
     if (const OUString* pName = GetStyleName())
         nHash = pName->hashCode();
@@ -1538,7 +1540,10 @@ CellAttributeHolder ScPatternAttr::MigrateToDocument( ScDocument* pDestDoc, ScDo
 bool ScPatternAttr::IsVisible() const
 {
     if (!mxVisible.has_value())
+    {
+        assert(!ScGlobal::bThreadedGroupCalcInProgress);
         mxVisible = CalcVisible();
+    }
     return *mxVisible;
 }
 
@@ -1702,14 +1707,22 @@ bool ScPatternAttr::HasValidNumberFormat() const
 sal_uInt32 ScPatternAttr::GetNumberFormatKey() const
 {
     if (!mxNumberFormatKey.has_value())
+    {
+        if (ScGlobal::bThreadedGroupCalcInProgress)
+            return getNumberFormatKey(GetItemSet());
         mxNumberFormatKey = getNumberFormatKey(GetItemSet());
+    }
     return *mxNumberFormatKey;
 }
 
 LanguageType ScPatternAttr::GetLanguageType() const
 {
     if (!mxLanguageType.has_value())
+    {
+        if (ScGlobal::bThreadedGroupCalcInProgress)
+            return getLanguageType(GetItemSet());
         mxLanguageType = getLanguageType(GetItemSet());
+    }
     return *mxLanguageType;
 }
 
