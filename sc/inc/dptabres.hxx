@@ -349,13 +349,13 @@ public:
 
     virtual void CheckShowEmpty(bool bShow = false) = 0;
 
-    virtual OUString GetName() const = 0;
+    OUString GetName() const;
 
     virtual OUString GetDisplayName(bool bLocaleIndependent) const = 0;
 
     virtual const ScDPResultData* GetResultData() const = 0;
 
-    virtual ScDPItemData FillItemData() const = 0;
+    ScDPItemData FillItemData() const;
 
     virtual bool IsAutoHidden() const = 0;
 
@@ -377,9 +377,9 @@ public:
 
     virtual tools::Long GetSubTotalCount(tools::Long* pUserSubStart = nullptr) const = 0;
 
-    virtual bool IsNamedItem(SCROW nIndex) const = 0;
+    bool IsNamedItem(SCROW nIndex) const;
 
-    virtual bool IsValidEntry(const ::std::vector<SCROW>& aMembers) const = 0;
+    bool IsValidEntry(const ::std::vector<SCROW>& aMembers) const;
 
     virtual bool GetHasElements() const = 0;
 
@@ -438,7 +438,7 @@ public:
 
     virtual bool IsRoot() const = 0;
 
-    virtual SCROW GetDataId() const = 0;
+    SCROW GetDataId() const;
 
     virtual ScDPAggData* GetColTotal(tools::Long nMeasure) = 0;
 
@@ -477,11 +477,9 @@ public:
                                         size_t nPos,
                                         ScDPInitState& rInitState);
     void CheckShowEmpty( bool bShow = false );
-    OUString GetName() const;
     OUString GetDisplayName( bool bLocaleIndependent ) const;
     const ScDPResultData* GetResultData() const { return pResultData; }
 
-    ScDPItemData FillItemData() const;
     bool IsAutoHidden() const { return bAutoHidden; };
     bool GetForceSubTotal() const { return bForceSubTotal; };
     bool IsInitialized() const { return bInitialized; };
@@ -495,9 +493,6 @@ public:
     bool IsSubTotalInTitle(tools::Long nMeasure) const;
 
     tools::Long                GetSubTotalCount( tools::Long* pUserSubStart = nullptr ) const;
-
-    bool IsNamedItem( SCROW nIndex ) const;
-    bool IsValidEntry( const ::std::vector< SCROW >& aMembers ) const;
 
     bool GetHasElements() const { return bHasElements; };
     void SetHasElements() { bHasElements = true; }
@@ -549,7 +544,6 @@ public:
     const ScDPMember*     GetDPMember()const              { return aParentDimData.mpMemberDesc; }    //! Ref
     SCROW GetOrder() const { return aParentDimData.mnOrder; }         //! Ref
     bool IsRoot() const { return GetParentLevel() == nullptr; }
-    SCROW                       GetDataId( ) const ;
     ScDPAggData*        GetColTotal( tools::Long nMeasure );
 
     void                FillVisibilityData(ScDPResultVisibilityData& rData) const;

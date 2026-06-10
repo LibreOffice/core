@@ -1017,7 +1017,7 @@ ScDPResultMemberFull::~ScDPResultMemberFull()
 {
 }
 
-OUString ScDPResultMemberFull::GetName() const
+OUString ScDPResultMember::GetName() const
 {
     const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
@@ -1042,7 +1042,7 @@ OUString ScDPResultMemberFull::GetDisplayName(bool bLocaleIndependent) const
     return aItem.GetString();
 }
 
-ScDPItemData ScDPResultMemberFull::FillItemData() const
+ScDPItemData ScDPResultMember::FillItemData() const
 {
     const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
@@ -1050,7 +1050,7 @@ ScDPItemData ScDPResultMemberFull::FillItemData() const
     return ScDPItemData(ScResId(STR_PIVOT_TOTAL));     // root member
 }
 
-bool ScDPResultMemberFull::IsNamedItem(SCROW nIndex) const
+bool ScDPResultMember::IsNamedItem(SCROW nIndex) const
 {
     //TODO: store ScDPMember pointer instead of ScDPMember ???
     const ScDPMember* pMemberDesc = GetDPMember();
@@ -1059,7 +1059,7 @@ bool ScDPResultMemberFull::IsNamedItem(SCROW nIndex) const
     return false;
 }
 
-bool ScDPResultMemberFull::IsValidEntry(const std::vector<SCROW>& aMembers) const
+bool ScDPResultMember::IsValidEntry(const std::vector<SCROW>& aMembers) const
 {
     if ( !IsValid() )
         return false;
@@ -4143,7 +4143,7 @@ size_t ScDPResultVisibilityData::MemberHash::operator() (const ScDPItemData& r) 
     else
         return r.GetString().hashCode();
 }
-SCROW ScDPResultMemberFull::GetDataId() const
+SCROW ScDPResultMember::GetDataId() const
 {
     const ScDPMember*   pMemberDesc = GetDPMember();
     if (pMemberDesc)
