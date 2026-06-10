@@ -508,6 +508,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"sfx/ui/documentinfopage.ui",
     u"sfx/ui/linefragment.ui",
     u"sfx/ui/managestylepage.ui",
+    u"sfx/ui/optprintpage.ui",
     u"sfx/ui/propertycategoryrow.ui",
     u"sfx/ui/propertychip.ui",
     u"sfx/ui/propertychiprow.ui",
