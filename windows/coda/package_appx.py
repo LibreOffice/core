@@ -235,6 +235,13 @@ def filterPDBs(PDBs, files):
 def main():
     scriptPath, scriptBaseName = os.path.split(os.path.abspath(__file__))
 
+    # Short, fixed ID for the PackagingLayout PackageFamily/Package elements.
+    # MakeAppx caps these IDs at 30 chars and names its build output after them,
+    # so distname.ver.arch (e.g. CollaboraOfficePreview.2604.1.28.0.x64) is too
+    # long; use a short constant and rename the output to the real name below.
+    # This is internal only - the published identity is the manifest's Identity.
+    PACKAGE_ID = 'CODA'
+
     try:
         with open(os.path.join(scriptPath, scriptBaseName + '.ini'), encoding='utf8') as input:
             inifile = { name.strip() : value.strip() for name, sep, value in [ line.partition('=') for line in input ] if sep == '=' }
@@ -347,8 +354,7 @@ def main():
             output.write(input.read().replace('%WORKDIR', path2win(workdir))\
                                      .replace('%ASSETS', path2win(assetsdir))\
                                      .replace('%FILES', path2win(args.files))\
-                                     .replace('%DISTNAME', args.distname)\
-                                     .replace('%VER', args.ver)\
+                                     .replace('%ID', PACKAGE_ID)\
                                      .replace('%ARCH', args.arch)\
                                      .replace('%BOOTSTRAP', path2win(bootstrap_file))\
                                      .replace('%PRI', path2win(pri_file)))
@@ -361,13 +367,16 @@ def main():
     # now build the package. This depends on MakeAppx.exe being in the $PATH if no winkit in inifile
     subprocess.run([makeappx_exe, 'build', '/f', path2win(packaginglayout_xml), '/op', path2win(workdir)]).check_returncode()
 
-    # MakeAppx.exe picks the output extension from the manifest: a manifest
-    # referencing 10.0.17763+ schema (com / desktop2 namespaces, or that
-    # MinVersion) is written as .msix / .msixbundle; an older schema yields
-    # .appx / .appxbundle. Same container in either case; pick whichever
-    # filename MakeAppx actually produced.
-    pkgExt = 'msix' if os.path.exists(os.path.join(workdir, fileBaseName + 'msix')) else 'appx'
+    # MakeAppx names its output after the PackagingLayout Package ID
+    # (PACKAGE_ID.arch); rename it to the user-facing distname.ver.arch here.
+    # It picks the extension from the manifest: a manifest referencing
+    # 10.0.17763+ schema (com / desktop2 namespaces, or that MinVersion) is
+    # written as .msix / .msixbundle; an older schema yields .appx / .appxbundle.
+    # Same container in either case; pick whichever filename MakeAppx produced.
+    builtBaseName = PACKAGE_ID + '.' + args.arch + '.'
+    pkgExt = 'msix' if os.path.exists(os.path.join(workdir, builtBaseName + 'msix')) else 'appx'
     appxName = os.path.join(workdir, fileBaseName + pkgExt)
+    os.replace(os.path.join(workdir, builtBaseName + pkgExt), appxName)
     appxsymName = os.path.join(workdir, fileBaseName + pkgExt + 'sym')
     appxuploadName = os.path.join(args.outdir, fileBaseName + pkgExt + 'upload')
 
