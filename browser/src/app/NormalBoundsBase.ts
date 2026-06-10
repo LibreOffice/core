@@ -119,4 +119,59 @@ class NormalBoundsBase {
 		}
 		return this;
 	}
+
+	public getCenter(): NormalPoint {
+		Util.ensureValue(this._southWest);
+		Util.ensureValue(this._northEast);
+		return new NormalPoint(
+			(this._southWest.lat + this._northEast.lat) / 2,
+			(this._southWest.lng + this._northEast.lng) / 2,
+		);
+	}
+
+	public getSouthWest(): NormalPoint {
+		Util.ensureValue(this._southWest);
+		return this._southWest;
+	}
+
+	public getNorthEast(): NormalPoint {
+		Util.ensureValue(this._northEast);
+		return this._northEast;
+	}
+
+	public getNorthWest(): NormalPoint {
+		return new NormalPoint(this.getNorth(), this.getWest());
+	}
+
+	public getSouthEast(): NormalPoint {
+		return new NormalPoint(this.getSouth(), this.getEast());
+	}
+
+	public getWest(): number {
+		Util.ensureValue(this._southWest);
+		return this._southWest.lng;
+	}
+
+	public getSouth(): number {
+		Util.ensureValue(this._southWest);
+		return this._southWest.lat;
+	}
+
+	public getEast(): number {
+		Util.ensureValue(this._northEast);
+		return this._northEast.lng;
+	}
+
+	public getNorth(): number {
+		Util.ensureValue(this._northEast);
+		return this._northEast.lat;
+	}
+
+	public getWidth(): number {
+		return Math.abs(this.getEast() - this.getWest());
+	}
+
+	public getHeight(): number {
+		return Math.abs(this.getNorth() - this.getSouth());
+	}
 }

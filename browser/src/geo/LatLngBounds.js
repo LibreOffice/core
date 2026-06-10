@@ -10,52 +10,6 @@ class NormalBounds extends NormalBoundsBase {
 		super(southWest, northEast);
 	}
 
-	getCenter() { // -> LatLng
-		return new NormalPoint(
-		        (this._southWest.lat + this._northEast.lat) / 2,
-		        (this._southWest.lng + this._northEast.lng) / 2);
-	}
-
-	getSouthWest() {
-		return this._southWest;
-	}
-
-	getNorthEast() {
-		return this._northEast;
-	}
-
-	getNorthWest() {
-		return new NormalPoint(this.getNorth(), this.getWest());
-	}
-
-	getSouthEast() {
-		return new NormalPoint(this.getSouth(), this.getEast());
-	}
-
-	getWest() {
-		return this._southWest.lng;
-	}
-
-	getSouth() {
-		return this._southWest.lat;
-	}
-
-	getEast() {
-		return this._northEast.lng;
-	}
-
-	getNorth() {
-		return this._northEast.lat;
-	}
-
-	getWidth() {
-		return Math.abs(this.getEast() - this.getWest());
-	}
-
-	getHeight() {
-		return Math.abs(this.getNorth() - this.getSouth());
-	}
-
 	_getAsLatLngOrBounds (obj) {
 		if (typeof obj[0] === 'number' || obj instanceof NormalPoint) {
 			obj = window.L.latLng(obj);
