@@ -1,0 +1,122 @@
+--- afdko/c/addfeatures/hotconv/GPOS.cpp
++++ afdko/c/addfeatures/hotconv/GPOS.cpp
+@@ -1025,12 +1025,14 @@ GPOS::PairPos::Format1::Format1(GPOS &h, GPOS::SubtableInfo &si) : PairPos(h, si
+     auto previ = si.pairs.begin();
+     std::vector<decltype(previ)> pairSetEnds;
+     cac->coverageBegin();
+-    for (auto i = previ + 1; i <= si.pairs.end(); i++) {
++    for (auto i = previ + 1;; i++) {
+         if (i == si.pairs.end() || i->first != previ->first) {
+             cac->coverageAddGlyph(previ->first);
+             pairSetEnds.emplace_back(i);
+             previ = i;
+         }
++        if (i == si.pairs.end())
++            break;
+     }
+ 
+     auto nvals = MetricsInfo::numValues(ValueFormat1) + MetricsInfo::numValues(ValueFormat2);
+--- afdko/c/addfeatures/hotconv/otl.cpp
++++ afdko/c/addfeatures/hotconv/otl.cpp
+@@ -463,34 +463,41 @@ void OTL::calcFeatureListIndices() {
+ void OTL::prepScriptList() {
+     std::stable_sort(subtables.begin(), subtables.end(), Subtable::ltScriptList);
+ 
++    if (subtables.size() == 0)
++        return;
++
+     auto prevs = subtables.begin();
+-    for (auto ss = prevs + 1; ss <= subtables.end(); ss++) {
++    for (auto ss = prevs + 1;; ss++) {
+         if (ss == subtables.end() || (*ss)->isAnon() || (*ss)->isStandAlone() ||
+             (*ss)->script != (*prevs)->script) {
+             // script change
+             (*prevs)->span.script = ss;
+ 
+             auto prevl = prevs;
+-            for (auto sl = prevl + 1; sl <= ss ; sl++) {
++            for (auto sl = prevl + 1;; sl++) {
+                 if (sl == ss || (*sl)->language != (*prevl)->language) {
+                     // language change
+                     (*prevl)->span.language = sl;
+ 
+                     auto prevf = prevl;
+-                    for (auto sf = prevf + 1; sf <= sl ; sf++) {
++                    for (auto sf = prevf + 1;; sf++) {
+                         if (sf == sl ||
+                             (*sf)->index.feature != (*prevf)->index.feature) {
+                             // feature index change
+                             (*prevf)->span.feature = sf;
+                             prevf = sf;
+                         }
++                        if (sf == sl)
++                            break;
+                     }
+                     prevl = sl;
+                 }
++                if (sl == ss)
++                    break;
+             }
+             prevs = ss;
+         }
+-        if (ss != subtables.end() && ((*ss)->isAnon() || (*ss)->isStandAlone()))
++        if (ss == subtables.end() || (*ss)->isAnon() || (*ss)->isStandAlone())
+             break;
+     }
+ }
+@@ -560,8 +567,11 @@ Offset OTL::fillScriptList() {
+ void OTL::prepFeatureList() {
+     std::stable_sort(subtables.begin(), subtables.end(), Subtable::ltFeatureList);
+ 
++    if (subtables.size() == 0)
++        return;
++
+     auto prevf = subtables.begin();
+-    for (auto sf = prevf + 1; sf <= subtables.end(); sf++) {
++    for (auto sf = prevf + 1;; sf++) {
+         // Whenever we encounter new feature index, store the current subtable
+         // index in the first subtable of the sequence of subtables that
+         // had the previous subtable index. The array is this divided into
+@@ -576,16 +586,18 @@ void OTL::prepFeatureList() {
+             (*prevf)->span.feature = sf;
+ 
+             auto prevl = prevf;
+-            for (auto sl = prevl + 1; sl <= sf; sl++) {
++            for (auto sl = prevl + 1;; sl++) {
+                 if (sl == sf || (*sl)->index.lookup != (*prevl)->index.lookup) {
+                     // lookup index change
+                     (*prevl)->span.lookup = sl;
+                     prevl = sl;
+                 }
++                if (sl == sf)
++                    break;
+             }
+             prevf = sf;
+         }
+-        if (sf != subtables.end() && ((*sf)->isStandAlone() || (*sf)->isAnon()))
++        if (sf == subtables.end() || (*sf)->isStandAlone() || (*sf)->isAnon())
+             break;
+     }
+ }
+@@ -672,8 +684,11 @@ void OTL::fixFeatureParamOffsets(Offset shortfeatureParamBaseOffset) {
+ void OTL::prepLookupList() {
+     std::stable_sort(subtables.begin(), subtables.end(), Subtable::ltLookupList);
+ 
++    if (subtables.size() == 0)
++        return;
++
+     auto prevl = subtables.begin();
+-    for (auto sl = prevl + 1; sl <= subtables.end(); sl++) {
++    for (auto sl = prevl + 1;; sl++) {
+         Subtable *slr = sl == subtables.end() ? nullptr : sl->get();
+         auto &prevlr = *prevl;
+         if (slr == nullptr || slr->isRef() || slr->isParam() ||
+@@ -682,7 +697,7 @@ void OTL::prepLookupList() {
+             prevlr->span.lookup = sl;
+             prevl = sl;
+         }
+-        if (slr != nullptr && (slr->isRef() || slr->isParam()))
++        if (slr == nullptr || slr->isRef() || slr->isParam())
+             break;
+     }
+ }

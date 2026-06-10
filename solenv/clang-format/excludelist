@@ -3603,6 +3603,8 @@ extensions/test/ole/unoTocomCalls/XCallback_Impl/Callback.h
 extensions/test/ole/unoTocomCalls/XCallback_Impl/Simple.cpp
 extensions/test/ole/unoTocomCalls/XCallback_Impl/Simple.h
 extensions/test/ole/unoTocomCalls/XCallback_Impl/resource.h
+external/afdko/afdko_version.cpp
+external/afdko/afdko_version.h
 external/bluez_bluetooth/inc/bluetooth/bluetooth.h
 external/cairo/configs/wnt_cairo_config.h
 external/cairo/configs/wnt_cairo_features.h

@@ -4417,8 +4417,8 @@ $(call gb_LinkTarget_use_unpacked,$(1),afdko)
 $(call gb_LinkTarget_set_include,$(1),\
        -I$(gb_UnpackedTarball_workdir)/afdko/c/shared/include \
        -I$(gb_UnpackedTarball_workdir)/afdko/c/shared/resource \
-       -I$(gb_UnpackedTarball_workdir)/afdko/c/makeotf/include \
-       -I$(gb_UnpackedTarball_workdir)/afdko/c/makeotf/source \
+       -I$(gb_UnpackedTarball_workdir)/afdko/c/addfeatures/include \
+       -I$(gb_UnpackedTarball_workdir)/afdko/c/addfeatures \
        $$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),afdko)

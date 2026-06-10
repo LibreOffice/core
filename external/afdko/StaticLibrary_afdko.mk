@@ -15,11 +15,14 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,afdko))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,afdko,cpp))
 
+# c/shared/include must come before c/addfeatures/include so that the
+# shared sources find their own pstoken.h. The addfeatures consumers of
+# the other pstoken.h are patched to include it by relative path, see
+# extern_addfeatures.patch.
 $(eval $(call gb_StaticLibrary_set_include,afdko,\
 	-I$(gb_UnpackedTarball_workdir)/afdko/c/shared/include \
 	-I$(gb_UnpackedTarball_workdir)/afdko/c/shared/resource \
-	-I$(gb_UnpackedTarball_workdir)/afdko/c/shared/source/tx_shared \
-	-I$(gb_UnpackedTarball_workdir)/afdko/c/makeotf \
+	-I$(gb_UnpackedTarball_workdir)/afdko/c/addfeatures/include \
 	-I$(gb_UnpackedTarball_workdir)/afdko/a4/runtime/src \
 	$$(INCLUDE) \
 ))
@@ -29,113 +32,101 @@ $(eval $(call gb_StaticLibrary_use_externals,afdko,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,afdko, \
-	-DTC_EURO_SUPPORT=1 \
-	-DTC_SUBR_SUPPORT=1 \
-	-DTC_HINT_CHECK=1 \
 	-DANTLR4CPP_STATIC \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,afdko,\
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont \
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont_afm \
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont_compare \
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont_desc \
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont_draw \
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont_dump \
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont_metrics \
-	UnpackedTarball/afdko/c/shared/source/absfont/absfont_path \
-	UnpackedTarball/afdko/c/shared/source/cfembed/cfembed \
-	UnpackedTarball/afdko/c/shared/source/cffread/cffread \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_charset \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_dict \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_encoding \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_fdselect \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_sindex \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_subr \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_t2cstr \
-	UnpackedTarball/afdko/c/shared/source/cffwrite/cffwrite_varstore \
-	UnpackedTarball/afdko/c/shared/source/ctutil/ctutil \
-	UnpackedTarball/afdko/c/shared/source/dynarr/dynarr \
-	UnpackedTarball/afdko/c/shared/source/nameread/nameread \
-	UnpackedTarball/afdko/c/shared/source/pdfwrite/pdfwrite \
-	UnpackedTarball/afdko/c/shared/source/pstoken/pstoken \
-	UnpackedTarball/afdko/c/shared/source/sfntread/sfntread \
-	UnpackedTarball/afdko/c/shared/source/sfntwrite/sfntwrite \
-	UnpackedTarball/afdko/c/shared/source/sha1/sha1 \
-	UnpackedTarball/afdko/c/shared/source/support/canthappen \
-	UnpackedTarball/afdko/c/shared/source/support/except \
-	UnpackedTarball/afdko/c/shared/source/support/fixed \
-	UnpackedTarball/afdko/c/shared/source/svgwrite/svgwrite \
-	UnpackedTarball/afdko/c/shared/source/svread/svread \
-	UnpackedTarball/afdko/c/shared/source/t1cstr/t1cstr \
-	UnpackedTarball/afdko/c/shared/source/t1read/t1read \
-	UnpackedTarball/afdko/c/shared/source/t1write/t1write \
-	UnpackedTarball/afdko/c/shared/source/t2cstr/t2cstr \
-	UnpackedTarball/afdko/c/shared/source/ttread/ttread \
-	UnpackedTarball/afdko/c/shared/source/varread/varread \
-	UnpackedTarball/afdko/c/shared/source/uforead/uforead \
-	UnpackedTarball/afdko/c/shared/source/ufowrite/ufowrite \
-	UnpackedTarball/afdko/c/shared/source/tx_shared/tx_shared \
-))
-
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,afdko,\
-	UnpackedTarball/afdko/c/tx/source/tx \
-))
-
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,afdko,\
-	UnpackedTarball/afdko/c/mergefonts/source/mergeFonts \
-))
-
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,afdko,\
-	UnpackedTarball/afdko/c/makeotf/source/c_main \
-	UnpackedTarball/afdko/c/makeotf/source/cb \
-	UnpackedTarball/afdko/c/makeotf/source/cbpriv \
-	UnpackedTarball/afdko/c/makeotf/source/fcdb \
-	UnpackedTarball/afdko/c/makeotf/source/file \
-	UnpackedTarball/afdko/c/makeotf/source/mac \
-	UnpackedTarball/afdko/c/makeotf/lib/cffread/cffread \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/BASE \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/CFF_ \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/GDEF \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/GPOS \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/GSUB \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/OS_2 \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/STAT \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/VORG \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/anon \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/cmap \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/head \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/hhea \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/hmtx \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/hot \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/map \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/maxp \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/name \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/otl \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/post \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/sfnt \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/vhea \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/vmtx \
-	UnpackedTarball/afdko/c/makeotf/lib/pstoken/pstoken \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/charset \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/cs \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/dict \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/encoding \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/fdselect \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/parse \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/recode \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/sindex \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/subr \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/t13 \
-	UnpackedTarball/afdko/c/makeotf/lib/typecomp/tc \
+	UnpackedTarball/afdko/c/shared/cffread \
+	UnpackedTarball/afdko/c/shared/ctutil \
+	UnpackedTarball/afdko/c/shared/da \
+	UnpackedTarball/afdko/c/shared/dynarr \
+	UnpackedTarball/afdko/c/shared/sha1 \
+	UnpackedTarball/afdko/c/shared/smem \
+	UnpackedTarball/afdko/c/shared/support/except \
+	UnpackedTarball/afdko/c/shared/support/fixed \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,afdko,\
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/FeatCtx \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/FeatLexer \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/FeatParser \
-	UnpackedTarball/afdko/c/makeotf/lib/hotconv/FeatVisitor \
+	UnpackedTarball/afdko/c/shared/absfont/absfont \
+	UnpackedTarball/afdko/c/shared/absfont/absfont_afm \
+	UnpackedTarball/afdko/c/shared/absfont/absfont_compare \
+	UnpackedTarball/afdko/c/shared/absfont/absfont_desc \
+	UnpackedTarball/afdko/c/shared/absfont/absfont_draw \
+	UnpackedTarball/afdko/c/shared/absfont/absfont_dump \
+	UnpackedTarball/afdko/c/shared/absfont/absfont_metrics \
+	UnpackedTarball/afdko/c/shared/absfont/absfont_path \
+	UnpackedTarball/afdko/c/shared/afdko_version \
+	UnpackedTarball/afdko/c/shared/cfembed \
+	UnpackedTarball/afdko/c/shared/cffread_abs \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_charset \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_dict \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_encoding \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_fdselect \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_sindex \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_subr \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_t2cstr \
+	UnpackedTarball/afdko/c/shared/cffwrite/cffwrite_varstore \
+	UnpackedTarball/afdko/c/shared/designspace \
+	UnpackedTarball/afdko/c/shared/goadb \
+	UnpackedTarball/afdko/c/shared/namesupport \
+	UnpackedTarball/afdko/c/shared/pdfwrite \
+	UnpackedTarball/afdko/c/shared/pstoken \
+	UnpackedTarball/afdko/c/shared/sfile \
+	UnpackedTarball/afdko/c/shared/sfntread \
+	UnpackedTarball/afdko/c/shared/sfntwrite \
+	UnpackedTarball/afdko/c/shared/slogger \
+	UnpackedTarball/afdko/c/shared/svgwrite \
+	UnpackedTarball/afdko/c/shared/svread/svread \
+	UnpackedTarball/afdko/c/shared/t1cstr \
+	UnpackedTarball/afdko/c/shared/t1read \
+	UnpackedTarball/afdko/c/shared/t1write/t1write \
+	UnpackedTarball/afdko/c/shared/t2cstr \
+	UnpackedTarball/afdko/c/shared/ttread \
+	UnpackedTarball/afdko/c/shared/tx_shared \
+	UnpackedTarball/afdko/c/shared/uforead \
+	UnpackedTarball/afdko/c/shared/ufowrite \
+	UnpackedTarball/afdko/c/shared/varsupport \
+))
+
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,afdko,\
+	UnpackedTarball/afdko/c/mergefonts/mergeFonts \
+))
+
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,afdko,\
+	UnpackedTarball/afdko/c/addfeatures/pstoken/pstoken \
+))
+
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,afdko,\
+	UnpackedTarball/afdko/c/addfeatures/cb \
+	UnpackedTarball/afdko/c/addfeatures/fcdb \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/BASE \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/FeatCtx \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/FeatLexer \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/FeatParser \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/FeatParserBaseVisitor \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/FeatParserVisitor \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/FeatVisitor \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/GDEF \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/GPOS \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/GSUB \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/MVAR \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/OS_2 \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/STAT \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/anon \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/cmap \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/glyphmetrics \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/head \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/hmtx \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/hot \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/hotlogger \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/map \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/maxp \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/name \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/otl \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/post \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/sfnt \
+	UnpackedTarball/afdko/c/addfeatures/hotconv/vmtx \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,afdko,\

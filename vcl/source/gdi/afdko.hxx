@@ -15,19 +15,37 @@
 
 #pragma once
 
+// the afdko headers are not warning-clean
+#if defined __GNUC__ || defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4100) // goadb.h error() ignores its message parameter
+#pragma warning(disable : 4309) // varsupport.h passes 0x8000 to the int16_t writer w2
+#endif
+
+#include <afdko_version.h>
 #include <tx_shared.h>
 #include <hotconv.h>
 #include <cb.h>
 
-extern "C" {
-extern txCtx txNew(char* progname);
-extern void txFree(txCtx h);
-extern void cfrReadFont(txCtx h, long origin, int ttcIndex);
+#if defined __GNUC__ || defined __clang__
+#pragma GCC diagnostic pop
+#endif
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
-extern txCtx mergeFontsNew(char* progname);
+// the mergefonts embedding interface added by extern_mergefonts.patch
+extern "C" {
+extern txCtx mergeFontsNew(void);
 extern void mergeFontsFree(txCtx h);
-extern void readCIDFontInfo(txCtx h, char* filePath);
-extern int doMergeFileSet(txCtx h, int argc, char* args[], int i);
+extern void mergeFontsReadCIDFontInfo(txCtx h, const char* filePath);
+extern int mergeFontsDoMergeFileSet(txCtx h, int argc, char* argv[], int i);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
