@@ -118,6 +118,7 @@ RequestDetails::RequestDetails(std::string mobileURI)
     , _isProxy(false)
     , _isWebSocket(false)
     , _closeConnection(false)
+    , _isCool2(false)
 {
     dehexify();
     processURI();
@@ -129,6 +130,7 @@ RequestDetails::RequestDetails(const std::string& wopiSrc, const std::vector<std
     , _isProxy(false)
     , _isWebSocket(false)
     , _closeConnection(false)
+    , _isCool2(false)
 {
     // /cool/<encoded-document-URI+options>/ws?WOPISrc=<encoded-document-URI>&compat=/ws[/<sessionId>/<command>/<serial>]
 
@@ -238,7 +240,7 @@ void RequestDetails::processURI()
         (posDocUri == std::string::npos) ? std::string() : _uriString.substr(posDocUri + 1);
 
     // Cool URI 2.0 starts with /cool/ws.
-    const bool isCool2 = _pathSegs.equals(0, "cool") && _pathSegs.equals(1, "ws");
+    _isCool2 = _pathSegs.equals(0, "cool") && _pathSegs.equals(1, "ws");
 
     if (_pathSegs.equals(0, "cool") || _pathSegs.equals(0, "wasm"))
     {
@@ -256,7 +258,7 @@ void RequestDetails::processURI()
     _fields[Field::WOPISrc] = getParam("WOPISrc");
 
     // DocumentURI is the second segment in cool URIs.
-    if (isCool2)
+    if (_isCool2)
     {
         // The params are now part of the main URI, not a sub-section (i.e. Document-URI).
         _docUriParams = _params;
@@ -284,7 +286,7 @@ void RequestDetails::processURI()
     if (!compat.empty())
         _fields[Field::Compat] = std::move(compat);
 
-    if (!isCool2)
+    if (!_isCool2)
     {
         // /ws[/<sessionId>/<command>/<serial>]
         const auto posLastWS = uriRes.rfind("/ws");

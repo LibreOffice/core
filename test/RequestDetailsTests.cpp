@@ -515,6 +515,7 @@ void RequestDetailsTests::testRequestDetails()
 
         LOK_ASSERT_EQUAL(Root, details.getHostUntrusted());
         LOK_ASSERT_EQUAL(false, details.isWebSocket());
+        LOK_ASSERT_EQUAL(false, details.isCool2());
         LOK_ASSERT_EQUAL(true, details.isGet());
 
         LOK_ASSERT_EQUAL_STR("b26112ab1b6f2ed98ce1329f0f344791",
@@ -877,6 +878,7 @@ void RequestDetailsTests::testCoolWs()
 
         LOK_ASSERT_EQUAL(Root, details.getHostUntrusted());
         LOK_ASSERT_EQUAL(false, details.isWebSocket());
+        LOK_ASSERT_EQUAL(true, details.isCool2());
         LOK_ASSERT_EQUAL(true, details.isGet());
 
         LOK_ASSERT_EQUAL_STR("b26112ab1b6f2ed98ce1329f0f344791",
@@ -955,6 +957,7 @@ void RequestDetailsTests::testCoolWs()
 
         LOK_ASSERT_EQUAL(Root, details.getHostUntrusted());
         LOK_ASSERT(details.isWebSocket());
+        LOK_ASSERT(details.isCool2());
         LOK_ASSERT_EQUAL(true, details.isGet());
 
         LOK_ASSERT_EQUAL_STR(std::string(), details.getField(RequestDetails::Field::SessionId));

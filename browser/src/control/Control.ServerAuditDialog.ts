@@ -130,6 +130,21 @@ class ServerAuditDialog {
 				],
 				ok: [_('Direct network connection'), '', ''],
 			},
+			wsurl: {
+				priority: 13,
+				not_recommended: [
+					_(
+						'Connected with the old WebSocket URL form, which is planned for removal. Check that your proxy passes the compact form through.',
+					),
+					'SDK: proxy-settings',
+					'https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html',
+				],
+				ok: [
+					_('Connected with the compact WebSocket URL form'),
+					'SDK: proxy-settings',
+					'https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html',
+				],
+			},
 
 			is_admin: {
 				priority: 20,

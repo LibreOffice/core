@@ -4469,6 +4469,22 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
             ws->sendTextMessage(statusReady);
         }
 
+        // The compact /cool/ws?WOPISrc=... URL supersedes the legacy
+        // /cool/<encoded-document-URI>/ws URL, but is only offered when
+        // experimental features are enabled. In that configuration, flag WOPI
+        // connections still arriving on the legacy URL in the server audit, so
+        // the admin hears about the deprecation before support for it is
+        // removed. With experimental features off the legacy URL is the only
+        // one used, so warning about it would point at a URL the build cannot
+        // switch away from.
+#if !MOBILEAPP && !WASMAPP
+        if (EnableExperimental && !requestDetails.isCool2() &&
+            !requestDetails.getField(RequestDetails::Field::WOPISrc).empty())
+        {
+            _serverAudit.set("wsurl", "not_recommended");
+        }
+#endif
+
         // In case of WOPI, if this session is not set as readonly, it might be set so
         // later after making a call to WOPI host which tells us the permission on files
         // (UserCanWrite param).

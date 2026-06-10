@@ -169,6 +169,7 @@ private:
     bool _isProxy : 1;
     bool _isWebSocket : 1;
     bool _closeConnection : 1;
+    bool _isCool2 : 1;
 
     static Method stringToMethod(std::string_view method);
 
@@ -287,6 +288,12 @@ public:
     bool isWebSocket() const
     {
         return _isWebSocket;
+    }
+    /// True for the compact Cool URI 2.0 shape (/cool/ws?WOPISrc=...),
+    /// false for the legacy shape (/cool/<encoded-document-URI>/ws).
+    bool isCool2() const
+    {
+        return _isCool2;
     }
     bool closeConnection() const
     {
