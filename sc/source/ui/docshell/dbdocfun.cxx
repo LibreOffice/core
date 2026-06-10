@@ -92,23 +92,71 @@ bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool 
     if (bRecord)
         pUndoColl.reset(new ScDBCollection(*pDocColl));
 
-    std::unique_ptr<ScDBData> pNew(new ScDBData(rName, rRange.aStart.Tab(), rRange.aStart.Col(),
-                                                rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(),
-                                                true, bHeader, false, u""_ustr, rStyleName));
-    if (pNew)
+    // If a database range already covers exactly this area, reuse it and
+    // promote it into a table rather than layering a second, overlapping
+    // range on top.
+    ScDBData* pExisting = pDocColl->GetDBAtArea(rRange.aStart.Tab(), rRange.aStart.Col(),
+                                                rRange.aStart.Row(), rRange.aEnd.Col(),
+                                                rRange.aEnd.Row());
+
+    // The exact range is already a styled table; don't create a duplicate.
+    if (pExisting && pExisting->GetTableStyleInfo())
     {
-        pNew->SetAutoFilter(true);
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_TABLE_ERR_ADD);
+        return false;
+    }
+
+    bool bReuseNamed
+        = pExisting
+          && pDocColl->getNamedDBs().findByPointer(pExisting) != pDocColl->getNamedDBs().end();
+    bool bReuseAnon
+        = pExisting && !bReuseNamed && rDoc.GetAnonymousDBData(rRange.aStart.Tab()) == pExisting;
+
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = rStyleName;
+
+    bool bOk = true;
+
+    if (bReuseNamed)
+    {
+        pExisting->SetHeader(bHeader);
+        pExisting->SetAutoFilter(true);
+        pExisting->SetTableStyleInfo(aStyleParam);
         rDoc.ApplyFlagsTab(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(),
                            rRange.aStart.Row(), rRange.aStart.Tab(), ScMF::Auto);
     }
+    else
+    {
+        std::unique_ptr<ScDBData> pNew;
+        if (bReuseAnon)
+        {
+            // Migrate the anonymous range into the named range
+            pNew.reset(new ScDBData(rName, *pExisting));
+            pNew->SetHeader(bHeader);
+            pNew->SetTableStyleInfo(aStyleParam);
+        }
+        else
+        {
+            pNew.reset(new ScDBData(rName, rRange.aStart.Tab(), rRange.aStart.Col(),
+                                    rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(),
+                                    true, bHeader, false, u""_ustr, rStyleName));
+        }
+        pNew->SetAutoFilter(true);
+        rDoc.ApplyFlagsTab(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(),
+                           rRange.aStart.Row(), rRange.aStart.Tab(), ScMF::Auto);
 
-    bool bCompile = !rDoc.IsImportingXML();
-    if (bCompile)
-        rDoc.PreprocessDBDataUpdate();
+        if (bReuseAnon)
+            rDoc.SetAnonymousDBData(rRange.aStart.Tab(), nullptr);
 
-    bool bOk = pDocColl->getNamedDBs().insert(std::move(pNew));
-    if (bCompile)
-        rDoc.CompileHybridFormula();
+        bool bCompile = !rDoc.IsImportingXML();
+        if (bCompile)
+            rDoc.PreprocessDBDataUpdate();
+
+        bOk = pDocColl->getNamedDBs().insert(std::move(pNew));
+        if (bCompile)
+            rDoc.CompileHybridFormula();
+    }
 
     if (!bOk && !bApi)
     {
