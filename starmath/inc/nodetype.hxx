@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cstdint>
+
 /**
    * This file provides definition for the nodetypes.
    * Also provides analysis of the node functions
