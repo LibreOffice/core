@@ -18,6 +18,7 @@
  */
 
 #include <SvHeaderTabListBox.hxx>
+#include <SvLBoxButton.hxx>
 #include <accessibility/accessibletablistbox.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>

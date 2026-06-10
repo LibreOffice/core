@@ -44,6 +44,8 @@
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>
+
+#include <SvLBoxButton.hxx>
 #include <accel.hxx>
 #include <svimpbox.hxx>
 #include <window.h>

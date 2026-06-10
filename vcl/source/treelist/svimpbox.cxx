@@ -33,6 +33,7 @@
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/wintypes.hxx>
+#include <SvLBoxButton.hxx>
 #include <bitmaps.hlst>
 #include <svimpbox.hxx>
 #include <comphelper/processfactory.hxx>

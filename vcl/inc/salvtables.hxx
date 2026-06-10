@@ -69,6 +69,8 @@
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <o3tl/sorted_vector.hxx>
+
+#include "SvLBoxButton.hxx"
 #include "calendar.hxx"
 #include "colorpicker.hxx"
 #include "iconview.hxx"
