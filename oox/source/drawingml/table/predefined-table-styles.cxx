@@ -8,6 +8,7 @@
  */
 #include <oox/token/tokens.hxx>
 #include <drawingml/table/tablestyle.hxx>
+#include <cstdint>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>

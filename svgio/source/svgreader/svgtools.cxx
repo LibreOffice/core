@@ -18,6 +18,7 @@
  */
 
 #include <svgtools.hxx>
+#include <cstdint>
 #include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <rtl/math.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <cstdint>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/Color.hpp>
