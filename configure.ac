@@ -364,6 +364,11 @@ AC_ARG_WITH([poco-libs],
                             automatically.]),
             [AC_MSG_WARN([--with-poco-libs is obsolete and ignored; POCO is now built in the engine and taken from its workdir.])])
 
+AC_ARG_WITH([system-poco],
+            AS_HELP_STRING([--with-system-poco],
+                           [Link against the system POCO instead of the POCO built in the engine.
+                            For debugging purposes only.]))
+
 AC_ARG_WITH([libpng-includes],
             AS_HELP_STRING([--with-libpng-includes=<path>],
                            [Obsolete and ignored. libpng is taken from the engine's workdir
@@ -1624,12 +1629,18 @@ dnl builds, POCOINCLUDE/POCOLIB are not set yet; derive them from the engine
 dnl build tree (the same one --with-lo-builddir points at, defaulting to
 dnl "engine").  Prefer POCO from the engine workdir, and fall back to a system
 dnl POCO if it has not been built there.
-AS_IF([test -z "$POCOINCLUDE" -a -n "$with_lo_builddir"],
+AS_IF([test "$with_system_poco" = "yes"],
+      [AC_MSG_NOTICE([--with-system-poco given, linking against the system POCO])
+       POCOINCLUDE=
+       POCOLIB=],
+      [test -z "$POCOINCLUDE" -a -n "$with_lo_builddir"],
       [poco_engine_builddir=`readlink -f "$with_lo_builddir"`
        POCOINCLUDE="$poco_engine_builddir/workdir/UnpackedTarball/poco/include"
        POCOLIB="$poco_engine_builddir/workdir/LinkTarget/StaticLibrary"])
 
-AS_IF([test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
+AS_IF([test "$with_system_poco" = "yes"],
+      [:],
+      [test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
       [AC_MSG_NOTICE([using POCO built in the engine: $POCOLIB])
        CPPFLAGS="$CPPFLAGS -isystem ${POCOINCLUDE}"
        LDFLAGS="$LDFLAGS -L${POCOLIB}"],
