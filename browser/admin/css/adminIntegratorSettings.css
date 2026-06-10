@@ -14,6 +14,7 @@
     Cantarell, Ubuntu, 'Helvetica Neue', 'Liberation Sans', Arial, sans-serif;
 
   --default-font-size: 15px;
+  --description-font-size: 11px;
   --animation-quick: 100ms;
   --border-radius-element: 8px;
   --default-clickable-area: 34px;
@@ -853,6 +854,17 @@ ul {
 	margin-top: 1rem;
 	font-size: var(--default-font-size);
 	color: var(--settings-text);
+}
+
+#common-smartZoom-container {
+    flex-direction: column;
+    align-items: start;
+}
+
+#common-smartZoom-container > p {
+    margin-left: 46px;
+    font-size: var(--description-font-size);
+    margin-right: 10px;
 }
 
 .signature-textarea {

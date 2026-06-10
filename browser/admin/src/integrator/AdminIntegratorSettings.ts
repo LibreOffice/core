@@ -1184,6 +1184,26 @@ class SettingIframe {
 		}, 0);
 
 		this.installSettingsHooks();
+		this.addSubElements();
+	}
+
+	private _setupSmartZoomTipAndDescription() {
+		const container: HTMLSpanElement | null = document.querySelector(
+			'#common-smartZoom-container',
+		);
+
+		if (!container) {
+			console.error('#common-smartZoom-container does not exist!');
+			return;
+		}
+
+		container.appendChild(
+			this.createParagraph(
+				_(
+					'When on, Writer fits the document to the viewport width on open. When off, the document opens at the Default Zoom level set below.',
+				),
+			),
+		);
 	}
 
 	private _updateZoomDropdownState() {
@@ -1211,6 +1231,21 @@ class SettingIframe {
 		});
 
 		updateDropdownState();
+	}
+
+	/** The way we construct the list of toggles is really brittle, there's no
+	 * way to add tooltips to these checkboxes or some labels around them. A
+	 * quick hack for now is to get the element in this function and then
+	 * add tooltip to it, or insert something before/after the element using
+	 * the Element.before() and Element.after() methods.
+	 *
+	 * We have custom types to do fancy things, but adding tooltips or
+	 * static description labels around the widgets are stateless operations
+	 * i.e. they don't have much to do with the widget or it's state. So
+	 * customType doesn't work for this usecase.
+	 */
+	public addSubElements() {
+		this._setupSmartZoomTipAndDescription();
 	}
 
 	/*
@@ -1354,6 +1389,7 @@ class SettingIframe {
 	// is linked via aria-describedby so assistive tech reads it on focus.
 	private createInfoTooltip(text: string, bubbleId: string): HTMLElement {
 		const wrap = document.createElement('span');
+		/* todo: make it generic, remove ai- prefix, also adjust the css then. */
 		wrap.classList.add('ai-tip-wrap');
 
 		const button = document.createElement('button');
