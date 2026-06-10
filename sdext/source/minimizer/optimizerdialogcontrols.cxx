@@ -231,7 +231,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
     if ( nDeletedSlides > 1 )
     {
-        OUString aStr( SdextResId( STR_DELETE_SLIDES ) );
+        OUString aStr( SdextResId( STR_DELETE_SLIDES, nDeletedSlides ) );
         OUString aPlaceholder( u"%SLIDES"_ustr  );
         sal_Int32 i = aStr.indexOf( aPlaceholder );
         if ( i >= 0 )
@@ -249,7 +249,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     GraphicCollector::CountGraphics( mxContext, mxController->getModel(), aGraphicSettings, nGraphics );
     if ( nGraphics > 1 )
     {
-        OUString aStr( SdextResId( STR_OPTIMIZE_IMAGES ) );
+        OUString aStr( SdextResId( STR_OPTIMIZE_IMAGES, nGraphics ) );
         OUString aImagePlaceholder( u"%IMAGES"_ustr  );
         OUString aQualityPlaceholder( u"%QUALITY"_ustr  );
         OUString aResolutionPlaceholder( u"%RESOLUTION"_ustr  );

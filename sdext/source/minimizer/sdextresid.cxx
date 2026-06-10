@@ -12,4 +12,9 @@
 
 OUString SdextResId(TranslateId aKey) { return Translate::get(aKey, Translate::Create("sdext")); }
 
+OUString SdextResId(TranslateNId aContextSingularPlural, int nCardinality)
+{
+    return Translate::nget(aContextSingularPlural, nCardinality, Translate::Create("sdext"));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

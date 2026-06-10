@@ -12,5 +12,6 @@
 #include <unotools/resmgr.hxx>
 
 OUString SdextResId(TranslateId aKey);
+OUString SdextResId(TranslateNId aContextSingularPlural, int nCardinality);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -10,6 +10,7 @@
 #pragma once
 
 #define NC_(Context, String) TranslateId(Context, u8##String)
+#define NNC_(Context, StringSingular, StringPlural) TranslateNId(Context, reinterpret_cast<char const *>(u8##StringSingular), reinterpret_cast<char const *>(u8##StringPlural))
 
 #define STR_SUN_OPTIMIZATION_WIZARD2            NC_("STR_SUN_OPTIMIZATION_WIZARD2", "Presentation Minimizer")
 #define STR_INTRODUCTION                        NC_("STR_INTRODUCTION", "Introduction")
@@ -19,9 +20,10 @@
 #define STR_NO_OLE_OBJECTS_DESC                 NC_("STR_NO_OLE_OBJECTS_DESC", "Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.\n\nThe current presentation contains no OLE objects.")
 #define STR_SLIDES                              NC_("STR_SLIDES", "Slides")
 #define STR_SUMMARY                             NC_("STR_SUMMARY", "Summary")
-#define STR_DELETE_SLIDES                       NC_("STR_DELETE_SLIDES", "Delete %SLIDES slides.")
-// The following string is only used in plural.
-#define STR_OPTIMIZE_IMAGES                     NC_("STR_OPTIMIZE_IMAGES", "Optimize %IMAGES images to %QUALITY% JPEG quality at %RESOLUTION DPI.")
+// %SLIDES will be replaced with the number of slides to delete
+#define STR_DELETE_SLIDES                       NNC_("STR_DELETE_SLIDES", "Delete 1 slide.", "Delete %SLIDES slides.")
+// %IMAGES will be replaced with the number of images to optimize. It will only be used in the plural.
+#define STR_OPTIMIZE_IMAGES                     NNC_("STR_OPTIMIZE_IMAGES", "Optimize 1 image to %QUALITY% JPEG quality at %RESOLUTION DPI.", "Optimize %IMAGES images to %QUALITY% JPEG quality at %RESOLUTION DPI.")
 #define STR_CREATE_REPLACEMENT                  NC_("STR_CREATE_REPLACEMENT", "Create replacement images for %OLE objects.")
 #define STR_MY_SETTINGS                         NC_("STR_MY_SETTINGS", "My Settings ")
 #define STR_OK                                  NC_("STR_OK", "OK")
