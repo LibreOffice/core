@@ -46,6 +46,19 @@ struct TabAttr
     std::vector<ColAttr> maCols;
 };
 
+// The cell store's set() destroys the cell it overwrites with no shared
+// formula bookkeeping, so a group whose member dies that way is left with a
+// stale length, or with a dead top cell that the next Interpret of a
+// surviving member dereferences. Detach the doomed cell from its group first.
+void unshareDoomedCell(sc::CellStoreType& rCells, const sc::CellStoreType::iterator& itHint, SCROW nRow)
+{
+    sc::CellStoreType::position_type aPos = rCells.position(itHint, nRow);
+    if (aPos.first->type != sc::element_type_formula)
+        return;
+    ScFormulaCell& rCell = *sc::formula_block::at(*aPos.first->data, aPos.second);
+    sc::SharedFormulaUtil::unshareFormulaCell(aPos, rCell);
+}
+
 }
 
 struct ScDocumentImportImpl
@@ -423,6 +436,7 @@ void ScDocumentImport::setMatrixCells(
 
     mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pCell->GetCode());
 
+    unshareDoomedCell(rCells, pBlockPos->miCellPos, rBasePos.Row());
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rBasePos.Row(), pCell);
 
@@ -460,6 +474,7 @@ void ScDocumentImport::setMatrixCells(
         *ScRefTokenHelper::getSingleRef(t) = aRefData;
         ScTokenArray aTokArr(aArr.CloneValue());
         pCell = new ScFormulaCell(mpImpl->mrDoc, aPos, aTokArr, eGram, ScMatrixMode::Reference);
+        unshareDoomedCell(rCells, pBlockPos->miCellPos, aPos.Row());
         pBlockPos->miCellPos =
             rCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
     }
@@ -480,6 +495,7 @@ void ScDocumentImport::setMatrixCells(
             *ScRefTokenHelper::getSingleRef(t) = aRefData;
             ScTokenArray aTokArr(aArr.CloneValue());
             pCell = new ScFormulaCell(mpImpl->mrDoc, aPos, aTokArr, eGram, ScMatrixMode::Reference);
+            unshareDoomedCell(rColCells, pBlockPos->miCellPos, aPos.Row());
             pBlockPos->miCellPos =
                 rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
         }
