@@ -1356,6 +1356,9 @@ body {
 	align-items: center;
 	justify-content: right;
 	flex-grow: 1;
+	/* Keep the box at least as tall as the logo so a short info column
+	   (e.g. only Version and Copyright) cannot clip the bottom of it. */
+	min-height: 82px;
 	background-repeat: no-repeat;
 	background-size: 82px;
 	background-position: right center;
