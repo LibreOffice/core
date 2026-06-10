@@ -107,48 +107,94 @@ bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const doubl
     if (!pWriteAcc)
         return false;
 
-    for (sal_Int32 y(0); y < nHeight; y++)
+    if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcRgba)
     {
-        Scanline pScanline = pWriteAcc->GetScanline( y );
-        Scanline pScanlineRead = pReadAcc->GetScanline( y );
-
-        for (sal_Int32 x(0); x < nNewWidth; x++)
+        // We can skip doing unpremultiple/premultiply for this format, the result
+        // is the same if we operate in premultiplied space.
+        for (sal_Int32 y(0); y < nHeight; y++)
         {
-            const sal_Int32 nBaseIndex(x * nNumberOfContributions);
-            sal_Int32 nSum(0);
-            sal_Int32 nValueRed(0);
-            sal_Int32 nValueGreen(0);
-            sal_Int32 nValueBlue(0);
-            sal_Int32 nValueAlpha(0);
+            Scanline pScanline = pWriteAcc->GetScanline( y );
+            Scanline pScanlineRead = pReadAcc->GetScanline( y );
 
-            for (sal_Int32 j(0); j < aCounts[x]; j++)
+            for (sal_Int32 x(0); x < nNewWidth; x++)
             {
-                const sal_Int32 nIndex(nBaseIndex + j);
-                const sal_Int16 nWeight(aWeights[nIndex]);
-                BitmapColor aColor;
+                const sal_Int32 nBaseIndex(x * nNumberOfContributions);
+                sal_Int32 nSum(0);
+                sal_Int32 nValueRed(0);
+                sal_Int32 nValueGreen(0);
+                sal_Int32 nValueBlue(0);
+                sal_Int32 nValueAlpha(0);
 
-                nSum += nWeight;
+                for (sal_Int32 j(0); j < aCounts[x]; j++)
+                {
+                    const sal_Int32 nIndex(nBaseIndex + j);
+                    const sal_Int16 nWeight(aWeights[nIndex]);
 
-                if (pReadAcc->HasPalette())
-                    aColor = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, aPixels[nIndex]));
-                else
-                    aColor = pReadAcc->GetPixelFromData(pScanlineRead, aPixels[nIndex]);
+                    nSum += nWeight;
 
-                nValueRed += nWeight * aColor.GetRed();
-                nValueGreen += nWeight * aColor.GetGreen();
-                nValueBlue += nWeight * aColor.GetBlue();
-                nValueAlpha += nWeight * aColor.GetAlpha();
+                    auto p = pScanlineRead + (4 * aPixels[nIndex]);
+
+                    nValueRed += nWeight * *p;
+                    nValueGreen += nWeight * *(p+1);
+                    nValueBlue += nWeight * *(p+2);
+                    nValueAlpha += nWeight * *(p+3);
+                }
+
+                assert(nSum != 0);
+
+                auto p = pScanline + (4 * x);
+                *p = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255));
+                *(p+1) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255));
+                *(p+2) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255));
+                *(p+3) = static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueAlpha / nSum, 0, 255));
             }
+        }
+    }
+    else
+    {
+        for (sal_Int32 y(0); y < nHeight; y++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline( y );
+            Scanline pScanlineRead = pReadAcc->GetScanline( y );
 
-            assert(nSum != 0);
+            for (sal_Int32 x(0); x < nNewWidth; x++)
+            {
+                const sal_Int32 nBaseIndex(x * nNumberOfContributions);
+                sal_Int32 nSum(0);
+                sal_Int32 nValueRed(0);
+                sal_Int32 nValueGreen(0);
+                sal_Int32 nValueBlue(0);
+                sal_Int32 nValueAlpha(0);
 
-            const BitmapColor aResultColor(ColorAlpha,
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255)),
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255)),
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)),
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueAlpha / nSum, 0, 255)));
+                for (sal_Int32 j(0); j < aCounts[x]; j++)
+                {
+                    const sal_Int32 nIndex(nBaseIndex + j);
+                    const sal_Int16 nWeight(aWeights[nIndex]);
+                    BitmapColor aColor;
 
-            pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
+                    nSum += nWeight;
+
+                    if (pReadAcc->HasPalette())
+                        aColor = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, aPixels[nIndex]));
+                    else
+                        aColor = pReadAcc->GetPixelFromData(pScanlineRead, aPixels[nIndex]);
+
+                    nValueRed += nWeight * aColor.GetRed();
+                    nValueGreen += nWeight * aColor.GetGreen();
+                    nValueBlue += nWeight * aColor.GetBlue();
+                    nValueAlpha += nWeight * aColor.GetAlpha();
+                }
+
+                assert(nSum != 0);
+
+                const BitmapColor aResultColor(ColorAlpha,
+                    static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255)),
+                    static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255)),
+                    static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)),
+                    static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueAlpha / nSum, 0, 255)));
+
+                pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
+            }
         }
     }
 
