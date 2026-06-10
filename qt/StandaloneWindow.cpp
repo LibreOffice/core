@@ -60,6 +60,8 @@ StandaloneWindow::StandaloneWindow(WebView* webView, QWidget* parent)
     resize(w, h);
     if (!isWelcome)
         centerOnWorkArea(this);
+
+    installQuitShortcut(this);
 }
 
 StandaloneWindow* StandaloneWindow::wrap(WebView* webView, QWidget* parent)

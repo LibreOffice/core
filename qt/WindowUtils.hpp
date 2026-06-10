@@ -23,4 +23,7 @@ void centerOnWorkArea(QWidget* window);
 // Un-minimizes and raises; activation is best effort.
 void surfaceWindow(QWidget* window);
 
+// Ctrl+Q closes every window (each with its save round-trip), quitting the app.
+void installQuitShortcut(QWidget* window);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

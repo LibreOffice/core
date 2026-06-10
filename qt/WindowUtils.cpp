@@ -13,9 +13,12 @@
 
 #include "WindowUtils.hpp"
 
+#include <QApplication>
 #include <QGuiApplication>
+#include <QKeySequence>
 #include <QRect>
 #include <QScreen>
+#include <QShortcut>
 #include <QWidget>
 
 #include <algorithm>
@@ -58,6 +61,13 @@ void surfaceWindow(QWidget* window)
     window->setWindowState(window->windowState() & ~Qt::WindowMinimized);
     window->raise();
     window->activateWindow();
+}
+
+void installQuitShortcut(QWidget* window)
+{
+    auto* quitShortcut = new QShortcut(QKeySequence::Quit, window);
+    quitShortcut->setContext(Qt::WindowShortcut);
+    QObject::connect(quitShortcut, &QShortcut::activated, [] { QApplication::closeAllWindows(); });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

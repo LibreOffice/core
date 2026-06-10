@@ -43,6 +43,8 @@ TabbedWindow::TabbedWindow(QWebEngineProfile* profile, QWidget* parent)
     resize(defaultWindowSize());
     centerOnWorkArea(this);
 
+    installQuitShortcut(this);
+
     s_windows.append(this);
 }
 
