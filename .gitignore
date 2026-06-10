@@ -268,5 +268,8 @@ qt/translations/*.qm
 # coplugin
 /clang/plugin.so
 
-/engine/translations
 .envrc
+
+# This needs to stay at the end, to honor engine/.gitignore:
+!engine/**
+/engine/translations
