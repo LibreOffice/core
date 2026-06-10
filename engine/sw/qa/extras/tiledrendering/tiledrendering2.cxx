@@ -32,6 +32,9 @@
 
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/linkmgr.hxx>
+#include <svx/fillbitmaplink.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xdef.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <view.hxx>
@@ -997,6 +1000,42 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleBackgroundImageRemo
     pDevice->SetOutputSizePixel(Size(1024, 1024));
     static_cast<SwViewShell*>(pWrtShell)->Paint(
         *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageLinkSurvivesUpdate)
+{
+    // Resolving a paragraph's remote background must write the graphic back
+    // to that paragraph and keep the link registered, like the resolved
+    // drawing-layer links, so Edit > Links can still update or break it.
+    comphelper::COKit::setActive(false);
+
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"two-paragraph-background-links.fodt"), aParams);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    sfx2::LinkManager& rLinkMgr
+        = pDocShell->GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rLinkMgr.GetLinks().size());
+
+    // deliver a locally loadable graphic to both links, standing in for the
+    // arrival of the remote data
+    uno::Any aFetched(createFileURL(u"fill.png"));
+    rLinkMgr.GetLinks()[0]->DataChanged(u"image/png"_ustr, aFetched);
+    rLinkMgr.GetLinks()[1]->DataChanged(u"image/png"_ustr, aFetched);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rLinkMgr.GetLinks().size());
+
+    // the write-back resolved both paragraphs' items
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    SwTextNode* pFirst = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pFirst);
+    const XFillBitmapItem* pItem = pFirst->GetSwAttrSet().GetItemIfSet(XATTR_FILLBITMAP, false);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT(getDeferredOriginURL(*pItem).isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageBackgroundImageRemoteNotFetched)

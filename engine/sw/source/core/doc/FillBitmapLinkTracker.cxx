@@ -80,7 +80,14 @@ public:
         if (const SwAttrSet* pSet = HostOps<Host>::getAttrSet(m_rHost))
             if (const XFillBitmapItem* pItem = pSet->GetItemIfSet(XATTR_FILLBITMAP, false))
                 aName = pItem->GetName();
+        // Write the resolved graphic back to this one host. The write
+        // re-enters onFillBitmapURLChanged with a now-resolved item, so tell
+        // the tracker to ignore that notification for this host and keep us
+        // registered (like the svx tracker's resolved links), so our
+        // LinkManager entry survives SvBaseLink::Update.
+        m_rTracker.setUpdatingHost(&m_rHost);
         HostOps<Host>::setAttr(m_rHost, XFillBitmapItem(aName, aGrf));
+        m_rTracker.clearUpdatingHost();
         return SUCCESS;
     }
 
@@ -123,6 +130,10 @@ template <typename Host>
 void FillBitmapLinkTracker::onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap,
                                              Host& rHost, std::u16string_view rNewURL)
 {
+    // ignore the write-back of a graphic this tracker just resolved for rHost
+    if (isUpdatingHost(&rHost))
+        return;
+
     drainPendingReleases();
 
     auto it = rMap.find(&rHost);
