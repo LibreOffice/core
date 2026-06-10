@@ -805,7 +805,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			id: 'removeSectionAndSlides',
 			type: 'comboboxentry',
 			text: _('Remove Section & Slides'),
-			img: 'removeslidesection',
+			img: 'removesectionandslides',
 			pos: 0,
 		});
 		if (sectionIndex > 0) {
@@ -813,7 +813,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				id: 'moveSectionUp',
 				type: 'comboboxentry',
 				text: _('Move Section Up'),
-				img: 'movesectionup',
+				img: 'arrowup',
 				pos: 0,
 			});
 		}
@@ -822,7 +822,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				id: 'moveSectionDown',
 				type: 'comboboxentry',
 				text: _('Move Section Down'),
-				img: 'movesectiondown',
+				img: 'arrowdown',
 				pos: 0,
 			});
 		}
