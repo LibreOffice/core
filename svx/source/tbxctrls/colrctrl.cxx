@@ -182,16 +182,17 @@ constexpr sal_uInt16 gnRightSlot = SID_ATTR_LINE_COLOR;
 SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* _pParent)
     : SfxDockingWindow(_pBindings, pCW, _pParent,
         u"DockingColorWindow"_ustr, u"svx/ui/dockingcolorwindow.ui"_ustr)
-    , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
-    , xColorSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *xColorSet))
+    , m_pColorSet(
+          new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
+    , m_pColorSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_pColorSet))
 {
     SetText(SvxResId(STR_COLORTABLE));
     SetQuickHelpText(SvxResId(RID_SVXSTR_COLORBAR));
     SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MapUnit::MapAppFont)));
     SetHelpId(HID_CTRL_COLOR);
 
-    xColorSet->SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
-    xColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
+    m_pColorSet->SetSelectHdl(LINK(this, SvxColorDockingWindow, SelectHdl));
+    m_pColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
     // is unreliable when called at the wrong times.
@@ -215,12 +216,13 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
     {
         if (const SvxColorListItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE ))
         {
-            pColorList = pItem->GetColorList();
+            m_pColorList = pItem->GetColorList();
             FillValueSet();
         }
     }
 
-    Size aItemSize = xColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
+    Size aItemSize = m_pColorSet->CalcItemSizePixel(
+        Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
     aItemSize.setWidth( aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setWidth( aItemSize.Width() / 2 );
     aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
@@ -238,8 +240,8 @@ SvxColorDockingWindow::~SvxColorDockingWindow()
 void SvxColorDockingWindow::dispose()
 {
     EndListening( GetBindings() );
-    xColorSetWin.reset();
-    xColorSet.reset();
+    m_pColorSetWin.reset();
+    m_pColorSet.reset();
     SfxDockingWindow::dispose();
 }
 
@@ -251,7 +253,7 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
         if (auto pColorListItem = dynamic_cast<const SvxColorListItem*>(pPoolItemHint->GetObject()))
         {
             // The list of colors has changed
-            pColorList = pColorListItem->GetColorList();
+            m_pColorList = pColorListItem->GetColorList();
             FillValueSet();
         }
     }
@@ -259,12 +261,12 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 void SvxColorDockingWindow::FillValueSet()
 {
-    if( !pColorList.is() )
+    if (!m_pColorList.is())
         return;
 
-    xColorSet->Clear();
+    m_pColorSet->Clear();
 
-    xColorSet->addEntriesForXColorList(*pColorList);
+    m_pColorSet->addEntriesForXColorList(*m_pColorList);
 
     // create the last entry for 'invisible/none'
     const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
@@ -280,7 +282,8 @@ void SvxColorDockingWindow::FillValueSet()
 
     Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
-    xColorSet->InsertItem(xColorSet->GetItemCount() + 1, Image(aBmp), SvxResId(RID_SVXSTR_INVISIBLE));
+    m_pColorSet->InsertItem(m_pColorSet->GetItemCount() + 1, Image(aBmp),
+                            SvxResId(RID_SVXSTR_INVISIBLE));
 }
 
 bool SvxColorDockingWindow::Close()
@@ -295,13 +298,13 @@ bool SvxColorDockingWindow::Close()
 IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
-    sal_uInt16 nPos = xColorSet->GetSelectedItemId();
-    Color  aColor( xColorSet->GetItemColor( nPos ) );
-    OUString aStr( xColorSet->GetItemText( nPos ) );
+    sal_uInt16 nPos = m_pColorSet->GetSelectedItemId();
+    Color aColor(m_pColorSet->GetItemColor(nPos));
+    OUString aStr(m_pColorSet->GetItemText(nPos));
 
     // ID of 'invisible/none' entry, see SvxColorDockingWindow::FillValueSet
-    const sal_uInt16 nIdNone = xColorSet->GetItemCount();
-    if (xColorSet->IsLeftButton())
+    const sal_uInt16 nIdNone = m_pColorSet->GetItemCount();
+    if (m_pColorSet->IsLeftButton())
     {
         if ( gnLeftSlot == SID_ATTR_FILL_COLOR )
         {
@@ -397,11 +400,11 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
 void SvxColorDockingWindow::GetFocus()
 {
     SfxDockingWindow::GetFocus();
-    if (xColorSet)
+    if (m_pColorSet)
     {
         // Grab the focus to the color value set so that it can be controlled
         // with the keyboard.
-        xColorSet->GrabFocus();
+        m_pColorSet->GrabFocus();
     }
 }
 
