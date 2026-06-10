@@ -892,6 +892,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 					if (!tabHasCurrentContext && !tabHasDefultContext) {
 						$(tab).addClass('hidden');
 					}
+
+					if (!tabHasDefultContext) {
+						$(tab).addClass('contextual');
+					}
 				}
 
 				tabs[tabIdx] = tab;
