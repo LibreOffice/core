@@ -1596,8 +1596,6 @@ protected:
 
     TriState get_toggle(SvTreeListEntry* pEntry, int col) const;
 
-    void set_toggle(SvTreeListEntry& rEntry, TriState eState, int col);
-
     bool get_text_emphasis(SvTreeListEntry* pEntry, int col) const;
 
     void set_header_item_width(const std::vector<int>& rWidths);
