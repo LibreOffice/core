@@ -19,22 +19,19 @@
 
 QtInstanceMenuButton::QtInstanceMenuButton(QToolButton* pButton)
     : QtInstanceToggleButton(pButton)
-    , m_pToolButton(pButton)
     , m_pPopover(nullptr)
 {
-    assert(m_pToolButton);
-
-    if (m_pToolButton->menu())
-        connect(m_pToolButton->menu(), &QMenu::triggered, this,
+    if (getToolButton().menu())
+        connect(getToolButton().menu(), &QMenu::triggered, this,
                 &QtInstanceMenuButton::handleMenuItemTriggered);
 
-    connect(m_pToolButton, &QToolButton::clicked, this, &QtInstanceMenuButton::showPopupOrMenu);
+    connect(&getToolButton(), &QToolButton::clicked, this, &QtInstanceMenuButton::showPopupOrMenu);
 }
 
 void QtInstanceMenuButton::set_label(const OUString& rText)
 {
     QtInstanceToggleButton::set_label(rText);
-    updateToolButtonStyle(*m_pToolButton);
+    updateToolButtonStyle(getToolButton());
 }
 
 void QtInstanceMenuButton::do_set_active(bool bActive)
@@ -50,8 +47,8 @@ void QtInstanceMenuButton::do_set_active(bool bActive)
         {
             if (m_pPopover)
                 m_pPopover->hide();
-            else if (m_pToolButton->menu())
-                m_pToolButton->menu()->hide();
+            else if (getToolButton().menu())
+                getToolButton().menu()->hide();
         }
     });
 }
@@ -64,8 +61,8 @@ bool QtInstanceMenuButton::get_active() const
     GetQtInstance().RunInMainThread([&] {
         if (m_pPopover)
             bActive = m_pPopover->isVisible();
-        else if (m_pToolButton->menu())
-            m_pToolButton->menu()->isVisible();
+        else if (getToolButton().menu())
+            getToolButton().menu()->isVisible();
     });
 
     return bActive;
@@ -197,7 +194,7 @@ void QtInstanceMenuButton::updateToolButtonStyle(QToolButton& rToolButton)
 
 QMenu& QtInstanceMenuButton::getMenu() const
 {
-    QMenu* pMenu = m_pToolButton->menu();
+    QMenu* pMenu = getToolButton().menu();
     assert(pMenu);
     return *pMenu;
 }
@@ -233,14 +230,14 @@ void QtInstanceMenuButton::showPopupOrMenu()
     {
         // show popup horizontally centered below the button
         m_pPopover->adjustSize();
-        QPoint aPos = m_pToolButton->mapToGlobal(QPoint(0, m_pToolButton->height()));
-        aPos.setX(aPos.x() + (m_pToolButton->width() - m_pPopover->width() / 2));
+        QPoint aPos = getToolButton().mapToGlobal(QPoint(0, getToolButton().height()));
+        aPos.setX(aPos.x() + (getToolButton().width() - m_pPopover->width() / 2));
         m_pPopover->move(aPos);
         m_pPopover->show();
     }
     else
     {
-        m_pToolButton->showMenu();
+        getToolButton().showMenu();
     }
 }
 

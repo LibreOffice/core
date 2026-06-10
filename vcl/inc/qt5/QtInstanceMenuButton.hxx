@@ -21,7 +21,6 @@ class QtInstanceMenuButton : public QtInstanceToggleButton, public virtual weld:
 {
     Q_OBJECT
 
-    QToolButton* m_pToolButton;
     QWidget* m_pPopover;
 
 public:

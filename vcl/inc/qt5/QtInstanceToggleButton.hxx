@@ -15,17 +15,22 @@
 
 #include <vcl/weld/ToggleButton.hxx>
 
-#include <QtWidgets/QAbstractButton>
+#include <QtWidgets/QToolButton>
 
 class QtInstanceToggleButton : public QtInstanceButton, public virtual weld::ToggleButton
 {
     Q_OBJECT
 
+    QToolButton* m_pToolButton;
+
 public:
-    QtInstanceToggleButton(QAbstractButton* pButton);
+    QtInstanceToggleButton(QToolButton* pButton);
 
     virtual void do_set_active(bool bActive) override;
     virtual bool get_active() const override;
+
+protected:
+    QToolButton& getToolButton() const;
 
 private Q_SLOTS:
     void signalToggled();

@@ -12,17 +12,20 @@
 #include <QtInstanceToggleButton.hxx>
 #include <QtInstanceToggleButton.moc>
 
-QtInstanceToggleButton::QtInstanceToggleButton(QAbstractButton* pButton)
+QtInstanceToggleButton::QtInstanceToggleButton(QToolButton* pButton)
     : QtInstanceButton(pButton)
+    , m_pToolButton(pButton)
 {
-    connect(&getButton(), &QAbstractButton::toggled, this, &QtInstanceToggleButton::signalToggled);
+    assert(m_pToolButton);
+
+    connect(m_pToolButton, &QAbstractButton::toggled, this, &QtInstanceToggleButton::signalToggled);
 }
 
 void QtInstanceToggleButton::do_set_active(bool bActive)
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] { getButton().setChecked(bActive); });
+    GetQtInstance().RunInMainThread([&] { m_pToolButton->setChecked(bActive); });
 }
 
 bool QtInstanceToggleButton::get_active() const
@@ -30,10 +33,16 @@ bool QtInstanceToggleButton::get_active() const
     SolarMutexGuard g;
 
     bool bActive = false;
-    GetQtInstance().RunInMainThread([&] { bActive = getButton().isChecked(); });
+    GetQtInstance().RunInMainThread([&] { bActive = m_pToolButton->isChecked(); });
 
     return bActive;
 };
+
+QToolButton& QtInstanceToggleButton::getToolButton() const
+{
+    assert(m_pToolButton);
+    return *m_pToolButton;
+}
 
 void QtInstanceToggleButton::signalToggled()
 {

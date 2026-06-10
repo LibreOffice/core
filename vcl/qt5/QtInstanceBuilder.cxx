@@ -737,7 +737,7 @@ std::unique_ptr<weld::ToggleButton> QtInstanceBuilder::weld_toggle_button(const 
 
     std::unique_ptr<weld::ToggleButton> xRet;
     GetQtInstance().RunInMainThread([&] {
-        if (QAbstractButton* pButton = m_xBuilder->get<QAbstractButton>(rId))
+        if (QToolButton* pButton = m_xBuilder->get<QToolButton>(rId))
             xRet = std::make_unique<QtInstanceToggleButton>(pButton);
     });
     return xRet;
