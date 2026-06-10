@@ -7707,10 +7707,6 @@ module com {
      /** @deprecated */ void updateViewData([in] any Value);
      /** @deprecated */ void createNewEntry([in] string URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments, [in] string Title);
     };
-    /** @deprecated */ published interface XComponentRegistry {
-     interface ::com::sun::star::uno::XInterface;
-     /** @deprecated */ ::com::sun::star::uno::XInterface createObject([in] string URL, [in] ::com::sun::star::uno::Uik Uik);
-    };
     /** @deprecated */ published interface XConfigManager {
      interface ::com::sun::star::uno::XInterface;
      /** @deprecated */ void addPropertyChangeListener([in] string KeyName, [in] ::com::sun::star::beans::XPropertyChangeListener Listener);

@@ -717,12 +717,6 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
     return false;
 }
 
-Uik InterfaceIdlClassImpl::getUik()
-{
-    return Uik(0, 0, 0, 0, 0);
-        // Uiks are deprecated and this function must not be called
-}
-
 Sequence< Reference< XIdlMethod > > InterfaceIdlClassImpl::getMethods()
 {
     ::osl::MutexGuard aGuard( getMutexAccess() );

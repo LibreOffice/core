@@ -64,7 +64,6 @@ published interface XBridgeSupplier: com::sun::star::uno::XInterface
     /** creates a bridge to provide an object of one object model with another.
      */
     any createBridge( [in] any modelDepObject,
-             [in] com::sun::star::uno::Uik MachineId,
              [in] long ProcessId,
              [in] short sourceModelType,
              [in] short destModelType )

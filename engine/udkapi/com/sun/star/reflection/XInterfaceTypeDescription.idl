@@ -44,16 +44,6 @@ published interface XInterfaceTypeDescription: com::sun::star::reflection::XType
     */
     com::sun::star::reflection::XTypeDescription getBaseType();
 
-    /** Deprecated.  UIK are not used anymore, a type is uniquely identified by
-        its name.<br>
-        Returns the UIK, i.e. the unique identifier of the interface.
-
-        @return
-                uik of the interface
-        @deprecated
-    */
-    com::sun::star::uno::Uik getUik();
-
     /** Returns the members of the interfaces, i.e. attributes and methods.
 
         @returns

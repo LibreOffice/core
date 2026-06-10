@@ -176,11 +176,6 @@ Sequence< Reference< XIdlField > > IdlClassImpl::getFields()
 }
 // interfaces
 
-Uik IdlClassImpl::getUik()
-{
-    return Uik();
-}
-
 Reference< XIdlMethod > IdlClassImpl::getMethod( const OUString & )
 {
     return Reference< XIdlMethod >();

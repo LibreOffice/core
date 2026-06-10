@@ -397,19 +397,10 @@ module com {
      interface ::com::sun::star::uno::XInterface;
     };
    };
-   module uno {
-    /** @deprecated */ published struct Uik {
-     unsigned long Data1;
-     unsigned short Data2;
-     unsigned short Data3;
-     unsigned long Data4;
-     unsigned long Data5;
-    };
-   };
    module bridge {
     /** @deprecated */ published interface XBridgeSupplier {
      interface ::com::sun::star::uno::XInterface;
-     any createBridge([in] any modelDepObject, [in] ::com::sun::star::uno::Uik MachineId, [in] long ProcessId, [in] short sourceModelType, [in] short destModelType) raises (::com::sun::star::lang::IllegalArgumentException);
+     any createBridge([in] any modelDepObject, [in] long ProcessId, [in] short sourceModelType, [in] short destModelType) raises (::com::sun::star::lang::IllegalArgumentException);
     };
     /** @deprecated */ published service OleBridgeSupplier {
      interface ::com::sun::star::bridge::XBridgeSupplier;
@@ -1249,7 +1240,6 @@ module com {
      boolean isAssignableFrom([in] ::com::sun::star::reflection::XIdlClass xType);
      ::com::sun::star::uno::TypeClass getTypeClass();
      string getName();
-     /** @deprecated */ ::com::sun::star::uno::Uik getUik();
      sequence< ::com::sun::star::reflection::XIdlClass > getSuperclasses();
      /** @deprecated */ sequence< ::com::sun::star::reflection::XIdlClass > getInterfaces();
      ::com::sun::star::reflection::XIdlClass getComponentType();
@@ -1317,7 +1307,6 @@ module com {
     published interface XInterfaceTypeDescription {
      interface ::com::sun::star::reflection::XTypeDescription;
      /** @deprecated */ ::com::sun::star::reflection::XTypeDescription getBaseType();
-     /** @deprecated */ ::com::sun::star::uno::Uik getUik();
      sequence< ::com::sun::star::reflection::XInterfaceMemberTypeDescription > getMembers();
     };
     published interface XMethodParameter {

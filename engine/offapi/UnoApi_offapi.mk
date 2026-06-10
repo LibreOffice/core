@@ -2519,7 +2519,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XBorderResizeListener \
 	XBrowseHistoryRegistry \
 	XComponentLoader \
-	XComponentRegistry \
 	XConfigManager \
 	XControlNotificationListener \
 	XController \

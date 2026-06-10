@@ -72,11 +72,6 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     string getName();
 
     /** Deprecated.  Do not call.
-
-        @deprecated
-    */
-    com::sun::star::uno::Uik getUik();
-
     /** If the reflected type is an interface, then the returned
         sequence of XIdlClass reflect the base interfaces.
         <br>

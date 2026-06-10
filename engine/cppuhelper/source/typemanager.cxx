@@ -909,9 +909,6 @@ private:
             : manager_->resolve(entity_->getDirectMandatoryBases()[0].name);
     }
 
-    virtual css::uno::Uik SAL_CALL getUik() override
-    { return css::uno::Uik(); }
-
     virtual
     css::uno::Sequence<
         css::uno::Reference<

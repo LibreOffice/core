@@ -469,7 +469,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	RuntimeException \
 	SecurityException \
 	TypeClass \
-	Uik \
 	XAdapter \
 	XAggregation \
 	XComponentContext \
