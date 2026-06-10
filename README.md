@@ -1,8 +1,8 @@
-# Collabora Online
+# Collabora Online and Collabora Office
 
 > [!IMPORTANT]
 > **The CollaboraOnline/online.mirror repository on GitHub is a read-only mirror.**
-> Collabora Online is developed on our Gerrit
+> Collabora Online and Collabora Office are developed on our Gerrit
 > instance at **https://gerrit.collaboraoffice.com**; the GitHub repository only mirrors that
 > source code.
 >
@@ -34,7 +34,7 @@
 ## Key features
 * View and edit text documents, spreadsheets, presentations & more
 * Collaborative editing features
-* Works in any modern browser – no plugin needed
+* Collabora Online works in any modern browser – no plugin needed
 * [Integrate, extend and customise](https://www.collaboraonline.com/integrations/)
 * Open Source – primarily under the [MPLv2](http://mozilla.org/MPL/2.0/) license. Some parts are under other open source licences, see e.g. [browser/LICENSE](https://github.com/CollaboraOnline/online/blob/main/browser/LICENSE).
 
@@ -86,12 +86,15 @@ Please ask your questions on any of the bridged Matrix/Telegram rooms
 
 Join the conversation on our Discourse server at https://forum.collaboraonline.com/
 
-Watch the tinderbox status (if it's green) at
-https://cpci.cbg.collabora.co.uk:8080/job/Tinderbox%20for%20online%20main%20against%20co-25.04/
+Watch the tinderbox status (it should be green):
+
+[![tinderbox status](https://cpci.cbg.collabora.co.uk:8080/buildStatus/icon?job=Tinderbox+for+online+main&subject=tinderbox)](https://cpci.cbg.collabora.co.uk:8080/view/Tinderbox/job/Tinderbox%20for%20online%20main/)
 
 ## Development bits
 
 This project has several components:
+* **engine/**
+  * The document rendering engine
 * **wsd/**
   * The Web Services Daemon - which accepts external connections
 * **kit/**
@@ -107,41 +110,12 @@ This project has several components:
 
 ## Further recommended reading with build details
 
-* **[Build Collabora online](https://www.collaboraoffice.org/post/build-code/)**
-
-## iOS and Android apps
-
-### Building
-
-See the corresponding web pages:
-* **[Build for iOS](https://www.collaboraoffice.org/post/build-code-ios/)**
-* **[Build for Android](https://www.collaboraoffice.org/post/build-code-android/)**
-
-### Releases and pre-releases
-
-Releases and pre-release builds are made from the
-`distro/collabora/co-25.04-mobile` branch. Releases for Android and iOS are
-generally built from the same commit, and are tagged as a release on GitHub.
-
-Android snapshots are automatically built once a week, but may be built more
-frequently if there's something new to test. iOS testflight builds are
-exclusively built when there is something new to test. Pre-release builds are
-not tagged in GitHub.
-
-### Getting changes into 25.04-mobile
-
-You should still develop against `main`, even if you're working on
-mobile-only features. Changes made in `main` will be moved into the
-`distro/collabora/co-25.04` branch according to the release schedule. Changes
-from the `distro/collabora/co-25.04` branch are then regularly cherry-picked
-into the `distro/collabora/co-25.04-mobile` branch.
-
-If you have a change which you want to get into mobile snapshots or releases
-more quickly, you should still develop it against `main`. When it's merged
-into `main`, you should make a backport pull request against
-`distro/collabora/co-25.04-mobile`. Please don't make pull requests directly
-against `distro/collabora/co-25.04-mobile` (i.e. without the change first being
-merged into `main`).
+* **[Build Collabora Online](https://www.collaboraoffice.org/post/build-code/)**
+* **[Build Collabora Office for iOS](https://www.collaboraoffice.org/post/build-code-ios/)**
+* **[Build Collabora Office for Android](https://www.collaboraoffice.org/post/build-code-android/)**
+* **[Build Collabora Office for Windows](https://www.collaboraoffice.org/post/build-co-windows/)**
+* **[Build Collabora Office for macOS](https://www.collaboraoffice.org/post/build-co-mac/)**
+* **[Build Collabora Office for Linux](https://www.collaboraoffice.org/post/build-co-linux/)**
 
 ## Admin Panel
 
