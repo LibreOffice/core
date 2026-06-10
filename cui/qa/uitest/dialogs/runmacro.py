@@ -95,7 +95,7 @@ class RunMacroTest(UITestCase):
                     # Save the document to the temporary file
                     save_opts = (
                         PropertyValue(Name="Overwrite", Value=True),
-                        PropertyValue(Name="FilerName", Value="writer8"),
+                        PropertyValue(Name="FilterName", Value="writer8"),
                     )
                     xComponent.storeAsURL(uno.systemPathToFileUrl(doc_file.name), save_opts)
 
