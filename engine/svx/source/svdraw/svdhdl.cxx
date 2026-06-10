@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/image.hxx>
 
 #include <svx/sxekitm.hxx>
 #include <svx/strings.hrc>
@@ -572,7 +573,18 @@ void SdrHdl::CreateB2dIAObject()
             {
                 basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject;
-                if (getenv ("SVX_DRAW_HANDLES") && (eKindOfMarker == BitmapMarkerKind::Rect_7x7 || eKindOfMarker == BitmapMarkerKind::Rect_9x9 || eKindOfMarker == BitmapMarkerKind::Rect_11x11))
+                if (m_eKind == SdrHdlKind::Rotate)
+                {
+                    // Rotate handle: themed rotate icon centred on the position.
+                    Bitmap aRotateBmp(
+                        Image(StockImage::Yes, u"vcl/res/rotate.png"_ustr).GetBitmap());
+                    const Size aBmpSize(aRotateBmp.GetSizePixel());
+                    pNewOverlayObject.reset(new sdr::overlay::OverlayBitmapEx(
+                        aPosition, aRotateBmp,
+                        static_cast<sal_uInt16>(aBmpSize.Width() >> 1),
+                        static_cast<sal_uInt16>(aBmpSize.Height() >> 1)));
+                }
+                else if (getenv ("SVX_DRAW_HANDLES") && (eKindOfMarker == BitmapMarkerKind::Rect_7x7 || eKindOfMarker == BitmapMarkerKind::Rect_9x9 || eKindOfMarker == BitmapMarkerKind::Rect_11x11))
                 {
                     double fSize = 7.0;
                     switch (eKindOfMarker)
@@ -1008,6 +1020,7 @@ PointerStyle SdrHdl::GetPointer() const
                 case SdrHdlKind::BezierWeight : ePtr=PointerStyle::MoveBezierWeight; break;
                 case SdrHdlKind::Glue : ePtr=PointerStyle::MovePoint; break;
                 case SdrHdlKind::CustomShape1 : ePtr=PointerStyle::RefHand; break;
+                case SdrHdlKind::Rotate : ePtr=PointerStyle::Rotate; break;
                 default:
                     break;
             }

@@ -24,6 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <memory>
+#include <optional>
 
 class SdrDragStat;
 
@@ -51,9 +52,12 @@ class SVXCORE_DLLPUBLIC SdrDragEntryPolyPolygon final : public SdrDragEntry
 {
 private:
     basegfx::B2DPolyPolygon             maOriginalPolyPolygon;
+    // If set, transform around this individual origin, not the shared reference.
+    std::optional<Point>                moIndividualOrigin;
 
 public:
-    SdrDragEntryPolyPolygon(basegfx::B2DPolyPolygon aOriginalPolyPolygon);
+    SdrDragEntryPolyPolygon(basegfx::B2DPolyPolygon aOriginalPolyPolygon,
+                            std::optional<Point> oIndividualOrigin = std::nullopt);
     virtual ~SdrDragEntryPolyPolygon() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool IsDragSizeValid=true) override;
@@ -206,6 +210,11 @@ public:
     SAL_DLLPRIVATE void destroyOverlayGeometry();
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation() const;
+    // Same as getCurrentTransformation() but applies the transform around
+    // rOrigin. The base implementation ignores rOrigin.
+    virtual basegfx::B2DHomMatrix getCurrentTransformationForOrigin(const Point& rOrigin) const;
+    // The origin to transform rObject around, or nullopt to use the shared one.
+    virtual std::optional<Point> getIndividualDragOrigin(const SdrObject& rObject) const;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
     virtual void applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget);
 
@@ -258,6 +267,9 @@ class SVXCORE_DLLPUBLIC SdrDragResize : public SdrDragMethod
 protected:
     double                    m_aXFact;
     double                    m_aYFact;
+    // When true, each marked object resizes around its own origin (the corner
+    // opposite its dragged handle) instead of a shared reference point.
+    bool                      m_bIndividualOrigins;
 
 public:
     SdrDragResize(SdrDragView& rNewView);
@@ -269,6 +281,8 @@ public:
     virtual PointerStyle GetSdrDragPointer() const override;
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformationForOrigin(const Point& rOrigin) const override;
+    virtual std::optional<Point> getIndividualDragOrigin(const SdrObject& rObject) const override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
 };
 

@@ -40,6 +40,8 @@
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/svdorect.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
@@ -2524,6 +2526,212 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteInTextEditWithAnimationNode)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     CPPUNIT_ASSERT_EQUAL(u"blahblah"_ustr, rEditView.GetSelected());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMultiSelectionResize)
+{
+    // Two separate rectangles, wireframe (non-solid) dragging so the per-object
+    // drag origins are exercised.
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    pView->SetSolidDragging(false);
+    pView->SetSnapEnabled(false);
+
+    rtl::Reference<SdrRectObj> pRect1
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(0, 0, 1000, 1000));
+    rtl::Reference<SdrRectObj> pRect2
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(5000, 5000, 6000, 6000));
+    pPage->NbcInsertObject(pRect1.get());
+    pPage->NbcInsertObject(pRect2.get());
+
+    // A single selection keeps the standard group frame handles, a second object
+    // switches to individual handles automatically.
+    pView->MarkObj(pRect1.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(pView->IsFrameDragSingles());
+    pView->MarkObj(pRect2.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
+
+    // Find the lower-right resize handle that belongs to the first rectangle.
+    const SdrHdlList& rHdlList = pView->GetHdlList();
+    SdrHdl* pDragHdl = nullptr;
+    for (size_t i = 0; i < rHdlList.GetHdlCount(); ++i)
+    {
+        SdrHdl* pHdl = rHdlList.GetHdl(i);
+        if (pHdl->GetKind() == SdrHdlKind::LowerRight && pHdl->GetObj() == pRect1.get())
+        {
+            pDragHdl = pHdl;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pDragHdl);
+
+    const tools::Rectangle aOrig1(pRect1->GetSnapRect());
+    const tools::Rectangle aOrig2(pRect2->GetSnapRect());
+
+    // Dragging that single handle must drive an all-objects resize, not the
+    // single-object special drag, with each object anchored at its own origin
+    // (top-left for a lower-right drag).
+    CPPUNIT_ASSERT(pView->BegDragObj(pDragHdl->GetPos(), nullptr, pDragHdl, 0));
+    SdrDragMethod* pDragMethod = pView->GetDragMethod();
+    CPPUNIT_ASSERT(dynamic_cast<SdrDragResize*>(pDragMethod));
+    std::optional<Point> oOrigin1 = pDragMethod->getIndividualDragOrigin(*pRect1);
+    std::optional<Point> oOrigin2 = pDragMethod->getIndividualDragOrigin(*pRect2);
+    CPPUNIT_ASSERT(oOrigin1.has_value());
+    CPPUNIT_ASSERT(oOrigin2.has_value());
+    CPPUNIT_ASSERT_EQUAL(aOrig1.TopLeft(), *oOrigin1);
+    CPPUNIT_ASSERT_EQUAL(aOrig2.TopLeft(), *oOrigin2);
+
+    // Double the first rectangle by moving its handle, then commit.
+    pView->MovDragObj(Point(2000, 2000));
+    pView->EndDragObj();
+
+    const tools::Rectangle aNew1(pRect1->GetSnapRect());
+    const tools::Rectangle aNew2(pRect2->GetSnapRect());
+
+    // Both rectangles kept their own top-left origin and doubled in size. The
+    // second rectangle did not move, unlike a shared-pivot group resize.
+    CPPUNIT_ASSERT_EQUAL(aOrig1.TopLeft(), aNew1.TopLeft());
+    CPPUNIT_ASSERT_EQUAL(aOrig1.Left() + 2 * (aOrig1.Right() - aOrig1.Left()), aNew1.Right());
+    CPPUNIT_ASSERT_EQUAL(aOrig1.Top() + 2 * (aOrig1.Bottom() - aOrig1.Top()), aNew1.Bottom());
+    CPPUNIT_ASSERT_EQUAL(aOrig2.TopLeft(), aNew2.TopLeft());
+    CPPUNIT_ASSERT_EQUAL(aOrig2.Left() + 2 * (aOrig2.Right() - aOrig2.Left()), aNew2.Right());
+    CPPUNIT_ASSERT_EQUAL(aOrig2.Top() + 2 * (aOrig2.Bottom() - aOrig2.Top()), aNew2.Bottom());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMultiSelectionRotate)
+{
+    // Two separate, non-square rectangles, wireframe (non-solid) dragging.
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    pView->SetSolidDragging(false);
+    pView->SetSnapEnabled(false);
+
+    rtl::Reference<SdrRectObj> pRect1
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(0, 0, 2000, 1000));
+    rtl::Reference<SdrRectObj> pRect2
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(5000, 5000, 7000, 6000));
+    pPage->NbcInsertObject(pRect1.get());
+    pPage->NbcInsertObject(pRect2.get());
+
+    pView->MarkObj(pRect1.get(), pView->GetSdrPageView());
+    pView->MarkObj(pRect2.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
+
+    // Each object gets exactly one rotate handle in the individual handle set.
+    const SdrHdlList& rHdlList = pView->GetHdlList();
+    int nRotateHandles = 0;
+    SdrHdl* pRotateHdl = nullptr;
+    for (size_t i = 0; i < rHdlList.GetHdlCount(); ++i)
+    {
+        SdrHdl* pHdl = rHdlList.GetHdl(i);
+        if (pHdl->GetKind() == SdrHdlKind::Rotate)
+        {
+            ++nRotateHandles;
+            if (pHdl->GetObj() == pRect1.get())
+                pRotateHdl = pHdl;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(2, nRotateHandles);
+    CPPUNIT_ASSERT(pRotateHdl);
+
+    const Point aCenter1(pRect1->GetSnapRect().Center());
+    const Point aCenter2(pRect2->GetSnapRect().Center());
+
+    // Dragging rect1's rotate handle must drive an all-objects rotate, not the
+    // single-object special drag, with each object turning around its own centre.
+    CPPUNIT_ASSERT(pView->BegDragObj(pRotateHdl->GetPos(), nullptr, pRotateHdl, 0));
+    SdrDragMethod* pDragMethod = pView->GetDragMethod();
+    CPPUNIT_ASSERT(pDragMethod);
+    CPPUNIT_ASSERT_EQUAL(PointerStyle::Rotate, pDragMethod->GetSdrDragPointer());
+    std::optional<Point> oOrigin1 = pDragMethod->getIndividualDragOrigin(*pRect1);
+    std::optional<Point> oOrigin2 = pDragMethod->getIndividualDragOrigin(*pRect2);
+    CPPUNIT_ASSERT(oOrigin1.has_value());
+    CPPUNIT_ASSERT(oOrigin2.has_value());
+    CPPUNIT_ASSERT_EQUAL(aCenter1, *oOrigin1);
+    CPPUNIT_ASSERT_EQUAL(aCenter2, *oOrigin2);
+
+    // Drag the handle a quarter turn around rect1's centre, then commit.
+    pView->MovDragObj(Point(aCenter1.X() + 2000, aCenter1.Y()));
+    pView->EndDragObj();
+
+    // Both rectangles rotated by the same angle and each kept its own centre. A
+    // shared-pivot group rotate would instead have swung rect2's centre around
+    // rect1.
+    CPPUNIT_ASSERT_EQUAL(aCenter1, pRect1->GetSnapRect().Center());
+    CPPUNIT_ASSERT_EQUAL(aCenter2, pRect2->GetSnapRect().Center());
+    CPPUNIT_ASSERT(pRect1->GetRotateAngle() != 0_deg100);
+    CPPUNIT_ASSERT_EQUAL(pRect1->GetRotateAngle().get(), pRect2->GetRotateAngle().get());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMultiSelectionPointEditToggle)
+{
+    // Selecting multiple objects auto-enables Point Edit Mode (individual
+    // handles). Pressing F8 / the toolbar button (.uno:ToggleObjectBezierMode)
+    // must still toggle it as before, and the manual choice must persist while
+    // the multi-selection is held.
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+
+    // dispatchCommand needs an active frame to find the view.
+    auto xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+    auto pFrame = pXImpressDocument->GetDocShell()->GetFrame();
+    CPPUNIT_ASSERT(pFrame);
+    xDesktop->setActiveFrame(pFrame->GetFrame().GetFrameInterface());
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    rtl::Reference<SdrRectObj> pRect1
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(0, 0, 1000, 1000));
+    rtl::Reference<SdrRectObj> pRect2
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(2000, 0, 3000, 1000));
+    rtl::Reference<SdrRectObj> pRect3
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(4000, 0, 5000, 1000));
+    pPage->NbcInsertObject(pRect1.get());
+    pPage->NbcInsertObject(pRect2.get());
+    pPage->NbcInsertObject(pRect3.get());
+
+    // A single selection keeps the standard frame handles, a second object
+    // auto-enables Point Edit Mode.
+    pView->MarkObj(pRect1.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(pView->IsFrameDragSingles());
+    pView->MarkObj(pRect2.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
+
+    // Pressing F8 / the button turns Point Edit Mode off, as it did before.
+    dispatchCommand(mxComponent, u".uno:ToggleObjectBezierMode"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsFrameDragSingles());
+
+    // Pressing it again turns it back on, so the old toggle is not broken.
+    dispatchCommand(mxComponent, u".uno:ToggleObjectBezierMode"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
+
+    // Turn it off, then extend the selection: the manual choice must persist and
+    // not be re-forced back on while the selection stays multi.
+    dispatchCommand(mxComponent, u".uno:ToggleObjectBezierMode"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsFrameDragSingles());
+    pView->MarkObj(pRect3.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(pView->IsFrameDragSingles());
+
+    // Dropping back to a single selection restores the standard frame handles and
+    // re-arms the auto default, so a fresh multi-selection enables it again.
+    pView->UnmarkAllObj(pView->GetSdrPageView());
+    pView->MarkObj(pRect1.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(pView->IsFrameDragSingles());
+    pView->MarkObj(pRect2.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

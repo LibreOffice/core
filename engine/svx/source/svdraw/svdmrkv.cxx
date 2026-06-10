@@ -1362,6 +1362,10 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
     }
 }
 
+// Gap between the object and the rotate handle above it.
+// The unit is 1/100 mm, so 500 is 5 mm.
+constexpr tools::Long nRotateHandleOffset = 500;
+
 void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 {
     // remember old focus handle values to search for it again
@@ -1653,6 +1657,23 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                             }
                             plusList.MoveTo(maHdlList);
                         }
+                    }
+                }
+
+                // Give each object in a multi-selection its own rotate handle
+                // above its top centre.
+                if (nMarkCount > 1 && meDragMode == SdrDragMode::Move)
+                {
+                    const tools::Rectangle aObjRect(pObj->GetCurrentBoundRect());
+                    if (!aObjRect.IsEmpty())
+                    {
+                        const Point aRotPos(aObjRect.Center().X(),
+                                            aObjRect.Top() - nRotateHandleOffset);
+                        std::unique_ptr<SdrHdl> pRotHdl(
+                            new SdrHdl(aRotPos, SdrHdlKind::Rotate));
+                        pRotHdl->SetObj(pObj);
+                        pRotHdl->SetPageView(pPV);
+                        maHdlList.AddHdl(std::move(pRotHdl));
                     }
                 }
             }

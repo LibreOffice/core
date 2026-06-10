@@ -468,6 +468,25 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                     return false;
                                 }
                             }
+                            else if(rMarkList.GetMarkCount() > 1 && IsResizeAllowed(true)
+                                && (meDragHdl==SdrHdlKind::UpperLeft || meDragHdl==SdrHdlKind::Upper
+                                    || meDragHdl==SdrHdlKind::UpperRight || meDragHdl==SdrHdlKind::Left
+                                    || meDragHdl==SdrHdlKind::Right || meDragHdl==SdrHdlKind::LowerLeft
+                                    || meDragHdl==SdrHdlKind::Lower || meDragHdl==SdrHdlKind::LowerRight))
+                            {
+                                // Individual resize handle: resize the whole selection,
+                                // each object around its own origin. Without this it
+                                // falls through to SdrDragObjOwn and only one resizes.
+                                mpCurrentSdrDragMethod.reset( new SdrDragResize(*this) );
+                            }
+                            else if(meDragHdl == SdrHdlKind::Rotate
+                                && rMarkList.GetMarkCount() > 1 && IsRotateAllowed(true))
+                            {
+                                // Individual rotate handle: turn the whole selection,
+                                // each object around its own centre. Without this it
+                                // falls through to SdrDragObjOwn and nothing rotates.
+                                mpCurrentSdrDragMethod.reset( new SdrDragRotate(*this) );
+                            }
 
                             if(!mpCurrentSdrDragMethod)
                             {

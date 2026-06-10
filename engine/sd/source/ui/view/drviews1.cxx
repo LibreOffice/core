@@ -163,6 +163,20 @@ void DrawViewShell::SelectionHasChanged()
 {
     Invalidate();
 
+    // In Impress, auto-switch to individual handles when a multi-selection is
+    // first formed (like F8 / Toggle Point Edit Mode). Act only on the
+    // transition so a manual toggle stays in effect while the selection holds.
+    if (GetDoc()->GetDocumentType() == DocumentType::Impress)
+    {
+        const bool bMultiSelection
+            = mpDrawView->GetMarkedObjectList().GetMarkCount() > 1;
+        if (bMultiSelection != mbWasMultiSelection)
+        {
+            mpDrawView->SetFrameDragSingles(!bMultiSelection);
+            mbWasMultiSelection = bMultiSelection;
+        }
+    }
+
     //Update3DWindow(); // 3D-Controller
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->ExecuteList(

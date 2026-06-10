@@ -75,8 +75,28 @@ enum class SdrHdlKind
     // for SJ and the CustomShapeHandles:
     CustomShape1,
 
-    SmartTag
+    SmartTag,
+
+    Rotate          // Individual rotate handle (circular arrow above the shape)
 };
+
+// Returns the corner or edge midpoint of rRect opposite the dragged handle,
+// i.e. the point that stays fixed when resizing by that handle.
+inline Point GetResizeRefPoint(const tools::Rectangle& rRect, SdrHdlKind eDragKind)
+{
+    switch (eDragKind)
+    {
+        case SdrHdlKind::UpperLeft:  return rRect.BottomRight();
+        case SdrHdlKind::Upper:      return rRect.BottomCenter();
+        case SdrHdlKind::UpperRight: return rRect.BottomLeft();
+        case SdrHdlKind::Left:       return rRect.RightCenter();
+        case SdrHdlKind::Right:      return rRect.LeftCenter();
+        case SdrHdlKind::LowerLeft:  return rRect.TopRight();
+        case SdrHdlKind::Lower:      return rRect.TopCenter();
+        case SdrHdlKind::LowerRight: return rRect.TopLeft();
+        default:                     return rRect.Center();
+    }
+}
 
 
 enum class BitmapColorIndex

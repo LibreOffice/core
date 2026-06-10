@@ -501,6 +501,11 @@ private:
     /** This flag is used to prevent nested calls to SwitchPage().
     */
     bool mbIsInSwitchPage;
+    /** Whether the previous selection had more than one object, so individual
+        handles auto-enable only on the transition into multi-select and a
+        manual F8 toggle is not overridden.
+    */
+    bool mbWasMultiSelection = false;
     RotateTransliteration m_aRotateCase;
     /** Listen for selection changes and broadcast context changes for the sidebar.
     */

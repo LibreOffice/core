@@ -270,6 +270,40 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, double xFact, double yFact,
     if( bUndo )
         EndUndo();
 }
+
+void SdrEditView::ResizeMarkedObjIndividualOrigins(SdrHdlKind eDragKind, double xFact, double yFact, bool bCopy)
+{
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+    {
+        EndTextEditCurrentView();
+        OUString aStr {ImpGetDescriptionString(STR_EditResize)};
+        if (bCopy)
+            aStr+=SvxResId(STR_EditWithCopy);
+        BegUndo(aStr);
+    }
+
+    if (bCopy)
+        CopyMarkedObj();
+
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount=rMarkList.GetMarkCount();
+    for (size_t nm=0; nm<nMarkCount; ++nm)
+    {
+        SdrMark* pM=rMarkList.GetMark(nm);
+        SdrObject* pO=pM->GetMarkedSdrObj();
+        if( bUndo )
+        {
+            AddUndoActions( CreateConnectorUndo( *pO ) );
+            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+        }
+        pO->Resize(GetResizeRefPoint(pO->GetSnapRect(), eDragKind), xFact, yFact);
+    }
+
+    if( bUndo )
+        EndUndo();
+}
+
 void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     double xFact,
     double yFact,
@@ -373,6 +407,57 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCop
             delete aUpdaters.back();
             aUpdaters.pop_back();
         }
+    }
+
+    if( bUndo )
+        EndUndo();
+}
+
+void SdrEditView::RotateMarkedObjIndividualCenters(Degree100 nAngle, bool bCopy)
+{
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+    {
+        EndTextEditCurrentView();
+        OUString aStr {ImpGetDescriptionString(STR_EditRotate)};
+        if (bCopy) aStr+=SvxResId(STR_EditWithCopy);
+        BegUndo(aStr);
+    }
+
+    if (bCopy)
+        CopyMarkedObj();
+
+    double nSin = sin(toRadians(nAngle));
+    double nCos = cos(toRadians(nAngle));
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount(rMarkList.GetMarkCount());
+
+    std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
+
+    for(size_t nm = 0; nm < nMarkCount; ++nm)
+    {
+        SdrMark* pM = rMarkList.GetMark(nm);
+        SdrObject* pO = pM->GetMarkedSdrObj();
+
+        if( bUndo )
+        {
+            // extra undo actions for changed connector which now may hold its laid out path (SJ)
+            AddUndoActions( CreateConnectorUndo( *pO ) );
+            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+        }
+
+        // set up a scene updater if object is a 3d object
+        if(DynCastE3dObject(pO))
+            aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pO));
+
+        pO->Rotate(pO->GetSnapRect().Center(), nAngle, nSin, nCos);
+    }
+
+    // fire scene updaters
+    while(!aUpdaters.empty())
+    {
+        delete aUpdaters.back();
+        aUpdaters.pop_back();
     }
 
     if( bUndo )
