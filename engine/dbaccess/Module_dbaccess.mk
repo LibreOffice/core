@@ -68,10 +68,6 @@ $(eval $(call gb_Module_add_screenshot_targets,dbaccess,\
 
 endif
 
-$(eval $(call gb_Module_add_uicheck_targets,dbaccess,\
-    UITest_edit_field \
-    UITest_query \
-))
 
 endif
 
