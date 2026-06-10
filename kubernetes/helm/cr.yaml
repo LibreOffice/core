@@ -1,2 +1,0 @@
-release-name-template: "helm-{{ .Name }}-{{ .Version }}"
-make-release-latest: false
