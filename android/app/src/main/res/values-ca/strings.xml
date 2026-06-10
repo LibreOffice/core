@@ -29,7 +29,7 @@
     <string name="document_locations">Ubicacions dels documents</string>
     <string name="title_activity_show_html">Quant a</string>
     <string name="directory_not_saved">No s\'ha desat el directori.</string>
-    <string name="bmp_null">El BMP no és vàlid.</string>
+    <string name="bmp_null">El BMP no és vàlid</string>
     <string name="unable_to_go_further">No és possible anar més enllà.</string>
     <string name="action_overwrite">Sobreescriu</string>
     <string name="action_create">Crea</string>
