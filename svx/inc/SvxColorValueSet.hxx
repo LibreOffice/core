@@ -37,7 +37,6 @@ public:
     static sal_uInt32 getEntryEdgeLength();
     static sal_uInt32 getColumnCount();
 
-    Size layoutAllVisible(sal_uInt32 nEntryCount);
     void layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 
     virtual void insert(int nIndex, const Color& rColor, const OUString& rColorName) override
