@@ -119,11 +119,6 @@
 #define RID_STR_OB_BACK_BUTTON              NC_("RID_STR_OB_BACK_BUTTON", "Back")
 #define RID_STR_OB_FORWARD_BUTTON           NC_("RID_STR_OB_FORWARD_BUTTON", "Forward")
 // For Details Pane Formatting and Symbol Types
-#define RID_STR_OB_AS                       NC_("RID_STR_OB_AS", " As ")
-#define RID_STR_OB_OPTIONAL                 NC_("RID_STR_OB_OPTIONAL", "Optional")
-#define RID_STR_OB_BYREF                    NC_("RID_STR_OB_BYREF", "ByRef")
-#define RID_STR_OB_OUT_PARAM                NC_("RID_STR_OB_OUT_PARAM", "[out]")
-#define RID_STR_OB_INOUT_PARAM              NC_("RID_STR_OB_INOUT_PARAM", "[inout]")
 #define RID_STR_OB_ACCESS                   NC_("RID_STR_OB_ACCESS", "Access: ")
 #define RID_STR_OB_RETURNS                  NC_("RID_STR_OB_RETURNS", "Returns: ")
 #define RID_STR_OB_TYPE                     NC_("RID_STR_OB_TYPE", "Type: ")
