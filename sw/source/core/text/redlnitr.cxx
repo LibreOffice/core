@@ -808,13 +808,18 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
         Seek( TextFrameIndex(0) );
     }
 
+    SwRedlineItr::Mode const eMode(
+        (pRootFrame && pRootFrame->IsHideRedlines())
+            ? SwRedlineItr::Mode::Hide
+            : bShow
+                ? SwRedlineItr::Mode::Show
+                : SwRedlineItr::Mode::Ignore);
+    // In Ignore mode, with a null ExtTextInputAttr* pArr, SwRedlineItr has
+    // nothing to do, so skip creating it.
+    if (eMode == SwRedlineItr::Mode::Ignore && !pArr)
+        return;
     m_pRedline.reset(new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
-                    (pRootFrame && pRootFrame->IsHideRedlines())
-                        ? SwRedlineItr::Mode::Hide
-                        : bShow
-                            ? SwRedlineItr::Mode::Show
-                            : SwRedlineItr::Mode::Ignore,
-                    pArr, pExtInp ? pExtInp->Start() : nullptr));
+                    eMode, pArr, pExtInp ? pExtInp->Start() : nullptr));
 
     if( m_pRedline->IsOn() )
         ++m_nChgCnt;
