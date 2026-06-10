@@ -379,8 +379,7 @@ COOL_JS_LST =\
 	src/geometry/Transformation.ts \
 	src/app/dom/DomUtil.ts \
 	src/app/NormalPoint.ts \
-	src/app/NormalBoundsBase.ts \
-	src/geo/LatLngBounds.js \
+	src/app/NormalBounds.ts \
 	src/control/IFrameDialog.js \
 	src/map/Map.js \
 	src/control/Control.IdleHandler.ts \
