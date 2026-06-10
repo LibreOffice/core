@@ -15,6 +15,7 @@
 #include "StandaloneWindow.hpp"
 #include "TabbedWindow.hpp"
 #include "TabManager.hpp"
+#include "WindowUtils.hpp"
 
 #include <QUrlQuery>
 
@@ -1097,10 +1098,7 @@ void WebView::activateWindow()
     if (auto* tw = qobject_cast<TabbedWindow*>(_mainWindow))
         tw->activateTabFor(this); // raises and activates the window itself
     else if (_mainWindow)
-    {
-        _mainWindow->raise();
-        _mainWindow->activateWindow();
-    }
+        surfaceWindow(_mainWindow);
 }
 
 bool WebView::isSaveInFlight() const

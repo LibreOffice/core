@@ -15,6 +15,7 @@
 #include <qt/TabbedWindow.hpp>
 #include <qt/TabManager.hpp>
 #include <qt/WebView.hpp>
+#include <qt/WindowUtils.hpp>
 #include <qt/CodaConfig.hpp>
 #include <common/Log.hpp>
 #include <COKit/COKit.hxx>
@@ -108,7 +109,7 @@ namespace coda
             Application::getRecentFiles().add(uri.toString(), displayUri.toStdString());
         }
         if (tw)
-            tw->activateWindow();
+            surfaceWindow(tw);
     }
 
     bool openNewDocument(const std::string& templateType, const std::string& templatePath,

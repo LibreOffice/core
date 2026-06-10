@@ -193,6 +193,8 @@ int main(int argc, char** argv)
 
     // default application name
     QApplication::setApplicationName(APP_NAME);
+    // Lets window managers associate our windows with the installed desktop file.
+    QGuiApplication::setDesktopFileName("com.collaboraoffice.Office");
     QApplication::setWindowIcon(QIcon::fromTheme("com.collaboraoffice.Office.startcenter"));
 
     QCommandLineParser argParser;

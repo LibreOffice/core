@@ -13,6 +13,7 @@
 
 #include "StandaloneWindow.hpp"
 #include "WebView.hpp"
+#include "WindowUtils.hpp"
 
 #include <QCloseEvent>
 #include <QGuiApplication>
@@ -53,14 +54,12 @@ StandaloneWindow::StandaloneWindow(WebView* webView, QWidget* parent)
         setWindowModality(Qt::WindowModal);
     }
     else
-    {
-        QRect available = QGuiApplication::primaryScreen()->availableGeometry();
-        setMinimumSize(qBound(800, available.width() / 3, 1400),
-                       qBound(600, available.height() / 3, 1000));
-    }
+        setMinimumSize(defaultWindowMinimumSize());
 
     auto[w, h] = standaloneWindowSize(isWelcome);
     resize(w, h);
+    if (!isWelcome)
+        centerOnWorkArea(this);
 }
 
 StandaloneWindow* StandaloneWindow::wrap(WebView* webView, QWidget* parent)

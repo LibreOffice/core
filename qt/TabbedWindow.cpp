@@ -14,11 +14,10 @@
 #include "TabbedWindow.hpp"
 #include "TabManager.hpp"
 #include "WebView.hpp"
+#include "WindowUtils.hpp"
 
 #include <QCloseEvent>
 #include <QEvent>
-#include <QGuiApplication>
-#include <QScreen>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -40,10 +39,9 @@ TabbedWindow::TabbedWindow(QWebEngineProfile* profile, QWidget* parent)
 
     connect(_manager, &TabManager::requestWindowClose, this, &QMainWindow::close);
 
-    QRect available = QGuiApplication::primaryScreen()->availableGeometry();
-    setMinimumSize(qBound(800, available.width() / 3, 1400),
-                   qBound(600, available.height() / 3, 1000));
-    resize(available.width(), available.height());
+    setMinimumSize(defaultWindowMinimumSize());
+    resize(defaultWindowSize());
+    centerOnWorkArea(this);
 
     s_windows.append(this);
 }
@@ -67,8 +65,7 @@ void TabbedWindow::activateTabFor(WebView* wv)
     int id = _manager->tabIdForWebView(wv);
     if (id >= 0)
         _manager->activateTab(id);
-    raise();
-    QMainWindow::activateWindow();
+    surfaceWindow(this);
 }
 
 TabbedWindow* TabbedWindow::getOrCreate(QWebEngineProfile* profile)
