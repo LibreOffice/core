@@ -11,10 +11,13 @@
 
 #include <config.h>
 
-#include <wsd/ClientRequestDispatcher.hpp>
-#include <wsd/ContentType.hpp>
 #include <net/HttpRequest.hpp>
 #include <test/MockStreamSocket.hpp>
+#include <wsd/COOLWSD.hpp>
+#include <wsd/COOLWSDServer.hpp>
+#include <wsd/ClientRequestDispatcher.hpp>
+#include <wsd/ContentType.hpp>
+#include <wsd/FileServer.hpp>
 
 #include <test/lokassert.hpp>
 #include <test/testlog.hpp>
@@ -56,6 +59,31 @@ class ClientRequestDispatcherTests : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST_SUITE_END();
 
+public:
+    /// Provide a non-null FileRequestHandler so the browser/wopi file-server
+    /// branch does not dereference a null pointer. An empty root yields an
+    /// empty file hash, which is enough to route without serving real files.
+    void setUp() override
+    {
+        if (!COOLWSD::FileRequestHandler)
+        {
+            COOLWSD::FileRequestHandler =
+                std::make_unique<FileServerRequestHandler>(COOLWSD::FileServerRoot);
+        }
+
+        if (!COOLWSDServer::WebServerPoll)
+        {
+            COOLWSDServer::WebServerPoll = std::make_unique<TerminatingPoll>("websrv_poll");
+        }
+    }
+
+    void tearDown() override
+    {
+        COOLWSDServer::WebServerPoll.reset();
+        COOLWSD::FileRequestHandler.reset();
+    }
+
+private:
     void testGetContentType_Writer()
     {
         constexpr std::string_view testname = __func__;
