@@ -1,29 +1,29 @@
 /* -*- js-indent-level: 8 -*- */
 
 /// Intermediate representation of a rectangular bound using NormalPoint.
-class NormalBoundsBase {
+class NormalBounds {
 	private _southWest?: NormalPoint = undefined;
 	private _northEast?: NormalPoint = undefined;
 
 	public static flexConstruct(
 		a:
 			| undefined
-			| NormalBoundsBase
+			| NormalBounds
 			| NormalPoint
 			| NormalPoint[]
 			| number[]
 			| number[][],
 		b?: NormalPoint | number[],
-	): NormalBoundsBase | undefined {
+	): NormalBounds | undefined {
 		if (!a) {
 			return undefined;
 		}
 
-		if (a instanceof NormalBoundsBase) {
+		if (a instanceof NormalBounds) {
 			return a;
 		}
 
-		return new NormalBoundsBase(a, b);
+		return new NormalBounds(a, b);
 	}
 
 	constructor(
@@ -80,7 +80,7 @@ class NormalBoundsBase {
 		}
 	}
 
-	public extend(obj: any): NormalBoundsBase {
+	public extend(obj: any): NormalBounds {
 		if (!obj) {
 			return this;
 		}
@@ -92,12 +92,12 @@ class NormalBoundsBase {
 		if (obj instanceof NormalPoint) {
 			sw2 = obj;
 			ne2 = obj;
-		} else if (obj instanceof NormalBoundsBase) {
+		} else if (obj instanceof NormalBounds) {
 			sw2 = obj._southWest;
 			ne2 = obj._northEast;
 		} else {
 			this.extend(
-				NormalPoint.flexConstruct(obj) || NormalBoundsBase.flexConstruct(obj),
+				NormalPoint.flexConstruct(obj) || NormalBounds.flexConstruct(obj),
 			);
 		}
 
@@ -174,4 +174,115 @@ class NormalBoundsBase {
 	public getHeight(): number {
 		return Math.abs(this.getNorth() - this.getSouth());
 	}
+
+	private _getAsLatLngOrBounds(
+		obj: NormalPoint | number[] | NormalBounds | NormalPoint[] | number[][],
+	): NormalPoint | NormalBounds | undefined {
+		let res: NormalPoint | NormalBounds | null | undefined;
+		if (
+			(Array.isArray(obj) && typeof obj[0] === 'number') ||
+			obj instanceof NormalPoint
+		) {
+			res = NormalPoint.flexConstruct(obj);
+		} else {
+			res = NormalBounds.flexConstruct(obj);
+		}
+		return res ? res : undefined;
+	}
+
+	public contains(
+		obj_: NormalPoint | number[] | NormalBounds | NormalPoint[] | number[][],
+	): boolean {
+		Util.ensureValue(this._southWest);
+		Util.ensureValue(this._northEast);
+
+		const obj = this._getAsLatLngOrBounds(obj_);
+		Util.ensureValue(obj);
+
+		const sw = this._southWest;
+		const ne = this._northEast;
+		let sw2: NormalPoint;
+		let ne2: NormalPoint;
+
+		if (obj instanceof NormalBounds) {
+			sw2 = obj.getSouthWest();
+			ne2 = obj.getNorthEast();
+		} else {
+			sw2 = ne2 = obj;
+		}
+
+		return (
+			sw2.lat >= sw.lat &&
+			ne2.lat <= ne.lat &&
+			sw2.lng >= sw.lng &&
+			ne2.lng <= ne.lng
+		);
+	}
+
+	public intersects(
+		bounds_: NormalBounds | NormalPoint[] | number[][],
+	): boolean {
+		// (LatLngBounds)
+		const bounds = NormalBounds.flexConstruct(bounds_);
+		Util.ensureValue(bounds);
+		Util.ensureValue(this._southWest);
+		Util.ensureValue(this._northEast);
+
+		const sw = this._southWest;
+		const ne = this._northEast;
+		const sw2 = bounds.getSouthWest();
+		const ne2 = bounds.getNorthEast();
+
+		const latIntersects = ne2.lat >= sw.lat && sw2.lat <= ne.lat;
+		const lngIntersects = ne2.lng >= sw.lng && sw2.lng <= ne.lng;
+
+		return latIntersects && lngIntersects;
+	}
+
+	public equals(
+		bounds_: NormalBounds | NormalPoint[] | number[][] | undefined | null,
+	): boolean {
+		if (!bounds_) {
+			return false;
+		}
+
+		const bounds = NormalBounds.flexConstruct(bounds_);
+		Util.ensureValue(bounds);
+		Util.ensureValue(this._southWest);
+		Util.ensureValue(this._northEast);
+
+		return (
+			this._southWest.equals(bounds.getSouthWest()) &&
+			this._northEast.equals(bounds.getNorthEast())
+		);
+	}
+
+	public isValid(): boolean {
+		return !!(this._southWest && this._northEast);
+	}
+
+	public isInAny(latLngBoundsArray: NormalBounds[]): boolean {
+		for (let i = 0; i < latLngBoundsArray.length; ++i) {
+			if (latLngBoundsArray[i].contains(this)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	// Please do not remove even if unused. It can be useful in
+	// temporary console.log() etc.
+	public toString() {
+		return (
+			'NormalBounds(' +
+			(this._southWest ? this._southWest.toString() : 'undefined') +
+			',' +
+			(this._northEast ? this._northEast.toString() : 'undefined') +
+			')'
+		);
+	}
 }
+
+window.L.LatLngBounds = NormalBounds;
+window.L.latLngBounds = NormalBounds.flexConstruct;

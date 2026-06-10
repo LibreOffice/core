@@ -102,12 +102,12 @@ class NormalPoint {
 		return margin <= (maxMargin === undefined ? 1.0e-9 : maxMargin);
 	}
 
-	public toString(precision: number): string {
+	public toString(precision?: number): string {
 		return (
 			'LatLng(' +
-			app.util.formatNum(this.lat, precision) +
+			app.util.formatNum(this.lat, precision ? precision : 3) +
 			', ' +
-			app.util.formatNum(this.lng, precision) +
+			app.util.formatNum(this.lng, precision ? precision : 3) +
 			')'
 		);
 	}
