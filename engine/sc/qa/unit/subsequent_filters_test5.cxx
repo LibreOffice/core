@@ -234,8 +234,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testDynamicSpillStateExportFODS)
     ScMarkData aMark(pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
-                              formula::FormulaGrammar::GRAM_DEFAULT, true /*bCheckForSpill*/,
-                              true /*bDynamicArrayMaster*/);
+                              formula::FormulaGrammar::GRAM_DEFAULT, true /*bDynamicArrayMaster*/);
 
     ScFormulaCell* pMaster = pDoc->GetFormulaCell(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT(pMaster);

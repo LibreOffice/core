@@ -34,6 +34,7 @@
 #include <dbdata.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
+#include <formulacell.hxx>
 #include <drwlayer.hxx>
 #include <inputopt.hxx>
 #include <postit.hxx>
@@ -1180,27 +1181,38 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf99386)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf149378)
 {
+    // An array-returning formula lands as a dynamic-array master with no
+    // {} wrapping in the formula text.
+
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
-    insertStringToCell(u"A1"_ustr, u"=MINVERSE(A1:C3)");
+    auto checkDynamic = [pDoc](SCCOL nCol, SCROW nRow) {
+        ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(nCol, nRow, 0));
+        CPPUNIT_ASSERT(pCell);
+        CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+        CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pCell->GetMatrixFlag());
+    };
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: {=MINVERSE(A1:C3)}
-    // - Actual  : =MINVERSE(A1:C3)
-    CPPUNIT_ASSERT_EQUAL(u"{=MINVERSE(A1:C3)}"_ustr, pDoc->GetFormula(0, 0, 0));
+    insertStringToCell(u"A1"_ustr, u"=MINVERSE(A1:C3)");
+    CPPUNIT_ASSERT_EQUAL(u"=MINVERSE(A1:C3)"_ustr, pDoc->GetFormula(0, 0, 0));
+    checkDynamic(0, 0);
 
     insertStringToCell(u"B1"_ustr, u"={1;2}");
-    CPPUNIT_ASSERT_EQUAL(u"{={1;2}}"_ustr, pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"={1;2}"_ustr, pDoc->GetFormula(1, 0, 0));
+    checkDynamic(1, 0);
 
     insertStringToCell(u"C1"_ustr, u"={1;2}+3");
-    CPPUNIT_ASSERT_EQUAL(u"{={1;2}+3}"_ustr, pDoc->GetFormula(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"={1;2}+3"_ustr, pDoc->GetFormula(2, 0, 0));
+    checkDynamic(2, 0);
 
     insertStringToCell(u"D1"_ustr, u"={1;2}+{3;4}");
-    CPPUNIT_ASSERT_EQUAL(u"{={1;2}+{3;4}}"_ustr, pDoc->GetFormula(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"={1;2}+{3;4}"_ustr, pDoc->GetFormula(3, 0, 0));
+    checkDynamic(3, 0);
 
     insertStringToCell(u"E1"_ustr, u"={1;2}+A1");
-    CPPUNIT_ASSERT_EQUAL(u"{={1;2}+A1}"_ustr, pDoc->GetFormula(4, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"={1;2}+A1"_ustr, pDoc->GetFormula(4, 0, 0));
+    checkDynamic(4, 0);
 
     insertStringToCell(u"F1"_ustr, u"={1;2}+A1:A2");
     CPPUNIT_ASSERT_EQUAL(u"={1;2}+A1:A2"_ustr, pDoc->GetFormula(5, 0, 0));
@@ -1212,7 +1224,167 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf149378)
     CPPUNIT_ASSERT_EQUAL(u"=SUM({1;2})"_ustr, pDoc->GetFormula(7, 0, 0));
 
     insertStringToCell(u"I1"_ustr, u"=ABS({-1;-2})");
-    CPPUNIT_ASSERT_EQUAL(u"{=ABS({-1;-2})}"_ustr, pDoc->GetFormula(8, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=ABS({-1;-2})"_ustr, pDoc->GetFormula(8, 0, 0));
+    checkDynamic(8, 0);
+
+    insertStringToCell(u"J1"_ustr, u"=A1:A2");
+    CPPUNIT_ASSERT_EQUAL(u"=A1:A2"_ustr, pDoc->GetFormula(9, 0, 0));
+    checkDynamic(9, 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testBinaryRangeAdditionSpills)
+{
+    // Typing =A2:A5+B2:B5 without Ctrl+Shift+Enter should make the cell a
+    // dynamic-array master and spill the result into C1:C4.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A2"_ustr, u"1");
+    insertStringToCell(u"A3"_ustr, u"2");
+    insertStringToCell(u"A4"_ustr, u"3");
+    insertStringToCell(u"A5"_ustr, u"4");
+    insertStringToCell(u"B2"_ustr, u"10");
+    insertStringToCell(u"B3"_ustr, u"20");
+    insertStringToCell(u"B4"_ustr, u"30");
+    insertStringToCell(u"B5"_ustr, u"40");
+
+    insertStringToCell(u"C1"_ustr, u"=A2:A5+B2:B5");
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(2, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pCell->GetMatrixFlag());
+
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), nRows);
+
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(22.0, pDoc->GetValue(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(33.0, pDoc->GetValue(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(44.0, pDoc->GetValue(ScAddress(2, 3, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testChainedRangeAdditionSpills)
+{
+    // A chain of binary additions over the same multi-cell range spills,
+    // even when the cell sits inside the source row span.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"2");
+    insertStringToCell(u"A3"_ustr, u"3");
+    insertStringToCell(u"A4"_ustr, u"4");
+
+    insertStringToCell(u"D2"_ustr, u"=A1:A4 + A1:A4 + A1:A4 + A1:A4 + A1:A4");
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(3, 1, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pCell->GetMatrixFlag());
+
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), nRows);
+
+    CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(15.0, pDoc->GetValue(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDoc->GetValue(ScAddress(3, 4, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testIfWithRangeBranchesStaysScalar)
+{
+    // Jump commands like IF encode their branches with jump tokens that
+    // do not fit the pop-N push-1 model the pre-Interpret RPN walk uses,
+    // so the walk bails out and leaves the cell as a plain single-cell
+    // formula. The cell shows the upper-left of the selected branch
+    // rather than spilling.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"B1"_ustr, u"10");
+    insertStringToCell(u"B2"_ustr, u"20");
+    insertStringToCell(u"B3"_ustr, u"30");
+    insertStringToCell(u"B4"_ustr, u"40");
+    insertStringToCell(u"C1"_ustr, u"100");
+    insertStringToCell(u"C2"_ustr, u"200");
+    insertStringToCell(u"C3"_ustr, u"300");
+    insertStringToCell(u"C4"_ustr, u"400");
+
+    insertStringToCell(u"D1"_ustr, u"=IF(A1>0,B1:B4,C1:C4)");
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(3, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(!pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::NONE, pCell->GetMatrixFlag());
+
+    // D1 takes the true branch and shows B1, with no spill into D2:D4.
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 3, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testRangeTimesScalarSpills)
+{
+    // A binary op other than addition still triggers the array-intent
+    // walk. The cell sits at B2 inside the row span of A1:A4 so the
+    // compile-time implicit-intersection skip is exercised as well.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"2");
+    insertStringToCell(u"A3"_ustr, u"3");
+    insertStringToCell(u"A4"_ustr, u"4");
+
+    insertStringToCell(u"B2"_ustr, u"=A1:A4*2");
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1, 1, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pCell->GetMatrixFlag());
+
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(ScAddress(1, 4, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSumOfRangeStaysScalar)
+{
+    // A function that reduces an array to a scalar must not promote
+    // its cell, even when the argument is a multi-cell range. The walk
+    // pops the range push, recognises SUM as a non-array-returning
+    // function, and leaves a scalar on the stack.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"2");
+    insertStringToCell(u"A3"_ustr, u"3");
+    insertStringToCell(u"A4"_ustr, u"4");
+
+    insertStringToCell(u"B1"_ustr, u"=SUM(A1:A4)");
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(!pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::NONE, pCell->GetMatrixFlag());
+
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf152014)

@@ -189,7 +189,6 @@ public:
                                          const OUString& rString, bool bApi, bool bEnglish,
                                          const OUString& rFormulaNmsp,
                                          const formula::FormulaGrammar::Grammar,
-                                         bool bCheckForSpill = false,
                                          bool bDynamicArrayMaster = false);
 
     SC_DLLPUBLIC bool TabOp( const ScRange& rRange, const ScMarkData* pTabMark,

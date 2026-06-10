@@ -319,7 +319,6 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
                             rDest, &aMark, rInfo.mpCode, OUString(),
                             true /*bApi*/, false /*bEnglish*/,
                             OUString(), eGram,
-                            false /*bCheckForSpill*/,
                             rInfo.mbDynamicArrayMaster);
                 }
 

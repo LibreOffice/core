@@ -5050,7 +5050,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorOverwrites)
 
     ScRange aRange(0, 0, 0, 0, 2, 0); // A1:A3
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
-    // bCheckForSpill=false
+    // Static Ctrl+Shift+Enter master: bDynamicArrayMaster=false.
     rDocFunc.EnterMatrix(aRange, &aMark, nullptr, u"=B1:B3"_ustr, true, false, OUString(),
                          formula::FormulaGrammar::GRAM_DEFAULT, false);
 
@@ -5090,7 +5090,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixResolveAfterBlockerDelete)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
-                                formula::FormulaGrammar::GRAM_DEFAULT, true,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
                                 /*bDynamicArrayMaster=*/true);
 
     ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
@@ -5425,7 +5425,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixContractionOnValueChange)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 0, 0, 3, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
-                                formula::FormulaGrammar::GRAM_DEFAULT, true,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
                                 /*bDynamicArrayMaster=*/true);
 
     ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
@@ -5470,7 +5470,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixAutoResolveOnValueChange)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
-                                formula::FormulaGrammar::GRAM_DEFAULT, true,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
                                 /*bDynamicArrayMaster=*/true);
 
     ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
@@ -5529,7 +5529,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixComplexScenario)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
-                                formula::FormulaGrammar::GRAM_DEFAULT, true,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
                                 /*bDynamicArrayMaster=*/true);
 
     // We expect the spill error
@@ -5600,7 +5600,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixUndoRedoBlockerDelete)
     // UNIQUE matrix at A1.
     rFunc.EnterMatrix(ScRange(ScAddress(0, 0, 0)), &aMark, nullptr, u"=UNIQUE(B1:B4)"_ustr, true,
                       false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT,
-                      /*bCheckForSpill*/ true, /*bDynamicArrayMaster*/ true);
+                      /*bDynamicArrayMaster*/ true);
 
     ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT(pFormulaCell);
@@ -5673,7 +5673,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixUndoRedoInputChange)
     // UNIQUE matrix at A1.
     rFunc.EnterMatrix(ScRange(ScAddress(0, 0, 0)), &aMark, nullptr, u"=UNIQUE(B1:B4)"_ustr, true,
                       false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT,
-                      /*bCheckForSpill*/ true, /*bDynamicArrayMaster*/ true);
+                      /*bDynamicArrayMaster*/ true);
 
     ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT(pFormulaCell);
@@ -5855,10 +5855,11 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayMasterGrowsOnRecalc)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
-    // 1x1 master at A6 with =TRANSPOSE(B1:B4). Source is a 1-col 4-row range,
-    // so the natural result is a 4-col 1-row range that would land in A6:D6.
+    // 1x1 static master at A6 with =TRANSPOSE(B1:B4). The flag stays off so
+    // the cell does not auto-resize on the first interpret. The test then
+    // opts the cell into dynamic-array mode and verifies the resize.
     m_pDoc->InsertMatrixFormula(0, 5, 0, 5, aMark, u"=TRANSPOSE(B1:B4)"_ustr, nullptr,
-                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+                                formula::FormulaGrammar::GRAM_DEFAULT);
     m_pDoc->CalcAll();
 
     ScFormulaCell* pMaster = m_pDoc->GetFormulaCell(ScAddress(0, 5, 0));
@@ -5889,6 +5890,52 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayMasterGrowsOnRecalc)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayMasterFlagDrivesRangeReferenceResize)
+{
+    // A bare multi-cell range reference at the top grows the declared
+    // range on recalc when the cell carries the dynamic-array flag.
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // 1x1 static master at A6 with =B1:B4. The flag stays off so the cell
+    // does not auto-resize on the first interpret. The test then opts the
+    // cell into dynamic-array mode and verifies the resize.
+    m_pDoc->InsertMatrixFormula(0, 5, 0, 5, aMark, u"=B1:B4"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT);
+    m_pDoc->CalcAll();
+
+    ScFormulaCell* pMaster = m_pDoc->GetFormulaCell(ScAddress(0, 5, 0));
+    CPPUNIT_ASSERT(pMaster);
+
+    SCCOL nDeclCols = 0;
+    SCROW nDeclRows = 0;
+    pMaster->GetMatColsRows(nDeclCols, nDeclRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nDeclCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nDeclRows);
+
+    pMaster->SetDynamicArrayMaster(true);
+    pMaster->SetDirty();
+    m_pDoc->CalcAll();
+
+    pMaster->GetMatColsRows(nDeclCols, nDeclRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nDeclCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), nDeclRows);
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(0, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(ScAddress(0, 8, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayResizeDuringCopyToClip)
 {
     // A dynamic-array resize queued during CopyToClip must run after the clipboard clone is made.
@@ -5905,7 +5952,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayResizeDuringCopyToClip)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
-                                formula::FormulaGrammar::GRAM_DEFAULT, true,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
                                 /*bDynamicArrayMaster=*/true);
 
     ScFormulaCell* pMaster = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));

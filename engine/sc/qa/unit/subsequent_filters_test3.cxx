@@ -30,6 +30,7 @@
 #include <docsh.hxx>
 #include <cellvalue.hxx>
 #include <attrib.hxx>
+#include <formulacell.hxx>
 #include <stlpool.hxx>
 #include <hints.hxx>
 #include <detfunc.hxx>
@@ -703,6 +704,52 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf150815_RepaintSparkline)
     pViewShell->EnterData(0, 0, 0, u"10"_ustr);
 
     CPPUNIT_ASSERT(aListener.mbCalled);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testEnterDataFlagsArrayReturningFormula)
+{
+    // Plain Enter on =UNIQUE(B1:B4) makes the cell a dynamic-array master
+    // and the formula text reads back without {} wrapping.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    ScTabViewShell* pViewShell = getViewShell();
+    pViewShell->EnterData(0, 0, 0, u"=UNIQUE(B1:B4)"_ustr, nullptr, /*bAutoDynamicArray*/ true);
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pCell->GetMatrixFlag());
+    CPPUNIT_ASSERT_EQUAL(u"=UNIQUE(B1:B4)"_ustr, pDoc->GetFormula(0, 0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testEnterDataKeepsSingleValueAtTop)
+{
+    // The @ implicit-intersection operator opts a formula out of the
+    // dynamic-array auto-resize path. The typed =@UNIQUE(...) cell stays a
+    // plain single-value cell with no dynamic-array flag.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    ScTabViewShell* pViewShell = getViewShell();
+    pViewShell->EnterData(0, 0, 0, u"=@UNIQUE(B1:B4)"_ustr, nullptr, /*bAutoDynamicArray*/ true);
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(!pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::NONE, pCell->GetMatrixFlag());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf137091)

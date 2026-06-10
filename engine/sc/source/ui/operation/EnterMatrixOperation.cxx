@@ -28,7 +28,7 @@ EnterMatrixOperation::EnterMatrixOperation(ScDocShell& rDocShell, const ScRange&
                                            const ScTokenArray* pTokenArray, const OUString& rString,
                                            bool bApi, bool bEnglish, const OUString& rFormulaNmsp,
                                            formula::FormulaGrammar::Grammar eGrammar,
-                                           bool bCheckForSpill, bool bDynamicArrayMaster)
+                                           bool bDynamicArrayMaster)
     : Operation(OperationType::EnterMatrix, true, bApi)
     , mrDocShell(rDocShell)
     , maRange(rRange)
@@ -38,7 +38,6 @@ EnterMatrixOperation::EnterMatrixOperation(ScDocShell& rDocShell, const ScRange&
     , mbEnglish(bEnglish)
     , maFormulaNmsp(rFormulaNmsp)
     , meGrammar(eGrammar)
-    , mbCheckForSpill(bCheckForSpill)
     , mbDynamicArrayMaster(bDynamicArrayMaster)
 {
 }
@@ -95,8 +94,7 @@ bool EnterMatrixOperation::runImplementation()
         if (mpTokenArray)
         {
             rDoc.InsertMatrixFormula(nStartCol, nStartRow, nEndCol, nEndRow, aMark, OUString(),
-                                     mpTokenArray, meGrammar, mbCheckForSpill,
-                                     mbDynamicArrayMaster);
+                                     mpTokenArray, meGrammar, mbDynamicArrayMaster);
         }
         else if (rDoc.IsImportingXML())
         {
@@ -113,11 +111,11 @@ bool EnterMatrixOperation::runImplementation()
             ScCompiler aComp(rDoc, aRange.aStart, meGrammar);
             std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(maString);
             rDoc.InsertMatrixFormula(nStartCol, nStartRow, nEndCol, nEndRow, aMark, OUString(),
-                                     pCode.get(), meGrammar, mbCheckForSpill, mbDynamicArrayMaster);
+                                     pCode.get(), meGrammar, mbDynamicArrayMaster);
         }
         else
             rDoc.InsertMatrixFormula(nStartCol, nStartRow, nEndCol, nEndRow, aMark, maString,
-                                     nullptr, meGrammar, mbCheckForSpill, mbDynamicArrayMaster);
+                                     nullptr, meGrammar, mbDynamicArrayMaster);
 
         if (mbRecord)
         {

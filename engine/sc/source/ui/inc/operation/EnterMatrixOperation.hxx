@@ -31,7 +31,6 @@ private:
     bool mbEnglish;
     OUString maFormulaNmsp;
     formula::FormulaGrammar::Grammar meGrammar;
-    bool mbCheckForSpill;
     bool mbDynamicArrayMaster;
 
     bool runImplementation() override;
@@ -40,7 +39,7 @@ public:
     EnterMatrixOperation(ScDocShell& rDocShell, const ScRange& rRange, const ScMarkData* pTabMark,
                          const ScTokenArray* pTokenArray, const OUString& rString, bool bApi,
                          bool bEnglish, const OUString& rFormulaNmsp,
-                         formula::FormulaGrammar::Grammar eGrammar, bool bCheckForSpill = false,
+                         formula::FormulaGrammar::Grammar eGrammar,
                          bool bDynamicArrayMaster = false);
 };
 } // end sc namespace

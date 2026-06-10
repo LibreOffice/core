@@ -332,7 +332,6 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      const OUString& rFormula,
                                      const ScTokenArray* pArr,
                                      const formula::FormulaGrammar::Grammar eGram,
-                                     bool bCheckForSpill,
                                      bool bDynamicArrayMaster)
 {
     PutInOrder(nCol1, nCol2);
@@ -387,15 +386,14 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                     *pCell, *this, ScAddress(nCol1, nRow1, rTab), ScCloneFlags::StartListening));
     }
 
-    // Check for spill: if any non-origin cell in the auto expanded target
-    // range is non-empty, collapse the master to 1x1 with a re-evaluable
-    // #SPILL! error and don't create reference cells over the blocker. A
-    // later cell change operation can re-resolve via the runtime spill check
-    // and expand the matrix to the result dimensions. Applies the same way
-    // to dynamic array functions (UNIQUE, SEQUENCE, ...) and to functions returning
-    // an array (TRANSPOSE, MMULT, ...) whose result outgrew the auto-expanded
-    // selection.
-    if (bCheckForSpill && (nCol2 > nCol1 || nRow2 > nRow1))
+    // Check for spill on dynamic-array masters: if any non-origin cell in
+    // the declared range is non-empty, collapse the master to 1x1 with a
+    // re-evaluable #SPILL! error and don't create reference cells over the
+    // blocker. A later cell change operation can re-resolve through the
+    // runtime spill check and expand the matrix to the result dimensions.
+    // Static array masters (flag off) keep the user-chosen range as is
+    // and overwrite whatever sat there.
+    if (bDynamicArrayMaster && (nCol2 > nCol1 || nRow2 > nRow1))
     {
         bool bSpillBlocked = false;
         for (const SCTAB& nTab : rMark)

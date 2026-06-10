@@ -839,6 +839,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     mbSeenInPath(false),
     mbFreeFlying(false),
     mbDynamicArrayMaster(rCell.mbDynamicArrayMaster),
+    mbAutoDynamicArrayEligible(rCell.mbAutoDynamicArrayEligible),
     cMatrixFlag ( rCell.cMatrixFlag ),
     nSeenInIteration(0),
     nFormatType( rCell.nFormatType ),
@@ -2099,6 +2100,28 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
 
     if( pCode->GetCodeLen() )
     {
+        // A freshly UI-typed formula promotes to a dynamic-array master
+        // at interpret entry when the RPN says it intends to produce an
+        // array. Matrix mode has to be set before the interpreter runs
+        // so the array result is kept. Loaded and macro-created cells
+        // leave the flag false so legacy formulas keep their old
+        // result. An @ at the top suppresses promotion. Grouped cells
+        // stay single-cell so the group is not broken.
+        if (mbAutoDynamicArrayEligible
+            && cMatrixFlag == ScMatrixMode::NONE
+            && !pCode->IsHyperLink()
+            && !mxGroup)
+        {
+            if (!rpnTopIsImplicitIntersection(*pCode)
+                && rpnIntendsArrayResult(*pCode))
+            {
+                cMatrixFlag = ScMatrixMode::Formula;
+                SetMatColsRows(1, 1);
+                mbDynamicArrayMaster = true;
+            }
+            mbAutoDynamicArrayEligible = false;
+        }
+
         std::unique_ptr<ScInterpreter> pScopedInterpreter;
         ScInterpreter* pInterpreter;
         if (rContext.pInterpreter)

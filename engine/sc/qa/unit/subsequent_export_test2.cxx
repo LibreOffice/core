@@ -1798,8 +1798,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripXLSX)
     // Blocker at A2
     insertStringToCell(u"A2"_ustr, u"blocker");
 
-    // UNIQUE formula entered
-    insertArrayToCell(u"A1"_ustr, u"=UNIQUE(B1:B4)");
+    // UNIQUE formula entered. Plain Enter (not Ctrl+Shift+Enter) so the
+    // cell becomes a dynamic-array master, not a classic Ctrl+Shift+Enter
+    // static array.
+    insertStringToCell(u"A1"_ustr, u"=UNIQUE(B1:B4)");
 
     {
         ScDocument* pDocument = getScDoc();
@@ -1920,7 +1922,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripODS)
 
     insertStringToCell(u"A2"_ustr, u"blocker");
 
-    insertArrayToCell(u"A1"_ustr, u"=UNIQUE(B1:B4)");
+    // Plain Enter so the cell becomes a dynamic-array master.
+    insertStringToCell(u"A1"_ustr, u"=UNIQUE(B1:B4)");
 
     {
         ScDocument* pDocument = getScDoc();
