@@ -689,6 +689,29 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicCrop)
     assertJsonPathExists(aJson, "/primitives/0/crop/bottom");
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicRotation)
+{
+    // A raster graphic with a rotation attribute. The engine writes
+    // the angle in tenths of a degree when it is non-zero.
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(1000.0, 1000.0);
+
+    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+    GraphicAttr aAttribute;
+    // 45 degrees clockwise.
+    aAttribute.SetRotation(Degree10(450));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject, aAttribute));
+
+    auto aJson = writeReference(u"testGraphicRotation", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    assertJsonPath(aJson, "/primitives/0/rotation", sal_Int64(450));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvg)
 {
     // An SVG-backed Graphic goes through the writer's SVG branch.

@@ -471,6 +471,48 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(draw.args[8], 1 - top - bottom);
 		});
 
+		it('rotates a graphic around the centre of the unit square', function () {
+			// The wire rotation is in tenths of a degree. The
+			// renderer translates to the centre of the unit square,
+			// rotates by that angle in radians, then translates back,
+			// so the rotation pivots around the image's centre after
+			// the matrix maps it onto the slide.
+			const primitive = loadVectorRenderingReference('testGraphicRotation')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.strictEqual(typeof primitive.rotation, 'number');
+			nodeassert.strictEqual(typeof primitive.checksum, 'number');
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// Two translates frame a single rotate, with the centre
+			// of the unit square as the pivot.
+			const translates = recorder.callsOf('translate');
+			nodeassert.strictEqual(translates.length, 2);
+			nodeassert.deepStrictEqual(translates[0].args, [0.5, 0.5]);
+			nodeassert.deepStrictEqual(translates[1].args, [-0.5, -0.5]);
+
+			const rotate = recorder.findCall('rotate');
+			nodeassert.ok(rotate, 'rotate not called');
+			const expectedRadians = ((primitive.rotation / 10) * Math.PI) / 180;
+			nodeassert.strictEqual(rotate.args[0], expectedRadians);
+
+			// The image is still drawn into the unit square. The
+			// rotation lives in the canvas transform.
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+			nodeassert.deepStrictEqual(draw.args.slice(1), [0, 0, 1, 1]);
+		});
+
+
 		it('paints each point of a pointArray', function () {
 			// pointArray lays down a single-pixel mark at every point,
 			// all in the same colour.

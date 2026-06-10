@@ -401,6 +401,7 @@ namespace cool {
 				primitive.matrix,
 				primitive.checksum,
 				primitive.crop,
+				primitive.rotation,
 			);
 		}
 
@@ -414,11 +415,16 @@ namespace cool {
 		// the same inset region of the unit square. The matrix was
 		// sized for the original image, so insetting both rectangles
 		// keeps the visible content aligned with the slide bounds.
+		//
+		// rotation is in tenths of a degree and rotates around the
+		// centre of the unit square, which the matrix maps to the
+		// centre of the image in slide space.
 		private _drawRaster(
 			context: CanvasRenderingContext2D,
 			matrix: number[] | undefined,
 			checksum: number,
 			crop?: GraphicPrimitive['crop'],
+			rotation?: number,
 		): void {
 			if (!matrix || matrix.length < 6) return;
 			if (!this._bitmapLookup) return;
@@ -439,6 +445,13 @@ namespace cool {
 				matrix[4],
 				matrix[5],
 			);
+
+			if (rotation) {
+				const radians = ((rotation / 10) * Math.PI) / 180;
+				context.translate(0.5, 0.5);
+				context.rotate(radians);
+				context.translate(-0.5, -0.5);
+			}
 
 			if (crop && (crop.left || crop.top || crop.right || crop.bottom)) {
 				// Image bounds in slide units, from the matrix's two
