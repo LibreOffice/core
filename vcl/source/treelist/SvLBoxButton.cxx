@@ -128,17 +128,9 @@ void SvLBoxButtonData::SetDefaultImages(const Control& rCtrl)
 
 bool SvLBoxButtonData::IsRadio() const { return m_bShowRadioButton; }
 
-SvLBoxButton::SvLBoxButton(SvLBoxButtonData* pBData)
-    : m_bIsVis(true)
+SvLBoxButton::SvLBoxButton(SvLBoxButtonData* pBData, bool bIsVis)
+    : m_bIsVis(bIsVis)
     , m_pData(pBData)
-    , m_nItemFlags(SvItemStateFlags::NONE)
-{
-    SetStateUnchecked();
-}
-
-SvLBoxButton::SvLBoxButton()
-    : m_bIsVis(false)
-    , m_pData(nullptr)
     , m_nItemFlags(SvItemStateFlags::NONE)
 {
     SetStateUnchecked();
@@ -199,9 +191,8 @@ void SvLBoxButton::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCont
 
 std::unique_ptr<SvLBoxItem> SvLBoxButton::Clone(SvLBoxItem const* pSource) const
 {
-    std::unique_ptr<SvLBoxButton> pNew(new SvLBoxButton);
-    pNew->m_pData = static_cast<SvLBoxButton const*>(pSource)->m_pData;
-    return pNew;
+    return std::make_unique<SvLBoxButton>(static_cast<SvLBoxButton const*>(pSource)->m_pData,
+                                          false);
 }
 
 void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType,

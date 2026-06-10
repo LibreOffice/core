@@ -75,8 +75,7 @@ class SvLBoxButton final : public SvLBoxItem
                                   vcl::RenderContext const& pRenderContext);
 
 public:
-    SvLBoxButton(SvLBoxButtonData* pBData);
-    SvLBoxButton();
+    SvLBoxButton(SvLBoxButtonData* pBData, bool bIsVis = true);
     virtual ~SvLBoxButton() override;
     virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
                               SvViewDataItem* pViewData = nullptr) override;
