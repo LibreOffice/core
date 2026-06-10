@@ -28,7 +28,7 @@ interface InteractiveCommentArgs {
 	[arg: string]: UnoCommandValue | boolean | undefined;
 }
 
-interface LatLngLike {
+interface NormalPointLike {
 	lat: number;
 	lng: number;
 }
@@ -64,7 +64,7 @@ interface MapInterface extends Evented {
 
 	getDocSize(): cool.Point;
 	getSize(): cool.Point;
-	getCenter(): LatLngLike;
+	getCenter(): NormalPointLike;
 	getContainer(): Element;
 	_getCurrentFontName(): string;
 
@@ -164,8 +164,8 @@ interface MapInterface extends Evented {
 	_cacheSVG: string[];
 	calcInputBarHasFocus(): boolean;
 	lockAccessibilityOn(): void;
-	getPixelBounds(center?: LatLngLike, zoom?: number): cool.Bounds;
-	getPixelBoundsCore(center?: LatLngLike, zoom?: number): cool.Bounds;
+	getPixelBounds(center?: NormalPointLike, zoom?: number): cool.Bounds;
+	getPixelBoundsCore(center?: NormalPointLike, zoom?: number): cool.Bounds;
 	_partsDirection: number;
 	getZoomScale(toZoom: number, fomZoom?: number): number;
 	_docLoaded: boolean;
@@ -181,7 +181,7 @@ interface MapInterface extends Evented {
 		external?: boolean,
 		calledFromSetPartHandler?: boolean,
 	): void;
-	mouseEventToLatLng(e: any): LatLngLike;
+	mouseEventToLatLng(e: any): NormalPointLike;
 	_limitZoom(zoom: number): number;
 	setView(
 		center: [number, number],
