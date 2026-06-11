@@ -33,6 +33,10 @@
 
 namespace ConfigUtil
 {
+// Set by initialize(). On the apps (MOBILEAPP) initialize() is never called,
+// so Config stays null and the value accessors below fall back to their
+// defaults; the "is initialized" asserts there are therefore gated on
+// !MOBILEAPP, where a null Config really is a bug.
 static const Poco::Util::AbstractConfiguration* Config = nullptr;
 
 #if ENABLE_SSL
@@ -447,7 +451,9 @@ std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
 
 std::string getString(const std::string& key, const std::string& def)
 {
+#if !MOBILEAPP
     assert(Config && "Config is not initialized.");
+#endif
     return (Config != nullptr) ? Config->getString(key, def) : def;
 }
 
@@ -458,25 +464,33 @@ bool getBool(const std::string& key, const bool def)
         return def;
     }
 
+#if !MOBILEAPP
     assert(Config && "Config is not initialized.");
+#endif
     return (Config != nullptr) ? Config->getBool(key, def) : def;
 }
 
 int getInt(const std::string& key, const int def)
 {
+#if !MOBILEAPP
     assert(Config && "Config is not initialized.");
+#endif
     return (Config != nullptr) ? Config->getInt(key, def) : def;
 }
 
 bool has(const std::string& key)
 {
+#if !MOBILEAPP
     assert(Config && "Config is not initialized.");
+#endif
     return (Config != nullptr) ? Config->has(key) : false;
 }
 
 bool hasProperty(const std::string& key)
 {
+#if !MOBILEAPP
     assert(Config && "Config is not initialized.");
+#endif
     return (Config != nullptr) ? Config->hasProperty(key) : false;
 }
 
