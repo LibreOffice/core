@@ -74,13 +74,12 @@ class CellCursorSection extends CanvasSectionObject {
 			const cursorRect: cool.SimpleRectangle = (app.calc.cellCursorRectangle?? new cool.SimpleRectangle(0, 0, 0, 0)).clone();
 
 			for (let i: number = 0; i < this.sectionProperties.weight; i++) {
-				this.drawViewRectangle(cursorRect);
-
 				// Slighyly modify rectangle in each cycle, for thickness.
-				cursorRect.pX1 -= i;
-				cursorRect.pY1 -= i;
-				cursorRect.pWidth += 2 * i;
-				cursorRect.pHeight += 2 * i;
+				cursorRect.pX1 -= 1;
+				cursorRect.pY1 -= 1;
+				cursorRect.pWidth += 2;
+				cursorRect.pHeight += 2;
+				this.drawViewRectangle(cursorRect);
 			}
 
 			if (window.prefs.getBoolean('darkTheme')) {

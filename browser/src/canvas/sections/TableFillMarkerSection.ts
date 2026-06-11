@@ -20,7 +20,6 @@ app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
 
 	constructor() {
 		super(app.CSections.TableFillMarker.name);
-		this.selectionBorderWidth = 0;
 	}
 
 	public calculatePositionViaCellSelection(point: Array<number>) {

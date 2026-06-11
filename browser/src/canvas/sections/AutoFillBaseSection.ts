@@ -17,8 +17,6 @@ class AutoFillBaseSection extends CanvasSectionObject {
 	zIndex: number = 0;
 
 	map: any;
-	cursorBorderWidth: number = 2;
-	selectionBorderWidth: number = 1;
 
 	_showSection: boolean = true; // Store the internal show/hide section through forced readonly hides...
 
@@ -35,19 +33,8 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		var cursorStyle = getComputedStyle(
 			this.sectionProperties.docLayer._cursorDataDiv,
 		);
-		var selectionStyle = getComputedStyle(
-			this.sectionProperties.docLayer._selectionsDataDiv,
-		);
 		var cursorColor = cursorStyle.getPropertyValue('border-top-color');
 		this.backgroundColor = cursorColor ? cursorColor : this.backgroundColor;
-		this.cursorBorderWidth = Math.round(
-			window.devicePixelRatio *
-				parseInt(cursorStyle.getPropertyValue('border-top-width')),
-		);
-		this.selectionBorderWidth = Math.round(
-			window.devicePixelRatio *
-				parseInt(selectionStyle.getPropertyValue('border-top-width')),
-		);
 	}
 
 	public onInitialize() {
@@ -126,41 +113,14 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		this.context.lineCap = 'square';
 		this.context.lineWidth = 1;
 
-		var desktop: boolean = (<any>window).mode.isDesktop();
-		var translation = desktop
-			? [this.size[0], this.size[1]]
-			: [Math.floor(this.size[0] * 0.5), Math.floor(this.size[1] * 0.5)];
-		const adjustForRTL = app.calc.isRTL();
-		const transformX = (xcoord: number) => {
-			return adjustForRTL ? this.size[0] - xcoord : xcoord;
-		};
+		const rectangle = this.boundingRectangle.clone();
 
-		// top white line
 		this.context.beginPath();
-		this.context.moveTo(transformX(-0.5), -0.5);
-		var borderWidth = this.sectionProperties.selectedAreaPoint
-			? this.selectionBorderWidth
-			: this.cursorBorderWidth;
-		this.context.lineTo(
-			transformX(this.size[0] + 0.5 - (desktop ? borderWidth : 0)),
-			-0.5,
-		);
-		this.context.stroke();
-
-		if (!desktop) {
-			this.context.beginPath();
-			this.context.moveTo(transformX(this.size[0] - 0.5), -0.5);
-			this.context.lineTo(
-				transformX(this.size[0] - 0.5),
-				translation[1] - 0.5 - borderWidth,
-			);
-			this.context.stroke();
-		}
-
-		// bottom white line
-		this.context.beginPath();
-		this.context.moveTo(transformX(-0.5), -0.5);
-		this.context.lineTo(transformX(-0.5), translation[1] + 0.5 - borderWidth);
+		this.context.moveTo(rectangle.v1X - 0.5, rectangle.v1Y - 0.5);
+		this.context.lineTo(rectangle.v2X - 0.5, rectangle.v2Y - 0.5);
+		this.context.moveTo(rectangle.v1X - 0.5, rectangle.v1Y - 0.5);
+		this.context.lineTo(rectangle.v3X - 0.5, rectangle.v3Y - 0.5);
+		this.context.closePath();
 		this.context.stroke();
 	}
 
@@ -179,7 +139,10 @@ class AutoFillBaseSection extends CanvasSectionObject {
 	}
 
 	public onDraw() {
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
 		this.drawWhiteOuterBorders();
+		this.context.restore();
 	}
 
 	protected getDocumentPositionFromLocal(

@@ -4371,12 +4371,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return this._painter.getTileSectionPos();
 	},
 
-	isLayoutRTL: function () {
-		return !!(this.isCalc() && app.calc && app.calc.isRTL && app.calc.isRTL());
-	},
-
 	isCalcRTL: function () {
-		return this.isLayoutRTL();
+		return !!(this.isCalc() && app.calc && app.calc.isRTL && app.calc.isRTL());
 	}
 
 });

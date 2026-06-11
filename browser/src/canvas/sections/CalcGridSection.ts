@@ -46,7 +46,7 @@ class CalcGridSection extends CanvasSectionObject {
 			scale = tsManager._zoomFrameScale;
 
 		var ctx = tsManager._paintContext();
-		var isRTL = this.sectionProperties.docLayer.isLayoutRTL();
+		var isRTL = this.sectionProperties.docLayer.isCalcRTL();
 		var sectionWidth = this.size[0];
 		var xTransform = function (xcoord: any) {
 			return isRTL ? sectionWidth - xcoord : xcoord;
