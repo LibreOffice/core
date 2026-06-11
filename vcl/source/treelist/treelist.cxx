@@ -497,19 +497,18 @@ SvTreeListEntry* SvTreeList::Last() const
     return pEntry;
 }
 
-sal_uInt32 SvTreeList::GetVisiblePos(const SvTreeListBox* pView,
+sal_uInt32 SvTreeList::GetVisiblePos(const SvTreeListBox& rView,
                                      SvTreeListEntry const* pEntry) const
 {
-    assert(pView && "View?");
     DBG_ASSERT(pEntry,"Entry?");
 
-    if (!pView->m_bVisPositionsValid)
+    if (!rView.m_bVisPositionsValid)
     {
         // to make GetVisibleCount refresh the positions
-        const_cast<SvTreeListBox*>(pView)->m_nVisibleCount = 0;
-        GetVisibleCount(const_cast<SvTreeListBox*>(pView));
+        const_cast<SvTreeListBox&>(rView).m_nVisibleCount = 0;
+        GetVisibleCount(const_cast<SvTreeListBox*>(&rView));
     }
-    const SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
+    const SvViewDataEntry* pViewData = rView.GetViewData(pEntry);
     if (!pViewData)
         return 0;
     return pViewData->nVisPos;
@@ -652,7 +651,7 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvTreeListBox& rView, SvTreeListE
 {
     DBG_ASSERT(IsEntryVisible(&rView, pEntry), "NextVis:Wrong Vis");
 
-    sal_uInt32 nVisPos = GetVisiblePos(&rView, pEntry);
+    sal_uInt32 nVisPos = GetVisiblePos(rView, pEntry);
     // nDelta entries existent?
     // example: 0,1,2,3,4,5,6,7,8,9 nVisPos=5 nDelta=7
     //           nNewDelta = 10-nVisPos-1 == 4
@@ -676,7 +675,7 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox& rView, SvTreeListE
 {
     DBG_ASSERT(pEntry && IsEntryVisible(&rView, pEntry), "PrevVis:Parms/!Vis");
 
-    sal_uInt32 nVisPos = GetVisiblePos(&rView, pEntry);
+    sal_uInt32 nVisPos = GetVisiblePos(rView, pEntry);
     // nDelta entries existent?
     // example: 0,1,2,3,4,5,6,7,8,9 nVisPos=8 nDelta=20
     //           nNewDelta = nNewVisPos

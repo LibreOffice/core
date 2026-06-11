@@ -419,7 +419,7 @@ public:
 
     sal_uInt32 GetVisiblePos(SvTreeListEntry const* pEntry) const
     {
-        return m_pModel->GetVisiblePos(this, pEntry);
+        return m_pModel->GetVisiblePos(*this, pEntry);
     }
 
     sal_uInt32 GetVisibleChildCount(SvTreeListEntry* pParent) const
