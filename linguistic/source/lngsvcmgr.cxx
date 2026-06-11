@@ -578,7 +578,7 @@ namespace
         std::vector<OUString> aRes;
         aRes.reserve(rCfgSvcs.getLength());
 
-        std::copy_if(rCfgSvcs.begin(), rCfgSvcs.end(), std::back_inserter(aRes),
+        std::ranges::copy_if(rCfgSvcs, std::back_inserter(aRes),
             [&rAvailSvcs](const OUString& entry) { return lcl_SeqHasString(rAvailSvcs, entry); });
 
         return comphelper::containerToSequence(aRes);
@@ -591,7 +591,7 @@ namespace
         std::vector<OUString> aRes;
         aRes.reserve(rAvailSvcs.getLength());
 
-        std::copy_if(rAvailSvcs.begin(), rAvailSvcs.end(), std::back_inserter(aRes),
+        std::ranges::copy_if(rAvailSvcs, std::back_inserter(aRes),
             [&rLastFoundSvcs](const OUString& rEntry) {
                 return !rEntry.isEmpty() && !lcl_FindEntry( rEntry, rLastFoundSvcs ); });
 
@@ -612,7 +612,7 @@ namespace
         // new found services at the end
         for (const Sequence< OUString > &rSeq : { rCfgSvcs, rNewSvcs })
         {
-            std::copy_if(rSeq.begin(), rSeq.end(), std::back_inserter(aRes), lVecNotHasString);
+            std::ranges::copy_if(rSeq, std::back_inserter(aRes), lVecNotHasString);
         }
 
         return comphelper::containerToSequence(aRes);

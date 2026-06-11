@@ -119,10 +119,10 @@ static std::vector< OUString > GetMultiPaths_Impl(
         auto lPathIsNotEmpty = [](const OUString& rPath) { return !rPath.isEmpty(); };
 
         if (nPathFlags & DictionaryPathFlags::USER)
-            std::copy_if(std::cbegin(aUserPaths), std::cend(aUserPaths), std::back_inserter(aRes), lPathIsNotEmpty);
+            std::ranges::copy_if(aUserPaths, std::back_inserter(aRes), lPathIsNotEmpty);
 
         if (nPathFlags & DictionaryPathFlags::INTERNAL)
-            std::copy_if(std::cbegin(aInternalPaths), std::cend(aInternalPaths), std::back_inserter(aRes), lPathIsNotEmpty);
+            std::ranges::copy_if(aInternalPaths, std::back_inserter(aRes), lPathIsNotEmpty);
     }
 
     return aRes;
