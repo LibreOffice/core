@@ -99,7 +99,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeList final
     SvTreeListEntry* FirstSelected(const SvTreeListBox*) const;
     SvTreeListEntry* NextSelected(const SvTreeListBox*, SvTreeListEntry* pEntry) const;
 
-    sal_uInt32 GetChildSelectionCount(const SvTreeListBox*, SvTreeListEntry* pParent) const;
+    sal_uInt32 GetChildSelectionCount(const SvTreeListBox& rView, SvTreeListEntry* pParent) const;
 
     SAL_DLLPRIVATE void SetAbsolutePositions();
 

@@ -399,10 +399,9 @@ sal_uInt32 SvTreeList::GetVisibleChildCount(const SvTreeListBox& rView,
     return nCount - 1;
 }
 
-sal_uInt32 SvTreeList::GetChildSelectionCount(const SvTreeListBox* pView,
+sal_uInt32 SvTreeList::GetChildSelectionCount(const SvTreeListBox& rView,
                                               SvTreeListEntry* pParent) const
 {
-    assert(pView && "GetChildSelCount:No View");
     if ( !pParent )
         pParent = m_pRootItem.get();
 
@@ -415,7 +414,7 @@ sal_uInt32 SvTreeList::GetChildSelectionCount(const SvTreeListBox* pView,
     do
     {
         pParent = Next( pParent, &nActDepth );
-        if( pParent && pView->IsSelected( pParent ) && nRefDepth < nActDepth)
+        if (pParent && rView.IsSelected(pParent) && nRefDepth < nActDepth)
             nCount++;
     } while( pParent && nRefDepth < nActDepth );
 

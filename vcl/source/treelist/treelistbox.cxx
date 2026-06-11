@@ -755,7 +755,7 @@ void SvTreeListBox::ActionRemoving(SvTreeListEntry* pEntry)
     SvViewDataEntry& rViewData = iter->second;
     sal_uInt32 nSelRemoved = 0;
     if (rViewData.IsSelected())
-        nSelRemoved = 1 + m_pModel->GetChildSelectionCount(this, pEntry);
+        nSelRemoved = 1 + m_pModel->GetChildSelectionCount(*this, pEntry);
     m_nSelectionCount -= nSelRemoved;
     sal_uInt32 nVisibleRemoved = 0;
     if (m_pModel->IsEntryVisible(this, pEntry))
