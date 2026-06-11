@@ -4234,8 +4234,6 @@ void SalInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
 
     SvLBoxButtonData& rData = m_bTogglesAsRadio ? m_aRadioButtonData : m_aCheckButtonData;
     m_xTreeView->EnableCheckButton(rData);
-    // EnableCheckButton clobbered this, restore it
-    rData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
 }
 
 void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState, int col)

@@ -278,7 +278,6 @@ protected:
     std::unique_ptr<SvInplaceEdit2> m_pEdCtrl;
 
 private:
-    DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData *, void );
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, SvInplaceEdit2&, void );
     // Handler that is called by TreeList to clone an Entry
     DECL_DLLPRIVATE_LINK(CloneHdl_Impl, SvTreeListEntry&, SvTreeListEntry*);

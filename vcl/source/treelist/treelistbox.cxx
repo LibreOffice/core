@@ -1828,12 +1828,6 @@ const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry 
     return pItem->GetBitmap1( );
 }
 
-IMPL_LINK( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData, void )
-{
-    m_pHdlEntry = pData->GetActEntry();
-    CheckButtonHdl();
-}
-
 SvTreeListEntry* SvTreeListBox::InsertEntry(
     const OUString& rText,
     SvTreeListEntry* pParent,
@@ -2084,7 +2078,6 @@ void SvTreeListBox::EnableCheckButton(SvLBoxButtonData& rData)
 {
     m_pCheckButtonData = &rData;
     m_nTreeFlags |= SvTreeFlags::CHKBTN;
-    rData.SetLink( LINK(this, SvTreeListBox, CheckButtonClick));
 
     SetTabs();
     if( IsUpdateMode() )
