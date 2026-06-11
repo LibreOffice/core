@@ -2112,7 +2112,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		case 'rendered_combobox_entry':
 		{
 			if (!this.rendersCache[control.id])
-				this.rendersCache[control.id] = { persistent: false, images: [] };
+				this.rendersCache[control.id] = { persistent: false, images: [], dpiScale: window.devicePixelRatio };
 
 			const oldImage = this.rendersCache[control.id].images[data.pos];
 			if (oldImage === data.image) {

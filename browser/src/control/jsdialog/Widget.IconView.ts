@@ -283,9 +283,20 @@ JSDialog.iconView = function (
 		const signature = data.entries
 			? data.entries.map((e: IconViewEntry) => e.text || '').join('|')
 			: '';
-		if (cache.signature !== signature) {
+		// The entry images are bitmaps converted by core at a fixed pixel
+		// density that is sent with the render request. When the display
+		// density changes (browser zoom, or moving the window to a monitor
+		// with a different scale) the cached bitmap no longer matches and the
+		// browser upscales it, which looks blurry. Drop the images so the
+		// entries are re-requested and re-rendered at the new density.
+		// Persistent caches keep their images for the lifetime of the dialog
+		// and are never re-requested, so leave them untouched here.
+		const dpiChanged =
+			!cache.persistent && cache.dpiScale !== window.devicePixelRatio;
+		if (cache.signature !== signature || dpiChanged) {
 			cache.images = [];
 			cache.signature = signature;
+			cache.dpiScale = window.devicePixelRatio;
 		}
 	}
 
