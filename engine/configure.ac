@@ -6012,6 +6012,7 @@ if test "$cross_compiling" = "yes"; then
         $with_build_platform_configure_options \
         --srcdir=$srcdir
 
+    set -o pipefail
     ./configure \
         $sub_conf_defaults \
         --with-parallelism="$with_parallelism" \
@@ -6022,7 +6023,7 @@ if test "$cross_compiling" = "yes"; then
         $with_build_platform_configure_options \
         --srcdir=$srcdir \
         2>&1 | sed -e 's/^/    /'
-    if test [${PIPESTATUS[0]}] -ne 0; then
+    if test $? -ne 0; then
         AC_MSG_ERROR([Running the configure script for BUILD side failed, see CONF-FOR-BUILD/config.log])
     fi
 

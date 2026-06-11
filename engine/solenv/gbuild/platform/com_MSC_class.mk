@@ -63,6 +63,7 @@ endef
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
+	set -o pipefail && \
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
 	$(if $(and $(gb_COMPILERDEPFLAGS),$(T_USE_CLANG)), export SHOWINCLUDES_PREFIX="${LO_CLANG_SHOWINCLUDES_PREFIX}" &&) \
@@ -108,6 +109,7 @@ define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 	$(call gb_Trace_StartRange,$(2),PCH)
 $(call gb_Helper_abbreviate_dirs,\
+	set -o pipefail && \
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(6))) && \
 	unset INCLUDE && \
 	$(if $(and $(gb_COMPILERDEPFLAGS),$(T_USE_CLANG)), export SHOWINCLUDES_PREFIX="${LO_CLANG_SHOWINCLUDES_PREFIX}" &&) \
@@ -249,6 +251,7 @@ define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 	$(call gb_Trace_StartRange,$(2),LNK)
 $(call gb_Helper_abbreviate_dirs,\
+	set -o pipefail && \
 	rm -f $(1) && \
 	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)), \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -293,7 +296,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			-manifestfile:$(WORKDIR)/LinkTarget/$(2).manifest \
 			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/$(2))) \
 		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)) \
-		| $(GBUILDDIR)/platform/filter-creatingLibrary.awk; RC=$${PIPESTATUS[0]}; rm $${RESPONSEFILE} \
+		| $(GBUILDDIR)/platform/filter-creatingLibrary.awk; RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(filter Library,$(TARGETTYPE)),; if [ ! -f $(ILIBTARGET) ]; then rm -f $(1); exit 42; fi) \
 	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;2 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest $(ILIBTARGET); fi) \
 	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;1 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest; fi) \

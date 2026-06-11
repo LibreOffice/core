@@ -242,12 +242,12 @@ gb_COMPILERDEBUGOPTFLAGS :=
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes
 define gb_create_deps
-| $(GBUILDDIR)/platform/filter-showIncludes.awk -vdepfile=$(1) -vobjectfile=$(2) -vsourcefile=$(3); exit $${PIPESTATUS[0]}
+| $(GBUILDDIR)/platform/filter-showIncludes.awk -vdepfile=$(1) -vobjectfile=$(2) -vsourcefile=$(3)
 endef
 else
 gb_COMPILERDEPFLAGS :=
 define gb_create_deps
-| $(GBUILDDIR)/platform/filter-sourceName.awk; exit $${PIPESTATUS[0]}
+| $(GBUILDDIR)/platform/filter-sourceName.awk
 endef
 endif
 

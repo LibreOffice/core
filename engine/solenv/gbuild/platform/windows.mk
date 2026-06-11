@@ -20,6 +20,14 @@ gb_MKTEMP := mktemp --tmpdir=$(TMPDIR) gbuild.XXXXXX
 
 gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
 
+# Use dash as the recipe shell (cheaper to spawn) when it supports pipefail.
+gb_DASH := $(shell command -v dash 2>/dev/null)
+ifneq ($(gb_DASH),)
+ifeq ($(shell $(gb_DASH) -c 'set -o pipefail' >/dev/null 2>&1 && echo yes),yes)
+SHELL := $(shell cygpath -ms $(gb_DASH))
+endif
+endif
+
 # define _WIN32_WINNT and WINVER will be derived from it in sdkddkver.h
 # current baseline is Windows 10 (1507)
 # for _WIN32_IE, if _WIN32_WINNT >= 0x0600 the derived value from
