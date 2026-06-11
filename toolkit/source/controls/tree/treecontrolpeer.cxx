@@ -77,8 +77,10 @@ public:
 class ImplContextGraphicItem : public SvLBoxContextBmp
 {
 public:
-    ImplContextGraphicItem( Image const & rI1, Image const & rI2, bool bExpanded)
-        : SvLBoxContextBmp(rI1, rI2, bExpanded) {}
+    ImplContextGraphicItem(Image const& rI1, Image const& rI2)
+        : SvLBoxContextBmp(rI1, rI2, true)
+    {
+    }
 
     OUString msExpandedGraphicURL;
     OUString msCollapsedGraphicURL;
@@ -226,7 +228,7 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
     Image aImage;
     UnoTreeListEntry* pEntry = new UnoTreeListEntry(xNode, this);
-    pEntry->AddItem(std::make_unique<ImplContextGraphicItem>(aImage, aImage, true));
+    pEntry->AddItem(std::make_unique<ImplContextGraphicItem>(aImage, aImage));
 
     std::unique_ptr<UnoTreeListItem> pUnoItem(new UnoTreeListItem);
 
