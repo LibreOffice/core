@@ -49,6 +49,7 @@ fuzzer_externals = \
     argon2 \
 
 fuzzer_statics = \
+     findsofficepath \
      ulingu \
 
 fuzzer_core_libraries = \

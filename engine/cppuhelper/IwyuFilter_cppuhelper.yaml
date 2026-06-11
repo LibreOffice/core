@@ -27,6 +27,9 @@ excludelist:
     - com/sun/star/ucb/NameClashException.hpp
     # Needed for cppu::throwException
     - cppuhelper/exc_hlp.hxx
+    cppuhelper/source/findsofficepath.c:
+    # Needed for cppuhelper_detail_findSofficePath
+    - cppuhelper/findsofficepath.h
     cppuhelper/source/macro_expander.cxx:
     # Needed for template specialization
     - com/sun/star/lang/XSingleComponentFactory.hpp

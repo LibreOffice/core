@@ -76,6 +76,63 @@ defaultBootstrap_InitialComponentContext();
 CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
+/**
+ * An exception indicating a bootstrap error.
+ */
+class CPPUHELPER_DLLPUBLIC BootstrapException
+{
+public:
+    /**
+     * Constructs a BootstrapException.
+     */
+    BootstrapException();
+
+    /**
+     * Constructs a BootstrapException with the specified detail message.
+     *
+     * @param rMessage
+     * A message containing any details about the exception.
+     */
+    BootstrapException( const ::rtl::OUString & rMessage );
+
+    /**
+     * Copy constructs a BootstrapException.
+     */
+    BootstrapException( const BootstrapException & e );
+
+    /**
+     * Destructs a BootstrapException.
+     */
+    virtual ~BootstrapException();
+
+    /**
+     * Assigns a BootstrapException.
+     */
+    BootstrapException & operator=( const BootstrapException & e );
+
+    /** Gets the message.
+
+        @return
+        A reference to the message. The reference is valid for the lifetime of
+        this BootstrapException.
+     */
+    const ::rtl::OUString & getMessage() const;
+
+private:
+    ::rtl::OUString m_aMessage;
+};
+
+/**
+ * Bootstraps the component context from a UNO installation.
+ *
+ * @return a bootstrapped component context
+ * @exception BootstrapException
+ * Thrown in case bootstrap() signals an exception due to a
+ * bootstrap error.
+ */
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
+SAL_CALL bootstrap();
+
 /// @cond INTERNAL
 /**
  * Helper function to expand vnd.sun.star.expand URLs in contexts where no

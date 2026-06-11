@@ -33,6 +33,10 @@ $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	xmlreader \
 ))
 
+$(eval $(call gb_Library_use_static_libraries,cppuhelper,\
+	findsofficepath \
+))
+
 $(eval $(call gb_Library_use_externals,cppuhelper,\
     boost_headers \
 ))

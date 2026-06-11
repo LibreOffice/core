@@ -1998,6 +1998,7 @@ cppuhelper/source/component_context.cxx
 cppuhelper/source/defaultbootstrap.cxx
 cppuhelper/source/exc_thrower.cxx
 cppuhelper/source/factory.cxx
+cppuhelper/source/findsofficepath.c
 cppuhelper/source/implbase.cxx
 cppuhelper/source/implbase_ex.cxx
 cppuhelper/source/implementationentry.cxx
