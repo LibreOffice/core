@@ -2005,14 +2005,6 @@ bool SvTreeListBox::GetCheckButtonEnabled(SvTreeListEntry* pEntry) const
     return false;
 }
 
-void SvTreeListBox::CheckButtonHdl()
-{
-    if (m_pCheckButtonData)
-        CallEventListeners(VclEventId::CheckboxToggle,
-                           static_cast<void*>(m_pCheckButtonData->GetActEntry()));
-}
-
-
 // TODO: Currently all data is cloned so that they conform to the default tree
 // view format. Actually, the model should be used as a reference here. This
 // leads to us _not_ calling SvTreeListEntry::Clone, but only its base class

@@ -657,8 +657,6 @@ public:
     static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
     static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
-    void            CheckButtonHdl();
-
     void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right
 
     void            EnableInplaceEditing( bool bEnable );
