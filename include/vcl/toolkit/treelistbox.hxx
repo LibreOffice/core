@@ -381,7 +381,7 @@ public:
         return m_pModel->PrevVisible(this, pEntry);
     }
 
-    SvTreeListEntry* LastVisible() const { return m_pModel->LastVisible(this); }
+    SvTreeListEntry* LastVisible() const { return m_pModel->LastVisible(*this); }
 
     SvTreeListEntry* NextVisible(SvTreeListEntry* pEntry, sal_uInt16& rDelta) const
     {
@@ -390,7 +390,7 @@ public:
 
     SvTreeListEntry* PrevVisible(SvTreeListEntry* pEntry, sal_uInt16& rDelta) const
     {
-        return m_pModel->PrevVisible(this, pEntry, rDelta);
+        return m_pModel->PrevVisible(*this, pEntry, rDelta);
     }
 
     sal_uInt32 GetSelectionCount() const;

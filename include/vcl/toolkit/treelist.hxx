@@ -84,10 +84,10 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeList final
     SvTreeListEntry* NextVisible(const SvTreeListBox*, SvTreeListEntry* pEntry,
                                  sal_uInt16* pDepth = nullptr) const;
     SvTreeListEntry* PrevVisible(const SvTreeListBox*, SvTreeListEntry* pEntry) const;
-    SvTreeListEntry* LastVisible(const SvTreeListBox*) const;
+    SvTreeListEntry* LastVisible(const SvTreeListBox& rView) const;
     SvTreeListEntry* NextVisible(const SvTreeListBox*, SvTreeListEntry* pEntry,
                                  sal_uInt16& rDelta) const;
-    SvTreeListEntry* PrevVisible(const SvTreeListBox*, SvTreeListEntry* pEntry,
+    SvTreeListEntry* PrevVisible(const SvTreeListBox& rView, SvTreeListEntry* pEntry,
                                  sal_uInt16& rDelta) const;
 
     bool IsEntryVisible(const SvTreeListBox*, SvTreeListEntry* pEntry) const;

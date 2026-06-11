@@ -641,12 +641,11 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox* pView,
     return nullptr;
 }
 
-SvTreeListEntry* SvTreeList::LastVisible(const SvTreeListBox* pView) const
+SvTreeListEntry* SvTreeList::LastVisible(const SvTreeListBox& rView) const
 {
-    DBG_ASSERT(pView,"LastVis:No View");
     SvTreeListEntry* pEntry = Last();
-    while( pEntry && !IsEntryVisible( pView, pEntry ) )
-        pEntry = PrevVisible( pView, pEntry );
+    while (pEntry && !IsEntryVisible(&rView, pEntry))
+        pEntry = PrevVisible(&rView, pEntry);
     return pEntry;
 }
 
@@ -675,12 +674,12 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvTreeListBox* pView, SvTreeListE
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox* pView, SvTreeListEntry* pEntry,
+SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox& rView, SvTreeListEntry* pEntry,
                                          sal_uInt16& nDelta) const
 {
-    DBG_ASSERT(pView&&pEntry&&IsEntryVisible(pView,pEntry),"PrevVis:Parms/!Vis");
+    DBG_ASSERT(pEntry && IsEntryVisible(&rView, pEntry), "PrevVis:Parms/!Vis");
 
-    sal_uInt32 nVisPos = GetVisiblePos( pView, pEntry );
+    sal_uInt32 nVisPos = GetVisiblePos(&rView, pEntry);
     // nDelta entries existent?
     // example: 0,1,2,3,4,5,6,7,8,9 nVisPos=8 nDelta=20
     //           nNewDelta = nNewVisPos
@@ -689,7 +688,7 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox* pView, SvTreeListE
     sal_uInt16 nDeltaTmp = nDelta;
     while( nDeltaTmp )
     {
-        pEntry = PrevVisible( pView, pEntry );
+        pEntry = PrevVisible(&rView, pEntry);
         nDeltaTmp--;
         DBG_ASSERT(pEntry,"Entry?");
     }
