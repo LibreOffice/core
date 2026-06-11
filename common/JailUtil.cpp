@@ -395,9 +395,7 @@ void cleanupJails(const std::string& root)
             // Modern jails should look like this:
             //   jails/<coolwsd-pid>-<random>/<random>/
             size_t pidSepPos = jail.find('-');
-            // Unit-tests remove their jails, unless they fail.
-            // Here, we don't remove orphaned jails while unit-testing to aid debugging.
-            if (!UnitWSD::isUnitTesting() && pidSepPos != std::string::npos)
+            if (pidSepPos != std::string::npos)
             {
                 bool skip = false;
                 const std::string_view pidStr = std::string_view(jail).substr(0, pidSepPos);
@@ -408,6 +406,11 @@ void cleanupJails(const std::string& root)
                     if (pid != getpid() && ::kill(pid, 0) == 0)
                     {
                         LOG_TRC("Skipping cleaning jails directory for running coolwsd with pid " << pid);
+                        skip = true;
+                    }
+                    else if (UnitWSD::isUnitTesting())
+                    {
+                        // Keep a failed test's jail for debugging.
                         skip = true;
                     }
                 }
