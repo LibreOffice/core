@@ -905,6 +905,26 @@ bool ScValidationData::GetSelectionFromFormula(
                 {
                     bRef = true;
                 }
+                else if (pName)
+                {
+                    // Defined name wrapping a single ocTableRef.
+                    const ScTokenArray* pNameCode = pName->GetCode();
+                    if (pNameCode && pNameCode->GetLen() == 1)
+                    {
+                        formula::FormulaTokenArrayPlainIterator aNameIter(*pNameCode);
+                        const formula::FormulaToken* tInner = aNameIter.GetNextReferenceOrName();
+                        if (tInner && tInner->GetOpCode() == ocTableRef)
+                        {
+                            auto pTRToken = static_cast<const ScTableRefToken*>(tInner);
+                            if (const ScDBData* pDBData = rDocument.GetDBCollection()
+                                    ->getNamedDBs().findByIndex(pTRToken->GetIndex()))
+                            {
+                                pDBData->GetArea(aRange);
+                                bRef = true;
+                            }
+                        }
+                    }
+                }
             }
             else if (t->GetType() != svIndex)
             {

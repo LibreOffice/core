@@ -15,6 +15,14 @@
 #include <docsh.hxx>
 #include <formulacell.hxx>
 #include <tablestyle.hxx>
+#include <attrib.hxx>
+#include <validat.hxx>
+#include <document.hxx>
+#include <typedstrdata.hxx>
+#include <rangenam.hxx>
+#include <token.hxx>
+#include <tokenarray.hxx>
+#include <patattr.hxx>
 
 #include <svtools/sfxecode.hxx>
 #include <svl/intitem.hxx>
@@ -876,6 +884,46 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testErrorExternalsInDataValidation)
 
     xmlDocUniquePtr pDocXml = parseExport(u"xl/externalLinks/externalLink2.xml"_ustr);
     CPPUNIT_ASSERT(pDocXml);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRef)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(1, 1, 0), u"Apple"_ustr);
+    pDoc->SetString(ScAddress(1, 2, 0), u"Banana"_ustr);
+    pDoc->SetString(ScAddress(1, 3, 0), u"Cherry"_ustr);
+
+    std::unique_ptr<ScDBData> pDB(new ScDBData(u"MyTable"_ustr, 0, 1, 1, 1, 3, true, false));
+    ScDBData* pDBRaw = pDB.get();
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pDB)));
+
+    ScTokenArray aNameTokens(*pDoc);
+    aNameTokens.AddTableRef(pDBRaw->GetIndex());
+    auto pName
+        = std::make_unique<ScRangeData>(*pDoc, u"MyName"_ustr, aNameTokens, ScAddress(0, 0, 0));
+    ScRangeData* pNameRaw = pName.get();
+    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(pName.release()));
+
+    ScTokenArray aValTokens(*pDoc);
+    aValTokens.AddRangeName(pNameRaw->GetIndex(), -1);
+
+    ScValidationData aValData(SC_VALID_LIST, ScConditionMode::Equal, &aValTokens, nullptr, *pDoc,
+                              ScAddress(0, 0, 0));
+    const sal_uInt32 nValKey = pDoc->AddValidationEntry(aValData);
+    CPPUNIT_ASSERT(nValKey != 0);
+
+    ScPatternAttr aPattern(pDoc->getCellAttributeHelper());
+    aPattern.GetItemSetWritable().Put(SfxUInt32Item(ATTR_VALIDDATA, nValKey));
+    pDoc->ApplyPattern(3, 3, 0, aPattern);
+
+    const ScValidationData* pData = pDoc->GetValidationEntry(nValKey);
+    CPPUNIT_ASSERT(pData);
+    std::vector<ScTypedStrData> aStrings;
+    CPPUNIT_ASSERT(pData->FillSelectionList(aStrings, ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aStrings.size());
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testPivotTablesWriteRowColumnItems)
