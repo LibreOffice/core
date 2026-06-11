@@ -443,6 +443,8 @@ std::unique_ptr<ItemInfoPackage> createItemInfoPackageSwAttributes()
             { RES_RTL_GUTTER, new SfxBoolItem(RES_RTL_GUTTER, false), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_DECORATIVE, new SfxBoolItem(RES_DECORATIVE, false), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_WRAP_TEXT_AT_FLY_START, new SwFormatWrapTextAtFlyStart, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FRMATR_PAGE_MIN_TOP, new SfxInt32Item(RES_FRMATR_PAGE_MIN_TOP), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FRMATR_PAGE_MIN_BOTTOM, new SfxInt32Item(RES_FRMATR_PAGE_MIN_BOTTOM), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_GRFATR_MIRRORGRF, new SwMirrorGrf, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_GRFATR_CROPGRF, new SwCropGrf, SID_ATTR_GRAF_CROP, SFX_ITEMINFOFLAG_NONE },
             { RES_GRFATR_ROTATION, new SwRotationGrf, 0, SFX_ITEMINFOFLAG_NONE },

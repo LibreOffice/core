@@ -3301,6 +3301,8 @@ resolved
 page-content-top
 page-content-bottom
 margin-gutter
+min-page-margin-top
+min-page-margin-bottom
 local-url
 target-type
 target-url

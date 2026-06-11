@@ -145,6 +145,7 @@ static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
         RES_HEADER_FOOTER_EAT_SPACING,  RES_HEADER_FOOTER_EAT_SPACING,  // [115
         RES_BACKGROUND_FULL_SIZE,       RES_BACKGROUND_FULL_SIZE,       // [131
         RES_RTL_GUTTER,                 RES_RTL_GUTTER,                 // [132
+        RES_FRMATR_PAGE_MIN_TOP,        RES_FRMATR_PAGE_MIN_BOTTOM,
         RES_UNKNOWNATR_CONTAINER,       RES_UNKNOWNATR_CONTAINER,       // [143
 
         // take over DrawingLayer FillStyles

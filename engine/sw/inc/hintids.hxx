@@ -47,6 +47,7 @@ class SvxLRSpaceItem;
 class SdrTextVertAdjustItem;
 class SfxGrabBagItem;
 class SfxInt16Item;
+class SfxInt32Item;
 class SfxUInt16Item;
 class SvxAdjustItem;
 class SvxAutoKernItem;
@@ -398,7 +399,9 @@ inline constexpr TypedWhichId<SfxBoolItem> RES_RTL_GUTTER(RES_FRMATR_BEGIN + 51)
 inline constexpr TypedWhichId<SfxBoolItem> RES_DECORATIVE(RES_FRMATR_BEGIN + 52);
 inline constexpr TypedWhichId<SwFormatWrapTextAtFlyStart>
     RES_WRAP_TEXT_AT_FLY_START(RES_FRMATR_BEGIN + 53);
-inline constexpr sal_uInt16 RES_FRMATR_END(RES_FRMATR_BEGIN + 54);
+inline constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_TOP(RES_FRMATR_BEGIN + 54);
+inline constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_BOTTOM(RES_FRMATR_BEGIN + 55);
+inline constexpr sal_uInt16 RES_FRMATR_END(RES_FRMATR_BEGIN + 56);
 
 inline constexpr sal_uInt16 RES_GRFATR_BEGIN(RES_FRMATR_END);
 inline constexpr TypedWhichId<SwMirrorGrf> RES_GRFATR_MIRRORGRF(RES_GRFATR_BEGIN + 0);

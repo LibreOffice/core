@@ -4406,4 +4406,19 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
         </rng:attribute>
       </rng:optional>
     </rng:define>
+
+  <!-- TODO proposal -->
+  <rng:define name="style-page-layout-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:min-page-margin-top">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="coext:min-page-margin-bottom">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>
