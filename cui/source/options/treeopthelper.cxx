@@ -64,7 +64,6 @@ static PageIdToFileNameMap_Impl FileMap_Impl[] = {
     { RID_SVXPAGE_ASIAN_LAYOUT, u""_ustr }, // AsianLayout
     { RID_SVXPAGE_OPTIONS_CTL, u""_ustr }, // ComplexTextLayout
     { RID_SVXPAGE_LANGTOOL_OPTIONS, u""_ustr }, // LanguageTool Server
-    { RID_SVXPAGE_DEEPL_OPTIONS, u""_ustr }, // DeepL Server
 
     // Internet, SID_INET_DLG
     { RID_SVXPAGE_INET_PROXY, u""_ustr }, // Proxy

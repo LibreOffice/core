@@ -74,13 +74,13 @@
 #include <tox.hxx>
 #include <viewopt.hxx>
 #include <txmsrt.hxx>
+#include <pam2html.hxx>
 #include <unotools/useroptions.hxx>
 #include <IDocumentContentOperations.hxx>
 #if ENABLE_YRS
 #include <IDocumentState.hxx>
 #include <txtfld.hxx>
 #endif
-#include <translatehelper.hxx>
 #include <txtrfmrk.hxx>
 
 using namespace com::sun::star::uno;
@@ -1091,7 +1091,7 @@ bool SwFieldMgr::InsertField(
                         aRefmarkPam.Move(fnMoveBackward, GoInContent);
 
                         // Paste HTML content.
-                        SwTranslateHelper::PasteHTMLToPaM(
+                        SwPam2Html::PasteHTMLToPaM(
                                 *pCurShell, pCursorPos, rRefmarkText.toUtf8());
 
                         // Undo the above SplitNode().

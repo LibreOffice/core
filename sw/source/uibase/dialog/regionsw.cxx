@@ -33,8 +33,8 @@
 #include <cmdid.h>
 #include <swabstdlg.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <translatehelper.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <pam2html.hxx>
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {
@@ -160,7 +160,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             SwPaM* pCursorPos = rSh.GetCursor();
             pCursorPos->Move(fnMoveBackward, GoInContent);
             // Paste HTML content.
-            SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aSectionContent.toUtf8());
+            SwPam2Html::PasteHTMLToPaM(rSh, pCursorPos, aSectionContent.toUtf8());
             if (pCursorPos->GetPoint()->GetContentIndex() == 0)
             {
                 // The paste created a last empty text node, remove it.

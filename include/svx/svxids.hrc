@@ -604,7 +604,7 @@ class XFillGradientItem;
 #define SID_FM_FILECONTROL                              ( SID_SVX_START + 605 )
 //( SID_SVX_START + 606 ) is used by SID_DRAWTBX_REDACTED_EXPORT
 #define SID_FM_NAVIGATIONBAR                            ( SID_SVX_START + 607 )
-#define SID_FM_TRANSLATE                                ( SID_SVX_START + 608 )
+// was SID_FM_TRANSLATE introduced with e20d2de7836da52dbf9e528d1043b1e188097bfd
 //FREE
 #define SID_FM_DELETEROWS                               ( SID_SVX_START + 610 )
 //FREE
