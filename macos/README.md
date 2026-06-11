@@ -13,11 +13,15 @@ This is the Collabora Office macOS desktop app (`macos/`).
     ```bash
     brew install libtool
     ```
-* The Python helpers used by the build:
+* Python 3.12 plus the `lxml` and `polib` modules, used by the Python build
+  helpers:
     ```bash
-    /opt/homebrew/bin/pip3 install --break-system-packages lxml
-    /opt/homebrew/bin/pip3 install --break-system-packages polib
+    brew install python@3.12
+    /opt/homebrew/bin/pip3.12 install --break-system-packages lxml polib
     ```
+    Modern pip (23+) treats the Homebrew Python environment as externally
+    managed (PEP 668), so `--break-system-packages` is required; alternatively,
+    install the two modules into a virtual environment.
 * The Command Line Tools for Xcode:
     * `xcode-select --install`
     * Afterwards you might need to update them in System Settings > General > Software Update.
@@ -65,7 +69,18 @@ git clone https://gerrit.collaboraoffice.com/translations engine/translations
     # For a localized UI, drop the line above and list the languages instead, e.g.:
     #--with-lang=de fr es
 
-For dependency installation, refer to https://wiki.documentfoundation.org/Development/BuildingOnLinux
+Save the above as `engine/autogen.input`, then run the build from within
+`engine/`:
+
+```bash
+cd engine
+./autogen.sh
+make
+cd ..
+```
+
+The first build takes a long time and downloads a number of third-party
+tarballs. When it finishes, the built app bundle is under `engine/instdir/`.
 
 ## Build Collabora Office
 
@@ -79,14 +94,15 @@ Run this from the top of the monorepo (one level up from `engine/`):
     --with-app-name="Collabora Office" \
     --with-app-package-name=com.yourpackage.name \
     --with-vendor="Your Name" \
-    --with-lo-path=engine/instdir/your-built-lo.app
+    --with-lo-path=engine/instdir/CollaboraOffice.app
 
 POCO, zstd and libpng are built as part of the engine and taken from its
 workdir, so they no longer need to be installed (via Homebrew or otherwise) or
 passed on the configure line.
 
-Adjust `your-built-lo.app` to match the app bundle name produced by your engine
-build.
+With the `CPMacOS-LOKit` distro above, the engine produces
+`CollaboraOffice.app`. If you change the branding/product name, adjust the
+bundle name in `--with-lo-path` to match what ends up in `engine/instdir/`.
 
 ### Build the JavaScript bits
 
