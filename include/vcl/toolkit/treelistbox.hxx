@@ -373,12 +373,12 @@ public:
 
     SvTreeListEntry* NextVisible(SvTreeListEntry* pEntry) const
     {
-        return m_pModel->NextVisible(this, pEntry);
+        return m_pModel->NextVisible(*this, pEntry);
     }
 
     SvTreeListEntry* PrevVisible(SvTreeListEntry* pEntry) const
     {
-        return m_pModel->PrevVisible(this, pEntry);
+        return m_pModel->PrevVisible(*this, pEntry);
     }
 
     SvTreeListEntry* LastVisible() const { return m_pModel->LastVisible(*this); }
