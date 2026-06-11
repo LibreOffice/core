@@ -91,7 +91,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeList final
                                  sal_uInt16& rDelta) const;
 
     bool IsEntryVisible(const SvTreeListBox*, SvTreeListEntry* pEntry) const;
-    SvTreeListEntry* GetEntryAtVisPos(const SvTreeListBox*, sal_uInt32 nVisPos) const;
+    SvTreeListEntry* GetEntryAtVisPos(const SvTreeListBox& rView, sal_uInt32 nVisPos) const;
     sal_uInt32 GetVisiblePos(const SvTreeListBox& rView, SvTreeListEntry const* pEntry) const;
     sal_uInt32 GetVisibleCount(SvTreeListBox& rView) const;
     sal_uInt32 GetVisibleChildCount(const SvTreeListBox& rView, SvTreeListEntry* pParent) const;

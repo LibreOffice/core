@@ -409,7 +409,7 @@ public:
 
     SvTreeListEntry* GetEntryAtVisPos(sal_uInt32 nVisPos) const
     {
-        return m_pModel->GetEntryAtVisPos(this, nVisPos);
+        return m_pModel->GetEntryAtVisPos(*this, nVisPos);
     }
 
     sal_uInt32 GetAbsPos(SvTreeListEntry const* pEntry) const

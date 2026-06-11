@@ -843,13 +843,12 @@ SvTreeListEntry* SvTreeList::GetEntryAtAbsPos( sal_uInt32 nAbsPos ) const
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeList::GetEntryAtVisPos(const SvTreeListBox* pView, sal_uInt32 nVisPos) const
+SvTreeListEntry* SvTreeList::GetEntryAtVisPos(const SvTreeListBox& rView, sal_uInt32 nVisPos) const
 {
-    DBG_ASSERT(pView,"GetEntryAtVisPos:No View");
     SvTreeListEntry* pEntry = First();
     while ( nVisPos && pEntry )
     {
-        pEntry = NextVisible( pView, pEntry );
+        pEntry = NextVisible(&rView, pEntry);
         nVisPos--;
     }
     return pEntry;
