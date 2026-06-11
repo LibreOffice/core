@@ -88,6 +88,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"cui/ui/linedialog.ui",
     u"cui/ui/macroassigndialog.ui",
     u"cui/ui/macroselectordialog.ui",
+    u"cui/ui/multipathdialog.ui",
     u"cui/ui/namedialog.ui",
     u"cui/ui/newtabledialog.ui",
     u"cui/ui/numberdialog.ui",
