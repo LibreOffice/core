@@ -1072,16 +1072,6 @@ connectivity/source/inc/TSortIndex.hxx:36
     enum connectivity::TAscendingOrder DESC
 cppuhelper/source/servicemanager.hxx:118
     enum cppuhelper::ServiceManager::Data::Implementation::Status STATUS_WRAPPER
-cui/inc/tipoftheday.hrc:50
-    enum tipModule scalc
-cui/inc/tipoftheday.hrc:50
-    enum tipModule sdraw
-cui/inc/tipoftheday.hrc:50
-    enum tipModule simpress
-cui/inc/tipoftheday.hrc:50
-    enum tipModule soffice
-cui/inc/tipoftheday.hrc:50
-    enum tipModule swriter
 cui/source/dialogs/colorpicker.cxx:59
     enum (anonymous namespace)::UpdateFlags All
 cui/source/dialogs/hangulhanjadlg.cxx:88

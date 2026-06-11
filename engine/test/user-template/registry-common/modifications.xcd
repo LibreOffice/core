@@ -99,12 +99,6 @@
     <prop oor:name="UseLocking">
       <value>false</value>
     </prop>
-    <prop oor:name="ShowTipOfTheDay">
-      <value>false</value>
-    </prop>
-    <prop oor:name="LastTipOfTheDayShown">
-      <value>"32767"</value> <!-- some arbitrary high value (sal_Int32) -->
-    </prop>
   </node>
   <node oor:name="Filter">
     <node oor:name="Graphic">

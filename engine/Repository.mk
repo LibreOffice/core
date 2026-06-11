@@ -72,7 +72,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	vcldemo \
 	svdemo \
 	minvcl \
-	minweld \
 	svptest \
 	tiledrendering \
 	mtfdemo \
@@ -761,12 +760,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
 	) \
 ))
-
-ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	tipoftheday_images \
-))
-endif
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \

@@ -108,7 +108,7 @@ class SvxZoomItem;
 #define SID_HELPTIPS                        TypedWhichId<SfxBoolItem>(SID_SFX_START + 404)
 // free                                     (SID_SFX_START + 405)
 #define SID_CHARMAP_CONTROL                 (SID_SFX_START + 406)
-#define SID_TIPOFTHEDAY                     (SID_SFX_START + 407)
+// free                                     (SID_SFX_START + 407)
 
 // free                                     (SID_SFX_START + 410)
 #define SID_SEND_FEEDBACK                   (SID_SFX_START + 421)

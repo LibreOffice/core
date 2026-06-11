@@ -172,7 +172,6 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* _pParent) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* _pParent) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* _pParent) = 0;
 

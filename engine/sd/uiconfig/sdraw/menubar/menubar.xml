@@ -635,7 +635,6 @@
       <menu:menuitem menu:id=".uno:HelpIndex"/>
       <menu:menuitem menu:id=".uno:ExtendedHelp"/>
       <menu:menuitem menu:id=".uno:Documentation" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:TipOfTheDay" menu:style="text"/>
       <menu:menuitem menu:id=".uno:CommandPopup" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:QuestionAnswers"/>

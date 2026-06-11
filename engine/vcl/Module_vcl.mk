@@ -19,12 +19,6 @@
 
 $(eval $(call gb_Module_Module,vcl))
 
-ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Package_tipoftheday \
-))
-endif
-
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
     Package_theme_definitions \
@@ -43,7 +37,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
                 Executable_vcldemo \
                 Executable_svdemo \
                 Executable_minvcl \
-                Executable_minweld \
                 Executable_svptest \
                 Executable_icontest \
                 Executable_visualbackendtest \

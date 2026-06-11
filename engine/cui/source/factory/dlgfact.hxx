@@ -215,8 +215,6 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
-    virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
-
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* pParent) override;

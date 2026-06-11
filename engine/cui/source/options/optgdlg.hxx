@@ -33,8 +33,6 @@ private:
     std::unique_ptr<weld::Widget> m_xExtHelpImg;
     std::unique_ptr<weld::CheckButton> m_xPopUpNoHelpCB;
     std::unique_ptr<weld::Widget> m_xPopUpNoHelpImg;
-    std::unique_ptr<weld::CheckButton> m_xShowTipOfTheDay;
-    std::unique_ptr<weld::Widget> m_xShowTipOfTheDayImg;
     std::unique_ptr<weld::Widget> m_xFileDlgROImage;
     std::unique_ptr<weld::CheckButton> m_xFileDlgCB;
     std::unique_ptr<weld::Widget> m_xColorDlgROImage;

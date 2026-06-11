@@ -498,13 +498,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHelp-TipOfTheDay">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="action-name">.uno:TipOfTheDay</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuHelp-separator">
         <property name="visible">True</property>
         <property name="can-focus">False</property>

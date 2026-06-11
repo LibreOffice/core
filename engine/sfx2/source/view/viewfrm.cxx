@@ -1494,20 +1494,6 @@ bool SfxApplication::IsHeadlessOrUITest()
     return bRet;
 }
 
-bool SfxApplication::IsTipOfTheDayDue()
-{
-    const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
-    if (!bShowTipOfTheDay)
-        return false;
-
-    const auto t0 = std::chrono::system_clock::now().time_since_epoch();
-
-    // show tip-of-the-day dialog ?
-    const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
-    const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
-    return nDay - nLastTipOfTheDay > 0; //only once per day
-}
-
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(m_pImpl->bIsDowning)
@@ -1659,8 +1645,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 #if !ENABLE_WASM_STRIP_PINGUSER
                 if (!SfxApplication::IsHeadlessOrUITest()) //uitest.uicheck fails when the dialog is open
                 {
-                    bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
-
                     static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
                     //what's new dialog
                     static bool wantsWhatsNew = officecfg::Setup::Product::WhatsNew::get()
@@ -1696,35 +1680,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                             }
                         }
                         bIsInfobarShown = true;
-                        bIsWhatsNewShown = true;
-                    }
-
-                    // show tip-of-the-day dialog if it due, but not if there is the impress modal template dialog
-                    // open where SdModule::ExecuteNewDocument will launch it instead when that dialog is dismissed
-                    if (SfxApplication::IsTipOfTheDayDue() && !IsInModalMode() && !bIsWhatsNewShown)
-                    {
-                        bool bIsBaseFormOpen = false;
-
-                        const auto xCurrentFrame = GetFrame().GetFrameInterface();
-                        const auto& xContext = comphelper::getProcessComponentContext();
-                        const auto xModuleManager = css::frame::ModuleManager::create(xContext);
-                        switch (vcl::EnumContext::GetApplicationEnum(
-                            vcl::CommandInfoProvider::GetModuleIdentifier(xCurrentFrame)))
-                        {
-                            case vcl::EnumContext::Application::WriterForm:
-                            case vcl::EnumContext::Application::WriterReport:
-                                bIsBaseFormOpen = true;
-                                break;
-                            default:
-                                break;
-                        }
-                        if (!bIsBaseFormOpen)
-                        {
-                            // tdf#127946 pass in argument for dialog parent
-                            SfxUnoFrameItem aDocFrame(SID_FILLFRAME, xCurrentFrame);
-                            GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {},
-                                                        { &aDocFrame });
-                        }
                     }
 
                     // inform about the community involvement

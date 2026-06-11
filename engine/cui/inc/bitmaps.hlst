@@ -83,12 +83,6 @@ inline constexpr OUString RID_SVXBMP_COPY = u"cmd/sc_copy.png"_ustr;
 
 inline constexpr OUString RID_SVXBMP_STARS_FULL = u"cmd/sc_stars-full.png"_ustr;
 
-inline constexpr OUString RID_SVXBMP_TOTD_WRITER = u"res/tipoftheday_w.png"_ustr;
-inline constexpr OUString RID_SVXBMP_TOTD_CALC = u"res/tipoftheday_c.png"_ustr;
-inline constexpr OUString RID_SVXBMP_TOTD_DRAW = u"res/tipoftheday_d.png"_ustr;
-inline constexpr OUString RID_SVXBMP_TOTD_IMPRESS = u"res/tipoftheday_i.png"_ustr;
-inline constexpr OUString RID_SVXBMP_TOTD_SOFFICE = u"res/tipoftheday.png"_ustr;
-
 inline constexpr OUString RID_CUIBMP_QUERY = u"res/query.png"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

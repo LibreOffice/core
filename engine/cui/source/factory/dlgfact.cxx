@@ -92,7 +92,6 @@
 #include <screenshotannotationdlg.hxx>
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
-#include <tipofthedaydlg.hxx>
 #include <widgettestdlg.hxx>
 #include <uipickerdlg.hxx>
 #include <DiagramDialog.hxx>
@@ -1567,17 +1566,6 @@ VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 {
     return VclPtr<CuiAbstractControllerAsync_Impl<AboutDialog>>::Create(pParent);
-}
-
-VclPtr<VclAbstractDialog>
-AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
-{
-#if !ENABLE_WASM_STRIP_PINGUSER
-    return VclPtr<CuiAbstractControllerAsync_Impl<TipOfTheDayDialog>>::Create(pParent);
-#else
-    (void) pParent;
-    return nullptr;
-#endif
 }
 
 VclPtr<VclAbstractDialog>

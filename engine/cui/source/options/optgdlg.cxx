@@ -156,8 +156,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xExtHelpImg(m_xBuilder->weld_widget(u"lockexthelp"_ustr))
     , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button(u"popupnohelp"_ustr))
     , m_xPopUpNoHelpImg(m_xBuilder->weld_widget(u"lockpopupnohelp"_ustr))
-    , m_xShowTipOfTheDay(m_xBuilder->weld_check_button(u"cbShowTipOfTheDay"_ustr))
-    , m_xShowTipOfTheDayImg(m_xBuilder->weld_widget(u"lockcbShowTipOfTheDay"_ustr))
     , m_xFileDlgROImage(m_xBuilder->weld_widget(u"lockimage"_ustr))
     , m_xFileDlgCB(m_xBuilder->weld_check_button(u"filedlg"_ustr))
     , m_xColorDlgROImage(m_xBuilder->weld_widget(u"locksystemcolordialogs"_ustr))
@@ -210,7 +208,7 @@ OUString OfaMiscTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { u"exthelp"_ustr,   u"popupnohelp"_ustr, u"cbShowTipOfTheDay"_ustr, u"filedlg"_ustr,
+        = { u"exthelp"_ustr,   u"popupnohelp"_ustr, u"filedlg"_ustr,
             u"docstatus"_ustr, u"cbPerformFileExtCheck"_ustr };
 
     for (const auto& check : checkButton)
@@ -235,12 +233,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
     if ( m_xExtHelpCB->get_state_changed_from_saved() )
         officecfg::Office::Common::Help::ExtendedTip::set(m_xExtHelpCB->get_active(), batch);
-
-    if ( m_xShowTipOfTheDay->get_state_changed_from_saved() )
-    {
-        officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_xShowTipOfTheDay->get_active(), batch);
-        bModified = true;
-    }
 
     if (m_xColorDlgCB->get_state_changed_from_saved())
     {
@@ -298,12 +290,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xPopUpNoHelpCB->set_sensitive(bEnable);
     m_xPopUpNoHelpImg->set_visible(!bEnable);
     m_xPopUpNoHelpCB->save_state();
-
-    bEnable = !officecfg::Office::Common::Misc::ShowTipOfTheDay::isReadOnly();
-    m_xShowTipOfTheDay->set_active( officecfg::Office::Common::Misc::ShowTipOfTheDay::get() );
-    m_xShowTipOfTheDay->set_sensitive(bEnable);
-    m_xShowTipOfTheDayImg->set_visible(!bEnable);
-    m_xShowTipOfTheDay->save_state();
 
     bEnable = !officecfg::Office::Common::Misc::UseSystemColorDialog::isReadOnly();
     m_xColorDlgCB->set_sensitive(bEnable);

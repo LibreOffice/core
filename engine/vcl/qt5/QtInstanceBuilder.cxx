@@ -106,7 +106,6 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/spelloptionsdialog.ui"_ustr,
         u"cui/ui/splitcellsdialog.ui"_ustr,
         u"cui/ui/textdialog.ui"_ustr,
-        u"cui/ui/tipofthedaydialog.ui"_ustr,
         u"cui/ui/toolbartabpage.ui"_ustr,
         u"cui/ui/tsaurldialog.ui"_ustr,
         u"cui/ui/uipickerdialog.ui"_ustr,

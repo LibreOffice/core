@@ -837,17 +837,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#if !ENABLE_WASM_STRIP_PINGUSER
-        case SID_TIPOFTHEDAY:
-        {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTipOfTheDayDialog(rReq.GetFrameWeld()));
-            pDlg->StartExecuteAsync(nullptr);
-            bDone = true;
-            break;
-        }
-#endif
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WIDGET_TEST_DIALOG:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

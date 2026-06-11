@@ -4550,10 +4550,6 @@ vcl/unx/gtk3/gtkinst.cxx:22206
     int (anonymous namespace)::GtkInstanceComboBox::find_text_including_mru(class std::basic_string_view<char16_t>,_Bool) const
     _Bool bSearchMRU
     0
-vcl/workben/minweld.cxx:31
-    void (anonymous namespace)::TipOfTheDayDialog::TipOfTheDayDialog(class weld::Window *)
-    class weld::Window * pParent
-    0
 xmlhelp/source/cxxhelp/provider/databases.hxx:372
     void chelp::DataBaseIterator::DataBaseIterator(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class chelp::Databases &,const class rtl::OUString &,const class rtl::OUString &,_Bool)
     _Bool bHelpText
