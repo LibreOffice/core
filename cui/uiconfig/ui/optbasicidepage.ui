@@ -74,41 +74,22 @@
             <property name="margin-top">6</property>
             <property name="row-spacing">6</property>
             <child>
-              <object class="GtkCheckButton" id="autoclose_proc">
-                <property name="label" translatable="yes" context="optbasicidepage|autoclose_proc">Autoclose procedures</property>
+              <object class="GtkCheckButton" id="autocorrect">
+                <property name="label" translatable="yes" context="optbasicidepage|autocorrect">Autocorrection</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="autoclose_proc-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autoclose_proc">Automatically insert closing statements for procedures.</property>
+                  <object class="AtkObject" id="autocorrect-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autocorrect">Correct cases of Basic variables and keywords while typing.</property>
                   </object>
                 </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="autoclose_paren">
-                <property name="label" translatable="yes" context="optbasicidepage|autoclose_paren">Autoclose parenthesis</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="autoclose_paren-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autoclose_paren">Automatically close open parenthesis.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
@@ -131,22 +112,41 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="autocorrect">
-                <property name="label" translatable="yes" context="optbasicidepage|autocorrect">Autocorrection</property>
+              <object class="GtkCheckButton" id="autoclose_paren">
+                <property name="label" translatable="yes" context="optbasicidepage|autoclose_paren">Autoclose parenthesis</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="autocorrect-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autocorrect">Correct cases of Basic variables and keywords while typing.</property>
+                  <object class="AtkObject" id="autoclose_paren-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autoclose_paren">Automatically close open parenthesis.</property>
                   </object>
                 </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="autoclose_proc">
+                <property name="label" translatable="yes" context="optbasicidepage|autoclose_proc">Autoclose procedures</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="autoclose_proc-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autoclose_proc">Automatically insert closing statements for procedures.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
           </object>
