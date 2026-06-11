@@ -397,7 +397,8 @@ void XRMResMerge::WorkOnDesc(
                     sSearch = "xlink:href=\""_ostr;
                     sReplace = sSearch;
 
-                    const OString sLocDescFilename = sDescFilename.replaceFirst( "en-US"_ostr, sCur);
+                    // for cases like desc_en_US.txt or desc_en-US.txt
+                    const OString sLocDescFilename = sDescFilename.replaceFirst( "en-US"_ostr, sCur).replaceFirst( "en_US"_ostr, sCur);
 
                     sSearch += sDescFilename;
                     sReplace += sLocDescFilename;
