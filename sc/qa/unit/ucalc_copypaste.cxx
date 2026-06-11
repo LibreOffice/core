@@ -9911,6 +9911,45 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulas)
     CPPUNIT_ASSERT_EQUAL(u"=$Sheet2.K$1"_ustr, m_pDoc->GetFormula(10, 14, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyToClipCarriesNamedDBs)
+{
+    // A copy whose range intersects a named table must carry that table
+    // into the clipboard document, otherwise structured-reference tokens
+    // in the copied formulas have nothing to resolve against and any
+    // textual form of those formulas produces #REF!.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Named table area B3:E6 on sheet 0.
+    auto pTable = std::make_unique<ScDBData>(u"MyTable"_ustr, 0, 1, 2, 4, 5, true, true);
+    ScDBData* pTableRaw = pTable.get();
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+
+    // A second named table on sheet 0 that the copy does not touch.
+    auto pOther = std::make_unique<ScDBData>(u"AwayTable"_ustr, 0, 10, 20, 12, 25, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pOther)));
+
+    // Copy a single row inside MyTable's body.
+    ScRange aClipRange(1, 3, 0, 4, 3, 0); // B4:E4
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    ScDBCollection::NamedDBs& rClipDBs = aClipDoc.GetDBCollection()->getNamedDBs();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rClipDBs.size());
+    const ScDBData* pClone = rClipDBs.findByUpperName(u"MYTABLE"_ustr);
+    CPPUNIT_ASSERT(pClone);
+    CPPUNIT_ASSERT_EQUAL(pTableRaw->GetIndex(), pClone->GetIndex());
+    ScRange aCloneArea;
+    pClone->GetArea(aCloneArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 2, 0, 4, 5, 0), aCloneArea);
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);

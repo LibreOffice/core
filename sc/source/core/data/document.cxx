@@ -2320,6 +2320,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags);
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks);
+    CopyDBsToClip(pClipDoc, aClipRange, pMarks);
 
     // 1. Copy selected cells
     for (SCTAB i = 0; i < nEndTab; ++i)
@@ -2580,6 +2581,34 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
     /* TODO: handle also sheet-local names */
     sc::UpdatedRangeNames::NameIndicesType aUsedGlobalNames( aUsedNames.getUpdatedNames(-1));
     copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName.get(), aUsedGlobalNames);
+}
+
+// Carry named database ranges that overlap the copied area into the
+// clipboard document. Without this, structured-reference tokens in the
+// copied formulas have no ScDBData to resolve against on the clip side,
+// so any later stringification of those formulas writes #REF! in place
+// of the column name.
+void ScDocument::CopyDBsToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks)
+{
+    if (!pDBCollection || pDBCollection->getNamedDBs().empty())
+        return;
+
+    ScDBCollection* pClipDBs = pClipDoc->GetDBCollection();
+    if (!pClipDBs)
+        return;
+    ScDBCollection::NamedDBs& rDest = pClipDBs->getNamedDBs();
+
+    for (const auto& rxSrc : pDBCollection->getNamedDBs())
+    {
+        ScRange aArea;
+        rxSrc->GetArea(aArea);
+        if (pMarks && !pMarks->GetTableSelect(aArea.aStart.Tab()))
+            continue;
+        if (!aArea.Intersects(rClipRange))
+            continue;
+        auto pClone = std::make_unique<ScDBData>(*rxSrc);
+        rDest.insert(std::move(pClone));
+    }
 }
 
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument& rDoc, const ScDocument& rSrcDoc)
