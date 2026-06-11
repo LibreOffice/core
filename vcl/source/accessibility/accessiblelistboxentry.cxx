@@ -98,13 +98,13 @@ tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
     SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
     if ( pEntry )
     {
-        aRect = m_pTreeListBox->GetBoundingRect( pEntry );
+        aRect = m_pTreeListBox->GetBoundingRect(*pEntry);
         SvTreeListEntry* pParent = m_pTreeListBox->GetParent( pEntry );
         if ( pParent )
         {
             // position relative to parent entry
             Point aTopLeft = aRect.TopLeft();
-            aTopLeft -= m_pTreeListBox->GetBoundingRect( pParent ).TopLeft();
+            aTopLeft -= m_pTreeListBox->GetBoundingRect(*pParent).TopLeft();
             aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
     }

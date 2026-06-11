@@ -3766,10 +3766,10 @@ rtl::Reference<comphelper::OAccessible> SvTreeListBox::CreateAccessible()
     return {};
 }
 
-tools::Rectangle SvTreeListBox::GetBoundingRect(const SvTreeListEntry* pEntry)
+tools::Rectangle SvTreeListBox::GetBoundingRect(const SvTreeListEntry& rEntry)
 {
-    Point aPos = GetEntryPosition( pEntry );
-    tools::Rectangle aRect = GetFocusRect( pEntry, aPos.Y() );
+    Point aPos = GetEntryPosition(&rEntry);
+    tools::Rectangle aRect = GetFocusRect(&rEntry, aPos.Y());
     return aRect;
 }
 

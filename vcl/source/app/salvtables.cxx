@@ -4750,7 +4750,9 @@ void SalInstanceTreeView::unset_drag_dest_row() { m_xTreeView->UnsetDropTarget()
 
 tools::Rectangle SalInstanceTreeView::get_row_area(const weld::TreeIter& rIter) const
 {
-    return m_xTreeView->GetBoundingRect(static_cast<const SalInstanceTreeIter&>(rIter).iter);
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    assert(rVclIter.iter && "invalid iter");
+    return m_xTreeView->GetBoundingRect(*rVclIter.iter);
 }
 
 weld::TreeView* SalInstanceTreeView::get_drag_source() const { return g_DragSource; }
@@ -5213,7 +5215,8 @@ OUString SalInstanceIconView::get_item_tooltip_text(const weld::TreeIter& rIter)
 tools::Rectangle SalInstanceIconView::get_rect(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    return m_xIconView->GetBoundingRect(rVclIter.iter);
+    assert(rVclIter.iter && "invalid iter");
+    return m_xIconView->GetBoundingRect(*rVclIter.iter);
 }
 
 SalInstanceIconView::~SalInstanceIconView()

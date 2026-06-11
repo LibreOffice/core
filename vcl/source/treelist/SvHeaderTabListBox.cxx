@@ -278,7 +278,7 @@ tools::Rectangle SvHeaderTabListBox::calcFieldRectPixel(sal_Int32 _nRow, sal_uIn
     SvTreeListEntry* pEntry = GetEntryOnPos(_nRow);
     if (pEntry)
     {
-        aRect = _bIsHeader ? calcHeaderRect(true) : GetBoundingRect(pEntry);
+        aRect = _bIsHeader ? calcHeaderRect(true) : GetBoundingRect(*pEntry);
         Point aTopLeft = aRect.TopLeft();
         DBG_ASSERT(m_xHeaderBar->GetItemCount() > _nColumn, "invalid column");
         tools::Rectangle aItemRect = m_xHeaderBar->GetItemRect(m_xHeaderBar->GetItemId(_nColumn));

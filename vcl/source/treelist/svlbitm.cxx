@@ -103,13 +103,13 @@ void SvLBoxString::Paint(
             case TxtAlign::Center:
             {
                 nStyle |= DrawTextFlags::Center;
-                aSize.setWidth(rDev.GetBoundingRect(&rEntry).getOpenWidth());
+                aSize.setWidth(rDev.GetBoundingRect(rEntry).getOpenWidth());
                 break;
             }
             case TxtAlign::Right:
             {
                 nStyle |= DrawTextFlags::Right;
-                aSize.setWidth(rDev.GetBoundingRect(&rEntry).getOpenWidth());
+                aSize.setWidth(rDev.GetBoundingRect(rEntry).getOpenWidth());
                 break;
             }
         }

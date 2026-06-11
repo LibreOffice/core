@@ -551,10 +551,10 @@ public:
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     /** Calculate and return the bounding rectangle of an entry.
-        @param pEntry
+        @param rEntry
             The entry.
         @return  The bounding rectangle of an entry. */
-    tools::Rectangle    GetBoundingRect(const SvTreeListEntry* pEntry);
+    tools::Rectangle GetBoundingRect(const SvTreeListEntry& rEntry);
 
     SvTreeFlags GetTreeFlags() const { return m_nTreeFlags; }
 
