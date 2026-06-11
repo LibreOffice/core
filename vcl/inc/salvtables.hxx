@@ -1580,7 +1580,7 @@ protected:
 
     static void set_font_color(SvTreeListEntry* pEntry, const Color& rColor);
 
-    void AddStringItem(SvTreeListEntry* pEntry, const OUString& rStr, int nCol);
+    void AddStringItem(SvTreeListEntry& rEntry, const OUString& rStr, int nCol);
 
     void do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
                    const OUString* pId, const OUString* pIconName,

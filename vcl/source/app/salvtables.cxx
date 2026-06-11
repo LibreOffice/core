@@ -3603,12 +3603,12 @@ void SalInstanceTreeView::set_font_color(SvTreeListEntry* pEntry, const Color& r
         pEntry->SetTextColor(rColor);
 }
 
-void SalInstanceTreeView::AddStringItem(SvTreeListEntry* pEntry, const OUString& rStr, int nCol)
+void SalInstanceTreeView::AddStringItem(SvTreeListEntry& rEntry, const OUString& rStr, int nCol)
 {
     auto xCell = std::make_unique<SvLBoxString>(rStr);
     if (m_aCustomRenders.contains(nCol))
         xCell->SetCustomRender();
-    pEntry->AddItem(std::move(xCell));
+    rEntry.AddItem(std::move(xCell));
 }
 
 void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
@@ -3633,7 +3633,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
         pEntry->SetSeparator();
 
     if (m_xTreeView->m_nTreeFlags & SvTreeFlags::CHKBTN)
-        AddStringItem(pEntry, u""_ustr, -1);
+        AddStringItem(*pEntry, u""_ustr, -1);
 
     if (pIconName || pImageSurface)
     {
@@ -3646,7 +3646,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
     }
     if (pStr)
-        AddStringItem(pEntry, *pStr, pEntry->ItemCount());
+        AddStringItem(*pEntry, *pStr, pEntry->ItemCount());
     pEntry->SetUserData(pUserData);
     m_xTreeView->Insert(pEntry, iter, nInsertPos);
 
@@ -4020,10 +4020,10 @@ void SalInstanceTreeView::bulk_insert_for_each(
     {
         aVclIter.iter = new SvTreeListEntry;
         if (bHasAutoCheckButton)
-            AddStringItem(aVclIter.iter, u""_ustr, -1);
+            AddStringItem(*aVclIter.iter, u""_ustr, -1);
         aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
         if (bGoingToSetText)
-            AddStringItem(aVclIter.iter, u""_ustr, aVclIter.iter->ItemCount());
+            AddStringItem(*aVclIter.iter, u""_ustr, aVclIter.iter->ItemCount());
         m_xTreeView->Insert(aVclIter.iter, pVclParent, TREELIST_APPEND);
         func(aVclIter, i);
         m_xTreeView->CalcEntryHeight(aVclIter.iter);
@@ -4141,11 +4141,11 @@ void SalInstanceTreeView::set_text(SvTreeListEntry& rEntry, const OUString& rTex
 
     // blank out missing entries
     for (int i = rEntry.ItemCount(); i < col; ++i)
-        AddStringItem(&rEntry, u""_ustr, i - 1);
+        AddStringItem(rEntry, u""_ustr, i - 1);
 
     if (static_cast<size_t>(col) == rEntry.ItemCount())
     {
-        AddStringItem(&rEntry, rText, col - 1);
+        AddStringItem(rEntry, rText, col - 1);
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(&rEntry);
         m_xTreeView->InitViewData(pViewData, &rEntry);
     }
@@ -4252,7 +4252,7 @@ void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eStat
 
     // blank out missing entries
     for (int i = rEntry.ItemCount(); i < col; ++i)
-        AddStringItem(&rEntry, u""_ustr, i - 1);
+        AddStringItem(rEntry, u""_ustr, i - 1);
 
     if (static_cast<size_t>(col) == rEntry.ItemCount())
     {
@@ -4359,7 +4359,7 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const Image& rI
 
     // blank out missing entries
     for (int i = pEntry->ItemCount(); i < col; ++i)
-        AddStringItem(pEntry, u""_ustr, i - 1);
+        AddStringItem(*pEntry, u""_ustr, i - 1);
 
     if (static_cast<size_t>(col) == pEntry->ItemCount())
     {
