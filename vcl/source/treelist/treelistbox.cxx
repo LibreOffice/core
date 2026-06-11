@@ -759,7 +759,7 @@ void SvTreeListBox::ActionRemoving(SvTreeListEntry* pEntry)
     m_nSelectionCount -= nSelRemoved;
     sal_uInt32 nVisibleRemoved = 0;
     if (m_pModel->IsEntryVisible(this, pEntry))
-        nVisibleRemoved = 1 + m_pModel->GetVisibleChildCount(this, pEntry);
+        nVisibleRemoved = 1 + m_pModel->GetVisibleChildCount(*this, pEntry);
     if (m_nVisibleCount)
     {
 #ifdef DBG_UTIL

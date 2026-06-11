@@ -424,7 +424,7 @@ public:
 
     sal_uInt32 GetVisibleChildCount(SvTreeListEntry* pParent) const
     {
-        return m_pModel->GetVisibleChildCount(this, pParent);
+        return m_pModel->GetVisibleChildCount(*this, pParent);
     }
 
     bool IsEntryVisible(SvTreeListEntry* pEntry) const

@@ -377,14 +377,13 @@ sal_uInt32 SvTreeList::GetChildCount( const SvTreeListEntry* pParent ) const
     return nCount - 1;
 }
 
-sal_uInt32 SvTreeList::GetVisibleChildCount(const SvTreeListBox* pView,
+sal_uInt32 SvTreeList::GetVisibleChildCount(const SvTreeListBox& rView,
                                             SvTreeListEntry* pParent) const
 {
-    assert(pView && "GetVisChildCount:No View");
     if ( !pParent )
         pParent = m_pRootItem.get();
 
-    if (!pParent || !pView->IsExpanded(pParent) || pParent->m_Children.empty())
+    if (!pParent || !rView.IsExpanded(pParent) || pParent->m_Children.empty())
         return 0;
 
     sal_uInt32 nCount = 0;
@@ -392,7 +391,7 @@ sal_uInt32 SvTreeList::GetVisibleChildCount(const SvTreeListBox* pView,
     sal_uInt16 nActDepth = nRefDepth;
     do
     {
-        pParent = NextVisible( pView, pParent, &nActDepth );
+        pParent = NextVisible(&rView, pParent, &nActDepth);
         nCount++;
     } while( pParent && nRefDepth < nActDepth );
 
