@@ -36,7 +36,12 @@ SvLBoxButtonData::SvLBoxButtonData(const Control& rControlForSettings, bool _bRa
 
 SvLBoxButtonData::~SvLBoxButtonData() {}
 
-void SvLBoxButtonData::CallLink() { m_aLink.Call(this); }
+void SvLBoxButtonData::CallLink(SvTreeListEntry* pActEntry, SvLBoxButton* pActBox)
+{
+    m_pEntry = pActEntry;
+    m_pBox = pActBox;
+    m_aLink.Call(this);
+}
 
 SvBmp SvLBoxButtonData::GetIndex(SvItemStateFlags nItemState)
 {
@@ -67,12 +72,6 @@ const Size& SvLBoxButtonData::GetSize()
     }
 
     return m_aSize;
-}
-
-void SvLBoxButtonData::StoreButtonState(SvTreeListEntry* pActEntry, SvLBoxButton* pActBox)
-{
-    m_pEntry = pActEntry;
-    m_pBox = pActBox;
 }
 
 SvButtonState SvLBoxButtonData::ConvertToButtonState(SvItemStateFlags nItemFlags)
@@ -146,8 +145,8 @@ void SvLBoxButton::ClickHdl(SvTreeListEntry* pEntry)
         SetStateUnchecked();
     else
         SetStateChecked();
-    m_rData.StoreButtonState(pEntry, this);
-    m_rData.CallLink();
+
+    m_rData.CallLink(pEntry, this);
 }
 
 void SvLBoxButton::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,

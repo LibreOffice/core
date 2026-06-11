@@ -49,11 +49,9 @@ public:
     static SvBmp GetIndex(SvItemStateFlags nItemState);
     const Size& GetSize();
     void SetLink(const Link<SvLBoxButtonData*, void>& rLink) { m_aLink = rLink; }
+    void CallLink(SvTreeListEntry* pActEntry, SvLBoxButton* pActBox);
     bool IsRadio() const;
-    // as buttons are not derived from LinkHdl
-    void CallLink();
 
-    void StoreButtonState(SvTreeListEntry* pActEntry, SvLBoxButton* pActBox);
     static SvButtonState ConvertToButtonState(SvItemStateFlags nItemFlags);
 
     SvTreeListEntry* GetActEntry() const;
