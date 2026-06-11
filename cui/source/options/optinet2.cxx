@@ -517,7 +517,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertMgrPBHdl, weld::Button&, void)
     try
     {
         FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                                 FileDialogFlags::NONE, nullptr);
+                                 FileDialogFlags::NONE, GetDialogController()->getDialog());
         OUString sPath = m_xParameterEdit->get_text();
         if (sPath.isEmpty())
             sPath = "/usr/bin";
