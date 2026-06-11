@@ -93,12 +93,12 @@ public:
     // going to change the baseclass
     virtual DragDropMode NotifyStartDrag() override { return GetDragDropMode(); }
 
-    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
+    virtual SvTreeListEntry* InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uInt32 nPos=TREELIST_APPEND, OUString* pUserData = nullptr ) override;
+                                         sal_uInt32 nPos = TREELIST_APPEND) override;
 
-    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uInt32 nPos, sal_uInt16 nCol, OUString* pUserData = nullptr );
+    virtual SvTreeListEntry* InsertEntryToColumn(const OUString&, SvTreeListEntry* pParent,
+                                                 sal_uInt32 nPos, sal_uInt16 nCol);
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );

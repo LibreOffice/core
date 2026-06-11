@@ -636,9 +636,9 @@ public:
     */
     void    SetNodeDefaultImages();
 
-    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
+    virtual SvTreeListEntry* InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uInt32 nPos=TREELIST_APPEND, OUString* pUserData = nullptr);
+                                         sal_uInt32 nPos = TREELIST_APPEND);
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
     const Image&    GetDefaultCollapsedEntryBmp( ) const;
