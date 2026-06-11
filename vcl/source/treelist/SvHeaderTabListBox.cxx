@@ -85,10 +85,9 @@ bool SvHeaderTabListBox::IsItemChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol)
 }
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(const OUString& rStr,
-                                                         SvTreeListEntry* pParent, sal_uInt32 nPos,
-                                                         sal_uInt16 nCol)
+                                                         SvTreeListEntry* pParent, sal_uInt32 nPos)
 {
-    SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn(rStr, pParent, nPos, nCol);
+    SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn(rStr, pParent, nPos);
     RecalculateAccessibleChildren();
     return pEntry;
 }
