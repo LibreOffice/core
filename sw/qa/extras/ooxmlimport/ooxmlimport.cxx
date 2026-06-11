@@ -538,6 +538,8 @@ CPPUNIT_TEST_FIXTURE(Test, testN777345)
 CPPUNIT_TEST_FIXTURE(Test, testN778140)
 {
     createSwDoc("n778140.docx");
+
+    saveAndReload(TestFilter::DOCX);
     /*
      * The problem was that the paragraph top/bottom margins were incorrect due
      * to unhandled w:doNotUseHTMLParagraphAutoSpacing.

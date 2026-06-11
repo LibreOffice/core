@@ -538,6 +538,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf145716_nonHTMLspacing)
+{
+    // Given a two page document with the compat flag doNotUseHTMLParagraphAutoSpacing
+    createSwDoc("tdf145716_nonHTMLspacing.docx");
+
+    saveAndReload(TestFilter::DOCX);
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf148294_crossReferences)
 {
     // Given a file with several cross-references in various edge cases
