@@ -163,7 +163,7 @@ private:
     bool                ButtonDownCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
     bool                MouseMoveCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry const * pEntry );
     bool                ButtonUpCheckCtrl( const MouseEvent& rMEvt );
-    bool                ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry* );
+    bool ButtonDownCheckExpand(const MouseEvent& rMEvt, SvTreeListEntry& rEntry);
 
     bool EntryReallyHit(SvTreeListEntry& rEntry, const Point& rPos, tools::Long nLine);
     void                InitScrollBarBox();

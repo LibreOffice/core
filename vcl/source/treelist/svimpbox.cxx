@@ -1889,24 +1889,24 @@ bool SvImpLBox::IsNodeButton( const Point& rPosPixel, const SvTreeListEntry* pEn
 }
 
 // false == hit no node button
-bool SvImpLBox::ButtonDownCheckExpand( const MouseEvent& rMEvt, SvTreeListEntry* pEntry )
+bool SvImpLBox::ButtonDownCheckExpand(const MouseEvent& rMEvt, SvTreeListEntry& rEntry)
 {
     bool bRet = false;
 
-    if (m_rView.IsEditingActive() && pEntry == m_rView.m_pEdEntry)
+    if (m_rView.IsEditingActive() && &rEntry == m_rView.m_pEdEntry)
         // inplace editing -> nothing to do
         bRet = true;
-    else if ( IsNodeButton( rMEvt.GetPosPixel(), pEntry ) )
+    else if (IsNodeButton(rMEvt.GetPosPixel(), &rEntry))
     {
-        if (m_rView.IsExpanded(pEntry))
+        if (m_rView.IsExpanded(&rEntry))
         {
             m_rView.EndEditing(true);
-            m_rView.Collapse(pEntry);
+            m_rView.Collapse(&rEntry);
         }
         else
         {
             // you can expand an entry, which is in editing
-            m_rView.Expand(pEntry);
+            m_rView.Expand(&rEntry);
         }
         bRet = true;
     }
@@ -1941,7 +1941,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
 
     tools::Long nY = GetEntryLine( pEntry );
     // Node-Button?
-    if( ButtonDownCheckExpand( rMEvt, pEntry ) )
+    if (ButtonDownCheckExpand(rMEvt, *pEntry))
         return;
 
     if (!EntryReallyHit(*pEntry, aPos, nY))
