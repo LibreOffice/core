@@ -3772,6 +3772,26 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
         <rng:data type="integer"/>
       </rng:attribute>
     </rng:optional>
+    <rng:optional>
+      <rng:attribute name="coext:use-underflow-bin">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="coext:underflow-bin-value">
+        <rng:data type="double"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="coext:use-overflow-bin">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="coext:overflow-bin-value">
+        <rng:data type="double"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
 
   <!-- https://issues.oasis-open.org/browse/OFFICE-4107 -->

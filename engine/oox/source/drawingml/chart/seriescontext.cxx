@@ -851,13 +851,17 @@ ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const
                 case CX_TOKEN( binning ):
                 {
                     BinningModel& rB = mrModel.mxBinning.create();
-                    if (rAttribs.getString( XML_intervalClosed ) == "l") {
+                    if (rAttribs.getString( XML_intervalClosed ) == "l")
+                    {
                         rB.meIntervalClosed = BinningModel::ClosedSide::L;
-                    } else if (rAttribs.getString( XML_intervalClosed ) == "r") {
+                    }
+                    else if (rAttribs.getString( XML_intervalClosed ) == "r")
+                    {
                         rB.meIntervalClosed = BinningModel::ClosedSide::R;
                     }
                     // intervalClosed is optional in OOXML chartex
-                    // TODO: Also handle attributes underflow, overflow
+                    rB.mfUnderflow = rAttribs.getDouble(XML_underflow);
+                    rB.mfOverflow = rAttribs.getDouble(XML_overflow);
                     return new BinningContext( *this, rB );
                 }
                 case CX_TOKEN( geography ):

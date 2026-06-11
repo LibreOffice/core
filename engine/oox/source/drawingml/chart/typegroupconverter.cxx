@@ -434,6 +434,19 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                                 cpo::uno::Any(sal_Int32(2)));
                         }
                     }
+                    if (rBinning.mfUnderflow)
+                    {
+                        xTypePropSet->setPropertyValue(u"UseUnderflowBin"_ustr, cpo::uno::Any(true));
+                        xTypePropSet->setPropertyValue(u"UnderflowBinValue"_ustr,
+                                                        cpo::uno::Any(*rBinning.mfUnderflow));
+                    }
+
+                    if (rBinning.mfOverflow)
+                    {
+                        xTypePropSet->setPropertyValue(u"UseOverflowBin"_ustr, cpo::uno::Any(true));
+                        xTypePropSet->setPropertyValue(u"OverflowBinValue"_ustr,
+                                                        cpo::uno::Any(*rBinning.mfOverflow));
+                    }
 
                     break;
                 }

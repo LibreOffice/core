@@ -133,6 +133,7 @@
 #include <docmodel/uno/UnoChartColorStyle.hxx>
 
 #include <oox/export/ThemeExport.hxx>
+#include <sax/fastattribs.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -4294,6 +4295,12 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                 sal_Int32 nBinCount = 0;
                 bool bHasBinWidth = false;
                 bool bHasBinCount = false;
+                bool bUseUnderflowBin = false;
+                bool bUseOverflowBin = false;
+                double fUnderflowBinValue = 0.0;
+                double fOverflowBinValue = 0.0;
+                bool bHasUnderflowBinValue = false;
+                bool bHasOverflowBinValue = false;
                 if (aChartType == "com.sun.star.chart2.HistogramChartType")
                 {
                     Reference<beans::XPropertySet> xChartTypePropSet(xChartType, uno::UNO_QUERY);
@@ -4304,6 +4311,14 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                             (xChartTypePropSet->getPropertyValue(u"BinWidth"_ustr) >>= fBinWidth);
                         bHasBinCount =
                             (xChartTypePropSet->getPropertyValue(u"BinCount"_ustr) >>= nBinCount);
+
+                        xChartTypePropSet->getPropertyValue(u"UseUnderflowBin"_ustr) >>= bUseUnderflowBin;
+                        xChartTypePropSet->getPropertyValue(u"UseOverflowBin"_ustr) >>= bUseOverflowBin;
+
+                        bHasUnderflowBinValue
+                            = (xChartTypePropSet->getPropertyValue(u"UnderflowBinValue"_ustr) >>= fUnderflowBinValue);
+                        bHasOverflowBinValue
+                            = (xChartTypePropSet->getPropertyValue(u"OverflowBinValue"_ustr) >>= fOverflowBinValue);
                     }
                 }
 
@@ -4359,11 +4374,18 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                                 pIntervalClosed = "r";
                         }
 
+                        auto pBinningAttrs = sax_fastparser::FastSerializerHelper::createAttrList();
+
                         if (pIntervalClosed)
-                            pFS->startElement(FSNS(XML_cx, XML_binning),
-                                              XML_intervalClosed, pIntervalClosed);
-                        else
-                            pFS->startElement(FSNS(XML_cx, XML_binning));
+                            pBinningAttrs->add(XML_intervalClosed, pIntervalClosed);
+
+                        if (bUseUnderflowBin && bHasUnderflowBinValue)
+                            pBinningAttrs->add(XML_underflow, OString::number(fUnderflowBinValue));
+
+                        if (bUseOverflowBin && bHasOverflowBinValue)
+                            pBinningAttrs->add(XML_overflow, OString::number(fOverflowBinValue));
+
+                        pFS->startElement(FSNS(XML_cx, XML_binning), pBinningAttrs);
 
                         if (nFrequencyType == 1 && bHasBinWidth)
                         {

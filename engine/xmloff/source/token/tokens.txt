@@ -1403,6 +1403,7 @@ outline-style
 outset
 outside
 overflow-behavior
+overflow-bin-value
 overlap
 overlay
 p
@@ -2027,6 +2028,7 @@ suggested-signer-email
 suggested-signer-name
 suggested-signer-title
 wave
+underflow-bin-value
 unformatted-text
 union
 unit
@@ -2055,10 +2057,12 @@ use-objects
 use-optimal-column-width
 use-optimal-row-height
 use-other-objects
+use-overflow-bin
 use-pivot
 use-spreadsheet-objects
 use-styles
 use-tables
+use-underflow-bin
 use-window-font-color
 used-hierarchy
 user-defined
