@@ -73,6 +73,7 @@ interface Options {
 	leftParagraphIndent: number | null;
 	rightParagraphIndent: number | null;
 	tabs: TabstopObject[] | string;
+	tabsRelativeToIndent: boolean;
 	unit: string | null;
 	DraggableConvertRatio: number | null;
 	timer: ReturnType<typeof setTimeout>;
@@ -104,6 +105,7 @@ abstract class Ruler {
 			leftParagraphIndent: null,
 			rightParagraphIndent: null,
 			tabs: '',
+			tabsRelativeToIndent: false,
 			unit: null,
 			DraggableConvertRatio: null,
 			timer: null,

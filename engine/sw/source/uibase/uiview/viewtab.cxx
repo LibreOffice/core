@@ -1635,6 +1635,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                     aRootTree.push_back(std::make_pair("tabstops", aEntries));
 
+                    // When tab stops are relative to the paragraph indent, the
+                    // positions above are measured from the paragraph text-left
+                    // margin rather than the page margin. The ruler needs to know
+                    // this to draw the marks where the tabbed text actually lands.
+                    aRootTree.put("relativetoindent", bRelative);
+
                     std::stringstream aStream;
                     boost::property_tree::write_json(aStream, aRootTree);
                     rSh.GetSfxViewShell()->viewCallback(KIT_CALLBACK_TAB_STOP_LIST, OString(aStream.str()));

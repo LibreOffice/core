@@ -341,12 +341,7 @@ class HRuler extends Ruler {
 		this._rTSContainer.ondblclick = (e) => {
 			const offset = this._rTSContainer.getBoundingClientRect().left;
 
-			var position = this._map._docLayer._pixelsToTwips({
-				x: e.clientX - offset,
-				y: 0,
-			}).x;
-
-			this.currentPositionInTwips = position;
+			this.currentPositionInTwips = this._pointerToTabTwips(e.clientX - offset);
 
 			this._insertTabstop();
 		};
@@ -450,6 +445,16 @@ class HRuler extends Ruler {
 		this.options.leftParagraphIndent *= pxPerMm100;
 		this.options.rightParagraphIndent *= pxPerMm100;
 
+		// Core reports the left margin as the leftmost edge of the paragraph.
+		// With a hanging indent the first line sticks out to the left, so that
+		// edge belongs to the first line, not the body. The first line offset is
+		// reported separately and is negative in that case, so removing it
+		// recovers the body text-left margin. That margin is where the left
+		// indent marker belongs, and tabs relative to the indent are measured
+		// from it.
+		if (this.options.firstLineIndent < 0)
+			this.options.leftParagraphIndent -= this.options.firstLineIndent;
+
 		// Get navigatiosidebar width only when navigation sidebar is visible
 		const navigationsidebarWidth = this._getNavigationSidebarWidth();
 
@@ -480,11 +485,71 @@ class HRuler extends Ruler {
 
 		this._markerVerticalLine.style.top =
 			this._rTSContainer.getBoundingClientRect().bottom + 'px';
+
+		// The tab stops share the paragraph left indent as their origin, so
+		// reposition them whenever the indent changes.
+		this._layoutTabStops();
+	}
+
+	// Tab positions arrive from core measured from the page margin, or from the
+	// paragraph text-left margin when tabs are relative to the indent. The tab
+	// stop container starts at the page margin, so in the relative case the
+	// paragraph indent has to be added for the marks to line up with the tabbed
+	// text.
+	_tabStopIndentPixel() {
+		return this.options.tabsRelativeToIndent
+			? this.options.leftParagraphIndent || 0
+			: 0;
+	}
+
+	// Place each tab stop marker at the position core reported, offset by the
+	// paragraph indent when tabs are relative to it.
+	_layoutTabStops() {
+		const container = this._rTSContainer;
+		if (!container || !container.tabStops) return;
+
+		const pxPerMm100 =
+			app.map._docLayer._docPixelSize.x /
+			((app.activeDocument.fileSize.x * 2540) / 1440);
+		const indentPixel = this._tabStopIndentPixel();
+
+		for (let i = 0; i < container.tabStops.length; i++) {
+			const marker = container.tabStops[i];
+			if (!marker) continue;
+			const positionPixel =
+				marker.tabStopPositionMm100 * pxPerMm100 + indentPixel;
+			// Each glyph places its reference line at the centre of its box (the
+			// left tab's left edge, the right tab's right edge, the centre and
+			// decimal lines centred), so centring the box on the position lines
+			// the mark up with the tabbed text.
+			const halfWidth = marker.offsetWidth / 2.0;
+			marker.tabStopLocation = {
+				left: positionPixel - halfWidth,
+				center: positionPixel,
+				right: positionPixel + halfWidth,
+			};
+			marker.style.left = marker.tabStopLocation.left + 'px';
+		}
+	}
+
+	// Convert a pointer X coordinate measured from the tab stop container's
+	// left edge (the page margin) into a tab position in twips. When tabs are
+	// relative to the paragraph indent, core stores them from that indent, so
+	// it is removed before the conversion.
+	_pointerToTabTwips(pointX: number) {
+		return this._map._docLayer._pixelsToTwips({
+			x: pointX - this._tabStopIndentPixel(),
+			y: 0,
+		}).x;
 	}
 
 	_updateTabStops(obj: {
 		tabstops: Array<{ position: string; type: string }> | string;
+		relativetoindent?: string;
 	}) {
+		// Core sends "true" when tab positions are measured from the paragraph
+		// indent rather than the page margin.
+		this.options.tabsRelativeToIndent = obj['relativetoindent'] === 'true';
 		this.options.tabs = [];
 		var jsonTabstops = obj['tabstops'];
 		if (jsonTabstops === '') return;
@@ -551,9 +616,6 @@ class HRuler extends Ruler {
 		// RULER_TAB_RIGHT, RULER_TAB_CENTER, and RULER_TAB_DECIMAL. See <svtools/ruler.hxx>.
 		this._rTSContainer.replaceChildren();
 
-		var pxPerMm100 =
-			app.map._docLayer._docPixelSize.x /
-			((app.activeDocument.fileSize.x * 2540) / 1440);
 		this._rTSContainer.tabStops = [];
 		for (
 			var tabstopIndex = 0;
@@ -582,20 +644,13 @@ class HRuler extends Ruler {
 					markerClass,
 					this._rTSContainer,
 				);
-				var positionPixel = currentTabstop.position * pxPerMm100;
-				var markerWidth = marker.offsetWidth;
-				var markerHalfWidth = markerWidth / 2.0;
-				marker.tabStopLocation = {
-					left: positionPixel - markerHalfWidth,
-					center: positionPixel,
-					right: positionPixel + markerHalfWidth,
-				};
-				marker.style.left = marker.tabStopLocation.left + 'px';
+				marker.tabStopPositionMm100 = currentTabstop.position;
 				marker.tabStopNumber = tabstopIndex;
 				this._rTSContainer.tabStops[tabstopIndex] = marker;
 				marker.style.cursor = 'move';
 			}
 		}
+		this._layoutTabStops();
 
 		if (!this.options.marginSet) {
 			this.options.marginSet = true;
@@ -728,9 +783,6 @@ class HRuler extends Ruler {
 		// RULER_TAB_RIGHT, RULER_TAB_CENTER, and RULER_TAB_DECIMAL. See <svtools/ruler.hxx>.
 		window.L.DomUtil.removeChildNodes(this._rTSContainer);
 
-		var pxPerMm100 =
-			this._map._docLayer._docPixelSize.x /
-			((app.activeDocument.fileSize.x * 2540) / 1440);
 		this._rTSContainer.tabStops = [];
 		for (
 			var tabstopIndex = 0;
@@ -759,20 +811,13 @@ class HRuler extends Ruler {
 					markerClass,
 					this._rTSContainer,
 				);
-				var positionPixel = currentTabstop.position * pxPerMm100;
-				var markerWidth = marker.offsetWidth;
-				var markerHalfWidth = markerWidth / 2.0;
-				marker.tabStopLocation = {
-					left: positionPixel - markerHalfWidth,
-					center: positionPixel,
-					right: positionPixel + markerHalfWidth,
-				};
-				marker.style.left = marker.tabStopLocation.left + 'px';
+				marker.tabStopPositionMm100 = currentTabstop.position;
 				marker.tabStopNumber = tabstopIndex;
 				this._rTSContainer.tabStops[tabstopIndex] = marker;
 				marker.style.cursor = 'move';
 			}
 		}
+		this._layoutTabStops();
 
 		if (!this.options.marginSet) {
 			this.options.marginSet = true;
@@ -988,11 +1033,15 @@ class HRuler extends Ruler {
 		}
 
 		// it is kind of necessary to send all prams details to set values right in CORE otherwise for missing values it will take default as 0
+		// The markers report the body text-left margin and the first line offset
+		// relative to it, so set TextLeftMargin rather than the leftmost-edge
+		// LeftMargin. Core keeps the two consistent regardless of the order the
+		// values arrive in.
 		unoObj['LRSpace.FirstLineIndent'] = {
 			type: 'long',
 			value: firstLineMargin,
 		};
-		unoObj['LRSpace.LeftMargin'] = { type: 'long', value: leftValue };
+		unoObj['LRSpace.TextLeftMargin'] = { type: 'long', value: leftValue };
 		unoObj['LRSpace.RightMargin'] = { type: 'long', value: rightValue };
 
 		// Send the command
@@ -1275,10 +1324,7 @@ class HRuler extends Ruler {
 			// right-click inside tabstop container
 			if (event.button === 2) {
 				if (tabstop == null) {
-					var position = this._map._docLayer._pixelsToTwips({
-						x: pointX,
-						y: 0,
-					}).x;
+					var position = this._pointerToTabTwips(pointX);
 					this._showTabstopContextMenu(position, null, event);
 				} else {
 					this._showTabstopContextMenu(null, tabstop.tabStopNumber, event);
@@ -1365,10 +1411,7 @@ class HRuler extends Ruler {
 		if (event.type == 'mouseout') {
 			marker.style.left = marker.tabStopLocation.left + 'px';
 		} else {
-			var positionTwip = this._map._docLayer._pixelsToTwips({
-				x: pointX,
-				y: 0,
-			}).x;
+			var positionTwip = this._pointerToTabTwips(pointX);
 			var params = {
 				Index: {
 					type: 'int32',
@@ -1408,7 +1451,7 @@ class HRuler extends Ruler {
 	_onTabstopContainerLongPress(event: any) {
 		var tabstopContainer = event.target;
 		var pointX = event.center.x - tabstopContainer.getBoundingClientRect().left;
-		var pointXTwip = this._map._docLayer._pixelsToTwips({ x: pointX, y: 0 }).x;
+		var pointXTwip = this._pointerToTabTwips(pointX);
 		var tabstop = this._getTabStopHit(tabstopContainer, pointX);
 
 		if (window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
