@@ -13,7 +13,7 @@
  * Calc tile layer is used to display a spreadsheet document
  */
 
-/* global app TileManager cool FocusCellSection SplitterLinesSection */
+/* global app TileManager cool FocusCellSection SplitterLinesSection NormalBounds */
 
 window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	options: {
@@ -259,7 +259,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		app.activeDocument.fileSize = new cool.SimplePoint(newDocWidth, newDocHeight);
 		app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
 
-		this._map.setMaxBounds(new window.L.LatLngBounds(topLeft, bottomRight));
+		this._map.setMaxBounds(new NormalBounds(topLeft, bottomRight));
 
 		this._map.fire('scrolllimits', newSizePx.clone());
 
@@ -510,7 +510,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				height = Math.max(height, mapSize.y);
 				var topLeft = this._map.unproject(new cool.Point(0, 0));
 				var bottomRight = this._map.unproject(new cool.Point(width, height));
-				this._map.setMaxBounds(new window.L.LatLngBounds(topLeft, bottomRight));
+				this._map.setMaxBounds(new NormalBounds(topLeft, bottomRight));
 				this._docPixelSize = {x: width, y: height};
 				this._map.fire('scrolllimits', {x: width, y: height});
 			}

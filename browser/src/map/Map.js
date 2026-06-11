@@ -3,7 +3,7 @@
  * window.L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog TileManager cool */
+/* global app _ Cursor JSDialog TileManager cool NormalBounds NormalPoint */
 
 window.L.Map = window.L.Evented.extend({
 
@@ -23,7 +23,7 @@ window.L.Map = window.L.Evented.extend({
 		// percentages available are then rounded to the nearest five percent.
 		minZoom: 1,
 		maxZoom: 18,
-		maxBounds: window.L.latLngBounds([0, 0], [-100, 100]),
+		maxBounds: NormalBounds.flexConstruct([0, 0], [-100, 100]),
 		fadeAnimation: false, // Not useful for typing.
 		markerZoomAnimation: true,
 		// defaultZoom:
@@ -90,7 +90,7 @@ window.L.Map = window.L.Evented.extend({
 		}
 
 		if (options.center && options.zoom !== undefined) {
-			this.setView(window.L.latLng(options.center), options.zoom, true /* reset */);
+			this.setView(NormalPoint.flexConstruct(options.center), options.zoom, true /* reset */);
 		}
 
 		Cursor.imagePath = options.cursorURL;
@@ -481,7 +481,7 @@ window.L.Map = window.L.Evented.extend({
 
 	setView: function (center, zoom, reset) {
 		zoom = zoom === undefined ? this._zoom : this._limitZoom(zoom);
-		center = this._limitCenter(window.L.latLng(center), zoom, this.options.maxBounds);
+		center = this._limitCenter(NormalPoint.flexConstruct(center), zoom, this.options.maxBounds);
 
 		if (this._loaded && !reset && zoom === this._zoom) {
 			// difference between the new and current centers in pixels
@@ -588,7 +588,7 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	zoomToFactor: function (zoom) {
-		return Math.pow(window.L.LatLng.SCALE, (zoom - this.options.zoom));
+		return Math.pow(NormalPoint.SCALE, (zoom - this.options.zoom));
 	},
 
 	getDesktopCalcZoomCenter: function() {
@@ -655,11 +655,11 @@ window.L.Map = window.L.Evented.extend({
 
 		const mapUpdater = (animationCalculatedNewCenter) => {
 			if (animationCalculatedNewCenter) {
-				this._resetView(window.L.latLng(animationCalculatedNewCenter), zoom);
+				this._resetView(NormalPoint.flexConstruct(animationCalculatedNewCenter), zoom);
 				return;
 			}
 
-			this._resetView(window.L.latLng(newCenterLatLng), zoom);
+			this._resetView(NormalPoint.flexConstruct(newCenterLatLng), zoom);
 		};
 		const runAtFinish = () => {
 			this._ignoreCursorUpdate = false;
@@ -752,7 +752,7 @@ window.L.Map = window.L.Evented.extend({
 			// position stays the same.
 			var zoomScale = 1.0 / this.getZoomScale(zoom, this._zoom);
 			var caretPos = this._docLayer._twipsToLatLng({ x: app.file.textCursor.rectangle.center[0], y: app.file.textCursor.rectangle.center[1] });
-			var newCenter = new window.L.LatLng(curCenter.getY() + (caretPos.getY() - curCenter.getY()) * (1.0 - zoomScale),
+			var newCenter = new NormalPoint(curCenter.getY() + (caretPos.getY() - curCenter.getY()) * (1.0 - zoomScale),
 						     curCenter.getX() + (caretPos.getX() - curCenter.getX()) * (1.0 - zoomScale));
 
 			mapUpdater = function() {
@@ -765,7 +765,7 @@ window.L.Map = window.L.Evented.extend({
 			if (animate) {
 				this._docLayer.runZoomAnimation(zoom,
 					// pinchCenter
-					new window.L.LatLng(
+					new NormalPoint(
 						// Use the current y-center if there is a top margin.
 						cssBounds.min.y < 0 ? curCenter.getY() : caretPos.getY(),
 						// Use the current x-center if there is a left margin.
@@ -824,7 +824,7 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	setMaxBounds: function (bounds) {
-		bounds = window.L.latLngBounds(bounds);
+		bounds = NormalBounds.flexConstruct(bounds);
 
 		this.options.maxBounds = bounds;
 
@@ -1036,7 +1036,7 @@ window.L.Map = window.L.Evented.extend({
 		    sw = this.unproject(bounds.getBottomLeft()),
 		    ne = this.unproject(bounds.getTopRight());
 
-		return new window.L.LatLngBounds(sw, ne);
+		return new NormalBounds(sw, ne);
 	},
 
 	getMinZoom: function () {
@@ -1122,12 +1122,12 @@ window.L.Map = window.L.Evented.extend({
 
 	getZoomScale: function (toZoom, fromZoom) {
 		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return window.L.LatLng.scale(toZoom) / window.L.LatLng.scale(fromZoom);
+		return NormalPoint.scale(toZoom) / NormalPoint.scale(fromZoom);
 	},
 
 	getScaleZoom: function (scale, fromZoom) {
 		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return fromZoom + (Math.log(scale) / Math.log(window.L.LatLng.SCALE));
+		return fromZoom + (Math.log(scale) / Math.log(NormalPoint.SCALE));
 	},
 
 
@@ -1135,13 +1135,13 @@ window.L.Map = window.L.Evented.extend({
 
 	project: function (latlng, zoom) { // (LatLng[, Number]) -> Point
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		var projectedPoint = window.L.LatLng.latLngToPoint(window.L.latLng(latlng), zoom);
+		var projectedPoint = NormalPoint.latLngToPoint(NormalPoint.flexConstruct(latlng), zoom);
 		return new cool.Point(app.util.round(projectedPoint.x, 1e-6), app.util.round(projectedPoint.y, 1e-6));
 	},
 
 	unproject: function (point, zoom) { // (Point[, Number]) -> LatLng
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		return window.L.LatLng.pointToLatLng(new cool.Point(point.x, point.y), zoom);
+		return NormalPoint.pointToLatLng(new cool.Point(point.x, point.y), zoom);
 	},
 
 	// rescaling
@@ -1150,7 +1150,7 @@ window.L.Map = window.L.Evented.extend({
 		oldZoom = oldZoom === undefined ? this.getZoom() : oldZoom;
 		newZoom = newZoom === undefined ? this.getZoom() : newZoom;
 
-		return window.L.LatLng.rescale(point, oldZoom, newZoom);
+		return NormalPoint.rescale(point, oldZoom, newZoom);
 	},
 
 	layerPointToLatLng: function (point) { // (Point)
@@ -1159,12 +1159,12 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	latLngToLayerPoint: function (latlng) { // (LatLng)
-		var projectedPoint = this.project(window.L.latLng(latlng))._round();
+		var projectedPoint = this.project(NormalPoint.flexConstruct(latlng))._round();
 		return projectedPoint._subtract(this.getPixelOrigin());
 	},
 
 	distance: function (latlng1, latlng2) { // (LatLng, LatLng) -> number
-		return window.L.LatLng.distance(window.L.latLng(latlng1), window.L.latLng(latlng2));
+		return NormalPoint.distance(NormalPoint.flexConstruct(latlng1), NormalPoint.flexConstruct(latlng2));
 	},
 
 	containerPointToLayerPoint: function (point) { // (Point)
@@ -1235,11 +1235,11 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	latLngToContainerPointIgnoreSplits: function (latlng) {
-		return this.layerPointToContainerPointIgnoreSplits(this.latLngToLayerPoint(window.L.latLng(latlng)));
+		return this.layerPointToContainerPointIgnoreSplits(this.latLngToLayerPoint(NormalPoint.flexConstruct(latlng)));
 	},
 
 	latLngToContainerPoint: function (latlng) {
-		return this.layerPointToContainerPoint(this.latLngToLayerPoint(window.L.latLng(latlng)));
+		return this.layerPointToContainerPoint(this.latLngToLayerPoint(NormalPoint.flexConstruct(latlng)));
 	},
 
 	mouseEventToContainerPoint: function (e) { // (MouseEvent)

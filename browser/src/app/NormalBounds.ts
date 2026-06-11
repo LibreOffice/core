@@ -283,6 +283,3 @@ class NormalBounds {
 		);
 	}
 }
-
-window.L.LatLngBounds = NormalBounds;
-window.L.latLngBounds = NormalBounds.flexConstruct;

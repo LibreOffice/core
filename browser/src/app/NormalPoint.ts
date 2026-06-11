@@ -45,7 +45,7 @@ class NormalPoint {
 		return null;
 	}
 
-	private static scale(zoom: number): number {
+	public static scale(zoom: number): number {
 		return zoom ? Math.pow(NormalPoint.SCALE, zoom) : 1;
 	}
 
@@ -87,12 +87,13 @@ class NormalPoint {
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 
-	public equals(obj: any, maxMargin?: number): boolean {
-		if (!obj) {
+	public equals(obj_: any, maxMargin?: number): boolean {
+		if (!obj_) {
 			return false;
 		}
 
-		obj = window.L.latLng(obj);
+		const obj = NormalPoint.flexConstruct(obj_);
+		Util.ensureValue(obj);
 
 		const margin = Math.max(
 			Math.abs(this.lat - obj.lat),
@@ -132,6 +133,3 @@ class NormalPoint {
 		return this.lat;
 	}
 }
-
-window.L.LatLng = NormalPoint;
-window.L.latLng = NormalPoint.flexConstruct;
