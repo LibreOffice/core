@@ -1861,13 +1861,13 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     return pEntry;
 }
 
-void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
+void SvTreeListBox::SetEntryText(SvTreeListEntry& rEntry, const OUString& rStr)
 {
-    SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
+    SvLBoxString* pItem = static_cast<SvLBoxString*>(rEntry.GetFirstItem(SvLBoxItemType::String));
     assert(pItem);
     pItem->SetText(rStr);
-    pItem->InitViewData(*this, pEntry);
-    GetModel()->InvalidateEntry( pEntry );
+    pItem->InitViewData(*this, &rEntry);
+    GetModel()->InvalidateEntry(&rEntry);
 }
 
 void SvTreeListBox::SetExpandedEntryBmp(SvTreeListEntry& rEntry, const Image& aBmp)

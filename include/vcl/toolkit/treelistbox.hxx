@@ -649,7 +649,7 @@ public:
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
     bool GetCheckButtonEnabled(SvTreeListEntry* pEntry) const;
 
-    void            SetEntryText(SvTreeListEntry*, const OUString& );
+    void SetEntryText(SvTreeListEntry& rEntry, const OUString& rStr);
     void SetExpandedEntryBmp(SvTreeListEntry& rEntry, const Image& _rImage);
     void SetCollapsedEntryBmp(SvTreeListEntry& rEntry, const Image& _rImage);
 

@@ -4134,7 +4134,7 @@ void SalInstanceTreeView::set_text(SvTreeListEntry& rEntry, const OUString& rTex
 {
     if (col == -1)
     {
-        m_xTreeView->SetEntryText(&rEntry, rText);
+        m_xTreeView->SetEntryText(rEntry, rText);
         return;
     }
 
