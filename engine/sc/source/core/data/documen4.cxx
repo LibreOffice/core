@@ -1180,7 +1180,7 @@ void ScDocument::SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab )
 
 const ScValidationData* ScDocument::GetValidationEntry( sal_uInt32 nIndex ) const
 {
-    if ( pValidationList )
+    if ( nIndex && pValidationList )
         return pValidationList->GetData( nIndex );
     else
         return nullptr;
