@@ -109,10 +109,7 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvLBoxContextBmp : public SvLBoxItem
     bool m_bExpanded;
 
 public:
-    SvLBoxContextBmp(const Image& aBmp1,
-                     const Image& aBmp2,
-                     bool bExpanded);
-    SvLBoxContextBmp();
+    SvLBoxContextBmp(const Image& aBmp1, const Image& aBmp2, bool bExpanded);
     virtual ~SvLBoxContextBmp() override;
 
     virtual SvLBoxItemType GetType() const override;
