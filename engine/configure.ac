@@ -2831,16 +2831,6 @@ AC_ARG_WITH(vendor,
         [Set vendor of the build.]),
 ,)
 
-AC_ARG_WITH(privacy-policy-url,
-    AS_HELP_STRING([--with-privacy-policy-url="https://yourdomain/privacy-policy"],
-        [The URL to your privacy policy]),
-        [if test "x$with_privacy_policy_url" = "xyes"; then
-            AC_MSG_FAILURE([you need to specify an argument when using --with-privacy-policy-url])
-         elif test "x$with_privacy_policy_url" = "xno"; then
-            with_privacy_policy_url="undefined"
-         fi]
-,[with_privacy_policy_url="undefined"])
-
 AC_ARG_WITH(android-package-name,
     AS_HELP_STRING([--with-android-package-name="org.libreoffice"],
         [Set Android package name of the build.]),
@@ -13380,8 +13370,6 @@ else
 fi
 AC_SUBST(WITH_NOTO_FONT)
 
-PRIVACY_POLICY_URL="$with_privacy_policy_url"
-AC_SUBST(PRIVACY_POLICY_URL)
 dnl ===================================================================
 dnl Test whether we need bzip2
 dnl ===================================================================
