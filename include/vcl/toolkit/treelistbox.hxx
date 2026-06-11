@@ -366,7 +366,7 @@ public:
 
     sal_uInt32 GetVisibleCount() const
     {
-        return m_pModel->GetVisibleCount(const_cast<SvTreeListBox*>(this));
+        return m_pModel->GetVisibleCount(const_cast<SvTreeListBox&>(*this));
     }
 
     SvTreeListEntry* FirstVisible() const { return m_pModel->FirstVisible(); }

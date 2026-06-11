@@ -506,7 +506,7 @@ sal_uInt32 SvTreeList::GetVisiblePos(const SvTreeListBox& rView,
     {
         // to make GetVisibleCount refresh the positions
         const_cast<SvTreeListBox&>(rView).m_nVisibleCount = 0;
-        GetVisibleCount(const_cast<SvTreeListBox*>(&rView));
+        GetVisibleCount(const_cast<SvTreeListBox&>(rView));
     }
     const SvViewDataEntry* pViewData = rView.GetViewData(pEntry);
     if (!pViewData)
@@ -514,22 +514,21 @@ sal_uInt32 SvTreeList::GetVisiblePos(const SvTreeListBox& rView,
     return pViewData->nVisPos;
 }
 
-sal_uInt32 SvTreeList::GetVisibleCount(SvTreeListBox* pView) const
+sal_uInt32 SvTreeList::GetVisibleCount(SvTreeListBox& rView) const
 {
-    assert(pView && "GetVisCount:No View");
-    if( !pView->HasViewData() )
+    if (!rView.HasViewData())
         return 0;
-    if (pView->m_nVisibleCount)
-        return pView->m_nVisibleCount;
+    if (rView.m_nVisibleCount)
+        return rView.m_nVisibleCount;
 
     sal_uInt32 nPos = 0;
     SvTreeListEntry* pEntry = First();  // first entry is always visible
     while ( pEntry )
     {
-        if (SvViewDataEntry* pViewData = pView->GetViewData( pEntry ))
+        if (SvViewDataEntry* pViewData = rView.GetViewData(pEntry))
             pViewData->nVisPos = nPos;
         nPos++;
-        pEntry = NextVisible( pView, pEntry );
+        pEntry = NextVisible(&rView, pEntry);
     }
 #ifdef DBG_UTIL
     if( nPos > 10000000 )
@@ -537,8 +536,8 @@ sal_uInt32 SvTreeList::GetVisibleCount(SvTreeListBox* pView) const
         OSL_FAIL("nVisibleCount bad");
     }
 #endif
-    pView->m_nVisibleCount = nPos;
-    pView->m_bVisPositionsValid = true;
+    rView.m_nVisibleCount = nPos;
+    rView.m_bVisPositionsValid = true;
     return nPos;
 }
 
