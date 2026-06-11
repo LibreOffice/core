@@ -1087,7 +1087,7 @@ void ScDPResultMemberFull::InitFrom(const std::vector<ScDPDimension*>& ppDim,
     if (GetResultData()->IsLateInit())
         return;
 
-    bInitialized = true;
+    SetInitialized();
 
     if (nPos >= ppDim.size())
         return;
@@ -1096,7 +1096,7 @@ void ScDPResultMemberFull::InitFrom(const std::vector<ScDPDimension*>& ppDim,
     if ( GetDPMember() && !GetDPMember()->getShowDetails() )
     {
         // Show DataLayout dimension
-        nMemberStep = 1;
+        SetMemberStep(1);
         while ( nPos < ppDim.size() )
         {
             if (  ppDim[nPos]->getIsDataLayoutDimension() )
@@ -1109,10 +1109,10 @@ void ScDPResultMemberFull::InitFrom(const std::vector<ScDPDimension*>& ppDim,
             else
             { //find next dim
                 nPos ++;
-                nMemberStep ++;
+                SetMemberStep(GetMemberStep() + 1);
             }
         }
-        bHasHiddenDetails = true;   // only if there is a next dimension
+        SetHasHiddenDetails(); // only if there is a next dimension
         return;
     }
 
@@ -1242,13 +1242,13 @@ tools::Long ScDPResultMemberFull::GetSize(tools::Long nMeasure) const
 
 bool ScDPResultMemberFull::IsVisible() const
 {
-    if (!bInitialized)
+    if (!IsInitialized())
         return false;
 
     if (!IsValid())
         return false;
 
-    if (bHasElements)
+    if (GetHasElements())
         return true;
 
     //  not initialized -> shouldn't be there at all
@@ -1267,7 +1267,7 @@ bool ScDPResultMemberFull::IsValid() const
     if ( pMemberDesc && !pMemberDesc->isVisible() )
         return false;
 
-    if ( bAutoHidden )
+    if (IsAutoHidden())
         return false;
 
     return true;
@@ -1280,7 +1280,7 @@ tools::Long ScDPResultMemberFull::GetSubTotalCount(tools::Long* pUserSubStart) c
 
     const ScDPLevel* pParentLevel = GetParentLevel();
 
-    if ( bForceSubTotal )       // set if needed for root members
+    if (GetForceSubTotal()) // set if needed for root members
         return 1;               // grand total is always "automatic"
     else if ( pParentLevel )
     {
@@ -1505,7 +1505,7 @@ void ScDPResultMemberFull::FillMemberResults(uno::Sequence<sheet::MemberResult>*
         if (bRoot)      // same sequence for root member
             GetChildDimension()->FillMemberResults(pSequences, rPos, nMeasure);
         else
-            GetChildDimension()->FillMemberResults(pSequences + nMemberStep /*1*/, rPos, nMeasure);
+            GetChildDimension()->FillMemberResults(pSequences + GetMemberStep(), rPos, nMeasure);
 
         if ( bTitleLine )           // title row is included in GetSize, so the following
             --rPos;                 // positions are calculated with the normal values
@@ -4277,13 +4277,13 @@ void ScDPResultDimension::CheckShowEmpty( bool bShow )
 
 void ScDPResultMemberFull::CheckShowEmpty(bool bShow)
 {
-    if (bHasElements)
+    if (GetHasElements())
     {
         ScDPResultDimension* pChildDim = GetChildDimension();
         if (pChildDim)
             pChildDim->CheckShowEmpty();
     }
-    else if (IsValid() && bInitialized)
+    else if (IsValid() && IsInitialized())
     {
         bShow = bShow || (GetParentLevel() && GetParentLevel()->getShowEmpty());
         if (bShow)
