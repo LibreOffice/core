@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-09 21:01+0000\n"
-"Last-Translator: Ibnu Batuthah <50543972+ibnuasyi@users.noreply.github.com>\n"
+"PO-Revision-Date: 2026-06-11 19:01+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/id/>\n"
 "Language: id\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -940,6 +940,7 @@ msgstr "Tidak ada (nonaktifkan pembuatan gambar)"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Tidak dapat mengambil model (HTTP {0}). Periksa URL penyedia dan kunci API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1784,7 +1785,7 @@ msgstr "Perubahan ditolak"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
-msgstr ""
+msgstr "Gunakan bagian: "
 
 #: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
@@ -2894,7 +2895,7 @@ msgstr "EPUB (.epub)"
 #: src/control/Control.NotebookbarBuilder.js:414
 #: src/control/Control.NotebookbarBuilder.js:604
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/control/Control.Menubar.ts:111 src/control/Control.UIManager.ts:414
 msgid "Rename Document"
@@ -5795,15 +5796,15 @@ msgstr "Lebih banyak pilihan untuk {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1738
 msgid "Cell value"
-msgstr ""
+msgstr "Nilai sel"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1742
 msgid "row %1"
-msgstr ""
+msgstr "baris %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1751
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2493
 msgid "Headings and objects that you add to the document will appear here"
