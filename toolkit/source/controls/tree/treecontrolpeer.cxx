@@ -118,7 +118,7 @@ class UnoTreeListItem : public SvLBoxString
 public:
                     UnoTreeListItem();
 
-    void            InitViewData(SvTreeListBox&, SvTreeListEntry*, SvViewDataItem* = nullptr) override;
+    void InitViewData(SvTreeListBox&, SvTreeListEntry&, SvViewDataItem* = nullptr) override;
     void            SetImage( const Image& rImage );
     const OUString& GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );
@@ -1511,11 +1511,11 @@ void UnoTreeListItem::SetGraphicURL( const OUString& rGraphicURL )
     maGraphicURL = rGraphicURL;
 }
 
-
-void UnoTreeListItem::InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
+void UnoTreeListItem::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
+                                   SvViewDataItem* pViewData)
 {
     if( !pViewData )
-        pViewData = &rView.GetViewDataItem(pEntry, *this);
+        pViewData = &rView.GetViewDataItem(&rEntry, *this);
 
     Size aSize(maImage.GetSizePixel());
     pViewData->mnWidth = aSize.Width();

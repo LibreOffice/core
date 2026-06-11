@@ -220,11 +220,11 @@ void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType,
     }
 }
 
-void SvLBoxButton::InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
+void SvLBoxButton::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                                 SvViewDataItem* pViewData)
 {
     if (!pViewData)
-        pViewData = &rView.GetViewDataItem(pEntry, *this);
+        pViewData = &rView.GetViewDataItem(&rEntry, *this);
     Size aSize = m_rData.GetSize();
 
     ControlType eCtrlType = (m_rData.IsRadio()) ? ControlType::Radiobutton : ControlType::Checkbox;

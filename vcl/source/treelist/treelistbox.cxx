@@ -995,7 +995,7 @@ void SvTreeListBox::RecalcViewData()
         while ( nCurPos < nCount )
         {
             SvLBoxItem& rItem = pEntry->GetItem( nCurPos );
-            rItem.InitViewData(*this, pEntry);
+            rItem.InitViewData(*this, *pEntry);
             nCurPos++;
         }
         pEntry = Next( pEntry );
@@ -1142,7 +1142,7 @@ void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntr
     {
         SvLBoxItem& rItem = pEntry->GetItem(nCurPos);
         SvViewDataItem& rItemData = pData->GetItem(nCurPos);
-        rItem.InitViewData(*this, pEntry, &rItemData);
+        rItem.InitViewData(*this, *pEntry, &rItemData);
         nCurPos++;
     }
 }
@@ -1866,7 +1866,7 @@ void SvTreeListBox::SetEntryText(SvTreeListEntry& rEntry, const OUString& rStr)
     SvLBoxString* pItem = static_cast<SvLBoxString*>(rEntry.GetFirstItem(SvLBoxItemType::String));
     assert(pItem);
     pItem->SetText(rStr);
-    pItem->InitViewData(*this, &rEntry);
+    pItem->InitViewData(*this, rEntry);
     GetModel()->InvalidateEntry(&rEntry);
 }
 
@@ -2639,7 +2639,7 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
     for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
     {
         SvLBoxItem& rItem = pEntry->GetItem( nIdx );
-        rItem.InitViewData(*this, pEntry);
+        rItem.InitViewData(*this, *pEntry);
     }
 
     // repaint

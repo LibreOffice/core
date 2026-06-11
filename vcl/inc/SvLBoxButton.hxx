@@ -75,7 +75,7 @@ class SvLBoxButton final : public SvLBoxItem
 public:
     SvLBoxButton(SvLBoxButtonData& rBData, bool bIsVis = true);
     virtual ~SvLBoxButton() override;
-    virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
+    virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                               SvViewDataItem* pViewData = nullptr) override;
 
     virtual SvLBoxItemType GetType() const override;

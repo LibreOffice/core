@@ -71,7 +71,7 @@ public:
     virtual ~SvLBoxString() override;
 
     virtual SvLBoxItemType GetType() const override;
-    virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
+    virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                               SvViewDataItem* pViewData = nullptr) override;
 
     virtual int CalcWidth(const SvTreeListBox& rView) const override;
@@ -116,7 +116,7 @@ public:
     virtual ~SvLBoxContextBmp() override;
 
     virtual SvLBoxItemType GetType() const override;
-    virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
+    virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                               SvViewDataItem* pViewData = nullptr) override;
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,

@@ -148,13 +148,13 @@ std::unique_ptr<SvLBoxItem> SvLBoxString::Clone(SvLBoxItem const * pSource) cons
     return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
-void SvLBoxString::InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
+void SvLBoxString::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                                 SvViewDataItem* pViewData)
 {
     if( !pViewData )
-        pViewData = &rView.GetViewDataItem(pEntry, *this);
+        pViewData = &rView.GetViewDataItem(&rEntry, *this);
 
-    if (pEntry->IsSeparator())
+    if (rEntry.IsSeparator())
     {
         pViewData->mnWidth = -1;
         pViewData->mnHeight = 0;
@@ -171,7 +171,7 @@ void SvLBoxString::InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
 
     if (mbCustom)
     {
-        Size aSize = rView.MeasureCustomEntry(*rView.GetOutDev(), *pEntry);
+        Size aSize = rView.MeasureCustomEntry(*rView.GetOutDev(), rEntry);
         pViewData->mnWidth = aSize.Width();
         pViewData->mnHeight = aSize.Height();
     }
@@ -215,11 +215,11 @@ SvLBoxItemType SvLBoxContextBmp::GetType() const
     return SvLBoxItemType::ContextBmp;
 }
 
-void SvLBoxContextBmp::InitViewData(SvTreeListBox& rView, SvTreeListEntry* pEntry,
+void SvLBoxContextBmp::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                                     SvViewDataItem* pViewData)
 {
     if( !pViewData )
-        pViewData = &rView.GetViewDataItem(pEntry, *this);
+        pViewData = &rView.GetViewDataItem(&rEntry, *this);
     Size aSize = m_aImage1.GetSizePixel();
     pViewData->mnWidth = aSize.Width();
     pViewData->mnHeight = aSize.Height();
