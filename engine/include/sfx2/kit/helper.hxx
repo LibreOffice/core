@@ -29,6 +29,7 @@
 #include <optional>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
@@ -82,6 +83,7 @@ struct SFX2_DLLPUBLIC KitMouseEventData
 };
 
 namespace com::sun::star::ui { struct ContextChangeEventObject; };
+namespace com::sun::star::beans { struct PropertyValue; };
 
 class SFX2_DLLPUBLIC KitHelper
 {
@@ -272,6 +274,9 @@ public:
     static void addCertificates(const std::vector<std::string>& rCerts);
     /// Parses a private key + certificate pair.
     static css::uno::Reference<css::security::XCertificate> getSigningCertificate(const std::string& rCert, const std::string& rKey);
+    /// Ensure Author is that of pViewShell for a rCommand that need the current Author name
+    static void ensureCommandAuthor(const SfxViewShell* pViewShell, std::u16string_view rCommand,
+                                    std::vector<css::beans::PropertyValue>& rArguments);
     /// Decides if it's OK to call getCommandValues(rCommand).
     static bool supportsCommand(std::u16string_view rCommand);
     /// Returns information about a given command in JSON format.

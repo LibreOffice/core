@@ -1091,6 +1091,22 @@ void KitHelper::addCertificates(const std::vector<std::string>& rCerts)
     pObjectShell->RecheckSignature(false);
 }
 
+void KitHelper::ensureCommandAuthor(const SfxViewShell* pViewShell, std::u16string_view rCommand,
+                                    std::vector<beans::PropertyValue>& rArguments)
+{
+    // These commands pre-existed online mode and have Author fields. Strip any
+    // incoming Authors and set the server-provided identity recorded when the
+    // view was initialized.
+    if (rCommand == u".uno:InsertAnnotation" ||
+        rCommand == u".uno:InsertThreadedComment" ||
+        rCommand == u".uno:EditAnnotation")
+    {
+        std::erase_if(rArguments,
+                      [](const beans::PropertyValue& rPropValue) { return rPropValue.Name == "Author"; });
+        rArguments.push_back(comphelper::makePropertyValue(u"Author"_ustr, pViewShell->GetKitAuthor()));
+    }
+}
+
 bool KitHelper::supportsCommand(std::u16string_view rCommand)
 {
     static const std::initializer_list<std::u16string_view> vSupport = { u"Signature" };
