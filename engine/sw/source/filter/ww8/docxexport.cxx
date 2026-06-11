@@ -1186,6 +1186,8 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
 static auto
 WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> void
 {
+    // NOTE: officeotron complains if these are placed in the 'wrong order'
+
     const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
     if (!rIDSA.get(DocumentSettingId::ADD_EXT_LEADING))
     {
@@ -1210,6 +1212,8 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> voi
     {
         rpFS->singleElementNS(XML_w, XML_adjustLineHeightInTable);
     }
+    if (rIDSA.get(DocumentSettingId::PARA_SPACE_MAX))
+        rpFS->singleElementNS(XML_w, XML_doNotUseHTMLParagraphAutoSpacing);
     if (rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES))
     {
         // Map the DoNotBreakWrappedTables compat flag to <w:doNotBreakWrappedTables>.
