@@ -243,10 +243,11 @@ void SvLBoxContextBmp::Paint(
 
 std::unique_ptr<SvLBoxItem> SvLBoxContextBmp::Clone(SvLBoxItem const * pSource) const
 {
+    const SvLBoxContextBmp* pContextBmp = static_cast<const SvLBoxContextBmp*>(pSource);
     std::unique_ptr<SvLBoxContextBmp> pNew(new SvLBoxContextBmp);
-    pNew->m_aImage1 = static_cast<SvLBoxContextBmp const*>(pSource)->m_aImage1;
-    pNew->m_aImage2 = static_cast<SvLBoxContextBmp const*>(pSource)->m_aImage2;
-    pNew->m_bExpanded = static_cast<SvLBoxContextBmp const*>(pSource)->m_bExpanded;
+    pNew->m_aImage1 = pContextBmp->m_aImage1;
+    pNew->m_aImage2 = pContextBmp->m_aImage2;
+    pNew->m_bExpanded = pContextBmp->m_bExpanded;
     return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
