@@ -162,6 +162,8 @@ OUString getPropertyName( PropertyIds eId )
         { PROP_FULL_NAME, u"FullName"},
         { PROP_DESCRIPTION, u"Description"},
         { PROP_MACRO_NAME, u"MacroName"},
+        { PROP_MIN_BOTTOM_BODY_DISTANCE, u"MinBottomBodyDistance"},
+        { PROP_MIN_TOP_BODY_DISTANCE, u"MinTopBodyDistance"},
         { PROP_TITLE, u"Title"},
         { PROP_CONTENT, u"Content"},
         { PROP_INPUT_STREAM, u"InputStream"},

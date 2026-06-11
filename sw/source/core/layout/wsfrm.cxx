@@ -47,6 +47,7 @@
 #include <fmtftn.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtcntnt.hxx>
+#include <fmthdft.hxx>
 #include <ftnfrm.hxx>
 #include <tabfrm.hxx>
 #include <rowfrm.hxx>
@@ -3554,6 +3555,8 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
         return;
 
     bool bHideWhitespace = false;
+    ::std::optional<sal_uInt16> oMinTop;
+    ::std::optional<sal_uInt16> oMinBottom;
     if (IsPageFrame())
     {
         SwViewShell* pShell = getRootFrame()->GetCurrShell();
@@ -3565,13 +3568,32 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
             // height already.
             bHideWhitespace = true;
         }
+        // check the format, `Format()` is called before header frame is created
+        if (!GetFormat()->GetHeader().IsActive())
+        {   // else: rely on "HeaderHeight" item SID_ATTR_PAGE_SIZE on header
+            if (auto const*const pTopItem{
+                    pAttrs->GetAttrSet().GetItemIfSet(RES_FRMATR_PAGE_MIN_TOP)})
+            {
+                oMinTop.emplace(pTopItem->GetValue());
+            }
+        }
+        if (!GetFormat()->GetFooter().IsActive())
+        {
+            if (auto const*const pBottomItem{
+                    pAttrs->GetAttrSet().GetItemIfSet(RES_FRMATR_PAGE_MIN_BOTTOM)})
+            {
+                oMinBottom.emplace(pBottomItem->GetValue());
+            }
+        }
     }
 
     const sal_uInt16 nLeft = o3tl::narrowing<sal_uInt16>(pAttrs->CalcLeft(this));
-    const sal_uInt16 nUpper = bHideWhitespace ? 0 : pAttrs->CalcTop();
+    const sal_uInt16 nUpper = bHideWhitespace ? 0
+        : oMinTop ? ::std::max(pAttrs->CalcTop(), *oMinTop) : pAttrs->CalcTop();
 
     const sal_uInt16 nRight = o3tl::narrowing<sal_uInt16>(pAttrs->CalcRight(this));
-    const sal_uInt16 nLower = bHideWhitespace ? 0 : pAttrs->CalcBottom();
+    const sal_uInt16 nLower = bHideWhitespace ? 0
+        : oMinBottom ? ::std::max(pAttrs->CalcBottom(), *oMinBottom) : pAttrs->CalcBottom();
 
     SwRectFnSet fnRect(IsVertical() && !IsPageFrame(), IsVertLR(), IsVertLRBT());
     if ( !isFramePrintAreaValid() )

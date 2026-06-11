@@ -3515,6 +3515,8 @@ namespace xmloff::token {
 
         TOKEN( "page-content-bottom",             XML_PAGE_CONTENT_BOTTOM ),
         TOKEN("margin-gutter", XML_MARGIN_GUTTER),
+        TOKEN("min-page-margin-top", XML_MIN_PAGE_MARGIN_TOP),
+        TOKEN("min-page-margin-bottom", XML_MIN_PAGE_MARGIN_BOTTOM),
 
         TOKEN("local-url", XML_LOCAL_URL),
         TOKEN("target-type", XML_TARGET_TYPE),

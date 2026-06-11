@@ -48,6 +48,7 @@ class SvxLRSpaceItem;
 class SdrTextVertAdjustItem;
 class SfxGrabBagItem;
 class SfxInt16Item;
+class SfxInt32Item;
 class SfxUInt16Item;
 class SvxAdjustItem;
 class SvxAutoKernItem;
@@ -381,25 +382,25 @@ constexpr TypedWhichId<SfxBoolItem> RES_BACKGROUND_FULL_SIZE(138);
 constexpr TypedWhichId<SfxBoolItem> RES_RTL_GUTTER(139);
 constexpr TypedWhichId<SfxBoolItem> RES_DECORATIVE(140);
 constexpr TypedWhichId<SwFormatWrapTextAtFlyStart> RES_WRAP_TEXT_AT_FLY_START(141);
-constexpr sal_uInt16 RES_FRMATR_END(142);
+constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_TOP(142);
+constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_BOTTOM(143);
+constexpr sal_uInt16 RES_FRMATR_END(144);
 
 constexpr sal_uInt16 RES_GRFATR_BEGIN(RES_FRMATR_END);
 constexpr TypedWhichId<SwMirrorGrf> RES_GRFATR_MIRRORGRF(RES_GRFATR_BEGIN);
-constexpr TypedWhichId<SwCropGrf> RES_GRFATR_CROPGRF(143);
+constexpr TypedWhichId<SwCropGrf> RES_GRFATR_CROPGRF(145);
 
-constexpr TypedWhichId<SwRotationGrf> RES_GRFATR_ROTATION(144);
-constexpr TypedWhichId<SwLuminanceGrf> RES_GRFATR_LUMINANCE(145);
-constexpr TypedWhichId<SwContrastGrf> RES_GRFATR_CONTRAST(146);
-constexpr TypedWhichId<SwChannelRGrf> RES_GRFATR_CHANNELR(147);
-constexpr TypedWhichId<SwChannelGGrf> RES_GRFATR_CHANNELG(148);
-constexpr TypedWhichId<SwChannelBGrf> RES_GRFATR_CHANNELB(149);
-constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA(150);
-constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT(151);
-constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY(152);
-constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE(153);
+constexpr TypedWhichId<SwRotationGrf> RES_GRFATR_ROTATION(146);
+constexpr TypedWhichId<SwLuminanceGrf> RES_GRFATR_LUMINANCE(147);
+constexpr TypedWhichId<SwContrastGrf> RES_GRFATR_CONTRAST(148);
+constexpr TypedWhichId<SwChannelRGrf> RES_GRFATR_CHANNELR(149);
+constexpr TypedWhichId<SwChannelGGrf> RES_GRFATR_CHANNELG(150);
+constexpr TypedWhichId<SwChannelBGrf> RES_GRFATR_CHANNELB(151);
+constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA(152);
+constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT(153);
+constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY(154);
+constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE(155);
 
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY4(154);
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY5(155);
 constexpr sal_uInt16 RES_GRFATR_END(156);
 
 constexpr sal_uInt16 RES_BOXATR_BEGIN(RES_GRFATR_END);
