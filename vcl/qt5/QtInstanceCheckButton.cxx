@@ -56,7 +56,8 @@ OUString QtInstanceCheckButton::get_label() const
 
 void QtInstanceCheckButton::QtInstanceCheckButton::set_label_wrap(bool /*bWrap*/)
 {
-    assert(false && "Not implemented yet");
+    // https://bugreports.qt.io/browse/QTBUG-5370
+    SAL_WARN("vcl.qt", "Qt doesn't support word wrap in check boxes (see QTBUG-5370)");
 }
 
 void QtInstanceCheckButton::handleToggled()
