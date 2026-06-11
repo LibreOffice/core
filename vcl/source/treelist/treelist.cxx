@@ -47,9 +47,9 @@ void SvTreeList::Broadcast(SvListAction nActionId, SvTreeListEntry* pEntry)
 }
 
 // an entry is visible if all parents are expanded
-bool SvTreeList::IsEntryVisible(const SvTreeListBox* pView, SvTreeListEntry* pEntry) const
+bool SvTreeList::IsEntryVisible(const SvTreeListBox& rView, SvTreeListEntry* pEntry) const
 {
-    assert(pView && pEntry && "IsVisible:Invalid Params");
+    assert(pEntry && "IsVisible: Invalid Param");
     bool bRetVal = false;
     do
     {
@@ -59,7 +59,7 @@ bool SvTreeList::IsEntryVisible(const SvTreeListBox* pView, SvTreeListEntry* pEn
             break;
         }
         pEntry = pEntry->pParent;
-    }  while( pView->IsExpanded( pEntry ) );
+    } while (rView.IsExpanded(pEntry));
     return bRetVal;
 }
 
@@ -640,7 +640,7 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox* pView,
 SvTreeListEntry* SvTreeList::LastVisible(const SvTreeListBox& rView) const
 {
     SvTreeListEntry* pEntry = Last();
-    while (pEntry && !IsEntryVisible(&rView, pEntry))
+    while (pEntry && !IsEntryVisible(rView, pEntry))
         pEntry = PrevVisible(&rView, pEntry);
     return pEntry;
 }
@@ -648,7 +648,7 @@ SvTreeListEntry* SvTreeList::LastVisible(const SvTreeListBox& rView) const
 SvTreeListEntry* SvTreeList::NextVisible(const SvTreeListBox& rView, SvTreeListEntry* pEntry,
                                          sal_uInt16& nDelta) const
 {
-    DBG_ASSERT(IsEntryVisible(&rView, pEntry), "NextVis:Wrong Vis");
+    DBG_ASSERT(IsEntryVisible(rView, pEntry), "NextVis:Wrong Vis");
 
     sal_uInt32 nVisPos = GetVisiblePos(rView, pEntry);
     // nDelta entries existent?
@@ -672,7 +672,7 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvTreeListBox& rView, SvTreeListE
 SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox& rView, SvTreeListEntry* pEntry,
                                          sal_uInt16& nDelta) const
 {
-    DBG_ASSERT(pEntry && IsEntryVisible(&rView, pEntry), "PrevVis:Parms/!Vis");
+    DBG_ASSERT(pEntry && IsEntryVisible(rView, pEntry), "PrevVis:Parms/!Vis");
 
     sal_uInt32 nVisPos = GetVisiblePos(rView, pEntry);
     // nDelta entries existent?

@@ -429,7 +429,7 @@ public:
 
     bool IsEntryVisible(SvTreeListEntry* pEntry) const
     {
-        return m_pModel->IsEntryVisible(this, pEntry);
+        return m_pModel->IsEntryVisible(*this, pEntry);
     }
 
     bool IsExpanded(SvTreeListEntry* pEntry) const;

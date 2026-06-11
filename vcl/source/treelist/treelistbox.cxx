@@ -707,7 +707,7 @@ void SvTreeListBox::ActionInserted(SvTreeListEntry* pEntry)
     std::pair<SvDataTable::iterator, bool> aSuccess
         = m_DataTable.insert(std::make_pair(pEntry, std::move(aData)));
     DBG_ASSERT(aSuccess.second, "Entry already in View");
-    if (m_nVisibleCount && m_pModel->IsEntryVisible(this, pEntry))
+    if (m_nVisibleCount && m_pModel->IsEntryVisible(*this, pEntry))
     {
         m_nVisibleCount = 0;
         m_bVisPositionsValid = false;
@@ -716,7 +716,7 @@ void SvTreeListBox::ActionInserted(SvTreeListEntry* pEntry)
 
 void SvTreeListBox::ActionInsertedTree(SvTreeListEntry* pEntry)
 {
-    if (m_pModel->IsEntryVisible(this, pEntry))
+    if (m_pModel->IsEntryVisible(*this, pEntry))
     {
         m_nVisibleCount = 0;
         m_bVisPositionsValid = false;
@@ -758,7 +758,7 @@ void SvTreeListBox::ActionRemoving(SvTreeListEntry* pEntry)
         nSelRemoved = 1 + m_pModel->GetChildSelectionCount(*this, pEntry);
     m_nSelectionCount -= nSelRemoved;
     sal_uInt32 nVisibleRemoved = 0;
-    if (m_pModel->IsEntryVisible(this, pEntry))
+    if (m_pModel->IsEntryVisible(*this, pEntry))
         nVisibleRemoved = 1 + m_pModel->GetVisibleChildCount(*this, pEntry);
     if (m_nVisibleCount)
     {
