@@ -1181,44 +1181,45 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
     if(!xShape.is())
         return;
 
-    OUString aType(xShape->getShapeType());
+    OUString aShapeType(xShape->getShapeType());
 
-    if(!aType.match("com.sun.star."))
+    std::u16string_view aRest;
+    if(!o3tl::starts_with(aShapeType, u"com.sun.star.", &aRest))
         return;
 
-    if(aType.match("drawing.", 13))
+    if(o3tl::starts_with(aRest, u"drawing.", &aRest))
     {
         // drawing shapes
-        if     (aType.match("Rectangle", 21)) { eShapeType = XmlShapeType::DrawRectangleShape; }
+        if     (o3tl::starts_with(aRest, u"Rectangle")) { eShapeType = XmlShapeType::DrawRectangleShape; }
 
         // #i72177# Note: Correcting CustomShape, CustomShape->Custom, len from 9 (was wrong anyways) to 6.
         // As can be seen at the other compares, the appendix "Shape" is left out of the comparison.
-        else if(aType.match("Custom", 21)) { eShapeType = XmlShapeType::DrawCustomShape; }
+        else if(o3tl::starts_with(aRest, u"Custom")) { eShapeType = XmlShapeType::DrawCustomShape; }
 
-        else if(aType.match("Ellipse", 21)) { eShapeType = XmlShapeType::DrawEllipseShape; }
-        else if(aType.match("Control", 21)) { eShapeType = XmlShapeType::DrawControlShape; }
-        else if(aType.match("Connector", 21)) { eShapeType = XmlShapeType::DrawConnectorShape; }
-        else if(aType.match("Measure", 21)) { eShapeType = XmlShapeType::DrawMeasureShape; }
-        else if(aType.match("Line", 21)) { eShapeType = XmlShapeType::DrawLineShape; }
+        else if(o3tl::starts_with(aRest, u"Ellipse")) { eShapeType = XmlShapeType::DrawEllipseShape; }
+        else if(o3tl::starts_with(aRest, u"Control")) { eShapeType = XmlShapeType::DrawControlShape; }
+        else if(o3tl::starts_with(aRest, u"Connector")) { eShapeType = XmlShapeType::DrawConnectorShape; }
+        else if(o3tl::starts_with(aRest, u"Measure")) { eShapeType = XmlShapeType::DrawMeasureShape; }
+        else if(o3tl::starts_with(aRest, u"Line")) { eShapeType = XmlShapeType::DrawLineShape; }
 
         // #i72177# Note: This covers two types by purpose, PolyPolygonShape and PolyPolygonPathShape
-        else if(aType.match("PolyPolygon", 21)) { eShapeType = XmlShapeType::DrawPolyPolygonShape; }
+        else if(o3tl::starts_with(aRest, u"PolyPolygon")) { eShapeType = XmlShapeType::DrawPolyPolygonShape; }
 
         // #i72177# Note: This covers two types by purpose, PolyLineShape and PolyLinePathShape
-        else if(aType.match("PolyLine", 21)) { eShapeType = XmlShapeType::DrawPolyLineShape; }
+        else if(o3tl::starts_with(aRest, u"PolyLine")) { eShapeType = XmlShapeType::DrawPolyLineShape; }
 
-        else if(aType.match("OpenBezier", 21)) { eShapeType = XmlShapeType::DrawOpenBezierShape; }
-        else if(aType.match("ClosedBezier", 21)) { eShapeType = XmlShapeType::DrawClosedBezierShape; }
+        else if(o3tl::starts_with(aRest, u"OpenBezier")) { eShapeType = XmlShapeType::DrawOpenBezierShape; }
+        else if(o3tl::starts_with(aRest, u"ClosedBezier")) { eShapeType = XmlShapeType::DrawClosedBezierShape; }
 
         // #i72177# FreeHand (opened and closed) now supports the types OpenFreeHandShape and
         // ClosedFreeHandShape respectively. Represent them as bezier shapes
-        else if(aType.match("OpenFreeHand", 21)) { eShapeType = XmlShapeType::DrawOpenBezierShape; }
-        else if(aType.match("ClosedFreeHand", 21)) { eShapeType = XmlShapeType::DrawClosedBezierShape; }
+        else if(o3tl::starts_with(aRest, u"OpenFreeHand")) { eShapeType = XmlShapeType::DrawOpenBezierShape; }
+        else if(o3tl::starts_with(aRest, u"ClosedFreeHand")) { eShapeType = XmlShapeType::DrawClosedBezierShape; }
 
-        else if(aType.match("GraphicObject", 21)) { eShapeType = XmlShapeType::DrawGraphicObjectShape; }
-        else if(aType.match("Group", 21)) { eShapeType = XmlShapeType::DrawGroupShape; }
-        else if(aType.match("Text", 21)) { eShapeType = XmlShapeType::DrawTextShape; }
-        else if(aType.match("OLE2", 21))
+        else if(o3tl::starts_with(aRest, u"GraphicObject")) { eShapeType = XmlShapeType::DrawGraphicObjectShape; }
+        else if(o3tl::starts_with(aRest, u"Group")) { eShapeType = XmlShapeType::DrawGroupShape; }
+        else if(o3tl::starts_with(aRest, u"Text")) { eShapeType = XmlShapeType::DrawTextShape; }
+        else if(o3tl::starts_with(aRest, u"OLE2"))
         {
             eShapeType = XmlShapeType::DrawOLE2Shape;
 
@@ -1253,29 +1254,29 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 }
             }
         }
-        else if(aType.match("Page", 21)) { eShapeType = XmlShapeType::DrawPageShape; }
-        else if(aType.match("Frame", 21)) { eShapeType = XmlShapeType::DrawFrameShape; }
-        else if(aType.match("Caption", 21)) { eShapeType = XmlShapeType::DrawCaptionShape; }
-        else if(aType.match("Plugin", 21)) { eShapeType = XmlShapeType::DrawPluginShape; }
-        else if(aType.match("MediaShape", 21)) { eShapeType = XmlShapeType::DrawMediaShape; }
-        else if(aType.match("TableShape", 21)) { eShapeType = XmlShapeType::DrawTableShape; }
+        else if(o3tl::starts_with(aRest, u"Page")) { eShapeType = XmlShapeType::DrawPageShape; }
+        else if(o3tl::starts_with(aRest, u"Frame")) { eShapeType = XmlShapeType::DrawFrameShape; }
+        else if(o3tl::starts_with(aRest, u"Caption")) { eShapeType = XmlShapeType::DrawCaptionShape; }
+        else if(o3tl::starts_with(aRest, u"Plugin")) { eShapeType = XmlShapeType::DrawPluginShape; }
+        else if(o3tl::starts_with(aRest, u"MediaShape")) { eShapeType = XmlShapeType::DrawMediaShape; }
+        else if(o3tl::starts_with(aRest, u"TableShape")) { eShapeType = XmlShapeType::DrawTableShape; }
 
         // 3D shapes
-        else if(aType.match("Scene", 21 + 7)) { eShapeType = XmlShapeType::Draw3DSceneObject; }
-        else if(aType.match("Cube", 21 + 7)) { eShapeType = XmlShapeType::Draw3DCubeObject; }
-        else if(aType.match("Sphere", 21 + 7)) { eShapeType = XmlShapeType::Draw3DSphereObject; }
-        else if(aType.match("Lathe", 21 + 7)) { eShapeType = XmlShapeType::Draw3DLatheObject; }
-        else if(aType.match("Extrude", 21 + 7)) { eShapeType = XmlShapeType::Draw3DExtrudeObject; }
+        else if(o3tl::starts_with(aRest, u"Shape3DScene")) { eShapeType = XmlShapeType::Draw3DSceneObject; }
+        else if(o3tl::starts_with(aRest, u"Shape3DCube")) { eShapeType = XmlShapeType::Draw3DCubeObject; }
+        else if(o3tl::starts_with(aRest, u"Shape3DSphere")) { eShapeType = XmlShapeType::Draw3DSphereObject; }
+        else if(o3tl::starts_with(aRest, u"Shape3DLathe")) { eShapeType = XmlShapeType::Draw3DLatheObject; }
+        else if(o3tl::starts_with(aRest, u"Shape3DExtrude")) { eShapeType = XmlShapeType::Draw3DExtrudeObject; }
     }
-    else if(aType.match("presentation.", 13))
+    else if(o3tl::starts_with(aRest, u"presentation.", &aRest))
     {
         // presentation shapes
-        if     (aType.match("TitleText", 26)) { eShapeType = XmlShapeType::PresTitleTextShape; }
-        else if(aType.match("Outliner", 26)) { eShapeType = XmlShapeType::PresOutlinerShape;  }
-        else if(aType.match("Subtitle", 26)) { eShapeType = XmlShapeType::PresSubtitleShape;  }
-        else if(aType.match("GraphicObject", 26)) { eShapeType = XmlShapeType::PresGraphicObjectShape;  }
-        else if(aType.match("Page", 26)) { eShapeType = XmlShapeType::PresPageShape;  }
-        else if(aType.match("OLE2", 26))
+        if     (o3tl::starts_with(aRest, u"TitleText")) { eShapeType = XmlShapeType::PresTitleTextShape; }
+        else if(o3tl::starts_with(aRest, u"Outliner")) { eShapeType = XmlShapeType::PresOutlinerShape;  }
+        else if(o3tl::starts_with(aRest, u"Subtitle")) { eShapeType = XmlShapeType::PresSubtitleShape;  }
+        else if(o3tl::starts_with(aRest, u"GraphicObject")) { eShapeType = XmlShapeType::PresGraphicObjectShape;  }
+        else if(o3tl::starts_with(aRest, u"Page")) { eShapeType = XmlShapeType::PresPageShape;  }
+        else if(o3tl::starts_with(aRest, u"OLE2"))
         {
             eShapeType = XmlShapeType::PresOLE2Shape;
 
@@ -1298,17 +1299,17 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 SAL_WARN( "xmloff", "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
             }
         }
-        else if(aType.match("Chart", 26)) { eShapeType = XmlShapeType::PresChartShape;  }
-        else if(aType.match("OrgChart", 26)) { eShapeType = XmlShapeType::PresOrgChartShape;  }
-        else if(aType.match("CalcShape", 26)) { eShapeType = XmlShapeType::PresSheetShape; }
-        else if(aType.match("TableShape", 26)) { eShapeType = XmlShapeType::PresTableShape; }
-        else if(aType.match("Notes", 26)) { eShapeType = XmlShapeType::PresNotesShape;  }
-        else if(aType.match("HandoutShape", 26)) { eShapeType = XmlShapeType::HandoutShape; }
-        else if(aType.match("HeaderShape", 26)) { eShapeType = XmlShapeType::PresHeaderShape; }
-        else if(aType.match("FooterShape", 26)) { eShapeType = XmlShapeType::PresFooterShape; }
-        else if(aType.match("SlideNumberShape", 26)) { eShapeType = XmlShapeType::PresSlideNumberShape; }
-        else if(aType.match("DateTimeShape", 26)) { eShapeType = XmlShapeType::PresDateTimeShape; }
-        else if(aType.match("MediaShape", 26)) { eShapeType = XmlShapeType::PresMediaShape; }
+        else if(o3tl::starts_with(aRest, u"Chart")) { eShapeType = XmlShapeType::PresChartShape;  }
+        else if(o3tl::starts_with(aRest, u"OrgChart")) { eShapeType = XmlShapeType::PresOrgChartShape;  }
+        else if(o3tl::starts_with(aRest, u"CalcShape")) { eShapeType = XmlShapeType::PresSheetShape; }
+        else if(o3tl::starts_with(aRest, u"TableShape")) { eShapeType = XmlShapeType::PresTableShape; }
+        else if(o3tl::starts_with(aRest, u"Notes")) { eShapeType = XmlShapeType::PresNotesShape;  }
+        else if(o3tl::starts_with(aRest, u"HandoutShape")) { eShapeType = XmlShapeType::HandoutShape; }
+        else if(o3tl::starts_with(aRest, u"HeaderShape")) { eShapeType = XmlShapeType::PresHeaderShape; }
+        else if(o3tl::starts_with(aRest, u"FooterShape")) { eShapeType = XmlShapeType::PresFooterShape; }
+        else if(o3tl::starts_with(aRest, u"SlideNumberShape")) { eShapeType = XmlShapeType::PresSlideNumberShape; }
+        else if(o3tl::starts_with(aRest, u"DateTimeShape")) { eShapeType = XmlShapeType::PresDateTimeShape; }
+        else if(o3tl::starts_with(aRest, u"MediaShape")) { eShapeType = XmlShapeType::PresMediaShape; }
     }
 }
 
