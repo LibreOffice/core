@@ -18,24 +18,16 @@
  */
 #pragma once
 
-#include <sfx2/tabdlg.hxx>
-#include <vcl/weld/Entry.hxx>
+#include <sal/config.h>
 
-class OptDeeplTabPage : public SfxTabPage
+#include <config_features.h>
+
+#include <swdllapi.h>
+
+namespace SwPam2Html
 {
-public:
-    OptDeeplTabPage(weld::Container* pPage, weld::DialogController* pController,
-                    const SfxItemSet& rSet);
-    virtual ~OptDeeplTabPage() override;
-    static std::unique_ptr<SfxTabPage>
-    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
+SW_DLLPUBLIC OString ExportPaMToHTML(SwPaM* pCursor);
+SW_DLLPUBLIC void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData);
+}
 
-    virtual OUString GetAllStrings() override;
-
-    virtual bool FillItemSet(SfxItemSet* rSet) override;
-    virtual void Reset(const SfxItemSet* rSet) override;
-
-private:
-    std::unique_ptr<weld::Entry> m_xAPIUrl;
-    std::unique_ptr<weld::Entry> m_xAuthKey;
-};
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

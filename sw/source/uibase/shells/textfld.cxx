@@ -80,10 +80,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Compatibility.hxx>
 #include <ndtxt.hxx>
-#include <translatehelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
-
+#include <pam2html.hxx>
 
 static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
@@ -917,7 +916,7 @@ FIELD_INSERT:
                     if (pFieldResult)
                     {
                         // Paste HTML content.
-                        SwTranslateHelper::PasteHTMLToPaM(rSh, pCursorPos, aFieldResult.toUtf8());
+                        SwPam2Html::PasteHTMLToPaM(rSh, pCursorPos, aFieldResult.toUtf8());
                         if (pCursorPos->GetPoint()->GetContentIndex() == 0)
                         {
                             // The paste created a last empty text node, remove it.
@@ -1083,7 +1082,7 @@ FIELD_INSERT:
             rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
             OUString aFieldResult;
             aMap[u"FieldResult"_ustr] >>= aFieldResult;
-            SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
+            SwPam2Html::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
         }
 
         rSh.EndAction();
@@ -1578,7 +1577,7 @@ FIELD_INSERT:
         rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
         OUString aFieldResult;
         aMap[u"FieldResult"_ustr] >>= aFieldResult;
-        SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
+        SwPam2Html::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
 
         rSh.EndAction();
         rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FORM_FIELD, nullptr);

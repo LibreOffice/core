@@ -33,7 +33,7 @@
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-#include <translatehelper.hxx>
+#include <pam2html.hxx>
 #include <wrtsh.hxx>
 
 SwFormatRefMark::~SwFormatRefMark( )
@@ -187,7 +187,7 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, const OU
         // Paste HTML content.
         SwPaM* pCursorPos = rWrtSh.GetCursor();
         *pCursorPos = aPasteEnd;
-        SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8());
+        SwPam2Html::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8());
 
         // Update the refmark to point to the new content.
         sal_Int32 nOldStart = this->GetStart();

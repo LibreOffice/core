@@ -125,9 +125,7 @@
 #if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
 #include <officecfg/Office/Common.hxx>
 #include <svl/visitem.hxx>
-#include <translatelangselect.hxx>
 #endif // HAVE_FEATURE_CURL && ENABLE_WASM_STRIP_EXTRA
-#include <translatehelper.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
@@ -141,6 +139,7 @@
 #include <unotxdoc.hxx>
 #include <expfld.hxx>
 #include <sax/tools/converter.hxx>
+#include <pam2html.hxx>
 
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
@@ -507,7 +506,7 @@ void UpdateSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
             rWrtSh.EndSelect();
 
             OUString aSectionText = aMap[u"Content"_ustr].get<OUString>();
-            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8());
+            SwPam2Html::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8());
         }
     }
 
@@ -619,7 +618,7 @@ void UpdateBookmarks(const SfxRequest& rReq, SwWrtShell& rWrtSh)
             // Paste HTML content.
             SwPaM* pCursorPos = rWrtSh.GetCursor();
             *pCursorPos = aPasteEnd;
-            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8());
+            SwPam2Html::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8());
 
             // Update the bookmark to point to the new content.
             SwPaM aPasteStart(pMark->GetMarkEnd());
@@ -708,7 +707,7 @@ void UpdateBookmark(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     // Paste HTML content.
     SwPaM* pCursorPos = rWrtSh.GetCursor();
     *pCursorPos = aPasteEnd;
-    SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8());
+    SwPam2Html::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8());
 
     // Update the bookmark to point to the new content.
     SwPaM aPasteStart(pBookmark->GetMarkEnd());
@@ -1366,8 +1365,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         aBookmarkPam.Move(fnMoveBackward, GoInContent);
 
                         // Paste HTML content.
-                        SwTranslateHelper::PasteHTMLToPaM(
-                            rWrtSh, pCursorPos, aBookmarkText.toUtf8());
+                        SwPam2Html::PasteHTMLToPaM(rWrtSh, pCursorPos, aBookmarkText.toUtf8());
                         if (pCursorPos->GetPoint()->GetContentIndex() == 0)
                         {
                             // The paste created a last empty text node, remove it.
@@ -2363,25 +2361,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             aReq.AppendItem( SfxBoolItem( SID_FM_CTL_PROPERTIES, true ) );
             rWrtSh.GetView().GetFormShell()->Execute( aReq );
         }
-    }
-    break;
-    case SID_FM_TRANSLATE:
-    {
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
-        const SfxPoolItem* pTargetLangStringItem = nullptr;
-        if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TARGETLANG_STR, false, &pTargetLangStringItem))
-        {
-            OString aTargetLang = OUStringToOString(static_cast<const SfxStringItem*>(pTargetLangStringItem)->GetValue(), RTL_TEXTENCODING_UTF8);
-            SwTranslateHelper::TranslateDocument(rWrtSh, aTargetLang);
-        }
-        else
-        {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            std::shared_ptr<AbstractSwTranslateLangSelectDlg> pAbstractDialog(pFact->CreateSwTranslateLangSelectDlg(GetView().GetFrameWeld(), rWrtSh));
-            std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
-            weld::DialogController::runAsync(pDialogController, [] (sal_Int32 /*nResult*/) { });
-        }
-#endif // HAVE_FEATURE_CURL && ENABLE_WASM_STRIP_EXTRA
     }
     break;
     case SID_SPELLCHECK_IGNORE:
@@ -4042,23 +4021,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     }
                     else
                         GetView().GetViewFrame().GetBindings().SetVisibleState( nWhich, true );
-                }
-                break;
-
-            case SID_FM_TRANSLATE:
-                {
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
-                    if (!officecfg::Office::Common::Misc::ExperimentalMode::get()
-                        && !comphelper::LibreOfficeKit::isActive())
-                    {
-                        rSet.Put(SfxVisibilityItem(nWhich, false));
-                        break;
-                    }
-                    if (!SwTranslateHelper::IsTranslationServiceConfigured())
-                    {
-                        rSet.DisableItem(nWhich);
-                    }
-#endif
                 }
                 break;
 

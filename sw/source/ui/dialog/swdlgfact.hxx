@@ -83,7 +83,6 @@ public:
                                       SwContentControlListItem& rItem) override;
 
     virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) override;
-    virtual std::shared_ptr<AbstractSwTranslateLangSelectDlg> CreateSwTranslateLangSelectDlg(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractChangeDbDialog> CreateSwChangeDBDlg(SwView& rVw) override;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) override;

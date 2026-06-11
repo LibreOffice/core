@@ -121,7 +121,6 @@
 #include <UndoManager.hxx>
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
-#include <translatehelper.hxx>
 #include <rootfrm.hxx>
 
 FlyMode SwBaseShell::s_eFrameMode = FLY_DRAG_END;

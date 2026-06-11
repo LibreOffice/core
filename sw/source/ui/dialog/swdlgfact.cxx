@@ -91,7 +91,6 @@
 #include <uiborder.hxx>
 #include <mmresultdialogs.hxx>
 #include <formatlinebreak.hxx>
-#include <translatelangselect.hxx>
 #include <copyfielddlg.hxx>
 #include <SwGridTabPage.hxx>
 #include <set>
@@ -129,20 +128,6 @@ public:
     std::optional<SwLineBreakClear> GetClear() override;
 
     std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
-};
-
-class AbstractSwTranslateLangSelectDlg_Impl : public AbstractSwTranslateLangSelectDlg
-{
-    std::shared_ptr<weld::DialogController> m_xDlg;
-
-public:
-    explicit AbstractSwTranslateLangSelectDlg_Impl(std::shared_ptr<weld::DialogController> p)
-        : m_xDlg(std::move(p))
-    {
-    }
-
-    std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
-    std::optional<SwLanguageListItem> GetSelectedLanguage() override;
 };
 
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
@@ -204,15 +189,6 @@ void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal
     SwInsTableDlg* pDlg = dynamic_cast<SwInsTableDlg*>(m_xDlg.get());
     if (pDlg)
         pDlg->GetValues(rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
-}
-
-std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSelectedLanguage()
-{
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
-    return SwTranslateLangSelectDlg::GetSelectedLanguage();
-#else
-    return {};
-#endif
 }
 
 namespace
@@ -327,17 +303,6 @@ SwAbstractDialogFactory_Impl::CreateSwContentControlListItemDlg(weld::Window* pP
 std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)
 {
     return std::make_shared<AbstractSwBreakDlg_Impl>(std::make_unique<SwBreakDlg>(pParent, rSh));
-}
-
-std::shared_ptr<AbstractSwTranslateLangSelectDlg> SwAbstractDialogFactory_Impl::CreateSwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell &rSh)
-{
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
-    return std::make_shared<AbstractSwTranslateLangSelectDlg_Impl>(std::make_unique<SwTranslateLangSelectDlg>(pParent, rSh));
-#else
-    (void) pParent;
-    (void) rSh;
-    return nullptr;
-#endif
 }
 
 namespace
