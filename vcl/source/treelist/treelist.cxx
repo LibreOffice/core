@@ -693,14 +693,11 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvTreeListBox& rView, SvTreeListE
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeList::FirstSelected(const SvTreeListBox* pView) const
+SvTreeListEntry* SvTreeList::FirstSelected(const SvTreeListBox& rView) const
 {
-    DBG_ASSERT(pView,"FirstSel:No View");
-    if( !pView )
-        return nullptr;
     SvTreeListEntry* pActSelEntry = First();
-    while( pActSelEntry && !pView->IsSelected(pActSelEntry) )
-        pActSelEntry = NextVisible( pView, pActSelEntry );
+    while (pActSelEntry && !rView.IsSelected(pActSelEntry))
+        pActSelEntry = NextVisible(&rView, pActSelEntry);
     return pActSelEntry;
 }
 
@@ -716,11 +713,11 @@ SvTreeListEntry* SvTreeList::FirstChild(const SvTreeListEntry* pParent) const
     return pResult;
 }
 
-SvTreeListEntry* SvTreeList::NextSelected(const SvTreeListBox* pView, SvTreeListEntry* pEntry) const
+SvTreeListEntry* SvTreeList::NextSelected(const SvTreeListBox& rView, SvTreeListEntry* pEntry) const
 {
-    assert(pView && pEntry && "NextSel:View/Entry?");
+    assert(pEntry && "NextSelected: Entry?");
     pEntry = Next( pEntry );
-    while( pEntry && !pView->IsSelected(pEntry) )
+    while (pEntry && !rView.IsSelected(pEntry))
         pEntry = Next( pEntry );
     return pEntry;
 }

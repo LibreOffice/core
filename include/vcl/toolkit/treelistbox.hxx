@@ -395,11 +395,11 @@ public:
 
     sal_uInt32 GetSelectionCount() const;
 
-    SvTreeListEntry* FirstSelected() const { return m_pModel->FirstSelected(this); }
+    SvTreeListEntry* FirstSelected() const { return m_pModel->FirstSelected(*this); }
 
     SvTreeListEntry* NextSelected(SvTreeListEntry* pEntry) const
     {
-        return m_pModel->NextSelected(this, pEntry);
+        return m_pModel->NextSelected(*this, pEntry);
     }
 
     SvTreeListEntry* GetEntryAtAbsPos(sal_uInt32 nAbsPos) const

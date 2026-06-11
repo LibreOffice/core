@@ -96,8 +96,8 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeList final
     sal_uInt32 GetVisibleCount(SvTreeListBox*) const;
     sal_uInt32 GetVisibleChildCount(const SvTreeListBox& rView, SvTreeListEntry* pParent) const;
 
-    SvTreeListEntry* FirstSelected(const SvTreeListBox*) const;
-    SvTreeListEntry* NextSelected(const SvTreeListBox*, SvTreeListEntry* pEntry) const;
+    SvTreeListEntry* FirstSelected(const SvTreeListBox& rView) const;
+    SvTreeListEntry* NextSelected(const SvTreeListBox& rView, SvTreeListEntry* pEntry) const;
 
     sal_uInt32 GetChildSelectionCount(const SvTreeListBox& rView, SvTreeListEntry* pParent) const;
 
