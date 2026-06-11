@@ -338,20 +338,20 @@ class ScDPResultMember
 public:
     virtual ~ScDPResultMember() = default;
 
-    virtual void InitFrom(const ::std::vector<ScDPDimension*>& ppDim,
-                          const ::std::vector<ScDPLevel*>& ppLev, size_t nPos,
-                          ScDPInitState& rInitState, bool bInitChild = true) = 0;
+    void InitFrom(const ::std::vector<ScDPDimension*>& ppDim,
+                  const ::std::vector<ScDPLevel*>& ppLev, size_t nPos, ScDPInitState& rInitState,
+                  bool bInitChild = true);
 
     virtual void LateInitFrom(LateInitParams& rParams, const ::std::vector<SCROW>& pItemData,
                               size_t nPos, ScDPInitState& rInitState) = 0;
 
     virtual void ResetChildDimension() = 0;
 
-    virtual void CheckShowEmpty(bool bShow = false) = 0;
+    void CheckShowEmpty(bool bShow = false);
 
     OUString GetName() const;
 
-    virtual OUString GetDisplayName(bool bLocaleIndependent) const = 0;
+    OUString GetDisplayName(bool bLocaleIndependent) const;
 
     virtual const ScDPResultData* GetResultData() const = 0;
 
@@ -363,19 +363,19 @@ public:
 
     virtual bool IsInitialized() const = 0;
 
-    virtual bool IsValid() const = 0;
+    bool IsValid() const;
 
-    virtual bool IsVisible() const = 0;
+    bool IsVisible() const;
 
-    virtual tools::Long GetSize(tools::Long nMeasure) const = 0;
+    tools::Long GetSize(tools::Long nMeasure) const;
 
     virtual bool HasHiddenDetails() const = 0;
 
     virtual void SetHasHiddenDetails() = 0;
 
-    virtual bool IsSubTotalInTitle(tools::Long nMeasure) const = 0;
+    bool IsSubTotalInTitle(tools::Long nMeasure) const;
 
-    virtual tools::Long GetSubTotalCount(tools::Long* pUserSubStart = nullptr) const = 0;
+    tools::Long GetSubTotalCount(tools::Long* pUserSubStart = nullptr) const;
 
     bool IsNamedItem(SCROW nIndex) const;
 
@@ -397,23 +397,20 @@ public:
     ProcessData(const ::std::vector<SCROW>& aChildMembers, const ScDPResultDimension* pDataDim,
                 const ::std::vector<SCROW>& aDataMembers, const ::std::vector<ScDPValue>& aValues) = 0;
 
-    virtual void FillMemberResults(css::uno::Sequence<css::sheet::MemberResult>* pSequences,
-                                   tools::Long& rPos, tools::Long nMeasure, bool bRoot,
-                                   const OUString* pMemberName, const OUString* pMemberCaption) = 0;
+    void FillMemberResults(css::uno::Sequence<css::sheet::MemberResult>* pSequences,
+                           tools::Long& rPos, tools::Long nMeasure, bool bRoot,
+                           const OUString* pMemberName, const OUString* pMemberCaption);
 
-    virtual void
-    FillDataResults(const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
-                    css::uno::Sequence<css::uno::Sequence<css::sheet::DataResult>>& rSequence,
-                    tools::Long nMeasure) const = 0;
+    void FillDataResults(const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
+                         css::uno::Sequence<css::uno::Sequence<css::sheet::DataResult>>& rSequence,
+                         tools::Long nMeasure) const;
 
-    virtual void UpdateDataResults(const ScDPResultMember* pRefMember,
-                                   tools::Long nMeasure) const = 0;
+    void UpdateDataResults(const ScDPResultMember* pRefMember, tools::Long nMeasure) const;
 
-    virtual void UpdateRunningTotals(ScDPResultMember* pRefMember, tools::Long nMeasure,
-                                     ScDPRunningTotalState& rRunning,
-                                     ScDPRowTotals& rTotals) const = 0;
+    void UpdateRunningTotals(ScDPResultMember* pRefMember, tools::Long nMeasure,
+                             ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals) const;
 
-    virtual void SortMembers(ScDPResultMember* pRefMember) = 0;
+    void SortMembers(ScDPResultMember* pRefMember);
 
     virtual void DoAutoShow(ScDPResultMember* pRefMember) = 0;
 
@@ -436,13 +433,13 @@ public:
 
     virtual SCROW GetOrder() const = 0;
 
-    virtual bool IsRoot() const = 0;
+    bool IsRoot() const { return GetParentLevel() == nullptr; }
 
     SCROW GetDataId() const;
 
     virtual ScDPAggData* GetColTotal(tools::Long nMeasure) = 0;
 
-    virtual void FillVisibilityData(ScDPResultVisibilityData& rData) const = 0;
+    void FillVisibilityData(ScDPResultVisibilityData& rData) const;
 };
 
 class ScDPResultMemberFull : public ScDPResultMember
@@ -466,33 +463,21 @@ public:
     ScDPResultMemberFull(const ScDPResultData* pData, bool bForceSub);
     ~ScDPResultMemberFull();
 
-    void                InitFrom( const ::std::vector<ScDPDimension*>& ppDim,
-                                        const ::std::vector<ScDPLevel*>& ppLev,
-                                        size_t nPos,
-                                        ScDPInitState& rInitState,
-                                  bool bInitChild = true );
     void               LateInitFrom(
                                         LateInitParams& rParams,
                                         const ::std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState);
     void CheckShowEmpty( bool bShow = false );
-    OUString GetDisplayName( bool bLocaleIndependent ) const;
     const ScDPResultData* GetResultData() const { return pResultData; }
 
     bool IsAutoHidden() const { return bAutoHidden; };
     bool GetForceSubTotal() const { return bForceSubTotal; };
     bool IsInitialized() const { return bInitialized; };
-    bool IsValid() const;
-    bool IsVisible() const;
-    tools::Long                GetSize(tools::Long nMeasure) const;
     // bHasHiddenDetails is set only if the "show details" flag is off,
     // and there was a child dimension to skip
     bool HasHiddenDetails() const { return bHasHiddenDetails; }
     void SetHasHiddenDetails() { bHasHiddenDetails = true; }
-    bool IsSubTotalInTitle(tools::Long nMeasure) const;
-
-    tools::Long                GetSubTotalCount( tools::Long* pUserSubStart = nullptr ) const;
 
     bool GetHasElements() const { return bHasElements; };
     void SetHasElements() { bHasElements = true; }
@@ -506,21 +491,7 @@ public:
                                         const ScDPResultDimension* pDataDim,
                                         const ::std::vector<SCROW>& aDataMembers,
                                         const ::std::vector<ScDPValue>& aValues );
-    void FillMemberResults(
-        css::uno::Sequence< css::sheet::MemberResult>* pSequences,
-        tools::Long& rPos, tools::Long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
 
-    void FillDataResults(
-        const ScDPResultMember* pRefMember,
-        ScDPResultFilterContext& rFilterCxt,
-        css::uno::Sequence< css::uno::Sequence<  css::sheet::DataResult> >& rSequence,
-        tools::Long nMeasure) const;
-
-    void                UpdateDataResults( const ScDPResultMember* pRefMember, tools::Long nMeasure ) const;
-    void                UpdateRunningTotals( ScDPResultMember* pRefMember, tools::Long nMeasure,
-                                                ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals ) const;
-
-    void                SortMembers( ScDPResultMember* pRefMember );
     void                DoAutoShow( ScDPResultMember* pRefMember );
 
     void ResetResults();
@@ -543,10 +514,7 @@ public:
     const ScDPLevel*         GetParentLevel() const         { return aParentDimData.mpParentLevel; }   //! Ref
     const ScDPMember*     GetDPMember()const              { return aParentDimData.mpMemberDesc; }    //! Ref
     SCROW GetOrder() const { return aParentDimData.mnOrder; }         //! Ref
-    bool IsRoot() const { return GetParentLevel() == nullptr; }
     ScDPAggData*        GetColTotal( tools::Long nMeasure );
-
-    void                FillVisibilityData(ScDPResultVisibilityData& rData) const;
 };
 
 class ScDPDataMember
