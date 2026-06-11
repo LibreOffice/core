@@ -385,7 +385,7 @@ public:
 
     SvTreeListEntry* NextVisible(SvTreeListEntry* pEntry, sal_uInt16& rDelta) const
     {
-        return m_pModel->NextVisible(this, pEntry, rDelta);
+        return m_pModel->NextVisible(*this, pEntry, rDelta);
     }
 
     SvTreeListEntry* PrevVisible(SvTreeListEntry* pEntry, sal_uInt16& rDelta) const

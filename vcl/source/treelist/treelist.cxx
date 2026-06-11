@@ -647,25 +647,24 @@ SvTreeListEntry* SvTreeList::LastVisible(const SvTreeListBox& rView) const
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeList::NextVisible(const SvTreeListBox* pView, SvTreeListEntry* pEntry,
+SvTreeListEntry* SvTreeList::NextVisible(const SvTreeListBox& rView, SvTreeListEntry* pEntry,
                                          sal_uInt16& nDelta) const
 {
-    assert(pView && pEntry && "NextVis:Wrong Prms!");
-    DBG_ASSERT(IsEntryVisible(pView,pEntry), "NextVis:Wrong Vis");
+    DBG_ASSERT(IsEntryVisible(&rView, pEntry), "NextVis:Wrong Vis");
 
-    sal_uInt32 nVisPos = GetVisiblePos( pView, pEntry );
+    sal_uInt32 nVisPos = GetVisiblePos(&rView, pEntry);
     // nDelta entries existent?
     // example: 0,1,2,3,4,5,6,7,8,9 nVisPos=5 nDelta=7
     //           nNewDelta = 10-nVisPos-1 == 4
-    if (nVisPos + nDelta >= pView->m_nVisibleCount)
+    if (nVisPos + nDelta >= rView.m_nVisibleCount)
     {
-        nDelta = static_cast<sal_uInt16>(pView->m_nVisibleCount - nVisPos);
+        nDelta = static_cast<sal_uInt16>(rView.m_nVisibleCount - nVisPos);
         nDelta--;
     }
     sal_uInt16 nDeltaTmp = nDelta;
     while( nDeltaTmp )
     {
-        pEntry = NextVisible( pView, pEntry );
+        pEntry = NextVisible(&rView, pEntry);
         nDeltaTmp--;
         DBG_ASSERT(pEntry,"Entry?");
     }
