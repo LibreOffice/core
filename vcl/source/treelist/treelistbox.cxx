@@ -1870,17 +1870,18 @@ void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
     GetModel()->InvalidateEntry( pEntry );
 }
 
-void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& aBmp )
+void SvTreeListBox::SetExpandedEntryBmp(SvTreeListEntry& rEntry, const Image& aBmp)
 {
-    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
+    SvLBoxContextBmp* pItem
+        = static_cast<SvLBoxContextBmp*>(rEntry.GetFirstItem(SvLBoxItemType::ContextBmp));
 
     assert(pItem);
     pItem->SetBitmap2( aBmp );
 
-    ModelHasEntryInvalidated(pEntry);
-    CalcEntryHeight( pEntry );
+    ModelHasEntryInvalidated(&rEntry);
+    CalcEntryHeight(&rEntry);
     Size aSize = aBmp.GetSizePixel();
-    short nWidth = m_pImpl->UpdateContextBmpWidthVector(pEntry, static_cast<short>(aSize.Width()));
+    short nWidth = m_pImpl->UpdateContextBmpWidthVector(&rEntry, static_cast<short>(aSize.Width()));
     if (nWidth > m_nContextBmpWidthMax)
     {
         m_nContextBmpWidthMax = nWidth;
@@ -1888,17 +1889,18 @@ void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& a
     }
 }
 
-void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aBmp )
+void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry& rEntry, const Image& aBmp)
 {
-    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
+    SvLBoxContextBmp* pItem
+        = static_cast<SvLBoxContextBmp*>(rEntry.GetFirstItem(SvLBoxItemType::ContextBmp));
 
     assert(pItem);
     pItem->SetBitmap1( aBmp );
 
-    ModelHasEntryInvalidated(pEntry);
-    CalcEntryHeight( pEntry );
+    ModelHasEntryInvalidated(&rEntry);
+    CalcEntryHeight(&rEntry);
     Size aSize = aBmp.GetSizePixel();
-    short nWidth = m_pImpl->UpdateContextBmpWidthVector(pEntry, static_cast<short>(aSize.Width()));
+    short nWidth = m_pImpl->UpdateContextBmpWidthVector(&rEntry, static_cast<short>(aSize.Width()));
     if (nWidth > m_nContextBmpWidthMax)
     {
         m_nContextBmpWidthMax = nWidth;

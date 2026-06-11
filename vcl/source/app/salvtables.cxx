@@ -4347,11 +4347,12 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const Image& rI
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     SvTreeListEntry* pEntry = rVclIter.iter;
+    assert(pEntry);
 
     if (col == -1 || col == 0)
     {
-        m_xTreeView->SetExpandedEntryBmp(pEntry, rImage);
-        m_xTreeView->SetCollapsedEntryBmp(pEntry, rImage);
+        m_xTreeView->SetExpandedEntryBmp(*pEntry, rImage);
+        m_xTreeView->SetCollapsedEntryBmp(*pEntry, rImage);
         return;
     }
 

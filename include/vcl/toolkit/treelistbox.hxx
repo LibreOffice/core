@@ -650,8 +650,8 @@ public:
     bool GetCheckButtonEnabled(SvTreeListEntry* pEntry) const;
 
     void            SetEntryText(SvTreeListEntry*, const OUString& );
-    void            SetExpandedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
-    void            SetCollapsedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
+    void SetExpandedEntryBmp(SvTreeListEntry& rEntry, const Image& _rImage);
+    void SetCollapsedEntryBmp(SvTreeListEntry& rEntry, const Image& _rImage);
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const;
     static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
