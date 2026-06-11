@@ -17,6 +17,13 @@ class NotebookbarBase extends JSDialogComponent {
 	/// reference to old JS Notebookbar
 	impl: any = null;
 
+	/// the most recent style list, kept so the previews can be re-rendered
+	/// when the display density changes
+	private lastStyles: any[] = [];
+
+	/// media query that fires when the display density changes
+	private dpiMediaQuery: MediaQueryList | null = null;
+
 	constructor(map: any, impl: any) {
 		super(map, 'Notebookbar', 'notebookbar');
 		this.impl = impl;
@@ -41,6 +48,8 @@ class NotebookbarBase extends JSDialogComponent {
 			);
 			this.map.on('updatetoolbarcommandvalues', this.onCommandValues, this);
 		}
+
+		this.registerDPIChangeListener();
 	}
 
 	// when we hide the UI
@@ -54,7 +63,38 @@ class NotebookbarBase extends JSDialogComponent {
 			this.map.off('updatetoolbarcommandvalues', this.onCommandValues, this);
 		}
 
+		this.unregisterDPIChangeListener();
+
 		if (this.impl) this.impl.onRemove();
+	}
+
+	// The style previews are bitmaps converted by core at a fixed pixel
+	// density. A density change leaves the cached images blurry until they
+	// are re-rendered, so listen for it and rebuild the style box. The query
+	// matches a single density value, so it is re-registered after each
+	// change to track the new density.
+	private onDPIChange = () => {
+		if (this.lastStyles.length > 0) this.updateStylesView(this.lastStyles);
+		this.registerDPIChangeListener();
+	};
+
+	private registerDPIChangeListener() {
+		if (!window.matchMedia) return;
+		if (this.dpiMediaQuery)
+			this.dpiMediaQuery.removeEventListener('change', this.onDPIChange);
+		this.dpiMediaQuery = window.matchMedia(
+			'(resolution: ' + window.devicePixelRatio + 'dppx)',
+		);
+		this.dpiMediaQuery.addEventListener('change', this.onDPIChange, {
+			once: true,
+		});
+	}
+
+	private unregisterDPIChangeListener() {
+		if (this.dpiMediaQuery) {
+			this.dpiMediaQuery.removeEventListener('change', this.onDPIChange);
+			this.dpiMediaQuery = null;
+		}
 	}
 
 	public onCallback(
@@ -137,6 +177,8 @@ class NotebookbarBase extends JSDialogComponent {
 	}
 
 	private updateStylesView(styles: any[]) {
+		this.lastStyles = styles;
+
 		const widgetData = this.model.getById('stylesview') as IconViewJSON;
 		if (!widgetData || !this.builder) return;
 
