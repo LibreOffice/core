@@ -172,6 +172,8 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_FULL_NAME, u"FullName"_ustr},
         { PROP_DESCRIPTION, u"Description"_ustr},
         { PROP_MACRO_NAME, u"MacroName"_ustr},
+        { PROP_MIN_BOTTOM_BODY_DISTANCE, u"MinBottomBodyDistance"_ustr},
+        { PROP_MIN_TOP_BODY_DISTANCE, u"MinTopBodyDistance"_ustr},
         { PROP_TITLE, u"Title"_ustr},
         { PROP_CONTENT, u"Content"_ustr},
         { PROP_INPUT_STREAM, u"InputStream"_ustr},

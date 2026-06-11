@@ -3550,6 +3550,8 @@ namespace xmloff::token {
 
         XML_PAGE_CONTENT_BOTTOM,
         XML_MARGIN_GUTTER,
+        XML_MIN_PAGE_MARGIN_TOP,
+        XML_MIN_PAGE_MARGIN_BOTTOM,
 
         XML_LOCAL_URL,
         XML_TARGET_TYPE,

@@ -2759,7 +2759,25 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
             const Size& rPageSize = pPageFormat->GetFrameSize().GetSize();
             // Count what would be the max size for the body frame, ignoring top/bottom margin.
             const SvxULSpaceItem& rULSpace = pPageFormat->GetULSpace();
-            SwTwips nNominalHeight = rPageSize.getHeight() - rULSpace.GetUpper() - rULSpace.GetLower();
+            SwTwips nUpper{rULSpace.GetUpper()};
+            if (!pPageFormat->GetHeader().IsActive())
+            {
+                if (auto const*const pTopItem{
+                        pPageFormat->GetAttrSet().GetItemIfSet(RES_FRMATR_PAGE_MIN_TOP)})
+                {
+                    nUpper = ::std::max<SwTwips>(nUpper, pTopItem->GetValue());
+                }
+            }
+            SwTwips nLower{rULSpace.GetLower()};
+            if (!pPageFormat->GetFooter().IsActive())
+            {
+                if (auto const*const pBottomItem{
+                        pPageFormat->GetAttrSet().GetItemIfSet(RES_FRMATR_PAGE_MIN_BOTTOM)})
+                {
+                    nLower = ::std::max<SwTwips>(nLower, pBottomItem->GetValue());
+                }
+            }
+            SwTwips const nNominalHeight{rPageSize.getHeight() - nUpper - nLower};
             tools::Long nWhitespace = nNominalHeight - getFrameArea().Height();
             if (nWhitespace > -nDiff)
             {

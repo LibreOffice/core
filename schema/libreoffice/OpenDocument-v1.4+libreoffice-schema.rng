@@ -4434,4 +4434,19 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         </rng:attribute>
       </rng:optional>
     </rng:define>
+
+  <!-- TODO proposal -->
+  <rng:define name="style-page-layout-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:min-page-margin-top">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:min-page-margin-bottom">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>

@@ -1138,6 +1138,9 @@ void SectionPropertyMap::PrepareHeaderFooterProperties()
     sal_Int32 nHeaderHeight = m_nHeaderTop;
     if (HasHeader())
     {
+        // in DOCX a negative value means a fixed margin even if it overlaps
+        // the header - import it as a min margin for now
+        Insert(PROP_MIN_TOP_BODY_DISTANCE, uno::Any(::std::abs(m_nTopMargin)));
         nTopMargin = m_nHeaderTop;
         nHeaderHeight = m_nTopMargin - m_nHeaderTop;
 
@@ -1156,6 +1159,9 @@ void SectionPropertyMap::PrepareHeaderFooterProperties()
     sal_Int32 nFooterHeight = m_nHeaderBottom;
     if (HasFooter())
     {
+        // in DOCX a negative value means a fixed margin even if it overlaps
+        // the footer - import it as a min margin for now
+        Insert(PROP_MIN_BOTTOM_BODY_DISTANCE, uno::Any(::std::abs(m_nBottomMargin)));
         nBottomMargin = m_nHeaderBottom;
         nFooterHeight = m_nBottomMargin - m_nHeaderBottom;
 
