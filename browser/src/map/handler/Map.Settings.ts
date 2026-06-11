@@ -52,7 +52,10 @@ window.L.Map.Settings = window.L.Handler.extend({
 		if (this._iframeDialog) this._iframeDialog.remove();
 	},
 
-	showSettingsDialog: function (): void {
+	/**
+	 * target: id of the element to scroll into the view when the dialog shows up
+	 */
+	showSettingsDialog: function (target: string): void {
 		if (this._iframeDialog && this._iframeDialog.hasLoaded())
 			this.removeIframe();
 
@@ -67,6 +70,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 			{ wopi_setting_base_url: window.wopiSettingBaseUrl },
 			{ disable_ai_settings: this._map.wopi.DisableAISettings },
 			{ show_left_nav: true },
+			{ scroll_target: target },
 		];
 
 		const options = {

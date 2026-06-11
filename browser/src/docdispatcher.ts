@@ -273,6 +273,12 @@ class Dispatcher {
 				app.activeDocument.activeLayout.adjustViewZoomLevel();
 		};
 
+		this.actionsMap['zoomSettings'] = () => {
+			(app.map as any).settings.showSettingsDialog(
+				'common-smartZoom-container',
+			);
+		};
+
 		this.actionsMap['searchprev'] = () => {
 			app.searchService.searchPrevious();
 		};

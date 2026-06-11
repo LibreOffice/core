@@ -1661,22 +1661,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 
 	getViewTab: function() {
 		var isTablet = window.mode.isTablet();
-		var content = [
-			isTablet ?
-				{
-					'id': 'closemobile',
-					'type': 'bigcustomtoolitem',
-					'text': _('Read mode'),
-					'command': 'closetablet',
-				} : {},
-			{
-				'id': 'view-control-codes',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:ControlCodes', 'text'),
-				'command': '.uno:ControlCodes',
-				'accessibility': { focusBack: true, combination: 'CC', de: null }
-			},
-			{ type: 'separator', id: 'view-controlcodes-break', orientation: 'vertical' },
+		var zoomOverflowGroup =
 			{
 				'type': 'overflowgroup',
 				'id': 'view-zoom',
@@ -1728,7 +1713,32 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						'vertical': 'true'
 					},
 				]
+			};
+
+		if (window.wopiSettingBaseUrl) {
+			zoomOverflowGroup.more = {
+				'command':'zoomSettings',
+				'accessibility': { focusBack: false, combination: 'ZD', de: null }
+			}
+		}
+
+		var content = [
+			isTablet ?
+				{
+					'id': 'closemobile',
+					'type': 'bigcustomtoolitem',
+					'text': _('Read mode'),
+					'command': 'closetablet',
+				} : {},
+			{
+				'id': 'view-control-codes',
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:ControlCodes', 'text'),
+				'command': '.uno:ControlCodes',
+				'accessibility': { focusBack: true, combination: 'CC', de: null }
 			},
+			{ type: 'separator', id: 'view-controlcodes-break', orientation: 'vertical' },
+			zoomOverflowGroup,
 			{ type: 'separator', id: 'view-zoomin-break', orientation: 'vertical' },
 			{
 				'id': 'toggleuimode',

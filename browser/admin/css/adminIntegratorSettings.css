@@ -867,6 +867,23 @@ ul {
     margin-right: 10px;
 }
 
+.element-grab-attention {
+  animation: grab-attention 1s cubic-bezier(0.4, 0, 1, 1);
+  animation-iteration-count: 1;
+}
+
+@keyframes grab-attention {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1.0;
+  }
+}
+
 .view-setting-small-label.disabled-label {
   opacity: 0.5;
   filter: saturate(0.7);

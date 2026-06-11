@@ -18,6 +18,9 @@ interface StringConstructor {
 }
 var _: any = (s) => s.toLocaleString();
 
+/**
+ * target: id of the element to scroll into the view when the dialog shows up
+ */
 interface Window {
 	accessToken?: string;
 	accessTokenTTL?: string;
@@ -30,6 +33,7 @@ interface Window {
 	serviceRoot?: string;
 	versionHash?: string;
 	showLeftNav?: boolean;
+	scrollTarget?: string;
 }
 
 interface ConfigItem {
@@ -782,6 +786,7 @@ class SettingIframe {
 		window.disableAISettings =
 			read('disableAiSettings', 'disable_ai_settings') === 'true';
 		window.showLeftNav = read('showLeftNav', 'show_left_nav') === 'true';
+		window.scrollTarget = read('scrollTarget', 'scroll_target');
 		window.wopiSettingBaseUrl = read(
 			'wopiSettingBaseUrl',
 			'wopi_setting_base_url',
@@ -949,6 +954,8 @@ class SettingIframe {
 			);
 			console.error('Error fetching shared config:', error);
 		}
+
+		this.scrollWindowTargetIntoView();
 	}
 
 	private createConfigSection(config: SectionConfig): HTMLDivElement {
@@ -2993,6 +3000,31 @@ class SettingIframe {
 		}
 		status.textContent = message;
 		status.setAttribute('data-state', state);
+	}
+
+	private scrollWindowTargetIntoView() {
+		if (window.scrollTarget) {
+			const element: HTMLElement | null | undefined = document.getElementById(
+				window.scrollTarget,
+			);
+			if (element == null) {
+				console.error(
+					'window.scrollTarget element not found in settingsDialog, window.target (id): ' +
+						window.scrollTarget,
+				);
+				return;
+			}
+
+			element.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+				inline: 'start',
+			} as ScrollIntoViewOptions);
+			element.focus({ preventScroll: true });
+
+			/* change the object's opacity from 0.2 to 1.0 to grab user's attention. */
+			element.classList.add('element-grab-attention');
+		}
 	}
 
 	// Runs twice: first with `data === null` to drop in empty, hidden
