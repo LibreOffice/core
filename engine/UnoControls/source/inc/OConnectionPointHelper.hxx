@@ -28,13 +28,13 @@ namespace unocontrols { class OConnectionPointContainerHelper; }
 
 namespace unocontrols {
 
-class OConnectionPointHelper final :   public  css::lang::XConnectionPoint
+class OConnectionPointHelper final :   public  cpo::lang::XConnectionPoint
                                 ,   public  ::cppu::OWeakObject
 {
 public:
     OConnectionPointHelper( ::osl::Mutex&                       aMutex                      ,
                             OConnectionPointContainerHelper*    pContainerImplementation    ,
-                            css::uno::Type const &              aType                       );
+                            cpo::uno::Type const &              aType                       );
 
     virtual ~OConnectionPointHelper() override;
 
@@ -53,7 +53,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
 
     /**
         @short      increment refcount
@@ -75,17 +75,17 @@ public:
 
     //  XConnectionPoint
 
-    virtual css::uno::Type SAL_CALL getConnectionType() override;
+    virtual cpo::uno::Type SAL_CALL getConnectionType() override;
 
-    virtual css::uno::Reference< css::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer() override;
+    virtual cpo::uno::Reference< cpo::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer() override;
 
     virtual void SAL_CALL advise(
-        const css::uno::Reference< css::uno::XInterface >& xListener
+        const cpo::uno::Reference< cpo::uno::XInterface >& xListener
     ) override;
 
-    virtual void SAL_CALL unadvise( const css::uno::Reference< css::uno::XInterface >& xListener ) override;
+    virtual void SAL_CALL unadvise( const cpo::uno::Reference< cpo::uno::XInterface >& xListener ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getConnections() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > > SAL_CALL getConnections() override;
 
 private:
     bool impl_LockContainer();
@@ -95,11 +95,11 @@ private:
 private:
 
     ::osl::Mutex&                                                     m_aSharedMutex;
-    css::uno::WeakReference< css::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
+    cpo::uno::WeakReference< cpo::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
     OConnectionPointContainerHelper*                                  m_pContainerImplementation;
-    css::uno::Type                                                    m_aInterfaceType;
-    css::uno::Reference< css::uno::XInterface >                       m_xLock;
+    cpo::uno::Type                                                    m_aInterfaceType;
+    cpo::uno::Reference< cpo::uno::XInterface >                       m_xLock;
 };
 
 }

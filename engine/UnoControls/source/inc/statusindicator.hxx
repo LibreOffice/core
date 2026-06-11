@@ -40,12 +40,12 @@ constexpr sal_Int32 STATUSINDICATOR_LINECOLOR_BRIGHT = sal_Int32(COL_WHITE);
 constexpr sal_Int32 STATUSINDICATOR_LINECOLOR_SHADOW = sal_Int32(COL_BLACK);
 
 using StatusIndicator_BASE = cppu::ImplInheritanceHelper<BaseContainerControl,
-                                                         css::awt::XLayoutConstrains,
-                                                         css::task::XStatusIndicator>;
+                                                         cpo::awt::XLayoutConstrains,
+                                                         cpo::task::XStatusIndicator>;
 class StatusIndicator final : public StatusIndicator_BASE
 {
 public:
-    StatusIndicator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    StatusIndicator( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~StatusIndicator() override;
 
@@ -66,22 +66,22 @@ public:
 
     //  XLayoutConstrains
 
-    virtual css::awt::Size SAL_CALL getMinimumSize() override;
+    virtual cpo::awt::Size SAL_CALL getMinimumSize() override;
 
-    virtual css::awt::Size SAL_CALL getPreferredSize() override;
+    virtual cpo::awt::Size SAL_CALL getPreferredSize() override;
 
-    virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
+    virtual cpo::awt::Size SAL_CALL calcAdjustedSize( const cpo::awt::Size& aNewSize ) override;
 
     //  XControl
 
     virtual void SAL_CALL createPeer(
-        const   css::uno::Reference< css::awt::XToolkit >&    xToolkit    ,
-        const   css::uno::Reference< css::awt::XWindowPeer >& xParent
+        const   cpo::uno::Reference< cpo::awt::XToolkit >&    xToolkit    ,
+        const   cpo::uno::Reference< cpo::awt::XWindowPeer >& xParent
     ) override;
 
-    virtual sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual sal_Bool SAL_CALL setModel( const cpo::uno::Reference< cpo::awt::XControlModel >& xModel ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
+    virtual cpo::uno::Reference< cpo::awt::XControlModel > SAL_CALL getModel() override;
 
     //  XComponent
 
@@ -96,17 +96,17 @@ public:
                                         sal_Int16   nFlags  ) override;
 
 private:
-    virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
-        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
+    virtual cpo::awt::WindowDescriptor impl_getWindowDescriptor(
+        const cpo::uno::Reference< cpo::awt::XWindowPeer >& xParentPeer
     ) override;
 
     virtual void impl_paint (
         sal_Int32 nX,
         sal_Int32 nY,
-        const css::uno::Reference< css::awt::XGraphics > & rGraphics
+        const cpo::uno::Reference< cpo::awt::XGraphics > & rGraphics
     ) override;
 
-    virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent ) override;
+    virtual void impl_recalcLayout( const cpo::awt::WindowEvent& aEvent ) override;
 
     rtl::Reference< UnoFixedTextControl >         m_xText;
     rtl::Reference<ProgressBar>                   m_xProgressBar;

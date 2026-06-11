@@ -311,9 +311,9 @@ void ProgressBar::impl_recalcRange ()
 
 }   // namespace unocontrols
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 stardiv_UnoControls_ProgressBar_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::ProgressBar(context));
 }

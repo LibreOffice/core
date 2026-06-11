@@ -589,7 +589,7 @@ void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ )
 
 WindowDescriptor BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
-    // - used from "createPeer()" to set the values of a css::awt::WindowDescriptor !!!
+    // - used from "createPeer()" to set the values of a cpo::awt::WindowDescriptor !!!
     // - if you will change the descriptor-values, you must override this virtual function
     // - the caller must release the memory for this dynamical descriptor !!!
 
