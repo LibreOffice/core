@@ -657,10 +657,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			}
 			var parent = window.L.DomUtil.get(instance.popupParent);
 
-			if (instance.clickToCloseId && parent) {
-				var childButton = parent.querySelector('[id=\'' + instance.clickToCloseId + '\']');
-				if (childButton)
-					parent = childButton;
+			if (instance.clickToCloseElement && parent) {
+				// anchor the popup to the element that closes it, which was
+				// already resolved when the popup was built
+				parent = instance.clickToCloseElement;
 			} else if (instance.clickToCloseText && parent) {
 				var matchingElements;
 				if ((matchingElements = parent.querySelectorAll('span.ui-treeview-cell-text')).length) {// treeview entry for context menu
