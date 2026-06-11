@@ -1033,9 +1033,9 @@ OUString ScDPResultMemberFull::GetDisplayName(bool bLocaleIndependent) const
         return OUString();
 
     ScDPItemData aItem(pDPMember->FillItemData());
-    if (aParentDimData.mpParentDim)
+    if (GetParentDim())
     {
-        tools::Long nDim = aParentDimData.mpParentDim->GetDimension();
+        tools::Long nDim = GetParentDim()->GetDimension();
         return GetResultData()->GetSource().GetData()->GetFormattedString(nDim, aItem,
                                                                           bLocaleIndependent);
     }
@@ -1397,9 +1397,9 @@ void ScDPResultMemberFull::FillMemberResults(uno::Sequence<sheet::MemberResult>*
     else
     {
         ScDPItemData aItemData(FillItemData());
-        if (aParentDimData.mpParentDim)
+        if (GetParentDim())
         {
-            tools::Long nDim = aParentDimData.mpParentDim->GetDimension();
+            tools::Long nDim = GetParentDim()->GetDimension();
             aName = GetResultData()->GetSource().GetData()->GetFormattedString(nDim, aItemData,
                                                                                false);
         }
@@ -1668,7 +1668,7 @@ void ScDPResultMemberFull::FillDataResults(
         rFilterCxt.mnRow = nStartRow;
     }
 
-    if ( pDataRoot )
+    if (GetDataRoot())
     {
         ScDPSubTotalState aSubState;        // initial state
 
@@ -1692,7 +1692,8 @@ void ScDPResultMemberFull::FillDataResults(
                 if (pRefMember->IsVisible())
                 {
                     uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rFilterCxt.mnRow];
-                    pDataRoot->FillDataRow(pRefMember, rFilterCxt, rSubSeq, nMemberMeasure, bHasChild, aSubState);
+                    GetDataRoot()->FillDataRow(pRefMember, rFilterCxt, rSubSeq, nMemberMeasure,
+                                               bHasChild, aSubState);
                 }
                 rFilterCxt.mnRow += 1;
             }
@@ -1727,7 +1728,7 @@ void ScDPResultMemberFull::UpdateDataResults(const ScDPResultMember* pRefMember,
     tools::Long nMemberMeasure = nMeasure;
     tools::Long nSubSize = GetResultData()->GetCountForMeasure(nMeasure);
 
-    if (pDataRoot)
+    if (GetDataRoot())
     {
         ScDPSubTotalState aSubState;        // initial state
 
@@ -1746,7 +1747,7 @@ void ScDPResultMemberFull::UpdateDataResults(const ScDPResultMember* pRefMember,
                 else if (GetResultData()->GetColStartMeasure() == SC_DPMEASURE_ALL)
                     nMemberMeasure = SC_DPMEASURE_ALL;
 
-                pDataRoot->UpdateDataRow(pRefMember, nMemberMeasure, bHasChild, aSubState);
+                GetDataRoot()->UpdateDataRow(pRefMember, nMemberMeasure, bHasChild, aSubState);
             }
         }
     }
@@ -1763,12 +1764,12 @@ void ScDPResultMemberFull::SortMembers(ScDPResultMember* pRefMember)
     if (bHasChild)
         GetChildDimension()->SortMembers(pRefMember); // sorting is done at the dimension
 
-    if ( IsRoot() && pDataRoot )
+    if (IsRoot() && GetDataRoot())
     {
         // use the row root member to sort columns
         // sub total count is always 1
 
-        pDataRoot->SortMembers( pRefMember );
+        GetDataRoot()->SortMembers(pRefMember);
     }
 }
 
@@ -1818,7 +1819,7 @@ void ScDPResultMemberFull::UpdateRunningTotals(ScDPResultMember* pRefMember, too
         tools::Long nMemberMeasure = nMeasure;
         tools::Long nSubSize = GetResultData()->GetCountForMeasure(nMeasure);
 
-        if ( pDataRoot )
+        if (GetDataRoot())
         {
             ScDPSubTotalState aSubState;        // initial state
 
@@ -1838,8 +1839,8 @@ void ScDPResultMemberFull::UpdateRunningTotals(ScDPResultMember* pRefMember, too
                         nMemberMeasure = SC_DPMEASURE_ALL;
 
                     if (pRefMember->IsVisible())
-                        pDataRoot->UpdateRunningTotals(
-                            pRefMember, nMemberMeasure, bHasChild, aSubState, rRunning, rTotals, *this);
+                        GetDataRoot()->UpdateRunningTotals(pRefMember, nMemberMeasure, bHasChild,
+                                                           aSubState, rRunning, rTotals, *this);
                 }
             }
         }
