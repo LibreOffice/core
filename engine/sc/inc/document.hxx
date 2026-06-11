@@ -2939,6 +2939,7 @@ private:
                              const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz );
 
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
+    void    CopyDBsToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
 
     bool    HasPartOfMerged( const ScRange& rRange );
 
