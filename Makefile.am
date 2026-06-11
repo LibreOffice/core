@@ -1060,7 +1060,7 @@ check-struct-packing:
 	fi
 	@echo coolwsd struct packing is acceptably optimal
 
-czech: all-local
+czech: all-local presets-dir
 	@test -f browser/dist/cool.html || $(MAKE) -C browser
 	@echo "Running unit-tests only"
 	$(MAKE) check -C test
