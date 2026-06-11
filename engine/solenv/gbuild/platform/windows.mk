@@ -18,14 +18,16 @@ gb_Helper_LIBRARY_PATH_VAR := PATH
 
 gb_MKTEMP := mktemp --tmpdir=$(TMPDIR) gbuild.XXXXXX
 
-gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
-
-# Use dash as the recipe shell (cheaper to spawn) when it supports pipefail.
+# dash is cheaper to spawn than bash: use it for the external configure
+# scripts when present, and as the recipe shell too when it supports pipefail.
 gb_DASH := $(shell command -v dash 2>/dev/null)
 ifneq ($(gb_DASH),)
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms $(gb_DASH))
 ifeq ($(shell $(gb_DASH) -c 'set -o pipefail' >/dev/null 2>&1 && echo yes),yes)
 SHELL := $(shell cygpath -ms $(gb_DASH))
 endif
+else
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
 endif
 
 # define _WIN32_WINNT and WINVER will be derived from it in sdkddkver.h
