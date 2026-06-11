@@ -5173,14 +5173,14 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
 
 void SalInstanceIconView::set_text(int pos, const OUString& rText)
 {
-    SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
-    if (aEntry == nullptr)
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+    if (!pEntry)
         return;
 
-    SvLBoxString* aItem = static_cast<SvLBoxString*>(aEntry->GetFirstItem(SvLBoxItemType::String));
+    SvLBoxString* aItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
     if (aItem == nullptr)
     {
-        aEntry->AddItem(std::make_unique<SvLBoxString>(rText));
+        pEntry->AddItem(std::make_unique<SvLBoxString>(rText));
     }
     else
     {
@@ -5188,7 +5188,7 @@ void SalInstanceIconView::set_text(int pos, const OUString& rText)
     }
 
     if (!m_xIconView->GetModel()->IsEnableInvalidate())
-        m_xIconView->ModelHasEntryInvalidated(aEntry);
+        m_xIconView->ModelHasEntryInvalidated(pEntry);
 }
 
 void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rName)
