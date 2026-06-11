@@ -1456,31 +1456,6 @@
           <desc>Specifies the URL used with the UNO command Documentation (SID_DOCUMENTATION).</desc>
         </info>
       </prop>
-      <prop oor:name="GetInvolvedURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the URL used with the UNO command GetInvolved (SID_GETINVOLVED).</desc>
-        </info>
-      </prop>
-      <prop oor:name="DonationURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the URL used with the UNO command Donation (SID_DONATION).</desc>
-        </info>
-      </prop>
-      <prop oor:name="ReleaseNotesURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the URL used with the UNO command WhatsNew (SID_WHATSNEW).</desc>
-        </info>
-      </prop>
-      <prop oor:name="CreditsURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the URL for the LibreOffice Credits page.</desc>
-        </info>
-      </prop>
-      <prop oor:name="HyphenationMissingURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the URL used with the UNO command HyphenationMissing (SID_HYPHENATIONMISSING).</desc>
-        </info>
-      </prop>
       <prop oor:name="InstallJavaURL" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the URL used for Install Java message box.</desc>
@@ -5083,12 +5058,6 @@
         <!-- UIHints: Tools - Options - General -->
         <info>
           <desc>Determines whether the default file extension check is performed on startup.</desc>
-        </info>
-        <value>false</value>
-      </prop>
-      <prop oor:name="ShowDonation" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Determines whether to show a donation button in the start center or extension.</desc>
         </info>
         <value>false</value>
       </prop>

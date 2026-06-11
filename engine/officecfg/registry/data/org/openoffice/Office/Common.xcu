@@ -285,21 +285,6 @@
     <prop oor:name="DocumentationURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/documentation/</value>
     </prop>
-    <prop oor:name="GetInvolvedURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/joinus/</value>
-    </prop>
-    <prop oor:name="DonationURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/donation/</value>
-    </prop>
-    <prop oor:name="ReleaseNotesURL" oor:type="xs:string">
-      <value>https://www.collaboraonline.com/collabora-office-classic-26-04-release-notes/</value>
-    </prop>
-    <prop oor:name="CreditsURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/credits/</value>
-    </prop>
-    <prop oor:name="HyphenationMissingURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/HyphenationMissing/</value>
-    </prop>
     <prop oor:name="InstallJavaURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/InstallJava/</value>
     </prop>
@@ -398,9 +383,6 @@
     </prop>
     <prop oor:name="PerformFileExtCheck">
       <value install:module="wnt">true</value>
-    </prop>
-    <prop oor:name="ShowDonation">
-      <value>false</value>
     </prop>
   </node>
   <node oor:name="Save">

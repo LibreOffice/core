@@ -64,7 +64,7 @@ class SvxZoomItem;
 
 // default-ids for application
 #define SID_QUITAPP                         (SID_SFX_START + 300)
-#define SID_ABOUT                           (SID_SFX_START + 301)
+// free                                     (SID_SFX_START + 301)
 #define SID_SETUPPRINTER                    (SID_SFX_START + 302)
 
 #define SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW (SID_SFX_START + 306)
@@ -114,11 +114,11 @@ class SvxZoomItem;
 #define SID_SEND_FEEDBACK                   (SID_SFX_START + 421)
 #define SID_Q_AND_A                         (SID_SFX_START + 422)
 #define SID_DOCUMENTATION                   (SID_SFX_START + 423)
-#define SID_DONATION                        (SID_SFX_START + 424)
-#define SID_GETINVOLVED                     (SID_SFX_START + 425)
-#define SID_WHATSNEW                        (SID_SFX_START + 426)
-#define SID_CREDITS                         (SID_SFX_START + 427)
-#define SID_HYPHENATIONMISSING              (SID_SFX_START + 428)
+// free                                     (SID_SFX_START + 424)
+// free                                     (SID_SFX_START + 425)
+// free                                     (SID_SFX_START + 426)
+// free                                     (SID_SFX_START + 427)
+// free                                     (SID_SFX_START + 428)
 
 #define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
 #define SID_SHOW_CREDITS                    (SID_SFX_START + 1711)

@@ -25,7 +25,6 @@
 #include <align.hxx>
 #include "dlgfact.hxx"
 
-#include <about.hxx>
 #include <dlgname.hxx>
 #include <securityoptions.hxx>
 #include <AdditionsDialog.hxx>
@@ -98,7 +97,6 @@
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
 #include <querydialog.hxx>
-#include <welcomedlg.hxx>
 
 #include <MacroManagerDialog.hxx>
 
@@ -1402,11 +1400,6 @@ public:
 };
 }
 
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateWelcomeDialog(weld::Window* pParent, const bool bIsFirstStart)
-{
-    return VclPtr<CuiAbstractTabController_Impl<WelcomeDialog>>::Create(pParent, bIsFirstStart);
-}
-
 VclPtr<SfxAbstractPasteDialog> AbstractDialogFactory_Impl::CreatePasteDialog(weld::Window* pParent)
 {
     return VclPtr<AbstractPasteDialog_Impl>::Create(pParent);
@@ -1560,12 +1553,6 @@ VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialo
     (void) sAdditionsTag;
     return nullptr;
 #endif
-}
-
-VclPtr<VclAbstractDialog>
-AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
-{
-    return VclPtr<CuiAbstractControllerAsync_Impl<AboutDialog>>::Create(pParent);
 }
 
 VclPtr<VclAbstractDialog>

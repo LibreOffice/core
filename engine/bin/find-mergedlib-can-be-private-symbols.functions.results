@@ -23054,8 +23054,6 @@ utl::detail::Options::Options()
 utl::detail::Options::~Options()
 utl::dropPrefixFromConfigurationPath(rtl::OUString const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 utl::extractFirstFromConfigurationPath(rtl::OUString const&, rtl::OUString*)
-utl::isProductVersionNew()
-utl::isProductVersionUpgraded()
 utl::typeConvert(Date const&, com::sun::star::util::Date&)
 utl::typeConvert(com::sun::star::util::Date const&, Date&)
 uv_decode

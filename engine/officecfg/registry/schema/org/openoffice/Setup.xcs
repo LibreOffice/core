@@ -254,12 +254,6 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop oor:name="ooSetupLastVersion" oor:type="xs:string">
-        <info>
-          <desc>Specifies the version number of the previously used product for
-          whats-new comparison.</desc>
-        </info>
-      </prop>
       <prop oor:name="ooSetupVersionAboutBox" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the complete (major.minor.micro) version number of the
@@ -288,30 +282,6 @@
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
-      </prop>
-      <prop oor:name="LastTimeGetInvolvedShown" oor:type="xs:long" oor:nillable="false">
-          <info>
-              <desc>The last time when the Get Involved infobar was shown.</desc>
-          </info>
-          <value>0</value>
-      </prop>
-      <prop oor:name="LastTimeDonateShown" oor:type="xs:long" oor:nillable="false">
-          <info>
-              <desc>The last time when the Donate infobar was shown.</desc>
-          </info>
-          <value>0</value>
-      </prop>
-      <prop oor:name="WhatsNew" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-            <desc>Set to false to not show the WhatsNew infobar on major updates.</desc>
-        </info>
-        <value>true</value>
-      </prop>
-      <prop oor:name="WhatsNewDialog" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-            <desc>Set to false to not show the WhatsNew dialog but the infobar.</desc>
-        </info>
-        <value>true</value>
       </prop>
     </group>
     <group oor:name="Office">

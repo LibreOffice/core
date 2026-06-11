@@ -2374,13 +2374,6 @@
         <property name="action_name">.uno:HelpIndex</property>
       </object>
     </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuSettings-About">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:About</property>
-      </object>
-    </child>
   </object>
   <object class="GtkMenu" id="Menu View">
     <property name="visible">True</property>

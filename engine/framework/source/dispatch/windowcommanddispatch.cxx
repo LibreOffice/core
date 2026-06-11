@@ -117,10 +117,6 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, vo
                 sCommand = u".uno:OptionsTreeDialog"_ustr;
                 break;
 
-        case ShowDialogId::About :
-                sCommand = u".uno:About"_ustr;
-                break;
-
         default :
                 return;
     }

@@ -36,9 +36,6 @@ if test -n "$ENABLE_MACOSX_SANDBOX"; then
     application_identifier=`/usr/libexec/PlistBuddy -c "print com.apple.application-identifier"  $BUILDDIR/lo.xcent`
     # remove the key from the entitlement - only use it when signing the whole bundle in the final step
     /usr/libexec/PlistBuddy -c "delete com.apple.application-identifier"  $BUILDDIR/lo.xcent
-    # HACK: remove donate menu entries, need to support apple-pay and be verified
-    # as non profit as a bare minimum to allow asking....
-    sed -I "" -e '\#<menu:menuitem menu:id=".uno:Donation"/>#d' $APP_BUNDLE/Contents/Resources/config/soffice.cfg/modules/*/menubar/menubar.xml
 else
     entitlements="--entitlements $BUILDDIR/hardened_runtime.xcent"
     entitlements_helper=$entitlements

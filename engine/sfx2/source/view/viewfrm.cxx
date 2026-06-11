@@ -55,9 +55,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
-#if !ENABLE_WASM_STRIP_PINGUSER
-#include <unotools/VersionConfig.hxx>
-#endif
 #include <unotools/securityoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -1526,8 +1523,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
-                bool bIsInfobarShown(false);
-
                 if (officecfg::Office::Common::Passwords::HasMaster::get() &&
                     officecfg::Office::Common::Passwords::StorageVersion::get() == 0)
                 {
@@ -1535,7 +1530,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     VclPtr<SfxInfoBarWindow> pOldMasterPasswordInfoBar =
                         AppendInfoBar(u"oldmasterpassword"_ustr, u""_ustr,
                                       SfxResId(STR_REFRESH_MASTER_PASSWORD), InfobarType::DANGER, false);
-                    bIsInfobarShown = true;
                     if (pOldMasterPasswordInfoBar)
                     {
                         weld::Button& rButton = pOldMasterPasswordInfoBar->addButton();
@@ -1562,13 +1556,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
                 {
                     AppendReadOnlyInfobar();
-                    bIsInfobarShown = true;
                 }
 
                 if (!bEmbedded && m_xObjSh->Get_Impl()->getCurrentMacroExecMode() == css::document::MacroExecMode::NEVER_EXECUTE)
                 {
                     AppendContainsMacrosInfobar();
-                    bIsInfobarShown = true;
                 }
 
                 if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
@@ -1586,9 +1578,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 while (!aPendingInfobars.empty())
                 {
                     InfobarData& aInfobarData = aPendingInfobars.back();
+                    bool bTrackChanges = aInfobarData.msId == "hiddentrackchanges";
 
                     // don't show Track Changes infobar, if Track Changes toolbar is visible
-                    if (aInfobarData.msId == "hiddentrackchanges")
+                    if (bTrackChanges)
                     {
                         if (auto xLayoutManager = getLayoutManager(GetFrame()))
                         {
@@ -1601,34 +1594,21 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     }
 
                     // Track Changes infobar: add a button to show/hide Track Changes functions
-                    // Hyphenation infobar: add a button to get more information
                     // tdf#148913 limit VclPtr usage for these
-                    bool bTrackChanges = aInfobarData.msId == "hiddentrackchanges";
-                    if ( bTrackChanges || aInfobarData.msId == "hyphenationmissing" )
+                    if (bTrackChanges)
                     {
                         VclPtr<SfxInfoBarWindow> pInfoBar =
                             AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
                                   aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
                                   aInfobarData.mbShowCloseButton);
-                        bIsInfobarShown = true;
 
                         // tdf#148913 don't extend this condition to keep it thread-safe
                         if (pInfoBar)
                         {
                             weld::Button& rButton = pInfoBar->addButton();
-                            rButton.set_label(SfxResId(bTrackChanges
-                                    ? STR_TRACK_CHANGES_BUTTON
-                                    : STR_HYPHENATION_BUTTON));
-                            if (bTrackChanges)
-                            {
-                                rButton.connect_clicked(LINK(this,
-                                                    SfxViewFrame, HiddenTrackChangesHandler));
-                            }
-                            else
-                            {
-                                rButton.connect_clicked(LINK(this,
-                                                    SfxViewFrame, HyphenationMissingHandler));
-                            }
+                            rButton.set_label(SfxResId(STR_TRACK_CHANGES_BUTTON));
+                            rButton.connect_clicked(LINK(this,
+                                                SfxViewFrame, HiddenTrackChangesHandler));
                         }
                     }
                     else
@@ -1636,113 +1616,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
                                   aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
                                   aInfobarData.mbShowCloseButton);
-                        bIsInfobarShown = true;
                     }
 
                     aPendingInfobars.pop_back();
                 }
-
-#if !ENABLE_WASM_STRIP_PINGUSER
-                if (!SfxApplication::IsHeadlessOrUITest()) //uitest.uicheck fails when the dialog is open
-                {
-                    static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
-                    //what's new dialog
-                    static bool wantsWhatsNew = officecfg::Setup::Product::WhatsNew::get()
-                                                && !IsInModalMode() && !bRunningUnitTest
-                                                && utl::isProductVersionUpgraded(); //sets isProductVersionNew
-                    if (wantsWhatsNew)
-                    {
-                        wantsWhatsNew = false;
-
-                        if (utl::isProductVersionNew()) //welcome dialog
-                        {
-                            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                            ScopedVclPtr<SfxAbstractTabDialog> pDlg(
-                                pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), true));
-                            pDlg->Execute();
-                        }
-                        else if (officecfg::Setup::Product::WhatsNewDialog::get()) //whatsnew dialog
-                        {
-                            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                            ScopedVclPtr<SfxAbstractTabDialog> pDlg(
-                                pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld(), false));
-                            pDlg->Execute();
-                        }
-                        else //whatsnew infobar
-                        {
-                            OUString sText(SfxResId(STR_WHATSNEW_TEXT));
-                            VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"whatsnew"_ustr, u""_ustr, sText.replaceAll("\n",""), InfobarType::INFO);
-                            if (pInfoBar)
-                            {
-                                weld::Button& rWhatsNewButton = pInfoBar->addButton();
-                                rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
-                                rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
-                            }
-                        }
-                        bIsInfobarShown = true;
-                    }
-
-                    // inform about the community involvement
-                    const auto t0 = std::chrono::system_clock::now().time_since_epoch();
-                    const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
-                    const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
-                    const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
-                    bool bUpdateLastTimeGetInvolvedShown = false;
-
-                    if (nLastGetInvolvedShown == 0)
-                        bUpdateLastTimeGetInvolvedShown = true;
-                    else if (!bIsInfobarShown && nPeriodSec < nNow && nLastGetInvolvedShown < (nNow + nPeriodSec/2) - nPeriodSec) // 90d alternating with donation
-                    {
-                        bUpdateLastTimeGetInvolvedShown = true;
-
-                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"getinvolved"_ustr, u""_ustr, SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
-                        bIsInfobarShown = true;
-                        if (pInfoBar)
-                        {
-                            weld::Button& rGetInvolvedButton = pInfoBar->addButton();
-                            rGetInvolvedButton.set_label(SfxResId(STR_GET_INVOLVED_BUTTON));
-                            rGetInvolvedButton.connect_clicked(LINK(this, SfxViewFrame, GetInvolvedHandler));
-                        }
-                    }
-
-                    if (bUpdateLastTimeGetInvolvedShown
-                        && !officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
-                    {
-                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                        officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
-                        batch->commit();
-                    }
-
-                    // inform about donations
-                    const sal_Int64 nLastDonateShown = officecfg::Setup::Product::LastTimeDonateShown::get();
-                    bool bUpdateLastTimeDonateShown = false;
-
-                    if (nLastDonateShown == 0)
-                        bUpdateLastTimeDonateShown = true;
-                    else if (!bIsInfobarShown && nPeriodSec < nNow && nLastDonateShown < nNow - nPeriodSec) // 90d alternating with getinvolved
-                    {
-                        bUpdateLastTimeDonateShown = true;
-
-                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"donate"_ustr, u""_ustr, SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
-                        if (pInfoBar)
-                        {
-                            weld::Button& rDonateButton = pInfoBar->addButton();
-                            rDonateButton.set_label(SfxResId(STR_DONATE_BUTTON));
-                            rDonateButton.connect_clicked(LINK(this, SfxViewFrame, DonationHandler));
-                        }
-                    }
-
-                    if (bUpdateLastTimeDonateShown
-                        && !officecfg::Setup::Product::LastTimeDonateShown::isReadOnly())
-                    {
-                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                        officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
-                        batch->commit();
-                    }
-                }
-#else
-                (void) bIsInfobarShown;
-#endif
 
                 break;
             }
@@ -1829,23 +1706,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-#if !ENABLE_WASM_STRIP_PINGUSER
-IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, weld::Button&, void)
-{
-    GetDispatcher()->Execute(SID_WHATSNEW);
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, weld::Button&, void)
-{
-    GetDispatcher()->Execute(SID_GETINVOLVED);
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, weld::Button&, void)
-{
-    GetDispatcher()->Execute(SID_DONATION);
-}
-#endif
-
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, weld::Button&, rButton, void)
 {
     if (m_xObjSh.is() && m_xObjSh->IsSignPDF())
@@ -1882,12 +1742,6 @@ IMPL_LINK(SfxViewFrame, HiddenTrackChangesHandler, weld::Button&, rButton, void)
         xLayoutManager->destroyElement(CHANGES_STR);
         RemoveInfoBar(u"hiddentrackchanges");
     }
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, HyphenationMissingHandler, weld::Button&, void)
-{
-    GetDispatcher()->Execute(SID_HYPHENATIONMISSING);
-    RemoveInfoBar(u"hyphenationmissing");
 }
 
 IMPL_LINK_NOARG(SfxViewFrame, MacroButtonHandler, weld::Button&, void)

@@ -630,50 +630,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
-#if !ENABLE_WASM_STRIP_PINGUSER
-        case SID_GETINVOLVED:
-        {
-            // Open get involved/join us page based on locales
-            OUString sURL(officecfg::Office::Common::Menus::GetInvolvedURL::get() + //https://hub.libreoffice.org/joinus/
-                "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
-        case SID_DONATION:
-        {
-            // Open donation page based on language + script (BCP47) with language as fall back.
-            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
-            OUString aBcp47 = LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
-            OUString sURL(officecfg::Office::Common::Menus::DonationURL::get() + //https://hub.libreoffice.org/donation/
-                "?BCP47=" + aBcp47 + "&LOlang=" + aLang );
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
-        case SID_WHATSNEW:
-        {
-            // Open release notes depending on version and locale
-            OUString sURL(officecfg::Office::Common::Menus::ReleaseNotesURL::get() + //https://hub.libreoffice.org/ReleaseNotes/
-                "?LOvers=" + utl::ConfigManager::getProductVersion() +
-                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
-        case SID_CREDITS:
-        {
-            OUString sURL(officecfg::Office::Common::Menus::CreditsURL::get());
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
-        break;
-        case SID_HYPHENATIONMISSING:
-        {
-            // Open wiki page about hyphenation
-            OUString sURL(officecfg::Office::Common::Menus::HyphenationMissingURL::get() + //https://hub.libreoffice.org/HyphenationMissing/
-                "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
-#endif
         case SID_SHOW_LICENSE:
         {
             LicenseDialog aDialog(rReq.GetFrameWeld());
@@ -844,16 +800,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             pDlg->StartExecuteAsync([pDlg](sal_Int32 /*nResult*/){
                 pDlg->disposeOnce();
             });
-            bDone = true;
-            break;
-        }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_ABOUT:
-        {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialog(rReq.GetFrameWeld()));
-            pDlg->StartExecuteAsync(nullptr);
             bDone = true;
             break;
         }

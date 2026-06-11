@@ -117,23 +117,6 @@ SfxBoolItem _SwitchViewShell4 SID_VIEWSHELL4
 ]
 
 
-SfxVoidItem About SID_ABOUT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-
 SfxVoidItem Activate SID_ACTIVATE
 ()
 [
@@ -5162,81 +5145,6 @@ SfxVoidItem Documentation SID_DOCUMENTATION
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-SfxVoidItem Donation SID_DONATION
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-SfxVoidItem GetInvolved SID_GETINVOLVED
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-SfxVoidItem WhatsNew SID_WHATSNEW
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-SfxVoidItem Credits SID_CREDITS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-SfxVoidItem HyphenationMissing SID_HYPHENATIONMISSING
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
     GroupId = SfxGroupId::Application;
 ]
 SfxVoidItem ShowLicense SID_SHOW_LICENSE

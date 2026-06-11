@@ -784,7 +784,6 @@
       <menu:menuitem menu:id=".uno:SendFeedback"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ShowLicense" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:About"/>
     </menu:menupopup>
   </menu:menu>
 </menu:menubar>

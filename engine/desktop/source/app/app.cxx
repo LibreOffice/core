@@ -96,9 +96,6 @@
 #include <osl/process.h>
 #include <rtl/byteseq.hxx>
 #include <unotools/pathoptions.hxx>
-#if !ENABLE_WASM_STRIP_PINGUSER
-#include <unotools/VersionConfig.hxx>
-#endif
 #include <rtl/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/help.hxx>
@@ -311,12 +308,6 @@ void runGraphicsRenderTests()
 {
     if (comphelper::COKit::isActive())
         return;
-#if !ENABLE_WASM_STRIP_PINGUSER
-    if (!utl::isProductVersionUpgraded())
-    {
-        return;
-    }
-#endif
     GraphicsRenderTests TestObject;
     TestObject.run();
 }
@@ -2072,8 +2063,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             css::util::URL aCommand;
             if( rAppEvent.GetStringData() == "PREFERENCES" )
                 aCommand.Complete = u".uno:OptionsTreeDialog"_ustr;
-            else if( rAppEvent.GetStringData() == "ABOUT" )
-                aCommand.Complete = u".uno:About"_ustr;
             if( !aCommand.Complete.isEmpty() )
             {
                 xParser->parseStrict(aCommand);

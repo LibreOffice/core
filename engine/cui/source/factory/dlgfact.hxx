@@ -181,8 +181,6 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet& rAttr, const SdrModel& rModel, bool bStyle) override;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateWelcomeDialog(weld::Window* pParent, const bool bIsFirstStart) override;
-
     virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, tools::Long nMaxVertical) override;
 
     virtual std::shared_ptr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) override ;
@@ -212,8 +210,6 @@ public:
 
     virtual VclPtr<AbstractAdditionsDialog>
     CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) override;
-
-    virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 

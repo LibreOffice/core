@@ -170,14 +170,10 @@ public:
     virtual VclPtr<VclAbstractDialog>  CreateOptionsDialog(
         weld::Window* pParent, const OUString& rExtensionId ) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* _pParent) = 0;
-
 
     virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* _pParent) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* _pParent) = 0;
-
-    virtual VclPtr<SfxAbstractTabDialog> CreateWelcomeDialog(weld::Window* pParent, const bool bIsFirstStart) =0;
 
     virtual VclPtr<AbstractNewStyleDialog>     CreateNewStyleDialog(weld::Container* pParent,
                                                                     SfxStyleSheetBasePool& rPool,

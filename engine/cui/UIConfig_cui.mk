@@ -16,7 +16,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 endif
 
 $(eval $(call gb_UIConfig_add_uifiles,cui,\
-	cui/uiconfig/ui/aboutdialog \
 	cui/uiconfig/ui/aboutconfigdialog\
 	cui/uiconfig/ui/accelconfigpage \
 	cui/uiconfig/ui/additionsdialog \
@@ -223,8 +222,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/spinbox \
 	cui/uiconfig/ui/zoomdialog \
 	cui/uiconfig/ui/widgettestdialog \
-	cui/uiconfig/ui/welcomedialog \
-	cui/uiconfig/ui/whatsnewtabpage \
 ))
 
 # vim: set noet sw=4 ts=4:

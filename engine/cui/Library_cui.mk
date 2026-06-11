@@ -105,7 +105,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/SvxToolbarConfigPage \
     cui/source/customize/SvxNotebookbarConfigPage \
     cui/source/customize/CustomNotebookbarGenerator \
-    cui/source/dialogs/about \
     $(call gb_Helper_optional,EXTENSIONS, \
         cui/source/dialogs/AdditionsDialog) \
     cui/source/dialogs/cuifmsearch \
@@ -151,10 +150,8 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/srchxtra \
     cui/source/dialogs/thesdlg \
     cui/source/dialogs/uipickerdlg \
-    cui/source/dialogs/whatsnewtabpage \
     cui/source/dialogs/uitabpage \
     cui/source/dialogs/toolbartabpage \
-    cui/source/dialogs/welcomedlg \
     cui/source/dialogs/zoom \
     cui/source/factory/cuiexp \
     cui/source/factory/cuiresmgr \

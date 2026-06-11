@@ -33,10 +33,6 @@
   <!-- suppression of the Quit item -->
   <xsl:template match="menu:menuitem[@menu:id='.uno:Quit']"/>
 
-  <xsl:template match="menu:menuseparator[following-sibling::menu:menuitem[1]/@menu:id='.uno:About']"/>
-  <!-- suppression of the About item -->
-  <xsl:template match="menu:menuitem[@menu:id='.uno:About']"/>
-
   <!-- suppression of the OptionsTreeDialog item -->
   <xsl:template match="menu:menuitem[@menu:id='.uno:OptionsTreeDialog']"/>
 
