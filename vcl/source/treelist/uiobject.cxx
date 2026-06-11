@@ -23,15 +23,6 @@ TreeListUIObject::TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList):
 {
 }
 
-namespace {
-
-bool isCheckBoxList(const VclPtr<SvTreeListBox>& xTreeList)
-{
-    return (xTreeList->GetTreeFlags() & SvTreeFlags::CHKBTN) == SvTreeFlags::CHKBTN;
-}
-
-}
-
 StringMap TreeListUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
@@ -40,7 +31,6 @@ StringMap TreeListUIObject::get_state()
     aMap[u"VisibleCount"_ustr] = OUString::number(mxTreeList->GetVisibleCount());
     aMap[u"Children"_ustr] = OUString::number(mxTreeList->GetChildCount(nullptr));
     aMap[u"LevelChildren"_ustr] = OUString::number(mxTreeList->GetLevelChildCount(nullptr));
-    aMap[u"CheckBoxList"_ustr] = OUString::boolean(isCheckBoxList(mxTreeList));
     SvTreeListEntry* pEntry = mxTreeList->FirstSelected();
     aMap[u"SelectEntryText"_ustr] = pEntry ? mxTreeList->GetEntryText(pEntry) : OUString();
     aMap[u"SelectedEntryTooltip"_ustr] = pEntry ? mxTreeList->GetEntryTooltip(*pEntry) : OUString();
