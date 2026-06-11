@@ -1,0 +1,11 @@
+--- python3/Makefile.pre.in	2026-06-12 15:31:46.305166136 +0200
++++ python3/Makefile.pre.in	2026-06-12 15:33:10.216862520 +0200
+@@ -955,7 +955,7 @@
+ 	$(INSTALL) -d -m $(DIRMODE) $(PYTHONFRAMEWORKDIR)/Versions/$(VERSION)
+ 	$(CC) -o $(LDLIBRARY) $(PY_CORE_LDFLAGS) -dynamiclib \
+ 		-all_load $(LIBRARY) \
+-		-install_name $(PYTHONFRAMEWORKINSTALLNAMEPREFIX)/$(PYTHONFRAMEWORK) \
++		-install_name $(DESTDIR)$(PYTHONFRAMEWORKINSTALLNAMEPREFIX)/$(PYTHONFRAMEWORK) \
+ 		-compatibility_version $(VERSION) \
+ 		-current_version $(VERSION) \
+ 		-framework CoreFoundation $(LIBS);
