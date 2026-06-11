@@ -401,7 +401,8 @@ window.L.Clipboard = window.L.Class.extend({
 			}
 		} catch (_error) {
 			window.app.console.error('Clipboard: failed to download - error');
-			this._map.uiManager.showInfoModal('data-transfer-warning', '', errorMessage);
+			const uploadErrorMessage = _('Failed to upload the clipboard');
+			this._map.uiManager.showInfoModal('data-transfer-warning', '', uploadErrorMessage);
 		}
 	},
 
