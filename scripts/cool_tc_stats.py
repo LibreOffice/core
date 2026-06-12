@@ -12,8 +12,10 @@
 
 """Prints Collabora Office Gerrit statistics for the current ISO week."""
 
+import collections
 import datetime
 import json
+import subprocess
 import sys
 import urllib.request
 from pathlib import Path
@@ -73,6 +75,43 @@ def regression_issue_count():
 def open_pr_count():
     """Number of open GitHub pull requests."""
     return github_issue_count(f"is:pr+state:open+repo:{GITHUB_REPO}")
+
+
+def git_authors(until=None):
+    """Returns the set of unique git authors in the current repo's log,
+    optionally filtered with --until."""
+    cmd = ["git", "log", "--format=%aN"]
+    if until:
+        cmd.append(f"--until={until}")
+    out = subprocess.check_output(cmd, text=True)
+    return {line for line in out.splitlines() if line.strip()}
+
+
+def new_contributors_this_week():
+    """Authors who appear in the full git log but not in
+    git log --until=1.week.ago, i.e. first commit within the past week."""
+    return sorted(git_authors() - git_authors(until="1.week.ago"))
+
+
+def top_reviewers_this_week(n=10):
+    """Top n Reviewed-by trailer authors from commits in the past week,
+    as a list of (name, count) tuples sorted by count descending."""
+    out = subprocess.check_output(
+        ["git", "log", "--no-merges", "--since=1.week.ago",
+         "--format=%(trailers:key=Reviewed-by,valueonly,separator=%x0A)"],
+        text=True,
+    )
+    counter = collections.Counter()
+    for line in out.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        # "Foo Bar <foo@example.com>" -> "Foo Bar"
+        i = line.find("<")
+        name = line[:i].strip() if i > 0 else line
+        if name:
+            counter[name] += 1
+    return counter.most_common(n)
 
 
 def jenkins_recent_build_success(limit=JENKINS_RECENT_BUILD_LIMIT):
@@ -149,11 +188,21 @@ def main():
     pr_str = fmt_delta(pr_count, prev.get("githubPrOpenCount"))
     regression_str = fmt_delta(regression_count, prev.get("githubIssueOpenRegressionCount"))
 
+    new_contribs = new_contributors_this_week()
+    top_reviewers = top_reviewers_this_week()
+
     print("# Patch review")
     print(f"- [All changes]({GERRIT_BASE}/q/status:open+-is:wip)")
     print(f"  - Week {week}: {gerrit_str}")
     print(f"- [PRs to migrate from GitHub](https://github.com/{GITHUB_REPO}/pulls)")
     print(f"  - Week {week}: {pr_str}")
+    if new_contribs:
+        print("- New contributors since last week")
+        print(f"  - Week {week}: {', '.join(new_contribs)}")
+    if top_reviewers:
+        reviewers_str = ", ".join(f"{name} ({count})" for name, count in top_reviewers)
+        print("- Top 10 reviewers since last week")
+        print(f"  - Week {week}: {reviewers_str}")
     print("# Bug reporting")
     print(f"- [Regression issues]({GITHUB_ISSUES_URL}?q=is%3Aissue%20state%3Aopen%20label%3Aregression)")
     print(f"  - Week {week}: {regression_str}")
