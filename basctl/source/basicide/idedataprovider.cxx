@@ -335,6 +335,8 @@ void ImplGetChildrenOfBasicLibrary(SymbolInfoList& rChildren, const IdeSymbolInf
         BasicManager* pBasMgr = aDoc.getBasicManager();
         if (aDoc.hasLibrary(E_SCRIPTS, rParent.sName))
         {
+            aDoc.loadLibraryIfExists(E_SCRIPTS, rParent.sName);
+
             StarBASIC* pLib = pBasMgr->GetLib(rParent.sName);
             if (pLib)
             {
@@ -373,81 +375,6 @@ void IdeDataProvider::Initialize()
     // Perform a full synchronous UNO scan
     SAL_INFO("basctl", "Performing full synchronous UNO scan...");
     performFullUnoScan();
-
-    // Preload all BASIC Libraries
-    IdeTimer aBasicTimer(u"IdeDataProvider::Initialize (Basic Library Preload)"_ustr);
-    SAL_INFO("basctl", "Starting BASIC library preload...");
-
-    try
-    {
-        ScriptDocument aAppDoc = ScriptDocument::getApplicationScriptDocument();
-        if (aAppDoc.isAlive())
-        {
-            Reference<css::script::XLibraryContainer> xLibContainer
-                = aAppDoc.getLibraryContainer(E_SCRIPTS);
-            if (xLibContainer.is())
-            {
-                for (const OUString& rLibName : xLibContainer->getElementNames())
-                {
-                    try
-                    {
-                        if (xLibContainer->hasByName(rLibName)
-                            && !xLibContainer->isLibraryLoaded(rLibName))
-                        {
-                            xLibContainer->loadLibrary(rLibName);
-                        }
-                    }
-                    catch (const Exception& e)
-                    {
-                        SAL_WARN("basctl", "Exception while preloading application library '"
-                                               << rLibName << "': " << e.Message);
-                    }
-                }
-            }
-        }
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN("basctl", "Could not retrieve Application library container: " << e.Message);
-    }
-
-    // Preload from any open documents
-    try
-    {
-        for (const auto& rDoc :
-             ScriptDocument::getAllScriptDocuments(ScriptDocument::DocumentsSorted))
-        {
-            if (rDoc.isAlive())
-            {
-                auto xDocLibContainer = rDoc.getLibraryContainer(E_SCRIPTS);
-                if (xDocLibContainer.is())
-                {
-                    for (const OUString& rLibName : xDocLibContainer->getElementNames())
-                    {
-                        try
-                        {
-                            if (xDocLibContainer->hasByName(rLibName)
-                                && !xDocLibContainer->isLibraryLoaded(rLibName))
-                            {
-                                xDocLibContainer->loadLibrary(rLibName);
-                            }
-                        }
-                        catch (const Exception& e)
-                        {
-                            SAL_WARN("basctl", "Exception while preloading document library '"
-                                                   << rLibName << "' in document '"
-                                                   << rDoc.getTitle() << "': " << e.Message);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN("basctl", "Could not iterate through document libraries: " << e.Message);
-    }
-    SAL_INFO("basctl", "BASIC library preload finished.");
 
     m_aAllTopLevelNodes.clear();
     m_aAllTopLevelNodes.push_back(
