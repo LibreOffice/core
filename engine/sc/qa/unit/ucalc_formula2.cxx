@@ -26,6 +26,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/saveopt.hxx>
 
+#include <cmath>
 #include <memory>
 #include <functional>
 #include <set>
@@ -6181,6 +6182,28 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testEnterMatrixUndoRedoKeepsDynamicFlag)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testUnknownNameRoundTrip)
+{
+    // An unknown name evaluates to a name error and its text survives in the
+    // stored formula expression.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScAddress aPosition(0, 0, 0);
+    m_pDoc->SetString(aPosition, u"=ZZUNKNOWNZZ"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"#NAME?"_ustr, m_pDoc->GetString(aPosition));
+
+    // Casing of the round-tripped name is not guaranteed, so match without
+    // regard to case.
+    OUString aFormula = m_pDoc->GetFormula(0, 0, 0);
+    CPPUNIT_ASSERT(!aFormula.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE(aFormula.toUtf8().getStr(),
+                           aFormula.equalsIgnoreAsciiCase(u"=ZZUNKNOWNZZ"));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testCopyCellDropsAutoDynamicEligibility)
 {
     // A clone (paste, fill, transpose) drops the auto-promotion
@@ -6212,6 +6235,125 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testCopyCellDropsAutoDynamicEligibility)
     CPPUNIT_ASSERT(pSource->IsDynamicArrayMaster());
     CPPUNIT_ASSERT(!pCopy->IsDynamicArrayMaster());
     CPPUNIT_ASSERT_EQUAL(ScMatrixMode::NONE, pCopy->GetMatrixFlag());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLetWithOdffParameters)
+{
+    // A LET whose bound parameters use the ODFF _xlpm. prefix evaluates to the
+    // right value. The prefix starts with an underscore, which keeps the name
+    // from looking like an ordinary name to the compiler, so the bound
+    // parameters have to be resolved even in that case.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScAddress aPosition(0, 0, 0);
+    m_pDoc->SetFormula(aPosition,
+                       u"=COM.MICROSOFT.LET("
+                       "_xlpm.first;5;"
+                       "_xlpm.second;SUM(_xlpm.first;5);"
+                       "_xlpm.third;SUM(_xlpm.second;5);"
+                       "SUM(_xlpm.second;_xlpm.third))"_ustr,
+                       formula::FormulaGrammar::GRAM_ODFF);
+
+    CPPUNIT_ASSERT_EQUAL(25.0, m_pDoc->GetValue(aPosition));
+    CPPUNIT_ASSERT_EQUAL(u"25"_ustr, m_pDoc->GetString(aPosition));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testCallBuiltInThroughCallable)
+{
+    // A built-in function used as a value and then called gets routed through
+    // the call operator. It returns the same result as calling the built-in
+    // directly.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Parenthesizing SUM turns it into a callable, and the following argument
+    // list calls it.
+    ScAddress aPos(0, 0, 0);
+    m_pDoc->SetString(aPos, u"=(SUM)(1;2;3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
+
+    // Binding a built-in to a LET parameter and calling that parameter takes
+    // the same call path.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=LET(f;SUM;f(1;2;3))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testCallBuiltInZeroAndOneArg)
+{
+    // A built-in called through the call operator returns the same value with
+    // no arguments and with one argument as the built-in does on its own.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // PI takes no arguments, so the empty list calls it with nothing.
+    ScAddress aPos(0, 0, 0);
+    m_pDoc->SetString(aPos, u"=(PI)()"_ustr);
+    CPPUNIT_ASSERT_EQUAL(M_PI, m_pDoc->GetValue(aPos));
+
+    // ABS takes one argument.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=(ABS)(-5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testCallBuiltInChosenByFunction)
+{
+    // A built-in picked by IF and then called through an open paren that
+    // follows the closing paren of IF returns the chosen built-in's value.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // A true condition makes IF yield SUM.
+    ScAddress aPos(0, 0, 0);
+    m_pDoc->SetString(aPos, u"=IF(TRUE();SUM;MAX)(1;2;3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
+
+    // A false condition makes IF yield MAX.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=IF(FALSE();SUM;MAX)(1;2;3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testCallableCallAsCallableArgument)
+{
+    // A call through the call operator used as an argument to another such call
+    // evaluates inner first and feeds its value to the outer call.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScAddress aPos(0, 0, 0);
+    m_pDoc->SetString(aPos, u"=(SUM)((MAX)(1;2);3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testCallableWhereNumberExpected)
+{
+    // A callable handed to an operator that expects a number resolves to an
+    // illegal parameter error.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScAddress aPos(0, 0, 0);
+    m_pDoc->SetString(aPos, u"=(SUM)+1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Err:504"_ustr, m_pDoc->GetString(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=SUM+1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Err:504"_ustr, m_pDoc->GetString(aPos));
 
     m_pDoc->DeleteTab(0);
 }
