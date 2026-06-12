@@ -502,6 +502,8 @@ bool SvTreeListBox::DoubleClickHdl()
     return !m_aDoubleClickHdl.IsSet() || m_aDoubleClickHdl.Call(this);
 }
 
+void SvTreeListBox::ModelChangedHdl() { m_aModelChangedHdl.Call(this); }
+
 bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 nAction )
 {
     if ( pSource != this )
@@ -2166,6 +2168,8 @@ void SvTreeListBox::ModelHasCleared()
     AdjustEntryHeight();
     AdjustEntryHeight( GetDefaultExpandedEntryBmp() );
     AdjustEntryHeight( GetDefaultCollapsedEntryBmp() );
+
+    ModelChangedHdl();
 }
 
 bool SvTreeListBox::PosOverBody(const Point& rPos) const
@@ -2416,12 +2420,16 @@ void SvTreeListBox::ModelHasInsertedTree( SvTreeListEntry* pEntry )
         pTmp = Next( pTmp );
     } while (pTmp && nRefDepth < m_pModel->GetDepth(pTmp));
     m_pImpl->TreeInserted(pEntry);
+
+    ModelChangedHdl();
 }
 
 void SvTreeListBox::ModelHasInserted( SvTreeListEntry* pEntry )
 {
     ImpEntryInserted( pEntry );
     m_pImpl->EntryInserted(pEntry);
+
+    ModelChangedHdl();
 }
 
 void SvTreeListBox::ModelIsMoving(SvTreeListEntry* pSource )
@@ -2432,6 +2440,8 @@ void SvTreeListBox::ModelIsMoving(SvTreeListEntry* pSource )
 void SvTreeListBox::ModelHasMoved( SvTreeListEntry* pSource )
 {
     m_pImpl->EntryMoved(pSource);
+
+    ModelChangedHdl();
 }
 
 void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
@@ -2454,6 +2464,8 @@ void SvTreeListBox::ModelHasRemoved( SvTreeListEntry* pEntry  )
         m_pTargetEntry = nullptr;
 
     m_pImpl->EntryRemoved();
+
+    ModelChangedHdl();
 }
 
 void SvTreeListBox::SetCollapsedNodeBmp( const Image& rBmp)

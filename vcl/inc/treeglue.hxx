@@ -12,7 +12,6 @@
 
 class LclTabListBox final : public SvTabListBox
 {
-    Link<SvTreeListBox*, void> m_aModelChangedHdl;
     Link<SvTreeListBox*, bool> m_aStartDragHdl;
     Link<SvTreeListBox*, void> m_aEndDragHdl;
 
@@ -22,7 +21,6 @@ public:
     {
     }
 
-    void SetModelChangedHdl(const Link<SvTreeListBox*, void>& rLink) { m_aModelChangedHdl = rLink; }
     void SetStartDragHdl(const Link<SvTreeListBox*, bool>& rLink) { m_aStartDragHdl = rLink; }
     void SetEndDragHdl(const Link<SvTreeListBox*, void>& rLink) { m_aEndDragHdl = rLink; }
 
@@ -37,36 +35,6 @@ public:
     {
         SvTabListBox::DragFinished(nDropAction);
         m_aEndDragHdl.Call(this);
-    }
-
-    virtual void ModelHasCleared() override
-    {
-        SvTabListBox::ModelHasCleared();
-        m_aModelChangedHdl.Call(this);
-    }
-
-    virtual void ModelHasInserted(SvTreeListEntry* pEntry) override
-    {
-        SvTabListBox::ModelHasInserted(pEntry);
-        m_aModelChangedHdl.Call(this);
-    }
-
-    virtual void ModelHasInsertedTree(SvTreeListEntry* pEntry) override
-    {
-        SvTabListBox::ModelHasInsertedTree(pEntry);
-        m_aModelChangedHdl.Call(this);
-    }
-
-    virtual void ModelHasMoved(SvTreeListEntry* pSource) override
-    {
-        SvTabListBox::ModelHasMoved(pSource);
-        m_aModelChangedHdl.Call(this);
-    }
-
-    virtual void ModelHasRemoved(SvTreeListEntry* pEntry) override
-    {
-        SvTabListBox::ModelHasRemoved(pEntry);
-        m_aModelChangedHdl.Call(this);
     }
 
     SvTreeListEntry* GetTargetAtPoint(const Point& rPos, bool bHighLightTarget, bool bScroll = true)
