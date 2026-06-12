@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -23,16 +23,21 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+#include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/DomainMapper.cxx.
-class Test : public UnoApiTest
+class Test : public SwModelTestBase
 {
 public:
     Test()
-        : UnoApiTest("/sw/qa/writerfilter/dmapper/data/")
+        : SwModelTestBase("/sw/qa/writerfilter/dmapper/data/")
     {
     }
 };
@@ -274,6 +279,17 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
     CPPUNIT_ASSERT(!bShareFirstHeader);
     xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
     CPPUNIT_ASSERT(bNoFirstHeader);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentLayoutAccess& rIDLA = pDoc->getIDocumentLayoutAccess();
+    SwRootFrame* pLayout = rIDLA.GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+
+    CPPUNIT_ASSERT(pLastPage->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(pLastPage->GetLower()->GetNext()->GetNext()->IsFooterFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->GetNext()); // no footer
 }
 
 CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
@@ -298,6 +314,17 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
     CPPUNIT_ASSERT(!bShareFirstHeader);
     xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
     CPPUNIT_ASSERT(bNoFirstHeader);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentLayoutAccess& rIDLA = pDoc->getIDocumentLayoutAccess();
+    SwRootFrame* pLayout = rIDLA.GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+
+    CPPUNIT_ASSERT(pLastPage->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(pLastPage->GetLower()->GetNext()->GetNext()->IsFooterFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->GetNext()); // no footer
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

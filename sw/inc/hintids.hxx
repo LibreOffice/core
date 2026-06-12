@@ -382,7 +382,9 @@ constexpr TypedWhichId<SfxBoolItem> RES_BACKGROUND_FULL_SIZE(138);
 constexpr TypedWhichId<SfxBoolItem> RES_RTL_GUTTER(139);
 constexpr TypedWhichId<SfxBoolItem> RES_DECORATIVE(140);
 constexpr TypedWhichId<SwFormatWrapTextAtFlyStart> RES_WRAP_TEXT_AT_FLY_START(141);
+/// will be used instead of header's SID_ATTR_PAGE_SIZE/RES_UL_SPACE, if there is no header
 constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_TOP(142);
+/// will be used instead of footer's SID_ATTR_PAGE_SIZE/RES_UL_SPACE, if there is no footer
 constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_BOTTOM(143);
 constexpr sal_uInt16 RES_FRMATR_END(144);
 
