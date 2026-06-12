@@ -516,6 +516,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"modules/swriter/ui/tokenwidget.ui",
     u"modules/swriter/ui/toxbuttonwidget.ui",
     u"modules/swriter/ui/toxentrywidget.ui",
+    u"modules/swriter/ui/viewoptionspage.ui",
     u"modules/swriter/ui/wrappage.ui",
     u"sfx/ui/custominfopage.ui",
     u"sfx/ui/descriptioninfopage.ui",
