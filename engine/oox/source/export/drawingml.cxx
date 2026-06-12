@@ -4609,6 +4609,10 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     if (bBodyPr)
     {
         WriteBodyProps(rXIface, nXmlNamespace, bIsFontworkShape, nTop, nBottom, nLeft, nRight);
+    }
+    else
+    {
+        mpFS->singleElementNS(XML_a, XML_bodyPr);
     } // end of bodyPr
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );

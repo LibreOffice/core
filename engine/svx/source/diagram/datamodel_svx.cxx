@@ -671,7 +671,6 @@ uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(const P
     for (auto& rCandidate : getPoints())
     {
         if (!rCandidate.msPresentationAssociationId.isEmpty()
-            && "textNode" == rCandidate.msPresentationLayoutName
             && rCandidate.msPresentationAssociationId == rPoint.msModelId)
         {
             const uno::Reference<drawing::XShape> xMasterText = getXShapeByModelID(rCandidate.msModelId);
