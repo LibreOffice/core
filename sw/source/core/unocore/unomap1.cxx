@@ -514,7 +514,8 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPageStyleP
 
 
         { UNO_NAME_FIRST_IS_SHARED, SID_ATTR_PAGE_SHARED_FIRST,   cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
-        { UNO_NAME_NO_FIRST, SID_ATTR_PAGE_NO_FIRST,   cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { UNO_NAME_HEADER_NO_FIRST, SID_ATTR_PAGE_NO_FIRST, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { UNO_NAME_FOOTER_NO_FIRST, SID_ATTR_PAGE_NO_FIRST, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { u"MinBottomBodyDistance"_ustr, RES_FRMATR_PAGE_MIN_BOTTOM, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, /*CONVERT_TWIPS*/0, PropertyMoreFlags::METRIC_ITEM },
         { u"MinTopBodyDistance"_ustr, RES_FRMATR_PAGE_MIN_TOP, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, /*CONVERT_TWIPS*/0, PropertyMoreFlags::METRIC_ITEM },
 

@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
     uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"NoFirst"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderNoFirst"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
     uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"NoFirst"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderNoFirst"_ustr));
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
