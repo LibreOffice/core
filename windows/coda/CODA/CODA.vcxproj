@@ -175,8 +175,6 @@
         xcopy $(LO_PATH) $(OutDir)..\ /s /q /y /exclude:..\xcopy.excludes
         del $(OutDir)*.com
         del $(OutDir)..\..\Release\program\gengal.exe
-        del $(OutDir)..\..\Release\program\odbcconfig.exe
-        del $(OutDir)..\..\Release\program\quickstart.exe
         del $(OutDir)..\..\Release\program\regview.exe
         del $(OutDir)..\..\Release\program\sbase.exe
         del $(OutDir)..\..\Release\program\scalc.exe
@@ -186,27 +184,35 @@
         del $(OutDir)..\..\Release\program\smath.exe
         del $(OutDir)..\..\Release\program\soffice.exe
         del $(OutDir)..\..\Release\program\soffice_safe.exe
-        del $(OutDir)..\..\Release\program\spsupp_helper.exe
         del $(OutDir)..\..\Release\program\sweb.exe
         del $(OutDir)..\..\Release\program\swriter.exe
         del $(OutDir)..\..\Release\program\twain32shim.exe
         del $(OutDir)..\..\Release\program\uno.exe
         del $(OutDir)..\..\Release\program\unoinfo.exe
         del $(OutDir)..\..\Release\program\unopkg.exe
+        del $(OutDir)..\..\Release\program\analysislo.dll
+        del $(OutDir)..\..\Release\program\animcorelo.dll
         del $(OutDir)..\..\Release\program\avmedialo.dll
+        del $(OutDir)..\..\Release\program\avmediawin.dll
         del $(OutDir)..\..\Release\program\basctllo.dll
         del $(OutDir)..\..\Release\program\basprovlo.dll
+        del $(OutDir)..\..\Release\program\biblo.dll
+        del $(OutDir)..\..\Release\program\cached1.dll
+        del $(OutDir)..\..\Release\program\cairocanvaslo.dll
         del $(OutDir)..\..\Release\program\canvasfactorylo.dll
         del $(OutDir)..\..\Release\program\canvastoolslo.dll
-        del $(OutDir)..\..\Release\program\chartcontrollerlo.dll
-        del $(OutDir)..\..\Release\program\chartcorelo.dll
+        del $(OutDir)..\..\Release\program\chart2apilo.dll
+        del $(OutDir)..\..\Release\program\chart2lo.dll
         del $(OutDir)..\..\Release\program\configmgrlo.dll
         del $(OutDir)..\..\Release\program\cppcanvaslo.dll
         del $(OutDir)..\..\Release\program\ctllo.dll
+        del $(OutDir)..\..\Release\program\cuilo.dll
+        del $(OutDir)..\..\Release\program\datelo.dll
         del $(OutDir)..\..\Release\program\dbtoolslo.dll
         del $(OutDir)..\..\Release\program\deployment.dll
         del $(OutDir)..\..\Release\program\deploymentmisclo.dll
         del $(OutDir)..\..\Release\program\directx9canvaslo.dll
+        del $(OutDir)..\..\Release\program\dlgprovlo.dll
         del $(OutDir)..\..\Release\program\docmodello.dll
         del $(OutDir)..\..\Release\program\drawinglayercorelo.dll
         del $(OutDir)..\..\Release\program\drawinglayerlo.dll
@@ -219,13 +225,15 @@
         del $(OutDir)..\..\Release\program\filterconfiglo.dll
         del $(OutDir)..\..\Release\program\forlo.dll
         del $(OutDir)..\..\Release\program\foruilo.dll
+        del $(OutDir)..\..\Release\program\fps.dll
         del $(OutDir)..\..\Release\program\fps_officelo.dll
-        del $(OutDir)..\..\Release\program\frmlo.dll
         del $(OutDir)..\..\Release\program\fsstoragelo.dll
         del $(OutDir)..\..\Release\program\fwklo.dll
         del $(OutDir)..\..\Release\program\gdipluscanvaslo.dll
+        del $(OutDir)..\..\Release\program\graphicfilterlo.dll
         del $(OutDir)..\..\Release\program\guesslanglo.dll
         del $(OutDir)..\..\Release\program\helplinkerlo.dll
+        del $(OutDir)..\..\Release\program\hwplo.dll
         del $(OutDir)..\..\Release\program\hyphenlo.dll
         del $(OutDir)..\..\Release\program\i18npoollo.dll
         del $(OutDir)..\..\Release\program\i18nsearchlo.dll
@@ -234,38 +242,53 @@
         del $(OutDir)..\..\Release\program\lnglo.dll
         del $(OutDir)..\..\Release\program\lnthlo.dll
         del $(OutDir)..\..\Release\program\localebe1lo.dll
+        del $(OutDir)..\..\Release\program\loglo.dll
         del $(OutDir)..\..\Release\program\msfilterlo.dll
+        del $(OutDir)..\..\Release\program\msformslo.dll
         del $(OutDir)..\..\Release\program\mtfrendererlo.dll
         del $(OutDir)..\..\Release\program\numbertextlo.dll
         del $(OutDir)..\..\Release\program\odfflatxmllo.dll
         del $(OutDir)..\..\Release\program\offacclo.dll
-        del $(OutDir)..\..\Release\program\oglcanvaslo.dll
         del $(OutDir)..\..\Release\program\ooxlo.dll
         del $(OutDir)..\..\Release\program\package2.dll
         del $(OutDir)..\..\Release\program\passwordcontainerlo.dll
+        del $(OutDir)..\..\Release\program\pdffilterlo.dll
+        del $(OutDir)..\..\Release\program\pricinglo.dll
+        del $(OutDir)..\..\Release\program\protocolhandlerlo.dll
         del $(OutDir)..\..\Release\program\sblo.dll
+        del $(OutDir)..\..\Release\program\scriptframe.dll
         del $(OutDir)..\..\Release\program\sfxlo.dll
         del $(OutDir)..\..\Release\program\simplecanvaslo.dll
+        del $(OutDir)..\..\Release\program\slideshowlo.dll
+        del $(OutDir)..\..\Release\program\smplmaillo.dll
         del $(OutDir)..\..\Release\program\sofficeapp.dll
         del $(OutDir)..\..\Release\program\sotlo.dll
         del $(OutDir)..\..\Release\program\spelllo.dll
         del $(OutDir)..\..\Release\program\spllo.dll
         del $(OutDir)..\..\Release\program\srtrs1.dll
+        del $(OutDir)..\..\Release\program\storagefdlo.dll
         del $(OutDir)..\..\Release\program\stringresourcelo.dll
+        del $(OutDir)..\..\Release\program\svgfilterlo.dll
         del $(OutDir)..\..\Release\program\svgiolo.dll
         del $(OutDir)..\..\Release\program\svllo.dll
         del $(OutDir)..\..\Release\program\svtlo.dll
         del $(OutDir)..\..\Release\program\svxcorelo.dll
         del $(OutDir)..\..\Release\program\svxlo.dll
         del $(OutDir)..\..\Release\program\sysshlo.dll
+        del $(OutDir)..\..\Release\program\t602filterlo.dll
+        del $(OutDir)..\..\Release\program\textconversiondlgslo.dll
         del $(OutDir)..\..\Release\program\textfdlo.dll
         del $(OutDir)..\..\Release\program\tklo.dll
         del $(OutDir)..\..\Release\program\ucb1.dll
+        del $(OutDir)..\..\Release\program\ucpchelp1.dll
+        del $(OutDir)..\..\Release\program\ucpcmis1lo.dll
+        del $(OutDir)..\..\Release\program\ucpdav1.dll
         del $(OutDir)..\..\Release\program\ucpexpand1lo.dll
         del $(OutDir)..\..\Release\program\ucpextlo.dll
         del $(OutDir)..\..\Release\program\ucpfile1.dll
         del $(OutDir)..\..\Release\program\ucphier1.dll
         del $(OutDir)..\..\Release\program\ucpimagelo.dll
+        del $(OutDir)..\..\Release\program\ucppkg1.dll
         del $(OutDir)..\..\Release\program\ucptdoc1lo.dll
         del $(OutDir)..\..\Release\program\unordflo.dll
         del $(OutDir)..\..\Release\program\unoxmllo.dll
@@ -276,9 +299,16 @@
         del $(OutDir)..\..\Release\program\vbahelperlo.dll
         del $(OutDir)..\..\Release\program\vclcanvaslo.dll
         del $(OutDir)..\..\Release\program\vcllo.dll
+        del $(OutDir)..\..\Release\program\wininetbe1lo.dll
+        del $(OutDir)..\..\Release\program\wpftcalclo.dll
+        del $(OutDir)..\..\Release\program\wpftdrawlo.dll
+        del $(OutDir)..\..\Release\program\wpftimpresslo.dll
+        del $(OutDir)..\..\Release\program\wpftwriterlo.dll
+        del $(OutDir)..\..\Release\program\writerperfectlo.dll
         del $(OutDir)..\..\Release\program\xmlfalo.dll
         del $(OutDir)..\..\Release\program\xmlfdlo.dll
         del $(OutDir)..\..\Release\program\xmlscriptlo.dll
+        del $(OutDir)..\..\Release\program\xmlsecurity.dll
         del $(OutDir)..\..\Release\program\xoflo.dll
         del $(OutDir)..\..\Release\program\xolo.dll
         del $(OutDir)..\..\Release\program\xsec_xmlsec.dll
