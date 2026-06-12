@@ -1170,7 +1170,18 @@ OUString SvxCharacterMap::getCharacterNameFromId(std::u16string_view sId)
         return OUString::createFromAscii(buffer);
     }
 
-    return OUString();
+    // A code point without a formal Unicode name (control characters and
+    // similar) takes the extended name, for example "<control-0000>", and
+    // failing that its "U+" code point value, so every grid cell still has a
+    // non-empty accessible name.
+    errorCode = U_ZERO_ERROR;
+    u_charName(cChar, U_EXTENDED_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+    if (U_SUCCESS(errorCode) && buffer[0] != '\0')
+    {
+        return OUString::createFromAscii(buffer);
+    }
+
+    return "U+" + OUString::number(cChar, 16).toAsciiUpperCase();
 }
 
 IMPL_LINK(SvxCharacterMap, ShowCharQueryTooltipHdl, const weld::TreeIter&, iter, OUString)
