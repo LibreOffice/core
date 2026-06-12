@@ -293,6 +293,17 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderNoFirst"_ustr));
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentLayoutAccess& rIDLA = pDoc->getIDocumentLayoutAccess();
+    SwRootFrame* pLayout = rIDLA.GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+
+    CPPUNIT_ASSERT(pLastPage->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(pLastPage->GetLower()->GetNext()->GetNext()->IsFooterFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->GetNext()); // no footer
 }
 
 CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
@@ -313,6 +324,17 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderNoFirst"_ustr));
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentLayoutAccess& rIDLA = pDoc->getIDocumentLayoutAccess();
+    SwRootFrame* pLayout = rIDLA.GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+
+    CPPUNIT_ASSERT(pLastPage->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(pLastPage->GetLower()->GetNext()->GetNext()->IsFooterFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->GetNext()); // no footer
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

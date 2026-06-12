@@ -438,6 +438,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117805)
     CPPUNIT_ASSERT_EQUAL(8, getParagraphs(textbox));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFirstPageHeaderNoFooter, "firstheadernofooter.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/header", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/footer", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/header", 1); // TODO: should not be there!
+    assertXPath(pXmlDoc, "/root/page[2]/footer", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
 {
     // The horizontal positioning of the star shape affected the positioning of
