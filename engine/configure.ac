@@ -14400,7 +14400,7 @@ else
         ;;
         # what else than above does profit here *and* has /proc?
         *)
-            PARALLELISM=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
+            PARALLELISM=`grep '^processor[[:space:]]*:' /proc/cpuinfo | wc -l`
             ;;
         esac
 
