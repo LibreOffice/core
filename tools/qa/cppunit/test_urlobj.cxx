@@ -371,6 +371,11 @@ namespace tools_urlobj
                 CPPUNIT_ASSERT(!url.IsExoticProtocol());
             }
             {
+                INetURLObject url(u"vnd.sun.star.pkg://vnd.sun.star.expand%3Ahttp%3A%2F%2F127.0.0.1%2F%24%7BHOME%7D@example.com/x");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::VndSunStarPkg, url.GetProtocol());
+                CPPUNIT_ASSERT(url.IsExoticProtocol());
+            }
+            {
                 INetURLObject url(u"vnd.sun.star.zip://slot%3A0");
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, url.GetProtocol());
                 CPPUNIT_ASSERT(url.IsExoticProtocol());
