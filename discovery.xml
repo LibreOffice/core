@@ -7,12 +7,15 @@
             <action name="view" default="true" ext="sxw"/>
             <action name="edit" default="true" ext="odt"/>
             <action name="view" ext="odt"/>
+            <action name="editnew" ext="odt"/>
             <action name="edit" default="true" ext="fodt"/>
             <action name="view" ext="fodt"/>
+            <action name="editnew" ext="fodt"/>
             <!-- Text template documents -->
             <action name="view" default="true" ext="stw"/>
             <action name="edit" default="true" ext="ott"/>
             <action name="view" ext="ott"/>
+            <action name="editnew" ext="ott" newext="odt"/>
             <!-- MS Word -->
             <action name="edit" default="true" ext="doc"/>
             <action name="view" ext="doc"/>
@@ -20,10 +23,12 @@
             <!-- OOXML wordprocessing -->
             <action name="edit" default="true" ext="docx"/>
             <action name="view" ext="docx"/>
+            <action name="editnew" ext="docx"/>
             <action name="edit" default="true" ext="docm"/>
             <action name="view" ext="docm"/>
             <action name="edit" default="true" ext="dotx"/>
             <action name="view" ext="dotx"/>
+            <action name="editnew" ext="dotx" newext="docx" />
             <action name="edit" default="true" ext="dotm"/>
             <action name="view" ext="dotm"/>
             <!-- Others -->
@@ -36,8 +41,10 @@
             <action name="view" default="true" ext="mw"/>
             <action name="edit" default="true" ext="rtf"/>
             <action name="view" ext="rtf"/>
+            <action name="editnew" ext="rtf"/>
             <action name="edit" default="true" ext="txt"/>
             <action name="view" ext="txt"/>
+            <action name="editnew" ext="txt"/>
             <action name="view" default="true" ext="fb2"/>
             <action name="view" default="true" ext="cwk"/>
             <action name="view" default="true" ext="pages"/>
@@ -50,6 +57,7 @@
             <action name="view" default="true" ext="sxg"/>
             <action name="edit" default="true" ext="odm"/>
             <action name="view" ext="odm"/>
+            <action name="editnew" ext="odm"/>
             <!-- Writer master document templates -->
             <action name="view" default="true" ext="otm"/>
         </app>
@@ -64,12 +72,15 @@
             <action name="view" default="true" ext="sxc"/>
             <action name="edit" default="true" ext="ods"/>
             <action name="view" ext="ods"/>
+            <action name="editnew" ext="ods"/>
             <action name="edit" default="true" ext="fods"/>
             <action name="view" ext="fods"/>
+            <action name="editnew" ext="fods"/>
             <!-- Spreadsheet template documents -->
             <action name="view" default="true" ext="stc"/>
             <action name="edit" default="true" ext="ots"/>
             <action name="view" ext="ots"/>
+            <action name="editnew" ext="ots" newext="ods"/>
             <!-- MS Excel -->
             <action name="edit" default="true" ext="xls"/>
             <action name="view" ext="xls"/>
@@ -82,6 +93,7 @@
             <action name="view" ext="xltm"/>
             <action name="edit" default="true" ext="xlsx"/>
             <action name="view" ext="xlsx"/>
+            <action name="editnew" ext="xlsx"/>
             <action name="edit" default="true" ext="xlsb"/>
             <action name="view" ext="xlsb"/>
             <action name="edit" default="true" ext="xlsm"/>
@@ -93,6 +105,7 @@
             <action name="view" ext="slk"/>
             <action name="edit" default="true" ext="csv"/>
             <action name="view" ext="csv"/>
+            <action name="editnew" ext="csv"/>
             <action name="edit" default="true" ext="tsv"/>
             <action name="view" ext="tsv"/>
             <action name="edit" default="true" ext="dbf"/>
@@ -114,12 +127,15 @@
             <action name="view" default="true" ext="sxi"/>
             <action name="edit" default="true" ext="odp"/>
             <action name="view" ext="odp"/>
+            <action name="editnew" ext="odp"/>
             <action name="edit" default="true" ext="fodp"/>
             <action name="view" ext="fodp"/>
+            <action name="editnew" ext="fodp"/>
             <!-- Presentation template documents -->
             <action name="view" default="true" ext="sti"/>
             <action name="edit" default="true" ext="otp"/>
             <action name="view" ext="otp"/>
+            <action name="editnew" ext="otp" newext="odp"/>
             <!-- MS PowerPoint -->
             <action name="edit" default="true" ext="ppt"/>
             <action name="view" ext="ppt"/>
@@ -127,6 +143,7 @@
             <!-- OOXML presentation -->
             <action name="edit" default="true" ext="pptx"/>
             <action name="view" ext="pptx"/>
+            <action name="editnew" ext="pptx"/>
             <action name="edit" default="true" ext="pptm"/>
             <action name="view" ext="pptm"/>
             <action name="edit" default="true" ext="potx"/>
@@ -147,9 +164,11 @@
             <action name="view" ext="odg"/>
             <action name="edit" default="true" ext="fodg"/>
             <action name="view" ext="fodg"/>
+            <action name="editnew" ext="fodg"/>
             <!-- Drawing template documents -->
             <action name="view" default="true" ext="std"/>
             <action name="view" default="true" ext="otg"/>
+            <action name="editnew" ext="otg" newext="odg"/>
             <!-- Others -->
             <action name="view" ext="svg"/>
             <action name="view" default="true" ext="dxf"/>
