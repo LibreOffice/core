@@ -126,7 +126,8 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
              tokens.equals(0, "cpu_stats") ||
              tokens.equals(0, "sent_activity") ||
              tokens.equals(0, "recv_activity") ||
-             tokens.equals(0, "connection_activity"))
+             tokens.equals(0, "connection_activity") ||
+             tokens.equals(0, "server_audit"))
     {
         const std::string result = model.query(tokens[0]);
         if (!result.empty())
@@ -801,6 +802,11 @@ void Admin::modificationAlert(const std::string& docKey, pid_t pid, bool value){
 void Admin::uploadedAlert(const std::string& docKey, pid_t pid, bool value)
 {
     addCallback([this, docKey, pid, value] { _model.uploadedAlert(docKey, pid, value); });
+}
+
+void Admin::mergeServerAudit(const std::map<std::string, std::string>& entries)
+{
+    addCallback([this, entries] { _model.mergeServerAudit(entries); });
 }
 
 void Admin::addDoc(const std::string& docKey, pid_t pid, const std::string& filename,

@@ -49,6 +49,13 @@ std::string ServerAuditUtil::getResultsJSON() const
     return result;
 }
 
+std::map<std::string, std::string> ServerAuditUtil::getEntries() const
+{
+    std::lock_guard<std::mutex> lock(_mutex);
+
+    return _entries;
+}
+
 void ServerAuditUtil::set(const std::string& code, std::string status)
 {
     std::lock_guard<std::mutex> lock(_mutex);

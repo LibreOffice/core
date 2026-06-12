@@ -1,0 +1,23 @@
+<main>
+  <div class="container">
+    <script>Admin.ServerAudit(host);</script>
+
+    <h3 class="title is-3"><script>document.write(l10nstrings.strServerAudit)</script></h3>
+
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr>
+          <th style="width:120px;"><script>document.write(l10nstrings.strServerAuditStatus)</script></th>
+          <th><script>document.write(l10nstrings.strServerAuditDetails)</script></th>
+        </tr>
+      </thead>
+      <tbody id="server-audit-body"></tbody>
+    </table>
+    <p id="server-audit-empty"><script>document.write(l10nstrings.strServerAuditNoIssues)</script></p>
+  </div>
+</main>
+
+<script>
+  document.getElementById('a-audit-mobile').classList.add('is-active');
+  document.getElementById('a-audit-tablet').classList.add('is-active');
+</script>

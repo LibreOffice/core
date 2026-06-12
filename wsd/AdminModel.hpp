@@ -364,6 +364,9 @@ public:
 
     void uploadedAlert(const std::string& docKey, pid_t pid, bool value);
 
+    /// Record a document's non-ok audit conditions into the instance-wide audit.
+    void mergeServerAudit(const std::map<std::string, std::string>& entries);
+
     void clearMemStats() { _memStats.clear(); }
 
     void clearCpuStats() { _cpuStats.clear(); }
@@ -458,6 +461,9 @@ private:
 
     std::string getDocuments() const;
 
+    /// The instance-wide server audit as JSON.
+    std::string getServerAuditJSON() const;
+
     void CalcDocAggregateStats(DocumentAggregateStats& stats) const;
 
 private:
@@ -465,6 +471,11 @@ private:
 
     std::map<int, Subscriber> _subscribers;
     std::map<std::string, AdminDocument> _documents;
+
+    /// Non-ok server-audit conditions reported by any document, kept
+    /// instance-wide for the server's lifetime. is_admin (per-user) and
+    /// hardwarewarning (read live) are not kept here.
+    std::map<std::string, std::string> _serverAudit;
 
     /// The serialized histories of all expired documents.
     std::vector<std::string> _expiredDocumentsHistories;

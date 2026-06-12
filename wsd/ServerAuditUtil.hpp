@@ -39,6 +39,9 @@ public:
 
     std::string getResultsJSON() const;
 
+    /// A copy of the current code-to-status entries.
+    std::map<std::string, std::string> getEntries() const;
+
     void set(const std::string& code, std::string status);
     void mergeSettings(const std::shared_ptr<ChildProcess> &proc);
 

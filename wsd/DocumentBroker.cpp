@@ -4615,6 +4615,12 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
         }
 #endif
 
+#if !MOBILEAPP
+        // fold this document's audit into the admin console's instance view
+        if (!_serverAudit.isDisabled())
+            _admin.mergeServerAudit(_serverAudit.getEntries());
+#endif
+
         // In case of WOPI, if this session is not set as readonly, it might be set so
         // later after making a call to WOPI host which tells us the permission on files
         // (UserCanWrite param).

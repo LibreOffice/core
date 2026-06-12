@@ -139,6 +139,9 @@ public:
 
     void uploadedAlert(const std::string& dockey, pid_t pid, bool value);
 
+    /// Record a document's audit conditions into the Admin Model.
+    void mergeServerAudit(const std::map<std::string, std::string>& entries);
+
     /// Update the Admin Model.
     void update(const std::string& message);
 

@@ -316,6 +316,10 @@ std::string AdminModel::query(const std::string& command)
     {
         return std::to_string(_connStatsSize);
     }
+    else if (token == "server_audit")
+    {
+        return getServerAuditJSON();
+    }
 
     return std::string("");
 }
@@ -559,6 +563,55 @@ void AdminModel::uploadedAlert(const std::string& docKey, pid_t pid, bool value)
     std::ostringstream oss;
     oss << "uploaded " << pid << ' ' << (value ? "Yes" : "No");
     notify(oss.str());
+}
+
+void AdminModel::mergeServerAudit(const std::map<std::string, std::string>& entries)
+{
+    ASSERT_CORRECT_THREAD_OWNER(_owner);
+
+    bool changed = false;
+    for (const auto& entry : entries)
+    {
+        // is_admin is per-user, hardwarewarning is read live, ok is no problem,
+        // info_ codes carry a bare value (a number, true/false) that is never "ok"
+        // and is not a condition to report
+        if (entry.first == "is_admin" || entry.first == "hardwarewarning" ||
+            entry.second == "ok" || entry.first.starts_with("info_"))
+            continue;
+
+        auto it = _serverAudit.find(entry.first);
+        if (it == _serverAudit.end() || it->second != entry.second)
+        {
+            _serverAudit[entry.first] = entry.second;
+            changed = true;
+        }
+    }
+
+    if (changed)
+        notify("server_audit " + getServerAuditJSON());
+}
+
+std::string AdminModel::getServerAuditJSON() const
+{
+    // hardwarewarning is read live; the rest is the recorded set
+    std::map<std::string, std::string> result = _serverAudit;
+
+    const std::string& hardwareWarning = COOLWSD::getHardwareResourceWarning();
+    if (!hardwareWarning.empty())
+        result["hardwarewarning"] = hardwareWarning;
+
+    std::ostringstream oss;
+    oss << "{\"serverAudit\": [";
+    bool isFirst = true;
+    for (const auto& entry : result)
+    {
+        if (!isFirst)
+            oss << ", ";
+        isFirst = false;
+        oss << "{\"code\": \"" << entry.first << "\", \"status\": \"" << entry.second << "\"}";
+    }
+    oss << "]}";
+    return oss.str();
 }
 
 void AdminModel::addDocument(const std::string& docKey, pid_t pid,
