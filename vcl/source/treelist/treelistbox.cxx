@@ -3595,9 +3595,6 @@ void SvTreeListBox::ModelNotification(SvListAction nActionId, SvTreeListEntry* p
 {
     SolarMutexGuard aSolarGuard;
 
-    if( nActionId == SvListAction::CLEARING )
-        CancelTextEditing();
-
     switch (nActionId)
     {
         case SvListAction::INSERTED:
@@ -3624,6 +3621,7 @@ void SvTreeListBox::ModelNotification(SvListAction nActionId, SvTreeListEntry* p
             ModelHasMoved(pEntry);
             break;
         case SvListAction::CLEARING:
+            CancelTextEditing();
             Reset();
             ModelHasCleared(); // sic! for compatibility reasons!
             break;
