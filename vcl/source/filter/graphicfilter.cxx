@@ -87,23 +87,11 @@
 #include <mutex>
 #include <string_view>
 #include <o3tl/string_view.hxx>
-#include <o3tl/test_info.hxx>
 #include <vcl/TypeSerializer.hxx>
 
 #include "FilterConfigCache.hxx"
 
 #include <graphic/GraphicFormatDetector.hxx>
-
-// Support for GfxLinkType::NativeWebp is so far disabled,
-// as enabling it would write .webp images e.g. to .odt documents,
-// making those images unreadable for older readers. So for now
-// disable the support so that .webp images will be written out as .png,
-// and somewhen later enable the support unconditionally.
-static bool supportNativeWebp()
-{
-    // Enable support only for unittests
-    return o3tl::IsRunningUnitTest();
-}
 
 static std::vector< GraphicFilter* > gaFilterHdlList;
 
@@ -791,11 +779,8 @@ ErrCode prepareImageTypeAndData(SvStream& rStream, sal_uInt32 nStreamLength, Bin
     }
     else if (o3tl::equalsIgnoreAsciiCase(rFilterName, IMP_WEBP))
     {
-        if (supportNativeWebp())
-        {
-            rLinkType = GfxLinkType::NativeWebp;
-            nStatus = ERRCODE_NONE;
-        }
+        rLinkType = GfxLinkType::NativeWebp;
+        nStatus = ERRCODE_NONE;
     }
 
     return nStatus;
@@ -1281,8 +1266,7 @@ ErrCode GraphicFilter::readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkT
 {
     if (ImportWebpGraphic(rStream, rGraphic))
     {
-        if(supportNativeWebp())
-            rLinkType = GfxLinkType::NativeWebp;
+        rLinkType = GfxLinkType::NativeWebp;
         return ERRCODE_NONE;
     }
     else

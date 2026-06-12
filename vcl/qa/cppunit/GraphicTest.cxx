@@ -1252,6 +1252,10 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testLoadWEBP)
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+
+    // The imported Graphic is tagged with its WebP origin
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsGfxLink());
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeWebp, aGraphic.GetGfxLink().GetType());
 }
 
 CPPUNIT_TEST_FIXTURE(GraphicTest, testLoadSVGZ)

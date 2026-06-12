@@ -24,8 +24,11 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/gfxlink.hxx>
 
 #include <sortedobjs.hxx>
 #include <flyfrm.hxx>
@@ -1263,6 +1266,55 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedPdf)
     }
     // This failed, replacement was an svm file.
     CPPUNIT_ASSERT(bHasBitmap);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testWebpImageRoundtrip)
+{
+    // Insert a WebP image into a fresh document, save as ODT and reload.
+    // The saved zip must carry the picture as .webp, and the reloaded
+    // shape's graphic must report image/webp.
+    createSwDoc();
+    uno::Sequence<beans::PropertyValue> aInsertArgs{
+        comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"image.webp")),
+    };
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aInsertArgs);
+
+    saveAndReload(TestFilter::ODT);
+
+    uno::Sequence<uno::Any> aZipArgs{ uno::Any(maTempFile.GetURL()) };
+    uno::Reference<container::XNameAccess> xNameAccess(
+        m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
+                                                 aZipArgs),
+        uno::UNO_QUERY);
+    bool bHasWebp = false;
+    bool bHasPng = false;
+    const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+    for (const auto& rElementName : aNames)
+    {
+        if (!rElementName.startsWith("Pictures"))
+            continue;
+        if (rElementName.endsWith(".webp"))
+            bHasWebp = true;
+        else if (rElementName.endsWith(".png"))
+            bHasPng = true;
+    }
+    CPPUNIT_ASSERT(bHasWebp);
+    CPPUNIT_ASSERT(!bHasPng);
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, u"Graphic"_ustr);
+    CPPUNIT_ASSERT(xGraphic.is());
+    CPPUNIT_ASSERT_EQUAL(u"image/webp"_ustr, getProperty<OUString>(xGraphic, u"MimeType"_ustr));
+
+    // image.webp is 10x10, so the reloaded bitmap keeps that pixel size.
+    Graphic aGraphic(xGraphic);
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+
+    // It still carries the original WebP bytes as its native link.
+    CPPUNIT_ASSERT(aGraphic.IsGfxLink());
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeWebp, aGraphic.GetGfxLink().GetType());
 }
 
 DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
