@@ -15,6 +15,65 @@
         <property name="row-spacing">12</property>
         <property name="column-spacing">24</property>
         <child>
+          <object class="GtkFrame" id="frame4">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <!-- n-columns=2 n-rows=1 -->
+              <object class="GtkGrid" id="grid5">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="lockmathbaseline">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="mathbaseline">
+                    <property name="label" translatable="yes" context="optformataidspage|mathbaseline">_Math baseline alignment</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="layoutopt">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="optformataidspage|layoutopt">Layout Assistance</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -87,26 +146,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="nonbreak">
-                    <property name="label" translatable="yes" context="optformataidspage|nonbreak">Non-breaking s_paces and hyphen</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="nonbreak-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|nonbreak">Specifies that non-breaking spaces are shown as gray boxes. Non-breaking spaces are not broken at the end of a line and are entered with the Ctrl+Shift+Spacebar shortcut keys.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">7</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="tabs">
                     <property name="label" translatable="yes" context="optformataidspage|tabs">_Tabs</property>
                     <property name="visible">True</property>
@@ -145,6 +184,25 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="bookmarks">
+                    <property name="label" translatable="yes" context="optformataidspage|bookmarks">_Bookmarks</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="bookmarks-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|bookmarks">Specifies whether bookmark positions are displayed on the screen.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="hiddentext">
                     <property name="label" translatable="yes" context="optformataidspage|hiddentext">_Hidden characters</property>
                     <property name="visible">True</property>
@@ -165,22 +223,23 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="bookmarks">
-                    <property name="label" translatable="yes" context="optformataidspage|bookmarks">_Bookmarks</property>
+                  <object class="GtkCheckButton" id="nonbreak">
+                    <property name="label" translatable="yes" context="optformataidspage|nonbreak">Non-breaking s_paces and hyphen</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="bookmarks-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|bookmarks">Specifies whether bookmark positions are displayed on the screen.</property>
+                      <object class="AtkObject" id="nonbreak-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|nonbreak">Specifies that non-breaking spaces are shown as gray boxes. Non-breaking spaces are not broken at the end of a line and are entered with the Ctrl+Shift+Spacebar shortcut keys.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">5</property>
+                    <property name="top-attach">7</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -417,65 +476,6 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="frame4">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="grid5">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <property name="row-spacing">6</property>
-                <child>
-                  <object class="GtkCheckButton" id="mathbaseline">
-                    <property name="label" translatable="yes" context="optformataidspage|mathbaseline">_Math baseline alignment</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="lockmathbaseline">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="layoutopt">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="optformataidspage|layoutopt">Layout Assistance</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
@@ -1017,47 +1017,25 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="cbTableBoundaries">
-                    <property name="label" translatable="yes" context="optformataidspage|cbTableBoundaries">Tab_les</property>
+                  <object class="GtkRadioButton" id="rbTextBoundariesFull">
+                    <property name="label" translatable="yes" context="optformataidspage|rbTextBoundariesFull">Border _Outline</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="halign">start</property>
+                    <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
-                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <property name="group">rbTextBoundariesCrop</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="cbTableBoundaries-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|cbTableBoundaries">Displays the boundaries of table cells.</property>
+                      <object class="AtkObject" id="rbTextBoundariesFull-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|rbTextBoundariesFull">Shows a faint line indicating the page margins.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="cbSectionBoundaries">
-                    <property name="label" translatable="yes" context="optformataidspage|cbSectionBoundaries">_Sections and Frames</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="cbSectionBoundaries-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|cbSectionBoundaries">Displays the boundaries of sections and frames.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                    <property name="width">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -1083,25 +1061,47 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="rbTextBoundariesFull">
-                    <property name="label" translatable="yes" context="optformataidspage|rbTextBoundariesFull">Border _Outline</property>
+                  <object class="GtkCheckButton" id="cbSectionBoundaries">
+                    <property name="label" translatable="yes" context="optformataidspage|cbSectionBoundaries">_Sections and Frames</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
+                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
-                    <property name="group">rbTextBoundariesCrop</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="rbTextBoundariesFull-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|rbTextBoundariesFull">Shows a faint line indicating the page margins.</property>
+                      <object class="AtkObject" id="cbSectionBoundaries-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|cbSectionBoundaries">Displays the boundaries of sections and frames.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="cbTableBoundaries">
+                    <property name="label" translatable="yes" context="optformataidspage|cbTableBoundaries">Tab_les</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbTableBoundaries-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|cbTableBoundaries">Displays the boundaries of table cells.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
