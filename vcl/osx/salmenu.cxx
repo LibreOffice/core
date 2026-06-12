@@ -296,8 +296,6 @@ AquaSalMenu::~AquaSalMenu()
     }
 
     [mpMenuTranslations autorelease];
-    if( mpAltTitle )
-        [mpAltTitle autorelease];
 }
 
 bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags)
@@ -935,6 +933,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             );
 }
 
+// Returns a copy of the translated string, if found in the translations dictionary,
+// that the caller owns and is responsible for releasing.
 static NSString *getMenuTranslation( NSDictionary *pDict, OUString rUnoCommand )
 {
     NSDictionary *pLangs = pDict[ [CreateNSString(rUnoCommand) autorelease] ];
@@ -961,7 +961,7 @@ static NSString *getMenuTranslation( NSDictionary *pDict, OUString rUnoCommand )
     if ( !pAltTitle )
         pAltTitle = pLangs[pLang];
 
-    return pAltTitle;
+    return [pAltTitle copy];
 }
 
 /*

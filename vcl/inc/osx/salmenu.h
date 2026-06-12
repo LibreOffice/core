@@ -47,7 +47,6 @@ public: // for OOStatusView
     };
 private:
     std::vector< MenuBarButtonEntry >   maButtons;
-    NSString *                          mpAltTitle;
     NSDictionary *                      mpMenuTranslations;
 
     MenuBarButtonEntry* findButtonItem( sal_uInt16 i_nItemId );
