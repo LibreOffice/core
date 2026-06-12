@@ -1304,6 +1304,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     oPageNumber = pNumber->GetValue();
 
                 InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName, oClear);
+                rReq.Done();
             }
             else
             {
@@ -1322,6 +1323,22 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             std::optional<SwLineBreakClear> oClear = pAbstractDialog->GetClear();
 
                             InsertBreak(rWrtSh, nKind, oPageNumber, UIName(aTemplateName), oClear);
+
+                            // tdf#149631 - record break type and page style for macro replay
+                            SfxViewFrame& rViewFrame = rWrtSh.GetView().GetViewFrame();
+                            if (SfxRequest::HasMacroRecorder(rViewFrame))
+                            {
+                                SfxRequest aReq(rViewFrame, FN_INSERT_BREAK_DLG);
+                                aReq.AppendItem(SfxInt16Item(FN_INSERT_BREAK_DLG, static_cast<sal_Int16>(nKind)));
+                                if (!aTemplateName.isEmpty())
+                                    aReq.AppendItem(SfxStringItem(FN_PARAM_1, aTemplateName));
+                                if (oPageNumber)
+                                {
+                                    aReq.AppendItem(SfxUInt16Item(FN_PARAM_2, *oPageNumber));
+                                    aReq.AppendItem(SfxBoolItem(FN_PARAM_3, true));
+                                }
+                                aReq.Done();
+                            }
                         }
                     });
             }
