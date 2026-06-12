@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <cppuhelper/exc_hlp.hxx>
@@ -75,6 +76,14 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
                          + e.Message,
                          nullptr, anyEx );
                 }
+            }
+            css::uno::Reference< css::uri::XUriReference > uriRef(
+                css::uri::UriReferenceFactory::create(context)->parse(url));
+            if (!uriRef.is() || !uriRef->getScheme().equalsIgnoreAsciiCase("file"))
+            {
+                throw css::lang::IllegalArgumentException(
+                    "non-local Java class path entry: " + url,
+                    css::uno::Reference< css::uno::XInterface >(), 0);
             }
             jvalue arg;
             arg.l = environment->NewString(
