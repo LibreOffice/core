@@ -5347,7 +5347,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         const OUString sCurrentShellId = OUString::number(nCurrentShellId);
 
         // special values for window id
-        // nWindowId == -1 was legacy refresh sidebar - no longer in use
+        if (nWindowId == static_cast<unsigned long long int>(-1))
+            sWindowId = sCurrentShellId + "sidebar";
         if (nWindowId == static_cast<unsigned long long int>(-2))
             sWindowId = sCurrentShellId + "notebookbar";
         if (nWindowId == static_cast<unsigned long long int>(-3))
