@@ -272,8 +272,11 @@ tools::Long ImpEditEngine::FormatParagraphs(o3tl::sorted_vector<sal_Int32>& aRep
                     }
 
                 }
-                rParaPortion.SetMustRepaint(false);
             }
+
+            // Clear unconditionally: the paragraph is valid once CreateLines
+            // has run, whether or not its height changed.
+            rParaPortion.SetMustRepaint(false);
 
             aRepaintParagraphList.insert(nParagraph);
         }

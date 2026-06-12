@@ -79,14 +79,15 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
     SfxItemSet aEditAttr( mrDoc.GetPool() );
     mpView->GetAttributes( aEditAttr );
 
-    SfxItemSetFixed<EE_PARA_NUMBULLET, EE_PARA_BULLET> aNewAttr( mrViewShell.GetPool() );
-    aNewAttr.Put( aEditAttr, false );
+    // Must outlive the async dialog, which keeps a reference to it.
+    auto xNewAttr = std::make_shared<SfxItemSetFixed<EE_PARA_NUMBULLET, EE_PARA_BULLET>>( mrViewShell.GetPool() );
+    xNewAttr->Put( aEditAttr, false );
 
     // create and execute dialog
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    VclPtr<AbstractSvxBulletAndPositionDlg> pDlg(pFact->CreateSvxBulletAndPositionDlg(mrViewShell.GetFrameWeld(), &aNewAttr, mpView));
+    VclPtr<AbstractSvxBulletAndPositionDlg> pDlg(pFact->CreateSvxBulletAndPositionDlg(mrViewShell.GetFrameWeld(), xNewAttr.get(), mpView));
 
-    pDlg->StartExecuteAsync([pDlg, pView = this->mpView, pViewShell = &this->mrViewShell, aNewAttr = std::move(aNewAttr)](sal_Int32 nResult) mutable {
+    pDlg->StartExecuteAsync([pDlg, pView = this->mpView, pViewShell = &this->mrViewShell, xNewAttr](sal_Int32 nResult) mutable {
         if( nResult == RET_OK )
         {
             OutlinerView* pOLV = pView->GetTextEditOutlinerView();
@@ -102,7 +103,7 @@ void FuBulletAndPosition::DoExecute( SfxRequest& rReq )
             if( pOLV )
                 pOLV->EnsureNumberingIsOn();
 
-            const SfxItemSet pOutputSet( *pDlg->GetOutputItemSet( &aNewAttr ) );
+            const SfxItemSet pOutputSet( *pDlg->GetOutputItemSet( xNewAttr.get() ) );
             pView->SetAttributes(pOutputSet, /*bReplaceAll=*/false, /*bSlide*/ pDlg->IsSlideScope(), /*bMaster=*/pDlg->IsApplyToMaster());
         }
 
