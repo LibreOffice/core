@@ -591,25 +591,6 @@
                     <property name="margin-top">6</property>
                     <property name="row-spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="smoothscroll">
-                        <property name="label" translatable="yes" context="viewoptionspage|smoothscroll">S_mooth scroll</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="smoothscroll-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|smoothscroll">Activates the smooth page scrolling function. </property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <!-- n-columns=3 n-rows=3 -->
                       <object class="GtkGrid" id="grid6">
                         <property name="visible">True</property>
@@ -617,6 +598,67 @@
                         <property name="hexpand">True</property>
                         <property name="row-spacing">6</property>
                         <property name="column-spacing">12</property>
+                        <child>
+                          <object class="GtkImage" id="lockhruler">
+                            <property name="can-focus">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="icon-name">res/lock.png</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="hruler">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="viewoptionspage|hruler">Hori_zontal ruler:</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">hrulercombobox</property>
+                            <property name="ellipsize">end</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="hruler-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hruler">Displays the horizontal ruler. Select the desired measurement unit from the corresponding list.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="hrulercombobox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="hrulercombobox-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hrulercombobox">Displays the horizontal ruler. Select the desired measurement unit from the corresponding list.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="lockvruler">
+                            <property name="can-focus">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="icon-name">res/lock.png</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
                         <child>
                           <object class="GtkCheckButton" id="vruler">
                             <property name="label" translatable="yes" context="viewoptionspage|vruler">Verti_cal ruler:</property>
@@ -640,22 +682,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBoxText" id="hrulercombobox">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="hrulercombobox-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hrulercombobox">Displays the horizontal ruler. Select the desired measurement unit from the corresponding list.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">2</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkComboBoxText" id="vrulercombobox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -672,6 +698,19 @@
                           <packing>
                             <property name="left-attach">2</property>
                             <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="lockvrulerright">
+                            <property name="can-focus">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="icon-name">res/lock.png</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">2</property>
                           </packing>
                         </child>
                         <child>
@@ -695,64 +734,6 @@
                             <property name="width">2</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkLabel" id="hruler">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="viewoptionspage|hruler">Hori_zontal ruler:</property>
-                            <property name="use-underline">True</property>
-                            <property name="mnemonic-widget">hrulercombobox</property>
-                            <property name="ellipsize">end</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="hruler-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hruler">Displays the horizontal ruler. Select the desired measurement unit from the corresponding list.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkImage" id="lockhruler">
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="icon-name">res/lock.png</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkImage" id="lockvruler">
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="icon-name">res/lock.png</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkImage" id="lockvrulerright">
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="icon-name">res/lock.png</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -769,6 +750,25 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="smoothscroll">
+                        <property name="label" translatable="yes" context="viewoptionspage|smoothscroll">S_mooth scroll</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="smoothscroll-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|smoothscroll">Activates the smooth page scrolling function. </property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
                         <property name="top-attach">1</property>
                       </packing>
                     </child>
