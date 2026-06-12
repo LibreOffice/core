@@ -451,7 +451,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                             if (comphelper::COKit::isActive())
                             {
-                                if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+                                if (pObj && pObj->GetObjIdentifier() == SdrObjKind::Page)
                                 {
                                     SdPage* pPage = mrViewShell.GetActualPage();
                                     if (pPage->IsCanvasPage())
