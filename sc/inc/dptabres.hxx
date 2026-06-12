@@ -456,6 +456,18 @@ private:
     bool bmInitialized : 1;
     bool bmPromoted : 1;
 
+    // Called when 'mpPromoted' meaning someone with this object pointer is
+    // calling a member even though a previous call has promoted it.
+    // Note this is const since we know we're not changing the current (old) object
+    ScDPResultMember* GetPromote() const;
+
+    // Called when something decides it needs to be promoted, typically when something
+    // is getting set.  Note this is NOT const since the bmPromoted flag needs
+    // to be set.
+    // The 'sReason' is purely to let debugging be used to track the reason
+    // for promotions
+    ScDPResultMember* Promote(const char* sReason);
+
 public:
     ScDPResultMemberSlim(ScDPResultDimension* pRDimension, const ScDPResultData* pData,
                          const ScDPParentDimData& rParentDimData);

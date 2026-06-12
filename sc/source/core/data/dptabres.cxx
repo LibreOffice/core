@@ -1003,6 +1003,27 @@ ScDPResultMemberSlim::ScDPResultMemberSlim(
 {
 };
 
+ScDPResultMember* ScDPResultMemberSlim::GetPromote() const
+{
+    return mpOurDimension->GetPromote(mnOrder);
+}
+
+ScDPResultMember* ScDPResultMemberSlim::Promote(const char* sReason)
+{
+    // If we've already been promoted just retrieve it
+    if (bmPromoted)
+        return GetPromote();
+
+    SAL_INFO("sc.core", "ScDPResultMemberSlim::Promote for " << sReason << " on " << this);
+    ScDPResultMember* pNewMember = mpOurDimension->Promote(this, mnOrder);
+
+    // Really do expect it to be promoted!
+    assert(pNewMember != this);
+    bmPromoted = true;
+
+    return pNewMember;
+}
+
 ScDPResultMemberFull::ScDPResultMemberFull(
     const ScDPResultData* pData, const ScDPParentDimData& rParentDimData ) :
     pResultData( pData ),
