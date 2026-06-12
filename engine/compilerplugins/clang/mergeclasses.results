@@ -479,7 +479,6 @@ merge connectivity::file::OStatement_Base with connectivity::file::OStatement_BA
 merge connectivity::hsqldb::IMethodGuardAccess with connectivity::hsqldb::OHsqlConnection
 merge connectivity::java_lang_Exception with connectivity::java_sql_SQLException_BASE
 merge connectivity::java_sql_Statement_Base with connectivity::OStatement_BASE2
-merge connectivity::mysqlc::User with connectivity::mysqlc::OUserExtend
 merge connectivity::odbc::Functions with (anonymous namespace)::ORealOdbcDriver
 merge connectivity::odbc::ODBCDriver with (anonymous namespace)::ORealOdbcDriver
 merge connectivity::odbc::OStatement_Base with connectivity::odbc::OStatement_BASE2

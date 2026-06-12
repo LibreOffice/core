@@ -22,8 +22,6 @@ connectivity/source/drivers/evoab2/EApi.h:121
     EContactAddress address_format char *
 connectivity/source/drivers/evoab2/EApi.h:125
     EContactAddress ext char *
-connectivity/source/drivers/mysqlc/mysqlc_view.hxx:65
-    connectivity::mysqlc::View m_xConnection css::uno::Reference<css::sdbc::XConnection>
 cppu/source/threadpool/threadpool.cxx:352
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:57

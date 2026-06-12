@@ -948,7 +948,6 @@ AC_SUBST([ENABLE_ANDROID_EDITING])
 disable_database_connectivity_dependencies()
 {
     enable_evolution2=no
-    enable_mariadb_sdbc=no
 }
 
 # ===================================================================
@@ -2088,11 +2087,6 @@ libo_FUZZ_ARG_ENABLE(readonly-installset,
          progress, probably not fully implemented. Always enabled for macOS.]),
 ,)
 
-libo_FUZZ_ARG_ENABLE(mariadb-sdbc,
-    AS_HELP_STRING([--disable-mariadb-sdbc],
-        [Disable the build of the MariaDB/MySQL-SDBC driver.])
-)
-
 AC_ARG_ENABLE(bogus-pkg-config,
     AS_HELP_STRING([--enable-bogus-pkg-config],
         [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
@@ -2457,16 +2451,6 @@ AC_ARG_WITH(system-gpgmepp,
         [Use gpgmepp already on system]),,
     [with_system_gpgmepp="$with_system_libs"])
 
-AC_ARG_WITH(system-mariadb,
-    AS_HELP_STRING([--with-system-mariadb],
-        [Use MariaDB/MySQL libraries already on system.]),,
-    [with_system_mariadb="$with_system_libs"])
-
-AC_ARG_ENABLE(bundle-mariadb,
-    AS_HELP_STRING([--enable-bundle-mariadb],
-        [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/Collabora Office.])
-)
-
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
         [Use hsqldb already on system.]))
@@ -2734,7 +2718,7 @@ AC_ARG_WITH(locales,
     ],
 ,)
 
-# Kerberos and GSSAPI used by Mariadb/Mysql and libcurl
+# Kerberos and GSSAPI used by libcurl
 libo_FUZZ_ARG_WITH(krb5,
     AS_HELP_STRING([--with-krb5],
         [Enable MIT Kerberos 5 support in modules that support it.
@@ -5997,7 +5981,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-gtk3 \
         --disable-gtk4 \
         --disable-libcmis \
-        --disable-mariadb-sdbc \
         --disable-nss \
         --disable-online-update \
         --disable-opencl \
@@ -10422,130 +10405,6 @@ no|disable)
     ;;
 esac
 AC_SUBST(ENABLE_LIBRELOGO)
-
-ENABLE_MARIADBC=
-MARIADBC_MAJOR=1
-MARIADBC_MINOR=0
-MARIADBC_MICRO=2
-AC_MSG_CHECKING([whether to build the MariaDB/MySQL SDBC driver])
-if test "x$enable_mariadb_sdbc" != "xno" -a "$enable_mpl_subset" != "yes"; then
-    ENABLE_MARIADBC=TRUE
-    AC_MSG_RESULT([yes])
-    BUILD_TYPE="$BUILD_TYPE MARIADBC"
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_MARIADBC)
-AC_SUBST(MARIADBC_MAJOR)
-AC_SUBST(MARIADBC_MINOR)
-AC_SUBST(MARIADBC_MICRO)
-
-if test "$ENABLE_MARIADBC" = "TRUE"; then
-    dnl ===================================================================
-    dnl Check for system MariaDB
-    dnl ===================================================================
-
-    if test "$with_gssapi" = "yes" -a "$enable_openssl" = "no"; then
-        AC_MSG_ERROR([GSSAPI needs OpenSSL, but --disable-openssl was given.])
-    fi
-
-    AC_MSG_CHECKING([which MariaDB to use])
-    if test "$with_system_mariadb" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_MARIADB_CONNECTOR_C=TRUE
-        #AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
-        if test -z "$MARIADBCONFIG"; then
-            AC_PATH_PROG(MARIADBCONFIG, [mysql_config])
-            if test -z "$MARIADBCONFIG"; then
-                AC_MSG_ERROR([mysql_config is missing. Install MySQL client library development package.])
-                #AC_MSG_ERROR([mariadb_config and mysql_config are missing. Install MariaDB or MySQL client library development package.])
-            fi
-        fi
-        AC_MSG_CHECKING([MariaDB version])
-        MARIADB_VERSION=`$MARIADBCONFIG --version`
-        MARIADB_MAJOR=`$MARIADBCONFIG --version | cut -d"." -f1`
-        if test "$MARIADB_MAJOR" -ge "5"; then
-            AC_MSG_RESULT([OK])
-        else
-            AC_MSG_ERROR([too old, use 5.0.x or later])
-        fi
-        AC_MSG_CHECKING([for MariaDB Client library])
-        MARIADB_CFLAGS=`$MARIADBCONFIG --cflags`
-        if test "$COM_IS_CLANG" = TRUE; then
-            MARIADB_CFLAGS=$(printf '%s' "$MARIADB_CFLAGS" | sed -e s/-fstack-protector-strong//)
-        fi
-        MARIADB_LIBS=`$MARIADBCONFIG --libs_r`
-        dnl At least mariadb-5.5.34-3.fc20.x86_64 plus
-        dnl mariadb-5.5.34-3.fc20.i686 reports 64-bit specific output even under
-        dnl linux32:
-        if test "$OS" = LINUX -a "$CPUNAME" = INTEL; then
-            MARIADB_CFLAGS=$(printf '%s' "$MARIADB_CFLAGS" | sed -e s/-m64//)
-            MARIADB_LIBS=$(printf '%s' "$MARIADB_LIBS" \
-                | sed -e 's|/lib64/|/lib/|')
-        fi
-        FilterLibs "${MARIADB_LIBS}"
-        MARIADB_LIBS="${filteredlibs}"
-        AC_MSG_RESULT([includes '$MARIADB_CFLAGS', libraries '$MARIADB_LIBS'])
-        AC_MSG_CHECKING([whether to bundle the MySQL/MariaDB client library])
-        if test "$enable_bundle_mariadb" = "yes"; then
-            AC_MSG_RESULT([yes])
-            BUNDLE_MARIADB_CONNECTOR_C=TRUE
-            LIBMARIADB=lib$(echo "${MARIADB_LIBS}" | sed -e 's/[[[:space:]]]\{1,\}-l\([[^[:space:]]]\{1,\}\)/\
-\1\
-/g' -e 's/^-l\([[^[:space:]]]\{1,\}\)[[[:space:]]]*/\
-\1\
-/g' | grep -E '(mysqlclient|mariadb)')
-            if test "$_os" = "Darwin"; then
-                LIBMARIADB=${LIBMARIADB}.dylib
-                if test "$with_gssapi" != "no"; then
-                    WITH_GSSAPI=TRUE
-                    save_LIBS=$LIBS
-                    AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
-                        [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-                    GSSAPI_LIBS=$LIBS
-                    LIBS=$save_LIBS
-                fi
-            elif test "$_os" = "WINNT"; then
-                LIBMARIADB=${LIBMARIADB}.dll
-            else
-                LIBMARIADB=${LIBMARIADB}.so
-                if test "$with_gssapi" != "no"; then
-                    WITH_GSSAPI=TRUE
-                    save_LIBS=$LIBS
-                    AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
-                        [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-                    GSSAPI_LIBS=$LIBS
-                    LIBS=$save_LIBS
-                fi
-            fi
-            LIBMARIADB_PATH=$($MARIADBCONFIG --variable=pkglibdir)
-            AC_MSG_CHECKING([for $LIBMARIADB in $LIBMARIADB_PATH])
-            if test -e "$LIBMARIADB_PATH/$LIBMARIADB"; then
-                AC_MSG_RESULT([found.])
-                PathFormat "$LIBMARIADB_PATH"
-                LIBMARIADB_PATH="$formatted_path"
-            else
-                AC_MSG_ERROR([not found.])
-            fi
-        else
-            AC_MSG_RESULT([no])
-            BUNDLE_MARIADB_CONNECTOR_C=
-        fi
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_MARIADB_CONNECTOR_C=
-        MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb-connector-c/include"
-        MARIADB_LIBS='-L$(gb_StaticLibrary_WORKDIR) -lmariadb-connector-c'
-        BUILD_TYPE="$BUILD_TYPE MARIADB_CONNECTOR_C"
-    fi
-
-    AC_SUBST(SYSTEM_MARIADB_CONNECTOR_C)
-    AC_SUBST(MARIADB_CFLAGS)
-    AC_SUBST(MARIADB_LIBS)
-    AC_SUBST(LIBMARIADB)
-    AC_SUBST(LIBMARIADB_PATH)
-    AC_SUBST(BUNDLE_MARIADB_CONNECTOR_C)
-fi
 
 dnl ===================================================================
 dnl Check for system hsqldb

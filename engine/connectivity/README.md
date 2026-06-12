@@ -3,28 +3,3 @@
 Contains database pieces, drivers, etc.
 
 `dbaccess` builds UI on top of this.
-
-## Testing
-### MySQL
-
-For mysql_test:
-
-- The CppunitTest_mysql_test unit test can be used to test the mysqlc
-library with any versions of mysql or mariadb server of your choice.
-  
-- This test does not run automatically. It can be triggered with setting
-the environment variable "CONNECTIVITY_TEST_MYSQL_DRIVER".
-  
-- The environment variable should contain a URL of the following format:
-`[user]/[passwd]@sdbc:mysql:mysqlc:[host]:[port]/db_name`
-
-- tl;dr:
-
-```
-    podman pull mariadb/server
-    podman run --name=mariadb -e MYSQL_ROOT_PASSWORD=foobarbaz -p 127.0.0.1:3306:3306 mariadb/server
-    podman exec -it mariadb /bin/bash -c "echo -e CREATE DATABASE test | /usr/bin/mysql -u root"
-    (cd connectivity && make -srj8 CppunitTest_connectivity_mysql_test CONNECTIVITY_TEST_MYSQL_DRIVER="root/foobarbaz@sdbc:mysql:mysqlc:127.0.0.1:3306/test")
-    podman stop mariadb
-    podman rm mariadb
-```

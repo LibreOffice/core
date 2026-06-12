@@ -17,7 +17,6 @@ import argparse
 
 python_branch = ""
 openssl_branch = ""
-mariadb_branch = ""
 
 libraryIds = {
     "openssl": 2,
@@ -42,7 +41,6 @@ libraryNames = {
     "zxcvbn-c": "zxcvbn-c",
     "libjpeg-turbo": "libjpeg-turbo",
     "libgpg-error": "libgpg-error",
-    "mariadb-connector-c": "mariadb-connector-c",
     "tiff": "libtiff",
     "zxing": "zxing-cpp",
     "liborcus": "orcus",
@@ -94,10 +92,6 @@ def get_library_list(fileName):
             global openssl_branch
             openssl_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
             print("Openssl is on branch: " + str(openssl_branch))
-        elif libraryName.startswith("mariadb"):
-            global mariadb_branch
-            mariadb_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
-            print("MariaDB is on branch: " + str(mariadb_branch))
         libraryList.append(libraryName.lower())
     return libraryList
 
@@ -136,12 +130,6 @@ def get_latest_version(libName):
     elif libName == "python":
         for idx, ver in enumerate(json['items'][item]['stable_versions']):
             if ver.startswith(python_branch):
-                latest_version = idx
-                break
-
-    elif libName == "mariadb-connector-c":
-        for idx, ver in enumerate(json['items'][item]['stable_versions']):
-            if ver.startswith(mariadb_branch):
                 latest_version = idx
                 break
 

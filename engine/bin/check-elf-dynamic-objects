@@ -197,11 +197,6 @@ local file="$1"
                 allowlist="${allowlist} ${kerberosallowlist}"
             fi
         ;;
-        */libmysqlclo.so)
-            if [ "$WITH_GSSAPI" = TRUE ]; then
-                allowlist="${allowlist} ${kerberosallowlist}"
-            fi
-        ;;
         */libconfigmgrlo.so)
             if [ "$ENABLE_DCONF" = TRUE ]; then
                 allowlist="${allowlist} ${dconfallowlist}"

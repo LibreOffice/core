@@ -426,12 +426,6 @@ postprocess_FILES_main += \
 postprocess_DRIVERS += hsqldb jdbc mysql_jdbc
 endif
 
-ifeq ($(ENABLE_MARIADBC),TRUE)
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysqlc)/org/openoffice/Office/DataAccess/Drivers-mysqlc.xcu
-postprocess_DRIVERS += mysqlc
-endif
-
 ifeq (MACOSX,$(OS))
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/macab)/org/openoffice/Office/DataAccess/Drivers-macab.xcu

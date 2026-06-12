@@ -280,13 +280,6 @@
         "dest-filename": "@ZMF_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@MARIADB_CONNECTOR_C_TARBALL@",
-        "sha256": "@MARIADB_CONNECTOR_C_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@MARIADB_CONNECTOR_C_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@MDDS_TARBALL@",
         "sha256": "@MDDS_SHA256SUM@",
         "type": "file",

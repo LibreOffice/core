@@ -65,8 +65,5 @@ excludelist:
     connectivity/source/drivers/mysql_jdbc/YDriver.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
-    connectivity/source/drivers/mysqlc/mysqlc_statement.cxx:
-    # Needed to avoid "member access into incomplete type 'connectivity::mysqlc::OResultSetMetaData'" error
-    - mysqlc_resultsetmetadata.hxx
     connectivity/source/drivers/writer/WDatabaseMetaData.cxx:
     - com/sun/star/text/XTextDocument.hpp

@@ -103,7 +103,6 @@ gb_MERGE_LIBRARY_LIST := \
 	msfilter \
 	mtfrenderer \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
-	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
 	numbertext \
 	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
 	odfflatxml \
