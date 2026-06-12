@@ -24,6 +24,7 @@
 #include <shobjidl_core.h>
 
 #include <wincrypt.h>
+#include <winhttp.h>
 
 #include <WebView2.h>
 #include <WebView2EnvironmentOptions.h>
@@ -35,7 +36,9 @@
 
 #include "litecask.h"
 
+#include <common/AIHttpTransport.hpp>
 #include <common/Clipboard.hpp>
+#include <common/JsonUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Protocol.hpp>
 #include <common/Log.hpp>
@@ -574,12 +577,38 @@ static void do_other_message_handling_things(const WindowData& data, const char*
     fakeSocketWriteQueue(data.fakeClientFd, message, strlen(message));
 }
 
+// Escape a string for embedding in a single-quoted JavaScript string literal.
+// The native replies to postMobileCall() are injected as JS source and
+// evaluated, so any backslash, apostrophe or newline in the payload (Windows
+// paths, file names) would otherwise corrupt the literal.
+namespace
+{
+std::string escapeForJSString(const std::string& in)
+{
+    std::string out;
+    out.reserve(in.size() + 16);
+    for (const char c : in)
+    {
+        switch (c)
+        {
+            case '\\': out += "\\\\"; break;
+            case '\'': out += "\\'"; break;
+            case '\n': out += "\\n"; break;
+            case '\r': out += "\\r"; break;
+            default: out += c; break;
+        }
+    }
+    return out;
+}
+} // namespace
+
 static void do_getrecentdocs(const WindowData& data, int id)
 {
     PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
                  (WPARAM)_strdup(("window.replyFromNativeToCall(" +
                                   std::to_string(id) +
-                                  ", '" + recentFiles.serialiseFiltered(currentlyOpenDocumens()) + "')").c_str()), 0);
+                                  ", '" + escapeForJSString(recentFiles.serialiseFiltered(currentlyOpenDocumens())) +
+                                  "')").c_str()), 0);
 }
 
 // It happens that some other process opens the clipboard for a short time, and if we happen to try
@@ -2219,6 +2248,193 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
             .Get());
 }
 
+namespace
+{
+// Result of a WinHTTP request: an HTTP status code (>= 100), or one of the
+// ai:: sentinels (HttpNoResponse / HttpConnectFailed) when no response arrived.
+struct HttpResult
+{
+    int statusCode;
+    std::string body;
+};
+
+// Perform a blocking HTTP request with WinHTTP. The desktop app has no COOL net
+// stack for outbound requests, so the AI proxy and the Options dialog's model
+// listing reach providers through this. \c authHeader, when non-empty, becomes
+// the Authorization header value (e.g. "Bearer <key>").
+HttpResult winHttpRequest(const wchar_t* verb, const std::string& url,
+                          const std::string& authHeader, const std::string& body,
+                          int timeoutSeconds)
+{
+    HttpResult result{ ai::HttpConnectFailed, std::string() };
+
+    const std::wstring wideUrl = Util::string_to_wide_string(url);
+    URL_COMPONENTS components;
+    ZeroMemory(&components, sizeof(components));
+    components.dwStructSize = sizeof(components);
+    wchar_t hostName[256] = {};
+    wchar_t urlPath[8192] = {};
+    components.lpszHostName = hostName;
+    components.dwHostNameLength = ARRAYSIZE(hostName);
+    components.lpszUrlPath = urlPath;
+    components.dwUrlPathLength = ARRAYSIZE(urlPath);
+    if (!WinHttpCrackUrl(wideUrl.c_str(), 0, 0, &components))
+        return result;
+
+    HINTERNET session = WinHttpOpen(L"CODA", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
+                                    WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
+    if (session == nullptr)
+        return result;
+
+    if (timeoutSeconds > 0)
+    {
+        const int ms = timeoutSeconds * 1000;
+        WinHttpSetTimeouts(session, ms, ms, ms, ms);
+    }
+
+    HINTERNET connection = WinHttpConnect(session, hostName, components.nPort, 0);
+    if (connection == nullptr)
+    {
+        WinHttpCloseHandle(session);
+        return result;
+    }
+
+    const DWORD flags = (components.nScheme == INTERNET_SCHEME_HTTPS) ? WINHTTP_FLAG_SECURE : 0;
+    HINTERNET request = WinHttpOpenRequest(connection, verb, urlPath, nullptr, WINHTTP_NO_REFERER,
+                                           WINHTTP_DEFAULT_ACCEPT_TYPES, flags);
+    if (request == nullptr)
+    {
+        WinHttpCloseHandle(connection);
+        WinHttpCloseHandle(session);
+        return result;
+    }
+
+    std::wstring headers = L"Content-Type: application/json\r\n";
+    if (!authHeader.empty())
+        headers += L"Authorization: " + Util::string_to_wide_string(authHeader) + L"\r\n";
+    WinHttpAddRequestHeaders(request, headers.c_str(), static_cast<DWORD>(-1),
+                             WINHTTP_ADDREQ_FLAG_ADD);
+
+    BOOL ok = WinHttpSendRequest(request, WINHTTP_NO_ADDITIONAL_HEADERS, 0,
+                                 body.empty() ? WINHTTP_NO_REQUEST_DATA
+                                              : const_cast<char*>(body.data()),
+                                 static_cast<DWORD>(body.size()),
+                                 static_cast<DWORD>(body.size()), 0);
+    if (ok)
+        ok = WinHttpReceiveResponse(request, nullptr);
+
+    if (!ok)
+    {
+        result.statusCode =
+            (GetLastError() == ERROR_WINHTTP_TIMEOUT) ? ai::HttpNoResponse : ai::HttpConnectFailed;
+        WinHttpCloseHandle(request);
+        WinHttpCloseHandle(connection);
+        WinHttpCloseHandle(session);
+        return result;
+    }
+
+    DWORD statusCode = 0;
+    DWORD statusLen = sizeof(statusCode);
+    WinHttpQueryHeaders(request, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
+                        WINHTTP_HEADER_NAME_BY_INDEX, &statusCode, &statusLen,
+                        WINHTTP_NO_HEADER_INDEX);
+    result.statusCode = static_cast<int>(statusCode);
+
+    DWORD available = 0;
+    do
+    {
+        available = 0;
+        if (!WinHttpQueryDataAvailable(request, &available) || available == 0)
+            break;
+        std::string chunk(available, '\0');
+        DWORD read = 0;
+        if (!WinHttpReadData(request, &chunk[0], available, &read))
+            break;
+        chunk.resize(read);
+        result.body += chunk;
+    } while (available > 0);
+
+    WinHttpCloseHandle(request);
+    WinHttpCloseHandle(connection);
+    WinHttpCloseHandle(session);
+    return result;
+}
+
+// Register the AI chat HTTP transport. AIChatSession reaches the provider
+// through this platform hook (the Windows counterpart of Qt's
+// registerAIHttpTransport()). onDone may run on any thread; AIChatSession hops
+// back onto its polling thread itself.
+void registerAIHttpTransport()
+{
+    ai::setHttpPostFn(
+        [](const std::string& url, const std::string& authHeader, std::string body,
+           int timeoutSeconds, ai::HttpDoneCallback onDone)
+        {
+            // Called on the document's polling thread; run the blocking WinHTTP
+            // request on its own thread so we don't stall that thread.
+            std::thread(
+                [url, authHeader, body = std::move(body), timeoutSeconds,
+                 onDone = std::move(onDone)]() mutable
+                {
+                    ProcUtil::setThreadName("aihttp");
+                    const HttpResult result =
+                        winHttpRequest(L"POST", url, authHeader, body, timeoutSeconds);
+                    onDone(result.statusCode, std::move(result.body));
+                })
+                .detach();
+        });
+}
+
+// Fetch an AI provider's model list for the Options dialog. The desktop apps
+// have no server-side proxy, so the app issues the request itself, mirroring
+// Qt's Desktop::fetchAIModels(). The payload is {"provider","apiKey","baseUrl"};
+// returns the provider's JSON body verbatim ({"data":[...]} or its own error
+// JSON), or an {"error":...} JSON of our own.
+std::string fetchAIModels(const std::string& payload)
+{
+    Poco::JSON::Object::Ptr obj;
+    if (!JsonUtil::parseJSON(payload, obj))
+        return R"({"error":"Invalid payload"})";
+
+    std::string provider, apiKey, baseUrl;
+    JsonUtil::findJSONValue(obj, "provider", provider);
+    JsonUtil::findJSONValue(obj, "apiKey", apiKey);
+    JsonUtil::findJSONValue(obj, "baseUrl", baseUrl);
+
+    if (provider.empty() || apiKey.empty())
+        return R"({"error":"Missing provider or apiKey"})";
+
+    if (provider != "custom")
+    {
+        // Keep in sync with preCannedAIProviderBaseUrl() in wsd/FileServer.cpp
+        // and the same map in qt/Application.cpp / macos COWrapper.mm.
+        static const std::map<std::string, std::string> preCanned = {
+            { "openai", "https://api.openai.com" },
+            { "groq", "https://api.groq.com/openai" },
+            { "together", "https://api.together.xyz" },
+            { "mistral", "https://api.mistral.ai" },
+        };
+        const auto it = preCanned.find(provider);
+        if (it == preCanned.end())
+            return R"({"error":"Unknown provider"})";
+        baseUrl = it->second;
+    }
+    else if (baseUrl.empty())
+    {
+        return R"({"error":"Missing baseUrl for custom provider"})";
+    }
+
+    if (!baseUrl.empty() && baseUrl.back() == '/')
+        baseUrl.pop_back();
+    baseUrl += "/v1/models";
+
+    const HttpResult result = winHttpRequest(L"GET", baseUrl, "Bearer " + apiKey, std::string(), 30);
+    if (result.statusCode < 100 && result.body.empty())
+        return R"({"error":"Failed to reach the AI provider"})";
+    return result.body;
+}
+} // namespace
+
 static void processMessage(WindowData& data, wil::unique_cotaskmem_string& message)
 {
     std::wstring s(message.get());
@@ -2582,27 +2798,57 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
             auto result = Desktop::fetchSettingsFile(Util::wide_string_to_string(s.substr(strlen("FETCHSETTINGSFILE "))));
             if (!result.content.empty())
             {
+                // The JS caller reads result.content, so the reply must be an
+                // object literal (not a quoted string). The reply is injected as
+                // JS source and evaluated, so each value is escaped for a
+                // single-quoted string literal (the content can hold quotes,
+                // backslashes and newlines).
                 std::string resultAsJavaScriptData =
                     "{"
-                      "fileName: '" + result.fileName + "'"
+                      "fileName: '" + escapeForJSString(result.fileName) + "'"
                       ","
-                      "mimeType: '" + result.mimeType + "'"
+                      "mimeType: '" + escapeForJSString(result.mimeType) + "'"
                       ","
-                      "content: '" + result.content + "'"
+                      "content: '" + escapeForJSString(result.content) + "'"
                     "}";
 
                 PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
                              (WPARAM)_strdup(("window.replyFromNativeToCall(" +
                                               std::to_string(id) +
-                                              ", '" + resultAsJavaScriptData + "')").c_str()), 0);
+                                              ", " + resultAsJavaScriptData + ")").c_str()), 0);
             }
         }
         else if (s == L"FETCHSETTINGSCONFIG")
         {
+            // The reply is injected as JS source and evaluated, so the JSON
+            // (which contains Windows paths like C:\Users\...) must be escaped
+            // for a single-quoted string literal; otherwise the JS evaluator
+            // eats the backslashes and JSON.parse() chokes on "\U".
             PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
                          (WPARAM)_strdup(("window.replyFromNativeToCall(" +
                                           std::to_string(id) +
-                                          ", '" + Desktop::fetchSettingsConfig() + "')").c_str()), 0);
+                                          ", '" + escapeForJSString(Desktop::fetchSettingsConfig()) +
+                                          "')").c_str()), 0);
+        }
+        else if (s.starts_with(L"FETCHAIMODELS "))
+        {
+            // The Options dialog asks for an AI provider's model list. This
+            // performs a network request, so run it off the message thread and
+            // reply asynchronously, mirroring the Qt and macOS apps.
+            const std::string payload =
+                Util::wide_string_to_string(s.substr(strlen("FETCHAIMODELS ")));
+            const HWND hWnd = data.hWnd;
+            std::thread(
+                [payload, hWnd, id]()
+                {
+                    ProcUtil::setThreadName("aimodels");
+                    const std::string result = fetchAIModels(payload);
+                    PostMessageW(hWnd, CODA_WM_EXECUTESCRIPT,
+                                 (WPARAM)_strdup(("window.replyFromNativeToCall(" +
+                                                  std::to_string(id) + ", '" +
+                                                  escapeForJSString(result) + "')").c_str()), 0);
+                })
+                .detach();
         }
         else
             LOG_ERR("Unhandled CALL message: " + Util::wide_string_to_string(s));
@@ -2796,6 +3042,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
     }
 
     fakeSocketSetLoggingCallback([](const std::string& line) { LOG_TRC_NOFILE(line); });
+
+    // Give AIChatSession a native HTTP transport (no server-side AI proxy here).
+    registerAIHttpTransport();
 
     coolwsdThread = std::thread(
         []

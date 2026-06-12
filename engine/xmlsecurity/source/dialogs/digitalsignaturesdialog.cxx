@@ -263,11 +263,18 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     if (comphelper::COKit::isActive())
     {
+        // The Windows desktop app (CODA-W, the only _WIN32 COKit build) signs from
+        // the native Windows certificate store like the regular desktop, so it does
+        // not require a session certificate to enable the Sign button; the
+        // online/server path still does. The certificate-manager button stays
+        // hidden in COKit mode everywhere - there is no local manager to launch.
+#if !defined(_WIN32)
         // If the view has a signing certificate, then allow adding a signature.
         if (!pViewShell || !pViewShell->GetSigningCertificate().m_xCertificate.is())
         {
             m_xAddBtn->hide();
         }
+#endif
         m_xStartCertMgrBtn->hide();
     }
 

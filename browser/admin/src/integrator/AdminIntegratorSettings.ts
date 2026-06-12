@@ -428,6 +428,16 @@ if (!isCODesktop && window.location.protocol === 'file:') {
 	isCODesktop = true;
 }
 
+// The Windows desktop app signs with the native Windows certificate store, so
+// the Document Signing certificate/key configuration is not shown there (unlike
+// macOS, which has no native key store and configures the key here).
+let isWindowsApp = false;
+try {
+	isWindowsApp = !!(window as any).parent.ThisIsTheWindowsApp;
+} catch (e) {
+	isWindowsApp = false;
+}
+
 // Keep in sync with the pre-canned provider map in wsd/FileServer.cpp
 // fetchModels. The server ignores the baseUrl from the client for non-custom
 // providers and uses its own copy, so a caller cannot pair a pre-canned id
@@ -3110,18 +3120,22 @@ class SettingIframe {
 		// Document Signing and Zotero
 		if (isUserConfig) {
 			if (!data) {
-				this._docSigningSection = this.createEmptySection(
-					this._docSigningSection,
-					'doc-signing-section',
-					_('Document Signing'),
-				);
+				// On the Windows app, signing uses the native Windows certificate
+				// store, so the Document Signing section is not offered here.
+				if (!isWindowsApp)
+					this._docSigningSection = this.createEmptySection(
+						this._docSigningSection,
+						'doc-signing-section',
+						_('Document Signing'),
+					);
 				this._zoteroSection = this.createEmptySection(
 					this._zoteroSection,
 					'zotero-section',
 					'Zotero',
 				);
 			} else {
-				this.generateDocSigningUI(this._viewSetting, settingsContainer);
+				if (!isWindowsApp)
+					this.generateDocSigningUI(this._viewSetting, settingsContainer);
 				this.generateZoteroUI(this._viewSetting, settingsContainer);
 			}
 		}

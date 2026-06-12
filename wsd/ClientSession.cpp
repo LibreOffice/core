@@ -40,7 +40,7 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/FileServer.hpp>
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
 #include <wsd/AIChatSession.hpp>
 #endif
 #include <wsd/TileDesc.hpp>
@@ -149,7 +149,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
 
     _browserSettingsJSON = new Poco::JSON::Object();
 
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
     _aiChat = std::make_unique<AIChatSession>(*this);
 #endif
 }
@@ -1370,7 +1370,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         return forwardToChild(std::string(buffer, length), docBroker);
     }
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
     else if (tokens.equals(0, "aichat:"))
     {
         return _aiChat->handleAction(firstLine);
@@ -2871,7 +2871,7 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
                 abortConversion(docBroker, saveAsSocket, std::move(errorKind));
                 return false;
             }
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
             else if (_aiChat->tryConsumeKitError(errorCommand, errorKind))
             {
                 return true;
@@ -3299,7 +3299,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "commandvalues:"))
     {
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
         if (_aiChat->tryConsumeCommandValues(payload))
             return true;
 #endif
@@ -3432,7 +3432,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 #endif
     else if (tokens.equals(0, "extractedlinktargets:"))
     {
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
         if (_aiChat->tryConsumeExtractedLinkTargets(payload))
             return true;
 #endif
@@ -3456,7 +3456,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "extracteddocumentstructure:"))
     {
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
         if (_aiChat->tryConsumeExtractedDocumentStructure(payload))
             return true;
 #endif
@@ -3480,7 +3480,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "transformeddocumentstructure:"))
     {
-#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
         if (_aiChat->tryConsumeTransformedDocumentStructure(payload))
             return true;
 #endif

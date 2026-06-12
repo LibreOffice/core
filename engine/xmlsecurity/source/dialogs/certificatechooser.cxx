@@ -226,7 +226,15 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             {
                 if (meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign)
                 {
-                    if (comphelper::COKit::isActive())
+                    // The COKit (online/server) case takes the signing certificate
+                    // from the session/view. The Windows desktop app (CODA-W, the
+                    // only _WIN32 COKit build) instead signs from the native Windows
+                    // certificate store like the regular desktop.
+                    bool bUseSessionCertificate = comphelper::COKit::isActive();
+#if defined(_WIN32)
+                    bUseSessionCertificate = false;
+#endif
+                    if (bUseSessionCertificate)
                     {
                         // The COKit case takes the signing certificate from the view.
                         if (m_pViewShell && m_pViewShell->GetSigningCertificate().m_xCertificate.is())
