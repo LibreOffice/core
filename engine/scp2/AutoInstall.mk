@@ -9,8 +9,6 @@
 
 $(eval $(call gb_AutoInstall_AutoInstall))
 
-$(eval $(call gb_AutoInstall_add_module,base,LIBO_LIB_FILE,LIBO_EXECUTABLE))
-$(eval $(call gb_AutoInstall_add_module,base_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,calc,LIBO_LIB_FILE,,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,calc_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))

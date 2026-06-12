@@ -56,7 +56,7 @@ void OColumnControlTopLevel::GetFocus()
 // OColumnControlWindow
 OColumnControlWindow::OColumnControlWindow(weld::Container* pParent,
                                            const Reference<XComponentContext>& _rxContext)
-            : OFieldDescControl(pParent, nullptr)
+            : OFieldDescControl(pParent)
             , m_xContext(_rxContext)
             , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(true)

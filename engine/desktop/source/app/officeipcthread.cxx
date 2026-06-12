@@ -981,8 +981,6 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
                     eFactory = SvtModuleOptions::EFactory::DRAW;
                 else if ( aCmdLineArgs->IsImpress() )
                     eFactory = SvtModuleOptions::EFactory::IMPRESS;
-                else if ( aCmdLineArgs->IsBase() )
-                    eFactory = SvtModuleOptions::EFactory::DATABASE;
                 else if ( aCmdLineArgs->IsMath() )
                     eFactory = SvtModuleOptions::EFactory::MATH;
                 else if ( aCmdLineArgs->IsGlobal() )
@@ -1013,9 +1011,6 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
             } else if (aCmdLineArgs->IsHelpImpress()) {
                 bShowHelp = true;
                 aHelpURLBuffer.append("vnd.sun.star.help://simpress/start");
-            } else if (aCmdLineArgs->IsHelpBase()) {
-                bShowHelp = true;
-                aHelpURLBuffer.append("vnd.sun.star.help://sdatabase/start");
             } else if (aCmdLineArgs->IsHelpBasic()) {
                 bShowHelp = true;
                 aHelpURLBuffer.append("vnd.sun.star.help://sbasic/start");

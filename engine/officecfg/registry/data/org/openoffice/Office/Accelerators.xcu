@@ -527,7 +527,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           </prop>
         </node>
       </node>
-      <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace"/>
       <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace">
         <node oor:name="F_MOD1" oor:op="replace">
           <prop oor:name="Command">
@@ -539,26 +538,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:RecSearch</value>
-          </prop>
-        </node>
-      </node>
-      <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace">
-        <node oor:name="F4" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DBQueryPreview</value>
-          </prop>
-        </node>
-        <node oor:name="F5" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SbaExecuteSql</value>
-          </prop>
-        </node>
-        <node oor:name="F7" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:AddTable</value>
           </prop>
         </node>
       </node>

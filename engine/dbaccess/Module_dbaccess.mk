@@ -25,42 +25,11 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	Library_dbu \
 	Library_sdbt \
 	UIConfig_dbaccess \
-	UIConfig_dbapp \
 	UIConfig_dbbrowser \
-	UIConfig_dbquery \
-	UIConfig_dbrelation \
-	UIConfig_dbtable \
 	UIConfig_dbtdata \
 ))
 
 ifneq ($(OS),iOS)
-ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
-	CppunitTest_dbaccess_dialog_save \
-	CppunitTest_dbaccess_empty_stdlib_save \
-	CppunitTest_dbaccess_nolib_save \
-))
-endif
-
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
-    CppunitTest_dbaccess_hsqldb_test \
-    CppunitTest_dbaccess_RowSetClones \
-    CppunitTest_dbaccess_CRMDatabase_test \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
-	JunitTest_dbaccess_complex \
-    JunitTest_dbaccess_unoapi \
-))
-
-ifneq ($(ENABLE_JAVA),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
-	PythonTest_dbaccess_python \
-))
-endif
-
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,dbaccess,\
     CppunitTest_dbaccess_dialogs_test \

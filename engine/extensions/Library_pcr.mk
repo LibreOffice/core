@@ -87,7 +87,6 @@ $(eval $(call gb_Library_add_exception_objects,pcr,\
 	extensions/source/propctrlr/propeventtranslation \
 	extensions/source/propctrlr/pushbuttonnavigation \
 	extensions/source/propctrlr/selectlabeldialog \
-	extensions/source/propctrlr/sqlcommanddesign \
 	extensions/source/propctrlr/standardcontrol \
 	extensions/source/propctrlr/stringrepresentation \
 	extensions/source/propctrlr/submissionhandler \

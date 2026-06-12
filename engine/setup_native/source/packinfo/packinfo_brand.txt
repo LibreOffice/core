@@ -107,21 +107,6 @@ provides = "libreoffice-math"
 End
 
 Start
-module = "gid_Module_Brand_Prg_Base"
-solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-base"
-packagename = "%UNIXPACKAGENAME-base"
-requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-base %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX-base"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "Base brand module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-provides = "libreoffice-base"
-End
-
-Start
 module = "gid_Module_Langpack_Brand"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-%LANGUAGESTRING"
 packagename = "%UNIXPACKAGENAME-%LANGUAGESTRING"

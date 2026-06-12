@@ -20,7 +20,6 @@
 #pragma once
 
 #include "propertyhandler.hxx"
-#include "sqlcommanddesign.hxx"
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -68,8 +67,6 @@ namespace pcr
         /** helper component encapsulating the handling for the QueryDesign component for
             interactively designing an SQL command
         */
-        ::rtl::Reference< SQLCommandDesigner >                        m_xCommandDesigner;
-        css::uno::Reference< css::inspection::XObjectInspectorUI >    m_xBrowserUI;
 
         /// the string indicating a "default" (VOID) value in list-like controls
         OUString                        m_sDefaultValueString;
@@ -121,9 +118,6 @@ namespace pcr
                                                        SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
         virtual void                                   SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) override;
         virtual sal_Bool                               SAL_CALL suspend( sal_Bool _bSuspend ) override;
-
-        // XComponent
-        virtual void                                   SAL_CALL disposing() override;
 
         // PropertyHandler
         virtual css::uno::Sequence< css::beans::Property >
@@ -369,10 +363,6 @@ namespace pcr
                 <TRUE/> if the window was successfully opened, or was previously open,
                 <FALSE/> otherwise
         */
-        bool impl_doDesignSQLCommand_nothrow(
-            const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI,
-            PropertyId _nDesignForProperty
-        );
 
         /** updates a property (UI) whose state depends on more than one other property
 
@@ -414,7 +404,6 @@ namespace pcr
         OUString impl_getDocumentURL_nothrow() const;
 
     private:
-        DECL_LINK( OnDesignerClosed, SQLCommandDesigner&, void );
 
     private:
         FormComponentPropertyHandler( const FormComponentPropertyHandler& ) = delete;

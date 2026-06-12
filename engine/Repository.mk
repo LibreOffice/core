@@ -174,13 +174,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	) \
 ))
 
-$(eval $(call gb_Helper_register_executables_for_install,OOO,base_brand, \
-	$(if $(filter WNT,$(OS)), \
-		sbase \
-	) \
-))
-
-$(eval $(call gb_Helper_register_executables_for_install,OOO,base, \
+$(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter WNT,$(OS)), \
 		odbcconfig \
 	) \
@@ -240,7 +234,7 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
     $(call gb_CondExeUno,uno) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	abp \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		dbp \
@@ -925,10 +919,6 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 ))
 
 ifeq ($(USING_X11), TRUE)
-$(eval $(call gb_Helper_register_packages_for_install,base_brand,\
-	desktop_sbase_sh \
-))
-
 $(eval $(call gb_Helper_register_packages_for_install,calc_brand,\
 	desktop_scalc_sh \
 ))
@@ -1033,13 +1023,7 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	kit \
 	$(call gb_Helper_optional,SCRIPTING,modules/BasicIDE) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,\
-		modules/dbapp \
 		modules/dbbrowser \
-		modules/dbquery \
-		modules/dbrelation \
-	) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,\
-		modules/dbtable \
 		modules/dbtdata \
 	) \
 	modules/sabpilot \

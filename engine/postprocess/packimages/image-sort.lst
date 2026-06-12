@@ -66,19 +66,9 @@ modules/BasicIDE/toolbar/insertcontrolsbar.xml
 modules/BasicIDE/toolbar/formcontrolsbar.xml
 modules/BasicIDE/toolbar/macrobar.xml
 modules/BasicIDE/toolbar/standardbar.xml
-modules/dbapp/toolbar/formobjectbar.xml
-modules/dbapp/toolbar/queryobjectbar.xml
-modules/dbapp/toolbar/reportobjectbar.xml
-modules/dbapp/toolbar/tableobjectbar.xml
-modules/dbapp/toolbar/toolbar.xml
 #modules/dbbrowser/toolbar/browserobjectbar.xml
 #modules/dbbrowser/toolbar/copyobjectbar.xml
 modules/dbbrowser/toolbar/toolbar.xml
-modules/dbquery/toolbar/designobjectbar.xml
-modules/dbquery/toolbar/sqlobjectbar.xml
-modules/dbquery/toolbar/toolbar.xml
-modules/dbrelation/toolbar/toolbar.xml
-modules/dbtable/toolbar/toolbar.xml
 modules/schart/toolbar/arrowshapes.xml
 modules/schart/toolbar/basicshapes.xml
 modules/schart/toolbar/calloutshapes.xml
@@ -311,11 +301,7 @@ modules/swriter/toolbar/viewerbar.xml
 -- ordered
 
 modules/BasicIDE/menubar/menubar.xml
-modules/dbapp/menubar/menubar.xml
 #modules/dbbrowser/menubar/menubar.xml
-modules/dbquery/menubar/menubar.xml
-modules/dbrelation/menubar/menubar.xml
-modules/dbtable/menubar/menubar.xml
 modules/StartModule/menubar/menubar.xml
 modules/schart/menubar/menubar.xml
 modules/scalc/menubar/menubar.xml

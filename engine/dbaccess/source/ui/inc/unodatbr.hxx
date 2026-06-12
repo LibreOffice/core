@@ -309,7 +309,6 @@ namespace dbaui
         */
         std::unique_ptr<ImageProvider> getImageProviderFor(const weld::TreeIter* pAnyEntry);
 
-        void    implAdministrate(const weld::TreeIter& rApplyTo);
 
         bool implCopyObject(ODataClipboard& rExchange, const weld::TreeIter& rApplyTo, sal_Int32 nCommandType);
 

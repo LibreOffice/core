@@ -27,8 +27,8 @@
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdb/ReportDesign.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -120,11 +120,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         OUString     aAsciiImplementationName;
     } aImplementations[] = {
         { URL_COMPONENT_FORMGRIDVIEW,      u"org.openoffice.comp.dbu.OFormGridView"_ustr        },
-        { URL_COMPONENT_DATASOURCEBROWSER, u"org.openoffice.comp.dbu.ODatasourceBrowser"_ustr   },
-        { URL_COMPONENT_QUERYDESIGN,       u"org.openoffice.comp.dbu.OQueryDesign"_ustr         },
-        { URL_COMPONENT_TABLEDESIGN,       u"org.openoffice.comp.dbu.OTableDesign"_ustr         },
-        { URL_COMPONENT_RELATIONDESIGN,    u"org.openoffice.comp.dbu.ORelationDesign"_ustr      },
-        { URL_COMPONENT_VIEWDESIGN,        u"org.openoffice.comp.dbu.OViewDesign"_ustr          }
+        { URL_COMPONENT_DATASOURCEBROWSER, u"org.openoffice.comp.dbu.ODatasourceBrowser"_ustr   }
     };
 
     INetURLObject aParser( rURL );
@@ -162,23 +158,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             {
                 DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
-        }
-    }
-
-    if ( sComponentURL == URL_COMPONENT_REPORTDESIGN )
-    {
-        bool bPreview = aLoadArgs.getOrDefault( u"Preview"_ustr, false );
-        if ( bPreview )
-        {   // report designs cannot be previewed
-            if ( rListener.is() )
-                rListener->loadCancelled( this );
-            return;
-        }
-        Reference< XModel > xReportModel( aLoadArgs.getOrDefault( u"Model"_ustr, Reference< XModel >() ) );
-        if ( xReportModel.is() )
-        {
-            xController.set( ReportDesign::create( m_xContext ) );
-            utl::ConnectModelController(xReportModel, xController);
         }
     }
 

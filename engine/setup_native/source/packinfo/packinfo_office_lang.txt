@@ -162,19 +162,3 @@ packageversion = "%PACKAGEVERSION"
 pkg_list_entry = "%BASISPACKAGEPREFIX-math"
 End
 
-Start
-module = "gid_Module_Langpack_Base"
-solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-base"
-solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
-packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-base"
-provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-base"
-requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "Base language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX-base"
-End
-

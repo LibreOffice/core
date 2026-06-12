@@ -1630,7 +1630,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 break;
             [[fallthrough]];
         case ID_TREE_CLOSE_CONN:
-        case ID_TREE_EDIT_DATABASE:
         {
             weld::TreeView& rTreeView = m_pTreeView->GetWidget();
             std::unique_ptr<weld::TreeIter> xCurrentEntry(rTreeView.make_iterator());
@@ -1650,14 +1649,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             if ( nId == ID_TREE_CLOSE_CONN )
             {
                 aReturn.bEnabled = ( pDSData != nullptr ) && pDSData->xConnection.is();
-            }
-            else if ( nId == ID_TREE_EDIT_DATABASE )
-            {
-                ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext( getORB(),
-                    u"/org.openoffice.Office.DataAccess/Policies/Features/Common"_ustr ) );
-                bool bHaveEditDatabase( true );
-                OSL_VERIFY( aConfig.getNodeValue( u"EditDatabaseFromDataSourceView"_ustr ) >>= bHaveEditDatabase );
-                aReturn.bEnabled = getORB().is() && xDataSourceEntry && bHaveEditDatabase;
             }
             else if ( nId == ID_BROWSER_COPY )
             {
@@ -1803,14 +1794,6 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             SbaXDataBrowserController::Execute(nId,aArgs);
             break;
 
-        case ID_TREE_EDIT_DATABASE:
-        {
-            weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-            std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-            if (rTreeView.get_cursor(xIter.get()))
-                implAdministrate(*xIter);
-            break;
-        }
         case ID_TREE_CLOSE_CONN:
         {
             weld::TreeView& rTreeView = m_pTreeView->GetWidget();
@@ -3428,52 +3411,6 @@ int SbaTableQueryBrowser::OnTreeEntryCompare(const weld::TreeIter& rLHS, const w
         nCompareResult = sLeftText.compareTo(sRightText);
 
     return nCompareResult;
-}
-
-void SbaTableQueryBrowser::implAdministrate(const weld::TreeIter& rApplyTo)
-{
-    try
-    {
-        // get the desktop object
-        Reference< XDesktop2 > xFrameLoader = Desktop::create( getORB() );
-
-        // the initial selection
-        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-        std::unique_ptr<weld::TreeIter> xTopLevelSelected(rTreeView.make_iterator(&rApplyTo));
-
-        while (rTreeView.get_iter_depth(*xTopLevelSelected))
-            rTreeView.iter_parent(*xTopLevelSelected);
-
-        OUString sInitialSelection = getDataSourceAccessor(*xTopLevelSelected);
-
-        Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getFrameWeld(), getORB(), nullptr ) );
-        Reference< XModel > xDocumentModel( getDataSourceOrModel( xDataSource ), UNO_QUERY );
-
-        if ( xDocumentModel.is() )
-        {
-            Reference< XInteractionHandler2 > xInteractionHandler(
-                InteractionHandler::createWithParent(getORB(), nullptr) );
-
-            ::comphelper::NamedValueCollection aLoadArgs;
-            aLoadArgs.put( u"Model"_ustr, xDocumentModel );
-            aLoadArgs.put( u"InteractionHandler"_ustr, xInteractionHandler );
-            aLoadArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
-
-            Sequence< PropertyValue > aLoadArgPV;
-            aLoadArgs >>= aLoadArgPV;
-
-            xFrameLoader->loadComponentFromURL(
-                xDocumentModel->getURL(),
-                u"_default"_ustr,
-                FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL,
-                aLoadArgPV
-            );
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION("dbaccess");
-    }
 }
 
 bool SbaTableQueryBrowser::requestQuickHelp(const void* pUserData, OUString& rText) const

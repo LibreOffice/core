@@ -73,14 +73,12 @@ class CommandLineArgs
         bool                IsHelpCalc() const { return m_helpcalc;}
         bool                IsHelpDraw() const { return m_helpdraw;}
         bool                IsHelpImpress() const { return m_helpimpress;}
-        bool                IsHelpBase() const { return m_helpbase;}
         bool                IsHelpMath() const { return m_helpmath;}
         bool                IsHelpBasic() const { return m_helpbasic;}
         bool                IsWriter() const { return m_writer;}
         bool                IsCalc() const { return m_calc;}
         bool                IsDraw() const { return m_draw;}
         bool                IsImpress() const { return m_impress;}
-        bool                IsBase() const { return m_base;}
         bool                IsGlobal() const { return m_global;}
         bool                IsMath() const { return m_math;}
         bool                IsWeb() const { return m_web;}
@@ -144,14 +142,12 @@ class CommandLineArgs
         bool m_global;
         bool m_math;
         bool m_web;
-        bool m_base;
         bool m_helpwriter;
         bool m_helpcalc;
         bool m_helpdraw;
         bool m_helpbasic;
         bool m_helpmath;
         bool m_helpimpress;
-        bool m_helpbase;
         bool m_version;
         bool m_splashpipe;
         bool m_textcat;

@@ -167,21 +167,6 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Prg_Base_Bin"
-solarispackagename = "%BASISPACKAGEPREFIX-base"
-solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"
-packagename = "%BASISPACKAGEPREFIX-base"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
-requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "Base module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Prg_Math_Bin"
 solarispackagename = "%BASISPACKAGEPREFIX-math"
 solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWlibC"

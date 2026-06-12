@@ -56,7 +56,6 @@
 
 // The following ids are local to special components (e.g. menus), so they don't need to be unique
 // overall. Please have this in mind when changing anything
-#define ID_TREE_EDIT_DATABASE                1
 #define ID_TREE_CLOSE_CONN                   2
     // FREE
 #define ID_TREE_ADMINISTRATE                 4

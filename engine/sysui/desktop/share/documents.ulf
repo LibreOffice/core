@@ -73,9 +73,6 @@ en-US = "OpenDocument Spreadsheet (Flat XML)"
 [oasis-spreadsheet-template]
 en-US = "OpenDocument Spreadsheet Template"
 
-[oasis-database]
-en-US = "OpenDocument Database"
-
 [oasis-web-template]
 en-US = "HTML Document Template"
 

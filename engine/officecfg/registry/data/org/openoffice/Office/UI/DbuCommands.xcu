@@ -558,11 +558,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:DSBEditDB" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Edit ~Database File...</value>
-        </prop>
-      </node>
       <node oor:name=".uno:DSBCloseConnection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Disco~nnect</value>

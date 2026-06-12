@@ -53,7 +53,6 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Xdg);
     Files = (auto_brand_ALL,
 	     gid_Brand_File_Desktophelper_Txt,
-             gid_Brand_File_Share_Xdg_Base,
              gid_Brand_File_Share_Xdg_Calc,
              gid_Brand_File_Share_Xdg_Draw,
              gid_Brand_File_Share_Xdg_Impress,
@@ -157,15 +156,6 @@ File gid_Brand_File_Share_Registry_Cjk_Xcd
     Name (zh-CN) = "cjk.xcd";
     Name (zh-TW) = "cjk.xcd";
 End
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Base
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "base.desktop";
-End
-#endif
 
 #if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Calc

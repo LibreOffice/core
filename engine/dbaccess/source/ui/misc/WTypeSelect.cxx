@@ -39,7 +39,7 @@ using namespace ::com::sun::star::sdbc;
 
 // OWizTypeSelectControl
 OWizTypeSelectControl::OWizTypeSelectControl(weld::Container* pPage, OWizTypeSelect* pParentTabPage)
-    : OFieldDescControl(pPage, nullptr)
+    : OFieldDescControl(pPage)
     , m_pParentTabPage(pParentTabPage)
 {
 }

@@ -26,6 +26,8 @@
 #include "adminpages.hxx"
 #include "generalpage.hxx"
 #include <unotools/confignode.hxx>
+#include <connectivity/DriversConfig.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include "ConnectionPage.hxx"
 #include "DriverSettings.hxx"
 #include "DbAdminImpl.hxx"
@@ -306,6 +308,32 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
     // for enabling both the Next and Finish buttons, depending on the current page state.
     // Plus, the concept must also care for the case where those pages are embedded into
     // a normal tab dialog.
+}
+
+static void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::comphelper::NamedValueCollection& _aNew,::comphelper::NamedValueCollection& _rDSInfo)
+{
+    _rDSInfo.merge(_aNew,true);
+    for (auto& val : _aOld.getNamedValues())
+        if (!_aNew.has(val.Name))
+            _rDSInfo.remove(val.Name);
+}
+
+void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection, std::u16string_view _sOldURLPrefix, std::u16string_view _sNewURLPrefix,const css::uno::Reference< css::beans::XPropertySet >& _xDatasource)
+{
+    if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
+        return ;
+    Sequence< PropertyValue> aInfo;
+    _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
+    ::comphelper::NamedValueCollection aDS(aInfo);
+
+    ::connectivity::DriversConfig aDriverConfig(xContext);
+
+    const ::comphelper::NamedValueCollection&  aOldProperties   = aDriverConfig.getProperties(_sOldURLPrefix);
+    const ::comphelper::NamedValueCollection&  aNewProperties   = aDriverConfig.getProperties(_sNewURLPrefix);
+    lcl_removeUnused(aOldProperties,aNewProperties,aDS);
+
+    aDS >>= aInfo;
+    _xDatasource->setPropertyValue(PROPERTY_INFO,Any(aInfo));
 }
 
 void ODbTypeWizDialog::saveDatasource()

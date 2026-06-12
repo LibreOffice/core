@@ -49,7 +49,6 @@
 
 namespace dbaui
 {
-    class OTableDesignHelpBar;
     class OPropListBoxCtrl;
     class OPropEditCtrl;
     class OPropNumericEditCtrl;
@@ -62,7 +61,6 @@ namespace dbaui
         std::unique_ptr<weld::Builder> m_xBuilder;
         std::unique_ptr<weld::Container> m_xContainer;
 
-        OTableDesignHelpBar* m_pHelp;
         weld::Widget* m_pLastFocusWindow;
         weld::Widget* m_pActFocusWindow;
 
@@ -111,8 +109,6 @@ namespace dbaui
         // used by ActivatePropertyField
         DECL_LINK( OnControlFocusLost, weld::Widget&, void );
         DECL_LINK( OnControlFocusGot, weld::Widget&, void );
-
-        DECL_LINK( HelpFocusOut, weld::Widget&, void );
 
         void                UpdateFormatSample(OFieldDescription const * pFieldDescr);
 
@@ -163,7 +159,7 @@ namespace dbaui
         void    implFocusLost(weld::Widget* _pWhich);
 
     public:
-        OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar* pHelpBar);
+        explicit OFieldDescControl(weld::Container* pPage);
         virtual ~OFieldDescControl();
 
         void                FlushModifiedData();

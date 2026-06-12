@@ -9,7 +9,7 @@
 icns_WRKDIR := $(gb_CustomTarget_workdir)/sysui/icns
 icns_SRCDIR := $(SRCDIR)/sysui/desktop/icons/macos
 
-icns_mimetypes := database drawing drawing-template formula master-document \
+icns_mimetypes := drawing drawing-template formula master-document \
                   master-document-template presentation presentation-template spreadsheet \
                   spreadsheet-template text text-template
 

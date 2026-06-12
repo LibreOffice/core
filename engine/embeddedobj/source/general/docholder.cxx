@@ -968,12 +968,7 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
             aArgs.put( u"PluginMode"_ustr, sal_Int16(1) );
         OUString sUrl;
         uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
-        if (    xServiceInfo.is()
-            &&  xServiceInfo->supportsService(u"com.sun.star.report.ReportDefinition"_ustr) )
-        {
-            sUrl = u".component:DB/ReportDesign"_ustr;
-        }
-        else if( xServiceInfo.is()
+        if( xServiceInfo.is()
             &&   xServiceInfo->supportsService(u"com.sun.star.chart2.ChartDocument"_ustr))
             sUrl = u"private:factory/schart"_ustr;
         else

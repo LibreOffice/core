@@ -34,7 +34,7 @@ sed -i "s/text\/plain;//" "${2?}${3?}".writer.desktop
 desktop-file-edit --set-key=X-Endless-Alias --set-value=collaboraoffice-startcenter \
  --set-key=X-Flatpak-RenamedFrom --set-value='collaboraoffice-startcenter.desktop;' \
  "${2?}${3?}".desktop
-for i in base calc draw impress math writer xsltfilter
+for i in calc draw impress math writer xsltfilter
 do
  desktop-file-edit --set-key=X-Endless-Alias --set-value=collaboraoffice-"$i" \
   --set-key=X-Flatpak-RenamedFrom \

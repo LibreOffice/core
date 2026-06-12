@@ -46,7 +46,6 @@ officecfg_XCSFILES := \
     Office/Security \
     Office/TypeDetection \
     Office/UI \
-    Office/UI/BaseWindowState \
     Office/UI/BasicIDECommands \
     Office/UI/BasicIDEWindowState \
     Office/UI/BibliographyCommands \
@@ -59,11 +58,7 @@ officecfg_XCSFILES := \
     Office/UI/Commands \
     Office/UI/Controller \
     Office/UI/DbBrowserWindowState \
-    Office/UI/DbQueryWindowState \
-    Office/UI/DbRelationWindowState \
-    Office/UI/DbReportWindowState \
     Office/UI/DbTableDataWindowState \
-    Office/UI/DbTableWindowState \
     Office/UI/DbuCommands \
     Office/UI/DrawImpressCommands \
     Office/UI/DrawWindowState \

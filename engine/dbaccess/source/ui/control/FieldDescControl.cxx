@@ -21,7 +21,6 @@
 #include <FieldDescControl.hxx>
 #include <FieldControls.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <TableDesignHelpBar.hxx>
 #include <vcl/svapp.hxx>
 #include <FieldDescriptions.hxx>
 #include <svl/numuno.hxx>
@@ -64,10 +63,9 @@ namespace
     }
 }
 
-OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar* pHelpBar)
+OFieldDescControl::OFieldDescControl(weld::Container* pPage)
     : m_xBuilder(Application::CreateBuilder(pPage, u"dbaccess/ui/fielddescpage.ui"_ustr))
     , m_xContainer(m_xBuilder->weld_container(u"FieldDescPage"_ustr))
-    , m_pHelp( pHelpBar )
     , m_pLastFocusWindow(nullptr)
     , m_pActFocusWindow(nullptr)
     , m_nPos(-1)
@@ -76,8 +74,6 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar
     , m_nEditWidth(50)
     , pActFieldDescr(nullptr)
 {
-    if (m_pHelp)
-        m_pHelp->connect_focus_out(LINK(this, OFieldDescControl, HelpFocusOut));
 }
 
 OFieldDescControl::~OFieldDescControl()
@@ -637,8 +633,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     pActFieldDescr = pFieldDescr;
     if(!pFieldDescr)
     {
-        if (m_pHelp)
-            m_pHelp->SetHelpText( OUString() );
         DeactivateAggregate( tpDefault );
         DeactivateAggregate( tpRequired );
         DeactivateAggregate( tpTextLen );
@@ -948,25 +942,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
 IMPL_LINK(OFieldDescControl, OnControlFocusGot, weld::Widget&, rControl, void )
 {
-    OUString strHelpText;
-
-    bool bFoundControl = iterateControls([&](OWidgetBase* pWidget)
-    {
-        if (pWidget && &rControl == pWidget->GetWidget())
-        {
-            strHelpText = pWidget->GetHelp();
-            return true;
-        }
-        else
-            return false;
-    });
-
-    if (!bFoundControl && m_xFormat && &rControl == m_xFormat.get())
-        strHelpText = DBA_RES(STR_HELP_FORMAT_BUTTON);
-
-    if (!strHelpText.isEmpty() && m_pHelp)
-        m_pHelp->SetHelpText(strHelpText);
-
     m_pActFocusWindow = &rControl;
 
     m_aControlFocusIn.Call(rControl);
@@ -1071,15 +1046,6 @@ void OFieldDescControl::implFocusLost(weld::Widget* _pWhich)
     // Remember the active Control
     if (!m_pLastFocusWindow)
         m_pLastFocusWindow = _pWhich;
-
-    // Reset HelpText
-    if (m_pHelp && !m_pHelp->HasFocus())
-        m_pHelp->SetHelpText( OUString() );
-}
-
-IMPL_LINK_NOARG(OFieldDescControl, HelpFocusOut, weld::Widget&, void)
-{
-    m_pHelp->SetHelpText(OUString());
 }
 
 bool OFieldDescControl::IsFocusInEditableWidget() const

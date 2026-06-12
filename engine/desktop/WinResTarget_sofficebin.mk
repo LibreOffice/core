@@ -20,7 +20,6 @@ $(eval $(call gb_WinResTarget_add_defs,sofficebin/officeloader,\
 
 $(eval $(call gb_WinResTarget_add_dependencies,sofficebin/officeloader,\
     sysui/desktop/icons/soffice.ico \
-	sysui/desktop/icons/oasis-database.ico \
 	sysui/desktop/icons/oasis-drawing-template.ico \
 	sysui/desktop/icons/oasis-drawing.ico \
 	sysui/desktop/icons/oasis-formula.ico \
@@ -32,7 +31,6 @@ $(eval $(call gb_WinResTarget_add_dependencies,sofficebin/officeloader,\
 	sysui/desktop/icons/oasis-text-template.ico \
 	sysui/desktop/icons/oasis-text.ico \
 	sysui/desktop/icons/oasis-web-template.ico \
-	sysui/desktop/icons/database.ico \
 	sysui/desktop/icons/drawing-template.ico \
 	sysui/desktop/icons/drawing.ico \
 	sysui/desktop/icons/formula.ico \

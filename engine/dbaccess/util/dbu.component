@@ -70,17 +70,9 @@
     constructor="org_openoffice_comp_dbu_OAdvancedSettingsDialog_get_implementation">
     <service name="com.sun.star.sdb.AdvancedDatabaseSettingsDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OApplicationController"
-    constructor="org_openoffice_comp_dbu_OApplicationController_get_implementation">
-    <service name="com.sun.star.sdb.application.DefaultViewController"/>
-  </implementation>
   <implementation name="org.openoffice.comp.dbu.ODBTypeWizDialog"
     constructor="org_openoffice_comp_dbu_ODBTypeWizDialog_get_implementation">
     <service name="com.sun.star.sdb.DataSourceTypeChangeDialog"/>
-  </implementation>
-  <implementation name="org.openoffice.comp.dbu.ODBTypeWizDialogSetup"
-    constructor="org_openoffice_comp_dbu_ODBTypeWizDialogSetup_get_implementation">
-    <service name="com.sun.star.sdb.DatabaseWizardDialog"/>
   </implementation>
   <implementation
       name="org.openoffice.comp.dbu.ODatasourceAdministrationDialog"
@@ -95,21 +87,9 @@
     constructor="org_openoffice_comp_dbu_OFormGridView_get_implementation">
     <service name="com.sun.star.sdb.FormGridView"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OQueryDesign"
-    constructor="org_openoffice_comp_dbu_OQueryDesign_get_implementation">
-    <service name="com.sun.star.sdb.QueryDesign"/>
-  </implementation>
-  <implementation name="org.openoffice.comp.dbu.ORelationDesign"
-    constructor="org_openoffice_comp_dbu_ORelationDesign_get_implementation">
-    <service name="com.sun.star.sdb.RelationDesign"/>
-  </implementation>
   <implementation name="org.openoffice.comp.dbu.OSQLMessageDialog"
     constructor="org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation">
     <service name="com.sun.star.sdb.ErrorMessageDialog"/>
-  </implementation>
-  <implementation name="org.openoffice.comp.dbu.OTableDesign"
-    constructor="org_openoffice_comp_dbu_OTableDesign_get_implementation">
-    <service name="com.sun.star.sdb.TableDesign"/>
   </implementation>
   <implementation name="org.openoffice.comp.dbu.OTableFilterDialog"
     constructor="org_openoffice_comp_dbu_OTableFilterDialog_get_implementation">
@@ -118,13 +98,5 @@
   <implementation name="org.openoffice.comp.dbu.OUserSettingsDialog"
     constructor="org_openoffice_comp_dbu_OUserSettingsDialog_get_implementation">
     <service name="com.sun.star.sdb.UserAdministrationDialog"/>
-  </implementation>
-  <implementation name="org.openoffice.comp.dbu.OViewDesign"
-    constructor="org_openoffice_comp_dbu_OViewDesign_get_implementation">
-    <service name="com.sun.star.sdb.ViewDesign"/>
-  </implementation>
-  <implementation name="org.libreoffice.comp.dbu.LimitBoxController"
-    constructor="org_libreoffice_comp_dbu_LimitBoxController_get_implementation">
-    <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
 </component>

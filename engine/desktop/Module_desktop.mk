@@ -50,7 +50,6 @@ endif
 
 ifeq ($(USING_X11), TRUE)
 $(eval $(call gb_Module_add_targets,desktop,\
-    Package_sbase_sh \
     Package_scalc_sh \
     Package_sdraw_sh \
     Package_simpress_sh \
@@ -65,7 +64,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,desktop,\
     StaticLibrary_winloader \
     StaticLibrary_winlauncher \
-    Executable_sbase \
     Executable_scalc \
     Executable_sdraw \
     Executable_simpress \
@@ -79,7 +77,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
         Executable_unopkg \
         Executable_unopkg_com \
     ) \
-    WinResTarget_sbase \
     WinResTarget_scalc \
     WinResTarget_sdraw \
     WinResTarget_simpress \

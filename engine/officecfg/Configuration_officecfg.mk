@@ -144,12 +144,8 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/ChartCommands.xcu \
 	org/openoffice/Office/UI/ChartWindowState.xcu \
 	org/openoffice/Office/UI/DbuCommands.xcu \
-	org/openoffice/Office/UI/BaseWindowState.xcu \
 	org/openoffice/Office/UI/WriterFormWindowState.xcu \
 	org/openoffice/Office/UI/WriterReportWindowState.xcu \
-	org/openoffice/Office/UI/DbQueryWindowState.xcu \
-	org/openoffice/Office/UI/DbTableWindowState.xcu \
-	org/openoffice/Office/UI/DbRelationWindowState.xcu \
 	org/openoffice/Office/UI/DbBrowserWindowState.xcu \
 	org/openoffice/Office/UI/DbTableDataWindowState.xcu \
 	org/openoffice/Office/UI/DrawImpressCommands.xcu \

@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
@@ -33,10 +32,7 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
@@ -53,7 +49,6 @@
 #include <unotools/fcm.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace ::ucbhelper;
 using namespace ::com::sun::star::task;
@@ -67,8 +62,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::embed;
-using namespace ::com::sun::star::ui::dialogs;
-using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 namespace dbaxml
@@ -195,10 +188,7 @@ class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInf
 {
 private:
     const Reference< XComponentContext >  m_aContext;
-    rtl::Reference< DBContentLoader >   m_xMySelf;
-    ImplSVEvent * m_nStartWizard;
 
-    DECL_LINK( OnStartTableWizard, void*, void );
 public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
 
@@ -212,16 +202,12 @@ public:
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) override;
     virtual void SAL_CALL cancel() override;
-
-private:
-    bool impl_executeNewDatabaseWizard( Reference< XModel > const & _rxModel, bool& _bShouldStartTableWizard );
 };
 
 }
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactory)
     :m_aContext( _rxFactory )
-    ,m_nStartWizard(nullptr)
 {
 
 }
@@ -245,68 +231,6 @@ Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
 }
 
 
-namespace
-{
-    bool lcl_urlAllowsInteraction( const Reference<XComponentContext> & _rContext, const OUString& _rURL )
-    {
-        bool bDoesAllow = false;
-        try
-        {
-            Reference< XURLTransformer > xTransformer( URLTransformer::create(_rContext) );
-            URL aURL;
-            aURL.Complete = _rURL;
-            xTransformer->parseStrict( aURL );
-            bDoesAllow = aURL.Arguments == "Interactive";
-        }
-        catch( const Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "dbaccess", "lcl_urlAllowsInteraction: caught an exception while analyzing the URL!" );
-        }
-        return bDoesAllow;
-    }
-
-    Reference< XWindow > lcl_getTopMostWindow( const Reference<XComponentContext> & _rxContext )
-    {
-        Reference< XWindow > xWindow;
-        // get the top most window
-        Reference < XDesktop2 > xDesktop = Desktop::create(_rxContext);
-        Reference < XFrame > xActiveFrame = xDesktop->getActiveFrame();
-        if ( xActiveFrame.is() )
-        {
-            xWindow = xActiveFrame->getContainerWindow();
-            Reference<XFrame> xFrame = xActiveFrame;
-            while ( xFrame.is() && !xFrame->isTop() )
-                xFrame = xFrame->getCreator();
-
-            if ( xFrame.is() )
-                xWindow = xFrame->getContainerWindow();
-        }
-        return xWindow;
-    }
-}
-
-bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel > const & _rxModel, bool& _bShouldStartTableWizard )
-{
-    Sequence<Any> aWizardArgs(comphelper::InitAnyPropertySequence(
-    {
-        {"ParentWindow", Any(lcl_getTopMostWindow( m_aContext ))},
-        {"InitialSelection", Any(_rxModel)}
-    }));
-
-    // create the dialog
-    Reference< XExecutableDialog > xAdminDialog( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.sdb.DatabaseWizardDialog"_ustr, aWizardArgs, m_aContext), UNO_QUERY_THROW);
-
-    // execute it
-    if ( RET_OK != xAdminDialog->execute() )
-        return false;
-
-    Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
-    bool bSuccess = false;
-    xProp->getPropertyValue(u"OpenDatabase"_ustr) >>= bSuccess;
-    xProp->getPropertyValue(u"StartTableWizard"_ustr) >>= _bShouldStartTableWizard;
-    return bSuccess;
-}
-
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener)
@@ -325,7 +249,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     OUString            sSalvagedURL = aMediaDesc.getOrDefault( u"SalvagedFile"_ustr, _rURL );
 
     bool bCreateNew = false;        // does the URL denote the private:factory URL?
-    bool bStartTableWizard = false; // start the table wizard after everything was loaded successfully?
 
     bool bSuccess = true;
 
@@ -362,10 +285,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         bCreateNew = sFactoryName.match(_rURL);
 
         Reference< XDocumentDataSource > xDocumentDataSource;
-        bool bNewAndInteractive = false;
         if ( bCreateNew )
         {
-            bNewAndInteractive = lcl_urlAllowsInteraction( m_aContext, _rURL );
             xDocumentDataSource.set( xDatabaseContext->createInstance(), UNO_QUERY_THROW );
         }
         else
@@ -379,22 +300,15 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
         if ( bCreateNew && xModel.is() )
         {
-            if ( bNewAndInteractive )
+            try
             {
-                bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
+                Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
+                xLoad->initNew();
+                bSuccess = true;
             }
-            else
+            catch( const Exception& )
             {
-                try
-                {
-                    Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
-                    xLoad->initNew();
-                    bSuccess = true;
-                }
-                catch( const Exception& )
-                {
-                    bSuccess = false;
-                }
+                bSuccess = false;
             }
 
             // initially select the "Tables" category (will be done below)
@@ -471,15 +385,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
                 xDocView->select( Any( aSelection ) );
             }
         }
-
-        if ( bStartTableWizard )
-        {
-            // reset the data of the previous async drop (if any)
-            if ( m_nStartWizard )
-                Application::RemoveUserEvent(m_nStartWizard);
-            m_xMySelf = this;
-            m_nStartWizard = Application::PostUserEvent(LINK(this, DBContentLoader, OnStartTableWizard));
-        }
     }
     else
     {
@@ -493,14 +398,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
 void DBContentLoader::cancel()
 {
-}
-
-IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard, void*, void )
-{
-    m_nStartWizard = nullptr;
-    // wizards module has been removed; table wizard service no longer exists.
-    SAL_WARN("dbaccess", "table wizard service no longer available");
-    m_xMySelf = nullptr;
 }
 
 }

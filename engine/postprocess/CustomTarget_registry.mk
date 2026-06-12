@@ -159,7 +159,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/Scripting.xcs \
 	$(postprocess_XCS)/Office/Security.xcs \
 	$(postprocess_XCS)/Office/TypeDetection.xcs \
-	$(postprocess_XCS)/Office/UI/BaseWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/BasicIDECommands.xcs \
 	$(postprocess_XCS)/Office/UI/BasicIDEWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/BibliographyCommands.xcs \
@@ -170,10 +169,7 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/UI/Commands.xcs \
 	$(postprocess_XCS)/Office/UI/Controller.xcs \
 	$(postprocess_XCS)/Office/UI/DbBrowserWindowState.xcs \
-	$(postprocess_XCS)/Office/UI/DbQueryWindowState.xcs \
-	$(postprocess_XCS)/Office/UI/DbRelationWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/DbTableDataWindowState.xcs \
-	$(postprocess_XCS)/Office/UI/DbTableWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/DbuCommands.xcs \
 	$(postprocess_XCS)/Office/UI/DrawImpressCommands.xcs \
 	$(postprocess_XCS)/Office/UI/Factories.xcs \
@@ -223,7 +219,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/Paths.xcu \
 	$(postprocess_XCU)/Office/ProtocolHandler.xcu \
 	$(postprocess_XCU)/Office/Security.xcu \
-	$(postprocess_XCU)/Office/UI/BaseWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/BasicIDECommands.xcu \
 	$(postprocess_XCU)/Office/UI/BasicIDEWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/BibliographyCommands.xcu \
@@ -231,10 +226,7 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/UI/ChartWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/Controller.xcu \
 	$(postprocess_XCU)/Office/UI/DbBrowserWindowState.xcu \
-	$(postprocess_XCU)/Office/UI/DbQueryWindowState.xcu \
-	$(postprocess_XCU)/Office/UI/DbRelationWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/DbTableDataWindowState.xcu \
-	$(postprocess_XCU)/Office/UI/DbTableWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/DbuCommands.xcu \
 	$(postprocess_XCU)/Office/UI/DrawImpressCommands.xcu \
 	$(postprocess_XCU)/Office/UI/Factories.xcu \

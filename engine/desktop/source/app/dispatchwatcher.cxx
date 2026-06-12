@@ -308,12 +308,6 @@ OUString getName(const Reference< XInterface > & xDoc)
         return u"Basic"_ustr;
     else if (aDocService == "com.sun.star.formula.FormulaProperties")
         return u"Math"_ustr;
-    else if (aDocService == "com.sun.star.sdb.RelationDesign")
-        return u"Relation Design"_ustr;
-    else if (aDocService == "com.sun.star.sdb.QueryDesign")
-        return u"Query Design"_ustr;
-    else if (aDocService == "com.sun.star.sdb.TableDesign")
-        return u"Table Design"_ustr;
     else if (aDocService == "com.sun.star.sdb.DataSourceBrowser")
         return u"Data Source Browser"_ustr;
     else if (aDocService == "com.sun.star.sdb.DatabaseDocument")

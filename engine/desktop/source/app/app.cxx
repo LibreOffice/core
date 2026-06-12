@@ -1647,8 +1647,6 @@ void Desktop::OpenClients()
             aHelpModule = u"sdraw/helpdraw"_ustr;
         } else if (rArgs.IsHelpImpress()) {
             aHelpModule = u"simpress/helpimpress"_ustr;
-        } else if (rArgs.IsHelpBase()) {
-            aHelpModule = u"sdatabase/helpbase"_ustr;
         } else if (rArgs.IsHelpBasic()) {
             aHelpModule = u"sbasic/helpbasic"_ustr;
         } else if (rArgs.IsHelpMath()) {
@@ -1856,8 +1854,6 @@ void Desktop::OpenDefault()
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::CALC );
         else if (rArgs.IsImpress() && aOpt.IsImpressInstalled())
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::IMPRESS );
-        else if (rArgs.IsBase() && aOpt.IsDataBaseInstalled())
-            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DATABASE );
         else if (rArgs.IsDraw() && aOpt.IsDrawInstalled())
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DRAW );
         else if (rArgs.IsMath() && aOpt.IsMathInstalled())
@@ -2112,8 +2108,6 @@ void Desktop::OpenSplashScreen()
         aAppName = u"draw"_ustr;
     else if ( rCmdLine.IsImpress() )
         aAppName = u"impress"_ustr;
-    else if ( rCmdLine.IsBase() )
-        aAppName = u"base"_ustr;
     else if ( rCmdLine.IsGlobal() )
         aAppName = u"global"_ustr;
     else if ( rCmdLine.IsMath() )

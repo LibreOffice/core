@@ -144,7 +144,6 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     , mxCalcAllButton(m_xBuilder->weld_button(u"calc_all"_ustr))
     , mxImpressAllButton(m_xBuilder->weld_button(u"impress_all"_ustr))
     , mxDrawAllButton(m_xBuilder->weld_button(u"draw_all"_ustr))
-    , mxDBAllButton(m_xBuilder->weld_button(u"database_all"_ustr))
     , mxMathAllButton(m_xBuilder->weld_button(u"math_all"_ustr))
     , mxBrandImage(new BrandImage)
     , mxBrandImageWeld(new weld::CustomWeld(*m_xBuilder, u"daBrand"_ustr, *mxBrandImage))
@@ -228,7 +227,6 @@ void BackingWindow::dispose()
     mxCalcAllButton.reset();
     mxImpressAllButton.reset();
     mxDrawAllButton.reset();
-    mxDBAllButton.reset();
     mxMathAllButton.reset();
     mxBrandImageWeld.reset();
     mxBrandImage.reset();
@@ -301,7 +299,6 @@ void BackingWindow::initControls()
     mxWriterAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
     mxDrawAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
     mxCalcAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
-    mxDBAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
     mxImpressAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
     mxMathAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
 
@@ -350,7 +347,6 @@ void BackingWindow::ApplyStyleSettings()
     setLargerFont(mxWriterAllButton, aButtonFont);
     setLargerFont(mxDrawAllButton, aButtonFont);
     setLargerFont(mxCalcAllButton, aButtonFont);
-    setLargerFont(mxDBAllButton, aButtonFont);
     setLargerFont(mxImpressAllButton, aButtonFont);
     setLargerFont(mxMathAllButton, aButtonFont);
     setLargerFont(mxCreateLabel, aLabelFont);
@@ -402,7 +398,6 @@ void BackingWindow::checkInstalledModules()
         mxImpressAllButton->set_visible(false);
         mxDrawAllButton->set_visible(false);
         mxMathAllButton->set_visible(false);
-        mxDBAllButton->set_visible(false);
         return;
     }
 
@@ -413,7 +408,6 @@ void BackingWindow::checkInstalledModules()
     mxImpressAllButton->set_sensitive(aModuleOpt.IsImpressInstalled());
     mxDrawAllButton->set_sensitive(aModuleOpt.IsDrawInstalled());
     mxMathAllButton->set_sensitive(aModuleOpt.IsMathInstalled());
-    mxDBAllButton->set_sensitive(aModuleOpt.IsDataBaseInstalled());
 }
 
 bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
@@ -601,8 +595,6 @@ IMPL_LINK( BackingWindow, ClickHdl, weld::Button&, rButton, void )
         dispatchURL( u"private:factory/simpress?slot=6686"_ustr );
     else if( &rButton == mxDrawAllButton.get() )
         dispatchURL( u"private:factory/sdraw"_ustr );
-    else if( &rButton == mxDBAllButton.get() )
-        dispatchURL( u"private:factory/sdatabase?Interactive"_ustr );
     else if( &rButton == mxMathAllButton.get() )
         dispatchURL( u"private:factory/smath"_ustr );
     else if( &rButton == mxOpenButton.get() )

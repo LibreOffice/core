@@ -231,8 +231,6 @@
 #include <FieldDescriptions.hxx>
 #include <IClipBoardTest.hxx>
 #include <QEnumTypes.hxx>
-#include <TableConnectionData.hxx>
-#include <TableWindowData.hxx>
 #include <TypeInfo.hxx>
 #include <UITools.hxx>
 #include <browserids.hxx>

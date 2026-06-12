@@ -109,7 +109,6 @@ void SbaTableQueryBrowser::describeSupportedFeatures()
     implDescribeSupportedFeature( u".uno:Title"_ustr,                             ID_BROWSER_TITLE );
     if ( !m_bShowMenu )
     {
-        implDescribeSupportedFeature( u".uno:DSBEditDB"_ustr,          ID_TREE_EDIT_DATABASE );
         implDescribeSupportedFeature( u".uno:DSBCloseConnection"_ustr, ID_TREE_CLOSE_CONN );
         implDescribeSupportedFeature( u".uno:DSBAdministrate"_ustr,    ID_TREE_ADMINISTRATE );
 

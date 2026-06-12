@@ -23,7 +23,7 @@ share_SRCDIR := $(SRCDIR)/sysui/desktop
 
 share_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.py
 
-LAUNCHERLIST_APPS := writer calc draw impress math base startcenter
+LAUNCHERLIST_APPS := writer calc draw impress math startcenter
 LAUNCHERLIST := $(LAUNCHERLIST_APPS) xsltfilter
 LAUNCHERS := $(foreach launcher,$(LAUNCHERLIST),$(share_SRCDIR)/menus/$(launcher).desktop)
 
@@ -53,7 +53,6 @@ MIMELIST := \
     oasis-formula \
     oasis-master-document \
     oasis-master-document-template \
-    oasis-database \
     oasis-web-template \
     ms-excel-sheet-12 \
     ms-excel-sheet \
@@ -85,7 +84,6 @@ MIMEICONLIST := \
     oasis-formula \
     oasis-master-document \
     oasis-master-document-template \
-    oasis-database \
     oasis-web-template \
     text \
     text-template \
@@ -96,8 +94,7 @@ MIMEICONLIST := \
     presentation \
     presentation-template \
     formula \
-    master-document \
-    database
+    master-document
 
 share_ICONS := $(foreach size,16x16 32x32 48x48,\
 	$(foreach contrast,hicolor locolor,\

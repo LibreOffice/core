@@ -61,7 +61,6 @@ class BackingWindow : public InterimItemWindow
     std::unique_ptr<weld::Button> mxCalcAllButton;
     std::unique_ptr<weld::Button> mxImpressAllButton;
     std::unique_ptr<weld::Button> mxDrawAllButton;
-    std::unique_ptr<weld::Button> mxDBAllButton;
     std::unique_ptr<weld::Button> mxMathAllButton;
     std::unique_ptr<BrandImage> mxBrandImage;
     std::unique_ptr<weld::CustomWeld> mxBrandImageWeld;
