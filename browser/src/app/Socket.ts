@@ -24,6 +24,10 @@ class Socket {
 	};
 	private IndirectSocketReconnectCount: number = 0;
 	private _initialConnectRetries: number = 0;
+	// Once the compact /cool/ws URL has failed to connect and we have dropped
+	// back to the legacy /cool/<doc>/ws URL, stay on the legacy URL for the
+	// rest of the session.
+	private _forceLegacyWsUrl: boolean = false;
 	private _connectCount: number = 0;
 
 	/// Whether Trace Event recording is enabled or not. ("Enabled" here means whether it can be
@@ -264,7 +268,11 @@ class Socket {
 	}
 
 	private getWebSocketBaseURI(map: MapInterface): string {
-		if (window.enableExperimentalFeatures && map.options.wopiSrc) {
+		if (
+			window.enableExperimentalFeatures &&
+			map.options.wopiSrc &&
+			!this._forceLegacyWsUrl
+		) {
 			// Use the new Cool WS URL for WOPI documents.
 			return window.makeWopiCoolWsUrl(
 				window.makeWsUrl('/cool'),
@@ -511,6 +519,23 @@ class Socket {
 					'_onSocketClose: transient failure during initial load, attempt ' +
 						this._initialConnectRetries,
 				);
+				this._map['wopi'].resetAppLoaded();
+				setTimeout(() => {
+					this._scheduleReconnect();
+				}, 1);
+				return;
+			} else if (
+				window.enableExperimentalFeatures &&
+				this._map.options.wopiSrc &&
+				!this._forceLegacyWsUrl
+			) {
+				// The compact /cool/ws URL never connected.
+				//
+				// Perhaps a reverse proxy that only tunnels the legacy
+				// /cool/<doc>/ws URL drops the upgrade for the compact URL.
+				// So fall back to the legacy URL, which such a proxy still tunnels.
+				this._forceLegacyWsUrl = true;
+				this._initialConnectRetries = 0;
 				this._map['wopi'].resetAppLoaded();
 				setTimeout(() => {
 					this._scheduleReconnect();
