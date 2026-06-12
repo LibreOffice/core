@@ -444,8 +444,10 @@ public:
 
 class ScDPResultMemberSlim : public ScDPResultMember
 {
+    friend ScDPResultDimension; // For promotion
 private:
-    const ScDPResultDimension* mpOurDimension;
+    // When adding fields here, update ScDPResultDimension::Promote
+    ScDPResultDimension* mpOurDimension;
     const ScDPMember* mpMemberDesc;
     const ScDPResultData* pResultData;
     const SCROW mnOrder;
@@ -608,6 +610,10 @@ public:
 private:
     const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
+    // Used during 'Promote' of ScDPResultMember
+    ScDPDimension* mpDimension;
+    ScDPLevel* mpLevel;
+    MemberArray maPromotedMembers;
 
     OUString                aDimensionName;     //! or ptr to IntDimension?
     tools::Long                    nSortMeasure;
@@ -712,6 +718,14 @@ public:
     ScDPResultDimension* GetFirstChildDimension() const;
 
     void                FillVisibilityData(ScDPResultVisibilityData& rData) const;
+
+    // Called by an ScDPResultMemberSlim which has already been promoted
+    // but something with an older pointer calls one of its member functions
+    ScDPResultMember* GetPromote(SCROW nOrder) const;
+
+    // Called by an ScDPResultMemberSlim when a member function needs
+    // to do something which Slim can't represent
+    ScDPResultMember* Promote(ScDPResultMemberSlim* pSlim, SCROW nOrder);
 };
 
 class ScDPDataDimension

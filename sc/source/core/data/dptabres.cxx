@@ -2948,6 +2948,8 @@ bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
 
 ScDPResultDimension::ScDPResultDimension( const ScDPResultData* pData ) :
     pResultData( pData ),
+    mpDimension(nullptr),
+    mpLevel(nullptr),
     nSortMeasure( 0 ),
     bIsDataLayout( false ),
     bSortByData( false ),
@@ -3010,6 +3012,10 @@ void ScDPResultDimension::InitFrom(
         bInitialized = true;
         return;
     }
+
+    // Stash for promotion
+    mpDimension = pThisDim;
+    mpLevel = pThisLevel;
 
     bIsDataLayout = pThisDim->getIsDataLayoutDimension();   // member
     aDimensionName = pThisDim->getName();                   // member
@@ -3076,6 +3082,10 @@ void ScDPResultDimension::LateInitFrom(
 
     if (!pThisDim || !pThisLevel)
         return;
+
+    // Stash for promotion
+    mpDimension = pThisDim;
+    mpLevel = pThisLevel;
 
     tools::Long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
 
@@ -3733,6 +3743,52 @@ void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData) co
             pMember->FillVisibilityData(rData);
         }
     }
+}
+
+// Called by an ScDPResultMemberSlim which has already been promoted
+// but something calls one of it's member functions
+ScDPResultMember* ScDPResultDimension::GetPromote(SCROW nOrder) const
+{
+    // Find the existing slim entry
+    SCROW nIndex;
+    if (!lcl_SearchMember(maMemberArray, nOrder, nIndex))
+        throw container::NoSuchElementException();
+
+    return maMemberArray[nIndex].get();
+}
+
+// Called by an ScDPResultMemberSlim when a member function needs
+// to do something which Slim can't represent
+ScDPResultMember* ScDPResultDimension::Promote(ScDPResultMemberSlim* pSlim, SCROW nOrder)
+{
+    // Find the existing slim entry
+    SCROW nIndex;
+    if (!lcl_SearchMember(maMemberArray, nOrder, nIndex))
+        throw container::NoSuchElementException();
+
+    assert(pSlim == maMemberArray[nIndex].get());
+
+    ScDPParentDimData aParentData(nOrder, mpDimension, mpLevel, pSlim->mpMemberDesc);
+    ScDPResultMember* pFull = new ScDPResultMemberFull(pSlim->pResultData, aParentData);
+
+    if (pSlim->bmHasElements)
+        pFull->SetHasElements();
+    if (pSlim->bmHasHiddenDetails)
+        pFull->SetHasHiddenDetails();
+    if (pSlim->bmInitialized)
+        pFull->SetInitialized();
+
+    // Remove the Slim from the memberarray but don't deallocate
+    // We can't free it yet, because this Promote is called from Promote on
+    // this Slim instance and it's caller may use the pointer again
+    maMemberArray[nIndex].release();
+
+    maMemberArray[nIndex].reset(pFull);
+
+    // Stash the unpromoted member for later deletion - when this list is dropped
+    maPromotedMembers.emplace_back(pSlim);
+
+    return pFull;
 }
 
 ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
