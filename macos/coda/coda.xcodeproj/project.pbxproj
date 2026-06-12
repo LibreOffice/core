@@ -7,7 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD01AD01AD01AD01AD010101 /* adminIntegratorSettings.html in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010001 /* adminIntegratorSettings.html */; };
+		AD01AD01AD01AD01AD010102 /* admin-bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010002 /* admin-bundle.js */; };
+		AD01AD01AD01AD01AD010103 /* l10n-settings.js in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010003 /* l10n-settings.js */; };
+		AD01AD01AD01AD01AD010104 /* settings.css in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010004 /* settings.css */; };
+		AD01AD01AD01AD01AD010105 /* color-palette.css in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010005 /* color-palette.css */; };
+		AD01AD01AD01AD01AD010106 /* color-palette-dark.css in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010006 /* color-palette-dark.css */; };
+		AD01AD01AD01AD01AD010107 /* admin in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010007 /* admin */; };
 		5C02902E606BD6410CA7B24A /* ProcUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC95AFDE75BD0C4A66FE4558 /* ProcUtil.cpp */; };
+		5E7715000000000000000001 /* SettingsStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E7715000000000000000002 /* SettingsStorage.cpp */; };
 		BE16C9F02CD51F58005E5960 /* hello.odt in Resources */ = {isa = PBXBuildFile; fileRef = BE16C9EF2CD51F58005E5960 /* hello.odt */; };
 		BE178EEA2E5C756000A1FCBF /* Log-common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE178EE92E5C756000A1FCBF /* Log-common.cpp */; };
 		BE22492C2CC79AD700385A9C /* cool.html in Resources */ = {isa = PBXBuildFile; fileRef = BE22492B2CC79AD700385A9C /* cool.html */; };
@@ -111,6 +119,7 @@
 		6EC5603A58ED809E2702789D /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ProcUtil.hpp; path = ../../../../common/ProcUtil.hpp; sourceTree = "<group>"; };
 		BE16C9EF2CD51F58005E5960 /* hello.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello.odt; path = ../../../test/data/hello.odt; sourceTree = "<group>"; };
 		BE178EE92E5C756000A1FCBF /* Log-common.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Log-common.cpp"; path = "../../../../common/Log-common.cpp"; sourceTree = "<group>"; };
+		5E7715000000000000000002 /* SettingsStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SettingsStorage.cpp; path = ../../../../common/SettingsStorage.cpp; sourceTree = "<group>"; };
 		BE22492B2CC79AD700385A9C /* cool.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = cool.html; path = ../../../browser/dist/cool.html; sourceTree = "<group>"; };
 		BE22492D2CC79BAE00385A9C /* bundle.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = bundle.css; path = ../../../browser/dist/bundle.css; sourceTree = "<group>"; };
 		BE22492E2CC79BAE00385A9C /* bundle.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = bundle.js; path = ../../../browser/dist/bundle.js; sourceTree = "<group>"; };
@@ -118,6 +127,13 @@
 		BE2249302CC79BAE00385A9C /* device-desktop.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = "device-desktop.css"; path = "../../../browser/dist/device-desktop.css"; sourceTree = "<group>"; };
 		BE2249312CC79BAE00385A9C /* global.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = global.js; path = ../../../browser/dist/global.js; sourceTree = "<group>"; };
 		BE22AA9B2CC7AE7400385A9C /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../../../browser/dist/images; sourceTree = "<group>"; };
+		AD01AD01AD01AD01AD010001 /* adminIntegratorSettings.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "adminIntegratorSettings.html"; path = "../../../browser/dist/adminIntegratorSettings.html"; sourceTree = "<group>"; };
+		AD01AD01AD01AD01AD010002 /* admin-bundle.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "admin-bundle.js"; path = "../../../browser/dist/admin-bundle.js"; sourceTree = "<group>"; };
+		AD01AD01AD01AD01AD010003 /* l10n-settings.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "l10n-settings.js"; path = "../../../browser/dist/l10n-settings.js"; sourceTree = "<group>"; };
+		AD01AD01AD01AD01AD010004 /* settings.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = settings.css; path = ../../../browser/dist/settings.css; sourceTree = "<group>"; };
+		AD01AD01AD01AD01AD010005 /* color-palette.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = "color-palette.css"; path = "../../../browser/dist/color-palette.css"; sourceTree = "<group>"; };
+		AD01AD01AD01AD01AD010006 /* color-palette-dark.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = "color-palette-dark.css"; path = "../../../browser/dist/color-palette-dark.css"; sourceTree = "<group>"; };
+		AD01AD01AD01AD01AD010007 /* admin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = admin; path = ../../../browser/dist/admin; sourceTree = "<group>"; };
 		BE252C592EC6667400349F71 /* SlideCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SlideCache.hpp; path = ../../../../wsd/SlideCache.hpp; sourceTree = "<group>"; };
 		BE252C5A2EC6667400349F71 /* SlideCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SlideCache.cpp; path = ../../../../wsd/SlideCache.cpp; sourceTree = "<group>"; };
 		BE44ACBF2D7EFDE900BFA3B2 /* DummyTraceEventEmitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DummyTraceEventEmitter.cpp; path = ../../../../common/DummyTraceEventEmitter.cpp; sourceTree = "<group>"; };
@@ -368,6 +384,13 @@
 			children = (
 				BE22AA9B2CC7AE7400385A9C /* images */,
 				BE862C4C2EB9066E0061664E /* templates */,
+				AD01AD01AD01AD01AD010007 /* admin */,
+				AD01AD01AD01AD01AD010001 /* adminIntegratorSettings.html */,
+				AD01AD01AD01AD01AD010002 /* admin-bundle.js */,
+				AD01AD01AD01AD01AD010003 /* l10n-settings.js */,
+				AD01AD01AD01AD01AD010004 /* settings.css */,
+				AD01AD01AD01AD01AD010005 /* color-palette.css */,
+				AD01AD01AD01AD01AD010006 /* color-palette-dark.css */,
 				BE22492D2CC79BAE00385A9C /* bundle.css */,
 				BE22492E2CC79BAE00385A9C /* bundle.js */,
 				BE22492B2CC79AD700385A9C /* cool.html */,
@@ -481,6 +504,7 @@
 				BE9115AD2CECBD3100C597B2 /* FileUtil-unix.cpp */,
 				BEA263572CBE38E20007435A /* Log.hpp */,
 				BE178EE92E5C756000A1FCBF /* Log-common.cpp */,
+				5E7715000000000000000002 /* SettingsStorage.cpp */,
 				BEA263582CBE38E20007435A /* Log-poco.cpp */,
 				BE4C62052D59E85500047DF2 /* MobileApp.hpp */,
 				BE4C62062D59E85500047DF2 /* MobileApp.cpp */,
@@ -781,6 +805,13 @@
 				BE22AA9C2CC7AE7400385A9C /* images in Resources */,
 				BEB7CC182F332BF8006FCAE9 /* TestPlan.xctestplan in Resources */,
 				BE862C4D2EB9066E0061664E /* templates in Resources */,
+				AD01AD01AD01AD01AD010107 /* admin in Resources */,
+				AD01AD01AD01AD01AD010101 /* adminIntegratorSettings.html in Resources */,
+				AD01AD01AD01AD01AD010102 /* admin-bundle.js in Resources */,
+				AD01AD01AD01AD01AD010103 /* l10n-settings.js in Resources */,
+				AD01AD01AD01AD01AD010104 /* settings.css in Resources */,
+				AD01AD01AD01AD01AD010105 /* color-palette.css in Resources */,
+				AD01AD01AD01AD01AD010106 /* color-palette-dark.css in Resources */,
 				BE70D2422FC4F13200FA34B7 /* az.po in Resources */,
 				BE70D2432FC4F13200FA34B7 /* brh.po in Resources */,
 				BE70D24A2FC4F13200FA34B7 /* en_AU.po in Resources */,
@@ -929,6 +960,7 @@
 				BEA264A12CBE98CD0007435A /* Socket.cpp in Sources */,
 				BE9115B02CECBECF00C597B2 /* Util-unix.cpp in Sources */,
 				5C02902E606BD6410CA7B24A /* ProcUtil.cpp in Sources */,
+				5E7715000000000000000001 /* SettingsStorage.cpp in Sources */,
 				BE4C620E2D59E85500047DF2 /* MobileApp.cpp in Sources */,
 				BE4C620F2D59E85500047DF2 /* Util-macos.cpp in Sources */,
 				BE44ACCF2D7F067500BFA3B2 /* Crypto-stub.cpp in Sources */,

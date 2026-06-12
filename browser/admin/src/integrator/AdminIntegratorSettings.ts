@@ -125,9 +125,23 @@ const getIntegratorOrigin = (): string => {
 	return window.origin;
 };
 
+// Target origin for messages we post up to the parent (cool.html). On the
+// desktop apps both documents load over file://, but the embedded WebViews
+// hand this iframe an opaque "null" origin while the parent stays "file://"
+// (most visibly on macOS/WKWebView). A targetOrigin of window.origin ("null")
+// then never matches the parent, so the message is silently dropped and the
+// settings handshake stalls. The parent is our own trusted local content
+// there, so target "*". The online/WOPI path keeps the strict origin.
+function parentTargetOrigin(): string {
+	return isCODesktop ? '*' : window.origin;
+}
+
 const onLoaded = () => {
 	window.addEventListener('message', onMessage, false);
-	window.parent.postMessage('{"MessageId":"settings-ready"}', window.origin);
+	window.parent.postMessage(
+		'{"MessageId":"settings-ready"}',
+		parentTargetOrigin(),
+	);
 };
 
 const onMessage = (e) => {
@@ -143,7 +157,7 @@ const onMessage = (e) => {
 			if (data.MessageId === 'settings-ready') {
 				window.parent.postMessage(
 					'{"MessageId":"settings-show"}',
-					window.origin,
+					parentTargetOrigin(),
 				);
 			} else if (data.MessageId === 'settings-save-all') {
 				const settingIframe = (window as any).settingIframe as SettingIframe;
@@ -155,7 +169,7 @@ const onMessage = (e) => {
 								viewSettings: settingIframe.getViewSettings(),
 								aiJustConfigured: result.aiJustConfigured,
 							}),
-							window.origin,
+							parentTargetOrigin(),
 						);
 					});
 				}

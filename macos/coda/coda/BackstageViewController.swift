@@ -43,6 +43,7 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
 
         let cfg = WKWebViewConfiguration()
         cfg.userContentController = contentController
+        ViewController.allowLocalCrossFrameAccess(cfg)
 
         webView = WKWebView(frame: .zero, configuration: cfg)
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,6 +96,13 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
         }
 
         guard message.name == "lok", let body = message.body as? String else { return (nil, nil) }
+
+        // Options dialog: AI model listing performs a network request, so handle
+        // it asynchronously (handleBackstageMessage/handleSettingsMessage are sync).
+        if body.hasPrefix("FETCHAIMODELS ") {
+            let payload = String(body.dropFirst("FETCHAIMODELS ".count))
+            return (await ViewController.fetchAIModels(payload), nil)
+        }
 
         // Handle, and potentially close the window with the Backstage
         if let result = ViewController.handleBackstageMessage(body, onClose: { self.onClose?() }) {

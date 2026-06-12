@@ -47,4 +47,11 @@
 + (bool)darkModeWithSystemDefault:(bool)systemDefault NS_SWIFT_NAME(darkMode(systemDefault:));
 + (void)setDarkMode:(bool)value NS_SWIFT_NAME(setDarkMode(_:));
 
+// Options dialog (adminIntegratorSettings) native backend. These bridge to the
+// shared Desktop:: layer in common/SettingsStorage.cpp, mirroring the Windows
+// (CODA.cpp) and Qt (Bridge.cpp) apps.
++ (NSString *_Nonnull)fetchSettingsConfig;
++ (NSString *_Nonnull)fetchSettingsFile:(NSString *_Nonnull)relPath NS_SWIFT_NAME(fetchSettingsFile(_:));
++ (void)uploadSettings:(NSString *_Nonnull)payload NS_SWIFT_NAME(uploadSettings(_:));
+
 @end

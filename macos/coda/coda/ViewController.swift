@@ -85,6 +85,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         let config = WKWebViewConfiguration()
         config.preferences.isElementFullscreenEnabled = true
         config.userContentController = contentController
+        ViewController.allowLocalCrossFrameAccess(config)
 
         // Create the web view
         webView = WKWebView(frame: .zero, configuration: config)
@@ -351,6 +352,17 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     COWrapper.setDarkMode(body == "SETDARKMODE true")
                     return (nil, nil)
                 }
+                // Options dialog: AI model listing performs a network request, so
+                // handle it asynchronously rather than via handleSettingsMessage.
+                else if body.hasPrefix("FETCHAIMODELS ") {
+                    let payload = String(body.dropFirst("FETCHAIMODELS ".count))
+                    return (await ViewController.fetchAIModels(payload), nil)
+                }
+                // Other Options dialog native backend, shared with the Backstage
+                // web view (see handleSettingsMessage).
+                else if let settingsResult = ViewController.handleSettingsMessage(body) {
+                    return settingsResult
+                }
                 else if body.hasPrefix("downloadas ") {
                     let messageBodyItems = body.components(separatedBy: " ")
                     var format: String?
@@ -523,7 +535,112 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
      *
      * The return value is either nil (means the message was not handled), or pair that would be returned from the handler.
      */
+    /**
+     * The UI is loaded from file://, and WKWebView gives file:// frames unique
+     * opaque "null" origins, so the Options dialog iframe is cross-origin to its
+     * parent and the direct window.parent.postMobileCall() bridge is blocked
+     * with a SecurityError (postMessage is exempt, which is why the handshake
+     * works). Allow file:// documents to access other file:// documents, which
+     * removes that barrier.
+     *
+     * This is the WKWebView equivalent of what the other apps do with the same
+     * file:// UI: the Windows app passes Chromium's --allow-file-access-from-files
+     * (CODA.cpp), and QtWebEngine enables LocalContentCanAccessFileUrls by
+     * default. On all three the main UI is plain file://; the cool:// scheme only
+     * serves embedded media. This is the narrow file->file relaxation, not the
+     * broad file->any-origin allowUniversalAccessFromFileURLs. KVC-only setting,
+     * applied to our own bundled content.
+     */
+    static func allowLocalCrossFrameAccess(_ configuration: WKWebViewConfiguration) {
+        configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
+    }
+
+    /**
+     * Native backend for the Options dialog (adminIntegratorSettings), shared by
+     * the document web view and the Backstage web view. Bridges to the Desktop::
+     * layer in common/SettingsStorage.cpp, mirroring the Windows (CODA.cpp) and
+     * Qt (Bridge.cpp) apps. Returns nil if `body` is not a settings message.
+     */
+    static func handleSettingsMessage(_ body: String) -> (Any?, String?)? {
+        if body == "FETCHSETTINGSCONFIG" {
+            return (COWrapper.fetchSettingsConfig(), nil)
+        }
+        else if body.hasPrefix("FETCHSETTINGSFILE ") {
+            let relPath = String(body.dropFirst("FETCHSETTINGSFILE ".count))
+            // The JS caller reads `result.content`, so reply with an object.
+            return (["content": COWrapper.fetchSettingsFile(relPath)], nil)
+        }
+        else if body.hasPrefix("UPLOADSETTINGS ") {
+            COWrapper.uploadSettings(String(body.dropFirst("UPLOADSETTINGS ".count)))
+            return (nil, nil)
+        }
+        // FETCHAIMODELS is handled separately (asynchronously) by the message
+        // handlers, since it performs a network request; see fetchAIModels().
+        return nil
+    }
+
+    /**
+     * Fetch an AI provider's model list for the Options dialog. The desktop apps
+     * have no server-side proxy, so the app issues the request itself, mirroring
+     * Qt's Desktop::fetchAIModels(). The payload is {"provider","apiKey","baseUrl"};
+     * returns the provider's JSON body verbatim ({"data":[...]} or its own error
+     * JSON), or an {"error":...} JSON of our own.
+     */
+    static func fetchAIModels(_ payload: String) async -> String {
+        guard let data = payload.data(using: .utf8),
+              let obj = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+            return #"{"error":"Invalid payload"}"#
+        }
+
+        let provider = (obj["provider"] as? String) ?? ""
+        let apiKey = (obj["apiKey"] as? String) ?? ""
+        var baseUrl = (obj["baseUrl"] as? String) ?? ""
+
+        if provider.isEmpty || apiKey.isEmpty {
+            return #"{"error":"Missing provider or apiKey"}"#
+        }
+
+        if provider != "custom" {
+            // Keep in sync with preCannedAIProviderBaseUrl() in wsd/FileServer.cpp
+            // and the same map in qt/Application.cpp.
+            let preCanned = [
+                "openai": "https://api.openai.com",
+                "groq": "https://api.groq.com/openai",
+                "together": "https://api.together.xyz",
+                "mistral": "https://api.mistral.ai",
+            ]
+            guard let mapped = preCanned[provider] else {
+                return #"{"error":"Unknown provider"}"#
+            }
+            baseUrl = mapped
+        } else if baseUrl.isEmpty {
+            return #"{"error":"Missing baseUrl for custom provider"}"#
+        }
+
+        if baseUrl.hasSuffix("/") {
+            baseUrl.removeLast()
+        }
+        guard let url = URL(string: baseUrl + "/v1/models") else {
+            return #"{"error":"Invalid baseUrl"}"#
+        }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            let (body, _) = try await URLSession.shared.data(for: request)
+            return String(data: body, encoding: .utf8)
+                ?? #"{"error":"Non-text response from the AI provider"}"#
+        } catch {
+            return #"{"error":"Failed to reach the AI provider"}"#
+        }
+    }
+
     static func handleBackstageMessage(_ body: String, onClose: (() -> Void)? = nil) -> (Any?, String?)? {
+        if let settingsResult = handleSettingsMessage(body) {
+            return settingsResult
+        }
         if body == "GETRECENTDOCS" {
             return (RecentFiles.serialize(), nil)
         }

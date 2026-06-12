@@ -424,16 +424,64 @@ static std::atomic<int> appDocIdCounter(1);
 }
 
 + (bool)darkModeWithSystemDefault:(bool)systemDefault {
-    // TODO: persist via Desktop::getDarkMode() once common/SettingsStorage.cpp
-    // is added to coda.xcodeproj (it isn't today, so we can't link the
-    // Desktop:: layer here). For now follow the system theme on every launch.
-    return systemDefault;
+    const std::optional<bool> stored = Desktop::getDarkMode();
+    return stored.has_value() ? *stored : systemDefault;
 }
 
 + (void)setDarkMode:(bool)value {
-    // TODO: persist via Desktop::setDarkMode() once SettingsStorage.cpp is in
-    // the Xcode project. Silently no-op for now.
-    (void)value;
+    Desktop::setDarkMode(value);
+}
+
++ (NSString *)fetchSettingsConfig {
+    return [NSString stringWithUTF8String:Desktop::fetchSettingsConfig().c_str()];
+}
+
++ (NSString *)fetchSettingsFile:(NSString *)relPath {
+    const Desktop::FileResult result =
+        Desktop::fetchSettingsFile(std::string([relPath UTF8String]));
+    return [NSString stringWithUTF8String:result.content.c_str()];
+}
+
++ (void)uploadSettings:(NSString *)payload {
+    Desktop::uploadSettings(std::string([payload UTF8String]));
 }
 
 @end
+
+// macOS implementations of the platform-specific Desktop:: path hooks that
+// common/SettingsStorage.cpp relies on (Windows provides them in CODA.cpp, Qt
+// in Application.cpp). The app is sandboxed, so these resolve inside the app
+// container: per-user settings live under Application Support, and the app's
+// data is the bundle's Resources directory.
+namespace Desktop
+{
+Poco::Path getConfigPath()
+{
+    NSURL *appSupport = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory
+                                                               inDomain:NSUserDomainMask
+                                                      appropriateForURL:nil
+                                                                 create:YES
+                                                                  error:nil];
+    if (appSupport == nil)
+    {
+        LOG_ERR("getConfigPath: could not resolve the Application Support directory");
+        return Poco::Path(std::string([NSTemporaryDirectory() UTF8String]));
+    }
+
+    // Namespace settings under the app's name so they sit beside the engine's
+    // user profile (".../Application Support/Collabora Office/") rather than at
+    // the Application Support root, matching Qt's AppConfigLocation. CFBundleName
+    // follows --with-app-name, so this tracks the product branding.
+    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    if (appName.length == 0)
+        appName = @"Collabora Office";
+
+    return Poco::Path(std::string([appSupport.path UTF8String]) + "/" +
+                      std::string([appName UTF8String]));
+}
+
+std::string getDataDir()
+{
+    return std::string([[[NSBundle mainBundle] resourcePath] UTF8String]);
+}
+}
