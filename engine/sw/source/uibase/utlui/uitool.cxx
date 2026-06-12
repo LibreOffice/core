@@ -295,7 +295,7 @@ static UseOnPage lcl_convertUseFromSvx(SvxPageUsage nUse)
 void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bApplyToAllFormatFrames)
 {
     SwFrameFormat& rMaster = rPageDesc.GetMaster();
-    bool bFirstShare = false;
+    bool bFirstShareWasSetOnHeader = false;
 
     // before SetFormatAttr() in case it contains RES_BACKGROUND_FULL_SIZE
     // itself, as it does when called from SwXPageStyle
@@ -392,9 +392,9 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bAppl
             rPageDesc.ChgHeaderShare(rHeaderSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
             rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
                             rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
-            rPageDesc.ChgWithoutFirst(static_cast<const SfxBoolItem&>(
+            rPageDesc.ChgWithoutFirstHeader(static_cast<const SfxBoolItem&>(
                             rHeaderSet.Get(SID_ATTR_PAGE_NO_FIRST)).GetValue());
-            bFirstShare = true;
+            bFirstShareWasSetOnHeader = true;
         }
         else
         {
@@ -425,13 +425,14 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bAppl
             ::FillHdFt(aFooterFormat, rFooterSet, rPageDesc, bApplyToAllFormatFrames);
 
             rPageDesc.ChgFooterShare(rFooterSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
-            if (!bFirstShare)
+            if (!bFirstShareWasSetOnHeader)
             {
                 rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
                             rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
-                rPageDesc.ChgWithoutFirst(static_cast<const SfxBoolItem&>(
-                            rFooterSet.Get(SID_ATTR_PAGE_NO_FIRST)).GetValue());
             }
+
+            rPageDesc.ChgWithoutFirstFooter(static_cast<const SfxBoolItem&>(
+                        rFooterSet.Get(SID_ATTR_PAGE_NO_FIRST)).GetValue());
         }
         else
         {
@@ -591,7 +592,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aHeaderSet.Put(aShared);
         SfxBoolItem aFirstShared(SID_ATTR_PAGE_SHARED_FIRST, rPageDesc.IsFirstShared());
         aHeaderSet.Put(aFirstShared);
-        SfxBoolItem aWithoutFirst(SID_ATTR_PAGE_NO_FIRST, rPageDesc.IsWithoutFirst());
+        SfxBoolItem aWithoutFirst(SID_ATTR_PAGE_NO_FIRST, rPageDesc.IsWithoutFirstHeader());
         aHeaderSet.Put(aWithoutFirst);
 
         // Size
@@ -643,7 +644,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aFooterSet.Put(aShared);
         SfxBoolItem aFirstShared(SID_ATTR_PAGE_SHARED_FIRST, rPageDesc.IsFirstShared());
         aFooterSet.Put(aFirstShared);
-        SfxBoolItem aWithoutFirst(SID_ATTR_PAGE_NO_FIRST, rPageDesc.IsWithoutFirst());
+        SfxBoolItem aWithoutFirst(SID_ATTR_PAGE_NO_FIRST, rPageDesc.IsWithoutFirstFooter());
         aFooterSet.Put(aWithoutFirst);
 
         // Size

@@ -295,7 +295,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
     bool bShareFirstHeader;
     xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader;
     CPPUNIT_ASSERT(!bShareFirstHeader);
-    xPageStyle->getPropertyValue(u"NoFirst"_ustr) >>= bNoFirstHeader;
+    xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
     CPPUNIT_ASSERT(bNoFirstHeader);
 }
 
@@ -319,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
     bool bShareFirstHeader;
     xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader;
     CPPUNIT_ASSERT(!bShareFirstHeader);
-    xPageStyle->getPropertyValue(u"NoFirst"_ustr) >>= bNoFirstHeader;
+    xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
     CPPUNIT_ASSERT(bNoFirstHeader);
 }
 }
