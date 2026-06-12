@@ -486,6 +486,27 @@ public:
         return bmHasHiddenDetails;
     }
 
+    void SetHasElements() override
+    {
+        if (bmPromoted)
+            return GetPromote()->SetHasElements();
+        bmHasElements = true;
+    }
+
+    void SetHasHiddenDetails() override
+    {
+        if (bmPromoted)
+            return GetPromote()->SetHasHiddenDetails();
+        bmHasHiddenDetails = true;
+    }
+
+    void SetInitialized() override
+    {
+        if (bmPromoted)
+            return GetPromote()->SetInitialized();
+        bmInitialized = true;
+    }
+
     const ScDPMember* GetDPMember() const override
     {
         if (bmPromoted)
