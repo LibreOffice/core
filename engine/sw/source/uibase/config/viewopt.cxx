@@ -78,7 +78,9 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
 
     aValue = rConfig.GetColorValue(svtools::WRITERIDXSHADINGS);
     m_aIndexShadingsColor = aValue.nColor;
-    if(aValue.bIsVisible)
+    // as with field shadings below, we don't want to enable the grey
+    // index/table background for the online case
+    if (aValue.bIsVisible && !comphelper::COKit::isActive())
         m_nAppearanceFlags |= ViewOptFlags::IndexShadings;
 
     aValue = rConfig.GetColorValue(svtools::LINKS);
