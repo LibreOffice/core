@@ -297,6 +297,17 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
     CPPUNIT_ASSERT(!bShareFirstHeader);
     xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
     CPPUNIT_ASSERT(bNoFirstHeader);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentLayoutAccess& rIDLA = pDoc->getIDocumentLayoutAccess();
+    SwRootFrame* pLayout = rIDLA.GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+
+    CPPUNIT_ASSERT(pLastPage->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(pLastPage->GetLower()->GetNext()->GetNext()->IsFooterFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->GetNext()); // no footer
 }
 
 CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
@@ -321,6 +332,17 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
     CPPUNIT_ASSERT(!bShareFirstHeader);
     xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
     CPPUNIT_ASSERT(bNoFirstHeader);
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentLayoutAccess& rIDLA = pDoc->getIDocumentLayoutAccess();
+    SwRootFrame* pLayout = rIDLA.GetCurrentLayout();
+    SwPageFrame* pLastPage = pLayout->GetLastPage();
+
+    CPPUNIT_ASSERT(pLastPage->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(pLastPage->GetLower()->GetNext()->GetNext()->IsFooterFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->IsHeaderFrame());
+    CPPUNIT_ASSERT(!pLastPage->GetPrev()->GetLower()->GetNext()); // no footer
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

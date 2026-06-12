@@ -399,7 +399,9 @@ inline constexpr TypedWhichId<SfxBoolItem> RES_RTL_GUTTER(RES_FRMATR_BEGIN + 51)
 inline constexpr TypedWhichId<SfxBoolItem> RES_DECORATIVE(RES_FRMATR_BEGIN + 52);
 inline constexpr TypedWhichId<SwFormatWrapTextAtFlyStart>
     RES_WRAP_TEXT_AT_FLY_START(RES_FRMATR_BEGIN + 53);
+/// will be used instead of header's SID_ATTR_PAGE_SIZE/RES_UL_SPACE, if there is no header
 inline constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_TOP(RES_FRMATR_BEGIN + 54);
+/// will be used instead of footer's SID_ATTR_PAGE_SIZE/RES_UL_SPACE, if there is no footer
 inline constexpr TypedWhichId<SfxInt32Item> RES_FRMATR_PAGE_MIN_BOTTOM(RES_FRMATR_BEGIN + 55);
 inline constexpr sal_uInt16 RES_FRMATR_END(RES_FRMATR_BEGIN + 56);
 
