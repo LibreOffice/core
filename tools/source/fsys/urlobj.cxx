@@ -4847,6 +4847,25 @@ OUString INetURLObject::CutExtension()
     return OUString();
 }
 
+namespace {
+
+// Treat the substring of rURL from nStart up to the next '/' or '?' as a
+// percent-encoded nested url and report whether that nested url is an
+// exotic protocol.
+bool isExoticNestedProtocol(const OUString& rURL, sal_Int32 nStart)
+{
+    auto const find = [&rURL, nStart](auto c) {
+        auto const n = rURL.indexOf(c, nStart);
+        return n == -1 ? rURL.getLength() : n;
+    };
+    return INetURLObject(
+               INetURLObject::decode(rURL.subView(nStart, std::min(find('/'), find('?')) - nStart),
+                                     INetURLObject::DecodeMechanism::WithCharset))
+        .IsExoticProtocol();
+}
+
+}
+
 bool INetURLObject::IsExoticProtocol() const
 {
     if (m_eScheme == INetProtocol::Slot ||
@@ -4874,8 +4893,16 @@ bool INetURLObject::IsExoticProtocol() const
         return true;
     }
     if (m_eScheme == INetProtocol::VndSunStarPkg) {
-        return INetURLObject(GetHost(INetURLObject::DecodeMechanism::WithCharset))
-            .IsExoticProtocol();
+        // The package content provider (ucb/source/ucp/package/pkguri.cxx)
+        // treats the whole authority between "://" and the next '/' as the
+        // nested package url. GetHost() returns only the part after any '@',
+        // so match the provider and check that substring instead.
+        OUString sPayloadURL = GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        sal_Int32 nStart = sPayloadURL.indexOf(u"://");
+        if (nStart == -1) {
+            return false;
+        }
+        return isExoticNestedProtocol(sPayloadURL, nStart + 3);
     }
     if (isSchemeEqualTo(u"vnd.sun.star.zip"))
     {
@@ -4883,11 +4910,7 @@ bool INetURLObject::IsExoticProtocol() const
         if (!sPayloadURL.startsWith(u"//")) {
             return false;
         }
-        auto const find = [&sPayloadURL](auto c) {
-            auto const n = sPayloadURL.indexOf(c, 2);
-            return n == -1 ? sPayloadURL.getLength() : n;
-        };
-        return INetURLObject(decode(sPayloadURL.subView(2, std::min(find('/'), find('?')) - 2), INetURLObject::DecodeMechanism::WithCharset)).IsExoticProtocol();
+        return isExoticNestedProtocol(sPayloadURL, 2);
     }
     return false;
 }
