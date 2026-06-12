@@ -3587,6 +3587,40 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                 ? scaleYSpacingValue(rLSItem.GetInterLineSpace()) : 0;
             bool bPaintBullet (false);
 
+            // Fold the line that follows a multiline field into the field's
+            // last subline row. The line break that the field forces is
+            // skipped only when the IgnoreBreakAfterMultilineField compat flag
+            // is set. In edit mode that flag does not reach this path, so an
+            // active view behaves as if it were set, which matches how newer
+            // documents lay the field out (tdf#148966). A following line that
+            // is not a line break always belongs to the same row. Advances
+            // rLine past the consumed line and returns true when that line
+            // carries real content, so a caller still painting from a line
+            // pointer can repoint it.
+            const auto consumeLineFollowingMultilineField = [&](sal_Int32& rLine) -> bool
+            {
+                if (rLine + 1 >= nLines)
+                    return false;
+                const sal_Int32 nNextLineStart
+                    = rParaPortion.GetLines()[rLine + 1].GetStartPortion();
+                const TextPortion& rNextTextPortion
+                    = rParaPortion.GetTextPortions()[nNextLineStart];
+                if (rNextTextPortion.GetKind() != PortionKind::LINEBREAK)
+                {
+                    ++rLine;
+                    return true;
+                }
+                const OutlinerEditEng* pOutlEditEng = dynamic_cast<OutlinerEditEng*>(mpEditEngine);
+                const bool bIgnoreBreak
+                    = pOutlEditEng
+                      && pOutlEditEng
+                             ->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
+                             .value_or(false);
+                if (bIgnoreBreak || mpActiveView)
+                    ++rLine;
+                return false;
+            };
+
             for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
             {
                 EditLine* pLine = &GetParaPortions().getRef(nParaPortion).GetLines()[nLine];
@@ -3599,9 +3633,35 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                 adjustXDirectionAware(aTmpPos, pLine->GetStartPosX());
                 adjustYDirectionAware(aTmpPos, pLine->GetMaxAscent() - nLineHeight);
 
-                if ( ( !IsEffectivelyVertical() && ( aStartPos.Y() > aClipRect.Top() ) )
-                    || ( IsEffectivelyVertical() && IsTopToBottom() && aStartPos.X() < aClipRect.Right() )
-                    || ( IsEffectivelyVertical() && !IsTopToBottom() && aStartPos.X() > aClipRect.Left() ) )
+                // A field wrapped onto multiple sublines makes the line
+                // occupy more vertical space than its GetHeight(). The
+                // sublines are advanced by GetMaxAscent() each while painting
+                // the field below, and CalcHeight adds the same amount to the
+                // paragraph height.
+                tools::Long nWrappedFieldExtra = 0;
+                for (sal_Int32 nPortion = pLine->GetStartPortion(); nPortion <= pLine->GetEndPortion(); nPortion++)
+                {
+                    const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[nPortion];
+                    if (rTextPortion.GetKind() == PortionKind::FIELD)
+                    {
+                        const ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
+                        if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 1)
+                            nWrappedFieldExtra += pLine->GetMaxAscent() * (pExtraInfo->lineBreaksList.size() - 1);
+                    }
+                }
+
+                // The position after this line once the field sublines are
+                // accounted for. The visibility check below must use it so
+                // that sublines reaching into the clip area are painted even
+                // when the first subline ends above it.
+                const Point aLineMovePos(aStartPos);
+                const sal_Int16 nColumnAtLineStart(nColumn);
+                Point aLineEndPos(aStartPos);
+                adjustYDirectionAware(aLineEndPos, nWrappedFieldExtra);
+
+                if ( ( !IsEffectivelyVertical() && ( aLineEndPos.Y() > aClipRect.Top() ) )
+                    || ( IsEffectivelyVertical() && IsTopToBottom() && aLineEndPos.X() < aClipRect.Right() )
+                    || ( IsEffectivelyVertical() && !IsTopToBottom() && aLineEndPos.X() > aClipRect.Left() ) )
                 {
                     bPaintBullet = false;
 
@@ -3859,33 +3919,12 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                             nTextLen = nTextLen - nTextStart;
                                             bParsingFields = false;
 
-                                            if (nLine + 1 < nLines)
-                                            {
-                                                // tdf#148966 don't paint the line break following a
-                                                // multiline field based on a compat flag
-                                                OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(mpEditEngine)};
-                                                int nStartNextLine = rParaPortion.GetLines()[nLine + 1].GetStartPortion();
-                                                const TextPortion& rNextTextPortion = rParaPortion.GetTextPortions()[nStartNextLine];
-                                                if (pOutlEditEng
-                                                    && pOutlEditEng->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
-                                                           .value_or(false))
-                                                {
-                                                    if (rNextTextPortion.GetKind() == PortionKind::LINEBREAK)
-                                                        ++nLine; //ignore the following linebreak
-                                                }
-                                                else if (mpActiveView && rNextTextPortion.GetKind() == PortionKind::LINEBREAK)
-                                                {
-                                                    // if we are at edit mode, the compat flag does not work
-                                                    // here we choose to work if compat flag is true,
-                                                    // this is better for newer documents
-                                                    nLine++;
-                                                }
-                                                if (rNextTextPortion.GetKind() != PortionKind::LINEBREAK)
-                                                {
-                                                    nLine++;
-                                                    pLine = &GetParaPortions().getRef(nParaPortion).GetLines()[nLine];
-                                                }
-                                            }
+                                            // The painting here continues over the consumed line
+                                            // when it carries real content, so repoint pLine to it.
+                                            if (consumeLineFollowingMultilineField(nLine))
+                                                pLine = &GetParaPortions()
+                                                             .getRef(nParaPortion)
+                                                             .GetLines()[nLine];
                                         }
                                     }
 
@@ -4094,6 +4133,35 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                         else
                             nIndex = nIndex + rTextPortion.GetLen();
 
+                    }
+                }
+                if (nWrappedFieldExtra && nColumn == nColumnAtLineStart)
+                {
+                    // Whatever part of the subline space the field painting
+                    // did not advance over (the line was clipped away, or the
+                    // portion loop stopped early), move past it now so the
+                    // following content keeps its formatted position. After a
+                    // column wrap the position is left as the painting set
+                    // it, since the formatted heights only describe a single
+                    // column.
+                    tools::Long nConsumed;
+                    if (!IsEffectivelyVertical())
+                        nConsumed = aStartPos.Y() - aLineMovePos.Y();
+                    else if (IsTopToBottom())
+                        nConsumed = aLineMovePos.X() - aStartPos.X();
+                    else
+                        nConsumed = aStartPos.X() - aLineMovePos.X();
+
+                    if (nConsumed < nWrappedFieldExtra)
+                    {
+                        adjustYDirectionAware(aStartPos, nWrappedFieldExtra - nConsumed);
+
+                        // The field was not painted to its end here, so the
+                        // following line was not consumed yet. It sits on the
+                        // last subline's row and its height is already part of
+                        // the subline space, so consume it now under the same
+                        // rule as the field painting above.
+                        consumeLineFollowingMultilineField(nLine);
                     }
                 }
 
