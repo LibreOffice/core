@@ -123,6 +123,7 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
         [](const css::beans::PropertyValue& rProp) { return rProp.Name == "BaseURI"; });
     if (aIter != rMediaData.end())
         (*aIter).Value >>= maBaseURI;
+    maSoundCollection.SetReferer(maBaseURI);
     mpPptEscherEx.reset( new PptEscherEx( *mpStrm, maBaseURI ) );
 }
 
