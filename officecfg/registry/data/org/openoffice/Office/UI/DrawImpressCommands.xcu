@@ -799,6 +799,16 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:CopySlide" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Copy Slide</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:PasteSlide" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Paste Slide</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ManageLinks" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">E~xternal Links...</value>
