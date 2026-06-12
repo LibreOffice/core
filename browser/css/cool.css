@@ -1535,6 +1535,17 @@ body {
 	transform: translate(-1px, -1px);
 }
 
+/* While presenting in a window, the iframe above covers the page at a
+   very high z-index. Raise modal popups above it so confirmation dialogs such
+   as the external-link warning stay visible */
+body.slideshow-presenting-in-window .jsdialog-overlay {
+	z-index: 1000001;
+}
+
+body.slideshow-presenting-in-window .jsdialog-window.modalpopup {
+	z-index: 1000002;
+}
+
 .table-add-col-row-marker {
 	border-radius: var(--border-radius);
 	background-color: var(--color-insert-marker-background) !important;

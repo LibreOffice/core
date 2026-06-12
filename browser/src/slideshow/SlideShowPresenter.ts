@@ -302,13 +302,16 @@ class SlideShowPresenter {
 
 		const slideInfo =
 			this._metaPresentation.getSlideInfoByIndex(currentSlideIndex);
-		if (!slideInfo || !slideInfo.videos || slideInfo.videos.length === 0) {
-			return;
-		}
+		if (!slideInfo) return;
 
 		if (event.relativeX !== undefined && event.relativeY !== undefined) {
 			const x = event.relativeX * this._metaPresentation.getDocWidth();
 			const y = event.relativeY * this._metaPresentation.getDocHeight();
+
+			// text/shape hyperlinks click interactions
+			if (navigator.tryExecuteInteractionAt(x, y)) return;
+
+			if (!slideInfo.videos || slideInfo.videos.length === 0) return;
 
 			const clickedVideo = slideInfo.videos.find((videoInfo) =>
 				this.isPointInVideoArea(videoInfo, x, y),
@@ -1158,6 +1161,7 @@ class SlideShowPresenter {
 			'beforeunload',
 			this.slideshowWindowCleanUp.bind(this),
 		);
+		document.body.classList.add('slideshow-presenting-in-window');
 		this._slideShowCanvas.focus();
 	}
 
@@ -1173,6 +1177,7 @@ class SlideShowPresenter {
 			}
 		}
 		this._slideShowWindowProxy = null;
+		document.body.classList.remove('slideshow-presenting-in-window');
 		window.removeEventListener('resize', this.onSlideWindowResize);
 		window.removeEventListener('beforeunload', this.slideshowWindowCleanUp);
 	};

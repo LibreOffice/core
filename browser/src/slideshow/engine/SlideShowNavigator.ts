@@ -536,15 +536,12 @@ class SlideShowNavigator {
 			const x = (aEvent.offsetX / width) * this.theMetaPres.getDocWidth();
 			const y = (aEvent.offsetY / height) * this.theMetaPres.getDocHeight();
 
-			const shape = slideInfo.interactions.find((shape) =>
-				hitTest(shape.bounds, x, y),
-			);
+			if (this.tryExecuteInteractionAt(x, y)) return;
+
 			const videoInfo = slideInfo.videos.find((videoInfo) =>
 				hitTest(videoInfo, x, y),
 			);
-			if (shape) {
-				this._onExecuteInteraction(shape.clickAction);
-			} else if (videoInfo) {
+			if (videoInfo) {
 				this.presenter.sendSlideShowFollowMessage(
 					'followvideo ' +
 						JSON.stringify({
@@ -564,6 +561,21 @@ class SlideShowNavigator {
 		} else if (aEvent.button === 2) {
 			this.switchSlide(-1, false);
 		}
+	}
+
+	// Hit-test the given document coordinates against the current slide's
+	// click interactions (text/shape hyperlinks) and execute the first match.
+	public tryExecuteInteractionAt(x: number, y: number): boolean {
+		const slideInfo = this.theMetaPres.getSlideInfoByIndex(this.currentSlide);
+		if (!slideInfo || !slideInfo.interactions) return false;
+
+		const shape = slideInfo.interactions.find((shape) =>
+			hitTest(shape.bounds, x, y),
+		);
+		if (!shape) return false;
+
+		this._onExecuteInteraction(shape.clickAction);
+		return true;
 	}
 
 	followVideo(info: any) {
