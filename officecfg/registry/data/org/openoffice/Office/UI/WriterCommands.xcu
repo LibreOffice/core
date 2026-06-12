@@ -2123,11 +2123,16 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:UpdateFields" oor:op="replace">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:UpdateFields?UnlockSoftFixed:bool=1</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Update ~Fields</value>
+        </prop>
+      </node>
       <node oor:name=".uno:UpdateFields?UnlockSoftFixed:bool=1" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Fields</value>
-        </prop>
-        <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Update ~Fields</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
