@@ -25,7 +25,7 @@
 #include <common/ContainerUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
-#if defined(QTAPP)
+#if defined(QTAPP) || defined(MACOSAPP)
 #include <common/SettingsStorage.hpp>
 #endif
 #include <common/NumUtil.hpp>
@@ -2092,15 +2092,15 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         parseDocOptions(tokens, loadPart, timestamp);
         overrideDocOption();
 
-#if defined(QTAPP)
+#if defined(QTAPP) || defined(MACOSAPP)
         // The kit reads SignatureCert/Key/Ca from authorprivateinfo (set at load
         // time and frozen there). On the desktop apps there is no WOPI host to
         // seed _userPrivateInfo, so the engine would fall back to NSS and
         // complain about a missing Mozilla profile. Hydrate it from the user's
         // viewsetting.json so the kit sees the credentials when building the
-        // .uno:Signature arguments. CODA-Q (QTAPP) is the only MOBILEAPP build
-        // that links common/SettingsStorage.cpp today; the others stay without
-        // signing support until they pick the Desktop:: layer up.
+        // .uno:Signature arguments. CODA-Q (QTAPP) and CODA-M (MACOSAPP) link
+        // common/SettingsStorage.cpp and so get the Desktop:: layer; the other
+        // app builds stay without signing support until they pick it up.
         {
             const Desktop::FileResult vs = Desktop::fetchSettingsFile(
                 "settings/userconfig/viewsetting/viewsetting.json");

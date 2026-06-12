@@ -446,6 +446,17 @@ static std::atomic<int> appDocIdCounter(1);
     Desktop::uploadSettings(std::string([payload UTF8String]));
 }
 
++ (void)syncSettingsWith:(Document *)document {
+    // syncSettings() reads viewsetting.json and invokes the callback with a
+    // "viewsetting: <json>" frame; hand it straight to the document's JS the
+    // same way the kit's own messages are delivered. Mirrors the Qt (Bridge.cpp)
+    // and Windows (CODA.cpp) SYNCSETTINGS handlers.
+    Desktop::syncSettings([document](const std::vector<char>& data) {
+        if (!data.empty())
+            [document send2JS:data.data() length:(NSInteger)data.size()];
+    });
+}
+
 @end
 
 // macOS implementations of the platform-specific Desktop:: path hooks that

@@ -53,5 +53,9 @@
 + (NSString *_Nonnull)fetchSettingsConfig;
 + (NSString *_Nonnull)fetchSettingsFile:(NSString *_Nonnull)relPath NS_SWIFT_NAME(fetchSettingsFile(_:));
 + (void)uploadSettings:(NSString *_Nonnull)payload NS_SWIFT_NAME(uploadSettings(_:));
+// Push the saved view settings (viewsetting.json) into the running document's
+// JS so the kit applies them (AI credentials, Zotero, signing cert, ...). Sent
+// by the client (main.js) on load via the SYNCSETTINGS message.
++ (void)syncSettingsWith:(Document *_Nonnull)document NS_SWIFT_NAME(syncSettings(with:));
 
 @end

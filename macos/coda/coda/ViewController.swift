@@ -345,7 +345,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                      return (nil, nil)
                 }
                 else if body == "SYNCSETTINGS" {
-                    // TODO implement
+                    COWrapper.syncSettings(with: document)
                     return (nil, nil)
                 }
                 else if body.hasPrefix("SETDARKMODE ") {
