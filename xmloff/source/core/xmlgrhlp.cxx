@@ -816,12 +816,15 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             }
 
             // picture formats that actually _do_ benefit from zip
-            // storage compression
-            // .svm pics gets compressed via ZBITMAP old-style stream
-            // option below
+            // storage compression.
+            // Note: SVM/EMF/WMF are *uncompressed* metafiles. The ZBITMAP
+            // stream option set below only compresses embedded bitmap
+            // actions, not the vector action stream, so these formats must
+            // still be zip-compressed in the package (tdf#117074).
             static const char* const aCompressiblePics[] =
             {
                 "image/svg+xml",
+                "image/x-svm",
                 "image/x-emf",
                 "image/x-wmf",
                 "image/tiff",
