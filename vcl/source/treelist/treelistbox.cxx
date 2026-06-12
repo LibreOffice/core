@@ -1672,7 +1672,6 @@ enum class TreeListButtonType
 
 #define TAB_STARTPOS    2
 
-// take care of GetTextOffset when doing changes
 void SvTreeListBox::SetTabs()
 {
     m_nTreeFlags &= ~SvTreeFlags::RECALCTABS;
