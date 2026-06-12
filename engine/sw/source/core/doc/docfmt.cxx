@@ -522,27 +522,27 @@ void SwDoc::ResetAttrAtFormat( const std::vector<sal_uInt16>& rIds,
     }
 }
 
-static bool lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
-                                SvxTabStopItem& rChgTabStop )
+// Return a copy of the given tab stop item with its trailing run of default
+// tab stops dropped, so they are regenerated at the new default width. Returns
+// nothing when there are no trailing default tab stops to drop. The returned
+// copy must be stored back on the owning paragraph or style. The original item
+// may be a shared pooled item that must not be changed in place.
+static std::optional<SvxTabStopItem> lcl_RemoveDefaultTabStops( const SvxTabStopItem& rTabStop )
 {
-    // Set the default values of all TabStops to the new value.
-    // Attention: we always work with the PoolAttribute here, so that
-    // we don't calculate the same value on the same TabStop (pooled!) for all sets.
-    // We send a FormatChg to modify.
-
-    sal_uInt16 nOldCnt = rChgTabStop.Count();
-    if( !nOldCnt || nOldWidth == nNewWidth )
-        return false;
+    const sal_uInt16 nOldCount = rTabStop.Count();
 
     // Find the default's beginning
     sal_uInt16 n;
-    for( n = nOldCnt; n ; --n )
-        if( SvxTabAdjust::Default != rChgTabStop[n - 1].GetAdjustment() )
+    for (n = nOldCount; n ; --n)
+        if (SvxTabAdjust::Default != rTabStop[n - 1].GetAdjustment())
             break;
     ++n;
-    if( n < nOldCnt )   // delete the DefTabStops
-        rChgTabStop.Remove( n, nOldCnt - n );
-    return true;
+    if (n >= nOldCount)
+        return std::nullopt;
+
+    SvxTabStopItem aNewTabStop(rTabStop);
+    aNewTabStop.Remove(n, nOldCount - n);
+    return aNewTabStop;
 }
 
 /// Set the attribute as new default attribute in this document.
@@ -626,27 +626,30 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         const SvxTabStopItem* pTmpItem = aNew.GetItemIfSet( RES_PARATR_TABSTOP, false );
         if( pTmpItem && pTmpItem->Count() )
         {
-            // Set the default values of all TabStops to the new value.
-            // Attention: we always work with the PoolAttribute here, so that
-            // we don't calculate the same value on the same TabStop (pooled!) for all sets.
-            // We send a FormatChg to modify.
+            // The default tab stop width changed. Drop the regenerated default
+            // tab stops from every paragraph and style that holds them, so they
+            // are recreated at the new width, then reformat.
             SwTwips nNewWidth = (*pTmpItem)[ 0 ].GetTabPos(),
                     nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
 
-            bool bChg = false;
-            ForEachParaAtrTabStopItem([&bChg, &nOldWidth, &nNewWidth](const SvxTabStopItem& rTabStopItem) -> bool {
-                // pItem2 and thus pTabStopItem is a evtl. shared & RefCounted
-                // Item and *should* not be changed that way. lcl_SetNewDefTabStops
-                // seems to change pTabStopItem (!). This may need to be changed
-                // to use iterateItemSurrogates and a defined write cycle.
-                bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
-                                               const_cast<SvxTabStopItem&>(rTabStopItem) );
-                return true;
-            });
+            bool bChanged = false;
+            if (nOldWidth != nNewWidth)
+            {
+                ForEachParaAtrTabStopItem(
+                    [&bChanged](const SvxTabStopItem& rTabStopItem,
+                            const std::function<void(const SvxTabStopItem&)>& rSetItem)
+                    {
+                        if (!rTabStopItem.Count())
+                            return;
+                        bChanged = true;
+                        if (std::optional<SvxTabStopItem> oNewTabStop = lcl_RemoveDefaultTabStops(rTabStopItem))
+                            rSetItem(*oNewTabStop);
+                    });
+            }
 
             aNew.ClearItem( RES_PARATR_TABSTOP );
             aOld.ClearItem( RES_PARATR_TABSTOP );
-            if( bChg )
+            if( bChanged )
             {
                 SwFormatChangeHint aChgFormat( mpDfltCharFormat.get(), mpDfltCharFormat.get() );
                 // notify the frames

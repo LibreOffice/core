@@ -1531,28 +1531,34 @@ void SwDoc::ForEachCharacterFontItem(TypedWhichId<SvxFontItem> nWhich, bool bIgn
     }
 }
 
-/// Iterate over all RES_PARATR_TABSTOP SvxTabStopItem, if the function returns false, iteration is stopped
-void SwDoc::ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>& rFunc )
+/// Iterate over every paragraph and paragraph style that directly holds a
+/// RES_PARATR_TABSTOP item, offering a setter to replace it on that owner.
+void SwDoc::ForEachParaAtrTabStopItem(
+    const std::function<void(const SvxTabStopItem&,
+                             const std::function<void(const SvxTabStopItem&)>&)>& rFunction )
 {
     SwNodeOffset nCount = GetNodes().Count();
     for (SwNodeOffset i(0); i < nCount; ++i)
     {
-        const SwNode* pNode = GetNodes()[i];
+        SwNode* pNode = GetNodes()[i];
         if (pNode->IsContentNode())
         {
-            const SwContentNode* pTextNode = pNode->GetContentNode();
-            if (pTextNode->HasSwAttrSet())
-                if (const SvxTabStopItem* pItem = pTextNode->GetSwAttrSet().GetItemIfSet(RES_PARATR_TABSTOP))
-                    if (!rFunc(*pItem))
-                        return;
+            SwContentNode* pContentNode = pNode->GetContentNode();
+            if (pContentNode->HasSwAttrSet())
+            {
+                if (const SvxTabStopItem* pItem = pContentNode->GetSwAttrSet().GetItemIfSet(RES_PARATR_TABSTOP, false))
+                {
+                    rFunction(*pItem, [pContentNode](const SvxTabStopItem& rNew) { pContentNode->SetAttr(rNew); });
+                }
+            }
         }
     }
-    for(const SwTextFormatColl* pFormat : *GetTextFormatColls())
+    for(SwTextFormatColl* pFormat : *GetTextFormatColls())
     {
-        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
-        if (const SvxTabStopItem* pItem = rAttrSet.GetItemIfSet(RES_PARATR_TABSTOP))
-            if (!rFunc(*pItem))
-                return;
+        if (const SvxTabStopItem* pItem = pFormat->GetAttrSet().GetItemIfSet(RES_PARATR_TABSTOP, false))
+        {
+            rFunction(*pItem, [pFormat](const SvxTabStopItem& rNew) { pFormat->SetFormatAttr(rNew); });
+        }
     }
 }
 

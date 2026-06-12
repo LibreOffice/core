@@ -1468,8 +1468,12 @@ public:
     /// Iterate over all RES_TXTATR_UNKNOWN_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachTxtAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>&  ) const;
 
-    /// Iterate over all RES_PARATR_TABSTOP SvxTabStopItem, if the function returns false, iteration is stopped
-    SW_DLLPUBLIC void ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>&  );
+    /// Iterate over every paragraph and paragraph style that directly holds a
+    /// RES_PARATR_TABSTOP item. For each one the function receives the item and
+    /// a setter that stores a replacement item back on that owner.
+    SW_DLLPUBLIC void ForEachParaAtrTabStopItem(
+        const std::function<void(const SvxTabStopItem& rTabStopItem,
+                                 const std::function<void(const SvxTabStopItem&)>& rSetItem)>& rFunction);
 
     /// Iterate over all RES_UNKNOWNATR_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachUnknownAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>&  ) const;

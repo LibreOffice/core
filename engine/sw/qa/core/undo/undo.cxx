@@ -11,6 +11,8 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <editeng/tstpitem.hxx>
+
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -21,6 +23,12 @@
 #include <fmtpdsc.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
+#include <hintids.hxx>
+#include <fmtcol.hxx>
+#include <poolfmt.hxx>
+#include <swundo.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 
 /// Covers sw/source/core/undo/ fixes.
 class SwCoreUndoTest : public SwModelTestBase
@@ -337,6 +345,47 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescCreate)
 
     CPPUNIT_ASSERT_EQUAL(lcl_getLastPagePageDesc(*pDoc),
                          const_cast<const SwPageDesc*>(pNewPageDesc2));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testDefaultTabStopChangeUndo)
+{
+    // Changing the document default tab stop distance can be undone and redone.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    IDocumentUndoRedo& rUndoRedo = pDoc->GetIDocumentUndoRedo();
+
+    // Set up the precondition without recording undo.
+    rUndoRedo.DoUndo(false);
+
+    // Start from a known default tab stop distance.
+    pWrtShell->SetDefault(SvxTabStopItem(1, 1000, SvxTabAdjust::Default, RES_PARATR_TABSTOP));
+    const sal_Int32 nOriginalDistance = pDoc->GetDefault(RES_PARATR_TABSTOP)[0].GetTabPos();
+
+    // The standard paragraph style holds tab stops that end in default tab
+    // stops, so changing the default distance updates them too.
+    SwTextFormatColl* pColl
+        = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
+    {
+        SvxTabStopItem aTabStops(RES_PARATR_TABSTOP);
+        aTabStops.Insert(SvxTabStop(1000, SvxTabAdjust::Left));
+        aTabStops.Insert(SvxTabStop(2000, SvxTabAdjust::Default));
+        aTabStops.Insert(SvxTabStop(3000, SvxTabAdjust::Default));
+        pColl->SetFormatAttr(aTabStops);
+    }
+
+    // Change the default tab stop distance as one undoable step.
+    rUndoRedo.DoUndo(true);
+    rUndoRedo.StartUndo(SwUndoId::INSDOKUMENT, nullptr);
+    pWrtShell->SetDefault(SvxTabStopItem(1, 2000, SvxTabAdjust::Default, RES_PARATR_TABSTOP));
+    rUndoRedo.EndUndo(SwUndoId::INSDOKUMENT, nullptr);
+
+    // Undo restores the original distance, redo applies the new one again.
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(nOriginalDistance, pDoc->GetDefault(RES_PARATR_TABSTOP)[0].GetTabPos());
+
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), pDoc->GetDefault(RES_PARATR_TABSTOP)[0].GetTabPos());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
