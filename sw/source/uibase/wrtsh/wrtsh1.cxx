@@ -2285,7 +2285,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
         pSdrView->SdrEndTextEdit(true);
     }
     addCurrentPosition();
-    // tdf#136540 - prevent scrolling to cursor when deleting header/footer
+    // tdf#137107 - prevent scrolling to cursor when deleting header/footer
     const bool bLockedView = IsViewLocked();
     if (!bOn)
         LockView(true);
@@ -2361,7 +2361,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
     }
     EndUndo( SwUndoId::HEADER_FOOTER ); // #i7983#
     EndAllAction();
-    // tdf#136540 - prevent scrolling to cursor when deleting header/footer
+    // tdf#137107 - prevent scrolling to cursor when deleting header/footer
     if (!bOn)
         LockView(bLockedView);
 }
