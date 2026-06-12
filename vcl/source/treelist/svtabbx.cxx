@@ -86,7 +86,6 @@ void SvTabListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& rStr, cons
 
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
-    , m_eRole(SvTabListBoxRole::Unknown)
 {
     SetHighlightRange();    // select full width
 }

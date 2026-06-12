@@ -27,21 +27,11 @@
 
 #include <vector>
 
-enum class SvTabListBoxRole
-{
-    Unknown,
-    Tree,       // hierarchical, single-column
-    TreeGrid,   // hierarchical, multi-column
-    ListBox,    // flat, single-column
-    Grid        // flat, multi-column
-};
-
 class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
     OUString                    aCurEntry;
-    SvTabListBoxRole            m_eRole;
 
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
     Link<const EntryItemText&, bool> m_aEditedEntryHdl;
@@ -111,8 +101,6 @@ public:
     // Note that to make a tab visible, the width must also be set to a non-zero value
     void             SetTabVisible( sal_uInt16 nTab, bool bVisible );
     bool             GetTabVisible( sal_uInt16 nTab );
-
-    void             SetRole(SvTabListBoxRole e) { m_eRole = e; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
