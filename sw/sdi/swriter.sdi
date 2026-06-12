@@ -2641,9 +2641,9 @@ SfxVoidItem EditBookmark FN_EDIT_BOOKMARK
     RecordPerSet;
     Asynchron;
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Insert;
 ]
 
