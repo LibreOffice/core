@@ -5818,6 +5818,11 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">%PRODUCTNAME Credits</value>
         </prop>
       </node>
+      <node oor:name=".uno:Credits" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Credits Online</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StatusBarVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Status ~Bar</value>

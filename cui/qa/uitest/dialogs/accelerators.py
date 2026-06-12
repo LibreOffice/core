@@ -72,7 +72,7 @@ class Test(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer") as xComponent:
             # Set a shortcut on the global scope
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog") as xDialog:
-                self.assign_key(xDialog, "office", "F7", ".uno:Credits")
+                self.assign_key(xDialog, "office", "F7", "Credits Online")
 
             # Check that the key made it into the global config
             xGlobalAccelCfg = GlobalAcceleratorConfiguration.create(self.xContext)
@@ -132,7 +132,7 @@ class Test(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer") as xDoc1, \
              self.ui_test.load_empty_file("writer"), \
              self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog") as xDialog:
-            self.assign_key(xDialog, "Untitled 1", "F7", ".uno:Credits")
+            self.assign_key(xDialog, "Untitled 1", "F7", "Credits Online")
             xFrame1 = xDoc1.getCurrentController().getFrame()
             self.xUITest.executeCommandForProvider(".uno:CloseDoc", xFrame1)
 
@@ -144,7 +144,7 @@ class Test(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer") as xComponent:
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog") as xDialog:
                 # Assign a key
-                self.assign_key(xDialog, "Untitled 1", "F7", ".uno:Credits")
+                self.assign_key(xDialog, "Untitled 1", "F7", "Credits Online")
                 # … but then press reset before pressing OK
                 xReset = xDialog.getChild("AccelConfigPage").getChild("reset")
                 xReset.executeAction("CLICK", tuple())
@@ -191,7 +191,7 @@ class Test(UITestCase):
                 # Set a shortcut on the global scope
                 self.assign_key(xDialog, "office", "F7", ".uno:EditBookmark")
                 # Set a shortcut on the module scope
-                self.assign_key(xDialog, "module", "F7", ".uno:Credits")
+                self.assign_key(xDialog, "module", "F7", "Credits Online")
                 # Set a shortcut in the first document
                 self.assign_key(xDialog, "Untitled 1", "F7", "Spelling")
                 # Set a shortcut in the second document
