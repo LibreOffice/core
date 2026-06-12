@@ -55,6 +55,7 @@ class ExSoundCollection
 {
     public:
 
+        void                    SetReferer(const OUString& rReferer) { maReferer = rReferer; }
         sal_uInt32              GetId(const OUString&);
 
         /// @return size of a complete SoundCollectionContainer.
@@ -64,6 +65,7 @@ class ExSoundCollection
 private:
 
     std::vector<ExSoundEntry> maEntries;
+    OUString maReferer;
 };
 
 } // namespace ppt
