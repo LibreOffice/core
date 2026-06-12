@@ -1069,17 +1069,18 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 			const clip = this._map._clip;
 
-			// In the browser, read the system clipboard directly so a copy from
-			// another tab/document wins over a stale local copy. The Mac app skips
-			// this: its native clipboard bridge does the read (and going through
-			// navigator.clipboard.read() would pop up the WebView's system "Paste"
-			// confirmation), so it falls through to filterExecCopyPaste below.
-			if (window.L.Browser.clipboardApiAvailable && !window.ThisIsTheMacOSApp) {
+			// Read the system clipboard so a copy from another tab/document wins
+			// over a stale local copy. _readClipboardItems handles the CODA/mobile
+			// app native bridges (where navigator.clipboard.read() is unavailable
+			// or would pop up the WebView's system "Paste" confirmation).
+			const canReadClipboard = window.L.Browser.clipboardApiAvailable
+				|| window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp;
+			if (canReadClipboard) {
 				let html = '';
 				try {
+					const items = await clip._readClipboardItems();
 					let foundItem = null;
-					const items = await navigator.clipboard.read();
-					for (const item of items) {
+					for (const item of (items || [])) {
 						if (item.types.includes('text/html')) {
 							foundItem = item;
 							break;
@@ -1101,8 +1102,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				}
 			}
 
-			// The Clipboard API is unavailable, or this is the Mac app: let the
-			// paste event / native clipboard bridge drive things.
+			// No usable HTML on the clipboard (or the native app reported an
+			// internal copy): let the paste event / native clipboard bridge
+			// drive things.
 			clip.filterExecCopyPaste('.uno:Paste');
 		} finally {
 			this._pastePending = false;

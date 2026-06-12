@@ -1130,19 +1130,22 @@ window.L.Clipboard = window.L.Class.extend({
 		return this._MobileAppReadClipboard(encodedClipboardData);
 	},
 
+	// Read clipboard items, routing through the native bridge on the CODA/mobile
+	// apps and the dummy clipboard under cypress. Returns a ClipboardItem array,
+	// or null when the native app reports an internal copy ("(internal)").
+	_readClipboardItems: async function() {
+		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp)
+			return this._iOSReadClipboard();
+		if (window.ThisIsTheWindowsApp)
+			return this._WindowsReadClipboard();
+		const clipboard = window.L.Browser.cypressTest ? this._dummyClipboard : navigator.clipboard;
+		return clipboard.read();
+	},
+
 	_asyncAttemptNavigatorClipboardRead: async function(isSpecial) {
-		var clipboard = navigator.clipboard;
-		if (window.L.Browser.cypressTest) {
-			clipboard = this._dummyClipboard;
-		}
 		let clipboardContents;
 		try {
-			if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp)
-				clipboardContents = await this._iOSReadClipboard();
-			else if (window.ThisIsTheWindowsApp)
-				clipboardContents = await this._WindowsReadClipboard();
-			else
-				clipboardContents = await clipboard.read();
+			clipboardContents = await this._readClipboardItems();
 
 			if (clipboardContents === null) {
 				this._doInternalPaste(this._map, false);
