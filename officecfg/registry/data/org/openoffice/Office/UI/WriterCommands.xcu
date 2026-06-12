@@ -273,7 +273,7 @@
           <value xml:lang="en-US">Reject but Track and Move to Next</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reject tracked change but keep it and select the next one</value>
+          <value xml:lang="en-US">Reject change (keep as tracked) and select the next one</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -298,7 +298,7 @@
           <value xml:lang="en-US">Reject but Track All</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reject all tracked changes but keep them</value>
+          <value xml:lang="en-US">Reject all changes (keep as tracked)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -348,7 +348,7 @@
           <value xml:lang="en-US">Reject but Track</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reject tracked change but keep it</value>
+          <value xml:lang="en-US">Reject change (keep as tracked)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
