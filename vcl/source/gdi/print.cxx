@@ -193,6 +193,16 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                 Bitmap& rBmp )
 {
+#ifdef MACOSX
+    // tdf#172059 draw alpha bitmaps directly to print graphics on macOS
+    // The semi-transparent images in the .odt file attached to tdf#172059
+    // print as partially or completely opaque so add back the code that
+    // was reverted in commit 25ffb536755f10e2dfd3da26ce4dacdab271a044.
+    // The only code that wasn't added back was inverting the alpha mask.
+    // On macOS, there are no known problems drawing semi-transparent
+    // bitmaps so just draw the alpha mask directly without any blending.
+    DrawDeviceAlphaBitmap( Bitmap(rBmp.CreateColorBitmap(), rBmp.CreateAlphaMask()), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+#else
     if( rBmp.HasAlpha() )
     {
         // #107169# For true alpha bitmaps, no longer masking the
@@ -206,6 +216,7 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
     {
         ImplPrintTransparent( rBmp, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
     }
+#endif
 }
 
 void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
