@@ -1841,6 +1841,31 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
     return ret;
 }
 
+// A ruby annotation is not part of the paragraph getString(), which returns
+// only the base text, so a short base with a very long annotation drives
+// expensive ruby line layout without showing up in a paragraph length check.
+static bool lcl_HasOverlongRubyText(const uno::Reference<text::XTextRange>& xPara, sal_Int32 nLimit)
+{
+    uno::Reference<container::XEnumerationAccess> xPortionAccess(xPara, uno::UNO_QUERY);
+    if (!xPortionAccess)
+        return false;
+    uno::Reference<container::XEnumeration> xPortionEnum(xPortionAccess->createEnumeration());
+    while (xPortionEnum->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+        if (!xPortion)
+            continue;
+        uno::Reference<beans::XPropertySetInfo> xInfo(xPortion->getPropertySetInfo());
+        if (!xInfo || !xInfo->hasPropertyByName(u"RubyText"_ustr))
+            continue;
+        OUString aRubyText;
+        xPortion->getPropertyValue(u"RubyText"_ustr) >>= aRubyText;
+        if (aRubyText.getLength() > nLimit)
+            return true;
+    }
+    return false;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 {
     // do the same sort of check as FilterDetect::detect
@@ -1919,7 +1944,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
             while (xParaEnum->hasMoreElements())
             {
                 uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-                if (xPara && xPara->getString().getLength() > 10000)
+                if (!xPara)
+                    continue;
+                if (xPara->getString().getLength() > 10000)
+                    return true;
+                if (lcl_HasOverlongRubyText(xPara, 10000))
                     return true;
             }
             return false;
