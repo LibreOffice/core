@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-05-20 09:11+0000\n"
+"PO-Revision-Date: 2026-06-13 07:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Estonian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/et/>\n"
-"Language: \n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/et/>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -545,19 +545,19 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Content"
-msgstr ""
+msgstr "Sisu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:557
 #: src/control/Control.BackstageView.ts:552
 msgid "Drawing"
-msgstr ""
+msgstr "Joonis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:558
 #: src/control/Control.NotebookbarDraw.js:1245
 #: src/control/Control.NotebookbarDraw.js:1445
 #: src/control/Control.NotebookbarWriter.js:1242
 msgid "Page"
-msgstr ""
+msgstr "Leht"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 msgid "Fit to page"
@@ -569,7 +569,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:561
 msgid "Booklet"
-msgstr ""
+msgstr "Voldik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:562
 msgid "Booklet front"
@@ -663,7 +663,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:580
 msgid "Placeholders"
-msgstr ""
+msgstr "Kohatäited"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:581
 msgid "Left pages"
@@ -675,7 +675,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:583
 msgid "Brochure"
-msgstr ""
+msgstr "Brošüür"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:584
 msgid "Brochure Right to Left"
@@ -691,7 +691,7 @@ msgstr "Viga faili lugemisel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:805
 msgid "Autotext"
-msgstr ""
+msgstr "Automaatne tekst"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid ""
@@ -858,7 +858,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:2224
 #: admin/src/integrator/AdminIntegratorSettings.ts:2342
 msgid "e.g."
-msgstr ""
+msgstr "nt."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2246
 msgid ""
@@ -931,7 +931,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3298
 msgid "Reset"
-msgstr ""
+msgstr "Lähtesta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 #: src/control/Control.AIChatSidebar.ts:2771 src/map/handler/Map.WOPI.js:871
@@ -1071,20 +1071,20 @@ msgstr ""
 
 #: src/app/TableStylesService.ts:100
 msgid "Light"
-msgstr ""
+msgstr "Hele"
 
 #: src/app/TableStylesService.ts:102
 msgid "Medium"
-msgstr ""
+msgstr "Keskmine"
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
-msgstr ""
+msgstr "Tume"
 
 #: src/app/TableStylesService.ts:106
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Kohandatud"
 
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
@@ -1112,7 +1112,7 @@ msgstr "Kirjuta üle"
 
 #: src/canvas/sections/CommentListSection.ts:1907
 msgid "Update"
-msgstr ""
+msgstr "Uuenda"
 
 #: src/canvas/sections/CommentSection.ts:45
 msgid "Edit comment"
@@ -1995,18 +1995,18 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:83
 #: src/control/Control.NotebookbarWriter.js:44
 msgid "Home"
-msgstr ""
+msgstr "Avaleht"
 
 #: src/control/Control.BackstageView.ts:104
 #: src/control/Control.BackstageView.ts:434
 #: src/control/Control.NotebookbarImpress.js:873
 #: src/control/Control.NotebookbarImpress.js:1482
 msgid "New"
-msgstr ""
+msgstr "Uus"
 
 #: src/control/Control.BackstageView.ts:112
 msgid "Open"
-msgstr ""
+msgstr "Ava"
 
 #: src/control/Control.BackstageView.ts:120
 #: src/control/Control.Notebookbar.js:730
@@ -2025,7 +2025,7 @@ msgstr "Jaga"
 
 #: src/control/Control.BackstageView.ts:128
 msgid "Info"
-msgstr ""
+msgstr "Teave"
 
 #: src/control/Control.BackstageView.ts:144
 #: src/control/Control.NotebookbarCalc.js:180
@@ -2039,7 +2039,7 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:160
 msgid "Export"
-msgstr ""
+msgstr "Ekspordi"
 
 #: src/control/Control.BackstageView.ts:168
 msgid "Sign"
@@ -2063,7 +2063,7 @@ msgstr ""
 #: src/control/Control.BackstageView.ts:278
 #: src/control/jsdialog/Widget.ColorPicker.ts:441
 msgid "Recent"
-msgstr ""
+msgstr "Hiljutine"
 
 #: src/control/Control.BackstageView.ts:493
 msgid "Document Info"
@@ -2089,36 +2089,35 @@ msgstr ""
 #: src/control/Control.BackstageView.ts:549
 #: src/control/Control.BackstageView.ts:552
 msgid "Pages"
-msgstr ""
+msgstr "Lehed"
 
 #: src/control/Control.BackstageView.ts:550
 msgid "Spreadsheet"
-msgstr ""
+msgstr "Arvutustabel"
 
 #: src/control/Control.BackstageView.ts:550
 msgid "Sheets"
-msgstr ""
+msgstr "Lehed"
 
 #: src/control/Control.BackstageView.ts:551
 #: src/control/Control.NavigatorPanel.ts:202
 #: src/control/Control.NotebookbarImpress.js:1475
 #: src/slideshow/PresenterConsole.js:35
 msgid "Slides"
-msgstr ""
+msgstr "Slaidid"
 
 #: src/control/Control.BackstageView.ts:557
 msgid "Parts"
-msgstr ""
+msgstr "Osad"
 
 #: src/control/Control.BackstageView.ts:561
 #: src/control/Control.DocumentRepair.js:140
 msgid "Type"
-msgstr ""
+msgstr "Tüüp"
 
 #: src/control/Control.BackstageView.ts:567
-#, fuzzy
 msgid "Mode"
-msgstr "Mudel"
+msgstr "Režiim"
 
 #: src/control/Control.BackstageView.ts:568
 msgid "View Only"
@@ -2142,7 +2141,7 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:872
 msgid "Untitled"
-msgstr ""
+msgstr "Ilma nimeta"
 
 #: src/control/backstage/Common.tsx:48
 msgid "Loading templates…"
@@ -2167,7 +2166,7 @@ msgstr ""
 #: src/control/backstage/HomeView.tsx:70
 #: src/control/jsdialog/Widget.TreeView.ts:378
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #: src/control/backstage/HomeView.tsx:72
 msgid "Modified Date"
@@ -2189,7 +2188,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:369
 #: src/control/Control.NotebookbarWriter.js:1653
 msgid "Properties"
-msgstr ""
+msgstr "Omadused"
 
 #: src/control/backstage/InfoView.tsx:37
 msgid "More Property Info"
@@ -2205,7 +2204,7 @@ msgstr ""
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
-msgstr ""
+msgstr "Asukoht"
 
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
@@ -2219,19 +2218,19 @@ msgstr "Sina"
 
 #: src/control/Control.DocumentRepair.js:140
 msgid "What?"
-msgstr ""
+msgstr "Mida?"
 
 #: src/control/Control.DocumentRepair.js:140
 msgid "Who?"
-msgstr ""
+msgstr "Kes?"
 
 #: src/control/Control.DocumentRepair.js:140
 msgid "When?"
-msgstr ""
+msgstr "Millal?"
 
 #: src/control/Control.DocumentRepair.js:160
 msgid "You have not done anything to rollback yet..."
-msgstr ""
+msgstr "Sa pole veel teinud midagi, mida saaks tagasi võtta..."
 
 #: src/control/Control.DocumentRepair.js:170
 msgid "Redo"
@@ -2257,7 +2256,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:376
 #: src/control/Control.NotebookbarWriter.js:337
 msgid "Download"
-msgstr ""
+msgstr "Laadi alla"
 
 #: src/control/Control.DownloadProgress.js:80
 msgid "Downloading clipboard content"
@@ -2280,15 +2279,15 @@ msgstr ""
 
 #: src/control/Control.DownloadProgress.js:272
 msgid "Content copied to clipboard"
-msgstr ""
+msgstr "Sisu on kopeeritud lõikelauale"
 
 #: src/control/Control.DownloadProgress.js:302
 msgid "Download failed"
-msgstr ""
+msgstr "Allalaadimine ei õnnestunud"
 
 #: src/control/Control.ESignature.ts:127
 msgid "Andorra"
-msgstr ""
+msgstr "Andorra"
 
 #: src/control/Control.ESignature.ts:128
 msgid "United Arab Emirates"
@@ -2296,23 +2295,23 @@ msgstr ""
 
 #: src/control/Control.ESignature.ts:129
 msgid "Albania"
-msgstr ""
+msgstr "Albaania"
 
 #: src/control/Control.ESignature.ts:130
 msgid "Armenia"
-msgstr ""
+msgstr "Armeenia"
 
 #: src/control/Control.ESignature.ts:131
 msgid "Argentina"
-msgstr ""
+msgstr "Argentina"
 
 #: src/control/Control.ESignature.ts:132
 msgid "Austria"
-msgstr ""
+msgstr "Austria"
 
 #: src/control/Control.ESignature.ts:133
 msgid "Australia"
-msgstr ""
+msgstr "Austraalia"
 
 #: src/control/Control.ESignature.ts:134
 msgid "Åland Islands"
@@ -2320,7 +2319,7 @@ msgstr ""
 
 #: src/control/Control.ESignature.ts:135
 msgid "Azerbaijan"
-msgstr ""
+msgstr "Azerbaidžaan"
 
 #: src/control/Control.ESignature.ts:136
 msgid "Bosnia and Herzegovina"
@@ -2328,15 +2327,15 @@ msgstr ""
 
 #: src/control/Control.ESignature.ts:137
 msgid "Belgium"
-msgstr ""
+msgstr "Belgia"
 
 #: src/control/Control.ESignature.ts:138
 msgid "Bulgaria"
-msgstr ""
+msgstr "Bulgaaria"
 
 #: src/control/Control.ESignature.ts:139
 msgid "Brazil"
-msgstr ""
+msgstr "Brasiilia"
 
 #: src/control/Control.ESignature.ts:140
 msgid "Belarus"
