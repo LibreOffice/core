@@ -31,7 +31,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
-    OUString                    aCurEntry;
+    OUString m_aCurEntry;
 
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
     Link<const EntryItemText&, bool> m_aEditedEntryHdl;

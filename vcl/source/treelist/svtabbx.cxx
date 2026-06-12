@@ -79,7 +79,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& rStr, cons
     const sal_uInt16 nCount = mvTabList.size() - 1;
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
-        const std::u16string_view aToken = GetToken(aCurEntry, nIndex);
+        const std::u16string_view aToken = GetToken(m_aCurEntry, nIndex);
         rEntry.AddItem(std::make_unique<SvLBoxString>(OUString(aToken)));
     }
 }
@@ -145,10 +145,10 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr, SvTreeL
     if( nEnd != -1 )
     {
         aFirstStr = aFirstStr.copy(0, nEnd);
-        aCurEntry = rStr.copy(++nEnd);
+        m_aCurEntry = rStr.copy(++nEnd);
     }
     else
-        aCurEntry.clear();
+        m_aCurEntry.clear();
     return SvTreeListBox::InsertEntry(aFirstStr, pParent, false, nPos);
 }
 
