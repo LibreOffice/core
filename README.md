@@ -11,6 +11,7 @@
 > - **Report issues** at the [CollaboraOnline/online issue tracker](https://github.com/CollaboraOnline/online/issues/new/choose).
 
 [![Development: Gerrit](https://img.shields.io/badge/Development-Gerrit-orange?logo=git "Code development and review happen on Gerrit. GitHub pull requests are disabled.")](https://gerrit.collaboraoffice.com)
+[![Collabora Office Development Preview](https://img.shields.io/badge/Collabora%20Office-Development%20Preview-blue "Test the latest development snaphots of Collabora Office.")](https://www.collaboraoffice.com/downloads/CODA-Hd7wwbJWxm/)
 
 
 [![Matrix](https://img.shields.io/badge/Matrix-%23cool--dev-turquoise.svg)](https://matrix.to/#/#cool-dev:matrix.org)
