@@ -6011,9 +6011,9 @@ SfxVoidItem WidgetTestDialog SID_WIDGET_TEST_DIALOG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Application;
 ]
 
