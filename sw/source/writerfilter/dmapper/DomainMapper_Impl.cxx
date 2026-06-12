@@ -6386,7 +6386,7 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
         {u"REVNUM"_ustr,          {"DocInfo.Revision",        FIELD_REVNUM        }},
         {u"SAVEDATE"_ustr,        {"DocInfo.ChangeDateTime",  FIELD_SAVEDATE      }},
 //      {"SECTION",         {"",                        FIELD_SECTION       }},
-//      {"SECTIONPAGES",    {"",                        FIELD_SECTIONPAGES  }},
+        {u"SECTIONPAGES"_ustr,    {"PageCountRange",          FIELD_SECTIONPAGES  }},
         {u"SEQ"_ustr,             {"SetExpression",           FIELD_SEQ           }},
         {u"SET"_ustr,             {"SetExpression",           FIELD_SET           }},
 //      {"SKIPIF",          {"",                        FIELD_SKIPIF        }},
@@ -8207,7 +8207,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_REVNUM       : break;
                 case FIELD_SECTION      : break;
-                case FIELD_SECTIONPAGES : break;
                 case FIELD_SEQ          :
                 {
                     // command looks like: " SEQ Table \* ARABIC "
@@ -8481,6 +8480,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case  FIELD_NUMCHARS:
                 case  FIELD_NUMWORDS:
                 case  FIELD_NUMPAGES:
+                case  FIELD_SECTIONPAGES:
                 if (xFieldProperties.is())
                     xFieldProperties->setPropertyValue(
                         getPropertyName(PROP_NUMBERING_TYPE),

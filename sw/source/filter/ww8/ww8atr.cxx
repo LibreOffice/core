@@ -3139,6 +3139,9 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case DS_PAGE:
                     eField = ww::eNUMPAGES;
                     break;
+                case DS_PAGE_RANGE:
+                    eField = ww::eSECTIONPAGES;
+                    break;
                 case DS_WORD:
                     eField = ww::eNUMWORDS;
                     break;

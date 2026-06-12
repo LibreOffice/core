@@ -13,6 +13,11 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <xmloff/odffields.hxx>
 #include <o3tl/string_view.hxx>
@@ -348,6 +353,73 @@ CPPUNIT_TEST_FIXTURE(Test, testGenericTextField)
     OUString contents = OUString::createFromAscii(reinterpret_cast<char*>((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match(" PRINTDATE "));
     xmlXPathFreeObject(pXmlObj);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSectionPagesField)
+{
+    // A SECTIONPAGES field must import as a PageCountRange text field (not as an
+    // unhandled generic fieldmark) and export back to a SECTIONPAGES field.
+
+    // Fixture: 4 sections with 2, 3, 1, 2 pages, each with a SECTIONPAGES field
+    // in the body (and in the footer, only for user readibility "Page X of Y").
+    // Sections 1, 2 and 4 restart page numbering; section 3 does NOT.
+
+    // PageCountRange expands to the *virtual* page count, i.e. the pages since
+    // the last "restart page numbering" point. In Word SECTIONPAGES would be
+    // the section's own page count (2, 3, 1, 2), but because section 3 does not
+    // restart, section 2's numbering range stays open across it, so both read 4
+    // -> expected 2, 4, 4, 2. This documents the mapping's known limitation.
+    // But also it is a rare case because SECTIONPAGES planned to be used with
+    // restart page numbering. in this test file word display "4 of 1" page.
+
+    // Collect the PageCountRange fields in the body in document order (one per
+    // section); the footer copies are ignored so the order maps section 1..4.
+    auto collectBody = [this]() -> OUString {
+        OUString sJoin;
+        uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParaAccess(xTextDoc->getText(),
+                                                                  uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParas(xParaAccess->createEnumeration());
+        while (xParas->hasMoreElements())
+        {
+            uno::Reference<container::XEnumerationAccess> xPortions(xParas->nextElement(),
+                                                                    uno::UNO_QUERY);
+            if (!xPortions.is()) // e.g. tables
+                continue;
+            uno::Reference<container::XEnumeration> xPortionEnum(xPortions->createEnumeration());
+            while (xPortionEnum->hasMoreElements())
+            {
+                uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(),
+                                                             uno::UNO_QUERY);
+                OUString sType;
+                if (!(xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= sType)
+                    || sType != "TextField")
+                    continue;
+                uno::Reference<text::XTextField> xField;
+                xPortion->getPropertyValue(u"TextField"_ustr) >>= xField;
+                uno::Reference<lang::XServiceInfo> xSI(xField, uno::UNO_QUERY);
+                if (xSI.is()
+                    && xSI->supportsService(u"com.sun.star.text.TextField.PageCountRange"_ustr))
+                    sJoin += (sJoin.isEmpty() ? u""_ustr : u","_ustr)
+                             + xField->getPresentation(false);
+            }
+        }
+        return sJoin;
+    };
+
+    createSwDoc("sectionpages_field_2312.docx");
+    // Should be "2,3,1,2". Change it if SectionPages import change to more compatible field.
+    CPPUNIT_ASSERT_EQUAL(u"2,4,4,2"_ustr, collectBody());
+
+    saveAndReload(u"Office Open XML Text"_ustr);
+
+    // Export side: each section's field is written back as a SECTIONPAGES field
+    // instruction in the DOCX body (one per section).
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:instrText[contains(., 'SECTIONPAGES')]"_ostr, 4);
+
+    // ...and the values survive the round-trip.
+    CPPUNIT_ASSERT_EQUAL(u"2,4,4,2"_ustr, collectBody());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test_FieldType)
