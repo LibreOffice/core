@@ -391,6 +391,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"cui/ui/optfltrpage.ui",
     u"cui/ui/optgeneralpage.ui",
     u"cui/ui/opthtmlpage.ui",
+    u"cui/ui/optjsearchpage.ui",
     u"cui/ui/optlanguagespage.ui",
     u"cui/ui/optlingupage.ui",
     u"cui/ui/optonlineupdatepage.ui",
