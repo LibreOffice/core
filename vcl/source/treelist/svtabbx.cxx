@@ -131,13 +131,13 @@ void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions)
         Invalidate();
 }
 
-SvTreeListEntry* SvTabListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
+SvTreeListEntry& SvTabListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
                                            bool /*bChildrenOnDemand*/, sal_uInt32 nPos)
 {
     return InsertEntryToColumn(rText, pParent, nPos);
 }
 
-SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr, SvTreeListEntry* pParent,
+SvTreeListEntry& SvTabListBox::InsertEntryToColumn(const OUString& rStr, SvTreeListEntry* pParent,
                                                    sal_uInt32 nPos)
 {
     OUString aFirstStr(rStr);
