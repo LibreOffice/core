@@ -3598,9 +3598,27 @@ void SvTreeListBox::ModelNotification(SvListAction nActionId, SvTreeListEntry* p
     switch (nActionId)
     {
         case SvListAction::INSERTED:
+        {
             ActionInserted(pEntry);
             ModelHasInserted(pEntry);
+            SvLBoxContextBmp* pBmpItem
+                = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
+            if (!pBmpItem)
+                break;
+            const Image& rBitmap1(pBmpItem->GetBitmap1());
+            const Image& rBitmap2(pBmpItem->GetBitmap2());
+            short nMaxWidth
+                = short(std::max(rBitmap1.GetSizePixel().Width(), rBitmap2.GetSizePixel().Width()));
+            nMaxWidth = m_pImpl->UpdateContextBmpWidthVector(pEntry, nMaxWidth);
+            if (nMaxWidth > m_nContextBmpWidthMax)
+            {
+                m_nContextBmpWidthMax = nMaxWidth;
+                SetTabs();
+            }
+            if (get_width_request() == -1)
+                queue_resize();
             break;
+        }
         case SvListAction::INSERTED_TREE:
             ActionInsertedTree(pEntry);
             ModelHasInsertedTree(pEntry);
@@ -3626,6 +3644,8 @@ void SvTreeListBox::ModelNotification(SvListAction nActionId, SvTreeListEntry* p
             ModelHasCleared(); // sic! for compatibility reasons!
             break;
         case SvListAction::CLEARED:
+            if (IsUpdateMode())
+                PaintImmediately();
             break;
         case SvListAction::INVALIDATE_ENTRY:
             // no action for the base class
@@ -3633,51 +3653,15 @@ void SvTreeListBox::ModelNotification(SvListAction nActionId, SvTreeListEntry* p
             break;
         case SvListAction::RESORTED:
             m_bVisPositionsValid = false;
-            break;
-        case SvListAction::RESORTING:
-            break;
-        default:
-            OSL_FAIL("unknown ActionId");
-    }
-
-    switch( nActionId )
-    {
-        case SvListAction::INSERTED:
-        {
-            SvLBoxContextBmp* pBmpItem
-                = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
-            if ( !pBmpItem )
-                break;
-            const Image& rBitmap1( pBmpItem->GetBitmap1() );
-            const Image& rBitmap2( pBmpItem->GetBitmap2() );
-            short nMaxWidth = short( std::max( rBitmap1.GetSizePixel().Width(), rBitmap2.GetSizePixel().Width() ) );
-            nMaxWidth = m_pImpl->UpdateContextBmpWidthVector(pEntry, nMaxWidth);
-            if (nMaxWidth > m_nContextBmpWidthMax)
-            {
-                m_nContextBmpWidthMax = nMaxWidth;
-                SetTabs();
-            }
-            if (get_width_request() == -1)
-                queue_resize();
-        }
-        break;
-
-        case SvListAction::RESORTING:
-            SetUpdateMode( false );
-            break;
-
-        case SvListAction::RESORTED:
             // after a selection: show first entry and also keep the selection
             MakeVisible(m_pModel->First(), true);
             SetUpdateMode( true );
             break;
-
-        case SvListAction::CLEARED:
-            if( IsUpdateMode() )
-                PaintImmediately();
+        case SvListAction::RESORTING:
+            SetUpdateMode(false);
             break;
-
-        default: break;
+        default:
+            OSL_FAIL("unknown ActionId");
     }
 }
 
