@@ -13426,6 +13426,13 @@ if test "$need_meson" = "yes"; then
         fi
         MESON='$(call gb_ExternalExecutable_get_command,python) '"$MESON"
     fi
+    if test -n "$PROGRAMFILESX86" -a -n "$MESON"; then
+        # meson reads ProgramFiles(x86) to find vswhere, but dash drops such
+        # (foo) using env names. Resupply it from PROGRAMFILESX86 (exported by
+        # autogen.sh) via env, which is not constrained by the shell name
+        # rules.
+        MESON="env 'ProgramFiles(x86)=$PROGRAMFILESX86' $MESON"
+    fi
     AC_CHECK_PROG(NINJA,ninja,ninja)
     if test -z "$MESON" -o -z "$NINJA"; then
         AC_MSG_ERROR([you need to have meson and ninja in order to build harfbuzz])
