@@ -24,6 +24,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/securityoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 namespace ppt
@@ -149,7 +150,9 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
 sal_uInt32 ExSoundCollection::GetId(const OUString& rString)
 {
     sal_uInt32 nSoundId = 0;
-    if (!rString.isEmpty())
+    if (!rString.isEmpty()
+        && !SvtSecurityOptions().isUntrustedReferer(maReferer)
+        && !INetURLObject(rString).IsExoticProtocol())
     {
         const sal_uInt32 nSoundCount = maEntries.size();
 
