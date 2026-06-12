@@ -90,9 +90,6 @@ module org.libreoffice.uno
     exports com.sun.star.reflection;
     exports com.sun.star.registry;
     exports com.sun.star.rendering;
-    exports com.sun.star.report;
-    exports com.sun.star.report.inspection;
-    exports com.sun.star.report.meta;
     exports com.sun.star.resource;
     exports com.sun.star.scanner;
     exports com.sun.star.script;
