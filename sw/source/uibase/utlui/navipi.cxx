@@ -57,6 +57,8 @@
 #include <swcont.hxx>
 #include <content.hxx>
 
+#include <officecfg/Office/Writer.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -154,7 +156,8 @@ void SwNavigationPI::UpdateNavigateBy()
 
 IMPL_LINK(SwNavigationPI, NavigateByComboBoxSelectHdl, weld::ComboBox&, rComboBox, void)
 {
-    m_xContentTree->SelectContentType(rComboBox.get_active_text());
+    if (officecfg::Office::Writer::Navigator::NavigateByCategoryBinding::get())
+        m_xContentTree->SelectContentType(rComboBox.get_active_text());
     UpdateNavigateBy();
 }
 
@@ -1269,6 +1272,8 @@ bool SwNavigationPI::IsGlobalDoc() const
 
 void SwNavigationPI::SelectNavigateByContentType(const OUString& rContentTypeName)
 {
+    if (!officecfg::Office::Writer::Navigator::NavigateByCategoryBinding::get())
+        return;
     if (!m_pNavigateByComboBox)
         return;
     if (auto nPos = m_pNavigateByComboBox->find_text(rContentTypeName); nPos != -1)

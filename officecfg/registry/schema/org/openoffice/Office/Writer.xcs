@@ -5368,6 +5368,12 @@
         </info>
         <value>0</value>
       </prop>
+      <prop oor:name="NavigateByCategoryBinding" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+        <desc>Specifies whether the Navigate By control also selects the content type in the Navigator list box and vice versa.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Envelope">
       <info>
