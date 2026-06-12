@@ -490,6 +490,11 @@ DECLARE_WW8EXPORT_TEST(testTdf104704_mangledFooter, "tdf104704_mangledFooter.odt
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf164800_hiddenPara, "tdf164800_hiddenPara.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEmptyGroup)
 {
     // Given a document with an empty group
