@@ -20,9 +20,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_calc \
 	Configuration_dbase \
 	Configuration_flat \
-	Configuration_mysql_jdbc \
 	Configuration_odbc \
-	Configuration_mysql_jdbc \
 	Configuration_writer \
 	Library_calc \
 	Library_dbase \
@@ -30,7 +28,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_file \
 	Library_flat \
 	$(if $(filter ANDROID iOS,$(OS)),,Library_odbc) \
-	Library_mysql_jdbc \
 	Library_sdbc2 \
 	Library_writer \
 ))

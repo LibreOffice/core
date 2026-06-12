@@ -421,9 +421,8 @@ endif
 ifeq ($(ENABLE_JAVA),TRUE)
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/hsqldb)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql_jdbc)/org/openoffice/Office/DataAccess/Drivers-mysql_jdbc.xcu
-postprocess_DRIVERS += hsqldb jdbc mysql_jdbc
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
+postprocess_DRIVERS += hsqldb jdbc
 endif
 
 ifeq (MACOSX,$(OS))

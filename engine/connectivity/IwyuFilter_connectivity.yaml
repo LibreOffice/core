@@ -62,8 +62,5 @@ excludelist:
     - com/sun/star/util/Date.hpp
     - com/sun/star/util/Time.hpp
     - com/sun/star/util/DateTime.hpp
-    connectivity/source/drivers/mysql_jdbc/YDriver.cxx:
-    # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
     connectivity/source/drivers/writer/WDatabaseMetaData.cxx:
     - com/sun/star/text/XTextDocument.hpp
