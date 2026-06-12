@@ -507,6 +507,55 @@ public:
         bmInitialized = true;
     }
 
+    bool GetForceSubTotal() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->GetForceSubTotal();
+        // Never set in Slim
+        return false;
+    }
+
+    ScDPDataMember* GetDataRoot() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->GetDataRoot();
+        // Slim doesn't store the data root, if one was set we would have been promoted
+        return nullptr;
+    }
+
+    bool IsAutoHidden() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->IsAutoHidden();
+        // Slim doesn't store Auto hidden
+        return false;
+    }
+
+    sal_uInt16 GetMemberStep() override
+    {
+        if (bmPromoted)
+            return GetPromote()->GetMemberStep();
+        // We don't store this in the slim version, it's always
+        // 1 unless promoted
+        return 1;
+    }
+
+    const ScDPResultDimension* GetChildDimension() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->GetChildDimension();
+        // Slim doesn't store a child pointer, if one was set we would have been promoted
+        return nullptr;
+    }
+
+    ScDPResultDimension* GetChildDimension() override
+    {
+        if (bmPromoted)
+            return GetPromote()->GetChildDimension();
+        // Slim doesn't store a child pointer, if one was set we would have been promoted
+        return nullptr;
+    }
+
     const ScDPMember* GetDPMember() const override
     {
         if (bmPromoted)
