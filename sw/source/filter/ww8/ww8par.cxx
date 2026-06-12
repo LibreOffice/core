@@ -2569,8 +2569,6 @@ void SwWW8ImplReader::FinalizeTextNode(SwPosition& rPos, bool bAddNew)
 
     // tdf#64222 / tdf#150613 filter out the "paragraph marker" formatting and
     // set it as a separate paragraph property, just like we do for DOCX.
-    // This is only being used for numbering currently, so limiting to that context.
-    if (pRule)
     {
         SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1, RES_TXTATR_CHARFMT,
                         RES_TXTATR_CHARFMT, RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>
