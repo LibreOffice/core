@@ -882,12 +882,6 @@ namespace {
 
 /** @short  check if recovery must be started or not.
 
-    @param  bCrashed [boolean ... out!]
-            the office crashed last times.
-            But may be there are no recovery data.
-            Useful to trigger the error report tool without
-            showing the recovery UI.
-
     @param  bRecoveryDataExists [boolean ... out!]
             there exists some recovery data.
 
@@ -896,11 +890,9 @@ namespace {
             Because the user may be logged out last time from its
             unix session...
 */
-void impl_checkRecoveryState(bool& bCrashed           ,
-                             bool& bRecoveryDataExists,
+void impl_checkRecoveryState(bool& bRecoveryDataExists,
                              bool& bSessionDataExists )
 {
-    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get();
     bool elements = officecfg::Office::Recovery::RecoveryList::get()->
         hasElements();
     bool session
@@ -1245,11 +1237,10 @@ int Desktop::Main()
     recordTime(startT, "SetSplashScreenProgress(50): time = ");
 
     // Backing Component
-    bool bCrashed            = false;
     bool bExistsRecoveryData = false;
     bool bExistsSessionData  = false;
 
-    impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
+    impl_checkRecoveryState(bExistsRecoveryData, bExistsSessionData);
 
     OUString pidfileName = rCmdLineArgs.GetPidfileName();
     if ( !pidfileName.isEmpty() )

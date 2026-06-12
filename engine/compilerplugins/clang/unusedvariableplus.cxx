@@ -175,9 +175,6 @@ public:
             "DepthProtect",
             "desktop::Desktop",
             "desktop::(anonymous namespace)::ConditionSetGuard",
-            "desktop::(anonymous namespace)::RefClearGuard<class "
-            "com::sun::star::uno::Reference<class com::sun::star::frame::XSynchronousDispatch> "
-            ">",
             "DetachCurrentThread",
             "DialogReleaseGuard",
             "DisableCallbackAction",
