@@ -810,6 +810,8 @@ void AIChatSession::callLLMAPI()
 
         if (statusCode != 200)
         {
+            LOG_WRN("AIChat: provider returned HTTP " << statusCode
+                    << " for request [" << requestId << "]; body: " << body);
             self->sendChatResult(false, mapHttpStatusToError(statusCode, reason), requestId);
             self->_toolLoop.reset();
             return;

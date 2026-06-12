@@ -16,6 +16,9 @@
 		AD01AD01AD01AD01AD010107 /* admin in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010007 /* admin */; };
 		5C02902E606BD6410CA7B24A /* ProcUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC95AFDE75BD0C4A66FE4558 /* ProcUtil.cpp */; };
 		5E7715000000000000000001 /* SettingsStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E7715000000000000000002 /* SettingsStorage.cpp */; };
+		5E7715000000000000000103 /* AIChatSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E7715000000000000000003 /* AIChatSession.cpp */; };
+		5E7715000000000000000104 /* AIHttpTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E7715000000000000000004 /* AIHttpTransport.cpp */; };
+		5E7715000000000000000105 /* AIUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E7715000000000000000005 /* AIUtil.cpp */; };
 		BE16C9F02CD51F58005E5960 /* hello.odt in Resources */ = {isa = PBXBuildFile; fileRef = BE16C9EF2CD51F58005E5960 /* hello.odt */; };
 		BE178EEA2E5C756000A1FCBF /* Log-common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE178EE92E5C756000A1FCBF /* Log-common.cpp */; };
 		BE22492C2CC79AD700385A9C /* cool.html in Resources */ = {isa = PBXBuildFile; fileRef = BE22492B2CC79AD700385A9C /* cool.html */; };
@@ -120,6 +123,9 @@
 		BE16C9EF2CD51F58005E5960 /* hello.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello.odt; path = ../../../test/data/hello.odt; sourceTree = "<group>"; };
 		BE178EE92E5C756000A1FCBF /* Log-common.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Log-common.cpp"; path = "../../../../common/Log-common.cpp"; sourceTree = "<group>"; };
 		5E7715000000000000000002 /* SettingsStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SettingsStorage.cpp; path = ../../../../common/SettingsStorage.cpp; sourceTree = "<group>"; };
+		5E7715000000000000000003 /* AIChatSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AIChatSession.cpp; path = ../../../../wsd/AIChatSession.cpp; sourceTree = "<group>"; };
+		5E7715000000000000000004 /* AIHttpTransport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AIHttpTransport.cpp; path = ../../../../common/AIHttpTransport.cpp; sourceTree = "<group>"; };
+		5E7715000000000000000005 /* AIUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AIUtil.cpp; path = ../../../../wsd/AIUtil.cpp; sourceTree = "<group>"; };
 		BE22492B2CC79AD700385A9C /* cool.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = cool.html; path = ../../../browser/dist/cool.html; sourceTree = "<group>"; };
 		BE22492D2CC79BAE00385A9C /* bundle.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = bundle.css; path = ../../../browser/dist/bundle.css; sourceTree = "<group>"; };
 		BE22492E2CC79BAE00385A9C /* bundle.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = bundle.js; path = ../../../browser/dist/bundle.js; sourceTree = "<group>"; };
@@ -505,6 +511,9 @@
 				BEA263572CBE38E20007435A /* Log.hpp */,
 				BE178EE92E5C756000A1FCBF /* Log-common.cpp */,
 				5E7715000000000000000002 /* SettingsStorage.cpp */,
+				5E7715000000000000000003 /* AIChatSession.cpp */,
+				5E7715000000000000000004 /* AIHttpTransport.cpp */,
+				5E7715000000000000000005 /* AIUtil.cpp */,
 				BEA263582CBE38E20007435A /* Log-poco.cpp */,
 				BE4C62052D59E85500047DF2 /* MobileApp.hpp */,
 				BE4C62062D59E85500047DF2 /* MobileApp.cpp */,
@@ -961,6 +970,9 @@
 				BE9115B02CECBECF00C597B2 /* Util-unix.cpp in Sources */,
 				5C02902E606BD6410CA7B24A /* ProcUtil.cpp in Sources */,
 				5E7715000000000000000001 /* SettingsStorage.cpp in Sources */,
+				5E7715000000000000000103 /* AIChatSession.cpp in Sources */,
+				5E7715000000000000000104 /* AIHttpTransport.cpp in Sources */,
+				5E7715000000000000000105 /* AIUtil.cpp in Sources */,
 				BE4C620E2D59E85500047DF2 /* MobileApp.cpp in Sources */,
 				BE4C620F2D59E85500047DF2 /* Util-macos.cpp in Sources */,
 				BE44ACCF2D7F067500BFA3B2 /* Crypto-stub.cpp in Sources */,

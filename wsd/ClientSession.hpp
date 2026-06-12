@@ -39,14 +39,14 @@ class DocumentBroker;
 // transport for the AI proxy: COOL (!MOBILEAPP) and CODA-Q (QTAPP). The other
 // MOBILEAPP variants (iOS/Android/macOS/cowasm, and CODA-W until its Visual
 // Studio project picks it up) build without it.
-#if !MOBILEAPP || defined(QTAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
 class AIChatSession;
 #endif
 
 /// Represents a session to a COOL client, in the WSD process.
 class ClientSession final : public Session
 {
-#if !MOBILEAPP || defined(QTAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
     friend class AIChatSession;
 #endif
 public:
@@ -602,7 +602,7 @@ private:
 
     Poco::SharedPtr<Poco::JSON::Object> _viewSettingsJSON;
 
-#if !MOBILEAPP || defined(QTAPP)
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP)
     /// AI chat orchestrator - multi-round LLM tool loop.
     std::unique_ptr<AIChatSession> _aiChat;
 #endif

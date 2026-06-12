@@ -25,6 +25,7 @@
 #include <string>
 #include <common/Clipboard.hpp>
 #include <common/LangUtil.hpp>
+#include <common/AIHttpTransport.hpp>
 #include <common/SettingsStorage.hpp>
 #include <common/Log.hpp>
 #include <common/ProcUtil.hpp>
@@ -48,6 +49,60 @@ static int closeNotificationPipeForForwardingThread[2];
 static std::thread coolwsdThread;
 
 /**
+ * Register the AI chat HTTP transport. The desktop apps have no server-side AI
+ * proxy and no COOL net stack for outbound requests, so AIChatSession reaches
+ * the provider through this platform hook (the macOS counterpart of Qt's
+ * registerAIHttpTransport()). onDone may run on any thread; AIChatSession hops
+ * back onto its polling thread itself.
+ */
+static void registerAIHttpTransport()
+{
+    ai::setHttpPostFn(
+        [](const std::string& url, const std::string& authHeader, std::string body,
+           int timeoutSeconds, ai::HttpDoneCallback onDone)
+        {
+            @autoreleasepool {
+                NSURL* nsURL = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
+                if (nsURL == nil)
+                {
+                    onDone(ai::HttpConnectFailed, std::string());
+                    return;
+                }
+
+                NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:nsURL];
+                req.HTTPMethod = @"POST";
+                [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+                if (!authHeader.empty())
+                    [req setValue:[NSString stringWithUTF8String:authHeader.c_str()]
+                       forHTTPHeaderField:@"Authorization"];
+                if (timeoutSeconds > 0)
+                    req.timeoutInterval = (NSTimeInterval)timeoutSeconds;
+                req.HTTPBody = [NSData dataWithBytes:body.data() length:body.size()];
+
+                NSURLSessionDataTask* task = [[NSURLSession sharedSession]
+                    dataTaskWithRequest:req
+                      completionHandler:^(NSData* data, NSURLResponse* response, NSError* error) {
+                          int statusCode;
+                          if ([response isKindOfClass:[NSHTTPURLResponse class]])
+                              statusCode = (int)[(NSHTTPURLResponse*)response statusCode];
+                          else if (error != nil && error.code == NSURLErrorTimedOut)
+                              statusCode = ai::HttpNoResponse;
+                          else
+                              statusCode = ai::HttpConnectFailed;
+
+                          std::string responseBody;
+                          if (data != nil && data.length > 0)
+                              responseBody.assign(reinterpret_cast<const char*>(data.bytes),
+                                                  data.length);
+
+                          onDone(statusCode, std::move(responseBody));
+                      }];
+                [task resume];
+            }
+        });
+}
+
+/**
  * Wrapper to be able to call the C++ code from Swift.
  *
  * The main purpose is to initialize the COOLWSD and interact with it.
@@ -63,6 +118,9 @@ static std::thread coolwsdThread;
     Log::initialize("Mobile", "information");
 #endif
     ProcUtil::setThreadName("main");
+
+    // Give AIChatSession a native HTTP transport (no server-side AI proxy here).
+    registerAIHttpTransport();
 
     // Set up the logging callback
     fakeSocketSetLoggingCallback([](const std::string& line) {
