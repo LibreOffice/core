@@ -746,6 +746,24 @@ void AIChatSession::postViaTransport(
 }
 #endif
 
+namespace
+{
+// True when the provider rejected the request specifically for the
+// "temperature" parameter (e.g. reasoning models that only allow the default).
+bool isUnsupportedTemperatureError(const std::string& body)
+{
+    Poco::JSON::Object::Ptr root;
+    if (!JsonUtil::parseJSON(body, root) || !root)
+        return false;
+    const Poco::JSON::Object::Ptr err = root->getObject("error");
+    if (!err)
+        return false;
+    std::string param;
+    JsonUtil::findJSONValue(err, "param", param);
+    return param == "temperature";
+}
+} // namespace
+
 void AIChatSession::callLLMAPI()
 {
     if (!_toolLoop)
@@ -770,7 +788,10 @@ void AIChatSession::callLLMAPI()
     payload->set("tools", buildToolDefinitions(_toolLoop->docType));
     // Low temperature for deterministic, format-adherent output; explicit
     // auto so the model still chooses between a tool call and a text answer.
-    payload->set("temperature", 0.1);
+    // Some reasoning models only accept the default temperature and 400 on any
+    // explicit value, so omit it after such a rejection (see onResponse).
+    if (!_toolLoop->retriedWithoutTemperature)
+        payload->set("temperature", 0.1);
     payload->set("tool_choice", "auto");
 
     std::ostringstream payloadStream;
@@ -805,6 +826,16 @@ void AIChatSession::callLLMAPI()
         {
             self->sendChatResult(false, "Request timeout", requestId);
             self->_toolLoop.reset();
+            return;
+        }
+
+        if (statusCode == 400 && !self->_toolLoop->retriedWithoutTemperature &&
+            isUnsupportedTemperatureError(body))
+        {
+            LOG_WRN("AIChat: model rejected 'temperature'; retrying without it ["
+                    << requestId << ']');
+            self->_toolLoop->retriedWithoutTemperature = true;
+            self->callLLMAPI();
             return;
         }
 

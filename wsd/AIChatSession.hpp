@@ -83,6 +83,7 @@ struct AIToolLoopState
     int validationRetriesRemaining = 3; // silent re-prompts for malformed payloads
     int reasoningOnlyRetriesRemaining =
         1; // nudges when a turn ends with reasoning and no answer/tool call
+    bool retriedWithoutTemperature = false; // one-shot retry when the model rejects temperature
     bool awaitingKitResponse = false;
     bool awaitingApproval = false;
     std::string pendingToolCallId;
