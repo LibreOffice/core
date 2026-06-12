@@ -1675,10 +1675,6 @@ enum class TreeListButtonType
 // take care of GetTextOffset when doing changes
 void SvTreeListBox::SetTabs()
 {
-    // Moved to SvTreeListBox::Paint to make inplace editing work for X11 in the enhancement patch
-    // tdf#139663 Rename objects from tree view in navigator.
-    // if( IsEditingActive() )
-    //   EndEditing( true );
     m_nTreeFlags &= ~SvTreeFlags::RECALCTABS;
     m_nFocusWidth = -1;
     const WinBits nStyle( GetStyle() );
