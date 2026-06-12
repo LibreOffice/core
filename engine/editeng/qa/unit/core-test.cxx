@@ -18,6 +18,7 @@
 #include <EditSelection.hxx>
 #include <ParagraphPortion.hxx>
 #include <ParagraphPortionList.hxx>
+#include <TextPortion.hxx>
 
 #include <sfx2/app.hxx>
 #include <svl/itempool.hxx>
@@ -141,6 +142,7 @@ public:
     void testMoveParagraph();
     void testCreateLines();
     void testTdf154248MultilineFieldWrapping();
+    void testMultilineFieldClipInvariance();
     void testTdf151748StaleKashidaArray();
     void testTdf162803StaleKashidaArray();
     void testEscapementNotPreservedOnParaBreak();
@@ -184,6 +186,7 @@ public:
     CPPUNIT_TEST(testMoveParagraph);
     CPPUNIT_TEST(testCreateLines);
     CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
+    CPPUNIT_TEST(testMultilineFieldClipInvariance);
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
@@ -2270,6 +2273,93 @@ void Test::testTdf154248MultilineFieldWrapping()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(14), rLine.GetStart());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), rLine.GetEnd());
     }
+}
+
+// Records the document Y position of each stripped text portion so a test can
+// look up where a given piece of text was drawn.
+class PortionPositionCollector : public StripPortionsHelper
+{
+public:
+    std::vector<std::pair<OUString, tools::Long>> maPortions;
+
+    void processDrawPortionInfo(const DrawPortionInfo& rInfo) override
+    {
+        maPortions.emplace_back(rInfo.maText, rInfo.mrStartPos.Y());
+    }
+    void processDrawBulletInfo(const DrawBulletInfo&) override {}
+    void directlyAddB2DPrimitive(const drawinglayer::primitive2d::Primitive2DReference&) override {}
+
+    // Document Y of the first portion that carries rNeedle, or -1 if absent.
+    tools::Long findTextY(std::u16string_view rNeedle) const
+    {
+        for (const auto& rPortion : maPortions)
+            if (rPortion.first.indexOf(rNeedle) >= 0)
+                return rPortion.second;
+        return -1;
+    }
+};
+
+void Test::testMultilineFieldClipInvariance()
+{
+    // A long hyperlink field wraps onto several sublines that are not real
+    // layout lines. The text below the field must land at the same document
+    // position whether the clip rectangle covers the whole field or starts
+    // below the field's first subline, the way edit mode clips a shape into
+    // tile-sized bands.
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
+    aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
+
+    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    aEditEngine.SetPaperSize(Size(2000, 5000));
+
+    // Paragraph 0 holds only the wrapping field, paragraph 1 the marker text
+    // whose position is measured.
+    aEditEngine.SetText(u"\nBELOWFIELDMARKER"_ustr);
+
+    SvxURLField aURLField(
+        u"http://not.a.real.link"_ustr,
+        u"A hyperlink long enough to wrap over several lines no matter the paper width"_ustr,
+        SvxURLFormat::Repr);
+    SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
+
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+    ContentNode* pNode = rDoc.GetObject(0);
+    EditSelection aSel(EditPaM(pNode, 0), EditPaM(pNode, 0));
+    aEditEngine.InsertField(aSel, aField);
+
+    aEditEngine.QuickFormatDoc(false);
+    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
+
+    // The field must actually wrap, otherwise the bug cannot occur.
+    ParaPortion const& rFieldPara = aEditEngine.GetParaPortions().getRef(0);
+    const TextPortion& rFieldPortion = rFieldPara.GetTextPortions()[0];
+    CPPUNIT_ASSERT_EQUAL(PortionKind::FIELD, rFieldPortion.GetKind());
+    const ExtraPortionInfo* pExtraInfo = rFieldPortion.GetExtraInfos();
+    CPPUNIT_ASSERT(pExtraInfo);
+    CPPUNIT_ASSERT_GREATER(size_t(1), pExtraInfo->lineBreaksList.size());
+
+    // Reference layout: clip rectangle covering everything.
+    const tools::Rectangle aFullClip(Point(0, 0), Size(0x7FFFFFFF, 0x7FFFFFFF));
+    PortionPositionCollector aFull;
+    aEditEngine.StripPortions(aFull, aFullClip);
+    const tools::Long nReferenceY = aFull.findTextY(u"BELOWFIELDMARKER");
+    CPPUNIT_ASSERT_MESSAGE("marker not drawn in the full render", nReferenceY >= 0);
+
+    // Clip rectangle whose top sits one unit below the field's first subline.
+    // The first subline ends above this line, so the line-level visibility
+    // test once skipped the whole field, while the field paragraph and the
+    // marker below it stay inside the rectangle.
+    const tools::Long nFirstSublineHeight = rFieldPara.GetLines()[0].GetHeight();
+    const tools::Rectangle aClip(Point(0, nFirstSublineHeight + 1),
+                                 Size(0x7FFFFFFF, 0x7FFFFFFF));
+    PortionPositionCollector aClipped;
+    aEditEngine.StripPortions(aClipped, aClip);
+    const tools::Long nClippedY = aClipped.findTextY(u"BELOWFIELDMARKER");
+    CPPUNIT_ASSERT_MESSAGE("marker not drawn in the clipped render", nClippedY >= 0);
+
+    // The skipped field no longer pulls the text below it upward.
+    CPPUNIT_ASSERT_EQUAL(nReferenceY, nClippedY);
 }
 
 // tdf#151748: Verify that editeng produces an empty kashida array if the line does not have room

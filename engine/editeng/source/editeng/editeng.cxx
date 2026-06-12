@@ -1071,6 +1071,12 @@ void EditEngine::StripPortions(StripPortionsHelper& rStripPortionsHelper)
     getImpl().StripAllPortions(*aTmpDev, aBigRect, rStripPortionsHelper);
 }
 
+void EditEngine::StripPortions(StripPortionsHelper& rStripPortionsHelper, const tools::Rectangle& rClipRect)
+{
+    ScopedVclPtrInstance< VirtualDevice > aTmpDev;
+    getImpl().StripAllPortions(*aTmpDev, rClipRect, rStripPortionsHelper);
+}
+
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
 {
     if (!getImpl().IsFormatted())

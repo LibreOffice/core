@@ -367,6 +367,10 @@ public:
     bool            IsInSelectionMode() const;
 
     void StripPortions(StripPortionsHelper& rStripPortionsHelper);
+    // Strip the portions clipped to rClipRect, in document coordinates with
+    // the text origin at (0, 0). A line whose vertical extent falls entirely
+    // outside the rectangle is not handed to the helper.
+    void StripPortions(StripPortionsHelper& rStripPortionsHelper, const tools::Rectangle& rClipRect);
     void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList );
 
     SAL_DLLPRIVATE tools::Long            GetFirstLineStartX( sal_Int32 nParagraph );
