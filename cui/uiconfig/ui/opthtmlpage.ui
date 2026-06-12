@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustsize1">
@@ -80,183 +80,16 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="size7FT">
-                    <property name="visible">True</property>
+                  <object class="GtkImage" id="locksize1">
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="opthtmlpage|size7FT">Size _7:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">size7</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="size7">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustsize7</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="size7-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size7">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="size6FT">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="opthtmlpage|size6FT">Size _6:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">size6</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="size6">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustsize6</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="size6-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size6">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="size5FT">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="opthtmlpage|size5FT">Size _5:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">size5</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="size5">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustsize5</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="size5-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size5">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="size4FT">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="opthtmlpage|size4FT">Size _4:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">size4</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="size4">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustsize4</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="size4-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size4">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="size3FT">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="opthtmlpage|size3FT">Size _3:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">size3</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="size3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustsize3</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="size3-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size3">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="size2FT">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="opthtmlpage|size2FT">Size _2:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">size2</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="size2">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustsize2</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="size2-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size2">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -290,19 +123,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="locksize1">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkImage" id="locksize2">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -312,6 +132,36 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="size2FT">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="opthtmlpage|size2FT">Size _2:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">size2</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="size2">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustsize2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="size2-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size2">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
@@ -329,6 +179,36 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="size3FT">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="opthtmlpage|size3FT">Size _3:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">size3</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="size3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustsize3</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="size3-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size3">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkImage" id="locksize4">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -338,6 +218,36 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="size4FT">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="opthtmlpage|size4FT">Size _4:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">size4</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="size4">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustsize4</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="size4-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size4">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
                     <property name="top-attach">3</property>
                   </packing>
                 </child>
@@ -355,6 +265,36 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="size5FT">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="opthtmlpage|size5FT">Size _5:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">size5</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="size5">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustsize5</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="size5-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size5">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkImage" id="locksize6">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -368,6 +308,36 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="size6FT">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="opthtmlpage|size6FT">Size _6:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">size6</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="size6">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustsize6</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="size6-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size6">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkImage" id="locksize7">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -377,6 +347,36 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
+                    <property name="top-attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="size7FT">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="opthtmlpage|size7FT">Size _7:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">size7</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="size7">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustsize7</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="size7-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size7">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
                     <property name="top-attach">6</property>
                   </packing>
                 </child>
@@ -430,43 +430,16 @@
                 <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
                 <child>
-                  <object class="GtkCheckButton" id="ignorefontnames">
-                    <property name="label" translatable="yes" context="opthtmlpage|ignorefontnames">Ignore _font settings</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="ignorefontnames-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ignorefontnames">Mark this check box to ignore all font settings when importing. The fonts that were defined in the HTML Page Style will be the fonts that will be used. </property>
-                      </object>
-                    </child>
+                  <object class="GtkImage" id="locknumbersenglishus">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="unknowntag">
-                    <property name="label" translatable="yes" context="opthtmlpage|unknowntag">_Import unknown HTML tags as fields</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="unknowntag-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|unknowntag">Mark this check box if you want tags that are not recognized by Writer/Web to be imported as fields.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -490,19 +463,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="locknumbersenglishus">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkImage" id="lockunknowntag">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -516,6 +476,26 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="unknowntag">
+                    <property name="label" translatable="yes" context="opthtmlpage|unknowntag">_Import unknown HTML tags as fields</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="unknowntag-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|unknowntag">Mark this check box if you want tags that are not recognized by Writer/Web to be imported as fields.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkImage" id="lockignorefontnames">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -525,6 +505,26 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="ignorefontnames">
+                    <property name="label" translatable="yes" context="opthtmlpage|ignorefontnames">Ignore _font settings</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ignorefontnames-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ignorefontnames">Mark this check box to ignore all font settings when importing. The fonts that were defined in the HTML Page Style will be the fonts that will be used. </property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">2</property>
                   </packing>
                 </child>
@@ -564,28 +564,21 @@
                 <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
                 <child>
-                  <object class="GtkCheckButton" id="savegrflocal">
-                    <property name="label" translatable="yes" context="opthtmlpage|savegrflocal">_Copy local images to Internet</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="savegrflocal-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|savegrflocal">Mark this check box to automatically upload the embedded pictures to the Internet server when uploading using a network protocol. Use the Save As dialog to save the document and enter a complete URL as the file name in the Internet.</property>
-                      </object>
-                    </child>
+                  <object class="GtkImage" id="lockstarbasic">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="printextension">
-                    <property name="label" translatable="yes" context="opthtmlpage|printextension">_Print layout</property>
+                  <object class="GtkCheckButton" id="starbasic">
+                    <property name="label" translatable="yes" context="opthtmlpage|starbasic">LibreOffice _Basic</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -593,14 +586,27 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="printextension-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|printextension">If you mark this field, the print layout of the current document (for example, table of contents with justified page numbers and dot leaders) is exported as well.</property>
+                      <object class="AtkObject" id="starbasic-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasic">Check this box to include the BASIC instructions when exporting to HTML format.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockstarbasicwarning">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -625,52 +631,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="starbasic">
-                    <property name="label" translatable="yes" context="opthtmlpage|starbasic">LibreOffice _Basic</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="starbasic-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasic">Check this box to include the BASIC instructions when exporting to HTML format.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="lockstarbasic">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="lockstarbasicwarning">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkImage" id="lockprintextension">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -684,6 +644,26 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="printextension">
+                    <property name="label" translatable="yes" context="opthtmlpage|printextension">_Print layout</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="printextension-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|printextension">If you mark this field, the print layout of the current document (for example, table of contents with justified page numbers and dot leaders) is exported as well.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkImage" id="locksavegrflocal">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
@@ -693,6 +673,26 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="savegrflocal">
+                    <property name="label" translatable="yes" context="opthtmlpage|savegrflocal">_Copy local images to Internet</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="savegrflocal-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|savegrflocal">Mark this check box to automatically upload the embedded pictures to the Internet server when uploading using a network protocol. Use the Save As dialog to save the document and enter a complete URL as the file name in the Internet.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">3</property>
                   </packing>
                 </child>
