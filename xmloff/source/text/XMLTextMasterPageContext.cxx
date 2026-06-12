@@ -65,7 +65,8 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
 }
 
 constexpr OUString gsFollowStyle( u"FollowStyle"_ustr );
-constexpr OUString gsNoFirst( u"NoFirst"_ustr );
+constexpr OUString gsHeaderNoFirst( u"HeaderNoFirst"_ustr );
+constexpr OUString gsFooterNoFirst( u"FooterNoFirst"_ustr );
 constexpr OUString gsFirstShareContent(u"FirstIsShared"_ustr);
 
 XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
@@ -81,7 +82,6 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 ,   m_bInsertFooterFirst( false )
 ,   m_bHeaderInserted( false )
 ,   m_bFooterInserted( false )
-,   m_bHeaderFirstAvailable( false )
 {
     OUString sName, sDisplayName;
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -101,13 +101,13 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
             case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_NAME):
                 m_sPageMasterName = aValue;
                 break;
-            case XML_ELEMENT(STYLE, XML_IS_FIRST_PAGE_FOOTER_SHARED):
-            case XML_ELEMENT(CO_EXT, XML_IS_FIRST_PAGE_FOOTER_SHARED):
-                m_sIsFirstPageFooterShared = aValue;
+            case XML_ELEMENT(STYLE, XML_IS_FIRST_PAGE_FOOTER_ENABLED):
+            case XML_ELEMENT(CO_EXT, XML_IS_FIRST_PAGE_FOOTER_ENABLED):
+                m_sIsFirstPageFooterEnabled = aValue;
                 break;
-            case XML_ELEMENT(STYLE, XML_IS_FIRST_PAGE_HEADER_SHARED):
-            case XML_ELEMENT(CO_EXT, XML_IS_FIRST_PAGE_HEADER_SHARED):
-                m_sIsFirstPageHeaderShared = aValue;
+            case XML_ELEMENT(STYLE, XML_IS_FIRST_PAGE_HEADER_ENABLED):
+            case XML_ELEMENT(CO_EXT, XML_IS_FIRST_PAGE_HEADER_ENABLED):
+                m_sIsFirstPageHeaderEnabled = aValue;
                 break;
             case XML_ELEMENT(DRAW, XML_STYLE_NAME):
                 m_sDrawingPageStyle = aValue;
@@ -221,7 +221,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMasterPageConte
         break;
     case XML_ELEMENT(LO_EXT, XML_HEADER_FIRST):
     case XML_ELEMENT(STYLE, XML_HEADER_FIRST):
-        m_bHeaderFirstAvailable = true;
         if( m_bInsertHeaderFirst && m_bHeaderInserted )
             bInsert = bFirst = true;
         break;
@@ -307,10 +306,18 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
     {
         xPropSet->setPropertyValue( u"Hidden"_ustr, uno::Any( IsHidden( ) ) );
     }
-    if (xPropSetInfo->hasPropertyByName( gsNoFirst) && !m_bHeaderFirstAvailable &&  IsXMLToken(m_sIsFirstPageHeaderShared, XML_FALSE))
+    if (xPropSetInfo->hasPropertyByName(gsHeaderNoFirst))
     {
-        xPropSet->setPropertyValue( gsFirstShareContent, Any(false) );
-        xPropSet->setPropertyValue( gsNoFirst, Any(true) );
+        if (IsXMLToken(m_sIsFirstPageHeaderEnabled, XML_FALSE))
+        {
+            xPropSet->setPropertyValue( gsFirstShareContent, Any(false) );
+            xPropSet->setPropertyValue( gsHeaderNoFirst, Any(true) );
+        }
+        if (IsXMLToken(m_sIsFirstPageFooterEnabled, XML_FALSE))
+        {
+            xPropSet->setPropertyValue( gsFirstShareContent, Any(false) );
+            xPropSet->setPropertyValue( gsFooterNoFirst, Any(true) );
+        }
     }
 }
 

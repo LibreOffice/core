@@ -44,7 +44,8 @@ using namespace ::xmloff::token;
 constexpr OUString gsIsPhysical( u"IsPhysical"_ustr );
 constexpr OUString gsFollowStyle( u"FollowStyle"_ustr );
 constexpr OUString gsFirstShareContent( u"FirstIsShared"_ustr );
-constexpr OUString gsNoFirst( u"NoFirst"_ustr );
+constexpr OUString gsHeaderNoFirst( u"HeaderNoFirst"_ustr );
+constexpr OUString gsFooterNoFirst( u"FooterNoFirst"_ustr );
 
 namespace {
 
@@ -177,7 +178,7 @@ bool XMLPageExport::exportStyle(
         }
 
         //attributes to define shared/hidden headers/footers in Writer
-        if( xPropSetInfo->hasPropertyByName( gsNoFirst ) )
+        if( xPropSetInfo->hasPropertyByName(gsHeaderNoFirst) )
         {
             Any aAny;
             //same flag footer/header
@@ -186,20 +187,20 @@ bool XMLPageExport::exportStyle(
             aAny >>= bFirstShared;
 
             bool bWithoutFirstHeader = false;
-            aAny = xPropSet->getPropertyValue( gsNoFirst );
+            aAny = xPropSet->getPropertyValue( gsHeaderNoFirst );
             aAny >>= bWithoutFirstHeader;
             //TODO: version and odf extension ticket id
             if( GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
-                GetExport().AddAttribute(XML_NAMESPACE_CO_EXT, XML_IS_FIRST_PAGE_HEADER_SHARED,
+                GetExport().AddAttribute(XML_NAMESPACE_CO_EXT, XML_IS_FIRST_PAGE_HEADER_ENABLED,
                                          !bFirstShared && bWithoutFirstHeader ? XML_FALSE
                                                                                : XML_TRUE);
 
             bool bWithoutFirstFooter = false;
-            aAny = xPropSet->getPropertyValue( gsNoFirst );
+            aAny = xPropSet->getPropertyValue( gsFooterNoFirst );
             aAny >>= bWithoutFirstFooter;
             //TODO: version and odf extension ticket id
             if( GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
-                GetExport().AddAttribute(XML_NAMESPACE_CO_EXT, XML_IS_FIRST_PAGE_FOOTER_SHARED,
+                GetExport().AddAttribute(XML_NAMESPACE_CO_EXT, XML_IS_FIRST_PAGE_FOOTER_ENABLED,
                                          !bFirstShared && bWithoutFirstFooter ? XML_FALSE
                                                                                : XML_TRUE);
         }

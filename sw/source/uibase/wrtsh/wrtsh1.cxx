@@ -2177,9 +2177,16 @@ void SwWrtShell::ChangeHeaderOrFooter(
             {
                 bChgd = true;
                 SwFrameFormat &rMaster = aDesc.GetMaster();
-                if (bOn && aDesc.IsWithoutFirst())
+                if (bOn && (bHeader ? aDesc.IsWithoutFirstHeader() : aDesc.IsWithoutFirstFooter()))
                 {
-                    aDesc.ChgWithoutFirst(false);
+                    if (bHeader)
+                    {
+                        aDesc.ChgWithoutFirstHeader(false);
+                    }
+                    else
+                    {
+                        aDesc.ChgWithoutFirstFooter(false);
+                    }
                 }
                 else
                 {

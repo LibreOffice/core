@@ -34,8 +34,8 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     OUString       m_sFollow;
     OUString       m_sPageMasterName;
     OUString m_sDrawingPageStyle;
-    OUString m_sIsFirstPageFooterShared;
-    OUString m_sIsFirstPageHeaderShared;
+    OUString m_sIsFirstPageFooterEnabled;
+    OUString m_sIsFirstPageHeaderEnabled;
 
     css::uno::Reference < css::style::XStyle > m_xStyle;
 
@@ -47,7 +47,6 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     bool m_bInsertFooterFirst;
     bool m_bHeaderInserted;
     bool m_bFooterInserted;
-    bool m_bHeaderFirstAvailable;
 
     SAL_DLLPRIVATE css::uno::Reference< css::style::XStyle > Create();
 protected:

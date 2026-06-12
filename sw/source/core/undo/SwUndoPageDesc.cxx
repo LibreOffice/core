@@ -70,9 +70,9 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         m_bExchange = false;
     if( ( rOldHead.IsActive() || rOldFoot.IsActive() ) && ( rOldDesc.IsFirstShared() != rNewDesc.IsFirstShared() ) )
         m_bExchange = false;
-    if( ( rOldHead.IsActive() || rOldFoot.IsActive() ) && ( rOldDesc.IsWithoutFirst() != rNewDesc.IsWithoutFirst() ) )
+    if( rOldHead.IsActive() && (rOldDesc.IsWithoutFirstHeader() != rNewDesc.IsWithoutFirstHeader()) )
         m_bExchange = false;
-    if (!rNewDesc.IsFirstShared() && rOldDesc.IsWithoutFirst() == rNewDesc.IsWithoutFirst())
+    if( rOldFoot.IsActive() && (rOldDesc.IsWithoutFirstFooter() != rNewDesc.IsWithoutFirstFooter()) )
         m_bExchange = false;
 
     if( !m_bExchange )
@@ -169,7 +169,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         {
             // Same procedure for unshared header...
             const SwFrameFormat & rSourceMasterHead =
-                rSource.IsWithoutFirst() ? rSource.GetMaster() :
+                rSource.IsWithoutFirstHeader() ? rSource.GetMaster() :
                 rSource.GetFirstMaster();
             const SwFormatHeader& rSourceFirstMasterHead = rSourceMasterHead.GetHeader();
             pItem = rSourceMasterHead.GetAttrSet().GetItemIfSet( RES_HEADER, false );
@@ -215,7 +215,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         return;
 
     const SwFrameFormat & rSourceMasterFoot =
-        rSource.IsWithoutFirst() ? rSource.GetMaster() :
+        rSource.IsWithoutFirstFooter() ? rSource.GetMaster() :
         rSource.GetFirstMaster();
 
     const SwFormatFooter& rSourceFirstMasterFoot = rSourceMasterFoot.GetFooter();

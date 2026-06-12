@@ -828,7 +828,7 @@ static bool lcl_GetHeaderFooterItem(
         bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
         false);
     if (!o_rpItem &&
-        (rPropName == UNO_NAME_FIRST_IS_SHARED || rPropName == UNO_NAME_NO_FIRST))
+        rPropName == UNO_NAME_FIRST_IS_SHARED)
     {   // fdo#79269 header may not exist, check footer then
         o_rpItem = rSet.GetItemIfSet(
             (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
@@ -2386,7 +2386,7 @@ static const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxSt
         return &rSet;
     const bool isFooter = o3tl::starts_with(rPropertyName, u"Footer");
     if(!isFooter && !o3tl::starts_with(rPropertyName, u"Header") &&
-        rPropertyName != UNO_NAME_FIRST_IS_SHARED && rPropertyName != UNO_NAME_NO_FIRST)
+        rPropertyName != UNO_NAME_FIRST_IS_SHARED)
         return &rSet;
     const SvxSetItem* pSetItem;
     if(!lcl_GetHeaderFooterItem(rSet, rPropertyName, isFooter, pSetItem))
@@ -2794,9 +2794,8 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
         const bool bHeader(rPropName.startsWith("Header"));
         const bool bFooter(rPropName.startsWith("Footer"));
         const bool bFirstIsShared(rPropName == UNO_NAME_FIRST_IS_SHARED);
-        const bool bNoFirst(rPropName == UNO_NAME_NO_FIRST);
 
-        if(bHeader || bFooter || bFirstIsShared || bNoFirst)
+        if(bHeader || bFooter || bFirstIsShared)
         {
             switch(pEntry->nWID)
             {
@@ -2819,7 +2818,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     {
                         PutItemToSet(pSetItem, *pPropSet, *pEntry, rValues[nProp], aBaseImpl);
 
-                        if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST || pEntry->nWID == SID_ATTR_PAGE_NO_FIRST)
+                        if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
                         {
                             // Need to add this to the other as well
                             pSetItem = aBaseImpl.GetItemSet().GetItemIfSet(
@@ -2916,9 +2915,6 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     }
                 }
                 continue;
-                //case SID_ATTR_PAGE_NO_FIRST:
-                //    aBaseImpl.GetItemSet().Put(SfxBoolItem(SID_ATTR_PAGE_NO_FIRST, rValues[nProp].get<bool>()));
-                //    break;
                 default: ;
             }
         }
@@ -3048,8 +3044,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
         const bool bHeader(rPropName.startsWith("Header"));
         const bool bFooter(rPropName.startsWith("Footer"));
         const bool bFirstIsShared(rPropName == UNO_NAME_FIRST_IS_SHARED);
-        const bool bNoFirst(rPropName == UNO_NAME_NO_FIRST);
-        if(bHeader || bFooter || bFirstIsShared || bNoFirst)
+        if(bHeader || bFooter || bFirstIsShared)
         {
             switch(pEntry->nWID)
             {

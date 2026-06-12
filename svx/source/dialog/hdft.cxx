@@ -863,7 +863,6 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     std::optional<bool> oNonActivatedFirstShared; // only used by Writer
     bool bActivatedFirstShared = true; // default value
     const sal_uInt16 nSidAttrPageSharedFirst = GetWhich(SID_ATTR_PAGE_SHARED_FIRST);
-    std::optional<bool> oNonActivatedNoFirst; // only used by Writer
     bool bActivatedNoFirst = false; // default value
     const sal_uInt16 nSidAttrPageNoFirst = GetWhich(SID_ATTR_PAGE_NO_FIRST);
 
@@ -906,12 +905,9 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             if (rHeaderSet.HasItem(nSidAttrPageNoFirst))
                  pNoFirst
                     = static_cast<const SfxBoolItem*>(&rHeaderSet.Get(nSidAttrPageNoFirst));
-            if (pNoFirst)
+            if (pNoFirst && SID_ATTR_PAGE_HEADERSET == nId)
             {
-                if (SID_ATTR_PAGE_HEADERSET == nId)
-                    bActivatedNoFirst = pNoFirst->GetValue();
-                else
-                    oNonActivatedNoFirst = pNoFirst->GetValue();
+                bActivatedNoFirst = pNoFirst->GetValue();
             }
         }
         else
@@ -967,12 +963,9 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             if (rFooterSet.HasItem(nSidAttrPageNoFirst))
                  pNoFirst
                     = static_cast<const SfxBoolItem*>(&rFooterSet.Get(nSidAttrPageNoFirst));
-            if (pNoFirst)
+            if (pNoFirst && SID_ATTR_PAGE_FOOTERSET == nId)
             {
-                if (SID_ATTR_PAGE_FOOTERSET == nId)
-                    bActivatedNoFirst = pNoFirst->GetValue();
-                else
-                    oNonActivatedNoFirst = pNoFirst->GetValue();
+                bActivatedNoFirst = pNoFirst->GetValue();
             }
         }
         else
@@ -995,8 +988,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     m_xCntSharedFirstBox->set_active(
         oNonActivatedFirstShared.has_value() ? *oNonActivatedFirstShared : bActivatedFirstShared);
 
-    m_xCntNoFirstBox->set_active(
-        oNonActivatedNoFirst.has_value() ? *oNonActivatedNoFirst : bActivatedNoFirst);
+    m_xCntNoFirstBox->set_active(bActivatedNoFirst);
 
     m_xCntSharedFirstBox->set_sensitive(m_xTurnOnBox->get_active() &&
         !m_xCntNoFirstBox->get_active());
