@@ -188,10 +188,10 @@
     {
       "SPDXID": "SPDXRef-dompurify",
       "name": "DOMPurify",
-      "versionInfo": "3.3.2",
+      "versionInfo": "3.4.9",
       "filesAnalyzed": false,
       "downloadLocation": "NONE",
-      "licenseConcluded": "Apache-2.0"
+      "licenseConcluded": "MPL-2.0 OR Apache-2.0"
     },
     {
       "SPDXID": "SPDXRef-Montserrat",
