@@ -715,12 +715,15 @@ class CanvasSectionContainer {
 		this.flushLayoutingTasks();
 		this.resizeCanvas();
 		this.drawSections();
+
+		// animate() legitimately requests the next frame, so clear the flag
+		// before it runs or its requestReDraw would be dropped.
+		this.inRedrawCallback = false;
+
 		this.canvas.style.visibility = 'unset';
 
 		// need to check if we should continue animation
 		this.animate(timestamp);
-
-		this.inRedrawCallback = false;
 
 		app.exitRAF();
 	}
