@@ -667,7 +667,7 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
 
 void QtFrame::StartPresentation(bool bStart)
 {
-#if !defined __EMSCRIPTEN__
+#if defined LINUX || defined __sun || defined FREEBSD || defined OPENBSD
 #if CHECK_QT5_USING_X11
     unsigned int nRootWindow(0);
     std::optional<Display*> aDisplay;
