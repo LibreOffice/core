@@ -82,9 +82,8 @@ public:
                 TST_LOG(
                     "delaying dns resolution of preset host until document broker is destroyed");
                 std::unique_lock<std::mutex> lock(_dns_mutex);
-                bool ok =
-                    _dns_cv.wait_for(lock, 10s, [this]() { return _phase == Phase::ResumeDNS; });
-                TST_LOG("dns resumed: " << ok);
+                _dns_cv.wait(lock, [this]() { return _phase == Phase::ResumeDNS; });
+                TST_LOG("dns resumed after doc broker destruction");
                 TRANSITION_STATE(_phase, Phase::Finish);
             }
         }
