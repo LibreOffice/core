@@ -7560,6 +7560,15 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
+    AC_MSG_CHECKING([whether $CC_BASE supports -fstack-protector-strong])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -fstack-protector-strong"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -fstack-protector-strong"],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
     AC_MSG_CHECKING([whether $CC_BASE supports -fstack-clash-protection])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -fstack-clash-protection"
