@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <memory>
 #include <lotattr.hxx>
 
@@ -230,13 +231,16 @@ LotAttrTable::LotAttrTable(LOTUS_ROOT* pLotRoot):
 void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
                             const LotAttrWK3& rAttr )
 {
-    // With the current implementation of MAXCOLCOUNT>=1024 and nColFirst and
-    // nColLast being calculated as sal_uInt8+sal_uInt8 there's no chance that
-    // they would be invalid.
+    // nColFirst and nColLast are derived from the imported file. Clamp the
+    // range to keep the pCols index valid.
+    if (!ValidCol(nColFirst))
+        return;
+    const SCCOL nClampedLast = std::min(nColLast, MAXCOL);
+
     const ScPatternAttr &rPattAttr = aAttrCache.GetPattAttr( rAttr );
     SCCOL nColCnt;
 
-    for( nColCnt = nColFirst ; nColCnt <= nColLast ; nColCnt++ )
+    for( nColCnt = nColFirst ; nColCnt <= nClampedLast ; nColCnt++ )
         pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
 }
 

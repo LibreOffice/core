@@ -407,6 +407,9 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
     LotusContext &rContext = aConv.getContext();
     while( nCntDwn )
     {
+        if (nColCnt > MAXCOL)
+            break;
+
         Read( aAttr );
         Read( nRepeats );
 
