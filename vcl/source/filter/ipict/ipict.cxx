@@ -272,43 +272,56 @@ public:
 
 }
 
+static const Color& SanitizePaletteIndex(std::vector<Color> const & rvPalette, sal_uInt8 nIndex)
+{
+    if (nIndex >= rvPalette.size())
+    {
+        auto nSanitizedIndex = nIndex % rvPalette.size();
+        SAL_WARN_IF(nIndex != nSanitizedIndex, "filter.pict", "invalid palette index: "
+                    << static_cast<unsigned int>(nIndex) << ", palette len is: "
+                    << rvPalette.size());
+        nIndex = nSanitizedIndex;
+    }
+    return rvPalette[nIndex];
+}
+
 static void SetByte(sal_uInt16& nx, sal_uInt16 ny, vcl::bitmap::RawBitmap& rBitmap, sal_uInt16 nPixelSize, sal_uInt8 nDat, sal_uInt16 nWidth, std::vector<Color> const & rvPalette)
 {
     switch (nPixelSize)
     {
         case 1:
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 7) & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat >> 7) & 1));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 6) & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat >> 6) & 1));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 5) & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat >> 5) & 1));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 4) & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat >> 4) & 1));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 3) & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat >> 3) & 1));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 2) & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat >> 2) & 1));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 1) & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat >> 1) & 1));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[nDat & 1]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, nDat & 1));
             break;
         case 2:
-            rBitmap.SetPixel(ny, nx++, rvPalette[nDat >> 6]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, nDat >> 6));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat>>4)&3]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat>>4)&3));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat>>2)&3]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, (nDat>>2)&3));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[nDat & 3]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, nDat & 3));
             break;
         case 4:
-            rBitmap.SetPixel(ny, nx++, rvPalette[nDat >> 4]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, nDat >> 4));
             if ( nx == nWidth ) break;
-            rBitmap.SetPixel(ny, nx++, rvPalette[nDat & 0x0f]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, nDat & 0x0f));
             break;
         case 8:
-            rBitmap.SetPixel(ny, nx++, rvPalette[nDat]);
+            rBitmap.SetPixel(ny, nx++, SanitizePaletteIndex(rvPalette, nDat));
             break;
     }
 }
