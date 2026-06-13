@@ -23,7 +23,7 @@ window.L.Map = window.L.Evented.extend({
 		// percentages available are then rounded to the nearest five percent.
 		minZoom: 1,
 		maxZoom: 18,
-		maxBounds: NormalBounds.flexConstruct([0, 0], [-100, 100]),
+		maxBounds: NormalBounds.flexConstruct([0, 0], [100, 100]),
 		fadeAnimation: false, // Not useful for typing.
 		markerZoomAnimation: true,
 		// defaultZoom:
@@ -237,7 +237,7 @@ window.L.Map = window.L.Evented.extend({
 		this._lastPart = -1;
 		this._lastPartCount = -1;
 		this._lastPartDocType = '';
-		
+
 		var fireDocPartChanged = function(part, partCount, docType) {
 			var normalizedPart = Number(part);
 			var normalizedPartCount = Number(partCount);
@@ -752,8 +752,8 @@ window.L.Map = window.L.Evented.extend({
 			// position stays the same.
 			var zoomScale = 1.0 / this.getZoomScale(zoom, this._zoom);
 			var caretPos = this._docLayer._twipsToLatLng({ x: app.file.textCursor.rectangle.center[0], y: app.file.textCursor.rectangle.center[1] });
-			var newCenter = new NormalPoint(curCenter.getY() + (caretPos.getY() - curCenter.getY()) * (1.0 - zoomScale),
-						     curCenter.getX() + (caretPos.getX() - curCenter.getX()) * (1.0 - zoomScale));
+			var newCenter = new NormalPoint(curCenter.getX() + (caretPos.getX() - curCenter.getX()) * (1.0 - zoomScale),
+						     curCenter.getY() + (caretPos.getY() - curCenter.getY()) * (1.0 - zoomScale));
 
 			mapUpdater = function() {
 				thisObj.setView(newCenter, zoom);
@@ -766,10 +766,10 @@ window.L.Map = window.L.Evented.extend({
 				this._docLayer.runZoomAnimation(zoom,
 					// pinchCenter
 					new NormalPoint(
-						// Use the current y-center if there is a top margin.
-						cssBounds.min.y < 0 ? curCenter.getY() : caretPos.getY(),
 						// Use the current x-center if there is a left margin.
-						cssBounds.min.x < 0 ? curCenter.getX() : caretPos.getX()),
+						cssBounds.min.x < 0 ? curCenter.getX() : caretPos.getX(),
+						// Use the current y-center if there is a top margin.
+						cssBounds.min.y < 0 ? curCenter.getY() : caretPos.getY()),
 					mapUpdater,
 					runAtFinish);
 			} else {
@@ -1033,10 +1033,10 @@ window.L.Map = window.L.Evented.extend({
 
 	getBounds: function () {
 		var bounds = this.getPixelBounds(),
-		    sw = this.unproject(bounds.getBottomLeft()),
-		    ne = this.unproject(bounds.getTopRight());
+		    tl = this.unproject(bounds.getTopLeft()),
+		    br = this.unproject(bounds.getBottomRight());
 
-		return new NormalBounds(sw, ne);
+		return new NormalBounds(tl, br);
 	},
 
 	getMinZoom: function () {
@@ -1050,8 +1050,8 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	getLayerMaxBounds: function () {
-		return cool.Bounds.toBounds(this.latLngToLayerPoint(this.options.maxBounds.getNorthWest()),
-			this.latLngToLayerPoint(this.options.maxBounds.getSouthEast()));
+		return cool.Bounds.toBounds(this.latLngToLayerPoint(this.options.maxBounds.getTopLeft()),
+			this.latLngToLayerPoint(this.options.maxBounds.getBottomRight()));
 	},
 
 	getSize: function () {
@@ -1723,8 +1723,8 @@ window.L.Map = window.L.Evented.extend({
 
 	// returns offset needed for pxBounds to get inside maxBounds at a specified zoom
 	_getBoundsOffset: function (pxBounds, maxBounds, zoom) {
-		var nwOffset = this.project(maxBounds.getNorthWest(), zoom).subtract(pxBounds.min),
-		    seOffset = this.project(maxBounds.getSouthEast(), zoom).subtract(pxBounds.max),
+		var nwOffset = this.project(maxBounds.getTopLeft(), zoom).subtract(pxBounds.min),
+		    seOffset = this.project(maxBounds.getBottomRight(), zoom).subtract(pxBounds.max),
 
 		    dx = this._rebound(nwOffset.x, -seOffset.x),
 		    dy = this._rebound(nwOffset.y, -seOffset.y);

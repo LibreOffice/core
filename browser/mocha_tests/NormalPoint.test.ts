@@ -52,7 +52,7 @@ describe('NormalPoint', function () {
 			const a = -10;
 			const b = 20;
 			const normPoint = new NormalPoint(a, b);
-			const obj = { lat: a, lng: b };
+			const obj = { x: a, y: b };
 			nodeassert.deepEqual(NormalPoint.flexConstruct(obj), normPoint);
 		});
 

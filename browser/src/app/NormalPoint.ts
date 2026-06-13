@@ -4,16 +4,16 @@
 class NormalPoint {
 	public static SCALE = 1.2;
 
-	public lat: number;
-	public lng: number;
+	public x: number;
+	public y: number;
 
-	constructor(lat: number, lng: number) {
-		if (isNaN(lat) || isNaN(lng)) {
-			throw new Error('Invalid LatLng object: (' + lat + ', ' + lng + ')');
+	constructor(x_: number, y_: number) {
+		if (isNaN(x_) || isNaN(y_)) {
+			throw new Error('Invalid LatLng object: (' + x_ + ', ' + y_ + ')');
 		}
 
-		this.lat = +lat;
-		this.lng = +lng;
+		this.x = +x_;
+		this.y = +y_;
 	}
 
 	// constructs LatLng with different signatures
@@ -34,8 +34,8 @@ class NormalPoint {
 			return null;
 		}
 
-		if (typeof a === 'object' && 'lat' in a && 'lng' in a) {
-			return new NormalPoint(a.lat, a.lng);
+		if (typeof a === 'object' && 'x' in a && 'y' in a) {
+			return new NormalPoint(a.x, a.y);
 		}
 
 		if (typeof a === 'number' && typeof b === 'number') {
@@ -53,7 +53,7 @@ class NormalPoint {
 	// constructs NormalPoint from css pixel point at a given zoom.
 	public static pointToLatLng(point: cool.Point, zoom: number): NormalPoint {
 		const scale = NormalPoint.scale(zoom);
-		return new NormalPoint(-point.y / scale, point.x / scale);
+		return new NormalPoint(point.x / scale, point.y / scale);
 	}
 
 	// Needed in Map.prototype.project()
@@ -63,7 +63,7 @@ class NormalPoint {
 		zoom: number,
 	): cool.Point {
 		const scale = NormalPoint.scale(zoom);
-		return new cool.Point(normPoint.lng * scale, -normPoint.lat * scale);
+		return new cool.Point(normPoint.x * scale, normPoint.y * scale);
 	}
 
 	// used in Map.prototype.rescale(), only makes sense for pixel points.
@@ -82,8 +82,8 @@ class NormalPoint {
 		normPoint1: NormalPoint,
 		normPoint2: NormalPoint,
 	): number {
-		const dx = normPoint2.lng - normPoint1.lng;
-		const dy = normPoint2.lat - normPoint1.lat;
+		const dx = normPoint2.x - normPoint1.x;
+		const dy = normPoint2.y - normPoint1.y;
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 
@@ -95,20 +95,17 @@ class NormalPoint {
 		const obj = NormalPoint.flexConstruct(obj_);
 		Util.ensureValue(obj);
 
-		const margin = Math.max(
-			Math.abs(this.lat - obj.lat),
-			Math.abs(this.lng - obj.lng),
-		);
+		const margin = Math.max(Math.abs(this.x - obj.x), Math.abs(this.y - obj.y));
 
 		return margin <= (maxMargin === undefined ? 1.0e-9 : maxMargin);
 	}
 
 	public toString(precision?: number): string {
 		return (
-			'LatLng(' +
-			app.util.formatNum(this.lat, precision ? precision : 3) +
+			'NormalPoint(' +
+			app.util.formatNum(this.x, precision ? precision : 3) +
 			', ' +
-			app.util.formatNum(this.lng, precision ? precision : 3) +
+			app.util.formatNum(this.y, precision ? precision : 3) +
 			')'
 		);
 	}
@@ -122,14 +119,14 @@ class NormalPoint {
 	}
 
 	public isNaN(): boolean {
-		return isNaN(this.lat) || isNaN(this.lng);
+		return isNaN(this.x) || isNaN(this.y);
 	}
 
 	public getX(): number {
-		return this.lng;
+		return this.x;
 	}
 
 	public getY(): number {
-		return this.lat;
+		return this.y;
 	}
 }

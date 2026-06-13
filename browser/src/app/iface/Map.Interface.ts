@@ -29,8 +29,8 @@ interface InteractiveCommentArgs {
 }
 
 interface NormalPointLike {
-	lat: number;
-	lng: number;
+	x: number;
+	y: number;
 }
 
 interface MapInterface extends Evented {

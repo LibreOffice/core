@@ -2,8 +2,8 @@
 
 /// Intermediate representation of a rectangular bound using NormalPoint.
 class NormalBounds {
-	private _southWest?: NormalPoint = undefined;
-	private _northEast?: NormalPoint = undefined;
+	private _min?: NormalPoint = undefined;
+	private _max?: NormalPoint = undefined;
 
 	public static flexConstruct(
 		a:
@@ -27,15 +27,15 @@ class NormalBounds {
 	}
 
 	constructor(
-		southWest: NormalPoint | NormalPoint[] | number[] | number[][],
-		northEast?: NormalPoint | number[],
+		min: NormalPoint | NormalPoint[] | number[] | number[][],
+		max?: NormalPoint | number[],
 	) {
-		if (!southWest) {
+		if (!min) {
 			return;
 		}
 
 		const points: NormalPoint[] = [];
-		const inputList: any[] = [southWest, northEast];
+		const inputList: any[] = [min, max];
 
 		for (let inputIdx = 0; inputIdx < 2; ++inputIdx) {
 			const input = inputList[inputIdx];
@@ -84,98 +84,90 @@ class NormalBounds {
 		if (!obj) {
 			return this;
 		}
-		const sw = this._southWest;
-		const ne = this._northEast;
-		let sw2: NormalPoint | undefined = undefined;
-		let ne2: NormalPoint | undefined = undefined;
+		const min = this._min;
+		const max = this._max;
+		let min2: NormalPoint | undefined = undefined;
+		let max2: NormalPoint | undefined = undefined;
 
 		if (obj instanceof NormalPoint) {
-			sw2 = obj;
-			ne2 = obj;
+			min2 = obj;
+			max2 = obj;
 		} else if (obj instanceof NormalBounds) {
-			sw2 = obj._southWest;
-			ne2 = obj._northEast;
+			min2 = obj._min;
+			max2 = obj._max;
 		} else {
 			this.extend(
 				NormalPoint.flexConstruct(obj) || NormalBounds.flexConstruct(obj),
 			);
 		}
 
-		if (!sw2 || !ne2) {
+		if (!min2 || !max2) {
 			return this;
 		}
 
-		if (!sw && !ne) {
-			this._southWest = new NormalPoint(sw2.lat, sw2.lng);
-			this._northEast = new NormalPoint(ne2.lat, ne2.lng);
+		if (!min && !max) {
+			this._min = new NormalPoint(min2.x, min2.y);
+			this._max = new NormalPoint(max2.x, max2.y);
 		} else {
-			Util.ensureValue(sw);
-			sw.lat = Math.min(sw2.lat, sw.lat);
-			sw.lng = Math.min(sw2.lng, sw.lng);
+			Util.ensureValue(min);
+			min.x = Math.min(min2.x, min.x);
+			min.y = Math.min(min2.y, min.y);
 
-			Util.ensureValue(ne);
-			ne.lat = Math.max(ne2.lat, ne.lat);
-			ne.lng = Math.max(ne2.lng, ne.lng);
+			Util.ensureValue(max);
+			max.x = Math.max(max2.x, max.x);
+			max.y = Math.max(max2.y, max.y);
 		}
 		return this;
 	}
 
 	public getCenter(): NormalPoint {
-		Util.ensureValue(this._southWest);
-		Util.ensureValue(this._northEast);
+		Util.ensureValue(this._min);
+		Util.ensureValue(this._max);
 		return new NormalPoint(
-			(this._southWest.lat + this._northEast.lat) / 2,
-			(this._southWest.lng + this._northEast.lng) / 2,
+			(this._min.x + this._max.x) / 2,
+			(this._min.y + this._max.y) / 2,
 		);
 	}
 
-	public getSouthWest(): NormalPoint {
-		Util.ensureValue(this._southWest);
-		return this._southWest;
+	public getTopLeft(): NormalPoint {
+		Util.ensureValue(this._min);
+		return this._min;
 	}
 
-	public getNorthEast(): NormalPoint {
-		Util.ensureValue(this._northEast);
-		return this._northEast;
+	public getBottomRight(): NormalPoint {
+		Util.ensureValue(this._max);
+		return this._max;
 	}
 
-	public getNorthWest(): NormalPoint {
-		return new NormalPoint(this.getNorth(), this.getWest());
+	public getLeft(): number {
+		Util.ensureValue(this._min);
+		return this._min.x;
 	}
 
-	public getSouthEast(): NormalPoint {
-		return new NormalPoint(this.getSouth(), this.getEast());
+	public getBottom(): number {
+		Util.ensureValue(this._max);
+		return this._max.y;
 	}
 
-	public getWest(): number {
-		Util.ensureValue(this._southWest);
-		return this._southWest.lng;
+	public getRight(): number {
+		Util.ensureValue(this._max);
+		return this._max.x;
 	}
 
-	public getSouth(): number {
-		Util.ensureValue(this._southWest);
-		return this._southWest.lat;
-	}
-
-	public getEast(): number {
-		Util.ensureValue(this._northEast);
-		return this._northEast.lng;
-	}
-
-	public getNorth(): number {
-		Util.ensureValue(this._northEast);
-		return this._northEast.lat;
+	public getTop(): number {
+		Util.ensureValue(this._min);
+		return this._min.y;
 	}
 
 	public getWidth(): number {
-		return Math.abs(this.getEast() - this.getWest());
+		return Math.abs(this.getRight() - this.getLeft());
 	}
 
 	public getHeight(): number {
-		return Math.abs(this.getNorth() - this.getSouth());
+		return Math.abs(this.getBottom() - this.getTop());
 	}
 
-	private _getAsLatLngOrBounds(
+	private _getAsPointOrBounds(
 		obj: NormalPoint | number[] | NormalBounds | NormalPoint[] | number[][],
 	): NormalPoint | NormalBounds | undefined {
 		let res: NormalPoint | NormalBounds | null | undefined;
@@ -193,50 +185,46 @@ class NormalBounds {
 	public contains(
 		obj_: NormalPoint | number[] | NormalBounds | NormalPoint[] | number[][],
 	): boolean {
-		Util.ensureValue(this._southWest);
-		Util.ensureValue(this._northEast);
+		Util.ensureValue(this._min);
+		Util.ensureValue(this._max);
 
-		const obj = this._getAsLatLngOrBounds(obj_);
+		const obj = this._getAsPointOrBounds(obj_);
 		Util.ensureValue(obj);
 
-		const sw = this._southWest;
-		const ne = this._northEast;
-		let sw2: NormalPoint;
-		let ne2: NormalPoint;
+		const min = this._min;
+		const max = this._max;
+		let min2: NormalPoint;
+		let max2: NormalPoint;
 
 		if (obj instanceof NormalBounds) {
-			sw2 = obj.getSouthWest();
-			ne2 = obj.getNorthEast();
+			min2 = obj.getTopLeft();
+			max2 = obj.getBottomRight();
 		} else {
-			sw2 = ne2 = obj;
+			min2 = max2 = obj;
 		}
 
 		return (
-			sw2.lat >= sw.lat &&
-			ne2.lat <= ne.lat &&
-			sw2.lng >= sw.lng &&
-			ne2.lng <= ne.lng
+			min2.x >= min.x && min2.y >= min.y && max2.x <= max.x && max2.y <= max.y
 		);
 	}
 
 	public intersects(
 		bounds_: NormalBounds | NormalPoint[] | number[][],
 	): boolean {
-		// (LatLngBounds)
 		const bounds = NormalBounds.flexConstruct(bounds_);
 		Util.ensureValue(bounds);
-		Util.ensureValue(this._southWest);
-		Util.ensureValue(this._northEast);
+		Util.ensureValue(this._min);
+		Util.ensureValue(this._max);
 
-		const sw = this._southWest;
-		const ne = this._northEast;
-		const sw2 = bounds.getSouthWest();
-		const ne2 = bounds.getNorthEast();
+		const min = this._min;
+		const max = this._max;
+		const min2 = bounds.getTopLeft();
+		const max2 = bounds.getBottomRight();
 
-		const latIntersects = ne2.lat >= sw.lat && sw2.lat <= ne.lat;
-		const lngIntersects = ne2.lng >= sw.lng && sw2.lng <= ne.lng;
+		const xIntersects = max2.x >= min.x && min2.x <= max.x;
+		const yIntersects = max2.y >= min.y && min2.y <= max.y;
 
-		return latIntersects && lngIntersects;
+		return xIntersects && yIntersects;
 	}
 
 	public equals(
@@ -248,22 +236,22 @@ class NormalBounds {
 
 		const bounds = NormalBounds.flexConstruct(bounds_);
 		Util.ensureValue(bounds);
-		Util.ensureValue(this._southWest);
-		Util.ensureValue(this._northEast);
+		Util.ensureValue(this._min);
+		Util.ensureValue(this._max);
 
 		return (
-			this._southWest.equals(bounds.getSouthWest()) &&
-			this._northEast.equals(bounds.getNorthEast())
+			this._min.equals(bounds.getTopLeft()) &&
+			this._max.equals(bounds.getBottomRight())
 		);
 	}
 
 	public isValid(): boolean {
-		return !!(this._southWest && this._northEast);
+		return !!(this._min && this._max);
 	}
 
-	public isInAny(latLngBoundsArray: NormalBounds[]): boolean {
-		for (let i = 0; i < latLngBoundsArray.length; ++i) {
-			if (latLngBoundsArray[i].contains(this)) {
+	public isInAny(boundsArray: NormalBounds[]): boolean {
+		for (let i = 0; i < boundsArray.length; ++i) {
+			if (boundsArray[i].contains(this)) {
 				return true;
 			}
 		}
@@ -276,9 +264,9 @@ class NormalBounds {
 	public toString() {
 		return (
 			'NormalBounds(' +
-			(this._southWest ? this._southWest.toString() : 'undefined') +
+			(this._min ? this._min.toString() : 'undefined') +
 			',' +
-			(this._northEast ? this._northEast.toString() : 'undefined') +
+			(this._max ? this._max.toString() : 'undefined') +
 			')'
 		);
 	}
