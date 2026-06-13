@@ -1331,6 +1331,15 @@ if test "$enable_hardening" = no; then
         [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
+    AC_MSG_CHECKING([for full RELRO linker support])
+    save_LDFLAGS=$LDFLAGS
+    LDFLAGS="$LDFLAGS -Wl,-z,relro,-z,now"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_LDFLAGS="$HARDENING_LDFLAGS -Wl,-z,relro,-z,now"],
+        [AC_MSG_RESULT([no])])
+    LDFLAGS=$save_LDFLAGS
+
     AC_MSG_CHECKING([whether $CC supports -fPIE -pie])
     save_CFLAGS=$CFLAGS
     save_LDFLAGS=$LDFLAGS
@@ -1347,7 +1356,7 @@ if test "$enable_hardening" = no; then
 
     CFLAGS="$CFLAGS $HARDENING_CFLAGS"
     CXXFLAGS="$CXXFLAGS $HARDENING_CFLAGS"
-    LDFLAGS="$LDFLAGS $HARDENING_EXECUTABLE_LDFLAGS"
+    LDFLAGS="$LDFLAGS $HARDENING_LDFLAGS $HARDENING_EXECUTABLE_LDFLAGS"
 fi
 
 # Code Coverage.
