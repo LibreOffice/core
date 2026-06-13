@@ -120,8 +120,8 @@ public:
     bool isTransfer() const { return  _disposition == Type::TRANSFER; }
     bool isContinue() const { return _disposition == Type::CONTINUE; }
 
-    /// Perform the queued up work.
-    void execute();
+    /// Perform the queued up work. Returns false if it fails to execute.
+    bool execute();
 
 private:
     MoveFunction _socketMove;
@@ -847,6 +847,11 @@ public:
     void createWakeups();
 
     bool isAlive() const { return (_threadStarted && !_threadFinished) || _runOnClientThread; }
+
+    /// True iff the polling thread was started at some point.
+    /// Unlike isAlive() this stays true after the thread finishes,
+    /// so it distinguishes a never-started poll from an expired one.
+    bool isThreadStarted() const { return _threadStarted > 0; }
 
     /// Check if we should continue polling
     virtual bool continuePolling()

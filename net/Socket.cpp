@@ -1065,7 +1065,7 @@ void ServerSocket::dumpState(std::ostream& os)
     os << '\t' << getFD() << "\t<accept>\n";
 }
 
-void SocketDisposition::execute()
+bool SocketDisposition::execute()
 {
     const int socketFd = _socket->getFD();
 
@@ -1082,7 +1082,7 @@ void SocketDisposition::execute()
         SocketThreadOwnerChange::resetThreadOwner(*_socket);
 
         assert (isTransfer() && _toPoll);
-        if (!_toPoll->isAlive())
+        if (!_toPoll->isAlive() && !_toPoll->isThreadStarted())
         {
             // Ensure the thread is running before adding callback.
             LOG_DBG("Starting target poll thread [" << _toPoll->name() << "] while moving socket #"
@@ -1101,9 +1101,8 @@ void SocketDisposition::execute()
         _socketMove = nullptr;
         assert(!_socket && "should be unset after move");
 
-        _toPoll->addCallback(std::move(callback));
-
-        if (!_toPoll->isAlive())
+        const bool success = _toPoll->addCallback(std::move(callback));
+        if (!success)
         {
             // This can happen due to programming error or a race with the thread.
             LOG_WRN("Failed to transfer socket #" << socketFd << " to poll [" << _toPoll->name()
@@ -1111,11 +1110,14 @@ void SocketDisposition::execute()
         }
 
         _toPoll = nullptr;
+        return success;
     }
     else
     {
         assert(_disposition != Type::TRANSFER);
     }
+
+    return true;
 }
 
 void WebSocketHandler::dumpState(std::ostream& os, const std::string& indent) const
