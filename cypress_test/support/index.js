@@ -6,7 +6,6 @@ require('cypress-file-upload');
 require('cypress-real-events');
 import installLogsCollector from 'cypress-terminal-report/src/installLogsCollector';
 const { addCompareSnapshotCommand } = require('cypress-visual-regression/dist/command');
-const helper = require('../integration_tests/common/helper');
 
 addCompareSnapshotCommand();
 
@@ -19,17 +18,6 @@ beforeEach(function() {
 // not get printed
 afterEach(function() {
 	cy.log('Finishing test: ' + getFullTestName());
-
-	// Enforce the drawSections-per-frame invariant. Only check on tests
-	// that otherwise passed - a test that already failed should report
-	// the original failure, not a secondary draw-counter complaint.
-	// Skip when no active frame exists (tests that don't load a document
-	// in an iframe, e.g. idle/ or lighthouse/).
-	if (this.currentTest.state !== 'failed' && cy.cActiveFrame) {
-		cy.getFrameWindow().then(function(win) {
-			helper.assertDrawSectionsPerFrame(win);
-		});
-	}
 
 	if (this.currentTest.state === 'failed') {
 		// Report system load

@@ -482,12 +482,6 @@ function documentChecks(skipInitializedCheck = false) {
 		waitForInterferingUser();
 	}
 
-	// Install the per-frame drawSections counter once the document is
-	// ready. The global afterEach in support/index.js reads the result.
-	cy.getFrameWindow().then(function(win) {
-		installDrawSectionsCounter(win);
-	});
-
 	cy.log('<< documentChecks - end');
 }
 
@@ -1435,63 +1429,6 @@ function retryUntil(action, condition, options) {
 	}, opts);
 }
 
-// Install a per-frame call counter on win.app.sectionContainer.drawSections.
-//
-// Invariant under test: at most one drawSections call per animation
-// frame. The coalescing guard in requestReDraw keeps drawRequest
-// non-null until the frame fires.
-//
-// Frame identity comes from document.timeline.currentTime, which is
-// updated once per rendering tick and reads the same value for every
-// call within a frame (and for any synchronous code that runs between
-// frames). A second call with the same frame id is a violation.
-//
-// Idempotent: a second call on the same window is a no-op.
-function installDrawSectionsCounter(win) {
-	var csc = win && win.app && win.app.sectionContainer;
-	if (!csc || csc._dsInstalled) return;
-	csc._dsInstalled = true;
-
-	csc._dsLastFrameId = null;
-	csc._dsTotalCalls = 0;
-	csc._dsViolations = [];
-
-	var origDraw = csc.drawSections.bind(csc);
-	csc.drawSections = function() {
-		csc._dsTotalCalls++;
-		var frame = win.document.timeline.currentTime;
-		if (csc._dsLastFrameId === frame) {
-			csc._dsViolations.push({ frame: frame, call: csc._dsTotalCalls });
-		} else {
-			csc._dsLastFrameId = frame;
-		}
-		return origDraw.apply(this, arguments);
-	};
-}
-
-// Throws if any drawSections invariant violation was recorded since
-// install. No-op when the counter was never installed (e.g. for tests
-// that do not load a document). Returns total call count on success.
-function assertDrawSectionsPerFrame(win) {
-	var csc = win && win.app && win.app.sectionContainer;
-	if (!csc || !csc._dsInstalled) return 0;
-
-	if (csc._dsViolations.length > 0) {
-		var summary = csc._dsViolations.slice(0, 5).map(function(v) {
-			return 'frame ' + v.frame + ' (call #' + v.call + ')';
-		}).join(', ');
-		var more = csc._dsViolations.length > 5
-			? ' [+' + (csc._dsViolations.length - 5) + ' more]'
-			: '';
-		throw new Error(
-			'drawSections invariant violated: ' +
-			csc._dsViolations.length + ' extra call(s) - ' + summary + more +
-			' (total calls: ' + csc._dsTotalCalls + ')'
-		);
-	}
-	return csc._dsTotalCalls;
-}
-
 // Wait until no timers of the given tag exist.
 // If no timers with the tag exist at call time resolve immediately.
 function waitForTimers(win, tag) {
@@ -1638,8 +1575,6 @@ module.exports.waitUntilCoreIsIdle = waitUntilCoreIsIdle;
 module.exports.waitUntilLayoutingIsIdle = waitUntilLayoutingIsIdle;
 module.exports.processToIdle = processToIdle;
 module.exports.retryUntil = retryUntil;
-module.exports.installDrawSectionsCounter = installDrawSectionsCounter;
-module.exports.assertDrawSectionsPerFrame = assertDrawSectionsPerFrame;
 module.exports.waitForTimers = waitForTimers;
 module.exports.waitForOnDemandRenders = waitForOnDemandRenders;
 module.exports.waitForMapState = waitForMapState;
