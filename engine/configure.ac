@@ -7511,6 +7511,7 @@ dnl GCC features
 dnl ===================================================================
 HAVE_GCC_STACK_CLASH_PROTECTION=
 HARDENING_LDFLAGS=
+HARDENING_EXECUTABLE_LDFLAGS=
 HARDENING_CFLAGS=
 HARDENING_OPT_CFLAGS=
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
@@ -7573,6 +7574,18 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -fcf-protection"],
         [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
+
+    AC_MSG_CHECKING([whether $CC_BASE supports -pie])
+    save_CFLAGS=$CFLAGS
+    save_LDFLAGS=$LDFLAGS
+    CFLAGS="$CFLAGS -Werror -fPIE"
+    LDFLAGS="$LDFLAGS -pie"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_EXECUTABLE_LDFLAGS="-pie"],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+    LDFLAGS=$save_LDFLAGS
 
     AC_MSG_CHECKING([whether $CC_BASE supports -mno-avx])
     save_CFLAGS=$CFLAGS
@@ -7725,6 +7738,7 @@ AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 AC_SUBST(HAVE_GCC_STACK_CLASH_PROTECTION)
 AC_SUBST(HARDENING_LDFLAGS)
+AC_SUBST(HARDENING_EXECUTABLE_LDFLAGS)
 AC_SUBST(HARDENING_CFLAGS)
 AC_SUBST(HARDENING_OPT_CFLAGS)
 

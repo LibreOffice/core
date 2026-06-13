@@ -137,6 +137,7 @@ $(if $(call gb_LinkTarget__WantLock,$2), \
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Executable,$(TARGETTYPE)),$(if $(ENABLE_HARDENING_FLAGS),$(HARDENING_EXECUTABLE_LDFLAGS))) \
 		$(T_LTOFLAGS) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_USE_LD) $(T_LDFLAGS) $(foreach pre_js,$(T_PREJS), --pre-js $(pre_js)) \

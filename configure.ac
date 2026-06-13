@@ -1333,10 +1333,23 @@ if test "$enable_hardening" = no; then
         [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
+    AC_MSG_CHECKING([whether $CC supports -fPIE -pie])
+    save_CFLAGS=$CFLAGS
+    save_LDFLAGS=$LDFLAGS
+    CFLAGS="$CFLAGS -Werror -fPIE"
+    LDFLAGS="$LDFLAGS -pie"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -fPIE"; HARDENING_EXECUTABLE_LDFLAGS="-pie"],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+    LDFLAGS=$save_LDFLAGS
+
     AC_LANG_POP([C])
 
     CFLAGS="$CFLAGS $HARDENING_CFLAGS"
     CXXFLAGS="$CXXFLAGS $HARDENING_CFLAGS"
+    LDFLAGS="$LDFLAGS $HARDENING_EXECUTABLE_LDFLAGS"
 fi
 
 # Code Coverage.
