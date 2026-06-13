@@ -292,16 +292,16 @@ void HttpRequestTests::testSimpleGet()
             cv.notify_all();
         });
 
-        std::unique_lock<std::mutex> lock(mutex);
-
         httpSession->setConnectFailHandler([testname](const std::shared_ptr<http::Session>&)
                                            { LOK_ASSERT_FAIL("Unexpected connection failure"); });
 
         LOK_ASSERT(httpSession->asyncRequest(httpRequest, pollThread, false));
 
         // Use the internal HTTP API to get the same URL in parallel.
+        // NOTE: may invoke AsyncDNS.
         const auto altResponse = helpers::httpGetRetry(_localUri + URL);
 
+        std::unique_lock<std::mutex> lock(mutex);
         cv.wait_for(lock, DefTimeoutSeconds, [&]() { return timedout == false; });
 
         const std::shared_ptr<const http::Response> httpResponse = httpSession->response();
@@ -513,7 +513,6 @@ void HttpRequestTests::test500GetStatuses()
 
         TST_LOG("Requesting Status Code [" << statusCode << "]: " << url);
 
-        std::unique_lock<std::mutex> lock(mutex);
         timedout = true; // Assume we timed out until we prove otherwise.
 
         httpSession->setConnectFailHandler([testname](const std::shared_ptr<http::Session>&)
@@ -522,6 +521,7 @@ void HttpRequestTests::test500GetStatuses()
         LOK_ASSERT(httpSession->asyncRequest(httpRequest, pollThread, false));
 
         // Get via a separate internal HTTP session in parallel.
+        // NOTE: may invoke AsyncDNS.
         const auto altResponse = helpers::httpGetRetry(_localUri + url);
 #ifdef ENABLE_EXTERNAL_REGRESSION_CHECK
 #if ENABLE_SSL
@@ -533,6 +533,7 @@ void HttpRequestTests::test500GetStatuses()
 
         const std::shared_ptr<const http::Response> httpResponse = httpSession->response();
 
+        std::unique_lock<std::mutex> lock(mutex);
         cv.wait_for(lock, DefTimeoutSeconds, [&]() { return httpResponse->done(); });
         TST_LOG("Finished async GET of [" << url << "]: " << httpResponse->state());
 
