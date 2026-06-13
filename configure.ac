@@ -579,6 +579,49 @@ else
 fi
 AC_SUBST(ENABLE_DEBUG)
 AC_SUBST(ENABLE_DEBUG_0_OR_1)
+
+dnl Pick a fast linker (lld/mold/gold) for debug builds; the system
+dnl default ld is commonly the slow GNU bfd.
+AC_ARG_ENABLE(ld,
+    AS_HELP_STRING([--enable-ld=<linker>],
+        [Use the given linker (lld, mold or gold). With no argument a debug
+         build picks the fastest available linker. --disable-ld forces the
+         system default linker.]),
+,)
+
+check_use_ld()
+{
+    use_ld="-fuse-ld=$1"
+    use_ld_fail_if_error=$2
+    AC_MSG_CHECKING([whether $CXX links with $use_ld])
+    use_ld_ldflags_save="$LDFLAGS"
+    LDFLAGS="$LDFLAGS $use_ld"
+    use_ld_ok=
+    AC_LANG_PUSH([C++])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [use_ld_ok=yes], [])
+    AC_LANG_POP([C++])
+    if test -n "$use_ld_ok"; then
+        AC_MSG_RESULT([yes])
+        return 0
+    fi
+    AC_MSG_RESULT([no])
+    if test -n "$use_ld_fail_if_error"; then
+        AC_MSG_ERROR([the requested linker '$1' does not work])
+    fi
+    LDFLAGS="$use_ld_ldflags_save"
+    return 1
+}
+
+if test "$enable_ld" != "no" -a "$GXX" = "yes"; then
+    if test -n "$enable_ld" -a "$enable_ld" != "yes"; then
+        dnl an explicit --enable-ld=<linker> must work
+        check_use_ld "$enable_ld" fail_if_error
+    elif test "$ENABLE_DEBUG" = "true" -o "$enable_ld" = "yes"; then
+        dnl gold is deprecated, try it last before the slow default ld
+        check_use_ld lld || check_use_ld mold || check_use_ld gold || true
+    fi
+fi
+
 AC_SUBST(ENABLE_BUNDLE)
 AC_SUBST(COOLWSD_LOGLEVEL)
 AC_DEFINE_UNQUOTED([COOLWSD_LOGLEVEL],["$COOLWSD_LOGLEVEL"],[Default coolwsd loglevel.])
