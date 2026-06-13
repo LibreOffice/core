@@ -649,7 +649,7 @@ window.L.Map = window.L.Evented.extend({
 			true
 		);
 
-		const newCenterLatLng = this.unproject(docPos.center.divideBy(app.dpiScale), zoom);
+		const newCenterIntern = this.unproject(docPos.center.divideBy(app.dpiScale), zoom);
 
 		this._ignoreCursorUpdate = true;
 
@@ -659,7 +659,7 @@ window.L.Map = window.L.Evented.extend({
 				return;
 			}
 
-			this._resetView(NormalPoint.flexConstruct(newCenterLatLng), zoom);
+			this._resetView(NormalPoint.flexConstruct(newCenterIntern), zoom);
 		};
 		const runAtFinish = () => {
 			this._ignoreCursorUpdate = false;
@@ -677,7 +677,7 @@ window.L.Map = window.L.Evented.extend({
 			return;
 		}
 
-		mapUpdater(newCenterLatLng);
+		mapUpdater(newCenterIntern);
 		runAtFinish();
 	},
 
@@ -751,7 +751,7 @@ window.L.Map = window.L.Evented.extend({
 			// Calculate new center after zoom. The intent is that the caret
 			// position stays the same.
 			var zoomScale = 1.0 / this.getZoomScale(zoom, this._zoom);
-			var caretPos = this._docLayer._twipsToLatLng({ x: app.file.textCursor.rectangle.center[0], y: app.file.textCursor.rectangle.center[1] });
+			var caretPos = this._docLayer._twipsToIntern({ x: app.file.textCursor.rectangle.center[0], y: app.file.textCursor.rectangle.center[1] });
 			var newCenter = new NormalPoint(curCenter.getX() + (caretPos.getX() - curCenter.getX()) * (1.0 - zoomScale),
 						     curCenter.getY() + (caretPos.getY() - curCenter.getY()) * (1.0 - zoomScale));
 
@@ -808,18 +808,18 @@ window.L.Map = window.L.Evented.extend({
 		return this.setZoom(this._zoom - (delta || 1), options, animate);
 	},
 
-	setZoomAround: function (latlng, zoom) {
+	setZoomAround: function (intern, zoom) {
 		var scale = this.getZoomScale(zoom),
 		    viewHalf = this.getSize().divideBy(2),
-		    containerPoint = latlng instanceof cool.Point ? latlng : this.latLngToContainerPointIgnoreSplits(latlng),
+		    containerPoint = intern instanceof cool.Point ? intern : this.internToContainerPointIgnoreSplits(intern),
 
 		    centerOffset = containerPoint.subtract(viewHalf).multiplyBy(1 - 1 / scale),
-		    newCenter = this.containerPointToLatLngIgnoreSplits(viewHalf.add(centerOffset));
+		    newCenter = this.containerPointToInternIgnoreSplits(viewHalf.add(centerOffset));
 
 		return this.setView(newCenter, zoom);
 	},
 
-	panTo: function (center) { // (LatLng)
+	panTo: function (center) { // (Intern)
 		return this.setView(center, this._zoom);
 	},
 
@@ -964,9 +964,9 @@ window.L.Map = window.L.Evented.extend({
 		return this._viewInfo[viewid].readonly !== '0';
 	},
 
-	getCenter: function () { // (Boolean) -> LatLng
+	getCenter: function () { // (Boolean) -> Intern
 		this._checkIfLoaded();
-		return this.layerPointToLatLng(this._getCenterLayerPoint());
+		return this.layerPointToIntern(this._getCenterLayerPoint());
 	},
 
 	getZoom: function () {
@@ -1050,8 +1050,8 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	getLayerMaxBounds: function () {
-		return cool.Bounds.toBounds(this.latLngToLayerPoint(this.options.maxBounds.getTopLeft()),
-			this.latLngToLayerPoint(this.options.maxBounds.getBottomRight()));
+		return cool.Bounds.toBounds(this.internToLayerPoint(this.options.maxBounds.getTopLeft()),
+			this.internToLayerPoint(this.options.maxBounds.getBottomRight()));
 	},
 
 	getSize: function () {
@@ -1133,15 +1133,15 @@ window.L.Map = window.L.Evented.extend({
 
 	// conversion methods
 
-	project: function (latlng, zoom) { // (LatLng[, Number]) -> Point
+	project: function (intern, zoom) { // (Intern[, Number]) -> Point
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		var projectedPoint = NormalPoint.latLngToPoint(NormalPoint.flexConstruct(latlng), zoom);
+		var projectedPoint = NormalPoint.internToPoint(NormalPoint.flexConstruct(intern), zoom);
 		return new cool.Point(app.util.round(projectedPoint.x, 1e-6), app.util.round(projectedPoint.y, 1e-6));
 	},
 
-	unproject: function (point, zoom) { // (Point[, Number]) -> LatLng
+	unproject: function (point, zoom) { // (Point[, Number]) -> Intern
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		return NormalPoint.pointToLatLng(new cool.Point(point.x, point.y), zoom);
+		return NormalPoint.pointToIntern(new cool.Point(point.x, point.y), zoom);
 	},
 
 	// rescaling
@@ -1153,18 +1153,18 @@ window.L.Map = window.L.Evented.extend({
 		return NormalPoint.rescale(point, oldZoom, newZoom);
 	},
 
-	layerPointToLatLng: function (point) { // (Point)
+	layerPointToIntern: function (point) { // (Point)
 		var projectedPoint = cool.Point.toPoint(point).add(this.getPixelOrigin());
 		return this.unproject(projectedPoint);
 	},
 
-	latLngToLayerPoint: function (latlng) { // (LatLng)
-		var projectedPoint = this.project(NormalPoint.flexConstruct(latlng))._round();
+	internToLayerPoint: function (intern) { // (Intern)
+		var projectedPoint = this.project(NormalPoint.flexConstruct(intern))._round();
 		return projectedPoint._subtract(this.getPixelOrigin());
 	},
 
-	distance: function (latlng1, latlng2) { // (LatLng, LatLng) -> number
-		return NormalPoint.distance(NormalPoint.flexConstruct(latlng1), NormalPoint.flexConstruct(latlng2));
+	distance: function (intern1, intern2) { // (Intern, Intern) -> number
+		return NormalPoint.distance(NormalPoint.flexConstruct(intern1), NormalPoint.flexConstruct(intern2));
 	},
 
 	containerPointToLayerPoint: function (point) { // (Point)
@@ -1229,17 +1229,17 @@ window.L.Map = window.L.Evented.extend({
 		return cool.Point.toPoint(point).add(this._getMapPanePos());
 	},
 
-	containerPointToLatLngIgnoreSplits: function (point) {
+	containerPointToInternIgnoreSplits: function (point) {
 		var layerPoint = this.containerPointToLayerPointIgnoreSplits(cool.Point.toPoint(point));
-		return this.layerPointToLatLng(layerPoint);
+		return this.layerPointToIntern(layerPoint);
 	},
 
-	latLngToContainerPointIgnoreSplits: function (latlng) {
-		return this.layerPointToContainerPointIgnoreSplits(this.latLngToLayerPoint(NormalPoint.flexConstruct(latlng)));
+	internToContainerPointIgnoreSplits: function (intern) {
+		return this.layerPointToContainerPointIgnoreSplits(this.internToLayerPoint(NormalPoint.flexConstruct(intern)));
 	},
 
-	latLngToContainerPoint: function (latlng) {
-		return this.layerPointToContainerPoint(this.latLngToLayerPoint(NormalPoint.flexConstruct(latlng)));
+	internToContainerPoint: function (intern) {
+		return this.layerPointToContainerPoint(this.internToLayerPoint(NormalPoint.flexConstruct(intern)));
 	},
 
 	mouseEventToContainerPoint: function (e) { // (MouseEvent)
@@ -1250,8 +1250,8 @@ window.L.Map = window.L.Evented.extend({
 		return this.containerPointToLayerPoint(this.mouseEventToContainerPoint(e));
 	},
 
-	mouseEventToLatLng: function (e) { // (MouseEvent)
-		return this.layerPointToLatLng(this.mouseEventToLayerPoint(e));
+	mouseEventToIntern: function (e) { // (MouseEvent)
+		return this.layerPointToIntern(this.mouseEventToLayerPoint(e));
 	},
 
 	// Give the focus to the text input.
@@ -1650,7 +1650,7 @@ window.L.Map = window.L.Evented.extend({
 		    e.type !== 'compositionstart' && e.type !== 'compositionupdate' && e.type !== 'compositionend' && e.type !== 'textInput') {
 			data.containerPoint = this.mouseEventToContainerPoint(e);
 			data.layerPoint = this.containerPointToLayerPoint(data.containerPoint);
-			data.latlng = this.layerPointToLatLng(data.layerPoint);
+			data.intern = this.layerPointToIntern(data.layerPoint);
 		}
 		if (type === 'click') {
 			target.fire('preclick', data, true);
@@ -1704,8 +1704,8 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	// offset of the specified place to the current center in pixels
-	_getCenterOffset: function (latlng) {
-		return this.latLngToLayerPoint(latlng).subtract(this._getCenterLayerPoint());
+	_getCenterOffset: function (intern) {
+		return this.internToLayerPoint(intern).subtract(this._getCenterLayerPoint());
 	},
 
 	// adjust center for view to get inside bounds

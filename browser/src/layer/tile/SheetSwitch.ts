@@ -21,8 +21,6 @@ export class SheetSwitchViewRestore {
 	private docLayer: any;
 
 	// centerOfSheet maps from sheet id to center of sheet view.
-	// Currently LatLng is used for center, but this will be
-	// replaced by pixel coordinates.
 	private centerOfSheet: Map<number, any>;
 	private mayRestore: boolean;
 	private restorePart: number;

@@ -1292,7 +1292,7 @@ window.L.TextInput = window.L.Layer.extend({
 	},
 
 	_onCursorHandlerDragEnd: function(ev) {
-		var cursorPos = this._map._docLayer._latLngToTwips(ev.target.getLatLng());
+		var cursorPos = this._map._docLayer._internToTwips(ev.target.getIntern());
 		this._map._docLayer._postMouseEvent('buttondown', cursorPos.x, cursorPos.y, 1, 1, 0);
 		this._map._docLayer._postMouseEvent('buttonup', cursorPos.x, cursorPos.y, 1, 1, 0);
 	},

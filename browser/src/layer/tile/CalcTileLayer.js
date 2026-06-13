@@ -249,7 +249,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
-		// When there will be a latlng conversion, we should use CSS pixels.
+		// When there will be a Intern conversion, we should use CSS pixels.
 		var newSizePx = this._twipsToPixels(new cool.Point(newDocWidth, newDocHeight));
 
 		var topLeft = this._map.unproject(new cool.Point(0, 0));

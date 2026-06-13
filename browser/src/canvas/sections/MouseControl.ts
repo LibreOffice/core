@@ -596,11 +596,11 @@ class MouseControl extends CanvasSectionObject {
 		);
 
 		this.pinchStartCenter = { x: centerX, y: centerY };
-		const _pinchStartLatLng = app.map.mouseEventToLatLng({
+		const _pinchStartIntern = app.map.mouseEventToIntern({
 			clientX: centerX,
 			clientY: centerY,
 		});
-		app.map._docLayer.preZoomAnimation(_pinchStartLatLng);
+		app.map._docLayer.preZoomAnimation(_pinchStartIntern);
 	}
 
 	onMultiTouchMove(
@@ -635,7 +635,7 @@ class MouseControl extends CanvasSectionObject {
 		this.zoom = app.map.getZoom() + diff * 0.01;
 		this.zoom = app.map._limitZoom(this.zoom);
 
-		this.origCenter = app.map.mouseEventToLatLng({
+		this.origCenter = app.map.mouseEventToIntern({
 			clientX: center.x,
 			clientY: center.y,
 		});

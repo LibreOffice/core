@@ -298,7 +298,7 @@ window.L.TileSectionManager = window.L.Class.extend({
 
 		// Calculate the final center at final zoom in advance.
 		var newMapCenter = this._getZoomMapCenter(zoom).divideBy(app.dpiScale);
-		var newMapCenterLatLng = map.unproject(newMapCenter, zoom);
+		var newMapCenterIntern = map.unproject(newMapCenter, zoom);
 		app.sectionContainer.setZoomChanged(true);
 
 		var stopAnimation = noGap ? true : false;
@@ -328,7 +328,7 @@ window.L.TileSectionManager = window.L.Class.extend({
 
 				painter.setWaitForTiles(true);
 				// Set view and paint the tiles if all available.
-				mapUpdater(newMapCenterLatLng);
+				mapUpdater(newMapCenterIntern);
 				waitForTiles = true;
 			}
 
@@ -697,7 +697,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		TileManager.resetPreFetching(true);
 	},
 
-	_isLatLngInView: function (position) {
+	_isInternInView: function (position) {
 		var centerOffset = this._map._getCenterOffset(position);
 		var viewHalf = this._map.getSize()._divideBy(2);
 		var positionInView =
@@ -3015,7 +3015,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	// Scrolls the view to selected position
 	scrollToPos: function(pos) {
 		if (pos instanceof cool.SimplePoint) // Turn into lat/lng if required (pos may also be a simplePoint.).
-			pos = this._twipsToLatLng({ x: pos.x, y: pos.y });
+			pos = this._twipsToIntern({ x: pos.x, y: pos.y });
 
 		var center = this._map.project(pos);
 
@@ -3319,9 +3319,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_onDrop: function (e) {
 		// Move the cursor, so that the insert position is as close to the drop coordinates as possible.
-		var latlng = e.latlng;
+		var intern = e.intern;
 		var docLayer = this._map._docLayer;
-		var mousePos = docLayer._latLngToTwips(latlng);
+		var mousePos = docLayer._internToTwips(intern);
 		var count = 1;
 		var buttons = 1;
 		var modifier = this._map.keyboard.modifier;
@@ -3887,8 +3887,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const hasVisibleCursor = app.file.textCursor.visible
 			&& this._map._docLayer._cursorMarker && this._map._docLayer._cursorMarker.isDomAttached();
 		if (!heightIncreased && this._map._docLoaded && hasVisibleCursor) {
-			const cursorPos = this._map._docLayer._twipsToLatLng({ x: app.file.textCursor.rectangle.x1, y: app.file.textCursor.rectangle.y2 });
-			const cursorPositionInView = this._isLatLngInView(cursorPos);
+			const cursorPos = this._map._docLayer._twipsToIntern({ x: app.file.textCursor.rectangle.x1, y: app.file.textCursor.rectangle.y2 });
+			const cursorPositionInView = this._isInternInView(cursorPos);
 			if (!cursorPositionInView)
 				this._map.panTo(cursorPos);
 		}
@@ -4214,13 +4214,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			(pixels.y * app.dpiScale) * app.pixelsToTwips);
 	},
 
-	_twipsToLatLng: function (twips, zoom) {
+	_twipsToIntern: function (twips, zoom) {
 		var pixels = this._twipsToCssPixels(twips);
 		return this._map.unproject(pixels, zoom);
 	},
 
-	_latLngToTwips: function (latLng, zoom) {
-		var pixels = this._map.project(latLng, zoom);
+	_internToTwips: function (intern, zoom) {
+		var pixels = this._map.project(intern, zoom);
 		return this._cssPixelsToTwips(pixels);
 	},
 

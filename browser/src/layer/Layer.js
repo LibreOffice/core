@@ -160,21 +160,21 @@ window.L.Map.include({
 	}
 });
 
-// Used in window.L.Marker and L.Popup for computing layer position from latlng optionally with offsets
+// Used in window.L.Marker and L.Popup for computing layer position from Intern optionally with offsets
 // with or without freeze-panes. This also indicates in the returned object
 // whether the object should be visible or not when freeze panes are active.
-window.L.Layer.getLayerPositionVisibility = function (latlng, boundingClientRect, map, offset) {
+window.L.Layer.getLayerPositionVisibility = function (intern, boundingClientRect, map, offset) {
 	var splitPanesContext = map.getSplitPanesContext();
 
 	if (!splitPanesContext) {
 		return {
-			position: map.latLngToLayerPoint(latlng).round(),
+			position: map.internToLayerPoint(intern).round(),
 			visibility: 'visible'
 		};
 	}
 
 	var splitPos = splitPanesContext.getSplitPos();
-	var docPos = map.project(latlng);
+	var docPos = map.project(intern);
 	var docPosWithOffset = docPos.clone();
 	if (offset) {
 		docPosWithOffset._add(offset);

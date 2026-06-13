@@ -181,7 +181,7 @@ interface MapInterface extends Evented {
 		external?: boolean,
 		calledFromSetPartHandler?: boolean,
 	): void;
-	mouseEventToLatLng(e: any): NormalPointLike;
+	mouseEventToIntern(e: any): NormalPointLike;
 	_limitZoom(zoom: number): number;
 	setView(
 		center: [number, number],

@@ -41,7 +41,7 @@ window.L.Map.Scroll = window.L.Handler.extend({
 
 		this._delta = delta;
 		var viewCenter = this._map.getCenter();
-		var mousePos = this._map.mouseEventToLatLng(e);
+		var mousePos = this._map.mouseEventToIntern(e);
 
 		var docLayer = this._map._docLayer;
 		if (docLayer && docLayer.isCalc()) {

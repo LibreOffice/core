@@ -9,14 +9,14 @@ class NormalPoint {
 
 	constructor(x_: number, y_: number) {
 		if (isNaN(x_) || isNaN(y_)) {
-			throw new Error('Invalid LatLng object: (' + x_ + ', ' + y_ + ')');
+			throw new Error('Invalid Intern object: (' + x_ + ', ' + y_ + ')');
 		}
 
 		this.x = +x_;
 		this.y = +y_;
 	}
 
-	// constructs LatLng with different signatures
+	// constructs Intern with different signatures
 	// (NormalPoint) or ([Number, Number]) or (Number, Number) or (NormalPointLike)
 	public static flexConstruct(a: any, b?: number): NormalPoint | null {
 		if (a instanceof NormalPoint) {
@@ -51,14 +51,14 @@ class NormalPoint {
 
 	// Needed in Map.prototype.unproject()
 	// constructs NormalPoint from css pixel point at a given zoom.
-	public static pointToLatLng(point: cool.Point, zoom: number): NormalPoint {
+	public static pointToIntern(point: cool.Point, zoom: number): NormalPoint {
 		const scale = NormalPoint.scale(zoom);
 		return new NormalPoint(point.x / scale, point.y / scale);
 	}
 
 	// Needed in Map.prototype.project()
-	// constructs css pixel point from LatLng at a given zoom.
-	public static latLngToPoint(
+	// constructs css pixel point from Intern at a given zoom.
+	public static internToPoint(
 		normPoint: NormalPoint,
 		zoom: number,
 	): cool.Point {

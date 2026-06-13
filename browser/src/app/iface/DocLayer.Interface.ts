@@ -41,7 +41,7 @@ interface DocLayerInterface {
 	isCalcRTL(): boolean;
 
 	_pixelsToTwips(cssPix: cool.PointLike): cool.PointLike;
-	_latLngToTwips(normPoint: NormalPointLike): cool.Point;
+	_internToTwips(normPoint: NormalPointLike): cool.Point;
 
 	_postMouseEvent(
 		typ: string,
