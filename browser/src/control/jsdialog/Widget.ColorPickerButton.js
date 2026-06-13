@@ -238,28 +238,9 @@ JSDialog.colorPickerButton = function (parentContainer, data, builder) {
 			builder.map.on(
 				'commandstatechanged',
 				function (e) {
-					if (e.commandName !== data.command) return;
-
-					// Core reports the color of the freshly selected object.
-					// Adopt it so the swatch follows the selection (for example
-					// when switching between text boxes with different border
-					// colors). Only plain numeric colors are taken here. Complex
-					// theme colors arrive as objects, and replacing the remembered
-					// color with one would lose the user's last pick.
-					var newColor = builder.map['stateChangeHandler'].getItemValue(
-						data.command,
-					);
-					var isNumericColor =
-						typeof newColor === 'number' ||
-						(typeof newColor === 'string' &&
-							newColor.trim() !== '' &&
-							!isNaN(Number(newColor)));
-					if (isNumericColor)
-						app.colorLastSelection[data.command] = toHexColor(
-							parseInt(newColor),
-						);
-
-					updateFunction();
+					if (e.commandName === data.command) {
+						updateFunction();
+					}
 				},
 				this,
 			);
