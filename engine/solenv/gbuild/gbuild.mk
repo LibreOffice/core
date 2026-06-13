@@ -372,6 +372,20 @@ endif
 endif
 gb_COMPILER_SETUP += $(gb_CCACHE_SLOPPINESS)
 endif
+ifneq ($(CCACHE_BASEDIR),)
+export CCACHE_BASEDIR
+# With a base directory set, ccache works in relative paths and the generated
+# dependency files hold source and header paths relative to the build
+# directory rather than absolute ones. A build started inside a module
+# directory has that module as its working directory, so make would look for
+# those prerequisites in the wrong place and stop with "No rule to make
+# target". Searching the build directory lets make resolve the relative
+# prerequisites whatever the working directory is.
+VPATH := $(BUILDDIR)
+endif
+ifneq ($(CCACHE_NOHASHDIR),)
+export CCACHE_NOHASHDIR
+endif
 
 ifneq ($(CCACHE_DEPEND_MODE),)
 gb_COMPILER_SETUP += CCACHE_DEPEND=1

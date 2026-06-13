@@ -2008,6 +2008,19 @@ AC_ARG_ENABLE(ccache,
 ]),
 ,)
 
+AC_ARG_ENABLE(ccache-shared,
+    AS_HELP_STRING([--enable-ccache-shared],
+        [Enable the use of a shared ccache between different trees.
+         This enables relative paths to be used in the ccache, which means
+         that different work trees may have object files from other trees.
+         As a down-side, this may mean that split debuginfo from one
+         object may point to a path in a different build tree.
+         Against that - if you have many trees building very similar code
+         this should result in a significant compilation speedup for
+         subsequent branches.
+]),
+,)
+
 AC_ARG_ENABLE(z7-debug,
     AS_HELP_STRING([--enable-z7-debug],
         [Makes the MSVC compiler use -Z7 for debugging instead of the default -Zi. Using this option takes
@@ -3289,6 +3302,8 @@ AC_SUBST(WITH_TEMPLATES)
 dnl ===================================================================
 dnl  Checks if ccache is available
 dnl ===================================================================
+CCACHE_BASEDIR=
+CCACHE_NOHASHDIR=
 CCACHE_DEPEND_MODE=
 if test "$enable_ccache" = "no"; then
     CCACHE=""
@@ -3374,12 +3389,21 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
         fi
         ;;
     esac
+    if test "$enable_ccache_shared" = "yes"; then
+       AC_MSG_NOTICE("shared ccache - enabled")
+       dnl convert to relative paths
+       CCACHE_BASEDIR=${BUILDDIR}
+       dnl don't include cwd into the hash
+       CCACHE_NOHASHDIR=1
+    fi
 else
     CCACHE=""
 fi
 if test "$enable_ccache" = "nodepend"; then
     CCACHE_DEPEND_MODE=""
 fi
+AC_SUBST(CCACHE_BASEDIR)
+AC_SUBST(CCACHE_NOHASHDIR)
 AC_SUBST(CCACHE_DEPEND_MODE)
 
 # sccache defaults are good enough
