@@ -4600,15 +4600,14 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
         }
 
         // The compact /cool/ws?WOPISrc=... URL supersedes the legacy
-        // /cool/<encoded-document-URI>/ws URL, but is only offered when
-        // experimental features are enabled. In that configuration, flag WOPI
-        // connections still arriving on the legacy URL in the server audit, so
-        // the admin hears about the deprecation before support for it is
-        // removed. With experimental features off the legacy URL is the only
-        // one used, so warning about it would point at a URL the build cannot
-        // switch away from.
+        // /cool/<encoded-document-URI>/ws URL. The browser connects over the
+        // compact URL by default and only drops to the legacy URL when a
+        // reverse proxy fails to tunnel the compact one. So a WOPI connection
+        // still arriving on the legacy URL means that fallback happened. Flag
+        // it in the server audit so the admin hears about the proxy that needs
+        // fixing.
 #if !MOBILEAPP && !WASMAPP
-        if (EnableExperimental && !requestDetails.isCool2() &&
+        if (!requestDetails.isCool2() &&
             !requestDetails.getField(RequestDetails::Field::WOPISrc).empty())
         {
             _serverAudit.set("wsurl", "not_recommended");

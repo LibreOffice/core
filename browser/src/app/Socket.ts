@@ -268,11 +268,7 @@ class Socket {
 	}
 
 	private getWebSocketBaseURI(map: MapInterface): string {
-		if (
-			window.enableExperimentalFeatures &&
-			map.options.wopiSrc &&
-			!this._forceLegacyWsUrl
-		) {
+		if (map.options.wopiSrc && !this._forceLegacyWsUrl) {
 			// Use the new Cool WS URL for WOPI documents.
 			return window.makeWopiCoolWsUrl(
 				window.makeWsUrl('/cool'),
@@ -524,11 +520,7 @@ class Socket {
 					this._scheduleReconnect();
 				}, 1);
 				return;
-			} else if (
-				window.enableExperimentalFeatures &&
-				this._map.options.wopiSrc &&
-				!this._forceLegacyWsUrl
-			) {
+			} else if (this._map.options.wopiSrc && !this._forceLegacyWsUrl) {
 				// The compact /cool/ws URL never connected.
 				//
 				// Perhaps a reverse proxy that only tunnels the legacy
