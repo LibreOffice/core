@@ -21,7 +21,9 @@ echo git: `git -C $SRC/libreoffice log -1 --pretty=reference`
 
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
-export CXX="$CXX -stdlib=libc++ -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
+#enable libc++ fast hardening so an out-of-range operator[] aborts instead
+#of reading adjacent live memory that the redzone sanitizers don't flag
+export CXX="$CXX -stdlib=libc++ -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
 export CXX_FOR_BUILD="$CXX"
 export CC="$CC -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
 export CC_FOR_BUILD="$CC"
