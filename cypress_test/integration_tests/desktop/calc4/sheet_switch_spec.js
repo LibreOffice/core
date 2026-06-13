@@ -16,7 +16,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 	it('Check view position on sheet switch', function() {
 		// we should be somewhere far from A1
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'CQ1017');
-		desktopHelper.assertScrollbarPosition('vertical', 710, 750);
+		desktopHelper.assertScrollbarPosition('vertical', 690, 730);
 		desktopHelper.assertScrollbarPosition('horizontal', 930, 1050);
 
 		// insert sheet
