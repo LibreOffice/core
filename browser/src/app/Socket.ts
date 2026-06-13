@@ -1641,7 +1641,7 @@ class Socket {
 		}, timeout);
 	}
 
-	private _showDocumentConflictPopUp(): void {
+	private _showDocumentConflictPopUp(errorDetail?: string): void {
 		const buttonList: { id: string; text: string }[] = [];
 		const callbackList: { id: string; func_: (() => void) | null }[] = [];
 
@@ -1691,6 +1691,7 @@ class Socket {
 			false,
 			buttonList,
 			callbackList,
+			errorDetail,
 		);
 	}
 
@@ -2216,7 +2217,7 @@ class Socket {
 			} else if (command.errorKind === 'documentconflict') {
 				if (this._map.isReadOnlyMode())
 					return true; // caller should exit immediately.
-				else this._showDocumentConflictPopUp();
+				else this._showDocumentConflictPopUp(command.errorDetail);
 
 				return true; // caller should exit immediately.
 			}

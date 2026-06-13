@@ -364,9 +364,9 @@ public:
         }
         else
         {
-            LOK_ASSERT_EQUAL_MESSAGE("Expect only documentconflict errors",
-                                     std::string("error: cmd=storage kind=documentconflict"),
-                                     message);
+            // The conflict error may carry a trailing " errordetail=" token.
+            LOK_ASSERT_MESSAGE("Expect only documentconflict errors",
+                               message.starts_with("error: cmd=storage kind=documentconflict"));
 
             // We are done!
             TRANSITION_STATE(_phase, Phase::WaitDestroy);

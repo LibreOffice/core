@@ -1214,7 +1214,11 @@ bool DocumentBroker::download(
                                      << _storageManager.getLastModifiedServerTimeString()
                                      << ", Actual: " << fileInfo.getLastModifiedServerTimeString());
 
-                handleDocumentConflict();
+                handleDocumentConflict("Document changed in storage (timestamp mismatch).\nLast "
+                                       "known timestamp: " +
+                                       _storageManager.getLastModifiedServerTimeString() +
+                                       "\nTimestamp in storage: " +
+                                       fileInfo.getLastModifiedServerTimeString());
             }
         }
     }
@@ -3635,7 +3639,10 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
                 << _storageManager.getSizeAsUploaded() << " bytes because it's changed in storage");
         broadcastSaveResult(false, "Conflict: Document changed in storage",
                             uploadResult.getReason());
-        handleDocumentConflict();
+        handleDocumentConflict("Document changed in storage during upload.\nLast known timestamp: " +
+                               _storageManager.getLastModifiedServerTimeString() +
+                               "\nStorage response: " +
+                               getAbbreviatedMessage(uploadResult.getReason()));
     }
 
     // We failed to upload, merge the last attributes into the current one.
@@ -3643,16 +3650,19 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
     _lastStorageAttrs.reset();
 }
 
-void DocumentBroker::handleDocumentConflict()
+void DocumentBroker::handleDocumentConflict(std::string details)
 {
     _documentChangedInStorage = true;
 
     // Do not reload the document ("close: documentconflict") if there are
-    // any changes in the loaded document, either saved or unsaved.
-    const std::string message = (_lastStorageAttrs.isUserModified() ||
-                                 _currentStorageAttrs.isUserModified() || isPossiblyModified())
-                                    ? "error: cmd=storage kind=documentconflict"
-                                    : "close: documentconflict";
+    // any changes in the loaded document, either saved or unsaved. Only the
+    // dialog (error:) path forwards the technical details; the silent reload
+    // (close:) path has no use for them.
+    const std::string message =
+        (_lastStorageAttrs.isUserModified() || _currentStorageAttrs.isUserModified() ||
+         isPossiblyModified())
+            ? COOLProtocol::buildErrorFrame("storage", "documentconflict", details)
+            : "close: documentconflict";
 
     const std::size_t activeClients = broadcastMessage(message);
     LOG_TRC("There are " << activeClients << " active clients after broadcasting documentconflict");
@@ -6005,7 +6015,10 @@ void DocumentBroker::checkFileInfo(const std::shared_ptr<ClientSession>& session
                 LOG_WRN("After failing to upload, the document size neither matches the original, "
                         "nor our last uploaded. The document is in conflict.");
 
-                handleDocumentConflict();
+                handleDocumentConflict("Document changed in storage (size mismatch after a failed "
+                                       "upload).\nLast known timestamp: " +
+                                       _storageManager.getLastModifiedServerTimeString() +
+                                       "\nTimestamp in storage: " + lastModifiedTime);
             }
         }
         else

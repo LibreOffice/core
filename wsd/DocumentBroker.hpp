@@ -1753,7 +1753,9 @@ private:
     void processBatchUpdates();
 
     /// Called when document conflict is detected (i.e. it changed in storage).
-    void handleDocumentConflict();
+    /// @param details optional un-translated technical fault analysis (differing
+    /// timestamps and the storage response) shown in the conflict dialog.
+    void handleDocumentConflict(std::string details = std::string());
 
     std::string applyBrowserAccessibility(const std::string& message,
                                        const std::string& viewId);

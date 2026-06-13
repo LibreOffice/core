@@ -90,6 +90,10 @@ function _multiLineEditControl(parentContainer, data, builder, callback) {
 		edit.readOnly = true;
 	}
 
+	if (data.rows) {
+		edit.rows = data.rows;
+	}
+
 	function _keyupChangeHandler(e) {
 		const nav_keys = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 

@@ -202,9 +202,10 @@ public:
         else
         {
             // Once the first upload fails, we issue CheckFileInfo, which detects the conflict.
-            LOK_ASSERT_EQUAL_MESSAGE(
+            // The conflict error may carry a trailing " errordetail=" token.
+            LOK_ASSERT_MESSAGE(
                 "Expect only documentconflict errors after the second CheckFileInfo",
-                std::string("error: cmd=storage kind=documentconflict"), message);
+                message.starts_with("error: cmd=storage kind=documentconflict"));
 
             // Close the document.
             TST_LOG("Closing the document");

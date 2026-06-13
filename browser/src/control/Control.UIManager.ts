@@ -2332,13 +2332,14 @@ class UIManager extends window.L.Control {
 		cancellable: boolean,
 		buttonObjectList: any[],
 		callbackList: any[],
+		errorDetail?: string,
 	): void {
 		var dialogId = this.generateModalId(id);
 
 		for (var i = 0; i < buttonObjectList.length; i++)
 			buttonObjectList[i].type = 'pushbutton';
 
-		var json = this._modalDialogJSON(id, title, !!cancellable, [
+		var children: any[] = [
 			{
 				id: 'info-modal-tile-m',
 				type: 'fixedtext',
@@ -2350,16 +2351,22 @@ class UIManager extends window.L.Control {
 				type: 'fixedtext',
 				text: message
 			},
-			{
-				id: '',
-				type: 'buttonbox',
-				text: '',
-				enabled: true,
-				children: buttonObjectList,
-				vertical: false,
-				layoutstyle: 'end'
-			},
-		]);
+		];
+
+		if (errorDetail)
+			children.push(this._technicalDetailsExpander(errorDetail));
+
+		children.push({
+			id: '',
+			type: 'buttonbox',
+			text: '',
+			enabled: true,
+			children: buttonObjectList,
+			vertical: false,
+			layoutstyle: 'end'
+		});
+
+		var json = this._modalDialogJSON(id, title, !!cancellable, children);
 
 		buttonObjectList.forEach((button) => {
 			callbackList.forEach((callback) => {
@@ -2643,24 +2650,7 @@ class UIManager extends window.L.Control {
 			},
 		];
 		if (errorDetail) {
-			children.push({
-				id: 'technical-details-expander',
-				type: 'expander',
-				expanded: false,
-				children: [
-					{
-						id: 'technical-details-label',
-						type: 'fixedtext',
-						text: _('Show technical details'),
-					},
-					{
-						id: 'technical-details-text',
-						type: 'multilineedit',
-						text: errorDetail,
-						readonly: true,
-					},
-				],
-			});
+			children.push(this._technicalDetailsExpander(errorDetail));
 		}
 		const buttonChildren: any[] = [];
 		if (errorDetail) {
@@ -2703,6 +2693,30 @@ class UIManager extends window.L.Control {
 			}});
 		}
 		this.showModal(json, responses);
+	}
+
+	/// Builds a collapsed "Show technical details" expander holding the
+	/// un-translated technical detail text. Shared by the error popups.
+	private _technicalDetailsExpander(errorDetail: string): any {
+		return {
+			id: 'technical-details-expander',
+			type: 'expander',
+			expanded: false,
+			children: [
+				{
+					id: 'technical-details-label',
+					type: 'fixedtext',
+					text: _('Show technical details'),
+				},
+				{
+					id: 'technical-details-text',
+					type: 'multilineedit',
+					text: errorDetail,
+					readonly: true,
+					rows: 5,
+				},
+			],
+		};
 	}
 
 	private _copyErrorDetailsToClipboard(message: string, technicalDetails: string): void {
