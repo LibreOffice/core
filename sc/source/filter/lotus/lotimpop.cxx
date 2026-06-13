@@ -437,6 +437,9 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
 
     while( nCntDwn )
     {
+        if (nColCnt > rContext.rDoc.MaxCol())
+            break;
+
         Read( aAttr );
         Read( nRepeats );
 
