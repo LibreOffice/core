@@ -1067,9 +1067,10 @@ void ServerSocket::dumpState(std::ostream& os)
 
 void SocketDisposition::execute()
 {
+    const int socketFd = _socket->getFD();
+
     if (_disposition != Type::CONTINUE)
-        LOG_TRC("Executing SocketDisposition of #" << _socket->getFD() <<
-                ": " << name(_disposition));
+        LOG_TRC("Executing SocketDisposition of #" << socketFd << ": " << name(_disposition));
 
     // We should have hard ownership of this socket.
     ASSERT_CORRECT_SOCKET_THREAD(_socket);
@@ -1085,7 +1086,7 @@ void SocketDisposition::execute()
         {
             // Ensure the thread is running before adding callback.
             LOG_DBG("Starting target poll thread [" << _toPoll->name() << "] while moving socket #"
-                                                    << _socket->getFD());
+                                                    << socketFd);
             _toPoll->startThread();
         }
 
@@ -1102,10 +1103,12 @@ void SocketDisposition::execute()
 
         _toPoll->addCallback(std::move(callback));
 
-        // This can happen due to programming error or a race with the thread.
         if (!_toPoll->isAlive())
-            LOG_WRN("Thread poll [" << _toPoll->name()
-                                    << "] is not alive after adding transfer callback");
+        {
+            // This can happen due to programming error or a race with the thread.
+            LOG_WRN("Failed to transfer socket #" << socketFd << " to poll [" << _toPoll->name()
+                                                  << "] as the poll isn't alive");
+        }
 
         _toPoll = nullptr;
     }
