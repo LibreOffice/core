@@ -104,7 +104,7 @@ typedef std::map< TitleHelper::eTitleType, OUString > tTitleMap;
 const tTitleMap& lcl_getTitleMap()
 {
     //maps the title type to the ParentParticle for that title
-    static tTitleMap s_aTitleMap{
+    static const tTitleMap s_aTitleMap{
         {TitleHelper::MAIN_TITLE, ""},
         {TitleHelper::SUB_TITLE, "D=0"},
         {TitleHelper::X_AXIS_TITLE, "D=0:CS=0:Axis=0,0"},

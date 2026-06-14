@@ -703,9 +703,9 @@ void TPGalleryThemeProperties::FillFilterList()
 #if HAVE_FEATURE_AVMEDIA
     // media filters
     static constexpr OUString aWildcard = u"*."_ustr;
-    ::avmedia::FilterNameVector     aFilters= ::avmedia::MediaWindow::getMediaFilters();
+    const ::avmedia::FilterNameVector & rFilters= ::avmedia::MediaWindow::getMediaFilters();
 
-    for(const std::pair<OUString,OUString> & aFilter : aFilters)
+    for(const std::pair<OUString,OUString> & aFilter : rFilters)
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
@@ -744,7 +744,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 #if HAVE_FEATURE_AVMEDIA
     // media filters
-    for(const std::pair<OUString,OUString> & aFilter : aFilters)
+    for(const std::pair<OUString,OUString> & aFilter : rFilters)
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {

@@ -52,9 +52,9 @@ namespace chart::wrapper {
 
 namespace {
 
-ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
+const ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
 {
-    static ItemPropertyMapType aDataPointPropertyFilledMap{
+    static const ItemPropertyMapType aDataPointPropertyFilledMap{
         {XATTR_FILLSTYLE, {"FillStyle", 0}},
         {XATTR_FILLCOLOR, {"Color", 0}},
         {XATTR_LINECOLOR, {"BorderColor", 0}},
@@ -77,18 +77,18 @@ ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
 
     return aDataPointPropertyFilledMap;
 }
-ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
+const ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
 {
-    static ItemPropertyMapType aDataPointPropertyLineMap{
+    static const ItemPropertyMapType aDataPointPropertyLineMap{
         {XATTR_LINECOLOR, {"Color", 0}},
         {XATTR_LINESTYLE, {"LineStyle", 0}},
         {XATTR_LINEWIDTH, {"LineWidth", 0}},
         {XATTR_LINECAP, {"LineCap", 0}}};
     return aDataPointPropertyLineMap;
 }
-ItemPropertyMapType & lcl_GetLinePropertyMap()
+const ItemPropertyMapType & lcl_GetLinePropertyMap()
 {
-    static ItemPropertyMapType aLinePropertyMap{
+    static const ItemPropertyMapType aLinePropertyMap{
         {XATTR_LINESTYLE, {"LineStyle", 0}},
         {XATTR_LINEWIDTH, {"LineWidth", 0}},
         {XATTR_LINECOLOR, {"LineColor", 0}},
@@ -96,9 +96,9 @@ ItemPropertyMapType & lcl_GetLinePropertyMap()
         {XATTR_LINECAP, {"LineCap", 0}}};
     return aLinePropertyMap;
 }
-ItemPropertyMapType & lcl_GetFillPropertyMap()
+const ItemPropertyMapType & lcl_GetFillPropertyMap()
 {
-    static ItemPropertyMapType aFillPropertyMap{
+    static const ItemPropertyMapType aFillPropertyMap{
         {XATTR_FILLSTYLE, {"FillStyle", 0}},
         {XATTR_FILLCOLOR, {"FillColor", 0}},
         {XATTR_FILLBACKGROUND, {"FillBackground", 0}},

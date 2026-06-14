@@ -60,9 +60,9 @@ namespace chart::wrapper {
 
 namespace {
 
-ItemPropertyMapType & lcl_GetAxisPropertyMap()
+const ItemPropertyMapType & lcl_GetAxisPropertyMap()
 {
-    static ItemPropertyMapType aAxisPropertyMap{
+    static const ItemPropertyMapType aAxisPropertyMap{
         {SCHATTR_AXIS_SHOWDESCR,     {"DisplayLabels",    0}},
         {SCHATTR_AXIS_TICKS,         {"MajorTickmarks",   0}},
         {SCHATTR_AXIS_HELPTICKS,     {"MinorTickmarks",   0}},
@@ -134,7 +134,7 @@ const WhichRangesContainer& AxisItemConverter::GetWhichPairs() const
 
 bool AxisItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
+    const ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
     ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())

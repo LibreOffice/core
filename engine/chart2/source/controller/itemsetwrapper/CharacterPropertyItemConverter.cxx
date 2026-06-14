@@ -42,9 +42,9 @@ namespace chart::wrapper {
 
 namespace {
 
-ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
+const ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
 {
-    static ItemPropertyMapType aCharacterPropertyMap{
+    static const ItemPropertyMapType aCharacterPropertyMap{
         {EE_CHAR_COLOR, {"CharColor", 0}},
         {EE_CHAR_LANGUAGE, {"CharLocale", MID_LANG_LOCALE}},
         {EE_CHAR_LANGUAGE_CJK, {"CharLocaleAsian", MID_LANG_LOCALE}},
@@ -95,7 +95,7 @@ const WhichRangesContainer& CharacterPropertyItemConverter::GetWhichPairs() cons
 
 bool CharacterPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetCharacterPropertyPropertyMap());
+    const ItemPropertyMapType & rMap( lcl_GetCharacterPropertyPropertyMap());
     ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())

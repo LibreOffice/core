@@ -51,16 +51,6 @@ private:
             u"COLORSCHEME_BREEZE_LIGHT"_ustr,      u"COLORSCHEME_BREEZE_DARK"_ustr,
             u"COLORSCHEME_SOLARIZED_LIGHT"_ustr,   u"COLORSCHEME_SOLARIZED_DARK"_ustr };
 
-    // Maps the scheme names to their TranslateId
-    SchemeTranslateIdMap m_aTranslateIdsMap = {
-        { "COLORSCHEME_LIBREOFFICE_LIGHT", RID_STR_COLORSCHEME_LIGHT },
-        { "COLORSCHEME_LIBREOFFICE_DARK", RID_STR_COLORSCHEME_DARK },
-        { "COLORSCHEME_BREEZE_LIGHT", RID_STR_COLORSCHEME_BREEZE_LIGHT },
-        { "COLORSCHEME_BREEZE_DARK", RID_STR_COLORSCHEME_BREEZE_DARK },
-        { "COLORSCHEME_SOLARIZED_LIGHT", RID_STR_COLORSCHEME_SOLARIZED_LIGHT },
-        { "COLORSCHEME_SOLARIZED_DARK", RID_STR_COLORSCHEME_SOLARIZED_DARK },
-    };
-
     // Used to get colors defined in the Application Colors dialog
     const svtools::ColorConfig aColorConfig;
 
@@ -91,7 +81,7 @@ public:
     }
 
     // Returns the TranslateId of the scheme name
-    TranslateId GetSchemeTranslateId(const OUString& rScheme);
+    static TranslateId GetSchemeTranslateId(const OUString& rScheme);
 };
 
 } // namespace basctl

@@ -63,7 +63,7 @@ void ColorSchemeDialog::Init()
         // Default schemes (preinstalled with LO) have TranslateIds
         if (m_pColorConfig->IsDefaultScheme(rName))
         {
-            m_xSchemeList->append(rName, IDEResId(m_pColorConfig->GetSchemeTranslateId(rName)));
+            m_xSchemeList->append(rName, IDEResId(BasicColorConfig::GetSchemeTranslateId(rName)));
         }
         else
         {

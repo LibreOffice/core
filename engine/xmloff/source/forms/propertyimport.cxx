@@ -261,7 +261,7 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 {
     Type aUnoType( cppu::UnoType<void>::get() );
 
-    static std::map< OUString, css::uno::Type > s_aTypeNameMap
+    static const std::map< OUString, css::uno::Type > s_aTypeNameMap
     {
         { token::GetXMLToken( token::XML_BOOLEAN ) , cppu::UnoType<bool>::get()},
         // Not a copy paste error, quotation from:
@@ -274,7 +274,7 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
         { token::GetXMLToken( token::XML_VOID )    , cppu::UnoType<void>::get() },
     };
 
-    const std::map< OUString, css::uno::Type >::iterator aTypePos = s_aTypeNameMap.find( _rType );
+    auto aTypePos = s_aTypeNameMap.find( _rType );
     OSL_ENSURE( s_aTypeNameMap.end() != aTypePos, "PropertyConversion::xmlTypeToUnoType: invalid property name!" );
     if ( s_aTypeNameMap.end() != aTypePos )
         aUnoType = aTypePos->second;

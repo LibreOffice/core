@@ -634,7 +634,7 @@ void PPTShape::addShape(
                     css::presentation::ClickAction meClickAction;
                     uno::Sequence<beans::PropertyValue> aProperties;
 
-                    std::map<OUString, css::presentation::ClickAction> ActionMap = {
+                    static const std::map<OUString, css::presentation::ClickAction> ActionMap = {
                         { "#action?jump=nextslide", ClickAction_NEXTPAGE },
                         { "#action?jump=previousslide", ClickAction_PREVPAGE },
                         { "#action?jump=firstslide", ClickAction_FIRSTPAGE },

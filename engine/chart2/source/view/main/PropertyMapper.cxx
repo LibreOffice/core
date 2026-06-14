@@ -287,7 +287,7 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForCharacterProperties{
+    static const tPropertyNameMap s_aShapePropertyMapForCharacterProperties{
         {"CharColor",                "CharColor"},
         {"CharComplexColor",         "CharComplexColor"},
         {"CharContoured",            "CharContoured"},
@@ -346,7 +346,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForParagraphProperties{
+    static const tPropertyNameMap s_aShapePropertyMapForParagraphProperties{
         {"ParaAdjust",          "ParaAdjust"},
         {"ParaBottomMargin",    "ParaBottomMargin"},
         {"ParaIsHyphenation",   "ParaIsHyphenation"},
@@ -360,7 +360,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForFillProperties{
+    static const tPropertyNameMap s_aShapePropertyMapForFillProperties{
         {"FillBackground",               "FillBackground"},
         {"FillBitmapName",               "FillBitmapName"},
         {"FillColor",                    "FillColor"},
@@ -393,7 +393,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForLineProperties{
+    static const tPropertyNameMap s_aShapePropertyMapForLineProperties{
         {"LineColor",              "LineColor"},
         {"LineComplexColor",       "LineComplexColor"},
         {"LineDashName",           "LineDashName"},
@@ -443,7 +443,7 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForLineSeriesProperties{
+    static const tPropertyNameMap s_aShapePropertyMapForLineSeriesProperties{
         {"LineColor",           "Color"},
         {"LineComplexColor",    "ComplexColor"},
         {"LineDashName",        "LineDashName"},
@@ -476,14 +476,14 @@ namespace {
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProperties()
 {
     // target name (drawing layer) : source name (chart model)
-    static tPropertyNameMap aMap = getPropertyNameMapForTextLabelProperties_();
+    static const tPropertyNameMap aMap = getPropertyNameMapForTextLabelProperties_();
     return aMap;
 }
 
 const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForFilledSeriesProperties{
+    static const tPropertyNameMap s_aShapePropertyMapForFilledSeriesProperties{
         {"FillBackground",               "FillBackground"},
         {"FillBitmapName",               "FillBitmapName"},
         {"FillColor",                    "Color"},

@@ -179,9 +179,10 @@ vcl::Window* MediaWindow::getWindow() const
 }
 
 
-FilterNameVector MediaWindow::getMediaFilters()
+const FilterNameVector & MediaWindow::getMediaFilters()
 {
-    return {{"Advanced Audio Coding", "aac"},
+    static const FilterNameVector gMediaFilters
+           {{"Advanced Audio Coding", "aac"},
             {"AIF Audio", "aif;aiff"},
             {"Advanced Systems Format", "asf;wma;wmv"},
             {"AU Audio", "au"},
@@ -207,6 +208,7 @@ FilterNameVector MediaWindow::getMediaFilters()
             {"WebM Video", "webm"},
             {"Windows Media Audio", "wma"},
             {"Windows Media Video", "wmv"}};
+    return gMediaFilters;
 }
 
 
@@ -217,7 +219,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::NONE, pParent);
     static const char               aWildcard[] = "*.";
-    FilterNameVector                aFilters = getMediaFilters();
+    const FilterNameVector &        rFilters = getMediaFilters();
     static const char               aSeparator[] = ";";
     OUStringBuffer                  aAllTypes;
 
@@ -225,7 +227,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     aDlg.SetTitle( AvmResId( o_pbLink != nullptr
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
-    for( const auto &filter : aFilters )
+    for( const auto &filter : rFilters )
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
@@ -239,7 +241,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     // add filter for all media types
     aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes.makeStringAndClear() );
 
-    for( const auto &filter : aFilters )
+    for( const auto &filter : rFilters )
     {
         OUStringBuffer aTypes;
 
@@ -342,10 +344,10 @@ bool MediaWindow::isMediaURL(std::u16string_view rURL, const OUString& rReferer,
     }
     else
     {
-        FilterNameVector        aFilters = getMediaFilters();
+        const FilterNameVector & rFilters = getMediaFilters();
         const OUString          aExt( aURL.getExtension() );
 
-        for( const auto &filter : aFilters )
+        for( const auto &filter : rFilters )
         {
             for( sal_Int32 nIndex = 0; nIndex >= 0; )
             {

@@ -569,7 +569,7 @@ typedef std::map< OUString, OUString > tMakeStringStringMap;
 
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
-    static tMakeStringStringMap g_aChartTypeNameMap{
+    static const tMakeStringStringMap g_aChartTypeNameMap{
         {"com.sun.star.chart2.LineChartType", "com.sun.star.chart.LineDiagram"},
         {"com.sun.star.chart2.AreaChartType", "com.sun.star.chart.AreaDiagram"},
         {"com.sun.star.chart2.ColumnChartType", "com.sun.star.chart.BarDiagram"},

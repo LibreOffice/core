@@ -22,9 +22,9 @@ namespace chart::wrapper
 {
 namespace
 {
-ItemPropertyMapType& lclDataTablePropertyMap()
+const ItemPropertyMapType& lclDataTablePropertyMap()
 {
-    static ItemPropertyMapType aPropertyMap{
+    static const ItemPropertyMapType aPropertyMap{
         { SCHATTR_DATA_TABLE_HORIZONTAL_BORDER, { "HBorder", 0 } },
         { SCHATTR_DATA_TABLE_VERTICAL_BORDER, { "VBorder", 0 } },
         { SCHATTR_DATA_TABLE_OUTLINE, { "Outline", 0 } },
@@ -78,7 +78,7 @@ const WhichRangesContainer& DataTableItemConverter::GetWhichPairs() const
 bool DataTableItemConverter::GetItemProperty(tWhichIdType nWhichId,
                                              tPropertyNameWithMemberId& rOutProperty) const
 {
-    ItemPropertyMapType& rMap(lclDataTablePropertyMap());
+    const ItemPropertyMapType& rMap(lclDataTablePropertyMap());
     auto aIt = rMap.find(nWhichId);
     if (aIt == rMap.cend())
         return false;

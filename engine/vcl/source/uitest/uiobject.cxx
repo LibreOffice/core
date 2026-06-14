@@ -163,7 +163,7 @@ sal_uInt16 get_key(sal_Unicode cChar, bool& bShift)
 
 bool isFunctionKey(const OUString& rStr, sal_uInt16& rKeyCode)
 {
-    std::map<OUString, sal_uInt16> aFunctionKeyMap = {
+    static const std::map<OUString, sal_uInt16> aFunctionKeyMap = {
         {"F1", KEY_F1},
         {"F2", KEY_F2},
         {"F3", KEY_F3},
@@ -191,7 +191,7 @@ std::vector<KeyEvent> generate_key_events_from_keycode(std::u16string_view rStr)
 {
     std::vector<KeyEvent> aEvents;
 
-    std::map<OUString, sal_uInt16> aKeyMap = {
+    static const std::map<OUString, sal_uInt16> aKeyMap = {
         {"ESC", KEY_ESCAPE},
         {"TAB", KEY_TAB},
         {"DOWN", KEY_DOWN},
@@ -242,9 +242,9 @@ std::vector<KeyEvent> generate_key_events_from_keycode(std::u16string_view rStr)
         vcl::KeyCode aCode(nFunctionKey, bShift, bMod1, bMod2, false);
         aEvents.emplace_back(0, aCode);
     }
-    else if (aKeyMap.contains(aRemainingText))
+    else if (auto it = aKeyMap.find(aRemainingText); it != aKeyMap.end())
     {
-        sal_uInt16 nKey = aKeyMap[aRemainingText];
+        sal_uInt16 nKey = it->second;
         vcl::KeyCode aCode(nKey, bShift, bMod1, bMod2, false);
         aEvents.emplace_back( 'a', aCode);
     }

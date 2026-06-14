@@ -2180,9 +2180,9 @@ ChartThemesType& ChartThemesType::getInstance()
 typedef std::pair<OUString, sal_uInt8> tPropertyNameWithMemberId;
 typedef std::map<sal_uInt16, tPropertyNameWithMemberId> ItemPropertyMapType;
 
-static ItemPropertyMapType& lcl_GetPropertyMap()
+const static ItemPropertyMapType& lcl_GetPropertyMap()
 {
-    static ItemPropertyMapType aCharacterPropertyMap{
+    static const ItemPropertyMapType aCharacterPropertyMap{
         { EE_CHAR_COLOR, { "CharColor", 0 } },
         { EE_CHAR_KERNING, { "CharKerning", 0 } },
         { EE_CHAR_SHADOW, { "CharShadowed", 0 } },
@@ -2357,7 +2357,7 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
             break;
             default:
             {
-                ItemPropertyMapType& rMap(lcl_GetPropertyMap());
+                const ItemPropertyMapType& rMap(lcl_GetPropertyMap());
                 ItemPropertyMapType::const_iterator aIt(rMap.find(nWhichId));
 
                 if (aIt != rMap.end())

@@ -103,9 +103,9 @@ enum eServiceType
 
 typedef std::map< OUString, enum eServiceType > tServiceNameMap;
 
-tServiceNameMap & lcl_getStaticServiceNameMap()
+const tServiceNameMap & lcl_getStaticServiceNameMap()
 {
-    static tServiceNameMap aServiceNameMap {
+    static const tServiceNameMap aServiceNameMap {
         {"com.sun.star.chart.AreaDiagram",                    SERVICE_NAME_AREA_DIAGRAM},
         {"com.sun.star.chart.BarDiagram",                     SERVICE_NAME_BAR_DIAGRAM},
         {"com.sun.star.chart.HistogramDiagram",               SERVICE_NAME_HISTOGRAM_DIAGRAM},
@@ -1171,7 +1171,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         return xResult;
 
     bool bServiceFound = false;
-    tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
+    const tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
 
     tServiceNameMap::const_iterator aIt( rMap.find( aServiceSpecifier ));
     if( aIt != rMap.end())

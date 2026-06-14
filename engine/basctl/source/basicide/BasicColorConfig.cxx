@@ -22,6 +22,7 @@
 
 namespace basctl
 {
+
 BasicColorConfig::BasicColorConfig()
     : ConfigItem(u"Office.BasicIDE/IDEColorSchemes"_ustr)
 {
@@ -116,9 +117,19 @@ OUString& BasicColorConfig::GetCurrentColorSchemeName()
     return m_sCurrentColorScheme;
 }
 
+// static
 TranslateId BasicColorConfig::GetSchemeTranslateId(const OUString& rScheme)
 {
-    return m_aTranslateIdsMap.find(rScheme)->second;
+    // Maps the scheme names to their TranslateId
+    static const SchemeTranslateIdMap g_aTranslateIdsMap = {
+        { "COLORSCHEME_LIBREOFFICE_LIGHT", RID_STR_COLORSCHEME_LIGHT },
+        { "COLORSCHEME_LIBREOFFICE_DARK", RID_STR_COLORSCHEME_DARK },
+        { "COLORSCHEME_BREEZE_LIGHT", RID_STR_COLORSCHEME_BREEZE_LIGHT },
+        { "COLORSCHEME_BREEZE_DARK", RID_STR_COLORSCHEME_BREEZE_DARK },
+        { "COLORSCHEME_SOLARIZED_LIGHT", RID_STR_COLORSCHEME_SOLARIZED_LIGHT },
+        { "COLORSCHEME_SOLARIZED_DARK", RID_STR_COLORSCHEME_SOLARIZED_DARK },
+    };
+    return g_aTranslateIdsMap.find(rScheme)->second;
 }
 
 } // namespace basctl

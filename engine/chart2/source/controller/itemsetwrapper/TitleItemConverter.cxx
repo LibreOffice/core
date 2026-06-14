@@ -38,9 +38,9 @@ namespace chart::wrapper {
 
 namespace {
 
-ItemPropertyMapType & lcl_GetTitlePropertyMap()
+const ItemPropertyMapType & lcl_GetTitlePropertyMap()
 {
-    static ItemPropertyMapType aTitlePropertyMap{
+    static const ItemPropertyMapType aTitlePropertyMap{
         {SCHATTR_TEXT_STACKED, {"StackCharacters", 0}}};
     return aTitlePropertyMap;
 };
@@ -147,7 +147,7 @@ const WhichRangesContainer& TitleItemConverter::GetWhichPairs() const
 
 bool TitleItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetTitlePropertyMap());
+    const ItemPropertyMapType & rMap( lcl_GetTitlePropertyMap());
     ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())

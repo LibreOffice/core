@@ -162,7 +162,7 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyE
     bool bMod2 = rEvent.GetKeyCode().IsMod2();
     bool bMod3 = rEvent.GetKeyCode().IsMod3();
 
-    std::map<OUString, sal_uInt16> aKeyMap
+    static const std::map<OUString, sal_uInt16> aKeyMap
         = { { "ESC", KEY_ESCAPE },    { "TAB", KEY_TAB },          { "DOWN", KEY_DOWN },
             { "UP", KEY_UP },         { "LEFT", KEY_LEFT },        { "RIGHT", KEY_RIGHT },
             { "DELETE", KEY_DELETE }, { "INSERT", KEY_INSERT },    { "BACKSPACE", KEY_BACKSPACE },

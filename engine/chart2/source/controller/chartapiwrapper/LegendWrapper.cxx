@@ -226,7 +226,7 @@ void lcl_AddPropertiesToVector(
 
 const Sequence< Property >& StaticLegendWrapperPropertyArray()
 {
-    static Sequence< Property > aPropSeq = []()
+    static const Sequence< Property > aPropSeq = []()
         {
             std::vector< css::beans::Property > aProperties;
             lcl_AddPropertiesToVector( aProperties );

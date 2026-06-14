@@ -25,6 +25,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
+using namespace svx::sidebar::commands;
+
 namespace svx::sidebar {
 
 DefaultShapesPanel::DefaultShapesPanel (
@@ -73,16 +75,16 @@ std::unique_ptr<PanelLayout> DefaultShapesPanel::Create(
 void DefaultShapesPanel::Initialize()
 {
     mpShapesSetMap = decltype(mpShapesSetMap){
-        { mxLineArrowSet.get(),   mpLineShapes },
-        { mxCurveSet.get(),       mpCurveShapes },
-        { mxConnectorSet.get(),   mpConnectorShapes },
-        { mxBasicShapeSet.get(),  mpBasicShapes },
-        { mxSymbolShapeSet.get(), mpSymbolShapes },
-        { mxBlockArrowSet.get(),  mpBlockArrowShapes },
-        { mxFlowchartSet.get(),   mpFlowchartShapes },
-        { mxCalloutSet.get(),     mpCalloutShapes },
-        { mxStarSet.get(),        mpStarShapes },
-        { mx3DObjectSet.get(),    mp3DShapes }
+        { mxLineArrowSet.get(),   gaLineShapes },
+        { mxCurveSet.get(),       gaCurveShapes },
+        { mxConnectorSet.get(),   gaConnectorShapes },
+        { mxBasicShapeSet.get(),  gaBasicShapes },
+        { mxSymbolShapeSet.get(), gaSymbolShapes },
+        { mxBlockArrowSet.get(),  gaBlockArrowShapes },
+        { mxFlowchartSet.get(),   gaFlowchartShapes },
+        { mxCalloutSet.get(),     gaCalloutShapes },
+        { mxStarSet.get(),        gaStarShapes },
+        { mx3DObjectSet.get(),    ga3DShapes }
     };
     populateShapes();
     for(auto& aSetMap: mpShapesSetMap)

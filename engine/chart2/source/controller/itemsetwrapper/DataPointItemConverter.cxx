@@ -66,9 +66,9 @@ namespace chart::wrapper {
 
 namespace {
 
-ItemPropertyMapType & lcl_GetDataPointPropertyMap()
+const ItemPropertyMapType & lcl_GetDataPointPropertyMap()
 {
-    static ItemPropertyMapType aDataPointPropertyMap{
+    static const ItemPropertyMapType aDataPointPropertyMap{
         {SCHATTR_STYLE_SHAPE, {"Geometry3D", 0}}};
     return aDataPointPropertyMap;
 };
@@ -302,7 +302,7 @@ const WhichRangesContainer& DataPointItemConverter::GetWhichPairs() const
 
 bool DataPointItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ItemPropertyMapType & rMap( lcl_GetDataPointPropertyMap());
+    const ItemPropertyMapType & rMap( lcl_GetDataPointPropertyMap());
     ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())

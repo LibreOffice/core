@@ -20,6 +20,94 @@
 
 namespace sc
 {
+// Maps solver parameters to named ranges
+const std::map<SolverParameter, OUString> gaNamedRanges
+    = { { SP_OBJ_CELL, "solver_opt" },
+        { SP_OBJ_TYPE, "solver_typ" },
+        { SP_OBJ_VAL, "solver_val" },
+        { SP_VAR_CELLS, "solver_adj" },
+        { SP_CONSTR_COUNT, "solver_num" },
+        { SP_LO_ENGINE, "solver_lo_eng" },
+        { SP_MS_ENGINE, "solver_eng" },
+        { SP_INTEGER, "solver_int" },
+        { SP_NON_NEGATIVE, "solver_neg" },
+        { SP_EPSILON_LEVEL, "solver_eps" },
+        { SP_LIMIT_BBDEPTH, "solver_bbd" },
+        { SP_TIMEOUT, "solver_tim" },
+        { SP_ALGORITHM, "solver_alg" },
+        { SP_SWARM_SIZE, "solver_ssz" },
+        { SP_LEARNING_CYCLES, "solver_lcy" },
+        { SP_GUESS_VARIABLE_RANGE, "solver_gvr" },
+        { SP_VARIABLE_RANGE_THRESHOLD, "solver_vrt" },
+        { SP_ACR_COMPARATOR, "solver_acr" },
+        { SP_RND_STARTING_POINT, "solver_rsp" },
+        { SP_STRONGER_PRNG, "solver_prng" },
+        { SP_STAGNATION_LIMIT, "solver_slim" },
+        { SP_STAGNATION_TOLERANCE, "solver_stol" },
+        { SP_ENHANCED_STATUS, "solver_enst" },
+        { SP_AGENT_SWITCH_RATE, "solver_asr" },
+        { SP_SCALING_MIN, "solver_smin" },
+        { SP_SCALING_MAX, "solver_smax" },
+        { SP_CROSSOVER_PROB, "solver_crpb" },
+        { SP_COGNITIVE_CONST, "solver_cog" },
+        { SP_SOCIAL_CONST, "solver_soc" },
+        { SP_CONSTRICTION_COEFF, "solver_ccoeff" },
+        { SP_MUTATION_PROB, "solver_mtpb" },
+        { SP_LIBRARY_SIZE, "solver_lbsz" } };
+
+// Maps LO solver implementation names to MS engine codes
+const std::map<OUString, OUString> gaSolverNamesToExcelEngines = {
+    { "com.sun.star.comp.Calc.CoinMPSolver", "2" }, // Simplex LP
+    { "com.sun.star.comp.Calc.SwarmSolver", "1" }, // GRG Nonlinear
+};
+
+// Maps MS solver engine codes to LO solver implementation names
+const std::map<OUString, OUString> gaSolverCodesToLOEngines = {
+    { "1", "com.sun.star.comp.Calc.SwarmSolver" }, // GRG Nonlinear
+    { "2", "com.sun.star.comp.Calc.CoinMPSolver" }, // Simplex LP
+    { "3", "com.sun.star.comp.Calc.SwarmSolver" } // Evolutionary
+};
+
+// Maps LO solver parameters to named ranges to be used
+// NonNegative: for MS compatibility, use 1 for selected and 2 for not selected
+typedef std::vector<std::variant<OUString, SolverParameter>> TParamInfo;
+const std::map<OUString, TParamInfo> gaSolverParamNames
+    = { { u"Integer"_ustr, { SP_INTEGER, "solver_int", "bool" } },
+        { u"NonNegative"_ustr, { SP_NON_NEGATIVE, "solver_neg", "bool" } },
+        { u"EpsilonLevel"_ustr, { SP_EPSILON_LEVEL, "solver_eps", "int" } },
+        { u"LimitBBDepth"_ustr, { SP_LIMIT_BBDEPTH, "solver_bbd", "bool" } },
+        { u"Timeout"_ustr, { SP_TIMEOUT, "solver_tim", "int" } },
+        { u"Algorithm"_ustr, { SP_ALGORITHM, "solver_alg", "int" } },
+        // SCO and DEPS
+        { u"AssumeNonNegative"_ustr, { SP_NON_NEGATIVE, "solver_neg", "bool" } },
+        { u"SwarmSize"_ustr, { SP_SWARM_SIZE, "solver_ssz", "int" } },
+        { u"LearningCycles"_ustr, { SP_LEARNING_CYCLES, "solver_lcy", "int" } },
+        { u"GuessVariableRange"_ustr, { SP_GUESS_VARIABLE_RANGE, "solver_gvr", "bool" } },
+        { u"VariableRangeThreshold"_ustr,
+          { SP_VARIABLE_RANGE_THRESHOLD, "solver_vrt", "double" } },
+        { u"UseACRComparator"_ustr, { SP_ACR_COMPARATOR, "solver_acr", "bool" } },
+        { u"UseRandomStartingPoint"_ustr, { SP_RND_STARTING_POINT, "solver_rsp", "bool" } },
+        { u"UseStrongerPRNG"_ustr, { SP_STRONGER_PRNG, "solver_prng", "bool" } },
+        { u"StagnationLimit"_ustr, { SP_STAGNATION_LIMIT, "solver_slim", "int" } },
+        { u"Tolerance"_ustr, { SP_STAGNATION_TOLERANCE, "solver_stol", "double" } },
+        { u"EnhancedSolverStatus"_ustr, { SP_ENHANCED_STATUS, "solver_enst", "bool" } },
+        // DEPS only
+        { u"AgentSwitchRate"_ustr, { SP_AGENT_SWITCH_RATE, "solver_asr", "double" } },
+        { u"DEFactorMin"_ustr, { SP_SCALING_MIN, "solver_smin", "double" } },
+        { u"DEFactorMax"_ustr, { SP_SCALING_MAX, "solver_smax", "double" } },
+        { u"DECR"_ustr, { SP_CROSSOVER_PROB, "solver_crpb", "double" } },
+        { u"PSC1"_ustr, { SP_COGNITIVE_CONST, "solver_cog", "double" } },
+        { u"PSC2"_ustr, { SP_SOCIAL_CONST, "solver_soc", "double" } },
+        { u"PSWeight"_ustr, { SP_CONSTRICTION_COEFF, "solver_ccoeff", "double" } },
+        { u"PSCL"_ustr, { SP_MUTATION_PROB, "solver_mtpb", "double" } },
+        // SCO only
+        { u"LibrarySize"_ustr, { SP_LIBRARY_SIZE, "solver_lbsz", "int" } } };
+
+// Stores the roots used for named ranges of constraint parts
+// Items here must be in the same order as in ConstraintPart enum
+const std::vector<OUString> gaConstraintParts{ u"solver_lhs"_ustr, u"solver_rel"_ustr,
+                                          u"solver_rhs"_ustr };
+
 SolverSettings::SolverSettings(ScTable& rTable)
     : m_rTable(rTable)
     , m_rDoc(m_rTable.GetDoc())
@@ -400,7 +488,7 @@ void SolverSettings::WriteConstraintPart(ConstraintPart ePart, tools::Long nInde
     if (sValue.isEmpty())
         return;
 
-    OUString sRange = m_aConstraintParts[ePart] + OUString::number(nIndex);
+    OUString sRange = gaConstraintParts[ePart] + OUString::number(nIndex);
     ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
     pNewEntry->AddType(ScRangeData::Type::Hidden);
     m_pRangeName->insert(pNewEntry);
@@ -410,7 +498,7 @@ void SolverSettings::WriteConstraintPart(ConstraintPart ePart, tools::Long nInde
 // range does not exist in the file
 bool SolverSettings::ReadConstraintPart(ConstraintPart ePart, tools::Long nIndex, OUString& rValue)
 {
-    OUString sRange = m_aConstraintParts[ePart] + OUString::number(nIndex);
+    OUString sRange = gaConstraintParts[ePart] + OUString::number(nIndex);
     ScRangeData* pRangeData
         = m_pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sRange));
     if (pRangeData)
@@ -443,10 +531,10 @@ void SolverSettings::ReadEngine()
     if (m_sLOEngineName == "com.sun.star.comp.Calc.LpsolveSolver")
         m_sLOEngineName = u"com.sun.star.comp.Calc.CoinMPSolver"_ustr;
 
-    if (SolverNamesToExcelEngines.count(m_sLOEngineName))
+    if (gaSolverNamesToExcelEngines.count(m_sLOEngineName))
     {
         // Find equivalent MS engine code
-        m_sMSEngineId = SolverNamesToExcelEngines.find(m_sLOEngineName)->second;
+        m_sMSEngineId = gaSolverNamesToExcelEngines.find(m_sLOEngineName)->second;
     }
 }
 
@@ -455,9 +543,9 @@ void SolverSettings::WriteEngine()
 {
     WriteParamValue(SP_LO_ENGINE, m_sLOEngineName, true);
     // Find equivalent MS engine code
-    if (SolverNamesToExcelEngines.count(m_sLOEngineName))
+    if (gaSolverNamesToExcelEngines.count(m_sLOEngineName))
     {
-        m_sMSEngineId = SolverNamesToExcelEngines.find(m_sLOEngineName)->second;
+        m_sMSEngineId = gaSolverNamesToExcelEngines.find(m_sLOEngineName)->second;
         WriteParamValue(SP_MS_ENGINE, m_sMSEngineId);
     }
 }
@@ -526,8 +614,8 @@ void SolverSettings::SaveSolverSettings()
  */
 bool SolverSettings::ReadParamValue(SolverParameter eParam, OUString& rValue, bool bRemoveQuotes)
 {
-    const auto iter = m_mNamedRanges.find(eParam);
-    assert(iter != m_mNamedRanges.end());
+    const auto iter = gaNamedRanges.find(eParam);
+    assert(iter != gaNamedRanges.end());
     OUString sRange = iter->second;
     ScRangeData* pRangeData
         = m_pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sRange));
@@ -587,8 +675,8 @@ bool SolverSettings::ReadParamValue(SolverParameter eParam, OUString& rValue, bo
 // Reads a parameter value of type 'double' from the named range and into rValue
 bool SolverSettings::ReadDoubleParamValue(SolverParameter eParam, OUString& rValue)
 {
-    const auto iter = m_mNamedRanges.find(eParam);
-    assert(iter != m_mNamedRanges.end());
+    const auto iter = gaNamedRanges.find(eParam);
+    assert(iter != gaNamedRanges.end());
     OUString sRange = iter->second;
     ScRangeData* pRangeData
         = m_pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sRange));
@@ -618,8 +706,8 @@ void SolverSettings::WriteParamValue(SolverParameter eParam, OUString sValue, bo
     if (bQuoted)
         ScGlobal::AddQuotes(sValue, '"');
 
-    const auto iter = m_mNamedRanges.find(eParam);
-    assert(iter != m_mNamedRanges.end());
+    const auto iter = gaNamedRanges.find(eParam);
+    assert(iter != gaNamedRanges.end());
     OUString sRange = iter->second;
     ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
     pNewEntry->AddType(ScRangeData::Type::Hidden);
@@ -631,8 +719,8 @@ void SolverSettings::WriteParamValue(SolverParameter eParam, OUString sValue, bo
 // being written to the file
 void SolverSettings::WriteDoubleParamValue(SolverParameter eParam, std::u16string_view sValue)
 {
-    const auto iter = m_mNamedRanges.find(eParam);
-    assert(iter != m_mNamedRanges.end());
+    const auto iter = gaNamedRanges.find(eParam);
+    assert(iter != gaNamedRanges.end());
     OUString sRange = iter->second;
     double fValue = rtl::math::stringToDouble(sValue, '.', ',');
     OUString sLocalizedValue = rtl::math::doubleToUString(
@@ -653,10 +741,10 @@ void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
         const css::beans::PropertyValue& aProp = aOptions[i];
         OUString sLOParamName = aProp.Name;
         // Only try to get the parameter value if it is an expected parameter name
-        if (SolverParamNames.count(sLOParamName))
+        if (gaSolverParamNames.count(sLOParamName))
         {
             TParamInfo aParamInfo;
-            aParamInfo = SolverParamNames.find(sLOParamName)->second;
+            aParamInfo = gaSolverParamNames.find(sLOParamName)->second;
             SolverParameter eParamId = std::get<SolverParameter>(aParamInfo[0]);
             OUString sParamType = std::get<OUString>(aParamInfo[2]);
             OUString sParamValue = GetParameter(eParamId);
@@ -700,10 +788,10 @@ void SolverSettings::SetEngineOptions(const css::uno::Sequence<css::beans::Prope
         const css::beans::PropertyValue& aProp = aOptions[i];
         OUString sLOParamName = aProp.Name;
         // Only try to set the parameter value if it is an expected parameter name
-        if (SolverParamNames.count(sLOParamName))
+        if (gaSolverParamNames.count(sLOParamName))
         {
             TParamInfo aParamInfo;
-            aParamInfo = SolverParamNames.find(sLOParamName)->second;
+            aParamInfo = gaSolverParamNames.find(sLOParamName)->second;
             SolverParameter eParamId = std::get<SolverParameter>(aParamInfo[0]);
             OUString sParamType = std::get<OUString>(aParamInfo[2]);
             if (sParamType == "int")
@@ -797,8 +885,8 @@ void SolverSettings::ResetToDefaults()
 bool SolverSettings::TabHasSolverModel()
 {
     // Check if the named range for the objective value exists in the sheet
-    const auto iter = m_mNamedRanges.find(SP_OBJ_CELL);
-    if (iter == m_mNamedRanges.end())
+    const auto iter = gaNamedRanges.find(SP_OBJ_CELL);
+    if (iter == gaNamedRanges.end())
         return false;
     OUString sRange = iter->second;
     ScRangeData* pRangeData

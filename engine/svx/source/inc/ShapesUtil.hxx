@@ -21,17 +21,12 @@
 #include <map>
 #include <rtl/ustring.hxx>
 
-namespace svx::sidebar {
+namespace svx::sidebar::commands {
 
-class SvxShapeCommandsMap
-{
-public:
-    SvxShapeCommandsMap();
-    std::map<sal_uInt16, OUString> mpLineShapes, mpCurveShapes,
-                    mpConnectorShapes, mpBasicShapes, mpSymbolShapes,
-                    mpBlockArrowShapes, mpFlowchartShapes,
-                    mpCalloutShapes, mpStarShapes, mp3DShapes;
-};
+extern const std::map<sal_uInt16, OUString> gaLineShapes, gaCurveShapes,
+                gaConnectorShapes, gaBasicShapes, gaSymbolShapes,
+                gaBlockArrowShapes, gaFlowchartShapes,
+                gaCalloutShapes, gaStarShapes, ga3DShapes;
 
 }
 

@@ -1206,9 +1206,9 @@ enum eServiceType
 
 typedef std::map< OUString, enum eServiceType > tServiceNameMap;
 
-tServiceNameMap & lcl_getStaticServiceNameMap()
+const tServiceNameMap & lcl_getStaticServiceNameMap()
 {
-    static tServiceNameMap aServiceNameMap{
+    static const tServiceNameMap aServiceNameMap{
         {"com.sun.star.drawing.DashTable",                    SERVICE_DASH_TABLE},
         {"com.sun.star.drawing.GradientTable",                SERVICE_GRADIENT_TABLE},
         {"com.sun.star.drawing.HatchTable",                   SERVICE_HATCH_TABLE},
@@ -1222,7 +1222,7 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
 // ____ XMultiServiceFactory ____
 Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString& rServiceSpecifier )
 {
-    tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
+    const tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
 
     tServiceNameMap::const_iterator aIt( rMap.find( rServiceSpecifier ));
     if( aIt != rMap.end())

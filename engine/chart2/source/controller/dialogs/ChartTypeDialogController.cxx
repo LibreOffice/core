@@ -444,7 +444,7 @@ OUString ColumnChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
         {"com.sun.star.chart2.template.Column" ,                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE)},
         {"com.sun.star.chart2.template.StackedColumn" ,                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y)},
         {"com.sun.star.chart2.template.PercentStackedColumn" ,           ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT)},
@@ -539,7 +539,7 @@ OUString BarChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
         {"com.sun.star.chart2.template.Bar" ,                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE)},
         {"com.sun.star.chart2.template.StackedBar" ,                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y)},
         {"com.sun.star.chart2.template.PercentStackedBar" ,           ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT)},
@@ -639,7 +639,7 @@ OUString HistogramChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& HistogramChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
         {"com.sun.star.chart2.template.Histogram" , ChartTypeParameter(1, false, false, GlobalStackMode_NONE)}
     };
     return s_aTemplateMap;
@@ -685,7 +685,7 @@ OUString PieChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     {"com.sun.star.chart2.template.Pie" ,                    ChartTypeParameter(1,false,false)},
     {"com.sun.star.chart2.template.PieAllExploded" ,         ChartTypeParameter(2,false,false)},
     {"com.sun.star.chart2.template.Donut" ,                  ChartTypeParameter(3,false,false)},
@@ -774,7 +774,7 @@ OUString OfPieChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& OfPieChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     {"com.sun.star.chart2.template.BarOfPie" ,               ChartTypeParameter(1,false,false)},
     {"com.sun.star.chart2.template.PieOfPie" ,               ChartTypeParameter(2,false,false)}};
     return s_aTemplateMap;
@@ -939,7 +939,7 @@ OUString LineChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     {"com.sun.star.chart2.template.Symbol" ,                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false)},
     {"com.sun.star.chart2.template.StackedSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false)},
     {"com.sun.star.chart2.template.PercentStackedSymbol" ,       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y_PERCENT,true,false)},
@@ -1103,7 +1103,7 @@ OUString XYChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     {"com.sun.star.chart2.template.ScatterSymbol" ,              ChartTypeParameter(1,true,false,GlobalStackMode_NONE,true,false)},
     {"com.sun.star.chart2.template.ScatterLineSymbol" ,          ChartTypeParameter(2,true,false,GlobalStackMode_NONE,true,true)},
     {"com.sun.star.chart2.template.ScatterLine" ,                ChartTypeParameter(3,true,false,GlobalStackMode_NONE,false,true)},
@@ -1228,7 +1228,7 @@ bool AreaChartDialogController::shouldShow_3DLookControl() const
 
 const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     {"com.sun.star.chart2.template.Area" ,                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE)},
     {"com.sun.star.chart2.template.ThreeDArea" ,               ChartTypeParameter(1,false,true,GlobalStackMode_STACK_Z)},
     {"com.sun.star.chart2.template.StackedArea" ,              ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y)},
@@ -1331,7 +1331,7 @@ bool NetChartDialogController::shouldShow_StackingControl() const
 
 const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     //@todo need templates with symbols only
     {"com.sun.star.chart2.template.NetSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false)},
     {"com.sun.star.chart2.template.StackedNetSymbol" ,       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false)},
@@ -1438,7 +1438,7 @@ OUString StockChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     {"com.sun.star.chart2.template.StockLowHighClose" ,          ChartTypeParameter(1)},
     {"com.sun.star.chart2.template.StockOpenLowHighClose" ,      ChartTypeParameter(2)},
     {"com.sun.star.chart2.template.StockVolumeLowHighClose" ,    ChartTypeParameter(3)},
@@ -1502,7 +1502,7 @@ OUString CombiColumnLineChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
     {"com.sun.star.chart2.template.ColumnWithLine" ,             ChartTypeParameter(1)},
     {"com.sun.star.chart2.template.StackedColumnWithLine" ,      ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y)}};
     return s_aTemplateMap;
@@ -1645,7 +1645,7 @@ OUString BubbleChartDialogController::getImage()
 
 const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const
 {
-    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
         {"com.sun.star.chart2.template.Bubble" ,          ChartTypeParameter(1,true)}};
     return s_aTemplateMap;
 }
