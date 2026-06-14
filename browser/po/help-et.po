@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-13 07:01+0000\n"
+"PO-Revision-Date: 2026-06-15 10:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
 "online/help/et/>\n"
@@ -214,39 +214,36 @@ msgid "Apply Default paragraph style"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:47-94
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>0</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"0</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:48-38
 msgid "Apply Heading 1 paragraph style"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:48-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>1</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"1</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:49-38
 msgid "Apply Heading 2 paragraph style"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:49-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>2</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"2</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:50-38
 msgid "Apply Heading 3 paragraph style"
@@ -254,39 +251,36 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:50-96
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-89
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>3</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-38
 msgid "Apply Heading 4 paragraph style"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>4</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"4</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-38
 msgid "Apply Heading 5 paragraph style"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>5</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"5</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:56-9
 msgid "Text selection and navigation in document"
@@ -311,7 +305,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-88
 msgid "Arrow Left"
-msgstr ""
+msgstr "Nool vasakule"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-38
@@ -322,13 +316,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-103
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-103
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-103
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool vasakule</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:61-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-38
@@ -339,13 +332,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:61-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-90
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool vasakule</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:62-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-38
@@ -356,15 +348,14 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:62-96
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-96
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Nool "
+"vasakule</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:63-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
@@ -376,7 +367,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-89
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-89
 msgid "Arrow Right"
-msgstr ""
+msgstr "Nool paremale"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:64-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
@@ -387,13 +378,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:64-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-104
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool paremale</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:65-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:228-38
@@ -404,13 +394,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:65-93
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:228-93
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:293-93
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool paremale</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:229-38
@@ -421,15 +410,14 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:229-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:294-97
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Nool "
+"paremale</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:230-38
@@ -441,7 +429,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:230-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:295-88
 msgid "Arrow Up"
-msgstr ""
+msgstr "Nool üles"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:231-38
@@ -452,13 +440,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-98
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:231-98
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:296-98
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool üles</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:232-38
@@ -469,13 +456,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-115
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:232-115
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:297-115
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool üles</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-38
@@ -486,15 +472,14 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-97
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Nool "
+"üles</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
@@ -506,7 +491,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-90
 msgid "Arrow Down"
-msgstr ""
+msgstr "Nool alla"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
@@ -517,13 +502,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-100
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-100
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-100
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool alla</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
@@ -534,13 +518,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-111
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-111
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool alla</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
@@ -551,15 +534,14 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-91
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-91
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-91
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Nool "
+"alla</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
@@ -1131,13 +1113,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-265
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Left Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool vasakule</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid ""
@@ -1147,13 +1128,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-269
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Right Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool paremale</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-38
 msgid ""
@@ -1163,13 +1143,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-241
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Up Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool üles</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid ""
@@ -1179,13 +1158,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-246
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Down Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Nool alla</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
 msgid "Go to next sheet."
@@ -1306,13 +1284,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-269
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>*</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"*</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
 msgid ""
@@ -1321,13 +1298,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-178
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>/</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>/"
+"</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-38
 msgid "Insert cells (as in menu Insert - Cells)"
@@ -1364,13 +1340,12 @@ msgid "Display comment"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-80
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F1</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F1</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:172-38
 msgid "Fill Down"
@@ -1421,13 +1396,12 @@ msgid "Insert date"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-76
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>;</kbd> or <kbd>,</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> või <kbd>,</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-38
@@ -2881,6 +2855,9 @@ msgid ""
 "and print the document to download. On printing the PDF, select the pages of "
 "interest."
 msgstr ""
+"Printimisala kitsendamiseks lisa arvutustabelisse veeru- ja reavahed ning "
+"prindi dokument alla laadimiseks. PDF-faili printimisel vali soovitud "
+"leheküljed."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:770-5
 msgid "How can I import CSV data?"
