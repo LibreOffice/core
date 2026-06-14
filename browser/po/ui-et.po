@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-13 07:01+0000\n"
+"PO-Revision-Date: 2026-06-15 10:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/et/>\n"
@@ -166,16 +166,15 @@ msgstr "Mälustatistika puhverdatud suurus"
 
 #: admin/admin.strings.js:47
 msgid "Time interval of memory statistics (in ms)"
-msgstr ""
+msgstr "Mälustatistika välp (millisekundites)"
 
 #: admin/admin.strings.js:48
-#, fuzzy
 msgid "Cache size of CPU statistics"
-msgstr "Mälustatistika puhverdatud suurus"
+msgstr "Protsessoristatistika puhverdatud suurus"
 
 #: admin/admin.strings.js:49
 msgid "Time interval of CPU statistics (in ms)"
-msgstr ""
+msgstr "Protsessoristatistika välp (millisekundites)"
 
 #: admin/admin.strings.js:50 admin/src/AdminSocketOverview.js:100
 msgid "Kill session."
@@ -426,11 +425,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:524
 msgid "Image Size"
-msgstr ""
+msgstr "Pildi suurus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:525
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Päringu aegumine (sekundites)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:528
 msgid "In-document Screen Reader"
@@ -446,19 +445,19 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:738
 #: src/control/Control.NotebookbarWriter.js:1815
 msgid "Dark Mode"
-msgstr ""
+msgstr "Tume kujundus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:530
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Nutikas suum"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:531
 msgid "Default Zoom"
-msgstr ""
+msgstr "Vaikimisi suum"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:532
 msgid "Compact layout"
-msgstr ""
+msgstr "Kompaktne paigutus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:533
 msgid "Show status bar"
@@ -525,13 +524,12 @@ msgid "Synchronize axes"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
-#, fuzzy
 msgid "Snap grid"
 msgstr "Haagi alusvõrgule"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:552
 msgid "Empty Pages"
-msgstr ""
+msgstr "Tühjade lehed"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:553
 msgid "Force Breaks"
@@ -541,7 +539,7 @@ msgstr ""
 #: src/control/Control.Menubar.ts:803 src/control/Control.TopToolbar.js:139
 #: src/control/jsdialog/Definitions.Menu.ts:1588
 msgid "All Sheets"
-msgstr ""
+msgstr "Kõik lehed"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Content"
@@ -561,7 +559,7 @@ msgstr "Leht"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 msgid "Fit to page"
-msgstr ""
+msgstr "Sobita lehele"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:560
 msgid "Tile pages"
@@ -705,7 +703,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:819
 msgid "Custom dictionaries"
-msgstr ""
+msgstr "Sinu lisatud sõnastikud"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:821
 msgid ""
@@ -744,11 +742,11 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1118
 #: admin/src/integrator/AdminIntegratorSettings.ts:2945
 msgid "Interface Settings"
-msgstr ""
+msgstr "Kasutajaliidese seadistused"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1120
 msgid "Set default interface preferences."
-msgstr ""
+msgstr "Seadista kasutajaliidese vaikimisi eelistusi."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1270
 msgid "Select a tab to browser settings."
@@ -783,11 +781,11 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:640
 #: src/control/Control.NotebookbarWriter.js:1737
 msgid "Compact view"
-msgstr ""
+msgstr "Kompaktne vaade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1820
 msgid "Something went wrong while uploading the file. Please try again."
-msgstr ""
+msgstr "Midagi läks faili üleslaadimisel valesti. Palun proovi uuesti."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1896
 #: src/canvas/sections/CommentSection.ts:1523
@@ -804,6 +802,7 @@ msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
 msgstr ""
+"Midagi läks faili kustutamisel valesti. Palun proovi lehte uuesti laadida."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1922
 #: src/control/Control.BackstageView.ts:568
@@ -853,7 +852,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2174
 msgid "Text Generation"
-msgstr ""
+msgstr "Tekstiloome"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2224
 #: admin/src/integrator/AdminIntegratorSettings.ts:2342
@@ -876,7 +875,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2284
 msgid "Image Generation"
-msgstr ""
+msgstr "Pildiloome"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2289
 msgid "Same as Text AI"
@@ -1089,12 +1088,12 @@ msgstr "Kohandatud"
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
 msgid "Table Styles"
-msgstr ""
+msgstr "Tabelistiilid"
 
 #: src/canvas/sections/CommentListSection.ts:1891
 #: src/canvas/sections/CommentListSection.ts:1904
 msgid "Comments Updated"
-msgstr ""
+msgstr "Kommentaarid on uuendatud"
 
 #: src/canvas/sections/CommentListSection.ts:1892
 msgid "Another user has removed this comment."
@@ -1483,9 +1482,8 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:964
 #: src/control/Control.AIChatSidebar.ts:1014
 #: src/control/Control.AIChatSidebar.ts:1386
-#, fuzzy
 msgid "tone"
-msgstr "Puudub"
+msgstr "toon"
 
 #: src/control/Control.AIChatSidebar.ts:977
 #: src/control/Control.AIChatSidebar.ts:1248
@@ -1827,9 +1825,8 @@ msgid ""
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2805
-#, fuzzy
 msgid "formula"
-msgstr "Valem"
+msgstr "valem"
 
 #: src/control/Control.AIChatSidebar.ts:2807
 msgid "ERROR"
@@ -1840,9 +1837,8 @@ msgid "value"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2831
-#, fuzzy
 msgid "text"
-msgstr "Tekst"
+msgstr "tekst"
 
 #: src/control/Control.AIChatSidebar.ts:2836
 msgid "empty"
@@ -2291,7 +2287,7 @@ msgstr "Andorra"
 
 #: src/control/Control.ESignature.ts:128
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "Araabia Ühendemiraadid"
 
 #: src/control/Control.ESignature.ts:129
 msgid "Albania"
@@ -2315,7 +2311,7 @@ msgstr "Austraalia"
 
 #: src/control/Control.ESignature.ts:134
 msgid "Åland Islands"
-msgstr ""
+msgstr "Ahvenamaa"
 
 #: src/control/Control.ESignature.ts:135
 msgid "Azerbaijan"
@@ -2323,7 +2319,7 @@ msgstr "Azerbaidžaan"
 
 #: src/control/Control.ESignature.ts:136
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "Bosnia ja Hertsegoviina"
 
 #: src/control/Control.ESignature.ts:137
 msgid "Belgium"
@@ -2339,231 +2335,231 @@ msgstr "Brasiilia"
 
 #: src/control/Control.ESignature.ts:140
 msgid "Belarus"
-msgstr ""
+msgstr "Valgevene"
 
 #: src/control/Control.ESignature.ts:141
 msgid "Canada"
-msgstr ""
+msgstr "Kanada"
 
 #: src/control/Control.ESignature.ts:142
 msgid "Switzerland"
-msgstr ""
+msgstr "Šveits"
 
 #: src/control/Control.ESignature.ts:143
 msgid "Chile"
-msgstr ""
+msgstr "Tšiili"
 
 #: src/control/Control.ESignature.ts:144
 msgid "China"
-msgstr ""
+msgstr "Hiina"
 
 #: src/control/Control.ESignature.ts:145
 msgid "Cyprus"
-msgstr ""
+msgstr "Küpros"
 
 #: src/control/Control.ESignature.ts:146
 msgid "Czech Republic"
-msgstr ""
+msgstr "Tšehhi Vabariik"
 
 #: src/control/Control.ESignature.ts:147
 msgid "Germany"
-msgstr ""
+msgstr "Saksamaa"
 
 #: src/control/Control.ESignature.ts:148
 msgid "Denmark"
-msgstr ""
+msgstr "Taani"
 
 #: src/control/Control.ESignature.ts:149
 msgid "Estonia"
-msgstr ""
+msgstr "Eesti"
 
 #: src/control/Control.ESignature.ts:150
 msgid "Spain"
-msgstr ""
+msgstr "Hispaania"
 
 #: src/control/Control.ESignature.ts:151
 msgid "Finland"
-msgstr ""
+msgstr "Soome"
 
 #: src/control/Control.ESignature.ts:152
 msgid "France"
-msgstr ""
+msgstr "Prantsusmaa"
 
 #: src/control/Control.ESignature.ts:153
 msgid "United Kingdom"
-msgstr ""
+msgstr "Suurbritannia"
 
 #: src/control/Control.ESignature.ts:154
 msgid "Georgia"
-msgstr ""
+msgstr "Gruusia"
 
 #: src/control/Control.ESignature.ts:155
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernsey"
 
 #: src/control/Control.ESignature.ts:156
 msgid "Greece"
-msgstr ""
+msgstr "Kreeka"
 
 #: src/control/Control.ESignature.ts:157
 msgid "Croatia"
-msgstr ""
+msgstr "Horvaatia"
 
 #: src/control/Control.ESignature.ts:158
 msgid "Hungary"
-msgstr ""
+msgstr "Ungari"
 
 #: src/control/Control.ESignature.ts:159
 msgid "Indonesia"
-msgstr ""
+msgstr "Indoneesia"
 
 #: src/control/Control.ESignature.ts:160
 msgid "Ireland"
-msgstr ""
+msgstr "Iirimaa"
 
 #: src/control/Control.ESignature.ts:161
 msgid "Israel"
-msgstr ""
+msgstr "Iisrael"
 
 #: src/control/Control.ESignature.ts:162
 msgid "India"
-msgstr ""
+msgstr "India"
 
 #: src/control/Control.ESignature.ts:163
 msgid "Iceland"
-msgstr ""
+msgstr "Island"
 
 #: src/control/Control.ESignature.ts:164
 msgid "Italy"
-msgstr ""
+msgstr "Itaalia"
 
 #: src/control/Control.ESignature.ts:165
 msgid "Japan"
-msgstr ""
+msgstr "Jaapan"
 
 #: src/control/Control.ESignature.ts:166
 msgid "Kenya"
-msgstr ""
+msgstr "Keenia"
 
 #: src/control/Control.ESignature.ts:167
 msgid "South Korea"
-msgstr ""
+msgstr "Lõuna-Korea"
 
 #: src/control/Control.ESignature.ts:168
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Kasahstan"
 
 #: src/control/Control.ESignature.ts:169
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Liechtenstein"
 
 #: src/control/Control.ESignature.ts:170
 msgid "Lithuania"
-msgstr ""
+msgstr "Leedu"
 
 #: src/control/Control.ESignature.ts:171
 msgid "Luxembourg"
-msgstr ""
+msgstr "Luksemburg"
 
 #: src/control/Control.ESignature.ts:172
 msgid "Latvia"
-msgstr ""
+msgstr "Läti"
 
 #: src/control/Control.ESignature.ts:173
 msgid "Monaco"
-msgstr ""
+msgstr "Monaco"
 
 #: src/control/Control.ESignature.ts:174
 msgid "Moldova, Republic of"
-msgstr ""
+msgstr "Moldova"
 
 #: src/control/Control.ESignature.ts:175
 msgid "Montenegro"
-msgstr ""
+msgstr "Montenegro"
 
 #: src/control/Control.ESignature.ts:176
 msgid "North Macedonia, Republic of"
-msgstr ""
+msgstr "Põhja-Makedoonia"
 
 #: src/control/Control.ESignature.ts:177
 msgid "Malta"
-msgstr ""
+msgstr "Malta"
 
 #: src/control/Control.ESignature.ts:178
 msgid "Mexico"
-msgstr ""
+msgstr "Mehhiko"
 
 #: src/control/Control.ESignature.ts:179
 msgid "Netherlands"
-msgstr ""
+msgstr "Holland"
 
 #: src/control/Control.ESignature.ts:180
 msgid "Norway"
-msgstr ""
+msgstr "Norra"
 
 #: src/control/Control.ESignature.ts:181
 msgid "New Zealand"
-msgstr ""
+msgstr "Uus-Meremaa"
 
 #: src/control/Control.ESignature.ts:182
 msgid "Philippines"
-msgstr ""
+msgstr "Filipiinid"
 
 #: src/control/Control.ESignature.ts:183
 msgid "Poland"
-msgstr ""
+msgstr "Poola"
 
 #: src/control/Control.ESignature.ts:184
 msgid "Portugal"
-msgstr ""
+msgstr "Portugal"
 
 #: src/control/Control.ESignature.ts:185
 msgid "Qatar"
-msgstr ""
+msgstr "Katar"
 
 #: src/control/Control.ESignature.ts:186
 msgid "Romania"
-msgstr ""
+msgstr "Rumeenia"
 
 #: src/control/Control.ESignature.ts:187
 msgid "Serbia"
-msgstr ""
+msgstr "Serbia"
 
 #: src/control/Control.ESignature.ts:188
 msgid "Russian Federation"
-msgstr ""
+msgstr "Venemaa"
 
 #: src/control/Control.ESignature.ts:189
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "Saudi Araabia"
 
 #: src/control/Control.ESignature.ts:190
 msgid "Sweden"
-msgstr ""
+msgstr "Rootsi"
 
 #: src/control/Control.ESignature.ts:191
 msgid "Singapore"
-msgstr ""
+msgstr "Singapur"
 
 #: src/control/Control.ESignature.ts:192
 msgid "Slovenia"
-msgstr ""
+msgstr "Sloveenia"
 
 #: src/control/Control.ESignature.ts:193
 msgid "Slovakia"
-msgstr ""
+msgstr "Slovakkia"
 
 #: src/control/Control.ESignature.ts:194
 msgid "San Marino"
-msgstr ""
+msgstr "San Marino"
 
 #: src/control/Control.ESignature.ts:195
 msgid "Turkey"
-msgstr ""
+msgstr "Türgi"
 
 #: src/control/Control.ESignature.ts:196
 msgid "Taiwan, Province of China"
-msgstr ""
+msgstr "Taivan"
 
 #: src/control/Control.ESignature.ts:197
 msgid "Ukraine"
@@ -2600,11 +2596,11 @@ msgstr "Teenusepakkuja:"
 #: src/control/Control.ESignatureDialog.ts:175
 #: src/control/Control.ESignatureDialog.ts:176
 msgid "Insert Electronic Signature"
-msgstr ""
+msgstr "Allkirjasta digitaalselt"
 
 #: src/control/Control.FormulaBarJSDialog.js:18
 msgid "Expand Formula Bar"
-msgstr ""
+msgstr "Laienda valemiriba"
 
 #: src/control/Control.FormulaBarJSDialog.js:19
 msgid "Function Wizard"
@@ -2665,7 +2661,7 @@ msgstr "Ruut"
 
 #: src/control/Control.JSDialogBuilder.js:420
 msgid "Fixed size"
-msgstr ""
+msgstr "Fikseeritud suurus"
 
 #: src/control/Control.JSDialogBuilder.js:1145
 msgid "From"
@@ -2717,7 +2713,7 @@ msgstr ""
 
 #: src/control/Control.JSDialogBuilder.js:1633
 msgid "Open {name}"
-msgstr ""
+msgstr "Ava {name}"
 
 #: src/control/Control.JSDialogBuilder.js:1919
 #: src/control/Control.Menubar.ts:966
@@ -2913,7 +2909,6 @@ msgstr ""
 
 #: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:507
 #: src/control/Control.Menubar.ts:684 src/control/Control.Menubar.ts:832
-#, fuzzy
 msgid "Show Status Bar"
 msgstr "Näita olekuriba"
 
@@ -2936,7 +2931,6 @@ msgstr ""
 #: src/control/Control.Menubar.ts:182 src/control/Control.Menubar.ts:838
 #: src/control/Control.NotebookbarCalc.js:2787
 #: src/control/Control.NotebookbarWriter.js:1109
-#, fuzzy
 msgid "Style list"
 msgstr "Stiilide loend"
 
@@ -3693,9 +3687,8 @@ msgstr ""
 #: src/control/Control.NotebookbarDraw.js:385
 #: src/control/Control.NotebookbarImpress.js:421
 #: src/control/Control.NotebookbarWriter.js:382
-#, fuzzy
 msgid "Signature"
-msgstr "Allkirja sertifitseerimiskeskus"
+msgstr "Allkiri"
 
 #: src/control/Control.NotebookbarCalc.js:380
 #: src/control/Control.NotebookbarDraw.js:402
@@ -3976,9 +3969,8 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:1569
 #: src/control/Control.NotebookbarWriter.js:82
 #: src/control/Control.NotebookbarWriter.js:1265
-#, fuzzy
 msgid "Table"
-msgstr "Tabelid"
+msgstr "Tabel"
 
 #: src/control/Control.NotebookbarCalc.js:1811
 #: src/control/Control.NotebookbarCalc.js:1814
@@ -4218,7 +4210,6 @@ msgid "Slide Views"
 msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:725
-#, fuzzy
 msgid "Snap to Grid"
 msgstr "Haagi alusvõrgule"
 
@@ -5618,9 +5609,8 @@ msgid "Entering text mode"
 msgstr ""
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Lisa märge"
+msgstr "Lisamisviis"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -6390,7 +6380,6 @@ msgid "Next Slide"
 msgstr "Järgmine slaid"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Eelmine slaid"
 
