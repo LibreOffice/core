@@ -109,10 +109,16 @@ class SwgReaderOption
     bool m_bTextFormats;
     bool m_bNumRules;
     bool m_bMerge;
+    // Whether undo objects should be recorded for the imported changes. When
+    // false the import runs with undo recording switched off.
+    bool m_bRecordUndo = false;
     css::uno::Reference<css::io::XInputStream> m_xInputStream;
 public:
     void ResetAllFormatsOnly() { m_bFrameFormats = m_bPageDescs = m_bTextFormats = m_bNumRules = m_bMerge = false; }
     bool IsFormatsOnly() const { return m_bFrameFormats || m_bPageDescs || m_bTextFormats || m_bNumRules || m_bMerge; }
+
+    bool IsRecordUndo() const { return m_bRecordUndo; }
+    void SetRecordUndo( const bool bNew ) { m_bRecordUndo = bNew; }
 
     bool IsFrameFormats() const { return m_bFrameFormats; }
     void SetFrameFormats( const bool bNew) { m_bFrameFormats = bNew; }

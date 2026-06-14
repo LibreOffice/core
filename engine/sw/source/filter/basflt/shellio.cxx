@@ -144,7 +144,12 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
 
     bool bReadPageDescs = false;
     bool const bDocUndo = mxDoc->GetIDocumentUndoRedo().DoesUndo();
-    bool bSaveUndo = bDocUndo && mpCursor;
+    // When the caller asks to record undo, leave undo recording on across the
+    // whole read so each style-pool change appends its own undo object. The
+    // legacy path below disables undo and instead wraps the inserted content in
+    // a single SwUndoInsDoc, which records nothing for a styles-only import.
+    bool const bRecordUndo = bDocUndo && po->m_aOption.IsRecordUndo();
+    bool bSaveUndo = bDocUndo && mpCursor && !bRecordUndo;
     if( bSaveUndo )
     {
         // the reading of the page template cannot be undone!
@@ -160,7 +165,14 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
             mxDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSDOKUMENT, nullptr );
         }
     }
-    mxDoc->GetIDocumentUndoRedo().DoUndo(false);
+    else if( bRecordUndo )
+    {
+        // group the per-style undo objects into one undoable step
+        mxDoc->GetIDocumentUndoRedo().ClearRedo();
+        mxDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSDOKUMENT, nullptr );
+    }
+    if( !bRecordUndo )
+        mxDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     RedlineFlags eOld = mxDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     RedlineFlags ePostReadRedlineFlags( RedlineFlags::Ignore );
@@ -362,8 +374,9 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
     // Clear unassigned cell styles, because they aren't needed anymore.
     mxDoc->GetCellStyles().clear();
 
-    mxDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
-    if (!bReadPageDescs && bSaveUndo )
+    if( !bRecordUndo )
+        mxDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
+    if (!bReadPageDescs && (bSaveUndo || bRecordUndo))
     {
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
         mxDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSDOKUMENT, nullptr );

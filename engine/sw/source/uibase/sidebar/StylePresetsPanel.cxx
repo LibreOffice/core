@@ -190,6 +190,8 @@ IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
         SwgReaderOption aOption;
         aOption.SetTextFormats(true);
         aOption.SetNumRules(true);
+        // record undo so the user can revert applying a style preset
+        aOption.SetRecordUndo(true);
         pDocSh->LoadStylesFromFile(pEntry->maURL, aOption, false);
     }
 }

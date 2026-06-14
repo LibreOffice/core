@@ -1675,6 +1675,7 @@ ErrCodeMsg SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption&
         pRead->GetReaderOpt().SetPageDescs( rOpt.IsPageDescs() );
         pRead->GetReaderOpt().SetNumRules( rOpt.IsNumRules() );
         pRead->GetReaderOpt().SetMerge( rOpt.IsMerge() );
+        pRead->GetReaderOpt().SetRecordUndo(rOpt.IsRecordUndo());
 
         if( bUnoCall )
         {

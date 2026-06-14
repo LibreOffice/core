@@ -2862,7 +2862,22 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
     SwFormat* const pTargetFormat = lcl_GetFormatForStyle(m_pDoc, xStyle, m_rEntry.family());
     if(!pTargetFormat)
         return;
-    pTargetFormat->ResetAllFormatAttr();
+    if (m_pDoc->GetIDocumentUndoRedo().DoesUndo())
+    {
+        // Record the reset so it can be undone. Gather every attribute currently
+        // set on the style and clear them through the document's undo-aware path,
+        // which stores the old values in an undo object.
+        std::vector<sal_uInt16> aWhichIds;
+        for (SfxItemIter aIter(pTargetFormat->GetAttrSet()); !aIter.IsAtEnd(); aIter.Next())
+        {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            if (!IsInvalidItem(pItem))
+                aWhichIds.push_back(pItem->Which());
+        }
+        m_pDoc->ResetAttrAtFormat(aWhichIds, *pTargetFormat);
+    }
+    else
+        pTargetFormat->ResetAllFormatAttr();
 }
 
 uno::Sequence<uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequence<OUString>& aPropertyNames)
