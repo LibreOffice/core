@@ -563,6 +563,28 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfTextPos)
     assertXPath(pXml, "//textarray", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfLigatureTextFit)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+
+    // An "ſt" ligature is one narrow pdf glyph that expands to two
+    // characters. Its run must stay on a single line, not wrap with the
+    // trailing glyph dropped below the box.
+    loadFromFile(u"pdf/ligature-textbox-fit.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG);
+
+    xmlDocUniquePtr pXml = parseLayout();
+
+    // Three "ſt" runs, each on one line. A wrapped run adds a duplicate at
+    // the same x and a lower y, taking the count to six.
+    assertXPath(pXml, "//textarray[text='ſt']", 3);
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFont)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
@@ -619,11 +641,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfHindi)
     // ensure the expected content
     assertXPathContent(pXmlDoc,
                        "/office:document/office:body/office:drawing/draw:page/draw:g/draw:frame[3]/"
-                       "draw:text-box/text:p[@text:style-name='P6'][1]",
+                       "draw:text-box/text:p[@text:style-name='P4'][1]",
                        u"FIRST-YEAR HINDI COURSE");
 
     // ensure the expected font name
-    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P6']/"
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P4']/"
                          "style:text-properties[@style:font-name='AcademyEngravedLetPlain']");
 }
 

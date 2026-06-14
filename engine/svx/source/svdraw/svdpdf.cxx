@@ -1940,8 +1940,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
     if (nChars > 1 && nVclInkedWidth > 0 && nPdfInkedWidth > 0)
     {
         const tools::Long nKern = (nPdfInkedWidth - nVclInkedWidth) / (nChars - 1);
-        nExtraKerning
-            = static_cast<short>(std::clamp<tools::Long>(nKern, SAL_MIN_INT16, SAL_MAX_INT16));
+        nExtraKerning = static_cast<short>(std::clamp<tools::Long>(nKern, 0, SAL_MAX_INT16));
     }
 
     // As per ImpEditEngine::CalcParaWidth the width of the text box has to be 1 unit wider than the text
