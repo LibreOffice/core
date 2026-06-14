@@ -939,11 +939,12 @@ public:
     /// Global wakeup - signal safe: wakeup all socket polls.
     static void wakeupWorld();
 
-    /// Insert a new socket to be polled.
+    /// Insert a new socket to be polled, if still running.
+    /// Returns true iff we've scheduled the insertion (i.e. we're running).
     /// A socket is removed when it is closed, readIncomingData
     /// returns false, or when removeSockets is called (which is
     /// done automatically when SocketPoll is stopped via joinThread).
-    void insertNewSocket(std::shared_ptr<Socket> newSocket)
+    bool insertNewSocket(std::shared_ptr<Socket> newSocket)
     {
         if (newSocket)
         {
@@ -952,34 +953,52 @@ public:
             // sockets in transit are un-owned.
             SocketThreadOwnerChange::resetThreadOwner(*newSocket);
 
-            std::lock_guard<std::mutex> lock(_mutex);
-            const bool wasEmpty = taskQueuesEmpty();
-            _newSockets.emplace_back(std::move(newSocket));
+            bool wasEmpty = false;
+            const bool alive = isAlive();
+            if (alive)
+            {
+                std::lock_guard<std::mutex> lock(_mutex);
+                wasEmpty = taskQueuesEmpty();
+                _newSockets.emplace_back(std::move(newSocket));
+            }
+
             if (wasEmpty)
                 wakeup();
+
+            return alive;
         }
+
+        return false;
     }
 
     /// Schedules an async transfer of a socket from this SocketPoll to
-    /// @toPoll.
+    /// @toPoll, if we're still running.
+    /// Return true iff we scheduled the transfer (i.e. we're running).
     ///
     /// @cbAfterArrivalInNewPoll is called when socket is inserted in @toPoll.
     /// See insertNewSocket
     ///
     /// @cbAfterRemovalFromOldPoll is called when socket has been removed
     /// from this SocketPoll. May be nullptr.
-    void transferSocketTo(const std::weak_ptr<Socket>& socket,
+    bool transferSocketTo(const std::weak_ptr<Socket>& socket,
                           const std::weak_ptr<SocketPoll>& toPoll,
                           SocketDisposition::MoveFunction cbAfterArrivalInNewPoll,
                           std::function<void()> cbAfterRemovalFromOldPoll)
     {
-        std::lock_guard<std::mutex> lock(_mutex);
-        const bool wasEmpty = taskQueuesEmpty();
-        _pendingTransfers.emplace_back(socket, toPoll,
-                                       std::move(cbAfterArrivalInNewPoll),
-                                       std::move(cbAfterRemovalFromOldPoll));
+        bool wasEmpty = false;
+        const bool alive = isAlive();
+        if (alive)
+        {
+            std::lock_guard<std::mutex> lock(_mutex);
+            wasEmpty = taskQueuesEmpty();
+            _pendingTransfers.emplace_back(socket, toPoll, std::move(cbAfterArrivalInNewPoll),
+                                           std::move(cbAfterRemovalFromOldPoll));
+        }
+
         if (wasEmpty)
             wakeup();
+
+        return alive;
     }
 
     /// Takes socket from @fromPoll and moves it to @toPoll.
@@ -1007,14 +1026,23 @@ public:
 
     using CallbackFn = std::function<void()>;
 
-    /// Add a callback to be invoked in the polling thread
-    void addCallback(CallbackFn fn)
+    /// Add a callback to be invoked in the polling thread, if we're running.
+    /// Returns true iff we've scheduled the callback (i.e. we're running).
+    bool addCallback(CallbackFn fn)
     {
-        std::lock_guard<std::mutex> lock(_mutex);
-        const bool wasEmpty = taskQueuesEmpty();
-        _newCallbacks.emplace_back(std::move(fn));
+        bool wasEmpty = false;
+        const bool alive = isAlive();
+        if (alive)
+        {
+            std::lock_guard<std::mutex> lock(_mutex);
+            wasEmpty = taskQueuesEmpty();
+            _newCallbacks.emplace_back(std::move(fn));
+        }
+
         if (wasEmpty)
             wakeup();
+
+        return alive;
     }
 
     virtual void dumpState(std::ostream& os) const;
