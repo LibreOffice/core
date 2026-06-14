@@ -510,9 +510,6 @@ private:
     void CalcSizeValueSet();
     DECL_LINK( SelectHdl, ValueSet*, void );
 
-    void SetDiagonalDownBorder(const SvxLineItem& dDownLineItem);
-    void SetDiagonalUpBorder(const SvxLineItem& dUpLineItem);
-
 public:
     SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
     virtual void GrabFocus() override
@@ -536,9 +533,16 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
+
+    void SetLastUsedBorderItem(sal_uInt16 nItemId, bool bIsCalc, const Image& rImage);
+
 private:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
+
+    sal_uInt16 m_nLastItemId;
+    bool       m_bLastIsCalc;
+    Image      m_aLastImage;
 };
 
     class LineListBox final : public ValueSet
@@ -2484,11 +2488,24 @@ namespace o3tl {
     template<> struct typed_flags<FrmValidFlags> : is_typed_flags<FrmValidFlags, 0x3f> {};
 }
 
-// By default unset lines remain unchanged.
-// Via Shift unset lines are reset
-
-IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
+static void DispatchBorderItem(svt::PopupWindowController& rControl, sal_uInt16 nSel, bool bIsCalc, sal_uInt16 nModifier)
 {
+    auto dispatchDiagonalDownBorder = [&](const SvxLineItem& dDownLineItem)
+    {
+        Any a;
+        dDownLineItem.QueryValue(a);
+        Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"BorderTLBR"_ustr, a) };
+        rControl.dispatchCommand(u".uno:BorderTLBR"_ustr, aArgs);
+    };
+
+    auto dispatchDiagonalUpBorder = [&](const SvxLineItem& dUpLineItem)
+    {
+        Any a;
+        dUpLineItem.QueryValue(a);
+        Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"BorderBLTR"_ustr, a) };
+        rControl.dispatchCommand(u".uno:BorderBLTR"_ustr, aArgs);
+    };
+
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
@@ -2507,8 +2524,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                         *pRight = nullptr,
                         *pTop = nullptr,
                         *pBottom = nullptr;
-    sal_uInt16           nSel = mxFrameSet->GetSelectedItemId();
-    sal_uInt16           nModifier = mxFrameSet->GetModifier();
     FrmValidFlags        nValidFlags = FrmValidFlags::NONE;
 
     // tdf#48622, tdf#145828 use correct default to create intended 0.75pt
@@ -2518,7 +2533,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     // nSel has 15 cases which means 12 (9 common with writer + 3 unique) unique border
     // types for Calc. But Writer uses 12 (9 common with calc + 3 unique)
     // of them - when diagonal borders excluded.
-    if (m_bIsCalc)
+    if (bIsCalc)
     {
         // This is a lookup table to map the new 1-12 order
         // to the 'case' values of the switch statement.
@@ -2569,8 +2584,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                 // set nullptr to remove diagonal lines
                 dDownLineItem.SetLine(nullptr);
                 dUpLineItem.SetLine(nullptr);
-                SetDiagonalDownBorder(dDownLineItem);
-                SetDiagonalUpBorder(dUpLineItem);
+                dispatchDiagonalDownBorder(dDownLineItem);
+                dispatchDiagonalUpBorder(dUpLineItem);
         break;  // NONE
         case 2: pLeft = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left;
@@ -2582,7 +2597,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
         case 13: dDownLineItem.SetLine(&dDownBorderLine);
-                SetDiagonalDownBorder(dDownLineItem);
+                dispatchDiagonalDownBorder(dDownLineItem);
                 bIsDiagonalBorder = true;
         break;  // DIAGONAL DOWN
         case 5: pTop = &theDefLine;
@@ -2599,7 +2614,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         break;  // OUTER
         case 14:
                 dUpLineItem.SetLine(&dUpBorderLine);
-                SetDiagonalUpBorder(dUpLineItem);
+                dispatchDiagonalUpBorder(dUpLineItem);
                 bIsDiagonalBorder = true;
         break;  // DIAGONAL UP
 
@@ -2637,8 +2652,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
             dDownLineItem.SetLine(&dDownBorderLine);
             dUpLineItem.SetLine(&dUpBorderLine);
 
-            SetDiagonalDownBorder(dDownLineItem);
-            SetDiagonalUpBorder(dUpLineItem);
+            dispatchDiagonalDownBorder(dDownLineItem);
+            dispatchDiagonalUpBorder(dUpLineItem);
             bIsDiagonalBorder = true;
             break; // CRISS-CROSS
 
@@ -2672,9 +2687,19 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, a1),
                                          comphelper::makePropertyValue(u"InnerBorder"_ustr, a2) };
 
-        mxControl->dispatchCommand( u".uno:SetBorderStyle"_ustr, aArgs );
+        rControl.dispatchCommand(u".uno:SetBorderStyle"_ustr, aArgs);
     }
+}
 
+// By default unset lines remain unchanged.
+// Via Shift unset lines are reset
+
+IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
+{
+    const sal_uInt16 nSel = mxFrameSet->GetSelectedItemId();
+    const sal_uInt16 nModifier = mxFrameSet->GetModifier();
+    DispatchBorderItem(*mxControl, nSel, m_bIsCalc, nModifier);
+    mxControl->SetLastUsedBorderItem(nSel, m_bIsCalc, Image(aImgVec[nSel - 1].first));
     // coverity[ check_after_deref : FALSE]
     if (mxFrameSet)
     {
@@ -2687,25 +2712,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     mxControl->EndPopupMode();
 }
 
-void SvxFrameWindow_Impl::SetDiagonalDownBorder(const SvxLineItem& dDownLineItem)
-{
-    // apply diagonal down border
-    Any a;
-    dDownLineItem.QueryValue(a);
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"BorderTLBR"_ustr, a) };
-
-    mxControl->dispatchCommand(u".uno:BorderTLBR"_ustr, aArgs);
-}
-
-void SvxFrameWindow_Impl::SetDiagonalUpBorder(const SvxLineItem& dUpLineItem)
-{
-    // apply diagonal up border
-    Any a;
-    dUpLineItem.QueryValue(a);
-    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"BorderBLTR"_ustr, a) };
-
-    mxControl->dispatchCommand(u".uno:BorderBLTR"_ustr, aArgs);
-}
 
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
@@ -3785,20 +3791,46 @@ com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
 
 SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
+    , m_nLastItemId(0)
+    , m_bLastIsCalc(false)
 {
 }
 
 void SAL_CALL SvxFrameToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
 {
+    if (m_nLastItemId == 0)
+    {
+        if (m_pToolbar)
+        {
+            // Toggle the popup also when toolbutton is activated
+            m_pToolbar->set_menu_item_active(m_aCommandURL, !m_pToolbar->get_menu_item_active(m_aCommandURL));
+        }
+        else
+        {
+            // Open the popup also when Enter key is pressed.
+            createPopupWindow();
+        }
+        return;
+    }
+    DispatchBorderItem(*this, m_nLastItemId, m_bLastIsCalc, 0);
+}
+
+void SvxFrameToolBoxControl::SetLastUsedBorderItem(sal_uInt16 nItemId, bool bIsCalc,
+                                                   const Image& rImage)
+{
+    m_nLastItemId = nItemId;
+    m_bLastIsCalc = bIsCalc;
+    m_aLastImage = rImage;
     if (m_pToolbar)
     {
-        // Toggle the popup also when toolbutton is activated
-        m_pToolbar->set_menu_item_active(m_aCommandURL, !m_pToolbar->get_menu_item_active(m_aCommandURL));
+        m_pToolbar->set_item_image(m_aCommandURL, Graphic(m_aLastImage).GetXGraphic());
     }
     else
     {
-        // Open the popup also when Enter key is pressed.
-        createPopupWindow();
+        ToolBox* pToolBox = nullptr;
+        ToolBoxItemId nId;
+        if (getToolboxId(nId, &pToolBox))
+            pToolBox->SetItemImage(nId, m_aLastImage);
     }
 }
 
@@ -3815,7 +3847,7 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+        pToolBox->SetItemBits(nId, pToolBox->GetItemBits(nId) | ToolBoxItemBits::DROPDOWN);
 }
 
 std::unique_ptr<WeldToolbarPopup> SvxFrameToolBoxControl::weldPopupWindow()
