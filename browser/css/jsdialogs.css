@@ -129,6 +129,69 @@ div.ui-treeview-icon-column {
 	padding-left: 8.5ch;
 }
 
+/* Certificate dialogs: size columns to their content and keep headers aligned
+   with rows via subgrid (as the Chart Data table does). min-content (not auto)
+   tracks so empty/unused columns collapse and stretch can't inflate them. */
+#SelectCertificateDialog #signatures.ui-treeview,
+#DigitalSignaturesDialog #signatures.ui-treeview {
+	overflow-x: auto;
+	/* width:100% + the 1px border and padding overflow the container under the
+	   default content-box, clipping the right border; include them in the width. */
+	box-sizing: border-box;
+	/* both, so column 1 (the explicit track) and 2+ (implicit) are all
+	   non-stretchable - otherwise the lone auto track absorbs all the slack from
+	   justify-content:stretch and stays wide. */
+	grid-template-columns: min-content;
+	grid-auto-columns: min-content;
+}
+
+/* Select Certificate's usage column can make the table too wide, so let it
+   shrink and scroll horizontally. */
+#SelectCertificateDialog #signatures.ui-treeview {
+	min-width: 0;
+}
+
+#SelectCertificateDialog .ui-treeview-headers,
+#DigitalSignaturesDialog .ui-treeview-headers {
+	grid-template-columns: subgrid;
+}
+
+/* Trailing space so adjacent columns (esp. header labels) don't touch... */
+#SelectCertificateDialog .ui-treeview-headers > div,
+#SelectCertificateDialog .ui-treeview-entry > div,
+#DigitalSignaturesDialog .ui-treeview-headers > div,
+#DigitalSignaturesDialog .ui-treeview-entry > div {
+	padding-inline-end: 1rem;
+}
+
+/* ...but not on the icon column or columns empty in both header and body, so
+   those collapse instead of leaving a gap. */
+#SelectCertificateDialog .ui-treeview-entry > .ui-treeview-icon-column,
+#SelectCertificateDialog .ui-treeview-headers > div:has(.ui-treeview-header-text:empty),
+#SelectCertificateDialog .ui-treeview-entry > div:has(.ui-treeview-cell-text-content:empty),
+#DigitalSignaturesDialog .ui-treeview-entry > .ui-treeview-icon-column,
+#DigitalSignaturesDialog .ui-treeview-headers > div:has(.ui-treeview-header-text:empty),
+#DigitalSignaturesDialog .ui-treeview-entry > div:has(.ui-treeview-cell-text-content:empty) {
+	padding-inline-end: 0;
+}
+
+/* Data cells default to display:table-cell, which sizes to their own content and
+   ignores the grid track, so they overflow their (collapsed) tracks and widen the
+   table. Make them block so each fills its column track exactly. */
+#SelectCertificateDialog .ui-treeview-entry > div,
+#DigitalSignaturesDialog .ui-treeview-entry > div {
+	display: block;
+	width: auto;
+}
+
+/* The status-icon column is fixed at 30px by the base rule, which keeps the first
+   column wide even when the icon is hidden. Let it size to its icon instead, so it
+   collapses when there's no icon. */
+#SelectCertificateDialog .ui-treeview div.ui-treeview-icon-column,
+#DigitalSignaturesDialog .ui-treeview div.ui-treeview-icon-column {
+	width: auto;
+}
+
 .jsdialog.one-child-popup:not(.ui-iconview) {
 	border: 0;
 	margin: 0 !important;
