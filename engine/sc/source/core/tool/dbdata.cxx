@@ -440,7 +440,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     maPendingTriggerRangeRight(ScAddress::INITIALIZE_INVALID),
     maRegisteredHeaderRange(ScAddress::INITIALIZE_INVALID),
     maRegisteredRowBand(ScAddress::INITIALIZE_INVALID),
-    maRegisteredColBand(ScAddress::INITIALIZE_INVALID)
+    maRegisteredColBand(ScAddress::INITIALIZE_INVALID),
+    maGeneratedHeaderNames(rData.maGeneratedHeaderNames)
 {
     if (rData.mpTableStyles)
         mpTableStyles.reset(new ScTableStyleParam(*rData.mpTableStyles));
@@ -484,7 +485,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     maPendingTriggerRangeRight(ScAddress::INITIALIZE_INVALID),
     maRegisteredHeaderRange(ScAddress::INITIALIZE_INVALID),
     maRegisteredRowBand(ScAddress::INITIALIZE_INVALID),
-    maRegisteredColBand(ScAddress::INITIALIZE_INVALID)
+    maRegisteredColBand(ScAddress::INITIALIZE_INVALID),
+    maGeneratedHeaderNames(rData.maGeneratedHeaderNames)
 {
     aUpper = ScGlobal::getCharClass().uppercase(aUpper);
     if (rData.mpTableStyles)
@@ -543,6 +545,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         else
             mpTableStyles.reset();
 
+        maGeneratedHeaderNames = rData.maGeneratedHeaderNames;
 
         if (bHeaderRangeDiffers)
             InvalidateTableColumnNames( true);

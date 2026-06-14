@@ -63,6 +63,8 @@
 #include <inputopt.hxx>
 #include <compiler.hxx>
 #include <docfunc.hxx>
+#include <dbdocfun.hxx>
+#include <dbdata.hxx>
 #include <docfuncutil.hxx>
 #include <appoptio.hxx>
 #include <sizedev.hxx>
@@ -82,6 +84,23 @@
 #include <operation/ApplyAttributesOperation.hxx>
 
 #include <memory>
+
+static bool lcl_HasStyledTableOnTab(ScDocument& rDoc, SCTAB nTab)
+{
+    const ScDBCollection* pColl = rDoc.GetDBCollection();
+    if (!pColl)
+        return false;
+    for (const auto& rxData : pColl->getNamedDBs())
+    {
+        if (!rxData->GetTableStyleInfo())
+            continue;
+        ScRange aArea;
+        rxData->GetArea(aArea);
+        if (aArea.aStart.Tab() == nTab)
+            return true;
+    }
+    return false;
+}
 
 static void ShowFilteredRows(ScDocument& rDoc, SCTAB nTab, SCCOLROW nStartNo, SCCOLROW nEndNo,
                              bool bShow)
@@ -1858,12 +1877,30 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
     {
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         const ScMarkData& rMark = GetViewData().GetMarkData();
+        ScDocument& rDoc = GetViewData().GetDocument();
+        const SCTAB nTab = GetViewData().GetTabNumber();
+        const bool bInsertCols = (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
+
+        // Handle new columns being added to a styled table
+        const bool bGroupForTable
+            = bInsertCols && rDoc.IsUndoEnabled() && lcl_HasStyledTableOnTab(rDoc, nTab);
+        if (bGroupForTable)
+            pDocSh->GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, ViewShellId(-1));
+
         bool bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, &rMark, eCmd, bRecord, false, bPartOfPaste, nCount );
         if (bSuccess)
         {
             ResetAutoSpellForContentChange();
-            bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
             bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
+
+            if (bInsertCols)
+            {
+                const SCCOL nWidth = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
+                const SCCOL nShift = (eCmd == INS_INSCOLS_AFTER) ? nWidth : 0;
+                ScDBDocFunc(*pDocSh).FillInsertedColumnHeaders(
+                    nTab, static_cast<SCCOL>(aRange.aStart.Col() + nShift),
+                    static_cast<SCCOL>(aRange.aEnd.Col() + nShift));
+            }
 
             pDocSh->UpdateOle(GetViewData());
             CellContentChanged();
@@ -1894,6 +1931,9 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
         {
             ErrorMessage(STR_ERR_INSERT_CELLS);
         }
+
+        if (bGroupForTable)
+            pDocSh->GetUndoManager()->LeaveListAction();
 
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();

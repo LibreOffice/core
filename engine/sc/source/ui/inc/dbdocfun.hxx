@@ -75,14 +75,28 @@ public:
     void            DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
                                       bool bRecord, bool bApi );
 
-    bool AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader, bool bRecord,
+    SC_DLLPUBLIC bool AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader, bool bRecord,
                     bool bApi, const OUString& rStyleName = u""_ustr);
-    bool DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi );
+    SC_DLLPUBLIC bool DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi );
+
+    /** Write generated "Column#" default names into any empty header cell of the table.
+        nFirstCol/nLastCol optionally restrict the fill to a column range,
+        -1 means the whole header row. */
+    SC_DLLPUBLIC void FillEmptyHeaderColumnNames(ScDBData& rData, SCCOL nFirstCol = -1,
+                                                 SCCOL nLastCol = -1);
+
+    /** When a new column is inserted, for every styled table on nTab
+        whose header overlaps the column range [nCol1, nCol2], fill
+        default names into the (empty) header cells in that range. */
+    SC_DLLPUBLIC void FillInsertedColumnHeaders(SCTAB nTab, SCCOL nCol1, SCCOL nCol2);
+
+    /** If a header row is cleared by user restore the previous value*/
+    SC_DLLPUBLIC void RestoreEmptyHeaderColumnNames(ScDBData& rData);
 
     SC_DLLPUBLIC bool AddDBRange( const OUString& rName, const ScRange& rRange );
     bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const OUString& rOld, const OUString& rNew );
-    void ModifyDBData( const ScDBData& rNewData );  // Name unchanged
+    SC_DLLPUBLIC void ModifyDBData( const ScDBData& rNewData );  // Name unchanged
 
     void ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList );
 

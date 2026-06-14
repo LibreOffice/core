@@ -121,6 +121,7 @@
 #include <xmlwrap.hxx>
 #include <drwlayer.hxx>
 #include <dbdata.hxx>
+#include <dbdocfun.hxx>
 #include <undodat.hxx>
 #include <scextopt.hxx>
 #include <compiler.hxx>
@@ -3260,8 +3261,28 @@ void ScDocShell::SetDocumentModified()
         m_pDocument->Broadcast(ScHint(SfxHintId::ScDataChanged, BCA_BRDCST_ALWAYS));
         if ( m_pDocument->IsForcedFormulaPending() && m_pDocument->GetAutoCalc() )
             m_pDocument->CalcFormulaTree( true );
+
+        // A styled table's header row must not be empty.
+        std::vector<ScDBData*> aHeaderDirtyTables;
+        if (!IsInUndo() && !m_pDocument->IsClipOrUndo() && !m_pDocument->IsInInterpreter()
+            && !m_pDocument->IsCalculatingFormulaTree() && !m_pDocument->IsFinalTrackFormulas())
+        {
+            if (ScDBCollection* pDBColl = m_pDocument->GetDBCollection())
+                for (const auto& it : pDBColl->getNamedDBs())
+                    if (it->GetTableStyleInfo() && it->HasHeader()
+                        && it->AreTableColumnNamesDirty())
+                        aHeaderDirtyTables.push_back(it.get());
+        }
+
         m_pDocument->RefreshDirtyTableColumnNames();
         ProcessPendingTableExpansions();
+
+        if (!aHeaderDirtyTables.empty())
+        {
+            ScDBDocFunc aDBFunc(*this);
+            for (ScDBData* pData : aHeaderDirtyTables)
+                aDBFunc.RestoreEmptyHeaderColumnNames(*pData);
+        }
         PostDataChanged();
 
         //  Detective AutoUpdate:
@@ -3312,11 +3333,11 @@ void ScDocShell::ProcessPendingTableExpansions()
         return;
     }
 
-    bool bAnyExtended = false;
+    struct Resolved { ScDBData* pData; ScRange aOld; ScRange aNew; };
+    std::vector<Resolved> aResolved;
     for (auto const& it : pColl->getNamedDBs())
     {
         ScDBData* pData = it.get();
-
         if (pData->HasPendingExpansion())
         {
             std::optional<ScRange> aNewArea = pData->ResolvePendingExpansion(*m_pDocument);
@@ -3324,43 +3345,60 @@ void ScDocShell::ProcessPendingTableExpansions()
             {
                 ScRange aOldArea;
                 pData->GetArea(aOldArea);
-
-                if (m_pDocument->IsUndoEnabled())
-                {
-                    GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoExpandTableArea>(
-                            *this, pData->GetName(), aOldArea, *aNewArea));
-                }
-
-                // TODO: when a row-band expansion's trigger
-                // range contains ONLY formula cells, MSO activates Total
-                // Row mode on the new row instead of a regular data row.
-                // Detect via maPendingTriggerRangeDown cell types; call
-                // SetTotals(true) after SetArea; extend ScUndoExpandTableArea
-                // with an mbAddedTotalRow flag so Undo restores both.
-                pData->SetArea(aNewArea->aStart.Tab(),
-                               aNewArea->aStart.Col(), aNewArea->aStart.Row(),
-                               aNewArea->aEnd.Col(), aNewArea->aEnd.Row());
-
-                // Sync ScMF::Auto with the new header span (adds the flag
-                // on newly-included header cells when extending right;
-                // no-op for row-down since the header doesn't move).
-                if (pData->HasHeader() && pData->HasAutoFilter())
-                    ScDBData::SwapAutoFilterFlagOnHeader(
-                        *m_pDocument, aOldArea, *aNewArea);
-
-                PostPaint(*aNewArea, PaintPartFlags::Grid);
-                bAnyExtended = true;
+                aResolved.push_back({ pData, aOldArea, *aNewArea });
             }
         }
-
-        // Always clear so overflow flags set without a pending expansion
-        // don't leak into the next drain cycle.
         pData->ClearPendingExpansion();
     }
 
-    if (bAnyExtended)
-        SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
+    if (aResolved.empty())
+        return;
+
+    const bool bUndo = m_pDocument->IsUndoEnabled();
+    if (bUndo)
+    {
+        ViewShellId nViewShellId(-1);
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            nViewShellId = pViewSh->GetViewShellId();
+        GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
+    }
+
+    ScDBDocFunc aFunc(*this);
+    for (const Resolved& rDB : aResolved)
+    {
+        if (bUndo)
+            GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoExpandTableArea>(
+                    *this, rDB.pData->GetName(), rDB.aOld, rDB.aNew));
+
+        // TODO: when a row-band expansion's trigger range contains ONLY
+        // formula cells, MSO activates Total Row mode on the new row instead
+        // of a regular data row. Detect via maPendingTriggerRangeDown cell
+        // types; call SetTotals(true) after SetArea; extend
+        // ScUndoExpandTableArea with an mbAddedTotalRow flag so Undo restores
+        // both.
+        rDB.pData->SetArea(rDB.aNew.aStart.Tab(), rDB.aNew.aStart.Col(), rDB.aNew.aStart.Row(),
+                         rDB.aNew.aEnd.Col(), rDB.aNew.aEnd.Row());
+
+        // Sync ScMF::Auto with the new header span (adds the flag on
+        // newly-included header cells when extending right; no-op for row-down
+        // since the header doesn't move).
+        if (rDB.pData->HasHeader() && rDB.pData->HasAutoFilter())
+            ScDBData::SwapAutoFilterFlagOnHeader(*m_pDocument, rDB.aOld, rDB.aNew);
+
+        PostPaint(rDB.aNew, PaintPartFlags::Grid);
+
+        // Auto-generate column names for empty headers
+        const SCCOL nNewCol1 = static_cast<SCCOL>(rDB.aOld.aEnd.Col() + 1);
+        const SCCOL nNewCol2 = rDB.aNew.aEnd.Col();
+        if (nNewCol1 <= nNewCol2)
+            aFunc.FillEmptyHeaderColumnNames(*rDB.pData, nNewCol1, nNewCol2);
+    }
+
+    if (bUndo)
+        GetUndoManager()->LeaveListAction();
+
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
 }
 
 /**

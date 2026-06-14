@@ -197,6 +197,9 @@ private:
     ScRange         maRegisteredRowBand;
     ScRange         maRegisteredColBand;
 
+    /// Default header names ("Column#") wrote into empty header cells.
+    std::set<OUString> maGeneratedHeaderNames;
+
     using ScRefreshTimer::operator==;
 
 public:
@@ -210,7 +213,7 @@ public:
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bByR = true, bool bHasH = true, bool bTotals = false,
                           const OUString& rTableType = u""_ustr,
                           const OUString& rTableStyleID = u""_ustr);
-    ScDBData(const ScDBData& rData);
+    SC_DLLPUBLIC ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
     SC_DLLPUBLIC virtual ~ScDBData() override;
 
@@ -225,7 +228,7 @@ public:
     SCTAB       GetTab() const                  { return nTable; }
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
     SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
-    void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    SC_DLLPUBLIC void SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void SetArea(ScRange const& rRange)
     {
         SetArea(rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
@@ -236,7 +239,7 @@ public:
     void        SetByRow(bool bByR)             { bByRow = bByR; }
     bool        HasHeader() const               { return bHasHeader; }
     /// On flag change, surgically re-registers the header listener.
-    void        SetHeader(bool bHasH);
+    SC_DLLPUBLIC void SetHeader(bool bHasH);
     bool        HasTotals() const               { return bHasTotals; }
     /// On flag change, surgically re-registers the adjacency band listeners
     /// (the row band is gated on !bHasTotals).
@@ -307,6 +310,14 @@ public:
     /** Returns table column name if nCol is within column range and name
         is stored, else empty string. */
     const OUString & GetTableColumnName( SCCOL nCol ) const;
+
+    /** Record a default header name ("Column#") that was written in empty headers */
+    void AddGeneratedHeaderName(const OUString& rName) { maGeneratedHeaderNames.insert(rName); }
+    /** Was rName auto-generated as a default header name by this table? */
+    bool IsGeneratedHeaderName(const OUString& rName) const
+    {
+        return maGeneratedHeaderNames.find(rName) != maGeneratedHeaderNames.end();
+    }
 
     OUString GetSourceString() const;
     OUString GetOperations() const;
