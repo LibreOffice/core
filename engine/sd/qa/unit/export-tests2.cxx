@@ -563,15 +563,17 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfTextPos)
     assertXPath(pXml, "//textarray", 1);
 }
 
-CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfLigatureTextFit)
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFineDetail)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
 
-    // An "ſt" ligature is one narrow pdf glyph that expands to two
+    // A: an "ſt" ligature is one narrow pdf glyph that expands to two
     // characters. Its run must stay on a single line, not wrap with the
     // trailing glyph dropped below the box.
+    //
+    // B: hairline strokes should stay visible.
     loadFromFile(u"pdf/ligature-textbox-fit.pdf");
 
     setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
@@ -583,6 +585,15 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfLigatureTextFit)
     // Three "ſt" runs, each on one line. A wrapped run adds a duplicate at
     // the same x and a lower y, taking the count to six.
     assertXPath(pXml, "//textarray[text='ſt']", 3);
+
+    // The corner crop marks are 0.1pt strokes, thinner than a device pixel.
+    // They need to come through as explicit hairlines (stroke width 0),
+    // not as sub-pixel widths which the draw layer drops and leaves blank
+    // corners.
+    xmlDocUniquePtr pExported = parseExportedFile();
+    OUString aPathStyle = getXPath(pExported, "//draw:path", "style-name");
+    assertXPath(pExported, "//style:style[@style:name='" + aPathStyle.toUtf8()
+                               + "']/style:graphic-properties[@svg:stroke-width='0cm']");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFont)

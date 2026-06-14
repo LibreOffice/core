@@ -2208,6 +2208,12 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     const double dWidth = 0.5 * fabs(std::hypot(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = convertPointToMm100(dWidth);
 
+    // The pdf spec recommends drawing a sub-pixel stroke as a hairline.
+    // For us a hairline is used with a line width of 0
+    const sal_Int32 nOnePixel = mpVD->PixelToLogic(Size(1, 1)).Width();
+    if (mnLineWidth > 0 && mnLineWidth < nOnePixel)
+        mnLineWidth = 0;
+
     vcl::pdf::PDFFillMode nFillMode = vcl::pdf::PDFFillMode::Alternate;
     bool bStroke = true; // Assume we have to draw, unless told otherwise.
     if (pPageObject->getDrawMode(nFillMode, bStroke))
