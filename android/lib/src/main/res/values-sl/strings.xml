@@ -5,7 +5,7 @@
     <string name="loading">Nalaganje ...</string>
     <string name="failed_to_load_file">Določitev datoteke za nalaganje je spodletela</string>
     <string name="storage_permission_required">Potrebne so pravice za shrambo</string>
-    <string name="temp_file_saving_disabled">Datoteka je samo za branje, shranjevanje je onemogočeno.</string>
+    <string name="temp_file_saving_disabled">V skupni rabi samo za branje s strani izvornega programa. Uporabite »Uredi kopijo«, da opravite spremembe.</string>
     <string name="preparing_for_the_first_start_after_an_update">Pripravljanje na prvi zagon po posodobitvi.</string>
     <string name="saving">Shranjevanje ...</string>
     <string name="exiting">Zapiranje ...</string>
