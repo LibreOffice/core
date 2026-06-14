@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-07 16:01+0000\n"
+"PO-Revision-Date: 2026-06-15 10:02+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -842,12 +842,12 @@ msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
-"Um Zotero zu verwenden, geben Sie hier Ihren API-Schlüssel an. Sie können "
-"Ihren API-Schlüssel in Ihrem "
+"Um Zotero zu verwenden, geben Sie hier Ihren API-Schlüssel an. Erstellen Sie "
+"Ihren API-Schlüssel in den "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1949
 msgid "Zotero account API settings"
-msgstr "API-Einstellungen des Zotero-Kontos"
+msgstr "API-Einstellungen Ihres Zotero-Kontos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2006
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
@@ -5964,7 +5964,7 @@ msgstr ""
 
 #: src/app/Socket.ts:2313
 msgid "Only the document owner can change the password."
-msgstr "Nur der Eigentümer des Dokuments kann das Passwort ändern."
+msgstr "Nur der Eigentümer des Dokuments kann das Kennwort ändern."
 
 #: src/app/Socket.ts:2354 src/app/Socket.ts:2365
 msgid "Missing Fonts"
