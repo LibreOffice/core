@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">Failil on vaid lugemisõigused ja salvestamine pole võimalik.</string>
+    <string name="temp_file_saving_disabled">Failil on lähterakenduse poolt jagatud vaid lugemisõigustes. Kui tahad teda muuta, siis kasuta valikut „Muuda koopiat“.</string>
     <string name="loading">Laadin...</string>
     <string name="exiting">Väljun...</string>
     <string name="restarting">Käivitan uuesti...</string>
