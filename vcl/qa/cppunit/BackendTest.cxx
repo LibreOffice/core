@@ -1375,7 +1375,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(51, 20)));
     }
 
-    void testTdf136171()
+    void testTdf136171_draw_opaque_bitmap_with_alpha()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
@@ -1620,7 +1620,7 @@ public:
     CPPUNIT_TEST(testDrawOpenBezierWithPolyLineB2D);
 
     CPPUNIT_TEST(testTdf124848);
-    CPPUNIT_TEST(testTdf136171);
+    CPPUNIT_TEST(testTdf136171_draw_opaque_bitmap_with_alpha);
     CPPUNIT_TEST(testTdf145811);
 
     CPPUNIT_TEST_SUITE_END();
