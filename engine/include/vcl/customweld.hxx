@@ -239,6 +239,8 @@ public:
     CustomClientWeld(weld::Builder& rBuilder, const OUString& rWidgetId,
                      CustomClientWidgetController& rWidgetController);
     ~CustomClientWeld();
+
+    weld::Widget* GetWidget() const { return m_xWidget.get(); }
 };
 }
 #endif

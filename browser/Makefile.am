@@ -599,6 +599,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.DrawingArea.js \
 	src/control/jsdialog/Widget.CustomWidget.ts \
 	src/control/jsdialog/Widget.CsvGrid.ts \
+	src/control/jsdialog/Widget.SpellSentence.ts \
 	src/control/jsdialog/Widget.Edit.ts \
 	src/control/jsdialog/Widget.EmojiPicker.ts \
 	src/control/jsdialog/Widget.FormulabarEdit.js \
@@ -1435,6 +1436,7 @@ pot:
 		src/control/jsdialog/Widget.ColorPicker.ts \
 		src/control/jsdialog/Widget.Combobox.js \
 		src/control/jsdialog/Widget.CsvGrid.ts \
+		src/control/jsdialog/Widget.SpellSentence.ts \
 		src/control/jsdialog/Widget.EmojiPicker.ts \
 		src/control/jsdialog/Widget.PageMarginEntry.ts \
 		src/control/jsdialog/Widget.PageSizeEntry.ts \

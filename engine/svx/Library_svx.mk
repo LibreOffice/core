@@ -158,6 +158,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/ThemeColorEditDialog \
     svx/source/dialog/txencbox \
     svx/source/dialog/txenctab \
+    svx/source/dialog/dummyeditview \
     svx/source/dialog/weldeditview \
     svx/source/dialog/signaturelinehelper \
     svx/source/engine3d/float3d \

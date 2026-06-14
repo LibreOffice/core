@@ -26,8 +26,8 @@
 #include <svx/langbox.hxx>
 #include <memory>
 #include <svl/undo.hxx>
+#include <svx/dummyeditview.hxx>
 #include <vcl/customweld.hxx>
-#include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
 
 #include <set>
@@ -45,15 +45,16 @@ namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;
 
-class SentenceEditWindow_Impl : public WeldEditView
+class SentenceEditWindow_Impl : public DummyEditView
 {
 private:
-    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::set<sal_Int32> m_aIgnoreErrorsAt;
     SpellDialog*        m_pSpellDialog;
     weld::Toolbar*      m_pToolbar;
     sal_Int32           m_nErrorStart;
     sal_Int32           m_nErrorEnd;
+    sal_Int32           m_nSelStart;
+    sal_Int32           m_nSelEnd;
     bool                m_bIsUndoEditMode;
 
     Link<LinkParamNone*,void> m_aModifyLink;
@@ -64,24 +65,19 @@ private:
 
     bool GetErrorDescription(SpellErrorDescription& rSpellErrorDescription, sal_Int32 nPosition);
 
-    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
-    DECL_LINK(EditStatusHdl, EditStatus&, void);
     DECL_LINK(ToolbarHdl, const OUString&, void);
 
-    void DoScroll();
-    void SetScrollBarRange();
-    void SetSizeRequest();
-
-protected:
-    virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    StyleUpdated() override;
+    void InsertTextAtSelection(const OUString& rText);
+    bool HandleEdit(sal_Int32 nStart, sal_Int32 nEnd, const OUString& rText,
+                    bool bBackspace, bool bDelete);
 
 public:
-    SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual void EditViewScrollStateChange() override;
+    SentenceEditWindow_Impl();
     void SetSpellDialog(SpellDialog* pDialog) { m_pSpellDialog = pDialog; }
-    virtual ~SentenceEditWindow_Impl() override;
+
+    virtual void     DumpWidgetData(tools::JsonWriter& rWriter) override;
+    virtual OUString GetCustomWidgetType() const override { return u"spellsentence"_ustr; }
+    virtual bool     HandleCustomEvent(const OUString& rCmd, const OUString& rData) override;
 
     void            Init(weld::Toolbar* pToolbar);
     void            SetModifyHdl(const Link<LinkParamNone*,void>& rLink)
@@ -124,8 +120,6 @@ public:
     void            MoveErrorEnd(tools::Long nOffset);
 
     void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
-
-    void            SetDocumentColor(weld::DrawingArea* pDrawingArea);
 };
 
 class SpellDialogChildWindow;
@@ -181,7 +175,7 @@ private:
     std::unique_ptr<weld::Button> m_xUndoPB;
     std::unique_ptr<weld::Button> m_xClosePB;
     std::unique_ptr<weld::Toolbar> m_xToolbar;
-    std::unique_ptr<weld::CustomWeld> m_xSentenceEDWeld;
+    std::unique_ptr<weld::CustomClientWeld> m_xSentenceEDWeld;
     std::shared_ptr<SfxSingleTabDialogController> m_xOptionsDlg;
 
     DECL_LINK(ChangeHdl, weld::Button&, void);

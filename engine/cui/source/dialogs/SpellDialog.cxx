@@ -44,8 +44,6 @@
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/cuicharmap.hxx>
-#include <vcl/event.hxx>
-#include <vcl/texteng.hxx>
 #include <vcl/weld.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include <SpellDialog.hxx>
@@ -56,6 +54,13 @@
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/kit.hxx>
+#include <tools/color.hxx>
+#include <tools/json_writer.hxx>
+#include <vcl/transfer.hxx>
+#include <sot/formats.hxx>
+#include <boost/property_tree/json_parser.hpp>
+#include <optional>
+#include <sstream>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -226,7 +231,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     , m_xExplainFT(m_xBuilder->weld_label(u"explain"_ustr))
     , m_xExplainLink(m_xBuilder->weld_link_button(u"explainlink"_ustr))
     , m_xNotInDictFT(m_xBuilder->weld_label(u"notindictft"_ustr))
-    , m_xSentenceED(new SentenceEditWindow_Impl(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true)))
+    , m_xSentenceED(new SentenceEditWindow_Impl())
     , m_xSuggestionFT(m_xBuilder->weld_label(u"suggestionsft"_ustr))
     , m_xSuggestionLB(m_xBuilder->weld_tree_view(u"suggestionslb"_ustr))
     , m_xIgnorePB(m_xBuilder->weld_button(u"ignore"_ustr))
@@ -242,10 +247,13 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     , m_xUndoPB(m_xBuilder->weld_button(u"undo"_ustr))
     , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
     , m_xToolbar(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
-    , m_xSentenceEDWeld(new weld::CustomWeld(*m_xBuilder, u"errorsentence"_ustr, *m_xSentenceED))
 {
     m_xSentenceED->SetSpellDialog(this);
     m_xSentenceED->Init(m_xToolbar.get());
+
+    if (comphelper::COKit::isActive())
+        m_xSentenceEDWeld.reset(
+            new weld::CustomClientWeld(*m_xBuilder, u"errorsentence"_ustr, *m_xSentenceED));
 
     m_sTitleSpellingGrammar = m_xDialog->get_title();
     m_sTitleSpelling = m_xAltTitle->get_label();
@@ -411,11 +419,12 @@ void SpellDialog::SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGua
         weld::Widget* aControls[] =
         {
             m_xNotInDictFT.get(),
-            m_xSentenceED->GetDrawingArea(),
+            m_xSentenceEDWeld ? m_xSentenceEDWeld->GetWidget() : nullptr,
             m_xLanguageFT.get()
         };
         for (weld::Widget* pWidget : aControls)
-            pWidget->set_sensitive(true);
+            if (pWidget)
+                pWidget->set_sensitive(true);
     }
     if( bNextSentence )
     {
@@ -441,8 +450,9 @@ void SpellDialog::Initialize()
     InitUserDicts();
 
     LockFocusChanges(true);
-    if(m_xSentenceED->IsEnabled())
-        m_xSentenceED->GrabFocus();
+    weld::Widget* pSentenceWidget = m_xSentenceEDWeld ? m_xSentenceEDWeld->GetWidget() : nullptr;
+    if(pSentenceWidget && pSentenceWidget->get_sensitive())
+        pSentenceWidget->grab_focus();
     else if( m_xChangePB->get_sensitive() )
         m_xChangePB->grab_focus();
     else if( m_xIgnorePB->get_sensitive() )
@@ -1040,7 +1050,7 @@ void SpellDialog::InvalidateDialog()
     weld::Widget* aDisableArr[] =
     {
         m_xNotInDictFT.get(),
-        m_xSentenceED->GetDrawingArea(),
+        m_xSentenceEDWeld ? m_xSentenceEDWeld->GetWidget() : nullptr,
         m_xSuggestionFT.get(),
         m_xSuggestionLB.get(),
         m_xLanguageFT.get(),
@@ -1055,7 +1065,8 @@ void SpellDialog::InvalidateDialog()
         m_xUndoPB.get()
     };
     for (weld::Widget* pWidget : aDisableArr)
-        pWidget->set_sensitive(false);
+        if (pWidget)
+            pWidget->set_sensitive(false);
 
     SfxModelessDialogController::Deactivate();
 }
@@ -1198,122 +1209,37 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     return bRet;
 }
 
-SentenceEditWindow_Impl::SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
-    : m_xScrolledWindow(std::move(xScrolledWindow))
-    , m_pSpellDialog(nullptr)
+SentenceEditWindow_Impl::SentenceEditWindow_Impl()
+    : m_pSpellDialog(nullptr)
     , m_pToolbar(nullptr)
     , m_nErrorStart(0)
     , m_nErrorEnd(0)
+    , m_nSelStart(0)
+    , m_nSelEnd(0)
     , m_bIsUndoEditMode(false)
 {
-    m_xScrolledWindow->connect_vadjustment_value_changed(LINK(this, SentenceEditWindow_Impl, ScrollHdl));
-}
-
-void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
-{
-    Size aSize(pDrawingArea->get_approximate_digit_width() * 60,
-               pDrawingArea->get_text_height() * 6);
-    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-    WeldEditView::SetDrawingArea(pDrawingArea);
     // tdf#132288 don't merge equal adjacent attributes
     m_xEditEngine->DisableAttributeExpanding();
-
-    m_xEditEngine->SetStatusEventHdl(LINK(this, SentenceEditWindow_Impl, EditStatusHdl));
-
-    SetDocumentColor(pDrawingArea);
-}
-
-void SentenceEditWindow_Impl::SetSizeRequest()
-{
-    m_xScrolledWindow->set_size_request(m_xScrolledWindow->get_preferred_size().Width(), -1);
-}
-
-void SentenceEditWindow_Impl::SetDocumentColor(weld::DrawingArea* pDrawingArea)
-{
-    if (!pDrawingArea || !m_xEditView || !m_xEditEngine)
-        return;
-    // tdf#142631 use document background color in this widget
-    Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    OutputDevice& rDevice = pDrawingArea->get_ref_device();
-    rDevice.SetBackground(aBgColor);
-    m_xEditView->SetBackgroundColor(aBgColor);
-    m_xEditEngine->SetBackgroundColor(aBgColor);
-}
-
-void SentenceEditWindow_Impl::StyleUpdated()
-{
-    SetDocumentColor(GetDrawingArea());
-    WeldEditView::StyleUpdated();
-}
-
-IMPL_LINK_NOARG(SentenceEditWindow_Impl, EditStatusHdl, EditStatus&, void)
-{
-    SetScrollBarRange();
-    DoScroll();
-}
-
-IMPL_LINK_NOARG(SentenceEditWindow_Impl, ScrollHdl, weld::ScrolledWindow&, void)
-{
-    DoScroll();
-}
-
-void SentenceEditWindow_Impl::DoScroll()
-{
-    if (m_xEditView)
-    {
-        auto currentDocPos = m_xEditView->GetVisArea().Top();
-        auto nDiff = currentDocPos - m_xScrolledWindow->vadjustment_get_value();
-        // we expect SetScrollBarRange callback to be triggered by Scroll
-        // to set where we ended up
-        m_xEditView->Scroll(0, nDiff);
-    }
-}
-
-void SentenceEditWindow_Impl::EditViewScrollStateChange()
-{
-    // editengine height has changed or editview scroll pos has changed
-    SetScrollBarRange();
-}
-
-void SentenceEditWindow_Impl::SetScrollBarRange()
-{
-    EditEngine *pEditEngine = GetEditEngine();
-    if (!pEditEngine)
-        return;
-    if (!m_xScrolledWindow)
-        return;
-    EditView* pEditView = GetEditView();
-    if (!pEditView)
-        return;
-
-    int nVUpper = pEditEngine->GetTextHeight();
-    int nVCurrentDocPos = pEditView->GetVisArea().Top();
-    const Size aOut(pEditView->GetOutputArea().GetSize());
-    int nVStepIncrement = aOut.Height() * 2 / 10;
-    int nVPageIncrement = aOut.Height() * 8 / 10;
-    int nVPageSize = aOut.Height();
-
-    /* limit the page size to below nUpper because gtk's gtk_scrolled_window_start_deceleration has
-       effectively...
-
-       lower = gtk_adjustment_get_lower
-       upper = gtk_adjustment_get_upper - gtk_adjustment_get_page_size
-
-       and requires that upper > lower or the deceleration animation never ends
-    */
-    nVPageSize = std::min(nVPageSize, nVUpper);
-
-    m_xScrolledWindow->vadjustment_configure(nVCurrentDocPos, nVUpper, nVStepIncrement,
-                                             nVPageIncrement, nVPageSize);
-    m_xScrolledWindow->set_vpolicy(nVUpper > nVPageSize ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
-}
-
-SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
-{
 }
 
 namespace
 {
+    std::optional<boost::property_tree::ptree> parseEventJson(std::u16string_view rData)
+    {
+        std::stringstream aStream(OUStringToOString(rData, RTL_TEXTENCODING_UTF8).getStr());
+        boost::property_tree::ptree aTree;
+        try
+        {
+            boost::property_tree::read_json(aStream, aTree);
+        }
+        catch (const std::exception&)
+        {
+            SAL_WARN("cui.dialogs", "SentenceEditWindow_Impl: malformed JSON event payload");
+            return std::nullopt;
+        }
+        return aTree;
+    }
+
     const EECharAttrib* FindCharAttrib(int nPosition, sal_uInt16 nWhich, std::vector<EECharAttrib>& rAttribList)
     {
         for (auto it = rAttribList.rbegin(); it != rAttribList.rend(); ++it)
@@ -1423,19 +1349,35 @@ namespace
     };
 }
 
-bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
+bool SentenceEditWindow_Impl::HandleEdit(sal_Int32 nReplStart, sal_Int32 nReplEnd, const OUString& rText,
+                                         bool bBackspace, bool bDelete)
 {
-    if (rKeyEvt.GetKeyCode().GetCode() == KEY_TAB)
-        return false;
-
-    bool bConsumed = false;
-
-    bool bChange = TextEngine::DoesKeyChangeText( rKeyEvt );
-    if (bChange && !IsUndoEditMode())
+    auto applyEdit = [this](sal_Int32 a, sal_Int32 b, const OUString& rIns, bool bBack, bool bDel)
     {
-        bConsumed = true;
+        ESelection aSel(0, a, 0, b);
+        if (rIns.isEmpty() && a == b)
+        {
+            if (bBack && a > 0)
+                aSel = ESelection(0, a - 1, 0, a);
+            else if (bDel)
+                aSel = ESelection(0, a, 0, a + 1);
+            else
+                return;
+        }
+        m_xEditEngine->QuickInsertText(rIns, aSel);
+        m_nSelStart = m_nSelEnd = aSel.start.nIndex + rIns.getLength();
+    };
 
-        ESelection aCurrentSelection(m_xEditView->GetSelection());
+    if (IsUndoEditMode())
+    {
+        applyEdit(nReplStart, nReplEnd, rText, bBackspace, bDelete);
+        CallModifyLink();
+        Invalidate();
+        return true;
+    }
+
+    {
+        ESelection aCurrentSelection(0, nReplStart, 0, nReplEnd);
         aCurrentSelection.Adjust();
 
         //determine if the selection contains a field
@@ -1530,10 +1472,6 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         bool bIsErrorActive = (pErrorAttr && pErrorAttr->nStart == m_nErrorStart) ||
                 (pErrorAttrLeft && pErrorAttrLeft->nStart == m_nErrorStart);
 
-        const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
-        bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
-        bool bBackspace = rKeyCode.GetCode() == KEY_BACKSPACE;
-
         Action nAction = Action::CONTINUE;
         switch(nSelectionType)
         {
@@ -1595,13 +1533,16 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         sal_Int32 nCurrentLen = m_xEditEngine->GetText().getLength();
         if (nAction != Action::SELECTFIELD)
         {
-            m_xEditView->PostKeyEvent(rKeyEvt);
+            applyEdit(nReplStart, nReplEnd, rText, bBackspace, bDelete);
         }
         else
         {
             const EECharAttrib* pCharAttr = pBackAttr ? pBackAttr : pBackAttrLeft;
             if (pCharAttr)
-                m_xEditView->SetSelection(ESelection(0, pCharAttr->nStart, 0, pCharAttr->nEnd));
+            {
+                m_nSelStart = pCharAttr->nStart;
+                m_nSelEnd = pCharAttr->nEnd;
+            }
         }
         if(nAction == Action::EXPAND)
         {
@@ -1690,43 +1631,83 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         if(nAction != Action::SELECTFIELD && !m_bIsUndoEditMode)
             CallModifyLink();
     }
-    else
-        bConsumed = m_xEditView->PostKeyEvent(rKeyEvt);
 
-    return bConsumed;
+    Invalidate();
+    return true;
+}
+
+bool SentenceEditWindow_Impl::HandleCustomEvent(const OUString& rCmd, const OUString& rData)
+{
+    if (rCmd == u"edit")
+    {
+        std::optional<boost::property_tree::ptree> oTree = parseEventJson(rData);
+        if (!oTree)
+            return true;
+        sal_Int32 nStart = oTree->get<sal_Int32>("start", 0);
+        sal_Int32 nEnd = oTree->get<sal_Int32>("end", nStart);
+        if (nStart > nEnd)
+            std::swap(nStart, nEnd);
+        const OUString sText = OUString::fromUtf8(oTree->get<std::string>("text", std::string()));
+        const std::string aInputType = oTree->get<std::string>("inputType", std::string());
+        HandleEdit(nStart, nEnd, sText, aInputType == "deleteContentBackward",
+                   aInputType == "deleteContentForward");
+        return true;
+    }
+    if (rCmd == u"selection")
+    {
+        std::optional<boost::property_tree::ptree> oTree = parseEventJson(rData);
+        if (!oTree)
+            return true;
+        const sal_Int32 nStart = oTree->get<sal_Int32>("start", 0);
+        const sal_Int32 nEnd = oTree->get<sal_Int32>("end", nStart);
+        m_nSelStart = std::min(nStart, nEnd);
+        m_nSelEnd = std::max(nStart, nEnd);
+        return true;
+    }
+    if (rCmd == u"paste")
+    {
+        std::optional<boost::property_tree::ptree> oTree = parseEventJson(rData);
+        if (!oTree)
+            return true;
+        InsertTextAtSelection(OUString::fromUtf8(oTree->get<std::string>("text", std::string())));
+        return true;
+    }
+    SAL_WARN("cui.dialogs", "SentenceEditWindow_Impl: unknown custom event '" << rCmd << "'");
+    return false;
 }
 
 void SentenceEditWindow_Impl::Init(weld::Toolbar* pToolbar)
 {
     m_pToolbar = pToolbar;
     m_pToolbar->connect_clicked(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
-    // tdf#170524 Lock in the starting size request including space required
-    // for a vertical scrollbar that might be needed later in the lifetime of
-    // the dialog even if it doesn't need it at startup time.
-    SetSizeRequest();
 }
 
 IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OUString&, rCurItemId, void)
 {
+    if (!m_pSpellDialog)
+        return;
+
     if (rCurItemId == "paste")
     {
-        m_xEditView->Paste();
-        CallModifyLink();
+        auto xClipboard = m_pSpellDialog->getDialog()->get_clipboard();
+        if (xClipboard.is())
+        {
+            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(xClipboard));
+            OUString sText;
+            if (aDataHelper.GetString(SotClipboardFormatId::STRING, sText))
+                InsertTextAtSelection(sText);
+        }
     }
     else if (rCurItemId == "insert")
     {
-        auto xMap = std::make_shared<SvxCharacterMap>(GetDrawingArea(), nullptr, nullptr);
+        auto xMap = std::make_shared<SvxCharacterMap>(m_pSpellDialog->getDialog(), nullptr, nullptr);
         xMap->SetCharFont(m_xEditEngine->GetStandardFont(0));
         weld::DialogController::runAsync(xMap, [this, xMap](sal_Int32 nResult) {
             if (nResult != RET_OK)
                 return;
             sal_UCS4 cChar = xMap->GetChar();
             if (cChar)
-            {
-                ESelection aCurrentSelection(m_xEditView->GetSelection());
-                m_xEditEngine->QuickInsertText(OUString(&cChar, 1), aCurrentSelection);
-                CallModifyLink();
-            }
+                InsertTextAtSelection(OUString(&cChar, 1));
         });
     }
 }
@@ -1878,17 +1859,11 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
 
     m_xEditEngine->QuickSetAttribs(aSet, ESelection(0, nStart, 0, nEnd));
 
-    // Set the selection so the editview will autoscroll to make this visible
-    // unless (tdf#133958) the selection already overlaps this range
-    ESelection aCurrentSelection = m_xEditView->GetSelection();
-    aCurrentSelection.Adjust();
-    bool bCurrentSelectionInRange = nStart <= aCurrentSelection.end.nIndex && aCurrentSelection.start.nIndex <= nEnd;
+    sal_Int32 nSelMin = std::min(m_nSelStart, m_nSelEnd);
+    sal_Int32 nSelMax = std::max(m_nSelStart, m_nSelEnd);
+    bool bCurrentSelectionInRange = nStart <= nSelMax && nSelMin <= nEnd;
     if (!bCurrentSelectionInRange)
-    {
-        m_xEditView->SetSelection(ESelection(0, nStart));
-        // tdf#157148 ensure current location is auto-scrolled to be visible
-        m_xEditView->ShowCursor();
-    }
+        m_nSelStart = m_nSelEnd = nStart;
 
     Invalidate();
 
@@ -2038,6 +2013,7 @@ void SentenceEditWindow_Impl::SetAttrib(const SfxPoolItem& rItem, sal_Int32 nSta
 void SentenceEditWindow_Impl::SetText( const OUString& rStr )
 {
     m_nErrorStart = m_nErrorEnd = 0;
+    m_nSelStart = m_nSelEnd = 0;
     m_xEditEngine->SetText(rStr);
 }
 
@@ -2197,6 +2173,9 @@ void SentenceEditWindow_Impl::Undo()
     DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
     if(!GetUndoActionCount())
         return;
+    const sal_Int32 nTextLen = m_xEditEngine->GetTextLen(0);
+    m_xEditView->SetSelection(ESelection(0, std::min(m_nSelStart, nTextLen),
+                                         0, std::min(m_nSelEnd, nTextLen)));
     bool bSaveUndoEdit = IsUndoEditMode();
     SpellUndoAction_Impl* pUndoAction;
     //if the undo edit mode is active then undo all changes until the UNDO_EDIT_MODE action has been found
@@ -2208,6 +2187,11 @@ void SentenceEditWindow_Impl::Undo()
 
     if(bSaveUndoEdit || SpellUndoAction::CHANGE_GROUP == pUndoAction->GetId())
         GetSpellDialog()->UpdateBoxes_Impl();
+
+    const ESelection aSel = m_xEditView->GetSelection();
+    m_nSelStart = aSel.start.nIndex;
+    m_nSelEnd = aSel.end.nIndex;
+    Invalidate();
 }
 
 void SentenceEditWindow_Impl::ResetUndo()
@@ -2284,6 +2268,100 @@ void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     AddUndoAction( std::make_unique<SpellUndoAction_Impl>(
                         SpellUndoAction::UNDO_EDIT_MODE, GetSpellDialog()->aDialogUndoLink) );
     pSpellDialog->m_xChangePB->set_sensitive(true);
+}
+
+void SentenceEditWindow_Impl::InsertTextAtSelection(const OUString& rText)
+{
+    if (rText.isEmpty())
+        return;
+    const sal_Int32 a = std::min(m_nSelStart, m_nSelEnd);
+    const sal_Int32 b = std::max(m_nSelStart, m_nSelEnd);
+    m_xEditEngine->QuickInsertText(rText, ESelection(0, a, 0, b));
+    m_nSelStart = m_nSelEnd = a + rText.getLength();
+    CallModifyLink();
+    Invalidate();
+}
+
+void SentenceEditWindow_Impl::DumpWidgetData(tools::JsonWriter& rWriter)
+{
+    const OUString sText = m_xEditEngine->GetText();
+    rWriter.put("text", sText);
+    rWriter.put("errorStart", m_nErrorStart);
+    rWriter.put("errorEnd", m_nErrorEnd);
+    rWriter.put("undoEditMode", m_bIsUndoEditMode);
+
+    {
+        auto aSelNode = rWriter.startNode("selection");
+        rWriter.put("start", m_nSelStart);
+        rWriter.put("end", m_nSelEnd);
+    }
+
+    svtools::ColorConfig aColorConfig;
+    rWriter.put("docColor",
+                u"#"_ustr + aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor.AsRGBHexString());
+    rWriter.put("spellColor",
+                u"#"_ustr + aColorConfig.GetColorValue(svtools::SPELL).nColor.AsRGBHexString());
+    rWriter.put("grammarColor",
+                u"#"_ustr + aColorConfig.GetColorValue(svtools::GRAMMAR).nColor.AsRGBHexString());
+
+    std::vector<EECharAttrib> aAttribList;
+    m_xEditEngine->GetCharAttribs(0, aAttribList);
+    const sal_Int32 nParaLen = m_xEditEngine->GetTextLen(0);
+    const sal_Int32 nFullLen = sText.getLength();
+
+    auto aRunsNode = rWriter.startArray("runs");
+
+    auto flagsAt = [&aAttribList](sal_Int32 nPos, bool& bField, bool& bError,
+                                  bool& bGrammar, bool& bActive)
+    {
+        bField = FindCharAttrib(nPos, EE_CHAR_BKGCOLOR, aAttribList) != nullptr;
+        bActive = FindCharAttrib(nPos, EE_CHAR_COLOR, aAttribList) != nullptr;
+        bGrammar = false;
+        const EECharAttrib* pError = FindCharAttrib(nPos, EE_CHAR_GRABBAG, aAttribList);
+        bError = pError != nullptr;
+        if (pError)
+        {
+            SpellErrorDescription aDesc;
+            ExtractErrorDescription(*pError, aDesc);
+            bGrammar = aDesc.bIsGrammarError;
+        }
+    };
+
+    sal_Int32 nRunStart = 0;
+    while (nRunStart < nParaLen)
+    {
+        bool bField, bError, bGrammar, bActive;
+        flagsAt(nRunStart, bField, bError, bGrammar, bActive);
+        sal_Int32 nRunEnd = nRunStart + 1;
+        while (nRunEnd < nParaLen)
+        {
+            bool bF, bE, bG, bA;
+            flagsAt(nRunEnd, bF, bE, bG, bA);
+            if (bF != bField || bE != bError || bG != bGrammar || bA != bActive)
+                break;
+            ++nRunEnd;
+        }
+        {
+            auto aRunNode = rWriter.startStruct();
+            rWriter.put("start", nRunStart);
+            rWriter.put("end", nRunEnd);
+            if (bField)
+                rWriter.put("field", true);
+            if (bError)
+                rWriter.put("error", true);
+            if (bGrammar)
+                rWriter.put("grammar", true);
+            if (bActive)
+                rWriter.put("active", true);
+        }
+        nRunStart = nRunEnd;
+    }
+    if (nParaLen < nFullLen)
+    {
+        auto aRunNode = rWriter.startStruct();
+        rWriter.put("start", nParaLen);
+        rWriter.put("end", nFullLen);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
