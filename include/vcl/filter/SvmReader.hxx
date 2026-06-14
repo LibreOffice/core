@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <vcl/mapmod.hxx>
 
 class Color;
 class GDIMetaFile;
@@ -36,7 +37,13 @@ class SvmReader
 private:
     SvStream& mrStream;
 
+    // running product of the map mode scales read so far
+    double mfCumulativeMapScaleX;
+    double mfCumulativeMapScaleY;
+
     void ReadColor(::Color& rColor);
+
+    bool CheckMapScale(const MapMode& rMapMode);
 
 public:
     VCL_DLLPUBLIC SvmReader(SvStream& rIStm);
