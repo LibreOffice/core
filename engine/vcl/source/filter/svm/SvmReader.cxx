@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmath>
+
 #include <sal/log.hxx>
 #include <osl/thread.h>
 #include <tools/stream.hxx>
@@ -59,6 +61,8 @@ public:
 
 SvmReader::SvmReader(SvStream& rIStm)
     : mrStream(rIStm)
+    , mfCumulativeMapScaleX(1.0)
+    , mfCumulativeMapScaleY(1.0)
 {
 }
 
@@ -1054,6 +1058,34 @@ rtl::Reference<MetaAction> SvmReader::TextAlignHandler()
     return new MetaTextAlignAction(static_cast<TextAlign>(nTmp16));
 }
 
+bool SvmReader::CheckMapScale(const MapMode& rMapMode)
+{
+    // a metafile coordinate fits in sal_Int32 and the unit base is at most one
+    // inch per unit, so this ceiling keeps coordinate*scale*DPI inside
+    // tools::Long
+    constexpr double fMaxMapScale = 1e5;
+
+    double fX = mfCumulativeMapScaleX;
+    double fY = mfCumulativeMapScaleY;
+    if (rMapMode.GetMapUnit() == MapUnit::MapRelative)
+    {
+        fX *= rMapMode.GetScaleX();
+        fY *= rMapMode.GetScaleY();
+    }
+    else
+    {
+        fX = rMapMode.GetScaleX();
+        fY = rMapMode.GetScaleY();
+    }
+
+    if (std::abs(fX) > fMaxMapScale || std::abs(fY) > fMaxMapScale)
+        return false;
+
+    mfCumulativeMapScaleX = fX;
+    mfCumulativeMapScaleY = fY;
+    return true;
+}
+
 rtl::Reference<MetaAction> SvmReader::MapModeHandler()
 {
     VersionCompatRead aCompat(mrStream);
@@ -1063,6 +1095,12 @@ rtl::Reference<MetaAction> SvmReader::MapModeHandler()
     const bool bSuccess = aSerializer.readMapMode(aMapMode);
     if (!bSuccess)
         return nullptr;
+
+    if (!CheckMapScale(aMapMode))
+    {
+        SAL_WARN("vcl", "skipping map mode that scales beyond a usable range");
+        return nullptr;
+    }
 
     return new MetaMapModeAction(aMapMode);
 }
@@ -1123,6 +1161,9 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     VersionCompatRead aCompat(mrStream);
     GDIMetaFile aMtf;
     SvmReader aReader(mrStream);
+    // A nested metafile, so init with the current map mode scale
+    aReader.mfCumulativeMapScaleX = mfCumulativeMapScaleX;
+    aReader.mfCumulativeMapScaleY = mfCumulativeMapScaleY;
     aReader.Read(aMtf, pData);
     TypeSerializer aSerializer(mrStream);
     Point aPoint;

@@ -29,7 +29,13 @@ class SvmReader
 private:
     SvStream& mrStream;
 
+    // running product of the map mode scales read so far
+    double mfCumulativeMapScaleX;
+    double mfCumulativeMapScaleY;
+
     void ReadColor(::Color& rColor);
+
+    bool CheckMapScale(const MapMode& rMapMode);
 
 public:
     VCL_DLLPUBLIC SvmReader(SvStream& rIStm);
