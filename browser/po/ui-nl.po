@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-06 15:01+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-06-14 09:08+0000\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -2711,7 +2711,7 @@ msgstr "Niet actief document - klik om het bewerken te hervatten"
 
 #: src/control/Control.IdleHandler.ts:47
 msgid "Idle document - please tap to reload and resume editing"
-msgstr "Niet actief document - tap om het bewerken te hervatten"
+msgstr "Niet actief document - tik om de bewerking te hervatten"
 
 #: src/control/Control.JSDialog.js:414
 msgid "Close dialog"
@@ -3496,7 +3496,7 @@ msgstr "Navigatie"
 
 #: src/control/Control.NavigatorPanel.ts:146
 msgid "Close Navigation"
-msgstr "Navigatie Sluiten"
+msgstr "Navigatie sluiten"
 
 #: src/control/Control.NavigatorPanel.ts:240
 msgid "Results"
@@ -3737,7 +3737,7 @@ msgstr "Grafiek"
 #: src/control/Control.NotebookbarImpress.js:157
 #: src/control/Control.NotebookbarWriter.js:110
 msgid "View"
-msgstr "Beeld"
+msgstr "Weergave"
 
 #: src/control/Control.NotebookbarCalc.js:105
 #: src/control/Control.NotebookbarCalc.js:1837
@@ -3900,7 +3900,7 @@ msgstr "Slecht"
 #: src/control/Control.NotebookbarCalc.js:1059
 #: src/control/PermissionMode.ts:212
 msgid "Editing"
-msgstr "In bewerking"
+msgstr "Bewerken"
 
 #: src/control/Control.NotebookbarCalc.js:1083
 #: src/control/Control.NotebookbarDraw.js:1216
@@ -5155,7 +5155,7 @@ msgstr "Bewerkingsmodus"
 #: src/control/PermissionMode.ts:141 src/control/PermissionMode.ts:215
 #: src/control/PermissionMode.ts:221 src/control/PermissionMode.ts:227
 msgid "Viewing"
-msgstr "Bekijken"
+msgstr "Weergeven"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:312
 msgid "Save Image to Server"
@@ -6321,7 +6321,7 @@ msgstr "het tabblad Help"
 
 #: src/layer/marker/TextInput.js:486
 msgid "the View menu"
-msgstr "het menu Beeld"
+msgstr "het menu Weergave"
 
 #: src/layer/tile/CanvasTileLayer.js:461
 msgid "Online Editor"
