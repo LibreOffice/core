@@ -7,7 +7,7 @@
     <string name="app_vendor">Dieses Release wurde bereitgestellt durch $VENDOR.</string>
     <string name="no_recent_items">Öffnen Sie bitte eine Datei über das Ordnersymbol in der Symbolleiste.</string>
     <string name="no_items">Keine Elemente</string>
-    <string name="temp_file_saving_disabled">Diese Datei ist schreibgeschützt, Speichern ist deaktiviert.</string>
+    <string name="temp_file_saving_disabled">Von der Quell-App als schreibgeschützt freigegeben. Verwenden Sie „Kopie bearbeiten“, um Änderungen vorzunehmen.</string>
     <string name="file_exists_warning">Eine Datei mit diesem Namen existiert bereits und wird überschrieben.</string>
     <string name="file_creation_failed">Dateierstellung fehlgeschlagen</string>
     <string name="storage_permission_required">Eine Speichererlaubnis ist erforderlich</string>
@@ -85,7 +85,7 @@
     <string name="server_url">Server-URL</string>
     <string name="server_url_and_port">URL und Port des Cloud-Servers.</string>
     <string name="user_name">Benutzername</string>
-    <string name="password">Passwort</string>
+    <string name="password">Kennwort</string>
     <!-- Directory browser strings -->
     <string name="up_description">Zum übergeordneten Verzeichnis</string>
     <string name="confirm_label">Bestätigen</string>
