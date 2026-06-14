@@ -797,7 +797,13 @@ void SocketPoll::transfer(const SocketTransfer& pendingTransfer)
         // leave empty entry in _pollSockets to be added to toErase and
         // cleaned later.
         *it = nullptr;
-        disposition.execute();
+        if (!disposition.execute())
+        {
+            LOG_WRN("Failed to transfer socket #"
+                    << socket->getFD() << " to poll [" << toPoll->name()
+                    << "]; it has been removed from [" << name() << "] and dropped");
+        }
+
         if (pendingTransfer._cbAfterRemovalFromOldPoll)
             pendingTransfer._cbAfterRemovalFromOldPoll();
     }
@@ -848,7 +854,7 @@ void SocketPoll::takeSocket(const std::shared_ptr<SocketPoll>& fromPoll,
 
     int socketFD = inSocket->getFD();
 
-    fromPoll->transferSocketTo(inSocket, toPoll,
+    const bool scheduled = fromPoll->transferSocketTo(inSocket, toPoll,
         [](const std::shared_ptr<Socket>& /*moveSocket*/){},
         [&mut,&cond,&transferred,socketFD](){
 
@@ -859,6 +865,16 @@ void SocketPoll::takeSocket(const std::shared_ptr<SocketPoll>& fromPoll,
         transferred = true;
         cond.notify_all();
     });
+
+    if (!scheduled)
+    {
+        // The source poll isn't running, so the transfer was never queued and
+        // the removal callback above will never fire; waiting would hang forever.
+        LOG_WRN("Failed to transfer Socket #"
+                << socketFD << " from poll [" << fromPoll->name() << "] to poll [" << toPoll->name()
+                << "] as the source poll isn't alive; socket not moved");
+        return;
+    }
 
     LOG_TRC("Waiting to transfer Socket #" << socketFD <<
             " from: " << fromPoll->name() << " to new poll: " << toPoll->name());
