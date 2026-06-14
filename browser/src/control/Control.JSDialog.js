@@ -1068,7 +1068,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			// They are displayed before the document is loaded
 			// Spinning should be happening until the 1st interaction with the user
 			// which is the dialog opening in this case
-			if (this.map)
+			if (this.map && !instance.isDropdown)
 				this.map._progressBar.end();
 
 			const dialogDomParent = instance.overlay ? instance.overlay: instance.containerParent;
