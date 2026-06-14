@@ -131,12 +131,13 @@ sub check_author()
 
 sub check_prettier()
 {
-    my @files = split(/\n/, `git diff --cached --name-only`);
-    if (!@files || !grep { !m{^engine/} } @files) {
-        # Skip prettier check: nothing staged, or all changes are under engine/.
-        return;
-    }
-    if (-e "Makefile") {
+    # limit to the dirs the prettier target formats
+    my @staged = split(/\n/, `git diff --cached --name-only --diff-filter=ACMR -- browser/src browser/js browser/admin/src`);
+    return unless @staged;
+
+    if (-e "browser/Makefile") {
+        # the prettier target wants paths relative to browser/
+        my @rel = map { s{^browser/}{}r } @staged;
         my $red = "\033[0;31m";
         my $reset = "\033[0m";
         my $hasmake = system("which make > /dev/null 2>&1") == 0;
@@ -150,17 +151,17 @@ sub check_prettier()
                     "===============================================\n" .
                     $reset . "\n";
 
-        system("$make prettier >/dev/null 2>&1") == 0
+        system("$make", "--no-print-directory", "-C", "browser", "prettier", "PRETTIER_TARGETS=@rel") == 0
             or die $red .
                     "\n===============================================\n" .
                     "  ERROR: Code formatting check failed\n" .
                     "===============================================\n" .
-                    "Your code is not properly formatted.\n" .
-                    "Please run '$make prettier-write' before committing.\n" .
+                    "The staged files above are not properly formatted.\n" .
+                    "Please run '$make -C browser prettier-write' before committing.\n" .
                     "===============================================\n" .
                     $reset . "\n";
     } else {
-        print "Skipping code formatting check, no Makefile found\n"
+        print "Skipping code formatting check, no browser/Makefile found\n"
     }
 }
 

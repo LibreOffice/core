@@ -1505,17 +1505,15 @@ eslint: $(COOL_ADMIN_TS_JS)
 		$(srcdir)/js \
 		$(srcdir)/admin/src)
 
+# Override to check a subset, for example a pre-commit hook passing
+# only the staged files: make prettier PRETTIER_TARGETS="src/foo.ts".
+PRETTIER_TARGETS ?= src js admin/src
+
 prettier:
-	$(call run_prettier_check,--check \
-		$(srcdir)/src \
-		$(srcdir)/js \
-		$(srcdir)/admin/src)
+	$(call run_prettier_check,--check $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
 
 prettier-write:
-	$(call run_prettier_check,--write \
-		$(srcdir)/src \
-		$(srcdir)/js \
-		$(srcdir)/admin/src)
+	$(call run_prettier_check,--write $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
 
 MOCHA_TEST_LOG = "`pwd`/mocha.log"
 DUPLICATION_TEST_LOG = "`pwd`/duplication.log"
