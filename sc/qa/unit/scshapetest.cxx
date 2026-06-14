@@ -1383,12 +1383,12 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf167450_copySheet)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRectSource, pObjTarget->GetLogicRect(), 1);
 }
 
-CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140866)
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140866_copy_shape_preserves_comment)
 {
     // Load a document, which has a comment in cell $sheet2.$A$1, and a custom shape in cell
     // $sheet2.$B$11. When the shape from $sheet2.$B$11 was copied and pasted to $sheet2.$D$9,
     // the anchor position of comment is changed and after saved to ods the comment was gone.
-    createScDoc("ods/tdf140866.ods");
+    createScDoc("ods/tdf140866_copy_shape_preserves_comment.ods");
     ScDocument* pDoc = getScDoc();
 
     // Check that we have the comment on A1
