@@ -1183,11 +1183,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
     // ensure the expected content
     assertXPathContent(pXmlDoc,
                        "/office:document/office:body/office:drawing/draw:page/draw:g/draw:frame[3]/"
-                       "draw:text-box/text:p[@text:style-name='P6'][1]",
+                       "draw:text-box/text:p[@text:style-name='P4'][1]",
                        u"FIRST-YEAR HINDI COURSE");
 
     // ensure the expected font name
-    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P6']/"
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P4']/"
                          "style:text-properties[@style:font-name='AcademyEngravedLetPlain']");
 }
 
@@ -2567,6 +2567,33 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTableBordersTransparancy)
     xCellPropSet->getPropertyValue(u"LeftBorder"_ustr) >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xff2670c9),
                          Color(ColorTransparency, aBorderLine.Color));
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfLigatureTextFit)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    // An "ſt" ligature is one narrow pdf glyph that expands to two
+    // characters. Its run must stay on a single line, not wrap with the
+    // trailing glyph dropped below the box.
+    loadFromFile(u"pdf/ligature-textbox-fit.pdf");
+
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG,
+                  {
+                      comphelper::makePropertyValue(
+                          u"FilterOptions"_ustr,
+                          u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+                  });
+
+    xmlDocUniquePtr pXml = parseLayout();
+
+    // Three "ſt" runs, each on one line. A wrapped run adds a duplicate at
+    // the same x and a lower y, taking the count to six.
+    assertXPath(pXml, "//textarray[text='ſt']", 3);
 }
 
 // CharOpticalSizing should be enabled by default for new documents
