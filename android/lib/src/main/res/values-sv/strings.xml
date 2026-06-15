@@ -11,7 +11,7 @@
     <string name="failed_to_insert_image">Det gick inte att infoga bilden</string>
     <string name="failed_to_load_file">Det gick inte att fastställa vilken fil som ska laddas</string>
     <string name="storage_permission_required">Behörighet krävs för lagring</string>
-    <string name="temp_file_saving_disabled">Denna fil är skrivskyddad, spara är inaktiverat.</string>
+    <string name="temp_file_saving_disabled">Delad endast för läsning av källappen. Använd \"Redigera en kopia\" för att göra ändringar.</string>
     <string name="file_chromeos_read_only">Den här filen kan inte sparas på den här platsen och är skrivskyddad. Flytta den till Play-filerna för fullständig läs-/skrivåtkomst.</string>
     <string name="convert_odf_message">Detta dokument kan innehålla formatering eller innehåll som inte kan sparas i det för närvarande valda filformatet \"Text\".</string>
     <string name="ask_for_convert_odf">Bekräfta filformat</string>
