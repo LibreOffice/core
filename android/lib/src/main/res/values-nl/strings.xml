@@ -5,7 +5,7 @@
     <string name="failed_to_insert_image">De afbeelding kan niet worden invoegd</string>
     <string name="failed_to_load_file">Het te laden bestand is niet gevonden</string>
     <string name="storage_permission_required">Rechten om op te slaan zijn vereist</string>
-    <string name="temp_file_saving_disabled">Dit bestand is alleen-lezen; opslaan is uitgeschakeld.</string>
+    <string name="temp_file_saving_disabled">Door de bronappb gedeeld als alleen-lezen. Gebruik \"Een kopie bewerken\" om wijzigingen aan te brengen.</string>
     <string name="saving">Opslaan...</string>
     <string name="preparing_for_the_first_start_after_an_update">Voorbereiding voor de eerste start na een update.</string>
     <string name="rate_our_app_text">Als je enthousiast bent, geef dan alsjeblieft 5 sterren in Google Play. Jouw goede recensies zijn onze beste motivatie.</string>
