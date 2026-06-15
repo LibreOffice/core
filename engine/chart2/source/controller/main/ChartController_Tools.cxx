@@ -453,7 +453,7 @@ void ChartController::executeDispatch_FontReset(
     for (const auto& xProperty: xProperties)
     {
         xProperty->setPropertyValue(u"CharFontName"_ustr,
-                                         css::uno::Any(OUString("Liberation Sans")));
+                                         css::uno::Any(u"Liberation Sans"_ustr));
         xProperty->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(float(13)));
         xProperty->setPropertyValue(u"CharWeight"_ustr, uno::Any(float(100)));
         xProperty->setPropertyValue(u"CharPosture"_ustr,

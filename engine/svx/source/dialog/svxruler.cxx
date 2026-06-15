@@ -1177,9 +1177,9 @@ void SvxRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
         uno::Reference<lang::XServiceInfo> xSI(xModel, uno::UNO_QUERY);
         if (xSI.is())
         {
-            bWriter = xSI->supportsService("com.sun.star.text.TextDocument")
-            || xSI->supportsService("com.sun.star.text.WebDocument")
-                || xSI->supportsService("com.sun.star.text.GlobalDocument");
+            bWriter = xSI->supportsService(u"com.sun.star.text.TextDocument"_ustr)
+            || xSI->supportsService(u"com.sun.star.text.WebDocument"_ustr)
+                || xSI->supportsService(u"com.sun.star.text.GlobalDocument"_ustr);
         }
     }
 

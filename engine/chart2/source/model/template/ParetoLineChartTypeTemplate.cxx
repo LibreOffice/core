@@ -147,7 +147,7 @@ void ParetoLineChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& 
                                               ::sal_Int32 nSeriesCount)
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
-    xSeries->setPropertyAlsoToAllAttributedDataPoints("BorderStyle",
+    xSeries->setPropertyAlsoToAllAttributedDataPoints(u"BorderStyle"_ustr,
                                                       uno::Any(drawing::LineStyle_NONE));
     if (getDimension() != 3)
         return;
@@ -157,7 +157,7 @@ void ParetoLineChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& 
         //apply Geometry3D
         uno::Any aAGeometry3D;
         getFastPropertyValue(aAGeometry3D, PROP_PARETOLINE_TEMPLATE_GEOMETRY3D);
-        xSeries->setPropertyAlsoToAllAttributedDataPoints("Geometry3D", aAGeometry3D);
+        xSeries->setPropertyAlsoToAllAttributedDataPoints(u"Geometry3D"_ustr, aAGeometry3D);
     }
     catch (const uno::Exception&)
     {
@@ -173,10 +173,10 @@ void ParetoLineChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Dia
     for (auto const& series : aSeriesVec)
     {
         if (getDimension() == 3)
-            series->setPropertyToDefault("Geometry3D");
-        if (series->getPropertyValue("BorderStyle") == aLineStyleAny)
+            series->setPropertyToDefault(u"Geometry3D"_ustr);
+        if (series->getPropertyValue(u"BorderStyle"_ustr) == aLineStyleAny)
         {
-            series->setPropertyToDefault("BorderStyle");
+            series->setPropertyToDefault(u"BorderStyle"_ustr);
         }
     }
 

@@ -621,28 +621,28 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             // user templates
             const UIName& aNm(pPFormat->GetName());
 
-            if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_blockquote)
+            if (!bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_blockquote ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::COLL_HTML_BLOCKQUOTE;
                 rToken = OOO_STRING_SVTOOLS_HTML_blockquote ""_ostr;
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_citation)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_citation ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_CITATION;
                 rToken = OOO_STRING_SVTOOLS_HTML_citation ""_ostr;
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_code)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_code ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_CODE;
                 rToken = OOO_STRING_SVTOOLS_HTML_code ""_ostr;
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_definstance)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_definstance ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_DEFINSTANCE;
                 rToken = OOO_STRING_SVTOOLS_HTML_definstance ""_ostr;
             }
-            else if (!bChrFormat && (aNm == OOO_STRING_SVTOOLS_HTML_dd ||
-                                  aNm == OOO_STRING_SVTOOLS_HTML_dt))
+            else if (!bChrFormat && (aNm == u"" OOO_STRING_SVTOOLS_HTML_dd ""_ustr ||
+                                  aNm == u"" OOO_STRING_SVTOOLS_HTML_dt ""_ustr))
             {
                 sal_uInt16 nDefListLvl = GetDefListLvl(aNm, nPoolId);
                 // Export the templates DD 1/DT 1,
@@ -666,54 +666,54 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                     }
                 }
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_emphasis)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_emphasis ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_EMPHASIS;
                 rToken = OOO_STRING_SVTOOLS_HTML_emphasis ""_ostr;
             }
-            else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_horzrule)
+            else if (!bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_horzrule ""_ustr)
             {
                 // do not export HR !
                 bStop = (nDeep==0);
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_keyboard)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_keyboard ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_KEYBOARD;
                 rToken = OOO_STRING_SVTOOLS_HTML_keyboard ""_ostr;
             }
-            else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_listing)
+            else if (!bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_listing ""_ustr)
             {
                 // Export Listings as PRE or PRE-derived template
                 rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
                 rRefPoolId = SwPoolFormatId::COLL_HTML_PRE;
                 nDeep = CSS1_FMT_CMPREF;
             }
-            else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_preformtxt)
+            else if (!bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_preformtxt ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::COLL_HTML_PRE;
                 rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_sample)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_sample ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_SAMPLE;
                 rToken = OOO_STRING_SVTOOLS_HTML_sample ""_ostr;
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_strong)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_strong ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_STRONG;
                 rToken = OOO_STRING_SVTOOLS_HTML_strong ""_ostr;
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_teletype)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_teletype ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_TELETYPE;
                 rToken = OOO_STRING_SVTOOLS_HTML_teletype ""_ostr;
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_variable)
+            else if (bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_variable ""_ustr)
             {
                 rRefPoolId = SwPoolFormatId::CHR_HTML_VARIABLE;
                 rToken = OOO_STRING_SVTOOLS_HTML_variable ""_ostr;
             }
-            else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_xmp)
+            else if (!bChrFormat && aNm == u"" OOO_STRING_SVTOOLS_HTML_xmp ""_ustr)
             {
                 // export XMP as PRE (but not the template as Style)
                 rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
@@ -1528,13 +1528,13 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
             // user templates
             const UIName& aNm(rFormat.GetName());
 
-            if (aNm == "DD 1" || aNm == "DT 1")
+            if (aNm == u"DD 1"_ustr || aNm == u"DT 1"_ustr)
                 rWrt.m_nDfltBottomMargin = 0;
-            else if (aNm == OOO_STRING_SVTOOLS_HTML_listing)
+            else if (aNm == u"" OOO_STRING_SVTOOLS_HTML_listing ""_ustr)
                 rWrt.m_nDfltBottomMargin = 0;
-            else if (aNm == OOO_STRING_SVTOOLS_HTML_preformtxt)
+            else if (aNm == u"" OOO_STRING_SVTOOLS_HTML_preformtxt ""_ustr)
                 rWrt.m_nDfltBottomMargin = 0;
-            else if (aNm == OOO_STRING_SVTOOLS_HTML_xmp)
+            else if (aNm == u"" OOO_STRING_SVTOOLS_HTML_xmp ""_ustr)
                 rWrt.m_nDfltBottomMargin = 0;
         }
         else

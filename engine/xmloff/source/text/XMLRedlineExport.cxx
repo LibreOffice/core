@@ -385,10 +385,10 @@ void XMLRedlineExport::ExportChangedRegion(
                 bool bHasAutoStyle;
                 OUString aParentName;
                 uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xAutoStyle->getPropertySetInfo();
-                if (xPropSetInfo->hasPropertyByName("CharStyleName"))
+                if (xPropSetInfo->hasPropertyByName(u"CharStyleName"_ustr))
                 {
                     // Consider parent style when referring to the declared automatic style.
-                    xAutoStyle->getPropertyValue("CharStyleName") >>= aParentName;
+                    xAutoStyle->getPropertyValue(u"CharStyleName"_ustr) >>= aParentName;
                 }
                 OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(
                         xAutoStyle, bIsUICharStyle, bHasAutoStyle, /*pAddState=*/nullptr, &aParentName);
@@ -432,7 +432,7 @@ void XMLRedlineExport::ExportChangedRegion(
         // can't have additional redlines on top of them.
         OUString sType;
         comphelper::SequenceAsHashMap aMap(aSuccessorData);
-        auto it = aMap.find("RedlineType");
+        auto it = aMap.find(u"RedlineType"_ustr);
         if (it != aMap.end())
         {
             it->second >>= sType;
@@ -442,7 +442,7 @@ void XMLRedlineExport::ExportChangedRegion(
             true, true);
 
         ExportChangeInfo(aSuccessorData);
-        it = aMap.find("RedlineText");
+        it = aMap.find(u"RedlineText"_ustr);
         if (it != aMap.end())
         {
             // Delete has its own content outside the body text: export it here.

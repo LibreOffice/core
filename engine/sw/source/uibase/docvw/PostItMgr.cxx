@@ -1680,7 +1680,7 @@ static bool ConfirmDeleteAll(const SwView& pView, const OUString& sText)
         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
         auto pDlg
             = pFact->CreateQueryDialog(pView.GetFrameWeld(),
-                                       SwResId(STR_QUERY_DELALLCOMMENTS_TITLE), sText, "", true);
+                                       SwResId(STR_QUERY_DELALLCOMMENTS_TITLE), sText, u""_ustr, true);
         sal_Int32 nResult = pDlg->Execute();
         if (pDlg->ShowAgain() == false)
         {

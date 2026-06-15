@@ -38,14 +38,14 @@ protected:
 
 public:
     Test()
-        : UnoApiTest("/xmlsecurity/qa/xmlsec/data/")
+        : UnoApiTest(u"/xmlsecurity/qa/xmlsec/data/"_ustr)
     {
     }
 
     void setUp() override
     {
         UnoApiTest::setUp();
-        MacrosTest::setUpX509(m_directories, "xmlsecurity_xmlsec");
+        MacrosTest::setUpX509(m_directories, u"xmlsecurity_xmlsec"_ustr);
 
         // Initialize crypto after setting up the environment variables.
         mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
@@ -71,7 +71,7 @@ OString ReadToString(const OUString& rUrl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
 {
     // Given a view that has CA/cert/key data associated:
-    loadFromURL("private:factory/swriter");
+    loadFromURL(u"private:factory/swriter"_ustr);
     save(TestFilter::ODT);
     DocumentSignatureManager aManager(getComponentContext(), DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());

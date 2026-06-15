@@ -1432,10 +1432,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
     // First view is in dark scheme
     CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
@@ -1449,10 +1449,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
 
@@ -1463,10 +1463,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Light")) },
+                { "NewTheme", uno::Any(u"Light"_ustr) },
             }
         );
-        comphelper::dispatchCommand(".uno:InvertBackground", xFrame, aPropertyValues);
+        comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, xFrame, aPropertyValues);
     }
     // First view has inverted background
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
@@ -1481,10 +1481,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Light")) },
+                { "NewTheme", uno::Any(u"Light"_ustr) },
             }
         );
-        comphelper::dispatchCommand(".uno:InvertBackground", xFrame, aPropertyValues);
+        comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, xFrame, aPropertyValues);
     }
     // Second view has inverted background
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
@@ -1500,10 +1500,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        comphelper::dispatchCommand(".uno:InvertBackground", xFrame, aPropertyValues);
+        comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, xFrame, aPropertyValues);
     }
     // Second view has regular background
     CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
@@ -1527,20 +1527,20 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL("1c1c1c"_ostr, aView.m_aDocColor);
 
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Light")) },
+                { "NewTheme", uno::Any(u"Light"_ustr) },
             }
         );
-        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL("ffffff"_ostr, aView.m_aDocColor);
 }
@@ -4092,9 +4092,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAndReplaceInComments)
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::Any(OUString("test")) },
+        { "SearchItem.SearchString", uno::Any(u"test"_ustr) },
     }));
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
     // Without the accompanying fix in place, this test would have failed with:

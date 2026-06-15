@@ -1238,14 +1238,14 @@ void ScOptSolverDlg::FinishSolve(bool bAccepted, const std::shared_ptr<SolveStat
     // Generate sensitivity report if user wants it
     uno::Reference<css::beans::XPropertySetInfo> xInfo = rState->xOptProp->getPropertySetInfo();
     bool bUserWantsReport = false;
-    if (xInfo->hasPropertyByName("GenSensitivityReport"))
-        rState->xOptProp->getPropertyValue("GenSensitivityReport") >>= bUserWantsReport;
+    if (xInfo->hasPropertyByName(u"GenSensitivityReport"_ustr))
+        rState->xOptProp->getPropertyValue(u"GenSensitivityReport"_ustr) >>= bUserWantsReport;
 
     if (rState->bSuccess && bUserWantsReport)
     {
         // Retrieve the sensitivity analysis report
         css::sheet::SensitivityReport aSensitivity;
-        bool bHasReportObj = rState->xOptProp->getPropertyValue("SensitivityReport") >>= aSensitivity;
+        bool bHasReportObj = rState->xOptProp->getPropertyValue(u"SensitivityReport"_ustr) >>= aSensitivity;
 
         if (bHasReportObj && aSensitivity.HasReport)
         {

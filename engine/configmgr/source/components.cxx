@@ -606,7 +606,7 @@ Components::Components(
 #if ENABLE_DCONF
             if (write) {
                 OUString token(
-                    expand("${SYSUSERCONFIG}/libreoffice/dconfwrite"));
+                    expand(u"${SYSUSERCONFIG}/libreoffice/dconfwrite"_ustr));
                 osl::DirectoryItem it;
                 osl::FileBase::RC e = osl::DirectoryItem::get(token, it);
                 ignore = e == osl::FileBase::E_None;

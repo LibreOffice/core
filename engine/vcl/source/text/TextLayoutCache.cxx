@@ -92,7 +92,7 @@ struct TextLayoutCacheMap : public CacheOwner
         return ret;
     }
 
-    virtual OUString getCacheName() const override { return "TextLayoutCache"; }
+    virtual OUString getCacheName() const override { return u"TextLayoutCache"_ustr; }
 
     virtual bool dropCaches() override
     {

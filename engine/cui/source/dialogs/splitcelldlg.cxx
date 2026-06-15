@@ -22,7 +22,7 @@
 SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, tools::Long nMaxVertical, tools::Long nMaxHorizontal)
     : GenericDialogController(pParent, u"cui/ui/splitcellsdialog.ui"_ustr, u"SplitCellsDialog"_ustr)
     , m_xCountEdit(m_xBuilder->weld_spin_button(u"countnf"_ustr))
-    , m_xGrid(m_xBuilder->weld_grid("directiongrid"))
+    , m_xGrid(m_xBuilder->weld_grid(u"directiongrid"_ustr))
     , m_xHorzBox(!bIsTableVertical ? m_xBuilder->weld_radio_button(u"hori"_ustr) : m_xBuilder->weld_radio_button(u"vert"_ustr))
     , m_xVertBox(!bIsTableVertical ? m_xBuilder->weld_radio_button(u"vert"_ustr) : m_xBuilder->weld_radio_button(u"hori"_ustr))
     , m_xPropCB(m_xBuilder->weld_check_button(u"prop"_ustr))

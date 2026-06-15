@@ -281,20 +281,20 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
     if (comphelper::COKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "sidebar", nKitWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, u"sidebar"_ustr, nKitWindowId);
         else if (jsdialog::isBuilderEnabledForPopup(rUIFile))
             return JSInstanceBuilder::CreatePopupBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabledForMenu(rUIFile))
             return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabledForNavigator(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nKitWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, u"navigator"_ustr, nKitWindowId);
         else if (jsdialog::isBuilderEnabledForQuickFind(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nKitWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, u"quickfind"_ustr, nKitWindowId);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         // this is notebookbar widget but converted from sidebar panel
         else if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "notebookbar", nKitWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, u"notebookbar"_ustr, nKitWindowId);
         else
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }

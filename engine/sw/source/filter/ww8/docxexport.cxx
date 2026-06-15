@@ -1344,7 +1344,7 @@ void DocxExport::WriteSettings()
 
     // write w:stylePaneFormatFilter
     if (uno::Sequence< beans::PropertyValue > stylePaneFormatFilterProps;
-        aGrabBagPropMap.getValue("StylePaneFormatFilterProps") >>= stylePaneFormatFilterProps)
+        aGrabBagPropMap.getValue(u"StylePaneFormatFilterProps"_ustr) >>= stylePaneFormatFilterProps)
     {
         OUString aVal;
         std::map<OUString, OUString> aAttrs;
@@ -1443,7 +1443,7 @@ void DocxExport::WriteSettings()
 
     // write w:documentProtection
     if (uno::Sequence< beans::PropertyValue > rAttributeList;
-        aGrabBagPropMap.getValue("DocumentProtection") >>= rAttributeList)
+        aGrabBagPropMap.getValue(u"DocumentProtection"_ustr) >>= rAttributeList)
     {
         if (rAttributeList.hasElements())
         {
@@ -1565,7 +1565,7 @@ void DocxExport::WriteSettings()
     if (!bHyphenationZone)
     {
         sal_Int16 nHyphenationZone;
-        if (aGrabBagPropMap.getValue("HyphenationZone") >>= nHyphenationZone)
+        if (aGrabBagPropMap.getValue(u"HyphenationZone"_ustr) >>= nHyphenationZone)
         {
             if (nHyphenationZone > 0)
             {
@@ -1599,7 +1599,7 @@ void DocxExport::WriteSettings()
 
     // write w:compat
     if (uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
-        aGrabBagPropMap.getValue("CompatSettings") >>= aCompatSettingsSequence)
+        aGrabBagPropMap.getValue(u"CompatSettings"_ustr) >>= aCompatSettingsSequence)
     {
         pFS->startElementNS(XML_w, XML_compat);
 
@@ -1694,7 +1694,7 @@ void DocxExport::WriteSettings()
 
     // write w:themeFontLang
     if (uno::Sequence< beans::PropertyValue > themeFontLangProps;
-        aGrabBagPropMap.getValue("ThemeFontLangProps") >>= themeFontLangProps)
+        aGrabBagPropMap.getValue(u"ThemeFontLangProps"_ustr) >>= themeFontLangProps)
     {
         OUString aValues[3];
         for (const auto& rThemeFontLangProp : themeFontLangProps)

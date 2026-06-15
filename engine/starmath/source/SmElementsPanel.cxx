@@ -48,7 +48,7 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     , mrBindings(rBindings)
     , mxCategoryList(m_xBuilder->weld_combo_box(u"categorylist"_ustr))
     , mxElementsControl(std::make_unique<SmElementsControl>(
-          m_xBuilder->weld_icon_view(u"elements"_ustr), m_xBuilder->weld_menu("deletemenu")))
+          m_xBuilder->weld_icon_view(u"elements"_ustr), m_xBuilder->weld_menu(u"deletemenu"_ustr)))
 {
     for (const auto& rCategoryId : SmElementsControl::categories())
         mxCategoryList->append_text(SmResId(rCategoryId));

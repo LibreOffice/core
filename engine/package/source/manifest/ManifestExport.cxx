@@ -382,7 +382,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
                     sChecksumType = SHA1_1K_NAME;
                 else
-                    throw uno::RuntimeException( "Unexpected digest algorithm is provided!" );
+                    throw uno::RuntimeException( u"Unexpected digest algorithm is provided!"_ustr );
 
                 pNewAttrList->AddAttribute(ATTRIBUTE_CHECKSUM_TYPE, sChecksumType);
                 *pDigest >>= aSequence;
@@ -405,7 +405,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             {
                 OSL_ENSURE( nDerivedKeySize, "Unexpected key size is provided!" );
                 if ( nDerivedKeySize != 32 )
-                    throw uno::RuntimeException( "Unexpected key size is provided!" );
+                    throw uno::RuntimeException( u"Unexpected key size is provided!"_ustr );
 
                 sEncAlgName = AES256_URL;
             }
@@ -415,7 +415,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 SAL_WARN_IF(nDerivedKeySize != 32, "package.manifest", "Unexpected key size is provided!");
                 if (nDerivedKeySize != 32)
                 {
-                    throw uno::RuntimeException("Unexpected key size is provided!");
+                    throw uno::RuntimeException(u"Unexpected key size is provided!"_ustr);
                 }
                 sEncAlgName = AESGCM256_URL;
             }
@@ -424,7 +424,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 sEncAlgName = BLOWFISH_NAME;
             }
             else
-                throw uno::RuntimeException( "Unexpected encryption algorithm is provided!" );
+                throw uno::RuntimeException( u"Unexpected encryption algorithm is provided!"_ustr );
 
             pNewAttrList->AddAttribute ( ATTRIBUTE_ALGORITHM_NAME, sEncAlgName );
 
@@ -466,7 +466,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else
-                    throw uno::RuntimeException( "Unexpected start key algorithm is provided!" );
+                    throw uno::RuntimeException( u"Unexpected start key algorithm is provided!"_ustr );
 
                 pNewAttrList->AddAttribute ( ATTRIBUTE_START_KEY_GENERATION_NAME, sStartKeyAlg );
                 pNewAttrList->AddAttribute ( ATTRIBUTE_KEY_SIZE, sStartKeySize );

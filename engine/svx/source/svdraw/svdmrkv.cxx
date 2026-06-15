@@ -747,14 +747,14 @@ bool lcl_isStarMath(SdrObject* pO)
     {
         auto xServiceInfo = xUnoShape.query<lang::XServiceInfo>();
 
-        if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"))
+        if (xServiceInfo.is() && xServiceInfo->supportsService(u"com.sun.star.text.TextEmbeddedObject"_ustr))
         {
             auto xUnoShapeProperties =  xUnoShape.query<beans::XPropertySet>();
             if (xUnoShapeProperties.is())
             {
-                auto xModelInfo = xUnoShapeProperties->getPropertyValue("Model").query<lang::XServiceInfo>();
+                auto xModelInfo = xUnoShapeProperties->getPropertyValue(u"Model"_ustr).query<lang::XServiceInfo>();
                 if (xModelInfo.is())
-                    return xModelInfo->supportsService("com.sun.star.formula.FormulaProperties");
+                    return xModelInfo->supportsService(u"com.sun.star.formula.FormulaProperties"_ustr);
             }
         }
     }

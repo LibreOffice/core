@@ -517,7 +517,7 @@ Reference<XClipboard> GetSystemPrimarySelection()
 #else
         static Reference< XClipboard > s_xSelection(
             xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext), UNO_QUERY);
+                u"com.sun.star.datatransfer.clipboard.GenericClipboard"_ustr, xContext), UNO_QUERY);
         xSelection = s_xSelection;
 #endif
     }

@@ -32,7 +32,7 @@ public:
 
         {
             sal_uInt64 seed(0);
-            o3tl::hash_combine(seed, OUString("Hmm-.."));
+            o3tl::hash_combine(seed, u"Hmm-.."_ustr);
             o3tl::hash_combine(seed, 24);
             o3tl::hash_combine(seed, 42u);
             o3tl::hash_combine(seed, 5.1);
@@ -45,7 +45,7 @@ public:
 
         {
             sal_uInt32 seed(0);
-            o3tl::hash_combine(seed, OUString("Hmm-.."));
+            o3tl::hash_combine(seed, u"Hmm-.."_ustr);
             o3tl::hash_combine(seed, 24);
             o3tl::hash_combine(seed, 42u);
             o3tl::hash_combine(seed, 5.1);

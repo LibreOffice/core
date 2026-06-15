@@ -4707,20 +4707,20 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testHoriQueryEmptyCell)
     m_pDoc->SetString(2, 0, 0, u"z"_ustr);
 
     // Count empty cells in range A1:H1
-    m_pDoc->SetFormula(ScAddress(0, 2, 0), "=COUNTIF(A1:H1;\"=\")",
+    m_pDoc->SetFormula(ScAddress(0, 2, 0), u"=COUNTIF(A1:H1;\"=\")"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     // Without fix, count was 0
     CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTIF equal empty", 5.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
 
     // Get address of first empty cell
-    m_pDoc->SetFormula(ScAddress(0, 3, 0), "=CELL(\"ADDRESS\"; XLOOKUP(;A1:H1;A1:H1))",
+    m_pDoc->SetFormula(ScAddress(0, 3, 0), u"=CELL(\"ADDRESS\"; XLOOKUP(;A1:H1;A1:H1))"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     // Without fix, reference was #N/A
     CPPUNIT_ASSERT_EQUAL_MESSAGE("XLOOKUP empty", u"$D$1"_ustr,
                                  m_pDoc->GetString(ScAddress(0, 3, 0)));
 
     // criterion <> counts empty cells too.
-    m_pDoc->SetFormula(ScAddress(0, 4, 0), "=COUNTIF(A1:H1;\"<>y\")",
+    m_pDoc->SetFormula(ScAddress(0, 4, 0), u"=COUNTIF(A1:H1;\"<>y\")"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     // Without fix, count was 2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTIF not equal", 7.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
@@ -4743,7 +4743,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testVertQueryEmptyCell)
         m_pDoc->SetValue(1, nRow, 0, nRow + 1);
     }
 
-    m_pDoc->SetFormula(ScAddress(3, 0, 0), "=COUNTIFS(A1:A10;\"=\";B1:B10;\">0\")",
+    m_pDoc->SetFormula(ScAddress(3, 0, 0), u"=COUNTIFS(A1:A10;\"=\";B1:B10;\">0\")"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     // As >0 is true for all cells in B1:B10, match is determined by empty cells in col A1:A10.
     // Without fix the range was reduced, so that B9 and B10 were not count and result was 4.
@@ -4751,7 +4751,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testVertQueryEmptyCell)
 
     // Make sure the result is identical for exchanged queries. This tests that the range
     // reduction has actually been reversed.
-    m_pDoc->SetFormula(ScAddress(3, 1, 0), "=COUNTIFS($B1:$B10;\">0\";A1:A10;\"=\")",
+    m_pDoc->SetFormula(ScAddress(3, 1, 0), u"=COUNTIFS($B1:$B10;\">0\";A1:A10;\"=\")"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
 

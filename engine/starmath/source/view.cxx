@@ -114,9 +114,9 @@ static OUString GetScrollUIName(const SmViewShell& rShell)
         // This one has no border on the scrolledwindow, to maximize the space
         // available when in embedded mode and minimize the difference from
         // the ole preview to give a more seamless embedded editing experience.
-        return "modules/smath/ui/embedwindow.ui";
+        return u"modules/smath/ui/embedwindow.ui"_ustr;
     }
-    return "modules/smath/ui/mathwindow.ui";
+    return u"modules/smath/ui/mathwindow.ui"_ustr;
 }
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
@@ -1842,7 +1842,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         break;
         case SID_SAVE_FORMULA:
         {
-            OUString aName = "My Formula 1";
+            OUString aName = u"My Formula 1"_ustr;
             OUString aDesc(SmResId(STR_USER_DEFINED_FORMULA));
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractSvxNameDialog> pDlg(

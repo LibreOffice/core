@@ -990,7 +990,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     {
         // save xl/connections.xml reference into [Content_Types].xml and open stream to xl/connections.xml
         sax_fastparser::FSHelperPtr aConnectionsXml = rStrm.CreateOutputStream(
-            "xl/connections.xml", u"connections.xml", rStrm.GetCurrentStream()->getOutputStream(),
+            u"xl/connections.xml"_ustr, u"connections.xml", rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.connections+xml",
             oox::getRelationship(Relationship::CONNECTIONS));
         rStrm.PushStream(aConnectionsXml);
@@ -1373,7 +1373,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         // save xl/xmlMaps.xml relationship into xl/_rels/workbook.xml.rels
         // save xl/xmlMaps.xml reference into [Content_Types].xml and open stream to xl/xmlMaps.xml
         sax_fastparser::FSHelperPtr aXmlMapsXml = rStrm.CreateOutputStream(
-            "xl/xmlMaps.xml", u"xmlMaps.xml", rStrm.GetCurrentStream()->getOutputStream(),
+            u"xl/xmlMaps.xml"_ustr, u"xmlMaps.xml", rStrm.GetCurrentStream()->getOutputStream(),
             "application/xml", oox::getRelationship(Relationship::XMLMAPS));
 
         // start exporting xl/xmlMaps.xml

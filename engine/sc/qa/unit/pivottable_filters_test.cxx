@@ -2639,10 +2639,10 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testFirstHeaderRowZero)
     // Test that an xlsx pivot table with `firstHeaderRow="0"` is shown and exported correctly
     createScDoc("xlsx/pivot-table/first_header_row_zero.xlsx");
     // Check that the text under the table is visible
-    CPPUNIT_ASSERT_EQUAL(OUString("under"), getScDoc()->GetString(ScAddress(2, 6, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"under"_ustr, getScDoc()->GetString(ScAddress(2, 6, 1)));
 
     save(TestFilter::XLSX);
-    xmlDocUniquePtr pDoc = parseExport("xl/pivotTables/pivotTable1.xml");
+    xmlDocUniquePtr pDoc = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:pivotTableDefinition/x:location", "firstHeaderRow", u"0");
 }

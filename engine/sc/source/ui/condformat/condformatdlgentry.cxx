@@ -306,7 +306,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, formula::RefEdit&, rRefEdit, void)
     }
 
     rEdit.set_message_type(weld::EntryMessageType::Normal);
-    mxFtVal->set_label("");
+    mxFtVal->set_label(u""_ustr);
 }
 
 void ScConditionFrmtEntry::Select()
@@ -1368,7 +1368,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Grid* pParent, ScIconSetTyp
     , mxImgIcon(mxBuilder->weld_image(u"icon"_ustr))
     , mxEdEntry(mxBuilder->weld_entry(u"entry"_ustr))
     , mxLbEntryType(mxBuilder->weld_combo_box(u"listbox"_ustr))
-    , mxConditionMode(mxBuilder->weld_combo_box("conditionMode"))
+    , mxConditionMode(mxBuilder->weld_combo_box(u"conditionMode"_ustr))
     , mpParentGrid(pParent)
 {
     mxEdEntry->set_buildable_name(mxEdEntry->get_buildable_name() + OUString::number(i));

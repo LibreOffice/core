@@ -246,7 +246,7 @@ void SwBreakDlg::UpdateImage()
     else if (m_xPageBtn->get_active())
         m_xTypeImage->set_from_icon_name(RID_BMP_PAGEBREAK);
     else
-        m_xTypeImage->set_from_icon_name(""); //clear
+        m_xTypeImage->set_from_icon_name(u""_ustr); //clear
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

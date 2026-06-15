@@ -1389,10 +1389,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf150789)
         OUString sShapeType;
         const SdrCustomShapeGeometryItem& rGeometryItem(
             pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
-        const css::uno::Any aAny = *rGeometryItem.GetPropertyValueByName("Type");
+        const css::uno::Any aAny = *rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
         if (aAny.hasValue())
             aAny >>= sShapeType;
-        CPPUNIT_ASSERT_EQUAL(OUString("ooxml-upArrowCallout"), sShapeType);
+        CPPUNIT_ASSERT_EQUAL(u"ooxml-upArrowCallout"_ustr, sShapeType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(395),
                              pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1424),

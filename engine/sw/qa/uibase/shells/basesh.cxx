@@ -23,7 +23,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/uibase/shells/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/shells/data/"_ustr)
     {
     }
 };

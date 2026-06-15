@@ -583,7 +583,7 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreateBitmapBulletPreview(sal_uIn
     }
     else
     {
-        vcl::Font aFont("Arial", Size(0, 12));
+        vcl::Font aFont(u"Arial"_ustr, Size(0, 12));
         pVDev->SetFont(aFont);
         pVDev->DrawText(Point(10, 50), u"No Image"_ustr);
     }

@@ -162,7 +162,7 @@ OSaveAsDlg::OSaveAsDlg( weld::Window * pParent,
             if ( xSupplier.is() )
             {
                 // get the unique table name
-                OUString sTableName = ::dbtools::composeTableName(m_xMetaData, sCatalog, sSchema, "Table", false, eComposeRule);
+                OUString sTableName = ::dbtools::composeTableName(m_xMetaData, sCatalog, sSchema, u"Table"_ustr, false, eComposeRule);
                 // we create a unique full table name
                 OUString sUniqueName = ::dbtools::createUniqueName(xSupplier, sTableName, true);
                 // we extract just the table name in sTable

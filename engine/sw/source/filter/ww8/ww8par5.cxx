@@ -3359,8 +3359,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
             // also include the hyperlinks and page references
             SwFormToken aLinkStart(TOKEN_LINK_START);
             SwFormToken aLinkEnd(TOKEN_LINK_END);
-            aLinkStart.sCharStyleName = UIName("Index Link");
-            aLinkEnd.sCharStyleName = UIName("Index Link");
+            aLinkStart.sCharStyleName = UIName(u"Index Link"_ustr);
+            aLinkEnd.sCharStyleName = UIName(u"Index Link"_ustr);
             SwForm aForm(pBase->GetTOXForm());
             sal_uInt16 nEnd = aForm.GetFormMax()-1;
 

@@ -900,7 +900,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf123898)
     Scheduler::ProcessEventsToIdle();
 
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("de", "DE", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString())))
         return;
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1535,9 +1535,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
     createSwDoc("hidden-para-follow-frame.fodt");
 
     comphelper::ScopeGuard g(
-        [ this, old = queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") ] {
+        [ this, old = queryDispatchStatus(mxComponent, m_xContext, u".uno:ShowHiddenParagraphs"_ustr) ] {
             auto args(comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", old } }));
-            dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", args);
+            dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, args);
         });
 
     {
@@ -1546,10 +1546,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
 
         uno::Sequence<beans::PropertyValue> argsSH(
             comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
-        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+        dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
         uno::Sequence<beans::PropertyValue> args(
             comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
-        dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+        dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1558,7 +1558,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
         assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
     }
 
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+    dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, {});
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1567,7 +1567,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
     }
 
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+    dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, {});
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1582,9 +1582,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFlys)
     createSwDoc("hidden-para-as-char-fly.fodt");
 
     comphelper::ScopeGuard g(
-        [ this, old = queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") ] {
+        [ this, old = queryDispatchStatus(mxComponent, m_xContext, u".uno:ShowHiddenParagraphs"_ustr) ] {
             auto args(comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", old } }));
-            dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", args);
+            dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, args);
         });
 
     {
@@ -1593,17 +1593,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFlys)
 
         uno::Sequence<beans::PropertyValue> argsSH(
             comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
-        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+        dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
         uno::Sequence<beans::PropertyValue> args(
             comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
-        dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+        dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height", u"724");
     }
 
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+    dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, {});
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1611,7 +1611,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFlys)
         assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height", u"448");
     }
 
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+    dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, {});
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();

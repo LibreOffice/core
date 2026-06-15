@@ -2667,7 +2667,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.WebDAVManager";
+        return u"com.sun.star.comp.WebDAVManager"_ustr;
     }
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
     {
@@ -2675,7 +2675,7 @@ public:
     }
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.ucb.WebDAVManager" };
+        return { u"com.sun.star.ucb.WebDAVManager"_ustr };
     }
 
     // comphelper::COKit::ThreadJoinable

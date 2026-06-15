@@ -146,12 +146,12 @@ VclPtr<vcl::Window> ChartThemeControl::createVclPopupWindow(vcl::Window* pParent
 
 OUString ChartThemeControl::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.ChartThemeControl";
+    return u"com.sun.star.comp.chart2.ChartThemeControl"_ustr;
 }
 
 uno::Sequence<OUString> ChartThemeControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
@@ -163,7 +163,7 @@ com_sun_star_comp_chart2_ChartThemeControl_get_implementation(uno::XComponentCon
 
 ChartThemePopup::ChartThemePopup(ChartThemeControl* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent,
-                       "modules/schart/ui/chartthemepopup.ui", "ThemeWindow")
+                       u"modules/schart/ui/chartthemepopup.ui"_ustr, u"ThemeWindow"_ustr)
     , mxControl(pControl)
     , mxThemesIconView(m_xBuilder->weld_icon_view(u"themeview1col"_ustr))
     , mxManageChartStylesButton(m_xBuilder->weld_button(u"managechartstyle"_ustr))

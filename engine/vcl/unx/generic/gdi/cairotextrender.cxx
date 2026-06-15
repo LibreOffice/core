@@ -71,7 +71,7 @@ private:
 
     virtual OUString getCacheName() const override
     {
-        return "CairoFontsCache";
+        return u"CairoFontsCache"_ustr;
     }
 
     virtual bool dropCaches() override

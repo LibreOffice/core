@@ -586,20 +586,20 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorProperties)
     uno::Reference<beans::XPropertySet> const xAnchorProp(xAnchor, uno::UNO_QUERY);
 
     // the problem was that the property set didn't work
-    auto xSecFromProp = getProperty<uno::Reference<text::XTextContent>>(xAnchorProp, "TextSection");
+    auto xSecFromProp = getProperty<uno::Reference<text::XTextContent>>(xAnchorProp, u"TextSection"_ustr);
     CPPUNIT_ASSERT_EQUAL(xSection, xSecFromProp);
 
-    xAnchorProp->setPropertyValue("CharHeight", uno::Any(float(64)));
-    CPPUNIT_ASSERT_EQUAL(float(64), getProperty<float>(xAnchorProp, "CharHeight"));
+    xAnchorProp->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(64)));
+    CPPUNIT_ASSERT_EQUAL(float(64), getProperty<float>(xAnchorProp, u"CharHeight"_ustr));
     uno::Reference<beans::XPropertyState> const xAnchorState(xAnchor, uno::UNO_QUERY);
     // TODO: why does this return DEFAULT_VALUE instead of DIRECT_VALUE?
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
-                         xAnchorState->getPropertyState("CharHeight"));
+                         xAnchorState->getPropertyState(u"CharHeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
-                         xAnchorState->getPropertyStates({ "CharHeight" })[0]);
-    CPPUNIT_ASSERT_EQUAL(float(12), xAnchorState->getPropertyDefault("CharHeight").get<float>());
-    xAnchorState->setPropertyToDefault("CharHeight");
-    CPPUNIT_ASSERT_EQUAL(float(12), getProperty<float>(xAnchorProp, "CharHeight"));
+                         xAnchorState->getPropertyStates({ u"CharHeight"_ustr })[0]);
+    CPPUNIT_ASSERT_EQUAL(float(12), xAnchorState->getPropertyDefault(u"CharHeight"_ustr).get<float>());
+    xAnchorState->setPropertyToDefault(u"CharHeight"_ustr);
+    CPPUNIT_ASSERT_EQUAL(float(12), getProperty<float>(xAnchorProp, u"CharHeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
@@ -853,63 +853,63 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf62603)
 
     // Set up test by inserting strings with different font style/sizes
     // Inserts 1st string containing quotation marks (") with no font style
-    xText->insertString(xCursor, "\"", false);
+    xText->insertString(xCursor, u"\""_ustr, false);
     xCursor->gotoStart(true); // selects full string
-    CPPUNIT_ASSERT_EQUAL(OUString("\""), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\""_ustr, xCursor->getString());
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
-                         getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+                         getProperty<awt::FontSlant>(xCursorProps, u"CharPosture"_ustr));
     xCursor->collapseToEnd();
 
     // Inserts 2nd string 'test' with italic font style
-    xCursorProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
-    xText->insertString(xCursor, "test", false);
+    xCursorProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
+    xText->insertString(xCursor, u"test"_ustr, false);
     xCursor->goLeft(4, true); // selects 2nd string
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xCursor->getString());
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                         getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+                         getProperty<awt::FontSlant>(xCursorProps, u"CharPosture"_ustr));
     xCursor->collapseToEnd();
 
     // Insert 3rd string '? ' with 28 pt font height
-    xCursorProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_NONE)); // no font style
-    xCursorProps->setPropertyValue("CharHeight", uno::Any(float(28.0)));
-    xText->insertString(xCursor, "? ", false);
+    xCursorProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_NONE)); // no font style
+    xCursorProps->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(28.0)));
+    xText->insertString(xCursor, u"? "_ustr, false);
     xCursor->goLeft(2, true); // selects 3rd string
-    CPPUNIT_ASSERT_EQUAL(float(28.0), getProperty<float>(xCursorProps, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(float(28.0), getProperty<float>(xCursorProps, u"CharHeight"_ustr));
     xCursor->collapseToEnd();
 
     // Insert 4th string 'who' with default 12 pt font height
-    xCursorProps->setPropertyValue("CharHeight", uno::Any(float(12.0)));
-    xText->insertString(xCursor, "who", false);
+    xCursorProps->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(12.0)));
+    xText->insertString(xCursor, u"who"_ustr, false);
     xCursor->goLeft(3, true); // selects 4rd string
-    CPPUNIT_ASSERT_EQUAL(float(12.0), getProperty<float>(xCursorProps, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(float(12.0), getProperty<float>(xCursorProps, u"CharHeight"_ustr));
     xCursor->collapseToEnd();
 
     // Asserts that full string is properly inserted as: '"test? who'
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(OUString("\"test? who"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\"test? who"_ustr, getParagraph(1)->getString());
 
     uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
     uno::Reference<util::XReplaceDescriptor> xReplaceDesc(xReplace->createReplaceDescriptor());
 
     // Searches for "t and replaces with "gu
     // Note: Search string contains both no font style and italic font style
-    xReplaceDesc->setSearchString("\"t");
-    xReplaceDesc->setReplaceString("\"gu");
+    xReplaceDesc->setSearchString(u"\"t"_ustr);
+    xReplaceDesc->setReplaceString(u"\"gu"_ustr);
     xReplace->replaceAll(xReplaceDesc);
 
     // Search/replace adds extra space between ? and w
     // Note: Search string contains both 28 pt and 12 pt font sizes
-    xReplaceDesc->setSearchString("? w");
-    xReplaceDesc->setReplaceString("?  w");
+    xReplaceDesc->setSearchString(u"? w"_ustr);
+    xReplaceDesc->setReplaceString(u"?  w"_ustr);
     xReplace->replaceAll(xReplaceDesc);
 
     // Asserts that '"test? who' is replaced with '"guest?  who'
-    CPPUNIT_ASSERT_EQUAL(OUString("\"guest?  who"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\"guest?  who"_ustr, getParagraph(1)->getString());
 
     // Asserts no font style is on double quote mark (")
     CPPUNIT_ASSERT_EQUAL(
         awt::FontSlant_NONE,
-        getProperty<awt::FontSlant>(getRun(getParagraph(1), 1, u"\""_ustr), "CharPosture"));
+        getProperty<awt::FontSlant>(getRun(getParagraph(1), 1, u"\""_ustr), u"CharPosture"_ustr));
 
     // Asserts font style for 'guest' is italic
     // Without the test, 'g' and 'u' in 'guest' will change to no font style
@@ -917,18 +917,18 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf62603)
     // - Actual: 0 // NONE
     CPPUNIT_ASSERT_EQUAL(
         awt::FontSlant_ITALIC,
-        getProperty<awt::FontSlant>(getRun(getParagraph(1), 2, u"guest"_ustr), "CharPosture"));
+        getProperty<awt::FontSlant>(getRun(getParagraph(1), 2, u"guest"_ustr), u"CharPosture"_ustr));
 
     // Asserts font size is 28 pt
     CPPUNIT_ASSERT_EQUAL(float(28.0),
-                         getProperty<float>(getRun(getParagraph(1), 3, u"? "_ustr), "CharHeight"));
+                         getProperty<float>(getRun(getParagraph(1), 3, u"? "_ustr), u"CharHeight"_ustr));
 
     // Asserts font size is 12 pt
     // Without the test, the space ' ' and 'w' will change to 28 pt font size
     // - Expected: 12
     // - Actual: 28
     CPPUNIT_ASSERT_EQUAL(
-        float(12.0), getProperty<float>(getRun(getParagraph(1), 4, u" who"_ustr), "CharHeight"));
+        float(12.0), getProperty<float>(getRun(getParagraph(1), 4, u" who"_ustr), u"CharHeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
@@ -1448,7 +1448,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
     auto xTextBox = getShape(1).queryThrow<css::text::XTextContent>();
     auto xTable = getParagraphOrTable(2).queryThrow<css::text::XTextTable>();
     auto xAnchorRange = xTextBox->getAnchor();
-    auto xCellText = xTable->getCellByName("B1").queryThrow<css::text::XText>();
+    auto xCellText = xTable->getCellByName(u"B1"_ustr).queryThrow<css::text::XText>();
     CPPUNIT_ASSERT_EQUAL(xCellText, xAnchorRange->getText());
 }
 
@@ -1587,7 +1587,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
 
         uno::Reference<container::XNameContainer> xParaStyles(
             xSFS->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xBodyTextStyle(xParaStyles->getByName("Text body"),
+        uno::Reference<beans::XPropertySet> xBodyTextStyle(xParaStyles->getByName(u"Text body"_ustr),
                                                            uno::UNO_QUERY);
 
         rtl::OUString sListStyleName;

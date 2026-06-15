@@ -1400,7 +1400,7 @@ OUString SdPage::autoLayoutToString(AutoLayout nLayoutId)
 {
     if (nLayoutId == AUTOLAYOUT_TITLE)
     {
-        return "AUTOLAYOUT_TITLE";
+        return u"AUTOLAYOUT_TITLE"_ustr;
     }
     return enumtoString(nLayoutId);
 }

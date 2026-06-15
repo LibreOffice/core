@@ -286,7 +286,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                         uno::Any(comphelper::makePropertyValue(u"CustomShape"_ustr, xShape)),
                         uno::Any(comphelper::makePropertyValue(u"ForceGroupWithText"_ustr, true)) };
                     uno::Reference< uno::XInterface > xInterface(
-                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.drawing.EnhancedCustomShapeEngine", aArguments, xContext) );
+                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.drawing.EnhancedCustomShapeEngine"_ustr, aArguments, xContext) );
                     assert( xInterface && "should never fail" );
                     uno::Reference< drawing::XCustomShapeEngine > xCustomShapeEngine(
                         uno::Reference< drawing::XCustomShapeEngine >( xInterface, uno::UNO_QUERY ) );

@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExport)
     // Given a document with an unreferenced style:
     EditEngine aEditEngine(mpItemPool.get());
     rtl::Reference<SfxStyleSheetPool> xStyles(new SfxStyleSheetPool(*mpItemPool));
-    xStyles->Make("mystyle", SfxStyleFamily::Para);
+    xStyles->Make(u"mystyle"_ustr, SfxStyleFamily::Para);
     aEditEngine.SetStyleSheetPool(xStyles.get());
     OUString aText = u"mytest"_ustr;
     aEditEngine.SetText(aText);
@@ -102,9 +102,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExportReferToStyle)
     // Given a document with one unused and one used style:
     EditEngine aEditEngine(mpItemPool.get());
     rtl::Reference<SfxStyleSheetPool> xStyles(new SfxStyleSheetPool(*mpItemPool));
-    xStyles->Make("mystyle", SfxStyleFamily::Para);
-    xStyles->Make("mystyle2", SfxStyleFamily::Para);
-    auto pStyle = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle2", SfxStyleFamily::Para));
+    xStyles->Make(u"mystyle"_ustr, SfxStyleFamily::Para);
+    xStyles->Make(u"mystyle2"_ustr, SfxStyleFamily::Para);
+    auto pStyle
+        = static_cast<SfxStyleSheet*>(xStyles->Find(u"mystyle2"_ustr, SfxStyleFamily::Para));
     aEditEngine.SetStyleSheetPool(xStyles.get());
     OUString aText = u"mytest"_ustr;
     aEditEngine.SetText(aText);
@@ -132,13 +133,16 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExportParentRecursive)
     // Given a document with text that has a paragraph style with a parent that itself has a parent:
     EditEngine aEditEngine(mpItemPool.get());
     rtl::Reference<SfxStyleSheetPool> xStyles(new SfxStyleSheetPool(*mpItemPool));
-    xStyles->Make("mystyle1", SfxStyleFamily::Para);
-    xStyles->Make("mystyle2", SfxStyleFamily::Para);
-    xStyles->Make("mystyle3", SfxStyleFamily::Para);
-    auto pStyle1 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle1", SfxStyleFamily::Para));
-    auto pStyle2 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle2", SfxStyleFamily::Para));
+    xStyles->Make(u"mystyle1"_ustr, SfxStyleFamily::Para);
+    xStyles->Make(u"mystyle2"_ustr, SfxStyleFamily::Para);
+    xStyles->Make(u"mystyle3"_ustr, SfxStyleFamily::Para);
+    auto pStyle1
+        = static_cast<SfxStyleSheet*>(xStyles->Find(u"mystyle1"_ustr, SfxStyleFamily::Para));
+    auto pStyle2
+        = static_cast<SfxStyleSheet*>(xStyles->Find(u"mystyle2"_ustr, SfxStyleFamily::Para));
     pStyle2->SetParent(pStyle1->GetName());
-    auto pStyle3 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle3", SfxStyleFamily::Para));
+    auto pStyle3
+        = static_cast<SfxStyleSheet*>(xStyles->Find(u"mystyle3"_ustr, SfxStyleFamily::Para));
     pStyle3->SetParent(pStyle2->GetName());
     pStyle3->GetItemSet().SetRanges(svl::Items<WEIGHT_BOLD, EE_CHAR_WEIGHT>);
     SvxWeightItem aItem(WEIGHT_BOLD, EE_CHAR_WEIGHT);
@@ -164,12 +168,15 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExportFollowRecursive)
     // Given a document with text that has a paragraph style with a follow that itself has a follow:
     EditEngine aEditEngine(mpItemPool.get());
     rtl::Reference<SfxStyleSheetPool> xStyles(new SfxStyleSheetPool(*mpItemPool));
-    xStyles->Make("mystyle1", SfxStyleFamily::Para);
-    xStyles->Make("mystyle2", SfxStyleFamily::Para);
-    xStyles->Make("mystyle3", SfxStyleFamily::Para);
-    auto pStyle1 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle1", SfxStyleFamily::Para));
-    auto pStyle2 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle2", SfxStyleFamily::Para));
-    auto pStyle3 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle3", SfxStyleFamily::Para));
+    xStyles->Make(u"mystyle1"_ustr, SfxStyleFamily::Para);
+    xStyles->Make(u"mystyle2"_ustr, SfxStyleFamily::Para);
+    xStyles->Make(u"mystyle3"_ustr, SfxStyleFamily::Para);
+    auto pStyle1
+        = static_cast<SfxStyleSheet*>(xStyles->Find(u"mystyle1"_ustr, SfxStyleFamily::Para));
+    auto pStyle2
+        = static_cast<SfxStyleSheet*>(xStyles->Find(u"mystyle2"_ustr, SfxStyleFamily::Para));
+    auto pStyle3
+        = static_cast<SfxStyleSheet*>(xStyles->Find(u"mystyle3"_ustr, SfxStyleFamily::Para));
     pStyle1->SetFollow(pStyle2->GetName());
     pStyle2->SetFollow(pStyle3->GetName());
     pStyle3->SetFollow(pStyle3->GetName());

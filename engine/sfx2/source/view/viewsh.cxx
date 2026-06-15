@@ -2852,30 +2852,30 @@ GetSelectedShapeOfView(const uno::Reference<frame::XController>& xController)
 void SfxViewShell::SetSignPDFCertificate(const svl::crypto::CertificateOrName& rCertificateOrName)
 {
     uno::Reference<beans::XPropertySet> xShape = GetSelectedShapeOfView(GetController());
-    if (!xShape.is() || !xShape->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    if (!xShape.is() || !xShape->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
         return;
     }
 
-    comphelper::SequenceAsHashMap aMap(xShape->getPropertyValue("InteropGrabBag"));
+    comphelper::SequenceAsHashMap aMap(xShape->getPropertyValue(u"InteropGrabBag"_ustr));
 
-    auto it = aMap.find("SignatureCertificate");
+    auto it = aMap.find(u"SignatureCertificate"_ustr);
     if (rCertificateOrName.Is())
     {
         if (rCertificateOrName.m_xCertificate.is())
         {
-            aMap["SignatureCertificate"] <<= rCertificateOrName.m_xCertificate;
+            aMap[u"SignatureCertificate"_ustr] <<= rCertificateOrName.m_xCertificate;
         }
         else
         {
-            aMap["SignatureCertificate"] <<= rCertificateOrName.m_aName;
+            aMap[u"SignatureCertificate"_ustr] <<= rCertificateOrName.m_aName;
         }
     }
     else if (it != aMap.end())
     {
         aMap.erase(it);
     }
-    xShape->setPropertyValue("InteropGrabBag", uno::Any(aMap.getAsConstPropertyValueList()));
+    xShape->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aMap.getAsConstPropertyValueList()));
     if (!rCertificateOrName.Is())
     {
         // The shape's property is now reset, so the doc model is no longer modified.
@@ -2886,13 +2886,13 @@ void SfxViewShell::SetSignPDFCertificate(const svl::crypto::CertificateOrName& r
 svl::crypto::CertificateOrName SfxViewShell::GetSignPDFCertificate() const
 {
     uno::Reference<beans::XPropertySet> xShape = GetSelectedShapeOfView(GetController());
-    if (!xShape.is() || !xShape->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    if (!xShape.is() || !xShape->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
         return {};
     }
 
-    comphelper::SequenceAsHashMap aMap(xShape->getPropertyValue("InteropGrabBag"));
-    auto it = aMap.find("SignatureCertificate");
+    comphelper::SequenceAsHashMap aMap(xShape->getPropertyValue(u"InteropGrabBag"_ustr));
+    auto it = aMap.find(u"SignatureCertificate"_ustr);
     if (it == aMap.end())
     {
         return {};

@@ -292,7 +292,8 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
     uno::Any arg;
     if (args.getLength() == 0)
     {
-        throw lang::IllegalArgumentException("no arguments", static_cast<XFilePicker2*>(this), 1);
+        throw lang::IllegalArgumentException(u"no arguments"_ustr, static_cast<XFilePicker2*>(this),
+                                             1);
     }
 
     arg = args[0];
@@ -300,7 +301,7 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
     if ((arg.getValueType() != cppu::UnoType<sal_Int16>::get())
         && (arg.getValueType() != cppu::UnoType<sal_Int8>::get()))
     {
-        throw lang::IllegalArgumentException("invalid argument type",
+        throw lang::IllegalArgumentException(u"invalid argument type"_ustr,
                                              static_cast<XFilePicker2*>(this), 1);
     }
 
@@ -416,7 +417,10 @@ void Gtk3KDE5FilePicker::disposing(const lang::EventObject& rEvent)
     }
 }
 
-OUString SAL_CALL Gtk3KDE5FilePicker::getImplementationName() { return FILE_PICKER_IMPL_NAME; }
+OUString SAL_CALL Gtk3KDE5FilePicker::getImplementationName()
+{
+    return u"" FILE_PICKER_IMPL_NAME ""_ustr;
+}
 
 sal_Bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceName)
 {
@@ -425,8 +429,9 @@ sal_Bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceNam
 
 uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.FilePicker", "com.sun.star.ui.dialogs.SystemFilePicker",
-             "com.sun.star.ui.dialogs.Gtk3KDE5FilePicker" };
+    return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.Gtk3KDE5FilePicker"_ustr };
 }
 
 void Gtk3KDE5FilePicker::filterChanged()

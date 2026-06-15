@@ -1400,7 +1400,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStyleImportExport)
     loadFromFile(std::u16string_view(u"xlsx/column-style.xlsx"));
 
     save(TestFilter::XLSX);
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/style1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/style1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/cs:chartStyle");
     assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle");
@@ -1414,7 +1414,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testColorStyleImportExport)
     loadFromFile(std::u16string_view(u"xlsx/column-style.xlsx"));
 
     save(TestFilter::XLSX);
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/colors1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/colors1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/cs:colorStyle", "meth", u"acrossLinear");
     assertXPath(pXmlDoc, "/cs:colorStyle/a:schemeClr", "val", u"dk2");

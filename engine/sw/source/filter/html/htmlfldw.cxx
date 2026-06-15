@@ -478,8 +478,8 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
     if( SwFieldIds::SetExp == pFieldTyp->Which() &&
         (SwGetSetExpType::String & static_cast<const SwSetExpField*>(pField)->GetSubType()) )
     {
-        const bool bOn = pFieldTyp->GetName() == "HTML_ON";
-        if (!bOn && pFieldTyp->GetName() != "HTML_OFF")
+        const bool bOn = pFieldTyp->GetName() == u"HTML_ON"_ustr;
+        if (!bOn && pFieldTyp->GetName() != u"HTML_OFF"_ustr)
             return rWrt;
 
         OUString rText(comphelper::string::strip(pField->GetPar2(), ' '));

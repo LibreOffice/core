@@ -196,7 +196,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 #if !GTK_CHECK_VERSION(4, 0, 0)
             MAP_BUILTIN( PointerStyle::Pen, GDK_PENCIL, "" );
 #else
-            MAKE_CURSOR( PointerStyle::Pen, pen_, RID_CURSOR_PEN );
+            MAKE_CURSOR( PointerStyle::Pen, pen_, u"" RID_CURSOR_PEN ""_ustr );
 #endif
 
             MAP_BUILTIN( PointerStyle::HSplit, GDK_SB_H_DOUBLE_ARROW, "col-resize" );

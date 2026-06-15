@@ -70,7 +70,7 @@ ContextHandlerRef StyleEntryContext::onCreateContext(sal_Int32 nElement,
                 return new StyleReferenceContext(*this, rAttribs.getInteger(XML_idx, -1),
                                                  mrModel.mxEffectRef.create());
             case CS_TOKEN(fontRef): // CT_FontReference
-                return new FontReferenceContext(*this, rAttribs.getString(XML_idx, ""),
+                return new FontReferenceContext(*this, rAttribs.getString(XML_idx, u""_ustr),
                                                 mrModel.mxFontRef.create());
             case CS_TOKEN(spPr): // a:CT_ShapeProperties
                 return new ShapePropertiesContext(*this, mrModel.mxShapeProp.create());

@@ -4991,8 +4991,8 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula)
 
     // Below vector contains validTokens for the 1st token based on the number of tokens in the formula. The order is: 2, 3, 4
     static const std::vector<std::set<OUString>> validTokens
-        = { { "val", "abs", "sqrt" }, { "min", "max" }, { "*/", "+-", "?:" } };
-    static const std::set<OUString> builtInVariables = { "w", "h", "t", "b", "l", "r" };
+        = { { u"val"_ustr, u"abs"_ustr, u"sqrt"_ustr }, { u"min"_ustr, u"max"_ustr }, { u"*/"_ustr, u"+-"_ustr, u"?:"_ustr } };
+    static const std::set<OUString> builtInVariables = { u"w"_ustr, u"h"_ustr, u"t"_ustr, u"b"_ustr, u"l"_ustr, u"r"_ustr };
     const std::vector<OUString> strTokens = comphelper::string::split(sFormula, ' ');
     sal_uInt16 nSize = strTokens.size();
 
@@ -5038,9 +5038,9 @@ OUString GetFormula(const OUString& sEquation)
      */
 
     if (sEquation == "logwidth") // #1
-        return "val w";
+        return u"val w"_ustr;
     if (sEquation == "logheight")
-        return "val h";
+        return u"val h"_ustr;
     if (sEquation.startsWith("logwidth/")) // #2
         sFormula = u"*/ 1 w "_ustr + sEquation.subView(9);
     else if (sEquation.startsWith("logheight/"))
@@ -5049,12 +5049,12 @@ OUString GetFormula(const OUString& sEquation)
     {
         size_t nPos = sFormula.indexOf("*logwidth/"); //#3
         if (nPos != std::string::npos)
-            sFormula = "*/ " + sFormula.replaceAt(nPos, 10, " w ");
+            sFormula = "*/ " + sFormula.replaceAt(nPos, 10, u" w "_ustr);
         else
         {
             nPos = sFormula.indexOf("*logheight/");
             if (nPos != std::string::npos)
-                sFormula = "*/ " + sFormula.replaceAt(nPos, 11, " h ");
+                sFormula = "*/ " + sFormula.replaceAt(nPos, 11, u" h "_ustr);
         }
     }
 

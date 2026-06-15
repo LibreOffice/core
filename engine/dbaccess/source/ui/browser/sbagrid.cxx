@@ -467,7 +467,7 @@ VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinB
 {
     auto pGridControl = VclPtr<SbaGridControl>::Create( m_xContext, pParent, this, nStyle);
     // Set an ID on the grid to make it easier to do UI testing
-    pGridControl->set_id("DBGrid");
+    pGridControl->set_id(u"DBGrid"_ustr);
     return pGridControl;
 }
 

@@ -156,7 +156,7 @@ namespace
         std::shared_ptr<RichString> mxText;
         OUString msAuthorName;
 
-        OOXGenerateNoteCaption(const std::shared_ptr<RichString>& rText, const OUString& rAuthorName = "")
+        OOXGenerateNoteCaption(const std::shared_ptr<RichString>& rText, const OUString& rAuthorName = u""_ustr)
             : mxText(rText)
             , msAuthorName(rAuthorName)
         {
@@ -285,7 +285,7 @@ OUString Comment::getAuthorName()
 {
     if (o3tl::make_unsigned(this->maModel.mnAuthorId) < getComments().getAuthors().size())
         return getComments().getAuthors()[this->maModel.mnAuthorId];
-    return "";
+    return u""_ustr;
 }
 
 // private --------------------------------------------------------------------

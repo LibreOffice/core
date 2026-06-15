@@ -58,7 +58,7 @@ static void InitCurl_easy(CURL* const pCURL)
         rc = curl_easy_setopt(pCURL, CURLOPT_CAPATH, capath);
         if (rc != CURLE_OK)
         {
-            throw css::uno::RuntimeException("CURLOPT_CAPATH failed");
+            throw css::uno::RuntimeException(u"CURLOPT_CAPATH failed"_ustr);
         }
     }
 

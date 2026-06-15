@@ -45,7 +45,7 @@ namespace {
  */
 bool extractFilePath(const OUString& rUrl, OUString& rPath)
 {
-    OUString prefix1 = "Excel.Sheet.8", prefix2 = "Excel.Sheet.12";
+    OUString prefix1 = u"Excel.Sheet.8"_ustr, prefix2 = u"Excel.Sheet.12"_ustr;
     sal_Int32 nStart = -1;
 
     if (rUrl.startsWith(prefix1))

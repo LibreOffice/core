@@ -1117,7 +1117,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
         CPPUNIT_ASSERT(xImage.is());
         uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
         uno::Reference<graphic::XGraphic> xGraphic;
-        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic);
 
         Graphic aGraphic(xGraphic);
         // Without the accompanying fix in place, this test would have failed with:

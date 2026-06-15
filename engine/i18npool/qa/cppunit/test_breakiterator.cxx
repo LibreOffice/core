@@ -1793,11 +1793,11 @@ void TestBreakIterator::testKorean()
 
 void TestBreakIterator::testDictWordPrepostDash()
 {
-    std::vector<lang::Locale> aLocale{ { "de", "DE", "" },
-                                       { "nds", "DE", "" },
-                                       { "nl", "NL", "" },
-                                       { "sv", "SE", "" },
-                                       { "da", "DK", "" } };
+    std::vector<lang::Locale> aLocale{ { u"de"_ustr, u"DE"_ustr, u""_ustr },
+                                       { u"nds"_ustr, u"DE"_ustr, u""_ustr },
+                                       { u"nl"_ustr, u"NL"_ustr, u""_ustr },
+                                       { u"sv"_ustr, u"SE"_ustr, u""_ustr },
+                                       { u"da"_ustr, u"DK"_ustr, u""_ustr } };
 
     for (const auto& rLocale : aLocale)
     {
@@ -1818,8 +1818,8 @@ void TestBreakIterator::testDictWordPrepostDash()
 void TestBreakIterator::testDictWordAbbreviation()
 {
     std::vector<lang::Locale> aLocale{
-        { "en", "US", "" }, // dict_word locale
-        { "de", "DE", "" } // dict_word_prepostdash locale
+        { u"en"_ustr, u"US"_ustr, u""_ustr }, // dict_word locale
+        { u"de"_ustr, u"DE"_ustr, u""_ustr } // dict_word_prepostdash locale
     };
 
     for (const auto& rLocale : aLocale)
@@ -1861,7 +1861,7 @@ void TestBreakIterator::testDictWordAbbreviation()
 void TestBreakIterator::testDictWordAbbreviationHU()
 {
     std::vector<lang::Locale> aLocale{
-        { "hu", "HU", "" } // dict_word_hu locale
+        { u"hu"_ustr, u"HU"_ustr, u""_ustr } // dict_word_hu locale
     };
 
     for (const auto& rLocale : aLocale)
@@ -2153,7 +2153,7 @@ void TestBreakIterator::testDictionaryIteratorLanguages()
 {
     // Thai
     {
-        lang::Locale aLocale{ "th", "TH", "" };
+        lang::Locale aLocale{ u"th"_ustr, u"TH"_ustr, u""_ustr };
 
         const OUString aStr = u"รอนานหรือเปล่า"_ustr;
 
@@ -2218,7 +2218,7 @@ void TestBreakIterator::testDictionaryIteratorLanguages()
 
     // Japanese
     {
-        lang::Locale aLocale{ "ja", "JP", "" };
+        lang::Locale aLocale{ u"ja"_ustr, u"JP"_ustr, u""_ustr };
 
         const OUString aStr = u"通産省工業技術院北海道"_ustr;
 
@@ -2311,7 +2311,7 @@ void TestBreakIterator::testDictionaryIteratorLanguages()
 
     // Chinese
     {
-        lang::Locale aLocale{ "zh", "CN", "" };
+        lang::Locale aLocale{ u"zh"_ustr, u"CN"_ustr, u""_ustr };
 
         const OUString aStr = u"很高兴认识你"_ustr;
 

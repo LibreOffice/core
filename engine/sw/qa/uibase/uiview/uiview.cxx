@@ -513,7 +513,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testReinstateTrackedChangeState)
     // Given a document with a deletion:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("abcd");
+    pWrtShell->Insert(u"abcd"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);

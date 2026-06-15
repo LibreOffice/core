@@ -591,13 +591,13 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 void SwNavigationPI::InitContentFunctionsToolbar()
 {
     m_xHeadingsContentFunctionsToolbar
-        = m_xBuilder->weld_toolbar("HeadingsContentFunctionButtonsToolbar");
-    m_xDeleteFunctionToolbar = m_xBuilder->weld_toolbar("DeleteFunctionButtonToolbar");
+        = m_xBuilder->weld_toolbar(u"HeadingsContentFunctionButtonsToolbar"_ustr);
+    m_xDeleteFunctionToolbar = m_xBuilder->weld_toolbar(u"DeleteFunctionButtonToolbar"_ustr);
 
     const OUString sContentTypes[]
-        = { "Headings",  "Tables",         "Frames",     "Images",     "OLEobjects",
-            "Bookmarks", "Sections",       "Hyperlinks", "References", "Indexes",
-            "Comments",  "Drawingobjects", "Fields",     "Footnotes",  "Endnotes" };
+        = { u"Headings"_ustr,  u"Tables"_ustr,         u"Frames"_ustr,     u"Images"_ustr,     u"OLEobjects"_ustr,
+            u"Bookmarks"_ustr, u"Sections"_ustr,       u"Hyperlinks"_ustr, u"References"_ustr, u"Indexes"_ustr,
+            u"Comments"_ustr,  u"Drawingobjects"_ustr, u"Fields"_ustr,     u"Footnotes"_ustr,  u"Endnotes"_ustr };
 
     for (ContentTypeId eContentTypeId : o3tl::enumrange<ContentTypeId>())
     {
@@ -765,7 +765,7 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
         }
         if (!sToolTip.isEmpty())
         {
-            m_xDeleteFunctionToolbar->set_item_tooltip_text("delete", sToolTip);
+            m_xDeleteFunctionToolbar->set_item_tooltip_text(u"delete"_ustr, sToolTip);
             m_xDeleteFunctionToolbar->show();
         }
     }

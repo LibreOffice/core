@@ -99,12 +99,12 @@ private:
 };
 
 rtl::OUString Provider::static_getImplementationName() {
-    return rtl::OUString("com.sun.star.comp.test.deployment.passive_native");
+    return u"com.sun.star.comp.test.deployment.passive_native"_ustr;
 }
 
 css::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
 {
-    rtl::OUString name("com.sun.star.test.deployment.passive_native");
+    rtl::OUString name(u"com.sun.star.test.deployment.passive_native"_ustr);
     return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
@@ -113,15 +113,15 @@ css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
 {
     css::uno::Reference< css::frame::XDispatch > dispatch;
     if (!(context_->getValueByName(
-              "/singletons/com.sun.star.test.deployment."
-              "passive_native_singleton") >>=
+              u"/singletons/com.sun.star.test.deployment."
+              "passive_native_singleton"_ustr) >>=
           dispatch) ||
         !dispatch.is())
     {
         throw css::uno::DeploymentException(
-            "component context fails to supply singleton"
+            u"component context fails to supply singleton"
             " com.sun.star.test.deployment.passive_native_singleton of type"
-            " com.sun.star.frame.XDispatch",
+            " com.sun.star.frame.XDispatch"_ustr,
             context_);
     }
     return dispatch;
@@ -195,8 +195,7 @@ private:
 };
 
 rtl::OUString Dispatch::static_getImplementationName() {
-    return rtl::OUString(
-        "com.sun.star.comp.test.deployment.passive_native_singleton");
+    return u"com.sun.star.comp.test.deployment.passive_native_singleton"_ustr;
 }
 
 void Dispatch::dispatch(
@@ -211,7 +210,7 @@ void Dispatch::dispatch(
         xToolkit->createMessageBox(
             xWindowPeer,
             css::awt::MessageBoxType_INFOBOX,
-            css::awt::MessageBoxButtons::BUTTONS_OK, "passive", "native"),
+            css::awt::MessageBoxButtons::BUTTONS_OK, u"passive"_ustr, u"native"_ustr),
         css::uno::UNO_SET_THROW);
 
     box->execute();

@@ -155,7 +155,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatSelf)
     // Given a document with <ins>A<format>B</format>C</ins> redlines, created by Alice:
     createSwDoc("ins-then-format-self.docx");
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     comphelper::ScopeGuard g(
         [pModule] { pModule->SetRedlineAuthor(SwResId(STR_REDLINE_UNKNOWN_AUTHOR)); });
     SwDocShell* pDocShell = getSwDocShell();
@@ -598,7 +598,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatThenFormatOther)
 
     // When a different author selects the same range and applies italic:
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     comphelper::ScopeGuard g(
         [pModule] { pModule->SetRedlineAuthor(SwResId(STR_REDLINE_UNKNOWN_AUTHOR)); });
     pWrtShell->SttEndDoc(/*bStt=*/true);

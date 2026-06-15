@@ -23,7 +23,7 @@
 ScOnlyActiveSheetSavedDlg::ScOnlyActiveSheetSavedDlg(weld::Window* pParent)
     : GenericDialogController(pParent, u"modules/scalc/ui/onlyactivesheetsaveddialog.ui"_ustr,
                               u"OnlyActiveSheetSavedDialog"_ustr)
-    , m_xWarningOnBox(m_xBuilder->weld_check_button("cbShow"))
+    , m_xWarningOnBox(m_xBuilder->weld_check_button(u"cbShow"_ustr))
 {
     m_xDialog->set_default_response(RET_YES);
 }

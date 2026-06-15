@@ -745,7 +745,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
     // tdf#143899: framePr textbox not affected by compat15's aversion to vertical page margin
     // The textbox requests to be 0.72inch above its anchor paragraph (the first paragraph)
     xmlDocUniquePtr pDump = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getXPathContent(pDump, "//fly[2]/txt"));
+    CPPUNIT_ASSERT_EQUAL(u"Frame"_ustr, getXPathContent(pDump, "//fly[2]/txt"));
     sal_Int32 nShapeBottom = getXPath(pDump, "//fly[2]/infos/bounds", "bottom").toInt32();
     sal_Int32 nBodyTop = getXPath(pDump, "//page/body/infos/bounds", "top").toInt32();
     // The framePr textbox is NOT vertically limited like other shapes to the page margins
@@ -759,7 +759,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf170767_verticalEscape, "tdf170767_verticalEscape
     // tdf#143899: non-Compat15 ODT should not be vertically limited to the body text
     // The text-shape requests to be 1.25 cm above its anchor paragraph (the first paragraph)
     xmlDocUniquePtr pDump = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), getXPathContent(pDump, "//fly[1]/txt"));
+    CPPUNIT_ASSERT_EQUAL(u"aaa"_ustr, getXPathContent(pDump, "//fly[1]/txt"));
     sal_Int32 nShapeTop = getXPath(pDump, "//fly[1]/infos/bounds", "top").toInt32();
     sal_Int32 nBodyTop = getXPath(pDump, "//page/body/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT(nBodyTop > nShapeTop); // text-shape is well above the text body area

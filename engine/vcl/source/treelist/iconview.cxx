@@ -313,7 +313,7 @@ OUString IconView::renderEntry(int pos, int dpiscale) const
 {
     SvTreeListEntry* pEntry = GetEntry(pos);
     if (!pEntry)
-        return "";
+        return u""_ustr;
 
     OUString sResult;
     const bool bHandled = maDumpImageHdl.IsSet()

@@ -76,13 +76,13 @@ namespace osl_Forbidden
 
             // check some corner cases first
             CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
-                                         true, osl::qa::isForbidden(".", osl_File_OpenFlag_Read));
+                                         true, osl::qa::isForbidden(u"."_ustr, osl_File_OpenFlag_Read));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
-                                         true, osl::qa::isForbidden("", osl_File_OpenFlag_Read));
+                                         true, osl::qa::isForbidden(u""_ustr, osl_File_OpenFlag_Read));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
-                                         true, osl::qa::isForbidden("a", osl_File_OpenFlag_Read));
+                                         true, osl::qa::isForbidden(u"a"_ustr, osl_File_OpenFlag_Read));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("read bad should be forbidden",
-                                         true, osl::qa::isForbidden("/", osl_File_OpenFlag_Read));
+                                         true, osl::qa::isForbidden(u"/"_ustr, osl_File_OpenFlag_Read));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("read from non-existent should be allowed",
                                          false, osl::qa::isForbidden(maScratchGood + "/notthere/file", osl_File_OpenFlag_Read));
 

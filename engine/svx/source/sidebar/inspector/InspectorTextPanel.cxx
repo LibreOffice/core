@@ -56,9 +56,9 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent, SfxBindings* pBind
 
     mpToolbar = m_xBuilder->weld_toolbar(u"toolbar"_ustr);
     mpToolbar->connect_clicked(LINK(this, InspectorTextPanel, ToolbarHdl));
-    mpToolbar->set_item_icon_name("paragraphstyles", "sw/res/sf01.png");
-    mpToolbar->set_item_icon_name("characterstyles", "sw/res/sf02.png");
-    mpToolbar->set_item_icon_name("directformatting", "sw/res/sr20012.png");
+    mpToolbar->set_item_icon_name(u"paragraphstyles"_ustr, u"sw/res/sf01.png"_ustr);
+    mpToolbar->set_item_icon_name(u"characterstyles"_ustr, u"sw/res/sf02.png"_ustr);
+    mpToolbar->set_item_icon_name(u"directformatting"_ustr, u"sw/res/sr20012.png"_ustr);
 
     // Setup listening and set initial state
     pBindings->Update(SID_SPOTLIGHT_PARASTYLES);
@@ -179,15 +179,15 @@ void InspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemSt
         {
             if (nSId == SID_SPOTLIGHT_PARASTYLES)
             {
-                mpToolbar->set_item_active("paragraphstyles", pItem->GetValue());
+                mpToolbar->set_item_active(u"paragraphstyles"_ustr, pItem->GetValue());
             }
             else if (nSId == SID_SPOTLIGHT_CHARSTYLES)
             {
-                mpToolbar->set_item_active("characterstyles", pItem->GetValue());
+                mpToolbar->set_item_active(u"characterstyles"_ustr, pItem->GetValue());
             }
             else
             {
-                mpToolbar->set_item_active("directformatting", pItem->GetValue());
+                mpToolbar->set_item_active(u"directformatting"_ustr, pItem->GetValue());
             }
         }
     }

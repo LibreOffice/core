@@ -48,12 +48,12 @@ OUString SAL_CALL SunburstChartType::getChartType()
 
 uno::Sequence<OUString> SunburstChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 OUString SAL_CALL SunburstChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.SunburstChartType";
+    return u"com.sun.star.comp.chart.SunburstChartType"_ustr;
 }
 
 sal_Bool SAL_CALL SunburstChartType::supportsService(const OUString& rServiceName)
@@ -63,7 +63,7 @@ sal_Bool SAL_CALL SunburstChartType::supportsService(const OUString& rServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL SunburstChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

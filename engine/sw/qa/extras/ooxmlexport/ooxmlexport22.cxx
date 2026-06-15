@@ -269,11 +269,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166553_paraStyleAfterBreak)
     // Note: we emulate this by creating two real paragraphs.
     // The paragraph style/formatting after the break must be (almost) the same as before the break
     uno::Reference<text::XTextRange> xPara
-        = getParagraph(2, "A paragraph with a large 75pt top margin, split");
+        = getParagraph(2, u"A paragraph with a large 75pt top margin, split"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Subtitle"_ustr, getProperty<OUString>(xPara, u"ParaStyleName"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2646), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
 
-    xPara.set(getParagraph(3, " by a column break")); // after the break
+    xPara.set(getParagraph(3, u" by a column break"_ustr)); // after the break
     CPPUNIT_ASSERT_EQUAL(u"Subtitle"_ustr, getProperty<OUString>(xPara, u"ParaStyleName"_ustr));
     // The top margin ONLY applies at the beginning of the paragraph (i.e. before the break)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
@@ -626,10 +626,10 @@ CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
 {
     // Given a loaded by not laid out document:
     uno::Sequence<beans::PropertyValue> aFilterOptions = {
-        comphelper::makePropertyValue("Hidden", true),
+        comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };
     mxComponent = loadFromDesktop(createFileURL(u"formula-result.fodt"),
-                                  "com.sun.star.text.TextDocument", aFilterOptions);
+                                  u"com.sun.star.text.TextDocument"_ustr, aFilterOptions);
 
     // When saving to DOCX:
     save(TestFilter::DOCX);

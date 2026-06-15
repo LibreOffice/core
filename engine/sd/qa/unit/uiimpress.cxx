@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_leading_underscore_master_nam
 
     SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
     // Rename the master page with leading underscore
-    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "_Master0");
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), u"_Master0"_ustr);
 
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"_Master0"_ustr, aMasterPageName);
@@ -1035,7 +1035,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_middle_underscore_master_name
 
     SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
     // Rename the master page with middle underscore
-    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Master_0");
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), u"Master_0"_ustr);
 
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Master_0"_ustr, aMasterPageName);
@@ -1061,7 +1061,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_trailing_underscore_master_na
 
     SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
     // Rename the master page with trailing underscore
-    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Master0_");
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), u"Master0_"_ustr);
 
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Master0_"_ustr, aMasterPageName);
@@ -1087,7 +1087,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_space_in_master_name)
 
     SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
     // Rename the master page with space in the middle
-    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Master 0");
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), u"Master 0"_ustr);
 
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Master 0"_ustr, aMasterPageName);
@@ -1118,7 +1118,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nMasterPageCnt1);
     SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
     // Rename the master page with master name
-    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "master");
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), u"master"_ustr);
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"master"_ustr, aMasterPageName);
 
@@ -1183,7 +1183,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nMasterPageCnt1);
     SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
     // Rename the master page with default name
-    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Default");
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), u"Default"_ustr);
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Default"_ustr, aMasterPageName);
 
@@ -2334,20 +2334,20 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
     pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xb);
     pTheme->setColorSet(pColorSet);
 
-    xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
+    xMasterPage->setPropertyValue(u"Theme"_ustr, uno::Any(model::theme::createXTheme(pTheme)));
 
     // When inserting a shape:
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("CreateDirectly", true),
+        comphelper::makePropertyValue(u"CreateDirectly"_ustr, true),
     };
 
-    dispatchCommand(mxComponent, ".uno:BasicShapes.round-rectangle", aArgs);
+    dispatchCommand(mxComponent, u".uno:BasicShapes.round-rectangle"_ustr, aArgs);
 
     // Then make sure the that fill color of the last shape is the accent1 color:
     sal_Int32 nShapeIndex = xDrawPage->getCount() - 1;
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
     sal_Int32 nFillColor{};
-    xShape->getPropertyValue("FillColor") >>= nFillColor;
+    xShape->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4), nFillColor);
 }

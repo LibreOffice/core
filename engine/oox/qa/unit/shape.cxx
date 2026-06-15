@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
     // - Actual  : -1
     // i.e. the connector shape is not attaching to the shape
     sal_Int32 nStartGlueId;
-    xConnectorProps->getPropertyValue("StartGluePointIndex") >>= nStartGlueId;
+    xConnectorProps->getPropertyValue(u"StartGluePointIndex"_ustr) >>= nStartGlueId;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nStartGlueId);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -121,7 +121,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
     // - Actual  : -1
     // i.e. the connector shape is not attaching to the shape
     sal_Int32 nEndGlueId;
-    xConnectorProps->getPropertyValue("EndGluePointIndex") >>= nEndGlueId;
+    xConnectorProps->getPropertyValue(u"EndGluePointIndex"_ustr) >>= nEndGlueId;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nEndGlueId);
 }
 

@@ -1380,16 +1380,16 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowAndUseGridCallbacks)
 
     SdTestViewCallback aView;
 
-    dispatchCommand(mxComponent, ".uno:GridVisible", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=true") != aView.m_aStateChanged.end());
 
-    dispatchCommand(mxComponent, ".uno:GridVisible", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=false") != aView.m_aStateChanged.end());
 
-    dispatchCommand(mxComponent, ".uno:GridUse", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=false") != aView.m_aStateChanged.end());
 
-    dispatchCommand(mxComponent, ".uno:GridUse", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=true") != aView.m_aStateChanged.end());
 }
 

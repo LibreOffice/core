@@ -128,7 +128,7 @@ void MemoryManager::swappedOut(MemoryManaged* pMemoryManaged, sal_Int64 nNewSize
     changeExisting(pMemoryManaged, nNewSize);
 }
 
-OUString MemoryManager::getCacheName() const { return "MemoryManager"; }
+OUString MemoryManager::getCacheName() const { return u"MemoryManager"_ustr; }
 
 bool MemoryManager::dropCaches()
 {

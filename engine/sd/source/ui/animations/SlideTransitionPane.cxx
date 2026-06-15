@@ -370,9 +370,9 @@ SlideTransitionPane::SlideTransitionPane(
         PanelLayout( pParent, u"SlideTransitionsPanel"_ustr, u"modules/simpress/ui/slidetransitionspanel.ui"_ustr, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())),
         mrBase( rBase ),
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
-        mxTransitionsIconView(m_xBuilder->weld_icon_view("transitions_icons")),
-        mxTransitionsScrollWindow(m_xBuilder->weld_scrolled_window("transitions_icons_scrolled_window")),
-        mxRepeatAutoFrame(m_xBuilder->weld_frame("repeat_after_frame")),
+        mxTransitionsIconView(m_xBuilder->weld_icon_view(u"transitions_icons"_ustr)),
+        mxTransitionsScrollWindow(m_xBuilder->weld_scrolled_window(u"transitions_icons_scrolled_window"_ustr)),
+        mxRepeatAutoFrame(m_xBuilder->weld_frame(u"repeat_after_frame"_ustr)),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         maLateInitTimer("sd SlideTransitionPane maLateInitTimer")

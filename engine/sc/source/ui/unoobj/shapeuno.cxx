@@ -234,7 +234,7 @@ struct PropertySetInfoCache : public CacheOwner
 private:
     virtual OUString getCacheName() const override
     {
-        return "PropertySetInfoCache";
+        return u"PropertySetInfoCache"_ustr;
     }
 
     virtual bool dropCaches() override

@@ -90,7 +90,7 @@ OUString SAL_CALL BoxWhiskerChartType::getChartType()
 
 uno::Sequence<OUString> BoxWhiskerChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 // ____ OPropertySet ____
@@ -128,7 +128,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL BoxWhiskerChartType::getPropert
 
 OUString SAL_CALL BoxWhiskerChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.BoxWhiskerChartType";
+    return u"com.sun.star.comp.chart.BoxWhiskerChartType"_ustr;
 }
 
 sal_Bool SAL_CALL BoxWhiskerChartType::supportsService(const OUString& rServiceName)
@@ -138,7 +138,7 @@ sal_Bool SAL_CALL BoxWhiskerChartType::supportsService(const OUString& rServiceN
 
 css::uno::Sequence<OUString> SAL_CALL BoxWhiskerChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

@@ -723,7 +723,7 @@ void PowerPointExport::WriteEmbeddedFontList()
     std::vector<EmbeddedFont> aEmbeddedFontInfo;
 
     uno::Sequence<uno::Any> aAnySeq;
-    if (!(mXModel->getPropertyValue("Fonts") >>= aAnySeq))
+    if (!(mXModel->getPropertyValue(u"Fonts"_ustr) >>= aAnySeq))
         return;
 
     if (aAnySeq.getLength() % 5 != 0)
@@ -2017,7 +2017,7 @@ void PowerPointExport::FindEquivalentMasterPages()
         uno::Reference<beans::XPropertySet> xPagePropSet(xDrawPage, uno::UNO_QUERY_THROW);
         if (xPagePropSet.is())
         {
-            uno::Any aLayout = xPagePropSet->getPropertyValue("SlideLayout");
+            uno::Any aLayout = xPagePropSet->getPropertyValue(u"SlideLayout"_ustr);
             if (aLayout.hasValue())
             {
                 aLayout >>= maMastersLayouts[i].second;
@@ -2476,7 +2476,7 @@ void PowerPointExport::ImplWritePPTXLayoutWithContent(
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(
         "ppt/slideLayouts/slideLayout" + OUString::number(nLayoutFileId) + ".xml",
-        "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml");
+        u"application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"_ustr);
 
     // add implicit relation of slide layout to slide master
     addRelation(pFS->getOutputStream(), oox::getRelationship(Relationship::SLIDEMASTER),

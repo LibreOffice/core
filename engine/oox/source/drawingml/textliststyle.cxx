@@ -91,7 +91,7 @@ void TextListStyle::pushToNumberingRules(const uno::Reference<container::XIndexR
         bool bChanged = false;
         if (rLevel.getParaLeftMargin())
         {
-            aMap["LeftMargin"] <<= *rLevel.getParaLeftMargin();
+            aMap[u"LeftMargin"_ustr] <<= *rLevel.getParaLeftMargin();
             bChanged = true;
         }
         if (rLevel.getFirstLineIndentation())
@@ -103,7 +103,7 @@ void TextListStyle::pushToNumberingRules(const uno::Reference<container::XIndexR
                 // text:min-label-width="..."> to ODF, where negative values are not allowed.
                 nFirstLineIndentation = 0;
             }
-            aMap["FirstLineOffset"] <<= nFirstLineIndentation;
+            aMap[u"FirstLineOffset"_ustr] <<= nFirstLineIndentation;
             bChanged = true;
         }
 

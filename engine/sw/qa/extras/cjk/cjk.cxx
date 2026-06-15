@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
     }
 
     // Check that the compat setting is exported in OOXML
-    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlSettings, "/w:settings/w:compat/w:ulTrailSpace");
 }
 

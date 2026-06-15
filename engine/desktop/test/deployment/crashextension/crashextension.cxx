@@ -97,12 +97,12 @@ private:
 
 rtl::OUString Provider::static_getImplementationName()
 {
-    return rtl::OUString("org.libreoffice.test.desktop.deployment.crashextension.impl");
+    return u"org.libreoffice.test.desktop.deployment.crashextension.impl"_ustr;
 }
 
 css::uno::Sequence<rtl::OUString> Provider::static_getSupportedServiceNames()
 {
-    rtl::OUString name("org.libreoffice.test.desktop.deployment.crashextension");
+    rtl::OUString name(u"org.libreoffice.test.desktop.deployment.crashextension"_ustr);
     return css::uno::Sequence<rtl::OUString>(&name, 1);
 }
 

@@ -299,7 +299,7 @@ void SwStyleNameMapper::FillProgName(
     }
 
     if (eFlags == SwGetPoolIdFromName::ChrFmt && rName.toString() == SwResId(STR_POOLCHR_STANDARD))
-        rFillName = ProgName("Standard");
+        rFillName = ProgName(u"Standard"_ustr);
 }
 
 // Get the UI name from the programmatic name in rName and put it into rFillName
@@ -308,7 +308,7 @@ void SwStyleNameMapper::FillUIName(
         SwGetPoolIdFromName const eFlags)
 {
     ProgName aName = rName;
-    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == "Standard")
+    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == u"Standard"_ustr)
         aName = ProgName(SwResId(STR_POOLCHR_STANDARD));
 
     SwPoolFormatId nId = GetPoolIdFromProgName ( aName, eFlags );

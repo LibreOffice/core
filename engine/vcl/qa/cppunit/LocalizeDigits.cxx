@@ -20,7 +20,7 @@ namespace
 CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, LocalDigits)
 {
     // Test the case where there are no digits to convert
-    OUString sNoDigits = "hello";
+    OUString sNoDigits = u"hello"_ustr;
     sal_Int32 nLen = sNoDigits.getLength();
     // It should return the same string
     CPPUNIT_ASSERT_EQUAL(reinterpret_cast<sal_uIntPtr>(sNoDigits.getStr()),
@@ -30,7 +30,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, LocalDigits)
     CPPUNIT_ASSERT_EQUAL(sNoDigits.getLength(), nLen);
 
     // Test the case where there are digits but they are already correct for the locale.
-    OUString sDozen = "There are 12 eggs in a dozen.";
+    OUString sDozen = u"There are 12 eggs in a dozen."_ustr;
     nLen = sDozen.getLength();
     // It should return the same string
     CPPUNIT_ASSERT_EQUAL(reinterpret_cast<sal_uIntPtr>(sDozen.getStr()),
@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, LocalDigits)
     nLen = 12;
     CPPUNIT_ASSERT_EQUAL(
         u"There are ۱۲ eggs in a dozen but 13 in a baker's dozen."_ustr,
-        LocalizeDigitsInString("There are 12 eggs in a dozen but 13 in a baker's dozen.",
+        LocalizeDigitsInString(u"There are 12 eggs in a dozen but 13 in a baker's dozen."_ustr,
                                LANGUAGE_FARSI, 2, nLen));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), nLen);
 

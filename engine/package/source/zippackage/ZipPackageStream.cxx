@@ -152,11 +152,11 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
         throw io::IOException();
 
     if ( m_xBaseEncryptionData.is() )
-        throw ZipIOException("Encrypted stream without encryption data!" );
+        throw ZipIOException(u"Encrypted stream without encryption data!"_ustr );
 
     uno::Reference< io::XSeekable > xSeek( GetOwnSeekStream(), UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException("The stream must be seekable!" );
+        throw ZipIOException(u"The stream must be seekable!"_ustr );
 
     // skip header
     xSeek->seek( n_ConstHeaderSize + m_xBaseEncryptionData->m_aInitVector.getLength() +
@@ -232,7 +232,7 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
                     : PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         }
         else
-            throw uno::RuntimeException( "No expected key is provided!" );
+            throw uno::RuntimeException( u"No expected key is provided!"_ustr );
 
         for (const auto& rKey : m_aStorageEncryptionKeys)
             if ( rKey.Name == aNameToFind )
@@ -241,7 +241,7 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
         if ( !aResult.hasElements() )
-            throw uno::RuntimeException( "No expected key is provided!" );
+            throw uno::RuntimeException( u"No expected key is provided!"_ustr );
     }
     else
         aResult = m_aEncryptionKey;

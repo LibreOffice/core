@@ -48,12 +48,12 @@ OUString SAL_CALL RegionMapChartType::getChartType()
 
 uno::Sequence<OUString> RegionMapChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 OUString SAL_CALL RegionMapChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.RegionMapChartType";
+    return u"com.sun.star.comp.chart.RegionMapChartType"_ustr;
 }
 
 sal_Bool SAL_CALL RegionMapChartType::supportsService(const OUString& rServiceName)
@@ -63,7 +63,7 @@ sal_Bool SAL_CALL RegionMapChartType::supportsService(const OUString& rServiceNa
 
 css::uno::Sequence<OUString> SAL_CALL RegionMapChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

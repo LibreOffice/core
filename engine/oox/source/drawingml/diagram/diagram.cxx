@@ -229,7 +229,7 @@ SmartArtDiagram::SmartArtDiagram(const boost::property_tree::ptree& rDiagramMode
 
             // import DomTree to mpLayout
             uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(xDom, uno::UNO_QUERY_THROW);
-            rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramLayoutFragmentHandler(*this, *xPPTImport, "internal", mpLayout));
+            rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramLayoutFragmentHandler(*this, *xPPTImport, u"internal"_ustr, mpLayout));
             xPPTImport->importFragment(xRefLayout, xSerializer);
         }
 
@@ -240,7 +240,7 @@ SmartArtDiagram::SmartArtDiagram(const boost::property_tree::ptree& rDiagramMode
 
             // import DomTree to maStyles
             uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(xDom, uno::UNO_QUERY_THROW);
-            rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramQStylesFragmentHandler(*xPPTImport, "internal", maStyles));
+            rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramQStylesFragmentHandler(*xPPTImport, u"internal"_ustr, maStyles));
             xPPTImport->importFragment(xRefLayout, xSerializer);
         }
 
@@ -251,7 +251,7 @@ SmartArtDiagram::SmartArtDiagram(const boost::property_tree::ptree& rDiagramMode
 
             // import DomTree to maColors
             uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(xDom, uno::UNO_QUERY_THROW);
-            rtl::Reference< core::FragmentHandler > xRefLayout(new ColorFragmentHandler(*xPPTImport, "internal", maColors));
+            rtl::Reference< core::FragmentHandler > xRefLayout(new ColorFragmentHandler(*xPPTImport, u"internal"_ustr, maColors));
             xPPTImport->importFragment(xRefLayout, xSerializer);
         }
     }

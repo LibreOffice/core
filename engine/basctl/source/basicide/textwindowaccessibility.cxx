@@ -915,7 +915,7 @@ void Document::retrieveRunAttributesImpl(
     if ( pColor )
     {
         css::beans::PropertyValue aPropVal{
-            "CharColor", -1,
+            u"CharColor"_ustr, -1,
             mapFontColor(pColor->GetColor()),
             css::beans::PropertyState_DIRECT_VALUE};
         aRunAttrSeq[ aPropVal.Name ] = aPropVal;
@@ -923,7 +923,7 @@ void Document::retrieveRunAttributesImpl(
     if ( pWeight )
     {
         css::beans::PropertyValue aPropVal{
-            "CharWeight", -1,
+            u"CharWeight"_ustr, -1,
             mapFontWeight(pWeight->getFontWeight()),
             css::beans::PropertyState_DIRECT_VALUE};
         aRunAttrSeq[ aPropVal.Name ] = aPropVal;

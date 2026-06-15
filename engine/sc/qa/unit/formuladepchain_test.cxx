@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testCellCountLimit)
         aDoc.SetValue(1, nRow, 0, static_cast<double>(nRow + 1));
 
     // Build a formula referencing all 55 cells: =B1+B2+...+B55 then /0
-    OUString aFormula = "=(";
+    OUString aFormula = u"=("_ustr;
     for (int i = 1; i <= 55; ++i)
     {
         if (i > 1)

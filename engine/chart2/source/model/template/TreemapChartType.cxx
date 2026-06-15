@@ -45,12 +45,12 @@ OUString SAL_CALL TreemapChartType::getChartType() { return CHART2_SERVICE_NAME_
 
 uno::Sequence<OUString> TreemapChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 OUString SAL_CALL TreemapChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.TreemapChartType";
+    return u"com.sun.star.comp.chart.TreemapChartType"_ustr;
 }
 
 sal_Bool SAL_CALL TreemapChartType::supportsService(const OUString& rServiceName)
@@ -60,7 +60,7 @@ sal_Bool SAL_CALL TreemapChartType::supportsService(const OUString& rServiceName
 
 css::uno::Sequence<OUString> SAL_CALL TreemapChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

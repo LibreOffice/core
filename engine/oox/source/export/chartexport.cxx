@@ -1640,7 +1640,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
         else
         {
             Reference< XPropertySet > xPropSet(xChartDoc, UNO_QUERY);
-            Any aNullDate = xPropSet->getPropertyValue("NullDate");
+            Any aNullDate = xPropSet->getPropertyValue(u"NullDate"_ustr);
             util::DateTime aDate;
             if ((aNullDate >>= aDate) && (aDate.Year == 1904 && aDate.Month == 1 && aDate.Day == 1))
             {

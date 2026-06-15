@@ -157,7 +157,7 @@ class MakePropertyValueTest : public CppUnit::TestFixture
         // Then make sure we can construct an awt::Size:
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRet.size());
         beans::PropertyValue aFirst = aRet[0];
-        CPPUNIT_ASSERT_EQUAL(OUString("mykey"), aFirst.Name);
+        CPPUNIT_ASSERT_EQUAL(u"mykey"_ustr, aFirst.Name);
         // Without the accompanying fix in place, this test would have failed with:
         // - Cannot extract an Any(void) to com.sun.star.awt.Size
         auto aSize = aFirst.Value.get<awt::Size>();

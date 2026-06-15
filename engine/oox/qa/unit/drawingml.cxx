@@ -809,13 +809,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
     xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
     comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(2));
     sal_Int32 nLeftMargin{};
-    aMap["LeftMargin"] >>= nLeftMargin;
+    aMap[u"LeftMargin"_ustr] >>= nLeftMargin;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2388
     // - Actual  : 3600
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2388), nLeftMargin);
     sal_Int32 nFirstLineOffset{};
-    aMap["FirstLineOffset"] >>= nFirstLineOffset;
+    aMap[u"FirstLineOffset"_ustr] >>= nFirstLineOffset;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: -889
     // - Actual  : -800
@@ -836,7 +836,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
     xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
     aMap = comphelper::SequenceAsHashMap(xNumberingRules->getByIndex(2));
     nLeftMargin = 0;
-    aMap["LeftMargin"] >>= nLeftMargin;
+    aMap[u"LeftMargin"_ustr] >>= nLeftMargin;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2388
     // - Actual  : 3600

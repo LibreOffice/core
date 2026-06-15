@@ -279,7 +279,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclPar
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON("unknown")
+    , m_sTypeOfJSON(u"unknown"_ustr)
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
@@ -2174,10 +2174,10 @@ OUString JSMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rR
             SAL_WARN("vcl", "No entry detected in JSMenu::popup_at_rect");
     }
 
-    m_pSender->sendMenu(m_pPopupMenu, pParent ? pParent->get_buildable_name() : "", sCancelId);
+    m_pSender->sendMenu(m_pPopupMenu, pParent ? pParent->get_buildable_name() : u""_ustr, sCancelId);
 
     // Don't return any action - simulate canceled menu
-    return "";
+    return u""_ustr;
 }
 
 JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,

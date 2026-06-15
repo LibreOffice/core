@@ -48,12 +48,12 @@ OUString SAL_CALL ParetoLineChartType::getChartType()
 
 uno::Sequence<OUString> ParetoLineChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 OUString SAL_CALL ParetoLineChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ParetoLineChartType";
+    return u"com.sun.star.comp.chart.ParetoLineChartType"_ustr;
 }
 
 sal_Bool SAL_CALL ParetoLineChartType::supportsService(const OUString& rServiceName)
@@ -63,7 +63,7 @@ sal_Bool SAL_CALL ParetoLineChartType::supportsService(const OUString& rServiceN
 
 css::uno::Sequence<OUString> SAL_CALL ParetoLineChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

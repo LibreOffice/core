@@ -94,17 +94,17 @@ StringMap jsonToStringMap(const char* pJSON)
 
 void SendNavigatorForView(const sal_uInt64 nShellId)
 {
-    jsdialog::SendFullUpdate(OUString::number(nShellId) + "navigator", "NavigatorPanel");
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "navigator", u"NavigatorPanel"_ustr);
 }
 
 void SendSidebarForView(const sal_uInt64 nShellId)
 {
-    jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", "Panel");
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", u"Panel"_ustr);
 }
 
 void SendQuickFindForView(const sal_uInt64 nShellId)
 {
-    jsdialog::SendFullUpdate(OUString::number(nShellId) + "quickfind", "QuickFindPanel");
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "quickfind", u"QuickFindPanel"_ustr);
 }
 
 void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget)
@@ -176,7 +176,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
             weld::Menu* pMenu = JSInstanceBuilder::Menus().Find(nWindowId);
             if (pMenu && sAction == "select")
             {
-                KitTrigger::trigger_activated(*pMenu, rData.at("data"));
+                KitTrigger::trigger_activated(*pMenu, rData.at(u"data"_ustr));
                 return true;
             }
         }

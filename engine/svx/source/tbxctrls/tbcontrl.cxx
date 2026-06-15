@@ -771,7 +771,7 @@ private:
             auto pVDevNone = GetVirtualDevice(Image());
             pVDevNone->SetOutputSizePixel(aPreviewSize);
             Bitmap aNoneBmp = pVDevNone->GetBitmap(Point(0,0), aPreviewSize);
-            rIconView.append("0", m_sNone, &aNoneBmp);
+            rIconView.append(u"0"_ustr, m_sNone, &aNoneBmp);
 
             if (sCurrentSelectedId == "0")
                 rIconView.select(nPos);

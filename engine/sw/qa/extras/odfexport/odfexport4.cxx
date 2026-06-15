@@ -1329,15 +1329,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163703)
     // - Actual  : lorem
     // - run does not contain expected content
     // because direct formatting was dropped on export, and the comment was exported in one chunk
-    auto x1stRun = getRun(xCommentPara, 1, "lo");
+    auto x1stRun = getRun(xCommentPara, 1, u"lo"_ustr);
     CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_NONE,
                          getProperty<css::awt::FontSlant>(x1stRun, u"CharPosture"_ustr));
 
-    auto x2ndRun = getRun(xCommentPara, 2, "r");
+    auto x2ndRun = getRun(xCommentPara, 2, u"r"_ustr);
     CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_ITALIC,
                          getProperty<css::awt::FontSlant>(x2ndRun, u"CharPosture"_ustr));
 
-    auto x3rdRun = getRun(xCommentPara, 3, "em");
+    auto x3rdRun = getRun(xCommentPara, 3, u"em"_ustr);
     CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_NONE,
                          getProperty<css::awt::FontSlant>(x3rdRun, u"CharPosture"_ustr));
 

@@ -956,7 +956,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
     weld::Window* pFrameWin = SfxStoringHelper::GetModelWindow(m_xModel);
     OUString sPreselectedDir
-        = GetDocProps().getUnpackedValueOrDefault("ExportDirectory", OUString());
+        = GetDocProps().getUnpackedValueOrDefault(u"ExportDirectory"_ustr, OUString());
 
     // Fall back to the document base URL - but only if the document is not based on a template.
     // Otherwise the template's directory would be used, which is not what we want.
@@ -966,7 +966,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
         if (pDocShell && !pDocShell->IsBasedOnTemplate())
         {
             if (sPreselectedDir.isEmpty())
-                sPreselectedDir = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
+                sPreselectedDir = GetDocProps().getUnpackedValueOrDefault(u"DocumentBaseURL"_ustr, OUString());
             if (sPreselectedDir.isEmpty() && GetStorable()->hasLocation())
                 sPreselectedDir = GetStorable()->getLocation();
         }
@@ -2105,7 +2105,7 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
     sInfoText = sInfoText.replaceAll("%EXTENSION", aExtension);
 
     OUString sExtension = u"ODF"_ustr;
-    OUString sQuestion = "";
+    OUString sQuestion = u""_ustr;
     if (bDefIsAlien) {
         sExtension = aDefExtension.toAsciiUpperCase();
     }

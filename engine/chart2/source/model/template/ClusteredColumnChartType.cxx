@@ -90,7 +90,7 @@ OUString SAL_CALL ClusteredColumnChartType::getChartType()
 
 uno::Sequence<OUString> ClusteredColumnChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 // ____ OPropertySet ____
@@ -129,7 +129,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ClusteredColumnChartType::getPr
 
 OUString SAL_CALL ClusteredColumnChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.ClusteredColumnChartType";
+    return u"com.sun.star.comp.chart.ClusteredColumnChartType"_ustr;
 }
 
 sal_Bool SAL_CALL ClusteredColumnChartType::supportsService(const OUString& rServiceName)
@@ -139,7 +139,7 @@ sal_Bool SAL_CALL ClusteredColumnChartType::supportsService(const OUString& rSer
 
 css::uno::Sequence<OUString> SAL_CALL ClusteredColumnChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_CLUSTEREDCOLUMN, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_CLUSTEREDCOLUMN, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

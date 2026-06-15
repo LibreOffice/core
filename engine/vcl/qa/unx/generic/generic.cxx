@@ -49,11 +49,11 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testFontFallbackSerif)
 {
-    OUString sResolvedSerif = GetFallbackFont(vcl::Font("serif", Size(12, 12)));
+    OUString sResolvedSerif = GetFallbackFont(vcl::Font(u"serif"_ustr, Size(12, 12)));
 
     // Given a font select pattern with a font name we don't bundle and with a serif family:
     vcl::Font aFont;
-    aFont.SetFamilyName("IBM Plex Serif");
+    aFont.SetFamilyName(u"IBM Plex Serif"_ustr);
     aFont.SetFamily(FAMILY_ROMAN);
 
     OUString sPlexFallback = GetFallbackFont(aFont);
@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontFallbackCaching)
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     VclPtr<OutputDevice> pOutDev = pWindow->GetOutDev();
     vcl::Font aFont;
-    aFont.SetFamilyName("Verdana");
+    aFont.SetFamilyName(u"Verdana"_ustr);
     aFont.SetFamily(FAMILY_ROMAN);
     pOutDev->SetFont(aFont);
     OUString aText = u"1-1-2017"_ustr;

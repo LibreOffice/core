@@ -6092,7 +6092,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         for (const auto& rItem : aItems)
         {
-            OUString sDisplayText = rItem.isEmpty() ? " " : rItem; // displayText must not be empty
+            OUString sDisplayText = rItem.isEmpty() ? u" "_ustr : rItem; // displayText must not be empty
             m_pSerializer->singleElementNS(XML_w, XML_listItem,
                                            FSNS(XML_w, XML_displayText), sDisplayText,
                                            FSNS(XML_w, XML_value), rItem);

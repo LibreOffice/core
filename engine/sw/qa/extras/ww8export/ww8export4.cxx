@@ -106,7 +106,7 @@ DECLARE_WW8EXPORT_TEST(testTdf151548_formFieldMacros, "tdf151548_formFieldMacros
     for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
     {
         const SwMarkName sName = (*aIter)->GetName();
-        CPPUNIT_ASSERT(sName == "Check1" || sName == "Check2" || sName == "Text1" || sName == "Dropdown1");
+        CPPUNIT_ASSERT(sName == u"Check1"_ustr || sName == u"Check2"_ustr || sName == u"Text1"_ustr || sName == u"Dropdown1"_ustr);
     }
 }
 
@@ -515,13 +515,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135709)
     saveAndReload(TestFilter::DOC);
 
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName("Frame1") , uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr) , uno::UNO_QUERY);
 
-    xPropertySet->setPropertyValue("AnchorType",
+    xPropertySet->setPropertyValue(u"AnchorType"_ustr,
                                        uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     text::WrapTextMode eValue;
-    xPropertySet->getPropertyValue("Surround") >>= eValue;
+    xPropertySet->getPropertyValue(u"Surround"_ustr) >>= eValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrap should be PARALLEL", text::WrapTextMode_PARALLEL, eValue);
 }
 
@@ -538,8 +538,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
     // Set the anchor of the image to AT PARAGRAPH, without the fix in place this
     // results in the picture moving to the first column
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName("Frame1") , uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("AnchorType",
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr) , uno::UNO_QUERY);
+    xPropertySet->setPropertyValue(u"AnchorType"_ustr,
                                        uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
     pXmlDoc = parseLayoutDump();
 
@@ -599,12 +599,12 @@ nde muito parto na água. Tb posso fazer porcentagem de atendimento..."_ustr);
 DECLARE_WW8EXPORT_TEST(testTdf98284_softLockedFields, "tdf98284_softLockedFields.doc")
 {
     // given a document with some DocInfo fields containing hand-modified display values
-    getParagraph(1, "Title: Untitled");
+    getParagraph(1, u"Title: Untitled"_ustr);
     // the save date must not be 'recently' - it must update to the actual last save date.
     // Actual reported date is time-zone dependent.  Save Date: 17/04/2026 01:43:00 PM
     OUString sPara = getParagraph(2)->getString();
     CPPUNIT_ASSERT(sPara.endsWith("AM") || sPara.endsWith("PM"));
-    getParagraph(3, "Saved by user: Justin");
+    getParagraph(3, u"Saved by user: Justin"_ustr);
 
     // PRINTDATE: tricky - needs soft-lock for import, but unlocked if a print is requested.
     // Ultimately, paragraph 4 should return 'recent' here,

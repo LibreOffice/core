@@ -148,7 +148,7 @@ uno::Any MacrosTest::queryDispatchStatus(uno::Reference<lang::XComponent> const&
         = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
     uno::Reference<frame::XDispatchProvider> const xFrame(xController->getFrame(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFrame.is());
-    uno::Reference<frame::XDispatch> const xDisp(xFrame->queryDispatch(url, "", 0));
+    uno::Reference<frame::XDispatch> const xDisp(xFrame->queryDispatch(url, u""_ustr, 0));
     CPPUNIT_ASSERT(xDisp.is());
 
     uno::Reference<frame::XStatusListener> const xListener{ new StateGetter(ret) };

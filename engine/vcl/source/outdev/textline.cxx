@@ -74,7 +74,7 @@ namespace {
             rOutput = aBitmap;
         }
 
-        virtual OUString getCacheName() const override { return "WavyLineCache"; }
+        virtual OUString getCacheName() const override { return u"WavyLineCache"_ustr; }
 
         virtual bool dropCaches() override
         {

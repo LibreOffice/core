@@ -180,12 +180,13 @@ const std::vector<ObjectType> ChartGradientsPanel::maAcceptedTypes{
 ChartGradientsPanel::ChartGradientsPanel(weld::Widget* pParent,
                                          const uno::Reference<frame::XFrame>& rxFrame,
                                          ChartController* pController)
-    : PanelLayout(pParent, "ChartGradientsPanel", "modules/schart/ui/sidebargradients.ui")
+    : PanelLayout(pParent, u"ChartGradientsPanel"_ustr,
+                  u"modules/schart/ui/sidebargradients.ui"_ustr)
     , mxModel(pController->getChartModel())
     , mxModifyListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this))
     , mbModelValid(true)
-    , mxGradientPaletteTB(m_xBuilder->weld_toolbar("gradientpalettetype"))
+    , mxGradientPaletteTB(m_xBuilder->weld_toolbar(u"gradientpalettetype"_ustr))
     , mxGradientPaletteDispatch(
           new ToolbarUnoDispatcher(*mxGradientPaletteTB, *m_xBuilder, rxFrame))
 {
@@ -246,10 +247,10 @@ void ChartGradientsPanel::updateData()
             return;
 
         SolarMutexGuard aGuard;
-        if (xInfo->hasPropertyByName("FillStyle"))
+        if (xInfo->hasPropertyByName(u"FillStyle"_ustr))
         {
             drawing::FillStyle eFillStyle = drawing::FillStyle_SOLID;
-            xPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
+            xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
             if (eFillStyle != drawing::FillStyle_GRADIENT)
             {
                 mxModel->clearGradientPalette();
@@ -266,9 +267,9 @@ ChartGradientsPanel::Create(weld::Widget* pParent, const uno::Reference<frame::X
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
-            "no parent Window given to ChartGradientsPanel::Create", nullptr, 0);
+            u"no parent Window given to ChartGradientsPanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartGradientsPanel::Create",
+        throw lang::IllegalArgumentException(u"no XFrame given to ChartGradientsPanel::Create"_ustr,
                                              nullptr, 1);
 
     return std::make_unique<ChartGradientsPanel>(pParent, rxFrame, pController);

@@ -224,12 +224,12 @@ VclPtr<vcl::Window> ChartColorPaletteControl::createVclPopupWindow(vcl::Window* 
 
 OUString ChartColorPaletteControl::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.ChartColorPaletteControl";
+    return u"com.sun.star.comp.chart2.ChartColorPaletteControl"_ustr;
 }
 
 uno::Sequence<OUString> ChartColorPaletteControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
@@ -242,11 +242,13 @@ com_sun_star_comp_chart2_ChartColorPaletteControl_get_implementation(
 ChartColorPalettePopup::ChartColorPalettePopup(ChartColorPaletteControl* pControl,
                                                weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent,
-                       "modules/schart/ui/chartcolorpalettepopup.ui", "ColorPaletteWindow")
+                       u"modules/schart/ui/chartcolorpalettepopup.ui"_ustr,
+                       u"ColorPaletteWindow"_ustr)
     , mxControl(pControl)
-    , mxColorfulPalettes(new ChartColorPalettes(*m_xBuilder, "colorful_palettes", "colorfulwin"))
-    , mxMonoPalettes(
-          new ChartColorPalettes(*m_xBuilder, "monochromatic_palettes", "monochromaticwin"))
+    , mxColorfulPalettes(
+          new ChartColorPalettes(*m_xBuilder, u"colorful_palettes"_ustr, u"colorfulwin"_ustr))
+    , mxMonoPalettes(new ChartColorPalettes(*m_xBuilder, u"monochromatic_palettes"_ustr,
+                                            u"monochromaticwin"_ustr))
     , meHighlightedItemType(mxControl->getColorPaletteType())
     , mnHighlightedItemId(mxControl->getColorPaletteIndex())
     , mbItemSelected(false)

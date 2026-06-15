@@ -643,8 +643,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
     sal_Int32 nPara1Top
         = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/infos/bounds", "top").toInt32();
     // use paragraph 5 to prove the image is not at the bottom.
-    CPPUNIT_ASSERT_EQUAL(OUString("Below logo"),
-                         getXPathContent(pDump, "//tab/row[1]/cell[1]/txt[5]"));
+    CPPUNIT_ASSERT_EQUAL(u"Below logo"_ustr, getXPathContent(pDump, "//tab/row[1]/cell[1]/txt[5]"));
     sal_Int32 nPara5Top
         = getXPath(pDump, "//tab/row[1]/cell[1]/txt[5]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
@@ -669,7 +668,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
     // use paragraph 1 to indicate where the cell spacing/padding ends, and the text starts.
     nPara1Top = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/infos/bounds", "top").toInt32();
     // use paragraph 5 to prove the image is not at the bottom.
-    CPPUNIT_ASSERT_EQUAL(OUString("Below image"),
+    CPPUNIT_ASSERT_EQUAL(u"Below image"_ustr,
                          getXPathContent(pDump, "//tab/row[1]/cell[2]/txt[5]"));
     nPara5Top = getXPath(pDump, "//tab[1]/row/cell[2]/txt[5]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
@@ -1227,7 +1226,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
     createSwDoc("comment_with_children.odt");
     save(TestFilter::DOCX);
     // commentsExtended should exist
-    xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
+    xmlDocUniquePtr pXmlCommExt = parseExport(u"word/commentsExtended.xml"_ustr);
     CPPUNIT_ASSERT(pXmlCommExt);
     // And it should contain the same parent-child relations
     OUString sExChild1 = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[1]", "paraId");
@@ -1237,7 +1236,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
     std::map<OUString, OUString> parents;
     parents[sExChild1] = sExParent1;
     parents[sExChild2] = sExParent2;
-    xmlDocUniquePtr pXmlComments = parseExport("word/comments.xml");
+    xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
     OUString sComment1Id = getXPath(pXmlComments, "/w:comments/w:comment[1]/w:p[1]", "paraId");
     OUString sComment2Id = getXPath(pXmlComments, "/w:comments/w:comment[2]/w:p[1]", "paraId");
     OUString sComment3Id = getXPath(pXmlComments, "/w:comments/w:comment[3]/w:p[1]", "paraId");
@@ -1325,7 +1324,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165059_moveFromTo)
     save(TestFilter::DOCX);
     // Without the fix, exported contains w:move* outside of move ranges
     // Outside move range tags ins/del are valid
-    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr p_XmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(p_XmlDoc, "//w:moveTo"_ostr, 0);
     assertXPath(p_XmlDoc, "//w:ins"_ostr, 1);

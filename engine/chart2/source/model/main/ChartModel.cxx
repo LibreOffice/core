@@ -1563,7 +1563,7 @@ std::shared_ptr<model::Theme> ChartModel::getDocumentTheme() const
         uno::Reference<beans::XPropertySet> xPropSet(xDocModel, uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            aThemeValue = xPropSet->getPropertyValue("Theme");
+            aThemeValue = xPropSet->getPropertyValue(u"Theme"_ustr);
         }
     }
     else // Writer
@@ -1577,7 +1577,7 @@ std::shared_ptr<model::Theme> ChartModel::getDocumentTheme() const
                 uno::Reference<beans::XPropertySet> xPropSet(xDrawPage, uno::UNO_QUERY);
                 if (xPropSet.is())
                 {
-                    aThemeValue = xPropSet->getPropertyValue("Theme");
+                    aThemeValue = xPropSet->getPropertyValue(u"Theme"_ustr);
                 }
             }
         }
@@ -1643,8 +1643,8 @@ void ChartModel::applyColorPaletteToDataSeries(const ChartColorPalette& rColorPa
     {
         const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
         const size_t nPaletteIndex = i % rColorPalette.size();
-        xPropSet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_SOLID));
-        xPropSet->setPropertyValue("FillColor", uno::Any(rColorPalette[nPaletteIndex]));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
+        xPropSet->setPropertyValue(u"FillColor"_ustr, uno::Any(rColorPalette[nPaletteIndex]));
     }
 }
 
@@ -1712,11 +1712,11 @@ const std::vector<Color>& ChartModel::getDataSeriesColorsForGradient(bool bIsPre
         Color aColor = ChartGradientPresetInvalidColor;
         const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
         drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
-        if (xPropSet->getPropertyValue("FillStyle") >>= eFillStyle)
+        if (xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle)
         {
             if (eFillStyle == drawing::FillStyle_SOLID)
             {
-                xPropSet->getPropertyValue("FillColor") >>= aColor;
+                xPropSet->getPropertyValue(u"FillColor"_ustr) >>= aColor;
             }
         }
         m_aGradientBaseColors.push_back(aColor);
@@ -1745,7 +1745,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
     {
         const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
         const size_t nPaletteIndex = i % rGradientPalette.size();
-        xPropSet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_GRADIENT));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_GRADIENT));
 
         // check if we have to skip this data set
         const basegfx::BGradient& rGradient = rGradientPalette[nPaletteIndex];
@@ -1757,7 +1757,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
 
         // register a gradient and set it
         css::uno::Any aGradientVal(aPropGradient);
-        OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, this, "");
+        OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, this, u""_ustr);
         xPropSet->setPropertyValue(u"FillGradientName"_ustr, css::uno::Any(aNewName));
     }
 }

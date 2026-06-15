@@ -227,7 +227,7 @@ void GraphicFormatDetectorTest::testDetectGIF()
 void GraphicFormatDetectorTest::testDetectGIFMetadata()
 {
     SvFileStream aFileStream(getFullUrl(u"123_Numbers.gif"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "GIF", true);
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"GIF"_ustr, true);
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkGIF());

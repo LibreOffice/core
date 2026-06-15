@@ -31,16 +31,16 @@
 ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
                                              css::uno::Sequence<uno::Sequence<uno::Any>>& rData,
                                              ScViewData& rViewData, ScRange& rRange)
-    : weld::GenericDialogController(pParent, "modules/scalc/ui/duplicaterecordsdlg.ui",
-                                    "DuplicateRecordsDialog")
-    , m_xIncludesHeaders(m_xBuilder->weld_check_button("includesheaders"))
-    , m_xRadioRow(m_xBuilder->weld_radio_button("row"))
-    , m_xRadioColumn(m_xBuilder->weld_radio_button("column"))
-    , m_xRadioSelect(m_xBuilder->weld_radio_button("select"))
-    , m_xRadioRemove(m_xBuilder->weld_radio_button("remove"))
-    , m_xCheckList(m_xBuilder->weld_tree_view("checklist"))
-    , m_xAllChkBtn(m_xBuilder->weld_check_button("allcheckbtn"))
-    , m_xOkBtn(m_xBuilder->weld_button("ok"))
+    : weld::GenericDialogController(pParent, u"modules/scalc/ui/duplicaterecordsdlg.ui"_ustr,
+                                    u"DuplicateRecordsDialog"_ustr)
+    , m_xIncludesHeaders(m_xBuilder->weld_check_button(u"includesheaders"_ustr))
+    , m_xRadioRow(m_xBuilder->weld_radio_button(u"row"_ustr))
+    , m_xRadioColumn(m_xBuilder->weld_radio_button(u"column"_ustr))
+    , m_xRadioSelect(m_xBuilder->weld_radio_button(u"select"_ustr))
+    , m_xRadioRemove(m_xBuilder->weld_radio_button(u"remove"_ustr))
+    , m_xCheckList(m_xBuilder->weld_tree_view(u"checklist"_ustr))
+    , m_xAllChkBtn(m_xBuilder->weld_check_button(u"allcheckbtn"_ustr))
+    , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , mrCellData(rData)
     , mrRange(rRange)
     , mrViewData(rViewData)

@@ -190,15 +190,15 @@ void ZipPackage::checkZipEntriesWithDD()
                 uno::Reference<XPropertySet> xStream;
                 getByHierarchicalName(rEntry.sPath) >>= xStream;
                 uno::Reference<XServiceInfo> const xStreamSI{xStream, uno::UNO_QUERY_THROW};
-                if (!xStreamSI->supportsService("com.sun.star.packages.PackageStream"))
+                if (!xStreamSI->supportsService(u"com.sun.star.packages.PackageStream"_ustr))
                 {
                     SAL_INFO("package", "entry STORED with data descriptor is folder: \"" << rEntry.sPath << "\"");
-                    throw ZipIOException("entry STORED with data descriptor is folder");
+                    throw ZipIOException(u"entry STORED with data descriptor is folder"_ustr);
                 }
-                if (!xStream->getPropertyValue("WasEncrypted").get<bool>())
+                if (!xStream->getPropertyValue(u"WasEncrypted"_ustr).get<bool>())
                 {
                     SAL_INFO("package", "entry STORED with data descriptor but not encrypted: \"" << rEntry.sPath << "\"");
-                    throw ZipIOException("entry STORED with data descriptor but not encrypted");
+                    throw ZipIOException(u"entry STORED with data descriptor but not encrypted"_ustr);
                 }
             }
         }
@@ -446,7 +446,7 @@ void ZipPackage::parseManifest()
                                     m_bHasNonEncryptedEntries = true;
                             }
                             else
-                                throw ZipIOException("Wrong content");
+                                throw ZipIOException(u"Wrong content"_ustr);
                         }
                     }
 
@@ -467,7 +467,7 @@ void ZipPackage::parseManifest()
     }
 
     if ( !bManifestParsed && !m_bForceRecovery )
-        throw ZipIOException( "Could not parse manifest.xml" );
+        throw ZipIOException( u"Could not parse manifest.xml"_ustr );
 
     static constexpr OUString sMimetype (u"mimetype"_ustr);
     if ( m_xRootFolder->hasByName( sMimetype ) )
@@ -542,7 +542,7 @@ void ZipPackage::parseManifest()
             // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
             // in case of ODF1.2 documents without version in manifest.xml the property IsInconsistent
             // should be checked later
-            throw ZipIOException( "there are streams not referred in manifest.xml" );
+            throw ZipIOException( u"there are streams not referred in manifest.xml"_ustr );
         }
         // all the streams should be encrypted with the same StartKey in ODF1.2
         // TODO/LATER: in future the exception should be thrown
@@ -564,7 +564,7 @@ void ZipPackage::parseContentType()
         static constexpr std::u16string_view aContentTypes(u"[Content_Types].xml");
         // the content type must exist in OFOPXML format!
         if ( !m_xRootFolder->hasByName( aContentTypes ) )
-            throw io::IOException( "Wrong format!" );
+            throw io::IOException( u"Wrong format!"_ustr );
 
         uno::Reference < io::XActiveDataSink > xSink;
         uno::Any aAny = m_xRootFolder->getByName( aContentTypes );
@@ -1758,7 +1758,7 @@ uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         else if ( m_nStartKeyGenerationID == xml::crypto::DigestID::SHA1 )
             aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         else
-            throw uno::RuntimeException( "No expected key is provided!" );
+            throw uno::RuntimeException( u"No expected key is provided!"_ustr );
 
         for (const auto& rKey : m_aStorageEncryptionKeys)
             if ( rKey.Name == aNameToFind )
@@ -1766,7 +1766,7 @@ uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
 
         if (!aResult.hasElements() && m_aStorageEncryptionKeys.hasElements())
         {   // tdf#159519 sanity check
-            throw uno::RuntimeException("Expected key is missing!");
+            throw uno::RuntimeException(u"Expected key is missing!"_ustr);
         }
     }
     else

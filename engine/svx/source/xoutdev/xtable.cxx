@@ -336,7 +336,7 @@ bool XPropertyList::Save()
     if( aURL.getExtension().isEmpty() )
         aURL.setExtension( GetDefaultExt() );
 
-    XPropertyListRef rExportableList = CreatePropertyList(meType, maPath, "");
+    XPropertyListRef rExportableList = CreatePropertyList(meType, maPath, u""_ustr);
     if (mbNeedsExportableList)
     {
         rExportableList->SetName(maName);

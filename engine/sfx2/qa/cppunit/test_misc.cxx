@@ -307,16 +307,16 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     aDur.Seconds = 555;
     aDur.NanoSeconds = 444444444;
 
-    xUDP->addProperty("Frobnicate", beans::PropertyAttribute::REMOVABLE, uno::Any(true));
-    xUDP->addProperty("FrobDuration", beans::PropertyAttribute::REMOVABLE, uno::Any(aDur));
-    xUDP->addProperty("FrobDuration2", beans::PropertyAttribute::REMOVABLE, uno::Any(aTime));
-    xUDP->addProperty("FrobEndDate", beans::PropertyAttribute::REMOVABLE, uno::Any(aDate));
-    xUDP->addProperty("FrobStartTime", beans::PropertyAttribute::REMOVABLE, uno::Any(aDateTime));
-    xUDP->addProperty("Pi", beans::PropertyAttribute::REMOVABLE, uno::Any(3.1415));
-    xUDP->addProperty("Foo", beans::PropertyAttribute::REMOVABLE, uno::Any(u"bar"_ustr));
-    xUDP->addProperty("Removed", beans::PropertyAttribute::REMOVABLE, uno::Any(u"bar"_ustr));
+    xUDP->addProperty(u"Frobnicate"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(true));
+    xUDP->addProperty(u"FrobDuration"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aDur));
+    xUDP->addProperty(u"FrobDuration2"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aTime));
+    xUDP->addProperty(u"FrobEndDate"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aDate));
+    xUDP->addProperty(u"FrobStartTime"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aDateTime));
+    xUDP->addProperty(u"Pi"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(3.1415));
+    xUDP->addProperty(u"Foo"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"bar"_ustr));
+    xUDP->addProperty(u"Removed"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"bar"_ustr));
     // #i94175#: empty property name is valid ODF 1.1
-    xUDP->addProperty("", beans::PropertyAttribute::REMOVABLE, uno::Any(u"eeeeek"_ustr));
+    xUDP->addProperty(u""_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"eeeeek"_ustr));
 
     try
     {
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
 
     try
     {
-        xUDP->addProperty("Forbidden", beans::PropertyAttribute::REMOVABLE,
+        xUDP->addProperty(u"Forbidden"_ustr, beans::PropertyAttribute::REMOVABLE,
                           uno::Any(uno::Sequence<OUString>{ u"foo"_ustr, u"bar"_ustr }));
         CPPUNIT_FAIL("inserting value of non-supported type did not fail");
     }
@@ -589,7 +589,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testtestOverwriteReadOnly)
     // When trying to overwrite that:
     try
     {
-        xStorable->storeToURL(aURL, { comphelper::makePropertyValue("Overwrite", true) });
+        xStorable->storeToURL(aURL, { comphelper::makePropertyValue(u"Overwrite"_ustr, true) });
     }
     catch (const io::IOException&)
     {

@@ -1100,7 +1100,7 @@ bool LoadEnv::impl_loadContent()
     bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
     bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
     bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false);
-    bool bStartPres = m_lMediaDescriptor.contains("StartPresentation");
+    bool bStartPres = m_lMediaDescriptor.contains(u"StartPresentation"_ustr);
 
     if (!bHidden && !bMinimized && !bPreview && !bStartPres)
     {
@@ -1594,7 +1594,7 @@ void LoadEnv::impl_reactForLoadingState()
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
         bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
         bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
-        bool                                 bStartPres = m_lMediaDescriptor.contains("StartPresentation");
+        bool                                 bStartPres = m_lMediaDescriptor.contains(u"StartPresentation"_ustr);
 
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
 

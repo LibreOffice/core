@@ -1169,7 +1169,7 @@ void KitHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vie
     svl::crypto::SigningContext aSigningContext;
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
-    auto it = aMap.find("signatureTime");
+    auto it = aMap.find(u"signatureTime"_ustr);
     if (it != aMap.end())
     {
         // Signature time is provided: prefer it over the system time.

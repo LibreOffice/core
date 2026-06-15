@@ -42,7 +42,7 @@ ChartColorScheme::ChartColorScheme(const ChartColorPalette& rPalette)
 
 OUString SAL_CALL ChartColorScheme::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.ChartColorScheme";
+    return u"com.sun.star.comp.chart2.ChartColorScheme"_ustr;
 }
 } //  namespace chart
 

@@ -194,15 +194,16 @@ void ScDataProvidersTest::testBaseImport()
 {
     createScDoc();
 
-    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    ScDBData* pDBData = new ScDBData(u"testDB"_ustr, 0, 0, 0, 10, 10);
     ScDocument* pDoc = getScDoc();
     bool bInserted
         = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
-    sc::ExternalDataSource aDataSource("~/dummy.file", "org.libreoffice.calc.sql", pDoc);
-    aDataSource.setDBData("testDB");
-    aDataSource.setID("biblio@Bibliography");
+    sc::ExternalDataSource aDataSource(u"~/dummy.file"_ustr, u"org.libreoffice.calc.sql"_ustr,
+                                       pDoc);
+    aDataSource.setDBData(u"testDB"_ustr);
+    aDataSource.setID(u"biblio@Bibliography"_ustr);
 
     pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
     auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
@@ -211,8 +212,8 @@ void ScDataProvidersTest::testBaseImport()
     rDataSources[0].refresh(pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("ARJ00"), pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("AVV00"), pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"ARJ00"_ustr, pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"AVV00"_ustr, pDoc->GetString(0, 1, 0));
 }
 
 void ScDataProvidersTest::testTdf169541_TwoDataMapping()

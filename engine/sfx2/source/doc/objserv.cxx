@@ -532,7 +532,7 @@ namespace
 void ResetSignatureSelection(SfxObjectShell& rObjectShell, SfxViewShell& rViewShell)
 {
     rViewShell.SetSignPDFCertificate({});
-    comphelper::dispatchCommand(".uno:DeSelect", {});
+    comphelper::dispatchCommand(u".uno:DeSelect"_ustr, {});
     rObjectShell.RecheckSignature(false);
 }
 }
@@ -821,8 +821,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if (redactImage && redactImage->GetValue())
             {
-                RedactionTarget redactiontarget({ "Images", RedactionTargetType::REDACTION_TARGET_IMAGE,
-                                            "All Images", false, false, 0 });
+                RedactionTarget redactiontarget({ u"Images"_ustr, RedactionTargetType::REDACTION_TARGET_IMAGE,
+                                            u"All Images"_ustr, false, false, 0 });
                 aRedactionTargets.push_back({redactiontarget, redactiontarget.sName});
             }
             else if (nResult != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())

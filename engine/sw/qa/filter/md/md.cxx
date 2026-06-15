@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHeading)
     setImportFilterName(TestFilter::MD);
     createSwDoc("heading.md");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1),
                          getProperty<sal_Int16>(getParagraph(1), u"OutlineLevel"_ustr));
 }
@@ -139,13 +139,13 @@ CPPUNIT_TEST_FIXTURE(Test, testList)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SVX_NUM_ARABIC), getNumberingTypeOfParagraph(1));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0),
                          getProperty<sal_Int16>(getParagraph(1), u"NumberingLevel"_ustr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Ordered"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Ordered"_ustr, getParagraph(1)->getString());
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SVX_NUM_CHAR_SPECIAL),
                          getNumberingTypeOfParagraph(2));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1),
                          getProperty<sal_Int16>(getParagraph(2), u"NumberingLevel"_ustr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Unordered"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Unordered"_ustr, getParagraph(2)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)

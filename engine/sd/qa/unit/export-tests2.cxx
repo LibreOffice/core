@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdf)
 
     loadFromFile(u"pdf/sample.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     setImportFilterName(TestFilter::FODG);
     saveAndReload(TestFilter::FODG);
 
@@ -540,7 +540,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfTextPos)
     // The key assertion is that the text stays on one line (not split into two).
     loadFromFile(u"pdf/textheight1.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     setImportFilterName(TestFilter::FODG);
     saveAndReload(TestFilter::FODG);
 
@@ -571,7 +571,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFont)
 
     loadFromFile(u"pdf/differentfonts.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     setImportFilterName(TestFilter::FODG);
     saveAndReload(TestFilter::FODG);
 
@@ -609,7 +609,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfHindi)
 
     loadFromFile(u"pdf/BasicHindi.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     save(TestFilter::FODG);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfGrayscaleImageUnderInvisibleT
 
     loadFromFile(u"pdf/GrayscaleImageUnderInvisibleTest.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     setImportFilterName(TestFilter::FODG);
     saveAndReload(TestFilter::FODG);
 
@@ -681,7 +681,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfClippedImages)
 
     loadFromFile(u"pdf/ClippedImages.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     setImportFilterName(TestFilter::FODG);
     saveAndReload(TestFilter::FODG);
 
@@ -710,7 +710,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfMissingFontVersion)
 
     loadFromFile(u"pdf/ErrareHumanumEst.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     setImportFilterName(TestFilter::FODG);
     saveAndReload(TestFilter::FODG);
 
@@ -734,7 +734,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfEmbeddedFonts)
 
     loadFromFile(u"pdf/sciencejournalsource.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     save(TestFilter::FODG);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -754,7 +754,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfPatternStroke)
 
     loadFromFile(u"pdf/pattern-stroke.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     save(TestFilter::FODG);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -773,7 +773,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfPatternFill)
 
     loadFromFile(u"pdf/pattern-fill.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     save(TestFilter::FODG);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -794,7 +794,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testPdfPageMasterOrientation)
 
     loadFromFile(u"pdf/SampleSlideDeck.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     save(TestFilter::FODG);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -815,7 +815,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfTextShear)
 
     loadFromFile(u"pdf/textshear.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     save(TestFilter::FODG);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();

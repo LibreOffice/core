@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPageCrossrefUpdate)
 
     // When performing the equivalent of what SwFieldEditDlg would do to set "book" to "1":
     SwFieldMgr aMgr(pWrtShell);
-    aMgr.UpdateCurField(0, "book", u"1"_ustr);
+    aMgr.UpdateCurField(0, u"book"_ustr, u"1"_ustr);
     SwDoc* pDoc = getSwDoc();
     pWrtShell->SetEnteringStdMode(true);
     pDoc->getIDocumentStatistics().GetUpdatedDocStat(/*bCompleteAsync=*/true, /*bFields=*/false);

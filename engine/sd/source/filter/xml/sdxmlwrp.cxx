@@ -744,7 +744,7 @@ bool IsSlideSorterPaste(const ::sd::DrawDocShell& rDocSh)
     {
         if (rProp.Name != "slidesorter")
             continue;
-        uno::Any aFromSlideSorter = xSourcePropertySet->getPropertyValue("slidesorter");
+        uno::Any aFromSlideSorter = xSourcePropertySet->getPropertyValue(u"slidesorter"_ustr);
         bool bFromSlideSorter(false);
         aFromSlideSorter >>= bFromSlideSorter;
         return bFromSlideSorter;

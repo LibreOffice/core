@@ -474,7 +474,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleLostNumbering)
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     OUString aParaStyleName;
-    xPara->getPropertyValue("ParaStyleName") >>= aParaStyleName;
+    xPara->getPropertyValue(u"ParaStyleName"_ustr) >>= aParaStyleName;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Signature
     // - Actual  :  Signature
@@ -492,7 +492,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleLostNumbering)
     OUString aNumberingStyleName;
     // Without the accompanying fix in place, this test would have failed, the WWNum14 list was set
     // only as direct formatting, not at a style level.
-    xStyle->getPropertyValue("NumberingStyleName") >>= aNumberingStyleName;
+    xStyle->getPropertyValue(u"NumberingStyleName"_ustr) >>= aNumberingStyleName;
     CPPUNIT_ASSERT(!aNumberingStyleName.isEmpty());
 }
 

@@ -2243,8 +2243,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158198)
     CPPUNIT_ASSERT_EQUAL(u"{WORD}"_ustr, xAnchor1->getString());
     CPPUNIT_ASSERT_EQUAL(u"{PARAGRAPH}"_ustr, xAnchor2->getString());
 
-    xAnchor1->setString("");
-    xAnchor2->setString("");
+    xAnchor1->setString(u""_ustr);
+    xAnchor2->setString(u""_ustr);
 
     // Without the fix in place, this test would have failed here
     // - Expected: 2

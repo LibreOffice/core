@@ -30,11 +30,12 @@ namespace chart
 ChartColorPaletteTabPage::ChartColorPaletteTabPage(weld::Container* pPage,
                                                    weld::DialogController* pController,
                                                    const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_ChartColorPalette.ui",
-                 "tp_ChartColorPalette", &rInAttrs)
-    , mxColorfulPalettes(new ChartColorPalettes(*m_xBuilder, "colorful_palettes", "colorfulwin"))
-    , mxMonoPalettes(
-          new ChartColorPalettes(*m_xBuilder, "monochromatic_palettes", "monochromaticwin"))
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_ChartColorPalette.ui"_ustr,
+                 u"tp_ChartColorPalette"_ustr, &rInAttrs)
+    , mxColorfulPalettes(
+          new ChartColorPalettes(*m_xBuilder, u"colorful_palettes"_ustr, u"colorfulwin"_ustr))
+    , mxMonoPalettes(new ChartColorPalettes(*m_xBuilder, u"monochromatic_palettes"_ustr,
+                                            u"monochromaticwin"_ustr))
 {
     mxColorfulPalettes->SetSelectHdl(
         LINK(this, ChartColorPaletteTabPage, SelectColorfulPaletteHdl));

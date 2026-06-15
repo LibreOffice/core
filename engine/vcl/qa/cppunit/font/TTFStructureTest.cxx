@@ -18,7 +18,7 @@ class TTFTest : public UnoApiTest
 {
 public:
     TTFTest()
-        : UnoApiTest("/vcl/qa/cppunit/font/data/")
+        : UnoApiTest(u"/vcl/qa/cppunit/font/data/"_ustr)
     {
     }
 };

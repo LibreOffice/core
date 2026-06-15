@@ -142,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf94627)
     ScDocument* pDoc = getScDoc();
 
     ScRangeName& rRangeName = pDoc->GetRangeName();
-    ScRangeData* pRangeData = rRangeName.findByUpperName("NAME1");
+    ScRangeData* pRangeData = rRangeName.findByUpperName(u"NAME1"_ustr);
     CPPUNIT_ASSERT(pRangeData);
 
     OUString aFormula = pRangeData->GetSymbol();
@@ -256,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
 
     // Save and reload, verify file format and reloaded sort descriptor
     saveAndReload(TestFilter::ODS);
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//table:sort", "embedded-number-behavior", u"double");
     pDoc = getScDoc();
     pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5);
@@ -281,7 +281,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     // Save and reload, verify file format and reloaded sort descriptor
     // "alpha-numeric" is default and thus not written.
     saveAndReload(TestFilter::ODS);
-    pXmlDoc = parseExport("content.xml");
+    pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPathNoAttribute(pXmlDoc, "//table:sort", "embedded-number-behavior");
     pDoc = getScDoc();
     pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5);

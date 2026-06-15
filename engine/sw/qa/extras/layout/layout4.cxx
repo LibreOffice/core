@@ -57,10 +57,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
         // otherwise height depends on which tests run previously
         uno::Sequence<beans::PropertyValue> argsSH(
             comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
-        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+        dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
         uno::Sequence<beans::PropertyValue> args(
             comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
-        dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+        dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -143,8 +143,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testSectionPageBreaksWithNestedSectionWith
     CPPUNIT_ASSERT(xSections);
     auto xSection1 = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
     auto xSection2 = xSections->getByName(u"Section2"_ustr).queryThrow<css::beans::XPropertySet>();
-    CPPUNIT_ASSERT(getProperty<bool>(xSection1, "IsVisible"));
-    CPPUNIT_ASSERT(getProperty<bool>(xSection2, "IsVisible"));
+    CPPUNIT_ASSERT(getProperty<bool>(xSection1, u"IsVisible"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xSection2, u"IsVisible"_ustr));
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -349,7 +349,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf145826)
     // in order to pass.
     uno::Sequence<beans::PropertyValue> argsSH(
         comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
     Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

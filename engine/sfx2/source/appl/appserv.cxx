@@ -310,8 +310,8 @@ namespace
     public:
         LicenseDialog(weld::Window* pParent)
             : GenericDialogController(pParent, u"sfx/ui/licensedialog.ui"_ustr,  u"LicenseDialog"_ustr)
-            , m_xBtnLicense(m_xBuilder->weld_button("license"))
-            , m_xBtnEula(m_xBuilder->weld_button("eula"))
+            , m_xBtnLicense(m_xBuilder->weld_button(u"license"_ustr))
+            , m_xBtnEula(m_xBuilder->weld_button(u"eula"_ustr))
         {
             m_xBtnLicense->connect_clicked( LINK(this, LicenseDialog, LicenseHdl) );
             m_xBtnEula->connect_clicked( LINK(this, LicenseDialog, EulaHdl) );
@@ -361,8 +361,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
     if (!aColorConfigInitialized && bIsKit)
     {
         // preload color schemes
-        aEditableConfig.LoadScheme("Light");
-        aEditableConfig.LoadScheme("Dark");
+        aEditableConfig.LoadScheme(u"Light"_ustr);
+        aEditableConfig.LoadScheme(u"Dark"_ustr);
         aColorConfigInitialized = true;
     }
 
@@ -709,9 +709,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 ::Color aCurrentColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
 
                 if (aCurrentColor == aDefLightColor) {
-                    aNewTheme = OUString("Dark");
+                    aNewTheme = u"Dark"_ustr;
                 } else {
-                    aNewTheme = OUString("Light");
+                    aNewTheme = u"Light"_ustr;
                 }
             } else {
                 aNewTheme = pNewThemeArg->GetValue();

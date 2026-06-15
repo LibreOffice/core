@@ -43,7 +43,7 @@ protected:
 
 public:
     PDFEncryptionTest()
-        : UnoApiTest("/vcl/qa/cppunit/pdfexport/data/")
+        : UnoApiTest(u"/vcl/qa/cppunit/pdfexport/data/"_ustr)
     {
     }
 
@@ -72,12 +72,12 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
 
     // Save PDF
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    maMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
         { { "SelectPdfVersion", uno::Any(sal_Int32(17)) },
           { "EncryptFile", uno::Any(true) },
           { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
-    maMediaDescriptor["FilterData"] <<= aFilterData;
+    maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 
     // Load the exported result in PDFium
@@ -93,12 +93,12 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
 
     // Save PDF
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    maMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
         { { "SelectPdfVersion", uno::Any(sal_Int32(20)) },
           { "EncryptFile", uno::Any(true) },
           { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
-    maMediaDescriptor["FilterData"] <<= aFilterData;
+    maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 
     // Load the exported result in PDFium

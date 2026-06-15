@@ -39,7 +39,7 @@ public:
         return { u"com.sun.star.testuno.Singleton"_ustr };
     }
 
-    OUString SAL_CALL getString() override { return "this is a string from XStringFactory"; }
+    OUString SAL_CALL getString() override { return u"this is a string from XStringFactory"_ustr; }
 };
 }
 

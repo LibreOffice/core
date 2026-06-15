@@ -230,12 +230,12 @@ VclPtr<vcl::Window> ChartGradientPaletteControl::createVclPopupWindow(vcl::Windo
 
 OUString ChartGradientPaletteControl::getImplementationName()
 {
-    return "com.sun.star.comp.chart2.ChartGradientPaletteControl";
+    return u"com.sun.star.comp.chart2.ChartGradientPaletteControl"_ustr;
 }
 
 uno::Sequence<OUString> ChartGradientPaletteControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
@@ -248,10 +248,12 @@ com_sun_star_comp_chart2_ChartGradientPaletteControl_get_implementation(
 ChartGradientPalettePopup::ChartGradientPalettePopup(ChartGradientPaletteControl* pControl,
                                                      weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent,
-                       "modules/schart/ui/chartgradientpalettepopup.ui", "GradientPaletteWindow")
+                       u"modules/schart/ui/chartgradientpalettepopup.ui"_ustr,
+                       u"GradientPaletteWindow"_ustr)
     , mxControl(pControl)
-    , mxLightPalettes(new ChartGradientPalettes(*m_xBuilder, "light_palettes", "lightwin"))
-    , mxDarkPalettes(new ChartGradientPalettes(*m_xBuilder, "dark_palettes", "darkwin"))
+    , mxLightPalettes(
+          new ChartGradientPalettes(*m_xBuilder, u"light_palettes"_ustr, u"lightwin"_ustr))
+    , mxDarkPalettes(new ChartGradientPalettes(*m_xBuilder, u"dark_palettes"_ustr, u"darkwin"_ustr))
     , meHighlightedItemVariation(mxControl->getGradientVariation())
     , mnHighlightedItemType(mxControl->getGradientType())
     , mbItemSelected(false)

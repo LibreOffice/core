@@ -132,11 +132,11 @@ QuickFindPanel::Create(weld::Widget* pParent,
                        SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to QuickFindPanel::Create",
-                                             nullptr, 0);
+        throw lang::IllegalArgumentException(
+            u"no parent Window given to QuickFindPanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to QuickFindPanel::Create", nullptr,
-                                             0);
+        throw lang::IllegalArgumentException(u"no XFrame given to QuickFindPanel::Create"_ustr,
+                                             nullptr, 0);
     return std::make_unique<QuickFindPanel>(pParent, rxFrame, pBindings);
 }
 
@@ -151,7 +151,7 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     , m_xTopbar(m_xBuilder->weld_box(u"topbar"_ustr))
     , m_xQuickFindControls(m_xBuilder->weld_box(u"quickfindcontrols"_ustr))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
-    , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label("numberofsearchfinds"))
+    , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label(u"numberofsearchfinds"_ustr))
     , m_xFindNextButton(m_xBuilder->weld_button(u"findnext"_ustr))
     , m_xFindPreviousButton(m_xBuilder->weld_button(u"findprevious"_ustr))
     , m_pWrtShell(::GetActiveWrtShell())

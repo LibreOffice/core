@@ -1457,7 +1457,7 @@ void SwDocTest::testRenameTableReference()
     aPos.Assign(aIdx.GetNode(), 0);
     const SwTable* pTable2 = m_pDoc->InsertTable(aOpt, aPos, 1, 2, 0);
 
-    SwTableFormulaTest aFormula("", pTable1->GetTableNode());
+    SwTableFormulaTest aFormula(u""_ustr, pTable1->GetTableNode());
     aFormula.SetFormula(u"=<Table2.A1> * <Table1.A1> + <Table2.B1>"_ustr);
     aFormula.BoxNmToPtr(pTable1);
 

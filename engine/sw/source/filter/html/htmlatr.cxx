@@ -2062,7 +2062,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
     // Handle horizontal rule <hr>
     if (!nEnd &&
-        (SwPoolFormatId::COLL_HTML_HR==nPoolId || pNd->GetAnyFormatColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule))
+        (SwPoolFormatId::COLL_HTML_HR==nPoolId || pNd->GetAnyFormatColl().GetName() == u"" OOO_STRING_SVTOOLS_HTML_horzrule ""_ustr))
     {
         // then, the paragraph-anchored graphics/OLE objects in the paragraph
         // MIB 8.7.97: We enclose the line in a <PRE>. This means that the

@@ -833,7 +833,7 @@ void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     uno::Sequence<css::beans::PropertyValue> aTemplateArgs = {
-        comphelper::makePropertyValue("Hidden", true),
+        comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };
     uno::Reference<lang::XComponent> xTemplateComponent
         = xComponentLoader->loadComponentFromURL(aTemplateURL, u"_blank"_ustr, 0, aTemplateArgs);

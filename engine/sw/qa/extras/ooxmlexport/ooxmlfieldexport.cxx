@@ -466,11 +466,11 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78886)
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     // The left margin (1619 / 1.62cm) is adjusted by the border spacing (203 / 0.2cm)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1416), getProperty<sal_Int32>(xTable, "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1416), getProperty<sal_Int32>(xTable, u"LeftMargin"_ustr));
 
     xTable.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
     // Without the fix, this was -191 (DEF_BORDER_DIST)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-203), getProperty<sal_Int32>(xTable, "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-203), getProperty<sal_Int32>(xTable, u"LeftMargin"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78910)
@@ -488,7 +488,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78590)
 {
     createSwDoc("FDO78590.docx");
     saveAndReload(TestFilter::DOCX);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // This is to ensure that the fld starts and ends inside a hyperlink...
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "w", u"9851" );
@@ -581,7 +581,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158661_blockSDT)
     // TODO: the first table is also not correctly positioned
 
     // table2's cell margin (in the first row) is zero, so compat14 table shifts by zero, not .19cm
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, u"LeftMargin"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)

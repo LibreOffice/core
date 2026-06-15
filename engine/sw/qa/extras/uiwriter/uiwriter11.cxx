@@ -51,24 +51,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf167760_numberedPara)
 {
     createSwDoc("tdf167760_numberedPara.odt");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1.1."),
-                         getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"1.1."_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 
     // apply a non-numbered style to paragraph 1
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
                     { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
                       comphelper::makePropertyValue(u"Style"_ustr, u"Text body"_ustr) });
     // the numbering should not be affected by changing a paragraph style
-    CPPUNIT_ASSERT_EQUAL(OUString("1.1."),
-                         getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"1.1."_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 
     // apply a numbered style
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
                     { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
                       comphelper::makePropertyValue(u"Style"_ustr, u"aList"_ustr) });
     // the numbering should be changed to that specified by the paragraph style
-    CPPUNIT_ASSERT_EQUAL(OUString("i.I.a)"),
-                         getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"i.I.a)"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 
     // apply the non-numbered style while holding down the Ctrl-key
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
@@ -76,7 +76,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf167760_numberedPara)
                       comphelper::makePropertyValue(u"Style"_ustr, u"Text body"_ustr),
                       comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
     // the numbering should be removed when the Ctrl-key is held down
-    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+                         getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf113213_addToList)
@@ -91,10 +92,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf113213_addToList)
     // "Add to list": join the second list to the previous one
     dispatchCommand(mxComponent, u".uno:ContinueNumbering"_ustr, {});
     // The "restart numbering" property should be helpfully removed when joining to another list
-    CPPUNIT_ASSERT_EQUAL(OUString("3"), getProperty<OUString>(getParagraph(6), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr,
+                         getProperty<OUString>(getParagraph(6), u"ListLabelString"_ustr));
 
     pWrtShell->Undo();
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(6), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr,
+                         getProperty<OUString>(getParagraph(6), u"ListLabelString"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf108791)

@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSetStringDeletesShape)
     xCursor->gotoStart(false);
     xCursor->goRight(3, false);
     xCursor->gotoEnd(true);
-    xCursor->setString("bar"); // replace multi-paragraph selection
+    xCursor->setString(u"bar"_ustr); // replace multi-paragraph selection
 
     // the problem was that the fly on the middle node was not deleted
     CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
@@ -442,12 +442,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPasteTableInMiddleOfParagraph)
     pWrtShell->Undo();
 
     // the problem was that the A was missing
-    CPPUNIT_ASSERT_EQUAL(OUString("AB"),
+    CPPUNIT_ASSERT_EQUAL(u"AB"_ustr,
                          pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
 
     pWrtShell->Redo();
     pWrtShell->Undo();
-    CPPUNIT_ASSERT_EQUAL(OUString("AB"),
+    CPPUNIT_ASSERT_EQUAL(u"AB"_ustr,
                          pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
 }
 
@@ -462,8 +462,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport)
     uno::Reference<text::XTextSection> xSection(xSections->getByIndex(0), uno::UNO_QUERY);
 
     // apparently without a record it evaluates to hidden?
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsVisible"));
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsVisible"_ustr));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     // somehow a timer that constructs toolbars isn't run in unit tests -
     // it would query state of .uno:MailMergeEmailDocuments which as a side
@@ -471,12 +471,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport)
     getSwDocShell()->GetView()->EnsureMailMergeConfigItem();
 
     dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
-    getParagraph(1, "English ");
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    getParagraph(1, u"English "_ustr);
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
-    getParagraph(1, "English ");
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    getParagraph(1, u"English "_ustr);
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     uno::Sequence<css::beans::PropertyValue> args{
         comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
@@ -486,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport)
 
     // fetch again in case it was deleted and undo
     xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
 
@@ -508,15 +508,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport)
     }
 
     dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
-    getParagraph(1, "Deutsch ");
-    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    getParagraph(1, u"Deutsch "_ustr);
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
 
     // fetch again in case it was deleted and undo
     xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
     // the problem was that PDF export hid the section
-    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     if (pPDFium)
     {
@@ -547,8 +547,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport2)
     uno::Reference<text::XTextSection> xSection(xSections->getByIndex(0), uno::UNO_QUERY);
 
     // apparently without a record it evaluates to hidden?
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsVisible"));
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsVisible"_ustr));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     // somehow a timer that constructs toolbars isn't run in unit tests -
     // it would query state of .uno:MailMergeEmailDocuments which as a side
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport2)
     // ... but the file has wrong DB name so we first have to fix it
     // in the same way as SwChangeDBDlg
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GetDBManager()->RegisterConnection("Bibliography");
+    pWrtShell->GetDBManager()->RegisterConnection(u"Bibliography"_ustr);
     SwDBData data;
     data.sDataSource = u"Bibliography"_ustr;
     data.sCommand = u"biblio"_ustr;
@@ -568,12 +568,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport2)
     pWrtShell->ChangeDBFields({ u"Bibliography2ÿbiblioÿ0"_ustr }, u"Bibliographyÿbiblioÿ0"_ustr);
 
     dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
-    getParagraph(1, "English ");
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    getParagraph(1, u"English "_ustr);
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
-    getParagraph(1, "English ");
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    getParagraph(1, u"English "_ustr);
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     uno::Sequence<css::beans::PropertyValue> args{
         comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
@@ -583,7 +583,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport2)
 
     // fetch again in case it was deleted and undo
     xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
 
@@ -605,15 +605,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport2)
     }
 
     dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
-    getParagraph(1, "Deutsch ");
-    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    getParagraph(1, u"Deutsch "_ustr);
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
 
     // fetch again in case it was deleted and undo
     xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
     // the problem was that PDF export hid the section
-    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, u"IsCurrentlyVisible"_ustr));
 
     if (pPDFium)
     {
@@ -637,8 +637,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenTextFieldPDFExport)
 {
     createSwDoc("set-variable-hidden-text.fodt");
 
-    getParagraph(1, "2");
-    getParagraph(2, "Expected");
+    getParagraph(1, u"2"_ustr);
+    getParagraph(2, u"Expected"_ustr);
 
     uno::Sequence<css::beans::PropertyValue> args{
         comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
@@ -646,9 +646,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenTextFieldPDFExport)
     };
     dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
 
-    getParagraph(1, "2");
+    getParagraph(1, u"2"_ustr);
     // the problem was that this changed to Wrong
-    getParagraph(2, "Expected");
+    getParagraph(2, u"Expected"_ustr);
 
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (pPDFium)
@@ -909,7 +909,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf34804)
     dispatchCommand(mxComponent, u".uno:FontColor"_ustr, {});
     pWrtShell->Insert(u"New World!"_ustr);
 
-    const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1, "New World!"), 1);
+    const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1, u"New World!"_ustr), 1);
     // (This test assumes that nothing in the unit tests has modified the app's recent font color)
     // COL_DEFAULT_FONT is the default red color for the fontColor button on the toolbar.
     CPPUNIT_ASSERT_EQUAL(COL_DEFAULT_FONT, getProperty<Color>(xRun, u"CharColor"_ustr));
@@ -1164,7 +1164,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167133)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pDoc->getIDocumentContentOperations().ReplaceRange(*pWrtShell->GetCursor(), "", false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(*pWrtShell->GetCursor(), u""_ustr, false);
     Scheduler::ProcessEventsToIdle();
     // This must not crash!
 }

@@ -866,9 +866,9 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
                 if ( xCell.is() )
                 {
                     Reference< XPropertySet > aPropertySet( rxShape, UNO_QUERY_THROW );
-                    aPropertySet->setPropertyValue( "Anchor", Any( xCell ) );
+                    aPropertySet->setPropertyValue( u"Anchor"_ustr, Any( xCell ) );
                     if (bResizeWithCell)
-                        aPropertySet->setPropertyValue( "ResizeWithCell", Any( true ) );
+                        aPropertySet->setPropertyValue( u"ResizeWithCell"_ustr, Any( true ) );
                 }
             }
         }

@@ -96,7 +96,7 @@ void ParaPropertyPanel::HandleContextChange (
             mxTBxBackColor->show();
             mxTBxNumBullet->show();
             set_hyphenation_base_visible(true);
-            set_hyphenation_other_visible(mxTBxHyphenation->get_item_active("Hyphenate"));
+            set_hyphenation_other_visible(mxTBxHyphenation->get_item_active(u"Hyphenate"_ustr));
             ReSize();
             break;
 
@@ -169,18 +169,18 @@ void ParaPropertyPanel::set_hyphenation_base_visible( bool bVisible )
     // hide all hyphenation control for non-Writer applications
     // TODO: add automatic hyphenation for these, too
     mxHyphenationLabel->set_visible(bVisible);
-    mxTBxHyphenation->set_item_visible("Hyphenate", bVisible);
+    mxTBxHyphenation->set_item_visible(u"Hyphenate"_ustr, bVisible);
     ReSize();
 }
 
 void ParaPropertyPanel::set_hyphenation_other_visible( bool bVisible )
 {
-    mxTBxHyphenation->set_item_visible("HyphenateCaps", bVisible);
-    mxTBxHyphenation->set_item_visible("HyphenateLastWord", bVisible);
-    mxTBxHyphenation->set_item_visible("HyphenateLastFullLine", bVisible);
-    mxTBxHyphenation->set_item_visible("HyphenateColumn", bVisible);
-    mxTBxHyphenation->set_item_visible("HyphenatePage", bVisible);
-    mxTBxHyphenation->set_item_visible("HyphenateSpread", bVisible);
+    mxTBxHyphenation->set_item_visible(u"HyphenateCaps"_ustr, bVisible);
+    mxTBxHyphenation->set_item_visible(u"HyphenateLastWord"_ustr, bVisible);
+    mxTBxHyphenation->set_item_visible(u"HyphenateLastFullLine"_ustr, bVisible);
+    mxTBxHyphenation->set_item_visible(u"HyphenateColumn"_ustr, bVisible);
+    mxTBxHyphenation->set_item_visible(u"HyphenatePage"_ustr, bVisible);
+    mxTBxHyphenation->set_item_visible(u"HyphenateSpread"_ustr, bVisible);
     mxAtLineEndLabel->set_visible(bVisible);
     mxAtLineBeginLabel->set_visible(bVisible);
     mxConsecutiveLabel->set_visible(bVisible);
@@ -248,23 +248,23 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, weld::MetricSpinButton&, vo
 
 void ParaPropertyPanel::fill_hyphenzone(SvxHyphenZoneItem & rHyphen)
 {
-    rHyphen.SetHyphen(mxTBxHyphenation->get_item_active("Hyphenate"));
+    rHyphen.SetHyphen(mxTBxHyphenation->get_item_active(u"Hyphenate"_ustr));
     rHyphen.GetMinLead() = static_cast<sal_uInt8>(mxAtLineEnd->get_value(FieldUnit::NONE));
     rHyphen.GetMinTrail() = static_cast<sal_uInt8>(mxAtLineBegin->get_value(FieldUnit::NONE));
     rHyphen.GetMinWordLength() = static_cast<sal_uInt8>(mxWordLength->get_value(FieldUnit::NONE));
     rHyphen.GetMaxHyphens() = static_cast<sal_uInt8>(mxConsecutive->get_value(FieldUnit::NONE));
     rHyphen.GetCompoundMinLead() = static_cast<sal_uInt8>(mxCompound->get_value(FieldUnit::NONE));
     rHyphen.GetTextHyphenZone() = static_cast<sal_uInt16>(mxZone->GetCoreValue(m_eHyphenZoneUnit));
-    rHyphen.SetNoCapsHyphenation(!mxTBxHyphenation->get_item_active("HyphenateCaps"));
-    rHyphen.SetNoLastWordHyphenation(!mxTBxHyphenation->get_item_active("HyphenateLastWord"));
-    rHyphen.SetKeep(!mxTBxHyphenation->get_item_active("HyphenateSpread"));
+    rHyphen.SetNoCapsHyphenation(!mxTBxHyphenation->get_item_active(u"HyphenateCaps"_ustr));
+    rHyphen.SetNoLastWordHyphenation(!mxTBxHyphenation->get_item_active(u"HyphenateLastWord"_ustr));
+    rHyphen.SetKeep(!mxTBxHyphenation->get_item_active(u"HyphenateSpread"_ustr));
     rHyphen.GetKeepType() = !rHyphen.IsKeep()
             ? 3
-            : mxTBxHyphenation->get_item_active("HyphenatePage")
+            : mxTBxHyphenation->get_item_active(u"HyphenatePage"_ustr)
                 ? 1
-                : mxTBxHyphenation->get_item_active("HyphenateColumn")
+                : mxTBxHyphenation->get_item_active(u"HyphenateColumn"_ustr)
                     ? 2
-                    : mxTBxHyphenation->get_item_active("HyphenateLastFullLine")
+                    : mxTBxHyphenation->get_item_active(u"HyphenateLastFullLine"_ustr)
                         ? 3
                         : 4;
     rHyphen.SetKeepLine(mbKeepLine);
@@ -295,29 +295,29 @@ IMPL_LINK( ParaPropertyPanel, HyphenationToggleButtonHdl_Impl, const OUString&, 
     if(  rBtn == "HyphenateSpread" )
     {
         nButton = 4;
-        bEnabled = mxTBxHyphenation->get_item_active("HyphenateSpread");
+        bEnabled = mxTBxHyphenation->get_item_active(u"HyphenateSpread"_ustr);
     }
     else if( rBtn == "HyphenatePage" )
     {
         nButton = 3;
-        bEnabled = mxTBxHyphenation->get_item_active("HyphenatePage");
+        bEnabled = mxTBxHyphenation->get_item_active(u"HyphenatePage"_ustr);
     }
     else if( rBtn == "HyphenateColumn" )
     {
         nButton = 2;
-        bEnabled = mxTBxHyphenation->get_item_active("HyphenateColumn");
+        bEnabled = mxTBxHyphenation->get_item_active(u"HyphenateColumn"_ustr);
     }
     else if( rBtn == "HyphenateLastFullLine" )
     {
         nButton = 1;
-        bEnabled = mxTBxHyphenation->get_item_active("HyphenateLastFullLine");
+        bEnabled = mxTBxHyphenation->get_item_active(u"HyphenateLastFullLine"_ustr);
     }
     if (nButton > 0)
     {
-        mxTBxHyphenation->set_item_active("HyphenateSpread", nButton == 4 && bEnabled);
-        mxTBxHyphenation->set_item_active("HyphenatePage", nButton > 3 || (nButton == 3 && bEnabled));
-        mxTBxHyphenation->set_item_active("HyphenateColumn", nButton > 2 || (nButton == 2 && bEnabled));
-        mxTBxHyphenation->set_item_active("HyphenateLastFullLine", nButton > 1 || bEnabled);
+        mxTBxHyphenation->set_item_active(u"HyphenateSpread"_ustr, nButton == 4 && bEnabled);
+        mxTBxHyphenation->set_item_active(u"HyphenatePage"_ustr, nButton > 3 || (nButton == 3 && bEnabled));
+        mxTBxHyphenation->set_item_active(u"HyphenateColumn"_ustr, nButton > 2 || (nButton == 2 && bEnabled));
+        mxTBxHyphenation->set_item_active(u"HyphenateLastFullLine"_ustr, nButton > 1 || bEnabled);
     }
     fill_hyphenzone(aHyphen);
     GetBindings()->GetDispatcher()->ExecuteList(
@@ -523,13 +523,13 @@ void ParaPropertyPanel::StateChangedHyphenationImpl( SfxItemState eState, const 
         mxCompound->set_value(pOldItem->GetCompoundMinLead(), FieldUnit::CHAR);
         mxWordLength->set_value(pOldItem->GetMinWordLength(), FieldUnit::CHAR);
         bool bHyph = pOldItem->IsHyphen();
-        mxTBxHyphenation->set_item_active("Hyphenate", bHyph);
-        mxTBxHyphenation->set_item_active("HyphenateCaps", !pOldItem->IsNoCapsHyphenation());
-        mxTBxHyphenation->set_item_active("HyphenateLastWord", !pOldItem->IsNoLastWordHyphenation());
-        mxTBxHyphenation->set_item_active("HyphenateLastFullLine", !pOldItem->IsKeep() || pOldItem->GetKeepType() < 4);
-        mxTBxHyphenation->set_item_active("HyphenateColumn", !pOldItem->IsKeep() || pOldItem->GetKeepType() < 3);
-        mxTBxHyphenation->set_item_active("HyphenatePage", !pOldItem->IsKeep() || pOldItem->GetKeepType() < 2);
-        mxTBxHyphenation->set_item_active("HyphenateSpread", !pOldItem->IsKeep() || pOldItem->GetKeepType() < 1);
+        mxTBxHyphenation->set_item_active(u"Hyphenate"_ustr, bHyph);
+        mxTBxHyphenation->set_item_active(u"HyphenateCaps"_ustr, !pOldItem->IsNoCapsHyphenation());
+        mxTBxHyphenation->set_item_active(u"HyphenateLastWord"_ustr, !pOldItem->IsNoLastWordHyphenation());
+        mxTBxHyphenation->set_item_active(u"HyphenateLastFullLine"_ustr, !pOldItem->IsKeep() || pOldItem->GetKeepType() < 4);
+        mxTBxHyphenation->set_item_active(u"HyphenateColumn"_ustr, !pOldItem->IsKeep() || pOldItem->GetKeepType() < 3);
+        mxTBxHyphenation->set_item_active(u"HyphenatePage"_ustr, !pOldItem->IsKeep() || pOldItem->GetKeepType() < 2);
+        mxTBxHyphenation->set_item_active(u"HyphenateSpread"_ustr, !pOldItem->IsKeep() || pOldItem->GetKeepType() < 1);
         // When hyphenation is disabled, set HyphenationKeepLine to the default true (i.e. Move Line = false),
         // so enabling hyphenation on the sidebar will result the preferred "Move Line = false" state.
         // When hyphenation is enabled, store and use the actual value of HyphenationKeepLine at

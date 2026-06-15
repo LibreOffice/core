@@ -4039,7 +4039,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         {
             { "NewTheme", uno::Any(sBackgroundThemeName) }
         }));
-        comphelper::dispatchCommand(".uno:InvertBackground", aPropertyValues);
+        comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, aPropertyValues);
     }
 }
 

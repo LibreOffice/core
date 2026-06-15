@@ -147,7 +147,7 @@ public:
 private:
     virtual OUString getCacheName() const override
     {
-        return "CachedFontConfigFontOptions";
+        return u"CachedFontConfigFontOptions"_ustr;
     }
 
     virtual bool dropCaches() override

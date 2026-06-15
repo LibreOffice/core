@@ -84,7 +84,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xSheet, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSolverSettings> xSolverModel(
-        xPropSet->getPropertyValue("SolverSettings"), uno::UNO_QUERY_THROW);
+        xPropSet->getPropertyValue(u"SolverSettings"_ustr), uno::UNO_QUERY_THROW);
 
     // Objective cell is in G7
     table::CellAddress aObjCell(0, 6, 6);
@@ -100,11 +100,11 @@ void ScSolverSettingsObj::testXSolverSettings()
     // Constraints
     uno::Sequence<sheet::ModelConstraint> aConstraints(2);
     auto pConstraints = aConstraints.getArray();
-    pConstraints[0].Left <<= OUString("$E$3:$E$17");
+    pConstraints[0].Left <<= u"$E$3:$E$17"_ustr;
     pConstraints[0].Operator = sheet::SolverConstraintOperator_BINARY;
-    pConstraints[1].Left <<= OUString("$G$5");
+    pConstraints[1].Left <<= u"$G$5"_ustr;
     pConstraints[1].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    pConstraints[1].Right <<= OUString("$G$3");
+    pConstraints[1].Right <<= u"$G$3"_ustr;
     xSolverModel->setConstraints(aConstraints);
 
     // Set solver engine options
@@ -152,7 +152,7 @@ void ScSolverSettingsObj::testXSolverSettings()
 
     // Check solver engine options
     uno::Sequence<beans::PropertyValue> aEngProps = xSolverModel->getEngineOptions();
-    CPPUNIT_ASSERT_EQUAL(OUString("EpsilonLevel"), aEngProps[0].Name);
+    CPPUNIT_ASSERT_EQUAL(u"EpsilonLevel"_ustr, aEngProps[0].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(0)), aEngProps[0].Value);
     CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps[1].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps[1].Value);
@@ -172,7 +172,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     uno::Reference<sheet::XSpreadsheet> xSheet2(xIndex2->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet2(xSheet2, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSolverSettings> xSolverModel2(
-        xPropSet2->getPropertyValue("SolverSettings"), uno::UNO_QUERY_THROW);
+        xPropSet2->getPropertyValue(u"SolverSettings"_ustr), uno::UNO_QUERY_THROW);
 
     // // Check objective function
     testCellAddress(aObjCell, xSolverModel2->getObjectiveCell());
@@ -197,7 +197,7 @@ void ScSolverSettingsObj::testXSolverSettings()
 
     // Check solver engine options
     uno::Sequence<beans::PropertyValue> aEngProps2 = xSolverModel2->getEngineOptions();
-    CPPUNIT_ASSERT_EQUAL(OUString("EpsilonLevel"), aEngProps2[0].Name);
+    CPPUNIT_ASSERT_EQUAL(u"EpsilonLevel"_ustr, aEngProps2[0].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(0)), aEngProps2[0].Value);
     CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps2[1].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps2[1].Value);

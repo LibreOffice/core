@@ -22,10 +22,11 @@ namespace chart
 ChartGradientsTabPage::ChartGradientsTabPage(weld::Container* pPage,
                                              weld::DialogController* pController,
                                              const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/schart/ui/tp_ChartGradients.ui", "tp_ChartGradients",
-                 &rInAttrs)
-    , mxLightPalettes(new ChartGradientPalettes(*m_xBuilder, "light_palettes", "lightwin"))
-    , mxDarkPalettes(new ChartGradientPalettes(*m_xBuilder, "dark_palettes", "darkwin"))
+    : SfxTabPage(pPage, pController, u"modules/schart/ui/tp_ChartGradients.ui"_ustr,
+                 u"tp_ChartGradients"_ustr, &rInAttrs)
+    , mxLightPalettes(
+          new ChartGradientPalettes(*m_xBuilder, u"light_palettes"_ustr, u"lightwin"_ustr))
+    , mxDarkPalettes(new ChartGradientPalettes(*m_xBuilder, u"dark_palettes"_ustr, u"darkwin"_ustr))
 {
     mxLightPalettes->SetSelectHdl(LINK(this, ChartGradientsTabPage, SelectLightPaletteHdl));
 

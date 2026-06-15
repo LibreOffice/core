@@ -158,7 +158,7 @@ void TextPropertyPanel::HandleContextChange (
     mxResetBar->set_visible(bWriterText || bCalcText || bChartText);
     mxDefaultBar->set_visible(bDrawText);
     mxHyphenationBar->set_visible(bWriterText);
-    mxSpacingBar->set_item_visible(".uno:NoBreak", bWriterText);
+    mxSpacingBar->set_item_visible(u".uno:NoBreak"_ustr, bWriterText);
 
     bool bChartTitleOrNonChart
         = (maContext.GetContext() == vcl::EnumContext::Context::ChartTitle) || !bChartText;

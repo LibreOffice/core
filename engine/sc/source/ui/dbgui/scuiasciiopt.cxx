@@ -288,7 +288,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     , mxTableBox(new ScCsvTableBox(*m_xBuilder))
     , mxCkbAlwaysShowOnImport(m_xBuilder->weld_check_button(u"alwaysshowonimport"_ustr))
 {
-    SvtViewOptions aDlgOpt(EViewType::Dialog, "TextImportCsvDialog");
+    SvtViewOptions aDlgOpt(EViewType::Dialog, u"TextImportCsvDialog"_ustr);
     if (aDlgOpt.Exists())
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
@@ -511,7 +511,7 @@ IMPL_STATIC_LINK_NOARG(ScImportAsciiDlg, InstallKitNotifierHdl, void*, vcl::ICOK
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
-    SvtViewOptions aDlgOpt(EViewType::Dialog, "TextImportCsvDialog");
+    SvtViewOptions aDlgOpt(EViewType::Dialog, u"TextImportCsvDialog"_ustr);
     aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::PosSize));
 }
 

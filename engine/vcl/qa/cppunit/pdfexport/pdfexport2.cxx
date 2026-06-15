@@ -831,7 +831,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion15)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160196)
 {
     // Create an empty document.
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
 
     // Add a title to avoid
     // The Metadata stream as specified in ISO 32000-2:2020,
@@ -855,13 +855,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160196)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion20)
 {
     // Create an empty document.
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
         { { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(20)) } });
     comphelper::SequenceAsHashMap aMediaDescriptor;
-    aMediaDescriptor["FilterData"] <<= aFilterData;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
@@ -6325,10 +6325,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormRoundtrip)
 
     // Need to properly set the PDF export options
     comphelper::SequenceAsHashMap aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_pdf_Export"_ustr;
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(true) } }));
-    aMediaDescriptor["FilterData"] <<= aFilterData;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
     loadFromFile(u"FilledUpForm.pdf");
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
@@ -6468,11 +6468,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFAttachmentsWithEncryptedFile)
     // The original ODF document will be saved to the PDF as an attachment.
 
     uno::Sequence<beans::PropertyValue> aFilterData
-        = { comphelper::makePropertyValue("IsAddStream", true),
-            comphelper::makePropertyValue("EncryptFile", true),
-            comphelper::makePropertyValue("DocumentOpenPassword", OUString("secret")) };
+        = { comphelper::makePropertyValue(u"IsAddStream"_ustr, true),
+            comphelper::makePropertyValue(u"EncryptFile"_ustr, true),
+            comphelper::makePropertyValue(u"DocumentOpenPassword"_ustr, u"secret"_ustr) };
     comphelper::SequenceAsHashMap aMediaDescriptor;
-    aMediaDescriptor["FilterData"] <<= aFilterData;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
     loadFromFile(u"SimpleTestDocument.fodt");
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());

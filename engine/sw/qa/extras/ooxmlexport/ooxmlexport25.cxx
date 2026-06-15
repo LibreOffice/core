@@ -87,15 +87,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf171383_refFieldInCell, "tdf171383_refFieldInCell
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Xyz"), xCell->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Xyz"_ustr, xCell->getString());
     uno::Reference<beans::XPropertySet> xPara(getParagraphOfText(1, xCell->getText()),
                                               uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 
     xCell.set(xTextTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell->getString().startsWith("Issue 1"));
     xPara.set(getParagraphOfText(1, xCell->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.docx")
@@ -103,7 +103,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.doc
     // given a document where the field contains a table
 
     // there is some text prior to the table
-    getParagraph(1, "Zusammenfassung:");
+    getParagraph(1, u"Zusammenfassung:"_ustr);
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
     // The table cells also all have text content
@@ -112,7 +112,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.doc
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("ID"), xCell->getString());
+    CPPUNIT_ASSERT_EQUAL(u"ID"_ustr, xCell->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138020_undefined_firstCol, "tdf138020_undefined_firstCol.docx")
@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
 
     OUString aStyleName = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, aStyleName);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText)

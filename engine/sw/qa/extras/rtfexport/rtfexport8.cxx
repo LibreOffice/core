@@ -477,7 +477,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter)
 
     //tdf#164748: export must have the all same footer settings as the first page
     auto xStyles = getStyles(u"PageStyles"_ustr);
-    auto xPara = getParagraph(2, "2");
+    auto xPara = getParagraph(2, u"2"_ustr);
     OUString page2StyleName = getProperty<OUString>(xPara, u"PageDescName"_ustr);
     uno::Reference<beans::XPropertySet> page2Style;
     page2Style.set(xStyles->getByName(page2StyleName), uno::UNO_QUERY);
@@ -539,7 +539,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionBreakAfterSection)
     // Without the accompanying fix in place, this test would have failed with:
     // - the property is of unexpected type or void: PageDescName
     // i.e. the 2nd paragraph was on the same page as the 1st one.
-    auto aPageDescName = getProperty<OUString>(xParagraph, "PageDescName");
+    auto aPageDescName = getProperty<OUString>(xParagraph, u"PageDescName"_ustr);
     CPPUNIT_ASSERT(!aPageDescName.isEmpty());
 }
 
@@ -684,7 +684,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161878)
         uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
         uno::Reference<beans::XPropertySet> xPropSet(xCursor, uno::UNO_QUERY);
         xCursor->goRight(2, false);
-        uno::Any xField = xPropSet->getPropertyValue("TextField");
+        uno::Any xField = xPropSet->getPropertyValue(u"TextField"_ustr);
         CPPUNIT_ASSERT(xField.hasValue());
     };
     createSwDoc("tdf161878.rtf");

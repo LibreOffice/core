@@ -831,7 +831,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf159029)
 
     // set vert orient
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable(UIName("Table1"));
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     pWrtShell->Right(SwCursorSkipMode::Cells, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->SetBoxAlign(css::text::VertOrientation::BOTTOM);
 

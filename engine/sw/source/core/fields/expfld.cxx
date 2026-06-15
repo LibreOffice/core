@@ -893,7 +893,7 @@ OUString SwSetExpField::GetFieldName() const
                                 ? SwFieldTypesEnum::SetInput
                                 : SwFieldTypesEnum::Set   );
 
-    OUString sFieldText = "";
+    OUString sFieldText = u""_ustr;
 
     if(GetTextField())
          sFieldText = GetFirstNWords(GetTextField()->GetTextNode().GetText(), 2);

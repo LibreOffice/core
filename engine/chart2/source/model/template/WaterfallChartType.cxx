@@ -48,12 +48,12 @@ OUString SAL_CALL WaterfallChartType::getChartType()
 
 uno::Sequence<OUString> WaterfallChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 OUString SAL_CALL WaterfallChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.WaterfallChartType";
+    return u"com.sun.star.comp.chart.WaterfallChartType"_ustr;
 }
 
 sal_Bool SAL_CALL WaterfallChartType::supportsService(const OUString& rServiceName)
@@ -63,7 +63,7 @@ sal_Bool SAL_CALL WaterfallChartType::supportsService(const OUString& rServiceNa
 
 css::uno::Sequence<OUString> SAL_CALL WaterfallChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_WATERFALL, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_WATERFALL, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

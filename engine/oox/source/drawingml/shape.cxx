@@ -959,13 +959,13 @@ void PushMasterTextListStyleToMasterShapeParagraphs(TextListStyle& rMasterTextLi
         }
 
         uno::Reference<container::XIndexReplace> xNumberingRules;
-        if (!(xParagraph->getPropertyValue("NumberingRules") >>= xNumberingRules))
+        if (!(xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules))
         {
             continue;
         }
 
         rMasterTextListStyle.pushToNumberingRules(xNumberingRules, std::nullopt);
-        xParagraph->setPropertyValue("NumberingRules", uno::Any(xNumberingRules));
+        xParagraph->setPropertyValue(u"NumberingRules"_ustr, uno::Any(xNumberingRules));
     }
 }
 }
@@ -2950,12 +2950,12 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
             if (xSlideRels)
             {
                 for (auto const& slideRel : *xSlideRels)
-                    addRelation(slideRel, "slide");
+                    addRelation(slideRel, u"slide"_ustr);
             }
             if (xHlinkRels)
             {
                 for (auto const& hlinkRel : *xHlinkRels)
-                    addRelation(hlinkRel, "hyperlink");
+                    addRelation(hlinkRel, u"hyperlink"_ustr);
             }
         }
         xRelListTemp.realloc(counter);

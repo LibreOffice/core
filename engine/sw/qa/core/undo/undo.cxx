@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescThatFollowsItself)
     // Create a custom page desc that has its follow page desc set to itself
     // (that happens by default). This means that, if the current page uses this
     // page desc, then the next page will as well.
-    SwPageDesc* pOldPageDesc = pDoc->MakePageDesc(UIName("customPageDesc"), nullptr, true);
+    SwPageDesc* pOldPageDesc = pDoc->MakePageDesc(UIName(u"customPageDesc"_ustr), nullptr, true);
     CPPUNIT_ASSERT(pOldPageDesc);
     CPPUNIT_ASSERT_EQUAL(pOldPageDesc, pOldPageDesc->GetFollow());
 
@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescThatFollowsItself)
 
     // Without the fix, the follow page desc no longer matches, and the next page
     // would not use the correct page desc.
-    SwPageDesc* pNewPageDesc = pDoc->FindPageDesc(UIName("customPageDesc"));
+    SwPageDesc* pNewPageDesc = pDoc->FindPageDesc(UIName(u"customPageDesc"_ustr));
     CPPUNIT_ASSERT(pNewPageDesc);
     CPPUNIT_ASSERT_EQUAL(pNewPageDesc, pNewPageDesc->GetFollow());
 }
@@ -266,24 +266,24 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescDelete)
     // by a page containing customPageDesc2, and then set the second page of the document
     // to use customPageDesc2. (the first page just uses the default page desc)
 
-    SwPageDesc* pOldPageDesc2 = pDoc->MakePageDesc(UIName("customPageDesc2"), nullptr, true);
-    SwPageDesc* pPageDesc1 = pDoc->MakePageDesc(UIName("customPageDesc1"), nullptr, true);
+    SwPageDesc* pOldPageDesc2 = pDoc->MakePageDesc(UIName(u"customPageDesc2"_ustr), nullptr, true);
+    SwPageDesc* pPageDesc1 = pDoc->MakePageDesc(UIName(u"customPageDesc1"_ustr), nullptr, true);
     pPageDesc1->SetFollow(pOldPageDesc2);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
 
-    UIName aName2("customPageDesc2");
+    UIName aName2(u"customPageDesc2"_ustr);
     pWrtShell->InsertPageBreak(&aName2);
 
     CPPUNIT_ASSERT_EQUAL(lcl_getLastPagePageDesc(*pDoc),
                          const_cast<const SwPageDesc*>(pOldPageDesc2));
 
-    pDoc->DelPageDesc(UIName("customPageDesc2"));
+    pDoc->DelPageDesc(UIName(u"customPageDesc2"_ustr));
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    SwPageDesc* pNewPageDesc2 = pDoc->FindPageDesc(UIName("customPageDesc2"));
+    SwPageDesc* pNewPageDesc2 = pDoc->FindPageDesc(UIName(u"customPageDesc2"_ustr));
 
     // After deleting customPageDesc2 and undoing that delete, customPageDesc1 should still
     // have customPageDesc2 as its follow.
@@ -310,14 +310,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescCreate)
     // by a page containing customPageDesc2, and then set the second page of the document
     // to use customPageDesc2. (the first page just uses the default page desc)
 
-    SwPageDesc* pOldPageDesc2 = pDoc->MakePageDesc(UIName("customPageDesc2"), nullptr, true);
-    SwPageDesc* pOldPageDesc1 = pDoc->MakePageDesc(UIName("customPageDesc1"), nullptr, true);
+    SwPageDesc* pOldPageDesc2 = pDoc->MakePageDesc(UIName(u"customPageDesc2"_ustr), nullptr, true);
+    SwPageDesc* pOldPageDesc1 = pDoc->MakePageDesc(UIName(u"customPageDesc1"_ustr), nullptr, true);
     pOldPageDesc1->SetFollow(pOldPageDesc2);
 
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
 
-    UIName aName2("customPageDesc2");
+    UIName aName2(u"customPageDesc2"_ustr);
     pWrtShell->InsertPageBreak(&aName2);
 
     CPPUNIT_ASSERT_EQUAL(lcl_getLastPagePageDesc(*pDoc),
@@ -330,8 +330,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testPageDescCreate)
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
 
-    SwPageDesc* pNewPageDesc1 = pDoc->FindPageDesc(UIName("customPageDesc1"));
-    SwPageDesc* pNewPageDesc2 = pDoc->FindPageDesc(UIName("customPageDesc2"));
+    SwPageDesc* pNewPageDesc1 = pDoc->FindPageDesc(UIName(u"customPageDesc1"_ustr));
+    SwPageDesc* pNewPageDesc2 = pDoc->FindPageDesc(UIName(u"customPageDesc2"_ustr));
 
     // After undoing past the creation of both custom page descs, and then redoing to the present,
     // both page descs should exist and customPageDesc2 should still follow customPageDesc1.

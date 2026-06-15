@@ -1148,7 +1148,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
 
     // tdf#164201 the table was shifting to left of the page margin because it became compat12
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9), getProperty<sal_Int32>(xTableImport, u"LeftMargin"_ustr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Office Open XML Text"),
+    CPPUNIT_ASSERT_EQUAL(u"Office Open XML Text"_ustr,
                          getSwDocShell()->GetMedium()->GetFilter()->GetFilterName());
 
     saveAndReload(TestFilter::DOCX);

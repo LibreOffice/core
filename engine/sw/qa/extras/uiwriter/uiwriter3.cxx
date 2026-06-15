@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLInsert)
           { "FilterName", uno::Any(u"HTML (StarWriter)"_ustr) } });
 
     uno::Reference<document::XDocumentInsertable> xDocInsert{ xCursor, uno::UNO_QUERY };
-    xDocInsert->insertDocumentFromURL("private:stream", aPropertyValues);
+    xDocInsert->insertDocumentFromURL(u"private:stream"_ustr, aPropertyValues);
 
     CPPUNIT_ASSERT_EQUAL(int(4), getParagraphs());
 
@@ -164,8 +164,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPasteStyleOverride)
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xStyles(
         xSFS->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStandard(xStyles->getByName("Standard"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xTextbody(xStyles->getByName("Text body"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStandard(xStyles->getByName(u"Standard"_ustr),
+                                                  uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextbody(xStyles->getByName(u"Text body"_ustr),
+                                                  uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStandard, u"CharWeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xTextbody, u"CharWeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
@@ -2569,7 +2571,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> confSupplier
         = ui::theModuleUIConfigurationManagerSupplier::get(xContext);
     css::uno::Reference<ui::XUIConfigurationManager> xManager
-        = confSupplier->getUIConfigurationManager("com.sun.star.text.TextDocument");
+        = confSupplier->getUIConfigurationManager(u"com.sun.star.text.TextDocument"_ustr);
     awt::KeyEvent keyEvent;
     keyEvent.KeyCode = css::awt::Key::UP;
     keyEvent.Modifiers = css::awt::KeyModifier::MOD2;

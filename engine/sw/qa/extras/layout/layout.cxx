@@ -772,12 +772,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
     // first, disable both so para gets hidden
     uno::Sequence<beans::PropertyValue> argsSH(
         comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
 
     uno::Sequence<beans::PropertyValue> args(
         comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
 
-    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
     Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -785,7 +785,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "height", u"448");
 
     // the problem was that now the fly was the same height as before hiding
-    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
     pXmlDoc = parseLayoutDump();
@@ -793,14 +793,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
                 u"828");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "height", u"1000");
 
-    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds", "height", u"0");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "height", u"448");
 
-    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
     pXmlDoc = parseLayoutDump();
@@ -811,7 +811,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
     // other test like testTdf143239 and testTdf159101 depend on this;
     // seems getting the previous value is only possible with a listener
     // so just hardcode it...
-    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
     Scheduler::ProcessEventsToIdle();
 }
 
@@ -829,7 +829,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     SwFieldMgr manager(pWrtShell);
 
     pWrtShell->StartAllAction();
-    manager.UpdateCurField(10000 /*(?)*/, "Foo", "1", std::move(pField));
+    manager.UpdateCurField(10000 /*(?)*/, u"Foo"_ustr, u"1"_ustr, std::move(pField));
     pWrtShell->EndAllAction();
     Scheduler::ProcessEventsToIdle();
 
@@ -842,7 +842,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     assertXPath(pXmlDoc, "/root/page", 1);
 
     pWrtShell->StartAllAction();
-    manager.UpdateCurField(10000 /*(?)*/, "Foo", "0", std::move(pField));
+    manager.UpdateCurField(10000 /*(?)*/, u"Foo"_ustr, u"0"_ustr, std::move(pField));
     pWrtShell->EndAllAction();
     Scheduler::ProcessEventsToIdle();
 

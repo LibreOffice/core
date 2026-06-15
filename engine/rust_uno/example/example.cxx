@@ -102,12 +102,12 @@ private:
 
 rtl::OUString Provider::static_getImplementationName()
 {
-    return rtl::OUString("org.libreoffice.comp.rust_uno.example");
+    return u"org.libreoffice.comp.rust_uno.example"_ustr;
 }
 
 css::uno::Sequence<rtl::OUString> Provider::static_getSupportedServiceNames()
 {
-    rtl::OUString name("org.libreoffice.rust_uno.example");
+    rtl::OUString name(u"org.libreoffice.rust_uno.example"_ustr);
     return css::uno::Sequence<rtl::OUString>(&name, 1);
 }
 
@@ -115,13 +115,13 @@ css::uno::Reference<css::frame::XDispatch> Provider::queryDispatch(css::util::UR
                                                                    rtl::OUString const&, sal_Int32)
 {
     css::uno::Reference<css::frame::XDispatch> dispatch;
-    if (!(context_->getValueByName("/singletons/org.libreoffice.rust_uno.example_singleton")
+    if (!(context_->getValueByName(u"/singletons/org.libreoffice.rust_uno.example_singleton"_ustr)
           >>= dispatch)
         || !dispatch.is())
     {
-        throw css::uno::DeploymentException("component context fails to supply singleton "
+        throw css::uno::DeploymentException(u"component context fails to supply singleton "
                                             "org.libreoffice.rust_uno.example_singleton of type "
-                                            "com.sun.star.frame.XDispatch",
+                                            "com.sun.star.frame.XDispatch"_ustr,
                                             context_);
     }
     return dispatch;
@@ -201,7 +201,7 @@ private:
 
 rtl::OUString Dispatch::static_getImplementationName()
 {
-    return rtl::OUString("org.libreoffice.comp.rust_uno.example_singleton");
+    return u"org.libreoffice.comp.rust_uno.example_singleton"_ustr;
 }
 
 void Dispatch::dispatch(css::util::URL const&, css::uno::Sequence<css::beans::PropertyValue> const&)

@@ -609,8 +609,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmptyTableNameUpdatesChart)
 {
     createSwDoc("tdf171549.fodt");
 
-    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
-    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName(""));
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName(u"Table1"_ustr));
+    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName(u""_ustr));
 
     saveAndReload(TestFilter::ODT);
 
@@ -622,8 +622,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameCollisionUpdatesChart)
 {
     createSwDoc("tdf171549.fodt");
 
-    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
-    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName("Table2"));
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName(u"Table1"_ustr));
+    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName(u"Table2"_ustr));
 
     saveAndReload(TestFilter::ODT);
 
@@ -635,8 +635,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameUpdatePropagatedToFormulas)
 {
     createSwDoc("tdf83196.fodt");
 
-    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
-    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName("NewTableName"));
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName(u"Table1"_ustr));
+    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName(u"NewTableName"_ustr));
 
     saveAndReload(TestFilter::ODT);
 
@@ -654,32 +654,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameUndo)
     // We assert that the formula updates correctly when the target table is renamed.
     auto getFormula = [&] {
         uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<text::XTextTable> xTable(xSupplier->getTextTables()->getByName("Table2"),
-                                                uno::UNO_QUERY);
-        return xTable->getCellByName("A1")->getFormula();
+        uno::Reference<text::XTextTable> xTable(
+            xSupplier->getTextTables()->getByName(u"Table2"_ustr), uno::UNO_QUERY);
+        return xTable->getCellByName(u"A1"_ustr)->getFormula();
     };
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName(u"Table1"_ustr));
 
-    pWrtShell->SetTableName(*pFrameFormat, UIName("Table1"));
+    pWrtShell->SetTableName(*pFrameFormat, UIName(u"Table1"_ustr));
     bool bCreatedUndoAction = pWrtShell->GetLastUndoInfo(nullptr, nullptr);
     CPPUNIT_ASSERT_MESSAGE("Renaming Table1 to Table1 should have no effect", !bCreatedUndoAction);
 
-    pWrtShell->SetTableName(*pFrameFormat, UIName("Table100"));
+    pWrtShell->SetTableName(*pFrameFormat, UIName(u"Table100"_ustr));
     CPPUNIT_ASSERT_MESSAGE("Table1 name should be updated to Table100",
                            pFrameFormat->HasName(u"Table100"));
-    CPPUNIT_ASSERT_EQUAL(OUString("<Table100.A1>"), getFormula());
+    CPPUNIT_ASSERT_EQUAL(u"<Table100.A1>"_ustr, getFormula());
 
     pWrtShell->Undo();
     CPPUNIT_ASSERT_MESSAGE("Table100 name should revert to Table1 after Undo",
                            pFrameFormat->HasName(u"Table1"));
-    CPPUNIT_ASSERT_EQUAL(OUString("<Table1.A1>"), getFormula());
+    CPPUNIT_ASSERT_EQUAL(u"<Table1.A1>"_ustr, getFormula());
 
     pWrtShell->Redo();
     CPPUNIT_ASSERT_MESSAGE("Table1 name should change to Table100 after Redo",
                            pFrameFormat->HasName(u"Table100"));
-    CPPUNIT_ASSERT_EQUAL(OUString("<Table100.A1>"), getFormula());
+    CPPUNIT_ASSERT_EQUAL(u"<Table100.A1>"_ustr, getFormula());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testVirtPageNumReset)
@@ -779,9 +779,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEditListAutofmt)
 
     // When changing that red to be black:
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("Color.Color", static_cast<sal_Int32>(COL_BLACK)),
+        comphelper::makePropertyValue(u"Color.Color"_ustr, static_cast<sal_Int32>(COL_BLACK)),
     };
-    dispatchCommand(mxComponent, ".uno:Color", aArgs);
+    dispatchCommand(mxComponent, u".uno:Color"_ustr, aArgs);
 
     // Then make sure the layout turns into red:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

@@ -81,7 +81,7 @@ protected:
 void SvdrawTest::setUp()
 {
     UnoApiTest::setUp();
-    MacrosTest::setUpX509(m_directories, "svx_unit");
+    MacrosTest::setUpX509(m_directories, u"svx_unit"_ustr);
 
     mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
@@ -869,7 +869,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
 {
 #if ENABLE_PDFIMPORT
     // Given a read-only document with a just inserted signature line:
-    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     loadWithParams(createFileURL(u"empty.pdf"), aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -879,7 +880,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
     // Add a signature line to the 2nd page.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
-        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr), uno::UNO_QUERY);
     xShape->setPosition(awt::Point(1000, 1000));
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -910,11 +911,11 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
 
     // When resizing the shape by moving the bottom right (last) handle towards top right:
     aArgs = {
-        comphelper::makePropertyValue("HandleNum", static_cast<sal_Int32>(7)),
-        comphelper::makePropertyValue("NewPosX", static_cast<sal_Int32>(1500)),
-        comphelper::makePropertyValue("NewPosY", static_cast<sal_Int32>(1500)),
+        comphelper::makePropertyValue(u"HandleNum"_ustr, static_cast<sal_Int32>(7)),
+        comphelper::makePropertyValue(u"NewPosX"_ustr, static_cast<sal_Int32>(1500)),
+        comphelper::makePropertyValue(u"NewPosY"_ustr, static_cast<sal_Int32>(1500)),
     };
-    dispatchCommand(mxComponent, ".uno:MoveShapeHandle", aArgs);
+    dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aArgs);
 
     // Then make sure the size decreases:
     // Without the accompanying fix in place, this test would have failed with:

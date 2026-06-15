@@ -123,19 +123,19 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSingleInsert)
     // Given a document with a single insertion:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("aaa");
+    pWrtShell->Insert(u"aaa"_ustr);
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
-    pWrtShell->Insert("bbb");
+    pWrtShell->Insert(u"bbb"_ustr);
     pWrtShell->SetRedlineFlags(nMode);
-    pWrtShell->Insert("ccc");
+    pWrtShell->Insert(u"ccc"_ustr);
 
     // When a 2nd user reinstates that change:
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
-    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateTrackedChange"_ustr, {});
 
     // Then make sure this results in a delete on top of an insert:
     SwDoc* pDoc = pWrtShell->GetDoc();
@@ -170,27 +170,27 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateInsertsInSelection)
     // Given a document with two insertions:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("aaa");
+    pWrtShell->Insert(u"aaa"_ustr);
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
-    pWrtShell->Insert("bbb");
+    pWrtShell->Insert(u"bbb"_ustr);
     pWrtShell->SetRedlineFlags(nMode);
-    pWrtShell->Insert("ccc");
+    pWrtShell->Insert(u"ccc"_ustr);
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
-    pWrtShell->Insert("ddd");
+    pWrtShell->Insert(u"ddd"_ustr);
     pWrtShell->SetRedlineFlags(nMode);
-    pWrtShell->Insert("eee");
+    pWrtShell->Insert(u"eee"_ustr);
 
     // When a 2nd user reinstates those changes with a selection:
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     // Create a selection that excludes the initial "a" and the last "e":
     pWrtShell->SttPara(/*bSelect=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateTrackedChange"_ustr, {});
 
     // Then make sure this results in deletes on top of inserts:
     SwDoc* pDoc = pWrtShell->GetDoc();
@@ -231,9 +231,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSinglePlainDelete)
     // Given a document with a single deletion:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("abcd");
+    pWrtShell->Insert(u"abcd"_ustr);
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -242,10 +242,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSinglePlainDelete)
     pWrtShell->SetRedlineFlags(nMode);
 
     // When a 2nd user reinstates that change:
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     pWrtShell->EndPara(/*bSelect=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
-    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateTrackedChange"_ustr, {});
 
     // Then make sure this results in an insert after a delete:
     SwDoc* pDoc = pWrtShell->GetDoc();
@@ -269,9 +269,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSingleRichDelete)
     // Given a document: a<del>b<b>c\nd</b>e</del>f:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("abc");
+    pWrtShell->Insert(u"abc"_ustr);
     pWrtShell->SplitNode();
-    pWrtShell->Insert("def");
+    pWrtShell->Insert(u"def"_ustr);
     SwModule* pModule = SwModule::get();
     // Mark cd as bold:
     pWrtShell->SttPara(/*bSelect=*/false);
@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSingleRichDelete)
         aSet.Put(aWeightItem);
         pWrtShell->SetAttrSet(aSet);
     }
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -296,10 +296,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSingleRichDelete)
     pWrtShell->SetRedlineFlags(nMode);
 
     // When a 2nd user reinstates that change:
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
-    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateTrackedChange"_ustr, {});
 
     // Then make sure this results in an insert after a delete:
     // Expected document: a<del>b<b>c\nd</b>e</del><ins>b<b>c\nd</b>e</ins>f.
@@ -343,9 +343,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateDeletesInSelection)
     // Given a document with two deletions:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("abcde");
+    pWrtShell->Insert(u"abcde"_ustr);
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -357,11 +357,11 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateDeletesInSelection)
     pWrtShell->SetRedlineFlags(nMode);
 
     // When a 2nd user reinstates those changes with a selection:
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     // Create a selection that excludes the initial "a" and the last "e":
     pWrtShell->SttPara(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateTrackedChange"_ustr, {});
 
     // Then make sure this results in inserts after deletes:
     SwDoc* pDoc = pWrtShell->GetDoc();
@@ -391,9 +391,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateAndNext)
     // Given a document with two deletions:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("abbcdde");
+    pWrtShell->Insert(u"abbcdde"_ustr);
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -405,12 +405,12 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateAndNext)
     pWrtShell->SetRedlineFlags(nMode);
 
     // When a 2nd user moves into the first deletion and does reinstate-and-next twice:
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     pWrtShell->SttPara(/*bSelect=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
-    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChangeToNext", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateTrackedChangeToNext"_ustr, {});
     // Again, without an explicit cursor move:
-    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChangeToNext", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateTrackedChangeToNext"_ustr, {});
 
     // Then make sure we have insertions for both deletions:
     SwDoc* pDoc = pWrtShell->GetDoc();
@@ -428,9 +428,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateAll)
     // Given a document with two deletions:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("abbcdde");
+    pWrtShell->Insert(u"abbcdde"_ustr);
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -442,9 +442,9 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateAll)
     pWrtShell->SetRedlineFlags(nMode);
 
     // When a 2nd user does reinstate-all:
-    pModule->SetRedlineAuthor("Bob");
+    pModule->SetRedlineAuthor(u"Bob"_ustr);
     pWrtShell->SttPara(/*bSelect=*/false);
-    dispatchCommand(mxComponent, ".uno:ReinstateAllTrackedChanges", {});
+    dispatchCommand(mxComponent, u".uno:ReinstateAllTrackedChanges"_ustr, {});
 
     // Then make sure we have insertions for both deletions:
     SwDoc* pDoc = pWrtShell->GetDoc();
@@ -463,10 +463,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSelf)
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwModule* pModule = SwModule::get();
-    pModule->SetRedlineAuthor("Alice");
+    pModule->SetRedlineAuthor(u"Alice"_ustr);
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
-    pWrtShell->Insert("x");
+    pWrtShell->Insert(u"x"_ustr);
 
     // When reinstating that insert:
     pWrtShell->SttPara(/*bSelect=*/false);
@@ -501,10 +501,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
     // When comparing with an old document:
     OUString aOther = createFileURL(u"compare-old.odt");
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("URL", aOther),
-        comphelper::makePropertyValue("NoAcceptDialog", true),
+        comphelper::makePropertyValue(u"URL"_ustr, aOther),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
     };
-    dispatchCommand(mxComponent, ".uno:CompareDocuments", aArgs);
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
 
     // Then make sure a JSON callback with the expected content is emitted:
     auto it = std::find_if(aCallback.m_aStateChanges.begin(), aCallback.m_aStateChanges.end(),
@@ -534,7 +534,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutocorrectRedline)
     // with track changes, and change display is hidden:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("1000 MWh/an.");
+    pWrtShell->Insert(u"1000 MWh/an."_ustr);
 
     // Author enables track changes and replaces "1000 M" with "7 G":
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
@@ -542,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutocorrectRedline)
     pWrtShell->SttPara(/*bSelect=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
     pWrtShell->DelRight();
-    pWrtShell->Insert("7 G");
+    pWrtShell->Insert(u"7 G"_ustr);
 
     // Hide change display — visible text is now "7 GWh/an."
     // This creates MergedPara, so GetText() returns MergedPara::mergedText.

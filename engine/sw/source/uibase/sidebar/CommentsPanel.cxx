@@ -60,15 +60,15 @@
 namespace sw::sidebar
 {
 Comment::Comment(weld::Container* pParent, CommentsPanel& rCommentsPanel)
-    : mxBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/commentwidget.ui"))
-    , mxContainer(mxBuilder->weld_container("Comment"))
-    , mxExpander(mxBuilder->weld_expander("expander"))
-    , mxAuthor(mxBuilder->weld_label("authorlabel"))
-    , mxDate(mxBuilder->weld_label("datelabel"))
-    , mxTime(mxBuilder->weld_label("timelabel"))
-    , mxReply(mxBuilder->weld_button("replybutton"))
-    , mxResolve(mxBuilder->weld_check_button("resolvebutton"))
-    , mxTextView(mxBuilder->weld_text_view("textview"))
+    : mxBuilder(Application::CreateBuilder(pParent, u"modules/swriter/ui/commentwidget.ui"_ustr))
+    , mxContainer(mxBuilder->weld_container(u"Comment"_ustr))
+    , mxExpander(mxBuilder->weld_expander(u"expander"_ustr))
+    , mxAuthor(mxBuilder->weld_label(u"authorlabel"_ustr))
+    , mxDate(mxBuilder->weld_label(u"datelabel"_ustr))
+    , mxTime(mxBuilder->weld_label(u"timelabel"_ustr))
+    , mxReply(mxBuilder->weld_button(u"replybutton"_ustr))
+    , mxResolve(mxBuilder->weld_check_button(u"resolvebutton"_ustr))
+    , mxTextView(mxBuilder->weld_text_view(u"textview"_ustr))
     , mrCommentsPanel(rCommentsPanel)
     , maDate(Date::EMPTY)
     , maTime(tools::Time::EMPTY)
@@ -169,10 +169,10 @@ IMPL_LINK_NOARG(Comment, ResolveClicked, weld::Toggleable&, void)
 IMPL_LINK_NOARG(Comment, ReplyClicked, weld::Button&, void) { mrCommentsPanel.ReplyComment(this); }
 
 Thread::Thread(weld::Container* pParent)
-    : mxBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/commentsthread.ui"))
-    , mxContainer(mxBuilder->weld_container("Thread"))
-    , mxExpander(mxBuilder->weld_expander("expander"))
-    , mxCommentBox(mxBuilder->weld_box("comments_box"))
+    : mxBuilder(Application::CreateBuilder(pParent, u"modules/swriter/ui/commentsthread.ui"_ustr))
+    , mxContainer(mxBuilder->weld_container(u"Thread"_ustr))
+    , mxExpander(mxBuilder->weld_expander(u"expander"_ustr))
+    , mxCommentBox(mxBuilder->weld_box(u"comments_box"_ustr))
 {
     mxContainer->set_size_request(mxContainer->get_preferred_size().Width(), -1);
 }
@@ -182,24 +182,24 @@ Thread::~Thread() {}
 std::unique_ptr<PanelLayout> CommentsPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
-        throw css::lang::IllegalArgumentException("no parent window given to CommentsPanel::Create",
-                                                  nullptr, 0);
+        throw css::lang::IllegalArgumentException(
+            u"no parent window given to CommentsPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<CommentsPanel>(pParent);
 }
 
 CommentsPanel::CommentsPanel(weld::Widget* pParent)
-    : PanelLayout(pParent, "CommentsPanel", "modules/swriter/ui/commentspanel.ui")
+    : PanelLayout(pParent, u"CommentsPanel"_ustr, u"modules/swriter/ui/commentspanel.ui"_ustr)
     , mpDoc(nullptr)
     , mpPostItMgr(nullptr)
-    , mxFilterAuthor(m_xBuilder->weld_combo_box("filter_author"))
-    , mxFilterDate(new SvtCalendarBox(m_xBuilder->weld_menu_button("filter_date"), true))
-    , mxResetDate(m_xBuilder->weld_button("reset"))
-    , mxShowTime(m_xBuilder->weld_check_button("show_time"))
-    , mxShowResolved(m_xBuilder->weld_check_button("show_resolved"))
-    , mxShowReference(m_xBuilder->weld_check_button("show_reference"))
-    , mxSortbyPosition(m_xBuilder->weld_radio_button("sortby_position"))
-    , mxSortbyTime(m_xBuilder->weld_radio_button("sortby_time"))
-    , mxThreadsContainer(m_xBuilder->weld_box("comment_threads"))
+    , mxFilterAuthor(m_xBuilder->weld_combo_box(u"filter_author"_ustr))
+    , mxFilterDate(new SvtCalendarBox(m_xBuilder->weld_menu_button(u"filter_date"_ustr), true))
+    , mxResetDate(m_xBuilder->weld_button(u"reset"_ustr))
+    , mxShowTime(m_xBuilder->weld_check_button(u"show_time"_ustr))
+    , mxShowResolved(m_xBuilder->weld_check_button(u"show_resolved"_ustr))
+    , mxShowReference(m_xBuilder->weld_check_button(u"show_reference"_ustr))
+    , mxSortbyPosition(m_xBuilder->weld_radio_button(u"sortby_position"_ustr))
+    , mxSortbyTime(m_xBuilder->weld_radio_button(u"sortby_time"_ustr))
+    , mxThreadsContainer(m_xBuilder->weld_box(u"comment_threads"_ustr))
 {
     mxFilterAuthor->connect_changed(LINK(this, CommentsPanel, FilterByAuthor));
     mxFilterDate->connect_activated(LINK(this, CommentsPanel, FilterByDate));
@@ -668,12 +668,12 @@ void CommentsPanel::populateAuthorComboBox()
     mxFilterAuthor->clear();
     if (mpAuthorSet.empty())
         return;
-    mxFilterAuthor->append_text("All");
+    mxFilterAuthor->append_text(u"All"_ustr);
     for (const OUString& rAuthor : mpAuthorSet)
     {
         mxFilterAuthor->append_text(rAuthor);
     }
-    mxFilterAuthor->set_active_text("All");
+    mxFilterAuthor->set_active_text(u"All"_ustr);
 }
 
 IMPL_LINK_NOARG(CommentsPanel, FilterByAuthor, weld::ComboBox&, void)

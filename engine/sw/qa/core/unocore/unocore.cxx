@@ -1079,19 +1079,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
     uno::Sequence<beans::PropertyValue> aInsertArgs
         = { comphelper::makePropertyValue(u"PageStyle"_ustr, SwResId(STR_POOLPAGE_STANDARD)) };
     dispatchCommand(mxComponent, u".uno:InsertPageHeader"_ustr, aInsertArgs);
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xHeaderText(xPageStyle->getPropertyValue("HeaderText"),
-                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xHeaderText(
+        xPageStyle->getPropertyValue(u"HeaderText"_ustr), uno::UNO_QUERY);
     bool bIsContentEmpty = false;
-    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    xHeaderText->getPropertyValue(u"IsContentEmpty"_ustr) >>= bIsContentEmpty;
     CPPUNIT_ASSERT(bIsContentEmpty);
 
     // Header has 1 paragraph with text: IsContentEmpty is false.
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert("text");
+    pWrtShell->Insert(u"text"_ustr);
     bIsContentEmpty = true;
-    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    xHeaderText->getPropertyValue(u"IsContentEmpty"_ustr) >>= bIsContentEmpty;
     CPPUNIT_ASSERT(!bIsContentEmpty);
 
     // Header has 2 paragraphs: IsContentEmpty is false.
@@ -1099,7 +1099,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
     pWrtShell->DelRight();
     pWrtShell->SplitNode();
     bIsContentEmpty = true;
-    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    xHeaderText->getPropertyValue(u"IsContentEmpty"_ustr) >>= bIsContentEmpty;
     CPPUNIT_ASSERT(!bIsContentEmpty);
 
     // Header has an anchored object: IsContentEmpty is false.
@@ -1109,7 +1109,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
     RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
     aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
     bIsContentEmpty = true;
-    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    xHeaderText->getPropertyValue(u"IsContentEmpty"_ustr) >>= bIsContentEmpty;
     CPPUNIT_ASSERT(!bIsContentEmpty);
 }
 

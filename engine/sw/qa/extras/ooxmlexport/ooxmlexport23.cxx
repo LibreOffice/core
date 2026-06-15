@@ -931,7 +931,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf168598, "tdf168598.docx")
 
     // Without the fix in place this would be -302
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-501),
-                         getProperty<sal_Int32>(xTable, "LeftMargin"));
+                         getProperty<sal_Int32>(xTable, u"LeftMargin"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

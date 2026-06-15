@@ -1045,7 +1045,7 @@ static void lcl_getBookmarks(int nLevel, OUStringBuffer& rBuf, FPDF_DOCUMENT pDo
         }
 #endif
         // insert nLevel spaces before the title
-        rBuf.append(OUString("          ").subView(0, nLevel));
+        rBuf.append(u"          "_ustr.subView(0, nLevel));
         aString = OUString(pText.get());
     }
 

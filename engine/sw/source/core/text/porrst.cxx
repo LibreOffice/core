@@ -925,7 +925,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
                     }
                     else
                         nTypePos += aTextSize.Width() +
-                                        rInf.GetTextSize( " " ).Width() + 2 * mnHalfCharWidth;
+                                        rInf.GetTextSize( u" "_ustr ).Width() + 2 * mnHalfCharWidth;
                 }
                 aNewPos.AdjustX( nDirection * nTypePos );
 
@@ -939,7 +939,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
                 aNewPos.AdjustX( -nDirection * nTypePos );
                 if ( nDirection == 1 )
                     nTypePos += aTextSize.Width() +
-                                        rInf.GetTextSize( " " ).Width() - mnHalfCharWidth * 2;
+                                        rInf.GetTextSize( u" "_ustr ).Width() - mnHalfCharWidth * 2;
 
                 aNewPos.AdjustY(-fPos);
             }

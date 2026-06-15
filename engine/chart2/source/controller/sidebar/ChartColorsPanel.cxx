@@ -176,12 +176,12 @@ const std::vector<ObjectType> ChartColorsPanel::maAcceptedTypes{
 ChartColorsPanel::ChartColorsPanel(weld::Widget* pParent,
                                    const uno::Reference<frame::XFrame>& rxFrame,
                                    ChartController* pController)
-    : PanelLayout(pParent, "ChartColorsPanel", "modules/schart/ui/sidebarcolors.ui")
+    : PanelLayout(pParent, u"ChartColorsPanel"_ustr, u"modules/schart/ui/sidebarcolors.ui"_ustr)
     , mxModel(pController->getChartModel())
     , mxModifyListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this))
     , mbModelValid(true)
-    , mxColorPaletteTB(m_xBuilder->weld_toolbar("colorpalettetype"))
+    , mxColorPaletteTB(m_xBuilder->weld_toolbar(u"colorpalettetype"_ustr))
     , mxColorPaletteDispatch(new ToolbarUnoDispatcher(*mxColorPaletteTB, *m_xBuilder, rxFrame))
 {
     auto aAcceptedTypes(maAcceptedTypes);
@@ -240,10 +240,10 @@ void ChartColorsPanel::updateData()
             return;
 
         SolarMutexGuard aGuard;
-        if (xInfo->hasPropertyByName("FillStyle"))
+        if (xInfo->hasPropertyByName(u"FillStyle"_ustr))
         {
             drawing::FillStyle eFillStyle = drawing::FillStyle_SOLID;
-            xPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
+            xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
             if (eFillStyle != drawing::FillStyle_SOLID)
             {
                 mxModel->clearColorPalette();
@@ -259,11 +259,11 @@ std::unique_ptr<PanelLayout> ChartColorsPanel::Create(weld::Widget* pParent,
                                                       ChartController* pController)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ChartColorsPanel::Create",
-                                             nullptr, 0);
+        throw lang::IllegalArgumentException(
+            u"no parent Window given to ChartColorsPanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartColorsPanel::Create", nullptr,
-                                             1);
+        throw lang::IllegalArgumentException(u"no XFrame given to ChartColorsPanel::Create"_ustr,
+                                             nullptr, 1);
 
     return std::make_unique<ChartColorsPanel>(pParent, rxFrame, pController);
 }

@@ -35,8 +35,8 @@ css::uno::Reference<css::xml::dom::XNode>
 CreateProperty(const css::uno::Reference<css::xml::dom::XDocument>& xDoc, const OUString& rPropName,
                const OUString& rValue)
 {
-    css::uno::Reference<css::xml::dom::XElement> xProperty = xDoc->createElement("property");
-    css::uno::Reference<css::xml::dom::XAttr> xPropName = xDoc->createAttribute("name");
+    css::uno::Reference<css::xml::dom::XElement> xProperty = xDoc->createElement(u"property"_ustr);
+    css::uno::Reference<css::xml::dom::XAttr> xPropName = xDoc->createAttribute(u"name"_ustr);
     xPropName->setValue(rPropName);
     xProperty->setAttributeNode(xPropName);
     css::uno::Reference<css::xml::dom::XText> xValue = xDoc->createTextNode(rValue);
@@ -53,7 +53,8 @@ bool ToplevelIsMessageDialog(const css::uno::Reference<css::xml::dom::XNode>& xN
         {
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap
                 = xObjectCandidate->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xClass = xObjectMap->getNamedItem("class");
+            css::uno::Reference<css::xml::dom::XNode> xClass
+                = xObjectMap->getNamedItem(u"class"_ustr);
             if (xClass->getNodeValue() == "GtkMessageDialog")
                 return true;
         }
@@ -81,7 +82,8 @@ void SetPropertyOnTopLevel(const css::uno::Reference<css::xml::dom::XNode>& xNod
         {
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap
                 = xObjectCandidate->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xClass = xObjectMap->getNamedItem("class");
+            css::uno::Reference<css::xml::dom::XNode> xClass
+                = xObjectMap->getNamedItem(u"class"_ustr);
             if (xClass->getNodeValue() == "GtkDialog")
             {
                 insertAsFirstChild(xObjectCandidate, xProperty);
@@ -96,7 +98,7 @@ OUString GetParentObjectType(const css::uno::Reference<css::xml::dom::XNode>& xN
     auto xParent = xNode->getParentNode();
     assert(xParent->getNodeName() == "object");
     css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap = xParent->getAttributes();
-    css::uno::Reference<css::xml::dom::XNode> xClass = xParentMap->getNamedItem("class");
+    css::uno::Reference<css::xml::dom::XNode> xClass = xParentMap->getNamedItem(u"class"_ustr);
     return xClass->getNodeValue();
 }
 
@@ -150,7 +152,7 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
         if (xChild->getNodeName() == "property")
         {
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("name");
+            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem(u"name"_ustr);
             OUString sName(xName->getNodeValue().replace('_', '-'));
 
             if (sName == "label")
@@ -172,20 +174,21 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
             auto xDoc = xChild->getOwnerDocument();
 
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem(u"class"_ustr);
             OUString sClass(xClass->getNodeValue());
 
             if (sClass == "GtkMenuItem" || sClass == "GtkRadioMenuItem")
             {
                 /* <item> */
-                css::uno::Reference<css::xml::dom::XElement> xItem = xDoc->createElement("item");
+                css::uno::Reference<css::xml::dom::XElement> xItem
+                    = xDoc->createElement(u"item"_ustr);
                 xMenuSection->appendChild(xItem);
             }
             else if (sClass == "GtkSeparatorMenuItem")
             {
                 /* <section> */
                 css::uno::Reference<css::xml::dom::XElement> xSection
-                    = xDoc->createElement("section");
+                    = xDoc->createElement(u"section"_ustr);
                 xMenuSection->getParentNode()->appendChild(xSection);
                 xMenuSection = xSection;
                 xSavedMenuSection = xMenuSection;
@@ -195,10 +198,11 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
                 xMenuSection->removeChild(xMenuSection->getLastChild()); // remove preceding <item>
 
                 css::uno::Reference<css::xml::dom::XElement> xSubMenu
-                    = xDoc->createElement("submenu");
-                css::uno::Reference<css::xml::dom::XAttr> xIdAttr = xDoc->createAttribute("id");
+                    = xDoc->createElement(u"submenu"_ustr);
+                css::uno::Reference<css::xml::dom::XAttr> xIdAttr
+                    = xDoc->createAttribute(u"id"_ustr);
 
-                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem(u"id"_ustr);
                 OUString sId(xId->getNodeValue());
 
                 xIdAttr->setValue(sId);
@@ -206,7 +210,7 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
                 xMenuSection->appendChild(xSubMenu);
 
                 css::uno::Reference<css::xml::dom::XElement> xSection
-                    = xDoc->createElement("section");
+                    = xDoc->createElement(u"section"_ustr);
                 xSubMenu->appendChild(xSection);
 
                 xMenuSection = xSection;
@@ -230,12 +234,12 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
             auto xDoc = xChild->getOwnerDocument();
 
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem(u"class"_ustr);
             OUString sClass(xClass->getNodeValue());
 
             if (sClass == "GtkMenuItem" || sClass == "GtkRadioMenuItem")
             {
-                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem(u"id"_ustr);
                 OUString sId = xId->getNodeValue();
 
                 /*
@@ -251,7 +255,7 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
                         xChildPropertyLabel, css::uno::UNO_QUERY_THROW);
 
                     css::uno::Reference<css::xml::dom::XElement> xLabelAttr
-                        = xDoc->createElement("attribute");
+                        = xDoc->createElement(u"attribute"_ustr);
 
                     css::uno::Reference<css::xml::dom::XNamedNodeMap> xLabelMap
                         = xChildPropertyLabel->getAttributes();
@@ -270,10 +274,10 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
                 }
 
                 css::uno::Reference<css::xml::dom::XElement> xActionAttr
-                    = xDoc->createElement("attribute");
+                    = xDoc->createElement(u"attribute"_ustr);
                 css::uno::Reference<css::xml::dom::XAttr> xActionName
-                    = xDoc->createAttribute("name");
-                xActionName->setValue("action");
+                    = xDoc->createAttribute(u"name"_ustr);
+                xActionName->setValue(u"action"_ustr);
                 xActionAttr->setAttributeNode(xActionName);
                 if (bChildDrawAsRadio)
                     xActionAttr->appendChild(xDoc->createTextNode("menu.radio." + sId));
@@ -282,21 +286,21 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
                 xItem->appendChild(xActionAttr);
 
                 css::uno::Reference<css::xml::dom::XElement> xTargetAttr
-                    = xDoc->createElement("attribute");
+                    = xDoc->createElement(u"attribute"_ustr);
                 css::uno::Reference<css::xml::dom::XAttr> xTargetName
-                    = xDoc->createAttribute("name");
-                xTargetName->setValue("target");
+                    = xDoc->createAttribute(u"name"_ustr);
+                xTargetName->setValue(u"target"_ustr);
                 xTargetAttr->setAttributeNode(xTargetName);
                 xTargetAttr->appendChild(xDoc->createTextNode(sId));
                 xItem->appendChild(xTargetAttr);
 
                 css::uno::Reference<css::xml::dom::XElement> xHiddenWhenAttr
-                    = xDoc->createElement("attribute");
+                    = xDoc->createElement(u"attribute"_ustr);
                 css::uno::Reference<css::xml::dom::XAttr> xHiddenWhenName
-                    = xDoc->createAttribute("name");
-                xHiddenWhenName->setValue("hidden-when");
+                    = xDoc->createAttribute(u"name"_ustr);
+                xHiddenWhenName->setValue(u"hidden-when"_ustr);
                 xHiddenWhenAttr->setAttributeNode(xHiddenWhenName);
-                xHiddenWhenAttr->appendChild(xDoc->createTextNode("action-missing"));
+                xHiddenWhenAttr->appendChild(xDoc->createTextNode(u"action-missing"_ustr));
                 xItem->appendChild(xHiddenWhenAttr);
             }
         }
@@ -377,17 +381,18 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
         if (xChild->getNodeName() == "requires")
         {
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xLib = xMap->getNamedItem("lib");
+            css::uno::Reference<css::xml::dom::XNode> xLib = xMap->getNamedItem(u"lib"_ustr);
             assert(xLib->getNodeValue() == "gtk+");
-            xLib->setNodeValue("gtk");
-            css::uno::Reference<css::xml::dom::XNode> xVersion = xMap->getNamedItem("version");
+            xLib->setNodeValue(u"gtk"_ustr);
+            css::uno::Reference<css::xml::dom::XNode> xVersion
+                = xMap->getNamedItem(u"version"_ustr);
             assert(xVersion->getNodeValue() == "3.24");
-            xVersion->setNodeValue("4.0");
+            xVersion->setNodeValue(u"4.0"_ustr);
         }
         else if (xChild->getNodeName() == "property")
         {
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("name");
+            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem(u"name"_ustr);
             OUString sName(xName->getNodeValue().replace('_', '-'));
 
             if (sName == "border-width")
@@ -397,7 +402,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap
                     = xChild->getParentNode()->getAttributes();
-                css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
+                css::uno::Reference<css::xml::dom::XNode> xId
+                    = xParentMap->getNamedItem(u"id"_ustr);
                 auto xDoc = xChild->getOwnerDocument();
                 auto xDefaultWidget
                     = CreateProperty(xDoc, u"default-widget"_ustr, xId->getNodeValue());
@@ -409,7 +415,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap
                     = xChild->getParentNode()->getAttributes();
-                css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
+                css::uno::Reference<css::xml::dom::XNode> xId
+                    = xParentMap->getNamedItem(u"id"_ustr);
                 auto xDoc = xChild->getOwnerDocument();
                 auto xDefaultWidget
                     = CreateProperty(xDoc, u"focus-widget"_ustr, xId->getNodeValue());
@@ -450,7 +457,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (sParentClass == "GtkToolButton" || sParentClass == "GtkMenuToolButton"
                     || sParentClass == "GtkToggleToolButton")
                 {
-                    xName->setNodeValue("tooltip-text");
+                    xName->setNodeValue(u"tooltip-text"_ustr);
                 }
                 xPropertyLabel = xChild;
             }
@@ -459,7 +466,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 OUString sParentClass = GetParentObjectType(xChild);
                 if (sParentClass == "GtkPopover")
-                    xName->setNodeValue("autohide");
+                    xName->setNodeValue(u"autohide"_ustr);
             }
 
             if (sName == "visible")
@@ -503,7 +510,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap
                     = xChild->getParentNode()->getAttributes();
-                css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
+                css::uno::Reference<css::xml::dom::XNode> xId
+                    = xParentMap->getNamedItem(u"id"_ustr);
                 if (xId && xId->getNodeValue() == "help")
                 {
                     auto xDoc = xChild->getOwnerDocument();
@@ -731,7 +739,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                             if (!xImageCandidateMap.is())
                                 continue;
                             css::uno::Reference<css::xml::dom::XNode> xId
-                                = xImageCandidateMap->getNamedItem("id");
+                                = xImageCandidateMap->getNamedItem(u"id"_ustr);
                             if (xId && xId->getNodeValue() == sImageId)
                             {
                                 xImageNode = xImageCandidate;
@@ -742,7 +750,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         auto xDoc = xChild->getOwnerDocument();
 
                         // relocate it to be a child of this GtkButton
-                        xGeneratedImageChild = xDoc->createElement("child");
+                        xGeneratedImageChild = xDoc->createElement(u"child"_ustr);
                         xGeneratedImageChild->appendChild(
                             xImageNode->getParentNode()->removeChild(xImageNode));
                         xObjectCandidate->appendChild(xGeneratedImageChild);
@@ -773,26 +781,27 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
 
             if (sName == "AtkObject::accessible-description")
-                xName->setNodeValue("description");
+                xName->setNodeValue(u"description"_ustr);
 
             if (sName == "AtkObject::accessible-name")
-                xName->setNodeValue("label");
+                xName->setNodeValue(u"label"_ustr);
 
             if (sName == "AtkObject::accessible-role")
-                xName->setNodeValue("accessible-role");
+                xName->setNodeValue(u"accessible-role"_ustr);
         }
         else if (xChild->getNodeName() == "child")
         {
             bool bContentArea = false;
 
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("internal-child");
+            css::uno::Reference<css::xml::dom::XNode> xName
+                = xMap->getNamedItem(u"internal-child"_ustr);
             if (xName)
             {
                 OUString sName(xName->getNodeValue());
                 if (sName == "vbox")
                 {
-                    xName->setNodeValue("content_area");
+                    xName->setNodeValue(u"content_area"_ustr);
                     bContentArea = true;
                 }
                 else if (sName == "accessible")
@@ -824,7 +833,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             // remove "packing" and if its grid packing insert a replacement "layout" into
             // the associated "object"
             auto xDoc = xChild->getOwnerDocument();
-            css::uno::Reference<css::xml::dom::XElement> xNew = xDoc->createElement("layout");
+            css::uno::Reference<css::xml::dom::XElement> xNew = xDoc->createElement(u"layout"_ustr);
 
             bool bGridPacking = false;
 
@@ -835,26 +844,27 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xCurrent->getAttributes();
                 if (xMap.is())
                 {
-                    css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("name");
+                    css::uno::Reference<css::xml::dom::XNode> xName
+                        = xMap->getNamedItem(u"name"_ustr);
                     OUString sName(xName->getNodeValue().replace('_', '-'));
                     if (sName == "left-attach")
                     {
-                        xName->setNodeValue("column");
+                        xName->setNodeValue(u"column"_ustr);
                         bGridPacking = true;
                     }
                     else if (sName == "top-attach")
                     {
-                        xName->setNodeValue("row");
+                        xName->setNodeValue(u"row"_ustr);
                         bGridPacking = true;
                     }
                     else if (sName == "width")
                     {
-                        xName->setNodeValue("column-span");
+                        xName->setNodeValue(u"column-span"_ustr);
                         bGridPacking = true;
                     }
                     else if (sName == "height")
                     {
-                        xName->setNodeValue("row-span");
+                        xName->setNodeValue(u"row-span"_ustr);
                         bGridPacking = true;
                     }
                     else if (sName == "secondary")
@@ -862,8 +872,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         // turn parent tag of <child> into <child type="start">
                         auto xParent = xChild->getParentNode();
                         css::uno::Reference<css::xml::dom::XAttr> xTypeStart
-                            = xDoc->createAttribute("type");
-                        xTypeStart->setValue("start");
+                            = xDoc->createAttribute(u"type"_ustr);
+                        xTypeStart->setValue(u"start"_ustr);
                         css::uno::Reference<css::xml::dom::XElement> xElem(
                             xParent, css::uno::UNO_QUERY_THROW);
                         xElem->setAttributeNode(xTypeStart);
@@ -876,12 +886,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap
                             = xParent->getAttributes();
                         css::uno::Reference<css::xml::dom::XNode> xParentType
-                            = xParentMap->getNamedItem("type");
+                            = xParentMap->getNamedItem(u"type"_ustr);
                         assert(!xParentType || xParentType->getNodeValue() == "titlebar");
                         if (!xParentType)
                         {
                             css::uno::Reference<css::xml::dom::XAttr> xTypeStart
-                                = xDoc->createAttribute("type");
+                                = xDoc->createAttribute(u"type"_ustr);
                             xTypeStart->setValue(xCurrent->getFirstChild()->getNodeValue());
                             css::uno::Reference<css::xml::dom::XElement> xElem(
                                 xParent, css::uno::UNO_QUERY_THROW);
@@ -914,7 +924,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             auto xDoc = xChild->getOwnerDocument();
 
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xType = xMap->getNamedItem("type");
+            css::uno::Reference<css::xml::dom::XNode> xType = xMap->getNamedItem(u"type"_ustr);
             if (xType->getNodeValue() == "label-for")
             {
                 // there will be a matching labelled-by which should be sufficient in the gtk4 world
@@ -928,23 +938,25 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
             else
             {
-                css::uno::Reference<css::xml::dom::XNode> xTarget = xMap->getNamedItem("target");
+                css::uno::Reference<css::xml::dom::XNode> xTarget
+                    = xMap->getNamedItem(u"target"_ustr);
 
                 css::uno::Reference<css::xml::dom::XText> xValue
                     = xDoc->createTextNode(xTarget->getNodeValue());
                 xChild->appendChild(xValue);
 
-                css::uno::Reference<css::xml::dom::XAttr> xName = xDoc->createAttribute("name");
+                css::uno::Reference<css::xml::dom::XAttr> xName
+                    = xDoc->createAttribute(u"name"_ustr);
                 if (xType->getNodeValue() == "controller-for")
-                    xName->setValue("controls");
+                    xName->setValue(u"controls"_ustr);
                 else
                     xName->setValue(xType->getNodeValue());
 
                 css::uno::Reference<css::xml::dom::XElement> xElem(xChild,
                                                                    css::uno::UNO_QUERY_THROW);
                 xElem->setAttributeNode(xName);
-                xElem->removeAttribute("type");
-                xElem->removeAttribute("target");
+                xElem->removeAttribute(u"type"_ustr);
+                xElem->removeAttribute(u"target"_ustr);
             }
         }
 
@@ -955,23 +967,25 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             auto xDoc = xChild->getOwnerDocument();
 
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem(u"class"_ustr);
             OUString sClass(xClass->getNodeValue());
 
             if (sClass == "GtkMenu")
             {
-                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem(u"id"_ustr);
                 OUString sId(xId->getNodeValue() + "-menu-model");
 
                 // <menu id='menubar'>
-                css::uno::Reference<css::xml::dom::XElement> xMenu = xDoc->createElement("menu");
-                css::uno::Reference<css::xml::dom::XAttr> xIdAttr = xDoc->createAttribute("id");
+                css::uno::Reference<css::xml::dom::XElement> xMenu
+                    = xDoc->createElement(u"menu"_ustr);
+                css::uno::Reference<css::xml::dom::XAttr> xIdAttr
+                    = xDoc->createAttribute(u"id"_ustr);
                 xIdAttr->setValue(sId);
                 xMenu->setAttributeNode(xIdAttr);
                 xChild->getParentNode()->insertBefore(xMenu, xChild);
 
                 css::uno::Reference<css::xml::dom::XElement> xSection
-                    = xDoc->createElement("section");
+                    = xDoc->createElement(u"section"_ustr);
                 xMenu->appendChild(xSection);
 
                 css::uno::Reference<css::xml::dom::XNode> xMenuSection(xSection);
@@ -987,7 +1001,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 }
 
                 // change to GtkPopoverMenu
-                xClass->setNodeValue("GtkPopoverMenu");
+                xClass->setNodeValue(u"GtkPopoverMenu"_ustr);
 
                 // <property name="menu-model">
                 xChild->appendChild(CreateProperty(xDoc, u"menu-model"_ustr, sId));
@@ -1033,14 +1047,14 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             auto xDoc = xChild->getOwnerDocument();
 
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem(u"class"_ustr);
             OUString sClass(xClass->getNodeValue());
 
             auto xInternalChildCandidate = xChild->getParentNode();
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xInternalChildCandidateMap
                 = xInternalChildCandidate->getAttributes();
             css::uno::Reference<css::xml::dom::XNode> xInternalChild
-                = xInternalChildCandidateMap->getNamedItem("internal-child");
+                = xInternalChildCandidateMap->getNamedItem(u"internal-child"_ustr);
 
             // turn default gtk3 invisibility for widget objects into explicit invisible, but ignore internal-children
             if (!bChildHasVisible && !xInternalChild)
@@ -1069,7 +1083,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (xInternalChild && xInternalChild->getNodeValue() == "action_area"
                     && !ToplevelIsMessageDialog(xChild))
                 {
-                    xClass->setNodeValue("GtkHeaderBar");
+                    xClass->setNodeValue(u"GtkHeaderBar"_ustr);
                     auto xSpacingNode
                         = CreateProperty(xDoc, u"show-title-buttons"_ustr, u"False"_ustr);
                     insertAsFirstChild(xChild, xSpacingNode);
@@ -1081,7 +1095,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         css::uno::Reference<css::xml::dom::XNamedNodeMap> xChildMap
                             = xContentAreaCandidate->getAttributes();
                         css::uno::Reference<css::xml::dom::XNode> xName
-                            = xChildMap->getNamedItem("internal-child");
+                            = xChildMap->getNamedItem(u"internal-child"_ustr);
                         if (xName && xName->getNodeValue() == "content_area")
                         {
                             auto xActionArea = xChild->getParentNode();
@@ -1089,12 +1103,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                             xActionArea->getParentNode()->removeChild(xActionArea);
 
                             css::uno::Reference<css::xml::dom::XAttr> xTypeTitleBar
-                                = xDoc->createAttribute("type");
-                            xTypeTitleBar->setValue("titlebar");
+                                = xDoc->createAttribute(u"type"_ustr);
+                            xTypeTitleBar->setValue(u"titlebar"_ustr);
                             css::uno::Reference<css::xml::dom::XElement> xElem(
                                 xActionArea, css::uno::UNO_QUERY_THROW);
                             xElem->setAttributeNode(xTypeTitleBar);
-                            xElem->removeAttribute("internal-child");
+                            xElem->removeAttribute(u"internal-child"_ustr);
 
                             xContentAreaCandidate->getParentNode()->insertBefore(
                                 xActionArea, xContentAreaCandidate);
@@ -1117,7 +1131,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                         css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap
                                             = xObject->getAttributes();
                                         css::uno::Reference<css::xml::dom::XNode> xObjectId
-                                            = xObjectMap->getNamedItem("id");
+                                            = xObjectMap->getNamedItem(u"id"_ustr);
                                         sNodeId = xObjectId->getNodeValue();
                                     }
 
@@ -1129,7 +1143,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                     css::uno::Reference<css::xml::dom::XNamedNodeMap> xTitleChildMap
                                         = xTitleChild->getAttributes();
                                     css::uno::Reference<css::xml::dom::XNode> xPropName
-                                        = xTitleChildMap->getNamedItem("name");
+                                        = xTitleChildMap->getNamedItem(u"name"_ustr);
                                     OUString sPropName(xPropName->getNodeValue().replace('_', '-'));
                                     if (sPropName == "homogeneous")
                                         xChild->removeChild(xTitleChild);
@@ -1158,18 +1172,18 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
                                 css::uno::Reference<css::xml::dom::XElement> xChildElem(
                                     rTitleChild.first, css::uno::UNO_QUERY_THROW);
-                                if (!xChildElem->hasAttribute("type"))
+                                if (!xChildElem->hasAttribute(u"type"_ustr))
                                 {
                                     // turn parent tag of <child> into <child type="end"> except for cancel/close which we'll
                                     // put at start unless there is nothing at end
                                     css::uno::Reference<css::xml::dom::XAttr> xTypeEnd
-                                        = xDoc->createAttribute("type");
+                                        = xDoc->createAttribute(u"type"_ustr);
                                     if (nNonHelpButtonCount >= 2
                                         && (rTitleChild.second == "cancel"
                                             || rTitleChild.second == "close"))
-                                        xTypeEnd->setValue("start");
+                                        xTypeEnd->setValue(u"start"_ustr);
                                     else
-                                        xTypeEnd->setValue("end");
+                                        xTypeEnd->setValue(u"end"_ustr);
                                     xChildElem->setAttributeNode(xTypeEnd);
                                 }
                             }
@@ -1184,31 +1198,33 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     }
                 }
                 else // GtkMessageDialog
-                    xClass->setNodeValue("GtkBox");
+                    xClass->setNodeValue(u"GtkBox"_ustr);
             }
             else if (sClass == "GtkToolbar")
             {
-                xClass->setNodeValue("GtkBox");
-                css::uno::Reference<css::xml::dom::XElement> xStyle = xDoc->createElement("style");
+                xClass->setNodeValue(u"GtkBox"_ustr);
+                css::uno::Reference<css::xml::dom::XElement> xStyle
+                    = xDoc->createElement(u"style"_ustr);
                 css::uno::Reference<css::xml::dom::XElement> xToolbarClass
-                    = xDoc->createElement("class");
-                css::uno::Reference<css::xml::dom::XAttr> xPropName = xDoc->createAttribute("name");
-                xPropName->setValue("toolbar");
+                    = xDoc->createElement(u"class"_ustr);
+                css::uno::Reference<css::xml::dom::XAttr> xPropName
+                    = xDoc->createAttribute(u"name"_ustr);
+                xPropName->setValue(u"toolbar"_ustr);
                 xToolbarClass->setAttributeNode(xPropName);
                 xStyle->appendChild(xToolbarClass);
                 xChild->appendChild(xStyle);
             }
             else if (sClass == "GtkToolButton")
             {
-                xClass->setNodeValue("GtkButton");
+                xClass->setNodeValue(u"GtkButton"_ustr);
             }
             else if (sClass == "GtkToolItem")
             {
-                xClass->setNodeValue("GtkBox");
+                xClass->setNodeValue(u"GtkBox"_ustr);
             }
             else if (sClass == "GtkMenuToolButton")
             {
-                xClass->setNodeValue("GtkMenuButton");
+                xClass->setNodeValue(u"GtkMenuButton"_ustr);
                 if (gtk_get_minor_version() >= 4)
                 {
                     auto xAlwaysShowArrow
@@ -1218,15 +1234,15 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
             else if (sClass == "GtkRadioToolButton")
             {
-                xClass->setNodeValue("GtkCheckButton");
+                xClass->setNodeValue(u"GtkCheckButton"_ustr);
             }
             else if (sClass == "GtkToggleToolButton")
             {
-                xClass->setNodeValue("GtkToggleButton");
+                xClass->setNodeValue(u"GtkToggleButton"_ustr);
             }
             else if (sClass == "GtkSeparatorToolItem")
             {
-                xClass->setNodeValue("GtkSeparator");
+                xClass->setNodeValue(u"GtkSeparator"_ustr);
             }
             else if (sClass == "GtkBox")
             {
@@ -1243,7 +1259,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         css::uno::Reference<css::xml::dom::XNamedNodeMap> xBoxChildMap
                             = xBoxChild->getAttributes();
                         css::uno::Reference<css::xml::dom::XNode> xType
-                            = xBoxChildMap->getNamedItem("type");
+                            = xBoxChildMap->getNamedItem(u"type"_ustr);
                         if (xType && xType->getNodeValue() == "end")
                             aPackEnds.push_back(xChild->removeChild(xBoxChild));
                         else
@@ -1280,7 +1296,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                             css::uno::Reference<css::xml::dom::XNamedNodeMap>
                                                 xExpandMap = xExpandCandidate->getAttributes();
                                             css::uno::Reference<css::xml::dom::XNode> xName
-                                                = xExpandMap->getNamedItem("name");
+                                                = xExpandMap->getNamedItem(u"name"_ustr);
                                             OUString sPropName(xName->getNodeValue());
                                             if (sPropName == "hexpand")
                                             {
@@ -1311,7 +1327,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
             else if (sClass == "GtkRadioButton")
             {
-                xClass->setNodeValue("GtkCheckButton");
+                xClass->setNodeValue(u"GtkCheckButton"_ustr);
             }
             else if (sClass == "GtkImage")
             {
@@ -1363,7 +1379,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     }
                 }
                 if (!bKeepAsImage)
-                    xClass->setNodeValue("GtkPicture");
+                    xClass->setNodeValue(u"GtkPicture"_ustr);
             }
             else if (sClass == "GtkPopover" && !bHasVisible)
             {
@@ -1374,7 +1390,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 css::uno::Reference<css::xml::dom::XNode> xParentObject = xNode->getParentNode();
                 css::uno::Reference<css::xml::dom::XElement> xAccessibility
-                    = xDoc->createElement("accessibility");
+                    = xDoc->createElement(u"accessibility"_ustr);
                 xParentObject->insertBefore(xAccessibility, xNode);
 
                 // move the converted old AtkObject:: properties into a new accessibility parent
@@ -1386,7 +1402,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         = xCurrent->getAttributes())
                     {
                         css::uno::Reference<css::xml::dom::XNode> xName
-                            = xCurrentMap->getNamedItem("name");
+                            = xCurrentMap->getNamedItem(u"name"_ustr);
                         OUString sName(xName->getNodeValue());
                         if (sName == "accessible-role")
                         {
@@ -1407,7 +1423,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         // a role that exists in gtk4, nothing seems to match exactly, but maybe "alert"
                         // is a useful place to land for now
                         if (sText == "static")
-                            xRoleText->setNodeValue("alert");
+                            xRoleText->setNodeValue(u"alert"_ustr);
                     }
                     // move out of accessibility section to property section
                     xParentObject->insertBefore(xRole->getParentNode()->removeChild(xRole),
@@ -1444,7 +1460,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                 css::uno::Reference<css::xml::dom::XNamedNodeMap> xPropMap
                                     = xProp->getAttributes();
                                 css::uno::Reference<css::xml::dom::XNode> xPropName
-                                    = xPropMap->getNamedItem("name");
+                                    = xPropMap->getNamedItem(u"name"_ustr);
                                 OUString sPropName(xPropName->getNodeValue().replace('_', '-'));
                                 if (sPropName == "icon-name")
                                 {
@@ -1465,12 +1481,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (bChildAlwaysShowImage)
                 {
                     css::uno::Reference<css::xml::dom::XElement> xNewChildNode
-                        = xDoc->createElement("child");
+                        = xDoc->createElement(u"child"_ustr);
                     css::uno::Reference<css::xml::dom::XElement> xNewObjectNode
-                        = xDoc->createElement("object");
+                        = xDoc->createElement(u"object"_ustr);
                     css::uno::Reference<css::xml::dom::XAttr> xBoxClassName
-                        = xDoc->createAttribute("class");
-                    xBoxClassName->setValue("GtkBox");
+                        = xDoc->createAttribute(u"class"_ustr);
+                    xBoxClassName->setValue(u"GtkBox"_ustr);
                     xNewObjectNode->setAttributeNode(xBoxClassName);
 
                     if (eChildImagePos == GTK_POS_TOP || eChildImagePos == GTK_POS_BOTTOM)
@@ -1490,12 +1506,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     xChild->appendChild(xNewChildNode);
 
                     css::uno::Reference<css::xml::dom::XElement> xNewLabelChildNode
-                        = xDoc->createElement("child");
+                        = xDoc->createElement(u"child"_ustr);
                     css::uno::Reference<css::xml::dom::XElement> xNewChildObjectNode
-                        = xDoc->createElement("object");
+                        = xDoc->createElement(u"object"_ustr);
                     css::uno::Reference<css::xml::dom::XAttr> xLabelClassName
-                        = xDoc->createAttribute("class");
-                    xLabelClassName->setValue("GtkLabel");
+                        = xDoc->createAttribute(u"class"_ustr);
+                    xLabelClassName->setValue(u"GtkLabel"_ustr);
                     xNewChildObjectNode->setAttributeNode(xLabelClassName);
                     if (xChildPropertyLabel)
                     {
@@ -1580,7 +1596,7 @@ void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
     css::uno::Reference<css::beans::XPropertySet> xTempFile(css::io::TempFile::create(xContext),
                                                             css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::io::XStream> xTempStream(xTempFile, css::uno::UNO_QUERY_THROW);
-    xTempFile->setPropertyValue("RemoveFile", css::uno::Any(false));
+    xTempFile->setPropertyValue(u"RemoveFile"_ustr, css::uno::Any(false));
 
     // serialize it back to xml
     css::uno::Reference<css::xml::sax::XSAXSerializable> xSerializer(xDocument,

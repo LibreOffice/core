@@ -974,7 +974,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, test1904NullDate)
     Reference<beans::XPropertySet> xPropSet(xChartDoc, uno::UNO_QUERY);
 
     util::DateTime aDateTime;
-    xPropSet->getPropertyValue("NullDate") >>= aDateTime;
+    xPropSet->getPropertyValue(u"NullDate"_ustr) >>= aDateTime;
 
     CPPUNIT_ASSERT_EQUAL(1904, static_cast<int>(aDateTime.Year));
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aDateTime.Month));

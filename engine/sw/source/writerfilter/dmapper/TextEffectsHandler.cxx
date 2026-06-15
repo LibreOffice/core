@@ -889,13 +889,13 @@ void TextFillHandler::updateComplexColor()
 {
     auto getValue = [](const comphelper::SequenceAsHashMap& root)
     {
-        auto it = root.find("attributes");
+        auto it = root.find(u"attributes"_ustr);
         if (it == root.end())
         {
             return static_cast<sal_Int32>(0);
         }
         comphelper::SequenceAsHashMap aAttributesMap(it->second);
-        it = aAttributesMap.find("val");
+        it = aAttributesMap.find(u"val"_ustr);
         if (it == aAttributesMap.end())
         {
             return static_cast<sal_Int32>(0);
@@ -908,10 +908,10 @@ void TextFillHandler::updateComplexColor()
     uno::Sequence<beans::PropertyValue> aPropertyValues;
     fillProps.Value >>= aPropertyValues;
     comphelper::SequenceAsHashMap aSolidFillMap(aPropertyValues);
-    auto it = aSolidFillMap.find("srgbClr");
+    auto it = aSolidFillMap.find(u"srgbClr"_ustr);
     if (it == aSolidFillMap.end())
     {
-        it = aSolidFillMap.find("schemeClr");
+        it = aSolidFillMap.find(u"schemeClr"_ustr);
         if (it == aSolidFillMap.end())
         {
             return;
@@ -920,11 +920,11 @@ void TextFillHandler::updateComplexColor()
         {
             oox::drawingml::Color clr;
             comphelper::SequenceAsHashMap aSchemeClrMap(it->second);
-            auto schemeIt = aSchemeClrMap.find("attributes");
+            auto schemeIt = aSchemeClrMap.find(u"attributes"_ustr);
             if (schemeIt != aSchemeClrMap.end())
             {
                 comphelper::SequenceAsHashMap aAttributesMap(schemeIt->second);
-                schemeIt = aAttributesMap.find("val");
+                schemeIt = aAttributesMap.find(u"val"_ustr);
                 if (schemeIt != aAttributesMap.end())
                 {
                     OUString name;

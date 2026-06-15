@@ -833,7 +833,7 @@ OUString SfxAddTargetDialog::getContent() const
                         + m_xPredefContent->get_active_text());
     }
     else if (m_xType->get_active_id() == "image")
-        return "All Images";
+        return u"All Images"_ustr;
 
     return m_xContent->get_text();
 }

@@ -1034,7 +1034,7 @@ void MacroManagerDialog::CheckButtons()
                                 node, css::uno::UNO_QUERY);
                             if (xProps.is())
                             {
-                                if (getBoolProperty(xProps, "Creatable"))
+                                if (getBoolProperty(xProps, u"Creatable"_ustr))
                                 {
                                     bSensitiveNewLibraryButton = true;
                                 }
@@ -1129,22 +1129,22 @@ void MacroManagerDialog::CheckButtons()
                     css::uno::Reference<css::beans::XPropertySet> xProps(node, css::uno::UNO_QUERY);
                     if (xProps.is())
                     {
-                        if (getBoolProperty(xProps, "Creatable")
+                        if (getBoolProperty(xProps, u"Creatable"_ustr)
                             && rScriptContainersTreeView.get_iter_depth(
                                    *xScriptContainersSelectedIter)
                                    == 2) // library entry
                         {
                             bSensitiveMacroCreateButton = true;
                         }
-                        if (getBoolProperty(xProps, "Editable"))
+                        if (getBoolProperty(xProps, u"Editable"_ustr))
                         {
                             bSensitiveLibraryModuleDialogEditButton = true;
                         }
-                        if (getBoolProperty(xProps, "Deletable"))
+                        if (getBoolProperty(xProps, u"Deletable"_ustr))
                         {
                             bSensitiveLibraryModuleDialogDeleteButton = true;
                         }
-                        if (getBoolProperty(xProps, "Renamable"))
+                        if (getBoolProperty(xProps, u"Renamable"_ustr))
                         {
                             bSensitiveLibraryModuleDialogRenameButton = true;
                         }
@@ -1169,17 +1169,17 @@ void MacroManagerDialog::CheckButtons()
                     css::uno::Reference<css::beans::XPropertySet> xProps(node, css::uno::UNO_QUERY);
                     if (xProps.is())
                     {
-                        if (getBoolProperty(xProps, "Editable"))
+                        if (getBoolProperty(xProps, u"Editable"_ustr))
                         {
                             bSensitiveMacroEditButton = true;
                         }
                         if (!bSharedLocationContainer)
                         {
-                            if (getBoolProperty(xProps, "Deletable"))
+                            if (getBoolProperty(xProps, u"Deletable"_ustr))
                             {
                                 bSensitiveMacroDeleteButton = true;
                             }
-                            if (getBoolProperty(xProps, "Renamable"))
+                            if (getBoolProperty(xProps, u"Renamable"_ustr))
                             {
                                 bSensitiveMacroRenameButton = true;
                             }

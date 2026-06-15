@@ -44,7 +44,7 @@ ScTableShell::ScTableShell(ScTabViewShell* pViewShell)
     {
         pUndoManager->SetMaxUndoActionCount(0);
     }
-    SetName("Table");
+    SetName(u"Table"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Table));
 }
 

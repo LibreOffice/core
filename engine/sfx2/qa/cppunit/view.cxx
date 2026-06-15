@@ -44,7 +44,7 @@ public:
     void setUp() override
     {
         UnoApiTest::setUp();
-        MacrosTest::setUpX509(m_directories, "sfx2_view");
+        MacrosTest::setUpX509(m_directories, u"sfx2_view"_ustr);
     }
 };
 
@@ -233,7 +233,8 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testSignatureSerialize)
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testScheduler)
 {
     // Given an empty document:
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
 
     // When asking for the state of the scheduler:
     int nRet = Scheduler::GetMostUrgentTaskPriority();

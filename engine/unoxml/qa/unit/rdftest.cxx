@@ -75,17 +75,18 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testCVE_2012_0037)
     uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocRepo);
 
-    uno::Reference<css::rdf::XURI> xManifest = rdf::URI::create(xContext, "manifest:manifest");
-    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, "base-uri:");
-    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
-    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
+    uno::Reference<css::rdf::XURI> xManifest
+        = rdf::URI::create(xContext, u"manifest:manifest"_ustr);
+    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, u"base-uri:"_ustr);
+    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
+    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
 
     xDocRepo->importGraph(rdf::FileFormat::RDF_XML, xInputStream, xManifest, xBase);
     uno::Reference<rdf::XNamedGraph> xGraph = xDocRepo->getGraph(xManifest);
     CPPUNIT_ASSERT(xGraph);
     uno::Reference<container::XEnumeration> xEnum = xGraph->getStatements(xFoo, xBar, nullptr);
 
-    rdf::Statement aFooBarEvil(xFoo, xBar, rdf::Literal::create(xContext, "EVIL"), xManifest);
+    rdf::Statement aFooBarEvil(xFoo, xBar, rdf::Literal::create(xContext, u"EVIL"_ustr), xManifest);
     CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarEvil, xEnum->nextElement().get<rdf::Statement>());
 }
 
@@ -118,12 +119,12 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
 
     css::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
 
-    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
-    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
-    uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, "uri:baz");
-    uno::Reference<css::rdf::XURI> xInt = rdf::URI::create(xContext, "uri:int");
+    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
+    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
+    uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, u"uri:baz"_ustr);
+    uno::Reference<css::rdf::XURI> xInt = rdf::URI::create(xContext, u"uri:int"_ustr);
     uno::Reference<css::rdf::XLiteral> xLitType
-        = rdf::Literal::createWithType(xContext, "42", xInt);
+        = rdf::Literal::createWithType(xContext, u"42"_ustr, xInt);
 
     // 2. RDFa: set: no predicate
     try
@@ -212,28 +213,29 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocRepo);
 
-    uno::Reference<css::rdf::XURI> xManifest = rdf::URI::create(xContext, "manifest:manifest");
-    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, "base-uri:");
-    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
-    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
+    uno::Reference<css::rdf::XURI> xManifest
+        = rdf::URI::create(xContext, u"manifest:manifest"_ustr);
+    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, u"base-uri:"_ustr);
+    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
+    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
 
     xDocRepo->importGraph(rdf::FileFormat::RDF_XML, xInputStream, xManifest, xBase);
 
-    OUString sNss("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+    OUString sNss(u"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
                   "PREFIX pkg: <http://docs.oasis-open.org/opendocument/meta/package/common#>\n"
-                  "PREFIX odf: <http://docs.oasis-open.org/opendocument/meta/package/odf#>\n");
+                  "PREFIX odf: <http://docs.oasis-open.org/opendocument/meta/package/odf#>\n"_ustr);
 
     // 1. query: package-id
-    OUString sQuery("SELECT ?p WHERE { ?p rdf:type pkg:Package . }");
+    OUString sQuery(u"SELECT ?p WHERE { ?p rdf:type pkg:Package . }"_ustr);
     uno::Reference<rdf::XQuerySelectResult> aResult = xDocRepo->querySelect(sNss + sQuery);
     uno::Sequence<OUString> aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBindings.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("p"), aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(u"p"_ustr, aBindings[0]);
 
     uno::Sequence<uno::Reference<rdf::XNode>> aNode;
     css::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNode.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"),
+    CPPUNIT_ASSERT_EQUAL(u"urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"_ustr,
                          aNode[0]->getStringValue());
 
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
@@ -246,13 +248,13 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("part"), aBindings[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[1]);
+    CPPUNIT_ASSERT_EQUAL(u"part"_ustr, aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[1]);
 
     css::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
     CPPUNIT_ASSERT(!aNode[0]->getStringValue().isEmpty());
-    CPPUNIT_ASSERT_EQUAL(OUString("content.xml"), aNode[1]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(u"content.xml"_ustr, aNode[1]->getStringValue());
 
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
@@ -263,14 +265,14 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("pkg"), aBindings[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[1]);
+    CPPUNIT_ASSERT_EQUAL(u"pkg"_ustr, aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[1]);
 
     css::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"),
+    CPPUNIT_ASSERT_EQUAL(u"urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"_ustr,
                          aNode[0]->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("content.xml"), aNode[1]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(u"content.xml"_ustr, aNode[1]->getStringValue());
 
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
@@ -291,13 +293,13 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("part"), aBindings[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[1]);
+    CPPUNIT_ASSERT_EQUAL(u"part"_ustr, aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[1]);
 
     css::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("http://hospital-employee/doctor"), aNode[0]->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("meta/hospital/doctor.rdf"), aNode[1]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(u"http://hospital-employee/doctor"_ustr, aNode[0]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(u"meta/hospital/doctor.rdf"_ustr, aNode[1]->getStringValue());
 
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
@@ -311,13 +313,13 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("idref"), aBindings[1]);
+    CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(u"idref"_ustr, aBindings[1]);
 
     css::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("content.xml"), aNode[0]->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("ID_B"), aNode[1]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(u"content.xml"_ustr, aNode[0]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(u"ID_B"_ustr, aNode[1]->getStringValue());
 
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
@@ -328,8 +330,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     uno::Reference<container::XEnumeration> aResultEnum = xDocRepo->queryConstruct(sNss + sQuery);
 
     uno::Reference<css::rdf::XURI> xUuid
-        = rdf::URI::create(xContext, "urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3");
-    uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "I am the literal");
+        = rdf::URI::create(xContext, u"urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"_ustr);
+    uno::Reference<css::rdf::XLiteral> xLit
+        = rdf::Literal::create(xContext, u"I am the literal"_ustr);
     rdf::Statement aPkgFooLit(xUuid, xFoo, xLit, nullptr);
     CPPUNIT_ASSERT_STATEMENT_EQUAL(aPkgFooLit, aResultEnum->nextElement().get<rdf::Statement>());
 
@@ -347,15 +350,16 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
     uno::Reference<rdf::XRepository> xRepo = rdf::Repository::create(xContext);
     uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocRepo);
-    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
-    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, "base-uri:");
-    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
-    uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, "uri:baz");
-    uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "I am the literal");
-    uno::Reference<css::rdf::XURI> xInt = rdf::URI::create(xContext, "uri:int");
+    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
+    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, u"base-uri:"_ustr);
+    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
+    uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, u"uri:baz"_ustr);
+    uno::Reference<css::rdf::XLiteral> xLit
+        = rdf::Literal::create(xContext, u"I am the literal"_ustr);
+    uno::Reference<css::rdf::XURI> xInt = rdf::URI::create(xContext, u"uri:int"_ustr);
     uno::Reference<css::rdf::XLiteral> xLitType
-        = rdf::Literal::createWithType(xContext, "42", xInt);
-    uno::Reference<css::rdf::XBlankNode> xBlank = rdf::BlankNode::create(xContext, "_:uno");
+        = rdf::Literal::createWithType(xContext, u"42"_ustr, xInt);
+    uno::Reference<css::rdf::XBlankNode> xBlank = rdf::BlankNode::create(xContext, u"_:uno"_ustr);
 
     // 1. empty: graphs
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), xDocRepo->getGraphNames().size());
@@ -461,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
     uno::Reference<css::rdf::XLiteral> xLitLang
-        = rdf::Literal::createWithLanguage(xContext, "I am the literal", "en");
+        = rdf::Literal::createWithLanguage(xContext, u"I am the literal"_ustr, u"en"_ustr);
     xFooGraph->addStatement(xBaz, xBar, xLitLang);
 
     xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
@@ -633,11 +637,11 @@ getManifestStatements(const uno::Reference<uno::XComponentContext>& rContext,
                       const uno::Reference<css::rdf::XURI>& rURI)
 {
     uno::Reference<css::rdf::XURI> xManifest
-        = rdf::URI::createNS(rContext, rURI->getStringValue(), "manifest.rdf");
+        = rdf::URI::createNS(rContext, rURI->getStringValue(), u"manifest.rdf"_ustr);
     uno::Reference<css::rdf::XURI> xContent
-        = rdf::URI::createNS(rContext, rURI->getStringValue(), "content.xml");
+        = rdf::URI::createNS(rContext, rURI->getStringValue(), u"content.xml"_ustr);
     uno::Reference<css::rdf::XURI> xStyles
-        = rdf::URI::createNS(rContext, rURI->getStringValue(), "styles.xml");
+        = rdf::URI::createNS(rContext, rURI->getStringValue(), u"styles.xml"_ustr);
 
     uno::Reference<css::rdf::XURI> xRDFType = rdf::URI::createKnown(rContext, rdf::URIs::RDF_TYPE);
 
@@ -671,7 +675,7 @@ getMetadataFileStatements(const uno::Reference<uno::XComponentContext>& rContext
         = rdf::URI::createKnown(rContext, rdf::URIs::PKG_METADATAFILE);
 
     uno::Reference<css::rdf::XURI> xManifest
-        = rdf::URI::createNS(rContext, rURI->getStringValue(), "manifest.rdf");
+        = rdf::URI::createNS(rContext, rURI->getStringValue(), u"manifest.rdf"_ustr);
     uno::Reference<css::rdf::XURI> xGraph
         = rdf::URI::createNS(rContext, rURI->getStringValue(), rPath);
     rdf::Statement aGraphTypeMetadata(xGraph, xRDFType, xPkgMetadata, xManifest);
@@ -717,11 +721,12 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
 
         const uno::Reference<uno::XComponentContext> xContext(
             comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
-        uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
-        uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, "base-uri:");
-        uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
-        uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, "uri:baz");
-        uno::Reference<css::rdf::XBlankNode> xBlank = rdf::BlankNode::create(xContext, "_:uno");
+        uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
+        uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, u"base-uri:"_ustr);
+        uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
+        uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, u"uri:baz"_ustr);
+        uno::Reference<css::rdf::XBlankNode> xBlank
+            = rdf::BlankNode::create(xContext, u"_:uno"_ustr);
 
         {
             // RDFa: 1
@@ -730,7 +735,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
-            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "1");
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, u"1"_ustr);
             rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit, aStatements[0]);
@@ -743,7 +748,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
                 = xDocRepo->getStatementRDFa(xPara);
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
-            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "2");
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, u"2"_ustr);
             rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit, aStatements[0]);
@@ -762,8 +767,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             aSubject3 = aStatements[0].Subject->getStringValue();
-            CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatements[0].Predicate->getStringValue());
-            CPPUNIT_ASSERT_EQUAL(OUString("3"), aStatements[0].Object->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(u"uri:bar"_ustr, aStatements[0].Predicate->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(u"3"_ustr, aStatements[0].Object->getStringValue());
             CPPUNIT_ASSERT(!xResult.Second);
         }
         {
@@ -775,8 +780,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             aSubject4 = aStatements[0].Subject->getStringValue();
-            CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatements[0].Predicate->getStringValue());
-            CPPUNIT_ASSERT_EQUAL(OUString("4"), aStatements[0].Object->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(u"uri:bar"_ustr, aStatements[0].Predicate->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(u"4"_ustr, aStatements[0].Object->getStringValue());
             CPPUNIT_ASSERT(!xResult.Second);
         }
         {
@@ -788,8 +793,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             aSubject5 = aStatements[0].Subject->getStringValue();
-            CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatements[0].Predicate->getStringValue());
-            CPPUNIT_ASSERT_EQUAL(OUString("5"), aStatements[0].Object->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(u"uri:bar"_ustr, aStatements[0].Predicate->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(u"5"_ustr, aStatements[0].Object->getStringValue());
             CPPUNIT_ASSERT(!xResult.Second);
         }
 
@@ -804,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             std::vector<rdf::Statement> aStatements = sortStatements(xResult.First);
             CPPUNIT_ASSERT_EQUAL(size_t(2), aStatements.size());
 
-            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "6");
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, u"6"_ustr);
             rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
             rdf::Statement aFooBazLit(xFoo, xBaz, xLit, nullptr);
 
@@ -820,7 +825,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             std::vector<rdf::Statement> aStatements = sortStatements(xResult.First);
             CPPUNIT_ASSERT_EQUAL(size_t(3), aStatements.size());
 
-            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "7");
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, u"7"_ustr);
             rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
             rdf::Statement aFooBazLit(xFoo, xBaz, xLit, nullptr);
             rdf::Statement aFooFooLit(xFoo, xFoo, xLit, nullptr);
@@ -830,9 +835,10 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooFooLit, aStatements[2]);
             CPPUNIT_ASSERT(!xResult.Second);
         }
-        uno::Reference<css::rdf::XLiteral> xLit2 = rdf::Literal::create(xContext, "a fooish bar");
+        uno::Reference<css::rdf::XLiteral> xLit2
+            = rdf::Literal::create(xContext, u"a fooish bar"_ustr);
         uno::Reference<css::rdf::XLiteral> xLitType
-            = rdf::Literal::createWithType(xContext, "a fooish bar", xBar);
+            = rdf::Literal::createWithType(xContext, u"a fooish bar"_ustr, xBar);
         rdf::Statement aFooBarLit2(xFoo, xBar, xLit2, nullptr);
         rdf::Statement aFooBarLitType(xFoo, xBar, xLitType, nullptr);
 
@@ -877,7 +883,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
             uno::Reference<css::rdf::XLiteral> xLitType11
-                = rdf::Literal::createWithType(xContext, "11", xBar);
+                = rdf::Literal::createWithType(xContext, u"11"_ustr, xBar);
             rdf::Statement aFooBarLitType11(xFoo, xBar, xLitType11, nullptr);
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLitType11, aStatements[0]);
@@ -897,8 +903,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
             else
                 aURL = createFileURL(u"TESTRDFA.odt");
             uno::Reference<css::rdf::XURI> xFile
-                = rdf::URI::createNS(xContext, aURL, "/content.xml");
-            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "12");
+                = rdf::URI::createNS(xContext, aURL, u"/content.xml"_ustr);
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, u"12"_ustr);
             rdf::Statement aFileBarLitType(xFile, xBar, xLit, nullptr);
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFileBarLitType, aStatements[0]);
             CPPUNIT_ASSERT(!xResult.Second);
@@ -953,8 +959,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
         uno::UNO_QUERY_THROW);
     const uno::Reference<io::XInputStream> xInputStream(
         xFileAccess->openFileRead(createFileURL(u"TESTRDFA.odt")), uno::UNO_SET_THROW);
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("InputStream",
-                                                                                 xInputStream) };
+    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
+        u"InputStream"_ustr, xInputStream) };
     mxComponent
         = mxDesktop->loadComponentFromURL(u"private:stream"_ustr, u"_blank"_ustr, 0, aLoadArgs);
     CPPUNIT_ASSERT(mxComponent.is());
@@ -983,9 +989,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
                                                           css::uno::UNO_SET_THROW);
     uno::Reference<css::rdf::XURI> xManifest
-        = rdf::URI::createNS(xContext, sBaseURI, "manifest.rdf");
-    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
-    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
+        = rdf::URI::createNS(xContext, sBaseURI, u"manifest.rdf"_ustr);
+    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
+    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
     uno::Reference<css::rdf::XURI> xRDFType = rdf::URI::createKnown(xContext, rdf::URIs::RDF_TYPE);
     uno::Reference<css::rdf::XURI> xPkgHasPart
         = rdf::URI::createKnown(xContext, rdf::URIs::PKG_HASPART);
@@ -1028,7 +1034,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     css::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u""_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: empty filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1037,7 +1043,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("/foo", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"/foo"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: absolute filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1046,7 +1052,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("/fo\"o", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"/fo\"o"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: invalid filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1055,7 +1061,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("../foo", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"../foo"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: filename with .. allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1064,7 +1070,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("foo/../../bar", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"foo/../../bar"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: filename with nest .. allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1073,7 +1079,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("foo/././bar", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"foo/././bar"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: filename with nest . allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1082,7 +1088,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("content.xml", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"content.xml"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: content.xml allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1091,7 +1097,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("styles.xml", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"styles.xml"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: styles.xml allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1100,7 +1106,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("meta.xml", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"meta.xml"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: meta.xml allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1109,7 +1115,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addMetadataFile("settings.xml", xURI);
+        xDocumentMetadataAccess->addMetadataFile(u"settings.xml"_ustr, xURI);
         CPPUNIT_FAIL("addMetadataFile: settings.xml allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1118,8 +1124,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, nullptr, "foo", xFoo,
-                                                    xURI);
+        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, nullptr, u"foo"_ustr,
+                                                    xFoo, xURI);
         CPPUNIT_FAIL("importMetadataFile: null stream allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1136,8 +1142,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, xInputStream, "",
-                                                    xFoo, xURI);
+        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, xInputStream,
+                                                    u""_ustr, xFoo, xURI);
         CPPUNIT_FAIL("importMetadataFile: empty filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1147,7 +1153,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     try
     {
         xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, xInputStream,
-                                                    "meta.xml", xFoo, xURI);
+                                                    u"meta.xml"_ustr, xFoo, xURI);
         CPPUNIT_FAIL("importMetadataFile: meta.xml filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1156,8 +1162,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, xInputStream, "foo",
-                                                    nullptr, xURI);
+        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, xInputStream,
+                                                    u"foo"_ustr, nullptr, xURI);
         CPPUNIT_FAIL("importMetadataFile: null base URI allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1166,8 +1172,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, xInputStream, "foo",
-                                                    xRDFType, xURI);
+        xDocumentMetadataAccess->importMetadataFile(rdf::FileFormat::RDF_XML, xInputStream,
+                                                    u"foo"_ustr, xRDFType, xURI);
         CPPUNIT_FAIL("importMetadataFile: non-absolute base URI allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1185,7 +1191,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addContentOrStylesFile("");
+        xDocumentMetadataAccess->addContentOrStylesFile(u""_ustr);
         CPPUNIT_FAIL("addContentOrStylesFile: empty filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1194,7 +1200,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addContentOrStylesFile("/content.xml");
+        xDocumentMetadataAccess->addContentOrStylesFile(u"/content.xml"_ustr);
         CPPUNIT_FAIL("addContentOrStylesFile: absolute filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1203,7 +1209,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->addContentOrStylesFile("foo.rdf");
+        xDocumentMetadataAccess->addContentOrStylesFile(u"foo.rdf"_ustr);
         CPPUNIT_FAIL("addContentOrStylesFile: invalid filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1212,7 +1218,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     try
     {
-        xDocumentMetadataAccess->removeContentOrStylesFile("");
+        xDocumentMetadataAccess->removeContentOrStylesFile(u""_ustr);
         CPPUNIT_FAIL("removeContentOrStylesFile: empty filename allowed");
     }
     catch (css::lang::IllegalArgumentException&)
@@ -1256,7 +1262,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     {
     }
 
-    xDocumentMetadataAccess->removeContentOrStylesFile("content.xml");
+    xDocumentMetadataAccess->removeContentOrStylesFile(u"content.xml"_ustr);
 
     xEnum = xRepo->getStatements(nullptr, nullptr, nullptr);
     // removeContentOrStylesFile (content)
@@ -1266,7 +1272,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
-    xDocumentMetadataAccess->addContentOrStylesFile("content.xml");
+    xDocumentMetadataAccess->addContentOrStylesFile(u"content.xml"_ustr);
 
     xEnum = xRepo->getStatements(nullptr, nullptr, nullptr);
     // addContentOrStylesFile (content)
@@ -1278,7 +1284,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
-    xDocumentMetadataAccess->removeContentOrStylesFile("styles.xml");
+    xDocumentMetadataAccess->removeContentOrStylesFile(u"styles.xml"_ustr);
 
     xEnum = xRepo->getStatements(nullptr, nullptr, nullptr);
     // removeContentOrStylesFile (styles)
@@ -1288,7 +1294,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
-    xDocumentMetadataAccess->addContentOrStylesFile("styles.xml");
+    xDocumentMetadataAccess->addContentOrStylesFile(u"styles.xml"_ustr);
 
     xEnum = xRepo->getStatements(nullptr, nullptr, nullptr);
     // addContentOrStylesFile (styles)
@@ -1300,13 +1306,14 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
-    uno::Reference<css::rdf::XURI> xFooPath = rdf::URI::createNS(xContext, sBaseURI, "foo.rdf");
+    uno::Reference<css::rdf::XURI> xFooPath
+        = rdf::URI::createNS(xContext, sBaseURI, u"foo.rdf"_ustr);
     rdf::Statement aBaseHaspartFoo(xBase, xPkgHasPart, xFooPath, xManifest);
     rdf::Statement aFooTypeMetadata(xFooPath, xRDFType, xPkgMetadata, xManifest);
     rdf::Statement aFooTypeBar(xFooPath, xRDFType, xBar, xManifest);
 
     css::uno::Sequence<uno::Reference<rdf::XURI>> xURI2{ xBar };
-    xDocumentMetadataAccess->addMetadataFile("foo.rdf", xURI2);
+    xDocumentMetadataAccess->addMetadataFile(u"foo.rdf"_ustr, xURI2);
 
     xEnum = xRepo->getStatements(nullptr, nullptr, nullptr);
     // addMetadataFile

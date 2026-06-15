@@ -53,7 +53,7 @@ void ScAutoCalculateControl::StateChangedAtStatusBarControl(sal_uInt16, SfxItemS
     }
     m_bIsActive = pItem->GetValue();
 
-    GetStatusBar().SetQuickHelpText(GetId(), m_bIsActive ? "" : ScResId(STR_AUTOCALC_OFF));
+    GetStatusBar().SetQuickHelpText(GetId(), m_bIsActive ? u""_ustr : ScResId(STR_AUTOCALC_OFF));
     GetStatusBar().Invalidate();
 }
 

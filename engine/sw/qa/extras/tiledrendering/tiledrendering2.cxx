@@ -278,7 +278,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSignatureState)
 
     // When initializing tiled rendering with an author name:
     uno::Sequence<beans::PropertyValue> aPropertyValues
-        = { comphelper::makePropertyValue(".uno:Author", uno::Any(u"A"_ustr)) };
+        = { comphelper::makePropertyValue(u".uno:Author"_ustr, uno::Any(u"A"_ustr)) };
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SignatureState eState = getSwDocShell()->GetDocumentSignatureState();
 
@@ -337,10 +337,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
     // When exporting to PDF on the second view and a job on the main loop that switches to the
     // first view:
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("SynchronMode", false),
-        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
+        comphelper::makePropertyValue(u"SynchronMode"_ustr, false),
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
     };
-    comphelper::dispatchCommand(".uno:ExportDirectToPDF", xFrame2, aPropertyValues);
+    comphelper::dispatchCommand(u".uno:ExportDirectToPDF"_ustr, xFrame2, aPropertyValues);
     Application::PostUserEvent(LINK(nullptr, ViewSwitcher, SwitchView), nullptr);
     Scheduler::ProcessEventsToIdle();
 
@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
     KitHelper::setView(nView1);
     aView1.m_aStateChanges.clear();
     aView2.m_aStateChanges.clear();
-    dispatchCommand(mxComponent, ".uno:TrackChangesInThisView", {});
+    dispatchCommand(mxComponent, u".uno:TrackChangesInThisView"_ustr, {});
 
     // Then make sure view1 gets a state track changes state change, but not view2:
     // Filter out .uno:ModifiedStatus=true, which is not interesting here.
@@ -416,15 +416,15 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
 
     // And given a reset state (both view1 and view2 recording is disabled):
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TrackChanges", false),
+        comphelper::makePropertyValue(u"TrackChanges"_ustr, false),
     };
-    dispatchCommand(mxComponent, ".uno:TrackChanges", aArgs);
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, aArgs);
 
     // When recording changes in view2:
     KitHelper::setView(nView2);
     aView1.m_aStateChanges.clear();
     aView2.m_aStateChanges.clear();
-    dispatchCommand(mxComponent, ".uno:TrackChangesInThisView", {});
+    dispatchCommand(mxComponent, u".uno:TrackChangesInThisView"_ustr, {});
 
     // Then make sure view2 gets a 'track changes is now on' state change, but not view1:
     aRecord1 = FilterStateChanges(aView1.m_aStateChanges, ".uno:TrackChanges=true");
@@ -446,13 +446,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableBoth)
     int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     KitHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+    comphelper::dispatchCommand(u".uno:TrackChangesInThisView"_ustr, {});
     KitHelper::setView(nView2);
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
     CPPUNIT_ASSERT(!pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
 
     // When turning on track changes for view2:
-    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+    comphelper::dispatchCommand(u".uno:TrackChangesInThisView"_ustr, {});
 
     // Then make sure both views have track changes turned on:
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
@@ -473,12 +473,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewAllToOneTransi
     SwTestViewCallback aView2;
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     KitHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChangesInAllViews", {});
+    comphelper::dispatchCommand(u".uno:TrackChangesInAllViews"_ustr, {});
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
     CPPUNIT_ASSERT(pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
 
     // When limiting recording to just view 1:
-    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+    comphelper::dispatchCommand(u".uno:TrackChangesInThisView"_ustr, {});
 
     // Then make sure view 2 has recording off:
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
@@ -501,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewInsert)
     int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     KitHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+    comphelper::dispatchCommand(u".uno:TrackChangesInThisView"_ustr, {});
 
     // When view 1 types:
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewDelete)
     int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     KitHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+    comphelper::dispatchCommand(u".uno:TrackChangesInThisView"_ustr, {});
 
     // When view 1 deletes:
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -571,7 +571,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerDocInsert)
     int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     KitHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(u".uno:TrackChanges"_ustr, {});
 
     // When view 1 types:
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testControlCodesCursor)
     aView1.m_bCursorVisible = false;
 
     // When showing formatting marks:
-    dispatchCommand(mxComponent, ".uno:ControlCodes", {});
+    dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
     // Then make sure this doesn't result in a KIT_CALLBACK_CURSOR_VISIBLE callback:
     // Without the accompanying fix in place, this test would have failed, the view jumped to the
@@ -712,7 +712,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesInsertUndo)
     KitHelper::createView();
     SwTestViewCallback aView2;
     KitHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+    comphelper::dispatchCommand(u".uno:TrackChangesInThisView"_ustr, {});
 
     // When typing and undoing:
     pWrtShell1->Insert(u"A"_ustr);

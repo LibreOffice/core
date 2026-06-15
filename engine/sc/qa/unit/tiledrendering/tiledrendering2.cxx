@@ -144,15 +144,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDecimalSeparatorInfo)
 
     // Go to cell A1.
     uno::Sequence<beans::PropertyValue> aPropertyValues
-        = { comphelper::makePropertyValue("ToPoint", OUString("$A$1")) };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+        = { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr) };
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
 
     // Cell A1 has language set to English. Decimal separator should be ".".
     CPPUNIT_ASSERT_EQUAL(std::string("."), aView1.decimalSeparator);
 
     // Go to cell B1.
-    aPropertyValues = { comphelper::makePropertyValue("ToPoint", OUString("B$1")) };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    aPropertyValues = { comphelper::makePropertyValue(u"ToPoint"_ustr, u"B$1"_ustr) };
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
 
     // Cell B1 has language set to Turkish. Decimal separator should be ",".
     CPPUNIT_ASSERT_EQUAL(std::string(","), aView1.decimalSeparator);
@@ -217,13 +217,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTdf167042)
     ScTestViewCallback aView1;
 
     uno::Sequence<beans::PropertyValue> aPropertyValues
-        = { comphelper::makePropertyValue("ToPoint", OUString("$A$1")) };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+        = { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr) };
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
 
     Point aPoint = aView1.m_aCellCursorBounds.Center();
 
-    aPropertyValues = { comphelper::makePropertyValue("ToPoint", OUString("$B$1")) };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    aPropertyValues = { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$B$1"_ustr) };
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
 
     // Check that we have the comment on A1
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));

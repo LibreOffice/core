@@ -60,7 +60,7 @@ void SwDialogsTest::setUp()
     ScreenshotTest::setUp();
     // Make sure the sw library's global pSwResMgr is initialized:
     component_ = loadFromDesktop(
-        "private:factory/swriter", "com.sun.star.text.TextDocument");
+        u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     // Make sure the swui library's global pSwResMgr is initialized
     auto xService = css::text::DialogFactoryService::create(comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xService.is());

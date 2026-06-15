@@ -405,7 +405,7 @@ void ScMyValidationsContainer::WriteValidations(const ScDocument& rDoc, ScXMLExp
                 case sheet::ValidationAlertStyle_NONE :
                 {
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_REJECT);
-                    WriteMessage(rExport, "", "", rValidation.bShowErrorMessage, false);
+                    WriteMessage(rExport, u""_ustr, u""_ustr, rValidation.bShowErrorMessage, false);
                 }
                 break;
                 default:

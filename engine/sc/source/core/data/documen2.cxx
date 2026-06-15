@@ -327,7 +327,7 @@ void ScDocument::SetChangeTrack( std::unique_ptr<ScChangeTrack> pTrack )
     if (bLoadingMedium && mpShell)
     {
         mpShell->AddDelayedInfobarEntry(
-            "hiddentrackchanges", ScResId(STR_TRACK_CHANGES_INFOBAR_TITLE),
+            u"hiddentrackchanges"_ustr, ScResId(STR_TRACK_CHANGES_INFOBAR_TITLE),
             ScResId(pChangeTrack->GetActionMax() > 0 ? STR_DOCUMENT_HAS_CHANGES
                                                      : STR_DOCUMENT_TRACKS_CHANGES),
             InfobarType::INFO, true);

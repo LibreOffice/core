@@ -351,12 +351,6 @@ public:
         {
             return true;
         }
-        if (!compiler.getDiagnosticOpts().VerifyDiagnostics && utf16)
-        {
-            //TODO: Leave rewriting these uses of ordinary string literals for later (but already
-            // cover them when verifying CompilerTest_compilerplugins_clang):
-            return true;
-        }
         if (rewriter != nullptr && isSpellingRange(l1, l2) && isSpellingRange(l3, l4))
         {
             l3 = l3.getLocWithOffset(

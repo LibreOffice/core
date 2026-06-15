@@ -6475,19 +6475,19 @@ std::vector<MetroParagraphIndent> lcl_readMetroParaIndents(SvxMSDffManager& rMan
 
     auto xContext(::comphelper::getProcessComponentContext());
     auto xXPath(css::xml::xpath::XPathAPI::create(xContext));
-    xXPath->registerNS("p", "http://schemas.openxmlformats.org/presentationml/2006/main");
-    xXPath->registerNS("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+    xXPath->registerNS(u"p"_ustr, u"http://schemas.openxmlformats.org/presentationml/2006/main"_ustr);
+    xXPath->registerNS(u"a"_ustr, u"http://schemas.openxmlformats.org/drawingml/2006/main"_ustr);
 
-    auto xNodeList = xXPath->selectNodeList(xDoc, "//p:txBody/a:p");
+    auto xNodeList = xXPath->selectNodeList(xDoc, u"//p:txBody/a:p"_ustr);
     sal_Int32 nCount = xNodeList->getLength();
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         auto xPara = xNodeList->item(i);
         MetroParagraphIndent indent;
-        auto xMarginLeft = xXPath->selectSingleNode(xPara, "a:pPr/@marL");
+        auto xMarginLeft = xXPath->selectSingleNode(xPara, u"a:pPr/@marL"_ustr);
         if (xMarginLeft.is())
             indent.nMarginLeft = xMarginLeft->getNodeValue().toInt32();
-        auto xIndent = xXPath->selectSingleNode(xPara, "a:pPr/@indent");
+        auto xIndent = xXPath->selectSingleNode(xPara, u"a:pPr/@indent"_ustr);
         if (xIndent.is())
             indent.nIndent = xIndent->getNodeValue().toInt32();
         aIndents.emplace_back(indent);

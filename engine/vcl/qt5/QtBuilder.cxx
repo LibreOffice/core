@@ -503,7 +503,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         {
             pExpander->setContentWidget(pWidget);
             // erase "visible" property, QtExpander shows/hides the widget as needed
-            rMap.erase("visible");
+            rMap.erase(u"visible"_ustr);
         }
     }
 
@@ -1049,7 +1049,7 @@ void QtBuilder::setScaleProperties(QSlider& rSlider, stringmap& rProps)
     if (!hasOrientationVertical(rProps))
         rSlider.setOrientation(Qt::Horizontal);
 
-    auto aAdjustmentIt = rProps.find("adjustment");
+    auto aAdjustmentIt = rProps.find(u"adjustment"_ustr);
     if (aAdjustmentIt != rProps.end())
     {
         const Adjustment* pAdjustment = get_adjustment_by_name(aAdjustmentIt->second);
@@ -1076,7 +1076,7 @@ void QtBuilder::setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rPr
     sal_Int32 nDigits = (aDigitsIt != rProps.end()) ? aDigitsIt->second.toInt32() : 0;
     rSpinBox.setDecimals(nDigits);
 
-    auto aAdjustmentIt = rProps.find("adjustment");
+    auto aAdjustmentIt = rProps.find(u"adjustment"_ustr);
     if (aAdjustmentIt != rProps.end())
     {
         const Adjustment* pAdjustment = get_adjustment_by_name(aAdjustmentIt->second);

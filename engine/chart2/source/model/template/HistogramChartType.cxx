@@ -306,7 +306,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL HistogramChartType::getProperty
 
 OUString SAL_CALL HistogramChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.HistogramChartType";
+    return u"com.sun.star.comp.chart.HistogramChartType"_ustr;
 }
 
 sal_Bool SAL_CALL HistogramChartType::supportsService(const OUString& rServiceName)
@@ -316,7 +316,7 @@ sal_Bool SAL_CALL HistogramChartType::supportsService(const OUString& rServiceNa
 
 css::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart

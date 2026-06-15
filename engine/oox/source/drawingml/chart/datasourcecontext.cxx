@@ -89,7 +89,7 @@ ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, co
                     return this;
                 case CX_TOKEN(lvl):
                     mrModel.mnPointCount = rAttribs.getInteger(XML_ptCount, -1);
-                    mrModel.maFormatCode = rAttribs.getString(XML_formatCode, "");
+                    mrModel.maFormatCode = rAttribs.getString(XML_formatCode, u""_ustr);
                     return this;
             }
             break;
@@ -405,7 +405,7 @@ ContextHandlerRef DataSourceCxContext::onCreateContext(sal_Int32 nElement, const
                 case CX_TOKEN(numDim) :
                 {
                     assert(paCurSource);
-                    OUString sType = rAttribs.getString(XML_type, "val");
+                    OUString sType = rAttribs.getString(XML_type, u"val"_ustr);
                     DataSourceType eDimType = dataSourceTypeFromCx(true, sType);
                     DataSourceModel& rDataModel = paCurSource->create(eDimType);
                     return new DoubleSequenceContext(*this,
@@ -415,7 +415,7 @@ ContextHandlerRef DataSourceCxContext::onCreateContext(sal_Int32 nElement, const
                 case CX_TOKEN(strDim) :
                 {
                     assert(paCurSource);
-                    OUString sType = rAttribs.getString(XML_type, "cat");
+                    OUString sType = rAttribs.getString(XML_type, u"cat"_ustr);
                     DataSourceType eDimType = dataSourceTypeFromCx(false, sType);
                     DataSourceModel& rDataModel = paCurSource->create(eDimType);
                     return new StringSequenceContext(*this,

@@ -42,7 +42,7 @@ PrinterInfoManager& PrinterInfoManager::get()
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_eType( eType ),
-    m_aSystemDefaultPaper( "A4" )
+    m_aSystemDefaultPaper( u"A4"_ustr )
 {
     // initSystemDefaultPaper();
 }

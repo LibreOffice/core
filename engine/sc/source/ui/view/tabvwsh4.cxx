@@ -2054,7 +2054,7 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
     rDoc.LockAdjustHeight();
     pModel->lockControllers();
     pModel->addActionLock();
-    pModel->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
+    pModel->getUndoManager()->enterUndoContext(u"HandleDuplicateRecords"_ustr);
 
     bool nModifier = false;         // modifier key pressed?
     bool bNoDuplicatesForSelection = true;
@@ -2154,7 +2154,7 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
     pModel->lockControllers();
     pModel->addActionLock();
     pModel->enableAutomaticCalculation(true);
-    pModel->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
+    pModel->getUndoManager()->enterUndoContext(u"HandleDuplicateRecords"_ustr);
 
     if (bDuplicateRows)
     {

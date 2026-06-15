@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRecordFlatExport)
 {
     // Given a document with track changes enabled:
     createSwDoc();
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
 
     // When saving that to FODT:
     save(TestFilter::FODT);

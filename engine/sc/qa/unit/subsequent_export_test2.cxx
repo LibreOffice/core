@@ -546,7 +546,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testSortConditionRef2)
     //- In <>, attribute 'ref' of '//x:worksheet/x:autoFilter/x:sortState/x:sortCondition' incorrect value.
     createScDoc("xlsx/sortconditionref2.xlsx");
     save(TestFilter::XLSX);
-    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
 
     assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", u"A11:A300");
 }
@@ -684,7 +684,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColButton)
     createScDoc("ods/autofilter-colbutton.ods");
 
     save(TestFilter::XLSX);
-    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPathNoAttribute(pDoc, "//x:autoFilter/x:filterColumn", "hiddenButton");
 }
@@ -1385,7 +1385,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf161365)
 
     save(TestFilter::XLSX);
 
-    xmlDocUniquePtr pSheet1 = parseExport("xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet1 = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet1);
 
     assertXPathContent(pSheet1,
@@ -1406,7 +1406,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf161365)
                        "mc:Choice/x:control/x:controlPr/x:anchor/x:to/xdr:row",
                        u"3");
 
-    xmlDocUniquePtr pDrawing1 = parseExport("xl/drawings/drawing1.xml");
+    xmlDocUniquePtr pDrawing1 = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDrawing1);
 
     assertXPathContent(pDrawing1,
@@ -1424,7 +1424,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf161365)
 
     // Checked state - first off, second on
 
-    xmlDocUniquePtr pVmlDrawing1 = parseExport("xl/drawings/vmlDrawing1.vml");
+    xmlDocUniquePtr pVmlDrawing1 = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
     CPPUNIT_ASSERT(pVmlDrawing1);
 
     assertXPath(pVmlDrawing1, "/xml/v:shape[1]/xx:ClientData/xx:Checked", 0);

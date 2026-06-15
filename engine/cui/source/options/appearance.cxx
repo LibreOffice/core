@@ -35,51 +35,51 @@ struct StringPair
 std::vector<StringPair> const& getBitmapList()
 {
     static const std::vector<StringPair> aBitmapList = {
-        { CuiResId(BMP_FUZZY_LIGHTGREY), "fuzzy-lightgrey.jpg" },
-        { CuiResId(BMP_ICE_LIGHT), "ice-light.jpg" },
-        { CuiResId(BMP_PAINTED_WHITE), "painted-white.jpg" },
-        { CuiResId(BMP_TEXTURE_PAPER), "texture-paper.jpg" },
-        { CuiResId(BMP_CRUMPLED_PAPER), "crumpled-paper.jpg" },
-        { CuiResId(BMP_MARBLE), "marble.jpg" },
-        { CuiResId(BMP_CONCRETE), "concrete.jpg" },
-        { CuiResId(BMP_FUZZY_GREY), "fuzzy-grey.jpg" },
-        { CuiResId(BMP_FUZZY_DARKGREY), "fuzzy-darkgrey.jpg" },
-        { CuiResId(BMP_STONE), "stone.jpg" },
-        { CuiResId(BMP_WHITE_DIFFUSION), "white-diffusion.jpg" },
-        { CuiResId(BMP_SAND_LIGHT), "sand-light.jpg" },
-        { CuiResId(BMP_SAND), "sand.jpg" },
-        { CuiResId(BMP_SURFACE), "surface.jpg" },
-        { CuiResId(BMP_STUDIO), "studio.jpg" },
-        { CuiResId(BMP_INVOICE_PAPER), "invoice-paper.jpg" },
-        { CuiResId(BMP_PARCHMENT_PAPER), "parchment-paper.jpg" },
-        { CuiResId(BMP_CARDBOARD), "cardboard.jpg" },
-        { CuiResId(BMP_FENCE), "fence.jpg" },
-        { CuiResId(BMP_WOODEN_FENCE), "wooden-fence.jpg" },
-        { CuiResId(BMP_WOOD), "wood.jpg" },
-        { CuiResId(BMP_WOODEN_BOARD), "wooden-board.jpg" },
-        { CuiResId(BMP_PAINTED_WOOD), "painted-wood.jpg" },
-        { CuiResId(BMP_STONES), "stones.jpg" },
-        { CuiResId(BMP_PEBBLE_LIGHT), "pebble-light.jpg" },
-        { CuiResId(BMP_STONE_WALL), "stone-wall.jpg" },
-        { CuiResId(BMP_STONE_GRAY), "stone-gray.jpg" },
-        { CuiResId(BMP_ROCK_WALL), "rock-wall.jpg" },
-        { CuiResId(BMP_SURFACE_BLACK), "surface-black.jpg" },
-        { CuiResId(BMP_BRICK_WALL), "brick-wall.png" },
-        { CuiResId(BMP_TILES), "tiles.jpg" },
-        { CuiResId(BMP_GRAPH_PAPER), "graph-paper.png" },
-        { CuiResId(BMP_CLOUD), "cloud.jpg" },
-        { CuiResId(BMP_POOL), "pool.jpg" },
-        { CuiResId(BMP_SKY), "sky.jpg" },
-        { CuiResId(BMP_CIRCUIT_BOARD), "circuit-board.jpg" },
-        { CuiResId(BMP_COFFEE), "coffee.jpg" },
-        { CuiResId(BMP_COLOR_STRIPES), "color-stripes.png" },
-        { CuiResId(BMP_FLORAL), "floral.png" },
-        { CuiResId(BMP_LEAF), "leaf.jpg" },
-        { CuiResId(BMP_MAPLE_LEAVES), "maple-leaves.jpg" },
-        { CuiResId(BMP_SPACE), "space.png" },
-        { CuiResId(BMP_GIRAFFE), "giraffe.png" },
-        { CuiResId(BMP_TIGER), "tiger.jpg" },
-        { CuiResId(BMP_ZEBRA), "zebra.png" },
+        { CuiResId(BMP_FUZZY_LIGHTGREY), u"fuzzy-lightgrey.jpg"_ustr },
+        { CuiResId(BMP_ICE_LIGHT), u"ice-light.jpg"_ustr },
+        { CuiResId(BMP_PAINTED_WHITE), u"painted-white.jpg"_ustr },
+        { CuiResId(BMP_TEXTURE_PAPER), u"texture-paper.jpg"_ustr },
+        { CuiResId(BMP_CRUMPLED_PAPER), u"crumpled-paper.jpg"_ustr },
+        { CuiResId(BMP_MARBLE), u"marble.jpg"_ustr },
+        { CuiResId(BMP_CONCRETE), u"concrete.jpg"_ustr },
+        { CuiResId(BMP_FUZZY_GREY), u"fuzzy-grey.jpg"_ustr },
+        { CuiResId(BMP_FUZZY_DARKGREY), u"fuzzy-darkgrey.jpg"_ustr },
+        { CuiResId(BMP_STONE), u"stone.jpg"_ustr },
+        { CuiResId(BMP_WHITE_DIFFUSION), u"white-diffusion.jpg"_ustr },
+        { CuiResId(BMP_SAND_LIGHT), u"sand-light.jpg"_ustr },
+        { CuiResId(BMP_SAND), u"sand.jpg"_ustr },
+        { CuiResId(BMP_SURFACE), u"surface.jpg"_ustr },
+        { CuiResId(BMP_STUDIO), u"studio.jpg"_ustr },
+        { CuiResId(BMP_INVOICE_PAPER), u"invoice-paper.jpg"_ustr },
+        { CuiResId(BMP_PARCHMENT_PAPER), u"parchment-paper.jpg"_ustr },
+        { CuiResId(BMP_CARDBOARD), u"cardboard.jpg"_ustr },
+        { CuiResId(BMP_FENCE), u"fence.jpg"_ustr },
+        { CuiResId(BMP_WOODEN_FENCE), u"wooden-fence.jpg"_ustr },
+        { CuiResId(BMP_WOOD), u"wood.jpg"_ustr },
+        { CuiResId(BMP_WOODEN_BOARD), u"wooden-board.jpg"_ustr },
+        { CuiResId(BMP_PAINTED_WOOD), u"painted-wood.jpg"_ustr },
+        { CuiResId(BMP_STONES), u"stones.jpg"_ustr },
+        { CuiResId(BMP_PEBBLE_LIGHT), u"pebble-light.jpg"_ustr },
+        { CuiResId(BMP_STONE_WALL), u"stone-wall.jpg"_ustr },
+        { CuiResId(BMP_STONE_GRAY), u"stone-gray.jpg"_ustr },
+        { CuiResId(BMP_ROCK_WALL), u"rock-wall.jpg"_ustr },
+        { CuiResId(BMP_SURFACE_BLACK), u"surface-black.jpg"_ustr },
+        { CuiResId(BMP_BRICK_WALL), u"brick-wall.png"_ustr },
+        { CuiResId(BMP_TILES), u"tiles.jpg"_ustr },
+        { CuiResId(BMP_GRAPH_PAPER), u"graph-paper.png"_ustr },
+        { CuiResId(BMP_CLOUD), u"cloud.jpg"_ustr },
+        { CuiResId(BMP_POOL), u"pool.jpg"_ustr },
+        { CuiResId(BMP_SKY), u"sky.jpg"_ustr },
+        { CuiResId(BMP_CIRCUIT_BOARD), u"circuit-board.jpg"_ustr },
+        { CuiResId(BMP_COFFEE), u"coffee.jpg"_ustr },
+        { CuiResId(BMP_COLOR_STRIPES), u"color-stripes.png"_ustr },
+        { CuiResId(BMP_FLORAL), u"floral.png"_ustr },
+        { CuiResId(BMP_LEAF), u"leaf.jpg"_ustr },
+        { CuiResId(BMP_MAPLE_LEAVES), u"maple-leaves.jpg"_ustr },
+        { CuiResId(BMP_SPACE), u"space.png"_ustr },
+        { CuiResId(BMP_GIRAFFE), u"giraffe.png"_ustr },
+        { CuiResId(BMP_TIGER), u"tiger.jpg"_ustr },
+        { CuiResId(BMP_ZEBRA), u"zebra.png"_ustr },
     };
     return aBitmapList;
 }
@@ -87,8 +87,8 @@ std::vector<StringPair> const& getBitmapList()
 std::vector<StringPair> const& getBitmapDrawTypeList()
 {
     static std::vector<StringPair> aBitmapDrawTypeList = {
-        { CuiResId(BMP_DRAWTYPE_TILED), "Tiled" },
-        { CuiResId(BMP_DRAWTYPE_STRETCHED), "Stretched" },
+        { CuiResId(BMP_DRAWTYPE_TILED), u"Tiled"_ustr },
+        { CuiResId(BMP_DRAWTYPE_STRETCHED), u"Stretched"_ustr },
     };
     return aBitmapDrawTypeList;
 }
@@ -826,40 +826,40 @@ void SvxAppearanceTabPage::FillItemsList()
     for (size_t i = DOCCOLOR; i <= SHADOWCOLOR; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     for (size_t i = WRITERTEXTGRID; i <= WRITERNONPRINTCHARS; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     for (size_t i = HTMLSGML; i <= HTMLUNKNOWN; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     for (size_t i = CALCGRID; i <= CALCPROTECTEDBACKGROUND; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     m_xColorEntryBtn->append(OUString(cNames[DRAWGRID].cName), aRegistryEntries.at(DRAWGRID));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     for (size_t i = AUTHOR1; i <= AUTHOR9; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     for (size_t i = BASICEDITOR; i <= BASICERROR; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     for (size_t i = SQLIDENTIFIER; i <= SQLCOMMENT; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
-    m_xColorEntryBtn->append_separator("SeparatorID");
+    m_xColorEntryBtn->append_separator(u"SeparatorID"_ustr);
 
     // don't show UI customization options if theme is disabled
     if (!ThemeColors::IsThemeDisabled())

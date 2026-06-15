@@ -3715,9 +3715,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
     // Freeze panes on a column and receive the proper state back
     aView.m_aStateChanges.clear();
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("Index",  uno::Any(static_cast<sal_Int32>(8))),
+        comphelper::makePropertyValue(u"Index"_ustr,  uno::Any(static_cast<sal_Int32>(8))),
     };
-    comphelper::dispatchCommand(".uno:FreezePanesColumn", aPropertyValues);
+    comphelper::dispatchCommand(u".uno:FreezePanesColumn"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     pView->GetViewFrame().GetBindings().GetTimer().Invoke();
     pView->GetViewFrame().GetBindings().GetTimer().Invoke();
@@ -3732,7 +3732,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
 
     // Freeze panes on a row and receive the proper state back
     aView.m_aStateChanges.clear();
-    comphelper::dispatchCommand(".uno:FreezePanesRow", aPropertyValues);
+    comphelper::dispatchCommand(u".uno:FreezePanesRow"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     pView->GetViewFrame().GetBindings().GetTimer().Invoke();
     pView->GetViewFrame().GetBindings().GetTimer().Invoke();

@@ -55,23 +55,24 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
 {
     // Given a PDF to be signed:
-    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     createTempCopy(u"empty.pdf");
     loadWithParams(maTempFile.GetURL(), aArgs);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     pImpressDocument->initializeForTiledRendering({});
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     sd::View* pView = pViewShell->GetView();
-    pViewShell->GetViewShell()->SetKitAuthor("myauthor");
+    pViewShell->GetViewShell()->SetKitAuthor(u"myauthor"_ustr);
     SdTestViewCallback aView;
 
     // When inserting a signature line for electronic (external) signing:
     aArgs = {
-        comphelper::makePropertyValue("External", true),
+        comphelper::makePropertyValue(u"External"_ustr, true),
     };
     // Without the accompanying fix in place, this test would hang here in the certificate chooser
     // dialog.
-    dispatchCommand(mxComponent, ".uno:InsertSignatureLine", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertSignatureLine"_ustr, aArgs);
     // Signature line is selected right after inserting:
     CPPUNIT_ASSERT(pViewShell->GetViewShell()->GetSignPDFCertificate().Is());
 
@@ -81,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     uno::Any aAny;
     aMarkedObjects[0]->GetGrabBagItem(aAny);
     comphelper::SequenceAsHashMap aMap(aAny);
-    CPPUNIT_ASSERT(aMap.contains("SignatureCertificate"));
+    CPPUNIT_ASSERT(aMap.contains(u"SignatureCertificate"_ustr));
     // Also verify that this is exposed at a COKit level:
     OString aShapeSelection = "[" + aView.m_ShapeSelection + "]";
     const char* pShapeSelectionStr = aShapeSelection.getStr();
@@ -135,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
     aView.invalidatedAll = false;
 
     // Switching to notes view.
-    dispatchCommand(mxComponent, ".uno:NotesMode", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:NotesMode"_ustr, uno::Sequence<beans::PropertyValue>());
 
     CPPUNIT_ASSERT_EQUAL(true, aView.invalidatedAll);
     CPPUNIT_ASSERT_EQUAL(1, aView.partOfInvalidation);

@@ -373,7 +373,7 @@ OUString SwContentControl::GetDateString(bool bAsISO8601) const
 {
     SwDoc& rDoc = m_pTextNode->GetDoc();
     SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
-    OUString aFormat = bAsISO8601 ? "YYYY-MM-DDTHH:MM:SSZ" : m_aDateFormat;
+    OUString aFormat = bAsISO8601 ? u"YYYY-MM-DDTHH:MM:SSZ"_ustr : m_aDateFormat;
     sal_uInt32 nFormat
         = pNumberFormatter->GetEntryKey(aFormat, LanguageTag(m_aDateLanguage).getLanguageType());
 

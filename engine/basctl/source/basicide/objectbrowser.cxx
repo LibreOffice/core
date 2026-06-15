@@ -777,7 +777,7 @@ void ObjectBrowser::Show(bool bVisible)
         if (!m_pDataProvider->IsInitialized())
         {
             ShowLoadingState();
-            IdeTimer aTotalInitTimer("ObjectBrowser::FullInitialization");
+            IdeTimer aTotalInitTimer(u"ObjectBrowser::FullInitialization"_ustr);
             weld::WaitObject aWait(GetFrameWeld());
             m_pDataProvider->Initialize();
             m_bDataMayBeStale = true;

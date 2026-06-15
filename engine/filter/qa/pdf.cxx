@@ -420,10 +420,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificatePEM)
     OUString aCaPem
         = OUString::fromUtf8(read_uInt8s_ToOString(aCaStream, aCaStream.remainingSize()));
     uno::Sequence<beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue("SignPDF", true),
-        comphelper::makePropertyValue("SignCertificateCertPem", aCertPem),
-        comphelper::makePropertyValue("SignCertificateKeyPem", aKeyPem),
-        comphelper::makePropertyValue("aSignCertificateCaPem", aCaPem),
+        comphelper::makePropertyValue(u"SignPDF"_ustr, true),
+        comphelper::makePropertyValue(u"SignCertificateCertPem"_ustr, aCertPem),
+        comphelper::makePropertyValue(u"SignCertificateKeyPem"_ustr, aKeyPem),
+        comphelper::makePropertyValue(u"aSignCertificateCaPem"_ustr, aCaPem),
     };
     loadFromURL(u"private:factory/swriter"_ustr);
 
@@ -431,15 +431,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificatePEM)
     // in the NSS database:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(
-        xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.document.PDFFilter"_ustr), uno::UNO_QUERY);
     uno::Reference<document::XExporter> xExporter(xFilter, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxComponent);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue("FilterName", OUString("writer_pdf_Export")),
-        comphelper::makePropertyValue("FilterData", aFilterData),
-        comphelper::makePropertyValue("OutputStream", xOutputStream),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+        comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
     };
     xFilter->filter(aDescriptor);
 

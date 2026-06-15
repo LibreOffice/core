@@ -36,7 +36,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/uibase/shells/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/shells/data/"_ustr)
     {
     }
 };
@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteRichTextContentControl)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rManager.GetCount());
 
     // When deleting the content control
-    dispatchCommand(mxComponent, ".uno:DeleteContentControl", {});
+    dispatchCommand(mxComponent, u".uno:DeleteContentControl"_ustr, {});
 
     // Then verify that there are no content controls
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rManager.GetCount());
@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteCheckboxContentControl)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rManager.GetCount());
 
     // When deleting the content control
-    dispatchCommand(mxComponent, ".uno:DeleteContentControl", {});
+    dispatchCommand(mxComponent, u".uno:DeleteContentControl"_ustr, {});
 
     // Then verify that there are no content controls
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rManager.GetCount());
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteDropdownContentControl)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rManager.GetCount());
 
     // When deleting the content control
-    dispatchCommand(mxComponent, ".uno:DeleteContentControl", {});
+    dispatchCommand(mxComponent, u".uno:DeleteContentControl"_ustr, {});
 
     // Then verify that there are no content controls
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rManager.GetCount());
@@ -154,7 +154,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteDateContentControl)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rManager.GetCount());
 
     // When deleting the content control
-    dispatchCommand(mxComponent, ".uno:DeleteContentControl", {});
+    dispatchCommand(mxComponent, u".uno:DeleteContentControl"_ustr, {});
 
     // Then verify that there are no content controls
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rManager.GetCount());

@@ -141,12 +141,12 @@ VclPtr<VirtualDevice> ThemeWrapper::makePictureFromThemedChart(sal_uInt32 nIndex
 ChartThemePanel::ChartThemePanel(weld::Widget* pParent,
                                  const uno::Reference<frame::XFrame>& rxFrame,
                                  ChartController* pController)
-    : PanelLayout(pParent, "ChartThemePanel", "modules/schart/ui/sidebartheme.ui")
+    : PanelLayout(pParent, u"ChartThemePanel"_ustr, u"modules/schart/ui/sidebartheme.ui"_ustr)
     , mxModel(pController->getChartModel())
     , mpController(pController)
     , mxModifyListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)
-    , mxThemeTB(m_xBuilder->weld_toolbar("themetype"))
+    , mxThemeTB(m_xBuilder->weld_toolbar(u"themetype"_ustr))
     , mxThemeDispatch(new ToolbarUnoDispatcher(*mxThemeTB, *m_xBuilder, rxFrame))
     , mxSaveToNewTheme(m_xBuilder->weld_button(u"savetonew"_ustr))
 {
@@ -188,11 +188,11 @@ std::unique_ptr<PanelLayout> ChartThemePanel::Create(weld::Widget* pParent,
                                                      ChartController* pController)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to ChartThemePanel::Create",
-                                             nullptr, 0);
+        throw lang::IllegalArgumentException(
+            u"no parent Window given to ChartThemePanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartThemePanel::Create", nullptr,
-                                             1);
+        throw lang::IllegalArgumentException(u"no XFrame given to ChartThemePanel::Create"_ustr,
+                                             nullptr, 1);
 
     return std::make_unique<ChartThemePanel>(pParent, rxFrame, pController);
 }

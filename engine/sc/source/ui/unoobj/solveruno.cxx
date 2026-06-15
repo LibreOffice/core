@@ -301,7 +301,7 @@ void SAL_CALL ScSolverSettings::setObjectiveCell(const uno::Any& aValue)
     }
 
     // If all fails, set an empty string
-    m_pSettings->SetParameter(sc::SolverParameter::SP_OBJ_CELL, "");
+    m_pSettings->SetParameter(sc::SolverParameter::SP_OBJ_CELL, u""_ustr);
 }
 
 uno::Any SAL_CALL ScSolverSettings::getGoalValue()
@@ -384,7 +384,7 @@ void SAL_CALL ScSolverSettings::setGoalValue(const uno::Any& aValue)
     }
 
     // If all fails, set an empty string
-    m_pSettings->SetParameter(sc::SolverParameter::SP_OBJ_VAL, "");
+    m_pSettings->SetParameter(sc::SolverParameter::SP_OBJ_VAL, u""_ustr);
 }
 
 OUString SAL_CALL ScSolverSettings::getEngine()

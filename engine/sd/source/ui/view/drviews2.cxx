@@ -323,7 +323,7 @@ void lcl_UnoCommand(const std::string& rText)
         if (aCmdData != rUnoCommandList.end())
         {
             // Make the uno command synchron
-            aArg.push_back(comphelper::makePropertyValue("SynchronMode", true));
+            aArg.push_back(comphelper::makePropertyValue(u"SynchronMode"_ustr, true));
 
             // Todo: check why it does not work on my windows system
             comphelper::dispatchCommand(aCmd, comphelper::containerToSequence(aArg));

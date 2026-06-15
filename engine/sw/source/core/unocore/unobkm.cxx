@@ -205,7 +205,7 @@ void SwXBookmark::attachToRangeEx(
     UnoActionContext aCont(m_pImpl->m_pDoc);
     if (m_pImpl->m_sMarkName.isEmpty())
     {
-         m_pImpl->m_sMarkName = SwMarkName("Bookmark");
+         m_pImpl->m_sMarkName = SwMarkName(u"Bookmark"_ustr);
     }
     if (eType == IDocumentMarkAccess::MarkType::BOOKMARK)
     {

@@ -287,7 +287,7 @@ SlideBackgroundInfo::SlideBackgroundInfo(
         if (maFillStyle == drawing::FillStyle_SOLID)
         {
             OUString sGradientName;
-            mxBackground->getPropertyValue("FillTransparenceGradientName") >>= sGradientName;
+            mxBackground->getPropertyValue(u"FillTransparenceGradientName"_ustr) >>= sGradientName;
             if (sGradientName.isEmpty())
             {
                 mbIsSolidColor = true;
@@ -301,7 +301,7 @@ sal_Int32 SlideBackgroundInfo::getFillTransparency() const
     if (!mxBackground.is())
         return 0;
     sal_Int32 nFillTransparency = 0;
-    mxBackground->getPropertyValue("FillTransparence") >>= nFillTransparency;
+    mxBackground->getPropertyValue(u"FillTransparence"_ustr) >>= nFillTransparency;
     return nFillTransparency;
 }
 
@@ -309,7 +309,7 @@ sal_Int32 SlideBackgroundInfo::getFillTransparency() const
 {
     if (!mxBackground.is())
         return {};
-    if (sal_Int32 nFillColor; mxBackground->getPropertyValue("FillColor") >>= nFillColor)
+    if (sal_Int32 nFillColor; mxBackground->getPropertyValue(u"FillColor"_ustr) >>= nFillColor)
     {
         return ::Color(ColorTransparency, nFillColor & 0xffffff);
     }
@@ -335,12 +335,12 @@ bool SlideBackgroundInfo::getFillStyleImpl(const uno::Reference<drawing::XDrawPa
         if( xPropSet.is() )
         {
             uno::Reference< beans::XPropertySet > xBackground;
-            if (xPropSet->getPropertySetInfo()->hasPropertyByName("Background"))
-                xPropSet->getPropertyValue( "Background" ) >>= xBackground;
+            if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"Background"_ustr))
+                xPropSet->getPropertyValue( u"Background"_ustr ) >>= xBackground;
             if( xBackground.is() )
             {
                 drawing::FillStyle aFillStyle;
-                if( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle )
+                if( xBackground->getPropertyValue( u"FillStyle"_ustr ) >>= aFillStyle )
                 {
                     maFillStyle = aFillStyle;
                     if (aFillStyle != drawing::FillStyle_NONE)
@@ -4725,7 +4725,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
         {
             { "NewTheme", uno::Any(sBackgroundThemeName) }
         }));
-        comphelper::dispatchCommand(".uno:InvertBackground", aPropertyValues);
+        comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, aPropertyValues);
     }
 }
 
@@ -4969,7 +4969,7 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
 
     if (!xShapeProps->getPropertySetInfo()->hasPropertyByName( u"Visible"_ustr ))
         return;
-    xShapeProps->getPropertyValue("Visible") >>= bIsShapeVisible;
+    xShapeProps->getPropertyValue(u"Visible"_ustr) >>= bIsShapeVisible;
 
     if (!bIsShapeVisible)
         return;
@@ -5174,7 +5174,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
             }
 
             bool bIsVisible = true; // default visible
-            pSlide->getPropertyValue("Visible") >>= bIsVisible;
+            pSlide->getPropertyValue(u"Visible"_ustr) >>= bIsVisible;
 
             if (!bIsVisible)
             {
@@ -5266,13 +5266,13 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         aJsonWriter.put("masterPage", sMPHash);
 
                         bool bBackgroundObjectsVisibility = true; // default visible
-                        pSlide->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisibility;
+                        pSlide->getPropertyValue(u"IsBackgroundObjectsVisible"_ustr) >>= bBackgroundObjectsVisibility;
                         aJsonWriter.put("masterPageObjectsVisibility", bBackgroundObjectsVisibility);
                     }
                 }
 
                 bool bBackgroundVisibility = true; // default visible
-                pSlide->getPropertyValue("IsBackgroundVisible")  >>= bBackgroundVisibility;
+                pSlide->getPropertyValue(u"IsBackgroundVisible"_ustr)  >>= bBackgroundVisibility;
                 if (bBackgroundVisibility)
                 {
                     SlideBackgroundInfo aSlideBackgroundInfo(pSlide, static_cast<SvxDrawPage*>(pMasterPage));
@@ -5329,7 +5329,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 }
 
                 sal_Int32 nTransitionType = 0;
-                pSlide->getPropertyValue("TransitionType") >>= nTransitionType;
+                pSlide->getPropertyValue(u"TransitionType"_ustr) >>= nTransitionType;
 
                 if (nTransitionType != 0)
                 {
@@ -5340,7 +5340,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         aJsonWriter.put("transitionType", iterator->second);
 
                         sal_Int32 nTransitionSubtype = 0;
-                        pSlide->getPropertyValue("TransitionSubtype") >>= nTransitionSubtype;
+                        pSlide->getPropertyValue(u"TransitionSubtype"_ustr) >>= nTransitionSubtype;
 
                         auto iteratorSubType = constTransitionSubTypeToString.find(nTransitionSubtype);
                         if (iteratorSubType != constTransitionSubTypeToString.end())
@@ -5369,7 +5369,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         }
 
                         bool nTransitionDirection = false;
-                        pSlide->getPropertyValue("TransitionDirection") >>= nTransitionDirection;
+                        pSlide->getPropertyValue(u"TransitionDirection"_ustr) >>= nTransitionDirection;
                         aJsonWriter.put("transitionDirection", nTransitionDirection);
 
                         // fade color
@@ -5379,7 +5379,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                                     || (nTransitionSubtype == TransitionSubType::FADEOVERCOLOR)))
                         {
                             sal_Int32 nFadeColor = 0;
-                            pSlide->getPropertyValue("TransitionFadeColor") >>= nFadeColor;
+                            pSlide->getPropertyValue(u"TransitionFadeColor"_ustr) >>= nFadeColor;
                             OUStringBuffer sTmpBuf;
                             ::sax::Converter::convertColor(sTmpBuf, nFadeColor);
                             aJsonWriter.put("transitionFadeColor", sTmpBuf.makeStringAndClear());
@@ -5387,8 +5387,8 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                     }
 
                     double nTransitionDuration(0.0);
-                    if( pSlide->getPropertySetInfo()->hasPropertyByName( "TransitionDuration" ) &&
-                        (pSlide->getPropertyValue( "TransitionDuration" ) >>= nTransitionDuration ) && nTransitionDuration != 0.0 )
+                    if( pSlide->getPropertySetInfo()->hasPropertyByName( u"TransitionDuration"_ustr ) &&
+                        (pSlide->getPropertyValue( u"TransitionDuration"_ustr ) >>= nTransitionDuration ) && nTransitionDuration != 0.0 )
                     {
                         // convert transitionDuration time to ms
                         aJsonWriter.put("transitionDuration", nTransitionDuration * 1000);
@@ -5396,12 +5396,12 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 }
 
                 sal_Int32 nChange(0);
-                if( pSlide->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
-                        (pSlide->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                if( pSlide->getPropertySetInfo()->hasPropertyByName( u"Change"_ustr ) &&
+                        (pSlide->getPropertyValue( u"Change"_ustr ) >>= nChange ) && nChange == 1 )
                 {
                     double fSlideDuration(0);
-                    if( pSlide->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
-                            (pSlide->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
+                    if( pSlide->getPropertySetInfo()->hasPropertyByName( u"HighResDuration"_ustr ) &&
+                            (pSlide->getPropertyValue( u"HighResDuration"_ustr ) >>= fSlideDuration) )
                     {
                         // convert slide duration time to ms
                         aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);

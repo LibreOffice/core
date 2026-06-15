@@ -1141,7 +1141,7 @@ ScMacrosTest::ScMacrosTest()
 
 void ScMacrosTest::setUp()
 {
-    Application::SetAppName("CppunitTest_sc_macros_test");
+    Application::SetAppName(u"CppunitTest_sc_macros_test"_ustr);
     ScModelTestBase::setUp();
 }
 

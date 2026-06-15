@@ -468,36 +468,36 @@ void ColumnChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList,
         switch(rParameter.nGeometry3D)
         {
             case DataPointGeometry3D::CYLINDER:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_4)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_SAEULE_3D_4)));
             break;
             case DataPointGeometry3D::CONE:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_4)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGEL_3D_4)));
             break;
             case DataPointGeometry3D::PYRAMID:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_4)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMID_3D_4)));
             break;
             default: //DataPointGeometry3D::CUBOID:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_3D)));
             break;
         }
     }
     else
     {
-        lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_2D_1)));
-        lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_2D_2)));
-        lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_2D_3)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_2D_1)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_2D_2)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMNS_2D_3)));
     }
 }
 
@@ -563,36 +563,36 @@ void BarChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, co
         switch(rParameter.nGeometry3D)
         {
             case DataPointGeometry3D::CYLINDER:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_4)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_ROEHRE_3D_4)));
             break;
             case DataPointGeometry3D::CONE:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_4)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_KEGELQ_3D_4)));
             break;
             case DataPointGeometry3D::PYRAMID:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_4)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_PYRAMIDQ_3D_4)));
             break;
             default: //DataPointGeometry3D::CUBOID:
-                lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D_1)));
-                lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D_2)));
-                lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D_3)));
-                lcl_appendSubType(rSubTypeList,"4", deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D_1)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D_2)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D_3)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, deepText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_3D)));
             break;
         }
     }
     else
     {
-        lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_2D_1)));
-        lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_2D_2)));
-        lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_2D_3)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_2D_1)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_2D_2)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_BARS_2D_3)));
     }
 }
 
@@ -707,17 +707,17 @@ void PieChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, co
 
     if( rParameter.b3DLook )
     {
-        lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_3D)));
-        lcl_appendSubType(rSubTypeList,"2", explodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_3D_EXPLODED)));
-        lcl_appendSubType(rSubTypeList,"3", donutText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_3D)));
-        lcl_appendSubType(rSubTypeList,"4", donutExplodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_3D_EXPLODED)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_3D)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, explodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_3D_EXPLODED)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, donutText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_3D)));
+        lcl_appendSubType(rSubTypeList,u"4"_ustr, donutExplodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_3D_EXPLODED)));
     }
     else
     {
-        lcl_appendSubType(rSubTypeList,"1", normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_2D)));
-        lcl_appendSubType(rSubTypeList,"2", explodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_2D_EXPLODED)));
-        lcl_appendSubType(rSubTypeList,"3", donutText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_2D)));
-        lcl_appendSubType(rSubTypeList,"4", donutExplodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_2D_EXPLODED)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, normalText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_2D)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, explodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_CIRCLES_2D_EXPLODED)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, donutText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_2D)));
+        lcl_appendSubType(rSubTypeList,u"4"_ustr, donutExplodedText, getPreviewBitmap(Image(StockImage::Yes, BMP_DONUT_2D_EXPLODED)));
     }
 }
 
@@ -786,8 +786,8 @@ void OfPieChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, 
     OUString barOfPieText = SchResId( STR_BAR_OF_PIE );
     OUString pieOfPieText = SchResId( STR_PIE_OF_PIE );
 
-    lcl_appendSubType(rSubTypeList,"1", barOfPieText, getPreviewBitmap(Image(StockImage::Yes, BMP_BAR_OF_PIE)));
-    lcl_appendSubType(rSubTypeList,"2", pieOfPieText, getPreviewBitmap(Image(StockImage::Yes, BMP_PIE_OF_PIE)));
+    lcl_appendSubType(rSubTypeList,u"1"_ustr, barOfPieText, getPreviewBitmap(Image(StockImage::Yes, BMP_BAR_OF_PIE)));
+    lcl_appendSubType(rSubTypeList,u"2"_ustr, pieOfPieText, getPreviewBitmap(Image(StockImage::Yes, BMP_PIE_OF_PIE)));
 }
 
 OUString OfPieChartDialogController::getChartName( sal_Int32 nId ) const
@@ -969,17 +969,17 @@ void LineChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, c
         case CurveStyle_B_SPLINES:
             if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
             {
-                lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XCATEGORY)));
-                lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XCATEGORY_SMOOTH)));
-                lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XCATEGORY_SMOOTH)));
-                lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XCATEGORY_SMOOTH)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XCATEGORY)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XCATEGORY_SMOOTH)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XCATEGORY_SMOOTH)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XCATEGORY_SMOOTH)));
             }
             else
             {
-                lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_STACKED)));
-                lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_STACKED_SMOOTH)));
-                lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_STACKED_SMOOTH)));
-                lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_STACKED_SMOOTH)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_STACKED)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_STACKED_SMOOTH)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_STACKED_SMOOTH)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_STACKED_SMOOTH)));
             }
             break;
         case CurveStyle_STEP_START:
@@ -988,34 +988,34 @@ void LineChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, c
         case CurveStyle_STEP_CENTER_Y:
             if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
             {
-                lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XCATEGORY)));
-                lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XCATEGORY_STEPPED)));
-                lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XCATEGORY_STEPPED)));
-                lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XCATEGORY_STEPPED)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XCATEGORY)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XCATEGORY_STEPPED)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XCATEGORY_STEPPED)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XCATEGORY_STEPPED)));
             }
             else
             {
-                lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_STACKED)));
-                lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_STACKED_STEPPED)));
-                lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_STACKED_STEPPED)));
-                lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_STACKED_STEPPED)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_STACKED)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_STACKED_STEPPED)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_STACKED_STEPPED)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_STACKED_STEPPED)));
             }
             break;
         default: // includes CurveStyle_LINES
             //direct lines
             if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
             {
-                lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XCATEGORY)));
-                lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XCATEGORY)));
-                lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XCATEGORY)));
-                lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XCATEGORY)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XCATEGORY)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XCATEGORY)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XCATEGORY)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XCATEGORY)));
             }
             else
             {
-                lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_STACKED)));
-                lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_STACKED)));
-                lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_STACKED)));
-                lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_STACKED)));
+                lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_STACKED)));
+                lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_STACKED)));
+                lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_STACKED)));
+                lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_STACKED)));
             }
     }
 }
@@ -1125,10 +1125,10 @@ void XYChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, con
         case CurveStyle_CUBIC_SPLINES:
         case CurveStyle_B_SPLINES:
         {
-            lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XVALUES)));
-            lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XVALUES_SMOOTH)));
-            lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XVALUES_SMOOTH)));
-            lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XVALUES_SMOOTH)));
+            lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XVALUES)));
+            lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XVALUES_SMOOTH)));
+            lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XVALUES_SMOOTH)));
+            lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XVALUES_SMOOTH)));
             break;
         }
         case CurveStyle_STEP_START:
@@ -1136,17 +1136,17 @@ void XYChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, con
         case CurveStyle_STEP_CENTER_X:
         case CurveStyle_STEP_CENTER_Y:
         {
-            lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XVALUES)));
-            lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XVALUES_STEPPED)));
-            lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XVALUES_STEPPED)));
-            lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XVALUES_STEPPED)));
+            lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XVALUES)));
+            lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XVALUES_STEPPED)));
+            lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XVALUES_STEPPED)));
+            lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XVALUES_STEPPED)));
             break;
         }
         default: // includes CurveStyle_LINES
-            lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XVALUES)));
-            lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XVALUES)));
-            lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XVALUES)));
-            lcl_appendSubType(rSubTypeList,"4", lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XVALUES)));
+            lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_POINTS_XVALUES)));
+            lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_P_XVALUES)));
+            lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE_O_XVALUES)));
+            lcl_appendSubType(rSubTypeList,u"4"_ustr, lines3DText, getPreviewBitmap(Image(StockImage::Yes, BMP_LINE3D_XVALUES)));
     }
 }
 OUString XYChartDialogController::getChartName( sal_Int32 nId ) const
@@ -1249,15 +1249,15 @@ void AreaChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, c
 
     if( rParameter.b3DLook )
     {
-        lcl_appendSubType(rSubTypeList,"1", firstText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_3D)));
-        lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_3D_1)));
-        lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_3D_2)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, firstText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_3D)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_3D_1)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_3D_2)));
     }
     else
     {
-        lcl_appendSubType(rSubTypeList,"1", firstText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_2D_1)));
-        lcl_appendSubType(rSubTypeList,"2", stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_2D)));
-        lcl_appendSubType(rSubTypeList,"3", percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_2D_3)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, firstText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_2D_1)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, stackedText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_2D)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, percentText, getPreviewBitmap(Image(StockImage::Yes, BMP_AREAS_2D_3)));
     }
 }
 OUString AreaChartDialogController::getChartName( sal_Int32 nId ) const
@@ -1361,17 +1361,17 @@ void NetChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, co
 
     if( rParameter.eStackMode == GlobalStackMode_NONE )
     {
-        lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_SYMB)));
-        lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_LINESYMB)));
-        lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET)));
-        lcl_appendSubType(rSubTypeList,"4", filledText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_FILL)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_SYMB)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_LINESYMB)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET)));
+        lcl_appendSubType(rSubTypeList,u"4"_ustr, filledText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_FILL)));
     }
     else
     {
-        lcl_appendSubType(rSubTypeList,"1", pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_SYMB_STACK)));
-        lcl_appendSubType(rSubTypeList,"2", pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_LINESYMB_STACK)));
-        lcl_appendSubType(rSubTypeList,"3", linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_STACK)));
-        lcl_appendSubType(rSubTypeList,"4", filledText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_FILL_STACK)));
+        lcl_appendSubType(rSubTypeList,u"1"_ustr, pointsOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_SYMB_STACK)));
+        lcl_appendSubType(rSubTypeList,u"2"_ustr, pointsAndLinesText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_LINESYMB_STACK)));
+        lcl_appendSubType(rSubTypeList,u"3"_ustr, linesOnlyText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_STACK)));
+        lcl_appendSubType(rSubTypeList,u"4"_ustr, filledText, getPreviewBitmap(Image(StockImage::Yes, BMP_NET_FILL_STACK)));
     }
 }
 OUString NetChartDialogController::getChartName( sal_Int32 nId ) const
@@ -1455,10 +1455,10 @@ void StockChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, 
     OUString stock3Text = SchResId(STR_STOCK_3);
     OUString stock4Text = SchResId(STR_STOCK_4);
 
-    lcl_appendSubType(rSubTypeList,"1", stock1Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_1)));
-    lcl_appendSubType(rSubTypeList,"2", stock2Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_2)));
-    lcl_appendSubType(rSubTypeList,"3", stock3Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_3)));
-    lcl_appendSubType(rSubTypeList,"4", stock4Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_4)));
+    lcl_appendSubType(rSubTypeList,u"1"_ustr, stock1Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_1)));
+    lcl_appendSubType(rSubTypeList,u"2"_ustr, stock2Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_2)));
+    lcl_appendSubType(rSubTypeList,u"3"_ustr, stock3Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_3)));
+    lcl_appendSubType(rSubTypeList,u"4"_ustr, stock4Text, getPreviewBitmap(Image(StockImage::Yes, BMP_STOCK_4)));
 }
 
 OUString StockChartDialogController::getChartName( sal_Int32 nId ) const
@@ -1515,8 +1515,8 @@ void CombiColumnLineChartDialogController::fillSubTypeList( weld::IconView& rSub
     OUString lineColumnText = SchResId(STR_LINE_COLUMN);
     OUString lineStackedColumnText = SchResId(STR_LINE_STACKEDCOLUMN);
 
-    lcl_appendSubType(rSubTypeList,"1", lineColumnText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMN_LINE)));
-    lcl_appendSubType(rSubTypeList,"2", lineStackedColumnText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMN_LINE_STACKED)));
+    lcl_appendSubType(rSubTypeList,u"1"_ustr, lineColumnText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMN_LINE)));
+    lcl_appendSubType(rSubTypeList,u"2"_ustr, lineStackedColumnText, getPreviewBitmap(Image(StockImage::Yes, BMP_COLUMN_LINE_STACKED)));
 }
 
 OUString CombiColumnLineChartDialogController::getChartName( sal_Int32 nId ) const
@@ -1655,7 +1655,7 @@ void BubbleChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList,
 
     OUString bubble1Text = SchResId(STR_BUBBLE_1);
 
-    lcl_appendSubType(rSubTypeList,"1", bubble1Text, getPreviewBitmap(Image(StockImage::Yes, BMP_BUBBLE_1)));
+    lcl_appendSubType(rSubTypeList,u"1"_ustr, bubble1Text, getPreviewBitmap(Image(StockImage::Yes, BMP_BUBBLE_1)));
 }
 OUString BubbleChartDialogController::getChartName( sal_Int32 nId ) const
 {

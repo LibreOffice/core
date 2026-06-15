@@ -1329,18 +1329,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159549)
 
     uno::Reference<beans::XPropertySet> xStyleBuiltin(xParaStyles->getByName(
             u"Text body"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleBuiltin, "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), xStyleBuiltin.queryThrow<style::XStyle>()->getParentStyle());
+    CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleBuiltin, u"CharHeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyleBuiltin.queryThrow<style::XStyle>()->getParentStyle());
 
     uno::Reference<beans::XPropertySet> xStyleDerived(xParaStyles->getByName(
             u"DerivedFromTextBody"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleDerived, "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Text body"), xStyleDerived.queryThrow<style::XStyle>()->getParentStyle());
+    CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleDerived, u"CharHeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Text body"_ustr, xStyleDerived.queryThrow<style::XStyle>()->getParentStyle());
 
     uno::Reference<beans::XPropertySet> xStyleCustom(xParaStyles->getByName(
             u"Body Text"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(float(16), getProperty<float>(xStyleCustom, "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), xStyleCustom.queryThrow<style::XStyle>()->getParentStyle());
+    CPPUNIT_ASSERT_EQUAL(float(16), getProperty<float>(xStyleCustom, u"CharHeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, xStyleCustom.queryThrow<style::XStyle>()->getParentStyle());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134971)

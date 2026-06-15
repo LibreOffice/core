@@ -98,7 +98,7 @@ class SpellCheckContext::SpellCheckCache : public CacheOwner
 
     virtual OUString getCacheName() const override
     {
-        return "SpellCheckCache";
+        return u"SpellCheckCache"_ustr;
     }
 
     virtual bool dropCaches() override

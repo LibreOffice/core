@@ -1627,7 +1627,7 @@ void ScConditionEntry::CalcAll()
 
 OUString ScConditionEntry::getCacheName() const
 {
-    return "ScConditionEntry";
+    return u"ScConditionEntry"_ustr;
 }
 
 bool ScConditionEntry::dropCaches()

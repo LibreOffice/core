@@ -1876,7 +1876,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
 {
     OUString aStr = rRef;
     if (sal_Int32 nIndex = rRef.lastIndexOf('^'); nIndex > 0 && nIndex == (rRef.getLength() - 2))
-        aStr = aStr.replaceAt(nIndex, 1, "");
+        aStr = aStr.replaceAt(nIndex, 1, u""_ustr);
     if( aName == aStr )
         return 0;
     if (std::u16string_view prefix; bPrefixSupport && aStr.endsWith(aName, &prefix))

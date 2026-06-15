@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf37341)
     CPPUNIT_ASSERT(pModelObj);
 
     // Without the fix in place, this test would have hung here
-    sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, "0");
+    sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, u"0"_ustr);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(11778.08775, res.Result, 0.0001);
     CPPUNIT_ASSERT_EQUAL(DBL_MAX, res.Divergence);
 }
@@ -119,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf161616)
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
-    sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, "100");
+    sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, u"100"_ustr);
     CPPUNIT_ASSERT_EQUAL(0.0, res.Result);
     CPPUNIT_ASSERT_EQUAL(DBL_MAX, res.Divergence);
 

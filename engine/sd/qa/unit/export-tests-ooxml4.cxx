@@ -1433,9 +1433,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testDeduplicateMasters)
     saveAndReload(TestFilter::PPTX);
 
     // Check that the document still has one master and two layouts
-    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/presentation.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/presentation.xml"_ustr);
     assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId"_ostr, 1);
-    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster1.xml");
+    pXmlDocContent = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
     assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 2);
 
     // Check that both background colors have been preserved
@@ -1446,21 +1446,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testDeduplicateMasters)
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
-    uno::Any aAny = xPropSet->getPropertyValue("Background");
+    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     uno::Reference<beans::XPropertySet> aXBackgroundPropSet;
     aAny >>= aXBackgroundPropSet;
     Color nColor;
-    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillColor") >>= nColor);
+    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue(u"FillColor"_ustr) >>= nColor);
     CPPUNIT_ASSERT_EQUAL(Color(0x0E2841), nColor);
 
     uno::Reference<drawing::XDrawPage> xPage1(xDoc->getMasterPages()->getByIndex(1),
                                               uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet1(xPage1, uno::UNO_QUERY);
-    aAny = xPropSet1->getPropertyValue("Background");
+    aAny = xPropSet1->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     aAny >>= aXBackgroundPropSet;
-    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillColor") >>= nColor);
+    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue(u"FillColor"_ustr) >>= nColor);
     CPPUNIT_ASSERT_EQUAL(Color(0x000000), nColor);
 }
 
@@ -1869,13 +1869,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_vertical_layouts_from_scr
     uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPageSet(xPage, uno::UNO_QUERY_THROW);
     xPageSet->setPropertyValue(
-        "Layout",
+        u"Layout"_ustr,
         uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT)));
 
     uno::Reference<drawing::XDrawPage> xPage2(xPages->insertNewByIndex(1), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPageSet2(xPage2, uno::UNO_QUERY_THROW);
     xPageSet2->setPropertyValue(
-        "Layout", uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT)));
+        u"Layout"_ustr, uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT)));
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);

@@ -3706,13 +3706,13 @@ static int joinThreads(JoinThreads eCategory)
     if (eCategory == JoinThreads::ALL)
     {
         auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.ucb.WebDAVManager", xContext);
+            u"com.sun.star.ucb.WebDAVManager"_ustr, xContext);
         joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(ucpWebdav.get());
         if (joinable && !joinable->joinThreads())
             return 0;
 
         auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.task.StatusIndicatorFactory", xContext);
+            u"com.sun.star.task.StatusIndicatorFactory"_ustr, xContext);
         joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(progressThread.get());
         if (joinable && !joinable->joinThreads())
             return 0;
@@ -3742,13 +3742,13 @@ static void lo_startThreads(COKit* /* pThis */)
     salhelper::Timer::startThread();
 
     auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.ucb.WebDAVManager", xContext);
+        u"com.sun.star.ucb.WebDAVManager"_ustr, xContext);
     auto joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(ucpWebdav.get());
     if (joinable)
         joinable->startThreads();
 
     auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.task.StatusIndicatorFactory", xContext);
+        u"com.sun.star.task.StatusIndicatorFactory"_ustr, xContext);
     joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(progressThread.get());
     if (joinable)
         joinable->startThreads();
@@ -8399,7 +8399,7 @@ static void preLoadTypeDetection()
         uno::Sequence<beans::PropertyValue> aMediaDesc(2);
         auto pArgs = aMediaDesc.getArray();
         pArgs[0].Name = u"URL"_ustr;
-        pArgs[0].Value <<= OUString("private:stream");
+        pArgs[0].Value <<= u"private:stream"_ustr;
         pArgs[1].Name = u"InputStream"_ustr;
         pArgs[1].Value <<= xInputStream;
 

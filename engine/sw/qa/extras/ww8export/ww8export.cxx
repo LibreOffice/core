@@ -258,7 +258,7 @@ DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
     // Character height was 10pt instead of 7.5pt in the header.
     uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, u"HeaderTextFirst"_ustr)->getText();
-    uno::Reference<text::XTextRange> xHeaderParagraph = getParagraphOfText(1, xText, "");
+    uno::Reference<text::XTextRange> xHeaderParagraph = getParagraphOfText(1, xText, u""_ustr);
     CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(xHeaderParagraph, u"CharHeight"_ustr));
 
     // tdf#164845 - inherit the two tab stops from the "Header" paragraph style

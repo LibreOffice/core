@@ -1334,7 +1334,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf94259)
         Reference<beans::XPropertySet> xAxisTitleProps(xAxisTitle, UNO_QUERY_THROW);
 
         chart2::RelativePosition aRelPos;
-        CPPUNIT_ASSERT(xAxisTitleProps->getPropertyValue("RelativePosition") >>= aRelPos);
+        CPPUNIT_ASSERT(xAxisTitleProps->getPropertyValue(u"RelativePosition"_ustr) >>= aRelPos);
 
         // old value with my setup 0.0327998, new value: 0.822488
         CPPUNIT_ASSERT_GREATER(0.1, aRelPos.Secondary);
@@ -1353,7 +1353,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf94259)
         Reference<beans::XPropertySet> xAxisTitleProps(xAxisTitle, UNO_QUERY_THROW);
 
         chart2::RelativePosition aRelPos;
-        CPPUNIT_ASSERT(xAxisTitleProps->getPropertyValue("RelativePosition") >>= aRelPos);
+        CPPUNIT_ASSERT(xAxisTitleProps->getPropertyValue(u"RelativePosition"_ustr) >>= aRelPos);
 
         SAL_WARN("chart2", "Primary: " << aRelPos.Primary << ", " << aRelPos.Secondary);
         // old value with my setup 0.0330348, new value: 0.0987283

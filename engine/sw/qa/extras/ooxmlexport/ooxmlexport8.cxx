@@ -531,7 +531,7 @@ DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
     // MS Word conjures up an 'indent from left' tblInd that cancels out the 'shift by cell margin'.
     // Without the fix, it spilled into the left margin by the border spacing distance (-203/0.2cm)
     uno::Reference<text::XTextTable> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, u"LeftMargin"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
@@ -1032,7 +1032,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151548_activeContentDemo, "tdf151548_activeConte
     for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
     {
         const SwMarkName sName = (*aIter)->GetName();
-        CPPUNIT_ASSERT(sName == "Check1" || sName == "Text1" || sName == "Dropdown1");
+        CPPUNIT_ASSERT(sName == u"Check1"_ustr || sName == u"Text1"_ustr || sName == u"Dropdown1"_ustr);
     }
 }
 

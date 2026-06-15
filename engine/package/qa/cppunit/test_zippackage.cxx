@@ -28,7 +28,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDuplicate)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/duplicate-files.odt"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     CPPUNIT_ASSERT_THROW(m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDuplicate)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeODT)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/unicode-path.odt"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeODT)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/unicode-path.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -95,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testAbsolutePathODT)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/slash.odt"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testAbsolutePathODT)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDotPathDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/dot-slash.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDotPathDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatODT)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/two-zips.odt"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -179,7 +179,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatODT)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/two-zips.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testCaseInsensitiveDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/casing.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::OFOPXML)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::OFOPXML)))
     };
 
     // don't load corrupted zip file
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testCaseInsensitiveDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -251,7 +251,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testOverlapDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/overlap.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testOverlapDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -279,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testInnerGapDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/inner-gap.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -291,7 +291,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testInnerGapDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDeflatedDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/dd-deflated.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -319,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDeflatedDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorStoredDOCX)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/dd-stored.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::OFOPXML)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::OFOPXML)))
     };
 
     // don't load corrupted zip file
@@ -347,7 +347,8 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorStoredDOCX)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::OFOPXML)))
+            uno::Any(
+                beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::OFOPXML)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -363,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testZip64End)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/zip64-eocd.docx"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
 
     // don't load corrupted zip file
@@ -375,7 +376,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testZip64End)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -391,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163364)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163364.ods"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::PACKAGE)))
     };
 
     // don't load corrupted zip file
@@ -403,7 +404,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163364)
     {
         uno::Sequence<uno::Any> const args2{
             uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+            uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
         };
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                                m_xContext);
@@ -419,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163341)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163341.ods"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::PACKAGE)))
     };
 
     // this Zip64 should load successfully
@@ -432,7 +433,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163818)
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163818.odg"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::PACKAGE)))
     };
 
     // unclear if this should be allowed?
@@ -443,7 +444,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163818)
     // recovery should work
     uno::Sequence<uno::Any> const args2{
         uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::ZIP)))
     };
     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                            m_xContext);
@@ -455,7 +456,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDirectory)
         u"/package/qa/cppunit/data/vaidator-fine-libreoffice-no-open.odt"));
     uno::Sequence<uno::Any> const args{
         uno::Any(url),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::PACKAGE)))
     };
 
     // don't load zip file with DD on directory
@@ -466,7 +467,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDirectory)
     // recovery should work
     uno::Sequence<uno::Any> const args2{
         uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
-        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+        uno::Any(beans::NamedValue(u"StorageFormat"_ustr, uno::Any(embed::StorageFormats::PACKAGE)))
     };
 
     uno::Reference<container::XHierarchicalNameAccess> xZip{

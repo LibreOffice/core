@@ -263,7 +263,7 @@ bool OAuth2Request::Impl::openBrowser() const
         const SolarMutexGuard guard;
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(
             nullptr, VclMessageType::Warning, VclButtonsType::Ok, msg));
-        xErrorBox->set_title("title");
+        xErrorBox->set_title(u"title"_ustr);
         xErrorBox->run();
         xErrorBox.reset();
         return false;

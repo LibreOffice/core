@@ -590,7 +590,7 @@ size_t SalLayoutGlyphsCache::GlyphsCost::operator()(const SalLayoutGlyphs& glyph
     return cost;
 }
 
-OUString SalLayoutGlyphsCache::getCacheName() const { return "SalLayoutGlyphsCache"; }
+OUString SalLayoutGlyphsCache::getCacheName() const { return u"SalLayoutGlyphsCache"_ustr; }
 
 bool SalLayoutGlyphsCache::dropCaches()
 {

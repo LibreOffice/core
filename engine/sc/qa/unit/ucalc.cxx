@@ -274,7 +274,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)
     CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Now, compare string and edit text cells.
-    m_pDoc->SetString(ScAddress(0,0,0), "Andy and Bruce"); // A1 // [-loplugin:ostr]
+    m_pDoc->SetString(ScAddress(0,0,0), u"Andy and Bruce"_ustr); // A1 // [-loplugin:ostr]
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
     rEE.SetTextCurrentDefaults(u"Andy and Bruce"_ustr);
 

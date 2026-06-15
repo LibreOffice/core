@@ -240,10 +240,10 @@ void GtkInstance::EnsureInit()
     ImplSVData* pSVData = ImplGetSVData();
 #ifdef GTK_TOOLKIT_NAME
     // [-loplugin:ostr] if we use a literal here, we get use-after-free on shutdown
-    pSVData->maAppData.mxToolkitName = OUString(GTK_TOOLKIT_NAME);
+    pSVData->maAppData.mxToolkitName = u"" GTK_TOOLKIT_NAME ""_ustr;
 #else
     // [-loplugin:ostr] if we use a literal here, we get use-after-free on shutdown
-    pSVData->maAppData.mxToolkitName = OUString("gtk3");
+    pSVData->maAppData.mxToolkitName = u"gtk3"_ustr;
 #endif
 
     bNeedsInit = false;
@@ -715,7 +715,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
     if(bHaveText)
     {
         css::datatransfer::DataFlavor aFlavor;
-        aFlavor.MimeType = OUString("text/markdown");
+        aFlavor.MimeType = u"text/markdown"_ustr;
         aFlavor.DataType = cppu::UnoType<OUString>::get();
         aVector.push_back(std::move(aFlavor));
     }
@@ -19739,7 +19739,7 @@ private:
         }
 
         if (m_nMRUCount && !nMRUCount)
-            insert_separator_including_mru(m_nMRUCount, "separator");
+            insert_separator_including_mru(m_nMRUCount, u"separator"_ustr);
         else if (!m_nMRUCount && nMRUCount)
             remove_including_mru(m_nMRUCount);  // remove separator
     }
@@ -20586,7 +20586,7 @@ public:
         while (nIndex >= 0);
 
         if (nMRUCount && !m_nMRUCount)
-            insert_separator_including_mru(nMRUCount, "separator");
+            insert_separator_including_mru(nMRUCount, u"separator"_ustr);
         else if (!nMRUCount && m_nMRUCount)
             remove_including_mru(m_nMRUCount);  // remove separator
 

@@ -1458,7 +1458,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             makeSingleCellStr(rLimits, aBuf, aRef.Ref2, aAbs2);
         }
 
-        OUString sErrRef = "#REF!";
+        OUString sErrRef = u"#REF!"_ustr;
         if (aBuf.indexOf(sErrRef) == -1)
             rBuf.append(aBuf);
         else
@@ -1544,7 +1544,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             makeSingleCellStr(rLimits, aBuf, rRef.Ref2, aAbsRef.aEnd);
         }
 
-        OUString sErrRef = "#REF!";
+        OUString sErrRef = u"#REF!"_ustr;
         if (aBuf.indexOf(sErrRef) == -1)
             rBuffer.append(aBuf);
         else
@@ -1721,7 +1721,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
             makeSingleCellStr(rLimits, aBuf, rRef.Ref2, aAbsRef.aEnd);
         }
 
-        OUString sErrRef = "#REF!";
+        OUString sErrRef = u"#REF!"_ustr;
         if (aBuf.indexOf(sErrRef) == -1)
             rBuffer.append(aBuf);
         else

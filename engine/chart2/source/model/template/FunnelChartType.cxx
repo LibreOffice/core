@@ -87,7 +87,7 @@ OUString SAL_CALL FunnelChartType::getChartType() { return CHART2_SERVICE_NAME_C
 
 uno::Sequence<OUString> FunnelChartType::getSupportedPropertyRoles()
 {
-    return { "FillColor", "BorderColor" };
+    return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
 // ____ OPropertySet ____
@@ -125,7 +125,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL FunnelChartType::getPropertySet
 
 OUString SAL_CALL FunnelChartType::getImplementationName()
 {
-    return "com.sun.star.comp.chart.FunnelChartType";
+    return u"com.sun.star.comp.chart.FunnelChartType"_ustr;
 }
 
 sal_Bool SAL_CALL FunnelChartType::supportsService(const OUString& rServiceName)
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL FunnelChartType::supportsService(const OUString& rServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL FunnelChartType::getSupportedServiceNames()
 {
-    return { CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL, "com.sun.star.chart2.ChartType" };
+    return { CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL, u"com.sun.star.chart2.ChartType"_ustr };
 }
 
 } //  namespace chart
