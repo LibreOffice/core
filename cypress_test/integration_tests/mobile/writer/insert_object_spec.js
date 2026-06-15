@@ -92,6 +92,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		cy.cGet('body').contains('.ui-header.level-1.mobile-wizard.ui-widget', 'Header').click();
 		// Insert header for All
 		cy.cGet('body').contains('.menu-entry-no-icon', 'All').click();
+		helper.processToIdle(this.win);
 		cy.get('@cursorOrigLeft')
 			.then(function(cursorOrigLeft) {
 				cy.cGet('.blinking-cursor')
@@ -131,6 +132,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		mobileHelper.openInsertionWizard();
 		// Insert footnote
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Footnote').click();
+		helper.processToIdle(this.win);
 		// Check that the cursor was moved
 		cy.get('@cursorOrigTop')
 			.then(function(cursorOrigTop) {
@@ -148,6 +150,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		mobileHelper.openInsertionWizard();
 		// Insert endnote
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Endnote').click();
+		helper.processToIdle(this.win);
 		// Check that the cursor was moved
 		cy.get('@cursorOrigTop')
 			.then(function(cursorOrigTop) {
@@ -165,6 +168,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		mobileHelper.openInsertionWizard();
 		// Insert page break
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Page Break').click();
+		helper.processToIdle(this.win);
 		// Check that the cursor was moved
 		cy.get('@cursorOrigTop')
 			.then(function(cursorOrigTop) {
@@ -182,6 +186,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		mobileHelper.openInsertionWizard();
 		// Do insertion
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Column Break').click();
+		helper.processToIdle(this.win);
 		// Check that the cursor was moved
 		cy.get('@cursorOrigTop')
 			.then(function(cursorOrigTop) {
