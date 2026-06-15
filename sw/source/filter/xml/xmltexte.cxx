@@ -317,37 +317,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         if( SV_EMBEDDED_OWN == nType && !pOLENd->GetChartTableName().isEmpty() )
         {
-            OUString sRange( pOLENd->GetChartTableName().toString() );
-            OUStringBuffer aBuffer( sRange.getLength() + 2 );
-            for( sal_Int32 i=0; i < sRange.getLength(); i++ )
-            {
-                sal_Unicode c = sRange[i];
-                switch( c  )
-                {
-                    case ' ':
-                    case '.':
-                    case '\'':
-                    case '\\':
-                        if( aBuffer.isEmpty() )
-                        {
-                            aBuffer.append( OUString::Concat("\'") + sRange.subView(0, i) );
-                        }
-                        if( '\'' == c || '\\' == c )
-                            aBuffer.append( '\\' );
-                        [[fallthrough]];
-                    default:
-                        if( !aBuffer.isEmpty() )
-                            aBuffer.append( c );
-                }
-            }
-            if( !aBuffer.isEmpty() )
-            {
-                aBuffer.append( '\'' );
-                sRange = aBuffer.makeStringAndClear();
-            }
-
+            // Export the table name as-is; XML attribute quoting handles any
+            // spaces or special characters. Older versions wrapped names with
+            // spaces in single quotes — the importer still accepts that form.
             rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES,
-            sRange );
+                                     pOLENd->GetChartTableName().toString() );
         }
         eElementName = SV_EMBEDDED_OUTPLACE==nType ? XML_OBJECT_OLE
                                                    : XML_OBJECT;

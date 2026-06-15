@@ -342,7 +342,6 @@
 #define STR_CAPTION_FRAME                       NC_("STR_CAPTION_FRAME", "%PRODUCTNAME Writer Frame")
 #define STR_CAPTION_GRAPHIC                     NC_("STR_CAPTION_GRAPHIC", "%PRODUCTNAME Writer Image")
 #define STR_CAPTION_OLE                         NC_("STR_CAPTION_OLE", "Other OLE Objects")
-#define STR_WRONG_TABLENAME                     NC_("STR_WRONG_TABLENAME", "The name of the table must not contain spaces.")
 #define STR_ERR_TABLE_MERGE                     NC_("STR_ERR_TABLE_MERGE", "Selected table cells are too complex to merge.")
 #define STR_SRTERR                              NC_("STR_SRTERR", "Cannot sort selection")
 

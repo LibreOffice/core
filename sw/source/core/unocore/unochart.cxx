@@ -1684,6 +1684,33 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
     return aRes.makeStringAndClear();
 }
 
+// Split an XML cell-range-address list into its space-separated sub-ranges,
+// keeping spaces that occur inside a single-quoted table name (e.g.
+// "'Table 1'.$A$1") together. A backslash escapes the following character.
+static std::vector<OUString> lcl_SplitXMLRanges( const OUString& rXMLRange )
+{
+    std::vector<OUString> aRanges;
+    bool bInQuotation = false;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 i = 0; i < rXMLRange.getLength(); ++i)
+    {
+        sal_Unicode c = rXMLRange[i];
+        if (c == '\\')          // skip the escaped character
+            ++i;
+        else if (c == '\'')
+            bInQuotation = !bInQuotation;
+        else if (c == ' ' && !bInQuotation)
+        {
+            if (i > nStart)
+                aRanges.push_back(rXMLRange.copy(nStart, i - nStart));
+            nStart = i + 1;
+        }
+    }
+    if (nStart < rXMLRange.getLength())
+        aRanges.push_back(rXMLRange.copy(nStart));
+    return aRanges;
+}
+
 OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXMLRange )
 {
     SolarMutexGuard aGuard;
@@ -1697,19 +1724,22 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
 
     // multiple ranges are delimited by a ' ' like in
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
+    // A table name containing spaces is single-quoted, so the split must not
+    // break inside such a quoted name.
     OUString aFirstFoundTable; // to check that only one table will be used
-    sal_Int32 nPos = 0;
-    do
+    bool bFirstTableSet = false;
+    for (const OUString& aRange : lcl_SplitXMLRanges(rXMLRange))
     {
-        OUString aRange( rXMLRange.getToken(0, ' ', nPos) );
-
         //!! following objects and function are implemented in XMLRangeHelper.?xx
         //!! which is a copy of the respective file from chart2 !!
         XMLRangeHelper::CellRange aCellRange( XMLRangeHelper::getCellRangeFromXMLString( aRange ));
 
         // check that there is only one table used in all ranges
-        if (aFirstFoundTable.isEmpty())
+        if (!bFirstTableSet)
+        {
             aFirstFoundTable = aCellRange.aTableName;
+            bFirstTableSet = true;
+        }
         if (aCellRange.aTableName != aFirstFoundTable)
             throw lang::IllegalArgumentException();
 
@@ -1727,7 +1757,6 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
             aRes.append(";");
         aRes.append(aTmp);
     }
-    while (nPos>0);
 
     return aRes.makeStringAndClear();
 }

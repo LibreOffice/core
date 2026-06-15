@@ -65,7 +65,7 @@ IMPL_LINK(SwInsTableDlg, TextFilterHdl, OUString&, rTest, bool)
 SwInsTableDlg::SwInsTableDlg(SwView& rView)
     : SfxDialogController(rView.GetFrameWeld(), u"modules/swriter/ui/inserttable.ui"_ustr,
                           u"InsertTableDialog"_ustr)
-    , m_aTextFilter(u" .<>"_ustr)
+    , m_aTextFilter(u".<>"_ustr)
     , m_pShell(&rView.GetWrtShell())
     , m_nEnteredValRepeatHeaderNF(-1)
     , m_aWndPreview(rView.GetWrtShell().IsCursorInTable() ? rView.GetWrtShell().IsTableRightToLeft()

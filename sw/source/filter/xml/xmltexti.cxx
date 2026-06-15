@@ -344,73 +344,36 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         SwOLENode *pOLENode = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
         OSL_ENSURE( pOLENode, "Where is the OLE node" );
 
-        OUStringBuffer aBuffer( rTableName.getLength() );
-        bool bQuoted = false;
-        bool bEscape = false;
-        bool bError = false;
-        for( sal_Int32 i=0; i < rTableName.getLength(); i++ )
+        OUString sTableName( rTableName );
+        // Documents written by older versions wrap a table name in single
+        // quotes (escaping inner quotes and backslashes with a backslash)
+        // when it contains spaces, dots, quotes or backslashes. Newer
+        // versions write the name unquoted, so only unescape the legacy form.
+        if( rTableName.startsWith("'") )
         {
+            OUStringBuffer aBuffer( rTableName.getLength() );
+            bool bEscape = false;
             bool bEndOfNameFound = false;
-            sal_Unicode c = rTableName[i];
-            switch( c )
+            for( sal_Int32 i = 1; i < rTableName.getLength() && !bEndOfNameFound; ++i )
             {
-            case '\'':
+                sal_Unicode c = rTableName[i];
                 if( bEscape )
                 {
                     aBuffer.append( c );
                     bEscape = false;
                 }
-                else if( bQuoted )
-                {
-                    bEndOfNameFound = true;
-                }
-                else if( 0 == i )
-                {
-                    bQuoted = true;
-                }
-                else
-                {
-                    bError = true;
-                }
-                break;
-            case '\\':
-                if( bEscape )
-                {
-                    aBuffer.append( c );
-                    bEscape = false;
-                }
-                else
-                {
+                else if( c == '\\' )
                     bEscape = true;
-                }
-                break;
-            case ' ':
-            case '.':
-                if( !bQuoted )
-                {
+                else if( c == '\'' )
                     bEndOfNameFound = true;
-                }
                 else
-                {
                     aBuffer.append( c );
-                    bEscape = false;
-                }
-                break;
-            default:
-                {
-                    aBuffer.append( c );
-                    bEscape = false;
-                }
-                break;
             }
-            if( bError || bEndOfNameFound )
-                break;
+            sTableName = aBuffer.makeStringAndClear();
         }
-        if( !bError )
-        {
-            OUString sTableName( aBuffer.makeStringAndClear() );
-            pOLENode->SetChartTableName( UIName(GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTableName )) );
-        }
+
+        pOLENode->SetChartTableName(
+            UIName(GetRenameMap().Get(XML_TEXT_RENAME_TYPE_TABLE, sTableName)) );
     }
 
     sal_Int64 nDrawAspect = 0;

@@ -3367,7 +3367,7 @@ IMPL_LINK(SwContentTree, EditedEntryHdl, const weld::TreeView::IterColText&, rIt
     }
     else if (ContentTypeId::TABLE == nType)
     {
-        sForbiddenChars = " .<>";
+        sForbiddenChars = ".<>";
     }
 
     if (!sForbiddenChars.isEmpty())

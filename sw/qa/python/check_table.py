@@ -615,6 +615,18 @@ class CheckTable(unittest.TestCase):
         xCellRangeString = xChartDataProvider.convertRangeFromXML("Table1.$A$1:.$C$3")
         self.assertEqual("Table1.A1:C3", xCellRangeString)
 
+        # tdf#71261: a table name containing spaces must round-trip through the
+        # chart XML range conversions. In the XML form such a name is wrapped
+        # in single quotes, so the (space separated) range list parsing must
+        # not break inside the quoted name.
+        xTable.Name = "Table with space"
+
+        xml = xChartDataProvider.convertRangeToXML('Table with space.A1:C3')
+        self.assertEqual("'Table with space'.$A$1:.$C$3", xml)
+
+        xCellRangeString = xChartDataProvider.convertRangeFromXML("'Table with space'.$A$1:.$C$3")
+        self.assertEqual("Table with space.A1:C3", xCellRangeString)
+
         xDoc.dispose()
 
     def test_splitRangeHorizontal(self):

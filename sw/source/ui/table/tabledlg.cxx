@@ -21,7 +21,7 @@
 #include <o3tl/untaint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/Window.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -37,7 +37,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sfxdlg.hxx>
 
-#include <strings.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
@@ -617,17 +616,6 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 
 DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
-    //test the table name for spaces
-    OUString sTableName = m_xNameED->get_text();
-    if(sTableName.indexOf(' ') != -1)
-    {
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      SwResId(STR_WRONG_TABLENAME)));
-        xInfoBox->run();
-        m_xNameED->grab_focus();
-        return DeactivateRC::KeepPage;
-    }
     if(_pSet)
     {
         FillItemSet(_pSet);

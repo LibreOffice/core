@@ -745,6 +745,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameCollisionUpdatesChart)
     assertXPath(pXmlDoc, "//draw:object", "notify-on-update-of-ranges", u"Table3");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameWithSpaceUpdatesChart)
+{
+    createSwDoc("tdf171549.fodt");
+
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
+    getSwDocShell()->GetEditShell()->SetTableName(*pFrameFormat, UIName("Renamed Table"));
+
+    saveAndReload(TestFilter::ODT);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:object", "notify-on-update-of-ranges", u"Renamed Table");
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameUpdatePropagatedToFormulas)
 {
     createSwDoc("tdf83196.fodt");
