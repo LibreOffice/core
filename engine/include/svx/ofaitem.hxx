@@ -27,7 +27,7 @@
 class SVX_DLLPUBLIC OfaPtrItem final : public SfxPoolItem
 {
 private:
-    void* pPtr;
+    void* m_pPtr;
 
 public:
                              DECLARE_ITEM_TYPE_FUNCTION(OfaPtrItem)
@@ -36,7 +36,7 @@ public:
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual OfaPtrItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    void*                    GetValue() const { return pPtr; }
+    void*                    GetValue() const { return m_pPtr; }
 };
 
 class SVX_DLLPUBLIC OfaXColorListItem final : public SfxPoolItem
