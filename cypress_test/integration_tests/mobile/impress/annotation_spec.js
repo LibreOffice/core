@@ -20,9 +20,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		mobileHelper.insertComment();
 
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
-
-		// Wait for save to complete before reloading
-		helper.processToIdle(this.win);
+		helper.waitUntilDocumentSaved();
 
 		helper.reloadDocument(newFilePath);
 

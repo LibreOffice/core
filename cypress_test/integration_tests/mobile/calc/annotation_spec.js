@@ -17,6 +17,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Annotation Tests',function(
 		mobileHelper.insertComment(false, 'Note');
 		cy.cGet('#comment-container-1').should('exist');
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
+		helper.waitUntilDocumentSaved();
 
 		helper.reloadDocument(newFilePath);
 		mobileHelper.enableEditingMobile();
