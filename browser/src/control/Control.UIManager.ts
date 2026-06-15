@@ -340,24 +340,42 @@ class UIManager extends window.L.Control {
 	 * Toggles the overall dark mode setting and refreshes related UI components.
 	 */
 	toggleDarkMode(): void {
-		// get the initial mode
-		var inDarkTheme = window.prefs.getBoolean('darkTheme');
-		// swap them by invoking the appropriate load function and saving the state
-		if (inDarkTheme) {
-			window.prefs.set('darkTheme', false);
-			this.loadLightMode();
-			this.activateDarkModeInCore(false);
-		}
-		else {
-			window.prefs.set('darkTheme', true);
-			this.loadDarkMode();
-			this.activateDarkModeInCore(true);
+		const inDarkTheme = window.prefs.getBoolean('darkTheme');
+		this.applyDarkMode(!inDarkTheme, true);
+	}
+
+	/**
+	 * Applies the given dark or light mode to the UI, the core document and the
+	 * canvas, then refreshes the related UI components.
+	 *
+	 * When persist is true the choice becomes the saved preference: it is
+	 * written to storage and, on the desktop, handed to the native app which
+	 * owns dark mode and mirrors it to the other open windows. When persist is
+	 * false the rendering changes for this window only - the saved preference
+	 * keeps its value and the other windows keep their theme. A presentation
+	 * switches to light while it runs and passes false, so showing the slides
+	 * neither overwrites the saved choice nor flips the other windows.
+	 */
+	applyDarkMode(dark: boolean, persist: boolean): void {
+		if (persist) {
+			window.prefs.set('darkTheme', dark);
+		} else {
+			// Keep prefs.get('darkTheme') returning the mode the rendering
+			// helpers below need, without writing the shared storage that a
+			// storage event would carry to the other windows.
+			(window.prefs as any)._localStorageCache['darkTheme'] = dark ? 'true' : 'false';
 		}
 
-		// On the desktop the native app owns the dark-mode setting (persists it
-		// and broadcasts it to other windows).
-		if (window.mode.isCODesktop())
-			window.postMobileMessage('SETDARKMODE ' + window.prefs.getBoolean('darkTheme'));
+		if (dark)
+			this.loadDarkMode();
+		else
+			this.loadLightMode();
+		this.activateDarkModeInCore(dark);
+
+		// On the desktop the native app owns the saved dark-mode setting
+		// (persists it and broadcasts it to the other windows).
+		if (persist && window.mode.isCODesktop())
+			window.postMobileMessage('SETDARKMODE ' + dark);
 
 		this.applyInvert();
 		this.setCanvasColorAfterModeChange();

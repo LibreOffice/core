@@ -1356,16 +1356,19 @@ class SlideShowPresenter {
 		);
 	}
 
-	// We want to present the slides in default mode. So we check the state here and change when needed.
+	// We want to present the slides in default (light) mode. The switch is for
+	// the duration of the show only, so it must not be saved as the user's
+	// preference nor change the theme of the other open windows - pass persist
+	// false. The saved preference is restored when the show ends.
 	private checkDarkMode(starting: boolean) {
 		if (starting) {
 			const isDarkMode = window.prefs.getBoolean('darkTheme');
 			if (isDarkMode) {
 				this._wasInDarkMode = true;
-				app.map.uiManager.toggleDarkMode();
+				app.map.uiManager.applyDarkMode(false, false);
 			}
 		} else if (this._wasInDarkMode) {
-			app.map.uiManager.toggleDarkMode();
+			app.map.uiManager.applyDarkMode(true, false);
 			this._wasInDarkMode = false;
 		}
 	}
