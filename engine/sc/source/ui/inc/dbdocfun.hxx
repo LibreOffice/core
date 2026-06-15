@@ -79,9 +79,11 @@ public:
                     bool bApi, const OUString& rStyleName = u""_ustr);
     SC_DLLPUBLIC bool DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi );
 
-    /** Write generated "Column#" default names into any empty header cell of the table.
-        nFirstCol/nLastCol optionally restrict the fill to a column range,
-        -1 means the whole header row. */
+    /** Enforce the "no empty, no duplicate" header invariant of a styled table:
+        write generated "Column#" default names into empty header cells, and
+        disambiguate any non-empty header that duplicates an earlier one in
+        place, Excel-style ("x" -> "x2"). nFirstCol/nLastCol optionally restrict
+        the writes to a column range, -1 means the whole header row. */
     SC_DLLPUBLIC void FillEmptyHeaderColumnNames(ScDBData& rData, SCCOL nFirstCol = -1,
                                                  SCCOL nLastCol = -1);
 
@@ -90,8 +92,10 @@ public:
         default names into the (empty) header cells in that range. */
     SC_DLLPUBLIC void FillInsertedColumnHeaders(SCTAB nTab, SCCOL nCol1, SCCOL nCol2);
 
-    /** If a header row is cleared by user restore the previous value*/
-    SC_DLLPUBLIC void RestoreEmptyHeaderColumnNames(ScDBData& rData);
+    /** A styled table's header row must never be empty nor contain duplicate
+        names. After the user edits the header row, restore offending cells */
+    SC_DLLPUBLIC void RestoreHeaderColumnNames(ScDBData& rData,
+                                               const std::vector<OUString>& rPrevNames);
 
     SC_DLLPUBLIC bool AddDBRange( const OUString& rName, const ScRange& rRange );
     bool DeleteDBRange( const OUString& rName );

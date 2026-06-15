@@ -178,6 +178,8 @@ bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool 
                                            std::make_unique<ScDBCollection>(*pDocColl)));
     }
 
+    // A styled table's header row must not be empty nor contain duplicate
+    // names; fill blanks and disambiguate duplicates in place (Excel-style).
     if (bHeader)
     {
         if (ScDBData* pInserted = pDocColl->getNamedDBs().findByName(rName))
@@ -217,12 +219,20 @@ void ScDBDocFunc::FillEmptyHeaderColumnNames(ScDBData& rData, SCCOL nFirstCol, S
     for (SCCOL nCol = nHdrCol1; nCol <= nHdrCol2; ++nCol)
         aExisting.push_back(rDoc.GetString(nCol, nRow, nTab));
 
-    // A header name collides case-insensitively, matching the engine's own
+    // Header names compare case-insensitively, matching the engine's own
     // de-duplication (ScDBData::SetTableColumnName via GetTransliteration); a
     // plain == compare would wrongly let "Column1"/"column1" coexist.
     auto bNameTaken = [&aExisting](const OUString& rName) {
         return std::any_of(aExisting.begin(), aExisting.end(), [&rName](const OUString& rSeen)
                            { return ScGlobal::GetTransliteration().isEqual(rName, rSeen); });
+    };
+    // True if rName already appears in a header cell left of nCol (the first
+    // occurrence is the keeper; later duplicates are the ones renamed).
+    auto bSeenOnLeft = [&aExisting, nHdrCol1](const OUString& rName, SCCOL nCol) {
+        for (SCCOL c = nHdrCol1; c < nCol; ++c)
+            if (ScGlobal::GetTransliteration().isEqual(rName, aExisting[c - nHdrCol1]))
+                return true;
+        return false;
     };
 
     const OUString aColumn(ScResId(STR_COLUMN));
@@ -230,25 +240,46 @@ void ScDBDocFunc::FillEmptyHeaderColumnNames(ScDBData& rData, SCCOL nFirstCol, S
     bool bWrote = false;
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {
-        if (rDoc.GetCellType(ScAddress(nCol, nRow, nTab)) != CELLTYPE_NONE)
-            continue;
-
-        // Get the already cached name, if exists
-        OUString aName = rData.GetTableColumnName(nCol);
+        const SCCOL nOffset = nCol - nHdrCol1;
+        OUString aName;
         bool bGenerated = false;
-        if (aName.isEmpty() || bNameTaken(aName))
+
+        if (rDoc.GetCellType(ScAddress(nCol, nRow, nTab)) == CELLTYPE_NONE)
         {
-            sal_Int32 nNumber = nCol - nHdrCol1 + 1;
+            // Empty header cell: reuse a cached name if there is one, else fill
+            // with a default "Column#" placeholder. Only a freshly synthesized
+            // placeholder is tracked (so it can be stripped again on
+            // remove/header-off); a reused cached name is real and stays.
+            aName = rData.GetTableColumnName(nCol);
+            if (aName.isEmpty() || bNameTaken(aName))
+            {
+                sal_Int32 nNumber = nOffset + 1;
+                do
+                {
+                    aName = aColumn + OUString::number(nNumber);
+                    ++nNumber;
+                } while (bNameTaken(aName));
+                bGenerated = true;
+            }
+        }
+        else
+        {
+            // Non-empty header duplicating an earlier one: disambiguate in
+            // place, Excel-style ("x" -> "x2"). This is real header content,
+            // not a placeholder, so it is not tracked as generated.
+            const OUString aText = aExisting[nOffset];
+            if (!bSeenOnLeft(aText, nCol))
+                continue;  // unique so far, leave it untouched
+            sal_Int32 nNumber = 2;
             do
             {
-                aName = aColumn + OUString::number(nNumber);
+                aName = aText + OUString::number(nNumber);
                 ++nNumber;
             } while (bNameTaken(aName));
-            bGenerated = true;
         }
 
         rFunc.SetStringCell(ScAddress(nCol, nRow, nTab), aName, false);
-        aExisting[nCol - nHdrCol1] = aName;
+        aExisting[nOffset] = aName;
         if (bGenerated)
             rData.AddGeneratedHeaderName(aName);
         bWrote = true;
@@ -281,7 +312,7 @@ void ScDBDocFunc::FillInsertedColumnHeaders(SCTAB nTab, SCCOL nCol1, SCCOL nCol2
     }
 }
 
-void ScDBDocFunc::RestoreEmptyHeaderColumnNames(ScDBData& rData)
+void ScDBDocFunc::RestoreHeaderColumnNames(ScDBData& rData, const std::vector<OUString>& rPrevNames)
 {
     if (!rData.GetTableStyleInfo() || !rData.HasHeader())
         return;
@@ -294,16 +325,80 @@ void ScDBDocFunc::RestoreEmptyHeaderColumnNames(ScDBData& rData)
     ScDocFunc& rFunc = rDocShell.GetDocFunc();
     const SCTAB nTab = aHeader.aStart.Tab();
     const SCROW nRow = aHeader.aStart.Row();
+    const SCCOL nStartCol = aHeader.aStart.Col();
+    const SCCOL nEndCol = aHeader.aEnd.Col();
 
-    // If a header cell is cleared by user, put back the cached value
-    for (SCCOL nCol = aHeader.aStart.Col(); nCol <= aHeader.aEnd.Col(); ++nCol)
+    std::vector<OUString> aCur;
+    aCur.reserve(static_cast<size_t>(nEndCol - nStartCol + 1));
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+        aCur.push_back(rDoc.GetString(nCol, nRow, nTab));
+
+    auto getPrev = [&rPrevNames, nStartCol, &rData](SCCOL nCol) -> OUString
     {
-        if (rDoc.GetCellType(ScAddress(nCol, nRow, nTab)) != CELLTYPE_NONE)
-            continue;
+        const size_t nOffset = static_cast<size_t>(nCol - nStartCol);
+        if (nOffset < rPrevNames.size() && !rPrevNames[nOffset].isEmpty())
+            return rPrevNames[nOffset];
 
-        const OUString& aPrev = rData.GetTableColumnName(nCol);
-        if (!aPrev.isEmpty())
-            rFunc.SetStringCell(ScAddress(nCol, nRow, nTab), aPrev, false);
+        return rData.GetTableColumnName(nCol);
+    };
+
+    SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+    const bool bUndo = rDoc.IsUndoEnabled() && pUndoMgr;
+    const bool bHavePrevAction = bUndo && pUndoMgr->GetUndoActionCount() > 0;
+    bool bListOpen = false;
+
+    /* The user's edit that triggered this restore is already a top-level undo
+    action. We open a list action lazily on the first corrective write and
+    close it with LeaveAndMergeListAction, so the edit and our correction
+    collapse into a single undo step */
+    auto writeBack = [&](SCCOL nCol, const OUString& rName)
+    {
+        if (bUndo && !bListOpen)
+        {
+            ViewShellId nViewShellId(-1);
+            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+                nViewShellId = pViewSh->GetViewShellId();
+            pUndoMgr->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
+            bListOpen = true;
+        }
+        rFunc.SetStringCell(ScAddress(nCol, nRow, nTab), rName, false);
+    };
+
+    const auto& rTransliteration = ScGlobal::GetTransliteration();
+
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+    {
+        const OUString& rHeader = aCur[nCol - nStartCol];
+
+        // If a header cell is cleared by user, put back the pevious value
+        if (rDoc.GetCellType(ScAddress(nCol, nRow, nTab)) == CELLTYPE_NONE)
+        {
+            const OUString aPrev = getPrev(nCol);
+            if (!aPrev.isEmpty())
+                writeBack(nCol, aPrev);
+            continue;
+        }
+
+        // A header cell duplicating another header, revert it to its previous name.
+        bool bDuplicate = false;
+        for (SCCOL nOther = nStartCol; nOther <= nEndCol && !bDuplicate; ++nOther)
+        {
+            if (nOther != nCol && rTransliteration.isEqual(rHeader, aCur[nOther - nStartCol]))
+            {
+                const OUString aPrev = getPrev(nCol);
+                if (!aPrev.isEmpty() && !rTransliteration.isEqual(aPrev, rHeader))
+                    writeBack(nCol, aPrev);
+                break;
+            }
+        }
+    }
+
+    if (bListOpen)
+    {
+        if (bHavePrevAction)
+            pUndoMgr->LeaveAndMergeListAction();
+        else
+            pUndoMgr->LeaveListAction();
     }
 }
 

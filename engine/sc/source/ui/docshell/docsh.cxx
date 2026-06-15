@@ -3262,16 +3262,31 @@ void ScDocShell::SetDocumentModified()
         if ( m_pDocument->IsForcedFormulaPending() && m_pDocument->GetAutoCalc() )
             m_pDocument->CalcFormulaTree( true );
 
-        // A styled table's header row must not be empty.
-        std::vector<ScDBData*> aHeaderDirtyTables;
+        // A styled table's header row must not be empty nor have duplicates.
+        // Snapshot each dirty table's column names as they are before the
+        // refresh, so a duplicate edit can be reverted to its previous name
+        std::vector<std::pair<ScDBData*, std::vector<OUString>>> aHeaderDirtyTables;
         if (!IsInUndo() && !m_pDocument->IsClipOrUndo() && !m_pDocument->IsInInterpreter()
             && !m_pDocument->IsCalculatingFormulaTree() && !m_pDocument->IsFinalTrackFormulas())
         {
             if (ScDBCollection* pDBColl = m_pDocument->GetDBCollection())
+            {
                 for (const auto& it : pDBColl->getNamedDBs())
+                {
                     if (it->GetTableStyleInfo() && it->HasHeader()
                         && it->AreTableColumnNamesDirty())
-                        aHeaderDirtyTables.push_back(it.get());
+                    {
+                        std::vector<OUString> aPrevNames;
+                        const ScRange aHeader = it->GetHeaderArea();
+                        if (aHeader.IsValid())
+                        {
+                            for (SCCOL i = aHeader.aStart.Col(); i <= aHeader.aEnd.Col(); ++i)
+                                aPrevNames.push_back(it->GetTableColumnName(i));
+                        }
+                        aHeaderDirtyTables.emplace_back(it.get(), std::move(aPrevNames));
+                    }
+                }
+            }
         }
 
         m_pDocument->RefreshDirtyTableColumnNames();
@@ -3280,8 +3295,8 @@ void ScDocShell::SetDocumentModified()
         if (!aHeaderDirtyTables.empty())
         {
             ScDBDocFunc aDBFunc(*this);
-            for (ScDBData* pData : aHeaderDirtyTables)
-                aDBFunc.RestoreEmptyHeaderColumnNames(*pData);
+            for (auto& [pData, aPrevNames] : aHeaderDirtyTables)
+                aDBFunc.RestoreHeaderColumnNames(*pData, aPrevNames);
         }
         PostDataChanged();
 
