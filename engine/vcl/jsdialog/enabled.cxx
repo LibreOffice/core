@@ -292,6 +292,7 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/sectionpage.ui" },
         { u"modules/swriter/ui/sortdialog.ui" },
         { u"modules/swriter/ui/splittable.ui" },
+        { u"modules/swriter/ui/statisticsinfopage.ui" },
         { u"modules/swriter/ui/tablecolumnpage.ui" },
         { u"modules/swriter/ui/tableproperties.ui" },
         { u"modules/swriter/ui/tabletextflowpage.ui" },
