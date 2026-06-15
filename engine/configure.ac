@@ -3371,6 +3371,11 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
        CCACHE_NOHASHDIR=1
        dnl hash the compiler content, not its mtime
        CCACHE_COMPILERCHECK=content
+       dnl make debug paths relative so shared objects resolve to the local tree
+       if test "$enable_relative_debug_paths" != "no"; then
+          ENABLE_RELATIVE_DEBUG_PATHS=TRUE
+          AC_MSG_NOTICE([shared ccache - recording relative debug paths, debug from the engine root])
+       fi
     fi
 else
     CCACHE=""
@@ -5028,6 +5033,19 @@ else
     AC_MSG_RESULT([for "$enable_symbols"])
 fi
 AC_SUBST(ENABLE_SYMBOLS_FOR)
+
+dnl relative debug paths only need the gdb hook when debug info is emitted
+if test "$ENABLE_RELATIVE_DEBUG_PATHS" = "TRUE" -a -n "$ENABLE_SYMBOLS_FOR"; then
+    gdb_hook_installed=
+    for gdbinit in "${XDG_CONFIG_HOME:-$HOME/.config}/gdb/gdbinit" "$HOME/.gdbinit"; do
+        if test -f "$gdbinit" && grep -qF "engine relative-debug-paths hook" "$gdbinit"; then
+            gdb_hook_installed=yes
+        fi
+    done
+    if test -z "$gdb_hook_installed"; then
+        add_warning "debug paths are relative, to let gdb resolve them run: $SRC_ROOT/bin/setup-relative-debug-gdb.sh --install"
+    fi
+fi
 
 if test -n "$with_android_ndk" -a \( -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_SYMBOLS_FOR" = "all"; then
     # Building on Android with full symbols: without enough memory the linker never finishes currently.
