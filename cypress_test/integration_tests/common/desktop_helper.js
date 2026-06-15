@@ -558,7 +558,7 @@ function scrollWriterDocumentToTop() {
 	cy.getFrameWindow()
 		.its('L')
 		.then(function(L) {
-			L.Map.THIS.panTo({lat: -58.62652658901402, lng: 68.96288389396415});
+			L.Map.THIS.panTo({y: 363, x: 427});
 		});
 	assertScrollbarPosition('vertical', 0, 10);
 }
