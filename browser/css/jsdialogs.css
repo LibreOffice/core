@@ -3336,6 +3336,10 @@ kbd,
 	grid-column-gap: var(--spacing-s);
 }
 
+#DocumentPropertiesDialog #image-preferred-dpi-combobox + .ui-text {
+	margin-inline-start: var(--spacing-s);
+}
+
 #DocumentPropertiesDialog #customprops button {
 	line-height: 16px;
 	width: 100%;
