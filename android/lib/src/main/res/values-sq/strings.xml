@@ -2,7 +2,7 @@
 <resources>
     <string name="rate_now">Vlerësojeni tani</string>
     <string name="cant_open_the_document">S’u hap dot dokumenti</string>
-    <string name="temp_file_saving_disabled">Kjo kartelë është vetëm-lexim, ruajtja është e çaktivizuar.</string>
+    <string name="temp_file_saving_disabled">Ndarë me të tjerë nga aplikacioni burim si vetëm-lexim. Për të bërë ndryshime, përdorni “Përpunoni një kopje”.</string>
     <string name="file_chromeos_read_only">Kjo kartelë s’mund të ruhet në këtë vend, po hapet si vetëm-lexim. Për përdorim të plotë lexim/shkrim, kalojeni te kartelat Play.</string>
     <string name="storage_permission_required">Lypset leje depozitimi</string>
     <string name="failed_to_load_file">S’u arrit të përcaktohej kartela për ngarkim</string>
