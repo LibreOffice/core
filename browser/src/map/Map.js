@@ -3,7 +3,7 @@
  * window.L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog TileManager cool NormalBounds NormalPoint */
+/* global app _ Cursor JSDialog TileManager cool InternPointUtil InternBoundsUtil */
 
 window.L.Map = window.L.Evented.extend({
 
@@ -23,7 +23,7 @@ window.L.Map = window.L.Evented.extend({
 		// percentages available are then rounded to the nearest five percent.
 		minZoom: 1,
 		maxZoom: 18,
-		maxBounds: NormalBounds.flexConstruct([0, 0], [100, 100]),
+		maxBounds: InternBoundsUtil.flexConstruct([0, 0], [100, 100]),
 		fadeAnimation: false, // Not useful for typing.
 		markerZoomAnimation: true,
 		// defaultZoom:
@@ -90,7 +90,7 @@ window.L.Map = window.L.Evented.extend({
 		}
 
 		if (options.center && options.zoom !== undefined) {
-			this.setView(NormalPoint.flexConstruct(options.center), options.zoom, true /* reset */);
+			this.setView(InternPointUtil.flexConstruct(options.center), options.zoom, true /* reset */);
 		}
 
 		Cursor.imagePath = options.cursorURL;
@@ -481,7 +481,7 @@ window.L.Map = window.L.Evented.extend({
 
 	setView: function (center, zoom, reset) {
 		zoom = zoom === undefined ? this._zoom : this._limitZoom(zoom);
-		center = this._limitCenter(NormalPoint.flexConstruct(center), zoom, this.options.maxBounds);
+		center = this._limitCenter(InternPointUtil.flexConstruct(center), zoom, this.options.maxBounds);
 
 		if (this._loaded && !reset && zoom === this._zoom) {
 			// difference between the new and current centers in pixels
@@ -588,7 +588,7 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	zoomToFactor: function (zoom) {
-		return Math.pow(NormalPoint.SCALE, (zoom - this.options.zoom));
+		return Math.pow(InternPointUtil.SCALE, (zoom - this.options.zoom));
 	},
 
 	getDesktopCalcZoomCenter: function() {
@@ -655,11 +655,11 @@ window.L.Map = window.L.Evented.extend({
 
 		const mapUpdater = (animationCalculatedNewCenter) => {
 			if (animationCalculatedNewCenter) {
-				this._resetView(NormalPoint.flexConstruct(animationCalculatedNewCenter), zoom);
+				this._resetView(InternPointUtil.flexConstruct(animationCalculatedNewCenter), zoom);
 				return;
 			}
 
-			this._resetView(NormalPoint.flexConstruct(newCenterIntern), zoom);
+			this._resetView(InternPointUtil.flexConstruct(newCenterIntern), zoom);
 		};
 		const runAtFinish = () => {
 			this._ignoreCursorUpdate = false;
@@ -752,8 +752,8 @@ window.L.Map = window.L.Evented.extend({
 			// position stays the same.
 			var zoomScale = 1.0 / this.getZoomScale(zoom, this._zoom);
 			var caretPos = this._docLayer._twipsToIntern({ x: app.file.textCursor.rectangle.center[0], y: app.file.textCursor.rectangle.center[1] });
-			var newCenter = new NormalPoint(curCenter.getX() + (caretPos.getX() - curCenter.getX()) * (1.0 - zoomScale),
-						     curCenter.getY() + (caretPos.getY() - curCenter.getY()) * (1.0 - zoomScale));
+			var newCenter = InternPointUtil.flexConstruct(curCenter.x + (caretPos.x - curCenter.x) * (1.0 - zoomScale),
+						     curCenter.y + (caretPos.y - curCenter.y) * (1.0 - zoomScale));
 
 			mapUpdater = function() {
 				thisObj.setView(newCenter, zoom);
@@ -765,11 +765,11 @@ window.L.Map = window.L.Evented.extend({
 			if (animate) {
 				this._docLayer.runZoomAnimation(zoom,
 					// pinchCenter
-					new NormalPoint(
+					InternPointUtil.flexConstruct(
 						// Use the current x-center if there is a left margin.
-						cssBounds.min.x < 0 ? curCenter.getX() : caretPos.getX(),
+						cssBounds.min.x < 0 ? curCenter.x : caretPos.x,
 						// Use the current y-center if there is a top margin.
-						cssBounds.min.y < 0 ? curCenter.getY() : caretPos.getY()),
+						cssBounds.min.y < 0 ? curCenter.y : caretPos.y),
 					mapUpdater,
 					runAtFinish);
 			} else {
@@ -824,7 +824,7 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	setMaxBounds: function (bounds) {
-		bounds = NormalBounds.flexConstruct(bounds);
+		bounds = InternBoundsUtil.flexConstruct(bounds);
 
 		this.options.maxBounds = bounds;
 
@@ -1036,7 +1036,7 @@ window.L.Map = window.L.Evented.extend({
 		    tl = this.unproject(bounds.getTopLeft()),
 		    br = this.unproject(bounds.getBottomRight());
 
-		return new NormalBounds(tl, br);
+		return InternBoundsUtil.flexConstruct(tl, br);
 	},
 
 	getMinZoom: function () {
@@ -1050,8 +1050,10 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	getLayerMaxBounds: function () {
-		return cool.Bounds.toBounds(this.internToLayerPoint(this.options.maxBounds.getTopLeft()),
-			this.internToLayerPoint(this.options.maxBounds.getBottomRight()));
+		const tl = InternBoundsUtil.getTopLeft(this.options.maxBounds);
+		const br = InternBoundsUtil.getBottomRight(this.options.maxBounds);
+		return cool.Bounds.toBounds(this.internToLayerPoint(tl),
+			this.internToLayerPoint(br));
 	},
 
 	getSize: function () {
@@ -1122,12 +1124,12 @@ window.L.Map = window.L.Evented.extend({
 
 	getZoomScale: function (toZoom, fromZoom) {
 		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return NormalPoint.scale(toZoom) / NormalPoint.scale(fromZoom);
+		return InternPointUtil.scale(toZoom) / InternPointUtil.scale(fromZoom);
 	},
 
 	getScaleZoom: function (scale, fromZoom) {
 		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return fromZoom + (Math.log(scale) / Math.log(NormalPoint.SCALE));
+		return fromZoom + (Math.log(scale) / Math.log(InternPointUtil.SCALE));
 	},
 
 
@@ -1135,13 +1137,13 @@ window.L.Map = window.L.Evented.extend({
 
 	project: function (intern, zoom) { // (Intern[, Number]) -> Point
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		var projectedPoint = NormalPoint.internToPoint(NormalPoint.flexConstruct(intern), zoom);
+		var projectedPoint = InternPointUtil.internToPoint(InternPointUtil.flexConstruct(intern), zoom);
 		return new cool.Point(app.util.round(projectedPoint.x, 1e-6), app.util.round(projectedPoint.y, 1e-6));
 	},
 
 	unproject: function (point, zoom) { // (Point[, Number]) -> Intern
 		zoom = zoom === undefined ? this.getZoom() : zoom;
-		return NormalPoint.pointToIntern(new cool.Point(point.x, point.y), zoom);
+		return InternPointUtil.pointToIntern(new cool.Point(point.x, point.y), zoom);
 	},
 
 	// rescaling
@@ -1150,7 +1152,7 @@ window.L.Map = window.L.Evented.extend({
 		oldZoom = oldZoom === undefined ? this.getZoom() : oldZoom;
 		newZoom = newZoom === undefined ? this.getZoom() : newZoom;
 
-		return NormalPoint.rescale(point, oldZoom, newZoom);
+		return InternPointUtil.rescale(point, oldZoom, newZoom);
 	},
 
 	layerPointToIntern: function (point) { // (Point)
@@ -1159,12 +1161,12 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	internToLayerPoint: function (intern) { // (Intern)
-		var projectedPoint = this.project(NormalPoint.flexConstruct(intern))._round();
+		var projectedPoint = this.project(InternPointUtil.flexConstruct(intern))._round();
 		return projectedPoint._subtract(this.getPixelOrigin());
 	},
 
 	distance: function (intern1, intern2) { // (Intern, Intern) -> number
-		return NormalPoint.distance(NormalPoint.flexConstruct(intern1), NormalPoint.flexConstruct(intern2));
+		return InternPointUtil.distance(InternPointUtil.flexConstruct(intern1), InternPointUtil.flexConstruct(intern2));
 	},
 
 	containerPointToLayerPoint: function (point) { // (Point)
@@ -1235,11 +1237,11 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	internToContainerPointIgnoreSplits: function (intern) {
-		return this.layerPointToContainerPointIgnoreSplits(this.internToLayerPoint(NormalPoint.flexConstruct(intern)));
+		return this.layerPointToContainerPointIgnoreSplits(this.internToLayerPoint(InternPointUtil.flexConstruct(intern)));
 	},
 
 	internToContainerPoint: function (intern) {
-		return this.layerPointToContainerPoint(this.internToLayerPoint(NormalPoint.flexConstruct(intern)));
+		return this.layerPointToContainerPoint(this.internToLayerPoint(InternPointUtil.flexConstruct(intern)));
 	},
 
 	mouseEventToContainerPoint: function (e) { // (MouseEvent)
@@ -1723,11 +1725,13 @@ window.L.Map = window.L.Evented.extend({
 
 	// returns offset needed for pxBounds to get inside maxBounds at a specified zoom
 	_getBoundsOffset: function (pxBounds, maxBounds, zoom) {
-		var nwOffset = this.project(maxBounds.getTopLeft(), zoom).subtract(pxBounds.min),
-		    seOffset = this.project(maxBounds.getBottomRight(), zoom).subtract(pxBounds.max),
+		const tl = InternBoundsUtil.getTopLeft(maxBounds);
+		const br = InternBoundsUtil.getBottomRight(maxBounds);
+		var tlOffset = this.project(tl, zoom).subtract(pxBounds.min),
+		    brOffset = this.project(br, zoom).subtract(pxBounds.max),
 
-		    dx = this._rebound(nwOffset.x, -seOffset.x),
-		    dy = this._rebound(nwOffset.y, -seOffset.y);
+		    dx = this._rebound(tlOffset.x, -brOffset.x),
+		    dy = this._rebound(tlOffset.y, -brOffset.y);
 
 		return new cool.Point(dx, dy);
 	},

@@ -28,11 +28,6 @@ interface InteractiveCommentArgs {
 	[arg: string]: UnoCommandValue | boolean | undefined;
 }
 
-interface NormalPointLike {
-	x: number;
-	y: number;
-}
-
 interface MapInterface extends Evented {
 	_docLayer: DocLayerInterface;
 	uiManager: UIManager;
@@ -64,7 +59,7 @@ interface MapInterface extends Evented {
 
 	getDocSize(): cool.Point;
 	getSize(): cool.Point;
-	getCenter(): NormalPoint;
+	getCenter(): InternPointLike;
 	getContainer(): Element;
 	_getCurrentFontName(): string;
 
@@ -164,8 +159,8 @@ interface MapInterface extends Evented {
 	_cacheSVG: string[];
 	calcInputBarHasFocus(): boolean;
 	lockAccessibilityOn(): void;
-	getPixelBounds(center?: NormalPointLike, zoom?: number): cool.Bounds;
-	getPixelBoundsCore(center?: NormalPointLike, zoom?: number): cool.Bounds;
+	getPixelBounds(center?: InternPointLike, zoom?: number): cool.Bounds;
+	getPixelBoundsCore(center?: InternPointLike, zoom?: number): cool.Bounds;
 	_partsDirection: number;
 	getZoomScale(toZoom: number, fomZoom?: number): number;
 	_docLoaded: boolean;
@@ -181,7 +176,7 @@ interface MapInterface extends Evented {
 		external?: boolean,
 		calledFromSetPartHandler?: boolean,
 	): void;
-	mouseEventToIntern(e: any): NormalPointLike;
+	mouseEventToIntern(e: any): InternPointLike;
 	_limitZoom(zoom: number): number;
 	setView(
 		center: [number, number],

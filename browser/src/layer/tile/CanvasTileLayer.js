@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection TileManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection NormalPoint NormalBounds */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection TileManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection InternPointUtil InternBoundsUtil */
 
 function clamp(num, min, max)
 {
@@ -664,8 +664,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (!this._map.options._origMaxBounds) {
 				this._map.options._origMaxBounds = this._map.options.maxBounds;
 			}
-			scale = NormalPoint.scale(1);
-			this._map.setMaxBounds(new NormalBounds(
+			scale = InternPointUtil.scale(1);
+			this._map.setMaxBounds(InternBoundsUtil.flexConstruct(
 				this._map.unproject(new cool.Point(0, 0)),
 				this._map.unproject(new cool.Point(width * scale, height * scale))));
 		}
@@ -4243,7 +4243,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (this._documentInfo === '' || sizeChanged) {
 			// we just got the first status so we need to center the document
-			this._map.setMaxBounds(new NormalBounds(topLeft, this._map.unproject(scrollPixelLimits)));
+			this._map.setMaxBounds(InternBoundsUtil.flexConstruct(topLeft, this._map.unproject(scrollPixelLimits)));
 		}
 
 		this._docPixelSize = {x: docPixelLimits.x, y: docPixelLimits.y};

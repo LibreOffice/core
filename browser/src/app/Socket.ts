@@ -832,7 +832,7 @@ class Socket {
 		}
 
 		const center = this._map.getCenter();
-		if (center.isNaN() || isNaN(this._map.getZoom())) {
+		if (isNaN(center.x) || isNaN(center.y) || isNaN(this._map.getZoom())) {
 			return false;
 		}
 
@@ -1062,7 +1062,7 @@ class Socket {
 			let tileWidthTwips = this._map.options.tileWidthTwips;
 			let tileHeightTwips = this._map.options.tileHeightTwips;
 			if (this._map.options.zoom !== this._map.options.defaultZoom) {
-				const scale = NormalPoint.scale(
+				const scale = InternPointUtil.scale(
 					this._map.options.defaultZoom - this._map.options.zoom,
 				);
 				tileWidthTwips = Math.round(tileWidthTwips * scale);

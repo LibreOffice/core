@@ -25,7 +25,7 @@ interface PainterInterface {
 	};
 }
 
-type MapUpdaterType = (newMapCenterNormalPoint: NormalPointLike) => void;
+type MapUpdaterType = (newMapCenter: InternPointLike) => void;
 
 interface DocLayerInterface {
 	_toolbarCommandValues: any;
@@ -41,7 +41,7 @@ interface DocLayerInterface {
 	isCalcRTL(): boolean;
 
 	_pixelsToTwips(cssPix: cool.PointLike): cool.PointLike;
-	_internToTwips(normPoint: NormalPointLike): cool.Point;
+	_internToTwips(normPoint: InternPointLike): cool.Point;
 
 	_postMouseEvent(
 		typ: string,
@@ -70,7 +70,7 @@ interface DocLayerInterface {
 
 	sheetGeometry?: cool.SheetGeometry;
 	_cellSelectionArea?: cool.SimpleRectangle;
-	scrollToPos(pos: { x: number; y: number } | NormalPointLike): void;
+	scrollToPos(pos: InternPointLike): void;
 
 	_selectedPart: number;
 	_oleCSelections: CSelections;
@@ -113,11 +113,11 @@ interface DocLayerInterface {
 	_openCommentWizard(annotation?: cool.Comment): void;
 	_parseCellRange(cellRange: string): cool.Bounds;
 	_cellRangeToTwipRect(cellRange: cool.Bounds): cool.Bounds;
-	preZoomAnimation(pinchStartCenter: NormalPointLike): void;
-	zoomStep(zoom: number, newCenter: NormalPointLike): void;
+	preZoomAnimation(pinchStartCenter: InternPointLike): void;
+	zoomStep(zoom: number, newCenter: InternPointLike): void;
 	zoomStepEnd(
 		zoom: number,
-		newCenter: NormalPointLike,
+		newCenter: InternPointLike,
 		mapUpdater: MapUpdaterType,
 		runAtFinish: () => void,
 		noGap?: boolean,

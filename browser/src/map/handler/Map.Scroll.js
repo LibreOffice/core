@@ -3,7 +3,7 @@
  * window.L.Handler.Scroll is used by window.L.Map to enable mouse scroll wheel zoom on the map.
  */
 
-/* global app OtherViewCellCursorSection NormalPoint */
+/* global app OtherViewCellCursorSection InternPointUtil */
 window.L.Map.mergeOptions({
 	scrollHandler: true,
 	wheelDebounceTime: 40,
@@ -58,7 +58,7 @@ window.L.Map.Scroll = window.L.Handler.extend({
 			var viewBounds = this._map.getPixelBoundsCore();
 			var useMouseXCenter = viewBounds.min.x >= 0 && viewBounds.max.x <= maxX;
 
-			this._zoomCenter = new NormalPoint(useMouseXCenter ? mousePos.getX() : viewCenter.getX(), mousePos.getY());
+			this._zoomCenter = InternPointUtil.flexConstruct(useMouseXCenter ? mousePos.x : viewCenter.x, mousePos.y);
 
 		} else {
 			this._zoomCenter = viewCenter;
@@ -157,7 +157,7 @@ window.L.Map.Scroll = window.L.Handler.extend({
 	_stopZoomAnimation: function () {
 		cancelAnimationFrame(this._zoomInterpolateRAF); // Already cancelled by now ?
 		var zoom = this._zoom;
-		var lastCenter = new NormalPoint(this._zoomCenter.getX(), this._zoomCenter.getY());
+		var lastCenter = InternPointUtil.flexConstruct(this._zoomCenter.x, this._zoomCenter.y);
 		var map = this._map;
 		map._docLayer.zoomStepEnd(zoom, lastCenter,
 			// mapUpdater
