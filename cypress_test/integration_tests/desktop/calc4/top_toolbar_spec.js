@@ -19,6 +19,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 	it('Save.', function () {
 		desktopHelper.getCompactIcon('Bold').click();
 		cy.cGet('#save').click();
+		helper.waitUntilDocumentSaved();
 
 		helper.reloadDocument(newFilePath);
 

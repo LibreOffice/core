@@ -221,6 +221,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 	it('Save.', function() {
 		desktopHelper.getNbIcon('Bold').click();
 		cy.cGet('.notebookbar-shortcuts-bar .unoSave').click();
+		helper.waitUntilDocumentSaved();
 		helper.reloadDocument(newFilePath);
 		helper.setDummyClipboardForCopy();
 		writerHelper.selectAllTextOfDoc();
