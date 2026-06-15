@@ -189,6 +189,7 @@ private:
     OUString                    m_aUnknownSize;
     OUString                    m_aMultiSignedStr;
     OUString                    m_sFileURL;
+    OUString                    m_sRevealURL;
 
     bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1,
@@ -199,6 +200,7 @@ private:
     std::unique_ptr<weld::Button> m_xChangePassBtn;
 
     std::unique_ptr<weld::Label> m_xShowTypeFT;
+    std::unique_ptr<weld::Label> m_xFileNameFT;
     std::unique_ptr<weld::Label> m_xFileValEd;
     std::unique_ptr<weld::Button> m_xFileValBtn;
     std::unique_ptr<weld::Label> m_xShowSizeFT;

@@ -158,6 +158,13 @@ COMPHELPER_DLLPUBLIC void setFileSaveDialogCallback(
     const std::function<void(const char*, char*, size_t)>& pFileSaveDialogCallback);
 COMPHELPER_DLLPUBLIC bool fileSaveDialog(const OUString& rSuggested, OUString& rResult);
 
+// Reveal (and select) a document in the native file manager. Only desktop apps
+// register the callback; its presence means a real file manager is available.
+COMPHELPER_DLLPUBLIC void setRevealInFileManagerCallback(
+    const std::function<void(const char*)>& pRevealInFileManagerCallback);
+COMPHELPER_DLLPUBLIC bool canRevealInFileManager();
+COMPHELPER_DLLPUBLIC void revealInFileManager(const OUString& rURI);
+
 // These allow setting callbacks, so that set/get of a view is possible even in code that is
 // below sfx2.
 COMPHELPER_DLLPUBLIC void setViewSetter(const std::function<void(int)>& pViewSetter);

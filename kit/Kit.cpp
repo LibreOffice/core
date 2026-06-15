@@ -135,6 +135,10 @@ Util::LoadTimings KitLoadTimings;
 #include "windows.hpp"
 #endif
 
+#ifdef QTAPP
+#include <qt/QtFileManager.hpp>
+#endif
+
 using Poco::Exception;
 using Poco::File;
 using Poco::JSON::Object;
@@ -3431,6 +3435,13 @@ void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, 
     loKit->registerFileSaveDialogCallback(output_file_dialog_from_core);
 #else
     loKit->registerFileSaveDialogCallback(downloadAsFileSaveDialogCallback);
+#endif
+
+    // Desktop apps can reveal the document in the native file manager; browser
+    // COOL and the mobile apps cannot, so they don't register this callback (and
+    // the Properties dialog hides its "Open" button accordingly).
+#if defined(_WIN32) || (defined(MACOS) && MOBILEAPP) || defined(QTAPP)
+    loKit->registerRevealInFileManagerCallback(reveal_in_file_manager);
 #endif
 
     LOG_INF("Kit unipoll loop run");

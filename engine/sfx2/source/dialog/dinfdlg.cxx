@@ -808,6 +808,7 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     , m_xNameED(m_xBuilder->weld_label(u"nameed"_ustr))
     , m_xChangePassBtn(m_xBuilder->weld_button(u"changepass"_ustr))
     , m_xShowTypeFT(m_xBuilder->weld_label(u"showtype"_ustr))
+    , m_xFileNameFT(m_xBuilder->weld_label(u"label8"_ustr))
     , m_xFileValEd(m_xBuilder->weld_label(u"showlocation"_ustr))
     , m_xFileValBtn(m_xBuilder->weld_button(u"btnShowLocation"_ustr))
     , m_xShowSizeFT(m_xBuilder->weld_label(u"showsize"_ustr))
@@ -865,7 +866,10 @@ SfxDocumentPage::~SfxDocumentPage()
 
 IMPL_LINK_NOARG(SfxDocumentPage, FileValHdl, weld::Button&, void)
 {
-    sfx2::openUriExternally(m_sFileURL, false, GetFrameWeld());
+    if (comphelper::COKit::canRevealInFileManager() && !m_sRevealURL.isEmpty())
+        comphelper::COKit::revealInFileManager(m_sRevealURL);
+    else
+        sfx2::openUriExternally(m_sFileURL, false, GetFrameWeld());
 }
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl, weld::Button&, void)
@@ -1166,28 +1170,26 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_xShowTypeFT->set_label( aDescription );
 
     m_sFileURL.clear();
+    m_sRevealURL.clear();
     // determine location
-    // online we don't know file location so we just set it as the name
-    if (comphelper::COKit::isActive())
+    if (comphelper::COKit::isActive() && !comphelper::COKit::canRevealInFileManager())
     {
-        m_xFileValEd->set_label(aName);
-        m_sFileURL = aName;
-
-        // Disable setting/changing password on text files.
-        // Perhaps this needs to be done for both Online and Desktop.
-        OUString sExtension(INetURLObject(aMainURL).getExtension());
-        if (!sExtension.isEmpty())
-        {
-            sExtension = sExtension.toAsciiLowerCase();
-            if (sExtension == "txt" || sExtension == "csv")
-                m_xChangePassBtn->set_sensitive(false);
-        }
+        // Online (and mobile): the path is a jail path that's meaningless to the
+        // user, and the file name is already shown elsewhere in the dialog, so
+        // hide the whole location row.
+        m_xFileNameFT->hide();
+        m_xFileValEd->hide();
+        m_xFileValBtn->hide();
     }
     else
     {
+        // Desktop app (CODA) or classic desktop: show the containing folder.
         aURL.SetSmartURL( aFile);
         if ( aURL.GetProtocol() == INetProtocol::File )
         {
+            // Revealing in the file manager needs the file itself (so it can be
+            // selected), not the folder we display below.
+            m_sRevealURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             INetURLObject aPath(std::move(aURL));
             aPath.setFinalSlash();
             aPath.removeSegment();
@@ -1205,6 +1207,20 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             m_sFileURL = m_xFileValEd->get_label();
         }
     }
+
+    if (comphelper::COKit::isActive())
+    {
+        // Disable setting/changing password on text files.
+        // Perhaps this needs to be done for both Online and Desktop.
+        OUString sExtension(INetURLObject(aMainURL).getExtension());
+        if (!sExtension.isEmpty())
+        {
+            sExtension = sExtension.toAsciiLowerCase();
+            if (sExtension == "txt" || sExtension == "csv")
+                m_xChangePassBtn->set_sensitive(false);
+        }
+    }
+
     m_xFileValBtn->connect_clicked( LINK( this, SfxDocumentPage, FileValHdl ) );
     if (m_sFileURL.isEmpty())
         m_xFileValBtn->set_sensitive(false);

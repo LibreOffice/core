@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import <AppKit/AppKit.h>
 
 const char *user_name = nullptr;
 
@@ -67,6 +68,17 @@ std::string getResourceURL(const char *name, const char *ext) {
 std::string getResourcePath(const char *name, const char *ext) {
     NSString *path = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:name] ofType:[NSString stringWithUTF8String:ext]];
     return std::string([path UTF8String]);
+}
+
+void reveal_in_file_manager(const char *uri) {
+    if (uri == nullptr || *uri == '\0')
+        return;
+    @autoreleasepool {
+        NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:uri]];
+        if (!url)
+            return;
+        [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[url]];
+    }
 }
 
 extern "C" void setUserName(void)

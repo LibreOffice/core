@@ -30,6 +30,9 @@ typedef bool (*COKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
 typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
                                             size_t nResultUri);
 
+/// @see kit::Office::registerRevealInFileManagerCallback()
+typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
+
 #ifdef __cplusplus
 }
 #endif

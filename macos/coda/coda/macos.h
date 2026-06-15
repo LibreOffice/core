@@ -39,4 +39,9 @@ std::string getResourceURL(const char *name, const char *ext);
  */
 std::string getResourcePath(const char *name, const char *ext);
 
+/**
+ * Reveal (and select) a document, given as a file: URI, in Finder.
+ */
+void reveal_in_file_manager(const char *uri);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

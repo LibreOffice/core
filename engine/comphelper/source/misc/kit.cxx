@@ -62,6 +62,8 @@ static std::function<int()> g_pMostUrgentPriorityGetter;
 
 static std::function<void(const char*, char*, size_t)> g_pFileSaveDialogCallback;
 
+static std::function<void(const char*)> g_pRevealInFileManagerCallback;
+
 static std::function<void(int)> g_pViewSetter;
 static std::function<int()> g_pViewGetter;
 
@@ -408,6 +410,25 @@ bool fileSaveDialog(const OUString& rSuggested, OUString& rResult)
     g_pFileSaveDialogCallback(aSuggested.getStr(), aResult, PATH_MAX);
     rResult = OUString::fromUtf8(aResult);
     return true;
+}
+
+void setRevealInFileManagerCallback(const std::function<void(const char*)>& pRevealInFileManagerCallback)
+{
+    g_pRevealInFileManagerCallback = pRevealInFileManagerCallback;
+}
+
+bool canRevealInFileManager()
+{
+    return static_cast<bool>(g_pRevealInFileManagerCallback);
+}
+
+void revealInFileManager(const OUString& rURI)
+{
+    if (!g_pRevealInFileManagerCallback)
+        return;
+
+    OString aURI = rURI.toUtf8();
+    g_pRevealInFileManagerCallback(aURI.getStr());
 }
 
 void setViewSetter(const std::function<void(int)>& pViewSetter)

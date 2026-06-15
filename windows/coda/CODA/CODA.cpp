@@ -391,6 +391,41 @@ void output_file_dialog_from_core(const char* suggestedURI, char* result, size_t
         result[0] = '\0';
 }
 
+// COKit reveal-in-file-manager callback: open Explorer with the document selected.
+void reveal_in_file_manager(const char* uri)
+{
+    if (uri == nullptr || *uri == '\0')
+        return;
+
+    std::string path;
+    try
+    {
+        path = Poco::URI(uri).getPath();
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Reveal callback got bad URI [" << uri << "]: " << exc.what());
+        return;
+    }
+
+    // Turn "/C:/dir/file" into "C:\dir\file".
+    if (path.size() > 3 && path[0] == '/' && path[2] == ':')
+        path = path.substr(1);
+    for (char& c : path)
+    {
+        if (c == '/')
+            c = '\\';
+    }
+
+    std::wstring widePath = Util::string_to_wide_string(path);
+    PIDLIST_ABSOLUTE pidl = nullptr;
+    if (SUCCEEDED(SHParseDisplayName(widePath.c_str(), nullptr, &pidl, 0, nullptr)) && pidl)
+    {
+        SHOpenFolderAndSelectItems(pidl, 0, nullptr, 0);
+        CoTaskMemFree(pidl);
+    }
+}
+
 static void stopServer()
 {
     SigUtil::requestShutdown();

@@ -1402,6 +1402,14 @@ public:
     }
 
     /**
+     * Registers a callback that reveals (and selects) a file in the native file manager.
+     */
+    void registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
+    {
+        return mpThis->pClass->registerRevealInFileManagerCallback(mpThis, pCallback);
+    }
+
+    /**
      * Frees the memory pointed to by pFree.
      *
      * Use on dynamically allocated data returned by COKit

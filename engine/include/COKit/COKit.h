@@ -181,6 +181,10 @@ struct COKitClassStruct
 
     /// @see kit::Office::isExpectedReentry().
     int (*isExpectedReentry) (void);
+
+    /// @see kit::Office::registerRevealInFileManagerCallback()
+    void (*registerRevealInFileManagerCallback)(COKit* pThis,
+            COKitRevealInFileManagerCallback pCallback);
 };
 
 #define COKIT_DOCUMENT_HAS(pDoc,member) COKIT_HAS_MEMBER(COKitDocumentClass,member,(pDoc)->pClass->nSize)
