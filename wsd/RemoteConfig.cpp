@@ -175,7 +175,7 @@ void RemoteConfigPoll::handleJSON(const Poco::JSON::Object::Ptr& remoteJson)
     _persistConfig->reset(newAppConfig);
 
 #if ENABLE_FEATURE_LOCK
-    CommandControl::LockManager::parseLockedHost(_conf);
+    CommandControl::LockManager::parseLockedHost();
 #endif
     Admin::instance().updateMonitors(oldMonitors);
 
