@@ -90,10 +90,6 @@ function _scrolledWindowControl(parentContainer, data, builder) {
 			if (scrollwindow._externalScrollSetup)
 				return;
 
-			var hasOverflow = scrollwindow.scrollWidth > scrollwindow.clientWidth;
-			if (!hasOverflow)
-				return;
-
 			// Find sibling scroll buttons - deferred so all siblings exist in DOM.
 			// A scroll-button container is a simple wrapper whose only child
 			// is the button (e.g. a pushbutton widget).  Tab headers, toolbars
@@ -111,19 +107,25 @@ function _scrolledWindowControl(parentContainer, data, builder) {
 			var isLeftScrollBtn = isScrollBtn(prevSibling);
 			var isRightScrollBtn = isScrollBtn(nextSibling);
 
-			// Only swap to a native horizontal scrollbar when this scrolled
-			// window is the one driving sibling scroll buttons (the
-			// "external scroll" pattern, e.g. the TOC tokens row). If no
-			// such buttons exist this is a regular panel that just asked
-			// for hscrollbar-policy="never"; drop the max-content
-			// expansion so content fits the container instead of being
-			// clipped on the right (e.g. the Animation sidebar).
-			if (!isLeftScrollBtn && !isRightScrollBtn) {
+			// The "external scroll" pattern (e.g. the TOC tokens row) flanks the
+			// content with a pair of arrows and drives them with a native
+			// scrollbar; it requires BOTH a left and a right scroll button. A
+			// lone single-button sibling (e.g. the "Add Property" button next to
+			// the custom-properties list) is not a scroll arrow. Anything that
+			// is not that pattern is a regular hscrollbar-policy="never" panel:
+			// drop the max-content expansion unconditionally so the content fits
+			// the viewport instead of overflowing and clipping its right edge.
+			if (!isLeftScrollBtn || !isRightScrollBtn) {
 				content.style.width = '';
 				content.style.minWidth = '';
 				scrollwindow._externalScrollSetup = true;
 				return;
 			}
+
+			// Genuine external scroll: only swap to a native horizontal
+			// scrollbar once the content actually overflows.
+			if (scrollwindow.scrollWidth <= scrollwindow.clientWidth)
+				return;
 
 			scrollwindow._externalScrollSetup = true;
 

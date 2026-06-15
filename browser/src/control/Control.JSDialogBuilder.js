@@ -382,9 +382,12 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 	_cleanText: function(text) {
 		if (!text)
 			return '';
-		if (text.endsWith('...'))
+		// Strip a trailing ellipsis (the "opens a dialog" affordance, e.g.
+		// "Browse...") only when there is text before it - a button whose
+		// whole label is "..." must keep it instead of becoming blank.
+		if (text.length > 3 && text.endsWith('...'))
 			text = text.slice(0, -3);
-		if (text.endsWith('…'))
+		if (text.length > 1 && text.endsWith('…'))
 			text = text.slice(0, -1);
 		return text.replace('~', '');
 	},

@@ -3329,9 +3329,63 @@ kbd,
 /* DocumentPropertiesDialog Custom props */
 #DocumentPropertiesDialog #headerbox,
 #DocumentPropertiesDialog #properties > .jsdialog.ui-grid {
-	grid-template-columns: 128px 128px auto 26px !important;
+	/* Name | Type | Value | Remove(X). The Type dropdown only needs to fit
+	   "DateTime"/"Duration", and the value column must be allowed to shrink
+	   (minmax(0, 1fr)) so the row never overflows and clips the X button. */
+	grid-template-columns: 128px 75px minmax(0, 1fr) 26px !important;
+	column-gap: 8px !important;
 	align-items: center;
 	margin-block-start: 4px;
+}
+
+/* Keep the list at the viewport width rather than the widest row's content
+   width, so the rows - and the Remove (X) button at their right edge - are not
+   clipped by the scroll viewport. */
+#DocumentPropertiesDialog #scroll > .ui-scrollwindow-content {
+	width: 100% !important;
+	min-width: 0 !important;
+}
+
+/* The Remove (X) button is icon-only. Override the generic has-img button
+   layout (a 24px+1fr grid that is width:100% with a 2px margin) which makes the
+   button wider than its narrow column, so it overflows to the right and gets
+   clipped. Render it as a centered icon that fits the column instead. */
+#DocumentPropertiesDialog #properties [id^='remove'] button.jsdialog.has-img {
+	display: flex !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	margin: 0 !important;
+	padding: 2px !important;
+}
+
+/* The line widgets must shrink to / fill their grid column instead of rendering
+   at their natural content width: the desktop builder gives the Type dropdown
+   and the value fields a preferred width, so without this the Type <select>
+   overflows its column (pushing the value field and the Remove (X) button out
+   of view) and the text value leaves a gap before the X. */
+#DocumentPropertiesDialog #properties .ui-listbox-container,
+#DocumentPropertiesDialog #properties .ui-listbox-container > .ui-listbox,
+#DocumentPropertiesDialog #properties .ui-edit-container,
+#DocumentPropertiesDialog #properties .ui-edit-container > .ui-edit {
+	min-width: 0;
+	width: 100% !important;
+	max-width: none !important;
+}
+
+/* Duration value: let the entry take the space and keep the edit (...) button
+   beside it (it was being squeezed to nothing), with a small gap between them. */
+#DocumentPropertiesDialog #properties [id^='durationbox'] {
+	grid-template-columns: minmax(0, 1fr) auto !important;
+	column-gap: 8px !important;
+}
+
+/* The edit inputs default to content-box, so a 100%-wide field is really
+   100% + padding + border and overflows its cell, colliding with the next
+   widget (Remove button, duration edit button) and eating the column gap.
+   Make them border-box - matching .ui-listbox/.ui-combobox/.ui-textarea - so
+   they fit their cell and the gaps are respected. */
+#DocumentPropertiesDialog .ui-edit {
+	box-sizing: border-box;
 }
 
 #DocumentPropertiesDialog #properties > .jsdialog.ui-grid > .ui-grid-cell > .ui-grid-cell {
