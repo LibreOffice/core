@@ -988,7 +988,7 @@ void Document::setDocumentPassword(int passwordType)
     LOG_INF("setDocumentPassword: passwordProtected=" << _isDocPasswordProtected <<
             " passwordProvided=" << _haveDocPassword);
 
-    if (_isDocPasswordProtected && _haveDocPassword)
+    if (!isLoaded() && _isDocPasswordProtected && _haveDocPassword)
     {
         // it means this is the second attempt with the wrong password; abort the load operation
         _loKit->setDocumentPassword(_jailedUrl.c_str(), nullptr);

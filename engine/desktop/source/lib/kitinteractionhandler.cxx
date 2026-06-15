@@ -384,8 +384,11 @@ bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
             if (bIsRequestPasswordToModify)
             {
                 uno::Reference<task::XInteractionPassword2> const xIPW2(cont, uno::UNO_QUERY);
-                xIPW2->setPasswordToModify(m_Password);
-                xIPW2->select();
+                if (xIPW2.is())
+                {
+                    xIPW2->setPasswordToModify(m_Password);
+                    xIPW2->select();
+                }
             }
             else
             {
@@ -402,8 +405,11 @@ bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
             if (bIsRequestPasswordToModify)
             {
                 uno::Reference<task::XInteractionPassword2> const xIPW2(cont, uno::UNO_QUERY);
-                xIPW2->setRecommendReadOnly(true);
-                xIPW2->select();
+                if (xIPW2.is())
+                {
+                    xIPW2->setRecommendReadOnly(true);
+                    xIPW2->select();
+                }
             }
             else
             {

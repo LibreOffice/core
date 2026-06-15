@@ -3004,7 +3004,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         rtl::Reference<KitInteractionHandler> const pInteraction(
             new KitInteractionHandler("load"_ostr, pLib));
         auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
-        comphelper::ScopeGuard const g([&] () {
+        comphelper::ScopeGuard g([&] () {
                 if (pair.second)
                 {
                     pLib->mInteractionMap.erase(aURL.toUtf8());
@@ -3206,6 +3206,9 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         }
 
         SAL_INFO("kit", "lo_documentLoadWithOptions: finished @ " << osl_getGlobalTimer());
+        // Load succeeded: keep the interaction handler in mInteractionMap so a
+        // later reload (view to edit) can still deliver the password.
+        g.dismiss();
         return pDocument;
     }
     catch (const uno::Exception& exception)
