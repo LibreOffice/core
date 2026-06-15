@@ -45,44 +45,44 @@ namespace anim
 
     /** pushes the given node to the given vector and recursively calls itself for each child node.
     */
-    inline void create_deep_vector( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
-                                std::vector< css::uno::Reference< css::animations::XAnimationNode > >& rVector )
+    inline void create_deep_vector( const cpo::uno::Reference< cpo::animations::XAnimationNode >& xNode,
+                                std::vector< cpo::uno::Reference< cpo::animations::XAnimationNode > >& rVector )
     {
         rVector.push_back( xNode );
 
         try
         {
             // get an XEnumerationAccess to the children
-            css::uno::Reference< css::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode, css::uno::UNO_QUERY );
+            cpo::uno::Reference< cpo::container::XEnumerationAccess >
+                  xEnumerationAccess( xNode, cpo::uno::UNO_QUERY );
 
             if( xEnumerationAccess.is() )
             {
-                css::uno::Reference< css::container::XEnumeration >
+                cpo::uno::Reference< cpo::container::XEnumeration >
                       xEnumeration = xEnumerationAccess->createEnumeration();
 
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
                     {
-                        css::uno::Reference< css::animations::XAnimationNode >
+                        cpo::uno::Reference< cpo::animations::XAnimationNode >
                             xChildNode( xEnumeration->nextElement(),
-                                        css::uno::UNO_QUERY_THROW );
+                                        cpo::uno::UNO_QUERY_THROW );
 
                         create_deep_vector( xChildNode, rVector );
                     }
                 }
             }
         }
-        catch( css::uno::Exception& )
+        catch( cpo::uno::Exception& )
         {
         }
     }
 
-    inline bool getVisibilityPropertyForAny(css::uno::Any const& rAny)
+    inline bool getVisibilityPropertyForAny(cpo::uno::Any const& rAny)
     {
         bool bVisible = false;
-        css::uno::Any aAny(rAny);
+        cpo::uno::Any aAny(rAny);
 
         // try to extract bool value
         if (!(aAny >>= bVisible))
@@ -109,11 +109,11 @@ namespace anim
     }
 
     inline bool getVisibilityProperty(
-        const css::uno::Reference< css::animations::XAnimate >& xAnimateNode, bool& bReturn)
+        const cpo::uno::Reference< cpo::animations::XAnimate >& xAnimateNode, bool& bReturn)
     {
         if (xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility"))
         {
-            css::uno::Any aAny(xAnimateNode->getTo());
+            cpo::uno::Any aAny(xAnimateNode->getTo());
             bReturn = getVisibilityPropertyForAny(aAny);
             return true;
         }
@@ -121,13 +121,13 @@ namespace anim
         return false;
     }
 
-    inline void convertTarget(OStringBuffer& aStringBuffer, const css::uno::Any& rTarget)
+    inline void convertTarget(OStringBuffer& aStringBuffer, const cpo::uno::Any& rTarget)
     {
         if (!rTarget.hasValue())
             return;
 
-        css::uno::Reference<css::uno::XInterface> xRef;
-        if (auto xParagraphTarget = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
+        cpo::uno::Reference<cpo::uno::XInterface> xRef;
+        if (auto xParagraphTarget = o3tl::tryAccess<cpo::presentation::ParagraphTarget>(rTarget))
         {
             if (xParagraphTarget->Shape.is())
             {
