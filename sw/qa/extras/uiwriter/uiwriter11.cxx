@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <i18nutil/searchopt.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <test/commontesttools.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
@@ -31,6 +32,7 @@
 #include <ndtxt.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svxids.hrc>
 #include <sortedobjs.hxx>
 #include <rootfrm.hxx>
@@ -843,6 +845,94 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf172081SplitParaClearsWritingModeAu
     // The first paragraph should still have the DF, but it should be cleared on the second one
     CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(1), 1), u"WritingModeAutomatic"_ustr));
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(2), 1), u"WritingModeAutomatic"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf36582_findReplaceRedline)
+{
+    // given a two-paragraph document, where the first paragraph contains a change tracking deletion
+
+    createSwDoc("tdf36582_findReplaceRedline.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView = pWrtShell->GetView();
+    IDocumentRedlineAccess& rIDRA(getSwDoc()->getIDocumentRedlineAccess());
+
+    // Start by seeing the redlines, but NOT tracking changes.
+    CPPUNIT_ASSERT(!rIDRA.IsRedlineOn());
+
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(1)->getString()); // showing deletion
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(2)->getString()); // all normal text
+
+    // initialize environment to emulate a Find and Replace situation
+    SfxItemSet aSet(
+        SfxItemSet::makeFixedSfxItemSet<SID_SEARCH_ITEM, SID_SEARCH_ITEM>(rView.GetPool()));
+    rView.StateSearch(aSet); // initializes SwView::GetSearchItem
+    SvxSearchItem& rInit = *SwView::GetSearchItem();
+    rInit.SetReplaceString("Deleted"); // emulated environment needs to match replaceString below
+    rInit.SetCommand(SvxSearchCmd::REPLACE); // needed only to emulate find/replace environment
+
+    i18nutil::SearchOptions2 aSearchOpt;
+    aSearchOpt.searchString = "Expunged Text"; // deletion is 'Expunged ': search for more than that
+    aSearchOpt.replaceString = "Deleted";
+    aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+    const FindRanges flagReplaceAll = FindRanges::InBody | FindRanges::InSelAll;
+
+    // Find and replace all
+    pWrtShell->SearchPattern(aSearchOpt, /*SearchInNotes=*/false, SwDocPositions::Start,
+                             SwDocPositions::End, flagReplaceAll, /*Replace=*/true);
+
+    // don't replace when it found a mixture of deleted and non-deleted text
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(1)->getString()); // found mixture
+    CPPUNIT_ASSERT_EQUAL(u"Deleted"_ustr, getParagraph(2)->getString());
+
+    pWrtShell->Undo();
+    // reset search to just find (part of) the deletion string
+    aSearchOpt.searchString = "Expunged";
+
+    pWrtShell->SearchPattern(aSearchOpt, /*SearchInNotes=*/false, SwDocPositions::Start,
+                             SwDocPositions::End, flagReplaceAll, /*Replace=*/true);
+
+    // Special case: the deletion should remain deleted - just 'fix' the deleted text
+    CPPUNIT_ASSERT_EQUAL(u"Deleted Text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Deleted Text"_ustr, getParagraph(2)->getString()); // sanity check
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(2)->getString());
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(u"Deleted Text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Deleted Text"_ustr, getParagraph(2)->getString());
+
+    pWrtShell->Undo(); // back to initial state
+
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(1), rIDRA.GetRedlineTable().size());
+
+    // now turn change tracking on and do it again
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().IsRedlineOn());
+
+    pWrtShell->SearchPattern(aSearchOpt, /*SearchInNotes=*/false, SwDocPositions::Start,
+                             SwDocPositions::End, flagReplaceAll, /*Replace=*/true);
+
+    // The deletion should remain deleted - just 'fix' the deleted text
+    CPPUNIT_ASSERT_EQUAL(u"Deleted Text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"ExpungedDeleted Text"_ustr, getParagraph(2)->getString());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Expunged Text"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(1), rIDRA.GetRedlineTable().size());
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(u"Deleted Text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"ExpungedDeleted Text"_ustr, getParagraph(2)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testRedlineAutoCorrectInsertOverlap)

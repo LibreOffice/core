@@ -52,6 +52,7 @@
 #include <breakit.hxx>
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
+#include <UndoRedline.hxx>
 #include <view.hxx>
 #include <i18nutil/unicodeescape.hxx>
 
@@ -1093,7 +1094,18 @@ bool ReplaceImpl(
         }
     }
 #else
-    IDocumentRedlineAccess const& rIDRA(rDoc.getIDocumentRedlineAccess());
+    IDocumentRedlineAccess& rIDRA(rDoc.getIDocumentRedlineAccess());
+    const RedlineFlags eOld = rIDRA.GetRedlineFlags();
+
+    // oFoundStringIsAllDeletedContent: only gets value if part of the search-string is a deletion.
+    std::optional<bool> oFoundStringIsAllDeletedContent;
+
+    // Track changes considerations: IsRedlineOn? IsHideRedlines?
+    // case 1,1: currently tracking changes, but is hiding them
+    // This is the easy case. Just do the replacement. Only non-deleted content was found.
+
+    // case 0,1: currently not tracking changes, and is hiding any existing deletions
+    // In this case, eliminate the unseen redlines that exist in the string that is being replaced.
     if (pLayout && pLayout->IsHideRedlines()
         && !rIDRA.IsRedlineOn() // otherwise: ReplaceRange will handle it
         && (rIDRA.GetRedlineFlags() & RedlineFlags::ShowDelete)) // otherwise: ReplaceRange will DeleteRedline()
@@ -1126,7 +1138,80 @@ bool ReplaceImpl(
             }
         }
     }
+    // cases 0,0 and 1,0: the view is showing deletions
+    // This might have found a string containing a mixture of deleted and non-deleted content.
+    // Only worry about this for find and replace - not spell checking...
+    else if (SwView::GetSearchItem() && pLayout && !pLayout->IsHideRedlines()
+             && (rIDRA.GetRedlineFlags() & RedlineFlags::ShowDelete))
+    {
+        const SvxSearchCmd eCmd = SwView::GetSearchItem()->GetCommand();
+        bool bProbablyIsFindAndReplace
+            = eCmd == SvxSearchCmd::REPLACE || eCmd == SvxSearchCmd::REPLACE_ALL;
+        if (bProbablyIsFindAndReplace)
+        {
+            // verify just in case the dialog was not closed 'properly'
+            bProbablyIsFindAndReplace = SwView::GetSearchItem()->GetReplaceString() == rReplacement;
+            if (!bProbablyIsFindAndReplace)
+                SwView::GetSearchItem()->SetCommand(SvxSearchCmd::FIND); // reset to optimize
+        }
+
+        if (bProbablyIsFindAndReplace)
+        {
+            // determine the value of oFoundStringIsAllDeletedContent
+            SwRedlineTable::size_type tmp;
+            rIDRA.GetRedline(*rCursor.Start(), &tmp);
+            SwPosition aLastPosition = *rCursor.Start();
+            while (tmp < rIDRA.GetRedlineTable().size())
+            {
+                const SwRangeRedline& rRedline(*rIDRA.GetRedlineTable()[tmp]);
+                ++tmp;
+                if (*rCursor.End() <= *rRedline.Start())
+                    break;
+                if (*rRedline.End() <= aLastPosition || rRedline.GetType() != RedlineType::Delete)
+                    continue;
+
+                if (*rRedline.Start() > aLastPosition)
+                {
+                    oFoundStringIsAllDeletedContent = false;
+                    break;
+                }
+                oFoundStringIsAllDeletedContent = true;
+                aLastPosition = *rRedline.End();
+            }
+            if (oFoundStringIsAllDeletedContent.has_value() && aLastPosition < *rCursor.End())
+                oFoundStringIsAllDeletedContent = false;
+
+            // Is the 'found string' a mixture of deleted and non-deleted text?
+            if (!oFoundStringIsAllDeletedContent.value_or(true))
+                return false; // just refuse to replace it.
+
+            // case 1,0: currently tracking changes, and is not hiding deletions
+            if (rIDRA.IsRedlineOn())
+            {
+                // Is the 'found string' entirely inside a deletion? Then replace deletion: no Insert.
+                if (oFoundStringIsAllDeletedContent.value_or(false))
+                    rIDRA.SetRedlineFlags_intern(eOld & ~RedlineFlags::On);
+            }
+        }
+    }
+
     bReplaced &= rIDCO.ReplaceRange(rCursor, rReplacement, bRegExp);
+    if (bReplaced && oFoundStringIsAllDeletedContent.value_or(false))
+    {
+        // mark the replaced deletion as deleted
+        rIDRA.SetRedlineFlags_intern(eOld | RedlineFlags::On);
+
+        rIDRA.AppendRedline(new SwRangeRedline(RedlineType::Delete, rCursor), /*CallDelete=*/false);
+
+        if (rDoc.GetIDocumentUndoRedo().DoesUndo())
+        {
+            rDoc.GetIDocumentUndoRedo().AppendUndo(
+                std::make_unique<SwUndoRedlineDelete>(rCursor, SwUndoId::EMPTY));
+        }
+
+        sw::UpdateFramesForAddDeleteRedline(rDoc, rCursor);
+    }
+    rIDRA.SetRedlineFlags_intern(eOld);
 #endif
     return bReplaced;
 }
