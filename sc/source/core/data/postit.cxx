@@ -395,8 +395,6 @@ class ScNoteCaptionCreator : public ScCaptionCreator
 public:
     /** Create a new caption object and inserts it into the document. */
     explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData );
-    /** Manipulate an existing caption. */
-    explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, rtl::Reference<SdrCaptionObj>& xCaption, bool bShown );
 };
 
 ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData ) :
@@ -417,23 +415,6 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
         ScCaptionUtil::SetCaptionUserData( *rNoteData.mxCaption, rPos );
         // insert object into draw page
         pDrawPage->InsertObject( rNoteData.mxCaption.get() );
-    }
-}
-
-ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, rtl::Reference<SdrCaptionObj>& xCaption, bool bShown ) :
-    ScCaptionCreator( rDoc, rPos, xCaption )
-{
-    SdrPage* pDrawPage = GetDrawPage();
-    OSL_ENSURE( pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - no drawing page" );
-    OSL_ENSURE( xCaption->getSdrPageFromSdrObject() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
-    if( pDrawPage && (xCaption->getSdrPageFromSdrObject() == pDrawPage) )
-    {
-        // store note position in user data of caption object
-        ScCaptionUtil::SetCaptionUserData( *xCaption, rPos );
-        // basic caption settings
-        ScCaptionUtil::SetBasicCaptionSettings( *xCaption, bShown );
-        // set correct tail position
-        xCaption->SetTailPos( CalcTailPos( false ) );
     }
 }
 
