@@ -89,7 +89,7 @@
     <string name="storage_permission_required">Rechten om op te slaan zijn vereist</string>
     <string name="file_creation_failed">Aanmaken van bestand mislukt</string>
     <string name="file_exists_warning">Er bestaat al een bestand met deze naam en zal overschreven worden.</string>
-    <string name="temp_file_saving_disabled">Dit bestand is alleen-lezen; opslaan is uitgeschakeld.</string>
+    <string name="temp_file_saving_disabled">Door de bronappb gedeeld als alleen-lezen. Gebruik \"Een kopie bewerken\" om wijzigingen aan te brengen.</string>
     <string name="no_items">Geen items</string>
     <string name="no_recent_items">Open een bestand met behulp van het mappictogram in de werkbalk.</string>
     <string name="app_vendor">Deze versie is geleverd door $VENDOR.</string>
