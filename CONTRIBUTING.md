@@ -81,7 +81,7 @@ After cloning (whether via the script or by hand), install Gerrit's
 commit-msg hook so every commit gets a Change-Id automatically:
 
 ```bash
-scp -p -P 29418 YOUR_USERNAME@gerrit.collaboraoffice.com:hooks/commit-msg .git/hooks/
+scp -p -O -P 29418 YOUR_USERNAME@gerrit.collaboraoffice.com:hooks/commit-msg .git/hooks/
 ```
 
 We use [Change-Ids][change-id] to track patches across rebases and
