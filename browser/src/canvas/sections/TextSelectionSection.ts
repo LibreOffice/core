@@ -86,7 +86,7 @@ class TextSelectionSection extends CanvasSectionObject {
 			// painted just outside the boundary and shows up as a faint band one
 			// pixel past the right and bottom grid lines. The fill already
 			// covers the selected cells exactly, so the stroke is dropped here.
-			if (!isCalc) this.context.stroke();
+			if (!app.map._docLayer.isCalc()) this.context.stroke();
 			this.context.fill();
 		}
 
