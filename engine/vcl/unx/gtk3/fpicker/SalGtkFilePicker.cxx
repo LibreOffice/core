@@ -1464,7 +1464,7 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         SAL_WARN( "vcl.gtk", "Get label on unknown control " << nControlId);
     else if( tType == GTK_TYPE_CHECK_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
-        aTxt = gtk_button_get_label( GTK_BUTTON( pWidget ) );
+        aTxt = OString(gtk_button_get_label( GTK_BUTTON( pWidget ) ));
     else
         SAL_WARN( "vcl.gtk", "Can't get label on list");
 

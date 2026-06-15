@@ -560,7 +560,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
                                &aProp );
     if( aProp.value )
     {
-        aRet = reinterpret_cast<char*>(aProp.value);
+        aRet = OString(reinterpret_cast<char*>(aProp.value));
         XFree( aProp.value );
 #ifdef __sun
         /*

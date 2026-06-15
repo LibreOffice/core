@@ -281,14 +281,14 @@ public:
       @param    value       a NULL-terminated character array.
     */
     template< typename T >
-    OString( const T& value, typename libreoffice_internal::CharPtrDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
+    explicit OString( const T& value, typename libreoffice_internal::CharPtrDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
         pData = NULL;
         rtl_string_newFromStr( &pData, value );
     }
 
     template< typename T >
-    OString( T& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
+    explicit OString( T& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
         pData = NULL;
         rtl_string_newFromStr( &pData, value );
@@ -296,7 +296,7 @@ public:
 
 #if __cplusplus > 202002L // C++23 P2266R3 "Simpler implicit move"
     template< typename T >
-    OString( T&& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
+    explicit OString( T&& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
         pData = NULL;
         rtl_string_newFromStr( &pData, value );
@@ -312,7 +312,7 @@ public:
       @param    literal       a string literal
     */
     template< typename T >
-    OString( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
+    explicit OString( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));

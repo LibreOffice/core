@@ -2163,13 +2163,13 @@ OString CffContext::getGlyphName( int nGlyphIndex)
     {
         char aDefaultGlyphName[64];
         o3tl::sprintf( aDefaultGlyphName, "gly%03d", nGlyphIndex);
-        return aDefaultGlyphName;
+        return OString(aDefaultGlyphName);
     }
     else if( mbCIDFont)     // default glyph name in CIDs
     {
          char aDefaultGlyphName[64];
          o3tl::sprintf( aDefaultGlyphName, "cid%03d", nSID);
-         return aDefaultGlyphName;
+         return OString(aDefaultGlyphName);
     }
     else {                  // glyph name from string table
         auto const pSidName = getString( nSID);
@@ -2181,7 +2181,7 @@ OString CffContext::getGlyphName( int nGlyphIndex)
         // if needed invent a fallback name
         char aDefaultGlyphName[64];
         o3tl::sprintf( aDefaultGlyphName, "bad%03d", nSID);
-        return aDefaultGlyphName;
+        return OString(aDefaultGlyphName);
     }
 }
 

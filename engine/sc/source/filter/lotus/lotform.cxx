@@ -52,7 +52,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtString )
         {
             static constexpr std::string_view s("@<<@123>>");
 
-            t = pExtString;
+            t = OString(pExtString);
 
             sal_Int32 n = t.indexOf(s);
             if( n != -1 )

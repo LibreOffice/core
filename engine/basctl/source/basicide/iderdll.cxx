@@ -119,7 +119,7 @@ Dll::Dll () :
 {
     SfxObjectFactory& rFactory = DocShell::Factory();
 
-    auto pModule = std::make_unique<Module>("basctl", &rFactory);
+    auto pModule = std::make_unique<Module>("basctl"_ostr, &rFactory);
     SfxModule* pMod = pModule.get();
     SfxApplication::SetModule(SfxToolsModule::Basic, std::move(pModule));
 

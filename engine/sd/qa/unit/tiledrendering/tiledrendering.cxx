@@ -3040,7 +3040,7 @@ public:
 
         std::string sHash = GetSlideHash(mpXImpressDocument, mnSlideNumber);
         CPPUNIT_ASSERT(mpXImpressDocument->createSlideRenderer(
-            sHash.c_str(), mnSlideNumber, mnViewWidth, mnViewHeight, bRenderBackground,
+            OString(sHash), mnSlideNumber, mnViewWidth, mnViewHeight, bRenderBackground,
             bRenderMasterPage));
     }
 
@@ -3221,7 +3221,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     std::string sHash = GetSlideHash(pXImpressDocument, 0);
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
@@ -3349,7 +3349,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     std::string sHash = GetSlideHash(pXImpressDocument, 0);
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
@@ -3749,7 +3749,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     std::string sHash = GetSlideHash(pXImpressDocument, 0);
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
@@ -3921,7 +3921,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
     std::string sHash = GetSlideHash(pXImpressDocument, 0);
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
@@ -4183,7 +4183,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     sal_Int32 nViewHeight = 2000;
 
     std::string sHash = GetSlideHash(pXImpressDocument, 0);
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
@@ -4350,7 +4350,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     sal_Int32 nViewHeight = 2000;
 
     std::string sHash = GetSlideHash(pXImpressDocument, 0);
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
@@ -4455,7 +4455,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     sal_Int32 nViewHeight = 2000;
 
     std::string sHash = GetSlideHash(pXImpressDocument, 0);
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1500), nViewHeight);
 

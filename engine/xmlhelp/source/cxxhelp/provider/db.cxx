@@ -106,7 +106,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
         if( !implReadLenAndData( pData, end, iPos, aDBKey ) )
             break;
 
-        OString aOKeyStr = aDBKey.getData();
+        OString aOKeyStr(aDBKey.getData());
 
         // Read val len
         const char* pStartPtr = pData + iPos;

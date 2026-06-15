@@ -492,8 +492,8 @@ void RtfExport::WriteMainText()
         Strm().WriteOString("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
 
         std::vector<std::pair<OString, OString>> aProperties{
-            { "shapeType", "1" },
-            { "fillColor", OString::number(wwUtility::RGBToBGR(oBrush->GetColor())) }
+            { "shapeType"_ostr, "1"_ostr },
+            { "fillColor"_ostr, OString::number(wwUtility::RGBToBGR(oBrush->GetColor())) }
         };
         for (const std::pair<OString, OString>& rPair : aProperties)
         {

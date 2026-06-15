@@ -449,7 +449,7 @@ void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
     {
     case KIT_CALLBACK_TEXT_SELECTION:
     {
-        m_aTextSelection = pPayload;
+        m_aTextSelection = OString(pPayload);
         if (m_aSearchResultSelection.empty())
             ++m_nSelectionBeforeSearchResult;
         else
@@ -457,10 +457,10 @@ void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
     }
     break;
     case KIT_CALLBACK_TEXT_SELECTION_START:
-        m_aTextSelectionStart = pPayload;
+        m_aTextSelectionStart = OString(pPayload);
     break;
     case KIT_CALLBACK_TEXT_SELECTION_END:
-        m_aTextSelectionEnd = pPayload;
+        m_aTextSelectionEnd = OString(pPayload);
     break;
     case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
     {
@@ -477,7 +477,7 @@ void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
     break;
     case KIT_CALLBACK_UNO_COMMAND_RESULT:
     {
-        m_aCommandResult = pPayload;
+        m_aCommandResult = OString(pPayload);
         m_aCommandResultCondition.set();
     }
     break;

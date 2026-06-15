@@ -210,8 +210,8 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 
     rtl_string_unittest_const_literal = false; // start checking for OString conversions
     rtl_string_unittest_const_literal_function = false; // and check for const variants
-    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = static_cast<const char*>(foo_c) );
-    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = foo_c );
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = rtl::OString(static_cast<const char*>(foo_c)) );
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = rtl::OString(foo_c) );
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( static_cast<const char*>(fOo_c) ));
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( fOo_c ));
     CPPUNIT_ASSERT( foobarfoo.match( static_cast<const char*>(bar_c), 3 ));

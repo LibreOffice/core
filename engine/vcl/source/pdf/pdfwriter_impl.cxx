@@ -5102,7 +5102,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     lcl_assignMeta(m_aContext.DocumentInfo.Author, aMetadata.msAuthor);
     lcl_assignMeta(m_aContext.DocumentInfo.Subject, aMetadata.msSubject);
     lcl_assignMeta(m_aContext.DocumentInfo.Producer, aMetadata.msProducer);
-    aMetadata.msPDFVersion = getPDFVersionStr(m_aContext.Version);
+    aMetadata.msPDFVersion = OString(getPDFVersionStr(m_aContext.Version));
     if (m_nPDFA_Version == 4)
     {
         // if we have embedded files we need to use conformance level "F"
@@ -10107,7 +10107,7 @@ const char* PDFWriterImpl::getStructureTag(StructElement eType)
 
 void PDFWriterImpl::addRoleMap(const OString& aAlias, StructElement eType)
 {
-    OString aTag = getStructureTag(eType);
+    OString aTag(getStructureTag(eType));
     // For PDF/UA it's not allowed to map an alias with the same name.
     // Not aware of a reason for doing it in any case, so just don't do it.
     if (aAlias != aTag)

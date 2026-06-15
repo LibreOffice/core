@@ -531,7 +531,7 @@ static int next_token(OString &white, OString &token, std::istream *strm)
     {
       char buf[256];
       make_keyword(buf, token);
-      token = buf;
+      token = OString(buf);
     }
     if( token == "sub" || token == "from" )
       token = "_"_ostr;
@@ -712,7 +712,7 @@ static char eq2ltxconv(OString& sstr, std::istream *strm, const char *sentinel)
           && rtl::isAsciiUpperCase(static_cast<unsigned char>(token[0])) );
 
       if( eq->latex )
-        token = eq->latex;
+        token = OString(eq->latex);
       else {
         token = OString::Concat("\\") + eq->key;
       }

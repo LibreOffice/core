@@ -334,7 +334,7 @@ OString lclGetThemeOrSchemeType(model::ComplexColor const& rComplexColor, bool b
 {
     const auto iter = constThemeColorTypeTokenMap.find(rComplexColor.getThemeColorType());
     assert(iter != constThemeColorTypeTokenMap.end());
-    OString sSchemeType = bIsTheme ? iter->second.ThemeName : iter->second.SchemeName;
+    OString sSchemeType(bIsTheme ? iter->second.ThemeName : iter->second.SchemeName);
     if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Text)
     {
         if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark1)
@@ -709,11 +709,11 @@ OString DocxAttributeOutput::convertToOOXMLHoriOrient(sal_Int16 nOrient, bool bI
     switch( nOrient )
     {
         case text::HoriOrientation::LEFT:
-            return bIsPosToggle ? "inside" : "left";
+            return bIsPosToggle ? "inside"_ostr : "left"_ostr;
         case text::HoriOrientation::INSIDE:
             return "inside"_ostr;
         case text::HoriOrientation::RIGHT:
-            return bIsPosToggle ? "outside" : "right";
+            return bIsPosToggle ? "outside"_ostr : "right"_ostr;
         case text::HoriOrientation::OUTSIDE:
             return "outside"_ostr;
         case text::HoriOrientation::CENTER:
@@ -7953,7 +7953,7 @@ bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, Font
         ref.relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
             oox::getRelationship(Relationship::FONT),
             Concat2View("fonts/font" + OUString::number( m_nextFontId ) + ".odttf") ), RTL_TEXTENCODING_UTF8 );
-        ref.fontKey = fontKeyStr;
+        ref.fontKey = OString(fontKeyStr);
         m_FontFilesMap[ fontUrl ] = std::move(ref);
         ++m_nextFontId;
     }

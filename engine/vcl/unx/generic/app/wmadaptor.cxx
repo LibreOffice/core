@@ -980,7 +980,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
     else
     {
         static const char* pLang = getenv( "LANG" );
-        aWMLocale = pLang ? pLang : "C";
+        aWMLocale = pLang ? OString(pLang) : "C"_ostr;
     }
 
     char* pT = const_cast<char*>(aTitle.getStr());

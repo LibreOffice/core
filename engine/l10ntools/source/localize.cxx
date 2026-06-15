@@ -493,7 +493,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     "Syntax: localize <source-root> <outfile> <library-path-env-var-override>\n");
             exit(EXIT_FAILURE);
         }
-        libraryPathEnvVarOverride = argv[3];
+        libraryPathEnvVarOverride = OString(argv[3]);
         handleProjects(argv[1],argv[2]);
     }
     catch (std::exception& e)

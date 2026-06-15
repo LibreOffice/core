@@ -1245,7 +1245,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                     {
                         SAL_WARN("xmloff", "unknown attribute " << XML_CAST( attributes[ i ] ) << "=" <<
                             OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
-                        rEvent.mxAttributes->addUnknown( XML_CAST( attributes[ i ] ),
+                        rEvent.mxAttributes->addUnknown( OString(XML_CAST( attributes[ i ] )),
                             OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
                     }
                 }
@@ -1265,7 +1265,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                 if( attributes[ i + 1 ] != nullptr )
                     addUnknownElementWithPrefix(attributes, i, rEvent.mxAttributes);
                 else
-                    rEvent.mxAttributes->addUnknown( XML_CAST( attributes[ i ] ),
+                    rEvent.mxAttributes->addUnknown( OString(XML_CAST( attributes[ i ] )),
                             OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
             }
 

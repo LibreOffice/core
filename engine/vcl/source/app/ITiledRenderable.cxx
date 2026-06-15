@@ -25,45 +25,45 @@ namespace vcl
 #pragma warning(disable : 4592)
 #endif
 const std::map<PointerStyle, OString> gaKitPointerMap{
-    { PointerStyle::Arrow, "default" },
+    { PointerStyle::Arrow, "default"_ostr },
     // PointerStyle::Null ?
-    { PointerStyle::Wait, "wait" },
-    { PointerStyle::Text, "text" },
-    { PointerStyle::Help, "help" },
-    { PointerStyle::Cross, "crosshair" },
-    { PointerStyle::Fill, "fill" },
-    { PointerStyle::Move, "move" },
-    { PointerStyle::NSize, "n-resize" },
-    { PointerStyle::SSize, "s-resize" },
-    { PointerStyle::WSize, "w-resize" },
-    { PointerStyle::ESize, "e-resize" },
-    { PointerStyle::NWSize, "ne-resize" },
-    { PointerStyle::NESize, "ne-resize" },
-    { PointerStyle::SWSize, "sw-resize" },
-    { PointerStyle::SESize, "se-resize" },
+    { PointerStyle::Wait, "wait"_ostr },
+    { PointerStyle::Text, "text"_ostr },
+    { PointerStyle::Help, "help"_ostr },
+    { PointerStyle::Cross, "crosshair"_ostr },
+    { PointerStyle::Fill, "fill"_ostr },
+    { PointerStyle::Move, "move"_ostr },
+    { PointerStyle::NSize, "n-resize"_ostr },
+    { PointerStyle::SSize, "s-resize"_ostr },
+    { PointerStyle::WSize, "w-resize"_ostr },
+    { PointerStyle::ESize, "e-resize"_ostr },
+    { PointerStyle::NWSize, "ne-resize"_ostr },
+    { PointerStyle::NESize, "ne-resize"_ostr },
+    { PointerStyle::SWSize, "sw-resize"_ostr },
+    { PointerStyle::SESize, "se-resize"_ostr },
     // WindowNSize through WindowSESize
-    { PointerStyle::HSplit, "col-resize" },
-    { PointerStyle::VSplit, "row-resize" },
-    { PointerStyle::HSizeBar, "col-resize" },
-    { PointerStyle::VSizeBar, "row-resize" },
-    { PointerStyle::Hand, "grab" },
-    { PointerStyle::RefHand, "pointer" },
+    { PointerStyle::HSplit, "col-resize"_ostr },
+    { PointerStyle::VSplit, "row-resize"_ostr },
+    { PointerStyle::HSizeBar, "col-resize"_ostr },
+    { PointerStyle::VSizeBar, "row-resize"_ostr },
+    { PointerStyle::Hand, "grab"_ostr },
+    { PointerStyle::RefHand, "pointer"_ostr },
     // Pen, Magnify, Fill, Rotate
     // HShear, VShear
     // Mirror, Crook, Crop, MovePoint, MoveBezierWeight
     // MoveData
-    { PointerStyle::CopyData, "copy" },
-    { PointerStyle::LinkData, "alias" },
+    { PointerStyle::CopyData, "copy"_ostr },
+    { PointerStyle::LinkData, "alias"_ostr },
     // MoveDataLink, CopyDataLink
     //MoveFile, CopyFile, LinkFile
     // MoveFileLink, CopyFileLink, MoveFiless, CopyFiles
-    { PointerStyle::NotAllowed, "not-allowed" },
+    { PointerStyle::NotAllowed, "not-allowed"_ostr },
     // DrawLine through DrawCaption
     // Chart, Detective, PivotCol, PivotRow, PivotField, Chain, ChainNotAllowed
     // TimeEventMove, TimeEventSize
     // AutoScrollN through AutoScrollNSWE
     // Airbrush
-    { PointerStyle::TextVertical, "vertical-text" }
+    { PointerStyle::TextVertical, "vertical-text"_ostr }
     // Pivot Delete, TabSelectS through TabSelectSW
     // PaintBrush, HideWhiteSpace, ShowWhiteSpace
 };

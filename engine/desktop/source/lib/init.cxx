@@ -1695,7 +1695,7 @@ CallbackFlushHandler::CallbackFlushHandler(COKitDocument* pDocument, COKitCallba
 
     if (char* pViewRenderState = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRenderState"))
     {
-        m_aViewRenderState = pViewRenderState;
+        m_aViewRenderState = OString(pViewRenderState);
         free(pViewRenderState);
     }
 }
@@ -6580,7 +6580,7 @@ static int doc_getClipboard(COKitDocument* pThis,
             (*pOutMimeTypes)[i] = convertOString(aMimeTypes[i]);
 
         OString aRet;
-        bool bSuccess = getFromTransferable(xTransferable, (*pOutMimeTypes)[i], aRet);
+        bool bSuccess = getFromTransferable(xTransferable, OString((*pOutMimeTypes)[i]), aRet);
         if (!bSuccess || aRet.getLength() < 1)
         {
             (*pOutSizes)[i] = 0;

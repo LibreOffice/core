@@ -215,21 +215,21 @@ INetMIMEMessage::~INetMIMEMessage()
 void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
 {
     SetHeaderField_Impl (
-        ImplINetMIMEMessageHeaderData.at(InetMessageMime::VERSION), rVersion,
+        OString(ImplINetMIMEMessageHeaderData.at(InetMessageMime::VERSION)), rVersion,
         m_nMIMEIndex[InetMessageMime::VERSION]);
 }
 
 void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
 {
     SetHeaderField_Impl (
-        ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_DISPOSITION), rDisposition,
+        OString(ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_DISPOSITION)), rDisposition,
         m_nMIMEIndex[InetMessageMime::CONTENT_DISPOSITION]);
 }
 
 void INetMIMEMessage::SetContentType (const OUString& rType)
 {
     SetHeaderField_Impl (
-        ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TYPE), rType,
+        OString(ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TYPE)), rType,
         m_nMIMEIndex[InetMessageMime::CONTENT_TYPE]);
 }
 
@@ -237,7 +237,7 @@ void INetMIMEMessage::SetContentTransferEncoding (
     const OUString& rEncoding)
 {
     SetHeaderField_Impl (
-        ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TRANSFER_ENCODING), rEncoding,
+        OString(ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TRANSFER_ENCODING)), rEncoding,
         m_nMIMEIndex[InetMessageMime::CONTENT_TRANSFER_ENCODING]);
 }
 

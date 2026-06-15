@@ -1314,7 +1314,7 @@ oslFileError openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt
         return oslTranslateFileError(errno);
 #endif /* MACOSX */
 
-    return openFilePath(buffer, pHandle, uFlags, mode);
+    return openFilePath(OString(buffer), pHandle, uFlags, mode);
 }
 
 oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)

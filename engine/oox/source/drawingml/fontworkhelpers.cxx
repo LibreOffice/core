@@ -212,14 +212,14 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"@9,0;@10,10800;@11,21600;@12,10800\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"#0,bottomRight\" xrange=\"6629,14971\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextOctagon,
           "<v:shapetype id=\"_x0000_t25\" coordsize=\"21600,21600\" o:spt=\"25\" adj=\"4800\" "
           "path=\"m0@0l7200,r7200,l21600@0m0@1l7200,21600r7200,l21600@1e\"><v:formulas><v:f "
           "eqn=\"val #0\"/><v:f eqn=\"sum 21600 0 @0\"/></v:formulas><v:path textpathok=\"t\" "
           "o:connecttype=\"rect\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"3086,10800\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextHexagon,
           "<v:shapetype id=\"_x0000_t26\" coordsize=\"21600,21600\" o:spt=\"26\" adj=\"10800\" "
           "path=\"m0@0l10800,,21600@0m,21600r10800,l21600,21600e\"><v:formulas><v:f eqn=\"val "
@@ -228,7 +228,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,0;5400,@1;10800,21600;16200,@1\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"0,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCurve,
           "<v:shapetype id=\"_x0000_t27\" coordsize=\"21600,21600\" o:spt=\"27\" adj=\"3086\" "
           "path=\"m,qy10800@0,21600,m0@1qy10800,21600,21600@1e\"><v:formulas><v:f eqn=\"val "
@@ -237,7 +237,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@0;0,@2;10800,21600;21600,@2\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"center,#0\" yrange=\"0,7200\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextWave,
           "<v:shapetype id=\"_x0000_t28\" coordsize=\"21600,21600\" o:spt=\"28\" "
           "adj=\"2809,10800\" "
@@ -260,7 +260,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" yrange=\"0,4459\"/><v:h "
           "position=\"#1,bottomRight\" xrange=\"8640,12960\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextRing,
           "<v:shapetype id=\"_x0000_t29\" coordsize=\"21600,21600\" o:spt=\"29\" "
           "adj=\"11796480,5400\" "
@@ -278,7 +278,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@27;@22,@23;10800,@26;@24,@23\"/><v:textpath on=\"t\" "
           "fitshape=\"t\"/><v:handles><v:h position=\"#1,#0\" polar=\"10800,10800\" "
           "radiusrange=\"0,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextOnCurve,
           "<v:shapetype id=\"_x0000_t30\" coordsize=\"21600,21600\" o:spt=\"30\" adj=\"3086\" "
           "path=\"m,qy10800@0,21600,m0@1qy10800,21600,21600@1e\"><v:formulas><v:f eqn=\"val "
@@ -287,7 +287,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@0;0,@2;10800,21600;21600,@2\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"center,#0\" yrange=\"0,7200\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextOnRing,
           "<v:shapetype id=\"_x0000_t31\" coordsize=\"21600,21600\" o:spt=\"31\" adj=\"11796480\" "
           "path=\"al10800,10800,10800,10800@2@14e\"><v:formulas><v:f eqn=\"val #1\"/><v:f "
@@ -303,7 +303,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@22;@19,@20;@21,@20\"/><v:textpath on=\"t\" "
           "style=\"v-text-kern:t\" fitpath=\"t\"/><v:handles><v:h position=\"@16,#0\" "
           "polar=\"10800,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextPlainText,
           "<v:shapetype id=\"_x0000_t136\" coordsize=\"21600,21600\" o:spt=\"136\" adj=\"10800\" "
           "path=\"m@7,l@8,m@5,21600l@6,21600e\"><v:formulas><v:f eqn=\"sum #0 0 10800\"/><v:f "
@@ -315,14 +315,14 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"@9,0;@10,10800;@11,21600;@12,10800\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"#0,bottomRight\" xrange=\"6629,14971\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextStop,
           "<v:shapetype id=\"_x0000_t137\" coordsize=\"21600,21600\" o:spt=\"137\" adj=\"4800\" "
           "path=\"m0@0l7200,r7200,l21600@0m0@1l7200,21600r7200,l21600@1e\"><v:formulas><v:f "
           "eqn=\"val #0\"/><v:f eqn=\"sum 21600 0 @0\"/></v:formulas><v:path textpathok=\"t\" "
           "o:connecttype=\"rect\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"3086,10800\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextTriangle,
           "<v:shapetype id=\"_x0000_t138\" coordsize=\"21600,21600\" o:spt=\"138\" adj=\"10800\" "
           "path=\"m0@0l10800,,21600@0m,21600r10800,l21600,21600e\"><v:formulas><v:f eqn=\"val "
@@ -331,7 +331,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,0;5400,@1;10800,21600;16200,@1\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"0,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextTriangleInverted,
           "<v:shapetype id=\"_x0000_t139\" coordsize=\"21600,21600\" o:spt=\"139\" adj=\"10800\" "
           "path=\"m,l10800,,21600,m0@0l10800,21600,21600@0e\"><v:formulas><v:f eqn=\"val "
@@ -340,7 +340,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,0;5400,@2;10800,21600;16200,@2\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"0,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextChevron,
           "<v:shapetype id=\"_x0000_t140\" coordsize=\"21600,21600\" o:spt=\"140\" adj=\"5400\" "
           "path=\"m0@0l10800,,21600@0m,21600l10800@1,21600,21600e\"><v:formulas><v:f eqn=\"val "
@@ -349,7 +349,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,0;0,@3;10800,@1;21600,@3\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"0,10800\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextChevronInverted,
           "<v:shapetype id=\"_x0000_t141\" coordsize=\"21600,21600\" o:spt=\"141\" adj=\"16200\" "
           "path=\"m,l10800@1,21600,m0@0l10800,21600,21600@0e\"><v:formulas><v:f eqn=\"val "
@@ -358,7 +358,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@1;0,@2;10800,21600;21600,@2\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"10800,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextRingInside,
           "<v:shapetype id=\"_x0000_t142\" coordsize=\"21600,21600\" o:spt=\"142\" adj=\"13500\" "
           "path=\"m0@1qy10800,,21600@1,10800@0,0@1m0@2qy10800@3,21600@2,10800,21600,0@2e\"><v:"
@@ -369,7 +369,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,270,180,90,90,0\"/><v:textpath on=\"t\" "
           "fitshape=\"t\"/><v:handles><v:h position=\"center,#0\" "
           "yrange=\"10800,21600\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextRingOutside,
           "<v:shapetype id=\"_x0000_t143\" coordsize=\"21600,21600\" o:spt=\"143\" adj=\"13500\" "
           "path=\"m0@1qy10800@0,21600@1,10800,,0@1m0@2qy10800,21600,21600@2,10800@3,0@2e\"><v:"
@@ -380,7 +380,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,270,180,90,90,0\"/><v:textpath on=\"t\" "
           "fitshape=\"t\"/><v:handles><v:h position=\"center,#0\" "
           "yrange=\"10800,21600\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextArchUpCurve,
           "<v:shapetype id=\"_x0000_t144\" coordsize=\"21600,21600\" o:spt=\"144\" "
           "adj=\"11796480\" path=\"al10800,10800,10800,10800@2@14e\"><v:formulas><v:f eqn=\"val "
@@ -396,7 +396,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@22;@19,@20;@21,@20\"/><v:textpath on=\"t\" "
           "style=\"v-text-kern:t\" fitpath=\"t\"/><v:handles><v:h position=\"@16,#0\" "
           "polar=\"10800,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextArchDownCurve,
           "<v:shapetype id=\"_x0000_t145\" coordsize=\"21600,21600\" o:spt=\"145\" "
           "path=\"al10800,10800,10800,10800@3@15e\"><v:formulas><v:f eqn=\"val #1\"/><v:f "
@@ -412,7 +412,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@22;@19,@20;@21,@20\"/><v:textpath on=\"t\" "
           "style=\"v-text-kern:t\" fitpath=\"t\"/><v:handles><v:h position=\"@16,#0\" "
           "polar=\"10800,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCircleCurve,
           "<v:shapetype id=\"_x0000_t146\" coordsize=\"21600,21600\" o:spt=\"146\" "
           "adj=\"-11730944\" path=\"al10800,10800,10800,10800@2@5e\"><v:formulas><v:f eqn=\"val "
@@ -424,7 +424,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"@12,10800;@9,@10;@9,@11\"/><v:textpath on=\"t\" style=\"v-text-kern:t\" "
           "fitpath=\"t\"/><v:handles><v:h position=\"@6,#0\" "
           "polar=\"10800,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextButtonCurve,
           "<v:shapetype id=\"_x0000_t147\" coordsize=\"21600,21600\" o:spt=\"147\" "
           "adj=\"11796480\" "
@@ -442,7 +442,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "@23;@21,@23\"/><v:textpath on=\"t\" style=\"v-text-kern:t\" "
           "fitpath=\"t\"/><v:handles><v:h position=\"@16,#0\" "
           "polar=\"10800,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextArchUpPour,
           "<v:shapetype id=\"_x0000_t148\" coordsize=\"21600,21600\" o:spt=\"148\" "
           "adj=\"11796480,5400\" "
@@ -460,7 +460,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@27;@22,@23;10800,@26;@24,@23\"/><v:textpath on=\"t\" "
           "fitshape=\"t\"/><v:handles><v:h position=\"#1,#0\" polar=\"10800,10800\" "
           "radiusrange=\"0,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextArchDownPour,
           "<v:shapetype id=\"_x0000_t149\" coordsize=\"21600,21600\" o:spt=\"149\" adj=\",5400\" "
           "path=\"al10800,10800@0@0@3@15al10800,10800,10800,10800@3@15e\"><v:formulas><v:f "
@@ -477,7 +477,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@27;@22,@23;10800,@26;@24,@23\"/><v:textpath on=\"t\" "
           "fitshape=\"t\"/><v:handles><v:h position=\"#1,#0\" polar=\"10800,10800\" "
           "radiusrange=\"0,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCirclePour,
           "<v:shapetype id=\"_x0000_t150\" coordsize=\"21600,21600\" o:spt=\"150\" "
           "adj=\"-11730944,5400\" "
@@ -492,7 +492,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"@17,10800;@12,@13;@16,10800;@12,@14\"/><v:textpath on=\"t\" "
           "fitshape=\"t\"/><v:handles><v:h position=\"#1,#0\" polar=\"10800,10800\" "
           "radiusrange=\"0,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextButtonPour,
           "<v:shapetype id=\"_x0000_t151\" coordsize=\"21600,21600\" o:spt=\"151\" "
           "adj=\"11796480,5400\" "
@@ -514,7 +514,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "10800;10800,@16;@30,@33;10800,21600;@32,@33\"/><v:textpath on=\"t\" "
           "fitshape=\"t\"/><v:handles><v:h position=\"#1,#0\" polar=\"10800,10800\" "
           "radiusrange=\"4320,10800\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCurveUp,
           "<v:shapetype id=\"_x0000_t152\" coordsize=\"21600,21600\" o:spt=\"152\" adj=\"9931\" "
           "path=\"m0@0c7200@2,14400@1,21600,m0@5c7200@6,14400@6,21600@5e\"><v:formulas><v:f "
@@ -528,7 +528,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" "
           "yrange=\"0,12169\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCurveDown,
           "<v:shapetype id=\"_x0000_t153\" coordsize=\"21600,21600\" o:spt=\"153\" adj=\"9391\" "
           "path=\"m,c7200@1,14400@2,21600@0m0@5c7200@6,14400@6,21600@5e\"><v:formulas><v:f "
@@ -542,7 +542,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"bottomRight,#0\" "
           "yrange=\"0,11368\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCascadeUp,
           "<v:shapetype id=\"_x0000_t154\" coordsize=\"21600,21600\" o:spt=\"154\" adj=\"9600\" "
           "path=\"m0@2l21600,m,21600l21600@0e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum "
@@ -552,7 +552,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connecttype=\"custom\" o:connectlocs=\"10800,@4;0,@6;10800,@5;21600,@3\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"bottomRight,#0\" yrange=\"6171,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCascadeDown,
           "<v:shapetype id=\"_x0000_t155\" coordsize=\"21600,21600\" o:spt=\"155\" adj=\"9600\" "
           "path=\"m,l21600@2m0@0l21600,21600e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum "
@@ -562,7 +562,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connecttype=\"custom\" o:connectlocs=\"10800,@4;0,@3;10800,@5;21600,@6\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"6171,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextWave1,
           "<v:shapetype id=\"_x0000_t156\" coordsize=\"21600,21600\" o:spt=\"156\" "
           "adj=\"2809,10800\" "
@@ -585,7 +585,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" yrange=\"0,4459\"/><v:h "
           "position=\"#1,bottomRight\" xrange=\"8640,12960\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextWave2,
           "<v:shapetype id=\"_x0000_t157\" coordsize=\"21600,21600\" o:spt=\"157\" "
           "adj=\"2809,10800\" "
@@ -608,7 +608,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" yrange=\"0,4459\"/><v:h "
           "position=\"#1,bottomRight\" xrange=\"8640,12960\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextWave3,
           "<v:shapetype id=\"_x0000_t158\" coordsize=\"21600,21600\" o:spt=\"158\" "
           "adj=\"1404,10800\" "
@@ -635,7 +635,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" yrange=\"0,2229\"/><v:h "
           "position=\"#1,bottomRight\" xrange=\"8640,12960\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextWave4,
           "<v:shapetype id=\"_x0000_t159\" coordsize=\"21600,21600\" o:spt=\"159\" "
           "adj=\"1404,10800\" "
@@ -662,7 +662,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" yrange=\"0,2229\"/><v:h "
           "position=\"#1,bottomRight\" xrange=\"8640,12960\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextInflate,
           "<v:shapetype id=\"_x0000_t160\" coordsize=\"21600,21600\" o:spt=\"160\" adj=\"2945\" "
           "path=\"m0@0c7200@2,14400@2,21600@0m0@3c7200@4,14400@4,21600@3e\"><v:formulas><v:f "
@@ -671,7 +671,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "@5\"/></v:formulas><v:path textpathok=\"t\" o:connecttype=\"rect\"/><v:textpath "
           "on=\"t\" fitshape=\"t\" xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" "
           "yrange=\"0,4629\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextDeflate,
           "<v:shapetype id=\"_x0000_t161\" coordsize=\"21600,21600\" o:spt=\"161\" adj=\"4050\" "
           "path=\"m,c7200@0,14400@0,21600,m,21600c7200@1,14400@1,21600,21600e\"><v:formulas><v:f "
@@ -681,7 +681,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"center,#0\" "
           "yrange=\"0,8100\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextInflateBottom,
           "<v:shapetype id=\"_x0000_t162\" coordsize=\"21600,21600\" o:spt=\"162\" adj=\"14706\" "
           "path=\"m,l21600,m0@0c7200@2,14400@2,21600@0e\"><v:formulas><v:f eqn=\"val #0\"/><v:f "
@@ -691,7 +691,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" "
           "yrange=\"11148,21600\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextDeflateBottom,
           "<v:shapetype id=\"_x0000_t163\" coordsize=\"21600,21600\" o:spt=\"163\" adj=\"11475\" "
           "path=\"m,l21600,m,21600c7200@1,14400@1,21600,21600e\"><v:formulas><v:f eqn=\"prod #0 4 "
@@ -701,7 +701,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"center,#0\" "
           "yrange=\"1350,21600\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextInflateTop,
           "<v:shapetype id=\"_x0000_t164\" coordsize=\"21600,21600\" o:spt=\"164\" adj=\"6894\" "
           "path=\"m0@0c7200@2,14400@2,21600@0m,21600r21600,e\"><v:formulas><v:f eqn=\"val "
@@ -712,7 +712,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"topLeft,#0\" "
           "yrange=\"0,10452\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextDeflateTop,
           "<v:shapetype id=\"_x0000_t165\" coordsize=\"21600,21600\" o:spt=\"165\" adj=\"10125\" "
           "path=\"m,c7200@0,14400@0,21600,m,21600r21600,e\"><v:formulas><v:f eqn=\"prod #0 4 "
@@ -722,7 +722,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"center,#0\" "
           "yrange=\"0,20250\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextDeflateInflate,
           "<v:shapetype id=\"_x0000_t166\" coordsize=\"21600,21600\" o:spt=\"166\" adj=\"6054\" "
           "path=\"m,l21600,m,10125c7200@1,14400@1,21600,10125m,11475c7200@2,14400@2,21600,11475m,"
@@ -731,7 +731,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connecttype=\"rect\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"center,#0\" "
           "yrange=\"1308,20292\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextDeflateInflateDeflate,
           "<v:shapetype id=\"_x0000_t167\" coordsize=\"21600,21600\" o:spt=\"167\" adj=\"6054\" "
           "path=\"m,l21600,m,6609c7200@1,14400@1,21600,6609m,7491c7200@2,14400@2,21600,7491m,"
@@ -741,7 +741,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "textpathok=\"t\" o:connecttype=\"rect\"/><v:textpath on=\"t\" fitshape=\"t\" "
           "xscale=\"t\"/><v:handles><v:h position=\"center,#0\" "
           "yrange=\"854,9525\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" },
+          "shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextFadeRight,
           "<v:shapetype id=\"_x0000_t168\" coordsize=\"21600,21600\" o:spt=\"168\" adj=\"7200\" "
           "path=\"m,l21600@0m,21600l21600@1e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum "
@@ -750,7 +750,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@2;0,10800;10800,@3;21600,10800\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"bottomRight,#0\" yrange=\"0,10800\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextFadeLeft,
           "<v:shapetype id=\"_x0000_t169\" coordsize=\"21600,21600\" o:spt=\"169\" adj=\"7200\" "
           "path=\"m0@0l21600,m0@1l21600,21600e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum "
@@ -759,7 +759,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@2;0,10800;10800,@3;21600,10800\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"0,10800\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextFadeUp,
           "<v:shapetype id=\"_x0000_t170\" coordsize=\"21600,21600\" o:spt=\"170\" adj=\"7200\" "
           "path=\"m@0,l@1,m,21600r21600,e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum 21600 "
@@ -768,7 +768,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,0;@2,10800;10800,21600;@3,10800\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"#0,topLeft\" xrange=\"0,10792\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextFadeDown,
           "<v:shapetype id=\"_x0000_t171\" coordsize=\"21600,21600\" o:spt=\"171\" adj=\"7200\" "
           "path=\"m,l21600,m@0,21600l@1,21600e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum "
@@ -777,7 +777,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,0;@2,10800;10800,21600;@3,10800\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"#0,bottomRight\" xrange=\"0,10792\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextSlantUp,
           "<v:shapetype id=\"_x0000_t172\" coordsize=\"21600,21600\" o:spt=\"172\" adj=\"12000\" "
           "path=\"m0@0l21600,m,21600l21600@1e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum "
@@ -786,7 +786,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connecttype=\"custom\" o:connectlocs=\"10800,@2;0,@3;10800,@5;21600,@4\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"0,15429\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextSlantDown,
           "<v:shapetype id=\"_x0000_t173\" coordsize=\"21600,21600\" o:spt=\"173\" adj=\"9600\" "
           "path=\"m,l21600@1m0@0l21600,21600e\"><v:formulas><v:f eqn=\"val #0\"/><v:f eqn=\"sum "
@@ -795,7 +795,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connecttype=\"custom\" o:connectlocs=\"10800,@4;0,@2;10800,@3;21600,@5\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"topLeft,#0\" yrange=\"6171,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCanUp,
           "<v:shapetype id=\"_x0000_t174\" coordsize=\"21600,21600\" o:spt=\"174\" adj=\"18514\" "
           "path=\"m0@1qy10800,,21600@1m,21600qy10800@0,21600,21600e\"><v:formulas><v:f eqn=\"val "
@@ -804,7 +804,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,0;0,@3;10800,@0;21600,@3\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"center,#0\" yrange=\"14400,21600\"/></v:handles><o:lock v:ext=\"edit\" "
-          "text=\"t\" shapetype=\"t\"/></v:shapetype>" },
+          "text=\"t\" shapetype=\"t\"/></v:shapetype>"_ostr },
         { mso_sptTextCanDown,
           "<v:shapetype id=\"_x0000_t175\" coordsize=\"21600,21600\" o:spt=\"175\" adj=\"3086\" "
           "path=\"m,qy10800@0,21600,m0@1qy10800,21600,21600@1e\"><v:formulas><v:f eqn=\"val "
@@ -813,7 +813,7 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
           "o:connectlocs=\"10800,@0;0,@2;10800,21600;21600,@2\" "
           "o:connectangles=\"270,180,90,0\"/><v:textpath on=\"t\" fitshape=\"t\"/><v:handles><v:h "
           "position=\"center,#0\" yrange=\"0,7200\"/></v:handles><o:lock v:ext=\"edit\" text=\"t\" "
-          "shapetype=\"t\"/></v:shapetype>" }
+          "shapetype=\"t\"/></v:shapetype>"_ostr }
     };
 
     auto i(aTypeToMarkupMap.find(eShapeType));

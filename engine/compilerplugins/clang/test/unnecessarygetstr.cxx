@@ -20,33 +20,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-namespace test1
-{
-void f1(bool, const OString& s);
-struct Foo
-{
-    void f1(bool, const OString& s);
-};
-void test1(Foo& foo)
-{
-    OString s;
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
-    f1(true, s.getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
-    foo.f1(true, s.getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
-    foo.f1(true, OString::boolean(true).getStr());
-    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString constructor [loplugin:unnecessarygetstr]}}
-    foo.f1(true, OString::number(12).getStr());
-
-    // avoid false +
-    OString aVal = "xx";
-    OUString aCompText
-        = "xx" + OUString(aVal.getStr(), aVal.getLength(), RTL_TEXTENCODING_ASCII_US);
-    (void)aCompText;
-}
-}
-
 namespace test2
 {
 // call to param that takes string_view
@@ -120,13 +93,6 @@ void test(std::string v, OString o)
     // expected-error@+1 {{unnecessary call to 'getStr' when passing to string constructor [loplugin:unnecessarygetstr]}}
     std::string s2(o.getStr());
 }
-}
-
-// no warning expected
-namespace test6
-{
-void foo(const OString&);
-void test(std::string v) { foo(v.c_str()); }
 }
 
 // no warning expected

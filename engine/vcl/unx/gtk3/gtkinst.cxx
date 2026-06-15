@@ -7475,7 +7475,7 @@ public:
         g_object_ref(pPage);
         std::optional<OString> sTitle;
         if (auto const title = gtk_assistant_get_page_title(m_pAssistant, pPage)) {
-            sTitle = title;
+            sTitle = OString(title);
         }
         gtk_assistant_remove_page(m_pAssistant, nOldIndex);
         gtk_assistant_insert_page(m_pAssistant, pPage, nNewIndex);

@@ -51,7 +51,7 @@ static OString lcl_DateTimeToOString( const DateTime& rDateTime )
             rDateTime.GetYear(), rDateTime.GetMonth(), rDateTime.GetDay(),
             rDateTime.GetHour(), rDateTime.GetMin(), rDateTime.GetSec(),
             rDateTime.GetNanoSec() );
-    return sBuf;
+    return OString(sBuf);
 }
 
 // local functions

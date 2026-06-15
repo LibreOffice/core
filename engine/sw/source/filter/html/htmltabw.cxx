@@ -801,7 +801,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     if( bTSections )
     {
         rWrt.OutNewLine(); // <THEAD>/<TDATA> in new line
-        OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
+        OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead ""_ostr : OOO_STRING_SVTOOLS_HTML_tbody ""_ostr;
         HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag));
 
         rWrt.IncIndentLevel(); // indent content of <THEAD>/<TDATA>
@@ -826,7 +826,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         {
             rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>
             rWrt.OutNewLine(); // </THEAD>/</TDATA> in new line
-            OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
+            OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead ""_ostr : OOO_STRING_SVTOOLS_HTML_tbody ""_ostr;
             HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
             rWrt.OutNewLine(); // <THEAD>/<TDATA> in new line
 
@@ -844,7 +844,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>
 
         rWrt.OutNewLine(); // </THEAD>/</TDATA> in new line
-        OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
+        OString aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead ""_ostr : OOO_STRING_SVTOOLS_HTML_tbody ""_ostr;
         HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
     }
 
@@ -1117,8 +1117,8 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
         rWrt.DecIndentLevel();  // indent content of <CENTER>
         rWrt.OutNewLine();      // </CENTER> in new line
         OString aTag = text::HoriOrientation::CENTER == eDivHoriOri
-                           ? OOO_STRING_SVTOOLS_HTML_center
-                           : OOO_STRING_SVTOOLS_HTML_division;
+                           ? OOO_STRING_SVTOOLS_HTML_center ""_ostr
+                           : OOO_STRING_SVTOOLS_HTML_division ""_ostr;
         if (!rWrt.mbXHTML || eDivHoriOri != text::HoriOrientation::CENTER)
         {
             // Not XHTML's css center: end <center>.

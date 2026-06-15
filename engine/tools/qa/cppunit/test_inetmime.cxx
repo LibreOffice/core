@@ -45,7 +45,7 @@ namespace
 
     bool Test::testDecode(char const * input, char const * expected)
     {
-        OUString result = INetMIME::decodeHeaderFieldBody(input);
+        OUString result = INetMIME::decodeHeaderFieldBody(OString(input));
         return result.equalsAscii(expected);
     }
 

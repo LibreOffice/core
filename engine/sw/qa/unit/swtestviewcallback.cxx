@@ -64,7 +64,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
     {
         case KIT_CALLBACK_STATE_CHANGED:
         {
-            m_aStateChanges.push_back(pPayload);
+            m_aStateChanges.push_back(OString(pPayload));
             break;
         }
         case KIT_CALLBACK_INVALIDATE_TILES:
@@ -162,7 +162,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
         break;
         case KIT_CALLBACK_VIEW_RENDER_STATE:
         {
-            m_aViewRenderState = pPayload;
+            m_aViewRenderState = OString(pPayload);
         }
         break;
         case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:

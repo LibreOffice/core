@@ -146,7 +146,7 @@ bool isWellFormedXML( std::string_view text )
 OString xmlStrToOString( const xmlChar* pString )
 {
     xmlChar* pTemp = xmlStrdup( pString );
-    OString sResult = reinterpret_cast<char*>( pTemp );
+    OString sResult(reinterpret_cast<char*>( pTemp ));
     xmlFree( pTemp );
     return sResult;
 }

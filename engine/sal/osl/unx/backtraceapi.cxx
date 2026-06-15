@@ -176,7 +176,7 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
             {
                 // Cache that the address cannot be resolved.
                 std::lock_guard guard(frameCacheMutex);
-                frameCache.insert( { frame.addr, "" } );
+                frameCache.insert( { frame.addr, ""_ostr } );
             }
             else
             {

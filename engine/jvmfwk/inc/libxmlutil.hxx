@@ -93,7 +93,7 @@ public:
     CXmlCharPtr& operator=(xmlChar* pObj);
     operator xmlChar*() const { return _object; }
     operator OUString();
-    operator OString() { return reinterpret_cast<char*>(_object); }
+    operator OString() { return OString(reinterpret_cast<char*>(_object)); }
 };
 }
 #endif

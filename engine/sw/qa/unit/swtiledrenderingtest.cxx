@@ -126,7 +126,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         break;
         case KIT_CALLBACK_TEXT_SELECTION:
         {
-            m_aTextSelection = pPayload;
+            m_aTextSelection = OString(pPayload);
             if (m_aSearchResultSelection.empty())
                 ++m_nSelectionBeforeSearchResult;
             else

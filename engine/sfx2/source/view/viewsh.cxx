@@ -947,7 +947,7 @@ void KitDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
     if (m_pViewShell)
     {
         SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, OString(aPayload));
     }
 }
 
@@ -981,7 +981,7 @@ void KitDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
                        m_sFocusedParagraph, m_nCaretPosition,
                        m_nSelectionStart, m_nSelectionEnd, m_nListPrefixLength, force);
 
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUS_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUS_CHANGED, OString(aPayload));
     }
 }
 
@@ -996,7 +996,7 @@ void KitDocumentFocusListener::notifyCaretChanged()
     if (m_pViewShell)
     {
         SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_CARET_CHANGED, OString(aPayload));
     }
 }
 
@@ -1014,7 +1014,7 @@ void KitDocumentFocusListener::notifyTextSelectionChanged()
     {
         SAL_INFO("kit.a11y",  "KitDocumentFocusListener::notifyTextSelectionChanged: "
                 "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, OString(aPayload));
     }
 }
 
@@ -1068,7 +1068,7 @@ void KitDocumentFocusListener::notifyFocusedCellChanged(
                        m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd,
                        m_nListPrefixLength, false);
 
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, OString(aPayload));
     }
 }
 
@@ -1154,7 +1154,7 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         {
             SAL_INFO("kit.a11y",  "KitDocumentFocusListener::notifySelectionChanged: "
                                      "action: " << sAction << ", name: " << sName);
-            m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
+            m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_SELECTION_CHANGED, OString(aPayload));
         }
     }
 }

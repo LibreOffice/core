@@ -377,7 +377,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, So
         aStrm.WriteChar( 0 );
         if( aStrm.TellEnd() <= nSizeLimit )
         {
-            rText = static_cast<const char*>(aStrm.GetData());
+            rText = OString(static_cast<const char*>(aStrm.GetData()));
             return true;
         }
     }

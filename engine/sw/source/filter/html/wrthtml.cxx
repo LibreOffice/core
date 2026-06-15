@@ -1554,7 +1554,7 @@ OString SwHTMLWriter::GetIndentString(sal_uInt16 nIncLvl)
     if( nLevel && nLevel <= MAX_INDENT_LEVEL)
     {
         sIndentTabs[nLevel] = 0;
-        sRet = sIndentTabs;
+        sRet = OString(sIndentTabs);
         sIndentTabs[nLevel] = '\t';
     }
 

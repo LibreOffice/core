@@ -161,19 +161,19 @@ using ::sax_fastparser::FastSerializerHelper;
 
 namespace
 {
-constexpr auto g_aSchemeColorNames = std::to_array<const char*>({
-    "dk1", "lt1", "dk2", "lt2",
-    "accent1", "accent2", "accent3",
-    "accent4", "accent5", "accent6",
-    "hlink", "folHlink",
-});
+constexpr std::array<OString, 12> g_aSchemeColorNames {
+    "dk1"_ostr, "lt1"_ostr, "dk2"_ostr, "lt2"_ostr,
+    "accent1"_ostr, "accent2"_ostr, "accent3"_ostr,
+    "accent4"_ostr, "accent5"_ostr, "accent6"_ostr,
+    "hlink"_ostr, "folHlink"_ostr,
+};
 
-constexpr auto g_aSchemeColorNamesText = std::to_array<const char*>({
-    "tx1", "bg1", "tx2", "bg2",
-    "accent1", "accent2", "accent3",
-    "accent4", "accent5", "accent6",
-    "hlink", "folHlink",
-});
+constexpr std::array<OString, 12> g_aSchemeColorNamesText {
+    "tx1"_ostr, "bg1"_ostr, "tx2"_ostr, "bg2"_ostr,
+    "accent1"_ostr, "accent2"_ostr, "accent3"_ostr,
+    "accent4"_ostr, "accent5"_ostr, "accent6"_ostr,
+    "hlink"_ostr, "folHlink"_ostr,
+};
 
 /** converts 1/100mm to the ST_TextSpacingPoint (1/100pt) */
 sal_Int64 toTextSpacingPoint(sal_Int64 mm100)

@@ -566,7 +566,7 @@ void DbusIpcThread::execute()
             bool waitProcessed = false;
             {
                 osl::MutexGuard g(RequestHandler::GetMutex());
-                if (!process(argstr, &waitProcessed)) {
+                if (!process(OString(argstr), &waitProcessed)) {
                     continue;
                 }
             }

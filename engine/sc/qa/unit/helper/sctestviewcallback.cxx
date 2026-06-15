@@ -259,7 +259,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
         break;
         case KIT_CALLBACK_CELL_FORMULA:
         {
-            m_sCellFormula = pPayload;
+            m_sCellFormula = OString(pPayload);
         }
         break;
         case KIT_CALLBACK_COMMENT:
@@ -272,12 +272,12 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
         break;
         case KIT_CALLBACK_INVALIDATE_HEADER:
         {
-            m_sInvalidateHeader = pPayload;
+            m_sInvalidateHeader = OString(pPayload);
         }
         break;
         case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         {
-            m_sInvalidateSheetGeometry = pPayload;
+            m_sInvalidateSheetGeometry = OString(pPayload);
         }
         break;
         case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
@@ -287,7 +287,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
         break;
         case KIT_CALLBACK_HYPERLINK_CLICKED:
         {
-            m_aHyperlinkClicked = pPayload;
+            m_aHyperlinkClicked = OString(pPayload);
         }
         break;
         case KIT_CALLBACK_TEXT_SELECTION:

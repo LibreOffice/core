@@ -19,7 +19,7 @@ char const literal1[] = "foo";
 OString f1()
 {
     // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OString' constructor here [loplugin:stringliteralvar]}}
-    return literal1;
+    return OString(literal1);
 }
 
 void f(OUString const&);

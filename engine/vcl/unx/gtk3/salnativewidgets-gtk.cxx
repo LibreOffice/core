@@ -2220,7 +2220,7 @@ static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLoca
 
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale)
 {
-    OString    aFamily        = pango_font_description_get_family( font );
+    OString    aFamily( pango_font_description_get_family( font ) );
     PangoStyle    eStyle    = pango_font_description_get_style( font );
     PangoWeight    eWeight    = pango_font_description_get_weight( font );
     PangoStretch eStretch = pango_font_description_get_stretch( font );

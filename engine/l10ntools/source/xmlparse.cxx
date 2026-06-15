@@ -801,7 +801,7 @@ void SimpleXMLParser::StartElement(
     int i = 0;
     while( atts[i] )
     {
-        pElement->AddAttribute( atts[ i ], atts[ i + 1 ] );
+        pElement->AddAttribute( OString(atts[ i ]), OString(atts[ i + 1 ]) );
         i += 2;
     }
 }

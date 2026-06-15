@@ -846,7 +846,6 @@ void KitHelper::notifyAllViews(int nType, const OString& rPayload)
     if (DisableCallbacks::disabled())
         return;
 
-    const auto payload = rPayload.getStr();
     const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
     if (!pCurrentViewShell)
         return;
@@ -854,7 +853,7 @@ void KitHelper::notifyAllViews(int nType, const OString& rPayload)
     while (pViewShell)
     {
         if (pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
-            pViewShell->viewCallback(nType, payload);
+            pViewShell->viewCallback(nType, rPayload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
@@ -864,13 +863,12 @@ void KitHelper::notifyView(int nViewId, int nType, const OString& rPayload)
     if (DisableCallbacks::disabled() || nViewId < 0)
         return;
 
-    const auto payload = rPayload.getStr();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         if (pViewShell->GetViewShellId().get() == nViewId)
         {
-            pViewShell->viewCallback(nType, payload);
+            pViewShell->viewCallback(nType, rPayload);
             return;
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -924,11 +922,11 @@ void KitHelper::notifyLog(const std::ostringstream& stream)
         {
             for (const auto& msg : g_logNotifierCache)
             {
-                pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, msg.c_str());
+                pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, OString(msg));
             }
             g_logNotifierCache.clear();
         }
-        pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, stream.str().c_str());
+        pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, OString(stream.str()));
     }
     else
     {

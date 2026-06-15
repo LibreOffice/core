@@ -427,7 +427,7 @@ bool ORTFImportExport::Write()
                 default:pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
             }
 
-            pHorzChar[i-1] = pChar; // to avoid to always rummage in the ITEMSET later on
+            pHorzChar[i-1] = OString(pChar); // to avoid to always rummage in the ITEMSET later on
 
             m_pStream->WriteOString( SAL_NEWLINE_STRING );
             m_pStream->WriteChar( '{' );
@@ -837,15 +837,14 @@ void OHTMLImportExport::WriteTables()
 void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal_Int32 nHeightPixel, const char* pChar,
                                    const OUString& rValue, const char* pHtmlTag)
 {
-    OString aStrTD = pHtmlTag;
-
     nWidthPixel  = nWidthPixel  ? nWidthPixel   : 86;
     nHeightPixel = nHeightPixel ? nHeightPixel  : 17;
 
     // despite the <TABLE COLS=n> and <COL WIDTH=x> designation necessary,
     // as Netscape is not paying attention to them.
     // column width
-    aStrTD += " "
+    OString aStrTD = OString::Concat(pHtmlTag) +
+            " "
             OOO_STRING_SVTOOLS_HTML_O_width
             "=" +
             OString::number(nWidthPixel) +

@@ -429,8 +429,8 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
 
         OStringBuffer sOut;
         aContainerStr = (HtmlContainerFlags::Div == nCntnrMode)
-                            ? OOO_STRING_SVTOOLS_HTML_division
-                            : OOO_STRING_SVTOOLS_HTML_span;
+                            ? OOO_STRING_SVTOOLS_HTML_division ""_ostr
+                            : OOO_STRING_SVTOOLS_HTML_span ""_ostr;
         sOut.append("<" + GetNamespace() + aContainerStr + " "
                 OOO_STRING_SVTOOLS_HTML_O_class "=\""
                 "sd-abs-pos\"");

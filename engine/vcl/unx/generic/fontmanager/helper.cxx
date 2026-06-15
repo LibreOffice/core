@@ -239,7 +239,7 @@ void psp::normPath( OString& rPath )
           aPath.indexOf( '~' ) != -1 )
         && wrap_realpath( aPath.getStr(), buf ) )
     {
-        rPath = buf;
+        rPath = OString(buf);
     }
     else
     {

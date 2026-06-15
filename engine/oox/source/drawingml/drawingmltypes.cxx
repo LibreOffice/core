@@ -380,9 +380,9 @@ std::optional<OString> GetTextVerticalType(sal_Int32 nRotateAngle)
     switch (nRotateAngle)
     {
       case 9000:
-          return "vert270";
+          return "vert270"_ostr;
       case 27000:
-          return "vert";
+          return "vert"_ostr;
       default:
           return {};
     }

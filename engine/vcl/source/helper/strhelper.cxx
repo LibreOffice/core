@@ -200,7 +200,7 @@ OString GetCommandLineToken(int nToken, const OString& rLine)
     assert(pLeap && "otherwise would early return");
     *pLeap = 0;
 
-    return pBuffer;
+    return OString(pBuffer);
 }
 
 int GetCommandLineTokenCount(const OUString& rLine)
@@ -374,7 +374,7 @@ OString WhitespaceToSpace(std::string_view rLine)
 #if defined(__GNUC__) && __GNUC__ >= 12 && __GNUC__ <= 15
 #pragma GCC diagnostic pop
 #endif
-    return *pBuffer == ' ' ? pBuffer+1 : pBuffer;
+    return OString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
 } // namespace

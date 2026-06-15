@@ -34,7 +34,7 @@ OUString convert(xmlChar const * string) {
 
 OString oconvert(xmlChar const * string)
 {
-    return reinterpret_cast<char const *>(string);
+    return OString(reinterpret_cast<char const *>(string));
 }
 
 }

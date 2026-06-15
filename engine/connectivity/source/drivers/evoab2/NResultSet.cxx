@@ -354,9 +354,9 @@ OString OEvoabVersionHelper::getUserName( EBook *pBook )
 {
     OString aName;
     if( isLDAP( pBook ) )
-        aName = e_source_get_property( e_book_get_source( pBook ), "binddn" );
+        aName = OString(e_source_get_property( e_book_get_source( pBook ), "binddn" ));
     else
-        aName = e_source_get_property( e_book_get_source( pBook ), "user" );
+        aName = OString(e_source_get_property( e_book_get_source( pBook ), "user" ));
     return aName;
 }
 

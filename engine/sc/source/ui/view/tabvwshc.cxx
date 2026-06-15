@@ -622,7 +622,7 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pFo
 
     bool bAllTypes = bSizes && bHidden && bFiltered && bGroups;
     bool bAllDims = bColumns && bRows;
-    OString aPayload = bAllDims ? "all" : bColumns ? "columns" : "rows";
+    OString aPayload = bAllDims ? "all"_ostr : bColumns ? "columns"_ostr : "rows"_ostr;
 
     if (!bAllTypes)
     {

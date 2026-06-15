@@ -2635,7 +2635,7 @@ void GtkSalFrame::updateWMClass()
     const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
                                                     SalGenericSystem::getFrameClassName();
     XClassHint* pClass = XAllocClassHint();
-    OString aResName = SalGenericSystem::getFrameResName();
+    OString aResName(SalGenericSystem::getFrameResName());
     pClass->res_name  = const_cast<char*>(aResName.getStr());
     pClass->res_class = const_cast<char*>(pResClass);
     Display *display = gdk_x11_display_get_xdisplay(getGdkDisplay());

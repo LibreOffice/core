@@ -180,29 +180,30 @@ char const* GraphicMimeTypeHelper::GetExtensionForConvertDataFormat(ConvertDataF
 static auto GetMediaMimes() -> std::map<OString, OString> const&
 {
     static std::map<OString, OString> const mimes = {
-        { "mp4", "video/mp4" },
-        { "ts", "video/MP2T" },
-        { "mpeg", "video/mpeg" },
-        { "mpg", "video/mpeg" },
-        { "mkv", "video/x-matroska" },
-        { "webm", "video/webm" },
-        { "ogv", "video/ogg" },
-        { "mov", "video/quicktime" },
-        { "wmv", "video/x-ms-wmv" },
-        { "avi", "video/x-msvideo" },
-        { "flv", "video/x-flv" },
-        { "m4a", "audio/mp4" },
-        { "aac", "audio/aac" },
-        { "mp3", "audio/mpeg" }, // https://bugs.chromium.org/p/chromium/issues/detail?id=227004
-        { "ogg", "audio/ogg" },
-        { "oga", "audio/ogg" },
-        { "opus", "audio/ogg" },
-        { "flac", "audio/flac" }, // missing at IANA?
+        { "mp4"_ostr, "video/mp4"_ostr },
+        { "ts"_ostr, "video/MP2T"_ostr },
+        { "mpeg"_ostr, "video/mpeg"_ostr },
+        { "mpg"_ostr, "video/mpeg"_ostr },
+        { "mkv"_ostr, "video/x-matroska"_ostr },
+        { "webm"_ostr, "video/webm"_ostr },
+        { "ogv"_ostr, "video/ogg"_ostr },
+        { "mov"_ostr, "video/quicktime"_ostr },
+        { "wmv"_ostr, "video/x-ms-wmv"_ostr },
+        { "avi"_ostr, "video/x-msvideo"_ostr },
+        { "flv"_ostr, "video/x-flv"_ostr },
+        { "m4a"_ostr, "audio/mp4"_ostr },
+        { "aac"_ostr, "audio/aac"_ostr },
+        { "mp3"_ostr,
+          "audio/mpeg"_ostr }, // https://bugs.chromium.org/p/chromium/issues/detail?id=227004
+        { "ogg"_ostr, "audio/ogg"_ostr },
+        { "oga"_ostr, "audio/ogg"_ostr },
+        { "opus"_ostr, "audio/ogg"_ostr },
+        { "flac"_ostr, "audio/flac"_ostr }, // missing at IANA?
         // note there is RFC 2631 but i got the impression that vnd.wave
         // requires specifying the codec in the container; also this page
         // says "Historic" whatever that means:
         // https://www.iana.org/assignments/wave-avi-codec-registry/wave-avi-codec-registry.xhtml
-        { "wav", "audio/x-wav" },
+        { "wav"_ostr, "audio/x-wav"_ostr },
     };
     return mimes;
 }

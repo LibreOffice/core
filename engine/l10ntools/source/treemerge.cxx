@@ -44,7 +44,7 @@ namespace
                     xmlGetProp(pCurrent, reinterpret_cast<const xmlChar*>("title"));
 
                 common::writePoEntry(
-                    "Treex"_ostr, rPOStream, pSource->name, helper::xmlStrToOString( pNodeName ),
+                    "Treex"_ostr, rPOStream, OString(pSource->name), helper::xmlStrToOString( pNodeName ),
                     helper::xmlStrToOString( pID ), OString(), OString(), helper::xmlStrToOString( pText ));
 
                 xmlFree( pID );

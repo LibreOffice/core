@@ -82,7 +82,7 @@ struct DBusObject {
 
         pObject->maBusName = maBusName;
         pObject->maPath = maPath;
-        pObject->maInterface = pInterface;
+        pObject->maInterface = OString(pInterface);
 
         return pObject;
     }

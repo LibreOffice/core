@@ -597,7 +597,7 @@ oslProcessError osl_psz_executeProcess(char *pszImageName,
         return osl_Process_E_NotFound;
     }
 
-    if (isForbidden(pszImageName, 0x80 /* execute */))
+    if (isForbidden(OString(pszImageName), 0x80 /* execute */))
         return osl_Process_E_NoPermission;
 
     Data.m_pszArgs[0] = strdup(pszImageName);

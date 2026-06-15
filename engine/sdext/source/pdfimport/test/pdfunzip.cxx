@@ -234,7 +234,7 @@ static int handleFile( const char* pInFile, const char* pOutFile, const char* pP
             fprintf( stdout, "have a %s PDF file\n", pPDFFile->isEncrypted() ? "encrypted" : "unencrypted" );
             if( pPassword )
                 fprintf( stdout, "password %s\n",
-                         pPDFFile->setupDecryptionData( pPassword ) ? "matches" : "does not match" );
+                         pPDFFile->setupDecryptionData( OString(pPassword) ) ? "matches" : "does not match" );
             nRet = pHdl( pInFile, pOutFile, pPDFFile );
         }
         else

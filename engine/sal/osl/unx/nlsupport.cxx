@@ -817,13 +817,13 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     if ( locale.isEmpty() )
     {
         /* simulate behavior of setlocale */
-        locale = getenv( "LC_ALL" );
+        locale = OString(getenv( "LC_ALL" ));
 
         if( locale.isEmpty() )
-            locale = getenv( "LC_CTYPE" );
+            locale = OString(getenv( "LC_CTYPE" ));
 
         if( locale.isEmpty() )
-            locale = getenv( "LANG" );
+            locale = OString(getenv( "LANG" ));
 
         if( locale.isEmpty() )
             locale = "C"_ostr;

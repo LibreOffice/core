@@ -1859,7 +1859,7 @@ void X11SalFrame::SetApplicationID( const OUString &rWMClass )
 void X11SalFrame::updateWMClass()
 {
     XClassHint* pClass = XAllocClassHint();
-    OString aResName = SalGenericSystem::getFrameResName();
+    OString aResName(SalGenericSystem::getFrameResName());
     pClass->res_name  = const_cast<char*>(aResName.getStr());
 
     OString aResClass = OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);

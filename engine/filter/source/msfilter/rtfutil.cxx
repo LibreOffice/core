@@ -113,7 +113,7 @@ OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
             *pStr += 39;
         nHex >>= 4;
     }
-    return pStr;
+    return OString(pStr);
 }
 
 /// Handles correct unicode and legacy export of a single character.

@@ -194,7 +194,7 @@ static oslFileError osl_psz_getVolumeInformation (
     if (!pInfo)
         return osl_File_E_INVAL;
 
-    if (isForbidden(pszDirectory, osl_File_OpenFlag_Read))
+    if (isForbidden(OString(pszDirectory), osl_File_OpenFlag_Read))
         return osl_File_E_ACCES;
 
     pInfo->uValidFields = 0;

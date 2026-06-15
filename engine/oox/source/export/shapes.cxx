@@ -2185,7 +2185,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteShapeTransformation( xShape, XML_a );
-    WritePresetShape( nRadius == 0 ? "rect" : "roundRect" );
+    WritePresetShape( nRadius == 0 ? "rect"_ostr : "roundRect"_ostr );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
     {

@@ -1369,7 +1369,7 @@ void SaneDlg::SaveState()
     };
     for(const char * pSaveOption : pSaveOptions)
     {
-        OString aOption = pSaveOption;
+        OString aOption(pSaveOption);
         int nOption = mrSane.GetOptionByName( pSaveOption );
         if( nOption > -1 )
         {

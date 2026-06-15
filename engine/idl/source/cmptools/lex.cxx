@@ -41,7 +41,7 @@ OString SvToken::GetTokenAsString() const
             aStr = aString;
             break;
         case SVTOKENTYPE::Bool:
-            aStr = bBool ? "TRUE" : "FALSE";
+            aStr = bBool ? "TRUE"_ostr : "FALSE"_ostr;
             break;
         case SVTOKENTYPE::Identifier:
             aStr = aString;

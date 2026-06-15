@@ -842,7 +842,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
             if (bDomain || bUser || bPass)
             {
                 OString sPrinterName(OUStringToOString(rPrintername, RTL_TEXTENCODING_UTF8));
-                OString sUser = cupsUser();
+                OString sUser(cupsUser());
                 RTSPWDialog aDialog(Application::GetDefDialogParent(), sPrinterName, sUser);
                 aDialog.SetDomainVisible(bDomain);
                 aDialog.SetUserVisible(bUser);
@@ -964,8 +964,8 @@ const char* CUPSManager::authenticateUser()
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
 
-    OString aUser = cupsUser();
-    OString aServer = cupsServer();
+    OString aUser(cupsUser());
+    OString aServer(cupsServer());
     OString aPassword;
     if (AuthenticateQuery(aServer, aUser, aPassword))
     {

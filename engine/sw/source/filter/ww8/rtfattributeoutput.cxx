@@ -5008,12 +5008,13 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         m_rExport.m_pParentFrame = nullptr;
         m_pFlyFrameSize = nullptr;
         std::vector<std::pair<OString, OString>> aFlyProperties{
-            { "shapeType", OString::number(ESCHER_ShpInst_PictureFrame) },
+            { "shapeType"_ostr, OString::number(ESCHER_ShpInst_PictureFrame) },
 
-            { "wzDescription", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjDescription(),
-                                                            m_rExport.GetCurrentEncoding()) },
-            { "wzName", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjTitle(),
-                                                     m_rExport.GetCurrentEncoding()) }
+            { "wzDescription"_ostr,
+              msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjDescription(),
+                                           m_rExport.GetCurrentEncoding()) },
+            { "wzName"_ostr, msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjTitle(),
+                                                          m_rExport.GetCurrentEncoding()) }
         };
 
         // If we have a wrap polygon, then handle that here.

@@ -704,7 +704,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
     // all some directories of the Java installation. This is necessary for
     // all versions below 1.5.1
-    options.emplace_back("abort", reinterpret_cast<void*>(abort_handler));
+    options.emplace_back("abort"_ostr, reinterpret_cast<void*>(abort_handler));
     bool hasStackSize = false;
 #ifdef UNX
     // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
@@ -733,7 +733,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         options.emplace_back(opt, arOptions[i].extraInfo);
     }
     if (addForceInterpreted) {
-        options.emplace_back("-Xint", nullptr);
+        options.emplace_back("-Xint"_ostr, nullptr);
     }
     if (!hasStackSize) {
 #if defined LINUX && (defined X86 || defined X86_64)

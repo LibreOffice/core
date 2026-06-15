@@ -364,7 +364,7 @@ bool Sane::GetOptionValue( int n, OString& rRet )
     if( nStatus == SANE_STATUS_GOOD )
     {
         bSuccess = true;
-        rRet = pRet.get();
+        rRet = OString(pRet.get());
     }
     return bSuccess;
 }

@@ -800,7 +800,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
 
     if( rWrt.m_nDefListLvl > 0 && !bForceDL )
     {
-        OString aTag = bDT ? OOO_STRING_SVTOOLS_HTML_dt : OOO_STRING_SVTOOLS_HTML_dd;
+        OString aTag = bDT ? OOO_STRING_SVTOOLS_HTML_dt ""_ostr : OOO_STRING_SVTOOLS_HTML_dd ""_ostr;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag) );
     }
 
@@ -3231,8 +3231,8 @@ static SwHTMLWriter& OutHTML_SwTextCharFormat( SwHTMLWriter& rWrt, const SfxPool
     }
     else
     {
-        OString aTag = !pFormatInfo->aToken.isEmpty() ? pFormatInfo->aToken.getStr()
-                                                      : OOO_STRING_SVTOOLS_HTML_span;
+        OString aTag = !pFormatInfo->aToken.isEmpty() ? pFormatInfo->aToken
+                                                      : OOO_STRING_SVTOOLS_HTML_span ""_ostr;
         HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
     }
 

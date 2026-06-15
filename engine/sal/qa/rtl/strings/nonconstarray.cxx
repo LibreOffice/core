@@ -21,7 +21,7 @@ namespace
 OString returnOString()
 {
     char buf[] = "foo\0bar";
-    return buf;
+    return OString(buf);
 }
 
 OStringBuffer returnOStringBuffer()
