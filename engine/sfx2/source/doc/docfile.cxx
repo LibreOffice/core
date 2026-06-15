@@ -5101,6 +5101,20 @@ bool SfxMedium::CheckCanGetLockfile() const
             // this is own lock from the same installation, it could remain because of crash
             bCanReload = true;
         }
+
+        // judge a local lock by whether a live process still holds it, rather
+        // than by identity alone
+        if (GetURLObject().GetProtocol() == INetProtocol::File)
+        {
+            svt::StaleLockDecision eDecision = svt::decideStaleLock(
+                aData[LockFileComponent::LOCALHOST],
+                aOwnData[LockFileComponent::LOCALHOST],
+                svt::probeLockFileLiveness(aLockFile.GetURL()));
+            if (eDecision == svt::StaleLockDecision::TakeOverSilently)
+                bCanReload = true;
+            else if (eDecision == svt::StaleLockDecision::LiveKeepLock)
+                bCanReload = false;
+        }
     }
     else if (nError1 == osl::FileBase::E_NOENT) // file doesn't exist
     {
