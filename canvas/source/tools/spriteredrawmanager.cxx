@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <ranges>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -27,7 +28,6 @@
 #include <sal/log.hxx>
 
 #include <spriteredrawmanager.hxx>
-#include <boost/range/adaptor/reversed.hpp>
 #include <utility>
 
 namespace canvas
@@ -437,7 +437,7 @@ namespace canvas
         // this object, is the owner of the sprites. After all, a
         // sprite without a canvas to render into makes not terribly
         // much sense.
-        for( const auto& rCurr : boost::adaptors::reverse(maSprites) )
+        for( const auto& rCurr : std::views::reverse(maSprites) )
             rCurr->dispose();
 
         maSprites.clear();
