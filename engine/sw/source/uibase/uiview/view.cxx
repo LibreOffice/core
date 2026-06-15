@@ -530,6 +530,16 @@ void SwView::SelectShell()
             bSetExtInpCntxt = true;
             eShellMode = ShellMode::DrawText;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
+            // While text inside a shape is edited the notebookbar still
+            // offers the Shape tab, and the Table tab when the shape sits in
+            // a cell. Push the matching shells so those tabs' commands work
+            // alongside the text editing shell.
+            if (comphelper::COKit::isActive())
+            {
+                if (bObjectInTable)
+                    rDispatcher.Push( *(new SwTableShell( *this )) );
+                rDispatcher.Push( *(new SwDrawShell( *this )) );
+            }
             m_pShell = new SwDrawTextShell( *this );
             rDispatcher.Push( *m_pShell );
         }

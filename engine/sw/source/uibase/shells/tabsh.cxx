@@ -142,19 +142,22 @@ static void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
     rSh.SetTableAttr( aSet );
 }
 
-/// Anchor position of the selected fly frame or drawing object, when that
-/// anchor sits inside a table. Returns nullptr for any other selection.
+/// Anchor position of the selected fly frame or drawing object, or of the
+/// shape whose text is being edited, when that anchor sits inside a table.
+/// Returns nullptr for any other selection.
 static const SwPosition* lcl_GetSelectedObjectAnchorInTable(SwWrtShell& rSh)
 {
     const SwFrameFormat* pObjFormat = nullptr;
+    SdrView* pDrawView = rSh.GetDrawView();
     if (rSh.IsFrameSelected())
         pObjFormat = rSh.GetFlyFrameFormat();
-    else if (const SdrView* pDrawView = rSh.GetDrawView())
-    {
-        const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-        if (rMarkList.GetMarkCount() > 0)
-            pObjFormat = ::FindFrameFormat(rMarkList.GetMark(0)->GetMarkedSdrObj());
-    }
+    else if (pDrawView && pDrawView->IsTextEdit())
+        // The text cursor is inside the shape's text, not in the cell that
+        // holds the shape, so resolve the shape being edited.
+        pObjFormat = ::FindFrameFormat(pDrawView->GetTextEditObject());
+    else if (pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount() > 0)
+        pObjFormat
+            = ::FindFrameFormat(pDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
 
     const SwPosition* pAnchor
         = pObjFormat ? pObjFormat->GetAnchor().GetContentAnchor() : nullptr;
