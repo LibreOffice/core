@@ -2048,6 +2048,11 @@ class BitmapTileManager {
 			);
 		if (bitmaps.length)
 			this.endTransactionHandleBitmaps(pendingDeltas, bitmaps);
+		else if (!bitmapPromises.length)
+			// No-bitmap transaction (null/empty delta readies a tile without
+			// producing a bitmap): still run the resume/callback/GC path so
+			// coherency-paused drawing resumes.
+			this.endTransactionHandleBitmaps([], []);
 		if (bitmapPromises.length)
 			Promise.all(bitmapPromises).then((bitmaps) => {
 				this.endTransactionHandleBitmaps(pendingDeltas, bitmaps);
