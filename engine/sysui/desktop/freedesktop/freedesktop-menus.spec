@@ -378,7 +378,6 @@ fi
 %attr(0755,root,root) /opt/%unixfilename
 %endif
 /usr/bin/*
-/usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-calc.desktop
 /usr/share/applications/%unixfilename-draw.desktop
 /usr/share/applications/%unixfilename-impress.desktop
