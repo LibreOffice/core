@@ -2631,6 +2631,7 @@ dbaccess/source/ui/inc/unoadmin.hxx
 dbaccess/source/ui/inc/unodatbr.hxx
 dbaccess/source/ui/inc/unosqlmessage.hxx
 dbaccess/source/ui/misc/DExport.cxx
+dbaccess/source/ui/misc/FieldDescriptions.cxx
 dbaccess/source/ui/misc/HtmlReader.cxx
 dbaccess/source/ui/misc/RowSetDrop.cxx
 dbaccess/source/ui/misc/RtfReader.cxx
@@ -11179,6 +11180,7 @@ sw/qa/extras/ww8import/ww8import.cxx
 sw/qa/extras/xsltimport/xsltimport.cxx
 sw/qa/inc/bordertest.hxx
 sw/qa/inc/swmodeltestbase.hxx
+sw/qa/uibase/uiview/uiview.cxx
 sw/qa/unit/sw-dialogs-test.cxx
 sw/qa/unit/sw-dialogs-test_2.cxx
 sw/source/core/SwNumberTree/SwNodeNum.cxx
