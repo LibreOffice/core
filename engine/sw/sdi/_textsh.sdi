@@ -346,6 +346,11 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_SECURITY_LABEL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     FN_INSERT_BREAK_DLG // status(final|play)
     [
         ExecMethod = Execute ;

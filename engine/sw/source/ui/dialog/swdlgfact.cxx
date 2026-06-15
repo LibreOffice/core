@@ -76,6 +76,7 @@
 #include <mailmrge.hxx>
 #include <mergetbl.hxx>
 #include <multmrk.hxx>
+#include <seclabeldlg.hxx>
 #include <num.hxx>
 #include <outline.hxx>
 #include <column.hxx>
@@ -1028,6 +1029,13 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(we
     using AbstractMultiTOXMarkDlg_Impl
         = vcl::AbstractDialogImpl_Sync<VclAbstractDialog, SwMultiTOXMarkDlg>;
     return VclPtr<AbstractMultiTOXMarkDlg_Impl>::Create(pParent, rTOXMgr);
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSecurityLabelDlg(weld::Window* pParent)
+{
+    using AbstractSecurityLabelDlg_Impl
+        = vcl::AbstractDialogImpl_Async<VclAbstractDialog, SwSecurityLabelDlg>;
+    return VclPtr<AbstractSecurityLabelDlg_Impl>::Create(pParent);
 }
 
 namespace

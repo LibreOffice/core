@@ -62,6 +62,9 @@ const allCalcDialogs = [
 const excludedCommonDialogs = [
     '.uno:AcceptTrackedChanges',
     '.uno:GotoPage',
+    // Writer-only dialog; .uno:SecurityLabel is not dispatched in calc, so
+    // it opens nothing here. Its a11y is exercised by the writer spec.
+    '.uno:SecurityLabel',
     '.uno:SpellingAndGrammarDialog',
     '.uno:SplitCell',
 ];

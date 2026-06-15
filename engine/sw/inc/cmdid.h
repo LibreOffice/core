@@ -557,6 +557,7 @@ class SwUINumRuleItem;
 
 #define FN_COLL_TYPE                (FN_EXTRA + 98)   /* type for GlobalDoc-Collection*/
 #define FN_COLL_ADD                 (FN_EXTRA + 99)
+#define FN_SECURITY_LABEL           (FN_EXTRA + 100) /* SPIF/STANAG security label */
 
 #define FN_COLL_TITLE               (FN_EXTRA2 + 1)  /*  area name or index title */
 #define FN_SHADOWCURSOR             (FN_EXTRA2 + 4)  /* enable/disable Shadow Cursor */

@@ -472,6 +472,11 @@ const allCommonDialogs = [
 	'.uno:InsertSymbol',
 	'.uno:RunMacro',
 	'.uno:SearchDialog',
+	// modules/swriter/ui/seclabeldialog.ui. The command is writer-only, so
+	// the calc and impress specs exclude it. With no SPIF policy provisioned
+	// (the a11y harness has none) the dialog opens with its no-policy notice
+	// and disabled inputs, which still exercises the .ui for coverage + a11y.
+	'.uno:SecurityLabel',
 	'.uno:SetDocumentProperties',
 	'.uno:SpellDialog',
 	'.uno:SpellingAndGrammarDialog',

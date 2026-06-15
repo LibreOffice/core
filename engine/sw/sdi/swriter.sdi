@@ -2781,6 +2781,23 @@ SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem SecurityLabel FN_SECURITY_LABEL
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem InsertCaptionDialog FN_INSERT_CAPTION
 ()
 [

@@ -15,6 +15,9 @@ const allImpressDialogs = [
 // 'common' dialogs that impress specifically does not support
 const excludedCommonDialogs = [
     '.uno:AcceptTrackedChanges',
+    // Writer-only dialog; .uno:SecurityLabel is not dispatched in impress, so
+    // it opens nothing here. Its a11y is exercised by the writer spec.
+    '.uno:SecurityLabel',
     '.uno:SpellingAndGrammarDialog', // does not open in impress, SpellDialog is the equivalent
     '.uno:StyleNewByExample', // command dispatches but does not surface a dialog in impress
 ];
