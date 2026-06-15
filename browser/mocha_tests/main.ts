@@ -47,5 +47,5 @@
 /// <reference path="./DomUtil.test.ts" />
 /// <reference path="./Shortcuts.test.ts" />
 /// <reference path="./VectorPrimitiveRenderer.test.ts" />
-/// <reference path="./NormalPoint.test.ts" />
+/// <reference path="./InternUtil.test.ts" />
 // NOTE: reference new tests here ...
