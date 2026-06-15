@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2025-07-25 00:19+0000\n"
-"Last-Translator: Gokay Satir <gokaysatir@gmail.com>\n"
+"PO-Revision-Date: 2026-06-15 10:02+0000\n"
+"Last-Translator: muysup <79565421+MuySup@users.noreply.github.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/collabora-online/"
-"ui/tr/>\n"
-"Language: \n"
+"collabora-ui/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -404,9 +404,8 @@ msgid "Signature Certificate"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:514
-#, fuzzy
 msgid "Signature Key"
-msgstr "İmza"
+msgstr "İmza Anahtarı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:515
 #, fuzzy
@@ -415,14 +414,13 @@ msgstr "İmza"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:516
 #: admin/src/integrator/AdminIntegratorSettings.ts:520
-#, fuzzy
 msgid "Provider"
-msgstr "Sağlayıcı:"
+msgstr "Sağlayıcı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:517
 #: admin/src/integrator/AdminIntegratorSettings.ts:521
 msgid "API Key"
-msgstr ""
+msgstr "API Anahtarı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:518
 #: admin/src/integrator/AdminIntegratorSettings.ts:523
