@@ -111,4 +111,70 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', func
 		cy.cGet('#namebox-input-dialog').should('have.value', 'Telephone number');
 		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
 	});
+
+	it('General tab hides the file location row in Online.', function() {
+		writerHelper.openFileProperties(this.win);
+
+		// Online only has a meaningless jail path and the file name is shown
+		// elsewhere, so the whole Location row (label, value and Open button)
+		// is hidden.
+		cy.cGet('#label8').should('not.be.visible');
+		cy.cGet('#showlocation').should('not.be.visible');
+		cy.cGet('#btnShowLocation').should('not.be.visible');
+
+		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
+	});
+
+	it('Statistics tab Update fills in the line count.', function() {
+		writerHelper.openFileProperties(this.win);
+
+		// The Writer statistics page must render as a JSDialog for its Update
+		// button to work.
+		cy.cGet('#writerstats').click();
+
+		// The line count is computed on demand, so it is empty until Update is
+		// pressed; pressing it must populate the value.
+		cy.cGet('#nolines').invoke('text').should('not.match', /[0-9]/);
+		cy.cGet('#update.ui-pushbutton-wrapper').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#nolines').invoke('text').should('match', /[0-9]/);
+
+		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
+	});
+
+	it('Can keep adding custom properties (Add button stays).', function() {
+		writerHelper.openFileProperties(this.win);
+
+		cy.cGet('#customprops').click();
+
+		// First property.
+		cy.cGet('#add.ui-pushbutton-wrapper').click();
+		cy.cGet('#namebox-input-dialog').should('be.visible').type('Prop1');
+
+		// Regression: the Add button used to disappear after the first add, so
+		// no further properties could be added.
+		cy.cGet('#add.ui-pushbutton-wrapper').should('be.visible');
+
+		// A second property can still be added -> two editable rows.
+		cy.cGet('#add.ui-pushbutton-wrapper').click();
+		cy.cGet('#properties .ui-combobox-content:visible').should('have.length', 2);
+		cy.cGet('#add.ui-pushbutton-wrapper').should('be.visible');
+
+		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
+	});
+
+	it('Duration edit button keeps its "..." label.', function() {
+		writerHelper.openFileProperties(this.win);
+
+		cy.cGet('#customprops').click();
+
+		cy.cGet('#add.ui-pushbutton-wrapper').click();
+		cy.cGet('#typebox-input').select('Duration');
+
+		// The button label is "..."; the ellipsis-stripping in _cleanText must
+		// not erase a label that is nothing but an ellipsis.
+		cy.cGet('#durationbutton-button').should('be.visible').and('have.text', '...');
+
+		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
+	});
 });
