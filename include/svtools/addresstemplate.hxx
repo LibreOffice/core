@@ -27,11 +27,11 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com :: sun :: star :: container { class XNameAccess; }
-namespace com :: sun :: star :: sdbc { class XDataSource; }
-namespace com :: sun :: star :: sdb { class XDatabaseContext; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
-namespace com :: sun :: star :: util { struct AliasProgrammaticPair; }
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::sdbc { class XDataSource; }
+namespace com::sun::star::sdb { class XDatabaseContext; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { struct AliasProgrammaticPair; }
 
 namespace weld { class Button; }
 namespace weld { class ComboBox; }

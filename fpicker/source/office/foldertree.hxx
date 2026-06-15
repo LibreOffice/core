@@ -14,7 +14,7 @@
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
 
-namespace com :: sun :: star :: ucb { class XCommandEnvironment; }
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;

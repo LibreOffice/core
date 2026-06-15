@@ -30,8 +30,8 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
-namespace com :: sun :: star :: awt { class XWindow; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::uno { class XComponentContext; }
 namespace weld { class DialogController; }
 
 

@@ -24,8 +24,8 @@
 #include <memory>
 
 
-namespace com :: sun :: star :: i18n { class XBreakIterator; }
-namespace com :: sun :: star :: uno { template <typename > class Reference; }
+namespace com::sun::star::i18n { class XBreakIterator; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class OutputDevice;
 namespace vcl { class Font; }

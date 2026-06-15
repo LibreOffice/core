@@ -28,8 +28,8 @@
 #include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
 
-namespace com :: sun :: star :: io { class XInputStream; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SvStream;

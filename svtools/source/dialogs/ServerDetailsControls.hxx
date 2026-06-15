@@ -17,7 +17,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/weld/Builder.hxx>
 
-namespace com :: sun :: star :: awt { class XWindow; }
+namespace com::sun::star::awt { class XWindow; }
 
 namespace weld {
     class Button;

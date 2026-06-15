@@ -21,7 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 
-namespace com :: sun :: star :: uno { class XInterface; }
+namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class ImageMap;

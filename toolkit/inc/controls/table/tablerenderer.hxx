@@ -25,7 +25,7 @@
 
 #include <memory>
 
-namespace com :: sun :: star :: uno { class Any; }
+namespace com::sun::star::uno { class Any; }
 namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 

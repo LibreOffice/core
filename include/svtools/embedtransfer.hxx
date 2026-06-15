@@ -24,7 +24,7 @@
 #include <vcl/graph.hxx>
 #include <optional>
 
-namespace com :: sun :: star :: embed { class XEmbeddedObject; }
+namespace com::sun::star::embed { class XEmbeddedObject; }
 
 class SVT_DLLPUBLIC SvEmbedTransferHelper final : public TransferableHelper
 {

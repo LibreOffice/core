@@ -34,11 +34,11 @@
 
 #include <unordered_map>
 
-namespace com :: sun :: star :: frame { class XDispatch; }
-namespace com :: sun :: star :: frame { class XFrame; }
-namespace com :: sun :: star :: frame { class XLayoutManager; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
-namespace com :: sun :: star :: util { class XURLTransformer; }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XLayoutManager; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XURLTransformer; }
 
 namespace weld { class Builder; }
 namespace weld { class Toolbar; }

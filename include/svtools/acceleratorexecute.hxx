@@ -27,12 +27,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::awt { struct KeyEvent; }
-namespace com :: sun :: star :: frame { class XDispatchProvider; }
-namespace com :: sun :: star :: frame { class XFrame; }
-namespace com :: sun :: star :: frame { class XModel; }
-namespace com :: sun :: star :: ui { class XAcceleratorConfiguration; }
-namespace com :: sun :: star :: uno { class XComponentContext; }
-namespace com :: sun :: star :: util { class XURLTransformer; }
+namespace com::sun::star::frame { class XDispatchProvider; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::ui { class XAcceleratorConfiguration; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XURLTransformer; }
 
 namespace vcl { class KeyCode; }
 

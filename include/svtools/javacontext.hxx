@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XCurrentContext.hpp>
 
 
-namespace com :: sun :: star :: task { class XInteractionHandler; }
+namespace com::sun::star::task { class XInteractionHandler; }
 
 namespace svt
 {

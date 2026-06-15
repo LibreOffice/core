@@ -29,7 +29,7 @@
 
 #include <sot/exchange.hxx>
 
-namespace com :: sun :: star :: frame { class XFrame; }
+namespace com::sun::star::frame { class XFrame; }
 
 namespace com::sun::star::uno {
     class XComponentContext;

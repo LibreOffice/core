@@ -26,8 +26,8 @@
 #include <rtl/ref.hxx>
 #include <vcl/dockwin.hxx>
 
-namespace com :: sun :: star :: frame { class XFrame; }
-namespace com :: sun :: star :: frame { struct FeatureStateEvent; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { struct FeatureStateEvent; }
 namespace svt { class FrameStatusListener; }
 namespace weld { class Builder; }
 namespace weld { class Container; }
