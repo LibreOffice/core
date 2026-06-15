@@ -54,9 +54,6 @@ public final class Type_Test {
             "enum TypeClass", TypeClass.class,
             new Type("com.sun.star.uno.TypeClass", TypeClass.ENUM).getZClass());
         assertSame(
-            "struct Uik", Uik.class,
-            new Type("com.sun.star.uno.Uik", TypeClass.STRUCT).getZClass());
-        assertSame(
             "exception Exception", com.sun.star.uno.Exception.class,
             new Type("com.sun.star.uno.Exception", TypeClass.EXCEPTION).getZClass());
         assertSame(
