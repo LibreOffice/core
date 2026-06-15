@@ -1672,6 +1672,9 @@ img.context-menu-icon {
 	border-radius: var(--border-radius);
 	vertical-align: top;
 	width: stretch;
+	/* keep the border/padding inside the width so a 100%-wide textarea lines up
+	   with single-line entries instead of overflowing its grid cell */
+	box-sizing: border-box;
 }
 
 /* buttons: btns.css */
@@ -3349,6 +3352,14 @@ kbd,
 #DocumentPropertiesDialog #customprops #CustomInfoPage > .jsdialog.ui-scrollwindow:not(.formulabar) {
 	height: 540px;
 	max-height: none;
+}
+
+/* Description tab: let the value column shrink as well as grow. A bare 1fr
+   track keeps its min-content size, so the multiline Comments field would
+   otherwise force the whole grid wider than the dialog and add a needless
+   horizontal scrollbar. */
+#DocumentPropertiesDialog #DescriptionInfoPage .ui-grid {
+	grid-template-columns: auto minmax(0, 1fr) !important;
 }
 
 #ServerAuditDialog #ServerAuditDialog-mainbox {

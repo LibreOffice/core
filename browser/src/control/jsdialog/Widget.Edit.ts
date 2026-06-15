@@ -93,7 +93,10 @@ class EditWidget {
 			edit.setAttribute('placeholder', data.placeholder);
 		}
 
-		if (data.widthInChars && data.widthInChars > 0) {
+		// hexpand means the entry should fill the available space, so don't cap
+		// it to its preferred character width (which is otherwise defaulted to 20
+		// by the desktop builder, leaving expanding entries stuck at ~half width).
+		if (data.widthInChars && data.widthInChars > 0 && !data.hexpand) {
 			var widthValue = data.widthInChars + 2 + 'ch';
 			edit.style.maxWidth = widthValue;
 			container.style.width = 'fit-content';
