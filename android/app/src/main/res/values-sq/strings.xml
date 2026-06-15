@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">Kjo kartelë është vetëm-lexim, ruajtja është e çaktivizuar.</string>
+    <string name="temp_file_saving_disabled">Ndarë me të tjerë nga aplikacioni burim si vetëm-lexim. Për të bërë ndryshime, përdorni “Përpunoni një kopje”.</string>
     <string name="storage_permission_required">Lypset leje depozitimi</string>
     <string name="failed_to_load_file">S’u arrit të përcaktohej kartela për ngarkim</string>
     <string name="loading">Po ngarkohet…</string>
