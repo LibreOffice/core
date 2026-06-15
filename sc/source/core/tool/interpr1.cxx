@@ -8892,6 +8892,11 @@ void ScInterpreter::ScTakeOrDrop(bool bTake)
                     nMinCol = nArgCols.value();
             }
         }
+        else if (!bTake)
+        {
+            PushIllegalArgument();
+            return;
+        }
     }
 
     SCSIZE nMinRow = 0;
@@ -8914,6 +8919,11 @@ void ScInterpreter::ScTakeOrDrop(bool bTake)
                 else
                     nMinRow = nArgRows.value();
             }
+        }
+        else if (!bTake)
+        {
+            PushIllegalArgument();
+            return;
         }
     }
 
