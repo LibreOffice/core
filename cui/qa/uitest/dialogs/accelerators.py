@@ -94,7 +94,7 @@ class Test(UITestCase):
 
             # Set a shortcut on the document scope
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog") as xDialog:
-                self.assign_key(xDialog, "Untitled 1", "F9", ".uno:OptionsSecurityDialog")
+                self.assign_key(xDialog, "Untitled 1", "F9", "Security Options")
 
             # Check that the key made it into the document config
             xDocAccelCfg = xComponent.getUIConfigurationManager().getShortCutManager()
@@ -195,7 +195,7 @@ class Test(UITestCase):
                 # Set a shortcut in the first document
                 self.assign_key(xDialog, "Untitled 1", "F7", "Spelling")
                 # Set a shortcut in the second document
-                self.assign_key(xDialog, "Untitled 2", "F7", ".uno:OptionsSecurityDialog")
+                self.assign_key(xDialog, "Untitled 2", "F7", "Security Options")
 
                 # Switch back to the first document and make sure the binding is still in the list
                 xAcceleratorPage = xDialog.getChild("AccelConfigPage")
