@@ -74,8 +74,6 @@ constexpr OUString slash_UNO_slash_ACTIVATOR
         = u"/UNO/ACTIVATOR"_ustr;
 constexpr OUString colon_old
         = u":old"_ustr;
-constexpr OUStringLiteral com_sun_star_registry_SimpleRegistry
-        = u"com.sun.star.registry.SimpleRegistry";
 constexpr OUString Registry
         = u"Registry"_ustr;
 
@@ -1558,7 +1556,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 
     Reference < XSimpleRegistry > xReg(
         rSMgr->createInstanceWithContext(
-            com_sun_star_registry_SimpleRegistry,   xCtx ),
+            u"com.sun.star.registry.SimpleRegistry"_ustr,   xCtx ),
         UNO_QUERY);
     OSL_ASSERT( xReg.is() );
     return xReg;
