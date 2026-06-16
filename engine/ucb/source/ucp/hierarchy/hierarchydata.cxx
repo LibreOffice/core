@@ -86,7 +86,6 @@ static void makeXMLName( std::u16string_view rIn, OUStringBuffer & rBuffer  )
 // HierarchyEntry Implementation.
 
 
-constexpr OUStringLiteral READ_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadAccess";
 constexpr OUString READWRITE_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadWriteAccess"_ustr;
 
 // describe path of cfg entry
@@ -993,7 +992,7 @@ HierarchyEntry::getRootReadAccess()
 
                     m_xRootReadAccess.set(
                             m_xConfigProvider->createInstanceWithArguments(
-                                READ_SERVICE_NAME,
+                                u"com.sun.star.ucb.HierarchyDataReadAccess"_ustr,
                                 aArguments ),
                             uno::UNO_QUERY );
                 }

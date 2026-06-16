@@ -1662,10 +1662,6 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                         Sequence< PropertyValue > aValues( nCount );
                         auto pValues = aValues.getArray();
 
-                        static constexpr OUStringLiteral aHandleName(u"/Handle");
-                        static constexpr OUStringLiteral aValueName(u"/Value");
-                        static constexpr OUStringLiteral aStateName(u"/State");
-
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
                             PropertyValue& rValue = pValues[ n ];
@@ -1680,7 +1676,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property handle
-                                OUString aHierName = aXMLName + aHandleName;
+                                OUString aHierName = aXMLName + u"/Handle"_ustr;
                                 Any aKeyValue
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -1700,7 +1696,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property value
-                                OUString aHierName = aXMLName + aValueName;
+                                OUString aHierName = aXMLName + u"/Value"_ustr;
                                 rValue.Value
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -1720,7 +1716,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             try
                             {
                                 // Obtain and set property state
-                                OUString aHierName = aXMLName +aStateName;
+                                OUString aHierName = aXMLName +u"/State"_ustr;
                                 Any aKeyValue
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
@@ -1973,10 +1969,6 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
 
                         if ( xHierNameAccess.is() )
                         {
-                            static constexpr OUStringLiteral aHandleName(u"/Handle");
-                            static constexpr OUStringLiteral aValueName(u"/Value");
-                            static constexpr OUStringLiteral aAttrName(u"/Attributes");
-
                             Property* pProps = aPropSeq.getArray();
 
                             for ( sal_uInt32 n = 0; n < nCount; ++n )
@@ -1993,7 +1985,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property handle
-                                    OUString aHierName = aXMLName + aHandleName;
+                                    OUString aHierName = aXMLName + u"/Handle"_ustr;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -2013,7 +2005,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property type
-                                    OUString aHierName = aXMLName + aValueName;
+                                    OUString aHierName = aXMLName + u"/Value"_ustr;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
@@ -2035,7 +2027,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property attributes
-                                    OUString aHierName = aXMLName + aAttrName;
+                                    OUString aHierName = aXMLName + u"/Attributes"_ustr;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
