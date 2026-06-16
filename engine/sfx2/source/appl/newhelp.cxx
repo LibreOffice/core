@@ -120,13 +120,10 @@ constexpr OUString PROPERTY_ANCHORREF = u"KeywordAnchorForRef"_ustr;
 constexpr OUString PROPERTY_TITLEREF = u"KeywordTitleForRef"_ustr;
 constexpr OUString PROPERTY_TITLE = u"Title"_ustr;
 constexpr OUString HELP_URL = u"vnd.sun.star.help://"_ustr;
-constexpr OUStringLiteral HELP_SEARCH_TAG = u"/?Query=";
 constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
 
-constexpr OUStringLiteral PACKAGE_SETUP = u"/org.openoffice.Setup";
 constexpr OUString PATH_OFFICE_FACTORIES = u"Office/Factories/"_ustr;
 constexpr OUString KEY_HELP_ON_OPEN = u"ooSetupFactoryHelpOnOpen"_ustr;
-constexpr OUStringLiteral KEY_UI_NAME = u"ooSetupFactoryUIName";
 
 namespace sfx2
 {
@@ -998,7 +995,7 @@ void SearchTabPage_Impl::Search()
     std::unique_ptr<weld::WaitObject> xWaitCursor(new weld::WaitObject(m_pIdxWin->GetFrameWeld()));
     ClearSearchResults();
     RememberSearchText( aSearchText );
-    OUStringBuffer aSearchURL(HELP_URL + aFactory + HELP_SEARCH_TAG);
+    OUStringBuffer aSearchURL(HELP_URL + aFactory + u"/?Query="_ustr);
     if (!m_xFullWordsCB->get_active())
         aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
     aSearchURL.append(aSearchText);
@@ -1695,7 +1692,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
     try
     {
         xConfiguration = ConfigurationHelper::openConfig(
-            xContext, PACKAGE_SETUP, EConfigurationModes::Standard );
+            xContext, u"/org.openoffice.Setup"_ustr, EConfigurationModes::Standard );
         if ( xConfiguration.is() )
         {
             Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, KEY_HELP_ON_OPEN );
@@ -1720,7 +1717,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
             OUString sTemp;
             try
             {
-                Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, KEY_UI_NAME );
+                Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, u"ooSetupFactoryUIName"_ustr );
                 aAny >>= sTemp;
             }
             catch( Exception const & )

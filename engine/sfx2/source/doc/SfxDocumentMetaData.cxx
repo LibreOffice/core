@@ -453,7 +453,6 @@ constexpr OUString s_stdMetaList[] {
     sDCRelation, // string*
 };
 
-constexpr OUStringLiteral s_nsXLink = u"http://www.w3.org/1999/xlink";
 constexpr OUString s_nsDC = u"http://purl.org/dc/elements/1.1/"_ustr;
 constexpr OUString s_nsODF = u"urn:oasis:names:tc:opendocument:xmlns:office:1.0"_ustr;
 constexpr OUString s_nsODFMeta = u"urn:oasis:names:tc:opendocument:xmlns:meta:1.0"_ustr;
@@ -487,7 +486,7 @@ OUString getNameSpace(const OUString& i_qname) noexcept
 {
     OUString ns;
     OUString n = getQualifier(i_qname).first;
-    if ( n == "xlink" ) ns = s_nsXLink;
+    if ( n == "xlink" ) ns = u"http://www.w3.org/1999/xlink"_ustr;
     if ( n == "dc" ) ns = s_nsDC;
     if ( n == "office" ) ns = s_nsODF;
     if ( n == "meta" ) ns = s_nsODFMeta;
@@ -1187,19 +1186,16 @@ void SfxDocumentMetaData::init(
                 }
             }
             if (!xRElem.is()) {
-                static constexpr OUStringLiteral sOfficeDocumentMeta = u"office:document-meta";
                 xRElem = i_xDoc->createElementNS(
-                    s_nsODF, sOfficeDocumentMeta);
+                    s_nsODF, u"office:document-meta"_ustr);
                 css::uno::Reference<css::xml::dom::XNode> xRNode(xRElem,
                     css::uno::UNO_QUERY_THROW);
                 i_xDoc->appendChild(xRNode);
             }
-            static constexpr OUStringLiteral sOfficeVersion = u"office:version";
-            xRElem->setAttributeNS(s_nsODF, sOfficeVersion, u"1.0"_ustr);
+            xRElem->setAttributeNS(s_nsODF, u"office:version"_ustr, u"1.0"_ustr);
             // does not exist, otherwise m_xParent would not be null
-            static constexpr OUStringLiteral sOfficeMeta = u"office:meta";
             css::uno::Reference<css::xml::dom::XNode> xParent (
-                i_xDoc->createElementNS(s_nsODF, sOfficeMeta),
+                i_xDoc->createElementNS(s_nsODF, u"office:meta"_ustr),
                 css::uno::UNO_QUERY_THROW);
             xRElem->appendChild(xParent);
             m_xParent = std::move(xParent);
@@ -1235,7 +1231,6 @@ void SfxDocumentMetaData::init(
     // initialize members corresponding to attributes from DOM nodes
     static constexpr OUString sMetaTemplate = u"meta:template"_ustr;
     static constexpr OUString sMetaAutoReload = u"meta:auto-reload"_ustr;
-    static constexpr OUStringLiteral sMetaHyperlinkBehaviour = u"meta:hyperlink-behaviour";
     m_TemplateName  = getMetaAttr(g, sMetaTemplate, u"xlink:title"_ustr);
     m_TemplateURL   = getMetaAttr(g, sMetaTemplate, u"xlink:href"_ustr);
     m_TemplateDate  =
@@ -1244,7 +1239,7 @@ void SfxDocumentMetaData::init(
     m_AutoloadSecs  =
         textToDuration(getMetaAttr(g, sMetaAutoReload, u"meta:delay"_ustr));
     m_DefaultTarget =
-        getMetaAttr(g, sMetaHyperlinkBehaviour, u"office:target-frame-name"_ustr);
+        getMetaAttr(g, u"meta:hyperlink-behaviour"_ustr, u"office:target-frame-name"_ustr);
 
 
     std::vector<css::uno::Reference<css::xml::dom::XNode> > & vec =

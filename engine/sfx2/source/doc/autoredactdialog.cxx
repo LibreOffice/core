@@ -24,8 +24,6 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-constexpr OUStringLiteral FILEDIALOG_FILTER_JSON = u"*.json";
-
 int TargetsTable::GetRowByTargetName(std::u16string_view sName)
 {
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
@@ -530,7 +528,7 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
 
     m_pFileDlg->SetTitle(rTitle);
     m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
-    m_pFileDlg->AddFilter(aFilterJsonStr, FILEDIALOG_FILTER_JSON);
+    m_pFileDlg->AddFilter(aFilterJsonStr, u"*.json"_ustr);
     m_pFileDlg->SetCurrentFilter(aFilterJsonStr);
 
     Link<sfx2::FileDialogHelper*, void> aDlgClosedLink

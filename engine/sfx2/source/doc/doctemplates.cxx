@@ -89,26 +89,17 @@
 #include <memory>
 #include <vector>
 
-constexpr OUStringLiteral SERVICENAME_TYPEDETECTION = u"com.sun.star.document.TypeDetection";
-
-constexpr OUStringLiteral TEMPLATE_ROOT_URL = u"vnd.sun.star.hier:/templates";
 constexpr OUString TITLE = u"Title"_ustr;
 constexpr OUString IS_FOLDER = u"IsFolder"_ustr;
 constexpr OUString IS_DOCUMENT = u"IsDocument"_ustr;
 constexpr OUString TARGET_URL = u"TargetURL"_ustr;
-constexpr OUStringLiteral TEMPLATE_VERSION = u"TemplateComponentVersion";
-constexpr OUStringLiteral TEMPLATE_VERSION_VALUE = u"2";
-constexpr OUStringLiteral TYPE_FOLDER = u"application/vnd.sun.star.hier-folder";
-constexpr OUStringLiteral TYPE_LINK = u"application/vnd.sun.star.hier-link";
 constexpr OUString TYPE_FSYS_FOLDER = u"application/vnd.sun.staroffice.fsys-folder"_ustr;
-constexpr OUStringLiteral TYPE_FSYS_FILE = u"application/vnd.sun.staroffice.fsys-file";
 
 constexpr OUString PROPERTY_DIRLIST = u"DirectoryList"_ustr;
 constexpr OUString PROPERTY_NEEDSUPDATE = u"NeedsUpdate"_ustr;
 constexpr OUString PROPERTY_TYPE = u"TypeDescription"_ustr;
 
 constexpr OUString TARGET_DIR_URL = u"TargetDirURL"_ustr;
-constexpr OUStringLiteral COMMAND_DELETE = u"delete";
 
 constexpr OUString STANDARD_FOLDER = u"standard"_ustr;
 
@@ -418,10 +409,10 @@ void SfxDocTplService::init_Impl()
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
-    maRootURL = TEMPLATE_ROOT_URL + "/" + LanguageTag::convertToBcp47(maLocale);
+    maRootURL = u"vnd.sun.star.hier:/templates"_ustr + "/" + LanguageTag::convertToBcp47(maLocale);
 
-    const OUString aTemplVersPropName( TEMPLATE_VERSION  );
-    const OUString aTemplVers( TEMPLATE_VERSION_VALUE  );
+    const OUString aTemplVersPropName( u"TemplateComponentVersion"_ustr  );
+    const OUString aTemplVers( u"2"_ustr  );
     if ( Content::create( maRootURL, maCmdEnv, comphelper::getProcessComponentContext(), maRootContent ) )
     {
         uno::Any aValue;
@@ -454,7 +445,7 @@ void SfxDocTplService::init_Impl()
             TOOLS_WARN_EXCEPTION("sfx.doc", "SfxDocTplService_Impl::init_Impl: cannot create DocumentProperties service:");
         }
 
-        mxType.set( mxContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, mxContext), UNO_QUERY );
+        mxType.set( mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, mxContext), UNO_QUERY );
 
         getDirList();
         readFolderList();
@@ -717,7 +708,7 @@ bool SfxDocTplService::addEntry( Content& rParentFolder,
 
         try
         {
-            rParentFolder.insertNewContent( TYPE_LINK, { TITLE, IS_FOLDER, TARGET_URL }, aValues, aLink );
+            rParentFolder.insertNewContent( u"application/vnd.sun.star.hier-link"_ustr, { TITLE, IS_FOLDER, TARGET_URL }, aValues, aLink );
             setProperty( aLink, PROPERTY_TYPE, Any( rType ) );
             bAddedEntry = true;
         }
@@ -759,7 +750,7 @@ bool SfxDocTplService::createFolder( const OUString& rNewFolderURL,
             if ( bFsysFolder )
                 aType = TYPE_FSYS_FOLDER;
             else
-                aType = TYPE_FOLDER;
+                aType = u"application/vnd.sun.star.hier-folder"_ustr;
 
             aParent.insertNewContent( aType, { TITLE, IS_FOLDER }, aValues, rNewFolder );
             bCreatedFolder = true;
@@ -865,7 +856,7 @@ OUString SfxDocTplService::CreateNewUniqueFileWithPrefix( std::u16string_view aP
             try
             {
                 Sequence< Any > aValues{ Any(aTryName), Any(true) };
-                bCreated = aParent.insertNewContent( TYPE_FSYS_FILE, { TITLE, IS_DOCUMENT }, aValues, aNewFile );
+                bCreated = aParent.insertNewContent( u"application/vnd.sun.staroffice.fsys-file"_ustr, { TITLE, IS_DOCUMENT }, aValues, aNewFile );
             }
             catch( ucb::NameClashException& )
             {
@@ -902,7 +893,7 @@ bool SfxDocTplService::removeContent( Content& rContent )
     {
         Any aArg( true );
 
-        rContent.executeCommand( COMMAND_DELETE, aArg );
+        rContent.executeCommand( u"delete"_ustr, aArg );
         bRemoved = true;
     }
     catch ( RuntimeException& ) {}

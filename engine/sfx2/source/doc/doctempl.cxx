@@ -84,8 +84,6 @@ using namespace ::ucbhelper;
 constexpr OUString TITLE = u"Title"_ustr;
 constexpr OUString TARGET_URL = u"TargetURL"_ustr;
 
-constexpr OUStringLiteral COMMAND_TRANSFER = u"transfer";
-
 namespace {
 
 class RegionData_Impl;
@@ -774,7 +772,7 @@ bool SfxDocumentTemplates::CopyTo
         aTransferInfo.NameClash = NameClash::RENAME;
 
         Any aArg( aTransferInfo );
-        aTarget.executeCommand( COMMAND_TRANSFER, aArg );
+        aTarget.executeCommand( u"transfer"_ustr, aArg );
     }
     catch ( ContentCreationException& )
     { return false; }

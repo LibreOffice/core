@@ -147,15 +147,11 @@ namespace
 
 static std::optional<OUString> GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
-    static constexpr OUStringLiteral aSD_EXPORT_IDENTIFIER(u"SdExportLastFilter");
-    static constexpr OUStringLiteral aSI_EXPORT_IDENTIFIER(u"SiExportLastFilter");
-    static constexpr OUStringLiteral aSW_EXPORT_IDENTIFIER(u"SwExportLastFilter");
-
     switch( _eContext )
     {
-        case FileDialogHelper::DrawExport: return aSD_EXPORT_IDENTIFIER;
-        case FileDialogHelper::ImpressExport: return aSI_EXPORT_IDENTIFIER;
-        case FileDialogHelper::WriterExport: return aSW_EXPORT_IDENTIFIER;
+        case FileDialogHelper::DrawExport: return u"SdExportLastFilter"_ustr;
+        case FileDialogHelper::ImpressExport: return u"SiExportLastFilter"_ustr;
+        case FileDialogHelper::WriterExport: return u"SwExportLastFilter"_ustr;
         default: break;
     }
 
@@ -1996,7 +1992,6 @@ void FileDialogHelper_Impl::addGraphicFilter()
     }
 }
 
-constexpr OUStringLiteral GRF_CONFIG_STR = u"   ";
 constexpr OUString STD_CONFIG_STR = u"1 "_ustr;
 
 static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, std::u16string_view rStr)
@@ -2090,7 +2085,7 @@ void FileDialogHelper_Impl::saveConfig()
             // tdf#61358 - remember the last "insert as link" state
             bool bLink = false;
             xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
-            OUString aUserData(GRF_CONFIG_STR);
+            OUString aUserData(u"   "_ustr);
             SetToken(aUserData, 0, ' ', OUString::number(static_cast<sal_Int32>(bLink)));
 
             bool bValue = false;

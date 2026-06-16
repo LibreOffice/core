@@ -861,14 +861,6 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
 
 }
 
-// add <noscript> meta for browsers without javascript
-
-constexpr OUStringLiteral SHTML1 = u"<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">";
-constexpr OUStringLiteral SHTML2 = u"<noscript><meta http-equiv=\"refresh\" content=\"0; url='";
-constexpr OUStringLiteral SHTML3 = u"/noscript.html'\"></noscript><meta http-equiv=\"refresh\" content=\"1; url='";
-constexpr OUStringLiteral SHTML4 = u"'\"><script type=\"text/javascript\"> window.location.href = \"";
-constexpr OUStringLiteral SHTML5 = u"\";</script><title>Help Page Redirection</title></head><body></body></html>";
-
 // use a tempfile since e.g. xdg-open doesn't support URL-parameters with file:// URLs
 static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogParent)
 {
@@ -886,20 +878,19 @@ static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogPare
 
     // Get a html tempfile (for the flatpak case, create it in XDG_CACHE_HOME instead of /tmp for
     // technical reasons, so that it can be accessed by the browser running outside the sandbox):
-    static constexpr OUStringLiteral aExtension(u".html");
     OUString * parent = nullptr;
     if (flatpak::isFlatpak() && !flatpak::createTemporaryHtmlDirectory(&parent)) {
         return false;
     }
-    ::utl::TempFileNamed aTempFile(u"NewHelp", true, aExtension, parent, false );
+    ::utl::TempFileNamed aTempFile(u"NewHelp", true, u".html", parent, false );
 
     SvStream* pStream = aTempFile.GetStream(StreamMode::WRITE);
     pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
 
-    OUString aTempStr = SHTML1 + SHTML2 +
-        aBaseInstallPath + "/" + HelpLocaleString() + SHTML3 +
-        aHelpLink + SHTML4 +
-        aHelpLink + SHTML5;
+    OUString aTempStr = u"<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">"_ustr + u"<noscript><meta http-equiv=\"refresh\" content=\"0; url='"_ustr +
+        aBaseInstallPath + "/" + HelpLocaleString() + u"/noscript.html'\"></noscript><meta http-equiv=\"refresh\" content=\"1; url='"_ustr +
+        aHelpLink + u"'\"><script type=\"text/javascript\"> window.location.href = \""_ustr +
+        aHelpLink + u"\";</script><title>Help Page Redirection</title></head><body></body></html>"_ustr;
 
     pStream->WriteUnicodeOrByteText(aTempStr);
 

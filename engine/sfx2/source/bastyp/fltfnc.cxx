@@ -571,8 +571,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const css:
     if( !xServiceManager )
         return nullptr;
 
-    static constexpr OUStringLiteral sTypeDetection = u"com.sun.star.document.TypeDetection";
-    uno::Reference< container::XContainerQuery > xTypeCFG( xServiceManager->createInstance( sTypeDetection ), uno::UNO_QUERY );
+    uno::Reference< container::XContainerQuery > xTypeCFG( xServiceManager->createInstance( u"com.sun.star.document.TypeDetection"_ustr ), uno::UNO_QUERY );
     if ( !xTypeCFG )
         return nullptr;
 
@@ -581,16 +580,13 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const css:
     uno::Sequence<beans::PropertyValue> aProps;
     while ( xEnum->hasMoreElements() )
     {
-        static constexpr OUStringLiteral sPreferredFilter = u"PreferredFilter";
-        static constexpr OUStringLiteral sName = u"Name";
-
         xEnum->nextElement() >>= aProps;
         OUString aValue, aName;
         for( const auto & rPropVal : aProps)
         {
-            if (rPropVal.Name == sPreferredFilter)
+            if (rPropVal.Name == u"PreferredFilter"_ustr)
                 rPropVal.Value >>= aValue;
-            else if (rPropVal.Name == sName)
+            else if (rPropVal.Name == u"Name"_ustr)
                 rPropVal.Value >>= aName;
         }
 
@@ -751,10 +747,8 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4FilterName( const O
         uno::Reference< container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() )
         {
-            static constexpr OUStringLiteral sFilterFactory = u"com.sun.star.document.FilterFactory";
-            static constexpr OUStringLiteral sTypeDetection = u"com.sun.star.document.TypeDetection";
-            xFilterCFG.set( xServiceManager->createInstance(  sFilterFactory ), uno::UNO_QUERY );
-            xTypeCFG.set( xServiceManager->createInstance(  sTypeDetection ), uno::UNO_QUERY );
+            xFilterCFG.set( xServiceManager->createInstance(  u"com.sun.star.document.FilterFactory"_ustr ), uno::UNO_QUERY );
+            xTypeCFG.set( xServiceManager->createInstance(  u"com.sun.star.document.TypeDetection"_ustr ), uno::UNO_QUERY );
         }
 
         if( xFilterCFG.is() && xTypeCFG.is() )

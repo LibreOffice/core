@@ -370,12 +370,10 @@ namespace sfx2
                     bHasMacroLib = false;
                 else
                 {
-                    static constexpr OUStringLiteral aStdLibName( u"Standard" );
-                    static constexpr OUStringLiteral aVBAProject( u"VBAProject" );
                     const Sequence< OUString > aElements = xContainer->getElementNames();
                     for( const OUString& aElement : aElements )
                     {
-                        if( aElement == aStdLibName || aElement == aVBAProject )
+                        if( aElement == u"Standard"_ustr || aElement == u"VBAProject"_ustr )
                         {
                             Reference < XNameAccess > xLib;
                             Any aAny = xContainer->getByName( aElement );

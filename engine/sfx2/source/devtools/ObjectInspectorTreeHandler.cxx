@@ -52,9 +52,6 @@ using namespace css;
 
 namespace
 {
-constexpr OUStringLiteral constTypeDescriptionManagerSingletonName
-    = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
-
 OUString enumValueToEnumName(uno::Any const& aValue,
                              uno::Reference<uno::XComponentContext> const& xContext)
 {
@@ -63,7 +60,8 @@ OUString enumValueToEnumName(uno::Any const& aValue,
         return OUString();
 
     uno::Reference<container::XHierarchicalNameAccess> xManager;
-    xManager.set(xContext->getValueByName(constTypeDescriptionManagerSingletonName),
+    xManager.set(xContext->getValueByName(
+                     u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
                  uno::UNO_QUERY);
 
     uno::Reference<reflection::XEnumTypeDescription> xTypeDescription;
