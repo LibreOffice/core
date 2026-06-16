@@ -74,8 +74,6 @@ using namespace ::comphelper;
 using ::svt::SortingData_Impl;
 using ::svt::FolderDescriptor;
 
-constexpr OUStringLiteral ALL_FILES_FILTER = u"*.*";
-
 #define COLUMN_TITLE        1
 #define COLUMN_TYPE         2
 #define COLUMN_SIZE         3
@@ -1291,7 +1289,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
 void SvtFileView_Impl::FilterFolderContent_Impl( std::u16string_view rFilter )
 {
-    if ( rFilter.empty() || ( rFilter == ALL_FILES_FILTER ) )
+    if ( rFilter.empty() || ( rFilter == u"*.*" ) )
         // when replacing names, there is always something to filter (no view of ".nametranslation.table")
         return;
 
