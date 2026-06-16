@@ -2858,7 +2858,7 @@ desktop/unx/source/file_image.h
 desktop/unx/source/file_image_unx.c
 desktop/unx/source/pagein.c
 desktop/unx/source/splashx.c
-desktop/unx/source/start.c
+desktop/unx/source/start.cxx
 desktop/win32/source/applauncher/launcher.cxx
 desktop/win32/source/loader.cxx
 desktop/win32/source/loader.hxx

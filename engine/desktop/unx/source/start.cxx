@@ -23,11 +23,11 @@
 #include <string.h>
 #include <errno.h>
 
+#include <comphelper/hash.hxx>
 #include <desktop/exithelper.h>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/bootstrap.h>
-#include <rtl/digest.h>
 #include <rtl/process.h>
 #include <rtl/ustrbuf.h>
 #include <sal/main.h>
@@ -42,7 +42,7 @@
 /* Easier conversions: rtl_uString to rtl_String */
 static rtl_String *ustr_to_str(rtl_uString *pStr)
 {
-    rtl_String *pOut = NULL;
+    rtl_String *pOut = nullptr;
 
     rtl_uString2String(&pOut, rtl_uString_getStr(pStr),
             rtl_uString_getLength(pStr), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
@@ -53,17 +53,21 @@ static rtl_String *ustr_to_str(rtl_uString *pStr)
 /* Easier conversions: char * to rtl_uString */
 static rtl_uString *charp_to_ustr(const char *pStr)
 {
-    rtl_uString *pOut = NULL;
+    rtl_uString *pOut = nullptr;
 
     rtl_string2UString(&pOut, pStr, strlen(pStr), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
 
     return pOut;
 }
 
+namespace {
+
 typedef struct {
     int status_fd;
     oslProcess child;
 } ChildInfo;
+
+} // namespace
 
 static int
 child_info_get_status_fd(ChildInfo const *info)
@@ -79,16 +83,16 @@ child_info_destroy(ChildInfo *info)
     free (info);
 }
 
-static ChildInfo * child_spawn(Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus)
+static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
 {
-    rtl_uString *pApp = NULL, *pTmp = NULL;
+    rtl_uString *pApp = nullptr, *pTmp = nullptr;
     rtl_uString **ppArgs;
     sal_uInt32 nArgs, i;
     ChildInfo *info;
     int status_pipe[2];
     oslProcessError nError;
 
-    info = calloc (1, sizeof (ChildInfo));
+    info = static_cast<ChildInfo*>(calloc (1, sizeof (ChildInfo)));
 
     /* create pipe */
     if (pipe(status_pipe) < 0)
@@ -104,11 +108,11 @@ static ChildInfo * child_spawn(Args *args, sal_Bool bAllArgs, sal_Bool bWithStat
     rtl_uString_newFromAscii(&pTmp, "soffice.bin");
     rtl_uString_newConcat(&pApp, pApp, pTmp);
     rtl_uString_release(pTmp);
-    pTmp = NULL;
+    pTmp = nullptr;
 
     /* copy args */
     nArgs = bAllArgs ? args->nArgsTotal : args->nArgsEnv;
-    ppArgs = (rtl_uString **)calloc(nArgs + 1, sizeof(rtl_uString*));
+    ppArgs = static_cast<rtl_uString **>(calloc(nArgs + 1, sizeof(rtl_uString*)));
     for (i = 0; i < nArgs; ++i)
         ppArgs[i] = args->ppArgs[i];
 
@@ -126,9 +130,9 @@ static ChildInfo * child_spawn(Args *args, sal_Bool bAllArgs, sal_Bool bWithStat
     /* start the main process */
     nError = osl_executeProcess(pApp, ppArgs, nArgs,
                                 osl_Process_NORMAL,
-                                NULL,
-                                NULL,
-                                NULL, 0,
+                                nullptr,
+                                nullptr,
+                                nullptr, 0,
                                 &info->child );
 
     if (pTmp)
@@ -148,7 +152,7 @@ static ChildInfo * child_spawn(Args *args, sal_Bool bAllArgs, sal_Bool bWithStat
     return info;
 }
 
-static sal_Bool child_exited_wait(ChildInfo *info, sal_Bool bShortWait)
+static bool child_exited_wait(ChildInfo *info, bool bShortWait)
 {
     TimeValue t = { 0, 250 /* ms */ * 1000 * 1000 };
     if (!bShortWait)
@@ -173,7 +177,11 @@ static int child_get_exit_code(ChildInfo *info)
     return inf.Code;
 }
 
+namespace {
+
 typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
+
+} // namespace
 
 /* Path of the application, with trailing slash. */
 static rtl_uString *get_app_path(const char *pAppExec)
@@ -194,7 +202,7 @@ static rtl_uString *get_app_path(const char *pAppExec)
     len = rtl_uString_getLength(pResult);
     if (len > 0 && rtl_uString_getStr(pResult)[len - 1] != '/')
     {
-        rtl_uString *pSlash = NULL;
+        rtl_uString *pSlash = nullptr;
         rtl_uString_newFromAscii(&pSlash, "/");
         rtl_uString_newConcat(&pResult, pResult, pSlash);
         rtl_uString_release(pSlash);
@@ -206,49 +214,33 @@ static rtl_uString *get_app_path(const char *pAppExec)
 /* Compute the OOo md5 hash from 'pText' */
 static rtl_uString *get_md5hash(rtl_uString *pText)
 {
-    rtl_uString *pResult = NULL;
+    rtl_uString *pResult = nullptr;
     sal_Int32 nCapacity = 100;
-    unsigned char *pData = NULL;
+    unsigned char *pData = nullptr;
     sal_uInt32 nSize = 0;
-    rtlDigest digest;
-    sal_uInt32 md5_key_len = 0;
-    sal_uInt8* md5_buf = NULL;
-    sal_uInt32 i = 0;
 
     if ( !pText )
-        return NULL;
+        return nullptr;
 
-    pData = (unsigned char *)rtl_uString_getStr(pText);
+    pData = reinterpret_cast<unsigned char *>(rtl_uString_getStr(pText));
     nSize = rtl_uString_getLength(pText) * sizeof(sal_Unicode);
     if (!pData)
-        return NULL;
+        return nullptr;
 
-    digest = rtl_digest_create(rtl_Digest_AlgorithmMD5);
-    if (!digest)
-        return NULL;
-
-    md5_key_len = rtl_digest_queryLength(digest);
-    md5_buf = (sal_uInt8 *)calloc(md5_key_len, sizeof(sal_uInt8));
-
-    rtl_digest_init(digest, pData , nSize);
-    rtl_digest_update(digest, pData, nSize);
-    rtl_digest_get(digest, md5_buf, md5_key_len);
-    rtl_digest_destroy(digest);
+    const std::vector<unsigned char> md5_buf =
+        comphelper::Hash::calculateHash(pData, nSize, comphelper::HashType::MD5);
 
     /* create hex-value string from the MD5 value to keep
        the string size minimal */
     rtl_uString_new_WithLength(&pResult, nCapacity);
-    for (; i < md5_key_len; ++i)
+    for (unsigned char b : md5_buf)
     {
         char val[3];
-        snprintf(val, 3, "%x", md5_buf[i]); /* sic! we ignore some of the 0's */
+        snprintf(val, 3, "%x", b); /* sic! we ignore some of the 0's */
 
         rtl_uStringbuffer_insert_ascii(&pResult, &nCapacity, rtl_uString_getLength(pResult),
                 val, strlen(val));
     }
-
-    /* cleanup */
-    free(md5_buf);
 
     return pResult;
 }
@@ -256,10 +248,10 @@ static rtl_uString *get_md5hash(rtl_uString *pText)
 /* Construct the pipe name */
 static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
 {
-    rtl_uString *pPath = NULL, *pTmp = NULL, *pUserInstallation = NULL;
-    rtl_uString *pResult = NULL, *pBasePath = NULL, *pAbsUserInstallation = NULL;
+    rtl_uString *pPath = nullptr, *pTmp = nullptr, *pUserInstallation = nullptr;
+    rtl_uString *pResult = nullptr, *pBasePath = nullptr, *pAbsUserInstallation = nullptr;
     rtlBootstrapHandle handle;
-    rtl_uString *pMd5hash = NULL;
+    rtl_uString *pMd5hash = nullptr;
     sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
 
     /* setup bootstrap filename */
@@ -273,7 +265,7 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
     handle = rtl_bootstrap_args_open(pPath);
 
     rtl_uString_newFromAscii(&pTmp, "UserInstallation");
-    rtl_bootstrap_get_from_handle(handle, pTmp, &pUserInstallation, NULL);
+    rtl_bootstrap_get_from_handle(handle, pTmp, &pUserInstallation, nullptr);
 
     rtl_bootstrap_args_close(handle);
 
@@ -304,7 +296,7 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
     rtl_uString_newFromAscii(&pTmp, "/OSL_PIPE_");
     rtl_uString_newConcat(&pResult, pResult, pTmp);
 
-    rtl_ustr_valueOfInt32(pUnicode, (int)getuid(), 10);
+    rtl_ustr_valueOfInt32(pUnicode, static_cast<int>(getuid()), 10);
     rtl_uString_newFromStr(&pTmp, pUnicode);
     rtl_uString_newConcat(&pResult, pResult, pTmp);
 
@@ -354,7 +346,7 @@ static int connect_pipe(rtl_uString *pPipePath)
     len = sizeof(addr);
 #endif
 
-    if (connect(fd, (struct sockaddr *)&addr, len) < 0)
+    if (connect(fd, reinterpret_cast<struct sockaddr *>(&addr), len) < 0)
     {
         close(fd);
         fd = -1;
@@ -365,7 +357,7 @@ static int connect_pipe(rtl_uString *pPipePath)
 /* Escape: "," -> "\\,", "\0" -> "\\0", "\\" -> "\\\\" */
 static rtl_uString *escape_path(rtl_uString const *pToEscape)
 {
-    rtl_uString *pBuffer = NULL;
+    rtl_uString *pBuffer = nullptr;
     sal_Int32 nCapacity = 1000;
     sal_Int32 i = 0;
     sal_Int32 nEscapeLength = rtl_uString_getLength(pToEscape);
@@ -403,12 +395,12 @@ static rtl_uString *escape_path(rtl_uString const *pToEscape)
 }
 
 /* Send args to the LO instance (using the 'fd' file descriptor) */
-static sal_Bool send_args(int fd, rtl_uString const *pCwdPath)
+static bool send_args(int fd, rtl_uString const *pCwdPath)
 {
-    rtl_uString *pBuffer = NULL, *pTmp = NULL;
+    rtl_uString *pBuffer = nullptr, *pTmp = nullptr;
     sal_Int32 nCapacity = 1000;
-    rtl_String *pOut = NULL;
-    sal_Bool bResult;
+    rtl_String *pOut = nullptr;
+    bool bResult;
     size_t nLen;
     rtl_uString *pEscapedCwdPath = escape_path(pCwdPath);
     sal_uInt32 nArg = 0;
@@ -441,7 +433,7 @@ static sal_Bool send_args(int fd, rtl_uString const *pCwdPath)
 
     for (nArg = 0; nArg < nArgCount; ++nArg)
     {
-        rtl_uString *pEscapedTmp = NULL;
+        rtl_uString *pEscapedTmp = nullptr;
         rtl_uStringbuffer_insert_ascii(&pBuffer, &nCapacity,
                 rtl_uString_getLength(pBuffer),
                 ",", 1);
@@ -470,7 +462,7 @@ static sal_Bool send_args(int fd, rtl_uString const *pCwdPath)
 
     nLen = rtl_string_getLength(pOut) + 1;
     ssize_t n = write(fd, rtl_string_getStr(pOut), nLen);
-    bResult = (n >= 0 && (size_t) n == nLen);
+    bResult = (n >= 0 && static_cast<size_t>(n) == nLen);
 
     if ( bResult )
     {
@@ -581,7 +573,7 @@ static void exec_pagein (Args *args)
 
 static void extend_library_path(const char *new_element)
 {
-    rtl_uString *pEnvName=NULL, *pOrigEnvVar=NULL, *pNewEnvVar=NULL;
+    rtl_uString *pEnvName=nullptr, *pOrigEnvVar=nullptr, *pNewEnvVar=nullptr;
 
     rtl_uString_newFromAscii(&pEnvName, "LD_LIBRARY_PATH");
     rtl_string2UString(&pNewEnvVar, new_element, strlen(new_element), RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
@@ -589,7 +581,7 @@ static void extend_library_path(const char *new_element)
     osl_getEnvironment(pEnvName, &pOrigEnvVar);
     if (pOrigEnvVar && pOrigEnvVar->length)
     {
-        rtl_uString *pDelim = NULL;
+        rtl_uString *pDelim = nullptr;
         rtl_uString_newFromAscii(&pDelim, ":");
         rtl_uString_newConcat(&pNewEnvVar, pNewEnvVar, pDelim);
         rtl_uString_newConcat(&pNewEnvVar, pNewEnvVar, pOrigEnvVar);
@@ -613,20 +605,20 @@ static void exec_javaldx(Args *args)
     rtl_uString **ppArgs;
     rtl_uString *pTmp, *pTmp2;
 
-    oslProcess javaldx = NULL;
-    oslFileHandle fileOut = NULL;
+    oslProcess javaldx = nullptr;
+    oslFileHandle fileOut = nullptr;
     oslProcessError err;
 
-    ppArgs = (rtl_uString **)calloc(args->nArgsEnv + 2, sizeof(rtl_uString*));
+    ppArgs = static_cast<rtl_uString **>(calloc(args->nArgsEnv + 2, sizeof(rtl_uString*)));
 
     for (nArgs = 0; nArgs < args->nArgsEnv; ++nArgs)
         ppArgs[nArgs] = args->ppArgs[nArgs];
 
     /* Use absolute path to redirectrc */
-    pTmp = NULL;
+    pTmp = nullptr;
     rtl_uString_newFromAscii(&pTmp, "-env:INIFILENAME=vnd.sun.star.pathname:");
     rtl_uString_newConcat(&pTmp, pTmp, args->pAppPath);
-    pTmp2 = NULL;
+    pTmp2 = nullptr;
     rtl_uString_newFromAscii(&pTmp2, "redirectrc");
     rtl_uString_newConcat(&pTmp, pTmp, pTmp2);
     ppArgs[nArgs] = pTmp;
@@ -634,23 +626,23 @@ static void exec_javaldx(Args *args)
     nArgs++;
 
     /* And also to javaldx */
-    pApp = NULL;
+    pApp = nullptr;
     rtl_uString_newFromAscii(&pApp, "file://");
     rtl_uString_newConcat(&pApp, pApp, args->pAppPath);
-    pTmp = NULL;
+    pTmp = nullptr;
     rtl_uString_newFromAscii(&pTmp, "javaldx");
     rtl_uString_newConcat(&pApp, pApp, pTmp);
     rtl_uString_release(pTmp);
 
     err = osl_executeProcess_WithRedirectedIO(pApp, ppArgs, nArgs,
                                               osl_Process_NORMAL,
-                                              NULL, // security
-                                              NULL, // work dir
-                                              NULL, 0,
+                                              nullptr, // security
+                                              nullptr, // work dir
+                                              nullptr, 0,
                                               &javaldx, // process handle
-                                              NULL,
+                                              nullptr,
                                               &fileOut,
-                                              NULL);
+                                              nullptr);
 
     rtl_uString_release(ppArgs[nArgs-1]);
     rtl_uString_release(pApp);
@@ -658,7 +650,7 @@ static void exec_javaldx(Args *args)
 
     if(err != osl_Process_E_None)
     {
-        putenv("javaldx_warn=failed to launch javaldx - java may not function correctly");
+        putenv(const_cast<char*>("javaldx_warn=failed to launch javaldx - java may not function correctly"));
 
         if (javaldx)
             osl_freeProcessHandle(javaldx);
@@ -676,7 +668,7 @@ static void exec_javaldx(Args *args)
 
         if (bytes_read <= 0)
         {
-            putenv("javaldx_warn=failed to read path from javaldx");
+            putenv(const_cast<char*>("javaldx_warn=failed to read path from javaldx"));
 
             if (javaldx)
                 osl_freeProcessHandle(javaldx);
@@ -707,14 +699,12 @@ static void exec_javaldx(Args *args)
 #endif
 
 // has to be a global :(
-static oslProcess * volatile g_pProcess = NULL;
+static oslProcess volatile g_pProcess = nullptr;
 
-static void sigterm_handler(int ignored)
+static void sigterm_handler(int /*ignored*/)
 {
-    (void) ignored;
-
     if (g_pProcess) {
-        int SigTermSucceded = 0;
+        bool SigTermSucceded = false;
         oslProcessInfo info;
         info.Size = sizeof(oslProcessInfo);
 
@@ -739,12 +729,12 @@ static void sigterm_handler(int ignored)
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    sal_Bool bSentArgs = sal_False;
+    bool bSentArgs = false;
     const char* pUsePlugin;
-    rtl_uString *pPipePath = NULL;
+    rtl_uString *pPipePath = nullptr;
     Args *args;
     int status = 0;
-    struct splash* splash = NULL;
+    struct splash* splash = nullptr;
     struct sigaction sigpipe_action;
     struct sigaction sigterm_action;
 
@@ -752,11 +742,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     memset(&sigpipe_action, 0, sizeof(struct sigaction));
     sigpipe_action.sa_handler = SIG_IGN;
     sigemptyset(&sigpipe_action.sa_mask);
-    sigaction(SIGPIPE, &sigpipe_action, NULL);
+    sigaction(SIGPIPE, &sigpipe_action, nullptr);
     memset(&sigterm_action, 0, sizeof(struct sigaction));
     sigterm_action.sa_handler = &sigterm_handler;
     sigemptyset(&sigterm_action.sa_mask);
-    sigaction(SIGTERM, &sigterm_action, NULL);
+    sigaction(SIGTERM, &sigterm_action, nullptr);
 
     args = args_parse();
     args->pAppPath = get_app_path(argv[0]);
@@ -768,12 +758,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
 #ifndef ENABLE_QUICKSTART_LIBPNG
     /* we can't load and render it anyway */
-    args->bInhibitSplash = sal_True;
+    args->bInhibitSplash = true;
 #endif
 
     pUsePlugin = getenv("SAL_USE_VCLPLUGIN");
     if (pUsePlugin && !strcmp(pUsePlugin, "svp"))
-        args->bInhibitSplash = sal_True;
+        args->bInhibitSplash = true;
 
     if (!args->bInhibitPipe && !getenv("LIBO_FLATPAK"))
     {
@@ -785,11 +775,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             // Wait for answer
             char resp[27]; // strlen("InternalIPC::SendArguments") + 1
             ssize_t n = read(fd, resp, SAL_N_ELEMENTS(resp));
-            if (n == (ssize_t) SAL_N_ELEMENTS(resp) &&
+            if (n == static_cast<ssize_t>(SAL_N_ELEMENTS(resp)) &&
                 (memcmp(resp, "InternalIPC::SendArguments",
                         SAL_N_ELEMENTS(resp) - 1) == 0))
             {
-                rtl_uString *pCwdPath = NULL;
+                rtl_uString *pCwdPath = nullptr;
                 osl_getProcessWorkingDir(&pCwdPath);
 
                 // Then send args
@@ -805,8 +795,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         /* we have to prepare for, and exec the binary */
         int nPercent = 0;
         ChildInfo *info;
-        sal_Bool bAllArgs = sal_True;
-        sal_Bool bShortWait, bRestart;
+        bool bAllArgs = true;
+        bool bShortWait, bRestart;
 
         /* sanity check pieces */
         system_checks();
@@ -827,10 +817,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         do
         {
-            bRestart = sal_False;
+            bRestart = false;
 
             /* fast updates if we have somewhere to update it to */
-            bShortWait = splash ? sal_True : sal_False;
+            bShortWait = splash != nullptr;
 
             /* Periodically update the splash & the percent according
                to what status_fd says, poll quickly only while starting */
@@ -847,23 +837,23 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 if (eResult != ProgressContinue)
                 {
                     splash_destroy(splash);
-                    splash = NULL;
-                    bShortWait = sal_False;
+                    splash = nullptr;
+                    bShortWait = false;
                 }
             }
 
             status = child_get_exit_code(info);
-            g_pProcess = NULL; // reset
+            g_pProcess = nullptr; // reset
 
             switch (status)
             {
                 case EXITHELPER_CRASH_WITH_RESTART: // re-start with just -env: parameters
-                    bRestart = sal_True;
-                    bAllArgs = sal_False;
+                    bRestart = true;
+                    bAllArgs = false;
                     break;
                 case EXITHELPER_NORMAL_RESTART: // re-start with all arguments
-                    bRestart = sal_True;
-                    bAllArgs = sal_True;
+                    bRestart = true;
+                    bAllArgs = true;
                     break;
                 default:
                     break;
