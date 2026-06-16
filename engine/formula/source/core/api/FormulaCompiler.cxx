@@ -971,7 +971,11 @@ static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
 
     if (comphelper::COKit::isActive())
     {
-        OUString language = comphelper::COKit::getLanguageTag().getLanguage();
+        // Key the native symbol map by the view's locale rather than its UI
+        // language. The separators stored in this map are a locale property,
+        // and the locale keeps the requested value even when the UI language
+        // falls back to another language for which a localisation is installed.
+        OUString language = comphelper::COKit::getLocale().getLanguage();
         if (eWhat == FormulaCompiler::InitSymbols::ASK)
         {
             return aLocaleSymbolMap.contains(language)

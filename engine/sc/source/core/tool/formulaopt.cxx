@@ -11,6 +11,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <formulaopt.hxx>
 #include <global.hxx>
@@ -48,7 +49,8 @@ void ScFormulaOptions::ResetFormulaSeparators()
     GetDefaultFormulaSeparators(aFormulaSepArg, aFormulaSepArrayCol, aFormulaSepArrayRow);
 }
 
-void ScFormulaOptions::GetDefaultFormulaSeparators(
+static void lcl_getDefaultFormulaSeparators(
+    const lang::Locale& rLocale, const LocaleDataWrapper& rLocaleData,
     OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow)
 {
     // Defaults to the old separator values.
@@ -56,14 +58,12 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     rSepArrayCol = u";"_ustr;
     rSepArrayRow = u"|"_ustr;
 
-    const lang::Locale& rLocale = ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
     if (rLang == "ru")
         // Don't do automatic guess for these languages, and fall back to
         // the old separator set.
         return;
 
-    const LocaleDataWrapper& rLocaleData = ScGlobal::getLocaleData();
     const OUString& rDecSep  = rLocaleData.getNumDecimalSep();
     const OUString& rListSep = rLocaleData.getListSep();
 
@@ -105,6 +105,26 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     if (cDecSep == ',')
         rSepArrayCol = u"."_ustr;
     rSepArrayRow = u";"_ustr;
+}
+
+void ScFormulaOptions::GetDefaultFormulaSeparators(
+    OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow)
+{
+    lcl_getDefaultFormulaSeparators(ScGlobal::GetLocale(), ScGlobal::getLocaleData(),
+                                    rSepArg, rSepArrayCol, rSepArrayRow);
+}
+
+void ScFormulaOptions::GetDefaultFormulaSeparators(
+    const LanguageTag& rLanguageTag,
+    OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow)
+{
+    // The locale that the separators are derived from is given explicitly
+    // rather than taken from the global locale, so a multi-locale process can
+    // compute the separators for a particular language regardless of which
+    // locale happens to be current.
+    const LocaleDataWrapper* pLocaleData = LocaleDataWrapper::get(rLanguageTag);
+    lcl_getDefaultFormulaSeparators(rLanguageTag.getLocale(), *pLocaleData,
+                                    rSepArg, rSepArrayCol, rSepArrayRow);
 }
 
 bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const

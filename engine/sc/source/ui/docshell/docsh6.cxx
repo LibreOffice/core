@@ -38,6 +38,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <memory>
 #include <utility>
@@ -461,9 +462,21 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
             ScGlobal::ResetFunctionList();
         }
 
-        // Update the separators.
-        ScCompiler::UpdateSeparatorsNative(
-                rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
+        // Update the separators. The formula separators depend on the view's
+        // locale, not on its UI language. The two differ when the requested
+        // UI language has no installed localisation and falls back to another
+        // language: the locale still keeps the requested value. In a
+        // multi-locale (COKit) process the native symbol map is keyed by the
+        // view's locale, so derive the separators from that same locale to keep
+        // the value and the key in step.
+        OUString aSepArg = rOpt.GetFormulaSepArg();
+        OUString aSepArrayCol = rOpt.GetFormulaSepArrayCol();
+        OUString aSepArrayRow = rOpt.GetFormulaSepArrayRow();
+        const LanguageTag& rViewLocale = comphelper::COKit::getLocale();
+        if (comphelper::COKit::isActive() && rViewLocale.getLanguageType() != LANGUAGE_NONE)
+            ScFormulaOptions::GetDefaultFormulaSeparators(
+                    rViewLocale, aSepArg, aSepArrayCol, aSepArrayRow);
+        ScCompiler::UpdateSeparatorsNative(aSepArg, aSepArrayCol, aSepArrayRow);
 
         // Global interpreter settings.
         ScInterpreter::SetGlobalConfig(rOpt.GetCalcConfig());

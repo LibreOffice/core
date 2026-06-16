@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	docmodel \
 	editeng \
 	for \
+	i18nlangtag \
 	sal \
 	sc \
 	sfx \

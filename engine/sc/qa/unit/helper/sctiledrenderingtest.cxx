@@ -11,6 +11,7 @@
 
 #include <COKit/COKitEnums.h>
 #include <comphelper/kit.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/dialoghelper.hxx>
@@ -34,6 +35,12 @@ void ScTiledRenderingTest::setUp()
     UnoApiXmlTest::setUp();
 
     comphelper::COKit::setActive(true);
+
+    // The kit language and locale are process globals that one test would
+    // otherwise inherit from whichever test ran before it. Start each test
+    // from the unset state so its result does not depend on the run order.
+    comphelper::COKit::setLanguageTag(LanguageTag(LANGUAGE_NONE));
+    comphelper::COKit::setLocale(LanguageTag(LANGUAGE_NONE));
 }
 
 void ScTiledRenderingTest::tearDown()

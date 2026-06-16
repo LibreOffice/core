@@ -16,6 +16,8 @@
 #include "scdllapi.h"
 #include "calcconfig.hxx"
 
+class LanguageTag;
+
 class SC_DLLPUBLIC ScFormulaOptions
 {
 private:
@@ -71,6 +73,7 @@ public:
     void ResetFormulaSeparators();
 
     static void GetDefaultFormulaSeparators(OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow);
+    static void GetDefaultFormulaSeparators(const LanguageTag& rLanguageTag, OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow);
 
     bool               operator== ( const ScFormulaOptions& rOpt ) const;
     bool               operator!= ( const ScFormulaOptions& rOpt ) const;
