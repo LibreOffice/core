@@ -111,11 +111,11 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
 {
-    css::uno::Reference<XAccessible> xAccParent = m_xHeaderBar->GetAccessibleParent();
-    if (xAccParent.is())
+    rtl::Reference<comphelper::OAccessible> pAccParent = m_xHeaderBar->GetAccessibleParent();
+    if (pAccParent.is())
     {
         rtl::Reference<comphelper::OAccessible> pAccessible = new AccessibleBrowseBoxHeaderBar(
-            xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar);
+            pAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar);
         m_xHeaderBar->SetAccessible(pAccessible);
     }
 }
