@@ -202,9 +202,6 @@ bool DocumentSignatureManager::isXML(std::u16string_view rURI)
 
     bool bIsXML = false;
     bool bPropsAvailable = false;
-    static constexpr OUStringLiteral sPropFullPath(u"FullPath");
-    static constexpr OUStringLiteral sPropMediaType(u"MediaType");
-    static constexpr OUStringLiteral sPropDigest(u"Digest");
 
     if (readManifest())
     {
@@ -215,11 +212,11 @@ bool DocumentSignatureManager::isXML(std::u16string_view rURI)
             bool bEncrypted = false;
             for (const beans::PropertyValue& prop : entry)
             {
-                if (prop.Name == sPropFullPath)
+                if (prop.Name == u"FullPath"_ustr)
                     prop.Value >>= sPath;
-                else if (prop.Name == sPropMediaType)
+                else if (prop.Name == u"MediaType"_ustr)
                     prop.Value >>= sMediaType;
-                else if (prop.Name == sPropDigest)
+                else if (prop.Name == u"Digest"_ustr)
                     bEncrypted = true;
             }
             if (DocumentSignatureHelper::equalsReferenceUriManifestPath(rURI, sPath))

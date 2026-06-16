@@ -48,8 +48,6 @@
 
 #include <optional>
 
-constexpr OUStringLiteral NS_DOCUMENTSIGNATURES = u"http://openoffice.org/2004/documentsignatures";
-constexpr OUStringLiteral NS_DOCUMENTSIGNATURES_ODF_1_2 = u"urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0";
 constexpr OUString OOXML_SIGNATURE_ORIGIN = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"_ustr;
 constexpr OUString OOXML_SIGNATURE_SIGNATURE = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature"_ustr;
 
@@ -191,9 +189,9 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     rtl::Reference<comphelper::AttributeList> pAttributeList = new comphelper::AttributeList();
     OUString sNamespace;
     if (mbODFPre1_2)
-        sNamespace = NS_DOCUMENTSIGNATURES;
+        sNamespace = u"http://openoffice.org/2004/documentsignatures"_ustr;
     else
-        sNamespace = NS_DOCUMENTSIGNATURES_ODF_1_2;
+        sNamespace = u"urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"_ustr;
 
     pAttributeList->AddAttribute(
         u"xmlns"_ustr,
