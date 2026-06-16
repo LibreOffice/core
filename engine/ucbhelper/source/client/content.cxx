@@ -416,9 +416,8 @@ Reference< XCommandInfo > Content::getCommands()
 
 Reference< XPropertySetInfo > Content::getProperties()
 {
-    static constexpr OUStringLiteral sgetPropertySetInfo = u"getPropertySetInfo";
     Command aCommand;
-    aCommand.Name     = sgetPropertySetInfo;
+    aCommand.Name     = u"getPropertySetInfo"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -491,9 +490,8 @@ Reference< XRow > Content::getPropertyValuesInterface(
 //        rProp.Attributes = ;
     }
 
-    static constexpr OUStringLiteral sgetPropertyValues = u"getPropertyValues";
     Command aCommand;
-    aCommand.Name     = sgetPropertyValues;
+    aCommand.Name     = u"getPropertyValues"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
