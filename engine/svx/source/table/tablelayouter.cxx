@@ -582,8 +582,6 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
     MergeVector aMergedCells( nColCount );
     std::vector<sal_Int32> aOptimalColumns;
 
-    static constexpr OUStringLiteral sOptimalSize(u"OptimalSize");
-
     if( sal::static_int_cast< sal_Int32 >( maColumns.size() ) != nColCount )
         maColumns.resize( nColCount );
 
@@ -630,7 +628,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
             sal_Int32 nColWidth = 0;
             Reference< XPropertySet > xColSet( xCols->getByIndex( nCol ), UNO_QUERY_THROW );
             bool bOptimal = false;
-            xColSet->getPropertyValue( sOptimalSize ) >>= bOptimal;
+            xColSet->getPropertyValue( u"OptimalSize"_ustr ) >>= bOptimal;
             if( bOptimal )
             {
                 aOptimalColumns.push_back(nCol);
@@ -734,8 +732,6 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     MergeVector aMergedCells( nRowCount );
     std::vector<sal_Int32> aOptimalRows;
 
-    static constexpr OUStringLiteral sOptimalSize(u"OptimalSize");
-
     // first calculate current height and initial minimum size per column,
     // merged cells will be counted later
     sal_Int32 nCurrentHeight = 0;
@@ -778,7 +774,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
             Reference<XPropertySet> xRowSet(xRows->getByIndex(nRow), UNO_QUERY_THROW);
 
             bool bOptimal = false;
-            xRowSet->getPropertyValue( sOptimalSize ) >>= bOptimal;
+            xRowSet->getPropertyValue( u"OptimalSize"_ustr ) >>= bOptimal;
             if( bOptimal )
             {
                 aOptimalRows.push_back( nRow );

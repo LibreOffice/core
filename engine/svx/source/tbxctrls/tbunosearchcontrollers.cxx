@@ -76,7 +76,6 @@ namespace {
 constexpr OUString COMMAND_FINDTEXT = u".uno:FindText"_ustr;
 constexpr OUString COMMAND_DOWNSEARCH = u".uno:DownSearch"_ustr;
 constexpr OUString COMMAND_UPSEARCH = u".uno:UpSearch"_ustr;
-constexpr OUStringLiteral COMMAND_FINDALL = u".uno:FindAll";
 constexpr OUString COMMAND_MATCHCASE = u".uno:MatchCase"_ustr;
 constexpr OUString COMMAND_MATCHDIACRITICS = u".uno:MatchDiacritics"_ustr;
 constexpr OUString COMMAND_SEARCHFORMATTED = u".uno:SearchFormattedDisplayString"_ustr;
@@ -726,7 +725,7 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< c
     {
         m_nDownSearchId = pToolBox->GetItemId(COMMAND_DOWNSEARCH);
         m_nUpSearchId = pToolBox->GetItemId(COMMAND_UPSEARCH);
-        m_nFindAllId = pToolBox->GetItemId(COMMAND_FINDALL);
+        m_nFindAllId = pToolBox->GetItemId(u".uno:FindAll"_ustr);
     }
 
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(this), m_aCommandURL);

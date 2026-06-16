@@ -543,15 +543,13 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
 void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
 {
     // AdjustmentValues
-    static constexpr OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
-    const Any* pAny = rGeometryItem.GetPropertyValueByName( sAdjustmentValues );
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( u"AdjustmentValues"_ustr );
     if ( pAny )
         *pAny >>= m_seqAdjustmentValues;
 
 
     // Coordsize
-    static constexpr OUStringLiteral sViewBox( u"ViewBox" );
-    const Any* pViewBox = rGeometryItem.GetPropertyValueByName( sViewBox );
+    const Any* pViewBox = rGeometryItem.GetPropertyValueByName( u"ViewBox"_ustr );
     css::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
@@ -565,48 +563,37 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
             m_nCoordHeightG = o3tl::saturating_toggle_sign(m_nCoordHeightG);
     }
     static constexpr OUString sPath( u"Path"_ustr );
-    static constexpr OUStringLiteral sCoordinates( u"Coordinates" );
-    static constexpr OUStringLiteral sGluePoints( u"GluePoints" );
-    static constexpr OUStringLiteral sGluePointLeavingDirections( u"GluePointLeavingDirections" );
-    static constexpr OUStringLiteral sSegments( u"Segments" );
-    static constexpr OUStringLiteral sSubViewSize( u"SubViewSize" );
-    static constexpr OUStringLiteral sStretchX( u"StretchX" );
-    static constexpr OUStringLiteral sStretchY( u"StretchY" );
-    static constexpr OUStringLiteral sTextFrames( u"TextFrames" );
-    static constexpr OUStringLiteral sEquations( u"Equations" );
-    static constexpr OUStringLiteral sHandles( u"Handles" );
-
 
     // Path/Coordinates
-    pAny = rGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, u"Coordinates"_ustr );
     if ( pAny )
         *pAny >>= m_seqCoordinates;
 
 
     // Path/GluePoints
-    pAny = rGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, u"GluePoints"_ustr );
     if ( pAny )
         *pAny >>= m_seqGluePoints;
 
     // Path/GluePointLeavingDirections
-    pAny = rGeometryItem.GetPropertyValueByName(sPath, sGluePointLeavingDirections);
+    pAny = rGeometryItem.GetPropertyValueByName(sPath, u"GluePointLeavingDirections"_ustr);
     if (pAny)
         *pAny >>= m_seqGluePointLeavingDirections;
 
     // Path/Segments
-    pAny = rGeometryItem.GetPropertyValueByName( sPath, sSegments );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, u"Segments"_ustr );
     if ( pAny )
         *pAny >>= m_seqSegments;
 
 
     // Path/SubViewSize
-    pAny = rGeometryItem.GetPropertyValueByName( sPath, sSubViewSize );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, u"SubViewSize"_ustr );
     if ( pAny )
         *pAny >>= m_seqSubViewSize;
 
 
     // Path/StretchX
-    pAny = rGeometryItem.GetPropertyValueByName( sPath, sStretchX );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, u"StretchX"_ustr );
     if ( pAny )
     {
         sal_Int32 nStretchX = 0;
@@ -616,7 +603,7 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/StretchY
-    pAny = rGeometryItem.GetPropertyValueByName( sPath, sStretchY );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, u"StretchY"_ustr );
     if ( pAny )
     {
         sal_Int32 nStretchY = 0;
@@ -626,19 +613,19 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/TextFrames
-    pAny = rGeometryItem.GetPropertyValueByName( sPath, sTextFrames );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, u"TextFrames"_ustr );
     if ( pAny )
         *pAny >>= m_seqTextFrames;
 
 
     // Equations
-    pAny = rGeometryItem.GetPropertyValueByName( sEquations );
+    pAny = rGeometryItem.GetPropertyValueByName( u"Equations"_ustr );
     if ( pAny )
         *pAny >>= m_seqEquations;
 
 
     // Handles
-    pAny = rGeometryItem.GetPropertyValueByName( sHandles );
+    pAny = rGeometryItem.GetPropertyValueByName( u"Handles"_ustr );
     if ( pAny )
         *pAny >>= m_seqHandles;
 }
@@ -772,8 +759,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
 
     OUString sShapeType;
     const SdrCustomShapeGeometryItem& rGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    static constexpr OUStringLiteral sType = u"Type";
-    const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( u"Type"_ustr );
     if ( pAny ) {
         *pAny >>= sShapeType;
         m_bOOXMLShape = sShapeType.startsWith("ooxml-");
@@ -781,12 +767,10 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
     }
     m_eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
-    static constexpr OUStringLiteral sMirroredX = u"MirroredX";
-    static constexpr OUStringLiteral sMirroredY = u"MirroredY";
-    pAny = rGeometryItem.GetPropertyValueByName( sMirroredX );
+    pAny = rGeometryItem.GetPropertyValueByName( u"MirroredX"_ustr );
     if ( pAny )
         *pAny >>= m_bFlipH;
-    pAny = rGeometryItem.GetPropertyValueByName( sMirroredY );
+    pAny = rGeometryItem.GetPropertyValueByName( u"MirroredY"_ustr );
     if ( pAny )
         *pAny >>= m_bFlipV;
 

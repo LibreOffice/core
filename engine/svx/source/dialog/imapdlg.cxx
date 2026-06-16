@@ -51,7 +51,6 @@ constexpr OUString SELF_TARGET = u"_self"_ustr;
 constexpr OUString IMAP_CERN_FILTER = u"MAP - CERN"_ustr;
 constexpr OUString IMAP_NCSA_FILTER = u"MAP - NCSA"_ustr;
 constexpr OUString IMAP_BINARY_FILTER = u"SIP - StarView ImageMap"_ustr;
-constexpr OUStringLiteral IMAP_ALL_TYPE = u"*.*";
 constexpr OUString IMAP_BINARY_TYPE = u"*.sip"_ustr;
 constexpr OUString IMAP_CERN_TYPE = u"*.map"_ustr;
 constexpr OUString IMAP_NCSA_TYPE = u"*.map"_ustr;
@@ -360,7 +359,7 @@ void SvxIMapDlg::DoOpen()
     ImageMap        aLoadIMap;
     const OUString  aFilter(SvxResId(RID_SVXSTR_IMAP_ALL_FILTER));
 
-    aDlg.AddFilter( aFilter, IMAP_ALL_TYPE );
+    aDlg.AddFilter( aFilter, u"*.*"_ustr );
     aDlg.AddFilter( IMAP_CERN_FILTER, IMAP_CERN_TYPE );
     aDlg.AddFilter( IMAP_NCSA_FILTER, IMAP_NCSA_TYPE );
     aDlg.AddFilter( IMAP_BINARY_FILTER, IMAP_BINARY_TYPE );

@@ -38,17 +38,11 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-constexpr OUStringLiteral FORMAT_SVG = u"svg";
-constexpr OUStringLiteral FORMAT_WMF = u"wmf";
 constexpr OUString FORMAT_EMF = u"emf"_ustr;
-constexpr OUStringLiteral FORMAT_PDF = u"pdf";
 
 constexpr OUString FORMAT_BMP = u"bmp"_ustr;
 constexpr OUString FORMAT_GIF = u"gif"_ustr;
-constexpr OUStringLiteral FORMAT_JPG = u"jpg";
 constexpr OUString FORMAT_PNG = u"png"_ustr;
-constexpr OUStringLiteral FORMAT_TIF = u"tif";
-constexpr OUStringLiteral FORMAT_WEBP = u"webp";
 
 using namespace com::sun::star;
 
@@ -135,13 +129,13 @@ static OUString isKnownVectorFormat(const Graphic& rGraphic, std::u16string_view
     switch (pData->getType())
     {
         case VectorGraphicDataType::Svg:
-            return match(rFilter, FORMAT_SVG, false);
+            return match(rFilter, u"svg"_ustr, false);
         case VectorGraphicDataType::Wmf:
-            return match(rFilter, FORMAT_WMF, false);
+            return match(rFilter, u"wmf"_ustr, false);
         case VectorGraphicDataType::Emf:
             break;
         case VectorGraphicDataType::Pdf:
-            return match(rFilter, FORMAT_PDF, false);
+            return match(rFilter, u"pdf"_ustr, false);
     }
 
     return {};
@@ -162,13 +156,13 @@ static OUString isKnownRasterFormat(const GfxLink& rLink, std::u16string_view rF
             return match(rFilter, FORMAT_BMP);
 
         case GfxLinkType::NativeJpg:
-            return match(rFilter, FORMAT_JPG);
+            return match(rFilter, u"jpg"_ustr);
         case GfxLinkType::NativePng:
             return match(rFilter, FORMAT_PNG);
         case GfxLinkType::NativeTif:
-            return match(rFilter, FORMAT_TIF);
+            return match(rFilter, u"tif"_ustr);
         case GfxLinkType::NativeWebp:
-            return match(rFilter, FORMAT_WEBP);
+            return match(rFilter, u"webp"_ustr);
         default:
             return {};
     }

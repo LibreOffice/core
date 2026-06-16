@@ -268,20 +268,18 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
 
     // copy row heights
     Reference< XTableRows > xNewRows(mxTable->getRows(), css::uno::UNO_SET_THROW );
-    static constexpr OUStringLiteral sHeight( u"Height" );
     for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
     {
         Reference< XPropertySet > xNewSet( xNewRows->getByIndex( nRow ), UNO_QUERY_THROW );
-        xNewSet->setPropertyValue( sHeight, Any( mpLayouter->getRowHeight( rStart.mnRow + nRow ) ) );
+        xNewSet->setPropertyValue( u"Height"_ustr, Any( mpLayouter->getRowHeight( rStart.mnRow + nRow ) ) );
     }
 
     // copy column widths
     Reference< XTableColumns > xNewColumns( mxTable->getColumns(), css::uno::UNO_SET_THROW );
-    static constexpr OUStringLiteral sWidth( u"Width" );
     for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol )
     {
         Reference< XPropertySet > xNewSet( xNewColumns->getByIndex( nCol ), UNO_QUERY_THROW );
-        xNewSet->setPropertyValue( sWidth, Any( mpLayouter->getColumnWidth( rStart.mnCol + nCol ) ) );
+        xNewSet->setPropertyValue( u"Width"_ustr, Any( mpLayouter->getColumnWidth( rStart.mnCol + nCol ) ) );
     }
 
     // reset layouter which still holds a copy to old TableModel

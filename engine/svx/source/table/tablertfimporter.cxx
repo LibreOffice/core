@@ -281,14 +281,13 @@ void SdrTableRTFParser::FillTable()
             nColCount = mxTable->getColumnCount();
         }
 
-        static constexpr OUStringLiteral sWidth(u"Width");
         sal_Int32 nCol, nLastEdge = 0;
         for( nCol = 0; nCol < nColCount; nCol++ )
         {
             Reference< XPropertySet > xSet( xCols->getByIndex( nCol ), UNO_QUERY_THROW );
             sal_Int32 nWidth = maColumnEdges[nCol] - nLastEdge;
 
-            xSet->setPropertyValue( sWidth, Any( nWidth ) );
+            xSet->setPropertyValue( u"Width"_ustr, Any( nWidth ) );
             nLastEdge += nWidth;
         }
 

@@ -62,26 +62,16 @@ using namespace ::svx;
 constexpr OUString CFGNAME_DATANAVIGATOR = u"DataNavigator"_ustr;
 constexpr OUString CFGNAME_SHOWDETAILS = u"ShowDetails"_ustr;
 constexpr OUString MSG_VARIABLE = u"%1"_ustr;
-constexpr OUStringLiteral MODELNAME = u"$MODELNAME";
-constexpr OUStringLiteral INSTANCENAME = u"$INSTANCENAME";
-constexpr OUStringLiteral ELEMENTNAME = u"$ELEMENTNAME";
-constexpr OUStringLiteral ATTRIBUTENAME = u"$ATTRIBUTENAME";
-constexpr OUStringLiteral SUBMISSIONNAME = u"$SUBMISSIONNAME";
-constexpr OUStringLiteral BINDINGNAME = u"$BINDINGNAME";
-
 
 namespace svxform
 {
 
     // properties of instance
-    constexpr OUStringLiteral PN_INSTANCE_MODEL = u"Instance";
     constexpr OUString PN_INSTANCE_ID = u"ID"_ustr;
-    constexpr OUStringLiteral PN_INSTANCE_URL = u"URL";
 
     // properties of binding
     constexpr OUString PN_BINDING_ID = u"BindingID"_ustr;
     constexpr OUString PN_BINDING_EXPR = u"BindingExpression"_ustr;
-    constexpr OUStringLiteral PN_BINDING_MODEL = u"Model";
     constexpr OUString PN_BINDING_NAMESPACES = u"ModelNamespaces"_ustr;
     constexpr OUString PN_READONLY_EXPR = u"ReadonlyExpression"_ustr;
     constexpr OUString PN_RELEVANT_EXPR = u"RelevantExpression"_ustr;
@@ -100,8 +90,6 @@ namespace svxform
 
     // other const strings
     constexpr OUString TRUE_VALUE = u"true()"_ustr;
-    constexpr OUStringLiteral NEW_ELEMENT = u"newElement";
-    constexpr OUStringLiteral NEW_ATTRIBUTE = u"newAttribute";
     constexpr OUString EVENTTYPE_CHARDATA = u"DOMCharacterDataModified"_ustr;
     constexpr OUString EVENTTYPE_ATTR = u"DOMAttrModified"_ustr;
 
@@ -459,7 +447,7 @@ namespace svxform
                         try
                         {
                             pResId = RID_STR_DATANAV_ADD_ELEMENT;
-                            xNewNode = m_xUIHelper->createElement( xParentNode, NEW_ELEMENT );
+                            xNewNode = m_xUIHelper->createElement( xParentNode, u"newElement"_ustr );
                         }
                         catch ( Exception const & )
                         {
@@ -473,7 +461,7 @@ namespace svxform
                         eType = DITAttribute;
                         try
                         {
-                            xNewNode = m_xUIHelper->createAttribute( xParentNode, NEW_ATTRIBUTE );
+                            xNewNode = m_xUIHelper->createAttribute( xParentNode, u"newAttribute"_ustr );
                         }
                         catch ( Exception const & )
                         {
@@ -900,7 +888,7 @@ namespace svxform
                     css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     TranslateId pResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
-                    OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
+                    OUString sVar = bIsElement ? u"$ELEMENTNAME"_ustr : u"$ATTRIBUTENAME"_ustr;
                     std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(m_pNaviWin->GetFrameWeld(),
                                                                              VclMessageType::Question, VclButtonsType::YesNo,
                                                                              SvxResId(pResId)));
@@ -936,7 +924,7 @@ namespace svxform
                 bool bSubmission = ( DGTSubmission == m_eGroup );
                 TranslateId pResId = bSubmission ? RID_STR_QRY_REMOVE_SUBMISSION : RID_STR_QRY_REMOVE_BINDING;
                 OUString sProperty = bSubmission ? PN_SUBMISSION_ID : PN_BINDING_ID;
-                OUString sSearch = bSubmission ? OUString(SUBMISSIONNAME) : OUString(BINDINGNAME);
+                OUString sSearch = bSubmission ? u"$SUBMISSIONNAME"_ustr : u"$BINDINGNAME"_ustr;
                 OUString sName;
                 try
                 {
@@ -1144,9 +1132,9 @@ namespace svxform
     {
         OUString sRet;
         OUString sTemp;
-        OUString sInstModel = PN_INSTANCE_MODEL;
+        OUString sInstModel = u"Instance"_ustr;
         OUString sInstName = PN_INSTANCE_ID;
-        OUString sInstURL = PN_INSTANCE_URL;
+        OUString sInstURL = u"URL"_ustr;
         for ( const PropertyValue& rProp : _xPropSeq )
         {
             if ( sInstModel == rProp.Name )
@@ -1517,7 +1505,7 @@ namespace svxform
                                                                      VclMessageType::Question, VclButtonsType::YesNo,
                                                                      SvxResId( RID_STR_QRY_REMOVE_MODEL)));
             OUString sText = xQBox->get_primary_text();
-            sText = sText.replaceFirst( MODELNAME, sSelectedModel );
+            sText = sText.replaceFirst( u"$MODELNAME", sSelectedModel );
             xQBox->set_primary_text(sText);
             if (xQBox->run() == RET_YES)
             {
@@ -1618,7 +1606,7 @@ namespace svxform
                                                                          VclMessageType::Question, VclButtonsType::YesNo,
                                                                          SvxResId(RID_STR_QRY_REMOVE_INSTANCE)));
                 OUString sMessText = xQBox->get_primary_text();
-                sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
+                sMessText = sMessText.replaceFirst( u"$INSTANCENAME", sInstName );
                 xQBox->set_primary_text(sMessText);
                 if (xQBox->run() == RET_YES)
                 {
@@ -2591,7 +2579,7 @@ namespace svxform
                 }
 
                 Reference< css::xforms::XModel > xModel;
-                if ( ( m_xBinding->getPropertyValue( PN_BINDING_MODEL ) >>= xModel ) && xModel.is() )
+                if ( ( m_xBinding->getPropertyValue( u"Model"_ustr ) >>= xModel ) && xModel.is() )
                     m_xUIHelper.set( xModel, UNO_QUERY );
             }
             catch (const Exception&)

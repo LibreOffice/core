@@ -61,10 +61,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-constexpr OUStringLiteral XML_CONTAINERSTORAGE_NAME_60 = u"Pictures";
-constexpr OUStringLiteral XML_CONTAINERSTORAGE_NAME = u"ObjectReplacements";
 constexpr OUString XML_EMBEDDEDOBJECT_URL_BASE = u"vnd.sun.star.EmbeddedObject:"_ustr;
-constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:";
 
 
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
@@ -209,7 +206,7 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             return false;
         bool bObjUrl = aURLNoPar.startsWith( XML_EMBEDDEDOBJECT_URL_BASE );
         bool bGrUrl = !bObjUrl &&
-              aURLNoPar.startsWith( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE );
+              aURLNoPar.startsWith( u"vnd.sun.star.GraphicObject:" );
         if( !(bObjUrl || bGrUrl) )
             return false;
 
@@ -233,9 +230,9 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             bool bOASIS = mxRootStorage.is() &&
                 ( SotStorage::GetVersion( mxRootStorage ) > SOFFICE_FILEFORMAT_60 );
             if (bOASIS)
-                rContainerStorageName = XML_CONTAINERSTORAGE_NAME;
+                rContainerStorageName = u"ObjectReplacements"_ustr;
             else
-                rContainerStorageName = XML_CONTAINERSTORAGE_NAME_60;
+                rContainerStorageName = u"Pictures"_ustr;
 
             if( pGraphicRepl )
                 *pGraphicRepl = true;

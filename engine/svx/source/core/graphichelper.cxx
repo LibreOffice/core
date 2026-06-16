@@ -450,7 +450,6 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
         // populate filter dialog filter list and select default filter to match graphic mime type
 
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-        static constexpr OUStringLiteral aDefaultMimeType(u"image/png");
         OUString aDefaultFormatName;
         sal_uInt16 nCount = rGraphicFilter.GetExportFormatCount();
 
@@ -462,7 +461,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
             const OUString aFilterMimeType( rGraphicFilter.GetExportFormatMediaType( i ) );
             xFilePicker->appendFilter( aExportFormatName, rGraphicFilter.GetExportWildcard( i ) );
             aMimeTypeMap[ aExportFormatName ] = aFilterMimeType;
-            if( aDefaultMimeType == aFilterMimeType )
+            if( u"image/png"_ustr == aFilterMimeType )
                 aDefaultFormatName = aExportFormatName;
         }
 
