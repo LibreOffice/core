@@ -1360,9 +1360,6 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         // Create a vector to store data for the manifest.xml file
         std::vector < uno::Sequence < PropertyValue > > aManList;
 
-        static constexpr OUStringLiteral sMediaType(u"MediaType");
-        static constexpr OUStringLiteral sVersion(u"Version");
-        static constexpr OUStringLiteral sFullPath(u"FullPath");
         const bool bIsGpgEncrypt = m_aGpgProps.hasElements();
 
         // note: this is always created here (needed for GPG), possibly
@@ -1372,11 +1369,11 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             uno::Sequence < PropertyValue > aPropSeq(
                 bIsGpgEncrypt ? PKG_SIZE_NOENCR_MNFST+1 : PKG_SIZE_NOENCR_MNFST );
             auto pPropSeq = aPropSeq.getArray();
-            pPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
+            pPropSeq [PKG_MNFST_MEDIATYPE].Name = u"MediaType"_ustr;
             pPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_xRootFolder->GetMediaType();
-            pPropSeq [PKG_MNFST_VERSION].Name = sVersion;
+            pPropSeq [PKG_MNFST_VERSION].Name = u"Version"_ustr;
             pPropSeq [PKG_MNFST_VERSION].Value <<= m_xRootFolder->GetVersion();
-            pPropSeq [PKG_MNFST_FULLPATH].Name = sFullPath;
+            pPropSeq [PKG_MNFST_FULLPATH].Name = u"FullPath"_ustr;
             pPropSeq [PKG_MNFST_FULLPATH].Value <<= u"/"_ustr;
 
             if( bIsGpgEncrypt )

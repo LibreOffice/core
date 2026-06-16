@@ -964,18 +964,16 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
 
     // The "Compressed" property must be set after "MediaType" property,
     // since the setting of the last one can change the value of the first one
-    static constexpr OUStringLiteral sMediaType = u"MediaType";
     static constexpr OUString sCompressed = u"Compressed"_ustr;
     static constexpr OUString sSize = u"Size"_ustr;
-    static constexpr OUStringLiteral sEncrypted = u"Encrypted";
     if ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        aResultRange[0].Name = sMediaType;
+        aResultRange[0].Name = u"MediaType"_ustr;
         aResultRange[1].Name = sCompressed;
         aResultRange[2].Name = sSize;
 
         if ( m_nStorageType == embed::StorageFormats::PACKAGE )
-            aResultRange[3].Name = sEncrypted;
+            aResultRange[3].Name = u"Encrypted"_ustr;
     }
     else
     {
