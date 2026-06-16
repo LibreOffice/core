@@ -93,7 +93,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
         if (m_nRange > 0)
         {
             int nPercent = (100 * nValue) / m_nRange;
-            if (nPercent >= m_nLastCallbackPercent)
+            if (nPercent > m_nLastCallbackPercent)
             {
                 comphelper::COKit::statusIndicatorSetValue(nPercent);
                 m_nLastCallbackPercent = nPercent;
