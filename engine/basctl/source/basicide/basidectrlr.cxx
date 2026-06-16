@@ -32,7 +32,6 @@ namespace
 {
 
 int const nPropertyIconId = 1;
-constexpr OUStringLiteral sPropertyIconId(u"IconId");
 
 }
 
@@ -42,7 +41,7 @@ Controller::Controller (Shell* pViewShell)
     ,m_nIconId( ICON_MACROLIBRARY )
 {
     registerProperty(
-        sPropertyIconId, nPropertyIconId,
+        u"IconId"_ustr, nPropertyIconId,
         PropertyAttribute::READONLY,
         &m_nIconId, cppu::UnoType<decltype(m_nIconId)>::get()
     );
