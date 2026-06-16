@@ -33,9 +33,11 @@
 
 namespace ConfigUtil
 {
-// Set by initialize(). On the apps (MOBILEAPP) initialize() is never called,
-// so Config stays null and the value accessors below fall back to their
-// defaults; the "is initialized" asserts there are therefore gated on
+// Set by initialize(). On the apps (MOBILEAPP) COOLWSD is created and run
+// repeatedly in-process, each run owning the config it passes here, so Config
+// is re-pointed at the current run's instead of being asserted to be null; the
+// value accessors below still fall back to their defaults until the first run
+// initializes it, and the "is initialized" asserts there are therefore gated on
 // !MOBILEAPP, where a null Config really is a bug.
 static const Poco::Util::AbstractConfiguration* Config = nullptr;
 
@@ -335,7 +337,13 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
 void initialize(const Poco::Util::AbstractConfiguration* config)
 {
     assert(config && "Cannot initialize with invalid config instance");
+#if !MOBILEAPP
     assert(!Config && "Config is already initialized.");
+#else
+    // The apps run a fresh COOLWSD in a loop, each with its own configuration
+    // that dies with it. Adopt the current run's rather than leaving Config
+    // dangling at the previous run's.
+#endif
     Config = config;
 
 #if ENABLE_SSL

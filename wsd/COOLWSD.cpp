@@ -1639,10 +1639,12 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     Poco::AutoPtr<ConfigUtil::AppConfigMap> overrideConfig(
         new ConfigUtil::AppConfigMap(_overrideSettings));
     conf.addWriteable(overrideConfig, PRIO_APPLICATION); // Highest priority
+#endif // !MOBILEAPP
 
     // This caches some oft-used settings and must come after overriding.
     ConfigUtil::initialize(&config());
 
+#if !MOBILEAPP
     // Load extra ("plug-in") configuration files, if present
     Poco::File dir(ConfigDir);
     if (dir.exists() && dir.isDirectory())
