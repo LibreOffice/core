@@ -1813,7 +1813,7 @@ const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry 
 }
 
 SvTreeListEntry& SvTreeListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                            bool bChildrenOnDemand, sal_uInt32 nPos)
+                                            sal_uInt32 nPos)
 {
     m_nTreeFlags |= SvTreeFlags::MANINS;
 
@@ -1825,7 +1825,7 @@ SvTreeListEntry& SvTreeListBox::InsertEntry(const OUString& rText, SvTreeListEnt
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     InitEntry(*pEntry, rText, rDefColBmp, rDefExpBmp);
-    pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
+    pEntry->EnableChildrenOnDemand(false);
 
     if( !pParent )
         Insert( pEntry, nPos );

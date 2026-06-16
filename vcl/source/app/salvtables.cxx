@@ -3658,7 +3658,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
 
     if (bChildrenOnDemand)
     {
-        SvTreeListEntry& rPlaceHolder = m_xTreeView->InsertEntry(u"<dummy>"_ustr, pEntry, false, 0);
+        SvTreeListEntry& rPlaceHolder = m_xTreeView->InsertEntry(u"<dummy>"_ustr, pEntry, 0);
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(&rPlaceHolder);
         pViewData->SetSelectable(false);
     }
@@ -4491,7 +4491,7 @@ void SalInstanceTreeView::do_set_children_on_demand(const weld::TreeIter& rIter,
 
     if (bChildrenOnDemand && !pPlaceHolder)
     {
-        pPlaceHolder = &m_xTreeView->InsertEntry(u"<dummy>"_ustr, rVclIter.iter, false, 0);
+        pPlaceHolder = &m_xTreeView->InsertEntry(u"<dummy>"_ustr, rVclIter.iter, 0);
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
         pViewData->SetSelectable(false);
     }
@@ -5000,7 +5000,7 @@ bool SalInstanceTreeView::ExpandRow(const SalInstanceTreeIter& rIter)
         //expand disallowed, restore placeholder
         if (!bRet)
         {
-            pPlaceHolder = &m_xTreeView->InsertEntry(u"<dummy>"_ustr, pEntry, false, 0);
+            pPlaceHolder = &m_xTreeView->InsertEntry(u"<dummy>"_ustr, pEntry, 0);
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
             pViewData->SetSelectable(false);
         }
