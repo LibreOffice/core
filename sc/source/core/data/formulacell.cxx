@@ -482,6 +482,28 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     ScDBData* pNewDBData = aNewNamedDBs.findByUpperName(aDBName);
     if (!pNewDBData)
     {
+        // No matching table in the destination. For a clipboard paste leave it
+        // unresolved (index 0 -> #REF!): a fully-covered table is already
+        // recreated at the paste position before the cells arrive, so a miss
+        // here means only part of the table was copied, and fabricating one
+        // would register a misplaced, header-less table. Like the OOXML format,
+        // a partial copy makes no table. For any other clone - undo/redo
+        // restore, transpose - keep materialising the table so the reference
+        // still resolves, as those paths always expected the table to exist.
+        // TODO: the OOXML format keeps the paste case working with a
+        // cross-document external table reference ('source.xlsx'#Table1[Col]).
+        // We have no external structured references yet, so the value becomes
+        // #REF! instead.
+        if (rOldDoc.IsClipboard())
+        {
+            if (eOpCode == ocDBArea)
+                static_cast<FormulaIndexToken*>(pToken)->SetIndex(0);
+            else if (eOpCode == ocTableRef)
+                static_cast<ScTableRefToken*>(pToken)->SetIndex(0);
+            else
+                assert(false);
+            return;
+        }
         pNewDBData = new ScDBData(*pDBData);
         bool ins = aNewNamedDBs.insert(std::unique_ptr<ScDBData>(pNewDBData));
         assert(ins); (void)ins;
