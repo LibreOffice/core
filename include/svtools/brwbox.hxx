@@ -392,7 +392,7 @@ private:
     rtl::Reference<comphelper::OAccessible>
     getAccessibleHeaderCell(BrowseBox::THeaderCellMap& _raHeaderCells, sal_Int32 _nPos,
                             AccessibleBrowseBoxObjType _eType,
-                            const css::uno::Reference<css::accessibility::XAccessible>& _rParent);
+                            const rtl::Reference<comphelper::OAccessible>& rpParent);
 
     /// @see AccessibleBrowseBox::getTable
     rtl::Reference<comphelper::OAccessible> getAccessibleTable();

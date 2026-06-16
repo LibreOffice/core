@@ -31,20 +31,19 @@
 // Accessibility ==============================================================
 
 using namespace ::com::sun::star::uno;
-using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 
 rtl::Reference<comphelper::OAccessible>
 BrowseBox::getAccessibleHeaderCell(BrowseBox::THeaderCellMap& _raHeaderCells, sal_Int32 _nPos,
                                    AccessibleBrowseBoxObjType _eType,
-                                   const Reference<XAccessible>& _rParent)
+                                   const rtl::Reference<comphelper::OAccessible>& rpParent)
 {
     rtl::Reference<comphelper::OAccessible> pRet;
     BrowseBox::THeaderCellMap::iterator aFind = _raHeaderCells.find(_nPos);
     if (aFind == _raHeaderCells.end())
     {
         rtl::Reference<AccessibleBrowseBoxHeaderCell> pAccessible
-            = new AccessibleBrowseBoxHeaderCell(_nPos, _rParent, *this, _eType);
+            = new AccessibleBrowseBoxHeaderCell(_nPos, rpParent, *this, _eType);
         aFind = _raHeaderCells.emplace(_nPos, pAccessible).first;
     }
     if (aFind != _raHeaderCells.end())
