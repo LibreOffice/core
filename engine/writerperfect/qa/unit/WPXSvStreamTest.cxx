@@ -64,8 +64,6 @@ private:
 };
 
 const char aText[] = "hello world";
-constexpr OUStringLiteral aOLEFile = u"/writerperfect/qa/unit/data/stream/fdo40686-1.doc";
-constexpr OUStringLiteral aZipFile = u"/writerperfect/qa/unit/data/stream/test.odt";
 
 shared_ptr<RVNGInputStream> lcl_createStream()
 {
@@ -294,8 +292,8 @@ void WPXSvStreamTest::testStructured()
 {
     // OLE2
     {
-        const shared_ptr<RVNGInputStream> pInput(
-            lcl_createStreamForURL(m_directories.getURLFromSrc(aOLEFile)));
+        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(m_directories.getURLFromSrc(
+            u"/writerperfect/qa/unit/data/stream/fdo40686-1.doc"_ustr)));
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
@@ -316,8 +314,8 @@ void WPXSvStreamTest::testStructured()
 
     // Zip
     {
-        const shared_ptr<RVNGInputStream> pInput(
-            lcl_createStreamForURL(m_directories.getURLFromSrc(aZipFile)));
+        const shared_ptr<RVNGInputStream> pInput(lcl_createStreamForURL(
+            m_directories.getURLFromSrc(u"/writerperfect/qa/unit/data/stream/test.odt"_ustr)));
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());

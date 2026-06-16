@@ -56,10 +56,6 @@ private:
     uno::Reference<ucb::XContent> m_xNonexistent;
 };
 
-constexpr OUStringLiteral g_aDirPath = u"/writerperfect/qa/unit/data/stream/test.dir";
-constexpr OUStringLiteral g_aNondirPath = u"/writerperfect/qa/unit/data/stream/test.dir/mimetype";
-constexpr OUStringLiteral g_aNonexistentPath = u"/writerperfect/qa/unit/data/stream/foo/bar";
-
 DirectoryStreamTest::DirectoryStreamTest()
 {
     const uno::Reference<ucb::XCommandEnvironment> xCmdEnv;
@@ -67,10 +63,18 @@ DirectoryStreamTest::DirectoryStreamTest()
 
     using ucbhelper::Content;
 
-    m_xDir = Content(m_directories.getURLFromSrc(g_aDirPath), xCmdEnv, xContext).get();
-    m_xFile = Content(m_directories.getURLFromSrc(g_aNondirPath), xCmdEnv, xContext).get();
+    m_xDir
+        = Content(m_directories.getURLFromSrc(u"/writerperfect/qa/unit/data/stream/test.dir"_ustr),
+                  xCmdEnv, xContext)
+              .get();
+    m_xFile = Content(m_directories.getURLFromSrc(
+                          u"/writerperfect/qa/unit/data/stream/test.dir/mimetype"_ustr),
+                      xCmdEnv, xContext)
+                  .get();
     m_xNonexistent
-        = Content(m_directories.getURLFromSrc(g_aNonexistentPath), xCmdEnv, xContext).get();
+        = Content(m_directories.getURLFromSrc(u"/writerperfect/qa/unit/data/stream/foo/bar"_ustr),
+                  xCmdEnv, xContext)
+              .get();
 }
 
 void DirectoryStreamTest::testConstruction()
