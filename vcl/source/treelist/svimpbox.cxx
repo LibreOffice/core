@@ -1866,9 +1866,9 @@ bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
 // ******* Control plus/minus button for expanding/collapsing
 
 // false == no expand/collapse button hit
-bool SvImpLBox::IsNodeButton( const Point& rPosPixel, const SvTreeListEntry* pEntry ) const
+bool SvImpLBox::IsNodeButton(const Point& rPosPixel, const SvTreeListEntry& rEntry) const
 {
-    if( !pEntry->HasChildren() && !pEntry->HasChildrenOnDemand() )
+    if (!rEntry.HasChildren() && !rEntry.HasChildrenOnDemand())
         return false;
 
     SvLBoxTab* pFirstDynamicTab = m_rView.GetFirstDynamicTab();
@@ -1880,7 +1880,7 @@ bool SvImpLBox::IsNodeButton( const Point& rPosPixel, const SvTreeListEntry* pEn
     Point aOrigin(m_rView.GetMapMode().GetOrigin());
     nMouseX -= aOrigin.X();
 
-    tools::Long nX = m_rView.GetTabPos(pEntry, pFirstDynamicTab);
+    tools::Long nX = m_rView.GetTabPos(&rEntry, pFirstDynamicTab);
     nX += m_nNodeBmpTabDistance;
     if( nMouseX < nX )
         return false;
@@ -1896,7 +1896,7 @@ bool SvImpLBox::ButtonDownCheckExpand(const MouseEvent& rMEvt, SvTreeListEntry& 
     if (m_rView.IsEditingActive() && &rEntry == m_rView.m_pEdEntry)
         // inplace editing -> nothing to do
         bRet = true;
-    else if (IsNodeButton(rMEvt.GetPosPixel(), &rEntry))
+    else if (IsNodeButton(rMEvt.GetPosPixel(), rEntry))
     {
         if (m_rView.IsExpanded(&rEntry))
         {
