@@ -70,9 +70,11 @@
 #include <asciiopt.hxx>
 #include <scabstdlg.hxx>
 #include <clipparam.hxx>
+#include <inputopt.hxx>
 #include <markdata.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dbaexchange.hxx>
+#include <warnbox.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -707,6 +709,16 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
     ScAddress aCellPos( nPosX, nPosY, GetViewData().CurrentTabForData() );
     auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
     pObj->SetOverwriting( true );
+
+    // tdf#119088 - show overwrite warning for system-clipboard text paste
+    if (bAllowDialogs && !ScModule::get()->IsInExecuteDrop()
+        && ScModule::get()->GetInputOptions().GetReplaceCellsWarn()
+        && !rDoc.IsBlockEmpty(nPosX, nPosY, nPosX, nPosY, aCellPos.Tab()))
+    {
+        ScReplaceWarnBox aBox(GetViewData().GetDialogParent());
+        if (aBox.run() != RET_YES)
+            return false;
+    }
 
     auto pStrBuffer = std::make_shared<OUString>();
     if (std::unique_ptr<SvStream> xStream = rDataHelper.GetSotStorageStream( nFormatId ) )
