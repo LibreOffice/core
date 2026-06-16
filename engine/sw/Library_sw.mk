@@ -379,6 +379,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/model/ModelTraverser \
     sw/source/core/model/SearchResultLocator \
     sw/source/core/model/ThemeColorChanger \
+    sw/source/core/seclabel/SpifPolicy \
     sw/source/core/objectpositioning/anchoredobjectposition \
     sw/source/core/objectpositioning/ascharanchoredobjectposition \
     sw/source/core/objectpositioning/environmentofanchoredobject \
