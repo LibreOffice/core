@@ -40,9 +40,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using ::com::sun::star::awt::tab::XTabPageModel;
 
-constexpr OUStringLiteral WRONG_TYPE_EXCEPTION = u"Type must be css::awt::tab::XTabPageModel!";
-
-
 UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XComponentContext >& i_factory )
     :UnoControlTabPageContainerModel_Base( i_factory )
     ,maContainerListeners( *this )
@@ -138,7 +135,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
     SolarMutexGuard aSolarGuard;
     uno::Reference < XTabPageModel > xTabPageModel;
     if(!(aElement >>= xTabPageModel))
-        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, getXWeak(), 2 );
+        throw IllegalArgumentException( u"Type must be css::awt::tab::XTabPageModel!"_ustr, getXWeak(), 2 );
 
     if ( sal_Int32( m_aTabPageVector.size()) ==nIndex )
         m_aTabPageVector.push_back( xTabPageModel );

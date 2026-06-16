@@ -57,10 +57,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-constexpr OUStringLiteral PROPERTY_DIALOGSOURCEURL = u"DialogSourceURL";
-constexpr OUStringLiteral PROPERTY_IMAGEURL = u"ImageURL";
-constexpr OUStringLiteral PROPERTY_GRAPHIC = u"Graphic";
-
 
 // we probably will need both a hash of control models and hash of controls
 // => use some template magic
@@ -413,12 +409,12 @@ void UnoDialogControl::PrepareWindowDescriptor( css::awt::WindowDescriptor& rDes
     // before the propertiesChangeEvents are sent!
     OUString aImageURL;
     Reference< graphic::XGraphic > xGraphic;
-    if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
+    if (( ImplGetPropertyValue( u"ImageURL"_ustr ) >>= aImageURL ) &&
         ( !aImageURL.isEmpty() ))
     {
-        OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(PROPERTY_DIALOGSOURCEURL), uno::Any(aImageURL));
+        OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(u"DialogSourceURL"_ustr), uno::Any(aImageURL));
         xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl, u""_ustr );
-        ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::Any( xGraphic ), true );
+        ImplSetPropertyValue( u"Graphic"_ustr, uno::Any( xGraphic ), true );
     }
 }
 

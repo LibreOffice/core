@@ -44,16 +44,6 @@ namespace
     };
 }
 
-constexpr OUStringLiteral GCM_PROPERTY_POS_X = u"PositionX";
-constexpr OUStringLiteral GCM_PROPERTY_POS_Y = u"PositionY";
-constexpr OUStringLiteral GCM_PROPERTY_WIDTH = u"Width";
-constexpr OUStringLiteral GCM_PROPERTY_HEIGHT = u"Height";
-constexpr OUStringLiteral GCM_PROPERTY_NAME = u"Name";
-constexpr OUStringLiteral GCM_PROPERTY_TABINDEX = u"TabIndex";
-constexpr OUStringLiteral GCM_PROPERTY_STEP = u"Step";
-constexpr OUStringLiteral GCM_PROPERTY_TAG = u"Tag";
-constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
-
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
 
@@ -174,15 +164,15 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
     void OGeometryControlModel_Base::registerProperties()
     {
         // register our members for the property handling of the OPropertyContainer
-        registerProperty(GCM_PROPERTY_POS_X,    GCM_PROPERTY_ID_POS_X,      DEFAULT_ATTRIBS(), &m_nPosX, cppu::UnoType<decltype(m_nPosX)>::get());
-        registerProperty(GCM_PROPERTY_POS_Y,    GCM_PROPERTY_ID_POS_Y,      DEFAULT_ATTRIBS(), &m_nPosY, cppu::UnoType<decltype(m_nPosY)>::get());
-        registerProperty(GCM_PROPERTY_WIDTH,    GCM_PROPERTY_ID_WIDTH,      DEFAULT_ATTRIBS(), &m_nWidth, cppu::UnoType<decltype(m_nWidth)>::get());
-        registerProperty(GCM_PROPERTY_HEIGHT,   GCM_PROPERTY_ID_HEIGHT,     DEFAULT_ATTRIBS(), &m_nHeight, cppu::UnoType<decltype(m_nHeight)>::get());
-        registerProperty(GCM_PROPERTY_NAME,     GCM_PROPERTY_ID_NAME,       DEFAULT_ATTRIBS(), &m_aName, cppu::UnoType<decltype(m_aName)>::get());
-        registerProperty(GCM_PROPERTY_TABINDEX, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, cppu::UnoType<decltype(m_nTabIndex)>::get());
-        registerProperty(GCM_PROPERTY_STEP,     GCM_PROPERTY_ID_STEP,       DEFAULT_ATTRIBS(), &m_nStep, cppu::UnoType<decltype(m_nStep)>::get());
-        registerProperty(GCM_PROPERTY_TAG,      GCM_PROPERTY_ID_TAG,        DEFAULT_ATTRIBS(), &m_aTag, cppu::UnoType<decltype(m_aTag)>::get());
-        registerProperty(GCM_PROPERTY_RESOURCERESOLVER, GCM_PROPERTY_ID_RESOURCERESOLVER, DEFAULT_ATTRIBS(), &m_xStrResolver, cppu::UnoType<decltype(m_xStrResolver)>::get());
+        registerProperty(u"PositionX"_ustr,    GCM_PROPERTY_ID_POS_X,      DEFAULT_ATTRIBS(), &m_nPosX, cppu::UnoType<decltype(m_nPosX)>::get());
+        registerProperty(u"PositionY"_ustr,    GCM_PROPERTY_ID_POS_Y,      DEFAULT_ATTRIBS(), &m_nPosY, cppu::UnoType<decltype(m_nPosY)>::get());
+        registerProperty(u"Width"_ustr,    GCM_PROPERTY_ID_WIDTH,      DEFAULT_ATTRIBS(), &m_nWidth, cppu::UnoType<decltype(m_nWidth)>::get());
+        registerProperty(u"Height"_ustr,   GCM_PROPERTY_ID_HEIGHT,     DEFAULT_ATTRIBS(), &m_nHeight, cppu::UnoType<decltype(m_nHeight)>::get());
+        registerProperty(u"Name"_ustr,     GCM_PROPERTY_ID_NAME,       DEFAULT_ATTRIBS(), &m_aName, cppu::UnoType<decltype(m_aName)>::get());
+        registerProperty(u"TabIndex"_ustr, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, cppu::UnoType<decltype(m_nTabIndex)>::get());
+        registerProperty(u"Step"_ustr,     GCM_PROPERTY_ID_STEP,       DEFAULT_ATTRIBS(), &m_nStep, cppu::UnoType<decltype(m_nStep)>::get());
+        registerProperty(u"Tag"_ustr,      GCM_PROPERTY_ID_TAG,        DEFAULT_ATTRIBS(), &m_aTag, cppu::UnoType<decltype(m_aTag)>::get());
+        registerProperty(u"ResourceResolver"_ustr, GCM_PROPERTY_ID_RESOURCERESOLVER, DEFAULT_ATTRIBS(), &m_xStrResolver, cppu::UnoType<decltype(m_xStrResolver)>::get());
     }
 
 
