@@ -1195,10 +1195,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
     // E.g. psqlodbc up to at least version 09.01.0100 segfaults
     if (table.isEmpty())
     {
-        static constexpr OUStringLiteral errMsg
-            = u"ODBC: Trying to get special columns of empty table name";
-        static constexpr OUStringLiteral SQLState = u"HY009";
-        throw SQLException( errMsg, *this, SQLState, -1, Any() );
+        throw SQLException( u"ODBC: Trying to get special columns of empty table name"_ustr, *this, u"HY009"_ustr, -1, Any() );
     }
 
     OUString uPKQ;

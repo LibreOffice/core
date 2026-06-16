@@ -48,8 +48,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::logging;
 using namespace ::osl;
 
-constexpr OUStringLiteral SERVICE_SDBC_DRIVER = u"com.sun.star.sdbc.Driver";
-
 class ODriverEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
     friend class OSDBCDriverManager;
@@ -204,7 +202,7 @@ void OSDBCDriverManager::bootstrapDrivers()
     Reference< XContentEnumerationAccess > xEnumAccess( m_xContext->getServiceManager(), UNO_QUERY );
     Reference< XEnumeration > xEnumDrivers;
     if (xEnumAccess.is())
-        xEnumDrivers = xEnumAccess->createContentEnumeration(SERVICE_SDBC_DRIVER);
+        xEnumDrivers = xEnumAccess->createContentEnumeration(u"com.sun.star.sdbc.Driver"_ustr);
 
     OSL_ENSURE( xEnumDrivers.is(), "OSDBCDriverManager::bootstrapDrivers: no enumeration for the drivers available!" );
     if (!xEnumDrivers.is())

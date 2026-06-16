@@ -39,13 +39,11 @@ OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 
 void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {
-        static constexpr OUStringLiteral aName = u"Name";
-
         for (const auto& rxColumn : *xColumns)
         {
                 OUString aFieldName;
 
-                rxColumn->getPropertyValue(aName) >>= aFieldName;
+                rxColumn->getPropertyValue(u"Name"_ustr) >>= aFieldName;
                 guint nFieldNumber = findEvoabField(aFieldName);
                 if (nFieldNumber == guint(-1))
                 {
