@@ -28,7 +28,6 @@ SvLBoxButtonData::SvLBoxButtonData(const Control& rControlForSettings, bool _bRa
     , m_pBox(nullptr)
     , m_bShowRadioButton(false)
 {
-    m_bDataOk = false;
     m_bShowRadioButton = _bRadioBtn;
 
     SetDefaultImages(rControlForSettings);
@@ -63,16 +62,7 @@ SvBmp SvLBoxButtonData::GetIndex(SvItemStateFlags nItemState)
     return nIdx;
 }
 
-const Size& SvLBoxButtonData::GetSize()
-{
-    if (!m_bDataOk)
-    {
-        m_aSize = m_aBmps.at(SvBmp::UNCHECKED).GetSizePixel();
-        m_bDataOk = true;
-    }
-
-    return m_aSize;
-}
+const Size& SvLBoxButtonData::GetSize() { return m_aSize; }
 
 SvButtonState SvLBoxButtonData::ConvertToButtonState(SvItemStateFlags nItemFlags)
 {
@@ -123,6 +113,8 @@ void SvLBoxButtonData::SetDefaultImages(const Control& rCtrl)
         m_aBmps[SvBmp::HITRISTATE] = CheckBox::GetCheckImage(
             rSettings, DrawButtonFlags::DontKnow | DrawButtonFlags::Pressed);
     }
+
+    m_aSize = m_aBmps.at(SvBmp::UNCHECKED).GetSizePixel();
 }
 
 bool SvLBoxButtonData::IsRadio() const { return m_bShowRadioButton; }

@@ -33,7 +33,6 @@ class SvLBoxButtonData
 private:
     Link<SvLBoxButtonData*, void> m_aLink;
     Size m_aSize;
-    bool m_bDataOk;
     std::map<SvBmp, Image> m_aBmps;
 
     SvTreeListEntry* m_pEntry;
