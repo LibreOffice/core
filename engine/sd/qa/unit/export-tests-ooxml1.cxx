@@ -1369,11 +1369,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripPrstDash)
             u"lgDashDot"_ustr,     u"lgDashDotDot"_ustr, u"sysDash"_ustr, u"sysDashDot"_ustr,
             u"sysDashDotDot"_ustr, u"sysDot"_ustr };
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    static constexpr OStringLiteral sStart = "/p:sld/p:cSld/p:spTree/p:sp[";
-    static constexpr OStringLiteral sEnd = "]/p:spPr/a:ln/a:prstDash";
     for (sal_uInt16 i = 0; i < 10; i++)
     {
-        OString sXmlPath = sStart + OString::number(i + 1) + sEnd;
+        OString sXmlPath = "/p:sld/p:cSld/p:spTree/p:sp["_ostr + OString::number(i + 1)
+                           + "]/p:spPr/a:ln/a:prstDash"_ostr;
         OUString sResaved = getXPath(pXmlDoc, sXmlPath, "val");
         CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong prstDash", sOriginal[i], sResaved);
     }

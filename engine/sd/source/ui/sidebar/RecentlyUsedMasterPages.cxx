@@ -120,8 +120,6 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
         if ( ! xSet.is())
             return;
 
-        static constexpr OUStringLiteral sURLMemberName(u"URL");
-        static constexpr OUStringLiteral sNameMemberName(u"Name");
         OUString sURL;
         OUString sName;
 
@@ -135,8 +133,8 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                 xSet->getByName(rKey), UNO_QUERY);
             if (xSetItem.is())
             {
-                Any aURL (xSetItem->getByName(sURLMemberName));
-                Any aName (xSetItem->getByName(sNameMemberName));
+                Any aURL (xSetItem->getByName(u"URL"_ustr));
+                Any aName (xSetItem->getByName(u"Name"_ustr));
                 aURL >>= sURL;
                 aName >>= sName;
                 SharedMasterPageDescriptor pDescriptor = std::make_shared<MasterPageDescriptor>(
@@ -188,8 +186,6 @@ void RecentlyUsedMasterPages::SavePersistentValues()
             xSet->removeByName (rKey);
 
         // Fill it with the URLs of this object.
-        static constexpr OUStringLiteral sURLMemberName(u"URL");
-        static constexpr OUStringLiteral sNameMemberName(u"Name");
         Any aValue;
         Reference<lang::XSingleServiceFactory> xChildFactory (
             xSet, UNO_QUERY);
@@ -207,10 +203,10 @@ void RecentlyUsedMasterPages::SavePersistentValues()
                 xSet->insertByName (sKey, Any(xChild));
 
                 aValue <<= rDescriptor.msURL;
-                xChild->replaceByName (sURLMemberName, aValue);
+                xChild->replaceByName (u"URL"_ustr, aValue);
 
                 aValue <<= rDescriptor.msName;
-                xChild->replaceByName (sNameMemberName, aValue);
+                xChild->replaceByName (u"Name"_ustr, aValue);
             }
             ++nIndex;
         }

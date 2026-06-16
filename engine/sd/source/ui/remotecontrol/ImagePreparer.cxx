@@ -195,8 +195,6 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
 
     static constexpr OUString sNotesShapeName (
         u"com.sun.star.presentation.NotesShape"_ustr );
-    static constexpr OUStringLiteral sTextShapeName (
-        u"com.sun.star.drawing.TextShape" );
 
     if (aNotesPage.is())
     {
@@ -224,7 +222,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
                 if (xShapeDescriptor.is())
                 {
                     OUString sType (xShapeDescriptor->getShapeType());
-                    if (sType == sNotesShapeName || sType == sTextShapeName)
+                    if (sType == sNotesShapeName || sType == u"com.sun.star.drawing.TextShape"_ustr)
                     {
                         uno::Reference<text::XTextRange> xText (
                             aNotesPage->getByIndex(nIndex), UNO_QUERY);

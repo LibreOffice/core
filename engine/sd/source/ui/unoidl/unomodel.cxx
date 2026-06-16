@@ -2262,19 +2262,15 @@ bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                                           std::string_view rCommand)
 {
-    static constexpr OStringLiteral aExtractDocStructure(".uno:ExtractDocumentStructure");
-    static constexpr OStringLiteral aVectorTile(".uno:VectorTile");
-    static constexpr OStringLiteral aVectorRenderingGraphics(".uno:VectorRenderingGraphics");
-
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 
-    if (o3tl::starts_with(rCommand, aExtractDocStructure))
+    if (o3tl::starts_with(rCommand, ".uno:ExtractDocumentStructure"))
     {
         auto commentsNode = rJsonWriter.startNode("DocStructure");
         GetDocStructureSlides(rJsonWriter, this, aMap);
     }
-    else if (o3tl::starts_with(rCommand, aVectorRenderingGraphics))
+    else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingGraphics"))
     {
         auto it = aMap.find(u"checksum"_ustr);
         if (it != aMap.end())
@@ -2290,7 +2286,7 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             }
         }
     }
-    else if (o3tl::starts_with(rCommand, aVectorTile))
+    else if (o3tl::starts_with(rCommand, ".uno:VectorTile"))
     {
         sal_Int32 nPart = -1;
         auto it = aMap.find(u"part"_ustr);

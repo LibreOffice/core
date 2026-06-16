@@ -90,11 +90,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
 
-// PowerPoint-Filter
-constexpr OUStringLiteral pFilterPowerPoint97( u"MS PowerPoint 97" );
-constexpr OUStringLiteral pFilterPowerPoint97Template( u"MS PowerPoint 97 Vorlage" );
-constexpr OUStringLiteral pFilterPowerPoint97AutoPlay( u"MS PowerPoint 97 AutoPlay" );
-
 namespace sd {
 
 /**
@@ -537,9 +532,9 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
 
-    if( aFilterName == pFilterPowerPoint97
-        || aFilterName == pFilterPowerPoint97Template
-        || aFilterName == pFilterPowerPoint97AutoPlay)
+    if( aFilterName == u"MS PowerPoint 97"_ustr
+        || aFilterName == u"MS PowerPoint 97 Vorlage"_ustr
+        || aFilterName == u"MS PowerPoint 97 AutoPlay"_ustr)
     {
         mpDoc->StopWorkStartupDelay();
         bRet = SdPPTFilter( rMedium, *this ).Import();

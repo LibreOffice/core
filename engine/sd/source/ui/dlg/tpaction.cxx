@@ -63,9 +63,6 @@ using namespace com::sun::star::uno;
 
 #define DOCUMENT_TOKEN '#'
 
-// XML content stream
-constexpr OUStringLiteral pStarDrawXMLContent( u"content.xml" );
-
 /**
  * Constructor of the Tab dialog: appends the pages to the dialog
  */
@@ -630,7 +627,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
             {
                 try
                 {
-                    if (xStorage->hasByName(pStarDrawXMLContent))
+                    if (xStorage->hasByName(u"content.xml"_ustr))
                     {
                         if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile))
                         {

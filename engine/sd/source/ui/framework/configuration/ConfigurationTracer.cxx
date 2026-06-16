@@ -57,12 +57,11 @@ void ConfigurationTracer::TraceBoundResources (
 {
     const std::vector<rtl::Reference<ResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, u"", AnchorBindingMode_DIRECT));
-    static constexpr OUStringLiteral sIndentation (u"    ");
     for (rtl::Reference<ResourceId> const & resourceId : aResourceList)
     {
         OUString sLine (resourceId->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
-            sLine = sIndentation + sLine;
+            sLine = u"    "_ustr + sLine;
         SAL_INFO("sd.ui", "" << sLine);
         TraceBoundResources(rxConfiguration, resourceId, nIndentation+1);
     }

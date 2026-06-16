@@ -81,7 +81,6 @@ void TransformOOo2xDocument( SdDrawDocument* pDocument )
 
 constexpr OUString gsEnableNumbering( u"enable-numbering"_ustr );
 constexpr OUString gsTextNamespace( u"urn:oasis:names:tc:opendocument:xmlns:text:1.0"_ustr );
-constexpr OUStringLiteral gsTrue( u"true" );
 
 SdTransformOOo2xDocument::SdTransformOOo2xDocument( SdDrawDocument& rDocument )
 : mrDocument( rDocument )
@@ -278,7 +277,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt1
             if( ( rAttr.GetAttrLName( nItem ) == gsEnableNumbering ) && ( rAttr.GetAttrNamespace( nItem ) == gsTextNamespace ) )
             {
                 const OUString& sValue( rAttr.GetAttrValue( nItem ) );
-                rState = sValue == gsTrue;
+                rState = sValue == u"true"_ustr;
                 return true;
             }
         }

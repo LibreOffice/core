@@ -1109,7 +1109,6 @@ constexpr OUString gaStrPlayFull( u"PlayFull"_ustr );
 constexpr OUString gaStrVerb( u"Verb"_ustr );
 constexpr OUString gaStrSoundURL( u"SoundURL"_ustr );
 constexpr OUString gaStrSpeed( u"Speed"_ustr );
-constexpr OUStringLiteral gaStrStarBasic( u"StarBasic" );
 constexpr OUString gaStrScript( u"Script"_ustr );
 
 SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) noexcept
@@ -1482,7 +1481,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         else
         {
             // Old Basic macro URL
-            aAny <<= OUString(gaStrStarBasic);
+            aAny <<= u"StarBasic"_ustr;
             pProperties->Name = gaStrEventType;
             pProperties->Handle = -1;
             pProperties->Value = aAny;

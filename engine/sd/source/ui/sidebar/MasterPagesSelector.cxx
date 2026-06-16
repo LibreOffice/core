@@ -45,11 +45,6 @@
 
 namespace sd::sidebar {
 
-    /** menu entry that is executed as default action when the left mouse button is
-        clicked over a master page.
-    */
-constexpr OUStringLiteral gsDefaultClickAction = u"applyselect";
-
 // Sidebar
 MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument,
                                          ViewShellBase& rBase,
@@ -152,7 +147,7 @@ OUString MasterPagesSelector::GetContextMenuUIFile() const
 
 IMPL_LINK_NOARG(MasterPagesSelector, MasterPageSelected, weld::IconView&, bool)
 {
-    ExecuteCommand(gsDefaultClickAction);
+    ExecuteCommand(u"applyselect"_ustr);
     return true;
 }
 

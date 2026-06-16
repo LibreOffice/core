@@ -742,8 +742,6 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPresetShapesExport)
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDocCT = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    static constexpr OStringLiteral sT("_T_");
-    static constexpr OStringLiteral sN("_N_");
 
     size_t i = 0;
     while (i < SAL_N_ELEMENTS(sShapeTypeAndValues))
@@ -755,8 +753,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPresetShapesExport)
         {
             OString sXPath
                 = "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom[@prst='_T_']/a:avLst/a:gd[_N_]"_ostr
-                      .replaceFirst(sT, sType)
-                      .replaceFirst(sN, OString::number(j));
+                      .replaceFirst("_T_"_ostr, sType)
+                      .replaceFirst("_N_"_ostr, OString::number(j));
             assertXPath(pXmlDocCT, sXPath, "name",
                         OUString::createFromAscii(sShapeTypeAndValues[i++]));
             assertXPath(pXmlDocCT, sXPath, "fmla",

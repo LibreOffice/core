@@ -491,11 +491,6 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
 
 } // namespace
 
-constexpr OUStringLiteral gaHTMLHeader(
-            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
-            "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
-            "<html>\r\n<head>\r\n" );
-
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
     OUString aPath,
@@ -680,7 +675,9 @@ void HtmlExport::ExportSingleDocument()
     mnPagesWritten = 0;
     InitProgress(mnSdPageCount);
 
-    OUStringBuffer aStr(gaHTMLHeader
+    OUStringBuffer aStr(u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
+            "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
+            "<html>\r\n<head>\r\n"_ustr
         + DocumentMetadata()
         + "\r\n"
         "</head>\r\n"
