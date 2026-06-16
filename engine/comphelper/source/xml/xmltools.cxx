@@ -78,12 +78,12 @@ namespace comphelper::xml
         OString makeXMLChaff()
         {
             sal_Int8 n;
-            (void)rtl_random_getBytes(nullptr, &n, 1);
+            rtl_random_getBytes(&n, 1);
 
             sal_Int32 nLength = 1024+n;
             // coverity[tainted_data] - 1024 deliberate random minus max -127/plus max 128
             std::vector<sal_uInt8> aChaff(nLength);
-            (void)rtl_random_getBytes(nullptr, aChaff.data(), nLength);
+            rtl_random_getBytes(aChaff.data(), nLength);
 
             encodeChaff(aChaff);
 

@@ -436,10 +436,7 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
 
     // get 32 random chars out of it
     uno::Sequence < sal_Int8 > aVector(32);
-    if (rtl_random_getBytes(nullptr, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
-    {
-        throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
-    }
+    rtl_random_getBytes(aVector.getArray(), aVector.getLength());
 
     std::vector< uno::Sequence< beans::NamedValue > > aGpgEncryptions;
 

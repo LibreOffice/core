@@ -71,7 +71,7 @@ namespace {
 
 sal_Int32 random() {
     sal_Int32 n;
-    (void)rtl_random_getBytes(nullptr, &n, sizeof n);
+    rtl_random_getBytes(&n, sizeof n);
     return n;
 }
 

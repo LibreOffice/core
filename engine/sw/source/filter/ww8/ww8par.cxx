@@ -5518,10 +5518,7 @@ namespace
                 ::msfilter::MSCodec_Std97 aCodec97;
 
                 sal_uInt8 pDocId[ 16 ];
-                if (rtl_random_getBytes(nullptr, pDocId, 16) != rtl_Random_E_None)
-                {
-                    throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
-                }
+                rtl_random_getBytes(pDocId, 16);
 
                 sal_uInt16 pStd97Pass[16] = {};
                 for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )

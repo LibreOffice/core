@@ -19,63 +19,24 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
 
 #include <sal/types.h>
-#include <rtl/alloc.h>
 #include <rtl/random.h>
 #include <oslrandom.h>
 
-namespace {
 
-struct RandomPool_Impl
+void rtl_random_getBytes (void *Buffer, sal_Size Bytes) noexcept
 {
-};
-
-}
-
-rtlRandomPool SAL_CALL rtl_random_createPool() noexcept
-{
-    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(rtl_allocateZeroMemory(sizeof(RandomPool_Impl)));
-    return static_cast< rtlRandomPool >(pImpl);
-}
-
-void SAL_CALL rtl_random_destroyPool(rtlRandomPool Pool) noexcept
-{
-    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
-    if (pImpl)
-    {
-        rtl_freeZeroMemory (pImpl, sizeof(RandomPool_Impl));
-    }
-}
-
-rtlRandomError SAL_CALL rtl_random_addBytes(
-    rtlRandomPool Pool, const void *Buffer, sal_Size /*Bytes*/) noexcept
-{
-    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
-    const sal_uInt8 *pBuffer = static_cast< const sal_uInt8* >(Buffer);
-
-    if (!pImpl || !pBuffer)
-        return rtl_Random_E_Argument;
-
-    return rtl_Random_E_None;
-}
-
-rtlRandomError SAL_CALL rtl_random_getBytes (
-    rtlRandomPool, void *Buffer, sal_Size Bytes) noexcept
-{
-    sal_uInt8 *pBuffer = static_cast< sal_uInt8* >(Buffer);
-
-    if (!pBuffer)
-        return rtl_Random_E_Argument;
+    assert(Buffer != nullptr);
 
     if (!osl_get_system_random_data(static_cast<char*>(Buffer), Bytes))
     {
         ::std::fprintf(stderr, "rtl_random_getBytes(): cannot read random device, aborting.\n");
         ::std::abort();
     }
-    return rtl_Random_E_None;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,66 +29,13 @@
 extern "C" {
 #endif
 
-/** Random Pool opaque type.
- */
-typedef void* rtlRandomPool;
-
-
-/** Error Code enumeration.
- */
-enum __rtl_RandomError
-{
-    rtl_Random_E_None,
-    rtl_Random_E_Argument,
-    rtl_Random_E_Memory,
-    rtl_Random_E_Unknown,
-    rtl_Random_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-};
-
-/** Error Code type.
- */
-typedef enum __rtl_RandomError rtlRandomError;
 
 /** Retrieve random bytes
-    @param[in] Pool use NULL, non-NULL Random Pools are deprecated
     @param[in,out] Buffer a buffer to receive the random bytes.
     @param[in] Bytes the number of bytes to write to the buffer.
-    @retval rtl_Random_E_None upon success.
  */
-SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_getBytes (
-    rtlRandomPool  Pool,
+SAL_DLLPUBLIC void rtl_random_getBytes (
     void          *Buffer,
-    sal_Size       Bytes
-) SAL_THROW_EXTERN_C();
-
-
-/** Create a Random Pool.
-    @return initialized Random Pool, or NULL upon failure.
-    @deprecated Instead use rtl_random_getBytes with a NULL Pool
- */
-SAL_DLLPUBLIC rtlRandomPool SAL_CALL rtl_random_createPool (void) SAL_THROW_EXTERN_C();
-
-
-/** Destroy a Random Pool.
-    @param[in] Pool a Random Pool.
-    @deprecated Instead use rtl_random_getBytes with a NULL Pool
- */
-SAL_DLLPUBLIC void SAL_CALL rtl_random_destroyPool (
-    rtlRandomPool Pool
-) SAL_THROW_EXTERN_C();
-
-
-/** Add bytes to a Random Pool.
-    @param[in] Pool   a Random Pool.
-    @param[in] Buffer a buffer containing the bytes to add.
-    @param[in] Bytes  the number of bytes to read from the buffer.
-    @retval rtl_Random_E_None upon success.
-    @deprecated This now does nothing, instead use rtl_random_getBytes with a
-    NULL Pool
- */
-SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_addBytes (
-    rtlRandomPool  Pool,
-    const void    *Buffer,
     sal_Size       Bytes
 ) SAL_THROW_EXTERN_C();
 

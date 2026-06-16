@@ -56,12 +56,7 @@ extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
                                         SAL_UNUSED_PARAMETER const sal_uInt8 *,
                                         SAL_UNUSED_PARAMETER bool)
 {
-    if (rtl_random_getBytes(nullptr, pTargetUUID, 16) != rtl_Random_E_None)
-    {
-        abort();
-            // only possible way to signal failure here (rtl_createUuid
-            // being part of a fixed C API)
-    }
+    rtl_random_getBytes(pTargetUUID, 16);
 
     // See ITU-T Recommendation X.667:
     pTargetUUID[6] &= 0x0F;

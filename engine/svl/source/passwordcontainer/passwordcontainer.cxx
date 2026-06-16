@@ -651,10 +651,7 @@ void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUStr
 OUString PasswordContainer::createIV()
 {
     unsigned char iv[RTL_DIGEST_LENGTH_MD5];
-    if (rtl_random_getBytes(nullptr, iv, RTL_DIGEST_LENGTH_MD5) != rtl_Random_E_None)
-    {
-        throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
-    }
+    rtl_random_getBytes(iv, RTL_DIGEST_LENGTH_MD5);
     OUStringBuffer aBuffer;
     for (sal_uInt8 i : iv)
     {

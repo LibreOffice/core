@@ -91,10 +91,7 @@ OUString generateRandomPipeId()
 {
     // compute some good pipe id:
     sal_uInt8 bytes[ 32 ];
-    if (rtl_random_getBytes(
-            nullptr, bytes, SAL_N_ELEMENTS(bytes) ) != rtl_Random_E_None) {
-        throw RuntimeException( u"random pool error!?"_ustr, nullptr );
-    }
+    rtl_random_getBytes(bytes, SAL_N_ELEMENTS(bytes));
     OUStringBuffer buf;
     for (unsigned char byte : bytes) {
         buf.append( static_cast<sal_Int32>(byte), 0x10 );

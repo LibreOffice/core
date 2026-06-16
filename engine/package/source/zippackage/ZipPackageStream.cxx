@@ -587,14 +587,8 @@ bool ZipPackageStream::saveChild(
                 uno::Sequence<sal_Int8> aSalt(16);
                 // note: for GCM it's particularly important that IV is unique
                 uno::Sequence<sal_Int8> aVector(GetIVSize());
-                if (rtl_random_getBytes(nullptr, aSalt.getArray(), 16) != rtl_Random_E_None)
-                {
-                    throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
-                }
-                if (rtl_random_getBytes(nullptr, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
-                {
-                    throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
-                }
+                rtl_random_getBytes(aSalt.getArray(), 16);
+                rtl_random_getBytes(aVector.getArray(), aVector.getLength());
                 if ( !m_bHaveOwnKey )
                 {
                     m_aEncryptionKey = rEncryptionKey;

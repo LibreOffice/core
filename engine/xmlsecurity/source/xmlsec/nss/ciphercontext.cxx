@@ -325,10 +325,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
 
         if ( nPaddingSize > 1 )
         {
-            if (rtl_random_getBytes(nullptr, pLastBlock + nOldLastBlockLen, nPaddingSize - 1) != rtl_Random_E_None)
-            {
-                throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
-            }
+            rtl_random_getBytes(pLastBlock + nOldLastBlockLen, nPaddingSize - 1);
         }
         pLastBlock[m_aLastBlock.getLength() - 1] = static_cast< sal_Int8 >( nPaddingSize );
     }
