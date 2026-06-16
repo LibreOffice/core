@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_uwriter, \
     sw/qa/core/test_ToxMiscTest \
     sw/qa/core/test_rect \
     sw/qa/core/test_region \
+    sw/qa/core/SpifPolicyTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,sw_uwriter,sw))
