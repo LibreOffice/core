@@ -259,3 +259,104 @@ window.L.control.tooltip = function (options) {
 };
 
 window.L.control.attachTooltipEventListener = Tooltip.attachEventListener;
+
+/*
+ * ValueTooltip - a small floating tooltip that shows a value, optionally with
+ * an icon and a label.
+ *
+ * Unlike the Tooltip class above, which is a single shared hover manager (one
+ * #cooltip element shown on hover, placed automatically), ValueTooltip is a
+ * lightweight widget the caller instantiates and drives directly. One instance
+ * owns one element, so several can be shown at once - which is what the rulers
+ * use to present all indent values together with one of them focused. The
+ * caller decides when it appears (show/hide) and where it sits (setPosition or
+ * placeNearPoint).
+ *
+ * Two looks are supported. A focused tooltip shows an icon, a label and the
+ * value in the standard tooltip style. A plain (chip) tooltip shows only the
+ * value as a small dark pill.
+ *
+ * The content passed to render() has the shape { value, focused?, iconName?,
+ * label? } (see the ValueTooltip declaration in global.d.ts).
+ */
+class ValueTooltip {
+	constructor() {
+		this._container = window.L.DomUtil.create(
+			'div',
+			'cool-value-tooltip',
+			document.body,
+		);
+	}
+
+	// Rebuild the tooltip content. The icon path is resolved here on every
+	// render so the correct theme variant is used after a theme change.
+	render(content) {
+		const tip = this._container;
+		tip.innerText = '';
+		if (content.focused) {
+			window.L.DomUtil.addClass(tip, 'cool-value-tooltip--focused');
+			const icon = window.L.DomUtil.create(
+				'span',
+				'cool-value-tooltip-icon',
+				tip,
+			);
+			if (content.iconName)
+				icon.style.backgroundImage =
+					'url("' + app.LOUtil.getImageURL(content.iconName) + '")';
+			const text = window.L.DomUtil.create(
+				'span',
+				'cool-value-tooltip-text',
+				tip,
+			);
+			text.innerText = content.label
+				? content.label + ': ' + content.value
+				: content.value;
+		} else {
+			window.L.DomUtil.removeClass(tip, 'cool-value-tooltip--focused');
+			tip.innerText = content.value;
+		}
+	}
+
+	show() {
+		this._container.style.display = 'block';
+	}
+
+	hide() {
+		this._container.style.display = 'none';
+	}
+
+	isVisible() {
+		return this._container.style.display === 'block';
+	}
+
+	// Place the tooltip at fixed viewport coordinates.
+	setPosition(left, top) {
+		this._container.style.left = left + 'px';
+		this._container.style.top = top + 'px';
+	}
+
+	// Place the tooltip next to a pointer position, kept inside the viewport.
+	placeNearPoint(x, y) {
+		const w = this._container.offsetWidth;
+		const h = this._container.offsetHeight;
+		let left = x + 12;
+		let top = y + 12;
+		if (left + w > window.innerWidth) left = x - w - 12;
+		if (top + h > window.innerHeight) top = y - h - 12;
+		this.setPosition(Math.max(0, left), Math.max(0, top));
+	}
+
+	get offsetWidth() {
+		return this._container.offsetWidth;
+	}
+
+	get offsetHeight() {
+		return this._container.offsetHeight;
+	}
+
+	destroy() {
+		this._container.remove();
+	}
+}
+
+app.definitions.valueTooltip = ValueTooltip;
