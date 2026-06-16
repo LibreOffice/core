@@ -522,7 +522,7 @@ public:
 
     // Is called for an Entry that gets expanded with the Flag
     // ENTRYFLAG_CHILDREN_ON_DEMAND set.
-    virtual void             RequestingChildren( SvTreeListEntry* pParent );
+    virtual void RequestingChildren(SvTreeListEntry& rParent);
 
     // Drag & Drop
     // New D'n'D API

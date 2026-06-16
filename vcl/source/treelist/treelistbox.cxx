@@ -2114,10 +2114,10 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
+void SvTreeListBox::RequestingChildren(SvTreeListEntry& rParent)
 {
-    if( !pParent->HasChildren() )
-        InsertEntry( u"<dummy>"_ustr, pParent );
+    if (!rParent.HasChildren())
+        InsertEntry(u"<dummy>"_ustr, &rParent);
 }
 
 void SvTreeListBox::GetFocus()
@@ -2311,7 +2311,7 @@ bool SvTreeListBox::Expand(SvTreeListEntry& rParent)
     SvTLEntryFlags nFlags;
 
     if (rParent.HasChildrenOnDemand())
-        RequestingChildren(&rParent);
+        RequestingChildren(rParent);
     bool bExpandAllowed = rParent.HasChildren() && ExpandingHdl();
     // double check if the expander callback ended up removing all children
     if (rParent.HasChildren())

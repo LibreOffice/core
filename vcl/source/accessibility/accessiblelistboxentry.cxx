@@ -1075,7 +1075,7 @@ SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)
         pEntry = m_pTreeListBox->GetEntry( pParent, nIndex );
         if ( !pEntry && getAccessibleChildCount() > 0 )
         {
-            m_pTreeListBox->RequestingChildren(pParent);
+            m_pTreeListBox->RequestingChildren(*pParent);
             pEntry = m_pTreeListBox->GetEntry( pParent, nIndex );
         }
     }

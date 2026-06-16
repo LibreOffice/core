@@ -98,7 +98,7 @@ public:
 
     void            insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos );
 
-    virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
+    virtual void RequestingChildren(SvTreeListEntry& rParent) override;
 
     virtual bool    EditingEntry( SvTreeListEntry* pEntry ) override;
     virtual bool EditedEntry(SvTreeListEntry& rEntry, const SvLBoxItem& rItem,
@@ -1448,10 +1448,9 @@ void UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParen
         SvTreeListBox::Insert( pEntry, nPos );
 }
 
-
-void UnoTreeListBoxImpl::RequestingChildren( SvTreeListEntry* pParent )
+void UnoTreeListBoxImpl::RequestingChildren(SvTreeListEntry& rParent)
 {
-    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( pParent );
+    UnoTreeListEntry* pEntry = dynamic_cast<UnoTreeListEntry*>(&rParent);
     if( pEntry && pEntry->mxNode.is() && mxPeer.is() )
         mxPeer->onRequestChildNodes( pEntry->mxNode );
 }
