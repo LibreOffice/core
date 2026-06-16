@@ -17,11 +17,11 @@
 #include <opencl/platforminfo.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <comphelper/hash.hxx>
 #include <opencl/OpenCLZone.hxx>
 
 #include <memory>
@@ -66,14 +66,12 @@ namespace
 
 OString generateMD5(const void* pData, size_t length)
 {
-    sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_MD5];
-    rtlDigestError aError = rtl_digest_MD5(pData, length,
-            pBuffer, RTL_DIGEST_LENGTH_MD5);
-    SAL_WARN_IF(aError != rtl_Digest_E_None, "opencl", "md5 generation failed");
+    ::std::vector<unsigned char> hash{
+        ::comphelper::Hash::calculateHash(pData, length, ::comphelper::HashType::MD5)};
 
     OStringBuffer aBuffer(length * 2);
     const char* const pString = "0123456789ABCDEF";
-    for(sal_uInt8 val : pBuffer)
+    for(sal_uInt8 val : hash)
     {
         aBuffer.append(OStringChar(pString[val/16]) + OStringChar(pString[val%16]));
     }
