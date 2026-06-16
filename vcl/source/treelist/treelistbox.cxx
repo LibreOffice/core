@@ -2064,20 +2064,10 @@ void SvTreeListBox::EnableCheckButton(SvLBoxButtonData& rData)
         Invalidate();
 }
 
-const Image& SvTreeListBox::GetDefaultExpandedNodeImage( )
-{
-    return SvImpLBox::GetDefaultExpandedNodeImage( );
-}
-
-const Image& SvTreeListBox::GetDefaultCollapsedNodeImage( )
-{
-    return SvImpLBox::GetDefaultCollapsedNodeImage( );
-}
-
 void SvTreeListBox::SetNodeDefaultImages()
 {
-    SetExpandedNodeBmp(GetDefaultExpandedNodeImage());
-    SetCollapsedNodeBmp(GetDefaultCollapsedNodeImage());
+    SetExpandedNodeBmp(SvImpLBox::GetDefaultExpandedNodeImage());
+    SetCollapsedNodeBmp(SvImpLBox::GetDefaultCollapsedNodeImage());
     SetTabs();
 }
 
@@ -2919,8 +2909,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
             pImg = &m_pImpl->GetExpandedNodeBmp();
         else
             pImg = &m_pImpl->GetCollapsedNodeBmp();
-        bDefaultImage = bExpanded ? *pImg == GetDefaultExpandedNodeImage()
-                                  : *pImg == GetDefaultCollapsedNodeImage();
+        bDefaultImage = bExpanded ? *pImg == SvImpLBox::GetDefaultExpandedNodeImage()
+                                  : *pImg == SvImpLBox::GetDefaultCollapsedNodeImage();
         aImageSize = pImg->GetSizePixel();
         aImagePos.AdjustY((nTempEntryHeight - aImageSize.Height()) / 2);
     }

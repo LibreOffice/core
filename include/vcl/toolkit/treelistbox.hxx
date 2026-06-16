@@ -623,16 +623,6 @@ public:
 
     void            EnableCheckButton(SvLBoxButtonData&);
 
-    /** Returns the default image which clients should use for expanded nodes, to have a consistent user
-        interface experience in the whole product.
-    */
-    static const Image& GetDefaultExpandedNodeImage( );
-
-    /** Returns the default image which clients should use for expanded nodes, to have a consistent user
-        interface experience in the whole product.
-    */
-    static const Image& GetDefaultCollapsedNodeImage( );
-
     /** Sets default bitmaps for collapsed and expanded nodes.
     */
     void    SetNodeDefaultImages();
