@@ -26,7 +26,6 @@
 class Point;
 enum class AccessibleBrowseBoxObjType;
 namespace comphelper { class OAccessible; }
-namespace com::sun::star::accessibility { class XAccessible; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace rtl { template <class reference_type> class Reference; }
@@ -98,8 +97,9 @@ public:
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessibleCell(sal_Int32 _nRow,
                                                                          sal_uInt16 _nColumnPos)
         = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessibleRowHeader(sal_Int32 _nRow) = 0;
+    virtual rtl::Reference<comphelper::OAccessible>
+    CreateAccessibleColumnHeader(sal_uInt16 _nColumnPos) = 0;
 
     virtual sal_Int32               GetAccessibleControlCount() const = 0;
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessibleControl(sal_Int32 _nIndex) = 0;

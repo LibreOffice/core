@@ -308,13 +308,13 @@ SvHeaderTabListBox::CreateAccessibleCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos
     return xChild;
 }
 
-Reference<XAccessible> SvHeaderTabListBox::CreateAccessibleRowHeader(sal_Int32)
+rtl::Reference<comphelper::OAccessible> SvHeaderTabListBox::CreateAccessibleRowHeader(sal_Int32)
 {
-    Reference<XAccessible> xHeader;
-    return xHeader;
+    return {};
 }
 
-Reference<XAccessible> SvHeaderTabListBox::CreateAccessibleColumnHeader(sal_uInt16 _nColumn)
+rtl::Reference<comphelper::OAccessible>
+SvHeaderTabListBox::CreateAccessibleColumnHeader(sal_uInt16 _nColumn)
 {
     // first call? -> initial list
     if (m_aAccessibleChildren.empty())

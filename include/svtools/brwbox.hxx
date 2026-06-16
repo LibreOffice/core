@@ -42,6 +42,11 @@ class ScrollAdaptor;
 class MeasureStatusBar;
 enum class AccessibleBrowseBoxObjType;
 
+namespace com::sun::star::accessibility
+{
+class XAccessible;
+}
+
 namespace weld {
     class Scrollbar;
 }
@@ -715,17 +720,15 @@ public:
 
     /** Creates the accessible object of a row header.
         @param nRow  The row index of the header.
-        @return  The XAccessible interface of the specified row header. */
-    virtual css::uno::Reference<
-        css::accessibility::XAccessible >
-    CreateAccessibleRowHeader( sal_Int32 nRow ) override;
+        @return  The accessible of the specified row header. */
+    virtual rtl::Reference<comphelper::OAccessible>
+    CreateAccessibleRowHeader(sal_Int32 nRow) override;
 
     /** Creates the accessible object of a column header.
         @param nColumnId  The column ID of the header.
-        @return  The XAccessible interface of the specified column header. */
-    virtual css::uno::Reference<
-        css::accessibility::XAccessible >
-    CreateAccessibleColumnHeader( sal_uInt16 nColumnPos ) override;
+        @return  The accessible of the specified column header. */
+    virtual rtl::Reference<comphelper::OAccessible>
+    CreateAccessibleColumnHeader(sal_uInt16 nColumnPos) override;
 
     /** Converts a point relative to the data window origin to a cell address.
         @param rnRow  Out-parameter that takes the row index.

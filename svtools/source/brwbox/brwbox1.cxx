@@ -776,12 +776,9 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
         Any()
     );
 
-    commitHeaderBarEvent(
-        AccessibleEventId::CHILD,
-        Any(),
-        Any( CreateAccessibleColumnHeader( nPos ) ),
-        true
-    );
+    commitHeaderBarEvent(AccessibleEventId::CHILD, Any(),
+                         Any(css::uno::Reference<XAccessible>(CreateAccessibleColumnHeader(nPos))),
+                         true);
 }
 
 
@@ -1255,10 +1252,7 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
         {
             commitHeaderBarEvent(
                 AccessibleEventId::CHILD,
-                Any( CreateAccessibleRowHeader( i ) ),
-                Any(),
-                false
-            );
+                Any(css::uno::Reference<XAccessible>(CreateAccessibleRowHeader(i))), Any(), false);
         }
     }
 
@@ -1416,11 +1410,8 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
             for (tools::Long i = nRow+1 ; i <= (nRow+nNumRows) ; ++i)
             {
                 commitHeaderBarEvent(
-                    AccessibleEventId::CHILD,
-                    Any(),
-                    Any( CreateAccessibleRowHeader( i ) ),
-                    false
-                );
+                    AccessibleEventId::CHILD, Any(),
+                    Any(css::uno::Reference<XAccessible>(CreateAccessibleRowHeader(i))), false);
             }
         }
     }

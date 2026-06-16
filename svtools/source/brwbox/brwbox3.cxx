@@ -91,16 +91,15 @@ rtl::Reference<comphelper::OAccessible> BrowseBox::CreateAccessibleCell(sal_Int3
     return new AccessibleBrowseBoxTableCell(getAccessibleTable(), *this, _nRow, _nColumnPos);
 }
 
-
-Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
+rtl::Reference<comphelper::OAccessible> BrowseBox::CreateAccessibleRowHeader(sal_Int32 _nRow)
 {
     return getAccessibleHeaderCell(
         m_aRowHeaderCellMap, _nRow, AccessibleBrowseBoxObjType::RowHeaderCell,
         getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar));
 }
 
-
-Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos )
+rtl::Reference<comphelper::OAccessible>
+BrowseBox::CreateAccessibleColumnHeader(sal_uInt16 _nColumnPos)
 {
     return getAccessibleHeaderCell(
         m_aColHeaderCellMap, _nColumnPos, AccessibleBrowseBoxObjType::ColumnHeaderCell,
