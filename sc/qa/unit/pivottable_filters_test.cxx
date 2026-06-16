@@ -2967,6 +2967,23 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSB)
     verifyCalcFields(pDoc, /*bBIFF12=*/true);
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotOutputPositionXLSB)
+{
+    createScDoc("xlsb/pivot-table/position.xlsb");
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->ReloadAllLinks();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(2, 1, 0)));
+    // Without the fix the following strings would be at the 4th row.
+    CPPUNIT_ASSERT_EQUAL(u"Region"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Sum of Sales"_ustr, pDoc->GetString(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Sum of Units"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testDatesDiscreteGrouping)
 {
     createScDoc("xls/pivottable_dates_grouping.xls");

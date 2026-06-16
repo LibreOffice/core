@@ -1246,9 +1246,10 @@ void PivotTable::importPTLocation( SequenceInputStream& rStrm, sal_Int16 nSheet 
 {
     BinRange aBinRange;
     rStrm >> aBinRange;
-    maLocationModel.mnFirstHeaderRow = rStrm.readInt32();
-    maLocationModel.mnFirstDataRow = rStrm.readInt32();
-    maLocationModel.mnFirstDataCol = rStrm.readInt32();
+    const BinAddress& aOrigin = aBinRange.maFirst;
+    maLocationModel.mnFirstHeaderRow = rStrm.readInt32() - aOrigin.mnRow;
+    maLocationModel.mnFirstDataRow = rStrm.readInt32() - aOrigin.mnRow;
+    maLocationModel.mnFirstDataCol = rStrm.readInt32() - aOrigin.mnCol;
     maLocationModel.mnRowPageCount = rStrm.readInt32();
     maLocationModel.mnColPageCount = rStrm.readInt32();
     AddressConverter::convertToCellRangeUnchecked( maLocationModel.maRange, aBinRange, nSheet );
