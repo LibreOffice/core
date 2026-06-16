@@ -84,10 +84,10 @@ bool SvHeaderTabListBox::IsItemChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol)
     return (eState == SvButtonState::Checked);
 }
 
-SvTreeListEntry& SvHeaderTabListBox::InsertEntryToColumn(const OUString& rStr,
-                                                         SvTreeListEntry* pParent, sal_uInt32 nPos)
+SvTreeListEntry& SvHeaderTabListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
+                                                 sal_uInt32 nPos)
 {
-    SvTreeListEntry& rEntry = SvTabListBox::InsertEntryToColumn(rStr, pParent, nPos);
+    SvTreeListEntry& rEntry = SvTabListBox::InsertEntry(rText, pParent, nPos);
     RecalculateAccessibleChildren();
     return rEntry;
 }

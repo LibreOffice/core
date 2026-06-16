@@ -56,8 +56,8 @@ public:
     HeaderBar* GetHeaderBar();
     static bool IsItemChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol);
 
-    virtual SvTreeListEntry& InsertEntryToColumn(const OUString&, SvTreeListEntry* pParent,
-                                                 sal_uInt32 nPos) override;
+    virtual SvTreeListEntry& InsertEntry(const OUString& Text, SvTreeListEntry* pParent = nullptr,
+                                         sal_uInt32 nPos = TREELIST_APPEND) override;
     virtual void Insert(SvTreeListEntry* pEnt, SvTreeListEntry* pPar, sal_uInt32 nPos) override;
     virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos) override;
 

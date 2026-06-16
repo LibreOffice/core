@@ -86,9 +86,6 @@ public:
     virtual SvTreeListEntry& InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          sal_uInt32 nPos = TREELIST_APPEND) override;
 
-    virtual SvTreeListEntry& InsertEntryToColumn(const OUString&, SvTreeListEntry* pParent,
-                                                 sal_uInt32 nPos);
-
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );
     OUString         GetEntryText( sal_uInt32 nPos, sal_uInt16 nCol = 0xffff ) const;

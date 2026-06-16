@@ -134,18 +134,12 @@ void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions)
 SvTreeListEntry& SvTabListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
                                            sal_uInt32 nPos)
 {
-    return InsertEntryToColumn(rText, pParent, nPos);
-}
-
-SvTreeListEntry& SvTabListBox::InsertEntryToColumn(const OUString& rStr, SvTreeListEntry* pParent,
-                                                   sal_uInt32 nPos)
-{
-    OUString aFirstStr(rStr);
+    OUString aFirstStr(rText);
     sal_Int32 nEnd = aFirstStr.indexOf( '\t' );
     if( nEnd != -1 )
     {
         aFirstStr = aFirstStr.copy(0, nEnd);
-        m_aCurEntry = rStr.copy(++nEnd);
+        m_aCurEntry = rText.copy(++nEnd);
     }
     else
         m_aCurEntry.clear();
