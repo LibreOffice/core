@@ -25,10 +25,10 @@
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
+#include <comphelper/OAccessible.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>

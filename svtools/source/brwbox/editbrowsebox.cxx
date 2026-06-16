@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/OAccessible.hxx>
 #include <svtools/editbrowsebox.hxx>
-
 #include <tools/debug.hxx>
-#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/image.hxx>
 #include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/settings.hxx>

@@ -30,6 +30,7 @@
 #include <sqlbison.hxx>
 #include <QueryTableView.hxx>
 #include <browserids.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include "TableFieldInfo.hxx"
@@ -46,7 +47,6 @@
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/fontdefs.hxx>
-#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>

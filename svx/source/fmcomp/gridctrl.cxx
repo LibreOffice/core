@@ -41,10 +41,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
-#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
