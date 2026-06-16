@@ -1578,21 +1578,6 @@ static void NormalizeURI( OUString& rName )
         NormalizeW3URI( rName );
 }
 
-constexpr OUStringLiteral XML_URI_W3_PREFIX(u"http://www.w3.org/");
-constexpr OUStringLiteral XML_URI_XFORMS_SUFFIX(u"/xforms");
-constexpr OUStringLiteral XML_N_XFORMS_1_0(u"http://www.w3.org/2002/xforms");
-constexpr OUStringLiteral XML_N_SVG(u"http://www.w3.org/2000/svg");
-constexpr OUStringLiteral XML_N_SVG_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-constexpr OUStringLiteral XML_N_FO(u"http://www.w3.org/1999/XSL/Format");
-constexpr OUStringLiteral XML_N_FO_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-constexpr OUStringLiteral XML_N_SMIL(u"http://www.w3.org/2001/SMIL20/");
-constexpr OUStringLiteral XML_N_SMIL_OLD(u"http://www.w3.org/2001/SMIL20");
-constexpr OUStringLiteral XML_N_SMIL_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
-constexpr OUStringLiteral XML_URN_OASIS_NAMES_TC(u"urn:oasis:names:tc");
-constexpr OUStringLiteral XML_XMLNS(u"xmlns");
-constexpr OUStringLiteral XML_OPENDOCUMENT(u"opendocument");
-constexpr OUStringLiteral XML_1_0(u"1.0");
-
 static bool NormalizeW3URI( OUString& rName )
 {
     // check if URI matches:
@@ -1602,15 +1587,15 @@ static bool NormalizeW3URI( OUString& rName )
     // - xforms
 
     bool bSuccess = false;
-    const OUString sURIPrefix = XML_URI_W3_PREFIX;
+    const OUString sURIPrefix = u"http://www.w3.org/"_ustr;
     if( rName.startsWith( sURIPrefix ) )
     {
-        const OUString sURISuffix = XML_URI_XFORMS_SUFFIX ;
+        const OUString sURISuffix = u"/xforms"_ustr ;
         sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
         if( rName.subView( nCompareFrom ) == sURISuffix )
         {
             // found W3 prefix, and xforms suffix
-            rName = XML_N_XFORMS_1_0;
+            rName = u"http://www.w3.org/2002/xforms"_ustr;
             bSuccess = true;
         }
     }
@@ -1622,19 +1607,19 @@ static bool NormalizeOasisURN( OUString& rName )
     // #i38644#
     // we exported the wrong namespace for smil, so we correct this here on load
     // for older documents
-    if( rName == XML_N_SVG )
+    if( rName == u"http://www.w3.org/2000/svg"_ustr )
     {
-        rName = XML_N_SVG_COMPAT;
+        rName = u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"_ustr;
         return true;
     }
-    else if( rName == XML_N_FO )
+    else if( rName == u"http://www.w3.org/1999/XSL/Format"_ustr )
     {
-        rName = XML_N_FO_COMPAT;
+        rName = u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"_ustr;
         return true;
     }
-    else if( rName == XML_N_SMIL || rName == XML_N_SMIL_OLD  )
+    else if( rName == u"http://www.w3.org/2001/SMIL20/"_ustr || rName == u"http://www.w3.org/2001/SMIL20"_ustr  )
     {
-        rName = XML_N_SMIL_COMPAT;
+        rName = u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"_ustr;
         return true;
     }
 
@@ -1646,7 +1631,7 @@ static bool NormalizeOasisURN( OUString& rName )
 
     sal_Int32 nNameLen = rName.getLength();
     // :urn:oasis:names:tc.*
-    const OUString aOasisURN = XML_URN_OASIS_NAMES_TC;
+    const OUString aOasisURN = u"urn:oasis:names:tc"_ustr;
     if( !rName.startsWith( aOasisURN ) )
         return false;
 
@@ -1664,7 +1649,7 @@ static bool NormalizeOasisURN( OUString& rName )
     // :urn:oasis:names:tc:[^:]:xmlns.*
     nPos = nTCIdEnd + 1;
     std::u16string_view sTmp( rName.subView( nPos ) );
-    const OUString aXMLNS = XML_XMLNS;
+    const OUString aXMLNS = u"xmlns"_ustr;
     if( !o3tl::starts_with(sTmp, aXMLNS ) )
         return false;
 
@@ -1691,9 +1676,9 @@ static bool NormalizeOasisURN( OUString& rName )
     // replace [tcid] with current TCID and version with current version.
 
     rName = rName.subView( 0, nTCIdStart ) +
-            XML_OPENDOCUMENT +
+            u"opendocument"_ustr +
             rName.subView( nTCIdEnd, nVersionStart-nTCIdEnd ) +
-            XML_1_0;
+            u"1.0"_ustr;
 
     return true;
 }
