@@ -31,7 +31,6 @@ namespace apitest {
 constexpr OUString colLevel1 = u"OutlineSheet.A1:Z1"_ustr;
 constexpr OUString colLevel2 = u"OutlineSheet.C1:W1"_ustr;
 constexpr OUString colLevel3 = u"OutlineSheet.E1:U1"_ustr;
-constexpr OUStringLiteral colLevel4 = u"OutlineSheet.G1:S1";
 
 constexpr OUString rowLevel1 = u"OutlineSheet.A1:A30"_ustr;
 constexpr OUString rowLevel2 = u"OutlineSheet.A3:A27"_ustr;
@@ -124,7 +123,7 @@ void XSheetOutline::testShowLevel()
     table::CellRangeAddress aLevel1 = getAddressFromRangeString(aSheet, colLevel1);
     table::CellRangeAddress aLevel2 = getAddressFromRangeString(aSheet, colLevel2);
     table::CellRangeAddress aLevel3 = getAddressFromRangeString(aSheet, colLevel3);
-    table::CellRangeAddress aLevel4 = getAddressFromRangeString(aSheet, colLevel4);
+    table::CellRangeAddress aLevel4 = getAddressFromRangeString(aSheet, u"OutlineSheet.G1:S1"_ustr);
 
     aSheetOutline->showDetail(getAddressFromRangeString(aSheet, colLevel1));
     aSheetOutline->showDetail(getAddressFromRangeString(aSheet, colLevel2));

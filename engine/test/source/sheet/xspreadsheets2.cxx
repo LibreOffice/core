@@ -34,7 +34,6 @@ using namespace css::uno;
 namespace apitest {
 
 constexpr OUString gaSrcSheetName(u"SheetToCopy"_ustr);
-constexpr OUStringLiteral gaSrcFileName(u"rangenamessrc.ods");
 constexpr OUString gaDestFileBase(u"ScNamedRangeObj.ods"_ustr);
 
 static sal_Int32 nInsertedSheets(0);
@@ -357,7 +356,7 @@ bool XSpreadsheets2::isExternalReference(std::u16string_view aDestContent, std::
 
     if (!o3tl::endsWithIgnoreAsciiCase(aDestContent, aSrcContent)) // same cell address
         return false;
-    size_t nPos = aDestContent.find(gaSrcFileName);
+    size_t nPos = aDestContent.find(u"rangenamessrc.ods");
     return nPos != std::u16string_view::npos && nPos > 0; // contains source file name
 }
 

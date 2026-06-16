@@ -254,11 +254,10 @@ void ScreenshotTest::processDialogBatchFile(std::u16string_view rFile)
     const OUString aURL(aDirectories.getURLFromSrc(rFile));
     SvFileStream aStream(aURL, StreamMode::READ);
     OString aNextUIFile;
-    static constexpr OStringLiteral aComment("#");
 
     while (aStream.ReadLine(aNextUIFile))
     {
-        if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
+        if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith("#"))
         {
             std::cout << "processing " << aNextUIFile << ":\n";
 
