@@ -83,13 +83,6 @@ using namespace ::xmloff::token;
 
 #define NSPREFIX u"ooo:"
 
-constexpr OUStringLiteral SVG_PROP_TINYPROFILE = u"TinyMode";
-constexpr OUStringLiteral SVG_PROP_DTDSTRING = u"DTDString";
-constexpr OUStringLiteral SVG_PROP_EMBEDFONTS = u"EmbedFonts";
-constexpr OUStringLiteral SVG_PROP_NATIVEDECORATION = u"UseNativeTextDecoration";
-constexpr OUStringLiteral SVG_PROP_OPACITY = u"Opacity";
-constexpr OUStringLiteral SVG_PROP_POSITIONED_CHARACTERS = u"UsePositionedCharacters";
-
 // ooo xml elements
 constexpr OUString aOOOElemTextField = NSPREFIX "text_field"_ustr;
 
@@ -97,11 +90,8 @@ constexpr OUString aOOOElemTextField = NSPREFIX "text_field"_ustr;
 // ooo xml attributes for meta_slide
 constexpr OUString aOOOAttrSlide = NSPREFIX "slide"_ustr;
 constexpr OUString aOOOAttrMaster = NSPREFIX "master"_ustr;
-constexpr OUStringLiteral aOOOAttrHasCustomBackground = NSPREFIX "has-custom-background";
-constexpr OUStringLiteral aOOOAttrDisplayName = NSPREFIX "display-name";
 constexpr OUString aOOOAttrBackgroundVisibility = NSPREFIX "background-visibility"_ustr;
 constexpr OUString aOOOAttrMasterObjectsVisibility = NSPREFIX "master-objects-visibility"_ustr;
-constexpr OUStringLiteral aOOOAttrSlideDuration = NSPREFIX "slide-duration";
 constexpr OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field"_ustr;
 constexpr OUString aOOOAttrFooterField = NSPREFIX "footer-field"_ustr;
 constexpr OUString aOOOAttrHasTransition = NSPREFIX "has-transition"_ustr;
@@ -348,13 +338,13 @@ SVGExport::SVGExport(
     comphelper::SequenceAsHashMap aFilterDataHashMap = rFilterData;
 
     // TinyProfile
-    mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_TINYPROFILE, false);
+    mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(u"TinyMode"_ustr, false);
 
     // DTD string
-    mbIsUseDTDString = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_DTDSTRING, true);
+    mbIsUseDTDString = aFilterDataHashMap.getUnpackedValueOrDefault(u"DTDString"_ustr, true);
 
     // Font Embedding
-    comphelper::SequenceAsHashMap::const_iterator iter = aFilterDataHashMap.find(SVG_PROP_EMBEDFONTS);
+    comphelper::SequenceAsHashMap::const_iterator iter = aFilterDataHashMap.find(u"EmbedFonts"_ustr);
     if(iter==aFilterDataHashMap.end())
     {
         OUString v;
@@ -367,13 +357,13 @@ SVGExport::SVGExport(
     }
 
     // Native Decoration
-    mbIsUseNativeTextDecoration = !mbIsUseTinyProfile && aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, true);
+    mbIsUseNativeTextDecoration = !mbIsUseTinyProfile && aFilterDataHashMap.getUnpackedValueOrDefault(u"UseNativeTextDecoration"_ustr, true);
 
     // Tiny Opacity (supported from SVG Tiny 1.2)
-    mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, true);
+    mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(u"Opacity"_ustr, true);
 
     // Positioned Characters    (The old method)
-    mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, false);
+    mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(u"UsePositionedCharacters"_ustr, false);
 
     // add namespaces
     GetNamespaceMap_().Add(
@@ -1341,7 +1331,7 @@ void SVGFilter::implGenerateMetaData()
                     OUString sDisplayName;
                     if (xPropSet->getPropertyValue(u"LinkDisplayName"_ustr) >>= sDisplayName)
                     {
-                        mpSVGExport->AddAttribute(aOOOAttrDisplayName, sDisplayName);
+                        mpSVGExport->AddAttribute(u"ooo:display-name"_ustr, sDisplayName);
                     }
 
                     bool bBackgroundVisibility                = true;     // default: visible
@@ -1360,7 +1350,7 @@ void SVGFilter::implGenerateMetaData()
                         bool assigned = ( xBackground->getPropertyValue( u"FillStyle"_ustr ) >>= aFillStyle );
                         // has a custom background ?
                         if( assigned && aFillStyle != drawing::FillStyle_NONE )
-                            mpSVGExport->AddAttribute(aOOOAttrHasCustomBackground, u"true"_ustr);
+                            mpSVGExport->AddAttribute(u"ooo:has-custom-background"_ustr, u"true"_ustr);
                     }
 
                     xPropSet->getPropertyValue( u"IsBackgroundVisible"_ustr )  >>= bBackgroundVisibility;
@@ -1436,7 +1426,7 @@ void SVGFilter::implGenerateMetaData()
                         if( xPropSet->getPropertySetInfo()->hasPropertyByName( u"HighResDuration"_ustr ) &&
                             (xPropSet->getPropertyValue( u"HighResDuration"_ustr ) >>= fSlideDuration) )
                         {
-                            mpSVGExport->AddAttribute( aOOOAttrSlideDuration, OUString::number(fSlideDuration) );
+                            mpSVGExport->AddAttribute( u"ooo:slide-duration"_ustr, OUString::number(fSlideDuration) );
                         }
                     }
                     // We look for a slide transition.

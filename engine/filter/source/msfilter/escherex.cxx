@@ -2596,14 +2596,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     if ( !(aGeoPropSet >>= aGeoPropSeq) )
         return;
 
-    static constexpr OUStringLiteral sViewBox            ( u"ViewBox"  );
-    static constexpr OUStringLiteral sTextRotateAngle    ( u"TextRotateAngle"  );
     static constexpr OUString sExtrusion          ( u"Extrusion"_ustr  );
-    static constexpr OUStringLiteral sEquations          ( u"Equations"  );
-    static constexpr OUStringLiteral sPath               ( u"Path"  );
     static constexpr OUString sTextPath           ( u"TextPath"_ustr  );
-    static constexpr OUStringLiteral sHandles            ( u"Handles"  );
-    static constexpr OUStringLiteral sAdjustmentValues   ( u"AdjustmentValues"  );
 
     bool bAdjustmentValuesProp = false;
     uno::Any aAdjustmentValuesProp;
@@ -2638,7 +2632,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     for ( i = 0; i < nCount; i++ )
     {
         const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
-        if ( rProp.Name == sViewBox )
+        if ( rProp.Name == u"ViewBox"_ustr )
         {
             if (!bIsDefaultObject && !bUseDefaultObject)
             {
@@ -2652,7 +2646,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 }
             }
         }
-        else if ( rProp.Name == sTextRotateAngle )
+        else if ( rProp.Name == u"TextRotateAngle"_ustr )
         {
             double f = 0;
             if ( rProp.Value >>= f )
@@ -2955,7 +2949,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     AddOpt( DFF_Prop_fc3DFillHarsh, nFillHarshFlags );
             }
         }
-        else if ( rProp.Name == sEquations )
+        else if ( rProp.Name == u"Equations"_ustr )
         {
             if (!bIsDefaultObject && !bUseDefaultObject)
             {
@@ -2994,7 +2988,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 }
             }
         }
-        else if ( rProp.Name == sPath )
+        else if ( rProp.Name == u"Path"_ustr )
         {
             uno::Sequence< beans::PropertyValue > aPathPropSeq;
             if ( rProp.Value >>= aPathPropSeq )
@@ -3476,7 +3470,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
             }
         }
-        else if ( rProp.Name == sHandles )
+        else if ( rProp.Name == u"Handles"_ustr )
         {
             if (!bIsDefaultObject && !bUseDefaultObject)
             {
@@ -3646,7 +3640,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 }
             }
         }
-        else if ( rProp.Name == sAdjustmentValues )
+        else if ( rProp.Name == u"AdjustmentValues"_ustr )
         {
             // it is required, that the information which handle is polar has already be read,
             // so we are able to change the polar value to a fixed float

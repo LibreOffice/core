@@ -87,9 +87,6 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
         static constexpr OUString sComma               ( u","_ustr );
         static constexpr OUString sDelim               ( u";"_ustr );
         static constexpr OUString sData                ( u"Data"_ustr );
-        static constexpr OUStringLiteral sDocTypePrefix       ( u"doctype:" );
-        static constexpr OUStringLiteral sFilterAdaptorService( u"com.sun.star.comp.Writer.XmlFilterAdaptor" );
-        static constexpr OUStringLiteral sXSLTFilterService   ( u"com.sun.star.documentconversion.XSLTFilter" );
 
 
         // set up sax writer and connect to given output stream
@@ -122,7 +119,7 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                 OUString sValue = "0" + sComma + sComma;
                 if( !filter->maDocType.isEmpty() )
                 {
-                    sValue += sDocTypePrefix + filter->maDocType;
+                    sValue += u"doctype:"_ustr + filter->maDocType;
                 }
                 sValue += sComma + sComma + filter->maExtension + sComma +
                     OUString::number( filter->mnDocumentIconID ) + sComma;
@@ -160,11 +157,11 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                     sComma +
                     filter->maDocumentService +
                     sComma +
-                    sFilterAdaptorService +
+                    u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr +
                     sComma +
                     OUString::number( filter->maFlags ) +
                     sComma +
-                    sXSLTFilterService +
+                    u"com.sun.star.documentconversion.XSLTFilter"_ustr +
                     sDelim +
                     OUString::boolean( filter->mbNeedsXSLT2 ) +
                     sDelim +

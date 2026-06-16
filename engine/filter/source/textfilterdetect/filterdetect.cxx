@@ -27,10 +27,6 @@ constexpr OUString CALC_TEXT_FILTER = u"Text - txt - csv (StarCalc)"_ustr;
 
 constexpr OUString WRITER_MARKDOWN_FILTER = u"Markdown"_ustr;
 
-constexpr OUStringLiteral WEB_HTML_FILTER = u"HTML";
-constexpr OUStringLiteral WRITER_HTML_FILTER = u"HTML (StarWriter)";
-constexpr OUStringLiteral CALC_HTML_FILTER = u"calc_HTML_WebQuery";
-
 constexpr OUString WRITER_DOCSERVICE = u"com.sun.star.text.TextDocument"_ustr;
 constexpr OUString CALC_DOCSERVICE = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
 
@@ -149,11 +145,11 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             return OUString();
 
         if ((aDocService == CALC_DOCSERVICE) || (aType == "calc_HTML"))
-            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_HTML_FILTER);
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= u"calc_HTML_WebQuery"_ustr;
         else if (aDocService == WRITER_DOCSERVICE)
-            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_HTML_FILTER);
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= u"HTML (StarWriter)"_ustr;
         else
-            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= OUString(WEB_HTML_FILTER);
+            aMediaDesc[utl::MediaDescriptor::PROP_FILTERNAME] <<= u"HTML"_ustr;
     }
 
     else if(aType == "generic_Markdown")

@@ -129,10 +129,8 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
 
 OString ConvertColor( const Color &rColor )
 {
-    static constexpr OStringLiteral AUTO( "auto" );
-
     if ( rColor == COL_AUTO )
-        return AUTO;
+        return "auto"_ostr;
 
     const char pHexDigits[] = "0123456789ABCDEF";
     char pBuffer[] = "000000";
@@ -149,10 +147,8 @@ OString ConvertColor( const Color &rColor )
 
 OUString ConvertColorOU( const Color &rColor )
 {
-    static constexpr OUStringLiteral AUTO( u"auto" );
-
     if ( rColor == COL_AUTO )
-        return AUTO;
+        return u"auto"_ustr;
 
     const char pHexDigits[] = "0123456789ABCDEF";
     sal_Unicode pBuffer[] = u"000000";

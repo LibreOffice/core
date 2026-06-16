@@ -58,12 +58,6 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-    constexpr OUStringLiteral constFilterNameDraw = u"svg_Scalable_Vector_Graphics_Draw";
-    constexpr OUStringLiteral constFilterName = u"svg_Scalable_Vector_Graphics";
-}
-
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxContext( rxCtx ),
     mpSVGDoc( nullptr ),
@@ -791,7 +785,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
         if(aSVGFileInfo.isSVG())
         {
             // We have SVG - set default document format to Draw
-            aRetval = OUString(constFilterNameDraw);
+            aRetval = u"svg_Scalable_Vector_Graphics_Draw"_ustr;
 
             if(aSVGFileInfo.isOwnFormat())
             {
@@ -800,7 +794,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
                 {
                     // it was written by Impress export. Set document
                     // format for import to Impress
-                    aRetval = OUString(constFilterName);
+                    aRetval = u"svg_Scalable_Vector_Graphics"_ustr;
                 }
             }
         }
