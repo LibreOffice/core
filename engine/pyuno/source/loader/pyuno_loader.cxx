@@ -144,7 +144,11 @@ static void setPythonHome ( const OUString & pythonHome )
         return;
     }
 #if PY_VERSION_HEX >= 0x03080000
-    config->home = wide;
+    // Use PyConfig_SetString (which allocates an owned copy) rather than assigning
+    // config->home directly, so the later PyConfig_Clear() can free it safely.
+    PyStatus status = PyConfig_SetString( config, &config->home, wide );
+    if ( PyStatus_Exception( status ) )
+        Py_ExitStatusException( status );
 #else
     Py_SetPythonHome(wide);
 #endif
@@ -240,12 +244,21 @@ void pythonInit() {
 
     PyImport_AppendInittab( "pyuno", PyInit_pyuno );
 
+    // initialize python
+#if PY_VERSION_HEX >= 0x03080000
 #if HAVE_FEATURE_READONLY_INSTALLSET
     config.write_bytecode = 0;
 #endif
-
-    // initialize python
+    // Apply the config (incl. the home set above) via Py_InitializeFromConfig();
+    // a plain Py_Initialize() ignores it and falls back to its own path search,
+    // emitting "Could not find platform independent libraries <prefix>" warnings.
+    PyStatus status = Py_InitializeFromConfig( &config );
+    PyConfig_Clear( &config );
+    if ( PyStatus_Exception( status ) )
+        Py_ExitStatusException( status );
+#else
     Py_Initialize();
+#endif
 #if PY_VERSION_HEX < 0x03090000
     PyEval_InitThreads();
 #endif
