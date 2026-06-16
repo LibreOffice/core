@@ -2930,6 +2930,7 @@ private:
 
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
     void    CopyDBsToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
+    void    CopyDBsFromClip(const ScRange& rDestRange, const ScRange& rClipRange, const ScDocument* pClipDoc);
 
     bool    HasPartOfMerged( const ScRange& rRange );
 

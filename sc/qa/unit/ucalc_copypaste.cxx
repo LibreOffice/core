@@ -9950,6 +9950,65 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyToClipCarriesNamedDBs)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipShiftsNamedDBs)
+{
+    // Pasting a fully-copied named table into a document that does not already
+    // own it must recreate the table anchored to the paste location, not at the
+    // source coordinates.
+    m_pDoc->InsertTab(0, u"Src"_ustr);
+
+    // Named table MyTable over A1:C3 on the source sheet, with some content so
+    // the paste carries cells.
+    auto pTable = std::make_unique<ScDBData>(u"MyTable"_ustr, 0, 0, 0, 2, 2, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+    m_pDoc->SetString(0, 0, 0, u"Name"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"A"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"B"_ustr);
+    m_pDoc->SetValue(2, 2, 0, 42.0);
+
+    // Copy the whole table A1:C3.
+    ScRange aClipRange(0, 0, 0, 2, 2, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Fresh destination document that has no MyTable of its own.
+    ScDocShellRef xDestDocSh = new ScDocShell;
+    xDestDocSh->DoLoad(new SfxMedium(u"file:///dbshift.fake"_ustr, StreamMode::STD_READWRITE));
+    ScDocument& rDestDoc = xDestDocSh->GetDocument();
+    rDestDoc.InsertTab(0, u"Dest"_ustr);
+
+    // Paste with the top-left at C5: the block shifts by (+2 col, +4 row).
+    ScRange aDestRange(2, 4, 0, 4, 6, 0); // C5:E7
+    ScMarkData aDestMark(rDestDoc.GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    rDestDoc.CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // The destination now owns MyTable, anchored to the pasted location.
+    ScDBCollection* pDestDBs = rDestDoc.GetDBCollection();
+    CPPUNIT_ASSERT(pDestDBs);
+    const ScDBData* pPasted = pDestDBs->getNamedDBs().findByUpperName(u"MYTABLE"_ustr);
+    CPPUNIT_ASSERT(pPasted);
+    ScRange aPastedArea;
+    pPasted->GetArea(aPastedArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(2, 4, 0, 4, 6, 0), aPastedArea);
+
+    // The source table must be left untouched at its original coordinates.
+    const ScDBData* pSrc
+        = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"MYTABLE"_ustr);
+    CPPUNIT_ASSERT(pSrc);
+    ScRange aSrcArea;
+    pSrc->GetArea(aSrcArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 2, 0), aSrcArea);
+
+    xDestDocSh->DoClose();
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testRefUndoRestoresEmptyDBCollection)
 {
     // Pasting a named table into a document that had none adds a DB range; the
