@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">Այս նիշքը միայն կարդալու համար է, պահպանումն անջատված է։</string>
+    <string name="temp_file_saving_disabled">Սկզբնաղբյուրի հավելվածի կողմից համօգտագործվել է որպես միայն հարդալու համար։ Փոփոխություններ կատարելու համար օգտագործեք «Խմբագրել պատճենը»։</string>
     <string name="app_name_settings">Կարգաբերումներ</string>
     <string name="app_version_and_hash">Տարբերակ: %1$s \nառցանց git-hash: %2$s \nմիջուկ git-hash: %3$s</string>
     <string name="storage_permission_required">Պահեստավորման թույլտվություն է պահանջվում</string>
