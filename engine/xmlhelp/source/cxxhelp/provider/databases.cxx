@@ -123,14 +123,6 @@ OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComp
     return aRetURL;
 }
 
-constexpr OUStringLiteral vendVersion = u"%VENDORVERSION";
-constexpr OUStringLiteral vendName = u"%VENDORNAME";
-constexpr OUStringLiteral prodVersion = u"%PRODUCTVERSION";
-constexpr OUStringLiteral vendShort = u"%VENDORSHORT";
-constexpr OUStringLiteral prodName = u"%PRODUCTNAME";
-constexpr OUStringLiteral newProdVersion = u"$[officeversion]";
-constexpr OUStringLiteral newProdName = u"$[officename]";
-
 Databases::Databases( bool showBasic,
                       const OUString& instPath,
                       const OUString& productName,
@@ -213,19 +205,19 @@ void Databases::replaceName( OUString& oustring ) const
                 idx = idx2;
         }
 
-        if( oustring.indexOf( prodName,idx ) == idx )
+        if( oustring.indexOf( u"%PRODUCTNAME",idx ) == idx )
             off = PRODUCTNAME;
-        else if( oustring.indexOf( prodVersion,idx ) == idx )
+        else if( oustring.indexOf( u"%PRODUCTVERSION",idx ) == idx )
             off = PRODUCTVERSION;
-        else if( oustring.indexOf( vendName,idx ) == idx )
+        else if( oustring.indexOf( u"%VENDORNAME",idx ) == idx )
             off = VENDORNAME;
-        else if( oustring.indexOf( vendVersion,idx ) == idx )
+        else if( oustring.indexOf( u"%VENDORVERSION",idx ) == idx )
             off = VENDORVERSION;
-        else if( oustring.indexOf( vendShort,idx ) == idx )
+        else if( oustring.indexOf( u"%VENDORSHORT",idx ) == idx )
             off = VENDORSHORT;
-        else if( oustring.indexOf( newProdName,idx ) == idx )
+        else if( oustring.indexOf( u"$[officename]",idx ) == idx )
             off = NEWPRODUCTNAME;
-        else if( oustring.indexOf( newProdVersion,idx ) == idx )
+        else if( oustring.indexOf( u"$[officeversion]",idx ) == idx )
             off = NEWPRODUCTVERSION;
         else
             off = -1;

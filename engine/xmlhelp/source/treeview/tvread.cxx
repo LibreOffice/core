@@ -159,12 +159,6 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using namespace com::sun::star::deployment;
 
-constexpr OUStringLiteral prodName = u"%PRODUCTNAME";
-constexpr OUStringLiteral vendName = u"%VENDORNAME";
-constexpr OUStringLiteral vendVersion = u"%VENDORVERSION";
-constexpr OUStringLiteral vendShort = u"%VENDORSHORT";
-constexpr OUStringLiteral prodVersion = u"%PRODUCTVERSION";
-
 ConfigData::ConfigData()
 {
 }
@@ -177,15 +171,15 @@ void ConfigData::replaceName( OUString& oustring ) const
 
     while( ( idx = oustring.indexOf( '%', ++idx ) ) != -1 )
     {
-        if( oustring.indexOf( prodName,idx ) == idx )
+        if( oustring.indexOf( u"%PRODUCTNAME",idx ) == idx )
             off = PRODUCTNAME;
-        else if( oustring.indexOf( prodVersion,idx ) == idx )
+        else if( oustring.indexOf( u"%PRODUCTVERSION",idx ) == idx )
             off = PRODUCTVERSION;
-        else if( oustring.indexOf( vendName,idx ) == idx )
+        else if( oustring.indexOf( u"%VENDORNAME",idx ) == idx )
             off = VENDORNAME;
-        else if( oustring.indexOf( vendVersion,idx ) == idx )
+        else if( oustring.indexOf( u"%VENDORVERSION",idx ) == idx )
             off = VENDORVERSION;
-        else if( oustring.indexOf( vendShort,idx ) == idx )
+        else if( oustring.indexOf( u"%VENDORSHORT",idx ) == idx )
             off = VENDORSHORT;
         else
             off = -1;
