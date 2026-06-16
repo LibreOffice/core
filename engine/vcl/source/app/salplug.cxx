@@ -406,17 +406,17 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 const OUString& SalGetDesktopEnvironment()
 {
 #if !HAVE_FEATURE_UI
-    static OUString aDesktopEnvironment("headless");
+    static constexpr OUString aDesktopEnvironment(u"headless"_ustr);
 #elif defined(_WIN32)
-    static OUString aDesktopEnvironment( "Windows" );
+    static constexpr OUString aDesktopEnvironment(u"Windows"_ustr);
 #elif defined(MACOSX)
-    static OUString aDesktopEnvironment( "MacOSX" );
+    static constexpr OUString aDesktopEnvironment(u"MacOSX"_ustr);
 #elif defined(__EMSCRIPTEN__)
-    static OUString aDesktopEnvironment("WASM");
+    static constexpr OUString aDesktopEnvironment(u"WASM"_ustr);
 #elif defined(ANDROID)
-    static OUString aDesktopEnvironment("android");
+    static constexpr OUString aDesktopEnvironment(u"android"_ustr);
 #elif defined(iOS)
-    static OUString aDesktopEnvironment("iOS");
+    static constexpr OUString aDesktopEnvironment(u"iOS"_ustr);
 #elif UNIX_DESKTOP_DETECT
     // Order to match desktops.hxx' DesktopType
     static constexpr OUString desktop_strings[] = {
@@ -428,7 +428,7 @@ const OUString& SalGetDesktopEnvironment()
         aDesktopEnvironment = desktop_strings[get_desktop_environment()];
     }
 #else
-    static OUString aDesktopEnvironment("unknown");
+    static constexpr OUString aDesktopEnvironment(u"unknown"_ustr);
 #endif
     return aDesktopEnvironment;
 }
