@@ -145,8 +145,8 @@ public:
 
     SvTreeListEntry* FirstChild(const SvTreeListEntry* pParent) const;
 
-    void Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pPar, sal_uInt32 nPos = TREELIST_APPEND);
-    void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND)
+    void Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pPar, sal_uInt32 nPos);
+    void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
     {
         Insert(pEntry, m_pRootItem.get(), nRootPos);
     }
