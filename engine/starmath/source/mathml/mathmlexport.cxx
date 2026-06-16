@@ -288,14 +288,10 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
     }
 
     uno::Reference<beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
-    static constexpr OUStringLiteral sMediaType = u"MediaType";
-    static constexpr OUStringLiteral sTextXml = u"text/xml";
-    xSet->setPropertyValue(sMediaType, Any(OUString(sTextXml)));
+    xSet->setPropertyValue(u"MediaType"_ustr, Any(u"text/xml"_ustr));
 
     // all streams must be encrypted in encrypted document
-    static constexpr OUStringLiteral sUseCommonStoragePasswordEncryption
-        = u"UseCommonStoragePasswordEncryption";
-    xSet->setPropertyValue(sUseCommonStoragePasswordEncryption, Any(true));
+    xSet->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, Any(true));
 
     // set Base URL
     if (rPropSet.is())
@@ -541,10 +537,8 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
                            aRet.Name = prop.Name;
                            OUString aActualName(prop.Name);
                            // handle 'save used symbols only'
-                           static constexpr OUStringLiteral sUserDefinedSymbolsInUse
-                               = u"UserDefinedSymbolsInUse";
                            if (bUsedSymbolsOnly && prop.Name == "Symbols")
-                               aActualName = sUserDefinedSymbolsInUse;
+                               aActualName = u"UserDefinedSymbolsInUse"_ustr;
                            aRet.Value = xProps->getPropertyValue(aActualName);
                        }
                        return aRet;
@@ -1047,16 +1041,14 @@ void SmXMLExport::ExportAttributes(const SmNode* pNode, int nLevel)
         {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
-            static constexpr OUStringLiteral nArse = u"\u00AF";
-            GetDocHandler()->characters(nArse);
+            GetDocHandler()->characters(u"\u00AF"_ustr);
         }
         break;
         case TUNDERLINE:
         {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
-            static constexpr OUStringLiteral nArse = u"\u0332";
-            GetDocHandler()->characters(nArse);
+            GetDocHandler()->characters(u"\u0332"_ustr);
         }
         break;
         case TOVERSTRIKE:

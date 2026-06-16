@@ -1352,13 +1352,10 @@ void SmMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfPr
         return;
     }
 
-    static constexpr OUStringLiteral sFormula(u"Formula");
-    static constexpr OUStringLiteral sBasicLibraries(u"BasicLibraries");
-    static constexpr OUStringLiteral sDialogLibraries(u"DialogLibraries");
     for (const PropertyValue& rValue : aConfProps)
     {
-        if (rValue.Name != sFormula && rValue.Name != sBasicLibraries
-            && rValue.Name != sDialogLibraries)
+        if (rValue.Name != u"Formula"_ustr && rValue.Name != u"BasicLibraries"_ustr
+            && rValue.Name != u"DialogLibraries"_ustr)
         {
             try
             {
