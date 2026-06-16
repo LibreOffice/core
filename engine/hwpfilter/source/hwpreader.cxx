@@ -4736,7 +4736,6 @@ void HwpReader::chars(const OUString& s)
 namespace
 {
 
-constexpr OUStringLiteral IMPLEMENTATION_NAME = u"com.sun.comp.hwpimport.HwpImportFilter";
 constexpr OUString SERVICE_NAME1 = u"com.sun.star.document.ImportFilter"_ustr;
 constexpr OUString SERVICE_NAME2 = u"com.sun.star.document.ExtendedTypeDetection"_ustr;
 
@@ -4796,7 +4795,7 @@ void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
 
 OUString HwpImportFilter::getImplementationName()
 {
-    return IMPLEMENTATION_NAME;
+    return u"com.sun.comp.hwpimport.HwpImportFilter"_ustr;
 }
 
 sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName )
