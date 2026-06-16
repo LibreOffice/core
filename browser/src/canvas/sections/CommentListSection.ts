@@ -1326,6 +1326,9 @@ export class CommentSection extends CanvasSectionObject {
 				this.sectionProperties.selectedComment?.setContainerPos(true, this.sectionProperties.canvasContainerBounds);
 			}
 
+			if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing')
+				this.listenForClickOutsideComment(true);
+
 			this.update();
 		}
 	}
@@ -1410,6 +1413,7 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public unselect (): void {
+		this.listenForClickOutsideComment(false);
 		if (this.sectionProperties.selectedComment && this.sectionProperties.selectedComment.sectionProperties.data.id != 'new') {
 			for (const comment of this.sectionProperties.commentList) {
 				if (window.L.DomUtil.hasClass(comment.sectionProperties.container, 'annotation-active'))
@@ -1448,6 +1452,36 @@ export class CommentSection extends CanvasSectionObject {
 		};
 
 		document.addEventListener('keydown', this.escapeListener);
+	}
+
+	// In Impress and Draw a comment is opened by clicking its avatar and stays
+	// open until the user clicks away onto the slide or the grey area around it.
+	// The whole document view, slide and grey area alike, is painted on the
+	// single document canvas, so while a comment is open a click whose target is
+	// that canvas is a click outside the comment. A click on the comment, on its
+	// marker, or on a popup carries a different target, so it leaves the open
+	// comment alone.
+	private onClickOutsideComment = (e: MouseEvent): void => {
+		const target = e.target as HTMLElement;
+		if (!target || target.id !== 'document-canvas')
+			return;
+
+		const selected = this.sectionProperties.selectedComment;
+		if (selected && !selected.isEdit())
+			this.unselect();
+	};
+
+	// The listener lives only while a comment is open, attached on select and
+	// detached on unselect.
+	private listenForClickOutsideComment(listen: boolean): void {
+		const documentContainer = document.getElementById('document-container');
+		if (!documentContainer)
+			return;
+
+		if (listen)
+			documentContainer.addEventListener('click', this.onClickOutsideComment);
+		else
+			documentContainer.removeEventListener('click', this.onClickOutsideComment);
 	}
 
 	private setThreadPopup (comment: Comment, popup: boolean) {

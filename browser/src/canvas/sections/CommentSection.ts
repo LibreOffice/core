@@ -1807,6 +1807,12 @@ export class Comment extends CanvasSectionObject {
 
 		if (['presentation', 'drawing'].includes(docType)) {
 			this.sectionProperties.commentListSection.selectById(this.sectionProperties.data.id);
+			// This click selected the comment. Stop it from reaching the document
+			// view, where the canvas-targeted listener would treat it as a click
+			// outside the comment and close it again. The marker sub section stops
+			// its own click for the same reason.
+			e.stopPropagation();
+			this.stopPropagating();
 		}
 		else if (docType === 'text') {
 			app.activeDocument.mouseControl.onClick(this.toMouseControlLocal(point), e);

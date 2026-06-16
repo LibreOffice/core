@@ -210,6 +210,23 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 		cy.cGet('[id^=annotation-content-area-]').should('have.text','some text0');
 		cy.cGet('.cool-annotation-info-collapsed').should('be.not.visible');
 	})
+
+	it('Opened comment closes when clicking the slide border', function() {
+		desktopHelper.insertComment();
+
+		// Open the collapsed comment by clicking its avatar.
+		cy.cGet('.cool-annotation-img').click();
+		cy.cGet('.cool-annotation.annotation-active').should('exist');
+		cy.cGet('.cool-annotation-content-wrapper').should('be.visible');
+
+		// Click the grey area to the left of the slide, which is part of the
+		// document view but not the slide itself.
+		cy.cGet('#document-canvas').click(30, 250);
+
+		// The comment is no longer selected and collapses back to its avatar.
+		cy.cGet('.cool-annotation.annotation-active').should('not.exist');
+		cy.cGet('.cool-annotation-content-wrapper').should('be.not.visible');
+	})
 });
 
 describe(['tagdesktop'], 'Comment Scrolling',function() {
