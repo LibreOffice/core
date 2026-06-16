@@ -1565,9 +1565,10 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
                          aHairlineColor.getBlue());
 
     // set LineWidth, use Cairo's special cairo_set_hairline
-    impl_cairo_set_hairline(mpRT, getViewInformation2D(), isCairoCoordinateLimitWorkaroundActive());
+    const bool bWorkaround(isCairoCoordinateLimitWorkaroundActive(rPolygon.getB2DRange()));
+    impl_cairo_set_hairline(mpRT, getViewInformation2D(), bWorkaround);
 
-    if (isCairoCoordinateLimitWorkaroundActive())
+    if (bWorkaround)
     {
         // need to fallback to paint in view coordinates, unfortunately
         // need to transform self (cairo will do it wrong in this coordinate
@@ -1646,7 +1647,7 @@ void CairoPixelProcessor2D::paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& 
         cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(),
                              aFillColor.getBlue());
 
-    if (isCairoCoordinateLimitWorkaroundActive())
+    if (isCairoCoordinateLimitWorkaroundActive(rPolyPolygon.getB2DRange()))
     {
         // need to fallback to paint in view coordinates, unfortunately
         // need to transform self (cairo will do it wrong in this coordinate
@@ -2378,7 +2379,7 @@ void CairoPixelProcessor2D::processPolygonStrokePrimitive2D(
     const bool bDashUsed(!rStrokeAttribute.isDefault()
                          && !rStrokeAttribute.getDotDashArray().empty()
                          && 0.0 < rStrokeAttribute.getFullDotDashLen());
-    if (isCairoCoordinateLimitWorkaroundActive())
+    if (isCairoCoordinateLimitWorkaroundActive(rPolygon.getB2DRange()))
     {
         // need to fallback to paint in view coordinates, unfortunately
         // need to transform self (cairo will do it wrong in this coordinate
