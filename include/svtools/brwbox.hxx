@@ -381,17 +381,16 @@ private:
     SAL_DLLPRIVATE void SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId);
 
     /// @see AccessibleBrowseBox::getHeaderBar
-    css::uno::Reference<css::accessibility::XAccessible>
+    rtl::Reference<comphelper::OAccessible>
     getAccessibleHeaderBar(AccessibleBrowseBoxObjType _eObjType);
 
-    css::uno::Reference<css::accessibility::XAccessible>
+    rtl::Reference<comphelper::OAccessible>
     getAccessibleHeaderCell(BrowseBox::THeaderCellMap& _raHeaderCells, sal_Int32 _nPos,
                             AccessibleBrowseBoxObjType _eType,
                             const css::uno::Reference<css::accessibility::XAccessible>& _rParent);
 
     /// @see AccessibleBrowseBox::getTable
-    css::uno::Reference<css::accessibility::XAccessible>
-    getAccessibleTable();
+    rtl::Reference<comphelper::OAccessible> getAccessibleTable();
 
 protected:
     bool                m_bNavigationBar;

@@ -34,12 +34,12 @@ using namespace ::com::sun::star::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 
-Reference<XAccessible> BrowseBox::getAccessibleHeaderCell(BrowseBox::THeaderCellMap& _raHeaderCells,
-                                                          sal_Int32 _nPos,
-                                                          AccessibleBrowseBoxObjType _eType,
-                                                          const Reference<XAccessible>& _rParent)
+rtl::Reference<comphelper::OAccessible>
+BrowseBox::getAccessibleHeaderCell(BrowseBox::THeaderCellMap& _raHeaderCells, sal_Int32 _nPos,
+                                   AccessibleBrowseBoxObjType _eType,
+                                   const Reference<XAccessible>& _rParent)
 {
-    Reference<XAccessible> xRet;
+    rtl::Reference<comphelper::OAccessible> pRet;
     BrowseBox::THeaderCellMap::iterator aFind = _raHeaderCells.find(_nPos);
     if (aFind == _raHeaderCells.end())
     {
@@ -48,18 +48,19 @@ Reference<XAccessible> BrowseBox::getAccessibleHeaderCell(BrowseBox::THeaderCell
         aFind = _raHeaderCells.emplace(_nPos, pAccessible).first;
     }
     if (aFind != _raHeaderCells.end())
-        xRet = aFind->second;
-    return xRet;
+        pRet = aFind->second;
+    return pRet;
 }
 
-Reference<XAccessible> BrowseBox::getAccessibleHeaderBar(AccessibleBrowseBoxObjType _eObjType)
+rtl::Reference<comphelper::OAccessible>
+BrowseBox::getAccessibleHeaderBar(AccessibleBrowseBoxObjType _eObjType)
 {
     if (m_xAccessible && m_xAccessible->isAlive())
         return m_xAccessible->getHeaderBar(_eObjType);
     return nullptr;
 }
 
-Reference<XAccessible> BrowseBox::getAccessibleTable()
+rtl::Reference<comphelper::OAccessible> BrowseBox::getAccessibleTable()
 {
     if (m_xAccessible && m_xAccessible->isAlive())
         return m_xAccessible->getTable();
