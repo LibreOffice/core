@@ -64,8 +64,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::linguistic2;
 
-constexpr OUStringLiteral sDuden = u"duden";
-
 namespace
 {
 constexpr size_t MAX_SUGGESTIONS_SIZE = 10;
@@ -398,7 +396,7 @@ uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
     SvtLinguConfig aLinguCfg;
     uno::Sequence<OUString> aLocaleList;
 
-    if (LanguageToolCfg::RestProtocol::get().value_or("") == sDuden)
+    if (LanguageToolCfg::RestProtocol::get().value_or("") == u"duden"_ustr)
     {
         aLocaleList.realloc(3);
         aLocaleList.getArray()[0] = u"de-DE"_ustr;

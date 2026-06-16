@@ -48,9 +48,6 @@
 #include <set>
 #include <string.h>
 
-// XML-header to query SPELLML support
-constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
-
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -403,7 +400,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         stem = 1;
 
         xSpell = xLngSvcMgr->getSpellChecker();
-        if (!xSpell.is() || !xSpell->isValid( SPELLML_SUPPORT, LanguageTag::convertToLocale(nLanguage), rProperties ))
+        if (!xSpell.is() || !xSpell->isValid( u"<?xml?>"_ustr, LanguageTag::convertToLocale(nLanguage), rProperties ))
             return noMeanings;
         Reference< XSpellAlternatives > xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
             aRTerm + "</word></query>", LanguageTag::convertToLocale(nLanguage), rProperties );

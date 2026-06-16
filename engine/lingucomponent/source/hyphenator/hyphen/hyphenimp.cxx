@@ -59,9 +59,6 @@
 #include <memory>
 #include <o3tl/string_view.hxx>
 
-// XML-header to query SPELLML support
-constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
-
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -470,7 +467,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
                     // get morphological analysis of the word
                     if ( ( bAnalyzed && xTmpRes.is() ) || ( xSpell.is() && xSpell->isValid(
-                            SPELLML_SUPPORT, LanguageTag::convertToLocale(nLanguage),
+                            u"<?xml?>"_ustr, LanguageTag::convertToLocale(nLanguage),
                             uno::Sequence< beans::PropertyValue >() ) ) )
                     {
                         if ( !bAnalyzed )
