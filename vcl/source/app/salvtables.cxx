@@ -4503,8 +4503,9 @@ void SalInstanceTreeView::expand_row(const weld::TreeIter& rIter)
 {
     assert(m_xTreeView->IsUpdateMode() && "don't expand when frozen");
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    assert(rVclIter.iter);
     if (!m_xTreeView->IsExpanded(rVclIter.iter) && ExpandRow(rVclIter))
-        m_xTreeView->Expand(rVclIter.iter);
+        m_xTreeView->Expand(*rVclIter.iter);
 }
 
 void SalInstanceTreeView::collapse_row(const weld::TreeIter& rIter)

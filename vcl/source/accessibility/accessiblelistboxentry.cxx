@@ -650,7 +650,7 @@ sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
             if ( m_pTreeListBox->IsExpanded( pEntry ) )
                 m_pTreeListBox->Collapse( pEntry );
             else
-                m_pTreeListBox->Expand( pEntry );
+                m_pTreeListBox->Expand(*pEntry);
             bRet = true;
         }
     }

@@ -161,7 +161,8 @@ void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*
     }
     else if (rAction == "EXPAND")
     {
-        mxTreeList->Expand(pEntry);
+        assert(pEntry);
+        mxTreeList->Expand(*pEntry);
     }
     else if (rAction == "SELECT")
     {

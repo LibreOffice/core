@@ -776,7 +776,7 @@ void SAL_CALL TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode )
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
     if( pEntry )
-        rTree.Expand( pEntry );
+        rTree.Expand(*pEntry);
 }
 
 

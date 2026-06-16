@@ -933,7 +933,7 @@ void SvImpLBox::MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop )
             {
                 if (!m_rView.IsExpanded(pParent))
                 {
-                    bool bRet = m_rView.Expand(pParent);
+                    bool bRet = m_rView.Expand(*pParent);
                     DBG_ASSERT(bRet,"Not expanded!");
                 }
                 pParent = m_rView.GetParent(pParent);
@@ -1906,7 +1906,7 @@ bool SvImpLBox::ButtonDownCheckExpand(const MouseEvent& rMEvt, SvTreeListEntry& 
         else
         {
             // you can expand an entry, which is in editing
-            m_rView.Expand(&rEntry);
+            m_rView.Expand(rEntry);
         }
         bRet = true;
     }
@@ -1990,7 +1990,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
                 if (m_rView.IsExpanded(pEntry))
                     m_rView.Collapse(pEntry);
                 else
-                    m_rView.Expand(pEntry);
+                    m_rView.Expand(*pEntry);
                 if( pEntry == m_pCursor )  // only if Entryitem was clicked
                                           // (Nodebutton is not an Entryitem!)
                     m_rView.Select(m_pCursor);
@@ -2066,7 +2066,7 @@ void SvImpLBox::ExpandAll()
     while (pCur && m_rTree.GetDepth(pCur) > nRefDepth)
     {
         if (pCur->HasChildren() && !m_rView.IsExpanded(pCur))
-            m_rView.Expand(pCur);
+            m_rView.Expand(*pCur);
         pCur = m_rTree.Next(pCur);
     }
 }
@@ -2195,7 +2195,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 // only try to expand if sublist is expandable,
                 // otherwise ignore the key press
                 if (IsExpandable() && !m_rView.IsExpanded(m_pCursor))
-                    m_rView.Expand(m_pCursor);
+                    m_rView.Expand(*m_pCursor);
             }
             else if (m_aHorSBar->IsVisible())
             {
@@ -2390,7 +2390,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_ADD:
             if (!m_rView.IsExpanded(m_pCursor))
-                m_rView.Expand(m_pCursor);
+                m_rView.Expand(*m_pCursor);
             if (bMod1)
                 ExpandAll();
             break;
@@ -2422,7 +2422,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 {
                     if (!m_rView.IsAllExpanded(m_pCursor))
                     {
-                        m_rView.Expand(m_pCursor);
+                        m_rView.Expand(*m_pCursor);
                         ExpandAll();
                     }
                     else

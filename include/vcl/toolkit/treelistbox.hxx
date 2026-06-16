@@ -714,7 +714,7 @@ public:
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
 
-    bool            Expand( SvTreeListEntry* pParent );
+    bool Expand(SvTreeListEntry& rParent);
     bool            Collapse( SvTreeListEntry* pParent );
     bool            Select( SvTreeListEntry* pEntry, bool bSelect=true );
     sal_uInt32      SelectChildren( const SvTreeListEntry* pParent, bool bSelect );

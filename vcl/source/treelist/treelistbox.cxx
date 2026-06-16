@@ -2304,43 +2304,43 @@ void SvTreeListBox::AdjustEntryHeight()
     }
 }
 
-bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
+bool SvTreeListBox::Expand(SvTreeListEntry& rParent)
 {
-    m_pHdlEntry = pParent;
+    m_pHdlEntry = &rParent;
     bool bExpanded = false;
     SvTLEntryFlags nFlags;
 
-    if( pParent->HasChildrenOnDemand() )
-        RequestingChildren( pParent );
-    bool bExpandAllowed = pParent->HasChildren() && ExpandingHdl();
+    if (rParent.HasChildrenOnDemand())
+        RequestingChildren(&rParent);
+    bool bExpandAllowed = rParent.HasChildren() && ExpandingHdl();
     // double check if the expander callback ended up removing all children
-    if (pParent->HasChildren())
+    if (rParent.HasChildren())
     {
         if (bExpandAllowed)
         {
             bExpanded = true;
-            ExpandListEntry( pParent );
-            m_pImpl->EntryExpanded(pParent);
-            m_pHdlEntry = pParent;
+            ExpandListEntry(&rParent);
+            m_pImpl->EntryExpanded(&rParent);
+            m_pHdlEntry = &rParent;
             ExpandedHdl();
         }
-        nFlags = pParent->GetFlags();
+        nFlags = rParent.GetFlags();
         nFlags &= ~SvTLEntryFlags::NO_NODEBMP;
         nFlags |= SvTLEntryFlags::HAD_CHILDREN;
-        pParent->SetFlags( nFlags );
+        rParent.SetFlags(nFlags);
     }
     else
     {
-        nFlags = pParent->GetFlags();
+        nFlags = rParent.GetFlags();
         nFlags |= SvTLEntryFlags::NO_NODEBMP;
-        pParent->SetFlags( nFlags );
-        GetModel()->InvalidateEntry( pParent ); // repaint
+        rParent.SetFlags(nFlags);
+        GetModel()->InvalidateEntry(&rParent); // repaint
     }
 
     // #i92103#
     if ( bExpanded )
     {
-        CallEventListeners(VclEventId::ItemExpanded, pParent);
+        CallEventListeners(VclEventId::ItemExpanded, &rParent);
     }
 
     return bExpanded;
