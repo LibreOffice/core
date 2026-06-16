@@ -35,7 +35,6 @@ using namespace ::com::sun::star;
 
 constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
 constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.DateFunctions"_ustr;
-constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.DateFunctionsImpl";
 
 #define UNIQUE              false   // function name does not exist in Calc
 
@@ -152,7 +151,7 @@ OUString SAL_CALL ScaDateAddIn::getServiceName()
 // XServiceInfo
 OUString SAL_CALL ScaDateAddIn::getImplementationName()
 {
-    return MY_IMPLNAME;
+    return u"com.sun.star.sheet.addin.DateFunctionsImpl"_ustr;
 }
 
 sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName )

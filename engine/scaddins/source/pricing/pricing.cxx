@@ -43,7 +43,6 @@ using namespace sca::pricing;
 
 constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
 constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.PricingFunctions"_ustr;
-constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.PricingFunctionsImpl";
 
 const ScaFuncDataBase pFuncDataArr[] =
 {
@@ -142,7 +141,7 @@ OUString SAL_CALL ScaPricingAddIn::getServiceName()
 // XServiceInfo
 OUString SAL_CALL ScaPricingAddIn::getImplementationName()
 {
-    return MY_IMPLNAME;
+    return u"com.sun.star.sheet.addin.PricingFunctionsImpl"_ustr;
 }
 
 sal_Bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName )

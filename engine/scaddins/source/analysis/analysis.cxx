@@ -34,7 +34,6 @@
 
 constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
 constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.Analysis"_ustr;
-constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.AnalysisImpl";
 
 using namespace                 ::com::sun::star;
 using namespace sca::analysis;
@@ -126,7 +125,7 @@ OUString SAL_CALL AnalysisAddIn::getServiceName()
 // XServiceInfo
 OUString SAL_CALL AnalysisAddIn::getImplementationName()
 {
-    return MY_IMPLNAME;
+    return u"com.sun.star.sheet.addin.AnalysisImpl"_ustr;
 }
 
 sal_Bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName )
