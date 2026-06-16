@@ -72,9 +72,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
 // PropertyNames
-constexpr OUStringLiteral FM_PROP_LABEL = u"Label";
 constexpr OUString FM_PROP_CONTROLSOURCE = u"DataField"_ustr;
-constexpr OUStringLiteral FM_PROP_NAME = u"Name";
 
 static Reference< XConnection > getConnection(const OUString& _rURL)
 {
@@ -526,9 +524,6 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::R
     xMasterDispatchProvider = xNewMasterDispatchProvider;
 }
 
-
-constexpr OUStringLiteral gGridName(u"theGrid");
-
 BibDataManager::BibDataManager()
     :pBibView( nullptr )
     ,pToolbar(nullptr)
@@ -630,7 +625,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             }
             Any aColName( rField );
             xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
-            xCurrentCol->setPropertyValue(FM_PROP_LABEL, aColName);
+            xCurrentCol->setPropertyValue(u"Label"_ustr, aColName);
 
             xColContainer->insertByName( rField, Any( xCurrentCol ) );
         }
@@ -656,7 +651,7 @@ Reference< awt::XControlModel > const & BibDataManager::updateGridModel(const Re
 
         if ( !m_xGridModel.is() )
         {
-            m_xGridModel = createGridModel( gGridName );
+            m_xGridModel = createGridModel( u"theGrid"_ustr );
 
             Reference< XNameContainer >  xNameCont(xDbForm, UNO_QUERY);
             xNameCont->insertByName( sName, Any( m_xGridModel ) );
@@ -1204,7 +1199,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
             Any aFieldName; aFieldName <<= aName;
 
-            xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
+            xPropSet->setPropertyValue( u"Name"_ustr,aFieldName);
             xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, Any( rName ) );
             xPropSet->setPropertyValue(u"NativeWidgetLook"_ustr, Any( true ) );
 
