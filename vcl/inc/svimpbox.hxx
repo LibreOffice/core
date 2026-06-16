@@ -277,8 +277,6 @@ public:
     void                PaintDDCursor(SvTreeListEntry* pEntry, bool bShow);
 
     // Images
-    inline Image&       implGetImageLocation( const ImageType _eType );
-
     inline void         SetExpandedNodeBmp(  const Image& _rImg );
     inline void         SetCollapsedNodeBmp( const Image& _rImg );
 
@@ -324,51 +322,46 @@ inline bool SvImpLBox::IsCaptureOnButtonActive() const
     return nullptr != m_pActiveButton && nullptr != m_pActiveEntry;
 }
 
-inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )
-{
-    return m_aNodeAndEntryImages[_eType];
-}
-
 inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg )
 {
-    implGetImageLocation( ImageType::NodeExpanded ) = rImg;
+    m_aNodeAndEntryImages[ImageType::NodeExpanded] = rImg;
     SetNodeBmpWidth( rImg );
 }
 
 inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg )
 {
-    implGetImageLocation( ImageType::NodeCollapsed ) = rImg;
+    m_aNodeAndEntryImages[ImageType::NodeCollapsed] = rImg;
     SetNodeBmpWidth( rImg );
 }
 
 inline const Image& SvImpLBox::GetExpandedNodeBmp( )
 {
-    return implGetImageLocation( ImageType::NodeExpanded );
+    return m_aNodeAndEntryImages[ImageType::NodeExpanded];
 }
 
 inline const Image& SvImpLBox::GetCollapsedNodeBmp( )
 {
-    return implGetImageLocation( ImageType::NodeCollapsed );
+    return m_aNodeAndEntryImages[ImageType::NodeCollapsed];
 }
 
 inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg )
 {
-    implGetImageLocation( ImageType::EntryDefExpanded ) = _rImg;
+    m_aNodeAndEntryImages[ImageType::EntryDefExpanded] = _rImg;
 }
 
 inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg )
 {
-    implGetImageLocation( ImageType::EntryDefCollapsed ) = _rImg;
+    m_aNodeAndEntryImages[ImageType::EntryDefCollapsed] = _rImg;
 }
 
 inline const Image& SvImpLBox::GetDefaultEntryExpBmp( )
 {
-    return implGetImageLocation( ImageType::EntryDefExpanded );
+    return m_aNodeAndEntryImages[ImageType::EntryDefExpanded];
 }
 
 inline const Image& SvImpLBox::GetDefaultEntryColBmp( )
 {
-    return implGetImageLocation( ImageType::EntryDefCollapsed );
+    return m_aNodeAndEntryImages[ImageType::EntryDefCollapsed];
 }
 
 inline Point SvImpLBox::GetEntryPosition(const SvTreeListEntry* pEntry) const
