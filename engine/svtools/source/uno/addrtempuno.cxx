@@ -32,7 +32,6 @@ using namespace svt;
 namespace {
 
 #define UNODIALOG_PROPERTY_ID_ALIASES       100
-constexpr OUStringLiteral UNODIALOG_PROPERTY_ALIASES = u"FieldMapping";
 
     using namespace css::uno;
     using namespace css::util;
@@ -81,7 +80,7 @@ constexpr OUStringLiteral UNODIALOG_PROPERTY_ALIASES = u"FieldMapping";
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty(UNODIALOG_PROPERTY_ALIASES, UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
+        registerProperty(u"FieldMapping"_ustr, UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
             &m_aAliases, cppu::UnoType<decltype(m_aAliases)>::get());
     }
 

@@ -254,13 +254,12 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 
 void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
 {
-    static constexpr OUStringLiteral sColorEntries(u"/Entries");
     for(OUString const & component : _rComponents)
     {
         OUString sComponentName = component.copy(component.lastIndexOf('/')+1);
         if ( m_aConfigValues.find(sComponentName) == m_aConfigValues.end() )
         {
-            OUString sEntry = component + sColorEntries;
+            OUString sEntry = component + u"/Entries"_ustr;
 
             uno::Sequence < OUString > aColorNames = GetPropertyNames(sEntry);
             uno::Sequence < OUString > aDefaultColorNames = aColorNames;
@@ -331,8 +330,6 @@ void ExtendedColorConfig_Impl::ImplCommit()
 {
     if ( m_sLoadedScheme.isEmpty() )
         return;
-    static constexpr OUStringLiteral sColorEntries(u"Entries");
-    static constexpr OUStringLiteral sColor(u"/Color");
     OUString sBase = "ExtendedColorScheme/ColorSchemes/"
                    + m_sLoadedScheme;
     static constexpr OUString s_sSep(u"/"_ustr);
@@ -346,7 +343,7 @@ void ExtendedColorConfig_Impl::ImplCommit()
                            + configValue.first
             //ConfigItem::AddNode(sNode, sColorEntries);
                            + s_sSep
-                           + sColorEntries;
+                           + u"Entries"_ustr;
 
             uno::Sequence < beans::PropertyValue > aPropValues(configValue.second.first.size());
             beans::PropertyValue* pPropValues = aPropValues.getArray();
@@ -355,7 +352,7 @@ void ExtendedColorConfig_Impl::ImplCommit()
                 pPropValues->Name = sNode + s_sSep + elem.first;
                 if (!ConfigItem::AddNode(sNode, elem.first))
                     SAL_WARN("svtools", "Could not add config node: " << pPropValues->Name);
-                pPropValues->Name += sColor;
+                pPropValues->Name += u"/Color"_ustr;
                 pPropValues->Value <<= elem.second.getColor();
                 // the default color will never be changed
                 ++pPropValues;

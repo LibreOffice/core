@@ -64,8 +64,6 @@
 #define GAPTOEXTRAPREVIEW 10
 #define MINGAPWIDTH 2
 
-constexpr OUStringLiteral FONTNAMEBOXMRUENTRIESFILE = u"/user/config/fontnameboxmruentries";
-
 
 BorderWidthImpl::BorderWidthImpl( BorderWidthImplFlags nFlags, double nRate1, double nRate2, double nRateGap ):
     m_nFlags( nFlags ),
@@ -479,7 +477,7 @@ void FontNameBox::InitFontMRUEntriesFile()
     maFontMRUEntriesFile = sUserConfigDir;
     if( !maFontMRUEntriesFile.isEmpty() )
     {
-        maFontMRUEntriesFile += FONTNAMEBOXMRUENTRIESFILE;
+        maFontMRUEntriesFile += u"/user/config/fontnameboxmruentries"_ustr;
     }
 }
 

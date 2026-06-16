@@ -40,8 +40,6 @@ using namespace ::utl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral ROOTNODE_MISC = u"Office.Common/Misc";
-
 // PROPERTYHANDLE defines must be sequential from zero for Commit/Load
 constexpr OUString PROPERTYNAME_SYMBOLSET = u"SymbolSet"_ustr;
 constexpr OUString PROPERTYNAME_ICONTHEME = u"SymbolStyle"_ustr;
@@ -138,7 +136,7 @@ private:
 
 SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
-    : ConfigItem( ROOTNODE_MISC )
+    : ConfigItem( u"Office.Common/Misc"_ustr )
 
     , m_bIsSymbolsStyleRO( false )
     , m_bIconThemeWasSetAutomatically( false )

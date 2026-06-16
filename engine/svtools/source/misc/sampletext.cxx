@@ -157,9 +157,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const &rD
         //It's the Apple version
         if (bHasSampleTextGlyphs)
             return aImplAppleSymbolText;
-        static constexpr OUStringLiteral aImplAdobeSymbolText =
-            u"\uF06D\uF0B6\uF0E5\uF0D5\uF070\uF0F2\uF057\uF0D6";
-        return aImplAdobeSymbolText;
+        return u"\uF06D\uF0B6\uF0E5\uF0D5\uF070\uF0F2\uF057\uF0D6"_ustr;
     }
 
     const bool bOpenSymbol = IsOpenSymbol(rDevice.GetFont().GetFamilyName());
@@ -224,266 +222,196 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
     {
         case USCRIPT_GREEK:
         {
-            static constexpr OUStringLiteral aGrek =
-                u"\u0391\u03BB\u03C6\u03AC\u03B2\u03B7\u03C4\u03BF";
-            sSampleText = aGrek;
+            sSampleText = u"\u0391\u03BB\u03C6\u03AC\u03B2\u03B7\u03C4\u03BF"_ustr;
             break;
         }
         case USCRIPT_HEBREW:
         {
-            static constexpr OUStringLiteral aHebr =
-                u"\u05D0\u05DC\u05E3\u05BE\u05D1\u05D9\u05EA "
-                "\u05E2\u05D1\u05E8\u05D9";
-            sSampleText = aHebr;
+            sSampleText = u"\u05D0\u05DC\u05E3\u05BE\u05D1\u05D9\u05EA "
+                "\u05E2\u05D1\u05E8\u05D9"_ustr;
             break;
         }
         case USCRIPT_ARABIC:
         {
-            static constexpr OUStringLiteral aArab =
-                u"\u0623\u0628\u062C\u062F\u064A\u0629 \u0639"
-                "\u0631\u0628\u064A\u0629";
-            sSampleText = aArab;
+            sSampleText = u"\u0623\u0628\u062C\u062F\u064A\u0629 \u0639"
+                "\u0631\u0628\u064A\u0629"_ustr;
             break;
         }
         case USCRIPT_ARMENIAN:
         {
-            static constexpr OUStringLiteral aArmenian =
-                u"\u0561\u0575\u0562\u0578\u0582\u0562\u0565"
-                "\u0576";
-            sSampleText = aArmenian;
+            sSampleText = u"\u0561\u0575\u0562\u0578\u0582\u0562\u0565"
+                "\u0576"_ustr;
             break;
         }
         case USCRIPT_DEVANAGARI:
         {
-            static constexpr OUStringLiteral aDeva =
-                u"\u0926\u0947\u0935\u0928\u093E\u0917\u0930\u0940";
-            sSampleText = aDeva;
+            sSampleText = u"\u0926\u0947\u0935\u0928\u093E\u0917\u0930\u0940"_ustr;
             break;
         }
         case USCRIPT_BENGALI:
         {
-            static constexpr OUStringLiteral aBeng =
-                u"\u09AC\u09BE\u0982\u09B2\u09BE \u09B2\u09BF"
-                "\u09AA\u09BF";
-            sSampleText = aBeng;
+            sSampleText = u"\u09AC\u09BE\u0982\u09B2\u09BE \u09B2\u09BF"
+                "\u09AA\u09BF"_ustr;
             break;
         }
         case USCRIPT_GURMUKHI:
         {
-            static constexpr OUStringLiteral aGuru =
-                u"\u0A17\u0A41\u0A30\u0A2E\u0A41\u0A16\u0A40";
-            sSampleText = aGuru;
+            sSampleText = u"\u0A17\u0A41\u0A30\u0A2E\u0A41\u0A16\u0A40"_ustr;
             break;
         }
         case USCRIPT_GUJARATI:
         {
-            static constexpr OUStringLiteral aGujr =
-                u"\u0A97\u0AC1\u0A9C\u0AB0\u0ABE\u0AA4\u0aC0 "
-                "\u0AB2\u0ABF\u0AAA\u0ABF";
-            sSampleText = aGujr;
+            sSampleText = u"\u0A97\u0AC1\u0A9C\u0AB0\u0ABE\u0AA4\u0aC0 "
+                "\u0AB2\u0ABF\u0AAA\u0ABF"_ustr;
             break;
         }
         case USCRIPT_ORIYA:
         {
-            static constexpr OUStringLiteral aOrya =
-                u"\u0B09\u0B24\u0B4D\u0B15\u0B33 \u0B32\u0B3F"
-                "\u0B2A\u0B3F";
-            sSampleText = aOrya;
+            sSampleText = u"\u0B09\u0B24\u0B4D\u0B15\u0B33 \u0B32\u0B3F"
+                "\u0B2A\u0B3F"_ustr;
             break;
         }
         case USCRIPT_TAMIL:
         {
-            static constexpr OUStringLiteral aTaml =
-                u"\u0B85\u0BB0\u0BBF\u0B9A\u0BCD\u0B9A\u0BC1\u0BB5"
-                "\u0B9F\u0BBF";
-            sSampleText = aTaml;
+            sSampleText = u"\u0B85\u0BB0\u0BBF\u0B9A\u0BCD\u0B9A\u0BC1\u0BB5"
+                "\u0B9F\u0BBF"_ustr;
             break;
         }
         case USCRIPT_TELUGU:
         {
-            static constexpr OUStringLiteral aTelu =
-                u"\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41";
-            sSampleText = aTelu;
+            sSampleText = u"\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41"_ustr;
             break;
         }
         case USCRIPT_KANNADA:
         {
-            static constexpr OUStringLiteral aKnda =
-                u"\u0C95\u0CA8\u0CCD\u0CA8\u0CA1 \u0CB2\u0CBF"
-                "\u0CAA\u0CBF";
-            sSampleText = aKnda;
+            sSampleText = u"\u0C95\u0CA8\u0CCD\u0CA8\u0CA1 \u0CB2\u0CBF"
+                "\u0CAA\u0CBF"_ustr;
             break;
         }
         case USCRIPT_MALAYALAM:
         {
-            static constexpr OUStringLiteral aMlym =
-                u"\u0D2E\u0D32\u0D2F\u0D3E\u0D33\u0D32\u0D3F\u0D2A"
-                "\u0D3F";
-            sSampleText = aMlym;
+            sSampleText = u"\u0D2E\u0D32\u0D2F\u0D3E\u0D33\u0D32\u0D3F\u0D2A"
+                "\u0D3F"_ustr;
             break;
         }
         case USCRIPT_THAI:
         {
-            static constexpr OUStringLiteral aThai =
-                u"\u0E2D\u0E31\u0E01\u0E29\u0E23\u0E44\u0E17\u0E22";
-            sSampleText = aThai;
+            sSampleText = u"\u0E2D\u0E31\u0E01\u0E29\u0E23\u0E44\u0E17\u0E22"_ustr;
             break;
         }
         case USCRIPT_LAO:
         {
-            static constexpr OUStringLiteral aLao =
-                u"\u0EAD\u0EB1\u0E81\u0EAA\u0EAD\u0E99\u0EA5\u0EB2"
-                "\u0EA7";
-            sSampleText = aLao;
+            sSampleText = u"\u0EAD\u0EB1\u0E81\u0EAA\u0EAD\u0E99\u0EA5\u0EB2"
+                "\u0EA7"_ustr;
             break;
         }
         case USCRIPT_GEORGIAN:
         {
-            static constexpr OUStringLiteral aGeorgian =
-                u"\u10D3\u10D0\u10DB\u10EC\u10D4\u10E0\u10DA\u10DD"
-                "\u10D1\u10D0";
-            sSampleText = aGeorgian;
+            sSampleText = u"\u10D3\u10D0\u10DB\u10EC\u10D4\u10E0\u10DA\u10DD"
+                "\u10D1\u10D0"_ustr;
             break;
         }
         case USCRIPT_JAMO:
         case USCRIPT_HANGUL:
         case USCRIPT_KOREAN:
         {
-            static constexpr OUStringLiteral aHang =
-                u"\uD55C\uAE00";
-            sSampleText = aHang;
+            sSampleText = u"\uD55C\uAE00"_ustr;
             break;
         }
         case USCRIPT_TIBETAN:
         {
-            static constexpr OUStringLiteral aTibt =
-                u"\u0F51\u0F56\u0F74\u0F0B\u0F45\u0F53\u0F0B";
-            sSampleText = aTibt;
+            sSampleText = u"\u0F51\u0F56\u0F74\u0F0B\u0F45\u0F53\u0F0B"_ustr;
             break;
         }
         case USCRIPT_SYRIAC:
         {
-            static constexpr OUStringLiteral aSyri =
-                u"\u0723\u071B\u072A\u0722\u0713\u0720\u0710";
-            sSampleText = aSyri;
+            sSampleText = u"\u0723\u071B\u072A\u0722\u0713\u0720\u0710"_ustr;
             break;
         }
         case USCRIPT_THAANA:
         {
-            static constexpr OUStringLiteral aThaa =
-                u"\u078C\u07A7\u0782\u07A6";
-            sSampleText = aThaa;
+            sSampleText = u"\u078C\u07A7\u0782\u07A6"_ustr;
             break;
         }
         case USCRIPT_SINHALA:
         {
-            static constexpr OUStringLiteral aSinh =
-                u"\u0DC1\u0DD4\u0DAF\u0DCA\u0DB0 \u0DC3\u0DD2"
-                "\u0D82\u0DC4\u0DBD";
-            sSampleText = aSinh;
+            sSampleText = u"\u0DC1\u0DD4\u0DAF\u0DCA\u0DB0 \u0DC3\u0DD2"
+                "\u0D82\u0DC4\u0DBD"_ustr;
             break;
         }
         case USCRIPT_MYANMAR:
         {
-            static constexpr OUStringLiteral aMymr =
-                u"\u1019\u103C\u1014\u103A\u1019\u102C\u1021\u1000"
-                "\u1039\u1001\u101B\u102C";
-            sSampleText = aMymr;
+            sSampleText = u"\u1019\u103C\u1014\u103A\u1019\u102C\u1021\u1000"
+                "\u1039\u1001\u101B\u102C"_ustr;
             break;
         }
         case USCRIPT_ETHIOPIC:
         {
-            static constexpr OUStringLiteral aEthi =
-                u"\u130D\u12D5\u12DD";
-            sSampleText = aEthi;
+            sSampleText = u"\u130D\u12D5\u12DD"_ustr;
             break;
         }
         case USCRIPT_CHEROKEE:
         {
-            static constexpr OUStringLiteral aCher =
-                u"\u13D7\u13AA\u13EA\u13B6\u13D9\u13D7";
-            sSampleText = aCher;
+            sSampleText = u"\u13D7\u13AA\u13EA\u13B6\u13D9\u13D7"_ustr;
             break;
         }
         case USCRIPT_KHMER:
         {
-            static constexpr OUStringLiteral aKhmr =
-                u"\u17A2\u1780\u17D2\u1781\u179A\u1780\u17D2\u179A"
+            sSampleText = u"\u17A2\u1780\u17D2\u1781\u179A\u1780\u17D2\u179A"
                 "\u1798\u1781\u17C1\u1798\u179A\u1797\u17B6\u179F"
-                "\u17B6";
-            sSampleText = aKhmr;
+                "\u17B6"_ustr;
             break;
         }
         case USCRIPT_MONGOLIAN:
         {
-            static constexpr OUStringLiteral aMongolian =
-                u"\u182A\u1822\u1834\u1822\u182D\u180C";
-            sSampleText = aMongolian;
+            sSampleText = u"\u182A\u1822\u1834\u1822\u182D\u180C"_ustr;
             break;
         }
         case USCRIPT_TAGALOG:
         {
-            static constexpr OUStringLiteral aTagalog =
-                u"\u170A\u170A\u170C\u1712";
-            sSampleText = aTagalog;
+            sSampleText = u"\u170A\u170A\u170C\u1712"_ustr;
             break;
         }
         case USCRIPT_NEW_TAI_LUE:
         {
-            static constexpr OUStringLiteral aTalu =
-                u"\u1991\u19BA\u199F\u19B9\u19C9";
-            sSampleText = aTalu;
+            sSampleText = u"\u1991\u19BA\u199F\u19B9\u19C9"_ustr;
             break;
         }
         case USCRIPT_TRADITIONAL_HAN:
         {
-            static constexpr OUStringLiteral aHant =
-                u"\u7E41";
-            sSampleText = aHant;
+            sSampleText = u"\u7E41"_ustr;
             break;
         }
         case USCRIPT_SIMPLIFIED_HAN:
         {
-            static constexpr OUStringLiteral aHans =
-                u"\u7B80";
-            sSampleText = aHans;
+            sSampleText = u"\u7B80"_ustr;
             break;
         }
         case USCRIPT_HAN:
         {
-            static constexpr OUStringLiteral aSimplifiedAndTraditionalChinese =
-                u"\u7B80\u7E41";
-            sSampleText = aSimplifiedAndTraditionalChinese;
+            sSampleText = u"\u7B80\u7E41"_ustr;
             break;
         }
         case USCRIPT_JAPANESE:
         {
-            static constexpr OUStringLiteral aJpan =
-                u"\u65E5\u672C\u8A9E";
-            sSampleText = aJpan;
+            sSampleText = u"\u65E5\u672C\u8A9E"_ustr;
             break;
         }
         case USCRIPT_YI:
         {
-            static constexpr OUStringLiteral aYiii =
-                u"\uA188\uA320\uA071\uA0B7";
-            sSampleText = aYiii;
+            sSampleText = u"\uA188\uA320\uA071\uA0B7"_ustr;
             break;
         }
         case USCRIPT_PHAGS_PA:
         {
-            static constexpr OUStringLiteral aPhag =
-                u"\uA84F\uA861\uA843 \uA863\uA861\uA859 "
-                u"\uA850\uA85C\uA85E";
-            sSampleText = aPhag;
+            sSampleText = u"\uA84F\uA861\uA843 \uA863\uA861\uA859 "
+                u"\uA850\uA85C\uA85E"_ustr;
             break;
         }
         case USCRIPT_TAI_LE:
         {
-            static constexpr OUStringLiteral aTale =
-                u"\u1956\u196D\u1970\u1956\u196C\u1973\u1951\u1968"
-                "\u1952\u1970";
-            sSampleText = aTale;
+            sSampleText = u"\u1956\u196D\u1970\u1956\u196C\u1973\u1951\u1968"
+                "\u1952\u1970"_ustr;
             break;
         }
         case USCRIPT_LATIN:
@@ -505,17 +433,13 @@ static OUString makeRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_HAN:
         {
             //Three Character Classic
-            static constexpr OUStringLiteral aZh =
-                u"\u4EBA\u4E4B\u521D \u6027\u672C\u5584";
-            sSampleText = aZh;
+            sSampleText = u"\u4EBA\u4E4B\u521D \u6027\u672C\u5584"_ustr;
             break;
         }
         case USCRIPT_JAPANESE:
         {
             //'Beautiful Japanese'
-            static constexpr OUStringLiteral aJa =
-                u"\u7F8E\u3057\u3044\u65E5\u672C\u8A9E";
-            sSampleText = aJa;
+            sSampleText = u"\u7F8E\u3057\u3044\u65E5\u672C\u8A9E"_ustr;
             break;
         }
         case USCRIPT_JAMO:
@@ -523,10 +447,8 @@ static OUString makeRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_HANGUL:
         {
             //The essential condition for...
-            static constexpr OUStringLiteral aKo =
-                u"\uD0A4\uC2A4\uC758 \uACE0\uC720\uC870"
-                "\uAC74\uC740";
-            sSampleText = aKo;
+            sSampleText = u"\uD0A4\uC2A4\uC758 \uACE0\uC720\uC870"
+                "\uAC74\uC740"_ustr;
             break;
         }
         default:
@@ -545,16 +467,12 @@ OUString makeShortMinimalTextForScript(UScriptCode eScript)
     {
         case USCRIPT_GREEK:
         {
-            static constexpr OUStringLiteral aGrek =
-                u"\u0391\u0392";
-            sSampleText = aGrek;
+            sSampleText = u"\u0391\u0392"_ustr;
             break;
         }
         case USCRIPT_HEBREW:
         {
-            static constexpr OUStringLiteral aHebr =
-                u"\u05D0\u05D1";
-            sSampleText = aHebr;
+            sSampleText = u"\u05D0\u05D1"_ustr;
             break;
         }
         default:
@@ -596,10 +514,8 @@ static OUString makeRepresentativeTextForLanguage(LanguageType eLang)
         sRet = makeRepresentativeTextForScript(USCRIPT_DEVANAGARI);
     else if( pri == primary(LANGUAGE_ASSAMESE) )
     {
-        static constexpr OUStringLiteral aAs =
-            u"\u0985\u09B8\u09AE\u09C0\u09AF\u09BC\u09BE"
-            " \u0986\u0996\u09F0";
-        sRet = aAs;
+        sRet = u"\u0985\u09B8\u09AE\u09C0\u09AF\u09BC\u09BE"
+            " \u0986\u0996\u09F0"_ustr;
     }
     else if( pri == primary(LANGUAGE_BENGALI) )
         sRet = makeRepresentativeTextForScript(USCRIPT_BENGALI);
@@ -653,9 +569,7 @@ static OUString makeRepresentativeTextForLanguage(LanguageType eLang)
         sRet = makeRepresentativeTextForScript(USCRIPT_YI);
     else if( pri == primary(LANGUAGE_GAELIC_IRELAND) )
     {
-        static constexpr OUStringLiteral aGa =
-            u"T\u00E9acs Samplach";
-        sRet = aGa;
+        sRet = u"T\u00E9acs Samplach"_ustr;
     }
 
     return sRet;
@@ -1200,20 +1114,16 @@ namespace
 
             bool bKore = false, bJpan = false, bHant = false, bHans = false;
 
-            static constexpr OUStringLiteral sKorean = u"\u4E6D\u4E76\u596C";
-            if (-1 == rDevice.HasGlyphs(rFont, sKorean))
+            if (-1 == rDevice.HasGlyphs(rFont, u"\u4E6D\u4E76\u596C"))
                 bKore = true;
 
-            static constexpr OUStringLiteral sJapanese = u"\u5968\u67A0\u9D8F";
-            if (-1 == rDevice.HasGlyphs(rFont, sJapanese))
+            if (-1 == rDevice.HasGlyphs(rFont, u"\u5968\u67A0\u9D8F"))
                 bJpan = true;
 
-            static constexpr OUStringLiteral sTraditionalChinese = u"\u555F\u96DE";
-            if (-1 == rDevice.HasGlyphs(rFont, sTraditionalChinese))
+            if (-1 == rDevice.HasGlyphs(rFont, u"\u555F\u96DE"))
                 bHant = true;
 
-            static constexpr OUStringLiteral sSimplifiedChinese = u"\u4E61\u542F\u5956";
-            if (-1 == rDevice.HasGlyphs(rFont, sSimplifiedChinese))
+            if (-1 == rDevice.HasGlyphs(rFont, u"\u4E61\u542F\u5956"))
                 bHans = true;
 
             if (bKore && !bJpan && !bHans && !bHant) {
