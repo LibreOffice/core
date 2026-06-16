@@ -27,11 +27,6 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/help-registry/2010";
-constexpr OUStringLiteral NS_PREFIX = u"help";
-constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"help-backend-db";
-constexpr OUStringLiteral KEY_ELEMENT_NAME = u"help";
-
 namespace dp_registry::backend::help {
 
 HelpBackendDb::HelpBackendDb(
@@ -43,22 +38,22 @@ HelpBackendDb::HelpBackendDb(
 
 OUString HelpBackendDb::getDbNSName()
 {
-    return EXTENSION_REG_NS;
+    return u"http://openoffice.org/extensionmanager/help-registry/2010"_ustr;
 }
 
 OUString HelpBackendDb::getNSPrefix()
 {
-    return NS_PREFIX;
+    return u"help"_ustr;
 }
 
 OUString HelpBackendDb::getRootElementName()
 {
-    return ROOT_ELEMENT_NAME;
+    return u"help-backend-db"_ustr;
 }
 
 OUString HelpBackendDb::getKeyElementName()
 {
-    return KEY_ELEMENT_NAME;
+    return u"help"_ustr;
 }
 
 

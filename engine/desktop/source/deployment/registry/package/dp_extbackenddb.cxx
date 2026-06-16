@@ -27,11 +27,6 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/extension-registry/2010";
-constexpr OUStringLiteral NS_PREFIX = u"ext";
-constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"extension-backend-db";
-constexpr OUStringLiteral KEY_ELEMENT_NAME = u"extension";
-
 namespace dp_registry::backend::bundle {
 
 ExtensionBackendDb::ExtensionBackendDb(
@@ -43,22 +38,22 @@ ExtensionBackendDb::ExtensionBackendDb(
 
 OUString ExtensionBackendDb::getDbNSName()
 {
-    return EXTENSION_REG_NS;
+    return u"http://openoffice.org/extensionmanager/extension-registry/2010"_ustr;
 }
 
 OUString ExtensionBackendDb::getNSPrefix()
 {
-    return NS_PREFIX;
+    return u"ext"_ustr;
 }
 
 OUString ExtensionBackendDb::getRootElementName()
 {
-    return ROOT_ELEMENT_NAME;
+    return u"extension-backend-db"_ustr;
 }
 
 OUString ExtensionBackendDb::getKeyElementName()
 {
-    return KEY_ELEMENT_NAME;
+    return u"extension"_ustr;
 }
 
 void ExtensionBackendDb::addEntry(OUString const & url, Data const & data)

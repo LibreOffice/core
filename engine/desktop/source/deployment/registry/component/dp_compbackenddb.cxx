@@ -27,11 +27,6 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/component-registry/2010";
-constexpr OUStringLiteral NS_PREFIX = u"comp";
-constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"component-backend-db";
-constexpr OUStringLiteral KEY_ELEMENT_NAME = u"component";
-
 namespace dp_registry::backend::component {
 
 ComponentBackendDb::ComponentBackendDb(
@@ -43,22 +38,22 @@ ComponentBackendDb::ComponentBackendDb(
 
 OUString ComponentBackendDb::getDbNSName()
 {
-    return EXTENSION_REG_NS;
+    return u"http://openoffice.org/extensionmanager/component-registry/2010"_ustr;
 }
 
 OUString ComponentBackendDb::getNSPrefix()
 {
-    return NS_PREFIX;
+    return u"comp"_ustr;
 }
 
 OUString ComponentBackendDb::getRootElementName()
 {
-    return ROOT_ELEMENT_NAME;
+    return u"component-backend-db"_ustr;
 }
 
 OUString ComponentBackendDb::getKeyElementName()
 {
-    return KEY_ELEMENT_NAME;
+    return u"component"_ustr;
 }
 
 void ComponentBackendDb::addEntry(OUString const & url, Data const & data)

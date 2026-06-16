@@ -1061,9 +1061,6 @@ void BackendImpl::PackageImpl::exportTo(
         std::vector< Sequence<beans::PropertyValue> > manifest;
         manifest.reserve( bundle.getLength() );
         sal_Int32 baseURLlen = m_url_expanded.getLength();
-        static constexpr OUStringLiteral strMediaType( u"MediaType" );
-        static constexpr OUStringLiteral strFullPath( u"FullPath" );
-        static constexpr OUStringLiteral strIsFolder( u"IsFolder" );
         for ( sal_Int32 pos = bundle.getLength(); pos--; )
         {
             Reference<deployment::XPackage> const& xPackage = bundle[pos];
@@ -1074,13 +1071,13 @@ void BackendImpl::PackageImpl::exportTo(
                 fullPath = url_.copy( baseURLlen + 1 );
             ::ucbhelper::Content ucbContent(
                 url_, xCmdEnv, getMyBackend()->getComponentContext() );
-            if (ucbContent.getPropertyValue(strIsFolder).get<bool>())
+            if (ucbContent.getPropertyValue(u"IsFolder"_ustr).get<bool>())
                 fullPath += "/";
             Sequence<beans::PropertyValue> attribs( 2 );
             beans::PropertyValue * pattribs = attribs.getArray();
-            pattribs[ 0 ].Name = strFullPath;
+            pattribs[ 0 ].Name = u"FullPath"_ustr;
             pattribs[ 0 ].Value <<= fullPath;
-            pattribs[ 1 ].Name = strMediaType;
+            pattribs[ 1 ].Name = u"MediaType"_ustr;
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 xPackage->getPackageType() );
             OUString mediaType;

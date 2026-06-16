@@ -24,9 +24,6 @@
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 
-constexpr OUStringLiteral PLATFORM_ALL = u"all";
-
-
 namespace dp_misc
 {
 namespace
@@ -73,7 +70,7 @@ namespace
     bool isPlatformSupported( std::u16string_view token )
     {
         bool ret = false;
-        if (token == PLATFORM_ALL)
+        if (token == u"all")
             ret = true;
         else if (token == u"windows_x86")
             ret = checkOSandCPU(u"Windows", u"x86");

@@ -24,11 +24,6 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/script-registry/2010";
-constexpr OUStringLiteral NS_PREFIX = u"script";
-constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"script-backend-db";
-constexpr OUStringLiteral KEY_ELEMENT_NAME = u"script";
-
 namespace dp_registry::backend::script {
 
 ScriptBackendDb::ScriptBackendDb(
@@ -40,22 +35,22 @@ ScriptBackendDb::ScriptBackendDb(
 
 OUString ScriptBackendDb::getDbNSName()
 {
-    return EXTENSION_REG_NS;
+    return u"http://openoffice.org/extensionmanager/script-registry/2010"_ustr;
 }
 
 OUString ScriptBackendDb::getNSPrefix()
 {
-    return NS_PREFIX;
+    return u"script"_ustr;
 }
 
 OUString ScriptBackendDb::getRootElementName()
 {
-    return ROOT_ELEMENT_NAME;
+    return u"script-backend-db"_ustr;
 }
 
 OUString ScriptBackendDb::getKeyElementName()
 {
-    return KEY_ELEMENT_NAME;
+    return u"script"_ustr;
 }
 
 

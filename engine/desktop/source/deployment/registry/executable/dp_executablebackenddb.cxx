@@ -24,11 +24,6 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/executable-registry/2010";
-constexpr OUStringLiteral NS_PREFIX = u"exe";
-constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"executable-backend-db";
-constexpr OUStringLiteral ENTRY_NAME = u"executable";
-
 namespace dp_registry::backend::executable {
 
 ExecutableBackendDb::ExecutableBackendDb(
@@ -40,22 +35,22 @@ ExecutableBackendDb::ExecutableBackendDb(
 
 OUString ExecutableBackendDb::getDbNSName()
 {
-    return EXTENSION_REG_NS;
+    return u"http://openoffice.org/extensionmanager/executable-registry/2010"_ustr;
 }
 
 OUString ExecutableBackendDb::getNSPrefix()
 {
-    return NS_PREFIX;
+    return u"exe"_ustr;
 }
 
 OUString ExecutableBackendDb::getRootElementName()
 {
-    return ROOT_ELEMENT_NAME;
+    return u"executable-backend-db"_ustr;
 }
 
 OUString ExecutableBackendDb::getKeyElementName()
 {
-    return ENTRY_NAME;
+    return u"executable"_ustr;
 }
 
 

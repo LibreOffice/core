@@ -28,11 +28,6 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/configuration-registry/2010";
-constexpr OUStringLiteral NS_PREFIX = u"conf";
-constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"configuration-backend-db";
-constexpr OUStringLiteral KEY_ELEMENT_NAME = u"configuration";
-
 namespace dp_registry::backend::configuration {
 
 ConfigurationBackendDb::ConfigurationBackendDb(
@@ -44,22 +39,22 @@ ConfigurationBackendDb::ConfigurationBackendDb(
 
 OUString ConfigurationBackendDb::getDbNSName()
 {
-    return EXTENSION_REG_NS;
+    return u"http://openoffice.org/extensionmanager/configuration-registry/2010"_ustr;
 }
 
 OUString ConfigurationBackendDb::getNSPrefix()
 {
-    return NS_PREFIX;
+    return u"conf"_ustr;
 }
 
 OUString ConfigurationBackendDb::getRootElementName()
 {
-    return ROOT_ELEMENT_NAME;
+    return u"configuration-backend-db"_ustr;
 }
 
 OUString ConfigurationBackendDb::getKeyElementName()
 {
-    return KEY_ELEMENT_NAME;
+    return u"configuration"_ustr;
 }
 
 

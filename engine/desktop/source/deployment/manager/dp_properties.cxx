@@ -34,7 +34,6 @@ namespace uno = css::uno;
 using css::uno::Reference;
 
 constexpr OUString PROP_SUPPRESS_LICENSE = u"SUPPRESS_LICENSE"_ustr;
-constexpr OUStringLiteral PROP_EXTENSION_UPDATE = u"EXTENSION_UPDATE";
 
 namespace dp_manager {
 
@@ -77,7 +76,7 @@ ExtensionProperties::ExtensionProperties(
         {
             m_prop_suppress_license = getPropertyValue(v);
         }
-        else if (v.Name == PROP_EXTENSION_UPDATE)
+        else if (v.Name == u"EXTENSION_UPDATE"_ustr)
         {
             m_prop_extension_update = getPropertyValue(v);
         }

@@ -191,7 +191,6 @@ bool MigrationImpl::doMigration()
         copyFiles();
 
         static constexpr OUString sMenubarResourceURL(u"private:resource/menubar/menubar"_ustr);
-        static constexpr OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
         for (MigrationModuleInfo & i : vModulesInfo) {
             OUString sModuleIdentifier = mapModuleShortNameToIdentifier(i.sModuleShortName);
             if (sModuleIdentifier.isEmpty())
@@ -224,7 +223,7 @@ bool MigrationImpl::doMigration()
             if (nToolbars >0) {
                 for (sal_Int32 j=0; j<nToolbars; ++j) {
                     OUString sToolbarName = i.m_vToolbars[j];
-                    OUString sToolbarResourceURL = sToolbarResourcePre + sToolbarName;
+                    OUString sToolbarResourceURL = u"private:resource/toolbar/"_ustr + sToolbarName;
 
                     uno::Reference< container::XIndexContainer > xOldVersionToolbarSettings(xOldCfgManager->getSettings(sToolbarResourceURL, true), uno::UNO_QUERY);
                     uno::Reference< container::XIndexContainer > xNewVersionToolbarSettings = aNewVersionUIInfo.getNewToolbarSettings(i.sModuleShortName, sToolbarName);
@@ -307,15 +306,12 @@ void MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigr
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_SET_THROW);
     const uno::Sequence< OUString > seqSupportedVersions = aMigrationAccess->getElementNames();
 
-    static constexpr OUStringLiteral aVersionIdentifiers( u"VersionIdentifiers" );
-    static constexpr OUStringLiteral aPriorityIdentifier( u"Priority" );
-
     for (OUString const & supportedVersion :seqSupportedVersions) {
         sal_Int32                 nPriority( 0 );
         uno::Sequence< OUString > seqVersions;
         uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(supportedVersion), uno::UNO_QUERY_THROW );
-        xMigrationData->getByName( aVersionIdentifiers ) >>= seqVersions;
-        xMigrationData->getByName( aPriorityIdentifier ) >>= nPriority;
+        xMigrationData->getByName( u"VersionIdentifiers"_ustr ) >>= seqVersions;
+        xMigrationData->getByName( u"Priority"_ustr ) >>= nPriority;
 
         supported_migration aSupportedMigration;
         aSupportedMigration.name      = supportedVersion;
@@ -900,8 +896,6 @@ void MigrationImpl::runServices()
 std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules() const
 {
     std::vector< MigrationModuleInfo > vModulesInfo;
-    static constexpr OUStringLiteral MENUBAR(u"menubar");
-    static constexpr OUStringLiteral TOOLBAR(u"toolbar");
 
     uno::Sequence< uno::Any > lArgs {uno::Any(m_aInfo.userdata + "/user/config/soffice.cfg/modules"),
                                      uno::Any(embed::ElementModes::READ)};
@@ -922,7 +916,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules()
         if (xModule.is()) {
             MigrationModuleInfo aModuleInfo;
 
-            uno::Reference< embed::XStorage > xMenubar = xModule->openStorageElement(MENUBAR, embed::ElementModes::READ);
+            uno::Reference< embed::XStorage > xMenubar = xModule->openStorageElement(u"menubar"_ustr, embed::ElementModes::READ);
             if (xMenubar.is()) {
                 if (xMenubar->getElementNames().hasElements()) {
                     aModuleInfo.sModuleShortName = sModuleShortName;
@@ -930,7 +924,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules()
                 }
             }
 
-            uno::Reference< embed::XStorage > xToolbar = xModule->openStorageElement(TOOLBAR, embed::ElementModes::READ);
+            uno::Reference< embed::XStorage > xToolbar = xModule->openStorageElement(u"toolbar"_ustr, embed::ElementModes::READ);
             if (xToolbar.is()) {
                 const ::uno::Sequence< OUString > lToolbars = xToolbar->getElementNames();
                 for (OUString const & sToolbarName : lToolbars) {
@@ -961,8 +955,6 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         const uno::Reference< container::XIndexContainer >& xIndexNew,
         const OUString& sResourceURL)
 {
-    static constexpr OUStringLiteral MENU_SEPARATOR(u" | ");
-
     std::vector< MigrationItem > vOldItems;
     std::vector< MigrationItem > vNewItems;
     uno::Sequence< beans::PropertyValue > aProps;
@@ -1006,7 +998,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         if (pFound != vNewItems.end() && oldItem.m_xPopupMenu.is()) {
             OUString sName;
             if (!sParent.isEmpty())
-                sName = sParent + MENU_SEPARATOR + oldItem.m_sCommandURL;
+                sName = sParent + u" | "_ustr + oldItem.m_sCommandURL;
             else
                 sName = oldItem.m_sCommandURL;
             compareOldAndNewConfig(sName, oldItem.m_xPopupMenu, pFound->m_xPopupMenu, sResourceURL);
@@ -1171,9 +1163,6 @@ void NewVersionUIInfo::init(const std::vector< MigrationModuleInfo >& vModulesIn
     m_lNewVersionToolbarSettingsSeq.realloc(vModulesInfo.size());
     auto p_lNewVersionToolbarSettingsSeq = m_lNewVersionToolbarSettingsSeq.getArray();
 
-    static constexpr OUStringLiteral sMenubarResourceURL(u"private:resource/menubar/menubar");
-    static constexpr OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
-
     uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = ui::theModuleUIConfigurationManagerSupplier::get( ::comphelper::getProcessComponentContext() );
 
     for (size_t i=0; i<vModulesInfo.size(); ++i) {
@@ -1185,7 +1174,7 @@ void NewVersionUIInfo::init(const std::vector< MigrationModuleInfo >& vModulesIn
 
             if (vModulesInfo[i].bHasMenubar) {
                 p_lNewVersionMenubarSettingsSeq[i].Name = vModulesInfo[i].sModuleShortName;
-                p_lNewVersionMenubarSettingsSeq[i].Value <<= xCfgManager->getSettings(sMenubarResourceURL, true);
+                p_lNewVersionMenubarSettingsSeq[i].Value <<= xCfgManager->getSettings(u"private:resource/menubar/menubar"_ustr, true);
             }
 
             sal_Int32 nToolbars = vModulesInfo[i].m_vToolbars.size();
@@ -1194,7 +1183,7 @@ void NewVersionUIInfo::init(const std::vector< MigrationModuleInfo >& vModulesIn
                 auto plPropSeq = lPropSeq.getArray();
                 for (sal_Int32 j=0; j<nToolbars; ++j) {
                     OUString sToolbarName = vModulesInfo[i].m_vToolbars[j];
-                    OUString sToolbarResourceURL = sToolbarResourcePre + sToolbarName;
+                    OUString sToolbarResourceURL = u"private:resource/toolbar/"_ustr + sToolbarName;
 
                     plPropSeq[j].Name = sToolbarName;
                     plPropSeq[j].Value <<= xCfgManager->getSettings(sToolbarResourceURL, true);

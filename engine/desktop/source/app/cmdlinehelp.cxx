@@ -38,7 +38,58 @@ namespace desktop
     constexpr OUString aCmdLineHelp_version =
         u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION %BUILDID\n"
         "\n"_ustr;
-    constexpr OUStringLiteral aCmdLineHelp =
+#ifdef _WIN32
+    namespace{
+        // This class is only used to create a console when soffice.bin is run without own console
+        // (like using soffice.exe launcher as opposed to soffice.com), and either --version or
+        // --help command line options were specified, or an error in a command line option was
+        // detected, which requires to output strings to user.
+        class lcl_Console {
+        public:
+            explicit lcl_Console(short nBufHeight)
+                : m_bOwnConsole(AllocConsole() != FALSE)
+            {
+                if (m_bOwnConsole)
+                {
+                    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+                    // Ensure that console buffer is enough to hold required data
+                    CONSOLE_SCREEN_BUFFER_INFO cinfo;
+                    GetConsoleScreenBufferInfo(hOut, &cinfo);
+                    if (cinfo.dwSize.Y < nBufHeight)
+                    {
+                        cinfo.dwSize.Y = nBufHeight;
+                        SetConsoleScreenBufferSize(hOut, cinfo.dwSize);
+                    }
+
+                    (void)freopen("CON", "r", stdin);
+                    (void)freopen("CON", "w", stdout);
+                    (void)freopen("CON", "w", stderr);
+
+                    std::ios::sync_with_stdio(true);
+                }
+            }
+
+            ~lcl_Console()
+            {
+                if (m_bOwnConsole)
+                {
+                    fflush(stdout);
+                    fprintf(stdout, "Press Enter to continue...");
+                    fgetc(stdin);
+                    FreeConsole();
+                }
+            }
+        private:
+            bool m_bOwnConsole;
+        };
+    }
+#endif
+
+    void displayCmdlineHelp(OUString const & unknown)
+    {
+        OUString aHelpMessage_version = ReplaceStringHookProc(aCmdLineHelp_version);
+        OUString aHelpMessage(
         u"Usage: %CMDNAME [argument...]\n"
         "       argument - switches, switch parameters and document URIs (filenames).   \n\n"
         "Using without special arguments:                                               \n"
@@ -177,59 +228,7 @@ namespace desktop
         "   -Embedding          Ignored (COM+ related; Windows only).                   \n"
         "   --nofirststartwizard Does nothing, accepted only for backward compatibility.\n"
         "   --protector {arg1} {arg2}                                                   \n"
-        "                       Used only in unit tests and should have two arguments.  \n\n";
-#ifdef _WIN32
-    namespace{
-        // This class is only used to create a console when soffice.bin is run without own console
-        // (like using soffice.exe launcher as opposed to soffice.com), and either --version or
-        // --help command line options were specified, or an error in a command line option was
-        // detected, which requires to output strings to user.
-        class lcl_Console {
-        public:
-            explicit lcl_Console(short nBufHeight)
-                : m_bOwnConsole(AllocConsole() != FALSE)
-            {
-                if (m_bOwnConsole)
-                {
-                    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
-                    // Ensure that console buffer is enough to hold required data
-                    CONSOLE_SCREEN_BUFFER_INFO cinfo;
-                    GetConsoleScreenBufferInfo(hOut, &cinfo);
-                    if (cinfo.dwSize.Y < nBufHeight)
-                    {
-                        cinfo.dwSize.Y = nBufHeight;
-                        SetConsoleScreenBufferSize(hOut, cinfo.dwSize);
-                    }
-
-                    (void)freopen("CON", "r", stdin);
-                    (void)freopen("CON", "w", stdout);
-                    (void)freopen("CON", "w", stderr);
-
-                    std::ios::sync_with_stdio(true);
-                }
-            }
-
-            ~lcl_Console()
-            {
-                if (m_bOwnConsole)
-                {
-                    fflush(stdout);
-                    fprintf(stdout, "Press Enter to continue...");
-                    fgetc(stdin);
-                    FreeConsole();
-                }
-            }
-        private:
-            bool m_bOwnConsole;
-        };
-    }
-#endif
-
-    void displayCmdlineHelp(OUString const & unknown)
-    {
-        OUString aHelpMessage_version = ReplaceStringHookProc(aCmdLineHelp_version);
-        OUString aHelpMessage(OUString(aCmdLineHelp).replaceFirst("%CMDNAME", "soffice"));
+        "                       Used only in unit tests and should have two arguments.  \n\n"_ustr.replaceFirst("%CMDNAME", "soffice"));
         if (!unknown.isEmpty())
         {
             aHelpMessage = "Error in option: " + unknown + "\n\n"
