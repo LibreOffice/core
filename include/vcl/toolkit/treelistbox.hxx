@@ -337,9 +337,8 @@ protected:
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType ) override;
 
-    virtual void Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pParent,
-                        sal_uInt32 nPos = TREELIST_APPEND);
-    virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND);
+    virtual void Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos);
+    virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos);
 
     // In-place editing
     void            EditText( const OUString&, const tools::Rectangle&,const Selection&);
