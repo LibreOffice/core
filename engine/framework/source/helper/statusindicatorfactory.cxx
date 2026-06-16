@@ -33,6 +33,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/kit.hxx>
 #include <mutex>
 #include <rtl/ref.hxx>
 
@@ -540,6 +541,14 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
 
     {
         SolarMutexGuard g;
+        // The progress-indicator reschedule deliberately spins the event loop during e.g.
+        // document load; bracket it so the kit host poll loop's non-async-dialog guard does
+        // not flag this expected kitPoll re-entry.
+        vcl::kit::pushExpectedReentry();
+        struct ReentryPopper
+        {
+            ~ReentryPopper() { vcl::kit::popExpectedReentry(); }
+        } popper;
         Application::Reschedule(true);
     }
 

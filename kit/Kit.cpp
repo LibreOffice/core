@@ -27,6 +27,7 @@
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
 #include <common/Png.hpp>
+#include <common/ProcUtil.hpp>
 #include <common/Protocol.hpp>
 #include <common/Rectangle.hpp>
 #include <common/RenderTiles.hpp>
@@ -3071,10 +3072,13 @@ int KitSocketPoll::kitPoll(int timeoutMicroS)
     static int lastWarned = 1;
     ReEntrancyGuard guard(reentries);
     // Skip re-entries the engine has explicitly opted into via vcl::kit::pushExpectedReentry,
-    // and leave lastWarned untouched too so a later depth-1 kitPoll doesn't fire spuriously:
+    // and leave lastWarned untouched too so a later depth-1 kitPoll doesn't fire spuriously.
+    // loKitPtr is the engine's COKit ABI handle, set in startMainLoop() for MOBILEAPP and via
+    // globalPreinit() on the server.
     if (reentries != lastWarned && !(loKitPtr && loKitPtr->pClass->isExpectedReentry()))
     {
-        LOG_ERR("non-async dialog triggered");
+        LOG_ERR("non-async dialog triggered; reentry depth " << reentries
+                << ", triggering call site:\n" << ProcUtil::Backtrace::get(30));
 #if !MOBILEAPP
         if (singletonDocument && lastWarned < reentries)
             singletonDocument->alertNotAsync();
@@ -3409,6 +3413,12 @@ void KitSocketPoll::kitWakeup() {
  * The LOKit main loop will use/call these callbacks inside VCL's Yield(), see SvpSalInstance::ImplYield().
  */
 void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, const std::shared_ptr<KitSocketPoll>& mainKit) {
+#if MOBILEAPP
+    // The server sets loKitPtr in globalPreinit(); MOBILEAPP has no ForKit, so publish the
+    // engine handle here, before the poll loop runs, so kitPoll's reentry guard can reach
+    // isExpectedReentry().
+    loKitPtr = const_cast<COKit*>(kit);
+#endif
     if (!COKIT_HAS(kit, runLoop))
     {
         LOG_FTL("Kit is missing Unipoll API");
