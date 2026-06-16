@@ -84,8 +84,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/browser/dbtreemodel \
     dbaccess/source/ui/browser/dsbrowserDnD \
     dbaccess/source/ui/browser/dsEntriesNoExp \
-    dbaccess/source/ui/browser/exsrcbrw \
-    dbaccess/source/ui/browser/formadapter \
     dbaccess/source/ui/browser/genericcontroller \
     dbaccess/source/ui/browser/sbagrid \
     dbaccess/source/ui/browser/sbamultiplex \

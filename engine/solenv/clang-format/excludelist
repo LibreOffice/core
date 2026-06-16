@@ -2453,8 +2453,6 @@ dbaccess/source/ui/browser/dbtreemodel.cxx
 dbaccess/source/ui/browser/dbtreemodel.hxx
 dbaccess/source/ui/browser/dsEntriesNoExp.cxx
 dbaccess/source/ui/browser/dsbrowserDnD.cxx
-dbaccess/source/ui/browser/exsrcbrw.cxx
-dbaccess/source/ui/browser/formadapter.cxx
 dbaccess/source/ui/browser/genericcontroller.cxx
 dbaccess/source/ui/browser/sbagrid.cxx
 dbaccess/source/ui/browser/sbamultiplex.cxx
@@ -2613,8 +2611,6 @@ dbaccess/source/ui/inc/dlgsave.hxx
 dbaccess/source/ui/inc/dlgsize.hxx
 dbaccess/source/ui/inc/dsitems.hxx
 dbaccess/source/ui/inc/dsmeta.hxx
-dbaccess/source/ui/inc/exsrcbrw.hxx
-dbaccess/source/ui/inc/formadapter.hxx
 dbaccess/source/ui/inc/imageprovider.hxx
 dbaccess/source/ui/inc/indexcollection.hxx
 dbaccess/source/ui/inc/indexdialog.hxx

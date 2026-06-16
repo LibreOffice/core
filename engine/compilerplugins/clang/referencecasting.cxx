@@ -42,9 +42,6 @@ public:
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
-        // macros
-        if (fn == SRCDIR "/dbaccess/source/ui/browser/formadapter.cxx")
-            return false;
         // UNO aggregation
         if (fn == SRCDIR "/toolkit/source/controls/stdtabcontroller.cxx")
             return false;

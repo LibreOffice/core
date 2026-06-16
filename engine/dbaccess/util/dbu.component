@@ -67,10 +67,6 @@
     constructor="org_openoffice_comp_dbu_ODatasourceBrowser_get_implementation">
     <service name="com.sun.star.sdb.DataSourceBrowser"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OFormGridView"
-    constructor="org_openoffice_comp_dbu_OFormGridView_get_implementation">
-    <service name="com.sun.star.sdb.FormGridView"/>
-  </implementation>
   <implementation name="org.openoffice.comp.dbu.OSQLMessageDialog"
     constructor="org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation">
     <service name="com.sun.star.sdb.ErrorMessageDialog"/>

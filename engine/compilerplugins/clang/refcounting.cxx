@@ -230,18 +230,6 @@ bool containsOWeakObjectSubclass(const clang::Type* pType0) {
             dc.Class("OBookmarkContainer").Namespace("dbaccess")
                 .GlobalNamespace())
             return false;
-        // TODO not sure about these ones, just avoiding dbaccess in general for now
-        if (dc.Class("SbaXPropertiesChangeMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXSubmitMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXResetMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXPropertyChangeMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXSQLErrorMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXParameterMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXRowSetApproveMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXRowSetMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXLoadMultiplexer").Namespace("dbaui").GlobalNamespace() ||
-            dc.Class("SbaXVetoableChangeMultiplexer").Namespace("dbaui").GlobalNamespace())
-            return false;
         // slideshow playing games here
         if (dc.Class("SlideView").AnonymousNamespace().Namespace("internal").Namespace("slideshow").GlobalNamespace())
             return false;
