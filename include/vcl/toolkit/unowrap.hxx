@@ -39,9 +39,6 @@ namespace com::sun::star::awt {
     class XWindow;
     class XVclWindowPeer;
 }
-namespace com::sun::star::accessibility {
-    class XAccessible;
-}
 
 class VCL_DLLPUBLIC UnoWrapperBase
 {
