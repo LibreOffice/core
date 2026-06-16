@@ -261,19 +261,12 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
 } // namespace OFOPXMLHelper
 
 // Relations info related strings
-constexpr OUStringLiteral g_aRelListElement(u"Relationships");
-constexpr OUStringLiteral g_aRelElement( u"Relationship" );
 constexpr OUString g_aIDAttr( u"Id"_ustr );
 constexpr OUString g_aTypeAttr( u"Type"_ustr );
 constexpr OUString g_aTargetModeAttr( u"TargetMode"_ustr );
 constexpr OUString g_aTargetAttr( u"Target"_ustr );
 
 // ContentType related strings
-constexpr OUStringLiteral g_aTypesElement( u"Types" );
-constexpr OUStringLiteral g_aDefaultElement( u"Default" );
-constexpr OUStringLiteral g_aOverrideElement( u"Override" );
-constexpr OUStringLiteral g_aExtensionAttr( u"Extension" );
-constexpr OUStringLiteral g_aPartNameAttr( u"PartName" );
 constexpr OUString g_aContentTypeAttr( u"ContentType"_ustr );
 
 OFOPXMLHelper_Impl::OFOPXMLHelper_Impl( sal_uInt16 nFormat )
@@ -304,7 +297,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 {
     if ( m_nFormat == RELATIONINFO_FORMAT )
     {
-        if ( aName == g_aRelListElement )
+        if ( aName == u"Relationships"_ustr )
         {
             sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
 
@@ -315,7 +308,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             return; // nothing to do
         }
-        else if ( aName == g_aRelElement )
+        else if ( aName == u"Relationship"_ustr )
         {
             sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
             if ( nNewLength != 2 )
@@ -366,7 +359,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
     }
     else if ( m_nFormat == CONTENTTYPE_FORMAT )
     {
-        if ( aName == g_aTypesElement )
+        if ( aName == u"Types"_ustr )
         {
             sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
 
@@ -380,7 +373,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             return; // nothing to do
         }
-        else if ( aName == g_aDefaultElement )
+        else if ( aName == u"Default"_ustr )
         {
             sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
             if ( nNewLength != 2 )
@@ -396,7 +389,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             auto pResultSeq = m_aResultSeq.getArray();
 
-            const OUString aExtensionValue = xAttribs->getValueByName( g_aExtensionAttr );
+            const OUString aExtensionValue = xAttribs->getValueByName( u"Extension"_ustr );
             if ( aExtensionValue.isEmpty() )
                 throw css::xml::sax::SAXException(); // TODO: the Extension value must present
 
@@ -411,7 +404,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             pSeq[nNewResultLen-1].First = aExtensionValue;
             pSeq[nNewResultLen-1].Second = aContentTypeValue;
         }
-        else if ( aName == g_aOverrideElement )
+        else if ( aName == u"Override"_ustr )
         {
             sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
             if ( nNewLength != 2 )
@@ -427,7 +420,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             auto pResultSeq = m_aResultSeq.getArray();
 
-            OUString aPartNameValue = xAttribs->getValueByName( g_aPartNameAttr );
+            OUString aPartNameValue = xAttribs->getValueByName( u"PartName"_ustr );
             if ( aPartNameValue.isEmpty() )
                 throw css::xml::sax::SAXException(); // TODO: the PartName value must present
 
