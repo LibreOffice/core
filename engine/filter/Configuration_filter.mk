@@ -280,21 +280,6 @@ $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_base_others.xcu
 	contenthandlers/com_sun_star_comp_framework_SoundHandler \
 ))
 
-ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
-# fcfg_database
-$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_database_types.xcu,filter/source/config/fragments/types,\
-	StarBase \
-))
-
-$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_database_filters.xcu,filter/source/config/fragments/filters,\
-	StarOffice_XML__Base_ \
-))
-
-$(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_database_others.xcu,filter/source/config/fragments,\
-	frameloaders/org_openoffice_comp_dbflt_DBContentLoader2 \
-))
-endif
-
 # fcfg_writer
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
 	generic_HTML \
