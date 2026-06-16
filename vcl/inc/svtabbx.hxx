@@ -31,7 +31,6 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
-    OUString m_aCurEntry;
 
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
     Link<const EntryItemText&, bool> m_aEditedEntryHdl;
@@ -82,9 +81,6 @@ public:
     // the configured drag drop mode would make more sense to me, but I'm not
     // going to change the baseclass
     virtual DragDropMode NotifyStartDrag() override { return GetDragDropMode(); }
-
-    virtual SvTreeListEntry& InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
-                                         sal_uInt32 nPos = TREELIST_APPEND) override;
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );

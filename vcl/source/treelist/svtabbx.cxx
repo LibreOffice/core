@@ -68,14 +68,10 @@ void SvTabListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& rStr, cons
 {
     SvTreeListBox::InitEntry(rEntry, rStr, rColl, rExp);
 
-    sal_Int32 nIndex = 0;
     // TODO: verify if nTabCount is always >0 here!
     const sal_uInt16 nCount = mvTabList.size() - 1;
-    for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
-    {
-        const std::u16string_view aToken = GetToken(m_aCurEntry, nIndex);
-        rEntry.AddItem(std::make_unique<SvLBoxString>(OUString(aToken)));
-    }
+    for (sal_uInt16 nTab = 0; nTab < nCount; nTab++)
+        rEntry.AddItem(std::make_unique<SvLBoxString>());
 }
 
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
@@ -123,21 +119,6 @@ void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions)
     SvTreeListBox::m_nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
-}
-
-SvTreeListEntry& SvTabListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                           sal_uInt32 nPos)
-{
-    OUString aFirstStr(rText);
-    sal_Int32 nEnd = aFirstStr.indexOf( '\t' );
-    if( nEnd != -1 )
-    {
-        aFirstStr = aFirstStr.copy(0, nEnd);
-        m_aCurEntry = rText.copy(++nEnd);
-    }
-    else
-        m_aCurEntry.clear();
-    return SvTreeListBox::InsertEntry(aFirstStr, pParent, nPos);
 }
 
 OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry ) const
