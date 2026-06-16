@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">Այս նիշքը միայն կարդալու համար է, պահպանումն անջատված է։</string>
+    <string name="temp_file_saving_disabled">Սկզբնաղբյուրի հավելվածի կողմից համօգտագործվել է որպես միայն հարդալու համար։ Փոփոխություններ կատարելու համար օգտագործեք «Խմբագրել պատճենը»։</string>
     <string name="file_chromeos_read_only">Այս նիշքը չի կարող պահպանվել այս տեղում, այն բացվում է միայն կարդալու համար: Տեղափոխեք այն Play նիշքերի մեջ՝ լիարժեք կարդալու/գրելու հասանելիություն ունենալու համար:</string>
     <string name="storage_permission_required">Պահեստավորման թույլտվություն է պահանջվում</string>
     <string name="failed_to_load_file">Չհաջողվեց որոշել բեռնվող նիշքը</string>
