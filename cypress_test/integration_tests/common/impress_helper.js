@@ -256,6 +256,24 @@ function getSlideShowCanvas() {
 	return getSlideShowContent().find('#slideshow-canvas');
 }
 
+// The "Presenting in window" snackbar is shown with a -1 timeout, so it
+// never auto-closes. It overlaps the slideshow and would otherwise land in
+// the canvas screenshot. Wait for it to appear on the given frame, close it
+// through the snackbar controller, and wait for it to leave the DOM, so the
+// captured pixels are the slide alone. Driven through the frame window so it
+// works without changing the active frame.
+function dismissPresentingSnackbar(win) {
+	cy.wrap(win, { log: false }).should(function (w) {
+		expect(w.document.querySelector('#snackbar-dismiss-button')).to.exist;
+	});
+	cy.then(function () {
+		win.app.map.uiManager.closeSnackbar();
+	});
+	cy.wrap(win, { log: false }).should(function (w) {
+		expect(w.document.querySelector('#snackbar-dismiss-button')).to.not.exist;
+	});
+}
+
 // Wait for the slideshow to have loaded a slide and for any
 // animations/transitions to finish. Waits for the navigator's
 // currentSlideIndex to be set (slide loaded via fetchAndRun)
@@ -307,5 +325,6 @@ module.exports.selectTableInTheCenter = selectTableInTheCenter;
 module.exports.getSlideShow = getSlideShow;
 module.exports.getSlideShowContent = getSlideShowContent;
 module.exports.getSlideShowCanvas = getSlideShowCanvas;
+module.exports.dismissPresentingSnackbar = dismissPresentingSnackbar;
 module.exports.waitForSlideShowIdle = waitForSlideShowIdle;
 module.exports.clickSlideShowNav = clickSlideShowNav;
