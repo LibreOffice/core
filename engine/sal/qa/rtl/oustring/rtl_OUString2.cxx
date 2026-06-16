@@ -794,10 +794,9 @@ public:
 };
 
 void convertToString::test() {
-    static constexpr OUStringLiteral utf16 = u"A\u00E4a";
     OString s;
     CPPUNIT_ASSERT(
-        OUString(utf16).convertToString(
+        u"A\u00E4a"_ustr.convertToString(
             &s, RTL_TEXTENCODING_UTF7,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)));
@@ -957,9 +956,7 @@ public:
 };
 
 void iterateCodePoints::testNotWellFormed() {
-    static constexpr OUStringLiteral utf16 =
-        u"\U00010000A\U0010FFFF\xDDEF\xD9AB";
-    OUString s(utf16);
+    OUString s(u"\U00010000A\U0010FFFF\xDDEF\xD9AB"_ustr);
     sal_Int32 i = 0;
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);

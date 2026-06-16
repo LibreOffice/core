@@ -37,7 +37,6 @@ namespace
 {
 
 constexpr OString sSampleString               ("This is a sample sentence, which we use to check some crypto functions in sal."_ostr);
-constexpr OStringLiteral sSampleString_only_one_diff ("This is a sample sentence. which we use to check some crypto functions in sal.");
 
 const rtlDigestAlgorithm constDigestAlgorithms[] =
 {
@@ -203,7 +202,7 @@ public:
 
         {
             OString aSum1 = getDigest(sSampleString, rtl_Digest_AlgorithmMD5);
-            OString aSum2 = getDigest(sSampleString_only_one_diff, rtl_Digest_AlgorithmMD5);
+            OString aSum2 = getDigest("This is a sample sentence. which we use to check some crypto functions in sal."_ostr, rtl_Digest_AlgorithmMD5);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE(
                 "md5sum must have a length", sal_Int32(32), aSum1.getLength() );

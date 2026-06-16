@@ -348,8 +348,7 @@ void Test::test_Uri() {
     // Check encode with unusual text encodings:
 
     {
-        static constexpr OUStringLiteral aText1U = u" !\u0401\u045F";
-        aText1 = OUString(aText1U);
+        aText1 = u" !\u0401\u045F"_ustr;
         aText2 = u"%20!%A1%FF"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 20",
@@ -364,11 +363,8 @@ void Test::test_Uri() {
                 aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_5));
     }
     {
-        static constexpr OUStringLiteral aText1U = u" !\u0401\u0700\u045F";
-        aText1 = OUString(aText1U);
-        static constexpr OUStringLiteral aText2U =
-            u"%20!%A1\u0700%FF";
-        aText2 = OUString(aText2U);
+        aText1 = u" !\u0401\u0700\u045F"_ustr;
+        aText2 = u"%20!%A1\u0700%FF"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 21",
             aText2,
@@ -383,8 +379,7 @@ void Test::test_Uri() {
     }
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
     {
-        static constexpr OUStringLiteral aText1U = u" !\u028A\U00022513";
-        aText1 = OUString(aText1U);
+        aText1 = u" !\u028A\U00022513"_ustr;
         aText2 = u"%20!%81%30%B1%33%95%39%C5%37"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 22",
@@ -402,8 +397,7 @@ void Test::test_Uri() {
     // Check strict mode:
 
     {
-        static constexpr OUStringLiteral aText1U = u" !\u0401\u0700\u045F";
-        aText1 = OUString(aText1U);
+        aText1 = u" !\u0401\u0700\u045F"_ustr;
         aText2 = OUString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 23",
@@ -442,8 +436,7 @@ void Test::test_Uri() {
     }
     {
         aText1 = u"%81%30%B1%33"_ustr;
-        static constexpr OUStringLiteral aText2U = u"\u028A";
-        aText2 = OUString(aText2U);
+        aText2 = u"\u028A"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 27",
             aText2,
@@ -452,8 +445,7 @@ void Test::test_Uri() {
     }
     {
         aText1 = u"%810%B13"_ustr;
-        static constexpr OUStringLiteral aText2U = u"\u028A";
-        aText2 = OUString(aText2U);
+        aText2 = u"\u028A"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 28",
             aText2,
@@ -474,8 +466,7 @@ void Test::test_Uri() {
                 RTL_TEXTENCODING_UTF8));
     }
     {
-        static constexpr OUStringLiteral aText1U = u"\u00EA";
-        aText1 = OUString(aText1U);
+        aText1 = u"\u00EA"_ustr;
         aText2 = u"%C3%AA"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 30",
@@ -485,8 +476,7 @@ void Test::test_Uri() {
                 RTL_TEXTENCODING_UTF8));
     }
     {
-        static constexpr OUStringLiteral aText1U = u" !\u0401\u0700\u045F";
-        aText1 = OUString(aText1U);
+        aText1 = u" !\u0401\u0700\u045F"_ustr;
         aText2 = OUString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 23",
