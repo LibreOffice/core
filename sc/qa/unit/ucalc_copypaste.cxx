@@ -9950,6 +9950,35 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyToClipCarriesNamedDBs)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testRefUndoRestoresEmptyDBCollection)
+{
+    // Pasting a named table into a document that had none adds a DB range; the
+    // paste's ScRefUndoData must be able to restore the empty pre-state on undo.
+    // That requires snapshotting even an empty collection - otherwise undo
+    // leaves the table orphaned. Regression guard for that orphaned table.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().empty());
+
+    // Snapshot the (empty) pre-state, exactly as the paste undo does up front -
+    // forcing the DB-range snapshot (see ScViewFunc::PasteFromClip).
+    ScRefUndoData aRefUndo(*m_pDoc, /*bForceDBSnapshot*/ true);
+
+    // Simulate the paste adding a named table to the empty collection.
+    auto pTable = std::make_unique<ScDBData>(u"MyTable"_ustr, 0, 0, 0, 2, 2, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+    CPPUNIT_ASSERT(!m_pDoc->GetDBCollection()->getNamedDBs().empty());
+
+    // DeleteUnchanged must keep the snapshot (collection changed), and DoUndo
+    // must restore the empty collection.
+    aRefUndo.DeleteUnchanged(*m_pDoc);
+    aRefUndo.DoUndo(*m_pDoc, true);
+
+    CPPUNIT_ASSERT_MESSAGE("undo must drop a table added over an empty DB collection",
+                           m_pDoc->GetDBCollection()->getNamedDBs().empty());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);

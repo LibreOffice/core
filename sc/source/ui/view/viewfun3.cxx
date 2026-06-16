@@ -43,6 +43,7 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>
+#include <dbdata.hxx>
 #include <undoblk.hxx>
 #include <refundo.hxx>
 #include <globstr.hrc>
@@ -1449,6 +1450,14 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             pRefUndoDoc->InitUndo( rDoc, 0, nTabCount-1 );
 
             pUndoData.reset(new ScRefUndoData( rDoc ));
+        }
+        else if (pClipDoc->GetDBCollection() && !pClipDoc->GetDBCollection()->getNamedDBs().empty())
+        {
+            // A clip document carrying named tables can add a database range to
+            // this document during paste. Force the DB-range snapshot so that
+            // addition is undoable even when this document had no ranges yet.
+            // The general path skips an empty collection.
+            pUndoData.reset(new ScRefUndoData( rDoc, /*bForceDBSnapshot*/true ));
         }
     }
 
