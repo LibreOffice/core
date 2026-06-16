@@ -98,16 +98,16 @@ rtlDigest SAL_CALL rtl_digest_create(rtlDigestAlgorithm Algorithm) noexcept
             Digest = rtl_digest_createSHA();
             break;
 
-        case rtl_Digest_AlgorithmSHA1:
-            Digest = rtl_digest_createSHA1();
+        case rtl_Digest_AlgorithmSHA1_StarOfficeBug:
+            Digest = rtl_digest_createSHA1_StarOfficeBug();
             break;
 
         case rtl_Digest_AlgorithmHMAC_MD5:
             Digest = rtl_digest_createHMAC_MD5();
             break;
 
-        case rtl_Digest_AlgorithmHMAC_SHA1:
-            Digest = rtl_digest_createHMAC_SHA1();
+        case rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug:
+            Digest = rtl_digest_createHMAC_SHA1_StarOfficeBug();
             break;
 
         default: /* rtl_Digest_AlgorithmInvalid */
@@ -1234,7 +1234,7 @@ void SAL_CALL rtl_digest_destroySHA(rtlDigest Digest) noexcept
 
 const Digest_Impl SHA_1 =
 {
-    rtl_Digest_AlgorithmSHA1,
+    rtl_Digest_AlgorithmSHA1_StarOfficeBug,
     RTL_DIGEST_LENGTH_SHA1,
     nullptr,
     rtl_digest_destroySHA1,
@@ -1247,7 +1247,7 @@ static sal_uInt32 updateSHA_1(sal_uInt32 x)
     return RTL_DIGEST_ROTL(x, 1);
 }
 
-rtlDigestError SAL_CALL rtl_digest_SHA1(
+rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug(
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen) noexcept
 {
@@ -1265,7 +1265,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA1(
     return result;
 }
 
-rtlDigest SAL_CALL rtl_digest_createSHA1() noexcept
+rtlDigest SAL_CALL rtl_digest_createSHA1_StarOfficeBug() noexcept
 {
     DigestSHA_Impl *pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
     if (pImpl)
@@ -1288,7 +1288,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA1(
     if (!pImpl || !pData)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmSHA1)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmSHA1_StarOfficeBug)
         return rtl_Digest_E_Algorithm;
 
     if (nDatLen == 0)
@@ -1358,7 +1358,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA1 (
     if (!pImpl || !pBuffer)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmSHA1)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmSHA1_StarOfficeBug)
         return rtl_Digest_E_Algorithm;
 
     if (pImpl->m_digest.m_length > nBufLen)
@@ -1382,7 +1382,7 @@ void SAL_CALL rtl_digest_destroySHA1(rtlDigest Digest) noexcept
     DigestSHA_Impl *pImpl = static_cast< DigestSHA_Impl * >(Digest);
     if (pImpl)
     {
-        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1)
+        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1_StarOfficeBug)
             rtl_freeZeroMemory(pImpl, sizeof(DigestSHA_Impl));
         else
             free(pImpl);
@@ -1610,7 +1610,7 @@ static void opadHMAC_SHA1(ContextHMAC_SHA1 * ctx);
 
 const Digest_Impl HMAC_SHA1 =
 {
-    rtl_Digest_AlgorithmHMAC_SHA1,
+    rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
     RTL_DIGEST_LENGTH_SHA1,
     rtl_digest_initHMAC_SHA1,
     rtl_digest_destroyHMAC_SHA1,
@@ -1655,7 +1655,7 @@ static void opadHMAC_SHA1(ContextHMAC_SHA1 * ctx)
     }
 }
 
-rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1(
+rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1_StarOfficeBug(
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
     const void      *pData,    sal_uInt32 nDatLen,
     sal_uInt8       *pBuffer,  sal_uInt32 nBufLen) noexcept
@@ -1677,7 +1677,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1(
     return result;
 }
 
-rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1() noexcept
+rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1_StarOfficeBug() noexcept
 {
     DigestHMAC_SHA1_Impl *pImpl = RTL_DIGEST_CREATE(DigestHMAC_SHA1_Impl);
     if (pImpl)
@@ -1697,7 +1697,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1(
     if (!pImpl || !pKeyData)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
         return rtl_Digest_E_Algorithm;
 
     ctx = &(pImpl->m_context);
@@ -1730,7 +1730,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1(
     if (!pImpl || !pData)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
         return rtl_Digest_E_Algorithm;
 
     ctx = &(pImpl->m_context);
@@ -1748,7 +1748,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1(
     if (!pImpl || !pBuffer)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
         return rtl_Digest_E_Algorithm;
 
     if (pImpl->m_digest.m_length > nBufLen)
@@ -1775,7 +1775,7 @@ void SAL_CALL rtl_digest_destroyHMAC_SHA1(rtlDigest Digest) noexcept
     DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
     if (pImpl)
     {
-        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_SHA1)
+        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
             rtl_freeZeroMemory(pImpl, sizeof(DigestHMAC_SHA1_Impl));
         else
             free(pImpl);

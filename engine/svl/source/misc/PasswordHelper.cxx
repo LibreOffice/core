@@ -56,7 +56,7 @@ void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const
 {
     rPassHash.realloc(RTL_DIGEST_LENGTH_SHA1);
 
-    rtlDigestError aError = rtl_digest_SHA1 (pPass, nLen, reinterpret_cast<sal_uInt8*>(rPassHash.getArray()), rPassHash.getLength());
+    rtlDigestError aError = rtl_digest_SHA1_StarOfficeBug (pPass, nLen, reinterpret_cast<sal_uInt8*>(rPassHash.getArray()), rPassHash.getLength());
     if (aError != rtl_Digest_E_None)
     {
         rPassHash.realloc(0);

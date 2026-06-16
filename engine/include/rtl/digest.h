@@ -42,10 +42,10 @@ enum __rtl_DigestAlgorithm
     rtl_Digest_AlgorithmMD2,
     rtl_Digest_AlgorithmMD5,
     rtl_Digest_AlgorithmSHA,
-    rtl_Digest_AlgorithmSHA1,
+    rtl_Digest_AlgorithmSHA1_StarOfficeBug,
 
     rtl_Digest_AlgorithmHMAC_MD5,
-    rtl_Digest_AlgorithmHMAC_SHA1,
+    rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
 
     rtl_Digest_AlgorithmInvalid,
     rtl_Digest_Algorithm_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
@@ -355,7 +355,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
 
 /*========================================================================
  *
- * rtl_digest_SHA1 interface.
+ * rtl_digest_SHA1_StarOfficeBug interface.
  *
  *======================================================================*/
 #define RTL_DIGEST_LENGTH_SHA1 20
@@ -371,7 +371,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
 
     @see rtl_digest_create()
  */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA1 (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA1_StarOfficeBug (void) SAL_THROW_EXTERN_C();
 
 /** Destroy a SHA1 digest handle.
 
@@ -426,7 +426,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -520,7 +520,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
 
     @see rtl_digest_create()
  */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1 (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1_StarOfficeBug (void) SAL_THROW_EXTERN_C();
 
 /** Destroy a HMAC_SHA1 digest handle.
 
@@ -596,7 +596,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1_StarOfficeBug (
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
     const void      *pData,    sal_uInt32 nDatLen,
     sal_uInt8       *pBuffer,  sal_uInt32 nBufLen

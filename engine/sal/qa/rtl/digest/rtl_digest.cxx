@@ -43,9 +43,9 @@ const rtlDigestAlgorithm constDigestAlgorithms[] =
     rtl_Digest_AlgorithmMD2,
     rtl_Digest_AlgorithmMD5,
     rtl_Digest_AlgorithmSHA,
-    rtl_Digest_AlgorithmSHA1,
+    rtl_Digest_AlgorithmSHA1_StarOfficeBug,
     rtl_Digest_AlgorithmHMAC_MD5,
-    rtl_Digest_AlgorithmHMAC_SHA1,
+    rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
 };
 
 const sal_uInt32 constDigestAlgorithmLengths[] =
@@ -376,18 +376,18 @@ public:
 
             std::unique_ptr<sal_uInt8[]> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
 
-            rtl_digest_SHA1(aData, sizeof(aData), pResult.get(), RTL_DIGEST_LENGTH_SHA1);
+            rtl_digest_SHA1_StarOfficeBug(aData, sizeof(aData), pResult.get(), RTL_DIGEST_LENGTH_SHA1);
 
             OString sKey = createHex(pResult.get(), RTL_DIGEST_LENGTH_SHA1);
 
             CPPUNIT_ASSERT_EQUAL("06f460d693aecdd3b5cbe8365408eccfc570f32a"_ostr, sKey);
         }
 
-        // tdf#114939, verify that rtl_digest_SHA1 computes broken results for certain input (which
+        // tdf#114939, verify that rtl_digest_SHA1_StarOfficeBug computes broken results for certain input (which
         // is not fixed for compatibility reasons):
         {
             sal_uInt8 result[RTL_DIGEST_LENGTH_SHA1];
-            rtl_digest_SHA1(
+            rtl_digest_SHA1_StarOfficeBug(
                 RTL_CONSTASCII_STRINGPARAM("1012345678901234567890123456789012345678901234567890"),
                 result, RTL_DIGEST_LENGTH_SHA1);
             // Rather than correct "9cb1dab34448c1ea460da1f8736869c8852f212f":

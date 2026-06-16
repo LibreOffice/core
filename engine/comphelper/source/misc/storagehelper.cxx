@@ -396,7 +396,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             OString aByteStrPass = OUStringToOString( aPassword, pEncoding[nInd] );
 
             sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_SHA1];
-            rtlDigestError nError = rtl_digest_SHA1( aByteStrPass.getStr(),
+            rtlDigestError nError = rtl_digest_SHA1_StarOfficeBug( aByteStrPass.getStr(),
                                                     aByteStrPass.getLength(),
                                                     pBuffer,
                                                     RTL_DIGEST_LENGTH_SHA1 );
