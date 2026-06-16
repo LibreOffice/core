@@ -96,7 +96,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/FieldDescControl \
     dbaccess/source/ui/control/sqledit \
     dbaccess/source/ui/control/SqlNameEdit \
-    dbaccess/source/ui/control/TableGrantCtrl \
     dbaccess/source/ui/control/tabletree \
     dbaccess/source/ui/dlg/admincontrols \
     dbaccess/source/ui/dlg/adminpages \
@@ -125,8 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/sqlmessage \
     dbaccess/source/ui/dlg/TextConnectionHelper \
     dbaccess/source/ui/dlg/textconnectionsettings \
-    dbaccess/source/ui/dlg/UserAdmin \
-    dbaccess/source/ui/dlg/UserAdminDlg \
     dbaccess/source/ui/misc/charsets \
     dbaccess/source/ui/misc/controllerframe \
     dbaccess/source/ui/misc/datasourceconnector \
@@ -161,7 +158,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/uno/textconnectionsettings_uno \
     dbaccess/source/ui/uno/unoadmin \
     dbaccess/source/ui/uno/unosqlmessage \
-    dbaccess/source/ui/uno/UserSettingsDlg \
 ))
 
 ifeq ($(OS),WNT)

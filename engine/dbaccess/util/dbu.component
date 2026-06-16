@@ -71,8 +71,4 @@
     constructor="org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation">
     <service name="com.sun.star.sdb.ErrorMessageDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OUserSettingsDialog"
-    constructor="org_openoffice_comp_dbu_OUserSettingsDialog_get_implementation">
-    <service name="com.sun.star.sdb.UserAdministrationDialog"/>
-  </implementation>
 </component>

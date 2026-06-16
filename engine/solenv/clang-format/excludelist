@@ -2462,7 +2462,6 @@ dbaccess/source/ui/control/FieldControls.cxx
 dbaccess/source/ui/control/FieldDescControl.cxx
 dbaccess/source/ui/control/RelationControl.cxx
 dbaccess/source/ui/control/SqlNameEdit.cxx
-dbaccess/source/ui/control/TableGrantCtrl.cxx
 dbaccess/source/ui/control/charsetlistbox.cxx
 dbaccess/source/ui/control/curledit.cxx
 dbaccess/source/ui/control/dbtreelistbox.cxx
@@ -2485,9 +2484,6 @@ dbaccess/source/ui/dlg/QueryPropertiesDialog.cxx
 dbaccess/source/ui/dlg/RelationDlg.cxx
 dbaccess/source/ui/dlg/TextConnectionHelper.cxx
 dbaccess/source/ui/dlg/TextConnectionHelper.hxx
-dbaccess/source/ui/dlg/UserAdmin.cxx
-dbaccess/source/ui/dlg/UserAdmin.hxx
-dbaccess/source/ui/dlg/UserAdminDlg.cxx
 dbaccess/source/ui/dlg/admincontrols.cxx
 dbaccess/source/ui/dlg/admincontrols.hxx
 dbaccess/source/ui/dlg/adminpages.cxx
@@ -2567,7 +2563,6 @@ dbaccess/source/ui/inc/TableDesignControl.hxx
 dbaccess/source/ui/inc/TableDesignHelpBar.hxx
 dbaccess/source/ui/inc/TableDesignView.hxx
 dbaccess/source/ui/inc/TableFieldDescription.hxx
-dbaccess/source/ui/inc/TableGrantCtrl.hxx
 dbaccess/source/ui/inc/TableRow.hxx
 dbaccess/source/ui/inc/TableRowExchange.hxx
 dbaccess/source/ui/inc/TableWindow.hxx
@@ -2579,7 +2574,6 @@ dbaccess/source/ui/inc/TablesSingleDlg.hxx
 dbaccess/source/ui/inc/TokenWriter.hxx
 dbaccess/source/ui/inc/TypeInfo.hxx
 dbaccess/source/ui/inc/UITools.hxx
-dbaccess/source/ui/inc/UserAdminDlg.hxx
 dbaccess/source/ui/inc/WCPage.hxx
 dbaccess/source/ui/inc/WColumnSelect.hxx
 dbaccess/source/ui/inc/WCopyTable.hxx
@@ -2739,8 +2733,6 @@ dbaccess/source/ui/uno/DBTypeWizDlg.cxx
 dbaccess/source/ui/uno/DBTypeWizDlg.hxx
 dbaccess/source/ui/uno/DBTypeWizDlgSetup.cxx
 dbaccess/source/ui/uno/DBTypeWizDlgSetup.hxx
-dbaccess/source/ui/uno/UserSettingsDlg.cxx
-dbaccess/source/ui/uno/UserSettingsDlg.hxx
 dbaccess/source/ui/uno/admindlg.hxx
 dbaccess/source/ui/uno/composerdialogs.cxx
 dbaccess/source/ui/uno/composerdialogs.hxx
