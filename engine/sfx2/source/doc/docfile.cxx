@@ -116,6 +116,7 @@
 #include <sot/storage.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/msodocumentlockfile.hxx>
+#include <svl/lockfileliveness.hxx>
 #include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
 
 #include <sfx2/app.hxx>
@@ -458,6 +459,7 @@ public:
     uno::Reference<io::XInputStream> xInputStream;
     uno::Reference<io::XStream> xStream;
     uno::Reference<io::XStream> m_xLockingStream;
+    svt::LockFileLivenessHandle m_aLivenessLock;
     uno::Reference<task::XInteractionHandler> xInteraction;
     rtl::Reference< comphelper::UNOMemoryStream > m_xODFDecryptedInnerPackageStream;
     uno::Reference<embed::XStorage> m_xODFEncryptedOuterStorage;
@@ -1616,6 +1618,10 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                     bResult = aLockFile.CreateOwnLockFile();
                                     if(pMSOLockFile)
                                         bResult &= pMSOLockFile->CreateOwnLockFile();
+                                    if (bResult
+                                        && GetURLObject().GetProtocol() == INetProtocol::File)
+                                        pImpl->m_aLivenessLock
+                                            = svt::acquireLockFileLiveness(aLockFile.GetURL());
                                 }
                                 catch (const cpo::uno::Exception&)
                                 {
@@ -1686,6 +1692,39 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                     }
                                 }
 
+                                // A leftover lock file on a local path may belong to a dead
+                                // session. This runs even when the identity check above already
+                                // set bResult: a lock still held by a live process of the same
+                                // installation must not be taken silently, and a dead owner's lock
+                                // is rewritten and held by this session so later sessions see us.
+                                if (!bHandleSysLocked && !bIoErr
+                                    && GetURLObject().GetProtocol() == INetProtocol::File)
+                                {
+                                    LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
+                                    svt::StaleLockDecision eDecision = svt::decideStaleLock(
+                                        aData[LockFileComponent::LOCALHOST],
+                                        aOwnData[LockFileComponent::LOCALHOST],
+                                        svt::probeLockFileLiveness(aLockFile.GetURL()));
+
+                                    if (eDecision == svt::StaleLockDecision::TakeOverSilently)
+                                    {
+                                        // no live process holds the lock, so the previous owner
+                                        // died: clear the stale lock and proceed editable
+                                        bResult = aLockFile.OverwriteOwnLockFile();
+                                        if (bResult)
+                                            pImpl->m_aLivenessLock
+                                                = svt::acquireLockFileLiveness(aLockFile.GetURL());
+                                        if (pMSOLockFile)
+                                            pMSOLockFile->OverwriteOwnLockFile();
+                                    }
+                                    else if (eDecision == svt::StaleLockDecision::LiveKeepLock)
+                                    {
+                                        // a live process still holds the lock, so do not take it
+                                        // over silently even when the identity matched
+                                        bResult = false;
+                                    }
+                                }
+
                                 if ( !bResult && !bIoErr)
                                 {
                                     if (!bNoUI)
@@ -1698,6 +1737,10 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                     {
                                         // take the ownership over the lock file
                                         bResult = aLockFile.OverwriteOwnLockFile();
+                                        if (bResult
+                                            && GetURLObject().GetProtocol() == INetProtocol::File)
+                                            pImpl->m_aLivenessLock
+                                                = svt::acquireLockFileLiveness(aLockFile.GetURL());
 
                                         if(pMSOLockFile)
                                             pMSOLockFile->OverwriteOwnLockFile();
@@ -3408,6 +3451,8 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
         try
         {
             pImpl->m_bLocked = false;
+            // release our advisory lock before deleting the lock file
+            pImpl->m_aLivenessLock.reset();
             // TODO/LATER: A warning could be shown in case the file is not the own one
             aLockFile.RemoveFile();
         }
