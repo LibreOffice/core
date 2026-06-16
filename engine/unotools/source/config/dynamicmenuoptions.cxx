@@ -34,20 +34,10 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_URL = u"URL";
-constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_TITLE = u"Title";
-constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER = u"ImageIdentifier";
-constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_TARGETNAME = u"TargetName";
-
 constexpr OUString PATHDELIMITER = u"/"_ustr;
 
 constexpr OUString SETNODE_NEWMENU = u"New"_ustr;
 constexpr OUString SETNODE_WIZARDMENU = u"Wizard"_ustr;
-
-#define PROPERTYNAME_URL                                DYNAMICMENU_PROPERTYNAME_URL
-#define PROPERTYNAME_TITLE                              DYNAMICMENU_PROPERTYNAME_TITLE
-#define PROPERTYNAME_IMAGEIDENTIFIER                    DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER
-#define PROPERTYNAME_TARGETNAME                         DYNAMICMENU_PROPERTYNAME_TARGETNAME
 
 #define PROPERTYCOUNT                                   4
 
@@ -326,10 +316,10 @@ static void lcl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource 
     for( const auto& rItem : lTemp )
     {
         OUString sFixPath(OUString::Concat(sSetNode) + PATHDELIMITER + rItem + PATHDELIMITER);
-        plDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_URL;
-        plDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TITLE;
-        plDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_IMAGEIDENTIFIER;
-        plDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TARGETNAME;
+        plDestination[nDestinationStep++] = sFixPath + u"URL"_ustr;
+        plDestination[nDestinationStep++] = sFixPath + u"Title"_ustr;
+        plDestination[nDestinationStep++] = sFixPath + u"ImageIdentifier"_ustr;
+        plDestination[nDestinationStep++] = sFixPath + u"TargetName"_ustr;
     }
 }
 

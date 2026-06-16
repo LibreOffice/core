@@ -109,8 +109,6 @@ public:
             const LanguageTag&  GetRealUILocale() const { return m_aRealUILocale; }
 };
 
-constexpr OUStringLiteral ROOTNODE_SYSLOCALE = u"Setup/L10N";
-
 constexpr OUString PROPERTYNAME_LOCALE = u"ooSetupSystemLocale"_ustr;
 constexpr OUString PROPERTYNAME_UILOCALE = u"ooLocale"_ustr;
 constexpr OUString PROPERTYNAME_CURRENCY = u"ooSetupCurrency"_ustr;
@@ -139,7 +137,7 @@ Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 }
 
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
-    : ConfigItem( ROOTNODE_SYSLOCALE )
+    : ConfigItem( u"Setup/L10N"_ustr )
     , m_aRealLocale( LANGUAGE_SYSTEM)
     , m_aRealUILocale( LANGUAGE_SYSTEM)
     , m_bDecimalSeparator( true )

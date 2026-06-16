@@ -31,7 +31,6 @@
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
-constexpr OUStringLiteral PACKAGE_VIEWS = u"org.openoffice.Office.Views";
 constexpr OUString PROPERTY_WINDOWSTATE = u"WindowState"_ustr;
 constexpr OUString PROPERTY_PAGEID = u"PageID"_ustr;
 constexpr OUString PROPERTY_VISIBLE = u"Visible"_ustr;
@@ -59,7 +58,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, OUString sViewName )
     {
         m_xRoot.set( ::comphelper::ConfigurationHelper::openConfig(
                             ::comphelper::getProcessComponentContext(),
-                            PACKAGE_VIEWS,
+                            u"org.openoffice.Office.Views"_ustr,
                             ::comphelper::EConfigurationModes::Standard),
                      css::uno::UNO_QUERY);
         if (m_xRoot.is())

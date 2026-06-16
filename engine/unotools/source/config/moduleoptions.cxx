@@ -52,7 +52,6 @@
                     e.g.:
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
-constexpr OUStringLiteral ROOTNODE_FACTORIES = u"Setup/Office/Factories";
 #define PATHSEPARATOR                       "/"
 
 // Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is
@@ -295,7 +294,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     @threadsafe no
 *//*-*************************************************************************************************************/
 SvtModuleOptions_Impl::SvtModuleOptions_Impl()
-    :   ::utl::ConfigItem( ROOTNODE_FACTORIES )
+    :   ::utl::ConfigItem( u"Setup/Office/Factories"_ustr )
     ,   m_bReadOnlyStatesWellKnown( false )
 {
     // First initialize list of factory infos! Otherwise we couldn't guarantee right working of these class.

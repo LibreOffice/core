@@ -38,15 +38,8 @@
 #define RTL_BOOTSTRAP_DEFAULTS_BROKEN true
 
 constexpr OUString BOOTSTRAP_ITEM_PRODUCT_KEY = u"ProductKey"_ustr;
-constexpr OUStringLiteral BOOTSTRAP_ITEM_VERSIONFILE = u"Location";
-constexpr OUStringLiteral BOOTSTRAP_ITEM_BUILDID = u"buildid";
-
-constexpr OUStringLiteral BOOTSTRAP_ITEM_BASEINSTALLATION = u"BRAND_BASE_DIR";
-constexpr OUStringLiteral BOOTSTRAP_ITEM_USERINSTALLATION = u"UserInstallation";
 
 constexpr OUString BOOTSTRAP_ITEM_USERDIR = u"UserDataDir"_ustr;
-
-constexpr OUStringLiteral BOOTSTRAP_DEFAULT_BASEINSTALL = u"$SYSBINDIR/..";
 
 constexpr OUString BOOTSTRAP_DIRNAME_USERDIR = u"user"_ustr;
 
@@ -402,7 +395,7 @@ static Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap const & _rData,
 
 static Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap const & _rData, Bootstrap::Impl::PathData & _rVersionFile)
 {
-    _rData.getFrom(BOOTSTRAP_ITEM_VERSIONFILE, _rVersionFile.path);
+    _rData.getFrom(u"Location"_ustr, _rVersionFile.path);
 
     return updateStatus(_rVersionFile);
 }
@@ -559,7 +552,7 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 
     // read value
     OUString sBuildId;
-    aData.getFrom(BOOTSTRAP_ITEM_BUILDID,sBuildId,_sDefault);
+    aData.getFrom(u"buildid"_ustr,sBuildId,_sDefault);
     return sBuildId;
 }
 
@@ -634,7 +627,7 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage,
 
 bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap const & _rData)
 {
-    _rData.getFrom(BOOTSTRAP_ITEM_BASEINSTALLATION, aBaseInstall_.path, BOOTSTRAP_DEFAULT_BASEINSTALL);
+    _rData.getFrom(u"BRAND_BASE_DIR"_ustr, aBaseInstall_.path, u"$SYSBINDIR/.."_ustr);
 
     bool bResult = (PATH_EXISTS == updateStatus(aBaseInstall_));
 
@@ -645,7 +638,7 @@ bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap const & _rData)
 
 bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap const & _rData)
 {
-    if (_rData.getFrom(BOOTSTRAP_ITEM_USERINSTALLATION, aUserInstall_.path))
+    if (_rData.getFrom(u"UserInstallation"_ustr, aUserInstall_.path))
     {
         updateStatus(aUserInstall_);
     }

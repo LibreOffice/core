@@ -42,8 +42,6 @@
 
 using namespace com::sun::star;
 
-constexpr OUStringLiteral FILE_PROTOCOL = u"file:///";
-
 namespace
 {
     std::mutex& theSvtLinguConfigItemMutex()
@@ -981,7 +979,7 @@ static bool lcl_GetFileUrlFromOrigin(
     OUString aURL(
         comphelper::getExpandedUri(
             comphelper::getProcessComponentContext(), rOrigin));
-    if (aURL.startsWith( FILE_PROTOCOL ))
+    if (aURL.startsWith( "file:///" ))
     {
         rFileUrl = aURL;
         return true;

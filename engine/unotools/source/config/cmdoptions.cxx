@@ -38,7 +38,6 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-constexpr OUStringLiteral ROOTNODE_CMDOPTIONS        = u"Office.Commands/Execute";
 #define PATHDELIMITER                                   "/"
 
 #define SETNODE_DISABLED                                "Disabled"
@@ -146,7 +145,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
 SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem( ROOTNODE_CMDOPTIONS )
+    :   ConfigItem( u"Office.Commands/Execute"_ustr )
     // Init member then...
 {
     // Get names and values of all accessible menu entries and fill internal structures.
