@@ -118,6 +118,8 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 	drawCropHandles() {
 		const markerWidth = this.size[0];
 		this.context.save();
+		// Shift the local-origin markers to this handle's view position.
+		this.context.translate(this.documentPosition.vX, this.documentPosition.vY);
 		switch (this.sectionProperties.ownInfo.kind) {
 			case '1':
 				this.drawCropCornerHandle();
