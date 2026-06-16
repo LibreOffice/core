@@ -295,14 +295,17 @@ class ValueTooltip {
 		tip.innerText = '';
 		if (content.focused) {
 			window.L.DomUtil.addClass(tip, 'cool-value-tooltip--focused');
-			const icon = window.L.DomUtil.create(
-				'span',
-				'cool-value-tooltip-icon',
-				tip,
-			);
-			if (content.iconName)
+			// Only add the icon when one is given, so a focused tooltip without
+			// an icon (such as a text hint) has no empty icon gap.
+			if (content.iconName) {
+				const icon = window.L.DomUtil.create(
+					'span',
+					'cool-value-tooltip-icon',
+					tip,
+				);
 				icon.style.backgroundImage =
 					'url("' + app.LOUtil.getImageURL(content.iconName) + '")';
+			}
 			const text = window.L.DomUtil.create(
 				'span',
 				'cool-value-tooltip-text',

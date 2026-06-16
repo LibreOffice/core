@@ -40,6 +40,9 @@ class HRuler extends Ruler {
 	_lToolTip: HTMLDivElement;
 	_rToolTip: HTMLDivElement;
 
+	// Hint shown next to the pointer over the tab-stop area of the ruler.
+	_tabStopHint: ValueTooltip;
+
 	// The current indent values keyed by marker id, in the document's display
 	// unit. These are the exact numbers core reports, the same ones shown in the
 	// paragraph dialog and sidebar.
@@ -103,6 +106,7 @@ class HRuler extends Ruler {
 		// explicitly rather than letting them leak when the ruler goes away.
 		this._destroyIndentTooltips();
 		this._destroyMarginTooltips();
+		if (this._tabStopHint) this._tabStopHint.destroy();
 	}
 
 	_changeInteractions(e: any) {
@@ -387,6 +391,22 @@ class HRuler extends Ruler {
 
 			this._insertTabstop();
 		};
+
+		// The tab-stop interactions are not obvious, so show a hint next to the
+		// pointer while hovering the tab-stop area of the ruler. Only the
+		// horizontal ruler has tab stops.
+		const tabStopHintText = _(
+			'Double-click to insert a tab stop. Right-click for more options.',
+		);
+		this._tabStopHint = new ValueTooltip();
+		this._rTSContainer.onmouseenter = (e) => {
+			// Use the focused (light) look like the margin tooltips, just
+			// without an icon.
+			this._tabStopHint.render({ focused: true, value: tabStopHintText });
+			this._tabStopHint.show();
+			this._tabStopHint.placeNearPoint(e.clientX, e.clientY);
+		};
+		this._rTSContainer.onmouseleave = () => this._tabStopHint.hide();
 
 		this._hammer = new Hammer(this._rTSContainer);
 		this._hammer.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
