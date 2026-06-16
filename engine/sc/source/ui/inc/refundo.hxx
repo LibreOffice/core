@@ -45,7 +45,7 @@ private:
     std::unique_ptr<ScUnoRefList> pUnoRefs;
 
 public:
-                ScRefUndoData(ScDocument& rDoc );
+                ScRefUndoData(ScDocument& rDoc, bool bForceDBSnapshot = false);
                 ~ScRefUndoData();
 
     void        DeleteUnchanged(ScDocument& rDoc);
