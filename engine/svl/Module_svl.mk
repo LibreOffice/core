@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_items \
 	CppunitTest_svl_lngmisc \
 	CppunitTest_svl_lockfiles \
+	CppunitTest_svl_lockfileliveness \
 	CppunitTest_svl_notify \
 	CppunitTest_svl_qa_cppunit \
 	CppunitTest_svl_urihelper \

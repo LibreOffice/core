@@ -158,6 +158,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/inettype \
     svl/source/misc/lngmisc \
     svl/source/misc/lockfilecommon \
+    svl/source/misc/lockfileliveness \
     svl/source/misc/sharecontrolfile \
     svl/source/misc/sharedstring \
     svl/source/misc/sharedstringpool \
