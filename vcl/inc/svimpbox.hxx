@@ -112,9 +112,7 @@ private:
     {
         NodeExpanded = 0,     // node is expanded ( usually a bitmap showing a minus )
         NodeCollapsed,        // node is collapsed ( usually a bitmap showing a plus )
-        EntryDefExpanded,     // default for expanded entries
-        EntryDefCollapsed,    // default for collapsed entries
-        LAST = EntryDefCollapsed
+        LAST = NodeCollapsed
     };
 
     // all our images
@@ -283,11 +281,6 @@ public:
     inline const Image& GetExpandedNodeBmp( );
     inline const Image& GetCollapsedNodeBmp( );
 
-    inline void         SetDefaultEntryExpBmp( const Image& _rImg );
-    inline void         SetDefaultEntryColBmp( const Image& _rImg );
-    inline const Image& GetDefaultEntryExpBmp( );
-    inline const Image& GetDefaultEntryColBmp( );
-
     static const Image& GetDefaultExpandedNodeImage( );
     static const Image& GetDefaultCollapsedNodeImage( );
 
@@ -342,26 +335,6 @@ inline const Image& SvImpLBox::GetExpandedNodeBmp( )
 inline const Image& SvImpLBox::GetCollapsedNodeBmp( )
 {
     return m_aNodeAndEntryImages[ImageType::NodeCollapsed];
-}
-
-inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg )
-{
-    m_aNodeAndEntryImages[ImageType::EntryDefExpanded] = _rImg;
-}
-
-inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg )
-{
-    m_aNodeAndEntryImages[ImageType::EntryDefCollapsed] = _rImg;
-}
-
-inline const Image& SvImpLBox::GetDefaultEntryExpBmp( )
-{
-    return m_aNodeAndEntryImages[ImageType::EntryDefExpanded];
-}
-
-inline const Image& SvImpLBox::GetDefaultEntryColBmp( )
-{
-    return m_aNodeAndEntryImages[ImageType::EntryDefCollapsed];
 }
 
 inline Point SvImpLBox::GetEntryPosition(const SvTreeListEntry* pEntry) const

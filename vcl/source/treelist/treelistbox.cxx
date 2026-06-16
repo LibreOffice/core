@@ -1824,23 +1824,14 @@ SvTreeListEntry& SvTreeListBox::InsertEntry(const OUString& rText, SvTreeListEnt
 {
     m_nTreeFlags |= SvTreeFlags::MANINS;
 
-    const Image& rDefExpBmp = m_pImpl->GetDefaultEntryExpBmp();
-    const Image& rDefColBmp = m_pImpl->GetDefaultEntryColBmp();
-
-    m_aCurInsertedExpBmp = rDefExpBmp;
-    m_aCurInsertedColBmp = rDefColBmp;
-
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    InitEntry(*pEntry, rText, rDefColBmp, rDefExpBmp);
+    InitEntry(*pEntry, rText, Image(), Image());
     pEntry->EnableChildrenOnDemand(false);
 
     if( !pParent )
         Insert( pEntry, nPos );
     else
         Insert( pEntry, pParent, nPos );
-
-    m_aPrevInsertedExpBmp = rDefExpBmp;
-    m_aPrevInsertedColBmp = rDefColBmp;
 
     m_nTreeFlags &= ~SvTreeFlags::MANINS;
 
@@ -1918,8 +1909,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
         pParent->SetFlags( nFlags );
     }
 
-    if (!((m_nTreeFlags & SvTreeFlags::MANINS) && (m_aPrevInsertedExpBmp == m_aCurInsertedExpBmp)
-          && (m_aPrevInsertedColBmp == m_aCurInsertedColBmp)))
+    if (!(m_nTreeFlags & SvTreeFlags::MANINS))
     {
         Size aSize = GetCollapsedEntryBmp( pEntry ).GetSizePixel();
         if (aSize.Width() > m_nContextBmpWidthMax)
@@ -2024,36 +2014,6 @@ SvTreeListEntry* SvTreeListBox::CloneEntry(const SvTreeListEntry& rSource)
     return pClone;
 }
 
-const Image& SvTreeListBox::GetDefaultExpandedEntryBmp( ) const
-{
-    return m_pImpl->GetDefaultEntryExpBmp();
-}
-
-const Image& SvTreeListBox::GetDefaultCollapsedEntryBmp( ) const
-{
-    return m_pImpl->GetDefaultEntryColBmp();
-}
-
-void SvTreeListBox::SetDefaultExpandedEntryBmp( const Image& aBmp )
-{
-    Size aSize = aBmp.GetSizePixel();
-    if (aSize.Width() > m_nContextBmpWidthMax)
-        m_nContextBmpWidthMax = static_cast<short>(aSize.Width());
-    SetTabs();
-
-    m_pImpl->SetDefaultEntryExpBmp(aBmp);
-}
-
-void SvTreeListBox::SetDefaultCollapsedEntryBmp( const Image& aBmp )
-{
-    Size aSize = aBmp.GetSizePixel();
-    if (aSize.Width() > m_nContextBmpWidthMax)
-        m_nContextBmpWidthMax = static_cast<short>(aSize.Width());
-    SetTabs();
-
-    m_pImpl->SetDefaultEntryColBmp(aBmp);
-}
-
 void SvTreeListBox::EnableCheckButton(SvLBoxButtonData& rData)
 {
     m_pCheckButtonData = &rData;
@@ -2148,14 +2108,10 @@ void SvTreeListBox::ModelHasCleared()
     m_nFocusWidth = -1;
 
     m_nContextBmpWidthMax = 0;
-    SetDefaultExpandedEntryBmp( GetDefaultExpandedEntryBmp() );
-    SetDefaultCollapsedEntryBmp( GetDefaultCollapsedEntryBmp() );
 
     if (!(m_nTreeFlags & SvTreeFlags::FIXEDHEIGHT))
         m_nEntryHeight = 0;
     AdjustEntryHeight();
-    AdjustEntryHeight( GetDefaultExpandedEntryBmp() );
-    AdjustEntryHeight( GetDefaultCollapsedEntryBmp() );
 
     ModelChangedHdl();
 }

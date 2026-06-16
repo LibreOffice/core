@@ -224,11 +224,6 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox : public Control,
     Link<svtree_render_args, void> m_aCustomRenderHdl;
     Link<svtree_measure_args, Size> m_aCustomMeasureHdl;
 
-    Image m_aPrevInsertedExpBmp;
-    Image m_aPrevInsertedColBmp;
-    Image m_aCurInsertedExpBmp;
-    Image m_aCurInsertedColBmp;
-
     short m_nContextBmpWidthMax;
     short m_nEntryHeightOffs;
     short m_nIndent;
@@ -629,12 +624,6 @@ public:
 
     virtual SvTreeListEntry& InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          sal_uInt32 nPos = TREELIST_APPEND);
-
-    const Image&    GetDefaultExpandedEntryBmp( ) const;
-    const Image&    GetDefaultCollapsedEntryBmp( ) const;
-
-    void            SetDefaultExpandedEntryBmp( const Image& rBmp );
-    void            SetDefaultCollapsedEntryBmp( const Image& rBmp );
 
     void            SetCheckButtonState( SvTreeListEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
