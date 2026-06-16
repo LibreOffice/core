@@ -67,23 +67,19 @@ using namespace cppu;
 
 OUString SfxScriptLibraryContainer::getInfoFileName() const
 {
-    static constexpr OUStringLiteral script = u"script";
-    return script;
+    return u"script"_ustr;
 }
 OUString SfxScriptLibraryContainer::getOldInfoFileName() const
 {
-    static constexpr OUStringLiteral script = u"script";
-    return script;
+    return u"script"_ustr;
 }
 OUString SfxScriptLibraryContainer::getLibElementFileExtension() const
 {
-    static constexpr OUStringLiteral xba = u"xba";
-    return xba;
+    return u"xba"_ustr;
 }
 OUString SfxScriptLibraryContainer::getLibrariesDir() const
 {
-    static constexpr OUStringLiteral sBasic = u"Basic";
-    return sBasic;
+    return u"Basic"_ustr;
 }
 
 void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword )

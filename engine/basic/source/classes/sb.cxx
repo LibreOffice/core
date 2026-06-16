@@ -1887,13 +1887,12 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     // look for the ThisComponent variable, first in the parent (which
     // might be the document's Basic), then in the parent's parent (which might be
     // the application Basic)
-    static constexpr OUStringLiteral sThisComponent( u"ThisComponent");
     SbxVariable* pThisComponent = nullptr;
 
     SbxObject* pLookup = pBasic->GetParent();
     while ( pLookup && !pThisComponent )
     {
-        pThisComponent = pLookup->Find( sThisComponent, SbxClassType::Object );
+        pThisComponent = pLookup->Find( u"ThisComponent"_ustr, SbxClassType::Object );
         pLookup = pLookup->GetParent();
     }
     if ( !pThisComponent )

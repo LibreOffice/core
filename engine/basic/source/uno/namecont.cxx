@@ -3111,9 +3111,6 @@ void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListen
 
 // Implementation class ScriptExtensionIterator
 
-constexpr OUStringLiteral sBasicLibMediaType = u"application/vnd.sun.star.basic-library";
-constexpr OUStringLiteral sDialogLibMediaType = u"application/vnd.sun.star.dialog-library";
-
 ScriptExtensionIterator::ScriptExtensionIterator()
     : m_xContext( comphelper::getProcessComponentContext() )
     , m_eState( USER_EXTENSIONS )
@@ -3257,11 +3254,11 @@ Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPack
     {
         const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = rPackage->getPackageType();
         OUString aMediaType = xPackageTypeInfo->getMediaType();
-        if ( aMediaType == sBasicLibMediaType )
+        if ( aMediaType == u"application/vnd.sun.star.basic-library"_ustr )
         {
             xScriptPackage = rPackage;
         }
-        else if ( aMediaType == sDialogLibMediaType )
+        else if ( aMediaType == u"application/vnd.sun.star.dialog-library"_ustr )
         {
             rbPureDialogLib = true;
             xScriptPackage = rPackage;
