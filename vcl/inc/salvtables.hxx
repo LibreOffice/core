@@ -1663,8 +1663,6 @@ public:
 
     virtual std::vector<int> get_selected_rows() const override;
 
-    OUString get_text(SvTreeListEntry* pEntry, int col) const;
-
     void set_text(SvTreeListEntry& rEntry, const OUString& rText, int col);
 
     using SalInstanceWidget::set_sensitive;

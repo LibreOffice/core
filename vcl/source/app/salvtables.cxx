@@ -4113,22 +4113,6 @@ std::vector<int> SalInstanceTreeView::get_selected_rows() const
     return aRows;
 }
 
-OUString SalInstanceTreeView::get_text(SvTreeListEntry* pEntry, int col) const
-{
-    if (col == -1)
-        return SvTabListBox::GetEntryText(pEntry, 0);
-
-    col = to_internal_model(col);
-
-    if (static_cast<size_t>(col) == pEntry->ItemCount())
-        return OUString();
-
-    assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
-    SvLBoxItem& rItem = pEntry->GetItem(col);
-    assert(dynamic_cast<SvLBoxString*>(&rItem));
-    return static_cast<SvLBoxString&>(rItem).GetText();
-}
-
 void SalInstanceTreeView::set_text(SvTreeListEntry& rEntry, const OUString& rText, int col)
 {
     if (col == -1)
@@ -4518,7 +4502,19 @@ void SalInstanceTreeView::collapse_row(const weld::TreeIter& rIter)
 OUString SalInstanceTreeView::get_text(const weld::TreeIter& rIter, int col) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    return get_text(rVclIter.iter, col);
+
+    if (col == -1)
+        return SvTabListBox::GetEntryText(rVclIter.iter, 0);
+
+    col = to_internal_model(col);
+
+    if (static_cast<size_t>(col) == rVclIter.iter->ItemCount())
+        return OUString();
+
+    assert(col >= 0 && o3tl::make_unsigned(col) < rVclIter.iter->ItemCount());
+    SvLBoxItem& rItem = rVclIter.iter->GetItem(col);
+    assert(dynamic_cast<SvLBoxString*>(&rItem));
+    return static_cast<SvLBoxString&>(rItem).GetText();
 }
 
 void SalInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& rText, int col)
