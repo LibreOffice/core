@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
+#include <com/sun/star/embed/XLinkFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
@@ -27,6 +28,7 @@
 
 class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
                                                 css::embed::XEmbeddedObjectCreator,
+                                                css::embed::XLinkFactory,
                                                 css::lang::XServiceInfo >
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -52,6 +54,9 @@ public:
 
     // XLinkCreator
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceLink( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+
+    // XLinkFactory
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceLinkUserInit( const css::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName, const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lArguments, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

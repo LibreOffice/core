@@ -6069,6 +6069,10 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::uno::XInterface createInstanceLink([in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
     };
+    published interface XLinkFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createInstanceLinkUserInit([in] sequence< byte > aClassID, [in] string ClassName, [in] ::com::sun::star::embed::XStorage xStorage, [in] string sEntryName, [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs, [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception);
+    };
    };
    module frame {
     published interface XDispatchProviderInterceptor;
