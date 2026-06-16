@@ -82,10 +82,8 @@ bool SvTreeList::IsAtRootDepth( const SvTreeListEntry* pEntry ) const
 
 void SvTreeList::Clear()
 {
-    Broadcast( SvListAction::CLEARING );
     m_pRootItem->ClearChildren();
     m_nEntryCount = 0;
-    Broadcast( SvListAction::CLEARED );
 }
 
 bool SvTreeList::IsChild(const SvTreeListEntry* pParent, const SvTreeListEntry* pChild) const

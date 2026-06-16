@@ -40,12 +40,10 @@ enum class SvListAction
     REMOVED,
     MOVING,
     MOVED,
-    CLEARING,
     INSERTED_TREE,
     INVALIDATE_ENTRY,
     RESORTING,
     RESORTED,
-    CLEARED
 };
 
 class SvTreeListBox;

@@ -458,8 +458,16 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
 
 void SvTreeListBox::Clear()
 {
-    if (m_pModel)
-        m_pModel->Clear(); // Model calls SvTreeListBox::ModelHasCleared()
+    if (!m_pModel)
+        return;
+
+    CancelTextEditing();
+    Reset();
+    ModelHasCleared(); // sic! for compatibility reasons!
+    m_pModel->Clear();
+
+    if (IsUpdateMode())
+        PaintImmediately();
 }
 
 IMPL_LINK(SvTreeListBox, CloneHdl_Impl, SvTreeListEntry&, rEntry, SvTreeListEntry*)
@@ -3644,15 +3652,6 @@ void SvTreeListBox::ModelNotification(SvListAction eAction, SvTreeListEntry* pEn
         case SvListAction::MOVED:
             ActionMoved();
             ModelHasMoved(pEntry);
-            break;
-        case SvListAction::CLEARING:
-            CancelTextEditing();
-            Reset();
-            ModelHasCleared(); // sic! for compatibility reasons!
-            break;
-        case SvListAction::CLEARED:
-            if (IsUpdateMode())
-                PaintImmediately();
             break;
         case SvListAction::INVALIDATE_ENTRY:
             // no action for the base class
