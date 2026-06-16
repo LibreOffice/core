@@ -85,6 +85,7 @@ void UnitPerf::testPerf(const std::string& testType, const std::string& fileType
     }
 
     std::shared_ptr<TerminatingPoll> poll = std::make_shared<TerminatingPoll>("performance test");
+    poll->runOnClientThread();
 
     const std::string docName = "empty." + fileType;
 
