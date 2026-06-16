@@ -11593,6 +11593,7 @@ sw/inc/IDocumentRedlineAccess.hxx
 sw/inc/IDocumentUndoRedo.hxx
 sw/inc/IMark.hxx
 sw/inc/PostItMgr.hxx
+sw/inc/SwAppletImpl.hxx
 sw/inc/SwStyleNameMapper.hxx
 sw/inc/SwUndoField.hxx
 sw/inc/SwXMLSectionList.hxx
@@ -12410,6 +12411,7 @@ sw/source/filter/basflt/fltshell.cxx
 sw/source/filter/basflt/iodetect.cxx
 sw/source/filter/basflt/shellio.cxx
 sw/source/filter/docx/swdocxreader.cxx
+sw/source/filter/html/SwAppletImpl.cxx
 sw/source/filter/html/css1atr.cxx
 sw/source/filter/html/htmlatr.cxx
 sw/source/filter/html/htmlbas.cxx

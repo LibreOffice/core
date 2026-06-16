@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_SWHTML_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_SWHTML_HXX
 
+#include <config_java.h>
+
 #include <sfx2/sfxhtml.hxx>
 #include <svl/listener.hxx>
 #include <svl/macitem.hxx>
@@ -54,6 +56,7 @@ class SwStartNode;
 class SwFormatColl;
 class SwField;
 class SwHTMLForm_Impl;
+class SwApplet_Impl;
 struct SwHTMLFootEndNote_Impl;
 class HTMLTableCnts;
 class SwNumRule;
@@ -397,6 +400,8 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     //onto them until parsing is done
     std::vector<std::unique_ptr<SwTableBox>> m_aOrphanedTableBoxes;
 
+    std::unique_ptr<SwApplet_Impl> m_pAppletImpl; // current applet
+
     std::unique_ptr<SwCSS1Parser> m_pCSS1Parser;   // Style-Sheet-Parser
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;
     std::vector<SwPending>  m_vPendingStack;
@@ -684,7 +689,7 @@ private:
     // <SPACER>
     void InsertSpacer();
 
-    // Inserting graphics
+    // Inserting graphics, plug-ins and applets
 
     // search image maps and link with graphic nodes
     ImageMap *FindImageMap( std::u16string_view rURL ) const;
@@ -726,9 +731,19 @@ private:
     void GetDefaultScriptType( ScriptType& rType,
                                OUString& rTypeStr ) const;
 
-    // the actual insert methods for <IMG>, <EMBED> and <PARAM>
+    // the actual insert methods for <IMG>, <EMBED>, <APPLET> and <PARAM>
     void InsertImage();     // htmlgrin.cxx
     bool InsertEmbed();     // htmlplug.cxx
+
+#if HAVE_FEATURE_JAVA
+    void NewObject();   // htmlplug.cxx
+#endif
+    void EndObject();       // link CommandLine with applet (htmlplug.cxx)
+#if HAVE_FEATURE_JAVA
+    void InsertApplet();    // htmlplug.cxx
+#endif
+    void EndApplet();       // link CommandLine with applet (htmlplug.cxx)
+    void InsertParam();     // htmlplug.cxx
 
     void InsertFloatingFrame();
 
