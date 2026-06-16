@@ -19,6 +19,7 @@
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
@@ -221,6 +222,7 @@
               <object class="GtkEntry" id="indication">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
@@ -238,6 +240,7 @@
               <object class="GtkEntry" id="name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">

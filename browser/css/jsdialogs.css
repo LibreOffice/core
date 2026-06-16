@@ -3118,8 +3118,19 @@ kbd,
 	margin-right: 2px;
 }
 
+/* The Target frame renders as a div, the Text and Name frame below as a
+   fieldset with a 2px side margin. Add the same margin so they line up. */
+#HyperlinkDocPage #frame3 {
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
 #HyperlinkDocPage #grid5 {
-	grid-template-columns: 87px 1fr 38px !important;
+	/* Match the label column width and zero gap of the Text and Name grid so
+	   the Target field starts at the same left edge. The last 38px column is
+	   for the browse button. */
+	grid-template-columns: 90px 1fr 38px !important;
+	column-gap: 0px !important;
 }
 
 #HyperlinkDocPage #frame1,
@@ -3128,9 +3139,11 @@ kbd,
 	display: none;
 }
 
-/* grid requires all elements to occupy space, but we can reduce their sizing */
+/* grid requires all elements to occupy space, but we can reduce their sizing.
+   Right-align the button in its column so its right edge lines up with the
+   Text and Name fields, keeping it centred vertically. */
 [id^='Hyperlink'] #browse button {
-	margin: auto;
+	margin: auto 0 auto auto;
 	max-height: 32px;
 }
 
