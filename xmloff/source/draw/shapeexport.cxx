@@ -978,6 +978,12 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeType::DrawAppletShape:
+        {
+            ImpExportAppletShape(xShape, nFeatures, pRefPoint );
+            break;
+        }
+
         case XmlShapeType::DrawPluginShape:
         {
             ImpExportPluginShape(xShape, nFeatures, pRefPoint );
@@ -1269,6 +1275,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
         else if(aType.match("Frame", 21)) { eShapeType = XmlShapeType::DrawFrameShape; }
         else if(aType.match("Caption", 21)) { eShapeType = XmlShapeType::DrawCaptionShape; }
         else if(aType.match("Plugin", 21)) { eShapeType = XmlShapeType::DrawPluginShape; }
+        else if(aType.match("Applet", 21)) { eShapeType = XmlShapeType::DrawAppletShape; }
         else if(aType.match("MediaShape", 21)) { eShapeType = XmlShapeType::DrawMediaShape; }
         else if(aType.match("TableShape", 21)) { eShapeType = XmlShapeType::DrawTableShape; }
 
@@ -3302,6 +3309,62 @@ void XMLShapeExport::ImpExportFrameShape(
     // write floating frame
     {
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_FLOATING_FRAME, true, true);
+    }
+
+    ImpExportDescription(xShape);
+}
+
+void XMLShapeExport::ImpExportAppletShape(
+    const uno::Reference< drawing::XShape >& xShape,
+    XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
+{
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(!xPropSet.is())
+        return;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    // export frame url
+    OUString aStr;
+    xPropSet->getPropertyValue(u"AppletCodeBase"_ustr) >>= aStr;
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+
+    // export draw:applet-name
+    xPropSet->getPropertyValue(u"AppletName"_ustr) >>= aStr;
+    if( !aStr.isEmpty() )
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
+
+    // export draw:code
+    xPropSet->getPropertyValue(u"AppletCode"_ustr) >>= aStr;
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
+
+    // export draw:may-script
+    bool bIsScript = false;
+    xPropSet->getPropertyValue(u"AppletIsScript"_ustr) >>= bIsScript;
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bIsScript ? XML_TRUE : XML_FALSE );
+
+    {
+        // write applet
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_APPLET, true, true);
+
+        // export parameters
+        uno::Sequence< beans::PropertyValue > aCommands;
+        xPropSet->getPropertyValue(u"AppletCommands"_ustr) >>= aCommands;
+        for (const auto& rCommand : aCommands)
+        {
+            rCommand.Value >>= aStr;
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.Name );
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
+            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
+        }
     }
 
     ImpExportDescription(xShape);

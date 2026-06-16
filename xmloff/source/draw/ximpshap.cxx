@@ -499,6 +499,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
             xShape.set(xServiceFact->createInstance(u"com.sun.star.drawing.temporaryForXMLImportOLE2Shape"_ustr), uno::UNO_QUERY);
         }
         else if (serviceName == "com.sun.star.drawing.GraphicObjectShape"
+                 || serviceName == "com.sun.star.drawing.AppletShape"
                  || serviceName == "com.sun.star.drawing.FrameShape"
                  || serviceName == "com.sun.star.drawing.MediaShape"
                  || serviceName == "com.sun.star.drawing.OLE2Shape"
@@ -2867,6 +2868,135 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContex
 
     // delegate to parent class if no context could be created
     return SdXMLShapeContext::createFastChildContext(nElement, xAttrList);
+}
+
+SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        css::uno::Reference< css::drawing::XShapes > const & rShapes)
+: SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
+  mbIsScript( false )
+{
+}
+
+SdXMLAppletShapeContext::~SdXMLAppletShapeContext()
+{
+}
+
+void SdXMLAppletShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
+{
+    AddShape(u"com.sun.star.drawing.AppletShape"_ustr);
+
+    if( mxShape.is() )
+    {
+        SetLayer();
+
+        // set pos, size, shear and rotate
+        SetTransformation();
+        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    }
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+bool SdXMLAppletShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
+{
+    switch( aIter.getToken() )
+    {
+        case XML_ELEMENT(DRAW, XML_APPLET_NAME):
+            maAppletName = aIter.toString();
+            break;
+        case XML_ELEMENT(DRAW, XML_CODE):
+            maAppletCode = aIter.toString();
+            break;
+        case XML_ELEMENT(DRAW, XML_MAY_SCRIPT):
+            mbIsScript = IsXMLToken( aIter, XML_TRUE );
+            break;
+        case XML_ELEMENT(XLINK, XML_HREF):
+            maHref = GetImport().GetAbsoluteReference(aIter.toString());
+            break;
+        default:
+            return SdXMLShapeContext::processAttribute( aIter );
+    }
+    return true;
+}
+
+void SdXMLAppletShapeContext::endFastElement(sal_Int32 nElement)
+{
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+    if( xProps.is() )
+    {
+        if ( maSize.Width && maSize.Height )
+        {
+            // the visual area for applet must be set on loading
+            awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+            xProps->setPropertyValue(u"VisibleArea"_ustr, Any(aRect) );
+        }
+
+        if( maParams.hasElements() )
+        {
+            xProps->setPropertyValue(u"AppletCommands"_ustr, Any(maParams) );
+        }
+
+        if( !maHref.isEmpty() )
+        {
+            xProps->setPropertyValue(u"AppletCodeBase"_ustr, Any(maHref) );
+        }
+
+        if( !maAppletName.isEmpty() )
+        {
+            xProps->setPropertyValue(u"AppletName"_ustr, Any(maAppletName) );
+        }
+
+        if( mbIsScript )
+        {
+            xProps->setPropertyValue(u"AppletIsScript"_ustr, Any(mbIsScript) );
+
+        }
+
+        if( !maAppletCode.isEmpty() )
+        {
+            xProps->setPropertyValue(u"AppletCode"_ustr, Any(maAppletCode) );
+        }
+
+        xProps->setPropertyValue(u"AppletDocBase"_ustr, Any(GetImport().GetDocumentBase()) );
+
+        SetThumbnail();
+    }
+
+    SdXMLShapeContext::endFastElement(nElement);
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLAppletShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    if( nElement == XML_ELEMENT(DRAW, XML_PARAM) )
+    {
+        OUString aParamName, aParamValue;
+        // now parse the attribute list and look for draw:name and draw:value
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        {
+            if( aIter.getToken() == XML_ELEMENT(DRAW, XML_NAME) )
+                aParamName = aIter.toString();
+            if( aIter.getToken() == XML_ELEMENT(DRAW, XML_VALUE) )
+                aParamValue = aIter.toString();
+        }
+
+        if( !aParamName.isEmpty() )
+        {
+            sal_Int32 nIndex = maParams.getLength();
+            maParams.realloc( nIndex + 1 );
+            auto pParams = maParams.getArray();
+            pParams[nIndex].Name = aParamName;
+            pParams[nIndex].Handle = -1;
+            pParams[nIndex].Value <<= aParamValue;
+            pParams[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+        }
+
+        return new SvXMLImportContext( GetImport() );
+    }
+
+    return SdXMLShapeContext::createFastChildContext( nElement, xAttrList );
 }
 
 

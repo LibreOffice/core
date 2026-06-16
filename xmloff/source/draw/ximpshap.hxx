@@ -470,6 +470,37 @@ public:
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
+// draw:applet
+
+class SdXMLAppletShapeContext : public SdXMLShapeContext
+{
+private:
+    OUString maAppletName;
+    OUString maAppletCode;
+    OUString maHref;
+    bool mbIsScript;
+
+    css::uno::Sequence< css::beans::PropertyValue > maParams;
+
+public:
+
+    SdXMLAppletShapeContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+    virtual ~SdXMLAppletShapeContext() override;
+
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
+};
+
 // draw:plugin
 
 class SdXMLPluginShapeContext : public SdXMLShapeContext
