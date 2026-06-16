@@ -264,7 +264,6 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
 
 } // namespace
 
-constexpr OStringLiteral gaOpeningCData( "<![CDATA[" );
 constexpr OString gaClosingCData( "]]>"_ostr );
 
 InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
@@ -357,7 +356,7 @@ void InputStream::updateBuffer()
             // read the element text (add the leading opening bracket manually)
             OStringBuffer aElement = "<" + readToElementEnd();
             // check for CDATA part, starting with '<![CDATA['
-            if( o3tl::starts_with(aElement, gaOpeningCData) )
+            if( o3tl::starts_with(aElement, "<![CDATA[") )
             {
                 // search the end tag ']]>'
                 while( ((aElement.getLength() < gaClosingCData.getLength()) || !o3tl::ends_with(aElement, gaClosingCData)) && !mxTextStrm->isEOF() )

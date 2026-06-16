@@ -89,11 +89,8 @@ void ObjectContainer::createContainer() const
     OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );
 }
 
-constexpr OUStringLiteral gaDashNameBase(      u"msLineDash " );      ///< Base name for all named line dashes.
 constexpr OUString gaGradientNameBase(  u"msFillGradient "_ustr );  ///< Base name for all named fill gradients.
 constexpr OUString gaTransGradNameBase( u"msTransGradient "_ustr ); ///< Base name for all named fill gradients.
-constexpr OUStringLiteral gaBitmapUrlNameBase( u"msFillBitmap " );    ///< Base name for all named fill bitmap URLs.
-constexpr OUStringLiteral gaHatchNameBase(     u"msFillHatch " );     ///< Base name for all named fill hatches.
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maMarkerContainer(    rxModelFactory, u"com.sun.star.drawing.MarkerTable"_ustr ),
@@ -120,7 +117,7 @@ bool ModelObjectHelper::insertLineMarker( const OUString& rMarkerName, const Pol
 
 OUString ModelObjectHelper::insertLineDash( const LineDash& rDash )
 {
-    return maDashContainer.insertObject( gaDashNameBase, Any( rDash ), true );
+    return maDashContainer.insertObject( u"msLineDash "_ustr, Any( rDash ), true );
 }
 
 OUString ModelObjectHelper::insertFillGradient( const awt::Gradient2& rGradient )
@@ -147,13 +144,13 @@ OUString ModelObjectHelper::insertFillBitmapXGraphic(uno::Reference<graphic::XGr
 {
     uno::Reference<awt::XBitmap> xBitmap(rxGraphic, uno::UNO_QUERY);
     if (xBitmap.is())
-        return maBitmapUrlContainer.insertObject(gaBitmapUrlNameBase, Any(xBitmap), true);
+        return maBitmapUrlContainer.insertObject(u"msFillBitmap "_ustr, Any(xBitmap), true);
     return OUString();
 }
 
 OUString ModelObjectHelper::insertFillHatch(const drawing::Hatch& rHatch)
 {
-    return maHatchContainer.insertObject( gaHatchNameBase, Any( rHatch ), true );
+    return maHatchContainer.insertObject( u"msFillHatch "_ustr, Any( rHatch ), true );
 }
 
 uno::Reference<awt::XBitmap> ModelObjectHelper::getFillBitmap(OUString const & rGraphicName)

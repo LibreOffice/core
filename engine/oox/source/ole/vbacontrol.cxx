@@ -102,8 +102,6 @@ private:
     sal_Int32           mnIndex;
 };
 
-constexpr OUStringLiteral gaDummyBaseName( u"DummyGroupSep" );
-
 VbaControlNamesSet::VbaControlNamesSet() :
     mnIndex( 0 )
 {
@@ -121,7 +119,7 @@ OUString VbaControlNamesSet::generateDummyName()
     OUString aCtrlName;
     do
     {
-        aCtrlName = gaDummyBaseName + OUString::number( ++mnIndex );
+        aCtrlName = u"DummyGroupSep"_ustr + OUString::number( ++mnIndex );
     }
     while( maCtrlNames.count( aCtrlName ) > 0 );
     maCtrlNames.insert( aCtrlName );
@@ -803,13 +801,12 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
 
     // scan for the line 'Begin {GUID} <FormName>'
     TextInputStream aFrameTextStrm( mxContext, aInStrm, eTextEnc );
-    static constexpr OUStringLiteral aBegin = u"Begin";
     OUString aLine;
     bool bBeginFound = false;
     while( !bBeginFound && !aFrameTextStrm.isEof() )
     {
         aLine = aFrameTextStrm.readLine().trim();
-        bBeginFound = lclEatKeyword( aLine, aBegin );
+        bBeginFound = lclEatKeyword( aLine, u"Begin" );
     }
     // check for the specific GUID that represents VBA forms
     if( !bBeginFound || !lclEatKeyword( aLine, u"{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) )

@@ -912,12 +912,11 @@ void PropertyMap::dumpCode( const Reference< XPropertySet >& rXPropSet )
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     const Sequence< Property > props = info->getProperties ();
-    static constexpr OUStringLiteral sType = u"Type";
 
     for (const Property& rProp : props) {
 
         // ignore Type, it is set elsewhere
-        if (rProp.Name == sType)
+        if (rProp.Name == u"Type"_ustr)
             continue;
 
         OString name = OUStringToOString( rProp.Name, RTL_TEXTENCODING_UTF8);

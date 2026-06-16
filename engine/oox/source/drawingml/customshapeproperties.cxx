@@ -171,14 +171,13 @@ void CustomShapeProperties::pushToPropSet(
         if ( !maAdjustmentGuideList.empty() )
         {
             static constexpr OUString sCustomShapeGeometry(u"CustomShapeGeometry"_ustr);
-            static constexpr OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
             uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
                 for ( auto& rGeoProp : asNonConstRange(aGeoPropSeq) )
                 {
-                    if ( rGeoProp.Name == sAdjustmentValues )
+                    if ( rGeoProp.Name == u"AdjustmentValues"_ustr )
                     {
                         uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
                         if ( rGeoProp.Value >>= aAdjustmentSeq )

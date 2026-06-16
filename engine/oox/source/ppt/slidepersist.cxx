@@ -307,10 +307,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
             OUString aStyle;
             OUString aFamily;
 
-            static constexpr OUStringLiteral sOutline( u"outline1" );
             static constexpr OUString sTitle( u"title"_ustr );
-            static constexpr OUStringLiteral sStandard( u"standard" );
-            static constexpr OUStringLiteral sSubtitle( u"subtitle" );
 
             for( int i = 0; i < 4; i++ )    // todo: aggregation of bodystyle (subtitle)
             {
@@ -326,7 +323,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                     case 1 :    // body style
                     {
                         pTextListStylePtr = maBodyTextStylePtr;
-                        aStyle = sOutline;
+                        aStyle = u"outline1"_ustr;
                         aFamily= aXNamed->getName();
                         break;
                     }
@@ -340,14 +337,14 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                     case 4 :    // standard style
                     {
                         pTextListStylePtr = maOtherTextStylePtr;
-                        aStyle = sStandard;
+                        aStyle = u"standard"_ustr;
                         aFamily = u"graphics"_ustr;
                         break;
                     }
                     case 5 :    // subtitle
                     {
                         pTextListStylePtr = maBodyTextStylePtr;
-                        aStyle = sSubtitle;
+                        aStyle = u"subtitle"_ustr;
                         aFamily = aXNamed->getName();
                         break;
                     }

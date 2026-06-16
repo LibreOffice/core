@@ -58,8 +58,7 @@ namespace {
 OUString lclGetShapeId( sal_Int32 nShapeId )
 {
     // identifier consists of a literal NUL character, a lowercase 's', and the id
-    static constexpr OUStringLiteral aStr = u"\0s";
-    return aStr + OUString::number( nShapeId );
+    return u"\0s"_ustr + OUString::number( nShapeId );
 }
 
 /** Returns the numeric VML shape identifier from its textual representation. */
