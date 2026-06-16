@@ -259,8 +259,6 @@ MSCodec97::MSCodec97(size_t nHashLen, OUString aEncKeyName)
 MSCodec_Std97::MSCodec_Std97()
     : MSCodec97(RTL_DIGEST_LENGTH_MD5, u"STD97EncryptionKey"_ustr)
 {
-    m_hDigest = rtl_digest_create(rtl_Digest_AlgorithmMD5);
-    assert(m_hDigest != nullptr);
 }
 
 MSCodec_CryptoAPI::MSCodec_CryptoAPI()
@@ -277,7 +275,6 @@ MSCodec97::~MSCodec97()
 
 MSCodec_Std97::~MSCodec_Std97()
 {
-    rtl_digest_destroy(m_hDigest);
 }
 
 #if DEBUG_MSO_ENCRYPTION_STD97
@@ -449,10 +446,8 @@ bool MSCodec_Std97::InitCipher(sal_uInt32 nCounter)
     pKeyData[56] = 0x48;
 
     // Fill raw digest of KeyData into KeyData.
-    (void)rtl_digest_updateMD5 (
-        m_hDigest, pKeyData, sizeof(pKeyData));
-    (void)rtl_digest_rawMD5 (
-        m_hDigest, pKeyData, RTL_DIGEST_LENGTH_MD5);
+    (void)rtl_digest_MD5_MSOffice (
+        pKeyData, sizeof(pKeyData), pKeyData, RTL_DIGEST_LENGTH_MD5);
 
     // Initialize Cipher with KeyData (for decoding).
     rtlCipherError result = rtl_cipher_init (
@@ -565,10 +560,8 @@ void MSCodec_Std97::GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8* pDi
     pBuffer[56] = 0x80;
 
     // Fill raw digest of Buffer into Digest.
-    rtl_digest_updateMD5 (
-        m_hDigest, pBuffer, sizeof(pBuffer));
-    rtl_digest_rawMD5 (
-        m_hDigest, pDigestLocal, sizeof(pDigestLocal));
+    rtl_digest_MD5_MSOffice (
+        pBuffer, sizeof(pBuffer), pDigestLocal, sizeof(pDigestLocal));
 
     memcpy(pDigest, pDigestLocal, 16);
 }
@@ -593,10 +586,8 @@ void MSCodec_Std97::GetEncryptKey (
     memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
     pBuffer[56] = 0x80;
 
-    rtl_digest_updateMD5 (
-        m_hDigest, pBuffer, sizeof(pBuffer));
-    rtl_digest_rawMD5 (
-        m_hDigest, pDigest, sizeof(pDigest));
+    rtl_digest_MD5_MSOffice (
+        pBuffer, sizeof(pBuffer), pDigest, sizeof(pDigest));
 
     rtl_cipher_encode (
         m_hCipher, pDigest, 16, pSaltDigest, 16);

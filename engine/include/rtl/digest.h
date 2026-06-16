@@ -39,7 +39,6 @@ typedef void* rtlDigest;
  */
 enum __rtl_DigestAlgorithm
 {
-    rtl_Digest_AlgorithmMD5,
     rtl_Digest_AlgorithmSHA1_StarOfficeBug,
 
     rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
@@ -154,59 +153,11 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
 
 #define RTL_DIGEST_LENGTH_MD5 16
 
-/** Create a MD5 digest handle.
-
-    The MD5 digest algorithm is specified in
-    RFC 1321 (Informational)
-      The MD5 Message-Digest Algorithm
-
-    @see rtl_digest_create()
- */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createMD5 (void) SAL_THROW_EXTERN_C();
-
-/** Destroy a MD5 digest handle.
-    @see rtl_digest_destroy()
- */
-SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyMD5 (
-    rtlDigest Digest
-) SAL_THROW_EXTERN_C();
-
-/** Update a MD5 digest with given data.
-    @see rtl_digest_update()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateMD5 (
-    rtlDigest Digest,
-    const void *pData, sal_uInt32 nDatLen
-) SAL_THROW_EXTERN_C();
-
-/** Finalize a MD5 digest and retrieve the digest value.
-    @see rtl_digest_get()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD5 (
-    rtlDigest Digest,
-    sal_uInt8 *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-/** Retrieve the raw (not finalized) MD5 digest value.
-
-    This function is a non-standard replacement for
-    rtl_digest_getMD5() and must be used with caution.
-
-    @post Digest initialized to accept another update sequence.
-    @see rtl_digest_get()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_rawMD5 (
-    rtlDigest Digest,
-    sal_uInt8 *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-/** Evaluate a MD5 digest value from given data.
+/** Evaluate a MD5 inspired Microsoft Office compatible digest value
+    which is not actually MD5 from given data.
 
     This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
-
-    @see rtl_digest_updateMD5()
-    @see rtl_digest_getMD5()
 
     @param[in] pData   data buffer.
     @param[in] nDatLen data length.
@@ -215,7 +166,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_rawMD5 (
 
     @retval rtl_Digest_E_None upon success.
  */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5_MSOffice (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();

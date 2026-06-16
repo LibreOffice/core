@@ -486,35 +486,39 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
         pKeyData[56] = sal::static_int_cast< sal_uInt8 >( nInd << 4 );
 
         // Fill raw digest of KeyData into KeyData.
-        rtlDigest hDigest = rtl_digest_create ( rtl_Digest_AlgorithmMD5 );
-        (void)rtl_digest_updateMD5 (
-            hDigest, pKeyData, sizeof(pKeyData));
-        (void)rtl_digest_rawMD5 (
-            hDigest, pKeyData, RTL_DIGEST_LENGTH_MD5);
+        (void)rtl_digest_MD5_MSOffice (
+            pKeyData, sizeof(pKeyData), pKeyData, RTL_DIGEST_LENGTH_MD5);
 
-        // Update digest with KeyData and Unique.
+        // Build a single input buffer: 16 repetitions of (KeyData[0..5] || DocId)
+        // followed by the padded tail of KeyData[16..63].
+        sal_uInt8 pCombined[16 * (5 + 16) + (sizeof(pKeyData) - 16)];
+        sal_uInt8 *pOut = pCombined;
         for ( nInd = 0; nInd < 16; nInd++ )
         {
-            rtl_digest_updateMD5( hDigest, pKeyData, 5 );
-            rtl_digest_updateMD5( hDigest, pDocId, 16 );
+            memcpy( pOut, pKeyData, 5 );
+            pOut += 5;
+            memcpy( pOut, pDocId, 16 );
+            pOut += 16;
         }
 
-        // Update digest with padding.
+        // Apply padding to KeyData[16..63] for the trailing block.
         pKeyData[16] = 0x80;
         memset( pKeyData + 17, 0, sizeof(pKeyData) - 17 );
         pKeyData[56] = 0x80;
         pKeyData[57] = 0x0a;
 
-        rtl_digest_updateMD5( hDigest, &(pKeyData[16]), sizeof(pKeyData) - 16 );
+        memcpy( pOut, &pKeyData[16], sizeof(pKeyData) - 16 );
 
-        // Fill raw digest of above updates
+        // Fill raw digest of the combined buffer into aResultKey.
         aResultKey.realloc( RTL_DIGEST_LENGTH_MD5 );
-        rtl_digest_rawMD5 ( hDigest, reinterpret_cast<sal_uInt8*>(aResultKey.getArray()), aResultKey.getLength() );
+        rtl_digest_MD5_MSOffice (
+            pCombined, sizeof(pCombined),
+            reinterpret_cast<sal_uInt8*>(aResultKey.getArray()),
+            aResultKey.getLength() );
 
-        // Erase KeyData array and leave.
-        rtl_secureZeroMemory (pKeyData, sizeof(pKeyData));
-
-        rtl_digest_destroy(hDigest);
+        // Erase KeyData and combined arrays and leave.
+        rtl_secureZeroMemory( pCombined, sizeof(pCombined) );
+        rtl_secureZeroMemory( pKeyData, sizeof(pKeyData) );
     }
 
     return aResultKey;

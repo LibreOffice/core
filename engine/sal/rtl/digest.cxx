@@ -86,10 +86,6 @@ rtlDigest SAL_CALL rtl_digest_create(rtlDigestAlgorithm Algorithm) noexcept
     rtlDigest Digest = nullptr;
     switch (Algorithm)
     {
-        case rtl_Digest_AlgorithmMD5:
-            Digest = rtl_digest_createMD5();
-            break;
-
         case rtl_Digest_AlgorithmSHA1_StarOfficeBug:
             Digest = rtl_digest_createSHA1_StarOfficeBug();
             break;
@@ -181,7 +177,6 @@ struct DigestMD5_Impl
 
 static void initMD5 (DigestContextMD5 *ctx);
 static void updateMD5 (DigestContextMD5 *ctx);
-static void endMD5 (DigestContextMD5 *ctx);
 
 #define F(x,y,z) ((((y) ^ (z)) & (x)) ^ (z))
 #define G(x,y,z) ((((x) ^ (y)) & (z)) ^ (y))
@@ -210,12 +205,12 @@ static void endMD5 (DigestContextMD5 *ctx);
 
 const Digest_Impl MD5 =
 {
-    rtl_Digest_AlgorithmMD5,
+    rtl_Digest_Algorithm_FORCE_EQUAL_SIZE, // this is only used internally now so no need to check it
     RTL_DIGEST_LENGTH_MD5,
     nullptr,
-    rtl_digest_destroyMD5,
-    rtl_digest_updateMD5,
-    rtl_digest_getMD5
+    nullptr, // unused now
+    nullptr, // unused now
+    nullptr, // unused now
 };
 
 static void initMD5(DigestContextMD5 *ctx)
@@ -313,94 +308,9 @@ static void updateMD5(DigestContextMD5 *ctx)
     ctx->m_nD += D;
 }
 
-static void endMD5(DigestContextMD5 *ctx)
-{
-    static const sal_uInt8 end[4] =
-    {
-        0x80, 0x00, 0x00, 0x00
-    };
-    const sal_uInt8 *p = end;
+namespace {
 
-    sal_uInt32 *X;
-    int         i;
-
-    X = ctx->m_pData;
-    i = (ctx->m_nDatLen >> 2);
-
-#ifdef OSL_BIGENDIAN
-    swapLong(X, i + 1);
-#endif /* OSL_BIGENDIAN */
-
-    switch (ctx->m_nDatLen & 0x03)
-    {
-        case 1: X[i] &= 0x000000ff; break;
-        case 2: X[i] &= 0x0000ffff; break;
-        case 3: X[i] &= 0x00ffffff; break;
-    }
-
-    switch (ctx->m_nDatLen & 0x03)
-    {
-        case 0: X[i]  = static_cast<sal_uInt32>(*(p++)) <<  0;
-            [[fallthrough]];
-        case 1: X[i] |= static_cast<sal_uInt32>(*(p++)) <<  8;
-            [[fallthrough]];
-        case 2: X[i] |= static_cast<sal_uInt32>(*(p++)) << 16;
-            [[fallthrough]];
-        case 3: X[i] |= static_cast<sal_uInt32>(*p) << 24;
-    }
-
-    i += 1;
-
-    if (i > (DIGEST_LBLOCK_MD5 - 2))
-    {
-        for (; i < DIGEST_LBLOCK_MD5; i++)
-        {
-            X[i] = 0;
-        }
-
-        updateMD5(ctx);
-        i = 0;
-    }
-
-    for (; i < (DIGEST_LBLOCK_MD5 - 2); i++)
-        X[i] = 0;
-
-    X[DIGEST_LBLOCK_MD5 - 2] = ctx->m_nL;
-    X[DIGEST_LBLOCK_MD5 - 1] = ctx->m_nH;
-
-    updateMD5(ctx);
-}
-
-rtlDigestError SAL_CALL rtl_digest_MD5(
-    const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen) noexcept
-{
-    DigestMD5_Impl digest;
-    rtlDigestError result;
-
-    digest.m_digest = MD5;
-    initMD5(&(digest.m_context));
-
-    result = rtl_digest_update(&digest, pData, nDatLen);
-    if (result == rtl_Digest_E_None)
-        result = rtl_digest_getMD5(&digest, pBuffer, nBufLen);
-
-    rtl_secureZeroMemory(&digest, sizeof(digest));
-    return result;
-}
-
-rtlDigest SAL_CALL rtl_digest_createMD5() noexcept
-{
-    DigestMD5_Impl *pImpl = RTL_DIGEST_CREATE(DigestMD5_Impl);
-    if (pImpl)
-    {
-        pImpl->m_digest = MD5;
-        initMD5(&(pImpl->m_context));
-    }
-    return static_cast<rtlDigest>(pImpl);
-}
-
-rtlDigestError SAL_CALL rtl_digest_updateMD5(
+rtlDigestError rtl_digest_updateMD5(
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen) noexcept
 {
     DigestMD5_Impl *pImpl = static_cast<DigestMD5_Impl *>(Digest);
@@ -412,7 +322,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5(
     if (!pImpl || !pData)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD5)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_Algorithm_FORCE_EQUAL_SIZE)
         return rtl_Digest_E_Algorithm;
 
     if (nDatLen == 0)
@@ -471,7 +381,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5(
     return rtl_Digest_E_None;
 }
 
-rtlDigestError SAL_CALL rtl_digest_getMD5(
+rtlDigestError rtl_digest_rawMD5(
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen) noexcept
 {
     DigestMD5_Impl *pImpl = static_cast<DigestMD5_Impl *>(Digest);
@@ -482,36 +392,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD5(
     if (!pImpl || !pBuffer)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD5)
-        return rtl_Digest_E_Algorithm;
-
-    if (pImpl->m_digest.m_length > nBufLen)
-        return rtl_Digest_E_BufferSize;
-
-    ctx = &(pImpl->m_context);
-
-    endMD5(ctx);
-    RTL_DIGEST_LTOC(ctx->m_nA, p);
-    RTL_DIGEST_LTOC(ctx->m_nB, p);
-    RTL_DIGEST_LTOC(ctx->m_nC, p);
-    RTL_DIGEST_LTOC(ctx->m_nD, p);
-    initMD5(ctx);
-
-    return rtl_Digest_E_None;
-}
-
-rtlDigestError SAL_CALL rtl_digest_rawMD5(
-    rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen) noexcept
-{
-    DigestMD5_Impl *pImpl = static_cast<DigestMD5_Impl *>(Digest);
-    sal_uInt8 *p = pBuffer;
-
-    DigestContextMD5 *ctx;
-
-    if (!pImpl || !pBuffer)
-        return rtl_Digest_E_Argument;
-
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmMD5)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_Algorithm_FORCE_EQUAL_SIZE)
         return rtl_Digest_E_Algorithm;
 
     if (pImpl->m_digest.m_length > nBufLen)
@@ -529,17 +410,26 @@ rtlDigestError SAL_CALL rtl_digest_rawMD5(
     return rtl_Digest_E_None;
 }
 
-void SAL_CALL rtl_digest_destroyMD5(rtlDigest Digest) noexcept
-{
-    DigestMD5_Impl *pImpl = static_cast<DigestMD5_Impl *>(Digest);
-    if (pImpl)
-    {
-        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD5)
-            rtl_freeZeroMemory(pImpl, sizeof(DigestMD5_Impl));
-        else
-            free(pImpl);
-    }
 }
+
+rtlDigestError SAL_CALL rtl_digest_MD5_MSOffice(
+    const void *pData,   sal_uInt32 nDatLen,
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen) noexcept
+{
+    DigestMD5_Impl digest;
+    rtlDigestError result;
+
+    digest.m_digest = MD5;
+    initMD5(&(digest.m_context));
+
+    result = rtl_digest_updateMD5(&digest, pData, nDatLen);
+    if (result == rtl_Digest_E_None)
+        result = rtl_digest_rawMD5(&digest, pBuffer, nBufLen);
+
+    rtl_secureZeroMemory(&digest, sizeof(digest));
+    return result;
+}
+
 
 #define DIGEST_CBLOCK_SHA 64
 #define DIGEST_LBLOCK_SHA 16

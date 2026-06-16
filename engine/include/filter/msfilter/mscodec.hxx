@@ -391,8 +391,6 @@ public:
 private:
                         MSCodec_Std97( const MSCodec_Std97& ) = delete;
     MSCodec_Std97&      operator=( const MSCodec_Std97& ) = delete;
-
-    rtlDigest           m_hDigest;
 };
 
 class MSFILTER_DLLPUBLIC MSCodec_CryptoAPI final : public MSCodec97
