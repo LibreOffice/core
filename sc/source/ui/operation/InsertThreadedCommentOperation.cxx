@@ -11,7 +11,7 @@
 
 #include <operation/InsertThreadedCommentOperation.hxx>
 
-#include <rtl/digest.h>
+#include <comphelper/hash.hxx>
 #include <rtl/string.hxx>
 #include <svx/svdocapt.hxx>
 #include <tools/Guid.hxx>
@@ -114,11 +114,11 @@ bool InsertThreadedCommentOperation::runImplementation()
             // document's person-ids and breaks author matching on reopen.
             OString aInput = "LibreOffice:ThreadedCommentPerson:"
                              + OUStringToOString(aAuthor, RTL_TEXTENCODING_UTF8);
-            sal_uInt8 aDigest[RTL_DIGEST_LENGTH_SHA1];
-            rtl_digest_SHA1(aInput.getStr(), aInput.getLength(), aDigest, RTL_DIGEST_LENGTH_SHA1);
+            ::std::vector<sal_uInt8> aDigest{ ::comphelper::Hash::calculateHash(
+                aInput.getStr(), aInput.getLength(), ::comphelper::HashType::SHA1) };
             aDigest[6] = (aDigest[6] & 0x0F) | 0x50; // version 5
             aDigest[8] = (aDigest[8] & 0x3F) | 0x80; // variant RFC 4122
-            tools::Guid aPersonGuid(aDigest);
+            tools::Guid aPersonGuid(aDigest.data());
 
             ScPersonData aPerson;
             aPerson.maId = aPersonGuid.getOUString();
