@@ -49,6 +49,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <svx/svdocapt.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svditer.hxx>
@@ -1452,6 +1453,14 @@ PointerStyle SdrDragObjOwn::GetSdrDragPointer() const
 
 void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal)
 {
+    // tdf#123441 - use clone-based drag for fixed-tail captions to keep the arrow anchored to the cell
+    if (const auto* pCaption = dynamic_cast<const SdrCaptionObj*>(&rOriginal))
+        if (pCaption->IsFixedTail())
+        {
+            SdrDragMethod::createSdrDragEntryForSdrObject(rOriginal);
+            return;
+        }
+
     // use the view-independent primitive representation (without
     // evtl. GridOffset, that may be applied to the DragEntry individually)
     drawinglayer::primitive2d::Primitive2DContainer xRetval;

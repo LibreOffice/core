@@ -92,6 +92,7 @@ public:
 
     // for calc: fixed note tail position.
     void SetFixedTail() { mbFixedTail = true; }
+    bool IsFixedTail() const { return mbFixedTail; }
 
     SAL_DLLPRIVATE virtual OUString TakeObjNameSingul() const override;
     SAL_DLLPRIVATE virtual OUString TakeObjNamePlural() const override;
