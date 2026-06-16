@@ -34,9 +34,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::task;
 
-constexpr OUStringLiteral CONTROLNAME_TEXT = u"Text"; // identifier the control in container
-constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar"; //              -||-
-
 namespace unocontrols {
 
 //  construct/destruct
@@ -55,8 +52,8 @@ StatusIndicator::StatusIndicator( const cpo::uno::Reference< XComponentContext >
     // ( ProgressBar has no model !!! )
     m_xText->setModel( new UnoControlFixedTextModel(rxContext) );
     // ... and add controls to basecontainercontrol!
-    addControl( CONTROLNAME_TEXT, m_xText    );
-    addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar );
+    addControl( u"Text"_ustr, m_xText    );
+    addControl( u"ProgressBar"_ustr, m_xProgressBar );
     // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     m_xProgressBar->setVisible( true );
