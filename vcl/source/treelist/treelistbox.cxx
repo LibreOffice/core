@@ -3598,11 +3598,11 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_Int32 )
     return DefaultCompare(pLeftText, pRightText);
 }
 
-void SvTreeListBox::ModelNotification(SvListAction nActionId, SvTreeListEntry* pEntry)
+void SvTreeListBox::ModelNotification(SvListAction eAction, SvTreeListEntry* pEntry)
 {
     SolarMutexGuard aSolarGuard;
 
-    switch (nActionId)
+    switch (eAction)
     {
         case SvListAction::INSERTED:
         {

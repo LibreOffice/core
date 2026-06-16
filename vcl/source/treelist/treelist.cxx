@@ -41,9 +41,9 @@ SvTreeList::~SvTreeList()
 {
 }
 
-void SvTreeList::Broadcast(SvListAction nActionId, SvTreeListEntry* pEntry)
+void SvTreeList::Broadcast(SvListAction eAction, SvTreeListEntry* pEntry)
 {
-    mrOwnerListView.ModelNotification(nActionId, pEntry);
+    mrOwnerListView.ModelNotification(eAction, pEntry);
 }
 
 // an entry is visible if all parents are expanded

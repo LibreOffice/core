@@ -35,17 +35,17 @@
 
 enum class SvListAction
 {
-    INSERTED         = 1,
-    REMOVING         = 2,
-    REMOVED          = 3,
-    MOVING           = 4,
-    MOVED            = 5,
-    CLEARING         = 6,
-    INSERTED_TREE    = 7,
-    INVALIDATE_ENTRY = 8,
-    RESORTING        = 9,
-    RESORTED         = 10,
-    CLEARED          = 11
+    INSERTED,
+    REMOVING,
+    REMOVED,
+    MOVING,
+    MOVED,
+    CLEARING,
+    INSERTED_TREE,
+    INVALIDATE_ENTRY,
+    RESORTING,
+    RESORTED,
+    CLEARED
 };
 
 class SvTreeListBox;
@@ -130,7 +130,7 @@ public:
                         SvTreeList(SvTreeListBox&);
                         ~SvTreeList();
 
-    void Broadcast(SvListAction nActionId, SvTreeListEntry* pEntry = nullptr);
+    void Broadcast(SvListAction eAction, SvTreeListEntry* pEntry = nullptr);
 
     void                EnableInvalidate( bool bEnable );
     bool                IsEnableInvalidate() const { return mbEnableInvalidate; }
