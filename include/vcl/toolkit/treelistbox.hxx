@@ -283,7 +283,7 @@ private:
     // Handler that is called by TreeList to clone an Entry
     DECL_DLLPRIVATE_LINK(CloneHdl_Impl, SvTreeListEntry&, SvTreeListEntry*);
 
-    void ExpandListEntry(SvTreeListEntry* pParent);
+    void ExpandListEntry(SvTreeListEntry& rParent);
     void CollapseListEntry(SvTreeListEntry* pParent);
     bool SelectListEntry(SvTreeListEntry* pEntry, bool bSelect);
 

@@ -594,21 +594,20 @@ sal_uInt32 SvTreeListBox::GetSelectionCount() const { return m_nSelectionCount; 
 
 bool SvTreeListBox::HasViewData() const { return m_DataTable.size() > 1; } // There's always a ROOT
 
-void SvTreeListBox::ExpandListEntry(SvTreeListEntry* pEntry)
+void SvTreeListBox::ExpandListEntry(SvTreeListEntry& rEntry)
 {
-    assert(pEntry && "Expand:View/Entry?");
-    SvViewDataEntry* pViewData = GetViewData(pEntry);
+    SvViewDataEntry* pViewData = GetViewData(&rEntry);
     if (!pViewData)
         return;
 
     if (pViewData->IsExpanded())
         return;
 
-    DBG_ASSERT(!pEntry->m_Children.empty(),
+    DBG_ASSERT(!rEntry.m_Children.empty(),
                "SvTreeList::Expand: We expected to have child entries.");
 
     pViewData->SetExpanded(true);
-    SvTreeListEntry* pParent = pEntry->pParent;
+    SvTreeListEntry* pParent = rEntry.pParent;
     // if parent is visible, invalidate status data
     if (IsExpanded(pParent))
     {
@@ -2319,7 +2318,7 @@ bool SvTreeListBox::Expand(SvTreeListEntry& rParent)
         if (bExpandAllowed)
         {
             bExpanded = true;
-            ExpandListEntry(&rParent);
+            ExpandListEntry(rParent);
             m_pImpl->EntryExpanded(&rParent);
             m_pHdlEntry = &rParent;
             ExpandedHdl();
