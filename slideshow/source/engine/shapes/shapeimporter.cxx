@@ -37,6 +37,7 @@
 #include "drawshape.hxx"
 #include "backgroundshape.hxx"
 #include "mediashape.hxx"
+#include "appletshape.hxx"
 #include <shapeimporter.hxx>
 #include <slideshowexceptions.hxx>
 #include <tools.hxx>
@@ -215,6 +216,26 @@ ShapeSharedPtr ShapeImporter::createShape(
         return createMediaShape(xCurrShape,
                                 mnAscendingPrio,
                                 mrContext);
+    }
+    else if( shapeType == u"com.sun.star.drawing.AppletShape" )
+    {
+        // PropertyValues to copy from XShape to applet
+        static const char* const aPropertyValues[] =
+            {
+                "AppletCodeBase",
+                "AppletName",
+                "AppletCode",
+                "AppletCommands",
+                "AppletIsScript"
+            };
+
+        // (Java)Applet shape. This is a special object
+        return createAppletShape( xCurrShape,
+                                  mnAscendingPrio,
+                                  u"com.sun.star.comp.sfx2.AppletObject"_ustr,
+                                  aPropertyValues,
+                                  SAL_N_ELEMENTS(aPropertyValues),
+                                  mrContext );
     }
     else if( shapeType == u"com.sun.star.drawing.OLE2Shape" || shapeType == u"com.sun.star.presentation.OLE2Shape" )
     {
