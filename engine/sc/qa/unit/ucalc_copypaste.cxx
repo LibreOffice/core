@@ -10033,6 +10033,61 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testRefUndoRestoresEmptyDBCollection)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipPartialTableNoPhantom)
+{
+    // A partial copy (one that does not cover the whole table) carrying a
+    // structured reference must NOT fabricate a table in the destination.
+    // CopyDBsFromClip only recreates a fully-covered table; for a partial copy
+    // adjustDBRange must leave the reference unresolved (#REF!) instead of
+    // cloning a misplaced, header-less table at the source coordinates.
+    m_pDoc->InsertTab(0, u"Src"_ustr);
+
+    // Named table MyTable over A1:C4 (header + 3 data rows) with explicit column
+    // names so a structured reference compiles, and H1-column data so it computes.
+    auto pTable = std::make_unique<ScDBData>(u"MyTable"_ustr, 0, 0, 0, 2, 3, true, true);
+    pTable->SetTableColumnNames(std::vector<OUString>{ u"H1"_ustr, u"H2"_ustr, u"H3"_ustr });
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+    m_pDoc->SetValue(0, 1, 0, 1.0);   // A2
+    m_pDoc->SetValue(0, 2, 0, 4.0);   // A3
+    m_pDoc->SetValue(0, 3, 0, 16.0);  // A4
+    m_pDoc->SetString(2, 1, 0, u"=SUM(MyTable[H1])"_ustr); // C2, a structured-ref formula
+    m_pDoc->CalcAll();
+    // Confirm the structured reference actually compiled and resolved, so the
+    // test really exercises adjustDBRange rather than passing trivially.
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 1, 0));
+
+    // Copy a partial block A2:C3 - it intersects MyTable but does not cover it.
+    ScRange aClipRange(0, 1, 0, 2, 2, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+    // The table was carried into the clip (it intersects the copied range).
+    CPPUNIT_ASSERT(aClipDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"MYTABLE"_ustr));
+
+    // Paste into a fresh document that has no MyTable, at a different position.
+    ScDocShellRef xDestDocSh = new ScDocShell;
+    xDestDocSh->DoLoad(new SfxMedium(u"file:///nophantom.fake"_ustr, StreamMode::STD_READWRITE));
+    ScDocument& rDestDoc = xDestDocSh->GetDocument();
+    rDestDoc.InsertTab(0, u"Dest"_ustr);
+
+    ScRange aDestRange(5, 10, 0, 7, 11, 0); // F11:H12
+    ScMarkData aDestMark(rDestDoc.GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    rDestDoc.CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // No phantom table must have been registered in the destination.
+    ScDBCollection* pDestDBs = rDestDoc.GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("partial copy must not fabricate a table in the destination",
+                           !pDestDBs || pDestDBs->getNamedDBs().empty());
+
+    xDestDocSh->DoClose();
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);
