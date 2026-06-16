@@ -190,7 +190,8 @@ sal_uInt16 SvHeaderTabListBox::GetCurrColumn() const { return 0; }
 
 OUString SvHeaderTabListBox::GetRowDescription(sal_Int32 _nRow) const
 {
-    return GetEntryText(_nRow);
+    SvTreeListEntry* pEntry = GetEntryOnPos(_nRow);
+    return GetEntryText(pEntry, 0xffff);
 }
 
 OUString SvHeaderTabListBox::GetColumnDescription(sal_uInt16 _nColumn) const

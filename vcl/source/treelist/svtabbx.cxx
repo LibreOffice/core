@@ -158,12 +158,6 @@ OUString SvTabListBox::GetEntryText( const SvTreeListEntry* pEntry, sal_uInt16 n
     return aResult.makeStringAndClear();
 }
 
-OUString SvTabListBox::GetEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const
-{
-    SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
-    return GetEntryText( pEntry, nCol );
-}
-
 OUString SvTabListBox::GetCellText( sal_uInt32 nPos, sal_uInt16 nCol ) const
 {
     SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
