@@ -1474,23 +1474,6 @@ css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame&
 }
 }
 
-bool SfxApplication::IsHeadlessOrUITest()
-{
-    if (Application::IsHeadlessModeEnabled())
-        return true;
-
-    bool bRet = o3tl::IsRunningUITest(); //uitest.uicheck fails when the dialog is open
-    for (sal_uInt16 i = 0, nCount = Application::GetCommandLineParamCount(); i < nCount; ++i)
-    {
-        if (Application::GetCommandLineParam(i) == "--nologo")
-        {
-            bRet = true;
-            break;
-        }
-    }
-    return bRet;
-}
-
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(m_pImpl->bIsDowning)

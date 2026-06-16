@@ -386,17 +386,6 @@ std::vector< LanguageType >
     return aLangs;
 }
 
-uno::Sequence< sal_Int16 >
-     LocaleSeqToLangSeq( uno::Sequence< Locale > const &rLocaleSeq )
-{
-    std::vector<sal_Int16> aLangs;
-    aLangs.reserve(rLocaleSeq.getLength());
-
-    std::transform(rLocaleSeq.begin(), rLocaleSeq.end(), std::back_inserter(aLangs),
-        [](const Locale& rLocale) { return static_cast<sal_uInt16>(LinguLocaleToLanguage(rLocale)); });
-
-    return comphelper::containerToSequence(aLangs);
-}
 bool    IsReadOnly( const OUString &rURL, bool *pbExist )
 {
     bool bRes = false;

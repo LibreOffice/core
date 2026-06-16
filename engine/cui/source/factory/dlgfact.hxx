@@ -185,9 +185,6 @@ public:
 
     virtual std::shared_ptr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) override ;
 
-    virtual VclPtr<VclAbstractDialog>          CreateOptionsDialog(
-        weld::Window* pParent, const OUString& rExtensionId ) override;
-
     virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OUString& rHelpId) override;
 
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window* pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;

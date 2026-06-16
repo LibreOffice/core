@@ -298,8 +298,6 @@ public:
                                const OUString& rStr);
     /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
-    /// Insert an User Drawn item with @rStr tooltip.
-    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
@@ -338,10 +336,6 @@ public:
         return !mbNoSelection && (nItemId == mnSelItemId);
     }
     void SetNoSelection();
-    bool IsNoSelection() const
-    {
-        return mbNoSelection;
-    }
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
@@ -388,17 +382,6 @@ public:
         return mbEdgeBlending;
     }
     void SetEdgeBlending(bool bNew);
-
-    void SaveValue()
-    {
-        mnSavedItemId = IsNoSelection() ? -1 : GetSelectedItemId();
-    }
-
-    bool IsValueChangedFromSaved() const
-    {
-        int nItemId = IsNoSelection() ? -1 : GetSelectedItemId();
-        return mnSavedItemId != nItemId;
-    }
 
     virtual FactoryFunction GetUITestFactory() const override;
 };

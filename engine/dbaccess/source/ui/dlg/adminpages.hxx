@@ -99,8 +99,6 @@ namespace dbaui
                                    m_xORB;
     public:
         OGenericAdministrationPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& rAttrSet);
-        /// set a handler which gets called every time something on the page has been modified
-        void SetModifiedHandler(const Link<OGenericAdministrationPage const *, void>& _rHandler) { m_aModifiedHandler = _rHandler; }
 
         /** Sets the ParentDialog
             @param  _pAdminDialog
@@ -141,7 +139,6 @@ namespace dbaui
         virtual bool canAdvance() const override;
 
         void                SetRoadmapStateValue( bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
-        bool                GetRoadmapStateValue() const { return m_abEnableRoadmap; }
 
     protected:
         /// default implementation: call FillItemSet, call prepareLeave,

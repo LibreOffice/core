@@ -119,10 +119,6 @@ namespace dbaui
     void setColumnProperties(   const css::uno::Reference< css::beans::XPropertySet>& _rxColumn,
                                 const OFieldDescription* _pFieldDesc);
 
-    OUString createDefaultName(  const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
-                                 const css::uno::Reference< css::container::XNameAccess>& _xTables,
-                                 const OUString& _sName);
-
     /** checks if the given name exists in the database context
     */
     bool checkDataSourceAvailable(  const OUString& _sDataSourceName,
@@ -199,23 +195,6 @@ namespace dbaui
                         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                         weld::Window* pParent);
 
-    /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
-        @param  _pWindow
-            The window which is used to search for the SystemWindow.
-        @param  _pToRegister
-            The window which should be added or removed on the TaskPaneList.
-        @param  _rMemFunc
-            The member function which should be called at the SystemWindow when found.
-            Possible values are:
-            ::comphelper::mem_fun(&TaskPaneList::AddWindow)
-            ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
-    */
-    void notifySystemWindow(vcl::Window const * _pWindow,
-                            vcl::Window* _pToRegister,
-                            const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc);
-
-    void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId );
-
     /** check if SQL92 name checking is enabled
         @param  _xConnection
             Used to get the datasource as parent from the connection.
@@ -223,18 +202,6 @@ namespace dbaui
             <TRUE/> if so otherwise <FALSE/>
     */
     bool isSQL92CheckEnabled(const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
-
-    /** check if the alias name of the table should be added at select statements
-        @param  _xConnection
-            Used to get the datasource as parent from the connection.
-        @return
-            <TRUE/> if so otherwise <FALSE/>
-    */
-    bool isAppendTableAliasEnabled(const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
-
-    /** determines whether when generating SQL statements, AS should be placed before a table alias
-    */
-    bool generateAsBeforeTableAlias( const css::uno::Reference< css::sdbc::XConnection>& _rxConnection );
 
     /** fills the bool and string value with information out of the datasource info property
         @param  _xDatasource
@@ -288,37 +255,6 @@ namespace dbaui
             the configuration node name of user defined drivers.
     */
 
-    /** returns the result of the user action when view the query dialog.
-        @param  pParent
-            The parent of the dialog
-        @param  pTitle
-            A string resource id for the text which will be displayed as title.
-        @param  pText
-            A string resource id for the text which will be displayed above the buttons.
-            When the string contains a #1. This will be replaced by the name.
-        @param  bAll
-            When set to <TRUE/>, the all button will be appended.
-        @param  rName
-            The name of the object to ask for.
-        @return
-            RET_YES, RET_NO, RET_ALL
-    */
-    sal_Int32 askForUserAction(weld::Window* pParent, TranslateId pTitle, TranslateId pText, bool bAll, std::u16string_view rName);
-
-    /** creates a new view from a query or table
-        @param  _sName
-            The name of the view to be created.
-        @param  _xConnection
-            The source connection.
-        @param  _xSourceObject
-            The object for which a view should be created.
-        @return
-            The created view.
-    */
-    css::uno::Reference< css::beans::XPropertySet> createView( const OUString& _sName
-                                                    ,const css::uno::Reference< css::sdbc::XConnection >& _xConnection
-                                                    ,const css::uno::Reference< css::beans::XPropertySet>& _xSourceObject);
-
     /** creates a view with the given command
     */
     css::uno::Reference< css::beans::XPropertySet> createView(
@@ -337,12 +273,6 @@ namespace dbaui
     */
     OUString getStrippedDatabaseName(const css::uno::Reference< css::beans::XPropertySet>& _xDataSource
                                             ,OUString& _rsDatabaseName);
-
-    /** returns the standard database filter
-        @return
-            the filter
-    */
-    std::shared_ptr<const SfxFilter> getStandardDatabaseFilter();
 
     /** opens a save dialog to store a form or report folder in the current hierarchy.
         @param  _pParent

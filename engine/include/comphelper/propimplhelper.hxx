@@ -319,12 +319,6 @@ protected:
     void setDependentFastPropertyValue(std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle,
                                        const css::uno::Any& rValue);
 
-    /// Enable/disable ignoring RuntimeExceptions during listener notification.
-    void setIgnoreRuntimeExceptionsWhileFiring(bool b)
-    {
-        m_bIgnoreRuntimeExceptionsWhileFiring = b;
-    }
-
 private:
     template <typename Func> void callNoBroadcast(Func&& fn);
 

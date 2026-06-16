@@ -1230,11 +1230,6 @@ void ThumbnailView::ShowTooltips( bool bShowTooltips )
     mbShowTooltips = bShowTooltips;
 }
 
-void ThumbnailView::DrawMnemonics( bool bDrawMnemonics )
-{
-    mbDrawMnemonics = bDrawMnemonics;
-}
-
 void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewItem*)> &func)
 {
     mnFirstLine = 0;        // start at the top of the list instead of the current position

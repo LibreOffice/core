@@ -84,15 +84,6 @@ bool satisfiesMaximalVersion(
     return dp_misc::compareVersions(actual, specified) != dp_misc::GREATER;
 }
 
-OUString produceErrorText(
-    OUString const & reason, OUString const & version)
-{
-    return reason.replaceFirst("%VERSION",
-        (version.isEmpty()
-         ?  DpResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN)
-         : version));
-}
-
 }
 
 namespace dp_misc::Dependencies {
@@ -153,42 +144,6 @@ check(dp_misc::DescriptionInfoset const & infoset) {
     }
     unsatisfied.realloc(unsat);
     return unsatisfied;
-}
-
-OUString getErrorText(
-    css::uno::Reference< css::xml::dom::XElement > const & dependency)
-{
-    OSL_ASSERT(dependency.is());
-    if ( dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == minimalVersionOpenOfficeOrg )
-    {
-        return produceErrorText(
-                DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN),
-            dependency->getAttribute(u"value"_ustr));
-    } else if (dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == maximalVersionOpenOfficeOrg )
-    {
-        return produceErrorText(
-                DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX),
-            dependency->getAttribute(u"value"_ustr));
-    } else if (dependency->getNamespaceURI() == namespaceLibreOffice && dependency->getTagName() == minimalVersionLibreOffice )
-    {
-        return produceErrorText(
-                DpResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN),
-            dependency->getAttribute(u"value"_ustr));
-    } else if (dependency->getNamespaceURI() == namespaceLibreOffice && dependency->getTagName() == maximalVersionLibreOffice )
-    {
-        return produceErrorText(
-                DpResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MAX),
-            dependency->getAttribute(u"value"_ustr));
-    } else if (dependency->hasAttributeNS(namespaceOpenOfficeOrg,
-                   minimalVersionOpenOfficeOrg))
-    {
-        return produceErrorText(
-                DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN),
-            dependency->getAttributeNS(namespaceOpenOfficeOrg,
-                minimalVersionOpenOfficeOrg));
-    } else {
-        return DpResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN);
-    }
 }
 
 }

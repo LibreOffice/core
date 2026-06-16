@@ -120,86 +120,19 @@ namespace comphelper
         void tryPush();
         void tryPushExtensionInfo();
 
-        /** finds out if a restore is possible
-         *
-         *  @return bool
-         *          returns true if a restore to an older backup is possible
-         *
-         * isPopPossibleExtensionInfo is the specialized version for ExtensionInfo
-         */
-        bool isPopPossible();
-        bool isPopPossibleExtensionInfo() const;
-
-        /** tries to execute a restore. Will overwrite the base file
-         *  in that case and take one version off the 'stack' of copies.
-         *  Also may cleanup older backups when NumBackups given in the
-         *  constructor has changed.
-         *
-         * tryPopExtensionInfo is the specialized version for ExtensionInfo
-         */
-        void tryPop();
-        void tryPopExtensionInfo();
-
-        /** tries to iterate the extensions and to disable all of them
-        */
-        static bool isTryDisableAllExtensionsPossible();
-        static void tryDisableAllExtensions();
-
-        /** Deinstall all User Extensions (installed for User only)
-        */
-        static bool isTryDeinstallUserExtensionsPossible();
-        static void tryDeinstallUserExtensions();
-
-        /** Reset shared Extensions
-        */
-        static bool isTryResetSharedExtensionsPossible();
-        static void tryResetSharedExtensions();
-
-        /** Reset bundled Extensions
-        */
-        static bool isTryResetBundledExtensionsPossible();
-        static void tryResetBundledExtensions();
-
-        /// Disables OpenCL
-        static void tryDisableHWAcceleration();
-
-        /** resets User-Customizations like Settings and UserInterface modifications
-        */
-        static bool isTryResetCustomizationsPossible();
-        static void tryResetCustomizations();
-
-        /** resets the whole UserProfile
-        */
-        static void tryResetUserProfile();
-
         /** Return the profile url */
         static const OUString& getUserProfileURL();
-
-        /** Return the url of the backed up profile (when in safe mode) */
-        static const OUString& getUserProfileWorkURL();
 
     private:
         // internal helper methods
         static OUString getPackURL();
-        static const std::vector< OUString >& getCustomizationDirNames();
-        static const std::vector< OUString >& getCustomizationFileNames();
 
         // file push helpers
         bool tryPush_Files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, std::u16string_view rSourceURL, const OUString& rTargetURL);
         bool tryPush_file(std::u16string_view rSourceURL, std::u16string_view rTargetURL, std::u16string_view rName, std::u16string_view rExt);
 
-        // file pop possibilities helper
-        bool isPopPossible_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, std::u16string_view rSourceURL, std::u16string_view rTargetURL);
-        static bool isPopPossible_file(std::u16string_view rSourceURL, std::u16string_view rTargetURL, std::u16string_view rName, std::u16string_view rExt);
-
-        // file pop helpers
-        bool tryPop_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, std::u16string_view rSourceURL, const OUString& rTargetURL);
-        bool tryPop_file(std::u16string_view rSourceURL, std::u16string_view rTargetURL, std::u16string_view rName, std::u16string_view rExt);
-
         // ExtensionInfo helpers
         bool tryPush_extensionInfo(std::u16string_view rTargetURL);
-        static bool isPopPossible_extensionInfo(std::u16string_view rTargetURL);
-        bool tryPop_extensionInfo(std::u16string_view rTargetURL);
 
         // FileDirInfo helpers
         void fillDirFileInfo();

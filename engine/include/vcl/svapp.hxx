@@ -926,13 +926,6 @@ public:
      */
     static OUString             GetOSVersion();
 
-    /** Get useful OS, Hardware and configuration information,
-     * cf. Help->About, and User-Agent
-     * bSelection = 0 to return all info, 1 for environment only,
-     *   and 2 for VCL/render related infos
-     */
-    static OUString             GetHWOSConfInfo(const int bSelection = 0, bool bLocalize = true);
-
     /** Load a localized branding PNG file as a bitmap.
 
      @param     pName           Name of the bitmap to load.

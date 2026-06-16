@@ -1045,8 +1045,6 @@ namespace svt
 
         virtual bool IsCursorMoveAllowed(sal_Int32 nNewRow, sal_uInt16 nNewColId) const override;
 
-        void    PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
-
         void AsynchGetFocus();
             // secure starting of StartEditHdl
 
@@ -1057,7 +1055,6 @@ namespace svt
 
         bool IsEditing() const {return aController.is();}
         void InvalidateStatusCell(sal_Int32 nRow) {RowModified(nRow, 0);}
-        void InvalidateHandleColumn();
 
         // late construction
         virtual void Init();

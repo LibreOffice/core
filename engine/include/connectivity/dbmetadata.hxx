@@ -77,12 +77,6 @@ namespace dbtools
         ~DatabaseMetaData();
 
     public:
-        /** determines whether or not the instances is based on a valid connection
-
-            As long as this method returns true<TRUE/>, you should expect all other
-            methods throwing an SQLException when called.
-        */
-        bool    isConnected() const;
 
         /** resets the instance so that it's based on a new connection
         */
@@ -139,10 +133,6 @@ namespace dbtools
         */
         bool shouldSubstituteParameterNames() const;
 
-        /** auto increment columns should be automatically used as primary key.
-        */
-        bool isAutoIncrementPrimaryKey() const;
-
         /** determines the syntax to use for boolean comparison predicates
 
             @see css::sdb::BooleanComparisonMode
@@ -150,38 +140,6 @@ namespace dbtools
         sal_Int32
             getBooleanComparisonMode() const;
 
-        /** determines in relations are supported.
-        *
-        * \return <TRUE/> when relations are supported, otherwise <FALSE/>
-        */
-        bool supportsRelations() const;
-
-        /** determines if column alias names can be used in the order by clause.
-        *
-        * \return <TRUE/> when relations are supported, otherwise <FALSE/>
-        */
-        bool supportsColumnAliasInOrderBy() const;
-
-        /** determines whether user administration is supported for the database
-
-            User administration support is controlled by the availability of the XUsersSupplier
-            interface, and it returning a non-NULL users container.
-
-            @param _rContext
-                the component context we operate in. Might be needed to create the
-                css.sdbc.DriverManager instance.
-        */
-        bool    supportsUserAdministration( const css::uno::Reference<css::uno::XComponentContext>& _rContext ) const;
-
-        /** determines whether in the application UI, empty table folders (aka catalogs/schemas) should be displayed
-        */
-        bool displayEmptyTableFolders() const;
-
-        /** determines that threads are supported.
-        *
-        * \return <TRUE/> when threads are supported, otherwise <FALSE/>
-        */
-        bool supportsThreads() const;
     };
 
 

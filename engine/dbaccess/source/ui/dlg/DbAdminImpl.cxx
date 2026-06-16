@@ -440,7 +440,7 @@ OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet&
 
 bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& _rSet)
 {
-    return DataSourceMetaData::getAuthentication( getDatasourceType( _rSet ) ) != AuthNone;
+    return getAuthentication( getDatasourceType( _rSet ) ) != AuthNone;
 }
 
 OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
@@ -957,13 +957,6 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
         default:
             OSL_FAIL("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
     }
-}
-
-OUString ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet const & _rDest)
-{
-    const SfxStringItem* pUrlItem = _rDest.GetItem<SfxStringItem>(DSID_DOCUMENT_URL);
-    assert(pUrlItem && "Document URL is NULL. -> GPF!");
-    return pUrlItem->GetValue();
 }
 
 void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)

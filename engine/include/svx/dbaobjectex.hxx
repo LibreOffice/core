@@ -35,22 +35,6 @@ namespace svx
     public:
         OComponentTransferable();
 
-        void Update(
-            const OUString&  rDatasourceOrLocation,
-            const css::uno::Reference< css::ucb::XContent>& xContent
-        );
-
-        /** checks whether or not a component descriptor can be extracted from the data flavor vector given
-            @param _rFlavors
-                available flavors
-        */
-        static bool canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors, bool _bForm );
-
-        /** extracts a component descriptor from the transferable given
-        */
-        static ODataAccessDescriptor
-                        extractComponentDescriptor(const TransferableDataHelper& _rData);
-
     private:
         // TransferableHelper overridables
         virtual void        AddSupportedFormats() override;

@@ -184,12 +184,6 @@ const ::comphelper::NamedValueCollection& DriversConfig::getProperties(std::u16s
     return impl_get(_sURL,1);
 }
 
-const ::comphelper::NamedValueCollection& DriversConfig::getFeatures(std::u16string_view _sURL)
-    const
-{
-    return impl_get(_sURL,0);
-}
-
 const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(std::u16string_view _sURL)
     const
 {

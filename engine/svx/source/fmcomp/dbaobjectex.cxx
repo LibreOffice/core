@@ -41,17 +41,6 @@ namespace svx
     {
     }
 
-    void OComponentTransferable::Update(const OUString& rDatasourceOrLocation
-            ,const Reference< XContent>& xContent)
-    {
-        ClearFormats();
-
-        m_aDescriptor.setDataSource(rDatasourceOrLocation);
-        m_aDescriptor[DataAccessDescriptorProperty::Component] <<= xContent;
-
-        AddSupportedFormats();
-    }
-
     SotClipboardFormatId OComponentTransferable::getDescriptorFormatId(bool _bExtractForm)
     {
         static SotClipboardFormatId s_nReportFormat = static_cast<SotClipboardFormatId>(-1);
@@ -94,43 +83,6 @@ namespace svx
 
         return false;
     }
-
-
-    bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors, bool _bForm )
-    {
-        SotClipboardFormatId nFormatId = getDescriptorFormatId(_bForm);
-        return std::any_of(_rFlavors.begin(), _rFlavors.end(),
-            [&nFormatId](const DataFlavorEx& rCheck) { return nFormatId == rCheck.mnSotId; });
-    }
-
-
-    ODataAccessDescriptor OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData)
-    {
-        bool bForm = _rData.HasFormat(getDescriptorFormatId(true));
-        if ( bForm || _rData.HasFormat(getDescriptorFormatId(false)) )
-        {
-            // the object has a real descriptor object (not just the old compatible format)
-
-            // extract the any from the transferable
-            DataFlavor aFlavor;
-            bool bSuccess =
-                SotExchange::GetFormatDataFlavor(getDescriptorFormatId(bForm), aFlavor);
-            OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
-
-            Any aDescriptor = _rData.GetAny(aFlavor, OUString());
-
-            // extract the property value sequence
-            Sequence< PropertyValue > aDescriptorProps;
-            bSuccess = aDescriptor >>= aDescriptorProps;
-            OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid clipboard format!");
-
-            // build the real descriptor
-            return ODataAccessDescriptor(aDescriptorProps);
-        }
-
-        return ODataAccessDescriptor();
-    }
-
 
 }
 

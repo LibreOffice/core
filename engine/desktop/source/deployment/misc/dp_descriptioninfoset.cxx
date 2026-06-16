@@ -503,12 +503,6 @@ DescriptionInfoset::getUpdateInformationUrls() const {
     return getUrls(u"desc:update-information/desc:src/@xlink:href"_ustr);
 }
 
-css::uno::Sequence< OUString >
-DescriptionInfoset::getUpdateDownloadUrls() const
-{
-    return getUrls(u"desc:update-download/desc:src/@xlink:href"_ustr);
-}
-
 OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
 {
     css::uno::Sequence< OUString > aStrList = getUrls( u"desc:icon/desc:default/@xlink:href"_ustr );
@@ -521,19 +515,6 @@ OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
         return aStrList[0];
 
     return OUString();
-}
-
-::std::optional< OUString > DescriptionInfoset::getLocalizedUpdateWebsiteURL()
-    const
-{
-    bool bParentExists = false;
-    const OUString sURL (getLocalizedHREFAttrFromChild(u"/desc:description/desc:update-website"_ustr, &bParentExists ));
-
-    if (!sURL.isEmpty())
-        return ::std::optional< OUString >(sURL);
-    else
-        return bParentExists ? ::std::optional< OUString >(OUString()) :
-            ::std::optional< OUString >();
 }
 
 ::std::optional< OUString > DescriptionInfoset::getOptionalValue(
@@ -601,11 +582,6 @@ std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAnd
            sURL = xURL->getNodeValue();
     }
     return std::make_pair(sPublisherName, sURL);
-}
-
-OUString DescriptionInfoset::getLocalizedReleaseNotesURL() const
-{
-    return getLocalizedHREFAttrFromChild(u"/desc:description/desc:release-notes"_ustr, nullptr);
 }
 
 OUString DescriptionInfoset::getLocalizedDisplayName() const

@@ -79,12 +79,6 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK(OSQLNameEditControl, ModifyHdl, weld::Entry&, rEntry, void)
-    {
-        checkName(*this, rEntry);
-        m_ChainChangedHdl.Call(rEntry);
-    }
-
     IMPL_LINK(OSQLNameEntry, ModifyHdl, weld::Entry&, rEntry, void)
     {
         checkName(*this, rEntry);

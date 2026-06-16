@@ -1217,29 +1217,6 @@ sal_uInt32 EditBrowseBox::GetTotalCellWidth(sal_Int32, sal_uInt16)
     return 0;
 }
 
-void EditBrowseBox::InvalidateHandleColumn()
-{
-    tools::Rectangle aHdlFieldRect( GetFieldRectPixel( 0, 0 ));
-    tools::Rectangle aInvalidRect( Point(0,0), GetOutputSizePixel() );
-    aInvalidRect.SetRight( aHdlFieldRect.Right() );
-    Invalidate( aInvalidRect );
-}
-
-void EditBrowseBox::PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled) const
-{
-    pCheckBoxPaint->SetState(eState);
-
-    pCheckBoxPaint->GetBox().set_sensitive(_bEnabled);
-
-    Size aBoxSize = pCheckBoxPaint->GetBox().get_preferred_size();
-    tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - aBoxSize.Width()) / 2),
-                                 rRect.Top() + ((rRect.GetHeight() - aBoxSize.Height()) / 2)),
-                           aBoxSize);
-    pCheckBoxPaint->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
-
-    pCheckBoxPaint->Draw(GetDataWindow().GetOutDev(), aRect.TopLeft(), SystemTextColorFlags::NONE);
-}
-
 void EditBrowseBox::AsynchGetFocus()
 {
     if (nStartEvent)

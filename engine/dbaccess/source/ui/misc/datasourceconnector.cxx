@@ -52,13 +52,6 @@ namespace dbaui
     using namespace ::com::sun::star::frame;
     using namespace ::dbtools;
 
-    // ODatasourceConnector
-    ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, weld::Window* _pMessageParent)
-        :m_pErrorMessageParent(_pMessageParent)
-        ,m_xContext(_rxContext)
-    {
-    }
-
     ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, weld::Window* _pMessageParent,
         OUString _sContextInformation )
         :m_pErrorMessageParent(_pMessageParent)

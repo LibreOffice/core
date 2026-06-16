@@ -71,7 +71,6 @@ namespace connectivity
         OUString getDriverFactoryName(std::u16string_view _sUrl) const;
         OUString getDriverTypeDisplayName(std::u16string_view _sUrl) const;
         const ::comphelper::NamedValueCollection& getProperties(std::u16string_view _sURL) const;
-        const ::comphelper::NamedValueCollection& getFeatures(std::u16string_view _sURL) const;
         const ::comphelper::NamedValueCollection& getMetaData(std::u16string_view _sURL) const;
         css::uno::Sequence< OUString > getURLs() const;
     private:

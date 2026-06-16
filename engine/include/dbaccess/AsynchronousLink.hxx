@@ -50,12 +50,6 @@ namespace dbaui
         OAsynchronousLink( const Link<void*,void>& _rHandler );
         ~OAsynchronousLink();
 
-        bool    IsRunning() const
-        {
-            std::unique_lock aEventGuard(m_aEventSafety);
-            return m_nEventId != nullptr;
-        }
-
         void Call( void* _pArgument = nullptr );
         void CancelCall();
     };

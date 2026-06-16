@@ -55,8 +55,6 @@ namespace connectivity
 
         virtual ~OConnectionWrapper();
         void setDelegation(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
-        void setDelegation(const css::uno::Reference< css::sdbc::XConnection >& _xConnection
-            ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
         virtual void SAL_CALL disposing() override;
     public:
         OConnectionWrapper( );

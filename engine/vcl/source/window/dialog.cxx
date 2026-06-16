@@ -1726,11 +1726,6 @@ void TopLevelWindowLocker::decBusy()
     m_xImpl->m_aBusyStack.pop();
 }
 
-bool TopLevelWindowLocker::isBusy() const
-{
-    return !m_xImpl->m_aBusyStack.empty();
-}
-
 TopLevelWindowLocker::~TopLevelWindowLocker()
 {
 }

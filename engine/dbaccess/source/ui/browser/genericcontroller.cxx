@@ -398,17 +398,6 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
 
 }
 
-bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
-{
-    SupportedFeatures::const_iterator aFeaturePos = std::find_if(
-        m_aSupportedFeatures.begin(),
-        m_aSupportedFeatures.end(),
-        CompareFeatureById(_nId)
-    );
-
-    return ( m_aSupportedFeatures.end() != aFeaturePos && !aFeaturePos->first.isEmpty());
-}
-
 void OGenericUnoController::InvalidateFeature_Impl()
 {
     bool bEmpty = true;
@@ -811,25 +800,6 @@ void OGenericUnoController::startConnectionListening(const Reference< XConnectio
         xComponent->addEventListener(static_cast<XFrameActionListener*>(this));
 }
 
-void OGenericUnoController::stopConnectionListening(const Reference< XConnection >& _rxConnection)
-{
-    // we have to remove ourself before disposing the connection
-    Reference< XComponent >  xComponent(_rxConnection, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener(static_cast<XFrameActionListener*>(this));
-}
-
-Reference< XConnection > OGenericUnoController::connect( const Reference< XDataSource>& _xDataSource )
-{
-    weld::WaitObject aWaitCursor(getFrameWeld());
-
-    ODatasourceConnector aConnector( getORB(), getFrameWeld(), OUString() );
-    Reference< XConnection > xConnection = aConnector.connect( _xDataSource, nullptr );
-    startConnectionListening( xConnection );
-
-    return xConnection;
-}
-
 Reference< XConnection > OGenericUnoController::connect( const OUString& _rDataSourceName,
     const OUString& _rContextInformation, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
@@ -956,26 +926,6 @@ void OGenericUnoController::executeChecked(const util::URL& _rCommand, const Seq
     }
 }
 
-Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() const
-{
-    Reference< css::awt::XWindow> xWindow;
-
-    // get the top most window
-    Reference< XFrame > xFrame( m_aCurrentFrame.getFrame() );
-    if ( xFrame.is() )
-    {
-        xWindow = xFrame->getContainerWindow();
-
-        while ( xFrame.is() && !xFrame->isTop() )
-        {
-            xFrame = xFrame->getCreator();
-        }
-        if ( xFrame.is() )
-            xWindow = xFrame->getContainerWindow();
-    }
-    return xWindow;
-}
-
 Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw(bool bCreateIfNecessary)
 {
     SolarMutexGuard aSolarGuard;
@@ -1047,17 +997,6 @@ void SAL_CALL OGenericUnoController::removeMouseClickHandler( const Reference< X
     m_aUserInputInterception.removeMouseClickHandler( _rxHandler );
 }
 
-void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
-{
-    if ( isCommandEnabled(_nCommandId) )
-        Execute(_nCommandId, aArgs);
-}
-
-bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
-{
-    return GetState( _nCommandId ).bEnabled;
-}
-
 bool OGenericUnoController::isDataSourceReadOnly() const
 {
     return false;
@@ -1071,18 +1010,6 @@ Reference< XController > OGenericUnoController::getXController()
 bool OGenericUnoController::interceptUserInput( const NotifyEvent& _rEvent )
 {
     return m_aUserInputInterception.handleNotifyEvent( _rEvent );
-}
-
-bool OGenericUnoController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
-{
-    OSL_ENSURE( !_rCompleteCommandURL.isEmpty(), "OGenericUnoController::isCommandEnabled: Empty command url!" );
-
-    bool bIsEnabled = false;
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );
-    if ( aIter != m_aSupportedFeatures.end() )
-        bIsEnabled = isCommandEnabled( aIter->second.nFeatureId );
-
-    return bIsEnabled;
 }
 
 Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroups()

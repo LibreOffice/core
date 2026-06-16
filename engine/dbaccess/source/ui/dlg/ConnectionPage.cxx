@@ -152,7 +152,7 @@ namespace dbaui
                 break;
         }
 
-        AuthenticationMode eAuthMode( DataSourceMetaData::getAuthentication( m_eType ) );
+        AuthenticationMode eAuthMode( getAuthentication( m_eType ) );
         bool bShowUserAuthenfication = ( eAuthMode != AuthNone );
         bool bShowUser = ( eAuthMode == AuthUserPwd );
 

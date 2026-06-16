@@ -56,8 +56,6 @@ namespace dbaui
 
         bool FillItemSet( SfxItemSet* rCoreAttrs );
         void implInitControls( const SfxItemSet& _rSet );
-
-        bool canAdvance() const;
     };
 
 } // namespace dbaui

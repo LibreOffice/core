@@ -82,17 +82,6 @@ namespace dbtools
         return OUString::createFromAscii(ostr.str());
     }
 
-    OUString DBTypeConversion::toTimeStringS(const css::util::Time& rTime)
-    {
-        std::ostringstream ostr;
-        using std::setw;
-        ostr.fill('0');
-        ostr << setw(2) << rTime.Hours   << ":"
-             << setw(2) << rTime.Minutes << ":"
-             << setw(2) << rTime.Seconds;
-        return OUString::createFromAscii(ostr.str());
-    }
-
     OUString DBTypeConversion::toTimeString(const css::util::Time& rTime)
     {
         std::ostringstream ostr;

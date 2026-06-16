@@ -67,11 +67,6 @@ namespace dbaui
         /// Creates the detail page for Text
         static std::unique_ptr<SfxTabPage> CreateText( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
 
-        /// creates the GeneratedValues page
-        static std::unique_ptr<SfxTabPage> CreateGeneratedValuesPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
-
-        /// creates the "Special Settings" page of the "Advanced Settings" dialog
-        static std::unique_ptr<SfxTabPage> CreateSpecialSettingsPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
     };
 }
 

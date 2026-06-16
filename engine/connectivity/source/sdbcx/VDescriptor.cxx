@@ -75,13 +75,6 @@ namespace connectivity::sdbcx
         }
 
 
-        bool ODescriptor::isNew( const Reference< XInterface >& _rxDescriptor )
-        {
-            ODescriptor* pImplementation = dynamic_cast<ODescriptor*>( _rxDescriptor.get() );
-            return pImplementation && pImplementation->isNew();
-        }
-
-
         void ODescriptor::setNew(bool _bNew)
         {
             m_bNew = _bNew;

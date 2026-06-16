@@ -94,22 +94,17 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/dbtreelistbox \
     dbaccess/source/ui/control/FieldControls \
     dbaccess/source/ui/control/FieldDescControl \
-    dbaccess/source/ui/control/sqledit \
     dbaccess/source/ui/control/SqlNameEdit \
-    dbaccess/source/ui/control/tabletree \
     dbaccess/source/ui/dlg/admincontrols \
     dbaccess/source/ui/dlg/adminpages \
-    dbaccess/source/ui/dlg/advancedsettings \
     dbaccess/source/ui/dlg/CollectionView \
     dbaccess/source/ui/dlg/ConnectionHelper \
     dbaccess/source/ui/dlg/ConnectionPage \
-    dbaccess/source/ui/dlg/ConnectionPageSetup \
     dbaccess/source/ui/dlg/dbadmin \
     dbaccess/source/ui/dlg/DbAdminImpl \
     dbaccess/source/ui/dlg/dbfindex \
     dbaccess/source/ui/dlg/dbwiz \
     dbaccess/source/ui/dlg/detailpages \
-    dbaccess/source/ui/dlg/directsql \
     dbaccess/source/ui/dlg/dlgattr \
     dbaccess/source/ui/dlg/dlgsave \
     dbaccess/source/ui/dlg/dlgsize \
@@ -127,14 +122,12 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/misc/charsets \
     dbaccess/source/ui/misc/controllerframe \
     dbaccess/source/ui/misc/datasourceconnector \
-    dbaccess/source/ui/misc/dbsubcomponentcontroller \
     dbaccess/source/ui/misc/defaultobjectnamecheck \
     dbaccess/source/ui/misc/DExport \
     dbaccess/source/ui/misc/dsmeta \
     dbaccess/source/ui/misc/FieldDescriptions \
     dbaccess/source/ui/misc/HtmlReader \
     dbaccess/source/ui/misc/imageprovider \
-    dbaccess/source/ui/misc/indexcollection \
     dbaccess/source/ui/misc/propertystorage \
     dbaccess/source/ui/misc/RowSetDrop \
     dbaccess/source/ui/misc/RtfReader \

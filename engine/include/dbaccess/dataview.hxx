@@ -61,12 +61,9 @@ namespace dbaui
         /// late construction
         virtual void Construct();
         // initialize will be called when after the controller finished his initialize method
-        virtual void initialize(){}
         // window overridables
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void StateChanged( StateChangedType nStateChange ) override;
-
-        IController& getCommandController() const { return *m_xController; }
 
         const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext;}
 

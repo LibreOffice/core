@@ -626,57 +626,6 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,Any(_pFieldDesc->GetAutoIncrementValue()));
 }
 
-OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const Reference<XNameAccess>& _xTables,const OUString& _sName)
-{
-    OSL_ENSURE(_xMetaData.is(),"No MetaData!");
-    OUString sDefaultName = _sName;
-    try
-    {
-        OUString sCatalog,sSchema,sCompsedName;
-        if(_xMetaData->supportsCatalogsInTableDefinitions())
-        {
-            try
-            {
-                Reference< XConnection> xCon = _xMetaData->getConnection();
-                if ( xCon.is() )
-                    sCatalog = xCon->getCatalog();
-                if ( sCatalog.isEmpty() )
-                {
-                    Reference<XResultSet> xRes = _xMetaData->getCatalogs();
-                    if ( xRes.is() )
-                    {
-                        Reference<XRow> xRow(xRes,UNO_QUERY);
-                        while(xRes->next())
-                        {
-                            sCatalog = xRow->getString(1);
-                            if(!xRow->wasNull())
-                                break;
-                        }
-                        Reference<XCloseable> xCloseable(xRes, UNO_QUERY);
-                        if (xCloseable.is())
-                            xCloseable->close();
-                        else
-                            ::comphelper::disposeComponent(xRes);
-                    }
-                }
-            }
-            catch(const SQLException&)
-            {
-            }
-        }
-        if(_xMetaData->supportsSchemasInTableDefinitions())
-        {
-            sSchema = _xMetaData->getUserName();
-        }
-        sCompsedName = ::dbtools::composeTableName( _xMetaData, sCatalog, sSchema, _sName, false, ::dbtools::EComposeRule::InDataManipulation );
-        sDefaultName = ::dbtools::createUniqueName(_xTables,sCompsedName);
-    }
-    catch(const SQLException&)
-    {
-    }
-    return sDefaultName;
-}
-
 bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< css::uno::XComponentContext >& _xContext)
 {
     Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
@@ -871,13 +820,6 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
     return bRet;
 }
 
-std::shared_ptr<const SfxFilter> getStandardDatabaseFilter()
-{
-    std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName(u"StarOffice XML (Base)"_ustr);
-    OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
-    return pFilter;
-}
-
 bool appendToFilter(const Reference<XConnection>& _xConnection,
                     const OUString& _sName,
                     const Reference< XComponentContext >& _rxContext,
@@ -928,59 +870,10 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
     return bRet;
 }
 
-void notifySystemWindow(vcl::Window const * _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc)
-{
-    OSL_ENSURE(_pWindow,"Window can not be null!");
-    SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : nullptr;
-    if ( pSystemWindow )
-    {
-        _rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
-    }
-}
-
-void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
-{
-    sal_Int32 nColSize = -1;
-    ::tools::Long nDefaultWidth = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
-    if ( nDefaultWidth != _pBox->GetColumnWidth( _nColId ) )
-    {
-        Size aSizeMM = _pBox->PixelToLogic( Size( _pBox->GetColumnWidth( _nColId ), 0 ), MapMode( MapUnit::MapMM ) );
-        nColSize = aSizeMM.Width() * 10;
-    }
-
-    Size aDefaultMM = _pBox->PixelToLogic( Size( nDefaultWidth, 0 ), MapMode( MapUnit::MapMM ) );
-
-    DlgSize aColumnSizeDlg(_pBox->GetFrameWeld(), nColSize, false, aDefaultMM.Width() * 10);
-    if (aColumnSizeDlg.run() != RET_OK)
-        return;
-
-    sal_Int32 nValue = aColumnSizeDlg.GetValue();
-    if ( -1 == nValue )
-    {   // default width
-        nValue = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
-    }
-    else
-    {
-        Size aSizeMM( nValue / 10, 0 );
-        nValue = _pBox->LogicToPixel( aSizeMM, MapMode( MapUnit::MapMM ) ).Width();
-    }
-    _pBox->SetColumnWidth( _nColId, nValue );
-}
-
 // check if SQL92 name checking is enabled
 bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_ENABLESQL92CHECK );
-}
-
-bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
-{
-    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_APPEND_TABLE_ALIAS );
-}
-
-bool generateAsBeforeTableAlias(const Reference<XConnection>& _xConnection)
-{
-    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_AS_BEFORE_CORRELATION_NAME );
 }
 
 void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
@@ -1170,39 +1063,6 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 
-sal_Int32 askForUserAction(weld::Window* pParent, TranslateId pTitle, TranslateId pText, bool _bAll, std::u16string_view _sName)
-{
-    SolarMutexGuard aGuard;
-    OUString aMsg = DBA_RES(pText);
-    aMsg = aMsg.replaceFirst("%1", _sName);
-    OSQLMessageBox aAsk(pParent, DBA_RES(pTitle), aMsg, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, MessageType::Query);
-    if ( _bAll )
-    {
-        aAsk.add_button(DBA_RES(STR_BUTTON_TEXT_ALL), RET_ALL, HID_CONFIRM_DROP_BUTTON_ALL);
-    }
-    return aAsk.run();
-}
-
-namespace
-{
-    OUString lcl_createSDBCLevelStatement( const OUString& _rStatement, const Reference< XConnection >& _rxConnection )
-    {
-        OUString sSDBCLevelStatement( _rStatement );
-        try
-        {
-            Reference< XMultiServiceFactory > xAnalyzerFactory( _rxConnection, UNO_QUERY_THROW );
-            Reference< XSingleSelectQueryAnalyzer > xAnalyzer( xAnalyzerFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
-            xAnalyzer->setQuery( _rStatement );
-            sSDBCLevelStatement = xAnalyzer->getQueryWithSubstitution();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
-        return sSDBCLevelStatement;
-    }
-}
-
 Reference< XPropertySet > createView( const OUString& _rName, const Reference< XConnection >& _rxConnection,
                                     const OUString& _rCommand )
 {
@@ -1250,27 +1110,6 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
     }
 
     return xView;
-}
-
-Reference<XPropertySet> createView( const OUString& _rName, const Reference< XConnection >& _rxConnection
-                                   ,const Reference<XPropertySet>& _rxSourceObject)
-{
-    OUString sCommand;
-    Reference< XPropertySetInfo > xPSI( _rxSourceObject->getPropertySetInfo(), UNO_SET_THROW );
-    if ( xPSI->hasPropertyByName( PROPERTY_COMMAND ) )
-    {
-        _rxSourceObject->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand;
-
-        bool bEscapeProcessing( false );
-        OSL_VERIFY( _rxSourceObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
-        if ( bEscapeProcessing )
-            sCommand = lcl_createSDBCLevelStatement( sCommand, _rxConnection );
-    }
-    else
-    {
-        sCommand =  "SELECT * FROM " + composeTableNameForSelect( _rxConnection, _rxSourceObject );
-    }
-    return createView( _rName, _rxConnection, sCommand );
 }
 
 bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentContext >& _rxContext,

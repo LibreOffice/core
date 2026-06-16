@@ -509,12 +509,6 @@ public:
     void            SetUpdateMode( bool bUpdate );
     bool            GetUpdateMode() const;
 
-    // map-mode and font control
-    void            SetFont( const vcl::Font& rNewFont );
-    const vcl::Font& GetFont() const;
-    void            SetTitleFont( const vcl::Font& rNewFont )
-                        { Control::SetFont( rNewFont ); }
-
     // inserting, changing, removing and freezing of columns
     void            InsertHandleColumn( tools::Long nWidth );
     void            InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
@@ -530,7 +524,6 @@ public:
     // control of title and data row height
     void            SetDataRowHeight( tools::Long nPixel );
     tools::Long            GetDataRowHeight() const;
-    void            SetTitleLines( sal_uInt16 nLines );
     tools::Long            GetTitleHeight() const;
 
     // access to dynamic values of cursor row

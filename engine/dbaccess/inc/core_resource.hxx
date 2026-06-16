@@ -42,7 +42,6 @@ namespace dbaccess
         /** loads the string with the specified resource id
         */
         static OUString  loadString(TranslateId pResId);
-        static OUString  loadString(TranslateNId aContextSingularPlural, int nCardinality);
 
         /** loads a string from the resource file, substituting two placeholders with given strings
 

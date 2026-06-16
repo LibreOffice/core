@@ -48,65 +48,6 @@ namespace dbaui
         }
     };
 
-    struct FeatureMapping
-    {
-        /// one of the items from dsitems.hxx
-        ItemID      nItemID;
-        OUString pAsciiFeatureName;
-    };
-
-    // global tables
-    constexpr FeatureMapping s_aMappings[] = {
-        { DSID_AUTORETRIEVEENABLED,     u"GeneratedValues"_ustr },
-        { DSID_AUTOINCREMENTVALUE,      u"GeneratedValues"_ustr },
-        { DSID_AUTORETRIEVEVALUE,       u"GeneratedValues"_ustr },
-        { DSID_SQL92CHECK,              u"UseSQL92NamingConstraints"_ustr },
-        { DSID_APPEND_TABLE_ALIAS,      u"AppendTableAliasInSelect"_ustr },
-        { DSID_AS_BEFORE_CORRNAME,      u"UseKeywordAsBeforeAlias"_ustr },
-        { DSID_ENABLEOUTERJOIN,         u"UseBracketedOuterJoinSyntax"_ustr },
-        { DSID_IGNOREDRIVER_PRIV,       u"IgnoreDriverPrivileges"_ustr },
-        { DSID_PARAMETERNAMESUBST,      u"ParameterNameSubstitution"_ustr },
-        { DSID_SUPPRESSVERSIONCL,       u"DisplayVersionColumns"_ustr },
-        { DSID_CATALOG,                 u"UseCatalogInSelect"_ustr },
-        { DSID_SCHEMA,                  u"UseSchemaInSelect"_ustr },
-        { DSID_INDEXAPPENDIX,           u"UseIndexDirectionKeyword"_ustr },
-        { DSID_DOSLINEENDS,             u"UseDOSLineEnds"_ustr },
-        { DSID_BOOLEANCOMPARISON,       u"BooleanComparisonMode"_ustr },
-        { DSID_CHECK_REQUIRED_FIELDS,   u"FormsCheckRequiredFields"_ustr },
-        { DSID_IGNORECURRENCY,          u"IgnoreCurrency"_ustr },
-        { DSID_ESCAPE_DATETIME,         u"EscapeDateTime"_ustr },
-        { DSID_PRIMARY_KEY_SUPPORT,     u"PrimaryKeySupport"_ustr },
-        { DSID_RESPECTRESULTSETTYPE,    u"RespectDriverResultSetType"_ustr },
-        { DSID_MAX_ROW_SCAN,            u"MaxRowScan"_ustr },
-    };
-    }
-
-    static const FeatureSet& lcl_getFeatureSet( const OUString& _rURL )
-    {
-        typedef std::map< OUString, FeatureSet > FeatureSets;
-        static FeatureSets s_aFeatureSets = []()
-        {
-            FeatureSets tmp;
-            ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessComponentContext() );
-            const uno::Sequence< OUString > aPatterns = aDriverConfig.getURLs();
-            for ( auto const & pattern : aPatterns )
-            {
-                FeatureSet aCurrentSet;
-                const ::comphelper::NamedValueCollection aCurrentFeatures( aDriverConfig.getFeatures( pattern ).getNamedValues() );
-
-                for ( const FeatureMapping& rFeatureMapping : s_aMappings )
-                {
-                    if ( aCurrentFeatures.has( rFeatureMapping.pAsciiFeatureName ) )
-                        aCurrentSet.put( rFeatureMapping.nItemID );
-                }
-
-                tmp[pattern] = std::move(aCurrentSet);
-            }
-            return tmp;
-        }();
-
-        OSL_ENSURE( s_aFeatureSets.find( _rURL ) != s_aFeatureSets.end(), "invalid URL/pattern!" );
-        return s_aFeatureSets[ _rURL ];
     }
 
     static AuthenticationMode getAuthenticationMode( const OUString& _sURL )
@@ -136,22 +77,7 @@ namespace dbaui
         return s_aSupport[ _sURL ].eAuthentication;
     }
 
-    // DataSourceMetaData
-    DataSourceMetaData::DataSourceMetaData( const OUString& _sURL )
-        :m_sURL(  _sURL )
-    {
-    }
-
-    DataSourceMetaData::~DataSourceMetaData()
-    {
-    }
-
-    const FeatureSet& DataSourceMetaData::getFeatureSet() const
-    {
-        return lcl_getFeatureSet( m_sURL );
-    }
-
-    AuthenticationMode  DataSourceMetaData::getAuthentication( const OUString& _sURL )
+    AuthenticationMode getAuthentication( const OUString& _sURL )
     {
         return getAuthenticationMode( _sURL );
     }

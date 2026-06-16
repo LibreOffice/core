@@ -63,9 +63,6 @@ namespace connectivity::sdbcx
 
         /// @throws css::uno::RuntimeException
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
-
-        // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
-        static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );
     };
 
 }

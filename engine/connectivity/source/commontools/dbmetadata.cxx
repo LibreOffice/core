@@ -108,17 +108,6 @@ namespace dbtools
         }
 
 
-        bool lcl_getDriverSetting( const OUString& _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
-        {
-            lcl_checkConnected( _metaData );
-            const ::comphelper::NamedValueCollection& rDriverMetaData = _metaData.aDriverConfig.getMetaData( _metaData.xConnectionMetaData->getURL() );
-            if ( !rDriverMetaData.has( _asciiName ) )
-                return false;
-            _out_setting = rDriverMetaData.get( _asciiName );
-            return true;
-        }
-
-
         bool lcl_getConnectionSetting(const OUString& _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             try
@@ -206,12 +195,6 @@ namespace dbtools
     DatabaseMetaData::~DatabaseMetaData()
     {
     }
-
-    bool DatabaseMetaData::isConnected() const
-    {
-        return m_pImpl->xConnection.is();
-    }
-
 
     bool DatabaseMetaData::supportsSubqueriesInFrom() const
     {
@@ -310,16 +293,6 @@ namespace dbtools
         return doSubstitute;
     }
 
-    bool DatabaseMetaData::isAutoIncrementPrimaryKey() const
-    {
-        bool is( true );
-        Any setting;
-        if ( lcl_getDriverSetting( u"AutoIncrementIsPrimaryKey"_ustr, *m_pImpl, setting ) )
-            if( ! (setting >>= is) )
-                SAL_WARN("connectivity.commontools", "isAutoIncrementPrimaryKey: unable to assign AutoIncrementIsPrimaryKey");
-        return is;
-    }
-
     sal_Int32 DatabaseMetaData::getBooleanComparisonMode() const
     {
         sal_Int32 mode( BooleanComparisonMode::EQUAL_INTEGER );
@@ -328,113 +301,6 @@ namespace dbtools
             if( ! (setting >>= mode) )
                 SAL_WARN("connectivity.commontools", "getBooleanComparisonMode: unable to assign BooleanComparisonMode");
         return mode;
-    }
-
-    bool DatabaseMetaData::supportsRelations() const
-    {
-        lcl_checkConnected( *m_pImpl );
-        bool bSupport = false;
-        try
-        {
-            bSupport = m_pImpl->xConnectionMetaData->supportsIntegrityEnhancementFacility();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
-        }
-        try
-        {
-            if ( !bSupport )
-            {
-                const OUString url = m_pImpl->xConnectionMetaData->getURL();
-                bSupport = url.startsWith("sdbc:mysql");
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
-        }
-        return bSupport;
-    }
-
-
-    bool DatabaseMetaData::supportsColumnAliasInOrderBy() const
-    {
-        bool doGenerate( true );
-        Any setting;
-        if ( lcl_getConnectionSetting( u"ColumnAliasInOrderBy"_ustr, *m_pImpl, setting ) )
-            if( ! (setting >>= doGenerate) )
-                SAL_WARN("connectivity.commontools", "supportsColumnAliasInOrderBy: unable to assign ColumnAliasInOrderBy");
-        return doGenerate;
-    }
-
-
-    bool DatabaseMetaData::supportsUserAdministration( const Reference<XComponentContext>& _rContext ) const
-    {
-        lcl_checkConnected( *m_pImpl  );
-
-        bool isSupported( false );
-        try
-        {
-            // find the XUsersSupplier interface
-            // - either directly at the connection
-            Reference< XUsersSupplier > xUsersSupp( m_pImpl->xConnection, UNO_QUERY );
-            if ( !xUsersSupp.is() )
-            {
-                // - or at the driver manager
-                Reference< XDriverManager2 > xDriverManager = DriverManager::create( _rContext );
-                Reference< XDataDefinitionSupplier > xDriver( xDriverManager->getDriverByURL( m_pImpl->xConnectionMetaData->getURL() ), UNO_QUERY );
-                if ( xDriver.is() )
-                    xUsersSupp.set( xDriver->getDataDefinitionByConnection( m_pImpl->xConnection ), UNO_QUERY );
-            }
-
-            isSupported = ( xUsersSupp.is() && xUsersSupp->getUsers().is() );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
-        }
-        return isSupported;
-    }
-
-
-    bool DatabaseMetaData::displayEmptyTableFolders() const
-    {
-        bool doDisplay( true );
-#ifdef IMPLEMENTED_LATER
-        Any setting;
-        if ( lcl_getConnectionSetting( "DisplayEmptyTableFolders", *m_pImpl, setting ) )
-            if( ! (setting >>= doDisplay) )
-                SAL_WARN("connectivity.commontools", "displayEmptyTableFolders: unable to assign DisplayEmptyTableFolders");
-#else
-        try
-        {
-            Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
-            OUString sConnectionURL( xMeta->getURL() );
-            doDisplay = sConnectionURL.startsWith( "sdbc:mysql:mysqlc" );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
-        }
-#endif
-        return doDisplay;
-    }
-
-    bool DatabaseMetaData::supportsThreads() const
-    {
-        bool bSupported( true );
-        try
-        {
-            Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
-            OUString sConnectionURL( xMeta->getURL() );
-            bSupported = !sConnectionURL.startsWith( "sdbc:mysql:mysqlc" );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
-        }
-        return bSupported;
     }
 
 

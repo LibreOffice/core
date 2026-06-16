@@ -36,37 +36,11 @@ namespace dbaui
         {
         }
 
-        void setAllowedChars(const OUString& _rAllowedChars)
-        {
-            m_sAllowedChars = _rAllowedChars;
-        }
         void setCheck(bool _bCheck)
         {
             m_bCheck = _bCheck;
         }
         bool checkString(std::u16string_view _sToCheck,OUString& _rsCorrected);
-    };
-
-    class OSQLNameEditControl : public svt::EditControl
-                              , public OSQLNameChecker
-    {
-    public:
-        OSQLNameEditControl(BrowserDataWin* pParent, const OUString& rAllowedChars)
-            : svt::EditControl(pParent)
-            , OSQLNameChecker(rAllowedChars)
-        {
-            m_xWidget->connect_changed(LINK(this, OSQLNameEditControl, ModifyHdl));
-        }
-
-        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
-        {
-            m_ChainChangedHdl = rLink;
-        }
-
-    private:
-        DECL_LINK(ModifyHdl, weld::Entry&, void);
-
-        Link<weld::Entry&,void> m_ChainChangedHdl;
     };
 
     class OWidgetBase
@@ -86,7 +60,6 @@ namespace dbaui
         weld::Widget* GetWidget() { return m_pWidget; }
 
         short GetPos() const { return m_nPos; }
-        const OUString& GetHelp() const { return m_strHelpText; }
 
         virtual bool get_value_changed_from_saved() const = 0;
         virtual void save_value() = 0;

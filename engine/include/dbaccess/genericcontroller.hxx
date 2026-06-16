@@ -237,8 +237,6 @@ namespace dbaui
 
         // attribute access
         using OGenericUnoController_MBASE::getMutex;
-        ::cppu::OBroadcastHelper&   getBroadcastHelper()        { return OGenericUnoController_Base::rBHelper; }
-
 
         // methods
         OGenericUnoController( const css::uno::Reference< css::uno::XComponentContext >& _rM );
@@ -284,12 +282,6 @@ namespace dbaui
                     sal_Int16 _nCommandGroup = css::frame::CommandGroup::INTERNAL
                 );
 
-        /** returns <TRUE/> if the feature is supported, otherwise <FALSE/>
-            @param  _nId
-                The ID of the feature.
-        */
-        bool isFeatureSupported( sal_Int32 _nId );
-
         // gets the URL which the given id is assigned to
         css::util::URL getURLForId(sal_Int32 _nId) const;
 
@@ -307,24 +299,12 @@ namespace dbaui
 
         // connect to a datasource
         css::uno::Reference< css::sdbc::XConnection > connect(
-            const css::uno::Reference< css::sdbc::XDataSource>& _xDataSource
-        );
-
-        // connect to a datasource
-        css::uno::Reference< css::sdbc::XConnection > connect(
             const OUString& _rsDataSourceName,
             const OUString& _rContextInformation,
             ::dbtools::SQLExceptionInfo* _pErrorInfo
         );
 
         void startConnectionListening(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection);
-        void stopConnectionListening(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection);
-
-        /** return the container window of the top most frame
-            @return
-                The top most container window, nmay be <NULL/>.
-        */
-        css::uno::Reference< css::awt::XWindow> getTopMostContainerWindow() const;
 
         // XInitialize will be called inside initialize
         virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments);
@@ -392,9 +372,6 @@ namespace dbaui
 
         // IController
         virtual void executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
-        virtual void executeChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
-        virtual bool isCommandEnabled(sal_uInt16 _nCommandId) const override;
-        virtual bool isCommandEnabled(const OUString& _rCompleteCommandURL) const override;
         virtual bool isDataSourceReadOnly() const override;
         virtual css::uno::Reference< css::frame::XController > getXController() override;
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) override;

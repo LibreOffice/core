@@ -244,11 +244,6 @@ Reference< XComponentContext > ODbAdminDialog::getORB() const
     return m_pImpl->getORB();
 }
 
-Reference< XDriver > ODbAdminDialog::getDriver()
-{
-    return m_pImpl->getDriver();
-}
-
 OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);

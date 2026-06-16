@@ -98,8 +98,6 @@ namespace dbaui
         /** returns the data source the dialog is currently working with
         */
         css::uno::Reference< css::beans::XPropertySet > const &  getCurrentDataSource();
-        // returns the Url of a database document
-        static OUString        getDocumentUrl(SfxItemSet const & _rDest);
 
         void setDataSourceOrName( const css::uno::Any& _rDataSourceOrName );
 

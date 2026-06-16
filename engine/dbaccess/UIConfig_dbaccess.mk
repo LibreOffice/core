@@ -29,7 +29,6 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/fielddescpage \
     dbaccess/uiconfig/ui/generalpagedialog \
     dbaccess/uiconfig/ui/generalspecialjdbcdetailspage \
-    dbaccess/uiconfig/ui/generatedvaluespage \
     dbaccess/uiconfig/ui/keymenu \
     dbaccess/uiconfig/ui/ldappage \
     dbaccess/uiconfig/ui/mysqlnativepage \
@@ -41,7 +40,6 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/rowheightdialog \
     dbaccess/uiconfig/ui/savedialog \
     dbaccess/uiconfig/ui/savemodifieddialog \
-    dbaccess/uiconfig/ui/specialsettingspage \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/sqlexception \
     dbaccess/uiconfig/ui/textconnectionsettings \

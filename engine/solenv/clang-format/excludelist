@@ -1203,7 +1203,6 @@ comphelper/source/compare/AnyCompareFactory.cxx
 comphelper/source/container/IndexedPropertyValuesContainer.cxx
 comphelper/source/container/NamedPropertyValuesContainer.cxx
 comphelper/source/container/container.cxx
-comphelper/source/container/containermultiplexer.cxx
 comphelper/source/container/embeddedobjectcontainer.cxx
 comphelper/source/container/enumerablemap.cxx
 comphelper/source/container/enumhelper.cxx
@@ -1211,7 +1210,6 @@ comphelper/source/container/interfacecontainer2.cxx
 comphelper/source/container/namecontainer.cxx
 comphelper/source/eventattachermgr/eventattachermgr.cxx
 comphelper/source/misc/OAccessible.cxx
-comphelper/source/misc/SelectionMultiplex.cxx
 comphelper/source/misc/accessibleeventnotifier.cxx
 comphelper/source/misc/accessiblekeybindinghelper.cxx
 comphelper/source/misc/accessibletexthelper.cxx
@@ -2467,8 +2465,6 @@ dbaccess/source/ui/control/charsetlistbox.cxx
 dbaccess/source/ui/control/curledit.cxx
 dbaccess/source/ui/control/dbtreelistbox.cxx
 dbaccess/source/ui/control/opendoccontrols.cxx
-dbaccess/source/ui/control/sqledit.cxx
-dbaccess/source/ui/control/tabletree.cxx
 dbaccess/source/ui/dlg/CollectionView.cxx
 dbaccess/source/ui/dlg/ConnectionHelper.cxx
 dbaccess/source/ui/dlg/ConnectionHelper.hxx
@@ -2491,8 +2487,6 @@ dbaccess/source/ui/dlg/adminpages.cxx
 dbaccess/source/ui/dlg/adminpages.hxx
 dbaccess/source/ui/dlg/adodatalinks.cxx
 dbaccess/source/ui/dlg/adtabdlg.cxx
-dbaccess/source/ui/dlg/advancedsettings.cxx
-dbaccess/source/ui/dlg/advancedsettings.hxx
 dbaccess/source/ui/dlg/dbadmin.cxx
 dbaccess/source/ui/dlg/dbfindex.cxx
 dbaccess/source/ui/dlg/dbfindex.hxx
@@ -2500,7 +2494,6 @@ dbaccess/source/ui/dlg/dbwiz.cxx
 dbaccess/source/ui/dlg/dbwizsetup.cxx
 dbaccess/source/ui/dlg/detailpages.cxx
 dbaccess/source/ui/dlg/detailpages.hxx
-dbaccess/source/ui/dlg/directsql.cxx
 dbaccess/source/ui/dlg/dlgattr.cxx
 dbaccess/source/ui/dlg/dlgsave.cxx
 dbaccess/source/ui/dlg/dlgsize.cxx
@@ -2600,14 +2593,12 @@ dbaccess/source/ui/inc/dbtreelistbox.hxx
 dbaccess/source/ui/inc/dbwiz.hxx
 dbaccess/source/ui/inc/dbwizsetup.hxx
 dbaccess/source/ui/inc/defaultobjectnamecheck.hxx
-dbaccess/source/ui/inc/directsql.hxx
 dbaccess/source/ui/inc/dlgattr.hxx
 dbaccess/source/ui/inc/dlgsave.hxx
 dbaccess/source/ui/inc/dlgsize.hxx
 dbaccess/source/ui/inc/dsitems.hxx
 dbaccess/source/ui/inc/dsmeta.hxx
 dbaccess/source/ui/inc/imageprovider.hxx
-dbaccess/source/ui/inc/indexcollection.hxx
 dbaccess/source/ui/inc/indexdialog.hxx
 dbaccess/source/ui/inc/indexes.hxx
 dbaccess/source/ui/inc/indexfieldscontrol.hxx
@@ -2623,9 +2614,7 @@ dbaccess/source/ui/inc/queryorder.hxx
 dbaccess/source/ui/inc/sbagrid.hxx
 dbaccess/source/ui/inc/sbamultiplex.hxx
 dbaccess/source/ui/inc/singledoccontroller.hxx
-dbaccess/source/ui/inc/sqledit.hxx
 dbaccess/source/ui/inc/sqlmessage.hxx
-dbaccess/source/ui/inc/tabletree.hxx
 dbaccess/source/ui/inc/textconnectionsettings.hxx
 dbaccess/source/ui/inc/undosqledit.hxx
 dbaccess/source/ui/inc/unoadmin.hxx
@@ -3401,8 +3390,6 @@ extensions/source/propctrlr/submissionhandler.cxx
 extensions/source/propctrlr/submissionhandler.hxx
 extensions/source/propctrlr/taborder.cxx
 extensions/source/propctrlr/taborder.hxx
-extensions/source/propctrlr/unourl.cxx
-extensions/source/propctrlr/unourl.hxx
 extensions/source/propctrlr/usercontrol.cxx
 extensions/source/propctrlr/usercontrol.hxx
 extensions/source/propctrlr/xsddatatypes.cxx
@@ -4461,7 +4448,6 @@ include/comphelper/MasterPropertySet.hxx
 include/comphelper/MasterPropertySetInfo.hxx
 include/comphelper/OAccessible.hxx
 include/comphelper/PropertyInfoHash.hxx
-include/comphelper/SelectionMultiplex.hxx
 include/comphelper/accessiblecontexthelper.hxx
 include/comphelper/accessibleeventnotifier.hxx
 include/comphelper/accessiblekeybindinghelper.hxx
@@ -4478,7 +4464,6 @@ include/comphelper/configuration.hxx
 include/comphelper/configurationhelper.hxx
 include/comphelper/configurationlistener.hxx
 include/comphelper/container.hxx
-include/comphelper/containermultiplexer.hxx
 include/comphelper/diagnose_ex.hxx
 include/comphelper/dispatchcommand.hxx
 include/comphelper/docpasswordhelper.hxx
@@ -4654,7 +4639,6 @@ include/dbaccess/IController.hxx
 include/dbaccess/controllerframe.hxx
 include/dbaccess/dataview.hxx
 include/dbaccess/dbaundomanager.hxx
-include/dbaccess/dbsubcomponentcontroller.hxx
 include/dbaccess/genericcontroller.hxx
 include/drawinglayer/XShapeDumper.hxx
 include/drawinglayer/animation/animationtiming.hxx

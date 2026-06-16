@@ -501,14 +501,6 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, const Referenc
         ActivateLastSelection();
 }
 
-// Ctor() with ExtensionId -----------------------------------------------
-OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, std::u16string_view rExtensionId)
-    : OfaTreeOptionsDialog(pParent, !rExtensionId.empty())
-{
-    LoadExtensionOptions( rExtensionId );
-    ActivateLastSelection();
-}
-
 void OfaTreeOptionsDialog::ImplDestroy()
 {
     xCurrentPageEntry.reset();

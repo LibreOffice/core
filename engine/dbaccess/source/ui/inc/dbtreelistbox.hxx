@@ -109,8 +109,6 @@ namespace dbaui
 
         void    SetSelChangeHdl( const Link<LinkParamNone*,void>& _rHdl )      { m_aSelChangeHdl = _rHdl; }
         void    setCopyHandler(const Link<LinkParamNone*,void>& _rHdl)         { m_aCopyHandler = _rHdl; }
-        void    setPasteHandler(const Link<LinkParamNone*,void>& _rHdl)        { m_aPasteHandler = _rHdl; }
-        void    setDeleteHandler(const Link<LinkParamNone*,void>& _rHdl)       { m_aDeleteHandler = _rHdl; }
     };
 
     class InterimDBTreeListBox : public InterimItemWindow
@@ -128,37 +126,6 @@ namespace dbaui
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt) override;
     };
 
-    class DBTreeViewBase
-    {
-    protected:
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Container> m_xContainer;
-        std::unique_ptr<TreeListBox> m_xTreeListBox;
-    public:
-        DBTreeViewBase(weld::Container* pContainer);
-        virtual ~DBTreeViewBase();
-
-        weld::TreeView& GetWidget() { return m_xTreeListBox->GetWidget(); }
-        const weld::TreeView& GetWidget() const { return m_xTreeListBox->GetWidget(); }
-
-        TreeListBox& getListBox() const { return *m_xTreeListBox; }
-
-        void hide() { m_xContainer->hide(); }
-        void show() { m_xContainer->show(); }
-        bool get_visible() const { return m_xContainer->get_visible(); }
-    };
-
-    class DBTreeView final : public DBTreeViewBase
-    {
-    public:
-        DBTreeView(weld::Container* pContainer, bool bSQLType);
-    };
-
-    class DBTableTreeView final : public DBTreeViewBase
-    {
-    public:
-        DBTableTreeView(weld::Container* pContainer);
-    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

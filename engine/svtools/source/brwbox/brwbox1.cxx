@@ -269,17 +269,6 @@ void BrowseBox::SetRealRowCount( const OUString &rRealRowCount )
 }
 
 
-void BrowseBox::SetFont( const vcl::Font& rNewFont )
-{
-    pDataWin->SetFont( rNewFont );
-    ImpGetDataRowHeight();
-}
-
-const vcl::Font& BrowseBox::GetFont() const
-{
-    return pDataWin->GetFont();
-}
-
 tools::Long BrowseBox::GetDefaultColumnWidth( const OUString& _rText ) const
 {
     return pDataWin->GetTextWidth( _rText ) + pDataWin->GetTextWidth(OUString('0')) * 4;
@@ -885,12 +874,6 @@ void BrowseBox::SetDataRowHeight( tools::Long nPixel )
     m_nDataRowHeight = CalcReverseZoom(nPixel);
     Resize();
     pDataWin->Invalidate();
-}
-
-void BrowseBox::SetTitleLines( sal_uInt16 nLines )
-{
-
-    nTitleLines = nLines;
 }
 
 sal_Int32 BrowseBox::ScrollColumns( sal_Int32 nCols )

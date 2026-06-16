@@ -178,19 +178,6 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(std::u16string_vie
     return sURL;
 }
 
-bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL )
-{
-    return !(   _sURL.startsWithIgnoreAsciiCase("sdbc:embedded:hsqldb")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:outlook")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:outlookexp")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:mozilla:")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:kab")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:evolution:local")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:evolution:groupwise")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:evolution:ldap")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:macab")  );
-}
-
 void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sDatabaseName,OUString& _rsHostname,sal_Int32& _nPortNumber) const
 {
     OUString sUrl = cutPrefix(_rDsn);
@@ -243,18 +230,6 @@ bool ODsnTypeCollection::isFileSystemBased(std::u16string_view _sURL) const
     return aFeatures.getOrDefault(u"FileSystemBased"_ustr,false);
 }
 
-bool ODsnTypeCollection::supportsTableCreation(std::u16string_view _sURL) const
-{
-    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault(u"SupportsTableCreation"_ustr,false);
-}
-
-bool ODsnTypeCollection::supportsColumnDescription(std::u16string_view _sURL) const
-{
-    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault(u"SupportsColumnDescription"_ustr,false);
-}
-
 bool ODsnTypeCollection::supportsBrowsing(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
@@ -266,23 +241,6 @@ bool ODsnTypeCollection::supportsDBCreation(std::u16string_view _sURL) const
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault(u"SupportsDBCreation"_ustr,false);
 }
-
-Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( std::u16string_view _sURL ) const
-{
-    const ::comphelper::NamedValueCollection& aProperties = m_aDriverConfig.getProperties(_sURL);
-    return aProperties.getPropertyValues();
-}
-
-bool ODsnTypeCollection::isEmbeddedDatabase( std::u16string_view _sURL )
-{
-    return o3tl::starts_with( _sURL, u"sdbc:embedded:" );
-}
-
-OUString ODsnTypeCollection::getEmbeddedDatabase()
-{
-    return u"sdbc:embedded:hsqldb"_ustr;
-}
-
 
 DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) const
 {
@@ -390,69 +348,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
     return DST_UNKNOWN;
 }
 
-void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_Int16>& _rOutPathIds) const
-{
-    DATASOURCE_TYPE eType = determineType(_sURL);
-    switch(eType)
-    {
-        case DST_ADO:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ADO);
-            break;
-        case DST_DBASE:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_DBASE);
-            break;
-        case DST_FLAT:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_TEXT);
-            break;
-        case DST_CALC:
-        case DST_WRITER:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET);
-            break;
-        case DST_ODBC:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ODBC);
-            break;
-        case DST_JDBC:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_JDBC);
-            break;
-        case DST_MYSQL_ODBC:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_INTRO);
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_ODBC);
-            break;
-        case DST_MYSQL_JDBC:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_INTRO);
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_JDBC);
-            break;
-        case DST_MYSQL_NATIVE:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_INTRO);
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_NATIVE);
-            break;
-        case DST_ORACLE_JDBC:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ORACLE);
-            break;
-        case DST_LDAP:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_LDAP);
-            break;
-        case DST_MSACCESS:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MSACCESS);
-            break;
-        case DST_OUTLOOKEXP:
-        case DST_OUTLOOK:
-        case DST_MOZILLA:
-        case DST_THUNDERBIRD:
-        case DST_EVOLUTION:
-        case DST_EVOLUTION_GROUPWISE:
-        case DST_EVOLUTION_LDAP:
-        case DST_KAB:
-        case DST_MACAB:
-        case DST_EMBEDDED_HSQLDB:
-        case DST_EMBEDDED_UNKNOWN:
-            break;
-        default:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_USERDEFINED);
-            break;
-    }
-}
-
 OUString ODsnTypeCollection::getType(std::u16string_view _sURL) const
 {
     OUString sOldPattern;
@@ -465,30 +360,6 @@ OUString ODsnTypeCollection::getType(std::u16string_view _sURL) const
         }
     }
     return sOldPattern;
-}
-
-sal_Int32 ODsnTypeCollection::getIndexOf(std::u16string_view _sURL) const
-{
-    sal_Int32 nRet = -1;
-    OUString sOldPattern;
-    sal_Int32 i = 0;
-    for (auto const& dsnPrefix : m_aDsnPrefixes)
-    {
-        WildCard aWildCard(dsnPrefix);
-        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(_sURL) )
-        {
-            nRet = i;
-            sOldPattern = dsnPrefix;
-        }
-        ++i;
-    }
-
-    return nRet;
-}
-
-sal_Int32 ODsnTypeCollection::size() const
-{
-    return m_aDsnPrefixes.size();
 }
 
 // ODsnTypeCollection::TypeIterator

@@ -89,29 +89,6 @@ namespace dbaui
 
         OTableCopyHelper(OGenericUnoController* _pController);
 
-        /** pastes a table into the data source
-            @param  _rPasteData
-                The data helper.
-            @param  _sDestDataSourceName
-                The name of the dest data source.
-        */
-        void pasteTable( const TransferableDataHelper& _rTransData
-                        ,std::u16string_view _sDestDataSourceName
-                        ,const SharedConnection& _xConnection);
-
-        /** pastes a table into the data source
-            @param  _nFormatId
-                The format which should be copied.
-            @param  _rPasteData
-                The data helper.
-            @param  _sDestDataSourceName
-                The name of the dest data source.
-        */
-        void pasteTable( SotClipboardFormatId _nFormatId
-                        ,const TransferableDataHelper& _rTransData
-                        ,std::u16string_view _sDestDataSourceName
-                        ,const SharedConnection& _xConnection);
-
         /** copies a table which was constructed by tags like HTML or RTF
             @param  _rDesc
                 The Drop descriptor
@@ -148,11 +125,6 @@ namespace dbaui
                           DropDescriptor& _rAsyncDrop,
                           const SharedConnection& _xConnection);
 
-        /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
-        static bool isTableFormat(const TransferableDataHelper& _rClipboard);
-
-        void                     SetTableNameForAppend( const OUString& _rDefaultTableName ) { m_sTableNameForAppend = _rDefaultTableName; }
-        void                     ResetTableNameForAppend() { SetTableNameForAppend( OUString() ); }
         const OUString&   GetTableNameForAppend() const { return m_sTableNameForAppend ;}
 
     private:

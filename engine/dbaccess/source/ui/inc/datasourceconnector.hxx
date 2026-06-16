@@ -43,10 +43,6 @@ namespace dbaui
     public:
         ODatasourceConnector(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            weld::Window* _pMessageParent
-        );
-        ODatasourceConnector(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             weld::Window* _pMessageParent,
             OUString _sContextInformation
         );

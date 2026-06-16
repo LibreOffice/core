@@ -137,12 +137,6 @@ public:
 
     void extractHostNamePort(const OUString& _rDsn,OUString& _sDatabaseName,OUString& _rHostname,sal_Int32& _nPortNumber) const;
 
-    /// check if the given data source allows creation of tables
-    bool supportsTableCreation(std::u16string_view _sURL) const;
-
-    /// check if the given data source allows to show column description.
-    bool supportsColumnDescription(std::u16string_view _sURL) const;
-
     // check if a Browse button may be shown to insert connection url
     bool supportsBrowsing(std::u16string_view _sURL) const;
 
@@ -154,30 +148,13 @@ public:
 
     bool isConnectionUrlRequired(std::u16string_view _sURL) const;
 
-    /// checks if the given data source type embeds its data into the database document
-    static bool isEmbeddedDatabase( std::u16string_view _sURL );
-
-    static OUString getEmbeddedDatabase();
-
-    // returns true when the properties dialog can be shown, otherwise false.
-    static bool isShowPropertiesEnabled( const OUString& _sURL );
-
-    /** returns default settings for newly created databases of the given type.
-    */
-    css::uno::Sequence< css::beans::PropertyValue>
-            getDefaultDBSettings( std::u16string_view _sURL ) const;
-
     /// get access to the first element of the types collection
     inline TypeIterator    begin() const;
     /// get access to the (last + 1st) element of the types collection
     inline TypeIterator    end() const;
 
-    void fillPageIds(std::u16string_view _sURL,std::vector<sal_Int16>& _rOutPathIds) const;
-
     DATASOURCE_TYPE determineType(std::u16string_view _rDsn) const;
 
-    sal_Int32 getIndexOf(std::u16string_view _sURL) const;
-    sal_Int32 size() const;
     OUString getType(std::u16string_view _sURL) const;
 };
 

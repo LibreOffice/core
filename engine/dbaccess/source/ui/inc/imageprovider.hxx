@@ -66,10 +66,6 @@ namespace dbaui
             const sal_Int32 _nDatabaseObjectType
         );
 
-        // check whether the connection can give us an icon
-        css::uno::Reference<css::graphic::XGraphic> getXGraphic(const OUString& _rName,
-                                                                const sal_Int32 _nDatabaseObjectType);
-
         /** returns the resource ID for the default image to be used for a database object
 
             In opposite to getImageId, this method does not check the concrete object

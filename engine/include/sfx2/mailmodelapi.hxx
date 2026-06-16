@@ -78,23 +78,10 @@ public:
 
     void                AddToAddress( const OUString& rAddress );
 
-    /** attaches a document to the current attachment list, can be called more than once.
-    *   at the moment there will be a dialog for export executed for every model which is going to be attached.
-    *
-    * \param xModel
-        The current model to attach
-    * \param sAttachmentTitle
-        The title which will be used as attachment title
-    * \return @see error code
-    */
-    SendMailResult      AttachDocument( const css::uno::Reference< css::uno::XInterface >& xFrameOrModel,
-                                        const OUString& sAttachmentTitle );
-
     SendMailResult      SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame,
                                      const OUString& rType );
     SendMailResult      Send( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
-    bool                IsEmpty() const;
 };
 
 bool CreateFromAddress_Impl( OUString& rFrom );

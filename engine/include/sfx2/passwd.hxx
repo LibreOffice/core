@@ -94,10 +94,6 @@ private:
 public:
     SfxPasswordDialog(weld::Widget* pParent, const OUString* pGroupText = nullptr);
 
-    OUString GetUser() const
-    {
-        return m_xUserED->get_text();
-    }
     OUString GetPassword() const
     {
         return m_xPassword1ED->get_text();

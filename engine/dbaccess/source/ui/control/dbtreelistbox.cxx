@@ -492,22 +492,6 @@ std::unique_ptr<weld::TreeIter> TreeListBox::GetRootLevelParent(const weld::Tree
     return xEntry;
 }
 
-DBTreeViewBase::DBTreeViewBase(weld::Container* pContainer)
-    : m_xBuilder(Application::CreateBuilder(pContainer, u"dbaccess/ui/dbtreelist.ui"_ustr))
-    , m_xContainer(m_xBuilder->weld_container(u"DBTreeList"_ustr))
-{
-}
-
-DBTreeViewBase::~DBTreeViewBase()
-{
-}
-
-DBTreeView::DBTreeView(weld::Container* pContainer, bool bSQLType)
-    : DBTreeViewBase(pContainer)
-{
-    m_xTreeListBox.reset(new TreeListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr), bSQLType));
-}
-
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

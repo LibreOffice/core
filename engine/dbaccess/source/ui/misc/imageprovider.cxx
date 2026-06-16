@@ -45,21 +45,6 @@ namespace dbaui
 
     namespace
     {
-        void lcl_getConnectionProvidedTableIcon_nothrow(
-            const css::uno::Reference< css::sdb::application::XTableUIProvider >& _xTableUI,
-            const OUString& _rName, Reference< XGraphic >& _out_rxGraphic )
-        {
-            try
-            {
-                if ( _xTableUI.is() )
-                    _out_rxGraphic = _xTableUI->getTableIcon( _rName, GraphicColorMode::NORMAL );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("dbaccess");
-            }
-        }
-
         void lcl_getTableImageResourceID_nothrow(
             const css::uno::Reference< css::container::XNameAccess >& _xViews,
             const OUString& _rName,
@@ -120,17 +105,6 @@ namespace dbaui
             lcl_getTableImageResourceID_nothrow( mxViews, _rName, sImageResourceID );
             return sImageResourceID;
         }
-    }
-
-    Reference<XGraphic> ImageProvider::getXGraphic(const OUString& _rName, const sal_Int32 _nDatabaseObjectType)
-    {
-        Reference<XGraphic> xGraphic;
-        if (_nDatabaseObjectType == DatabaseObject::TABLE)
-        {
-            // check whether the connection can give us an icon
-            lcl_getConnectionProvidedTableIcon_nothrow( mxTableUI, _rName, xGraphic );
-        }
-        return xGraphic;
     }
 
     OUString ImageProvider::getDefaultImageResourceID( sal_Int32 _nDatabaseObjectType)

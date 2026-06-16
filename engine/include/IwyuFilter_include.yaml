@@ -137,9 +137,6 @@ excludelist:
     include/comphelper/ChainablePropertySetInfo.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySetInfo.hpp
-    include/comphelper/containermultiplexer.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XContainerListener.hpp
     include/comphelper/docpasswordrequest.hxx:
     # base class has to be a complete type
     - com/sun/star/task/XInteractionRequest.hpp
@@ -161,9 +158,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XIndexContainer.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    include/comphelper/SelectionMultiplex.hxx:
-    # base class has to be a complete type
-    - com/sun/star/view/XSelectionChangeListener.hpp
     include/comphelper/MasterPropertySetInfo.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySetInfo.hpp

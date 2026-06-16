@@ -107,17 +107,6 @@ namespace dbaui
         ~IContextMenuProvider() {}
     };
 
-    // IDragTransferableListener
-    class SAL_NO_VTABLE IDragTransferableListener
-    {
-    public:
-        /// called when a drag operation done with a Transferable has been finished
-        virtual void        dragFinished( ) = 0;
-
-    protected:
-        ~IDragTransferableListener() {}
-    };
-
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

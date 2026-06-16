@@ -598,13 +598,6 @@ OSQLWarningBox::OSQLWarningBox(weld::Window* pParent, const OUString& rMessage, 
 {
 }
 
-// OSQLErrorBox
-OSQLErrorBox::OSQLErrorBox(weld::Window* pParent, const OUString& rMessage)
-    : OSQLMessageBox(pParent, DBA_RES(STR_EXCEPTION_ERROR), rMessage, MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
-                     MessageType::Error, nullptr)
-{
-}
-
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

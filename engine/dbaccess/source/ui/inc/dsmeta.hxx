@@ -38,84 +38,8 @@ namespace dbaui
         AuthPwd
     };
 
-    // DataSourceMetaData
-    class FeatureSet;
-    /** encapsulates meta data for a data source
-
-        On the long run, this class should a) encapsulate *all* meta data which
-        currently is hard coded somewhere in the program logic and b) be initialized
-        from the configuration.
-
-        At the moment, the data a) is still hard coded in the, well, code and b)
-        contains meta data about the advanced settings only.
-    */
-    class DataSourceMetaData
-    {
-    public:
-        DataSourceMetaData( const OUString& _sURL );
-        ~DataSourceMetaData();
-
-        /// returns a struct describing this data source type's support for our known advanced settings
-        const FeatureSet&   getFeatureSet() const;
-
-        /// determines whether or not the data source requires authentication
-        static  AuthenticationMode  getAuthentication( const OUString& _sURL );
-
-    private:
-        OUString m_sURL;
-    };
-
-    // FeatureSet
-    /** can be used to ask for (UI) support for certain advanced features
-    */
-    class FeatureSet
-    {
-    public:
-        typedef std::set< ItemID >::const_iterator    const_iterator;
-
-    public:
-        FeatureSet() { }
-
-        void put( const ItemID _id )         { m_aContent.insert( _id ); }
-        bool has( const ItemID _id ) const   { return m_aContent.contains( _id ); }
-
-        inline  bool    supportsAnySpecialSetting() const;
-        inline  bool    supportsGeneratedValues() const;
-
-        const_iterator begin() const    { return m_aContent.begin(); }
-        const_iterator end() const      { return m_aContent.end(); }
-
-    private:
-        std::set< ItemID >    m_aContent;
-    };
-
-    inline  bool FeatureSet::supportsGeneratedValues() const
-    {
-        return has( DSID_AUTORETRIEVEENABLED );
-    }
-
-    inline bool FeatureSet::supportsAnySpecialSetting() const
-    {
-        return  has( DSID_SQL92CHECK )
-            ||  has( DSID_APPEND_TABLE_ALIAS )
-            ||  has( DSID_AS_BEFORE_CORRNAME )
-            ||  has( DSID_ENABLEOUTERJOIN )
-            ||  has( DSID_IGNOREDRIVER_PRIV )
-            ||  has( DSID_PARAMETERNAMESUBST )
-            ||  has( DSID_SUPPRESSVERSIONCL )
-            ||  has( DSID_CATALOG )
-            ||  has( DSID_SCHEMA )
-            ||  has( DSID_INDEXAPPENDIX )
-            ||  has( DSID_DOSLINEENDS )
-            ||  has( DSID_BOOLEANCOMPARISON )
-            ||  has( DSID_CHECK_REQUIRED_FIELDS )
-            ||  has( DSID_IGNORECURRENCY )
-            ||  has( DSID_ESCAPE_DATETIME )
-            ||  has( DSID_PRIMARY_KEY_SUPPORT )
-            ||  has( DSID_MAX_ROW_SCAN )
-            ||  has( DSID_RESPECTRESULTSETTYPE )
-            ;
-    }
+    /// determines whether or not the data source requires authentication
+    AuthenticationMode  getAuthentication( const OUString& _sURL );
 
 } // namespace dbaui
 

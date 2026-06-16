@@ -91,7 +91,6 @@ $(eval $(call gb_Library_add_exception_objects,pcr,\
 	extensions/source/propctrlr/stringrepresentation \
 	extensions/source/propctrlr/submissionhandler \
 	extensions/source/propctrlr/taborder \
-	extensions/source/propctrlr/unourl \
 	extensions/source/propctrlr/usercontrol \
 	extensions/source/propctrlr/xsddatatypes \
 	extensions/source/propctrlr/xsdvalidationhelper \

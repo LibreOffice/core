@@ -227,11 +227,6 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     return eRet;
 }
 
-bool SfxMailModel::IsEmpty() const
-{
-    return maAttachedDocuments.empty();
-}
-
 SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     const OUString& aSaveFileName,
     const css::uno::Reference< css::uno::XInterface >& xFrameOrModel,
@@ -642,18 +637,6 @@ void SfxMailModel::AddToAddress( const OUString& rAddress )
         // add address to list
         mpToList->push_back( rAddress );
     }
-}
-
-SfxMailModel::SendMailResult SfxMailModel::AttachDocument(
-    const css::uno::Reference< css::uno::XInterface >& xFrameOrModel,
-    const OUString& sAttachmentTitle )
-{
-    OUString sFileName;
-
-    SaveResult eSaveResult = SaveDocumentAsFormat( sAttachmentTitle, xFrameOrModel, OUString()/*sDocumentType*/, sFileName );
-    if ( eSaveResult == SAVE_SUCCESSFUL &&  !sFileName.isEmpty() )
-        maAttachedDocuments.push_back(sFileName);
-    return eSaveResult == SAVE_SUCCESSFUL ? SEND_MAIL_OK : SEND_MAIL_ERROR;
 }
 
 SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css::frame::XFrame >& xFrame )

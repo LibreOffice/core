@@ -117,8 +117,6 @@ namespace dbtools::DBTypeConversion
 
         // return the date in the format %04d-%02d-%02d
         OOO_DLLPUBLIC_DBTOOLS OUString toDateString(const css::util::Date& rDate);
-        // return the time in the format %02d:%02d:%02d
-        OOO_DLLPUBLIC_DBTOOLS OUString toTimeStringS(const css::util::Time& rTime);
         // return the time in the format %02d:%02d:%02d.%09d
         OOO_DLLPUBLIC_DBTOOLS OUString toTimeString(const css::util::Time& rTime);
         // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d.%09d

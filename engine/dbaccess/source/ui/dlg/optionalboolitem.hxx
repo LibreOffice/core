@@ -42,9 +42,6 @@ namespace dbaui
         void    ClearValue()                    { m_aValue.reset(); }
         bool    GetValue() const                { return *m_aValue; }
         void    SetValue(bool _bValue)          { m_aValue = _bValue; }
-
-        const ::std::optional< bool >&
-            GetFullValue() const { return m_aValue; }
     };
 
 } // namespace dbaui

@@ -81,8 +81,6 @@ public:
 
     int getGeneration() { return mnGeneration; }
 
-    int getLastChange() { return mnLastChange; }
-
     void initialize()
     {
         mnGeneration = 0;

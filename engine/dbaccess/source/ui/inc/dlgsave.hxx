@@ -69,13 +69,6 @@ namespace dbaui
         DECL_LINK(TextFilterHdl, OUString&, bool);
 
     public:
-        OSaveAsDlg( weld::Window * pParent, sal_Int32 _rType,
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-                    const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                    const OUString& rDefault,
-                    const IObjectNameCheck& _rObjectNameCheck,
-                    SADFlags _nFlags);
-
         OSaveAsDlg( weld::Window* _pParent,
                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const OUString& _rDefault,

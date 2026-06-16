@@ -1757,22 +1757,6 @@ bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodePara
     return true;
 }
 
-void OSQLParseNode::replaceNodeValue(const OUString& rTableAlias, const OUString& rColumnName)
-{
-    for (size_t i=0;i<count();++i)
-    {
-        if (SQL_ISRULE(this,column_ref) && count() == 1 && getChild(0)->getTokenValue() == rColumnName)
-        {
-            OSQLParseNode * pCol = removeAt(sal_uInt32(0));
-            append(new OSQLParseNode(rTableAlias,SQLNodeType::Name));
-            append(new OSQLParseNode(".",SQLNodeType::Punctuation));
-            append(pCol);
-        }
-        else
-            getChild(i)->replaceNodeValue(rTableAlias,rColumnName);
-    }
-}
-
 OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
 {
     OSQLParseNode* pRetNode = nullptr;

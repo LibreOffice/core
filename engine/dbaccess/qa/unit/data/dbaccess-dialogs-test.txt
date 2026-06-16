@@ -60,8 +60,6 @@ dbaccess/ui/applycolpage.ui
 dbaccess/ui/copytablepage.ui
 dbaccess/ui/namematchingpage.ui
 dbaccess/ui/typeselectpage.ui
-dbaccess/ui/specialsettingspage.ui
-dbaccess/ui/generatedvaluespage.ui
 dbaccess/ui/ldapconnectionpage.ui
 dbaccess/ui/dbwizmysqlintropage.ui
 dbaccess/ui/dbwizmysqlnativepage.ui

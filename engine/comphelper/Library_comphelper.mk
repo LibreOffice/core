@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/container/IndexedPropertyValuesContainer \
     comphelper/source/container/NamedPropertyValuesContainer \
     comphelper/source/container/container \
-    comphelper/source/container/containermultiplexer \
     comphelper/source/container/interfacecontainer2 \
     comphelper/source/container/embeddedobjectcontainer \
     comphelper/source/container/enumerablemap \
@@ -126,7 +125,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/officerestartmanager \
     comphelper/source/misc/traceevent \
     comphelper/source/misc/random \
-    comphelper/source/misc/SelectionMultiplex \
     comphelper/source/misc/sequenceashashmap \
     comphelper/source/misc/sharedmutex \
     comphelper/source/misc/simplefileaccessinteraction \

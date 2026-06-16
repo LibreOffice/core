@@ -1447,11 +1447,6 @@ std::shared_ptr<SvxAbstractNewTableDialog> AbstractDialogFactory_Impl::CreateSvx
     return std::make_shared<SvxNewTableDialogWrapper>(pParent);
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(weld::Window* pParent, const OUString& rExtensionId)
-{
-    return VclPtr<CuiAbstractController_Impl<OfaTreeOptionsDialog>>::Create(pParent, rExtensionId);
-}
-
 namespace
 {
 class SvxAbstractInsRowColDlg_Impl final

@@ -187,11 +187,6 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
     return r;
 }
 
-sal_uInt32 unicode::GetMirroredChar(sal_uInt32 nChar) {
-    nChar = u_charMirror(nChar);
-    return nChar;
-}
-
 static constexpr auto bit(sal_Int16 name) { return 1U << name; }
 
 bool unicode::isControl(const sal_uInt32 ch)

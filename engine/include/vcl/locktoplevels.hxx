@@ -32,7 +32,6 @@ public:
     void incBusy(const weld::Widget* pIgnore);
     // unlock previous lock
     void decBusy();
-    bool isBusy() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

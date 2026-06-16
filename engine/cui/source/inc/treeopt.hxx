@@ -211,7 +211,6 @@ public:
     OfaTreeOptionsDialog(weld::Window* pParent,
         const css::uno::Reference< css::frame::XFrame >& _xFrame,
         bool bActivateLastSelection);
-    OfaTreeOptionsDialog(weld::Window* pParent, std::u16string_view rExtensionId);
     virtual ~OfaTreeOptionsDialog() override;
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );

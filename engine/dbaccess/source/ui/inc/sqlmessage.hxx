@@ -95,10 +95,6 @@ public:
                 MessageType _eType = Info,
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 
-    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    void add_button(const OUString& rText, int nResponse, const OUString& rHelpId = {}) { m_xDialog->add_button(rText, nResponse, rHelpId); }
-    void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
-
     virtual ~OSQLMessageBox() override;
 
 private:
@@ -120,14 +116,6 @@ public:
                     const OUString& _rMessage,
                     MessBoxStyle _nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
                     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
-};
-
-// OSQLErrorBox
-class OSQLErrorBox : public OSQLMessageBox
-{
-public:
-    OSQLErrorBox( weld::Window* pParent,
-                  const OUString& _rMessage );
 };
 
 }   // namespace dbaui

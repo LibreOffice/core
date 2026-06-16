@@ -144,82 +144,6 @@ void OFieldDescControl::SetReadOnly( bool bReadOnly )
     }
 }
 
-void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& rText )
-{
-    // Set the Controls' texts
-    switch( nControlId )
-    {
-        case FIELD_PROPERTY_BOOL_DEFAULT:
-            if (m_xBoolDefault)
-            {
-                OUString sOld = m_xBoolDefault->get_active_text();
-                m_xBoolDefault->set_active_text(rText);
-                if (sOld != rText)
-                    ChangeHdl(m_xBoolDefault->GetComboBox());
-            }
-            break;
-        case FIELD_PROPERTY_DEFAULT:
-            if (m_xDefault)
-            {
-                m_xDefault->set_text(rText);
-                UpdateFormatSample(pActFieldDescr);
-            }
-            break;
-
-        case FIELD_PROPERTY_REQUIRED:
-            if (m_xRequired)
-                m_xRequired->set_active_text(rText);
-            break;
-
-        case FIELD_PROPERTY_TEXTLEN:
-            if (m_xTextLen)
-                m_xTextLen->set_text(rText);
-            break;
-
-        case FIELD_PROPERTY_NUMTYPE:
-            if (m_xNumType)
-                m_xNumType->set_active_text(rText);
-            break;
-
-        case FIELD_PROPERTY_AUTOINC:
-            if (m_xAutoIncrement)
-            {
-                OUString sOld = m_xAutoIncrement->get_active_text();
-                m_xAutoIncrement->set_active_text(rText);
-                if (sOld != rText)
-                    ChangeHdl(m_xAutoIncrement->GetComboBox());
-            }
-            break;
-
-        case FIELD_PROPERTY_LENGTH:
-            if (m_xLength)
-                m_xLength->set_text(rText);
-            break;
-
-        case FIELD_PROPERTY_SCALE:
-            if (m_xScale)
-                m_xScale->set_text(rText);
-            break;
-
-        case FIELD_PROPERTY_FORMAT:
-            if (pActFieldDescr)
-                UpdateFormatSample(pActFieldDescr);
-            break;
-        case FIELD_PROPERTY_COLUMNNAME:
-            if (m_xColumnName)
-                m_xColumnName->set_text(rText);
-            break;
-        case FIELD_PROPERTY_TYPE:
-            if (m_xType)
-                m_xType->set_active_text(rText);
-            break;
-        case FIELD_PROPERTY_AUTOINCREMENT:
-            if (m_xAutoIncrementValue)
-                m_xAutoIncrementValue->set_text(rText);
-            break;
-    }
-}
-
 IMPL_LINK_NOARG(OFieldDescControl, FormatClickHdl, weld::Button&, void)
 {
     // Create temporary Column, which is used for data exchange with Dialog
@@ -967,17 +891,6 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )
     implFocusLost(&rControl);
 }
 
-void OFieldDescControl::FlushModifiedData()
-{
-    iterateControls([&](OWidgetBase* pWidget)
-    {
-        if (pWidget && pWidget->get_value_changed_from_saved())
-            CellModified(-1, pWidget->GetPos());
-
-        return false;
-    });
-}
-
 void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 {
     if( !pFieldDescr )
@@ -1046,75 +959,6 @@ void OFieldDescControl::implFocusLost(weld::Widget* _pWhich)
     // Remember the active Control
     if (!m_pLastFocusWindow)
         m_pLastFocusWindow = _pWhich;
-}
-
-bool OFieldDescControl::IsFocusInEditableWidget() const
-{
-    if (m_xDefault && m_pActFocusWindow == m_xDefault->GetWidget())
-        return true;
-    if (m_xFormatSample && m_pActFocusWindow == m_xFormatSample->GetWidget())
-        return true;
-    if (m_xTextLen && m_pActFocusWindow == m_xTextLen->GetWidget())
-        return true;
-    if (m_xLength && m_pActFocusWindow == m_xLength->GetWidget())
-        return true;
-    if (m_xScale && m_pActFocusWindow == m_xScale->GetWidget())
-        return true;
-    if (m_xColumnName && m_pActFocusWindow == m_xColumnName->GetWidget())
-        return true;
-    if (m_xAutoIncrementValue && m_pActFocusWindow == m_xAutoIncrementValue->GetWidget())
-        return true;
-    return false;
-}
-
-bool OFieldDescControl::HasChildPathFocus() const
-{
-    return m_xContainer && m_xContainer->has_child_focus();
-}
-
-bool OFieldDescControl::isCopyAllowed()
-{
-    int nStartPos, nEndPos;
-    bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget() &&
-                        dynamic_cast<weld::Entry&>(*m_pActFocusWindow).get_selection_bounds(nStartPos, nEndPos);
-    return bAllowed;
-}
-
-bool OFieldDescControl::isCutAllowed()
-{
-    int nStartPos, nEndPos;
-    bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget() &&
-                        dynamic_cast<weld::Entry&>(*m_pActFocusWindow).get_selection_bounds(nStartPos, nEndPos);
-    return bAllowed;
-}
-
-bool OFieldDescControl::isPasteAllowed()
-{
-    bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget();
-    if ( bAllowed )
-    {
-        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromClipboard(m_pActFocusWindow->get_clipboard()));
-        bAllowed = aTransferData.HasFormat(SotClipboardFormatId::STRING);
-    }
-    return bAllowed;
-}
-
-void OFieldDescControl::cut()
-{
-    if (isCutAllowed())
-        dynamic_cast<weld::Entry&>(*m_pActFocusWindow).cut_clipboard();
-}
-
-void OFieldDescControl::copy()
-{
-    if (isCopyAllowed()) // this only checks if the focus window is valid
-        dynamic_cast<weld::Entry&>(*m_pActFocusWindow).copy_clipboard();
-}
-
-void OFieldDescControl::paste()
-{
-    if (m_pActFocusWindow) // this only checks if the focus window is valid
-        dynamic_cast<weld::Entry&>(*m_pActFocusWindow).paste_clipboard();
 }
 
 bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr, sal_uInt32& _nFormatKey) const

@@ -211,8 +211,6 @@ public:
 
     SAL_DLLPRIVATE void ShowTooltips( bool bShowTooltips );
 
-    void DrawMnemonics( bool bDrawMnemonics );
-
     SAL_DLLPRIVATE void filterItems(const std::function<bool (const ThumbnailViewItem*) > &func);
 
     void setItemStateHdl (const Link<const ThumbnailViewItem*,void> &aLink) { maItemStateHdl = aLink; }

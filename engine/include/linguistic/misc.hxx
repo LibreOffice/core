@@ -104,8 +104,6 @@ LNG_DLLPUBLIC bool LinguIsUnspecified( std::u16string_view rBcp47 );
 
 std::vector< LanguageType >
     LocaleSeqToLangVec( css::uno::Sequence< css::lang::Locale > const &rLocaleSeq );
-css::uno::Sequence<sal_Int16>
-    LocaleSeqToLangSeq( css::uno::Sequence< css::lang::Locale > const &rLocaleSeq );
 
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not

@@ -51,20 +51,6 @@ namespace Dependencies {
     DESKTOP_DEPLOYMENTMISC_DLLPUBLIC css::uno::Sequence<
         css::uno::Reference< css::xml::dom::XElement > >
     check(dp_misc::DescriptionInfoset const & infoset);
-
-    /**
-       Obtain the (human-readable) error message of a failed dependency.
-
-       @param dependency
-       a dependency represented as a non-null XML element
-
-       @return
-       the name of the dependency; will never be empty, as a localized
-       &ldquo;unknown&rdquo; is substituted for an empty/missing name
-    */
-    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getErrorText(
-        css::uno::Reference< css::xml::dom::XElement >
-            const & dependency);
 }
 
 }

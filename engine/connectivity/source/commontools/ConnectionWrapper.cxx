@@ -65,33 +65,6 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
     osl_atomic_decrement(&m_refCount);
 }
 
-void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnection
-                                       ,const Reference< XComponentContext>& _rxContext)
-{
-    // So far only called from constructors
-    OSL_ENSURE(_xConnection.is(),"OConnectionWrapper: Connection must be valid!");
-    osl_atomic_increment(&m_refCount);
-
-    m_xConnection = _xConnection;
-    m_xTypeProvider.set(m_xConnection,UNO_QUERY);
-    m_xUnoTunnel.set(m_xConnection,UNO_QUERY);
-    m_xServiceInfo.set(m_xConnection,UNO_QUERY);
-
-    Reference< XProxyFactory >  xProxyFactory = ProxyFactory::create( _rxContext );
-    Reference< XAggregation > xConProxy = xProxyFactory->createProxy(_xConnection);
-    if (xConProxy.is())
-    {
-        // transfer the (one and only) real ref to the aggregate to our member
-        m_xProxyConnection = std::move(xConProxy);
-
-        // set ourself as delegator
-        Reference<XInterface> xIf = static_cast< XUnoTunnel* >( this );
-        m_xProxyConnection->setDelegator( xIf );
-
-    }
-    osl_atomic_decrement(&m_refCount);
-}
-
 void OConnectionWrapper::disposing()
 {
     osl::MutexGuard aGuard(m_aMutex);

@@ -1199,14 +1199,6 @@ const OUString & Application::GetAppName()
 
 enum {hwAll=0, hwEnv=1, hwUI=2};
 
-static OUString Localize(TranslateId aId, const bool bLocalize)
-{
-    if (bLocalize)
-        return VclResId(aId);
-    else
-        return Translate::get(aId, Translate::Create("vcl", LanguageTag(u"en-US"_ustr)));
-}
-
 OUString Application::GetOSVersion()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1216,55 +1208,6 @@ OUString Application::GetOSVersion()
     else
         aVersion = u"-"_ustr;
     return aVersion;
-}
-
-OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize)
-{
-    OUStringBuffer aDetails;
-
-    const auto appendDetails = [&aDetails](std::u16string_view sep, auto&& val) {
-        if (!aDetails.isEmpty() && !sep.empty())
-            aDetails.append(sep);
-        aDetails.append(std::move(val));
-    };
-
-    if (bSelection != hwUI) {
-        appendDetails(u"; ", Localize(SV_APP_CPUTHREADS, bLocalize)
-                                + OUString::number(std::thread::hardware_concurrency()));
-
-        OUString aVersion = GetOSVersion();
-
-        appendDetails(u"; ", Localize(SV_APP_OSVERSION, bLocalize) + aVersion);
-    }
-
-    if (bSelection != hwEnv) {
-        appendDetails(u"; ", Localize(SV_APP_UIRENDER, bLocalize));
-#if HAVE_FEATURE_SKIA
-        if ( SkiaHelper::isVCLSkiaEnabled() )
-        {
-            switch(SkiaHelper::renderMethodToUse())
-            {
-                case SkiaHelper::RenderVulkan:
-                    appendDetails(u"", Localize(SV_APP_SKIA_VULKAN, bLocalize));
-                    break;
-                case SkiaHelper::RenderMetal:
-                    appendDetails(u"", Localize(SV_APP_SKIA_METAL, bLocalize));
-                    break;
-                case SkiaHelper::RenderRaster:
-                    appendDetails(u"", Localize(SV_APP_SKIA_RASTER, bLocalize));
-                    break;
-            }
-        }
-        else
-#endif
-            appendDetails(u"", Localize(SV_APP_DEFAULT, bLocalize));
-
-#if (defined LINUX || defined _WIN32 || defined MACOSX || defined __FreeBSD__ || defined __EMSCRIPTEN__)
-        appendDetails(u"; ", SV_APP_VCLBACKEND + GetToolkitName());
-#endif
-    }
-
-    return aDetails.makeStringAndClear();
 }
 
 void Application::SetDisplayName( const OUString& rName )

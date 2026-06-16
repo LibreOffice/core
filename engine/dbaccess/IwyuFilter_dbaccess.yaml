@@ -89,9 +89,6 @@ excludelist:
     dbaccess/source/ui/control/RelationControl.cxx:
     # Actually used
     - com/sun/star/awt/XWindow.hpp
-    dbaccess/source/ui/control/sqledit.cxx:
-    # Needed for template
-    - com/sun/star/container/XHierarchicalNameAccess.hpp
     dbaccess/source/ui/dlg/ConnectionHelper.cxx:
     # Actually used
     - com/sun/star/awt/XSystemDependentWindowPeer.hpp

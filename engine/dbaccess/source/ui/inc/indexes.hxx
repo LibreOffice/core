@@ -63,7 +63,6 @@ namespace dbaui
 
         const OUString& getOriginalName() const { return sOriginalName; }
 
-        bool    isModified() const { return bModified; }
         void        setModified(bool _bModified) { bModified = _bModified; }
         void        clearModified() { setModified(false); }
 

@@ -19,7 +19,6 @@
 #pragma once
 
 #include <vcl/weld.hxx>
-#include "IClipBoardTest.hxx"
 #include "QEnumTypes.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -55,7 +54,7 @@ namespace dbaui
     class OFieldDescription;
     class OPropColumnEditCtrl;
 
-    class OFieldDescControl : public IClipboardTest
+    class OFieldDescControl
     {
     private:
         std::unique_ptr<weld::Builder> m_xBuilder;
@@ -117,8 +116,6 @@ namespace dbaui
         void                InitializeControl(weld::Widget* _pControl,const OUString& _sHelpId);
         void                InitializeControl(OPropListBoxCtrl* _pControl,const OUString& _sHelpId,bool _bAddChangeHandler);
 
-        bool                IsFocusInEditableWidget() const;
-
         // Call func on all of the controls or stop early if one of them returns true
         template <class Func> bool iterateControls(Func func)
         {
@@ -162,36 +159,17 @@ namespace dbaui
         explicit OFieldDescControl(weld::Container* pPage);
         virtual ~OFieldDescControl();
 
-        void                FlushModifiedData();
-
         void                DisplayData(OFieldDescription* pFieldDescr );
 
         void                SaveData( OFieldDescription* pFieldDescr );
 
-        void                SetControlText( sal_uInt16 nControlId, const OUString& rText );
         void                SetReadOnly( bool bReadOnly );
 
         void                Enable(bool bEnable) { m_xContainer->set_sensitive(bEnable); }
-        void                SetHelpId(const OUString& rId) { m_xContainer->set_help_id(rId); }
-
-        virtual bool        isCutAllowed() override;
-        virtual bool        isCopyAllowed() override;
-        virtual bool        isPasteAllowed() override;
-
-        virtual void        cut() override;
-        virtual void        copy() override;
-        virtual void        paste() override;
-
-        void connect_focus_in(const Link<weld::Widget&, void>& rLink)
-        {
-            m_aControlFocusIn = rLink;
-        }
 
         void Init();
 
         void GrabFocus();
-
-        bool HasChildPathFocus() const;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;

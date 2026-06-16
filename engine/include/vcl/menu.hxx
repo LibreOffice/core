@@ -469,19 +469,6 @@ public:
     void SetDisplayable( bool bDisplayable );
     bool IsDisplayable() const                       { return mbDisplayable; }
 
-    // add an arbitrary button to the menubar (will appear next to closer)
-    // passed link will be call with a MenuBarButtonCallbackArg on press
-    // passed string will be set as tooltip
-    SAL_DLLPRIVATE sal_uInt16 AddMenuBarButton( const Image&, const Link<MenuBarButtonCallbackArg&,bool>&, const OUString& );
-    // set the highlight link for additional button with ID nId
-    // highlight link will be called with a MenuBarButtonHighlightArg
-    // the bHighlight member of that struct shall contain the new state
-    SAL_DLLPRIVATE void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBarButtonCallbackArg&,bool>& );
-    // returns the rectangle occupied by the additional button named nId
-    // coordinates are relative to the systemwindow the menubar is attached to
-    // if the menubar is unattached an empty rectangle is returned
-    SAL_DLLPRIVATE tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 nId );
-    SAL_DLLPRIVATE void RemoveMenuBarButton( sal_uInt16 nId );
     void LayoutChanged();
     // get the height of the menubar, return the native menubar height if that is active or the vcl
     // one if not

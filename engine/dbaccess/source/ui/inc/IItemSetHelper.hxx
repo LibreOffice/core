@@ -48,7 +48,6 @@ namespace dbaui
     public:
         virtual css::uno::Reference< css::uno::XComponentContext > getORB() const = 0;
         virtual std::pair< css::uno::Reference< css::sdbc::XConnection >,bool> createConnection() = 0;
-        virtual css::uno::Reference< css::sdbc::XDriver > getDriver() = 0;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const = 0;
         virtual void clearPassword() = 0;
         virtual void saveDatasource() = 0;

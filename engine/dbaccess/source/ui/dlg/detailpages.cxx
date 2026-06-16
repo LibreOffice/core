@@ -22,7 +22,6 @@
 #include "detailpages.hxx"
 #include <sqlmessage.hxx>
 #include <dsmeta.hxx>
-#include "advancedsettings.hxx"
 #include "DbAdminImpl.hxx"
 #include <dsitems.hxx>
 #include "dbfindex.hxx"
@@ -696,17 +695,6 @@ namespace dbaui
         return m_xTextConnectionHelper->prepareLeave();
     }
 
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
-    {
-        return std::make_unique<GeneratedValuesPage>(pPage, pController, *_rAttrSet);
-    }
-
-    std::unique_ptr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)
-    {
-        OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
-        DataSourceMetaData aMetaData( eType );
-        return std::make_unique<SpecialSettingsPage>(pPage, pController, *_rAttrSet, aMetaData);
-    }
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

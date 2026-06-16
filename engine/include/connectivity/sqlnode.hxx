@@ -262,8 +262,6 @@ namespace connectivity
 
         OSQLParseNode* removeAt(sal_uInt32 nPos);
 
-        void replaceNodeValue(const OUString& rTableAlias,const OUString& rColumnName);
-
         /** parses the node to a string which can be passed to a driver's connection for execution
 
             Any particles of the parse tree which represent application-level features - such

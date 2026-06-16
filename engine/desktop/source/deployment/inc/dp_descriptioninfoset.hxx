@@ -118,13 +118,6 @@ public:
     */
     std::pair< OUString, OUString > getLocalizedPublisherNameAndURL() const;
 
-    /**
-        Returns the URL for the release notes corresponding to the office's locale.
-
-        In case there is no release-notes element then an empty string is returned.
-    */
-    OUString getLocalizedReleaseNotesURL() const;
-
     /** returns the relative path to the license file.
 
         In case there is no simple-license element then an empty string is returned.
@@ -143,27 +136,6 @@ public:
         In case there is no localized display-name then an empty string is returned.
     */
     OUString getLocalizedDisplayName() const;
-
-    /**
-        returns the download website URL from the update information.
-
-        There can be multiple URLs where each is assigned to a particular locale.
-        The function returns the URL which locale matches best the one used in the office.
-
-        The return value is an optional because it may be necessary to find out if there
-        was a value provided or not. This is necessary to flag the extension in the update dialog
-        properly as "browser based update". The return value will only then not be initialized
-        if there is no <code>&lt;update-website&gt;</code>. If the element exists, then it must
-        have at least one child element containing a URL.
-
-        The <code>&lt;update-website&gt;</code> and <code>&lt;update-download&gt;</code>
-        elements are mutually exclusive.
-
-        @return
-        the download website URL, or an empty <code>optional</code> if none is
-        specified
-    */
-    ::std::optional< OUString > getLocalizedUpdateWebsiteURL() const;
 
     /** returns the relative URL to the description.
 
@@ -186,18 +158,6 @@ public:
        update information URLs
     */
     css::uno::Sequence< OUString > getUpdateInformationUrls() const;
-
-     /**
-        Return the download URLs from the update information.
-
-        Because the <code>&lt;update-download&gt;</code> and the <code>&lt;update-website&gt;</code>
-        elements are mutually exclusive one may need to determine exactly if the element
-        was provided.
-
-        @return
-        download URLs
-     */
-    css::uno::Sequence< OUString > getUpdateDownloadUrls() const;
 
     /**
         Returns the URL for the icon image.

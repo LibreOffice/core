@@ -1182,16 +1182,6 @@ void SystemWindow::ensureRepaint()
     }
 }
 
-void SystemWindow::CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const
-{
-    if (MenuBar* pMenu = GetMenuBar())
-    {
-        sal_uInt16 nMenuItems = pMenu->GetItemCount();
-        for ( sal_uInt16 i = 0; i < nMenuItems; ++i )
-            rMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
-    }
-}
-
 int SystemWindow::GetMenuBarHeight() const
 {
     if (MenuBar* pMenuBar = GetMenuBar())

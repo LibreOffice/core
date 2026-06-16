@@ -52,31 +52,6 @@ namespace dbaui
         */
         virtual void executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
-        /** executes the given command only when it is allowed
-            @param  _nCommandId
-                the id of the command URL
-        */
-        virtual void executeChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
-
-
-        /** checks if the given Command is enabled
-            @param  _nCommandId
-                the id of the command URL
-
-            @return
-                <TRUE/> if the command is allowed, otherwise <FALSE/>.
-        */
-        virtual bool isCommandEnabled(sal_uInt16 _nCommandId) const = 0;
-
-        /** checks if the given Command is enabled
-            @param  _rCompleteCommandURL
-                the URL of the command
-
-            @return
-                <TRUE/> if the command is allowed, otherwise <FALSE/>.
-        */
-        virtual bool isCommandEnabled( const OUString& _rCompleteCommandURL ) const = 0;
-
         /** checks if the selected data source is read only
             @return
                 <TRUE/> if read only, otherwise <FALSE/>

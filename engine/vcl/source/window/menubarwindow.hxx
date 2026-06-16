@@ -130,11 +130,6 @@ public:
     void    LayoutChanged();
     Size const & MinCloseButtonSize() const;
 
-    /// Add an arbitrary button to the menubar that will appear next to the close button.
-    sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBarButtonCallbackArg&,bool>&, const OUString&);
-    void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<MenuBarButtonCallbackArg&,bool>&);
-    tools::Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
-    void RemoveMenuBarButton(sal_uInt16 nId);
     bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId);
     void SetMBWHideAccel(bool val) { mbHideAccel = val; }
     bool GetMBWHideAccel() const { return mbHideAccel; }
