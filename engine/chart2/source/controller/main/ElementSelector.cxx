@@ -42,12 +42,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-namespace
-{
-constexpr OUStringLiteral lcl_aServiceName
-    = u"com.sun.star.comp.chart.ElementSelectorToolbarController";
-}
-
 SelectorListBox::SelectorListBox(vcl::Window* pParent)
     : InterimItemWindow(pParent, u"modules/schart/ui/combobox.ui"_ustr, u"ComboBox"_ustr)
     , m_xWidget(m_xBuilder->weld_combo_box(u"combobox"_ustr))
@@ -239,7 +233,7 @@ IMPL_LINK_NOARG(SelectorListBox, FocusOutHdl, weld::Widget&, void)
 
 OUString SAL_CALL ElementSelectorToolbarController::getImplementationName()
 {
-    return lcl_aServiceName;
+    return u"com.sun.star.comp.chart.ElementSelectorToolbarController"_ustr;
 }
 
 sal_Bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUString& rServiceName )
