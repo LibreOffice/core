@@ -508,7 +508,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 								'type': 'checkbox',
 								'command': 'showruler',
 								'text': _('Ruler'),
-								'accessibility': { focusBack: true, combination: 'R', de: 'L' }
+								'accessibility': { focusBack: true, combination: 'U', de: 'L' }
 							}
 						]
 					},
