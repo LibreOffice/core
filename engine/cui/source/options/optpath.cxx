@@ -51,11 +51,8 @@ using namespace svx;
 
 // define ----------------------------------------------------------------
 
-constexpr OUStringLiteral POSTFIX_INTERNAL = u"_internal";
 constexpr OUString POSTFIX_USER = u"_user"_ustr;
 constexpr OUString POSTFIX_WRITABLE = u"_writable"_ustr;
-constexpr OUStringLiteral VAR_ONE = u"%1";
-constexpr OUStringLiteral IODLG_CONFIGNAME = u"FilePicker_Save";
 
 // struct OptPath_Impl ---------------------------------------------------
 
@@ -461,7 +458,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     {
         // Remove view options entry so the new work path
         // will be used for the next open dialog.
-        SvtViewOptions aDlgOpt( EViewType::Dialog, IODLG_CONFIGNAME );
+        SvtViewOptions aDlgOpt( EViewType::Dialog, u"FilePicker_Save"_ustr );
         aDlgOpt.Delete();
     }
 }
@@ -501,7 +498,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
         pMultiDlg->SetPath( sPath );
 
         const OUString sPathName = m_xPathBox->get_text(nEntry, 0);
-        const OUString sNewTitle = pImpl->m_sMultiPathDlg.replaceFirst( VAR_ONE, sPathName );
+        const OUString sNewTitle = pImpl->m_sMultiPathDlg.replaceFirst( u"%1", sPathName );
         pMultiDlg->SetTitle( sNewTitle );
 
         if (pMultiDlg->Execute() == RET_OK)
@@ -614,7 +611,7 @@ void SvxPathTabPage::GetPathList(
 
         // load internal paths
         Any aAny = pImpl->m_xPathSettings->getPropertyValue(
-            sCfgName + POSTFIX_INTERNAL);
+            sCfgName + u"_internal"_ustr);
         Sequence< OUString > aPathSeq;
         if ( aAny >>= aPathSeq )
         {

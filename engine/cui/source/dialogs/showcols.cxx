@@ -25,7 +25,6 @@
 #include <comphelper/diagnose_ex.hxx>
 
 constexpr OUString CUIFM_PROP_HIDDEN = u"Hidden"_ustr;
-constexpr OUStringLiteral CUIFM_PROP_LABEL = u"Label";
 
 FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, u"cui/ui/showcoldialog.ui"_ustr, u"ShowColDialog"_ustr)
@@ -92,7 +91,7 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference<css::container::XInd
             bIsHidden = ::comphelper::getBOOL(aHidden);
 
             OUString sName;
-            xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
+            xCurCol->getPropertyValue(u"Label"_ustr) >>= sName;
             sCurName = sName;
         }
         catch (...)

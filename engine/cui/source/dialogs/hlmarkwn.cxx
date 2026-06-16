@@ -303,9 +303,6 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
 
     int nEntries=0;
 
-    static constexpr OUStringLiteral aProp_LinkDisplayName( u"LinkDisplayName" );
-    static constexpr OUStringLiteral aProp_LinkTarget( u"com.sun.star.document.LinkTarget" );
-    static constexpr OUStringLiteral aProp_LinkDisplayBitmap( u"LinkDisplayBitmap" );
     for (auto& aLink : xLinks->getElementNames())
     {
         uno::Any aAny;
@@ -328,14 +325,14 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
             try
             {
                 // get name to display
-                aAny = xTarget->getPropertyValue( aProp_LinkDisplayName );
+                aAny = xTarget->getPropertyValue( u"LinkDisplayName"_ustr );
                 OUString aDisplayName;
                 aAny >>= aDisplayName;
                 OUString aStrDisplayname ( aDisplayName );
 
                 // is it a target ?
                 uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
-                bool bIsTarget = xSI->supportsService( aProp_LinkTarget );
+                bool bIsTarget = xSI->supportsService( u"com.sun.star.document.LinkTarget"_ustr );
 
                 // create userdata
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
@@ -391,7 +388,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                 {
                     // get bitmap for the tree-entry
                     uno::Reference< awt::XBitmap >
-                        aXBitmap( xTarget->getPropertyValue( aProp_LinkDisplayBitmap ), uno::UNO_QUERY );
+                        aXBitmap( xTarget->getPropertyValue( u"LinkDisplayBitmap"_ustr ), uno::UNO_QUERY );
                     if (aXBitmap.is())
                     {
                         Graphic aBmp(Graphic(VCLUnoHelper::GetBitmap(aXBitmap)));

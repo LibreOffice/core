@@ -813,7 +813,6 @@ static bool bLanguageCurrentDoc_Impl = false;
 
 // some things we'll need...
 constexpr OUString sAccessSrvc = u"com.sun.star.configuration.ConfigurationAccess"_ustr;
-constexpr OUStringLiteral sAccessUpdSrvc = u"com.sun.star.configuration.ConfigurationUpdateAccess";
 constexpr OUString sInstalledLocalesPath = u"org.openoffice.Setup/Office/InstalledLocales"_ustr;
 constexpr OUString sUserLocalePath = u"org.openoffice.Office.Linguistic/General"_ustr;
 constexpr OUString sUserLocaleKey = u"UILocale"_ustr;
@@ -1078,7 +1077,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
                 comphelper::getProcessComponentContext()));
         Sequence< Any > theArgs{ Any(NamedValue(u"nodepath"_ustr, Any(sUserLocalePath))) };
         Reference< XPropertySet >xProp(
-            theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, theArgs ), UNO_QUERY_THROW );
         if ( m_sUserLocaleValue != aLangString)
         {
             // OSL_FAIL("UserInterface language was changed, restart.");
