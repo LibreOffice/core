@@ -2612,6 +2612,60 @@ void ScDocument::CopyDBsToClip(ScDocument* pClipDoc, const ScRange& rClipRange, 
     }
 }
 
+// Counterpart of CopyDBsToClip on the paste side: recreate a fully-copied
+// named table in the destination, anchored to the paste location rather than
+// the source coordinates it was carried with - otherwise the table, with its
+// autofilter and style, would sit over the wrong (usually empty) cells.
+// A same-document paste keeps the existing table instead (reconstructing an
+// independent copy with a fresh unique name is intentionally out of scope).
+void ScDocument::CopyDBsFromClip(const ScRange& rDestRange, const ScRange& rClipRange,
+                                 const ScDocument* pClipDoc)
+{
+    if (!pClipDoc)
+        return;
+    const ScDBCollection* pClipDBs = pClipDoc->GetDBCollection();
+    if (!pClipDBs || pClipDBs->getNamedDBs().empty())
+        return;
+
+    if (!pDBCollection)
+        SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*this)));
+    ScDBCollection::NamedDBs& rDest = pDBCollection->getNamedDBs();
+
+    // The whole copied block shifts uniformly from the clip origin to the
+    // paste origin; the table area moves by the same delta and onto the
+    // destination sheet.
+    const SCCOL nDx = rDestRange.aStart.Col() - rClipRange.aStart.Col();
+    const SCROW nDy = rDestRange.aStart.Row() - rClipRange.aStart.Row();
+    const SCTAB nDestTab = rDestRange.aStart.Tab();
+
+    for (const auto& rxClip : pClipDBs->getNamedDBs())
+    {
+        // Only recreate a table the copy fully covered; a partial copy must
+        // not register a clipped or misplaced table.
+        ScRange aSrcArea;
+        rxClip->GetArea(aSrcArea);
+        if (!rClipRange.Contains(aSrcArea))
+            continue;
+
+        // Destination already owns a table of this name (same-document paste):
+        // leave it, and any references resolving to it, alone.
+        if (rDest.findByUpperName(rxClip->GetUpperName()))
+            continue;
+
+        const SCCOL nNewCol1 = aSrcArea.aStart.Col() + nDx;
+        const SCROW nNewRow1 = aSrcArea.aStart.Row() + nDy;
+        const SCCOL nNewCol2 = aSrcArea.aEnd.Col() + nDx;
+        const SCROW nNewRow2 = aSrcArea.aEnd.Row() + nDy;
+        if (!ValidColRowTab(nNewCol1, nNewRow1, nDestTab) || !ValidColRowTab(nNewCol2, nNewRow2, nDestTab))
+            continue;
+
+        auto pClone = std::make_unique<ScDBData>(*rxClip);
+        pClone->SetIndex(0); // let the destination assign a fresh, collision-free index
+        pClone->MoveTo(nDestTab, nNewCol1, nNewRow1, nNewCol2, nNewRow2);
+        rDest.insert(std::move(pClone));
+    }
+}
+
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument& rDoc, const ScDocument& rSrcDoc)
     : mrDoc(rDoc)
 {
@@ -3063,6 +3117,13 @@ void ScDocument::CopyFromClip(
         aLocalRangeList.push_back( rDestRange);
         pDestRanges = &aLocalRangeList;
     }
+
+    // Recreate named tables the copy fully covered at the paste location, so the
+    // structured-reference tokens resolved further down bind to a table placed
+    // at the paste position. Must run before the cells, and their formulas, are
+    // copied in.
+    if (nInsFlag & InsertDeleteFlags::CONTENTS)
+        CopyDBsFromClip(rDestRange, aClipRange, pClipDoc);
 
     bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert
 
