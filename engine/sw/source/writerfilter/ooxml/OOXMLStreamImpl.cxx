@@ -128,44 +128,12 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     uno::Reference<uri::XUriReference> xBase = xFac->parse("file:///" + msPath);
 
     static const char sType[] = "Type";
-    static constexpr OUStringLiteral sDocumentType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
-    static constexpr OUStringLiteral sStylesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
-    static constexpr OUStringLiteral sNumberingType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering";
-    static constexpr OUStringLiteral sFonttableType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable";
-    static constexpr OUStringLiteral sFootnotesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes";
-    static constexpr OUStringLiteral sEndnotesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes";
-    static constexpr OUStringLiteral sCommentsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
-    static constexpr OUStringLiteral sThemeType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
     static constexpr OUString sCustomType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml"_ustr;
-    static constexpr OUStringLiteral sCustomPropsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps";
-    static constexpr OUStringLiteral sGlossaryType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument";
-    static constexpr OUStringLiteral sWebSettings = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
-    static constexpr OUStringLiteral sSettingsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
     static constexpr OUString sChartType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"_ustr;
     static constexpr OUString sEmbeddingsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"_ustr;
     static constexpr OUString sFooterType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer"_ustr;
     static constexpr OUString sHeaderType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"_ustr;
-    static constexpr OUStringLiteral sOleObjectType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
     static constexpr OUString sCommentsExtendedType = u"http://schemas.microsoft.com/office/2011/relationships/commentsExtended"_ustr;
-    // OOXML strict
-    static constexpr OUStringLiteral sDocumentTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument";
-    static constexpr OUStringLiteral sStylesTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
-    static constexpr OUStringLiteral sNumberingTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/numbering";
-    static constexpr OUStringLiteral sFonttableTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
-    static constexpr OUStringLiteral sFootnotesTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes";
-    static constexpr OUStringLiteral sEndnotesTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes";
-    static constexpr OUStringLiteral sCommentsTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/comments";
-    static constexpr OUStringLiteral sThemeTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/theme";
-    static constexpr OUStringLiteral sCustomTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
-    static constexpr OUStringLiteral sCustomPropsTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/customXmlProps";
-    static constexpr OUStringLiteral sGlossaryTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/glossaryDocument";
-    static constexpr OUStringLiteral sWebSettingsStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
-    static constexpr OUStringLiteral sSettingsTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
-    static constexpr OUStringLiteral sChartTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/chart";
-    static constexpr OUStringLiteral sEmbeddingsTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/package";
-    static constexpr OUStringLiteral sFootersTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer";
-    static constexpr OUStringLiteral sHeaderTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/header";
-    static constexpr OUStringLiteral sOleObjectTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject";
     static constexpr OUString sVBAProjectType = u"http://schemas.microsoft.com/office/2006/relationships/vbaProject"_ustr;
     static constexpr OUString sVBADataType = u"http://schemas.microsoft.com/office/2006/relationships/wordVbaData"_ustr;
 
@@ -183,72 +151,72 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
             sStreamTypeStrict = sVBADataType;
             break;
         case StreamType_t::DOCUMENT:
-            sStreamType = sDocumentType;
-            sStreamTypeStrict = sDocumentTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument"_ustr;
             break;
         case StreamType_t::STYLES:
-            sStreamType = sStylesType;
-            sStreamTypeStrict = sStylesTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/styles"_ustr;
             break;
         case StreamType_t::NUMBERING:
-            sStreamType = sNumberingType;
-            sStreamTypeStrict = sNumberingTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/numbering"_ustr;
             break;
         case StreamType_t::FONTTABLE:
-            sStreamType = sFonttableType;
-            sStreamTypeStrict = sFonttableTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable"_ustr;
             break;
         case StreamType_t::FOOTNOTES:
-            sStreamType = sFootnotesType;
-            sStreamTypeStrict = sFootnotesTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes"_ustr;
             break;
         case StreamType_t::ENDNOTES:
-            sStreamType = sEndnotesType;
-            sStreamTypeStrict = sEndnotesTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes"_ustr;
             break;
         case StreamType_t::COMMENTS:
-            sStreamType = sCommentsType;
-            sStreamTypeStrict = sCommentsTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/comments"_ustr;
             break;
         case StreamType_t::THEME:
-            sStreamType = sThemeType;
-            sStreamTypeStrict = sThemeTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/theme"_ustr;
             break;
         case StreamType_t::CUSTOMXML:
             sStreamType = sCustomType;
-            sStreamTypeStrict = sCustomTypeStrict;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/customXml"_ustr;
             break;
         case StreamType_t::CUSTOMXMLPROPS:
-            sStreamType = sCustomPropsType;
-            sStreamTypeStrict = sCustomPropsTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/customXmlProps"_ustr;
             break;
         case StreamType_t::SETTINGS:
-            sStreamType = sSettingsType;
-            sStreamTypeStrict = sSettingsTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/settings"_ustr;
             break;
         case StreamType_t::GLOSSARY:
-            sStreamType = sGlossaryType;
-            sStreamTypeStrict = sGlossaryTypeStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/glossaryDocument"_ustr;
             break;
         case StreamType_t::WEBSETTINGS:
-            sStreamType = sWebSettings;
-            sStreamTypeStrict = sWebSettingsStrict;
+            sStreamType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings"_ustr;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings"_ustr;
           break;
         case StreamType_t::CHARTS:
             sStreamType = sChartType;
-            sStreamTypeStrict = sChartTypeStrict;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/chart"_ustr;
           break;
         case StreamType_t::EMBEDDINGS:
             sStreamType = sEmbeddingsType;
-            sStreamTypeStrict = sEmbeddingsTypeStrict;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/package"_ustr;
           break;
         case StreamType_t::FOOTER:
             sStreamType = sFooterType;
-            sStreamTypeStrict = sFootersTypeStrict;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer"_ustr;
           break;
         case StreamType_t::HEADER:
             sStreamType = sHeaderType;
-            sStreamTypeStrict = sHeaderTypeStrict;
+            sStreamTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/header"_ustr;
           break;
         case StreamType_t::COMMENTS_EXTENDED:
             sStreamType = sCommentsExtendedType;
@@ -274,8 +242,8 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                       rPair.Second == sStreamTypeStrict ))
                     bFound = true;
                 else if(rPair.First == sType &&
-                        ((rPair.Second == sOleObjectType ||
-                          rPair.Second == sOleObjectTypeStrict) &&
+                        ((rPair.Second == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject"_ustr ||
+                          rPair.Second == u"http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject"_ustr) &&
                           nStreamType == StreamType_t::EMBEDDINGS))
                 {
                     bFound = true;

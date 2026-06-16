@@ -40,13 +40,9 @@ constexpr OUString UNO_NAME_NUMBERING_TYPE = u"NumberingType"_ustr;
 constexpr OUString UNO_NAME_BULLET_CHAR = u"BulletChar"_ustr;
 
 constexpr OUString CHAR_CLOSED_DOT = u"\u2022"_ustr;
-constexpr OUStringLiteral CHAR_EMPTY_DOT = u"o";
 constexpr OUString CHAR_SQUARE = u"\u2540"_ustr;
-constexpr OUStringLiteral CHAR_STAR_SYMBOL = u"\u272A";
 constexpr OUString CHAR_FOUR_DIAMONDS = u"\u2756"_ustr;
-constexpr OUStringLiteral CHAR_DIAMOND = u"\u2726";
 constexpr OUString CHAR_ARROW = u"\u27A2"_ustr;
-constexpr OUStringLiteral CHAR_CHECK_MARK = u"\u2713";
 
 SwVbaListHelper::SwVbaListHelper( css::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument(std::move( xTextDoc )), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
 {
@@ -149,7 +145,7 @@ void SwVbaListHelper::CreateBulletListTemplate()
         }
         case 2:
         {
-            aBulletChar = CHAR_EMPTY_DOT;
+            aBulletChar = u"o"_ustr;
             break;
         }
         case 3:
@@ -159,7 +155,7 @@ void SwVbaListHelper::CreateBulletListTemplate()
         }
         case 4:
         {
-            aBulletChar = CHAR_STAR_SYMBOL;
+            aBulletChar = u"\u272A"_ustr;
             break;
         }
         case 5:
@@ -174,7 +170,7 @@ void SwVbaListHelper::CreateBulletListTemplate()
         }
         case 7:
         {
-            aBulletChar = CHAR_CHECK_MARK;
+            aBulletChar = u"\u2713"_ustr;
             break;
         }
         default:
@@ -435,7 +431,7 @@ void SwVbaListHelper::CreateOutlineNumberForType3()
             case 4:
             case 8:
             {
-                aBulletChar = CHAR_DIAMOND;
+                aBulletChar = u"\u2726"_ustr;
                 break;
             }
         }

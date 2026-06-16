@@ -121,8 +121,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
-constexpr OUStringLiteral DEFAULT_CHAR_FORMAT_NAME = u"Character style";
-
 /*
  * global functions...
  */
@@ -236,7 +234,7 @@ SwDoc::SwDoc()
     mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), UIName(u"Frameformat"_ustr), nullptr ) ),
     mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), UIName(u"Empty Page"_ustr), mpDfltFrameFormat.get() ) ),
     mpColumnContFormat( new SwFrameFormat( GetAttrPool(), UIName(u"Columncontainer"_ustr), mpDfltFrameFormat.get() ) ),
-    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), UIName(DEFAULT_CHAR_FORMAT_NAME), nullptr ) ),
+    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), UIName(u"Character style"_ustr), nullptr ) ),
     mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), UIName(u"Paragraph style"_ustr) ) ),
     mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), UIName(u"Graphikformatvorlage"_ustr) ) ),
     mpFrameFormatTable( new sw::FrameFormats<SwFrameFormat*>() ),

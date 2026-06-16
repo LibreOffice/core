@@ -3894,8 +3894,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
                 OUString aStyleName;
                 std::vector<OUString> aList;
-                static constexpr OUStringLiteral sPhysical(u"IsPhysical");
-                static constexpr OUStringLiteral sDisplay(u"DisplayName");
                 const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? u"HeaderIsOn"_ustr : u"FooterIsOn"_ustr);
 
                 rtl::Reference< SwXTextDocument > xSupplier(GetView().GetDocShell()->GetBaseModel());
@@ -3910,9 +3908,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         {
                             aStyleName = rName;
                             uno::Reference<XPropertySet> xPropSet(xContainer->getByName(aStyleName), uno::UNO_QUERY);
-                            if (xPropSet.is() && (xPropSet->getPropertyValue(sPhysical) >>= bIsPhysical) && bIsPhysical)
+                            if (xPropSet.is() && (xPropSet->getPropertyValue(u"IsPhysical"_ustr) >>= bIsPhysical) && bIsPhysical)
                             {
-                                xPropSet->getPropertyValue(sDisplay) >>= aStyleName;
+                                xPropSet->getPropertyValue(u"DisplayName"_ustr) >>= aStyleName;
                                 if ((xPropSet->getPropertyValue(sHeaderOn)>>= bState) && bState)
                                     aList.push_back(aStyleName);
                                 else

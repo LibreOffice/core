@@ -192,9 +192,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelection)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionLineLimit)
 {
-    static OStringLiteral sOriginalText(u8"Estonian employs the Latin script as the basis for its alphabet, which adds the letters ä, ö, ü, and õ, plus the later additions š and ž. The letters c, q, w, x and y are limited to proper names of foreign origin, and f, z, š, and ž appear in loanwords and foreign names only. Ö and Ü are pronounced similarly to their equivalents in Swedish and German. Unlike in standard German but like Swedish (when followed by 'r') and Finnish, Ä is pronounced [æ], as in English mat. The vowels Ä, Ö and Ü are clearly separate phonemes and inherent in Estonian, although the letter shapes come from German. The letter õ denotes /ɤ/, unrounded /o/, or a close-mid back unrounded vowel. It is almost identical to the Bulgarian ъ /ɤ̞/ and the Vietnamese ơ, and is also used to transcribe the Russian ы.");
-    static OStringLiteral sExpectedHtml(u8"Estonian employs the <a href=\"https://en.wikipedia.org/wiki/Latin_script\">Latin script</a> as the basis for <a href=\"https://en.wikipedia.org/wiki/Estonian_alphabet\">its alphabet</a>, which adds the letters <a href=\"https://en.wikipedia.org/wiki/%C3%84\"><i>ä</i></a>, <a href=\"https://en.wikipedia.org/wiki/%C3%96\"><i>ö</i></a>, <a href=\"https://en.wikipedia.org/wiki/%C3%9C\"><i>ü</i></a>, and <a href=\"https://en.wikipedia.org/wiki/%C3%95\"><i>õ</i></a>, plus the later additions <a href=\"https://en.wikipedia.org/wiki/%C5%A0\"><i>š</i></a> and <a href=\"https://en.wikipedia.org/wiki/%C5%BD\"><i>ž</i></a>. The letters <i>c</i>, <i>q</i>, <i>w</i>, <i>x</i> and <i>y</i> are limited to <a href=\"https://en.wikipedia.org/wiki/Proper_names\">proper names</a> of foreign origin, and <i>f</i>, <i>z</i>, <i>š</i>, and <i>ž</i> appear in loanwords and foreign names only. <i>Ö</i> and <i>Ü</i> are pronounced similarly to their equivalents in Swedish and German. Unlike in standard German but like Swedish (when followed by 'r') and Finnish, <i>Ä</i> is pronounced [æ], as in English <i>mat</i>. The vowels Ä, Ö and Ü are clearly separate <a href=\"https://en.wikipedia.org/wiki/Phonemes\">phonemes</a> and inherent in Estonian, although the letter shapes come from German. The letter <a href=\"https://en.wikipedia.org/wiki/%C3%95\"><i>õ</i></a> denotes /ɤ/, unrounded /o/, or a <a href=\"https://en.wikipedia.org/wiki/Close-mid_back_unrounded_vowel\">close-mid back unrounded vowel</a>. It is almost identical to the <a href=\"https://en.wikipedia.org/wiki/Bulgarian_language\">Bulgarian</a> <a href=\"https://en.wikipedia.org/wiki/%D0%AA\">ъ</a> /ɤ̞/ and the <a href=\"https://en.wikipedia.org/wiki/Vietnamese_language\">Vietnamese</a> <a href=\"https://en.wikipedia.org/wiki/%C6%A0\">ơ</a>, and is also used to transcribe the Russian <a href=\"https://en.wikipedia.org/wiki/%D0%AB\">ы</a>.");
-
     SwXTextDocument* pXTextDocument = createDoc("estonian.odt");
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -205,38 +202,18 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionLineLimit)
 
     OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"_ostr);
 
-    CPPUNIT_ASSERT_EQUAL(OString(sOriginalText), sPlainText.trim());
+    CPPUNIT_ASSERT_EQUAL(u8"Estonian employs the Latin script as the basis for its alphabet, which adds the letters ä, ö, ü, and õ, plus the later additions š and ž. The letters c, q, w, x and y are limited to proper names of foreign origin, and f, z, š, and ž appear in loanwords and foreign names only. Ö and Ü are pronounced similarly to their equivalents in Swedish and German. Unlike in standard German but like Swedish (when followed by 'r') and Finnish, Ä is pronounced [æ], as in English mat. The vowels Ä, Ö and Ü are clearly separate phonemes and inherent in Estonian, although the letter shapes come from German. The letter õ denotes /ɤ/, unrounded /o/, or a close-mid back unrounded vowel. It is almost identical to the Bulgarian ъ /ɤ̞/ and the Vietnamese ơ, and is also used to transcribe the Russian ы."_ostr, sPlainText.trim());
 
     OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html"_ostr);
 
     int nStart = sHtmlText.indexOf(u8"Estonian");
 
-    CPPUNIT_ASSERT(sHtmlText.match(sExpectedHtml, nStart));
+    CPPUNIT_ASSERT(sHtmlText.match(u8"Estonian employs the <a href=\"https://en.wikipedia.org/wiki/Latin_script\">Latin script</a> as the basis for <a href=\"https://en.wikipedia.org/wiki/Estonian_alphabet\">its alphabet</a>, which adds the letters <a href=\"https://en.wikipedia.org/wiki/%C3%84\"><i>ä</i></a>, <a href=\"https://en.wikipedia.org/wiki/%C3%96\"><i>ö</i></a>, <a href=\"https://en.wikipedia.org/wiki/%C3%9C\"><i>ü</i></a>, and <a href=\"https://en.wikipedia.org/wiki/%C3%95\"><i>õ</i></a>, plus the later additions <a href=\"https://en.wikipedia.org/wiki/%C5%A0\"><i>š</i></a> and <a href=\"https://en.wikipedia.org/wiki/%C5%BD\"><i>ž</i></a>. The letters <i>c</i>, <i>q</i>, <i>w</i>, <i>x</i> and <i>y</i> are limited to <a href=\"https://en.wikipedia.org/wiki/Proper_names\">proper names</a> of foreign origin, and <i>f</i>, <i>z</i>, <i>š</i>, and <i>ž</i> appear in loanwords and foreign names only. <i>Ö</i> and <i>Ü</i> are pronounced similarly to their equivalents in Swedish and German. Unlike in standard German but like Swedish (when followed by 'r') and Finnish, <i>Ä</i> is pronounced [æ], as in English <i>mat</i>. The vowels Ä, Ö and Ü are clearly separate <a href=\"https://en.wikipedia.org/wiki/Phonemes\">phonemes</a> and inherent in Estonian, although the letter shapes come from German. The letter <a href=\"https://en.wikipedia.org/wiki/%C3%95\"><i>õ</i></a> denotes /ɤ/, unrounded /o/, or a <a href=\"https://en.wikipedia.org/wiki/Close-mid_back_unrounded_vowel\">close-mid back unrounded vowel</a>. It is almost identical to the <a href=\"https://en.wikipedia.org/wiki/Bulgarian_language\">Bulgarian</a> <a href=\"https://en.wikipedia.org/wiki/%D0%AA\">ъ</a> /ɤ̞/ and the <a href=\"https://en.wikipedia.org/wiki/Vietnamese_language\">Vietnamese</a> <a href=\"https://en.wikipedia.org/wiki/%C6%A0\">ơ</a>, and is also used to transcribe the Russian <a href=\"https://en.wikipedia.org/wiki/%D0%AB\">ы</a>.", nStart));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionMultiLine)
 {
     // Test will check if correct number of new line marks / paragraphs is generated
-    static OStringLiteral sOriginalText(u8"Heading\n\
-Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:\n\
-\n\
-\n\
-\n\
-\n\
-\n\
-And this is all for Writer shape objects\n\
-Heading on second page");
-
-    static OStringLiteral sExpectedHtml(u8"Heading</h2>\n\
-<p>Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:</p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<h1 class=\"western\">And this is all for Writer shape objects</h1>\n\
-<h2 class=\"western\">Heading on second page</h2>");
-
     SwXTextDocument* pXTextDocument = createDoc("multiline.odt");
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -245,13 +222,29 @@ Heading on second page");
 
     OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"_ostr);
 
-    CPPUNIT_ASSERT_EQUAL(OString(sOriginalText), sPlainText.trim());
+    CPPUNIT_ASSERT_EQUAL(u8"Heading\n\
+Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:\n\
+\n\
+\n\
+\n\
+\n\
+\n\
+And this is all for Writer shape objects\n\
+Heading on second page"_ostr, sPlainText.trim());
 
     OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html"_ostr);
 
     int nStart = sHtmlText.indexOf(u8"Heading");
 
-    CPPUNIT_ASSERT(sHtmlText.match(sExpectedHtml, nStart));
+    CPPUNIT_ASSERT(sHtmlText.match(u8"Heading</h2>\n\
+<p>Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:</p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<p><br/><br/></p>\n\
+<h1 class=\"western\">And this is all for Writer shape objects</h1>\n\
+<h2 class=\"western\">Heading on second page</h2>", nStart));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)

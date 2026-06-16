@@ -1285,9 +1285,8 @@ DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
 
         xCursor->goRight( 5 , false );
         uno::Reference< beans::XPropertySet > xPropSet(xCursor, uno::UNO_QUERY);
-        static constexpr OUStringLiteral aFontname = u"\u65B0\u7D30\u660E\u9AD4;PMingLiU";
         CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, getProperty<OUString>(xPropSet, u"CharFontName"_ustr));
-        CPPUNIT_ASSERT_EQUAL(OUString(aFontname), getProperty<OUString>(xPropSet, u"CharFontNameAsian"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"\u65B0\u7D30\u660E\u9AD4;PMingLiU"_ustr, getProperty<OUString>(xPropSet, u"CharFontNameAsian"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"Times New Roman"_ustr, getProperty<OUString>(xPropSet, u"CharFontNameComplex"_ustr));
 }
 

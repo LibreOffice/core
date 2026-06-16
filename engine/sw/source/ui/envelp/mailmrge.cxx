@@ -316,11 +316,10 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
                                 + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::NOTINFILEDLG))
                                 + ":default_first");
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
-        static constexpr OUStringLiteral sName(u"Name");
         sal_Int32 nODT = -1;
         while(xList->hasMoreElements()) {
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());
-            const OUString sFilter = aFilter.getUnpackedValueOrDefault(sName, OUString());
+            const OUString sFilter = aFilter.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
 
             uno::Any aProps = xFilterFactory->getByName(sFilter);
             uno::Sequence< beans::PropertyValue > aFilterProperties;

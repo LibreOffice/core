@@ -223,21 +223,6 @@ void SwXTextPortion::GetPropertyValue(
         SwUnoCursor *pUnoCursor,
         std::unique_ptr<SfxItemSet> &pSet )
 {
-    static constexpr OUStringLiteral TEXT = u"Text";
-    static constexpr OUStringLiteral TEXTFIELD = u"TextField";
-    static constexpr OUStringLiteral FRAME = u"Frame";
-    static constexpr OUStringLiteral FOOTNOTE = u"Footnote";
-    static constexpr OUStringLiteral REDLINE = u"Redline";
-    static constexpr OUStringLiteral RUBY = u"Ruby";
-    static constexpr OUStringLiteral SOFTPAGEBREAK = u"SoftPageBreak";
-    static constexpr OUStringLiteral TEXTFIELDSTART = u"TextFieldStart";
-    static constexpr OUStringLiteral TEXTFIELDSEPARATOR = u"TextFieldSeparator";
-    static constexpr OUStringLiteral TEXTFIELDEND = u"TextFieldEnd";
-    static constexpr OUStringLiteral TEXTFIELDSTARTEND = u"TextFieldStartEnd";
-    static constexpr OUStringLiteral ANNOTATION = u"Annotation";
-    static constexpr OUStringLiteral ANNOTATIONEND = u"AnnotationEnd";
-    static constexpr OUStringLiteral LINEBREAK = u"LineBreak";
-
     OSL_ENSURE( pUnoCursor, "UNO cursor missing" );
     if (!pUnoCursor)
         return;
@@ -248,10 +233,10 @@ void SwXTextPortion::GetPropertyValue(
             OUString sRet;
             switch (m_ePortionType)
             {
-            case PORTION_TEXT:           sRet = TEXT; break;
-            case PORTION_FIELD:          sRet = TEXTFIELD; break;
-            case PORTION_FRAME:          sRet = FRAME; break;
-            case PORTION_FOOTNOTE:       sRet = FOOTNOTE; break;
+            case PORTION_TEXT:           sRet = u"Text"_ustr; break;
+            case PORTION_FIELD:          sRet = u"TextField"_ustr; break;
+            case PORTION_FRAME:          sRet = u"Frame"_ustr; break;
+            case PORTION_FOOTNOTE:       sRet = u"Footnote"_ustr; break;
             case PORTION_REFMARK_START:
             case PORTION_REFMARK_END:    sRet = UNO_NAME_REFERENCE_MARK; break;
             case PORTION_TOXMARK_START:
@@ -259,18 +244,18 @@ void SwXTextPortion::GetPropertyValue(
             case PORTION_BOOKMARK_START:
             case PORTION_BOOKMARK_END :  sRet = UNO_NAME_BOOKMARK; break;
             case PORTION_REDLINE_START:
-            case PORTION_REDLINE_END:    sRet = REDLINE; break;
+            case PORTION_REDLINE_END:    sRet = u"Redline"_ustr; break;
             case PORTION_RUBY_START:
-            case PORTION_RUBY_END:       sRet = RUBY; break;
-            case PORTION_SOFT_PAGEBREAK: sRet = SOFTPAGEBREAK; break;
+            case PORTION_RUBY_END:       sRet = u"Ruby"_ustr; break;
+            case PORTION_SOFT_PAGEBREAK: sRet = u"SoftPageBreak"_ustr; break;
             case PORTION_META:           sRet = UNO_NAME_META; break;
-            case PORTION_FIELD_START:    sRet = TEXTFIELDSTART; break;
-            case PORTION_FIELD_SEP:      sRet = TEXTFIELDSEPARATOR; break;
-            case PORTION_FIELD_END:      sRet = TEXTFIELDEND; break;
-            case PORTION_FIELD_START_END:sRet = TEXTFIELDSTARTEND; break;
-            case PORTION_ANNOTATION:     sRet = ANNOTATION; break;
-            case PORTION_ANNOTATION_END: sRet = ANNOTATIONEND; break;
-            case PORTION_LINEBREAK:      sRet = LINEBREAK; break;
+            case PORTION_FIELD_START:    sRet = u"TextFieldStart"_ustr; break;
+            case PORTION_FIELD_SEP:      sRet = u"TextFieldSeparator"_ustr; break;
+            case PORTION_FIELD_END:      sRet = u"TextFieldEnd"_ustr; break;
+            case PORTION_FIELD_START_END:sRet = u"TextFieldStartEnd"_ustr; break;
+            case PORTION_ANNOTATION:     sRet = u"Annotation"_ustr; break;
+            case PORTION_ANNOTATION_END: sRet = u"AnnotationEnd"_ustr; break;
+            case PORTION_LINEBREAK:      sRet = u"LineBreak"_ustr; break;
             case PORTION_CONTENT_CONTROL:sRet = UNO_NAME_CONTENT_CONTROL; break;
             default: break;
             }

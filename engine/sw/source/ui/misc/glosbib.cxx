@@ -90,7 +90,6 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
     const size_t nCount = pHdl->GetGroupCnt();
     /* tdf#111870 "My AutoText" comes from mytexts.bau but should be translated
        here as well, see also SwGlossaryDlg::Init */
-    static constexpr OUStringLiteral sMyAutoTextEnglish(u"My AutoText");
     for( size_t i = 0; i < nCount; ++i)
     {
         OUString sTitle;
@@ -99,7 +98,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
             continue;
         GlosBibUserData* pData = new GlosBibUserData;
         pData->sGroupName = sGroup;
-        if ( sTitle == sMyAutoTextEnglish )
+        if ( sTitle == u"My AutoText"_ustr )
             pData->sGroupTitle = SwResId(STR_MY_AUTOTEXT);
         else
             pData->sGroupTitle = sTitle;

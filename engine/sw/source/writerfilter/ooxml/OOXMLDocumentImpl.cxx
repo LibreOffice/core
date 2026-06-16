@@ -622,31 +622,9 @@ void OOXMLDocument::resolveCustomXmlStream(Stream & rStream)
 
 namespace
 {
-constexpr OUStringLiteral sSettingsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
-constexpr OUStringLiteral sEndnotesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes";
-constexpr OUStringLiteral sFootnotesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes";
-constexpr OUStringLiteral sStylesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
-constexpr OUStringLiteral sFonttableType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable";
-constexpr OUStringLiteral sWebSettings = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
-constexpr OUStringLiteral sSettingsTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
-constexpr OUStringLiteral sEndnoteTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes";
-constexpr OUStringLiteral sFootnoteTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes";
-constexpr OUStringLiteral sStylesTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
-constexpr OUStringLiteral sFonttableTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
-constexpr OUStringLiteral sWebSettingsStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
-
 constexpr OUString sId = u"Id"_ustr;
-constexpr OUStringLiteral sType = u"Type";
 constexpr OUString sTarget = u"Target"_ustr;
-constexpr OUStringLiteral sTargetMode = u"TargetMode";
 constexpr OUString sContentType = u"_contentType"_ustr;
-constexpr OUStringLiteral sRelDom = u"_relDom";
-constexpr OUStringLiteral sSettingsContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
-constexpr OUStringLiteral sEndnotesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml";
-constexpr OUStringLiteral sFootnotesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml";
-constexpr OUStringLiteral sStylesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
-constexpr OUStringLiteral sWebsettingsContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
-constexpr OUStringLiteral sFonttableContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
 }
 
 // See DocxExport::WriteGlossary
@@ -677,39 +655,39 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
         for (const auto& [name, value] : aSeq)
             aRelDefinition.put(name, value);
 
-        const OUString gType = aRelDefinition.getOrDefault(sType, OUString{});
+        const OUString gType = aRelDefinition.getOrDefault(u"Type"_ustr, OUString{});
         OOXMLStream::StreamType_t nType(OOXMLStream::StreamType_t::UNKNOWN);
-        if (gType == sSettingsType || gType == sSettingsTypeStrict)
+        if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/settings"_ustr)
         {
             nType = OOXMLStream::StreamType_t::SETTINGS;
-            aRelDefinition.put(sContentType, sSettingsContentType);
+            aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"_ustr);
         }
-        else if (gType == sEndnotesType || gType == sEndnoteTypeStrict)
+        else if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes"_ustr)
         {
             nType = OOXMLStream::StreamType_t::ENDNOTES;
-            aRelDefinition.put(sContentType, sEndnotesContentType);
+            aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"_ustr);
         }
-        else if (gType == sFootnotesType || gType == sFootnoteTypeStrict)
+        else if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes"_ustr)
         {
             nType = OOXMLStream::StreamType_t::FOOTNOTES;
-            aRelDefinition.put(sContentType, sFootnotesContentType);
+            aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"_ustr);
         }
-        else if (gType == sStylesType || gType == sStylesTypeStrict)
+        else if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/styles"_ustr)
         {
             nType = OOXMLStream::StreamType_t::STYLES;
-            aRelDefinition.put(sContentType, sStylesContentType);
+            aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"_ustr);
         }
-        else if (gType == sWebSettings || gType == sWebSettingsStrict)
+        else if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings"_ustr)
         {
             nType = OOXMLStream::StreamType_t::WEBSETTINGS;
-            aRelDefinition.put(sContentType, sWebsettingsContentType);
+            aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml"_ustr);
         }
-        else if (gType == sFonttableType || gType == sFonttableTypeStrict)
+        else if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable"_ustr)
         {
             nType = OOXMLStream::StreamType_t::FONTTABLE;
-            aRelDefinition.put(sContentType, sFonttableContentType);
+            aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml"_ustr);
         }
-        else if (aRelDefinition.getOrDefault(sTargetMode, OUString{}) != "External")
+        else if (aRelDefinition.getOrDefault(u"TargetMode"_ustr, OUString{}) != "External")
         {
             // Some internal relation, but we don't create a DOM for it here yet?
             SAL_WARN("writerfilter.ooxml", "Unknown type of glossary internal relation: "
@@ -728,7 +706,7 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
                 uno::Reference xContext(pStream->getContext());
                 uno::Reference xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
                 uno::Reference xDom = xDomBuilder->parse(xInputStream);
-                aRelDefinition.put(sRelDom, xDom);
+                aRelDefinition.put(u"_relDom"_ustr, xDom);
             }
             catch (uno::Exception const&)
             {
@@ -747,13 +725,6 @@ void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStrea
     xRelationshipAccess.set(dynamic_cast<OOXMLStreamImpl&>(*pStream).accessDocumentStream(), uno::UNO_QUERY);
     if (xRelationshipAccess.is())
     {
-        static constexpr OUStringLiteral sChartType(u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
-        static constexpr OUStringLiteral sChartTypeStrict(u"http://purl.oclc.org/ooxml/officeDocument/relationships/chart");
-        static constexpr OUStringLiteral sFootersType(u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer");
-        static constexpr OUStringLiteral sFootersTypeStrict(u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer");
-        static constexpr OUStringLiteral sHeaderType(u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header");
-        static constexpr OUStringLiteral sHeaderTypeStrict(u"http://purl.oclc.org/ooxml/officeDocument/relationships/header");
-
         bool bFound = false;
         bool bHeaderFooterFound = false;
         OOXMLStream::StreamType_t streamType = OOXMLStream::StreamType_t::UNKNOWN;
@@ -762,19 +733,19 @@ void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStrea
         {
             for (const beans::StringPair& aPair : aSeq)
             {
-                if (aPair.Second == sChartType ||
-                        aPair.Second == sChartTypeStrict)
+                if (aPair.Second == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"_ustr ||
+                        aPair.Second == u"http://purl.oclc.org/ooxml/officeDocument/relationships/chart"_ustr)
                 {
                     bFound = true;
                 }
-                else if(aPair.Second == sFootersType ||
-                        aPair.Second == sFootersTypeStrict)
+                else if(aPair.Second == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer"_ustr ||
+                        aPair.Second == u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer"_ustr)
                 {
                     bHeaderFooterFound = true;
                     streamType = OOXMLStream::StreamType_t::FOOTER;
                 }
-                else if(aPair.Second == sHeaderType ||
-                        aPair.Second == sHeaderTypeStrict)
+                else if(aPair.Second == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"_ustr ||
+                        aPair.Second == u"http://purl.oclc.org/ooxml/officeDocument/relationships/header"_ustr)
                 {
                     bHeaderFooterFound = true;
                     streamType = OOXMLStream::StreamType_t::HEADER;

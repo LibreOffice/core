@@ -92,22 +92,19 @@ SwASCWriter::~SwASCWriter() {}
 ErrCode SwASCWriter::WriteStream()
 {
     static constexpr OUString STR_CR = u"\015"_ustr;
-    static constexpr OUStringLiteral STR_LF = u"\012";
-    static constexpr OUStringLiteral STR_CRLF = u"\015\012";
-    static constexpr OUStringLiteral STR_BLANK = u" ";
     bool bIncludeBOM = GetAsciiOptions().GetIncludeBOM();
     bool bIncludeHidden = GetAsciiOptions().GetIncludeHidden();
 
     if( m_bASCII_ParaAsCR )           // If predefined
         m_sLineEnd = STR_CR;
     else if( m_bASCII_ParaAsBlank )
-        m_sLineEnd = STR_BLANK;
+        m_sLineEnd = u" "_ustr;
     else
         switch( GetAsciiOptions().GetParaFlags() )
         {
         case LINEEND_CR:    m_sLineEnd = STR_CR; break;
-        case LINEEND_LF:    m_sLineEnd = STR_LF; break;
-        case LINEEND_CRLF:  m_sLineEnd = STR_CRLF; break;
+        case LINEEND_LF:    m_sLineEnd = u"\012"_ustr; break;
+        case LINEEND_CRLF:  m_sLineEnd = u"\015\012"_ustr; break;
         }
 
     SwNodeOffset nMaxNode = m_pDoc->GetNodes().Count();

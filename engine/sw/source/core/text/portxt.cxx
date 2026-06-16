@@ -591,8 +591,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             bool bIsPortion = rInf.GetLineWidth() < rInf.GetBreakWidth();
 
             // measure ten spaces for higher precision
-            static constexpr OUStringLiteral STR_BLANK = u"          ";
-            sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
+            sal_Int16 nSpaceWidth = rInf.GetTextSize(u"          "_ustr).Width();
             sal_Int32 nRealSpaces = rInf.GetLineSpaceCount( pGuess->BreakPos() );
             float fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nRealSpaces * nSpaceWidth/10.0))/nRealSpaces;
 

@@ -449,10 +449,6 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
 
 #define DEFAULT_STYLES_COUNT 16
 
-// Names of the storage streams
-constexpr OUStringLiteral sMainStream  = u"WordDocument";
-constexpr OUStringLiteral sCompObj = u"\1CompObj";
-
 static void WriteDop( WW8Export& rWrt )
 {
     WW8Dop& rDop = *rWrt.m_pDop;
@@ -3760,7 +3756,7 @@ void WW8Export::PrepareStorage()
     SvGlobalName aGName(MSO_WW8_CLASSID);
     GetWriter().GetStorage().SetClass(
         aGName, SotClipboardFormatId::NONE, u"Microsoft Word-Document"_ustr);
-    rtl::Reference<SotStorageStream> xStor(GetWriter().GetStorage().OpenSotStream(sCompObj));
+    rtl::Reference<SotStorageStream> xStor(GetWriter().GetStorage().OpenSotStream(u"\1CompObj"_ustr));
     xStor->WriteBytes(pData, sizeof(pData));
 
     SwDocShell* pDocShell = m_rDoc.GetDocShell ();
@@ -3938,7 +3934,7 @@ ErrCodeMsg SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
 }
 
 MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam )
-    : m_aMainStg(sMainStream)
+    : m_aMainStg(u"WordDocument"_ustr)
     , m_pISet(nullptr)
     , m_pTopNodeOfHdFtPage(nullptr)
     , m_pTableInfo(std::make_shared<ww8::WW8TableInfo>())
@@ -4594,14 +4590,12 @@ OUString MSWordExportBase::BookmarkToWord(const OUString& rBookmark, bool* pIsMo
     OUString sLookup = rBookmark;
     if (pIsMove)
     {
-        static constexpr OUStringLiteral MoveFrom_Bookmark_NamePrefix = u"__RefMoveFrom__";
-        static constexpr OUStringLiteral MoveTo_Bookmark_NamePrefix = u"__RefMoveTo__";
-        if (rBookmark.startsWith(MoveFrom_Bookmark_NamePrefix, &sLookup))
+        if (rBookmark.startsWith(u"__RefMoveFrom__", &sLookup))
         {
             *pIsMove = true;
             *pIsFrom = true;
         }
-        else if (rBookmark.startsWith(MoveTo_Bookmark_NamePrefix, &sLookup))
+        else if (rBookmark.startsWith(u"__RefMoveTo__", &sLookup))
         {
             *pIsMove = true;
             *pIsFrom = false;

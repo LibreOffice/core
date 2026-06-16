@@ -260,10 +260,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf65955_2)
 
 DECLARE_OOXMLEXPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
 {
-    static constexpr OUStringLiteral aExpectedNumbering = u"\u7b2c 1 \u7ae0";
-
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedNumbering),
+    CPPUNIT_ASSERT_EQUAL(u"\u7b2c 1 \u7ae0"_ustr,
                          getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 }
 

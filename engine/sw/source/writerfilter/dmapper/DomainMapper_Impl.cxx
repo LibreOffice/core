@@ -9473,12 +9473,10 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
 
 void DomainMapper_Impl::SetMoveBookmark( bool bIsFrom )
 {
-    static constexpr OUStringLiteral MoveFrom_Bookmark_NamePrefix = u"__RefMoveFrom__";
-    static constexpr OUStringLiteral MoveTo_Bookmark_NamePrefix = u"__RefMoveTo__";
     if ( bIsFrom )
-        m_sCurrentBkmkPrefix = MoveFrom_Bookmark_NamePrefix;
+        m_sCurrentBkmkPrefix = u"__RefMoveFrom__"_ustr;
     else
-        m_sCurrentBkmkPrefix = MoveTo_Bookmark_NamePrefix;
+        m_sCurrentBkmkPrefix = u"__RefMoveTo__"_ustr;
 }
 
 void DomainMapper_Impl::setPermissionRangeEd(const OUString& user)

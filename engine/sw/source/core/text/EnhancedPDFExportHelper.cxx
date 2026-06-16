@@ -187,42 +187,12 @@ constexpr OUString constEmphasisStyleName = u"Emphasis"_ustr;
 constexpr OUString constStrongEmphasisStyleName = u"Strong Emphasis"_ustr;
 
 // PDF Tag Names:
-constexpr OUStringLiteral aDocumentString = u"Document";
 constexpr OUString aDivString = u"Div"_ustr;
-constexpr OUStringLiteral aSectString = u"Sect";
-constexpr OUStringLiteral aHString = u"H";
 constexpr OUString aH1String = u"H1"_ustr;
-constexpr OUStringLiteral aH2String = u"H2";
-constexpr OUStringLiteral aH3String = u"H3";
-constexpr OUStringLiteral aH4String = u"H4";
-constexpr OUStringLiteral aH5String = u"H5";
-constexpr OUStringLiteral aH6String = u"H6";
-constexpr OUStringLiteral aH7String = u"H7";
-constexpr OUStringLiteral aH8String = u"H8";
-constexpr OUStringLiteral aH9String = u"H9";
-constexpr OUStringLiteral aH10String = u"H10";
-constexpr OUStringLiteral aListString = u"L";
-constexpr OUStringLiteral aListItemString = u"LI";
-constexpr OUStringLiteral aListLabelString = u"Lbl";
 constexpr OUString aListBodyString = u"LBody"_ustr;
-constexpr OUStringLiteral aBlockQuoteString = u"BlockQuote";
 constexpr OUString aCaptionString = u"Caption"_ustr;
-constexpr OUStringLiteral aIndexString = u"Index";
-constexpr OUStringLiteral aTOCString = u"TOC";
-constexpr OUStringLiteral aTOCIString = u"TOCI";
-constexpr OUStringLiteral aTableString = u"Table";
-constexpr OUStringLiteral aTRString = u"TR";
-constexpr OUStringLiteral aTDString = u"TD";
-constexpr OUStringLiteral aTHString = u"TH";
-constexpr OUStringLiteral aBibEntryString = u"BibEntry";
-constexpr OUStringLiteral aQuoteString = u"Quote";
 constexpr OUString aSpanString = u"Span"_ustr;
-constexpr OUStringLiteral aCodeString = u"Code";
-constexpr OUStringLiteral aFigureString = u"Figure";
-constexpr OUStringLiteral aFormulaString = u"Formula";
 constexpr OUString aLinkString = u"Link"_ustr;
-constexpr OUStringLiteral aNoteString = u"Note";
-constexpr OUStringLiteral aAnnotString = u"Annot";
 
 // returns true if first paragraph in cell frame has 'table heading' style
 bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
@@ -1367,11 +1337,11 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     const bool bNewItemTag = bNewListTag || pTextNd->IsCountedInList(); // If the text node is not counted, we do not start a new list item:
 
     if ( bNewListTag )
-        BeginTag(vcl::pdf::StructElement::List, aListString);
+        BeginTag(vcl::pdf::StructElement::List, u"L"_ustr);
 
     if ( bNewItemTag )
     {
-        BeginTag(vcl::pdf::StructElement::ListItem, aListItemString);
+        BeginTag(vcl::pdf::StructElement::ListItem, u"LI"_ustr);
         assert(rTextFrame.GetPara());
         // check whether to open LBody now or delay until after Lbl
         if (!rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
@@ -1409,7 +1379,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Document: Document
 
             nPDFType = sal_uInt16(vcl::pdf::StructElement::Document);
-            aPDFType = aDocumentString;
+            aPDFType = u"Document"_ustr;
             break;
 
         case SwFrameType::Header :
@@ -1435,7 +1405,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Note: vcl::pdf::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
             nPDFType = sal_uInt16(vcl::pdf::StructElement::Note);
-            aPDFType = aNoteString;
+            aPDFType = u"Note"_ustr;
             break;
 
         case SwFrameType::Section :
@@ -1488,19 +1458,19 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( TOX_INDEX == pTOXBase->GetType() )
                         {
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::Index);
-                            aPDFType = aIndexString;
+                            aPDFType = u"Index"_ustr;
                         }
                         else
                         {
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::TOC);
-                            aPDFType = aTOCString;
+                            aPDFType = u"TOC"_ustr;
                         }
                     }
                 }
                 else if ( SectionType::Content == pSection->GetType() )
                 {
                     nPDFType = sal_uInt16(vcl::pdf::StructElement::Section);
-                    aPDFType = aSectString;
+                    aPDFType = u"Sect"_ustr;
                 }
             }
             break;
@@ -1572,7 +1542,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if (sStyleName == aQuotations)
                 {
                     nPDFType = sal_uInt16(vcl::pdf::StructElement::BlockQuote);
-                    aPDFType = aBlockQuoteString;
+                    aPDFType = u"BlockQuote"_ustr;
                 }
 
                 // Caption: Caption
@@ -1634,7 +1604,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if (sStyleName == aHeading)
                 {
                     nPDFType = sal_uInt16(vcl::pdf::StructElement::Heading);
-                    aPDFType = aHString;
+                    aPDFType = u"H"_ustr;
                 }
 
                 // Heading: H1 - H6
@@ -1650,31 +1620,31 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                             aPDFType = aH1String;
                             break;
                         case 1 :
-                            aPDFType = aH2String;
+                            aPDFType = u"H2"_ustr;
                             break;
                         case 2 :
-                            aPDFType = aH3String;
+                            aPDFType = u"H3"_ustr;
                             break;
                         case 3 :
-                            aPDFType = aH4String;
+                            aPDFType = u"H4"_ustr;
                             break;
                         case 4 :
-                            aPDFType = aH5String;
+                            aPDFType = u"H5"_ustr;
                             break;
                         case 5:
-                            aPDFType = aH6String;
+                            aPDFType = u"H6"_ustr;
                             break;
                         case 6:
-                            aPDFType = aH7String;
+                            aPDFType = u"H7"_ustr;
                             break;
                         case 7:
-                            aPDFType = aH8String;
+                            aPDFType = u"H8"_ustr;
                             break;
                         case 8:
-                            aPDFType = aH9String;
+                            aPDFType = u"H9"_ustr;
                             break;
                         case 9:
-                            aPDFType = aH10String;
+                            aPDFType = u"H10"_ustr;
                             break;
                         default:
                             assert(false);
@@ -1701,7 +1671,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
                         {
                             // Special case: Open additional TOCI tag:
-                            BeginTagImpl(nullptr, vcl::pdf::StructElement::TOCI, aTOCIString);
+                            BeginTagImpl(nullptr, vcl::pdf::StructElement::TOCI, u"TOCI"_ustr);
                         }
                     }
                 }
@@ -1713,7 +1683,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // TabFrame: Table
 
             nPDFType = sal_uInt16(vcl::pdf::StructElement::Table);
-            aPDFType = aTableString;
+            aPDFType = u"Table"_ustr;
 
             {
                 // set up table column data:
@@ -1767,7 +1737,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             if ( !static_cast<const SwRowFrame*>(pFrame)->IsRepeatedHeadline() )
             {
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::TableRow);
-                aPDFType = aTRString;
+                aPDFType = u"TR"_ustr;
             }
             else
             {
@@ -1784,12 +1754,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( pTable->IsInHeadline( *pFrame ) || lcl_IsHeadlineCell( *static_cast<const SwCellFrame*>(pFrame) ) )
                 {
                     nPDFType = sal_uInt16(vcl::pdf::StructElement::TableHeader);
-                    aPDFType = aTHString;
+                    aPDFType = u"TH"_ustr;
                 }
                 else
                 {
                     nPDFType = sal_uInt16(vcl::pdf::StructElement::TableData);
-                    aPDFType = aTDString;
+                    aPDFType = u"TD"_ustr;
                 }
             }
             break;
@@ -1833,12 +1803,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     if ( bFormula )
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Formula);
-                        aPDFType = aFormulaString;
+                        aPDFType = u"Formula"_ustr;
                     }
                     else
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Figure);
-                        aPDFType = aFigureString;
+                        aPDFType = u"Figure"_ustr;
                     }
                 }
                 else
@@ -2020,7 +1990,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             if (!mpPDFExtOutDevData->GetSwPDFState()->m_NoteIdMap.empty())
             {
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::Annot);
-                aPDFType = aAnnotString;
+                aPDFType = u"Annot"_ustr;
             }
             break;
 
@@ -2087,7 +2057,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     if (!isContinueSpan)
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Quote);
-                        aPDFType = aQuoteString;
+                        aPDFType = u"Quote"_ustr;
                         CreateCurrentSpan(rInf, sStyleName.toString());
                     }
                 }
@@ -2096,7 +2066,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     if (!isContinueSpan)
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Code);
-                        aPDFType = aCodeString;
+                        aPDFType = u"Code"_ustr;
                         CreateCurrentSpan(rInf, sStyleName.toString());
                     }
                 }
@@ -2149,7 +2119,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     else if ( SwFieldIds::TableOfAuthorities == pField->Which() )
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::BibEntry);
-                        aPDFType = aBibEntryString;
+                        aPDFType = u"BibEntry"_ustr;
                     }
                 }
             }
@@ -2217,7 +2187,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             if (mpPorInfo->m_Mode == 1)
             {   // only works for multiple lines via wrapper from PaintSwFrame
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::LILabel);
-                aPDFType = aListLabelString;
+                aPDFType = u"Lbl"_ustr;
             }
             break;
 

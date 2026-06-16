@@ -290,14 +290,12 @@ void SwDocTest::testUserPerceivedCharCount()
 
     //Grapheme example, two different unicode code-points perceived by the user as a single
     //glyph
-    static constexpr OUStringLiteral sALEF_QAMATS = u"\u05D0\u05B8";
-    sal_Int32 nGraphemeCount = pBreakIter->getGraphemeCount(sALEF_QAMATS);
+    sal_Int32 nGraphemeCount = pBreakIter->getGraphemeCount(u"\u05D0\u05B8"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Grapheme Count should be 1", static_cast<sal_Int32>(1), nGraphemeCount);
 
     //Surrogate pair example, one single unicode code-point (U+1D11E)
     //represented as two code units in UTF-16
-    static constexpr OUStringLiteral sGCLEF = u"\U0001D11E";
-    sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
+    sal_Int32 nCount = pBreakIter->getGraphemeCount(u"\U0001D11E"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Surrogate Pair should be counted as single character", static_cast<sal_Int32>(1), nCount);
 }
 
@@ -928,9 +926,8 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(15), aDocStat.nChar);
         aDocStat.Reset();
 
-        static constexpr OUStringLiteral sChunk = u" \u2013 ";
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", sChunk));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", u" \u2013 "));
         pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aDocStat.nWord);

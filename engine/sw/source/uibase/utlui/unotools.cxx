@@ -63,8 +63,6 @@
 
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral cFactory = u"private:factory/swriter";
-
 static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xViewProps,
     bool bEnableOnlineMode)
 {
@@ -177,7 +175,7 @@ SwOneExampleFrame::~SwOneExampleFrame()
 void SwOneExampleFrame::CreateControl()
 {
     // create new doc
-    OUString sTempURL(cFactory);
+    OUString sTempURL(u"private:factory/swriter"_ustr);
     if(!m_sArgumentURL.isEmpty())
         sTempURL = m_sArgumentURL;
 

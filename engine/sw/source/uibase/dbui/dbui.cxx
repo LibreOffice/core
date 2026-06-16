@@ -62,12 +62,9 @@ CreateMonitor::~CreateMonitor()
 
 void CreateMonitor::UpdateCountingText()
 {
-    static constexpr OUStringLiteral sVariable_Total(u"%Y");
-    static constexpr OUStringLiteral sVariable_Position(u"%X");
-
     OUString sText(m_sCountingPattern);
-    sText = sText.replaceAll( sVariable_Total, OUString::number( m_nTotalCount ) );
-    sText = sText.replaceAll( sVariable_Position, OUString::number( m_nCurrentPosition ) );
+    sText = sText.replaceAll( u"%Y", OUString::number( m_nTotalCount ) );
+    sText = sText.replaceAll( u"%X", OUString::number( m_nCurrentPosition ) );
     m_xCounting->set_label(sText);
 }
 

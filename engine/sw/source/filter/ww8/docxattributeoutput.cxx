@@ -8547,19 +8547,15 @@ void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
         m_pSerializer->singleElementNS(XML_w, XML_effect, FSNS(XML_w, XML_val), "none");
 }
 
-constexpr OUStringLiteral MSWORD_CH_SHADING_FILL = u"FFFFFF"; // The attribute w:fill of w:shd, for MS-Word's character shading,
-constexpr OUStringLiteral MSWORD_CH_SHADING_COLOR = u"auto"; // The attribute w:color of w:shd, for MS-Word's character shading,
-constexpr OUStringLiteral MSWORD_CH_SHADING_VAL = u"pct15"; // The attribute w:value of w:shd, for MS-Word's character shading,
-
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
     // Check if the brush shading pattern is 'PCT15'. If so - write it back to the DOCX
     if (rBrush.GetShadingValue() == ShadingPattern::PCT15)
     {
         m_pSerializer->singleElementNS( XML_w, XML_shd,
-            FSNS( XML_w, XML_val ), MSWORD_CH_SHADING_VAL,
-            FSNS( XML_w, XML_color ), MSWORD_CH_SHADING_COLOR,
-            FSNS( XML_w, XML_fill ), MSWORD_CH_SHADING_FILL );
+            FSNS( XML_w, XML_val ), u"pct15"_ustr,
+            FSNS( XML_w, XML_color ), u"auto"_ustr,
+            FSNS( XML_w, XML_fill ), u"FFFFFF"_ustr );
     }
     else
     {

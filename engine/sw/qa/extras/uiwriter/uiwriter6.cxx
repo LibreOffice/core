@@ -2547,8 +2547,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
         SfxViewShell* pViewShell = SfxViewShell::Current();
         CPPUNIT_ASSERT(pViewShell);
         {
-            static constexpr OUStringLiteral sApplyRule(u"Spelling_Baaed");
-            SfxStringItem aApplyItem(FN_PARAM_1, sApplyRule);
+            SfxStringItem aApplyItem(FN_PARAM_1, u"Spelling_Baaed"_ustr);
             pViewShell->GetViewFrame().GetDispatcher()->ExecuteList(
                 SID_SPELLCHECK_APPLY_SUGGESTION, SfxCallMode::SYNCHRON, { &aApplyItem });
         }
