@@ -15,6 +15,7 @@
 
 #import <WebKit/WebKit.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import <CoreServices/CoreServices.h>
 
 #import "coda-Swift.h"
 #import "COWrapper.h"
@@ -351,50 +352,73 @@ static void registerAIHttpTransport()
 }
 
 /**
+ * Map a pasteboard type back to the engine mime type, or nil if it carries no
+ * usable mime.
+ */
++ (NSString *_Nullable)mimeForPasteboardType:(NSString *_Nonnull)identifier {
+    UTType * uti = [UTType typeWithIdentifier:identifier];
+
+    // Not a uniform type identifier at all: a raw type name, use it as is.
+    if (uti == nil)
+        return identifier;
+
+    if ([uti conformsToType:UTTypePlainText]) {
+        // Several plain-text types describe the same text. Keep only the UTF-8 one
+        // and tell the engine its charset, so we neither feed duplicates nor
+        // mislabel UTF-16 bytes as UTF-8.
+        return [identifier isEqualToString:UTTypeUTF8PlainText.identifier]
+            ? @"text/plain;charset=utf-8" : nil;
+    }
+
+    // A registered type maps to its mime directly (png, html, rtf, pdf, ...).
+    if (!uti.dynamic)
+        return uti.preferredMIMEType;
+
+    // The internal engine formats (application/x-openoffice-*) have no registered
+    // type, so the system stored each as a dynamic type that keeps the original
+    // name under the pasteboard tag class. preferredMIMEType is nil for these;
+    // recover the name from that tag class, the same value the Pasteboard Viewer
+    // shows.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CFStringRef aTag = UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)identifier,
+                                                       CFSTR("com.apple.nspboard-type"));
+#pragma clang diagnostic pop
+    return aTag != NULL ? (__bridge_transfer NSString *)aTag : nil;
+}
+
+/**
  * Sets the LOKit internal clipboard with the content of NSPasteboard.
  */
 + (void)setClipboardWith:(Document *_Nonnull)document from:(NSPasteboard *_Nonnull)pasteboard {
-    // Read every flavour on the pasteboard through the pasteboard-level types API
-    // (the same one desktop LibreOffice reads with, see vcl/osx/OSXTransferable.cxx),
-    // not just the first item. That way the internal engine formats
-    // (application/x-openoffice-*) that another LibreOffice build puts there reach
-    // the engine, so a paste from LibreOffice into CODA reconstructs the
-    // full-fidelity transferable rather than falling back to RTF or HTML.
+    // Read the flavours per pasteboard item rather than through the pasteboard-level
+    // types property. The latter returns only the types backed by a uniform type
+    // identifier, so the internal engine formats (application/x-openoffice-*), which
+    // have no such identifier, are invisible through it even though they are present.
+    // The per-item types carry the raw type names as written, which is what reaches
+    // the engine and lets a slide or other rich content paste with full fidelity.
     NSMutableArray<NSString *> * orderedMimes = [NSMutableArray array];
     NSMutableDictionary<NSString *, NSData *> * dataByMime = [NSMutableDictionary dictionary];
 
-    for (NSPasteboardType identifier in pasteboard.types) {
-        UTType * uti = [UTType typeWithIdentifier:identifier];
-
-        NSString * mime;
-        if (uti != nil && [uti conformsToType:UTTypePlainText]) {
-            // Several plain-text UTIs (utf8, utf16-external, ...) describe the same
-            // text. Keep only the UTF-8 one and tell the engine its charset, so we
-            // neither feed duplicates nor mislabel UTF-16 bytes as UTF-8.
-            if (![identifier isEqualToString:UTTypeUTF8PlainText.identifier])
+    for (NSPasteboardItem * item in pasteboard.pasteboardItems) {
+        for (NSPasteboardType identifier in item.types) {
+            NSString * mime = [COWrapper mimeForPasteboardType:identifier];
+            if (mime == nil) {
+                LOG_WRN("Pasteboard type " << [identifier UTF8String] << " had no mime type when deserializing clipboard, skipping...");
                 continue;
-            mime = @"text/plain;charset=utf-8";
-        } else {
-            // No system UTI means an internal engine format whose type name is its
-            // raw mime string, which we pass through unchanged.
-            mime = uti ? uti.preferredMIMEType : identifier;
+            }
+
+            // Keep the first representation we see for a given mime.
+            if (dataByMime[mime] != nil)
+                continue;
+
+            NSData * value = [item dataForType:identifier];
+            if (value == nil)
+                continue;
+
+            dataByMime[mime] = value;
+            [orderedMimes addObject:mime];
         }
-
-        if (mime == nil) {
-            LOG_WRN("UTI " << [identifier UTF8String] << " did not have associated mime type when deserializing clipboard, skipping...");
-            continue;
-        }
-
-        // Keep the first representation we see for a given mime.
-        if (dataByMime[mime] != nil)
-            continue;
-
-        NSData * value = [pasteboard dataForType:identifier];
-        if (value == nil)
-            continue;
-
-        dataByMime[mime] = value;
-        [orderedMimes addObject:mime];
     }
 
     if (orderedMimes.count == 0)
