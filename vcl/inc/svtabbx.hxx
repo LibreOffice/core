@@ -36,8 +36,6 @@ private:
     Link<const EntryItemText&, bool> m_aEditedEntryHdl;
 
 protected:
-    static std::u16string_view  GetToken( std::u16string_view sStr, sal_Int32 &nIndex );
-
     virtual void                SetTabs() override;
     virtual void InitEntry(SvTreeListEntry& rEntry, const OUString&, const Image&,
                            const Image&) override;

@@ -178,12 +178,6 @@ OUString SvTabListBox::GetCellText( sal_uInt32 nPos, sal_uInt16 nCol ) const
     return aResult;
 }
 
-// static
-std::u16string_view SvTabListBox::GetToken( std::u16string_view sStr, sal_Int32& nIndex )
-{
-    return o3tl::getToken(sStr, 0, '\t', nIndex);
-}
-
 OUString SvTabListBox::GetTabEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const
 {
     SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
