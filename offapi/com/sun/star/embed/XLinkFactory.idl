@@ -1,0 +1,80 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module embed {
+
+/** allows to create and initialize a new link of specified type.
+ */
+published interface XLinkFactory: com::sun::star::uno::XInterface
+{
+    /** creates a new link and transport parameters for persistent
+        initialization.
+
+        <p>
+        This method can be used to have a full control over persistence
+        initialization of a link.
+        </p>
+
+        @param aClassID
+            the class id of the new object
+
+        @param ClassName
+            the class name of the new object
+
+        @param xStorage
+            a parent storage the entry should be created in
+
+        @param sEntryName
+            a name for the entry
+
+        @param aArgs
+            com::sun::star::document::MediaDescriptor
+            that contains source for the link
+
+        @param aObjectArgs
+            optional parameters for the object persistence initialization
+            see also
+            com::sun::star::embed::EmbeddedObjectDescriptor
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws com::sun::star::io::IOException
+            in case of io problems during opening or creation
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    ::com::sun::star::uno::XInterface createInstanceLinkUserInit(
+            [in] sequence< byte > aClassID,
+            [in] string ClassName,
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntryName,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
