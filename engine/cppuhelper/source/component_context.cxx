@@ -45,7 +45,6 @@
 #include <utility>
 
 constexpr OUString SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceManager"_ustr;
-constexpr OUStringLiteral TDMGR_SINGLETON = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -404,7 +403,7 @@ void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
             rEntry.value >>= xComp;
             if (xComp.is())
             {
-                if ( rName == TDMGR_SINGLETON )
+                if ( rName == u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr )
                 {
                     xTDMgr = std::move(xComp);
                 }
