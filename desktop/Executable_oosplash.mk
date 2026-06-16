@@ -12,6 +12,7 @@ $(eval $(call gb_Executable_Executable,oosplash))
 $(eval $(call gb_Executable_set_targettype_gui,oosplash,YES))
 
 $(eval $(call gb_Executable_use_libraries,oosplash,\
+    comphelper \
     sal \
 ))
 
@@ -20,6 +21,9 @@ $(eval $(call gb_Executable_add_cobjects,oosplash,\
     desktop/unx/source/file_image_unx \
     $(if $(ENABLE_PAGEIN),desktop/unx/source/pagein) \
     desktop/unx/source/splashx \
+))
+
+$(eval $(call gb_Executable_add_cxxobjects,oosplash,\
     desktop/unx/source/start \
 ))
 

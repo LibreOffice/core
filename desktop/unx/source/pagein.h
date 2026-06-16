@@ -21,6 +21,10 @@
 
 #include <config_features.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if HAVE_FEATURE_PAGEIN
 void pagein_execute(char const* path, char const* file);
 #else
@@ -28,6 +32,10 @@ inline void pagein_execute(char const* path, char const* file)
 {
     (void)path;
     (void)file;
+}
+#endif
+
+#ifdef __cplusplus
 }
 #endif
 

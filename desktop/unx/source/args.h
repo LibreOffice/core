@@ -9,6 +9,10 @@
 #include <sal/types.h>
 #include <rtl/ustring.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
   rtl_uString *pAppPath;
   const char  *pPageinType;     // @pagein-writer for - writer etc. else NULL
@@ -24,5 +28,9 @@ typedef struct {
 
 Args *args_parse (void);
 void  args_free  (Args *args);
+
+#ifdef __cplusplus
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

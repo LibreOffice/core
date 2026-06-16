@@ -24,7 +24,7 @@
 #include <dp_interact.h>
 #include <dp_shared.hxx>
 #include <rtl/uri.hxx>
-#include <rtl/digest.h>
+#include <comphelper/hash.hxx>
 #include <rtl/random.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -299,27 +299,18 @@ OUString generateOfficePipeId()
         throw Exception(u"Extension Manager: Could not obtain path for UserInstallation."_ustr, nullptr);
     }
 
-    rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-    if (!digest) {
-        throw RuntimeException(u"cannot get digest rtl_Digest_AlgorithmMD5!"_ustr, nullptr );
-    }
-
     sal_uInt8 const * data =
         reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
     std::size_t size = userPath.getLength() * sizeof (sal_Unicode);
-    sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
-    std::unique_ptr<sal_uInt8[]> md5_buf( new sal_uInt8 [ md5_key_len ] );
 
-    rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
-    rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );
-    rtl_digest_get( digest, md5_buf.get(), md5_key_len );
-    rtl_digest_destroy( digest );
+    std::vector<unsigned char> hash{
+        ::comphelper::Hash::calculateHash(data, size, ::comphelper::HashType::MD5)};
 
     // create hex-value string from the MD5 value to keep
     // the string size minimal
     OUStringBuffer buf( "SingleOfficeIPC_" );
-    for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
-        buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
+    for (unsigned char b : hash) {
+        buf.append( static_cast<sal_Int32>(b), 0x10 );
     }
     return buf.makeStringAndClear();
 }
