@@ -496,7 +496,6 @@ rtl::Reference<SdrObject> XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter
                 if( mnObjType == 8 )//OCX
                 {
                     //Need summary type for export
-                    static constexpr OUStringLiteral sObjIdPropertyName(u"ObjIDinMSO");
                     const XclImpPictureObj* const pObj = dynamic_cast< const XclImpPictureObj* const >(this);
                     if( pObj != nullptr && pObj->IsOcxControl() )
                     {
@@ -505,7 +504,7 @@ rtl::Reference<SdrObject> XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter
                             const sal_Int16 nOCXControlType =  eCreateFromMSOCXControl;
                             xPropSet->setPropertyValue(sPropertyName, Any(nOCXControlType));
                             //Detail type(checkbox, button ...)
-                            xPropSet->setPropertyValue(sObjIdPropertyName, Any(sal_uInt16(mnObjId)));
+                            xPropSet->setPropertyValue(u"ObjIDinMSO"_ustr, Any(sal_uInt16(mnObjId)));
                         }
                         catch(const Exception&)
                         {

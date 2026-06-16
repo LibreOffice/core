@@ -335,15 +335,13 @@ void lclGetFormulaFromStringList( OUString& rFmlaStr, std::u16string_view rStrin
     @return  true = Conversion successful. */
 bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaStr, sal_Unicode cFmlaSep )
 {
-    static constexpr OUStringLiteral aQuotes( u"\"\"" );
-
     rStringList.clear();
     bool bIsStringList = !rFmlaStr.isEmpty();
     bool bTokenAdded = false;
 
     for ( sal_Int32 nStringIx = 0; bIsStringList && nStringIx>=0; )
     {
-        OUString aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, aQuotes, cFmlaSep, nStringIx ) );
+        OUString aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, u"\"\""_ustr, cFmlaSep, nStringIx ) );
         aToken = comphelper::string::strip(aToken, ' ');
         if( !aToken.isEmpty() )      // ignore empty tokens, i.e. "a";;"b"
         {

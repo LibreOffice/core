@@ -149,8 +149,6 @@ ScTpFormulaItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
     return new ScTpFormulaItem( *this );
 }
 
-constexpr OUStringLiteral CFGPATH_FORMULA = u"Office.Calc/Formula";
-
 #define SCFORMULAOPT_GRAMMAR              0
 #define SCFORMULAOPT_ENGLISH_FUNCNAME     1
 #define SCFORMULAOPT_SEP_ARG              2
@@ -217,7 +215,7 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 }
 
 ScFormulaCfg::ScFormulaCfg() :
-    ConfigItem( CFGPATH_FORMULA )
+    ConfigItem( u"Office.Calc/Formula"_ustr )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     UpdateFromProperties( aNames );

@@ -2307,8 +2307,6 @@ std::shared_ptr<SfxDialogController> ScModule::Find1RefWindow(sal_uInt16 nSlotId
 
 using namespace com::sun::star;
 
-constexpr OUStringLiteral LINGUPROP_AUTOSPELL = u"IsSpellAuto";
-
 void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang )
 {
     // use SvtLinguConfig instead of service LinguProperties to avoid
@@ -2329,7 +2327,7 @@ void ScModule::SetAutoSpellProperty( bool bSet )
     // loading the linguistic component
     SvtLinguConfig aConfig;
 
-    aConfig.SetProperty( LINGUPROP_AUTOSPELL, uno::Any(bSet) );
+    aConfig.SetProperty( u"IsSpellAuto", uno::Any(bSet) );
 }
 
 bool ScModule::GetAutoSpellProperty()

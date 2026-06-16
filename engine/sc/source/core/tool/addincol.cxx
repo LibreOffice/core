@@ -350,9 +350,6 @@ static sal_uInt16 lcl_GetCategory( std::u16string_view rName )
     return ID_FUNCTION_GRP_ADDINS;  // if not found, use Add-In group
 }
 
-constexpr OUStringLiteral CFGPATH_ADDINS = u"Office.CalcAddIns/AddInInfo";
-constexpr OUStringLiteral CFGSTR_ADDINFUNCTIONS = u"AddInFunctions";
-
 #define CFG_FUNCPROP_DISPLAYNAME    0
 #define CFG_FUNCPROP_DESCRIPTION    1
 #define CFG_FUNCPROP_CATEGORY       2
@@ -362,9 +359,6 @@ constexpr OUString CFGSTR_DESCRIPTION = u"Description"_ustr;
 constexpr OUString CFGSTR_CATEGORY = u"Category"_ustr;
 // CategoryDisplayName is ignored for now
 
-constexpr OUStringLiteral CFGSTR_COMPATIBILITYNAME = u"CompatibilityName";
-constexpr OUStringLiteral CFGSTR_PARAMETERS = u"Parameters";
-
 void ScUnoAddInCollection::ReadConfiguration()
 {
     // called only from Initialize
@@ -373,7 +367,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
     // Additional, temporary config item for the display names and
     // compatibility names.
-    ScLinkConfigItem aAllLocalesConfig( CFGPATH_ADDINS, ConfigItemMode::AllLocales );
+    ScLinkConfigItem aAllLocalesConfig( u"Office.CalcAddIns/AddInInfo"_ustr, ConfigItemMode::AllLocales );
     // CommitLink is not used (only reading values)
 
     const OUString sSlash('/');
@@ -385,7 +379,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     {
         ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName );
 
-        OUString aFunctionsPath(aServiceName + sSlash + CFGSTR_ADDINFUNCTIONS);
+        OUString aFunctionsPath(aServiceName + sSlash + u"AddInFunctions"_ustr);
 
         uno::Sequence<OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
         sal_Int32 nNewCount = aFunctionNames.getLength();
@@ -486,7 +480,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 ::std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
 
-                OUString aCompPath(aFuncPropPath + CFGSTR_COMPATIBILITYNAME);
+                OUString aCompPath(aFuncPropPath + u"CompatibilityName"_ustr);
                 uno::Sequence<OUString> aCompPropNames( &aCompPath, 1 );
 
                 uno::Sequence<uno::Any> aCompProperties = aAllLocalesConfig.GetProperties( aCompPropNames );
@@ -524,7 +518,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 std::unique_ptr<ScAddInArgDesc[]> pVisibleArgs;
                 sal_Int32 nVisibleCount = 0;
 
-                OUString aArgumentsPath(aFuncPropPath + CFGSTR_PARAMETERS);
+                OUString aArgumentsPath(aFuncPropPath + u"Parameters"_ustr);
 
                 const uno::Sequence<OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();

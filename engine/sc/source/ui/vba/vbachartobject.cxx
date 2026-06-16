@@ -30,8 +30,6 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-constexpr OUStringLiteral PERSIST_NAME(u"PersistName");
-
 ScVbaChartObject::ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, css::uno::Reference< css::table::XTableChart >  _xTableChart, css::uno::Reference< css::drawing::XDrawPageSupplier >  _xDrawPageSupplier ) : ChartObjectImpl_BASE( _xParent, _xContext ), xTableChart(std::move( _xTableChart )), xDrawPageSupplier(std::move( _xDrawPageSupplier ))
 {
         xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -63,7 +61,7 @@ ScVbaChartObject::setShape()
             {
                 uno::Reference< beans::XPropertySet > xShapePropertySet(xShape, uno::UNO_QUERY_THROW );
                 OUString sName;
-                xShapePropertySet->getPropertyValue(PERSIST_NAME ) >>=sName;
+                xShapePropertySet->getPropertyValue(u"PersistName"_ustr ) >>=sName;
                 if ( sName == sPersistName )
                 {
                     xNamedShape.set( xShape, uno::UNO_QUERY_THROW );

@@ -56,10 +56,6 @@ namespace sc
 {
 namespace
 {
-constexpr OUStringLiteral constIdCategories(u"categories");
-constexpr OUStringLiteral constIdLabel(u"label");
-constexpr OUStringLiteral constIdData(u"data");
-
 std::span<const SfxItemPropertyMapEntry> lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
@@ -81,17 +77,17 @@ uno::Reference<frame::XModel> lcl_GetXModel(const ScDocument * pDoc)
 
 OUString lcl_identifierForData(sal_Int32 index)
 {
-    return "PT@" + constIdData + " " + OUString::number(index);
+    return "PT@" + u"data"_ustr + " " + OUString::number(index);
 }
 
 OUString lcl_identifierForLabel(sal_Int32 index)
 {
-    return "PT@" + constIdLabel + " " + OUString::number(index);
+    return "PT@" + u"label"_ustr + " " + OUString::number(index);
 }
 
 OUString lcl_identifierForCategories()
 {
-    return "PT@" + constIdCategories;
+    return "PT@" + u"categories"_ustr;
 }
 
 std::vector<OUString> lcl_getVisiblePageMembers(const uno::Reference<uno::XInterface> & xLevel)

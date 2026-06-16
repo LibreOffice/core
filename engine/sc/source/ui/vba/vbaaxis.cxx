@@ -33,7 +33,6 @@ using namespace ::ooo::vba::excel::XlScaleType;
 constexpr OUString ORIGIN(u"Origin"_ustr);
 constexpr OUString AUTOORIGIN(u"AutoOrigin"_ustr);
 constexpr OUString VBA_MIN(u"Max"_ustr);
-constexpr OUStringLiteral VBA_MAX(u"Min");
 ScVbaChart*
 ScVbaAxis::getChartPtr()
 {
@@ -139,7 +138,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses )
                 bCrossesAreCustomized = false;
                 break;
             case xlAxisCrossesMaximum:                     // The axis crosses at the maximum value.
-                mxPropertySet->getPropertyValue(VBA_MAX) >>= fNum;
+                mxPropertySet->getPropertyValue(u"Min"_ustr) >>= fNum;
                 setCrossesAt(fNum);
                 bCrossesAreCustomized = false;
                 break;

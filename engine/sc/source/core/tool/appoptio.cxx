@@ -159,8 +159,6 @@ static void lcl_GetSortList( Any& rDest )
     rDest <<= aSeq;
 }
 
-constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";
-
 #define SCLAYOUTOPT_MEASURE         0
 #define SCLAYOUTOPT_STATUSBAR       1
 #define SCLAYOUTOPT_ZOOMVAL         2
@@ -168,36 +166,24 @@ constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";
 #define SCLAYOUTOPT_SYNCZOOM        4
 #define SCLAYOUTOPT_STATUSBARMULTI  5
 
-constexpr OUStringLiteral CFGPATH_INPUT = u"Office.Calc/Input";
-
 #define SCINPUTOPT_LASTFUNCS        0
 #define SCINPUTOPT_FAVOURITEFUNCS   1
 #define SCINPUTOPT_AUTOINPUT        2
 #define SCINPUTOPT_DET_AUTO         3
-
-constexpr OUStringLiteral CFGPATH_REVISION = u"Office.Calc/Revision/Color";
 
 #define SCREVISOPT_CHANGE           0
 #define SCREVISOPT_INSERTION        1
 #define SCREVISOPT_DELETION         2
 #define SCREVISOPT_MOVEDENTRY       3
 
-constexpr OUStringLiteral CFGPATH_CONTENT = u"Office.Calc/Content/Update";
-
 #define SCCONTENTOPT_LINK           0
 
-constexpr OUStringLiteral CFGPATH_SORTLIST = u"Office.Calc/SortList";
-
 #define SCSORTLISTOPT_LIST          0
-
-constexpr OUStringLiteral CFGPATH_MISC = u"Office.Calc/Misc";
 
 #define SCMISCOPT_DEFOBJWIDTH       0
 #define SCMISCOPT_DEFOBJHEIGHT      1
 #define SCMISCOPT_SHOWSHAREDDOCWARN 2
 #define SCMISCOPT_CLICKCHANGEROTATION 3
-
-constexpr OUStringLiteral CFGPATH_COMPAT = u"Office.Calc/Compatibility";
 
 #define SCCOMPATOPT_KEY_BINDING     0
 #define SCCOMPATOPT_LINK_LIKE_MS    1
@@ -274,13 +260,13 @@ Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
 }
 
 ScAppCfg::ScAppCfg() :
-    aLayoutItem( CFGPATH_LAYOUT ),
-    aInputItem( CFGPATH_INPUT ),
-    aRevisionItem( CFGPATH_REVISION ),
-    aContentItem( CFGPATH_CONTENT ),
-    aSortListItem( CFGPATH_SORTLIST ),
-    aMiscItem( CFGPATH_MISC ),
-    aCompatItem( CFGPATH_COMPAT )
+    aLayoutItem( u"Office.Calc/Layout"_ustr ),
+    aInputItem( u"Office.Calc/Input"_ustr ),
+    aRevisionItem( u"Office.Calc/Revision/Color"_ustr ),
+    aContentItem( u"Office.Calc/Content/Update"_ustr ),
+    aSortListItem( u"Office.Calc/SortList"_ustr ),
+    aMiscItem( u"Office.Calc/Misc"_ustr ),
+    aCompatItem( u"Office.Calc/Compatibility"_ustr )
 {
     aLayoutItem.EnableNotification(GetLayoutPropertyNames());
     ReadLayoutCfg();

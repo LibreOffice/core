@@ -469,9 +469,6 @@ const char* const sppcItalicNames[] =
 
 } // namespace
 
-constexpr OUStringLiteral gaPageNumberService( u"com.sun.star.text.TextField.PageNumber" );
-constexpr OUStringLiteral gaPageCountService( u"com.sun.star.text.TextField.PageCount" );
-constexpr OUStringLiteral gaSheetNameService( u"com.sun.star.text.TextField.SheetName" );
 constexpr OUString gaFileNameService( u"com.sun.star.text.TextField.FileName"_ustr );
 constexpr OUString gaDateTimeService( u"com.sun.star.text.TextField.DateTime"_ustr );
 
@@ -551,13 +548,13 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     case 'R':   setNewPortion( HF_RIGHT );  break;  // right portion
 
                     case 'P':   // page number
-                        appendField( createField( gaPageNumberService ) );
+                        appendField( createField( u"com.sun.star.text.TextField.PageNumber"_ustr ) );
                     break;
                     case 'N':   // total page count
-                        appendField( createField( gaPageCountService ) );
+                        appendField( createField( u"com.sun.star.text.TextField.PageCount"_ustr ) );
                     break;
                     case 'A':   // current sheet name
-                        appendField( createField( gaSheetNameService ) );
+                        appendField( createField( u"com.sun.star.text.TextField.SheetName"_ustr ) );
                     break;
 
                     case 'F':   // file name

@@ -41,17 +41,12 @@ OUString ScUnitConverterData::BuildIndexString(
 }
 
 // ScUnitConverter
-constexpr OUStringLiteral CFGPATH_UNIT = u"Office.Calc/UnitConversion";
-constexpr OUStringLiteral CFGSTR_UNIT_FROM = u"FromUnit";
-constexpr OUStringLiteral CFGSTR_UNIT_TO = u"ToUnit";
-constexpr OUStringLiteral CFGSTR_UNIT_FACTOR = u"Factor";
-
 ScUnitConverter::ScUnitConverter()
 {
     // read from configuration - "convert.ini" is no longer used
     //TODO: config item as member to allow change of values
 
-    ScLinkConfigItem aConfigItem( CFGPATH_UNIT );
+    ScLinkConfigItem aConfigItem( u"Office.Calc/UnitConversion"_ustr );
 
     // empty node name -> use the config item's path itself
     const Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( u""_ustr );
@@ -69,9 +64,9 @@ ScUnitConverter::ScUnitConverter()
     {
         OUString sPrefix = rNode + sSlash;
 
-        pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FROM;
-        pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_TO;
-        pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FACTOR;
+        pValNameArray[nIndex++] = sPrefix + u"FromUnit"_ustr;
+        pValNameArray[nIndex++] = sPrefix + u"ToUnit"_ustr;
+        pValNameArray[nIndex++] = sPrefix + u"Factor"_ustr;
     }
 
     Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);

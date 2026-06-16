@@ -62,13 +62,6 @@
 
 using namespace com::sun::star;
 
-constexpr OUStringLiteral SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet";
-
-//! move to a header file?
-constexpr OUStringLiteral SC_DBPROP_DATASOURCENAME = u"DataSourceName";
-constexpr OUStringLiteral SC_DBPROP_COMMAND = u"Command";
-constexpr OUStringLiteral SC_DBPROP_COMMANDTYPE = u"CommandType";
-
 void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame* pFrame )
 {
     //  called after opening the database beamer
@@ -198,7 +191,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         {
             bDispose = true;
             xRowSet.set(comphelper::getProcessServiceFactory()->createInstance(
-                            SC_SERVICE_ROWSET ),
+                            u"com.sun.star.sdb.RowSet"_ustr ),
                         uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
             OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
@@ -211,11 +204,11 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                             sdb::CommandType::TABLE );
 
-                xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, uno::Any(rParam.aDBName) );
+                xRowProp->setPropertyValue( u"DataSourceName"_ustr, uno::Any(rParam.aDBName) );
 
-                xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(rParam.aStatement) );
+                xRowProp->setPropertyValue( u"Command"_ustr, uno::Any(rParam.aStatement) );
 
-                xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(nType) );
+                xRowProp->setPropertyValue( u"CommandType"_ustr, uno::Any(nType) );
 
                 uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
                 if ( xExecute.is() )

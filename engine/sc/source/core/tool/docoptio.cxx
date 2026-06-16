@@ -132,8 +132,6 @@ ScTpCalcItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 
 //  Config Item containing document options
 
-constexpr OUStringLiteral CFGPATH_CALC = u"Office.Calc/Calculate";
-
 #define SCCALCOPT_ITER_ITER         0
 #define SCCALCOPT_ITER_STEPS        1
 #define SCCALCOPT_ITER_MINCHG       2
@@ -147,8 +145,6 @@ constexpr OUStringLiteral CFGPATH_CALC = u"Office.Calc/Calculate";
 #define SCCALCOPT_FINDLABEL         10
 #define SCCALCOPT_REGEX             11
 #define SCCALCOPT_WILDCARDS         12
-
-constexpr OUStringLiteral CFGPATH_DOCLAYOUT = u"Office.Calc/Layout/Other";
 
 #define SCDOCLAYOUTOPT_TABSTOP      0
 
@@ -178,8 +174,8 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 }
 
 ScDocCfg::ScDocCfg() :
-    aCalcItem( CFGPATH_CALC ),
-    aLayoutItem(CFGPATH_DOCLAYOUT)
+    aCalcItem( u"Office.Calc/Calculate"_ustr ),
+    aLayoutItem(u"Office.Calc/Layout/Other"_ustr)
 {
     sal_Int32 nIntVal = 0;
 

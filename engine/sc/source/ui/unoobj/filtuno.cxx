@@ -50,14 +50,10 @@ using namespace com::sun::star::uno;
 using namespace connectivity::dbase;
 
 constexpr OUString SCFILTEROPTIONSOBJ_SERVICE = u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr;
-constexpr OUStringLiteral SCFILTEROPTIONSOBJ_IMPLNAME = u"com.sun.star.comp.Calc.FilterOptionsDialog";
 
-SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTEROPTIONSOBJ_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, u"com.sun.star.comp.Calc.FilterOptionsDialog"_ustr, SCFILTEROPTIONSOBJ_SERVICE )
 
-constexpr OUStringLiteral SC_UNONAME_FILENAME = u"URL";
-constexpr OUStringLiteral SC_UNONAME_FILTERNAME = u"FilterName";
 constexpr OUString SC_UNONAME_FILTEROPTIONS = u"FilterOptions"_ustr;
-constexpr OUStringLiteral SC_UNONAME_INPUTSTREAM = u"InputStream";
 
 constexpr OUString DBF_CHAR_SET = u"CharSet"_ustr;
 constexpr OUString DBF_SEP_PATH_IMPORT = u"Office.Calc/Dialogs/DBFImport"_ustr;
@@ -151,13 +147,13 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::
     {
         OUString aPropName(rProp.Name);
 
-        if ( aPropName == SC_UNONAME_FILENAME )
+        if ( aPropName == u"URL"_ustr )
             rProp.Value >>= aFileName;
-        else if ( aPropName == SC_UNONAME_FILTERNAME )
+        else if ( aPropName == u"FilterName"_ustr )
             rProp.Value >>= aFilterName;
         else if ( aPropName == SC_UNONAME_FILTEROPTIONS )
             rProp.Value >>= aFilterOptions;
-        else if ( aPropName == SC_UNONAME_INPUTSTREAM )
+        else if ( aPropName == u"InputStream"_ustr )
             rProp.Value >>= xInputStream;
     }
 }

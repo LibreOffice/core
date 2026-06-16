@@ -32,8 +32,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
-constexpr OUStringLiteral SC_LAYERID = u"LayerID";
-
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -56,7 +54,7 @@ void XMLTableShapeImportHelper::SetLayer(const uno::Reference<drawing::XShape>& 
     {
         uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
         if( xShapeProp.is() )
-            xShapeProp->setPropertyValue( SC_LAYERID, uno::Any(nLayerID.get()) );
+            xShapeProp->setPropertyValue( u"LayerID"_ustr, uno::Any(nLayerID.get()) );
     }
 }
 

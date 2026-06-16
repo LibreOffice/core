@@ -49,9 +49,6 @@ using namespace ::ooo::vba::excel::XlRowCol;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;
 
-constexpr OUStringLiteral CHART_NAME(u"Name");
-// #TODO move this constant to vbaseries.[ch]xx ( when it exists )
-constexpr OUStringLiteral DEFAULTSERIESPREFIX(u"Series");
 constexpr OUString DATAROWSOURCE(u"DataRowSource"_ustr);
 constexpr OUString UPDOWN(u"UpDown"_ustr);
 constexpr OUString VOLUME(u"Volume"_ustr);
@@ -86,7 +83,7 @@ ScVbaChart::getName()
     uno::Reference< beans::XPropertySet > xProps( mxChartDocument, uno::UNO_QUERY_THROW );
     try
     {
-        xProps->getPropertyValue( CHART_NAME ) >>= sName;
+        xProps->getPropertyValue( u"Name"_ustr ) >>= sName;
     }
     catch( const uno::Exception & ) // swallow exceptions
     {
@@ -626,7 +623,7 @@ ScVbaChart::getDefaultSeriesDescriptions( sal_Int32 _nCount )
 {
     uno::Sequence< OUString > sDescriptions ( _nCount );
     std::generate_n(sDescriptions.getArray(), _nCount,
-        [i = 1]() mutable -> OUString { return DEFAULTSERIESPREFIX + OUString::number(i++); });
+        [i = 1]() mutable -> OUString { return u"Series"_ustr + OUString::number(i++); });
     return sDescriptions;
 }
 

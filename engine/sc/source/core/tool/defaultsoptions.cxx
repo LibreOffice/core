@@ -84,8 +84,6 @@ ScTpDefaultsItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
     return new ScTpDefaultsItem( *this );
 }
 
-constexpr OUStringLiteral CFGPATH_FORMULA = u"Office.Calc/Defaults";
-
 #define SCDEFAULTSOPT_TAB_COUNT  0
 #define SCDEFAULTSOPT_TAB_PREFIX 1
 #define SCDEFAULTSOPT_JUMBO_SHEETS 2
@@ -99,7 +97,7 @@ Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 }
 
 ScDefaultsCfg::ScDefaultsCfg() :
-    ConfigItem( CFGPATH_FORMULA )
+    ConfigItem( u"Office.Calc/Defaults"_ustr )
 {
     OUString aPrefix;
 

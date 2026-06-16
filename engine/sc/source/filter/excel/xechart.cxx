@@ -1922,7 +1922,6 @@ bool XclExpChSeries::ConvertDataSeries(
                     Reference< XColorScheme > xColorScheme = xDiagram->getDefaultColorScheme();
                     if( xColorScheme.is() )
                     {
-                        static constexpr OUStringLiteral aFillStyleName = u"FillStyle";
                         static constexpr OUString aColorName = u"Color"_ustr;
                         namespace cssd = ::com::sun::star::drawing;
                         for( sal_Int32 nPointIdx = 0; nPointIdx < nMaxPointCount; ++nPointIdx )
@@ -1931,7 +1930,7 @@ bool XclExpChSeries::ConvertDataSeries(
                             ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIdx );
                             // test that the point fill style is solid, but no color is set
                             cssd::FillStyle eFillStyle = cssd::FillStyle_NONE;
-                            if( aPointProp.GetProperty( eFillStyle, aFillStyleName ) &&
+                            if( aPointProp.GetProperty( eFillStyle, u"FillStyle"_ustr ) &&
                                 (eFillStyle == cssd::FillStyle_SOLID) &&
                                 !aPointProp.HasProperty( aColorName ) )
                             {

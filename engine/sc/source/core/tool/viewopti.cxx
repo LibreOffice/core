@@ -192,8 +192,6 @@ ScTpViewItem* ScTpViewItem::Clone( SfxItemPool * ) const
 
 //  Config Item containing view options
 
-constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";
-
 #define SCLAYOUTOPT_GRIDLINES       0
 #define SCLAYOUTOPT_GRIDCOLOR       1
 #define SCLAYOUTOPT_PAGEBREAK       2
@@ -207,8 +205,6 @@ constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";
 #define SCLAYOUTOPT_SUMMARY         10
 #define SCLAYOUTOPT_THEMEDCURSOR    11
 
-constexpr OUStringLiteral CFGPATH_DISPLAY = u"Office.Calc/Content/Display";
-
 #define SCDISPLAYOPT_FORMULA        0
 #define SCDISPLAYOPT_ZEROVALUE      1
 #define SCDISPLAYOPT_NOTETAG        2
@@ -219,8 +215,6 @@ constexpr OUStringLiteral CFGPATH_DISPLAY = u"Office.Calc/Content/Display";
 #define SCDISPLAYOPT_OBJECTGRA      7
 #define SCDISPLAYOPT_CHART          8
 #define SCDISPLAYOPT_DRAWING        9
-
-constexpr OUStringLiteral CFGPATH_GRID = u"Office.Calc/Grid";
 
 #define SCGRIDOPT_RESOLU_X          0
 #define SCGRIDOPT_RESOLU_Y          1
@@ -276,9 +270,9 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 }
 
 ScViewCfg::ScViewCfg() :
-    aLayoutItem( CFGPATH_LAYOUT ),
-    aDisplayItem( CFGPATH_DISPLAY ),
-    aGridItem( CFGPATH_GRID )
+    aLayoutItem( u"Office.Calc/Layout"_ustr ),
+    aDisplayItem( u"Office.Calc/Content/Display"_ustr ),
+    aGridItem( u"Office.Calc/Grid"_ustr )
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues = aLayoutItem.GetProperties(aNames);

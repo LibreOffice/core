@@ -96,12 +96,6 @@ using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::sheet::XDimensionsSupplier;
 using ::com::sun::star::beans::XPropertySet;
 
-constexpr OUStringLiteral SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet";
-
-constexpr OUStringLiteral SC_DBPROP_DATASOURCENAME = u"DataSourceName";
-constexpr OUStringLiteral SC_DBPROP_COMMAND = u"Command";
-constexpr OUStringLiteral SC_DBPROP_COMMANDTYPE = u"CommandType";
-
 constexpr OUString SCDPSOURCE_SERVICE = u"com.sun.star.sheet.DataPilotSource"_ustr;
 
 namespace {
@@ -3524,7 +3518,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     try
     {
         xRowSet.set(comphelper::getProcessServiceFactory()->createInstance(
-                       SC_SERVICE_ROWSET),
+                       u"com.sun.star.sdb.RowSet"_ustr),
                     UNO_QUERY);
 
         uno::Reference<beans::XPropertySet> xRowProp(xRowSet, UNO_QUERY);
@@ -3537,9 +3531,9 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
 
         //  set source parameters
 
-        xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, Any(rDBName) );
-        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, Any(rCommand) );
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, Any(nSdbType) );
+        xRowProp->setPropertyValue( u"DataSourceName"_ustr, Any(rDBName) );
+        xRowProp->setPropertyValue( u"Command"_ustr, Any(rCommand) );
+        xRowProp->setPropertyValue( u"CommandType"_ustr, Any(nSdbType) );
 
         uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
         if ( xExecute.is() )

@@ -31,7 +31,6 @@
 
 constexpr OUString URI_SHA1 = u"http://www.w3.org/2000/09/xmldsig#sha1"_ustr;
 constexpr OUString URI_SHA256_ODF12 = u"http://www.w3.org/2000/09/xmldsig#sha256"_ustr;
-constexpr OUStringLiteral URI_SHA256_W3C = u"http://www.w3.org/2001/04/xmlenc#sha256";
 constexpr OUString URI_XLS_LEGACY = u"http://docs.oasis-open.org/office/ns/table/legacy-hash-excel"_ustr;
 
 using namespace ::com::sun::star;
@@ -80,7 +79,7 @@ const OUString & ScPassHashHelper::getHashURI(ScPasswordHash eHash)
 
 ScPasswordHash ScPassHashHelper::getHashTypeFromURI(std::u16string_view rURI)
 {
-    if (rURI == URI_SHA256_ODF12 || rURI == URI_SHA256_W3C)
+    if (rURI == URI_SHA256_ODF12 || rURI == u"http://www.w3.org/2001/04/xmlenc#sha256")
         return PASSHASH_SHA256;
     if ( rURI == URI_SHA1 )
         return PASSHASH_SHA1;

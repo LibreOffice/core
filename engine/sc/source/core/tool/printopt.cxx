@@ -70,8 +70,6 @@ ScTpPrintItem* ScTpPrintItem::Clone( SfxItemPool * ) const
     return new ScTpPrintItem( *this );
 }
 
-constexpr OUStringLiteral CFGPATH_PRINT = u"Office.Calc/Print";
-
 #define SCPRINTOPT_EMPTYPAGES       0
 #define SCPRINTOPT_ALLSHEETS        1
 #define SCPRINTOPT_FORCEBREAKS      2
@@ -84,7 +82,7 @@ Sequence<OUString> ScPrintCfg::GetPropertyNames()
 }
 
 ScPrintCfg::ScPrintCfg() :
-    ConfigItem( CFGPATH_PRINT )
+    ConfigItem( u"Office.Calc/Print"_ustr )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     EnableNotification(aNames);

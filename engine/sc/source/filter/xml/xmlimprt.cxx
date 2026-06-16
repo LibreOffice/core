@@ -104,11 +104,6 @@
 #include <utility>
 
 constexpr OUString SC_LOCALE = u"Locale"_ustr;
-constexpr OUStringLiteral SC_CURRENCYSYMBOL = u"CurrencySymbol";
-constexpr OUStringLiteral SC_REPEAT_ROW = u"repeat-row";
-constexpr OUStringLiteral SC_FILTER = u"filter";
-constexpr OUStringLiteral SC_PRINT_RANGE = u"print-range";
-constexpr OUStringLiteral SC_HIDDEN = u"hidden";
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -853,7 +848,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, std::u16string
                 if (xNumberPropertySet.is())
                 {
                     OUString sTemp;
-                    if ( xNumberPropertySet->getPropertyValue(SC_CURRENCYSYMBOL) >>= sTemp)
+                    if ( xNumberPropertySet->getPropertyValue(u"CurrencySymbol"_ustr) >>= sTemp)
                     {
                         if (sCurrentCurrency == sTemp)
                             return true;
@@ -1186,13 +1181,13 @@ sal_Int32 ScXMLImport::GetRangeType(std::u16string_view sRangeType)
             OUString sTemp = sBuffer.makeStringAndClear();
             if (sTemp == "repeat-column")
                 nRangeType |= sheet::NamedRangeFlag::COLUMN_HEADER;
-            else if (sTemp == SC_REPEAT_ROW)
+            else if (sTemp == u"repeat-row"_ustr)
                 nRangeType |= sheet::NamedRangeFlag::ROW_HEADER;
-            else if (sTemp == SC_FILTER)
+            else if (sTemp == u"filter"_ustr)
                 nRangeType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
-            else if (sTemp == SC_PRINT_RANGE)
+            else if (sTemp == u"print-range"_ustr)
                 nRangeType |= sheet::NamedRangeFlag::PRINT_AREA;
-            else if (sTemp == SC_HIDDEN)
+            else if (sTemp == u"hidden"_ustr)
                 nRangeType |= sheet::NamedRangeFlag::HIDDEN;
         }
         else if (i < sRangeType.size())

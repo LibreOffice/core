@@ -26,8 +26,6 @@ using namespace ooo::vba;
 
 using namespace ooo::vba::office::MsoAnimationType;
 
-constexpr OUStringLiteral g_sName = u"Clippit";
-
 ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ): ScVbaAssistantImpl_BASE(rParent, rContext)
 {
     m_bIsVisible = false;
@@ -94,7 +92,7 @@ ScVbaAssistant::setAnimation( ::sal_Int32 _animation )
 OUString SAL_CALL
 ScVbaAssistant::Name(  )
 {
-    return g_sName;
+    return u"Clippit"_ustr;
 }
 
 OUString

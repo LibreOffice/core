@@ -29,10 +29,8 @@
 
 using namespace com::sun::star;
 
-constexpr OUStringLiteral CFGPATH_ADDINS = u"Office.CalcAddIns/AddInInfo";
-
 ScAddInCfg::ScAddInCfg()
-    : ConfigItem(CFGPATH_ADDINS)
+    : ConfigItem(u"Office.CalcAddIns/AddInInfo"_ustr)
 {
     EnableNotification({ {} });
 }

@@ -50,8 +50,6 @@ ScInputOptions::ScInputOptions()
 
 //  Config Item containing input options
 
-constexpr OUStringLiteral CFGPATH_INPUT = u"Office.Calc/Input";
-
 #define SCINPUTOPT_MOVEDIR                 0
 #define SCINPUTOPT_MOVESEL                 1
 #define SCINPUTOPT_EDTEREDIT               2
@@ -84,7 +82,7 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 }
 
 ScInputCfg::ScInputCfg() :
-    ConfigItem( CFGPATH_INPUT )
+    ConfigItem( u"Office.Calc/Input"_ustr )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     EnableNotification(aNames);

@@ -1025,11 +1025,10 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
     OUString aTables( rStrm.ReadUniString() );
 
     const sal_Unicode cSep = ';';
-    static constexpr OUStringLiteral aQuotedPairs( u"\"\"" );
     maTables.clear();
     for ( sal_Int32 nStringIx {aTables.isEmpty() ? -1 : 0}; nStringIx>=0; )
     {
-        OUString aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
+        OUString aToken( ScStringUtil::GetQuotedToken( aTables, 0, u"\"\""_ustr, ',', nStringIx ) );
         sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.toInt32() : 0;
         if( nTabNum > 0 )
             maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );

@@ -90,12 +90,8 @@ constexpr OUString SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet"_ustr;
 constexpr OUString SC_DBPROP_ACTIVECONNECTION = u"ActiveConnection"_ustr;
 constexpr OUString SC_DBPROP_COMMAND = u"Command"_ustr;
 constexpr OUString SC_DBPROP_COMMANDTYPE = u"CommandType"_ustr;
-constexpr OUStringLiteral SC_DBPROP_PROPCHANGE_NOTIFY = u"PropertyChangeNotificationEnabled";
 
 constexpr OUString SC_DBPROP_NAME = u"Name"_ustr;
-constexpr OUStringLiteral SC_DBPROP_TYPE = u"Type";
-constexpr OUStringLiteral SC_DBPROP_PRECISION = u"Precision";
-constexpr OUStringLiteral SC_DBPROP_SCALE = u"Scale";
 
 constexpr OUString SC_DBPROP_EXTENSION = u"Extension"_ustr;
 constexpr OUString SC_DBPROP_CHARSET = u"CharSet"_ustr;
@@ -309,7 +305,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
 
         xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(aTabName) );
 
-        xRowProp->setPropertyValue( SC_DBPROP_PROPCHANGE_NOTIFY, uno::Any(false) );
+        xRowProp->setPropertyValue( u"PropertyChangeNotificationEnabled"_ustr, uno::Any(false) );
 
         xRowSet->execute();
 
@@ -856,11 +852,11 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
 
             xColumnDesc->setPropertyValue( SC_DBPROP_NAME, uno::Any(pColNames[nCol]) );
 
-            xColumnDesc->setPropertyValue( SC_DBPROP_TYPE, uno::Any(pColTypes[nCol]) );
+            xColumnDesc->setPropertyValue( u"Type"_ustr, uno::Any(pColTypes[nCol]) );
 
-            xColumnDesc->setPropertyValue( SC_DBPROP_PRECISION, uno::Any(pColLengths[nCol]) );
+            xColumnDesc->setPropertyValue( u"Precision"_ustr, uno::Any(pColLengths[nCol]) );
 
-            xColumnDesc->setPropertyValue( SC_DBPROP_SCALE, uno::Any(pColScales[nCol]) );
+            xColumnDesc->setPropertyValue( u"Scale"_ustr, uno::Any(pColScales[nCol]) );
 
             xColumnsAppend->appendByDescriptor( xColumnDesc );
         }

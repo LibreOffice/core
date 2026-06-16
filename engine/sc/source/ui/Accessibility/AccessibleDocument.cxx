@@ -104,17 +104,15 @@ ScAccessibleShapeData::ScAccessibleShapeData(css::uno::Reference< css::drawing::
     : xShape(std::move(xShape_)),
     bSelected(false), bSelectable(true)
 {
-    static constexpr OUStringLiteral gsLayerId = u"LayerID";
-    static constexpr OUStringLiteral gsZOrder = u"ZOrder";
     uno::Reference< beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
     if (xProps.is())
     {
-        uno::Any aAny = xProps->getPropertyValue(gsLayerId);
+        uno::Any aAny = xProps->getPropertyValue(u"LayerID"_ustr);
         sal_Int16 nLayerID;
         if (aAny >>= nLayerID)
             mxLayerID = nLayerID;
         sal_Int32 nZOrder;
-        aAny = xProps->getPropertyValue(gsZOrder);
+        aAny = xProps->getPropertyValue(u"ZOrder"_ustr);
         if (aAny >>= nZOrder)
             mxZOrder = nZOrder;
     }

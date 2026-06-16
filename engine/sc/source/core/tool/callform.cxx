@@ -65,16 +65,6 @@ typedef void (CALLTYPE* Unadvice)( double&      nHandle );
 
 }
 
-#ifndef DISABLE_DYNLOADING
-constexpr OUStringLiteral GETFUNCTIONCOUNT = u"GetFunctionCount";
-constexpr OUStringLiteral GETFUNCTIONDATA = u"GetFunctionData";
-constexpr OUStringLiteral SETLANGUAGE = u"SetLanguage";
-constexpr OUStringLiteral GETPARAMDESC = u"GetParameterDescription";
-constexpr OUStringLiteral ISASYNC = u"IsAsync";
-constexpr OUStringLiteral ADVICE = u"Advice";
-constexpr OUStringLiteral UNADVICE = u"Unadvice";
-#endif
-
 class ModuleData
 {
 friend class ModuleCollection;
@@ -175,14 +165,14 @@ bool InitExternalFunc(const OUString& rModuleName)
     if (!pLib->is())
        return false;
 
-    oslGenericFunction fpGetCount = pLib->getFunctionSymbol(GETFUNCTIONCOUNT);
-    oslGenericFunction fpGetData = pLib->getFunctionSymbol(GETFUNCTIONDATA);
+    oslGenericFunction fpGetCount = pLib->getFunctionSymbol(u"GetFunctionCount"_ustr);
+    oslGenericFunction fpGetData = pLib->getFunctionSymbol(u"GetFunctionData"_ustr);
     if ((fpGetCount == nullptr) || (fpGetData == nullptr))
        return false;
 
-    oslGenericFunction fpIsAsync = pLib->getFunctionSymbol(ISASYNC);
-    oslGenericFunction fpAdvice = pLib->getFunctionSymbol(ADVICE);
-    oslGenericFunction fpSetLanguage = pLib->getFunctionSymbol(SETLANGUAGE);
+    oslGenericFunction fpIsAsync = pLib->getFunctionSymbol(u"IsAsync"_ustr);
+    oslGenericFunction fpAdvice = pLib->getFunctionSymbol(u"Advice"_ustr);
+    oslGenericFunction fpSetLanguage = pLib->getFunctionSymbol(u"SetLanguage"_ustr);
     if ( fpSetLanguage )
     {
         LanguageType eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
@@ -327,7 +317,7 @@ void LegacyFuncData::Unadvice( double nHandle )
     (void) nHandle;
 #else
     osl::Module* pLib = pModuleData->GetInstance();
-    oslGenericFunction fProc = pLib->getFunctionSymbol(UNADVICE);
+    oslGenericFunction fProc = pLib->getFunctionSymbol(u"Unadvice"_ustr);
     if (fProc != nullptr)
     {
         reinterpret_cast< ::Unadvice>(fProc)(nHandle);
@@ -351,7 +341,7 @@ void LegacyFuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 
     if ( nParam <= nParamCount )
     {
         osl::Module* pLib = pModuleData->GetInstance();
-        oslGenericFunction fProc = pLib->getFunctionSymbol(GETPARAMDESC);
+        oslGenericFunction fProc = pLib->getFunctionSymbol(u"GetParameterDescription"_ustr);
         if ( fProc != nullptr )
         {
             char pcName[256];
