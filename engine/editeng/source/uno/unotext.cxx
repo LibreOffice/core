@@ -1852,8 +1852,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
             aRange.CollapseToStart();
 
             pRange->SetSelection( aRange );
-            static constexpr OUStringLiteral CR = u"\x0D";
-            pRange->setString( CR );
+            pRange->setString( u"\x0D"_ustr );
 
             aRange.start.nIndex = 0;
             aRange.start.nPara += 1;
