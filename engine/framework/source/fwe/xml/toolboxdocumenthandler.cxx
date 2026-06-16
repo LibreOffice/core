@@ -42,8 +42,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 
-constexpr OUStringLiteral TOOLBAR_DOCTYPE = u"<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">";
-
 namespace framework
 {
 
@@ -564,7 +562,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( TOOLBAR_DOCTYPE );
+        xExtendedDocHandler->unknown( u"<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">"_ustr );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 

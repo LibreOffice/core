@@ -96,9 +96,6 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
         aCmd = u".uno:InsertPageFooter"_ustr;
         aHeaderFooterIsOnStr = u"FooterIsOn"_ustr;
     }
-    static constexpr OUStringLiteral aIsPhysicalStr( u"IsPhysical" );
-    static constexpr OUStringLiteral aDisplayNameStr( u"DisplayName" );
-
     try
     {
         Reference< XNameContainer > xNameContainer;
@@ -119,11 +116,11 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
                 if ( xPropSet.is() )
                 {
                     bool bIsPhysical( false );
-                    if (( xPropSet->getPropertyValue( aIsPhysicalStr ) >>= bIsPhysical ) && bIsPhysical )
+                    if (( xPropSet->getPropertyValue( u"IsPhysical"_ustr ) >>= bIsPhysical ) && bIsPhysical )
                     {
                         OUString aDisplayName;
                         bool      bHeaderIsOn( false );
-                        xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
+                        xPropSet->getPropertyValue( u"DisplayName"_ustr ) >>= aDisplayName;
                         xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
 
                         OUStringBuffer aStrBuf( aCmd

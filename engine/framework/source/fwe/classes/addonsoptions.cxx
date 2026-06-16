@@ -50,8 +50,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral ROOTNODE_ADDONMENU = u"Office.Addons";
-constexpr OUStringLiteral PATHDELIMITER = u"/";
 constexpr OUString SEPARATOR_URL = u"private:separator"_ustr;
 
 #define PROPERTYNAME_URL                                ADDONSMENUITEM_STRING_URL
@@ -60,8 +58,6 @@ constexpr OUString SEPARATOR_URL = u"private:separator"_ustr;
 #define PROPERTYNAME_IMAGEIDENTIFIER                    ADDONSMENUITEM_STRING_IMAGEIDENTIFIER
 #define PROPERTYNAME_CONTEXT                            ADDONSMENUITEM_STRING_CONTEXT
 #define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_STRING_SUBMENU
-
-constexpr OUStringLiteral IMAGES_NODENAME = u"UserDefinedImages";
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL               0
@@ -367,9 +363,9 @@ void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize, const OUString &r
 
 AddonsOptions_Impl::AddonsOptions_Impl()
     // Init baseclasses first
-    : ConfigItem( ROOTNODE_ADDONMENU ),
+    : ConfigItem( u"Office.Addons"_ustr ),
     m_nRootAddonPopupMenuId( 0 ),
-    m_aPathDelimiter( PATHDELIMITER ),
+    m_aPathDelimiter( u"/"_ustr ),
     m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX_STR )
 {
     // initialize array with fixed property names
@@ -906,7 +902,7 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
         {
             OUString aImagesUserDefinedItemNode = aImagesItemNode +
                 m_aPathDelimiter +
-                IMAGES_NODENAME +
+                u"UserDefinedImages"_ustr +
                 m_aPathDelimiter;
 
             // Read a user-defined images data

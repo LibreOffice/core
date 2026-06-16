@@ -39,8 +39,6 @@ using namespace ::com::sun::star::container;
 
 constexpr OUString XMLNS_STATUSBAR = u"http://openoffice.org/2001/statusbar"_ustr;
 constexpr OUString XMLNS_XLINK = u"http://www.w3.org/1999/xlink"_ustr;
-constexpr OUStringLiteral XMLNS_STATUSBAR_PREFIX = u"statusbar:";
-constexpr OUStringLiteral XMLNS_XLINK_PREFIX = u"xlink:";
 
 constexpr OUString XMLNS_FILTER_SEPARATOR = u"^"_ustr;
 
@@ -57,9 +55,6 @@ constexpr OUString ATTRIBUTE_MANDATORY = u"mandatory"_ustr;
 constexpr OUString ELEMENT_NS_STATUSBAR = u"statusbar:statusbar"_ustr;
 constexpr OUString ELEMENT_NS_STATUSBARITEM = u"statusbar:statusbaritem"_ustr;
 
-constexpr OUStringLiteral ATTRIBUTE_XMLNS_STATUSBAR = u"xmlns:statusbar";
-constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
-
 constexpr OUString ATTRIBUTE_BOOLEAN_TRUE = u"true"_ustr;
 constexpr OUString ATTRIBUTE_BOOLEAN_FALSE = u"false"_ustr;
 
@@ -67,11 +62,8 @@ constexpr OUString ATTRIBUTE_ALIGN_LEFT = u"left"_ustr;
 constexpr OUString ATTRIBUTE_ALIGN_RIGHT = u"right"_ustr;
 constexpr OUString ATTRIBUTE_ALIGN_CENTER = u"center"_ustr;
 
-constexpr OUStringLiteral ATTRIBUTE_STYLE_IN = u"in";
 constexpr OUString ATTRIBUTE_STYLE_OUT = u"out"_ustr;
 constexpr OUString ATTRIBUTE_STYLE_FLAT = u"flat"_ustr;
-
-constexpr OUStringLiteral STATUSBAR_DOCTYPE = u"<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">";
 
 namespace framework
 {
@@ -268,7 +260,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
 
                         case SB_ATTRIBUTE_STYLE:
                         {
-                            if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_IN )
+                            if ( xAttribs->getValueByIndex( n ) == u"in"_ustr )
                             {
                                 nItemBits |= ItemStyle::DRAW_IN3D;
                                 nItemBits &= ~ItemStyle::DRAW_OUT3D;
@@ -453,8 +445,8 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     m_aStatusBarItems( aStatusBarItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
-    m_aXMLStatusBarNS   = XMLNS_STATUSBAR_PREFIX;
+    m_aXMLXlinkNS       = u"xlink:"_ustr;
+    m_aXMLStatusBarNS   = u"statusbar:"_ustr;
 }
 
 OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
@@ -469,16 +461,16 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( STATUSBAR_DOCTYPE );
+        xExtendedDocHandler->unknown( u"<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">"_ustr );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
-    pList->AddAttribute( ATTRIBUTE_XMLNS_STATUSBAR,
+    pList->AddAttribute( u"xmlns:statusbar"_ustr,
                          XMLNS_STATUSBAR );
 
-    pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
+    pList->AddAttribute( u"xmlns:xlink"_ustr,
                          XMLNS_XLINK );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList );

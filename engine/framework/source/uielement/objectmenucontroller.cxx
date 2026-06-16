@@ -80,14 +80,13 @@ void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescri
 
     resetPopupMenu( rPopupMenu );
 
-    static constexpr OUStringLiteral aVerbCommand( u".uno:ObjectMenue?VerbID:short=" );
     for ( sal_Int32 i = 0; i < rVerbCommandSeq.getLength(); i++ )
     {
         const css::embed::VerbDescriptor& rVerb = rVerbCommandSeq[i];
         if ( rVerb.VerbAttributes & css::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
         {
             m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );
-            OUString aCommand = aVerbCommand + OUString::number( rVerb.VerbID );
+            OUString aCommand = u".uno:ObjectMenue?VerbID:short="_ustr + OUString::number( rVerb.VerbID );
             m_xPopupMenu->setCommand( i+1, aCommand ); // Store verb command
         }
     }

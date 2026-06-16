@@ -117,8 +117,6 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     const Sequence< Any >&                  Arguments,
     const Reference< XComponentContext >& )
 {
-    static constexpr OUStringLiteral aPropModuleName( u"ModuleIdentifier" );
-
     OUString   aPropName;
     PropertyValue   aPropValue;
 
@@ -127,7 +125,7 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     // module!!
     for ( Any const & arg : Arguments )
     {
-        if (( arg >>= aPropValue ) && ( aPropValue.Name == aPropModuleName ))
+        if (( arg >>= aPropValue ) && ( aPropValue.Name == u"ModuleIdentifier"_ustr ))
         {
             aPropValue.Value >>= aPropName;
             break;

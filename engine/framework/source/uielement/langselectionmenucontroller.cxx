@@ -191,12 +191,11 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     // the different menus purpose will be handled by the different string
     // for aCmd_Dialog and aCmd_Language
     sal_Int16 nItemId = 0;  // in this control the item id is not important for executing the command
-    static constexpr OUStringLiteral sAsterisk(u"*");  // multiple languages in current selection
     const OUString sNone( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ));
     for (auto const& langItem : aLangItems)
     {
         if (langItem != sNone &&
-            langItem != sAsterisk &&
+            langItem != u"*"_ustr &&
             !langItem.isEmpty()) // 'no language found' from language guessing
         {
             ++nItemId;

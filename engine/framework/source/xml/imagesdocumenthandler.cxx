@@ -47,20 +47,10 @@ constexpr OUString ELEMENT_NS_ENTRY = u"image:entry"_ustr;
 #define ATTRIBUTE_HIGHCONTRASTURL       "highcontrasturl"
 #define ATTRIBUTE_HIGHCONTRASTMASKURL   "highcontrastmaskurl"
 
-constexpr OUStringLiteral ATTRIBUTE_XMLNS_IMAGE = u"xmlns:image";
-constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
-
 constexpr OUString ATTRIBUTE_XLINK_HREF = u"xlink:href"_ustr;
-constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE = u"xlink:type";
-constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE_VALUE = u"simple";
 
 constexpr OUString XMLNS_IMAGE = u"http://openoffice.org/2001/image"_ustr;
 constexpr OUString XMLNS_XLINK = u"http://www.w3.org/1999/xlink"_ustr;
-constexpr OUStringLiteral XMLNS_IMAGE_PREFIX = u"image:";
-
-constexpr OUStringLiteral XMLNS_FILTER_SEPARATOR = u"^";
-
-constexpr OUStringLiteral IMAGES_DOCTYPE = u"<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">";
 
 namespace framework
 {
@@ -105,7 +95,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageItemDescriptorList&
         else
             temp.append( XMLNS_XLINK );
 
-        temp.append( XMLNS_FILTER_SEPARATOR );
+        temp.append( u"^" );
         temp.appendAscii( ImagesEntries[i].aEntryName );
         m_aImageMap.emplace( temp.makeStringAndClear(), static_cast<Image_XML_Entry>(i) );
     }
@@ -285,9 +275,9 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_rImageItemList( rItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    m_aXMLImageNS           = XMLNS_IMAGE_PREFIX;
-    m_aAttributeXlinkType   = ATTRIBUTE_XLINK_TYPE;
-    m_aAttributeValueSimple = ATTRIBUTE_XLINK_TYPE_VALUE;
+    m_aXMLImageNS           = u"image:"_ustr;
+    m_aAttributeXlinkType   = u"xlink:type"_ustr;
+    m_aAttributeValueSimple = u"simple"_ustr;
 }
 
 OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler()
@@ -302,16 +292,16 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( IMAGES_DOCTYPE );
+        xExtendedDocHandler->unknown( u"<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">"_ustr );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
-    pList->AddAttribute( ATTRIBUTE_XMLNS_IMAGE,
+    pList->AddAttribute( u"xmlns:image"_ustr,
                          XMLNS_IMAGE );
 
-    pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
+    pList->AddAttribute( u"xmlns:xlink"_ustr,
                          XMLNS_XLINK );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList );

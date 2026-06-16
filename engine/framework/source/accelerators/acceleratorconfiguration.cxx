@@ -950,7 +950,6 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
     }
 
     const OUString sIsoLang       = impl_ts_getLocale();
-    static constexpr OUStringLiteral sDefaultLocale(u"en-US");
 
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameAccess > xCommand;
@@ -981,7 +980,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             {
                 for (auto const& locale : aLocales)
                 {
-                    if ( locale == sDefaultLocale )
+                    if ( locale == u"en-US"_ustr )
                     {
                         sLocale = locale;
                         break;

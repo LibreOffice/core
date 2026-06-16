@@ -30,8 +30,6 @@
 
 using namespace framework;
 
-constexpr OUStringLiteral RESOURCETYPE_ACCELERATOR = u"accelerator";
-
 namespace {
 
 /**
@@ -166,7 +164,7 @@ void DocumentAcceleratorConfiguration::fillCache()
         // open the folder, where the configuration exists
         m_aPresetHandler.connectToResource(
             PresetHandler::E_DOCUMENT,
-            RESOURCETYPE_ACCELERATOR,
+            u"accelerator",
             u"",
             xDocumentRoot,
             aLanguageTag);

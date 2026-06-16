@@ -37,15 +37,12 @@
 #undef ATTRIBUTE_HELPID
 #endif
 
-constexpr OUStringLiteral XMLNS_MENU = u"http://openoffice.org/2001/menu";
-
 constexpr OUString ELEMENT_MENUBAR = u"http://openoffice.org/2001/menu^menubar"_ustr;
 constexpr OUString ELEMENT_MENU = u"http://openoffice.org/2001/menu^menu"_ustr;
 constexpr OUString ELEMENT_MENUPOPUP = u"http://openoffice.org/2001/menu^menupopup"_ustr;
 constexpr OUString ELEMENT_MENUITEM = u"http://openoffice.org/2001/menu^menuitem"_ustr;
 constexpr OUString ELEMENT_MENUSEPARATOR = u"http://openoffice.org/2001/menu^menuseparator"_ustr;
 
-constexpr OUStringLiteral ELEMENT_NS_MENUBAR = u"menu:menubar";
 constexpr OUString ELEMENT_NS_MENU = u"menu:menu"_ustr;
 constexpr OUString ELEMENT_NS_MENUPOPUP = u"menu:menupopup"_ustr;
 constexpr OUString ELEMENT_NS_MENUITEM = u"menu:menuitem"_ustr;
@@ -58,12 +55,6 @@ constexpr OUString ATTRIBUTE_STYLE = u"http://openoffice.org/2001/menu^style"_us
 
 constexpr OUString ATTRIBUTE_NS_ID = u"menu:id"_ustr;
 constexpr OUString ATTRIBUTE_NS_LABEL = u"menu:label"_ustr;
-constexpr OUStringLiteral ATTRIBUTE_NS_HELPID = u"menu:helpid";
-constexpr OUStringLiteral ATTRIBUTE_NS_STYLE = u"menu:style";
-
-constexpr OUStringLiteral ATTRIBUTE_XMLNS_MENU = u"xmlns:menu";
-
-constexpr OUStringLiteral MENUBAR_DOCTYPE = u"<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">";
 
 #define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
 #define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
@@ -732,12 +723,12 @@ void OWriteMenuDocumentHandler::WriteMenuDocument()
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( m_bIsMenuBar /*FIXME*/ && xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( MENUBAR_DOCTYPE );
+        xExtendedDocHandler->unknown( u"<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"_ustr );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    pList->AddAttribute( ATTRIBUTE_XMLNS_MENU,
-                         XMLNS_MENU );
+    pList->AddAttribute( u"xmlns:menu"_ustr,
+                         u"http://openoffice.org/2001/menu"_ustr );
 
     if ( m_bIsMenuBar ) //FIXME
         pList->AddAttribute( ATTRIBUTE_NS_ID,
@@ -745,7 +736,7 @@ void OWriteMenuDocumentHandler::WriteMenuDocument()
 
     OUString aRootElement;
     if ( m_bIsMenuBar )
-        aRootElement = ELEMENT_NS_MENUBAR;
+        aRootElement = u"menu:menubar"_ustr;
     else
         aRootElement = ELEMENT_NS_MENUPOPUP;
     m_xWriteDocumentHandler->startElement( aRootElement, pList );
@@ -838,7 +829,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
 
     if ( !aHelpURL.isEmpty() )
     {
-        pList->AddAttribute( ATTRIBUTE_NS_HELPID,
+        pList->AddAttribute( u"menu:helpid"_ustr,
                              aHelpURL );
     }
 
@@ -861,7 +852,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
                 aValue.appendAscii( pStyle->attrName );
             }
         }
-        pList->AddAttribute( ATTRIBUTE_NS_STYLE,
+        pList->AddAttribute( u"menu:style"_ustr,
                                 aValue.makeStringAndClear() );
     }
 

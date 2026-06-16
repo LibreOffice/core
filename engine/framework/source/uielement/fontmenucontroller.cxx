@@ -92,7 +92,6 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
     }
     sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
 
-    static constexpr OUStringLiteral aFontNameCommandPrefix( u".uno:CharFontName?CharFontName.FamilyName:string=" );
     const sal_Int16 nCount = static_cast<sal_Int16>(aVector.size());
     for ( sal_Int16 i = 0; i < nCount; i++ )
     {
@@ -100,7 +99,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
         m_xPopupMenu->insertItem( i+1, rName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, i );
         if ( rName == m_aFontFamilyName )
             m_xPopupMenu->checkItem( i+1, true );
-        OUString aFontNameCommand = aFontNameCommandPrefix + INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::EncodeMechanism::All );
+        OUString aFontNameCommand = u".uno:CharFontName?CharFontName.FamilyName:string="_ustr + INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::EncodeMechanism::All );
         m_xPopupMenu->setCommand(i + 1, aFontNameCommand); // Store font name into item command.
     }
 }

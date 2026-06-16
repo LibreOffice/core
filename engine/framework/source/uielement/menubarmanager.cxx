@@ -80,9 +80,6 @@ namespace framework
 {
 
 constexpr OUString aCmdHelpIndex = u".uno:HelpIndex"_ustr;
-constexpr OUStringLiteral aCmdToolsMenu = u".uno:ToolsMenu";
-constexpr OUStringLiteral aCmdHelpMenu = u".uno:HelpMenu";
-constexpr OUStringLiteral aSpecialWindowCommand = u".uno:WindowList";
 
 MenuBarManager::MenuBarManager(
     const Reference< XComponentContext >& rxContext,
@@ -964,7 +961,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         {
             sal_uInt16          nItemId  = pMenu->GetItemId( nPos );
             OUString aCommand = pMenu->GetItemCommand( nItemId );
-            if ( aCommand == aSpecialWindowCommand || aCommand == aCmdHelpMenu )
+            if ( aCommand == u".uno:WindowList"_ustr || aCommand == u".uno:HelpMenu"_ustr )
             {
                 // Retrieve addon popup menus and add them to our menu bar
                 framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, nPos, static_cast<MenuBar *>(pMenu) );
@@ -1041,7 +1038,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             else
             {
                 // Check if this is the tools menu. Add menu item if needed
-                if ( aItemCommand == aCmdToolsMenu && AddonMenuManager::HasAddonMenuElements() )
+                if ( aItemCommand == u".uno:ToolsMenu"_ustr && AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
                     VclPtr<PopupMenu> pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame);

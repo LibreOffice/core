@@ -73,11 +73,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace framework;
 
-constexpr OUStringLiteral RESOURCETYPE_MENUBAR = u"menubar";
-constexpr OUStringLiteral RESOURCETYPE_TOOLBAR = u"toolbar";
-constexpr OUStringLiteral RESOURCETYPE_STATUSBAR = u"statusbar";
-constexpr OUStringLiteral RESOURCETYPE_POPUPMENU = u"popupmenu";
-
 namespace {
 
 class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
@@ -857,13 +852,13 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     {
         OUString aResourceType;
         if ( i == css::ui::UIElementType::MENUBAR )
-            aResourceType = RESOURCETYPE_MENUBAR;
+            aResourceType = u"menubar"_ustr;
         else if ( i == css::ui::UIElementType::TOOLBAR )
-            aResourceType = RESOURCETYPE_TOOLBAR;
+            aResourceType = u"toolbar"_ustr;
         else if ( i == css::ui::UIElementType::STATUSBAR )
-            aResourceType = RESOURCETYPE_STATUSBAR;
+            aResourceType = u"statusbar"_ustr;
         else if ( i == css::ui::UIElementType::POPUPMENU )
-            aResourceType = RESOURCETYPE_POPUPMENU;
+            aResourceType = u"popupmenu"_ustr;
 
         if ( !aResourceType.isEmpty() )
         {
