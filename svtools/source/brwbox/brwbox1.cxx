@@ -61,13 +61,10 @@ void disposeAndClearHeaderCell(BrowseBox::THeaderCellMap& _rHeaderCell)
         _rHeaderCell.begin(), _rHeaderCell.end(),
         [](const BrowseBox::THeaderCellMap::value_type& rType)
         {
-            css::uno::Reference<css::lang::XComponent> xComp(rType.second, css::uno::UNO_QUERY);
-            OSL_ENSURE(xComp.is() || !rType.second.is(),
-                       "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!");
-            if (xComp.is())
+            if (rType.second.is())
                 try
                 {
-                    xComp->dispose();
+                    rType.second->dispose();
                 }
                 catch (const css::uno::Exception&)
                 {

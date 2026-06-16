@@ -43,9 +43,9 @@ Reference<XAccessible> BrowseBox::getAccessibleHeaderCell(BrowseBox::THeaderCell
     BrowseBox::THeaderCellMap::iterator aFind = _raHeaderCells.find(_nPos);
     if (aFind == _raHeaderCells.end())
     {
-        Reference<XAccessible> xAccessible
+        rtl::Reference<AccessibleBrowseBoxHeaderCell> pAccessible
             = new AccessibleBrowseBoxHeaderCell(_nPos, _rParent, *this, _eType);
-        aFind = _raHeaderCells.emplace(_nPos, xAccessible).first;
+        aFind = _raHeaderCells.emplace(_nPos, pAccessible).first;
     }
     if (aFind != _raHeaderCells.end())
         xRet = aFind->second;

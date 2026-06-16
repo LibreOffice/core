@@ -259,7 +259,7 @@ class SVT_DLLPUBLIC BrowseBox
     friend class BrowserDataWin;
 
 public:
-    typedef ::std::map<sal_Int32, css::uno::Reference<css::accessibility::XAccessible>> THeaderCellMap;
+    typedef std::map<sal_Int32, rtl::Reference<comphelper::OAccessible>> THeaderCellMap;
 
     static const sal_uInt16 HandleColumnId = 0;
 
