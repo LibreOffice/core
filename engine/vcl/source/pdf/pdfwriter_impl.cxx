@@ -2897,11 +2897,19 @@ we check in the following sequence:
                     OUString aURL = bUnparsedURI ? url :
                                                    aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset :
                                                                                       INetURLObject::DecodeMechanism::NONE );
-                    aWriter.writeLiteralEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
-                                                                                        INetURLObject::EncodeMechanism::WasEncoded,
-                                                                                            bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE
-                                                                                            ) :
-                                                                               aURL , rLink.m_nObject, osl_getThreadTextEncoding() );
+                    OUString aLinkURL = aURL;
+                    if( bSetRelative )
+                    {
+                        OUString aRelURL = INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
+                                                                     INetURLObject::EncodeMechanism::WasEncoded,
+                                                                     bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE );
+                        // A "../" reference has no base to resolve against in a URI
+                        // action and so breaks once the PDF is opened from a different
+                        // location than the document.
+                        if( !aRelURL.startsWith( u"../" ) )
+                            aLinkURL = aRelURL;
+                    }
+                    aWriter.writeLiteralEncrypt( aLinkURL, rLink.m_nObject, osl_getThreadTextEncoding() );
                 }
             }
             aLine.append( ">>\n" );

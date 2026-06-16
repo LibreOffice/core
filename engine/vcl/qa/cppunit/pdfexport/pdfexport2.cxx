@@ -4625,6 +4625,61 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testExternalLinkOutsideDocTreeStaysAbsolute)
+{
+    // A file:// hyperlink whose target lives outside the document's own
+    // directory must stay absolute in the exported PDF. The relative-filesystem
+    // export option is on by default, and when the document sits in a temporary
+    // or jailed location (as in a server deployment) the relative reference would
+    // climb above that location with leading "../" segments. A URI action has no
+    // base to resolve such a reference against, so the link would be dead once the
+    // PDF is opened elsewhere.
+    const OUString aTarget(u"file:///fileserver/share/reports/target.xlsx"_ustr);
+
+    loadFromURL(u"private:factory/swriter"_ustr);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, u"click me"_ustr, /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(aTarget));
+
+    // The document's own location, on a filesystem root unrelated to the target.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    xModel->attachResource(maTempFile.GetURL(), xModel->getArgs());
+
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ExportLinksRelativeFsys", uno::Any(true) } }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
+    auto pAnnotReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotReference);
+    vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+    auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"_ostr));
+    CPPUNIT_ASSERT(pAction);
+    auto pURIElem
+        = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pAction->LookupElement("URI"_ostr));
+    CPPUNIT_ASSERT(pURIElem);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: file:///fileserver/share/reports/target.xlsx
+    // - Actual  : ../fileserver/share/reports/target.xlsx
+    CPPUNIT_ASSERT_EQUAL("file:///fileserver/share/reports/target.xlsx"_ostr, pURIElem->GetValue());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageAnnots)
 {
     // Given a document with a PDF image that has 2 comments (popup, text) and a hyperlink:
