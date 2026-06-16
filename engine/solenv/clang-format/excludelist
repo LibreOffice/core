@@ -2485,7 +2485,6 @@ dbaccess/source/ui/dlg/DbAdminImpl.hxx
 dbaccess/source/ui/dlg/DriverSettings.hxx
 dbaccess/source/ui/dlg/QueryPropertiesDialog.cxx
 dbaccess/source/ui/dlg/RelationDlg.cxx
-dbaccess/source/ui/dlg/TablesSingleDlg.cxx
 dbaccess/source/ui/dlg/TextConnectionHelper.cxx
 dbaccess/source/ui/dlg/TextConnectionHelper.hxx
 dbaccess/source/ui/dlg/UserAdmin.cxx
@@ -2526,8 +2525,6 @@ dbaccess/source/ui/dlg/paramdialog.cxx
 dbaccess/source/ui/dlg/queryfilter.cxx
 dbaccess/source/ui/dlg/queryorder.cxx
 dbaccess/source/ui/dlg/sqlmessage.cxx
-dbaccess/source/ui/dlg/tablespage.cxx
-dbaccess/source/ui/dlg/tablespage.hxx
 dbaccess/source/ui/dlg/textconnectionsettings.cxx
 dbaccess/source/ui/inc/AppElementType.hxx
 dbaccess/source/ui/inc/CollectionView.hxx
@@ -2748,8 +2745,6 @@ dbaccess/source/ui/uno/DBTypeWizDlg.cxx
 dbaccess/source/ui/uno/DBTypeWizDlg.hxx
 dbaccess/source/ui/uno/DBTypeWizDlgSetup.cxx
 dbaccess/source/ui/uno/DBTypeWizDlgSetup.hxx
-dbaccess/source/ui/uno/TableFilterDlg.cxx
-dbaccess/source/ui/uno/TableFilterDlg.hxx
 dbaccess/source/ui/uno/UserSettingsDlg.cxx
 dbaccess/source/ui/uno/UserSettingsDlg.hxx
 dbaccess/source/ui/uno/admindlg.hxx

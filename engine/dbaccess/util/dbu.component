@@ -91,10 +91,6 @@
     constructor="org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation">
     <service name="com.sun.star.sdb.ErrorMessageDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OTableFilterDialog"
-    constructor="org_openoffice_comp_dbu_OTableFilterDialog_get_implementation">
-    <service name="com.sun.star.sdb.TableFilterDialog"/>
-  </implementation>
   <implementation name="org.openoffice.comp.dbu.OUserSettingsDialog"
     constructor="org_openoffice_comp_dbu_OUserSettingsDialog_get_implementation">
     <service name="com.sun.star.sdb.UserAdministrationDialog"/>

@@ -125,8 +125,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/queryfilter \
     dbaccess/source/ui/dlg/queryorder \
     dbaccess/source/ui/dlg/sqlmessage \
-    dbaccess/source/ui/dlg/tablespage \
-    dbaccess/source/ui/dlg/TablesSingleDlg \
     dbaccess/source/ui/dlg/TextConnectionHelper \
     dbaccess/source/ui/dlg/textconnectionsettings \
     dbaccess/source/ui/dlg/UserAdmin \
@@ -164,7 +162,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
 	dbaccess/source/ui/uno/copytablewizard \
     dbaccess/source/ui/uno/dbinteraction \
     dbaccess/source/ui/uno/DBTypeWizDlg \
-    dbaccess/source/ui/uno/TableFilterDlg \
     dbaccess/source/ui/uno/textconnectionsettings_uno \
     dbaccess/source/ui/uno/unoadmin \
     dbaccess/source/ui/uno/unoDirectSql \
