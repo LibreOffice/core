@@ -18,15 +18,12 @@
  */
 
 #include <SvHeaderTabListBox.hxx>
-#include <accessibility/accessibletablistbox.hxx>
 
 #include <comphelper/types.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
@@ -35,9 +32,6 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 #include <memory>
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
 
 // SvTreeListBox callback
 
