@@ -279,8 +279,6 @@ namespace cairocanvas
         cairo_restore( mpCairo.get() );
     }
 
-constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::ParametricPolyPolygon";
-
     /** surfaceFromXBitmap Create a surface from XBitmap
      * @param xBitmap bitmap image that will be used for the surface
      * @param bHasAlpha will be set to true if resulting surface has alpha
@@ -528,7 +526,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                         uno::Reference< lang::XServiceInfo > xRef( aTexture.Gradient, uno::UNO_QUERY );
 
                         SAL_INFO( "canvas.cairo", "gradient fill" );
-                        if( xRef.is() && xRef->getImplementationName() == PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME )
+                        if( xRef.is() && xRef->getImplementationName() == u"Canvas::ParametricPolyPolygon"_ustr )
                         {
                             // TODO(Q1): Maybe use dynamic_cast here
 
