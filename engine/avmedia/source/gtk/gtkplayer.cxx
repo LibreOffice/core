@@ -21,8 +21,6 @@
 
 #include <gtk/gtk.h>
 
-constexpr OUStringLiteral AVMEDIA_GTK_PLAYER_IMPLEMENTATIONNAME
-    = u"com.sun.star.comp.avmedia.Player_Gtk";
 constexpr OUString AVMEDIA_GTK_PLAYER_SERVICENAME = u"com.sun.star.media.Player_Gtk"_ustr;
 
 using namespace ::com::sun::star;
@@ -437,7 +435,7 @@ uno::Reference<media::XFrameGrabber> SAL_CALL GtkPlayer::createFrameGrabber()
 
 OUString SAL_CALL GtkPlayer::getImplementationName()
 {
-    return AVMEDIA_GTK_PLAYER_IMPLEMENTATIONNAME;
+    return u"com.sun.star.comp.avmedia.Player_Gtk"_ustr;
 }
 
 sal_Bool SAL_CALL GtkPlayer::supportsService(const OUString& ServiceName)
