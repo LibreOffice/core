@@ -989,7 +989,7 @@ void SvTreeListBox::RemoveSelection()
     }
 
     for (auto const& elem : aList)
-        m_pModel->Remove(elem);
+        RemoveEntry(elem);
 }
 
 void SvTreeListBox::RemoveEntry(SvTreeListEntry const* pEntry) { m_pModel->Remove(pEntry); }

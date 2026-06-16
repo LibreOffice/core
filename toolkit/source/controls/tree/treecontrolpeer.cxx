@@ -1008,7 +1008,9 @@ void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEve
     updateChildNodes( rTree, xNode, pNodeEntry );
 }
 
-void TreeControlPeer::updateChildNodes( UnoTreeListBoxImpl const & rTree, const Reference< XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry )
+void TreeControlPeer::updateChildNodes(UnoTreeListBoxImpl& rTree,
+                                       const Reference<XTreeNode>& xParentNode,
+                                       UnoTreeListEntry* pParentEntry)
 {
     if( !(xParentNode.is() && pParentEntry) )
         return;
@@ -1049,7 +1051,7 @@ void TreeControlPeer::updateChildNodes( UnoTreeListBoxImpl const & rTree, const 
     while( pCurrentChild )
     {
         UnoTreeListEntry* pNextChild = dynamic_cast< UnoTreeListEntry* >( pCurrentChild->NextSibling() );
-        rTree.GetModel()->Remove( pCurrentChild );
+        rTree.RemoveEntry(pCurrentChild);
         pCurrentChild = pNextChild;
     }
 }
