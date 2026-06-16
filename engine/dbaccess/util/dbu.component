@@ -32,14 +32,6 @@
       constructor="com_sun_star_comp_dbaccess_OTextConnectionSettingsDialog_get_implementation">
     <service name="com.sun.star.sdb.TextConnectionSettings"/>
   </implementation>
-  <implementation name="com.sun.star.comp.dbu.OColumnControl"
-    constructor="com_sun_star_comp_dbu_OColumnControl_get_implementation">
-    <service name="com.sun.star.sdb.ColumnDescriptorControl"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.dbu.OColumnControlModel"
-    constructor="com_sun_star_comp_dbu_OColumnControlModel_get_implementation">
-    <service name="com.sun.star.sdb.ColumnDescriptorControlModel"/>
-  </implementation>
   <implementation name="com.sun.star.comp.dbu.SbaXGridControl"
     constructor="com_sun_star_comp_dbu_SbaXGridControl_get_implementation">
     <service name="com.sun.star.form.control.GridControl"/>
