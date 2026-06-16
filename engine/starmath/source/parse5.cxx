@@ -343,10 +343,11 @@ OUString encloseOrEscapeLiteral(const OUString& string, bool force)
     if (force)
         return "\"" + string + "\"";
     OUStringBuffer result;
+    // Standard math operators (+, -, *, /, =, <, >) are kept bare by the loop
+    // below, so they are deliberately not listed here.
     const std::unordered_set<sal_Unicode> DelimiterTable1{
         //keeping " as first entry is important to not get into recursive replacement
-        ' ', '\t', '\n', '\r', '+', '-', '*', '/', '=', '^',
-        '_', '#',  '%',  '>',  '<', '&', '|', '~', '`'
+        ' ', '\t', '\n', '\r', '^', '_', '#', '%', '&', '|', '~', '`'
     };
     const std::unordered_set<sal_Unicode> DelimiterTable2{
         //keeping " as first entry is important to not get into recursive replacement
@@ -356,6 +357,11 @@ OUString encloseOrEscapeLiteral(const OUString& string, bool force)
     {
         if (string[i] == '"')
             result.append("\"\\\"\"");
+        else if (isSingleCharMathOperator(string[i]))
+            // Standard math operators stay bare so StarMath renders them with
+            // math-font glyphs. A run like "-4" becomes the minus operator
+            // followed by 4 rather than a literal text hyphen.
+            result.append(string[i]);
         else if (DelimiterTable1.find(string[i]) != DelimiterTable1.end())
             result.append("\"" + OUStringChar(string[i]) + "\"");
         else if (DelimiterTable2.find(string[i]) != DelimiterTable2.end())
