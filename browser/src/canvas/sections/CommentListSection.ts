@@ -2522,12 +2522,23 @@ export class CommentSection extends CanvasSectionObject {
 			if (relayout)
 				this.resizeLastComment();
 			var lastY = 0;
-			if (selectedIndex) {
-				this.loopUp(selectedIndex - 1, x, yOrigin, relayout);
-				lastY = this.loopDown(selectedIndex, x, yOrigin, relayout);
+			// In Writer a comment is anchored to a point in the text that flows
+			// down the page, so comments before the selected one belong above it
+			// and are laid out upwards from its anchor. In Impress and Draw every
+			// comment is an independent thread pinned to a marker, and new comments
+			// all land at the same viewport top-left point. Laying the earlier ones
+			// upwards from that shared top anchor pushes them above the slide into
+			// the toolbar. Keep them in a single top-down stack with the selected
+			// comment expanded in place instead.
+			var stackFromTop = !selectedIndex
+				|| app.map._docLayer._docType === 'presentation'
+				|| app.map._docLayer._docType === 'drawing';
+			if (stackFromTop) {
+				lastY = this.loopDown(0, x, topRight[1], relayout);
 			}
 			else {
-				lastY = this.loopDown(0, x, topRight[1], relayout);
+				this.loopUp(selectedIndex - 1, x, yOrigin, relayout);
+				lastY = this.loopDown(selectedIndex, x, yOrigin, relayout);
 			}
 		} else {
 			for (const comment of this.sectionProperties.commentList) {
@@ -2540,10 +2551,10 @@ export class CommentSection extends CanvasSectionObject {
 			// detaches replies from their (now resized) parent. Reposition once more
 			// with the final heights so replies sit right under the parent.
 			if (!this.commentsHiddenOrNotPresent()) {
-				if (selectedIndex)
-					lastY = this.loopDown(selectedIndex, x, yOrigin, false);
-				else
+				if (stackFromTop)
 					lastY = this.loopDown(0, x, topRight[1], false);
+				else
+					lastY = this.loopDown(selectedIndex, x, yOrigin, false);
 				// Redraw indent lines for the repositioned replies (resizeComments drew
 				// them against the pre-reposition positions).
 				this.updateChildLines();
