@@ -153,7 +153,7 @@
     <message>
         <location filename="../Bridge.cpp" line="803"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar arquivo</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="158"/>
