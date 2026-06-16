@@ -477,27 +477,28 @@ class SlideShowPresenter {
 			winHeight = window.screen.height;
 		}
 
-		// set canvas styles
-		if (
-			winWidth * this._slideShowCanvas.height <
-			winHeight * this._slideShowCanvas.width
-		) {
-			// clean previous styles
-			this._slideShowCanvas.style.height = '';
-			this._slideShowCanvas.style.left = '';
-			// set new styles
-			this._slideShowCanvas.style.width = '100%';
-			this._slideShowCanvas.style.top = '50%';
-			this._slideShowCanvas.style.transform = 'translateY(-50%)';
+		if (!winWidth || !winHeight) return;
+
+		const canvas = this._slideShowCanvas;
+		const aspect = canvas.width / canvas.height;
+
+		// Fit the slide into the window keeping its aspect ratio, then round
+		// the displayed box to whole pixels and centre it on integer offsets.
+		let displayWidth: number;
+		let displayHeight: number;
+		if (winWidth < winHeight * aspect) {
+			displayWidth = winWidth;
+			displayHeight = Math.round(winWidth / aspect);
 		} else {
-			// clean previous styles
-			this._slideShowCanvas.style.width = '';
-			this._slideShowCanvas.style.top = '';
-			// set new styles
-			this._slideShowCanvas.style.height = '100%';
-			this._slideShowCanvas.style.left = '50%';
-			this._slideShowCanvas.style.transform = 'translateX(-50%)';
+			displayHeight = winHeight;
+			displayWidth = Math.round(winHeight * aspect);
 		}
+
+		canvas.style.width = displayWidth + 'px';
+		canvas.style.height = displayHeight + 'px';
+		canvas.style.left = Math.round((winWidth - displayWidth) / 2) + 'px';
+		canvas.style.top = Math.round((winHeight - displayHeight) / 2) + 'px';
+		canvas.style.transform = 'none';
 	}
 
 	private _configureCloseButtonStyles(
