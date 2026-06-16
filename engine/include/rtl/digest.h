@@ -39,12 +39,9 @@ typedef void* rtlDigest;
  */
 enum __rtl_DigestAlgorithm
 {
-    rtl_Digest_AlgorithmMD2,
     rtl_Digest_AlgorithmMD5,
-    rtl_Digest_AlgorithmSHA,
     rtl_Digest_AlgorithmSHA1_StarOfficeBug,
 
-    rtl_Digest_AlgorithmHMAC_MD5,
     rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
 
     rtl_Digest_AlgorithmInvalid,
@@ -155,62 +152,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-#define RTL_DIGEST_LENGTH_MD2 16
-
-/** Create a MD2 digest handle.
-
-    The MD2 digest algorithm is specified in
-    RFC 1319 (Informational)
-      The MD2 Message-Digest Algorithm
-
-    @see rtl_digest_create()
- */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createMD2 (void) SAL_THROW_EXTERN_C();
-
-
-/** Destroy a MD2 digest handle.
-    @see rtl_digest_destroy()
- */
-SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyMD2 (
-    rtlDigest Digest
-) SAL_THROW_EXTERN_C();
-
-/** Update a MD2 digest with given data.
-    @see rtl_digest_update()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateMD2 (
-    rtlDigest Digest,
-    const void *pData, sal_uInt32 nDatLen
-) SAL_THROW_EXTERN_C();
-
-/** Finalize a MD2 digest and retrieve the digest value.
-    @see rtl_digest_get()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD2 (
-    rtlDigest Digest,
-    sal_uInt8 *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-/** Evaluate a MD2 digest value from given data.
-
-    This function performs an optimized call sequence on a
-    single data buffer, avoiding digest creation and destruction.
-
-    @see rtl_digest_updateMD2()
-    @see rtl_digest_getMD2()
-
-    @param[in] pData   data buffer.
-    @param[in] nDatLen data length.
-    @param[in] pBuffer digest value buffer.
-    @param[in] nBufLen digest value length.
-
-    @retval rtl_Digest_E_None upon success.
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD2 (
-    const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
 #define RTL_DIGEST_LENGTH_MD5 16
 
 /** Create a MD5 digest handle.
@@ -275,80 +216,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_rawMD5 (
     @retval rtl_Digest_E_None upon success.
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
-    const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-#define RTL_DIGEST_LENGTH_SHA 20
-
-/** Create a SHA digest handle.
-
-    The SHA digest algorithm is specified in
-    FIPS PUB 180 (Superseded by FIPS PUB 180-1)
-      Secure Hash Standard
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_create()
- */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA (void) SAL_THROW_EXTERN_C();
-
-/** Destroy a SHA digest handle.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_destroy()
- */
-SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA (
-    rtlDigest Digest
-) SAL_THROW_EXTERN_C();
-
-
-/** Update a SHA digest with given data.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_update()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA (
-    rtlDigest Digest,
-    const void *pData, sal_uInt32 nDatLen
-) SAL_THROW_EXTERN_C();
-
-/** Finalize a SHA digest and retrieve the digest value.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_get()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA (
-    rtlDigest Digest,
-    sal_uInt8 *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-/** Evaluate a SHA digest value from given data.
-
-    This function performs an optimized call sequence on a
-    single data buffer, avoiding digest creation and destruction.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_updateSHA()
-    @see rtl_digest_getSHA()
-
-    @param[in] pData   data buffer.
-    @param[in] nDatLen data length.
-    @param[in] pBuffer digest value buffer.
-    @param[in] nBufLen digest value length.
-
-    @retval rtl_Digest_E_None upon success.
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -429,80 +296,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-#define RTL_DIGEST_LENGTH_HMAC_MD5 RTL_DIGEST_LENGTH_MD5
-
-/** Create a HMAC_MD5 digest handle.
-
-    The HMAC_MD5 digest algorithm is specified in
-
-    RFC 2104 (Informational)
-      HMAC: Keyed-Hashing for Message Authentication
-
-    @see rtl_digest_create()
- */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_MD5 (void) SAL_THROW_EXTERN_C();
-
-/** Destroy a HMAC_MD5 digest handle.
-    @see rtl_digest_destroy()
- */
-SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_MD5 (
-    rtlDigest Digest
-) SAL_THROW_EXTERN_C();
-
-/** Initialize a HMAC_MD5 digest.
-    @see rtl_digest_init()
-
-    @param[in] Digest   digest handle.
-    @param[in] pKeyData key material buffer.
-    @param[in] nKeyLen  key material length.
-
-    @retval rtl_Digest_E_None upon success.
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
-    rtlDigest Digest,
-    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen
-) SAL_THROW_EXTERN_C();
-
-/** Update a HMAC_MD5 digest with given data.
-    @see rtl_digest_update()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
-    rtlDigest Digest,
-    const void *pData, sal_uInt32 nDatLen
-) SAL_THROW_EXTERN_C();
-
-/** Finalize a HMAC_MD5 digest and retrieve the digest value.
-    @see rtl_digest_get()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
-    rtlDigest Digest,
-    sal_uInt8 *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-/** Evaluate a HMAC_MD5 digest value from given data.
-
-    This function performs an optimized call sequence on a
-    single data buffer, avoiding digest creation and destruction.
-
-    @see rtl_digest_initHMAC_MD5()
-    @see rtl_digest_updateHMAC_MD5()
-    @see rtl_digest_getHMAC_MD5()
-
-    @param[in] pKeyData key material buffer.
-    @param[in] nKeyLen  key material length.
-    @param[in] pData    data buffer.
-    @param[in] nDatLen  data length.
-    @param[in] pBuffer  digest value buffer.
-    @param[in] nBufLen  digest value length.
-
-    @retval rtl_Digest_E_None upon success.
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
-    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
-    const void      *pData,    sal_uInt32 nDatLen,
-    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
 #define RTL_DIGEST_LENGTH_HMAC_SHA1 RTL_DIGEST_LENGTH_SHA1

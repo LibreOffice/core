@@ -40,31 +40,22 @@ constexpr OString sSampleString               ("This is a sample sentence, which
 
 const rtlDigestAlgorithm constDigestAlgorithms[] =
 {
-    rtl_Digest_AlgorithmMD2,
     rtl_Digest_AlgorithmMD5,
-    rtl_Digest_AlgorithmSHA,
     rtl_Digest_AlgorithmSHA1_StarOfficeBug,
-    rtl_Digest_AlgorithmHMAC_MD5,
     rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
 };
 
 const sal_uInt32 constDigestAlgorithmLengths[] =
 {
-    RTL_DIGEST_LENGTH_MD2,
     RTL_DIGEST_LENGTH_MD5,
-    RTL_DIGEST_LENGTH_SHA,
     RTL_DIGEST_LENGTH_SHA1,
-    RTL_DIGEST_LENGTH_HMAC_MD5,
     RTL_DIGEST_LENGTH_HMAC_SHA1,
 };
 
 const std::string_view constSampleStringSums[] =
 {
-    std::string_view("647ee6c9d4aa5fdd374ed9d7a156acbf"),
     std::string_view("b16b903e6fc0b62ae389013ed93fe531"),
-    std::string_view("eab2814429b2613301c8a077b806af3680548914"),
     std::string_view("2bc5bdb7506a2cdc2fd27fc8b9889343012d5008"),
-    std::string_view("0b1b0e1a6f2e4420326354b031063605"),
     std::string_view("1998c6a556915be76451bfb587fa7c34d849936e")
 };
 
@@ -279,45 +270,42 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("does not handle wrong parameter", rtl_Digest_E_Argument, aError);
 
         aHandle = nullptr;
-        aError = rtl_digest_updateMD2(aHandle, nullptr, 0);
+        aError = rtl_digest_updateSHA1(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("does not handle wrong parameter", rtl_Digest_E_Argument, aError);
 
-        aError = rtl_digest_updateMD5(aHandle, nullptr, 0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("does not handle wrong parameter", rtl_Digest_E_Argument, aError);
-
-        aHandle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != nullptr);
+        aHandle = rtl_digest_create( rtl_Digest_AlgorithmSHA1_StarOfficeBug );
+        CPPUNIT_ASSERT(aHandle != nullptr);
 
         const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(sSampleString.getStr());
         sal_uInt32       nSize = sSampleString.getLength();
 
-        aError = rtl_digest_updateMD2(aHandle, nullptr, 0);
+        aError = rtl_digest_updateSHA1(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'pData' wrong", rtl_Digest_E_Argument, aError);
 
-        aError = rtl_digest_updateMD2(aHandle, pData, 0);
+        aError = rtl_digest_updateSHA1(aHandle, pData, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'nSize' wrong", rtl_Digest_E_None, aError);
 
-        rtl_digest_destroyMD2(aHandle);
+        rtl_digest_destroySHA1(aHandle);
 
         // use wrong Algorithm!!! This is volitional!
-        aHandle = rtl_digest_create(rtl_Digest_AlgorithmMD2);
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != nullptr);
+        aHandle = rtl_digest_create(rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug);
+        CPPUNIT_ASSERT(aHandle != nullptr);
 
-        aError = rtl_digest_updateMD5(aHandle, pData, nSize);
+        aError = rtl_digest_updateSHA1(aHandle, pData, nSize);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'handle' wrong", rtl_Digest_E_Algorithm, aError);
 
-        rtl_digest_destroyMD5(aHandle);
+        rtl_digest_destroyHMAC_SHA1(aHandle);
 
-        aHandle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD5", aHandle != nullptr);
+        aHandle = rtl_digest_create( rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug );
+        CPPUNIT_ASSERT(aHandle != nullptr);
 
-        aError = rtl_digest_updateMD5(aHandle, nullptr, 0);
+        aError = rtl_digest_updateHMAC_SHA1(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'pData' wrong", rtl_Digest_E_Argument, aError);
 
-        aError = rtl_digest_updateMD5(aHandle, pData, 0);
+        aError = rtl_digest_updateHMAC_SHA1(aHandle, pData, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'nSize' wrong", rtl_Digest_E_None, aError);
 
-        rtl_digest_destroyMD5(aHandle);
+        rtl_digest_destroyHMAC_SHA1(aHandle);
     }
 
     void testGet()
@@ -330,34 +318,34 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("does not handle wrong parameter", rtl_Digest_E_Argument, aError);
 
         aHandle = nullptr;
-        aError = rtl_digest_getMD5(aHandle, nullptr, 0);
+        aError = rtl_digest_getSHA1(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("does not handle wrong parameter", rtl_Digest_E_Argument, aError);
 
         // test with wrong algorithm
-        aHandle = rtl_digest_create(rtl_Digest_AlgorithmMD2);
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != nullptr);
+        aHandle = rtl_digest_create(rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug);
+        CPPUNIT_ASSERT(aHandle != nullptr);
 
         sal_uInt32 nKeyLen = rtl_digest_queryLength(aHandle);
         std::unique_ptr<sal_uInt8[]> pKeyBuffer(new sal_uInt8[nKeyLen]);
 
-        aError = rtl_digest_getMD5(aHandle, nullptr, 0);
+        aError = rtl_digest_getSHA1(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle 2. parameter wrong", rtl_Digest_E_Argument, aError);
 
-        aError = rtl_digest_getMD5(aHandle, pKeyBuffer.get(), 0);
+        aError = rtl_digest_getSHA1(aHandle, pKeyBuffer.get(), 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'handle' wrong", rtl_Digest_E_Algorithm, aError);
 
-        rtl_digest_destroyMD2(aHandle);
+        rtl_digest_destroyHMAC_SHA1(aHandle);
 
-        aHandle = rtl_digest_create(rtl_Digest_AlgorithmMD5);
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD5", aHandle != nullptr);
+        aHandle = rtl_digest_create(rtl_Digest_AlgorithmSHA1_StarOfficeBug);
+        CPPUNIT_ASSERT(aHandle != nullptr);
 
-        aError = rtl_digest_getMD5(aHandle, nullptr, nKeyLen);
+        aError = rtl_digest_getSHA1(aHandle, nullptr, nKeyLen);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'pData' wrong", rtl_Digest_E_Argument, aError);
 
-        aError = rtl_digest_getMD5(aHandle, pKeyBuffer.get(), 0);
+        aError = rtl_digest_getSHA1(aHandle, pKeyBuffer.get(), 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("handle parameter 'nSize' wrong", rtl_Digest_E_BufferSize, aError);
 
-        rtl_digest_destroyMD5(aHandle);
+        rtl_digest_destroySHA1(aHandle);
     }
 
     void testSHA1SumForBiggerInputData()
