@@ -986,7 +986,6 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     _rColumns.clear();
 
     OFieldDescription* pActFieldDescr = nullptr;
-    static constexpr OUStringLiteral sCreateParam(u"x");
     // ReadOnly-Flag
     // On drop no line must be editable.
     // On add only empty lines must be editable.
@@ -1007,7 +1006,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
 
         // search for type
         bool bForce;
-        TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
+        TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,u"x"_ustr,nPrecision,nScale,bAutoIncrement,bForce);
         if ( !pTypeInfo )
             pTypeInfo = m_pTypeInfo;
 

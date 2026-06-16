@@ -630,7 +630,6 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
     try { xInfo = _rxDest->getPropertySetInfo(); }
     catch(Exception&) { }
 
-    static constexpr OUStringLiteral sUrlProp(u"URL");
     // transfer the direct properties
     for (auto const& elem : m_aDirectPropTranslator)
     {
@@ -645,7 +644,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
             }
             if ((nAttributes & PropertyAttribute::READONLY) == 0)
             {
-                if ( sUrlProp == elem.second )
+                if ( u"URL"_ustr == elem.second )
                 {
                     Any aValue(getConnectionURL());
                     //  aValue <<= OUString();

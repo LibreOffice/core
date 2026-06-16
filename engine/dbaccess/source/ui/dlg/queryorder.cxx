@@ -119,9 +119,6 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
 {
     try
     {
-        static constexpr OUStringLiteral sNameProperty = u"Name";
-        static constexpr OUStringLiteral sAscendingProperty = u"IsAscending";
-
         Reference< XIndexAccess > xOrderColumns( m_xQueryComposer->getOrderColumns(), UNO_SET_THROW );
         sal_Int32 nColumns = xOrderColumns->getCount();
         if ( nColumns > DOG_ROWS )
@@ -134,8 +131,8 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
             OUString sColumnName;
             bool        bIsAscending( true );
 
-            xColumn->getPropertyValue( sNameProperty ) >>= sColumnName;
-            xColumn->getPropertyValue( sAscendingProperty ) >>= bIsAscending;
+            xColumn->getPropertyValue( u"Name"_ustr ) >>= sColumnName;
+            xColumn->getPropertyValue( u"IsAscending"_ustr ) >>= bIsAscending;
 
             m_aColumnList[i]->set_active_text(sColumnName);
             m_aValueList[i]->set_active(bIsAscending ? 0 : 1);

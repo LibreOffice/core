@@ -437,7 +437,6 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
 
     OUStringBuffer aSql = "UPDATE " + m_aComposedTableName + " SET ";
     // list all columns that should be set
-    static constexpr OUStringLiteral aPara(u" = ?,");
     OUString aQuote  = getIdentifierQuoteString();
     static constexpr OUString aAnd(u" AND "_ustr);
     OUString sIsNull(u" IS NULL"_ustr);
@@ -489,7 +488,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         }
         if((*_rInsertRow)[columnName.second.nPosition].isModified())
         {
-            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + aPara);
+            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + u" = ?,"_ustr);
         }
     }
 

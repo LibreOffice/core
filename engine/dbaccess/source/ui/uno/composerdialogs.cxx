@@ -49,9 +49,6 @@ namespace dbaui
 #define PROPERTY_ID_QUERYCOMPOSER       100
 #define PROPERTY_ID_ROWSET              101
 
-constexpr OUStringLiteral PROPERTY_QUERYCOMPOSER = u"QueryComposer";
-constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -64,9 +61,9 @@ constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
         :OGenericUnoDialog( _rxORB )
     {
 
-        registerProperty( PROPERTY_QUERYCOMPOSER, PROPERTY_ID_QUERYCOMPOSER, PropertyAttribute::TRANSIENT,
+        registerProperty( u"QueryComposer"_ustr, PROPERTY_ID_QUERYCOMPOSER, PropertyAttribute::TRANSIENT,
             &m_xComposer, cppu::UnoType<decltype(m_xComposer)>::get() );
-        registerProperty( PROPERTY_ROWSET, PROPERTY_ID_ROWSET, PropertyAttribute::TRANSIENT,
+        registerProperty( u"RowSet"_ustr, PROPERTY_ID_ROWSET, PropertyAttribute::TRANSIENT,
             &m_xRowSet, cppu::UnoType<decltype(m_xRowSet)>::get() );
     }
 

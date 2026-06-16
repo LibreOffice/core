@@ -79,18 +79,11 @@ namespace dbaccess {
 namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 }
 
-constexpr OUStringLiteral STR_SELECT = u"SELECT ";
-constexpr OUStringLiteral STR_FROM = u" FROM ";
 constexpr OUString STR_WHERE = u" WHERE "_ustr;
-constexpr OUStringLiteral STR_GROUP_BY = u" GROUP BY ";
-constexpr OUStringLiteral STR_HAVING = u" HAVING ";
-constexpr OUStringLiteral STR_ORDER_BY = u" ORDER BY ";
 constexpr OUString STR_AND = u" AND "_ustr;
 constexpr OUString STR_OR = u" OR "_ustr;
-constexpr OUStringLiteral STR_LIKE = u" LIKE ";
 constexpr OUString L_BRACKET = u"("_ustr;
 constexpr OUString R_BRACKET = u")"_ustr;
-constexpr OUStringLiteral COMMA = u",";
 
 namespace
 {
@@ -154,10 +147,10 @@ namespace
     */
     OUString getPureSelectStatement( const OSQLParseNode* _pRootNode, const Reference< XConnection >& _rxConnection )
     {
-        OUString sSQL = STR_SELECT;
+        OUString sSQL = u"SELECT "_ustr;
         _pRootNode->getChild(1)->parseNodeToStr( sSQL, _rxConnection );
         _pRootNode->getChild(2)->parseNodeToStr( sSQL, _rxConnection );
-        sSQL += STR_FROM;
+        sSQL += u" FROM "_ustr;
         _pRootNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr( sSQL, _rxConnection );
         return sSQL;
     }
@@ -578,7 +571,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
     OUString sColumnName( impl_getColumnNameOrderBy_throw(column) );
     OUString sOrder = getOrder();
     if ( !(sOrder.isEmpty() || sColumnName.isEmpty()) )
-        sOrder += COMMA;
+        sOrder += u","_ustr;
     sOrder += sColumnName;
     if ( !(ascending || sColumnName.isEmpty()) )
         sOrder += " DESC ";
@@ -1697,7 +1690,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     if ( xClob.is() )
                     {
                         const ::sal_Int64 nLength = xClob->length();
-                        if ( sal_Int64(nLength + aSQL.getLength() + STR_LIKE.getLength() ) < sal_Int64(SAL_MAX_INT32) )
+                        if ( sal_Int64(nLength + aSQL.getLength() + u" LIKE "_ustr.getLength() ) < sal_Int64(SAL_MAX_INT32) )
                         {
                             aSQL.append("'" + xClob->getSubString(1,static_cast<sal_Int32>(nLength)) + "'");
                         }
@@ -1869,13 +1862,13 @@ OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart )
             sKeyword = STR_WHERE;
             break;
         case Group:
-            sKeyword = STR_GROUP_BY;
+            sKeyword = u" GROUP BY "_ustr;
             break;
         case Having:
-            sKeyword = STR_HAVING;
+            sKeyword = u" HAVING "_ustr;
             break;
         case Order:
-            sKeyword = STR_ORDER_BY;
+            sKeyword = u" ORDER BY "_ustr;
             break;
     }
     return sKeyword;
