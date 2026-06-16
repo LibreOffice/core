@@ -182,11 +182,6 @@ void XMLIndexTOCContext::startFastElement(
             //    index
 
             // preliminaries
-#ifndef DBG_UTIL
-            static constexpr OUStringLiteral sMarker(u" ");
-#else
-            static constexpr OUStringLiteral sMarker(u"Y");
-#endif
             rtl::Reference<XMLTextImportHelper> rImport =
                 GetImport().GetTextImport();
 
@@ -214,7 +209,11 @@ void XMLIndexTOCContext::startFastElement(
             GetImport().SetXmlId(xIfc, sXmlId);
 
             // b) insert marker and move cursor
-            rImport->InsertString(sMarker);
+#ifndef DBG_UTIL
+            rImport->InsertString(u" "_ustr);
+#else
+            rImport->InsertString(u"Y"_ustr);
+#endif
             rImport->GetCursor()->goLeft(2, false);
         }
     }

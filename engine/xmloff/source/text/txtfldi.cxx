@@ -107,7 +107,6 @@ constexpr OUString sAPI_content  = u"Content"_ustr;
 constexpr OUString sAPI_author   = u"Author"_ustr;
 constexpr OUString sAPI_hint     = u"Hint"_ustr;
 constexpr OUString sAPI_name     = u"Name"_ustr;
-constexpr OUStringLiteral sAPI_parent_name = u"ParentName";
 constexpr OUString sAPI_sub_type = u"SubType"_ustr;
 constexpr OUString sAPI_date_time_value = u"DateTimeValue"_ustr;
 constexpr OUString sAPI_number_format = u"NumberFormat"_ustr;
@@ -483,9 +482,6 @@ void XMLTextFieldImportContext::ForceUpdate(
 
 // XMLSenderFieldImportContext
 
-
-constexpr OUStringLiteral gsPropertyFieldSubType(u"UserDataType");
-
 XMLSenderFieldImportContext::XMLSenderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)
     : XMLTextFieldImportContext(rImport, rHlp, u"ExtendedUser"_ustr)
@@ -581,7 +577,7 @@ void XMLSenderFieldImportContext::PrepareField(
     const Reference<XPropertySet> & rPropSet)
 {
     // set members
-    rPropSet->setPropertyValue(gsPropertyFieldSubType, Any(nSubType));
+    rPropSet->setPropertyValue(u"UserDataType"_ustr, Any(nSubType));
 
     // set fixed
     rPropSet->setPropertyValue(sPropertyFixed, Any(bFixed));
@@ -604,8 +600,6 @@ void XMLSenderFieldImportContext::PrepareField(
 
 
 // XMLAuthorFieldImportContext
-
-constexpr OUStringLiteral gsPropertyAuthorFullName(u"FullName");
 
 XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)
@@ -646,7 +640,7 @@ void XMLAuthorFieldImportContext::PrepareField(
 {
     // set members
     Any aAny;
-    rPropSet->setPropertyValue(gsPropertyAuthorFullName, Any(bAuthorFullName));
+    rPropSet->setPropertyValue(u"FullName"_ustr, Any(bAuthorFullName));
 
     rPropSet->setPropertyValue(sPropertyFixed, Any(bFixed));
 
@@ -678,8 +672,6 @@ SvXMLEnumMapEntry<PageNumberType> const lcl_aSelectPageAttrMap[] =
     { XML_NEXT,          PageNumberType_NEXT },
     { XML_TOKEN_INVALID, PageNumberType(0) },
 };
-
-constexpr OUStringLiteral gsPropertyUserText(u"UserText");
 
 XMLPageContinuationImportContext::XMLPageContinuationImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)
@@ -726,7 +718,7 @@ void XMLPageContinuationImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertySubType, Any(eSelectPage));
 
     aAny <<= (sStringOK ? sString : GetContent());
-    xPropertySet->setPropertyValue(gsPropertyUserText, aAny);
+    xPropertySet->setPropertyValue(u"UserText"_ustr, aAny);
 
     aAny <<= style::NumberingType::CHAR_SPECIAL;
     xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
@@ -832,10 +824,6 @@ void XMLPageNumberImportContext::PrepareField(
 
 // Placeholder
 
-
-constexpr OUStringLiteral gsPropertyPlaceholderType(u"PlaceHolderType");
-constexpr OUStringLiteral gsPropertyPlaceholder(u"PlaceHolder");
-
 XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)
 :   XMLTextFieldImportContext(rImport, rHlp, u"JumpEdit"_ustr)
@@ -907,9 +895,9 @@ void XMLPlaceholderFieldImportContext::PrepareField(
         --nLength;
     }
     aAny <<= aContent.copy(nStart, nLength);
-    xPropertySet->setPropertyValue(gsPropertyPlaceholder, aAny);
+    xPropertySet->setPropertyValue(u"PlaceHolder"_ustr, aAny);
 
-    xPropertySet->setPropertyValue(gsPropertyPlaceholderType, Any(nPlaceholderType));
+    xPropertySet->setPropertyValue(u"PlaceHolderType"_ustr, Any(nPlaceholderType));
 }
 
 
@@ -1093,13 +1081,6 @@ void XMLDateFieldImportContext::ProcessAttribute(
 
 // database field superclass
 
-
-constexpr OUStringLiteral gsPropertyDataBaseName(u"DataBaseName");
-constexpr OUStringLiteral gsPropertyDataBaseURL(u"DataBaseURL");
-constexpr OUStringLiteral gsPropertyTableName(u"DataTableName");
-constexpr OUStringLiteral gsPropertyDataCommandType(u"DataCommandType");
-constexpr OUStringLiteral gsPropertyIsVisible(u"IsVisible");
-
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     const OUString& pServiceName, bool bUseDisplay)
@@ -1198,27 +1179,27 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDatabaseFieldImport
 void XMLDatabaseFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    xPropertySet->setPropertyValue(gsPropertyTableName, Any(m_sTableName));
+    xPropertySet->setPropertyValue(u"DataTableName"_ustr, Any(m_sTableName));
 
     if( m_bDatabaseNameOK )
     {
-        xPropertySet->setPropertyValue(gsPropertyDataBaseName, Any(m_sDatabaseName));
+        xPropertySet->setPropertyValue(u"DataBaseName"_ustr, Any(m_sDatabaseName));
     }
     else if( m_bDatabaseURLOK )
     {
-        xPropertySet->setPropertyValue(gsPropertyDataBaseURL, Any(m_sDatabaseURL));
+        xPropertySet->setPropertyValue(u"DataBaseURL"_ustr, Any(m_sDatabaseURL));
     }
 
     // #99980# load/save command type for all fields; also load
     //         old documents without command type
     if( m_bCommandTypeOK )
     {
-        xPropertySet->setPropertyValue( gsPropertyDataCommandType, Any(m_nCommandType) );
+        xPropertySet->setPropertyValue( u"DataCommandType"_ustr, Any(m_nCommandType) );
     }
 
     if( m_bUseDisplay && m_bDisplayOK )
     {
-        xPropertySet->setPropertyValue( gsPropertyIsVisible, Any(m_bDisplay) );
+        xPropertySet->setPropertyValue( u"IsVisible"_ustr, Any(m_bDisplay) );
     }
 }
 
@@ -1551,8 +1532,6 @@ OUString XMLSimpleDocInfoImportContext::MapTokenToServiceName(
 
 // revision field
 
-constexpr OUStringLiteral sPropertyRevision(u"Revision");
-
 XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_Int32 nElement) :
         XMLSimpleDocInfoImportContext(rImport, rHlp, nElement, false, false)
@@ -1580,7 +1559,7 @@ void XMLRevisionDocInfoImportContext::PrepareField(
         sal_Int32 nTmp;
         if (::sax::Converter::convertNumber(nTmp, GetContent()))
         {
-            rPropertySet->setPropertyValue(sPropertyRevision, Any(nTmp));
+            rPropertySet->setPropertyValue(u"Revision"_ustr, Any(nTmp));
         }
     }
 }
@@ -1815,10 +1794,6 @@ void XMLHiddenParagraphImportContext::PrepareField(
 
 // import conditional text (<text:conditional-text>)
 
-constexpr OUStringLiteral gsPropertyTrueContent(u"TrueContent");
-constexpr OUStringLiteral gsPropertyFalseContent(u"FalseContent");
-constexpr OUStringLiteral gsPropertyIsConditionTrue(u"IsConditionTrue");
-
 XMLConditionalTextImportContext::XMLConditionalTextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
         XMLTextFieldImportContext(rImport, rHlp, u"ConditionalText"_ustr),
@@ -1879,9 +1854,9 @@ void XMLConditionalTextImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
     xPropertySet->setPropertyValue(sPropertyCondition, Any(sCondition));
-    xPropertySet->setPropertyValue(gsPropertyFalseContent, Any(sFalseContent));
-    xPropertySet->setPropertyValue(gsPropertyTrueContent, Any(sTrueContent));
-    xPropertySet->setPropertyValue(gsPropertyIsConditionTrue, Any(bCurrentValue));
+    xPropertySet->setPropertyValue(u"FalseContent"_ustr, Any(sFalseContent));
+    xPropertySet->setPropertyValue(u"TrueContent"_ustr, Any(sTrueContent));
+    xPropertySet->setPropertyValue(u"IsConditionTrue"_ustr, Any(bCurrentValue));
     xPropertySet->setPropertyValue(sPropertyCurrentPresentation, Any(GetContent()));
 }
 
@@ -2099,9 +2074,6 @@ const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-constexpr OUStringLiteral gsPropertyChapterFormat(u"ChapterFormat");
-constexpr OUStringLiteral gsPropertyLevel(u"Level");
-
 XMLChapterImportContext::XMLChapterImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
         XMLTextFieldImportContext(rImport, rHlp, u"Chapter"_ustr),
@@ -2151,8 +2123,8 @@ void XMLChapterImportContext::ProcessAttribute(
 void XMLChapterImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    xPropertySet->setPropertyValue(gsPropertyChapterFormat, Any(nFormat));
-    xPropertySet->setPropertyValue(gsPropertyLevel, Any(nLevel));
+    xPropertySet->setPropertyValue(u"ChapterFormat"_ustr, Any(nFormat));
+    xPropertySet->setPropertyValue(u"Level"_ustr, Any(nLevel));
 }
 
 
@@ -3350,7 +3322,7 @@ void XMLAnnotationImportContext::PrepareField(
         xPropertySet->setPropertyValue(sAPI_name, Any(aName));
 
     if (!aParentName.isEmpty())
-        xPropertySet->setPropertyValue(sAPI_parent_name, Any(aParentName));
+        xPropertySet->setPropertyValue(u"ParentName"_ustr, Any(aParentName));
 }
 
 

@@ -53,17 +53,7 @@ using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::drawing::PointSequence;
 
-constexpr OUStringLiteral gsBoundary(u"Boundary");
-constexpr OUStringLiteral gsCenter(u"Center");
-constexpr OUStringLiteral gsDescription(u"Description");
 constexpr OUString gsImageMap(u"ImageMap"_ustr);
-constexpr OUStringLiteral gsIsActive(u"IsActive");
-constexpr OUStringLiteral gsName(u"Name");
-constexpr OUStringLiteral gsPolygon(u"Polygon");
-constexpr OUStringLiteral gsRadius(u"Radius");
-constexpr OUStringLiteral gsTarget(u"Target");
-constexpr OUStringLiteral gsURL(u"URL");
-constexpr OUStringLiteral gsTitle(u"Title");
 
 XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
     mrExport(rExp)
@@ -158,7 +148,7 @@ void XMLImageMapExport::ExportMapEntry(
     // now: handle ImageMapObject properties (those for all types)
 
     // XLINK (URL property)
-    Any aAny = rPropertySet->getPropertyValue(gsURL);
+    Any aAny = rPropertySet->getPropertyValue(u"URL"_ustr);
     OUString sHref;
     aAny >>= sHref;
     if (!sHref.isEmpty())
@@ -168,7 +158,7 @@ void XMLImageMapExport::ExportMapEntry(
     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
 
     // Target property (and xlink:show)
-    aAny = rPropertySet->getPropertyValue(gsTarget);
+    aAny = rPropertySet->getPropertyValue(u"Target"_ustr);
     OUString sTargt;
     aAny >>= sTargt;
     if (!sTargt.isEmpty())
@@ -182,7 +172,7 @@ void XMLImageMapExport::ExportMapEntry(
     }
 
     // name
-    aAny = rPropertySet->getPropertyValue(gsName);
+    aAny = rPropertySet->getPropertyValue(u"Name"_ustr);
     OUString sItemName;
     aAny >>= sItemName;
     if (!sItemName.isEmpty())
@@ -191,7 +181,7 @@ void XMLImageMapExport::ExportMapEntry(
     }
 
     // is-active
-    aAny = rPropertySet->getPropertyValue(gsIsActive);
+    aAny = rPropertySet->getPropertyValue(u"IsActive"_ustr);
     if (! *o3tl::doAccess<bool>(aAny))
     {
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
@@ -222,7 +212,7 @@ void XMLImageMapExport::ExportMapEntry(
 
     // title property (as <svg:title> element)
     OUString sTitle;
-    rPropertySet->getPropertyValue(gsTitle) >>= sTitle;
+    rPropertySet->getPropertyValue(u"Title"_ustr) >>= sTitle;
     if(!sTitle.isEmpty())
     {
         SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, true/*bWhiteSpace*/, false);
@@ -231,7 +221,7 @@ void XMLImageMapExport::ExportMapEntry(
 
     // description property (as <svg:desc> element)
     OUString sDescription;
-    rPropertySet->getPropertyValue(gsDescription) >>= sDescription;
+    rPropertySet->getPropertyValue(u"Description"_ustr) >>= sDescription;
     if (!sDescription.isEmpty())
     {
         SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, true/*bWhiteSpace*/, false);
@@ -249,7 +239,7 @@ void XMLImageMapExport::ExportRectangle(
     const Reference<XPropertySet> & rPropertySet)
 {
     // get boundary rectangle
-    Any aAny = rPropertySet->getPropertyValue(gsBoundary);
+    Any aAny = rPropertySet->getPropertyValue(u"Boundary"_ustr);
     awt::Rectangle aRectangle;
     aAny >>= aRectangle;
 
@@ -275,7 +265,7 @@ void XMLImageMapExport::ExportCircle(
     const Reference<XPropertySet> & rPropertySet)
 {
     // get boundary rectangle
-    Any aAny = rPropertySet->getPropertyValue(gsCenter);
+    Any aAny = rPropertySet->getPropertyValue(u"Center"_ustr);
     awt::Point aCenter;
     aAny >>= aCenter;
 
@@ -289,7 +279,7 @@ void XMLImageMapExport::ExportCircle(
                           aBuffer.makeStringAndClear() );
 
     // radius
-    aAny = rPropertySet->getPropertyValue(gsRadius);
+    aAny = rPropertySet->getPropertyValue(u"Radius"_ustr);
     sal_Int32 nRadius = 0;
     aAny >>= nRadius;
     mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, nRadius);
@@ -303,7 +293,7 @@ void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertyS
     // pair sequence. The bounding box is always the entire image.
 
     // get polygon point sequence
-    Any aAny = rPropertySet->getPropertyValue(gsPolygon);
+    Any aAny = rPropertySet->getPropertyValue(u"Polygon"_ustr);
     PointSequence aPoly;
     aAny >>= aPoly;
 

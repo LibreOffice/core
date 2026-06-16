@@ -125,8 +125,6 @@ constexpr OUString XML_MODEL_SERVICE_IMPRESS = u"com.sun.star.presentation.Prese
 constexpr OUString XML_MODEL_SERVICE_MATH = u"com.sun.star.formula.FormulaProperties"_ustr;
 constexpr OUString XML_MODEL_SERVICE_CHART = u"com.sun.star.chart.ChartDocument"_ustr;
 
-constexpr OUStringLiteral XML_USEPRETTYPRINTING = u"UsePrettyPrinting";
-
 constexpr OUString XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:"_ustr;
 constexpr OUString XML_EMBEDDEDOBJECT_URL_BASE = u"vnd.sun.star.EmbeddedObject:"_ustr;
 
@@ -605,7 +603,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
         if (xPropertySetInfo.is())
         {
-            OUString sUsePrettyPrinting(XML_USEPRETTYPRINTING);
+            OUString sUsePrettyPrinting(u"UsePrettyPrinting"_ustr);
             if (xPropertySetInfo->hasPropertyByName(sUsePrettyPrinting))
             {
                 uno::Any aAny = mxExportInfo->getPropertyValue(sUsePrettyPrinting);
@@ -1831,8 +1829,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
     {
         // tdf#130559: don't export preview view data if active
-        static constexpr OUStringLiteral sNoPreviewData = u"NoPreviewData";
-        css::uno::ContextLayer layer(comphelper::NewFlagContext(sNoPreviewData));
+        css::uno::ContextLayer layer(comphelper::NewFlagContext(u"NoPreviewData"_ustr));
         xIndexAccess = xViewDataSupplier->getViewData();
     }
     bool bAdd = false;

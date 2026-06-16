@@ -61,8 +61,6 @@ using namespace ::com::sun::star::i18n;
 using namespace ::xmloff::token;
 
 
-constexpr OUStringLiteral XML_NULLDATE = u"NullDate";
-
 struct SvXMLUnitConverter::Impl
 {
     sal_Int16 m_eCoreMeasureUnit; /*css::util::MeasureUnit*/
@@ -355,7 +353,7 @@ bool SvXMLUnitConverter::setNullDate(const css::uno::Reference <css::frame::XMod
     if (xNumberFormatsSupplier.is())
     {
         const css::uno::Reference <css::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
-        return xPropertySet.is() && (xPropertySet->getPropertyValue(XML_NULLDATE) >>= m_pImpl->m_aNullDate);
+        return xPropertySet.is() && (xPropertySet->getPropertyValue(u"NullDate"_ustr) >>= m_pImpl->m_aNullDate);
     }
     return false;
 }

@@ -61,9 +61,6 @@ using namespace com::sun::star::io;
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-constexpr OUStringLiteral XML_GRAPHICSTORAGE_NAME = u"Pictures";
-constexpr OUStringLiteral XML_GRAPHICOBJECT_URL_BASE = u"vnd.sun.star.GraphicObject:";
-
 namespace {
 
 const MetaCommentAction* ImplCheckForEPS( GDIMetaFile const & rMtf )
@@ -801,7 +798,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             rPictureStreamName = sId + aExtension;
         }
 
-        SvxGraphicHelperStream_Impl aStream(ImplGetGraphicStream(XML_GRAPHICSTORAGE_NAME, rPictureStreamName));
+        SvxGraphicHelperStream_Impl aStream(ImplGetGraphicStream(u"Pictures"_ustr, rPictureStreamName));
 
         if (aStream.xStream.is())
         {
@@ -997,7 +994,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 
                 if( !aId.isEmpty() )
                 {
-                    aRet = XML_GRAPHICOBJECT_URL_BASE + aId;
+                    aRet = u"vnd.sun.star.GraphicObject:"_ustr + aId;
                 }
             }
         }

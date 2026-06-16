@@ -51,13 +51,6 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
     if( nCount == 0 )
         return;
 
-    static constexpr OUStringLiteral strName( u"Name" );
-    static constexpr OUStringLiteral strTitle( u"Title" );
-    static constexpr OUStringLiteral strDescription( u"Description" );
-    static constexpr OUStringLiteral strIsVisible( u"IsVisible");
-    static constexpr OUStringLiteral strIsPrintable( u"IsPrintable");
-    static constexpr OUStringLiteral strIsLocked( u"IsLocked" );
-
     OUString sTmp;
 
 
@@ -68,14 +61,14 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         try
         {
             Reference< XPropertySet> xLayer( xLayerManager->getByIndex( nIndex ), UNO_QUERY_THROW );
-            xLayer->getPropertyValue( strName ) >>= sTmp;
+            xLayer->getPropertyValue( u"Name"_ustr ) >>= sTmp;
             if(!sTmp.isEmpty())
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, sTmp );
 
             bool bTmpVisible( true );
             bool bTmpPrintable( true );
-            xLayer->getPropertyValue( strIsVisible) >>= bTmpVisible;
-            xLayer->getPropertyValue( strIsPrintable) >>= bTmpPrintable;
+            xLayer->getPropertyValue( u"IsVisible"_ustr) >>= bTmpVisible;
+            xLayer->getPropertyValue( u"IsPrintable"_ustr) >>= bTmpPrintable;
             // only write non-default values, default is "always"
             if ( bTmpVisible )
             {
@@ -91,7 +84,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             }
 
             bool bTmpLocked( false );
-            xLayer->getPropertyValue( strIsLocked ) >>= bTmpLocked;
+            xLayer->getPropertyValue( u"IsLocked"_ustr ) >>= bTmpLocked;
             // only write non-default value, default is "false"
             if ( bTmpLocked )
             {
@@ -101,7 +94,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, true, true );
 
             // title property (as <svg:title> element)
-            xLayer->getPropertyValue(strTitle) >>= sTmp;
+            xLayer->getPropertyValue(u"Title"_ustr) >>= sTmp;
             if(!sTmp.isEmpty())
             {
                 SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SVG, XML_TITLE, true, false);
@@ -109,7 +102,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             }
 
             // description property (as <svg:desc> element)
-            xLayer->getPropertyValue(strDescription) >>= sTmp;
+            xLayer->getPropertyValue(u"Description"_ustr) >>= sTmp;
             if(!sTmp.isEmpty())
             {
                 SvXMLElementExport aDesc(rExport, XML_NAMESPACE_SVG, XML_DESC, true, false);

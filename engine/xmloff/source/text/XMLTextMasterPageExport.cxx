@@ -32,17 +32,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-constexpr OUStringLiteral gsHeaderText( u"HeaderText" );
-constexpr OUStringLiteral gsHeaderOn( u"HeaderIsOn" );
-constexpr OUStringLiteral gsHeaderShareContent( u"HeaderIsShared" );
-constexpr OUStringLiteral gsHeaderTextFirst( u"HeaderTextFirst" );
-constexpr OUStringLiteral gsHeaderTextLeft( u"HeaderTextLeft" );
 constexpr OUString gsFirstShareContent( u"FirstIsShared"_ustr );
-constexpr OUStringLiteral gsFooterText( u"FooterText" );
-constexpr OUStringLiteral gsFooterOn( u"FooterIsOn" );
-constexpr OUStringLiteral gsFooterShareContent( u"FooterIsShared" );
-constexpr OUStringLiteral gsFooterTextFirst( u"FooterTextFirst" );
-constexpr OUStringLiteral gsFooterTextLeft( u"FooterTextLeft" );
 
 XMLTextMasterPageExport::XMLTextMasterPageExport( SvXMLExport& rExp ) :
     XMLPageExport( rExp )
@@ -84,27 +74,27 @@ void XMLTextMasterPageExport::exportMasterPageContent(
     Any aAny;
 
     Reference < XText > xHeaderText;
-    aAny = rPropSet->getPropertyValue( gsHeaderText );
+    aAny = rPropSet->getPropertyValue( u"HeaderText"_ustr );
     aAny >>= xHeaderText;
 
     Reference < XText > xHeaderTextFirst;
-    aAny = rPropSet->getPropertyValue( gsHeaderTextFirst );
+    aAny = rPropSet->getPropertyValue( u"HeaderTextFirst"_ustr );
     aAny >>= xHeaderTextFirst;
 
     Reference < XText > xHeaderTextLeft;
-    aAny = rPropSet->getPropertyValue( gsHeaderTextLeft );
+    aAny = rPropSet->getPropertyValue( u"HeaderTextLeft"_ustr );
     aAny >>= xHeaderTextLeft;
 
     Reference < XText > xFooterText;
-    aAny = rPropSet->getPropertyValue( gsFooterText );
+    aAny = rPropSet->getPropertyValue( u"FooterText"_ustr );
     aAny >>= xFooterText;
 
     Reference < XText > xFooterTextFirst;
-    aAny = rPropSet->getPropertyValue( gsFooterTextFirst );
+    aAny = rPropSet->getPropertyValue( u"FooterTextFirst"_ustr );
     aAny >>= xFooterTextFirst;
 
     Reference < XText > xFooterTextLeft;
-    aAny = rPropSet->getPropertyValue( gsFooterTextLeft );
+    aAny = rPropSet->getPropertyValue( u"FooterTextLeft"_ustr );
     aAny >>= xFooterTextLeft;
 
     if( bAutoStyles )
@@ -126,7 +116,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
     {
         auto const nVersion(GetExport().getSaneDefaultVersion());
 
-        aAny = rPropSet->getPropertyValue( gsHeaderOn );
+        aAny = rPropSet->getPropertyValue( u"HeaderIsOn"_ustr );
         bool bHeader = false;
         aAny >>= bHeader;
 
@@ -140,7 +130,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         bool bHeaderLeftShared = false;
         if( bHeader )
         {
-            aAny = rPropSet->getPropertyValue( gsHeaderShareContent );
+            aAny = rPropSet->getPropertyValue( u"HeaderIsShared"_ustr );
             aAny >>= bHeaderLeftShared;
         }
 
@@ -179,7 +169,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xHeaderTextFirst, false );
         }
 
-        aAny = rPropSet->getPropertyValue( gsFooterOn );
+        aAny = rPropSet->getPropertyValue( u"FooterIsOn"_ustr );
         bool bFooter = false;
         aAny >>= bFooter;
 
@@ -193,7 +183,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         bool bFooterLeftShared = false;
         if( bFooter )
         {
-            aAny = rPropSet->getPropertyValue( gsFooterShareContent );
+            aAny = rPropSet->getPropertyValue( u"FooterIsShared"_ustr );
             aAny >>= bFooterLeftShared;
         }
 

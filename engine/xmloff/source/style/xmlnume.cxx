@@ -626,7 +626,6 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 }
 
 
-constexpr OUStringLiteral gsNumberingRules( u"NumberingRules" );
 constexpr OUString gsIsPhysical( u"IsPhysical"_ustr );
 constexpr OUString gsIsContinuousNumbering( u"IsContinuousNumbering"_ustr );
 
@@ -715,7 +714,7 @@ void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
             return;
     }
 
-    aAny = xPropSet->getPropertyValue( gsNumberingRules );
+    aAny = xPropSet->getPropertyValue( u"NumberingRules"_ustr );
     Reference<XIndexReplace> xNumRule;
     aAny >>= xNumRule;
 

@@ -136,8 +136,6 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 using namespace ::xmloff::token;
 
-constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:";
-
 namespace {
 
 bool supportsText(XmlShapeType eShapeType)
@@ -159,26 +157,10 @@ bool supportsText(XmlShapeType eShapeType)
 
 }
 
-constexpr OUStringLiteral gsPrintable( u"Printable" );
-constexpr OUStringLiteral gsVisible( u"Visible" );
 constexpr OUString gsModel( u"Model"_ustr );
-constexpr OUStringLiteral gsStartShape( u"StartShape" );
-constexpr OUStringLiteral gsEndShape( u"EndShape" );
 constexpr OUString gsOnClick( u"OnClick"_ustr );
-constexpr OUStringLiteral gsEventType( u"EventType" );
-constexpr OUStringLiteral gsPresentation( u"Presentation" );
-constexpr OUStringLiteral gsMacroName( u"MacroName" );
 constexpr OUString gsScript( u"Script"_ustr );
-constexpr OUStringLiteral gsLibrary( u"Library" );
-constexpr OUStringLiteral gsClickAction( u"ClickAction" );
 constexpr OUString gsBookmark( u"Bookmark"_ustr );
-constexpr OUStringLiteral gsEffect( u"Effect" );
-constexpr OUStringLiteral gsPlayFull( u"PlayFull" );
-constexpr OUStringLiteral gsVerb( u"Verb" );
-constexpr OUStringLiteral gsSoundURL( u"SoundURL" );
-constexpr OUStringLiteral gsSpeed( u"Speed" );
-constexpr OUStringLiteral gsStarBasic( u"StarBasic" );
-constexpr OUStringLiteral gsHyperlink( u"Hyperlink" );
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
@@ -545,11 +527,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             uno::Reference< uno::XInterface > xConnection;
 
             // create shape ids for export later
-            xPropSet->getPropertyValue( gsStartShape ) >>= xConnection;
+            xPropSet->getPropertyValue( u"StartShape"_ustr ) >>= xConnection;
             if( xConnection.is() )
                 mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
 
-            xPropSet->getPropertyValue( gsEndShape ) >>= xConnection;
+            xPropSet->getPropertyValue( u"EndShape"_ustr ) >>= xConnection;
             if( xConnection.is() )
                 mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
             break;
@@ -621,7 +603,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     OUString sHyperlink;
     try
     {
-        xSet->getPropertyValue(gsHyperlink) >>= sHyperlink;
+        xSet->getPropertyValue(u"Hyperlink"_ustr) >>= sHyperlink;
     }
     catch (beans::UnknownPropertyException)
     {
@@ -787,8 +769,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 bool bVisible = true;
                 bool bPrintable = true;
 
-                xSet->getPropertyValue(gsVisible) >>= bVisible;
-                xSet->getPropertyValue(gsPrintable) >>= bPrintable;
+                xSet->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+                xSet->getPropertyValue(u"Printable"_ustr) >>= bPrintable;
 
                 XMLTokenEnum eDisplayToken = XML_TOKEN_INVALID;
                 const unsigned short nDisplay = (bVisible ? 2 : 0) | (bPrintable ? 1 : 0);
@@ -1762,27 +1744,27 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
     {
         for (const auto& rProperty : aClickProperties)
         {
-            if( !( nFound & Found::CLICKEVENTTYPE ) && rProperty.Name == gsEventType )
+            if( !( nFound & Found::CLICKEVENTTYPE ) && rProperty.Name == u"EventType"_ustr )
             {
                 if( rProperty.Value >>= aClickEventType )
                     nFound |= Found::CLICKEVENTTYPE;
             }
-            else if( !( nFound & Found::CLICKACTION ) && rProperty.Name == gsClickAction )
+            else if( !( nFound & Found::CLICKACTION ) && rProperty.Name == u"ClickAction"_ustr )
             {
                 if( rProperty.Value >>= eClickAction )
                     nFound |= Found::CLICKACTION;
             }
-            else if( !( nFound & Found::MACRO ) && ( rProperty.Name == gsMacroName || rProperty.Name == gsScript ) )
+            else if( !( nFound & Found::MACRO ) && ( rProperty.Name == u"MacroName"_ustr || rProperty.Name == gsScript ) )
             {
                 if( rProperty.Value >>= aStrMacro )
                     nFound |= Found::MACRO;
             }
-            else if( !( nFound & Found::LIBRARY ) && rProperty.Name == gsLibrary )
+            else if( !( nFound & Found::LIBRARY ) && rProperty.Name == u"Library"_ustr )
             {
                 if( rProperty.Value >>= aStrLibrary )
                     nFound |= Found::LIBRARY;
             }
-            else if( !( nFound & Found::EFFECT ) && rProperty.Name == gsEffect )
+            else if( !( nFound & Found::EFFECT ) && rProperty.Name == u"Effect"_ustr )
             {
                 if( rProperty.Value >>= eEffect )
                     nFound |= Found::EFFECT;
@@ -1792,22 +1774,22 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                 if( rProperty.Value >>= aStrBookmark )
                     nFound |= Found::BOOKMARK;
             }
-            else if( !( nFound & Found::SPEED ) && rProperty.Name == gsSpeed )
+            else if( !( nFound & Found::SPEED ) && rProperty.Name == u"Speed"_ustr )
             {
                 if( rProperty.Value >>= eSpeed )
                     nFound |= Found::SPEED;
             }
-            else if( !( nFound & Found::SOUNDURL ) && rProperty.Name == gsSoundURL )
+            else if( !( nFound & Found::SOUNDURL ) && rProperty.Name == u"SoundURL"_ustr )
             {
                 if( rProperty.Value >>= aStrSoundURL )
                     nFound |= Found::SOUNDURL;
             }
-            else if( !( nFound & Found::PLAYFULL ) && rProperty.Name == gsPlayFull )
+            else if( !( nFound & Found::PLAYFULL ) && rProperty.Name == u"PlayFull"_ustr )
             {
                 if( rProperty.Value >>= bPlayFull )
                     nFound |= Found::PLAYFULL;
             }
-            else if( !( nFound & Found::VERB ) && rProperty.Name == gsVerb )
+            else if( !( nFound & Found::VERB ) && rProperty.Name == u"Verb"_ustr )
             {
                 if( rProperty.Value >>= nVerb )
                     nFound |= Found::VERB;
@@ -1817,7 +1799,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
     // create the XML elements
 
-    if( aClickEventType == gsPresentation )
+    if( aClickEventType == u"Presentation"_ustr )
     {
         if( !(nFound & Found::CLICKACTION) || (eClickAction == presentation::ClickAction_NONE) )
             return;
@@ -1929,7 +1911,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             }
         }
     }
-    else if( aClickEventType == gsStarBasic )
+    else if( aClickEventType == u"StarBasic"_ustr )
     {
         if( nFound & Found::MACRO )
         {
@@ -3148,7 +3130,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
     }
     if( !bIsEmptyPresObj )
     {
-        OUString sURL = XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE + sPersistName;
+        OUString sURL = u"vnd.sun.star.GraphicObject:"_ustr + sPersistName;
         if( !bExportEmbedded )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );
@@ -3915,10 +3897,6 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
     OUString aStr;
     OUStringBuffer sStringBuffer;
 
-    static constexpr OUStringLiteral aColorPropName(u"D3DSceneLightColor");
-    static constexpr OUStringLiteral aDirectionPropName(u"D3DSceneLightDirection");
-    static constexpr OUStringLiteral aLightOnPropName(u"D3DSceneLightOn");
-
     ::basegfx::B3DVector aLightDirection;
     drawing::Direction3D aLightDir;
     bool bLightOnOff = false;
@@ -3927,7 +3905,7 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
         OUString aIndexStr = OUString::number( nLamp );
 
         // lightcolor
-        OUString aPropName = aColorPropName + aIndexStr;
+        OUString aPropName = u"D3DSceneLightColor"_ustr + aIndexStr;
         sal_Int32 nLightColor = 0;
         xPropSet->getPropertyValue( aPropName ) >>= nLightColor;
         ::sax::Converter::convertColor(sStringBuffer, nLightColor);
@@ -3935,7 +3913,7 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR, aStr);
 
         // lightdirection
-        aPropName = aDirectionPropName + aIndexStr;
+        aPropName = u"D3DSceneLightDirection"_ustr + aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= aLightDir;
         aLightDirection = ::basegfx::B3DVector(aLightDir.DirectionX, aLightDir.DirectionY, aLightDir.DirectionZ);
         SvXMLUnitConverter::convertB3DVector(sStringBuffer, aLightDirection);
@@ -3943,7 +3921,7 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIRECTION, aStr);
 
         // lighton
-        aPropName = aLightOnPropName + aIndexStr;
+        aPropName = u"D3DSceneLightOn"_ustr + aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= bLightOnOff;
         ::sax::Converter::convertBool(sStringBuffer, bLightOnOff);
         aStr = sStringBuffer.makeStringAndClear();

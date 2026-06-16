@@ -215,8 +215,6 @@ void PageStyleContext::FillPropertySet_PageStyle(
     if(!m_bIsFillStyleAlreadyConverted && !GetProperties().empty())
     {
         static constexpr OUString s_FillStyle(u"FillStyle"_ustr);
-        static constexpr OUStringLiteral s_HeaderFillStyle(u"HeaderFillStyle");
-        static constexpr OUStringLiteral s_FooterFillStyle(u"FooterFillStyle");
 
         // Before deactivating old fill definitions, recover any missing
         // bitmap table entries. A broken document may have
@@ -238,12 +236,12 @@ void PageStyleContext::FillPropertySet_PageStyle(
             deactivateOldFillStyleDefinitions(getStandardSet());
         }
 
-        if(doNewDrawingLayerFillStyleDefinitionsExist(s_HeaderFillStyle))
+        if(doNewDrawingLayerFillStyleDefinitionsExist(u"HeaderFillStyle"))
         {
             deactivateOldFillStyleDefinitions(getHeaderSet());
         }
 
-        if(doNewDrawingLayerFillStyleDefinitionsExist(s_FooterFillStyle))
+        if(doNewDrawingLayerFillStyleDefinitionsExist(u"FooterFillStyle"))
         {
             deactivateOldFillStyleDefinitions(getFooterSet());
         }

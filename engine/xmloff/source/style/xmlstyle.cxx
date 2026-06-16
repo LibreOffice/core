@@ -66,8 +66,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
-constexpr OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
-constexpr OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
 constexpr OUString gsParagraphStyles(u"ParagraphStyles"_ustr);
 constexpr OUString gsCharacterStyles(u"CharacterStyles"_ustr);
 
@@ -699,10 +697,10 @@ OUString SvXMLStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
     switch( nFamily )
     {
     case XmlStyleFamily::TEXT_PARAGRAPH:
-        sServiceName = gsParaStyleServiceName;
+        sServiceName = u"com.sun.star.style.ParagraphStyle"_ustr;
         break;
     case XmlStyleFamily::TEXT_TEXT:
-        sServiceName = gsTextStyleServiceName;
+        sServiceName = u"com.sun.star.style.CharacterStyle"_ustr;
         break;
     default: break;
     }

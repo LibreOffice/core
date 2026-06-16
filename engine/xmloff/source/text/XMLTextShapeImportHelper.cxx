@@ -43,10 +43,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-constexpr OUStringLiteral gsAnchorType(u"AnchorType");
-constexpr OUStringLiteral gsAnchorPageNo(u"AnchorPageNo");
-constexpr OUStringLiteral gsVertOrientPosition(u"VertOrientPosition");
-
 XMLTextShapeImportHelper::XMLTextShapeImportHelper(
         SvXMLImport& rImp ) :
     XMLShapeImportHelper( rImp, rImp.GetModel(),
@@ -118,7 +114,7 @@ void XMLTextShapeImportHelper::addShape(
     Reference < XPropertySet > xPropSet( rShape, UNO_QUERY );
 
     // anchor type
-    xPropSet->setPropertyValue( gsAnchorType, Any(eAnchorType) );
+    xPropSet->setPropertyValue( u"AnchorType"_ustr, Any(eAnchorType) );
 
     // page number must be set before the frame is inserted
     switch( eAnchorType )
@@ -127,7 +123,7 @@ void XMLTextShapeImportHelper::addShape(
         // only set positive page numbers
         if ( nPage > 0 )
         {
-            xPropSet->setPropertyValue( gsAnchorPageNo, Any(nPage) );
+            xPropSet->setPropertyValue( u"AnchorPageNo"_ustr, Any(nPage) );
         }
         break;
     default:
@@ -140,7 +136,7 @@ void XMLTextShapeImportHelper::addShape(
     switch( eAnchorType )
     {
     case TextContentAnchorType_AS_CHARACTER:
-        xPropSet->setPropertyValue( gsVertOrientPosition, Any(nY) );
+        xPropSet->setPropertyValue( u"VertOrientPosition"_ustr, Any(nY) );
         break;
     default:
         break;

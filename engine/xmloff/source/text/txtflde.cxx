@@ -310,74 +310,39 @@ static Sequence<OUString> GetStringSequenceProperty(
 
     // service names
 constexpr OUString gsServicePrefix(u"com.sun.star.text.textfield."_ustr);
-constexpr OUStringLiteral gsFieldMasterPrefix(u"com.sun.star.text.FieldMaster.");
 constexpr OUString gsPresentationServicePrefix(u"com.sun.star.presentation.TextField."_ustr);
 
     // property names
 constexpr OUString gsPropertyAdjust(u"Adjust"_ustr);
-constexpr OUStringLiteral gsPropertyAuthor(u"Author");
-constexpr OUStringLiteral gsPropertyChapterFormat(u"ChapterFormat");
-constexpr OUStringLiteral gsPropertyChapterNumberingLevel(u"ChapterNumberingLevel");
-constexpr OUStringLiteral gsPropertyCharStyleNames(u"CharStyleNames");
 constexpr OUString gsPropertyCondition(u"Condition"_ustr);
 constexpr OUString gsPropertyContent(u"Content"_ustr);
-constexpr OUStringLiteral gsPropertyDataBaseName(u"DataBaseName");
 constexpr OUString gsPropertyDataBaseURL(u"DataBaseURL"_ustr);
-constexpr OUStringLiteral gsPropertyDataColumnName(u"DataColumnName");
 constexpr OUString gsPropertyDataCommandType(u"DataCommandType"_ustr);
 constexpr OUString gsPropertyDataTableName(u"DataTableName"_ustr);
 constexpr OUString gsPropertyDateTime(u"DateTime"_ustr);
 constexpr OUString gsPropertyDateTimeValue(u"DateTimeValue"_ustr);
-constexpr OUStringLiteral gsPropertyDDECommandElement(u"DDECommandElement");
-constexpr OUStringLiteral gsPropertyDDECommandFile(u"DDECommandFile");
-constexpr OUStringLiteral gsPropertyDDECommandType(u"DDECommandType");
-constexpr OUStringLiteral gsPropertyDependentTextFields(u"DependentTextFields");
-constexpr OUStringLiteral gsPropertyFalseContent(u"FalseContent");
-constexpr OUStringLiteral gsPropertyFields(u"Fields");
-constexpr OUStringLiteral gsPropertyFieldSubType(u"UserDataType");
 constexpr OUString gsPropertyFileFormat(u"FileFormat"_ustr);
-constexpr OUStringLiteral gsPropertyFullName(u"FullName");
 constexpr OUString gsPropertyHint(u"Hint"_ustr);
-constexpr OUStringLiteral gsPropertyInitials(u"Initials");
-constexpr OUStringLiteral gsPropertyInstanceName(u"InstanceName");
-constexpr OUStringLiteral gsPropertyIsAutomaticUpdate(u"IsAutomaticUpdate");
-constexpr OUStringLiteral gsPropertyIsConditionTrue(u"IsConditionTrue");
 constexpr OUString gsPropertyIsDataBaseFormat(u"DataBaseFormat"_ustr);
 constexpr OUString gsPropertyIsDate(u"IsDate"_ustr);
 constexpr OUString gsPropertyIsExpression(u"IsExpression"_ustr);
 constexpr OUString gsPropertyIsFixed(u"IsFixed"_ustr);
 constexpr OUString gsPropertyIsFixedLanguage(u"IsFixedLanguage"_ustr);
 constexpr OUString gsPropertyIsHidden(u"IsHidden"_ustr);
-constexpr OUStringLiteral gsPropertyIsInput(u"Input");
 constexpr OUString gsPropertyIsShowFormula(u"IsShowFormula"_ustr);
 constexpr OUString gsPropertyIsVisible(u"IsVisible"_ustr);
-constexpr OUStringLiteral gsPropertyItems(u"Items");
-constexpr OUStringLiteral gsPropertyLevel(u"Level");
-constexpr OUStringLiteral gsPropertyMeasureKind(u"Kind");
 constexpr OUString gsPropertyName(u"Name"_ustr);
-constexpr OUStringLiteral gsPropertyParentName(u"ParentName");
 constexpr OUString gsPropertyNumberFormat(u"NumberFormat"_ustr);
-constexpr OUStringLiteral gsPropertyNumberingSeparator(u"NumberingSeparator");
 constexpr OUString gsPropertyNumberingType(u"NumberingType"_ustr);
 constexpr OUString gsPropertyOffset(u"Offset"_ustr);
-constexpr OUStringLiteral gsPropertyOn(u"On");
-constexpr OUStringLiteral gsPropertyPlaceholderType(u"PlaceHolderType");
 constexpr OUString gsPropertyReferenceFieldFlags(u"ReferenceFieldFlags"_ustr);
 constexpr OUString gsPropertyReferenceFieldPart(u"ReferenceFieldPart"_ustr);
 constexpr OUString gsPropertyReferenceFieldSource(u"ReferenceFieldSource"_ustr);
 constexpr OUString gsPropertyReferenceFieldLanguage(u"ReferenceFieldLanguage"_ustr);
-constexpr OUStringLiteral gsPropertyScriptType(u"ScriptType");
-constexpr OUStringLiteral gsPropertySelectedItem(u"SelectedItem");
 constexpr OUString gsPropertySequenceNumber(u"SequenceNumber"_ustr);
-constexpr OUStringLiteral gsPropertySequenceValue(u"SequenceValue");
 constexpr OUString gsPropertySetNumber(u"SetNumber"_ustr);
 constexpr OUString gsPropertySourceName(u"SourceName"_ustr);
 constexpr OUString gsPropertySubType(u"SubType"_ustr);
-constexpr OUStringLiteral gsPropertyTargetFrame(u"TargetFrame");
-constexpr OUStringLiteral gsPropertyTrueContent(u"TrueContent");
-constexpr OUStringLiteral gsPropertyURL(u"URL");
-constexpr OUStringLiteral gsPropertyURLContent(u"URLContent");
-constexpr OUStringLiteral gsPropertyUserText(u"UserText");
 constexpr OUString gsPropertyValue(u"Value"_ustr);
 constexpr OUString gsPropertyVariableName(u"VariableName"_ustr);
 constexpr OUString gsPropertyHelp(u"Help"_ustr);
@@ -477,7 +442,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
     // b) map prelim. to final FIELD_IDs
     switch (nToken) {
         case FIELD_ID_VARIABLE_SET:
-            if (GetBoolProperty(gsPropertyIsInput, xPropSet))
+            if (GetBoolProperty(u"Input"_ustr, xPropSet))
             {
                 nToken = FIELD_ID_VARIABLE_INPUT;
             }
@@ -788,7 +753,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
             // insert this text field master
             OUString sFieldMasterName = GetStringProperty(
-                gsPropertyInstanceName, xDepField->getTextFieldMaster());
+                u"InstanceName"_ustr, xDepField->getTextFieldMaster());
             if (!sFieldMasterName.isEmpty())
                 aMapIter->second.insert( sFieldMasterName );
         }
@@ -1021,7 +986,7 @@ void XMLTextFieldExport::ExportField(
                          GetExport().GetTextParagraphExport()
                              ->GetCharStyleNamesPropInfoCache().hasProperty(
                                         xRangePropSet, xRangePropSetInfo ), bHasAutoStyle,
-            xRangePropSet, gsPropertyCharStyleNames );
+            xRangePropSet, u"CharStyleNames"_ustr );
 
         // export span with style (if necessary)
         // (except for combined characters field)
@@ -1079,7 +1044,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // placeholder field: type, name, description
         ProcessString(XML_PLACEHOLDER_TYPE,
                       MapPlaceholderType(
-                        GetInt16Property(gsPropertyPlaceholderType, rPropSet)));
+                        GetInt16Property(u"PlaceHolderType"_ustr, rPropSet)));
         ProcessString(XML_DESCRIPTION,
                       GetStringProperty(gsPropertyHint,rPropSet), true);
         ExportElement(XML_PLACEHOLDER, sPresentation);
@@ -1191,7 +1156,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // TODO: use reference name only if actually being referenced.
         ProcessString(XML_REF_NAME,
                       MakeSequenceRefName(
-                          GetInt16Property(gsPropertySequenceValue, rPropSet),
+                          GetInt16Property(u"SequenceValue"_ustr, rPropSet),
                           sName));
         ProcessString(XML_NAME, sName);
         ProcessString(XML_FORMULA,  XML_NAMESPACE_OOOW,
@@ -1343,7 +1308,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_PAGESTRING:
     {
         ProcessString(XML_STRING_VALUE,
-                      GetStringProperty(gsPropertyUserText, rPropSet),
+                      GetStringProperty(u"UserText"_ustr, rPropSet),
                       sPresentation);
         sal_Int32 nDummy = 0; // MapPageNumberName need int
         ProcessString(XML_SELECT_PAGE, MapPageNumberName(rPropSet, nDummy));
@@ -1409,7 +1374,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(gsPropertyDataTableName, xMaster));
         ProcessCommandType(GetIntProperty(gsPropertyDataCommandType, xMaster));
         ProcessString(XML_COLUMN_NAME,
-                      GetStringProperty(gsPropertyDataColumnName, xMaster));
+                      GetStringProperty(u"DataColumnName"_ustr, xMaster));
         // export number format if available (happens only for numbers!)
         if (!GetBoolProperty(gsPropertyIsDataBaseFormat, rPropSet))
         {
@@ -1521,11 +1486,11 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(gsPropertyCondition, rPropSet));
         ProcessString(XML_STRING_VALUE_IF_TRUE,
-                      GetStringProperty(gsPropertyTrueContent, rPropSet));
+                      GetStringProperty(u"TrueContent"_ustr, rPropSet));
         ProcessString(XML_STRING_VALUE_IF_FALSE,
-                      GetStringProperty(gsPropertyFalseContent, rPropSet));
+                      GetStringProperty(u"FalseContent"_ustr, rPropSet));
         ProcessBoolean(XML_CURRENT_VALUE,
-                       GetBoolProperty(gsPropertyIsConditionTrue, rPropSet),
+                       GetBoolProperty(u"IsConditionTrue"_ustr, rPropSet),
                        false);
         ExportElement(XML_CONDITIONAL_TEXT, sPresentation);
         break;
@@ -1562,10 +1527,10 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_CHAPTER:
         ProcessString(XML_DISPLAY,
                       MapChapterDisplayFormat(
-                          GetInt16Property(gsPropertyChapterFormat, rPropSet)));
+                          GetInt16Property(u"ChapterFormat"_ustr, rPropSet)));
         // API numbers 0..9, we number 1..10
         ProcessInteger(XML_OUTLINE_LEVEL,
-                       GetInt8Property(gsPropertyLevel, rPropSet) + 1);
+                       GetInt8Property(u"Level"_ustr, rPropSet) + 1);
         ExportElement(XML_CHAPTER, sPresentation);
         break;
 
@@ -1588,7 +1553,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_REFPAGE_SET:
         ProcessBoolean(XML_ACTIVE,
-                       GetBoolProperty(gsPropertyOn, rPropSet), true);
+                       GetBoolProperty(u"On"_ustr, rPropSet), true);
         ProcessIntegerDef(XML_PAGE_ADJUST,
                        GetInt16Property(gsPropertyOffset, rPropSet), 0);
         DBG_ASSERT(sPresentation.isEmpty(),
@@ -1739,10 +1704,10 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // this field is a special case because it gets mapped onto a
         // hyperlink, rather than one of the regular text field.
-        ProcessString(XML_HREF, GetExport().GetRelativeReference(GetStringProperty(gsPropertyURL, rPropSet)),
+        ProcessString(XML_HREF, GetExport().GetRelativeReference(GetStringProperty(u"URL"_ustr, rPropSet)),
                       false, XML_NAMESPACE_XLINK);
         ProcessString(XML_TARGET_FRAME_NAME,
-                      GetStringProperty(gsPropertyTargetFrame,rPropSet),
+                      GetStringProperty(u"TargetFrame"_ustr,rPropSet),
                       true, XML_NAMESPACE_OFFICE);
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, XML_A,
@@ -1760,11 +1725,11 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_SCRIPT:
         ProcessString(XML_LANGUAGE,
-                      GetStringProperty(gsPropertyScriptType, rPropSet),
+                      GetStringProperty(u"ScriptType"_ustr, rPropSet),
                       true, XML_NAMESPACE_SCRIPT);
         DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for script field");
-        if (GetBoolProperty(gsPropertyURLContent, rPropSet))
+        if (GetBoolProperty(u"URLContent"_ustr, rPropSet))
         {
             ProcessString(XML_HREF,
                           GetExport().GetRelativeReference(GetStringProperty(gsPropertyContent, rPropSet)),
@@ -1797,7 +1762,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         }
 
         OUString aParentName;
-        rPropSet->getPropertyValue(gsPropertyParentName) >>= aParentName;
+        rPropSet->getPropertyValue(u"ParentName"_ustr) >>= aParentName;
         if (!aParentName.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_PARENT_NAME, aParentName);
@@ -1818,7 +1783,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                                  XML_ANNOTATION, false, true);
 
         // author
-        OUString aAuthor( GetStringProperty(gsPropertyAuthor, rPropSet) );
+        OUString aAuthor( GetStringProperty(u"Author"_ustr, rPropSet) );
         if( !aAuthor.isEmpty() )
         {
             SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_DC,
@@ -1844,7 +1809,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             // initials
-            OUString aInitials( GetStringProperty(gsPropertyInitials, rPropSet) );
+            OUString aInitials( GetStringProperty(u"Initials"_ustr, rPropSet) );
             if( !aInitials.isEmpty() )
             {
                 // ODF 1.3 OFFICE-3776 export meta:creator-initials for ODF 1.3
@@ -1887,7 +1852,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_MEASURE:
     {
-        ProcessString(XML_KIND, MapMeasureKind(GetInt16Property(gsPropertyMeasureKind, rPropSet)));
+        ProcessString(XML_KIND, MapMeasureKind(GetInt16Property(u"Kind"_ustr, rPropSet)));
         ExportElement( XML_MEASURE, sPresentation );
         break;
     }
@@ -1921,8 +1886,8 @@ void XMLTextFieldExport::ExportFieldHelper(
                                   XML_NAMESPACE_TEXT, XML_DROP_DOWN,
                                   false, false );
         ProcessStringSequence
-            (GetStringSequenceProperty( gsPropertyItems, rPropSet ),
-             GetStringProperty( gsPropertySelectedItem, rPropSet ) );
+            (GetStringSequenceProperty( u"Items"_ustr, rPropSet ),
+             GetStringProperty( u"SelectedItem"_ustr, rPropSet ) );
 
         GetExport().Characters( sPresentation );
     }
@@ -2139,7 +2104,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
             // outline level
             sal_Int32 nLevel = 1 + GetIntProperty(
-                gsPropertyChapterNumberingLevel, xPropSet);
+                u"ChapterNumberingLevel"_ustr, xPropSet);
             DBG_ASSERT(nLevel >= 0, "illegal outline level");
             DBG_ASSERT(nLevel < 127, "possible illegal outline level");
             ProcessInteger(XML_DISPLAY_OUTLINE_LEVEL, nLevel);
@@ -2147,7 +2112,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             // separation character
             if (nLevel > 0) {
                 ProcessString(XML_SEPARATION_CHARACTER, GetStringProperty(
-                    gsPropertyNumberingSeparator, xPropSet));
+                    u"NumberingSeparator"_ustr, xPropSet));
             }
             ProcessString(XML_NAME, sVarName);
             ExportElement(XML_SEQUENCE_DECL, true);
@@ -2230,19 +2195,19 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             // export elements; can't use ProcessString because
             // elements are in office namespace
             ProcessString(XML_DDE_APPLICATION,
-                          GetStringProperty(gsPropertyDDECommandType,
+                          GetStringProperty(u"DDECommandType"_ustr,
                                             xPropSet),
                           false, XML_NAMESPACE_OFFICE);
             ProcessString(XML_DDE_TOPIC,
-                          GetStringProperty(gsPropertyDDECommandFile,
+                          GetStringProperty(u"DDECommandFile"_ustr,
                                             xPropSet),
                           false, XML_NAMESPACE_OFFICE);
             ProcessString(XML_DDE_ITEM,
-                          GetStringProperty(gsPropertyDDECommandElement,
+                          GetStringProperty(u"DDECommandElement"_ustr,
                                             xPropSet),
                           false, XML_NAMESPACE_OFFICE);
             bool bIsAutomaticUpdate = GetBoolProperty(
-                gsPropertyIsAutomaticUpdate, xPropSet);
+                u"IsAutomaticUpdate"_ustr, xPropSet);
             if (bIsAutomaticUpdate)
             {
                 GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
@@ -2757,7 +2722,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
     const Reference<XPropertySet>& rPropSet)
 {
     // get the values
-    Any aAny = rPropSet->getPropertyValue(gsPropertyFields);
+    Any aAny = rPropSet->getPropertyValue(u"Fields"_ustr);
     Sequence<PropertyValue> aValues;
     aAny >>= aValues;
 
@@ -2862,7 +2827,7 @@ void XMLTextFieldExport::ExportDataBaseElement(
     OUString sDataBaseName;
     OUString sDataBaseURL;
     OUString sStr;
-    if( ( rPropertySet->getPropertyValue( gsPropertyDataBaseName ) >>= sStr )
+    if( ( rPropertySet->getPropertyValue( u"DataBaseName"_ustr ) >>= sStr )
         && !sStr.isEmpty() )
     {
         sDataBaseName = sStr;
@@ -2900,7 +2865,7 @@ void XMLTextFieldExport::ExportDataBaseElement(
 void XMLTextFieldExport::ExplodeFieldMasterName(
     std::u16string_view sMasterName, OUString& sFieldType, OUString& sVarName)
 {
-    sal_Int32 nLength = gsFieldMasterPrefix.getLength();
+    sal_Int32 nLength = u"com.sun.star.text.FieldMaster."_ustr.getLength();
     size_t nSeparator = sMasterName.find('.', nLength);
 
     // '.' found?
@@ -2931,7 +2896,7 @@ bool XMLTextFieldExport::GetDependentFieldPropertySet(
 {
     Any aAny;
     Sequence<Reference<XDependentTextField> > aFields;
-    aAny = xMaster->getPropertyValue(gsPropertyDependentTextFields);
+    aAny = xMaster->getPropertyValue(u"DependentTextFields"_ustr);
     aAny >>= aFields;
 
     // any fields?
@@ -2992,7 +2957,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapAuthorFieldName(
     const Reference<XPropertySet> & xPropSet)
 {
     // Initials or full name?
-    return GetBoolProperty(gsPropertyFullName, xPropSet)
+    return GetBoolProperty(u"FullName"_ustr, xPropSet)
         ? XML_AUTHOR_NAME : XML_AUTHOR_INITIALS;
 }
 
@@ -3251,7 +3216,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapSenderFieldName(
     enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
     // sub-field type
-    switch (GetInt16Property(gsPropertyFieldSubType, xPropSet))
+    switch (GetInt16Property(u"UserDataType"_ustr, xPropSet))
     {
         case UserDataPart::COMPANY :
             eName = XML_SENDER_COMPANY;

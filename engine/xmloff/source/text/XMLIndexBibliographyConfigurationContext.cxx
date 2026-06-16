@@ -43,15 +43,8 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 
 constexpr OUString gsFieldMaster_Bibliography(u"com.sun.star.text.FieldMaster.Bibliography"_ustr);
-constexpr OUStringLiteral gsBracketBefore(u"BracketBefore");
-constexpr OUStringLiteral gsBracketAfter(u"BracketAfter");
-constexpr OUStringLiteral gsIsNumberEntries(u"IsNumberEntries");
-constexpr OUStringLiteral gsIsSortByPosition(u"IsSortByPosition");
-constexpr OUStringLiteral gsSortKeys(u"SortKeys");
 constexpr OUString gsSortKey(u"SortKey"_ustr);
 constexpr OUString gsIsSortAscending(u"IsSortAscending"_ustr);
-constexpr OUStringLiteral gsSortAlgorithm(u"SortAlgorithm");
-constexpr OUStringLiteral gsLocale(u"Locale");
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
     SvXMLImport& rImport) :
@@ -187,24 +180,24 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
     Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
     Any aAny;
 
-    xPropSet->setPropertyValue(gsBracketAfter, Any(sSuffix));
-    xPropSet->setPropertyValue(gsBracketBefore, Any(sPrefix));
-    xPropSet->setPropertyValue(gsIsNumberEntries, Any(bNumberedEntries));
-    xPropSet->setPropertyValue(gsIsSortByPosition, Any(bSortByPosition));
+    xPropSet->setPropertyValue(u"BracketAfter"_ustr, Any(sSuffix));
+    xPropSet->setPropertyValue(u"BracketBefore"_ustr, Any(sPrefix));
+    xPropSet->setPropertyValue(u"IsNumberEntries"_ustr, Any(bNumberedEntries));
+    xPropSet->setPropertyValue(u"IsSortByPosition"_ustr, Any(bSortByPosition));
 
     if( !maLanguageTagODF.isEmpty() )
     {
         aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
-        xPropSet->setPropertyValue(gsLocale, aAny);
+        xPropSet->setPropertyValue(u"Locale"_ustr, aAny);
     }
 
     if( !sAlgorithm.isEmpty() )
     {
-        xPropSet->setPropertyValue(gsSortAlgorithm, Any(sAlgorithm));
+        xPropSet->setPropertyValue(u"SortAlgorithm"_ustr, Any(sAlgorithm));
     }
 
     Sequence<Sequence<PropertyValue> > aKeysSeq = comphelper::containerToSequence(aSortKeys);
-    xPropSet->setPropertyValue(gsSortKeys, Any(aKeysSeq));
+    xPropSet->setPropertyValue(u"SortKeys"_ustr, Any(aKeysSeq));
     // else: can't get FieldMaster -> ignore
     // else: can't even get Factory -> ignore
 }

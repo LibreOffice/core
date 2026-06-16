@@ -44,15 +44,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 
-constexpr OUStringLiteral gsSeparatorLineIsOn(u"SeparatorLineIsOn");
-constexpr OUStringLiteral gsSeparatorLineWidth(u"SeparatorLineWidth");
-constexpr OUStringLiteral gsSeparatorLineColor(u"SeparatorLineColor");
-constexpr OUStringLiteral gsSeparatorLineRelativeHeight(u"SeparatorLineRelativeHeight");
-constexpr OUStringLiteral gsSeparatorLineVerticalAlignment(u"SeparatorLineVerticalAlignment");
-constexpr OUStringLiteral gsIsAutomatic(u"IsAutomatic");
-constexpr OUStringLiteral gsAutomaticDistance(u"AutomaticDistance");
-constexpr OUStringLiteral gsSeparatorLineStyle(u"SeparatorLineStyle");
-
 XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
     rExport( rExp )
 {
@@ -77,10 +68,10 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
     if( xPropSet.is() )
     {
-        Any aAny = xPropSet->getPropertyValue( gsIsAutomatic );
+        Any aAny = xPropSet->getPropertyValue( u"IsAutomatic"_ustr );
         if ( *o3tl::doAccess<bool>(aAny) )
         {
-            aAny = xPropSet->getPropertyValue( gsAutomaticDistance );
+            aAny = xPropSet->getPropertyValue( u"AutomaticDistance"_ustr );
             sal_Int32 nDistance = 0;
             aAny >>= nDistance;
             OUStringBuffer aBuffer;
@@ -97,11 +88,11 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
     if( xPropSet.is() )
     {
-        Any aAny = xPropSet->getPropertyValue( gsSeparatorLineIsOn );
+        Any aAny = xPropSet->getPropertyValue( u"SeparatorLineIsOn"_ustr );
         if( *o3tl::doAccess<bool>(aAny) )
         {
             // style:width
-            aAny = xPropSet->getPropertyValue( gsSeparatorLineWidth );
+            aAny = xPropSet->getPropertyValue( u"SeparatorLineWidth"_ustr );
             sal_Int32 nWidth = 0;
             aAny >>= nWidth;
             GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
@@ -110,7 +101,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sValue.makeStringAndClear() );
 
             // style:color
-            aAny = xPropSet->getPropertyValue( gsSeparatorLineColor );
+            aAny = xPropSet->getPropertyValue( u"SeparatorLineColor"_ustr );
             sal_Int32 nColor = 0;
             aAny >>= nColor;
             ::sax::Converter::convertColor( sValue, nColor );
@@ -118,7 +109,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sValue.makeStringAndClear() );
 
             // style:height
-            aAny = xPropSet->getPropertyValue( gsSeparatorLineRelativeHeight );
+            aAny = xPropSet->getPropertyValue( u"SeparatorLineRelativeHeight"_ustr );
             sal_Int32 nHeight = 0;
             aAny >>= nHeight;
             ::sax::Converter::convertPercent( sValue, nHeight );
@@ -126,7 +117,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sValue.makeStringAndClear() );
 
             // style::style
-            aAny = xPropSet->getPropertyValue( gsSeparatorLineStyle );
+            aAny = xPropSet->getPropertyValue( u"SeparatorLineStyle"_ustr );
             sal_Int16 nStyle = css::text::ColumnSeparatorStyle::NONE;
             aAny >>= nStyle;
 
@@ -144,7 +135,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE, eStr );
 
             // style:vertical-align
-            aAny = xPropSet->getPropertyValue( gsSeparatorLineVerticalAlignment );
+            aAny = xPropSet->getPropertyValue( u"SeparatorLineVerticalAlignment"_ustr );
             VerticalAlignment eVertAlign;
             aAny >>= eVertAlign;
 

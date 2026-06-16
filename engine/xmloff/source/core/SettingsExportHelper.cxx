@@ -47,14 +47,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-constexpr OUStringLiteral gsPrinterIndependentLayout( u"PrinterIndependentLayout" );
-constexpr OUStringLiteral gsColorTableURL( u"ColorTableURL" );
-constexpr OUStringLiteral gsLineEndTableURL( u"LineEndTableURL" );
-constexpr OUStringLiteral gsHatchTableURL( u"HatchTableURL" );
-constexpr OUStringLiteral gsDashTableURL( u"DashTableURL" );
-constexpr OUStringLiteral gsGradientTableURL( u"GradientTableURL" );
-constexpr OUStringLiteral gsBitmapTableURL( u"BitmapTableURL" );
-
 XMLSettingsExportHelper::XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext )
 : m_rContext( i_rContext )
 {
@@ -291,17 +283,6 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
 {
     rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
 
-    static constexpr OUStringLiteral sName     ( u"Name" );
-    static constexpr OUStringLiteral sExportName ( u"ExportName" );
-    static constexpr OUStringLiteral sSymbolSet ( u"SymbolSet" );
-    static constexpr OUStringLiteral sCharacter ( u"Character" );
-    static constexpr OUStringLiteral sFontName ( u"FontName" );
-    static constexpr OUStringLiteral sCharSet  ( u"CharSet" );
-    static constexpr OUStringLiteral sFamily   ( u"Family" );
-    static constexpr OUStringLiteral sPitch    ( u"Pitch" );
-    static constexpr OUStringLiteral sWeight   ( u"Weight" );
-    static constexpr OUStringLiteral sItalic   ( u"Italic" );
-
     sal_Int32 nCount = rProps.getLength();
     const formula::SymbolDescriptor *pDescriptor = rProps.getConstArray();
 
@@ -310,25 +291,25 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
         uno::Sequence < beans::PropertyValue > aSequence ( XML_SYMBOL_DESCRIPTOR_MAX );
         beans::PropertyValue *pSymbol = aSequence.getArray();
 
-        pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = sName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = u"Name"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value       <<= pDescriptor->sName;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Name  = sExportName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Name  = u"ExportName"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Value<<= pDescriptor->sExportName;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Name    = sFontName;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Name    = u"FontName"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value  <<= pDescriptor->sFontName;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Name      = sCharSet;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Name      = u"CharSet"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value   <<= pDescriptor->nCharSet;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Name       = sFamily;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Name       = u"Family"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value <<= pDescriptor->nFamily;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Name        = sPitch;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Name        = u"Pitch"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value      <<= pDescriptor->nPitch;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Name       = sWeight;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Name       = u"Weight"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value <<= pDescriptor->nWeight;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Name       = sItalic;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Name       = u"Italic"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value <<= pDescriptor->nItalic;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Name       = sSymbolSet;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Name       = u"SymbolSet"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value <<= pDescriptor->sSymbolSet;
-        pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = sCharacter;
+        pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = u"Character"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
 
         xBox->insertByIndex(nIndex, uno::Any( aSequence ));
@@ -427,12 +408,6 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
      * xmloff/source/core/DocumentSettingsContext.cxx
      * XMLConfigItemMapIndexedContext::EndElement() */
 
-    static constexpr OUStringLiteral sLanguage  ( u"Language" );
-    static constexpr OUStringLiteral sCountry   ( u"Country" );
-    static constexpr OUStringLiteral sVariant   ( u"Variant" );
-    static constexpr OUStringLiteral sBeginLine ( u"BeginLine" );
-    static constexpr OUStringLiteral sEndLine   ( u"EndLine" );
-
     sal_Int32 nPos = 0;
     for( const auto& rLocale : aLocales )
     {
@@ -444,15 +419,15 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
             uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
             beans::PropertyValue *pForChar = aSequence.getArray();
 
-            pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
+            pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = u"Language"_ustr;
             pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= rLocale.Language;
-            pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
+            pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = u"Country"_ustr;
             pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= rLocale.Country;
-            pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
+            pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = u"Variant"_ustr;
             pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= rLocale.Variant;
-            pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
+            pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = u"BeginLine"_ustr;
             pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
-            pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
+            pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = u"EndLine"_ustr;
             pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
             xBox->insertByIndex(nPos++, uno::Any( aSequence ));
         }
@@ -476,7 +451,7 @@ void XMLSettingsExportHelper::exportAllSettings(
  */
 void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, std::u16string_view rName ) const
 {
-    if( rName == gsPrinterIndependentLayout )
+    if( rName == u"PrinterIndependentLayout" )
     {
         sal_Int16 nTmp = sal_Int16();
         if( rAny >>= nTmp )
@@ -489,8 +464,8 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, std::u16string_
                 rAny <<= u"high-resolution"_ustr;
         }
     }
-    else if( (rName == gsColorTableURL) || (rName == gsLineEndTableURL) || (rName == gsHatchTableURL) ||
-             (rName == gsDashTableURL) || (rName == gsGradientTableURL) || (rName == gsBitmapTableURL ) )
+    else if( (rName == u"ColorTableURL") || (rName == u"LineEndTableURL") || (rName == u"HatchTableURL") ||
+             (rName == u"DashTableURL") || (rName == u"GradientTableURL") || (rName == u"BitmapTableURL" ) )
     {
         if( !mxStringSubstitution.is() )
         {

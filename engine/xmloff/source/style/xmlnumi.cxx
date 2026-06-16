@@ -213,9 +213,6 @@ public:
     }
 };
 
-constexpr OUStringLiteral gsStarBats( u"StarBats"  );
-constexpr OUStringLiteral gsStarMath( u"StarMath"  );
-
 SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         SvXMLImport& rImport, sal_Int32 nElement,
         const Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -463,12 +460,12 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
             aFDesc.CharSet = eBulletFontEncoding;
             aFDesc.Weight = WEIGHT_DONTKNOW;
             bool bStarSymbol = false;
-            if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarBats ) )
+            if( aFDesc.Name.equalsIgnoreAsciiCase( u"StarBats" ) )
             {
                 cBullet = GetImport().ConvStarBatsCharToStarSymbol( cBullet );
                 bStarSymbol = true;
             }
-            else if( aFDesc.Name.equalsIgnoreAsciiCase( gsStarMath ) )
+            else if( aFDesc.Name.equalsIgnoreAsciiCase( u"StarMath" ) )
             {
                 cBullet = GetImport().ConvStarMathCharToStarSymbol( cBullet );
                 bStarSymbol = true;

@@ -2746,9 +2746,8 @@ void SdXMLObjectShapeContext::endFastElement(sal_Int32 nElement)
     if( mxBase64Stream.is() )
     {
         OUString aPersistName( GetImport().ResolveEmbeddedObjectURLFromBase64() );
-        static constexpr OUStringLiteral  sURL( u"vnd.sun.star.EmbeddedObject:" );
 
-        aPersistName = aPersistName.copy( sURL.getLength() );
+        aPersistName = aPersistName.copy( u"vnd.sun.star.EmbeddedObject:"_ustr.getLength() );
 
         uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
         if( xProps.is() )

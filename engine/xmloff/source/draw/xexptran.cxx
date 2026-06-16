@@ -355,13 +355,6 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
     const OUString aStr = msString;
     const sal_Int32 nLen(aStr.getLength());
 
-    static constexpr OUStringLiteral aString_rotate( u"rotate" );
-    static constexpr OUStringLiteral aString_scale( u"scale" );
-    static constexpr OUStringLiteral aString_translate( u"translate" );
-    static constexpr OUStringLiteral aString_skewX( u"skewX" );
-    static constexpr OUStringLiteral aString_skewY( u"skewY" );
-    static constexpr OUStringLiteral aString_matrix( u"matrix" );
-
     sal_Int32 nPos(0);
 
     while(nPos < nLen)
@@ -372,7 +365,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
         // look for tag
         if(nPos < nLen)
         {
-            if(nPos == aStr.indexOf(aString_rotate, nPos))
+            if(nPos == aStr.indexOf(u"rotate", nPos))
             {
                 double fValue(0.0);
                 nPos += 6;
@@ -383,7 +376,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_scale, nPos))
+            else if(nPos == aStr.indexOf(u"scale", nPos))
             {
                 ::basegfx::B2DTuple aValue(1.0, 1.0);
                 nPos += 5;
@@ -397,7 +390,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_translate, nPos))
+            else if(nPos == aStr.indexOf(u"translate", nPos))
             {
                 ::basegfx::B2DTuple aValue;
                 nPos += 9;
@@ -411,7 +404,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_skewX, nPos))
+            else if(nPos == aStr.indexOf(u"skewX", nPos))
             {
                 double fValue(0.0);
                 nPos += 5;
@@ -422,7 +415,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_skewY, nPos))
+            else if(nPos == aStr.indexOf(u"skewY", nPos))
             {
                 double fValue(0.0);
                 nPos += 5;
@@ -433,7 +426,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_matrix, nPos))
+            else if(nPos == aStr.indexOf(u"matrix", nPos))
             {
                 ::basegfx::B2DHomMatrix aValue;
 
@@ -762,13 +755,6 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
     const OUString aStr = msString;
     const sal_Int32 nLen(aStr.getLength());
 
-    static constexpr OUStringLiteral aString_rotatex( u"rotatex" );
-    static constexpr OUStringLiteral aString_rotatey( u"rotatey" );
-    static constexpr OUStringLiteral aString_rotatez( u"rotatez" );
-    static constexpr OUStringLiteral aString_scale( u"scale" );
-    static constexpr OUStringLiteral aString_translate( u"translate" );
-    static constexpr OUStringLiteral aString_matrix( u"matrix" );
-
     sal_Int32 nPos(0);
 
     while(nPos < nLen)
@@ -779,7 +765,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
         // look for tag
         if(nPos < nLen)
         {
-            if(nPos == aStr.indexOf(aString_rotatex, nPos))
+            if(nPos == aStr.indexOf(u"rotatex", nPos))
             {
                 double fValue(0.0);
 
@@ -791,7 +777,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_rotatey, nPos))
+            else if(nPos == aStr.indexOf(u"rotatey", nPos))
             {
                 double fValue(0.0);
 
@@ -803,7 +789,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_rotatez, nPos))
+            else if(nPos == aStr.indexOf(u"rotatez", nPos))
             {
                 double fValue(0.0);
 
@@ -815,7 +801,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_scale, nPos))
+            else if(nPos == aStr.indexOf(u"scale", nPos))
             {
                 ::basegfx::B3DTuple aValue(1.0, 1.0, 1.0);
 
@@ -832,7 +818,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_translate, nPos))
+            else if(nPos == aStr.indexOf(u"translate", nPos))
             {
                 ::basegfx::B3DTuple aValue;
 
@@ -849,7 +835,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                 Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
             }
-            else if(nPos == aStr.indexOf(aString_matrix, nPos))
+            else if(nPos == aStr.indexOf(u"matrix", nPos))
             {
                 ::basegfx::B3DHomMatrix aValue;
 

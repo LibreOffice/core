@@ -32,12 +32,6 @@ using namespace ::xmloff::token;
 using ::com::sun::star::beans::PropertyValue;
 
 
-constexpr OUStringLiteral gsStarBasic(u"StarBasic");
-constexpr OUStringLiteral gsLibrary(u"Library");
-constexpr OUStringLiteral gsMacroName(u"MacroName");
-constexpr OUStringLiteral gsStarOffice(u"StarOffice");
-constexpr OUStringLiteral gsApplication(u"application");
-
 XMLStarBasicExportHandler::XMLStarBasicExportHandler()
 {
 }
@@ -54,22 +48,22 @@ void XMLStarBasicExportHandler::Export(
 {
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
                          rExport.GetNamespaceMap().GetQNameByKey(
-                             XML_NAMESPACE_OOO, gsStarBasic ) );
+                             XML_NAMESPACE_OOO, u"StarBasic"_ustr ) );
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventQName);
 
     OUString sLocation, sName;
     for(const auto& rValue : rValues)
     {
-        if (gsLibrary == rValue.Name)
+        if (u"Library"_ustr == rValue.Name)
         {
             OUString sTmp;
             rValue.Value >>= sTmp;
             sLocation = GetXMLToken(
-                (sTmp.equalsIgnoreAsciiCase(gsApplication) ||
-                 sTmp.equalsIgnoreAsciiCase(gsStarOffice) ) ? XML_APPLICATION
+                (sTmp.equalsIgnoreAsciiCase(u"application") ||
+                 sTmp.equalsIgnoreAsciiCase(u"StarOffice") ) ? XML_APPLICATION
                                                            : XML_DOCUMENT );
         }
-        else if (gsMacroName == rValue.Name)
+        else if (u"MacroName"_ustr == rValue.Name)
         {
             rValue.Value >>= sName;
         }

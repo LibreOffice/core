@@ -104,19 +104,6 @@ void XMLFootnoteConfigHelper::characters( const OUString& rChars )
 
 // XMLFootnoteConfigurationImportContext
 
-constexpr OUStringLiteral gsPropertyAnchorCharStyleName(u"AnchorCharStyleName");
-constexpr OUStringLiteral gsPropertyCharStyleName(u"CharStyleName");
-constexpr OUStringLiteral gsPropertyNumberingType(u"NumberingType");
-constexpr OUStringLiteral gsPropertyPageStyleName(u"PageStyleName");
-constexpr OUStringLiteral gsPropertyParagraphStyleName(u"ParaStyleName");
-constexpr OUStringLiteral gsPropertyPrefix(u"Prefix");
-constexpr OUStringLiteral gsPropertyStartAt(u"StartAt");
-constexpr OUStringLiteral gsPropertySuffix(u"Suffix");
-constexpr OUStringLiteral gsPropertyPositionEndOfDoc(u"PositionEndOfDoc");
-constexpr OUStringLiteral gsPropertyFootnoteCounting(u"FootnoteCounting");
-constexpr OUStringLiteral gsPropertyEndNotice(u"EndNotice");
-constexpr OUStringLiteral gsPropertyBeginNotice(u"BeginNotice");
-
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
     sal_Int32 /*nElement*/,
@@ -269,33 +256,33 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XmlStyleFamily::TEXT_TEXT, sCitationStyle );
-        rConfig->setPropertyValue(gsPropertyCharStyleName, aAny);
+        rConfig->setPropertyValue(u"CharStyleName"_ustr, aAny);
     }
 
     if (!sAnchorStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XmlStyleFamily::TEXT_TEXT, sAnchorStyle );
-        rConfig->setPropertyValue(gsPropertyAnchorCharStyleName, aAny);
+        rConfig->setPropertyValue(u"AnchorCharStyleName"_ustr, aAny);
     }
 
     if (!sPageStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XmlStyleFamily::MASTER_PAGE, sPageStyle );
-        rConfig->setPropertyValue(gsPropertyPageStyleName, aAny);
+        rConfig->setPropertyValue(u"PageStyleName"_ustr, aAny);
     }
 
     if (!sDefaultStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
                         XmlStyleFamily::TEXT_PARAGRAPH, sDefaultStyle );
-        rConfig->setPropertyValue(gsPropertyParagraphStyleName, aAny);
+        rConfig->setPropertyValue(u"ParaStyleName"_ustr, aAny);
     }
 
-    rConfig->setPropertyValue(gsPropertyPrefix, Any(sPrefix));
+    rConfig->setPropertyValue(u"Prefix"_ustr, Any(sPrefix));
 
-    rConfig->setPropertyValue(gsPropertySuffix, Any(sSuffix));
+    rConfig->setPropertyValue(u"Suffix"_ustr, Any(sSuffix));
 
     sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat,
@@ -305,16 +292,16 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     if( NumberingType::CHAR_SPECIAL == nNumType )
         nNumType = NumberingType::ARABIC;
 
-    rConfig->setPropertyValue(gsPropertyNumberingType, Any(nNumType));
+    rConfig->setPropertyValue(u"NumberingType"_ustr, Any(nNumType));
 
-    rConfig->setPropertyValue(gsPropertyStartAt, Any(nOffset));
+    rConfig->setPropertyValue(u"StartAt"_ustr, Any(nOffset));
 
     if (!bIsEndnote)
     {
-        rConfig->setPropertyValue(gsPropertyPositionEndOfDoc, Any(bPosition));
-        rConfig->setPropertyValue(gsPropertyFootnoteCounting, Any(nNumbering));
-        rConfig->setPropertyValue(gsPropertyEndNotice, Any(sEndNotice));
-        rConfig->setPropertyValue(gsPropertyBeginNotice, Any(sBeginNotice));
+        rConfig->setPropertyValue(u"PositionEndOfDoc"_ustr, Any(bPosition));
+        rConfig->setPropertyValue(u"FootnoteCounting"_ustr, Any(nNumbering));
+        rConfig->setPropertyValue(u"EndNotice"_ustr, Any(sEndNotice));
+        rConfig->setPropertyValue(u"BeginNotice"_ustr, Any(sBeginNotice));
     }
 }
 
