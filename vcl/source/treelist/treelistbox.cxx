@@ -2113,11 +2113,7 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void SvTreeListBox::RequestingChildren(SvTreeListEntry& rParent)
-{
-    if (!rParent.HasChildren())
-        InsertEntry(u"<dummy>"_ustr, &rParent);
-}
+void SvTreeListBox::RequestingChildren(SvTreeListEntry&) {}
 
 void SvTreeListBox::GetFocus()
 {
