@@ -39,7 +39,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
 
-constexpr OUStringLiteral XML_NAMESPACE_TCD_STRING = u"http://openoffice.org/2003/text-conversion-dictionary";
 constexpr OUString CONV_TYPE_HANGUL_HANJA = u"Hangul / Hanja"_ustr;
 constexpr OUString CONV_TYPE_SCHINESE_TCHINESE = u"Chinese simplified / Chinese traditional"_ustr;
 
@@ -254,7 +253,7 @@ bool ConvDicXMLExport::Export()
 ErrCode ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ )
 {
     GetNamespaceMap_().Add( u"tcd"_ustr,
-            XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );
+            u"http://openoffice.org/2003/text-conversion-dictionary"_ustr, XML_NAMESPACE_TCD );
 
     GetDocHandler()->startDocument();
 

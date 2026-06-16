@@ -60,10 +60,6 @@ using namespace linguistic;
 
 #define MAX_HEADER_LENGTH 16
 
-// XML-header to query SPELLML support
-// to handle user words with "Grammar By" model words
-constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
-
 // User dictionaries can contain optional "title:" tags
 // to support custom titles with space and other characters.
 // (old mechanism stores the title of the user dictionary
@@ -717,7 +713,7 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDic
     if (xDicEntry.is() && !xDicEntry->isNegative() && !xDicEntry->getReplacementText().isEmpty()) {
         uno::Reference< XSpellChecker > xSpell = GetLngSvcMgr_Impl()->getSpellChecker();
         Sequence< css::beans::PropertyValue > aEmptySeq;
-        if (xSpell.is() && (xSpell->isValid( SPELLML_SUPPORT, LanguageTag::convertToLocale(nLanguage), aEmptySeq )))
+        if (xSpell.is() && (xSpell->isValid( u"<?xml?>"_ustr, LanguageTag::convertToLocale(nLanguage), aEmptySeq )))
         {
             // "Grammar By" sample word is a Hunspell dictionary word?
             if (xSpell->isValid( xDicEntry->getReplacementText(), LanguageTag::convertToLocale(nLanguage), aEmptySeq ))
