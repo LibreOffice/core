@@ -43,7 +43,6 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,version) \
     $(INSTROOT)/$(LIBO_ETC_FOLDER)/services/services.rdb \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/aboutconfigdialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/aboutdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/accelconfigpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/acorexceptpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/acoroptionspage.ui \
@@ -240,15 +239,6 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/twolinespage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/wordcompletionpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/zoomdialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/dependenciesdialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/extensionmanager.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/extensionmenu.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/installforalldialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/licensedialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/showlicensedialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/updatedialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/updateinstalldialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/desktop/ui/updaterequireddialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/editeng/ui/spellmenu.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/filter/ui/pdfgeneralpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/filter/ui/pdflinkspage.ui \
