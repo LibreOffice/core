@@ -29,8 +29,8 @@ namespace slideshow::internal
     {
         /** Base class for shapes rendered by external engines.
 
-            Used as the common base for e.g. MediaShape
-            all of which are rendered by external
+            Used as the common base for e.g. MediaShape or
+            AppletShape, all of which are rendered by external
             components (and all employ distinct windows).
 
             Please note that this base class indeed assumes the shape
