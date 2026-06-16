@@ -40,7 +40,6 @@ officecfg_XCSFILES := \
     Office/PresentationMinimizer \
     Office/ProtocolHandler \
     Office/Recovery \
-    Office/ReportDesign \
     Office/Scripting \
     Office/Security \
     Office/TypeDetection \

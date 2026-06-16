@@ -45,7 +45,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/Views.xcu \
 	org/openoffice/Office/Paths.xcu \
 	org/openoffice/Office/Histories.xcu \
-	org/openoffice/Office/ReportDesign.xcu \
 	org/openoffice/Office/UI/Controller.xcu \
 	org/openoffice/Office/UI/Factories.xcu \
 	org/openoffice/TypeDetection/UISort.xcu \
