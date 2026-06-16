@@ -344,14 +344,19 @@ class LOUtil {
 	}
 
 	public static setImage(
-		img: HTMLImageElement,
+		element: HTMLImageElement | HTMLElement,
 		name: string,
 		map: any,
 		imageIsLayoutCritical?: boolean,
 	): void {
 		const setupIcon = function () {
-			img.src = LOUtil.getImageURL(name);
-			LOUtil.checkIfImageExists(img, imageIsLayoutCritical);
+			const url = LOUtil.getImageURL(name);
+			if (element instanceof HTMLImageElement) {
+				element.src = url;
+				LOUtil.checkIfImageExists(element, imageIsLayoutCritical);
+			} else {
+				element.style.backgroundImage = 'url("' + url + '")';
+			}
 		};
 		setupIcon();
 

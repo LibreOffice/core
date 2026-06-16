@@ -40,6 +40,11 @@ class HRuler extends Ruler {
 	_lToolTip: HTMLDivElement;
 	_rToolTip: HTMLDivElement;
 
+	// The current indent values keyed by marker id, in the document's display
+	// unit. These are the exact numbers core reports, the same ones shown in the
+	// paragraph dialog and sidebar.
+	_indentDisplayValues: { [id: string]: number };
+
 	// Hammer variable declaration
 	_hammer: any;
 	_firstLineHammer: any;
@@ -51,7 +56,6 @@ class HRuler extends Ruler {
 	_lastposition: number;
 	currentPositionInTwips: number | null;
 	currentTabStopIndex: number | null;
-	_map: ReturnType<typeof window.L.map>;
 
 	declare options: Options;
 
@@ -94,6 +98,11 @@ class HRuler extends Ruler {
 		this._map.off('scrolllimits', this._updatePaintTimer, this);
 		this._map.off('moveend fixruleroffset', this.fixOffset, this);
 		this._map.off('updatepermission', this._changeInteractions, this);
+
+		// The value tooltips live on the document body, so remove them
+		// explicitly rather than letting them leak when the ruler goes away.
+		this._destroyIndentTooltips();
+		this._destroyMarginTooltips();
 	}
 
 	_changeInteractions(e: any) {
@@ -166,24 +175,33 @@ class HRuler extends Ruler {
 		this._pEndMarker.classList.add('cool-ruler-indentation-marker-up');
 		this._rFace.appendChild(this._pEndMarker);
 
-		// Rich tooltips (image + help text) for the three paragraph-indent
-		// drag handles. Labels and icons are pulled from the sidebar so the
-		// translations are shared and the icon themes apply automatically.
-		this._setupIndentTooltip(
+		// The icons are set from code (not CSS) so the dark-theme variant is
+		// used in dark mode and stays in sync when the theme changes. The
+		// first-line marker points down, the paragraph start and end markers
+		// point up. The base name is also stored so the grabbed state can swap
+		// to the filled icon during a drag.
+		this._firstLineMarker.dataset.indentIcon = 'indentation_marker_down';
+		this._pStartMarker.dataset.indentIcon = 'indentation_marker_up';
+		this._pEndMarker.dataset.indentIcon = 'indentation_marker_up';
+		app.LOUtil.setImage(
 			this._firstLineMarker,
-			_('First Line Indent'),
-			'lc_firstlineindent.svg',
+			'indentation_marker_down.svg',
+			this._map,
 		);
-		this._setupIndentTooltip(
+		app.LOUtil.setImage(
 			this._pStartMarker,
-			_('Before Text Indent'),
-			'lc_beforetextindent.svg',
+			'indentation_marker_up.svg',
+			this._map,
 		);
-		this._setupIndentTooltip(
+		app.LOUtil.setImage(
 			this._pEndMarker,
-			_('After Text Indent'),
-			'lc_aftertextindent.svg',
+			'indentation_marker_up.svg',
+			this._map,
 		);
+
+		// The paragraph indent markers use the value tooltips wired up at the end
+		// of this method, not the shared descriptive cooltip, so no data-cooltip
+		// is attached here.
 
 		// While one of the markers is being dragged, a vertical line should be visible in order to indicate the new position of the marker..
 		this._markerVerticalLine = window.L.DomUtil.create(
@@ -287,6 +305,30 @@ class HRuler extends Ruler {
 			window.touch.mouseOnly(this._initiateIndentationDrag),
 			this,
 		);
+
+		// One value tooltip per marker, shown together on hover with the hovered
+		// marker focused. The base class owns the tooltip elements and the
+		// hover wiring.
+		this._initIndentTooltips([
+			{
+				id: 'lo-fline-marker',
+				marker: this._firstLineMarker,
+				iconName: 'lc_firstlineindent.svg',
+				label: _('First line'),
+			},
+			{
+				id: 'lo-pstart-marker',
+				marker: this._pStartMarker,
+				iconName: 'lc_beforetextindent.svg',
+				label: _('Before'),
+			},
+			{
+				id: 'lo-pend-marker',
+				marker: this._pEndMarker,
+				iconName: 'lc_aftertextindent.svg',
+				label: _('After'),
+			},
+		]);
 	}
 
 	_initLayout() {
@@ -428,6 +470,27 @@ class HRuler extends Ruler {
 			parseFloat(state.right.replace(',', '.')) / conversionFactorToInches;
 		this.options.unit = state.unit;
 
+		// Capture the indent values in mm100 (a unit-agnostic hundredth of a
+		// millimetre) straight from what core reported, before they are converted
+		// to pixels below. The tooltips read these so the number matches the
+		// paragraph dialog exactly instead of drifting through a pixel round trip,
+		// and the tooltip can present them in centimetres to match the ruler
+		// regardless of the document's own unit. firstline is the offset of the
+		// first line from the left indent.
+		const toMm100 = (raw: string): number => {
+			const value =
+				parseFloat(raw.replace(',', '.')) / conversionFactorToInches;
+			if (state.unit === 'inch') return value * 2540;
+			if (state.unit === 'mm') return value * 100;
+			if (state.unit === 'point') return value * (2540 / 72);
+			return value * 1000; // centimetre, and the fallback
+		};
+		this._indentDisplayValues = {
+			'lo-fline-marker': toMm100(state.firstline),
+			'lo-pstart-marker': toMm100(state.left),
+			'lo-pend-marker': toMm100(state.right),
+		};
+
 		var pxPerMm100 =
 			app.map._docLayer._docPixelSize.x /
 			((app.activeDocument.fileSize.x * 2540) / 1440);
@@ -459,15 +522,28 @@ class HRuler extends Ruler {
 		const navigationsidebarWidth = this._getNavigationSidebarWidth();
 
 		// rTSContainer is the reference element.
-		const pStartPosition =
+		let pStartPosition =
 			this._rTSContainer.getBoundingClientRect().left +
 			this.options.leftParagraphIndent -
 			navigationsidebarWidth;
-		const fLinePosition = pStartPosition + this.options.firstLineIndent;
-		const pEndPosition =
+		let pEndPosition =
 			this._rTSContainer.getBoundingClientRect().right -
 			this.options.rightParagraphIndent -
 			navigationsidebarWidth;
+
+		// With no indent the before and after markers sit on the page margin,
+		// which is drawn as a 2px border (see the cool-ruler-drag border width
+		// in leaflet.css). Centre the marker's point on that border rather than
+		// its inner edge. Only at the default position, since that is the only
+		// place the border is.
+		const marginBorderWidth = 2;
+		const marginBorderHalf = marginBorderWidth / 2;
+		if (this.options.leftParagraphIndent === 0)
+			pStartPosition += marginBorderHalf;
+		if (this.options.rightParagraphIndent === 0)
+			pEndPosition -= marginBorderHalf;
+
+		const fLinePosition = pStartPosition + this.options.firstLineIndent;
 
 		// We calculated the positions. Now we should move them to left in order to make their sharp edge point to the right direction..
 		this._firstLineMarker.style.left =
@@ -684,12 +760,12 @@ class HRuler extends Ruler {
 				'cool-ruler-rtooltip',
 				this._rMarginDrag,
 			);
-			this._setupIndentTooltip(
+			this._setupMarginTooltip(
 				this._lMarginDrag,
 				_('Left Margin'),
 				'lc_beforetextindent.svg',
 			);
-			this._setupIndentTooltip(
+			this._setupMarginTooltip(
 				this._rMarginDrag,
 				_('Right Margin'),
 				'lc_aftertextindent.svg',
@@ -851,12 +927,12 @@ class HRuler extends Ruler {
 				'cool-ruler-rtooltip',
 				this._rMarginDrag,
 			);
-			this._setupIndentTooltip(
+			this._setupMarginTooltip(
 				this._lMarginDrag,
 				_('Left Margin'),
 				'lc_beforetextindent.svg',
 			);
-			this._setupIndentTooltip(
+			this._setupMarginTooltip(
 				this._rMarginDrag,
 				_('Right Margin'),
 				'lc_aftertextindent.svg',
@@ -956,27 +1032,17 @@ class HRuler extends Ruler {
 		this._markerVerticalLine.style.left =
 			String(newLeft + halfWidth + this._getNavigationSidebarWidth()) + 'px';
 
-		// Reflect the new position in the pinned tooltip so the user can
-		// place the marker precisely without reading off the ruler.
-		this._updateIndentTooltip(element);
+		// Update the live values and reposition the tooltips as the marker moves.
+		this._showIndentTooltips(this._indentationElementId);
 	}
 
 	_moveIndentationEnd(e: Event) {
 		this._map.rulerActive = false;
 
-		// Release the pinned tooltip - unconditional so the early-return
-		// below can't leave it stuck on screen.
-		if (this._map.tooltip) this._map.tooltip.unlock();
-
 		if (e.type !== 'panend') {
+			window.L.DomEvent.off(document, 'mousemove', this._moveIndentation, this);
 			window.L.DomEvent.off(
-				this._rFace,
-				'mousemove',
-				this._moveIndentation,
-				this,
-			);
-			window.L.DomEvent.off(
-				this._map,
+				document,
 				'mouseup',
 				this._moveIndentationEnd,
 				this,
@@ -1047,8 +1113,57 @@ class HRuler extends Ruler {
 		// Send the command
 		this._map.sendUnoCommand('.uno:LeftRightParaMargin', unoObj);
 
+		element.classList.remove('cool-ruler-indentation-marker--grabbed');
+		this._setIndentMarkerGrabbed(element, false);
+		this._rFace.style.cursor = '';
 		this._indentationElementId = '';
 		this._markerVerticalLine.style.display = 'none';
+		this._hideIndentTooltips();
+	}
+
+	// Resting indent values reported by core, keyed by marker id.
+	protected _indentDisplayValuesMm100(): { [id: string]: number } {
+		return this._indentDisplayValues;
+	}
+
+	// The three indent values in mm100, derived from the current marker
+	// positions so the dragged marker previews its live value. The first line
+	// value is the offset from the left indent and can be negative for a
+	// hanging indent.
+	protected _indentLiveValuesMm100(): { [id: string]: number } {
+		const ratio = this.options.DraggableConvertRatio;
+		const containerRect = this._rTSContainer.getBoundingClientRect();
+		const flineRect = this._firstLineMarker.getBoundingClientRect();
+		const pStartRect = this._pStartMarker.getBoundingClientRect();
+		const pEndRect = this._pEndMarker.getBoundingClientRect();
+		return {
+			'lo-fline-marker':
+				(flineRect.left - pStartRect.left + flineRect.width / 2) / ratio,
+			'lo-pstart-marker':
+				(pStartRect.left - containerRect.left + pStartRect.width / 2) / ratio,
+			'lo-pend-marker':
+				(containerRect.right - pEndRect.right + pEndRect.width / 2) / ratio,
+		};
+	}
+
+	protected _positionIndentTooltips(tooltips: IndentTooltip[]) {
+		// Tooltips use fixed positioning in viewport coordinates, centred over
+		// their marker. A tooltip goes on the same side of the ruler as its
+		// marker: the first line marker sits at the top of the ruler so its
+		// tooltip goes above, the before and after markers sit at the bottom so
+		// theirs go below. This keeps the first line and before tooltips apart
+		// even when those two markers land on the same spot.
+		const rulerRect = this._rWrapper.getBoundingClientRect();
+		tooltips.forEach((spec) => {
+			const above = spec.id === 'lo-fline-marker';
+			const markerRect = spec.marker.getBoundingClientRect();
+			spec.tip.setPosition(
+				markerRect.left + markerRect.width / 2 - spec.tip.offsetWidth / 2,
+				above
+					? rulerRect.top - spec.tip.offsetHeight - 6
+					: rulerRect.bottom + 6,
+			);
+		});
 	}
 
 	_initiateIndentationDrag(e: any) {
@@ -1059,31 +1174,24 @@ class HRuler extends Ruler {
 		this._indentationElementId =
 			e.target.id.trim() === '' ? e.target.parentNode.id : e.target.id;
 
+		// Swap the grabbed marker to its filled icon and show a grabbing cursor
+		// so the user gets clear feedback that they are moving something.
+		const draggedMarker = document.getElementById(this._indentationElementId);
+		if (draggedMarker) {
+			draggedMarker.classList.add('cool-ruler-indentation-marker--grabbed');
+			this._setIndentMarkerGrabbed(draggedMarker, true);
+		}
+		this._rFace.style.cursor = 'grabbing';
+
+		this._showIndentTooltips(this._indentationElementId);
+
 		if (e.type !== 'panstart') {
-			window.L.DomEvent.on(
-				this._rFace,
-				'mousemove',
-				this._moveIndentation,
-				this,
-			);
-			window.L.DomEvent.on(
-				this._rFace,
-				'click',
-				this._moveIndentationEnd,
-				this,
-			);
-			window.L.DomEvent.on(
-				this._rFace,
-				'mouseleave',
-				this._moveIndentationEnd,
-				this,
-			);
-			window.L.DomEvent.on(
-				this._map,
-				'mouseup',
-				this._moveIndentationEnd,
-				this,
-			);
+			// Track the pointer on the whole document, not just the ruler face,
+			// so the drag keeps following the cursor when it moves into the
+			// document area or anywhere off the ruler. The drag ends only when
+			// the button is released, wherever that release happens.
+			window.L.DomEvent.on(document, 'mousemove', this._moveIndentation, this);
+			window.L.DomEvent.on(document, 'mouseup', this._moveIndentationEnd, this);
 		} else {
 			e.clientX = e.center.x;
 		}
@@ -1091,10 +1199,6 @@ class HRuler extends Ruler {
 		this._initialposition = this._lastposition = e.clientX;
 		this._markerVerticalLine.style.display = 'block';
 		this._markerVerticalLine.style.left = this._lastposition + 'px';
-
-		// Pin the tooltip so it stays visible while the drag moves the
-		// pointer away from the handle, and seed it with the current value.
-		this._pinIndentTooltip(document.getElementById(this._indentationElementId));
 	}
 
 	_initiateDrag(e: any) {
@@ -1112,8 +1216,11 @@ class HRuler extends Ruler {
 		this._map.rulerActive = true;
 
 		var dragableElem = e.srcElement || e.target;
-		window.L.DomEvent.on(this._rFace, 'mousemove', this._moveMargin, this);
-		window.L.DomEvent.on(this._map, 'mouseup', this._endDrag, this);
+		// Listen on the whole document so the margin keeps tracking the pointer
+		// once it leaves the ruler, and so releasing the button anywhere ends
+		// the drag.
+		window.L.DomEvent.on(document, 'mousemove', this._moveMargin, this);
+		window.L.DomEvent.on(document, 'mouseup', this._endDrag, this);
 		this._initialposition = e.clientX;
 		this._lastposition = this._initialposition;
 
@@ -1173,18 +1280,19 @@ class HRuler extends Ruler {
 	_endDrag(e: any) {
 		this._map.rulerActive = false;
 
-		if (this._map.tooltip) this._map.tooltip.unlock();
+		this._hideMarginTooltips();
 
-		var posChange;
-		if (e.type === 'touchend')
-			posChange = this._lastposition - this._initialposition;
-		else posChange = e.originalEvent.clientX - this._initialposition;
+		// _lastposition is the pointer X recorded by the most recent move, which
+		// matches where the button was released. Using it keeps this working no
+		// matter which target the end event arrived from (mouse, touch or a
+		// document-level listener).
+		var posChange = this._lastposition - this._initialposition;
 		var unoObj: any = {},
 			marginType,
 			fact;
 
-		window.L.DomEvent.off(this._rFace, 'mousemove', this._moveMargin, this);
-		window.L.DomEvent.off(this._map, 'mouseup', this._endDrag, this);
+		window.L.DomEvent.off(document, 'mousemove', this._moveMargin, this);
+		window.L.DomEvent.off(document, 'mouseup', this._endDrag, this);
 
 		if (window.L.DomUtil.hasClass(this._rMarginDrag, 'leaflet-drag-moving')) {
 			marginType = 'Margin2';
@@ -1348,24 +1456,11 @@ class HRuler extends Ruler {
 			!this.getWindowProperty<boolean>('ThisIsTheiOSApp') &&
 			event.pointerType !== 'touch'
 		) {
-			window.L.DomEvent.on(
-				this._rTSContainer,
-				'mousemove',
-				this._moveTabstop,
-				this,
-			);
-			window.L.DomEvent.on(
-				this._rTSContainer,
-				'mouseup',
-				this._endTabstopDrag,
-				this,
-			);
-			window.L.DomEvent.on(
-				this._rTSContainer,
-				'mouseout',
-				this._endTabstopDrag,
-				this,
-			);
+			// Listen on the whole document so the tab stop keeps following the
+			// pointer once it leaves the tab-stop container, and so the drag
+			// ends only on release rather than the moment the pointer leaves.
+			window.L.DomEvent.on(document, 'mousemove', this._moveTabstop, this);
+			window.L.DomEvent.on(document, 'mouseup', this._endTabstopDrag, this);
 		}
 	}
 
@@ -1377,8 +1472,10 @@ class HRuler extends Ruler {
 			tabstopContainer = event.target;
 			pointX = event.center.x - event.target.getBoundingClientRect().left;
 		} else {
-			tabstopContainer = event.currentTarget;
-			pointX = event.layerX;
+			// The move listener is on the document, so derive the position
+			// relative to the tab-stop container from the viewport coordinate.
+			tabstopContainer = this._rTSContainer;
+			pointX = event.clientX - this._rTSContainer.getBoundingClientRect().left;
 		}
 
 		if (tabstopContainer === null) return;
@@ -1400,52 +1497,34 @@ class HRuler extends Ruler {
 			tabstopContainer = event.target;
 			pointX = event.center.x - event.target.getBoundingClientRect().left;
 		} else {
-			tabstopContainer = event.currentTarget;
-			pointX = event.layerX;
+			// The end listener is on the document, so derive the position
+			// relative to the tab-stop container from the viewport coordinate.
+			tabstopContainer = this._rTSContainer;
+			pointX = event.clientX - this._rTSContainer.getBoundingClientRect().left;
 		}
 
 		if (tabstopContainer === null) return;
 		var marker = tabstopContainer.tabStopMarkerBeingDragged;
 		if (marker === null) return;
 
-		if (event.type == 'mouseout') {
-			marker.style.left = marker.tabStopLocation.left + 'px';
-		} else {
-			var positionTwip = this._pointerToTabTwips(pointX);
-			var params = {
-				Index: {
-					type: 'int32',
-					value: marker.tabStopNumber,
-				},
-				Position: {
-					type: 'int32',
-					value: positionTwip,
-				},
-				Remove: {
-					type: 'boolean',
-					value: false,
-				},
-			};
-			this._map.sendUnoCommand('.uno:ChangeTabStop', params);
-		}
-		window.L.DomEvent.off(
-			this._rTSContainer,
-			'mousemove',
-			this._moveTabstop,
-			this,
-		);
-		window.L.DomEvent.off(
-			this._rTSContainer,
-			'mouseup',
-			this._endTabstopDrag,
-			this,
-		);
-		window.L.DomEvent.off(
-			this._rTSContainer,
-			'mouseout',
-			this._endTabstopDrag,
-			this,
-		);
+		var positionTwip = this._pointerToTabTwips(pointX);
+		var params = {
+			Index: {
+				type: 'int32',
+				value: marker.tabStopNumber,
+			},
+			Position: {
+				type: 'int32',
+				value: positionTwip,
+			},
+			Remove: {
+				type: 'boolean',
+				value: false,
+			},
+		};
+		this._map.sendUnoCommand('.uno:ChangeTabStop', params);
+		window.L.DomEvent.off(document, 'mousemove', this._moveTabstop, this);
+		window.L.DomEvent.off(document, 'mouseup', this._endTabstopDrag, this);
 	}
 
 	_onTabstopContainerLongPress(event: any) {
@@ -1518,103 +1597,5 @@ class HRuler extends Ruler {
 
 	_getNavigationSidebarWidth() {
 		return app.map?.navigator ? app.map.navigator.getCurrentWidth() : 0;
-	}
-
-	// Attach a rich cooltip with a sidebar icon and a short label.
-	// The label is stored separately so we can append a live value to it
-	// while the handle is being dragged. Refresh data-cooltip on mouseenter
-	// so the value shown on hover also reflects the current indent.
-	_setupIndentTooltip(elem: HTMLElement, label: string, iconFile: string) {
-		elem.dataset.cooltipLabel = label;
-		elem.setAttribute('data-cooltip', label);
-		elem.setAttribute('data-cooltip-icon', app.LOUtil.getImageURL(iconFile));
-		elem.addEventListener('mouseenter', () => {
-			const isMarginDrag = elem.classList.contains('cool-ruler-drag');
-			const value = this._formatRulerValue(
-				isMarginDrag
-					? this._currentMarginMm100(elem)
-					: this._currentIndentMm100(elem),
-			);
-			elem.setAttribute('data-cooltip', label + ': ' + value);
-		});
-		window.L.control.attachTooltipEventListener(elem, this._map);
-	}
-
-	// Format an mm100 value as a 2-decimal-place string in the user's
-	// preferred ruler unit (cm by default, inch when set).
-	_formatRulerValue(mm100: number): string {
-		// The ruler ticks are always drawn in centimetres (one mark per cm),
-		// so show the tooltip value in cm too rather than the document's
-		// measurement unit, which would otherwise disagree with the ruler.
-		return (mm100 / 1000).toFixed(2) + ' cm';
-	}
-
-	// Indent in mm100 of the marker currently being dragged, derived from
-	// the marker's live screen position so the value tracks the drag.
-	_currentIndentMm100(element: HTMLElement): number {
-		const ratio = this.options.DraggableConvertRatio;
-		const halfWidth = element.getBoundingClientRect().width * 0.5;
-		if (element.id === 'lo-fline-marker') {
-			return (
-				(this._firstLineMarker.getBoundingClientRect().left -
-					this._pStartMarker.getBoundingClientRect().left +
-					halfWidth) /
-				ratio
-			);
-		}
-		if (element.id === 'lo-pstart-marker') {
-			return (
-				(this._pStartMarker.getBoundingClientRect().left -
-					this._rTSContainer.getBoundingClientRect().left +
-					halfWidth) /
-				ratio
-			);
-		}
-		if (element.id === 'lo-pend-marker') {
-			return (
-				(this._rTSContainer.getBoundingClientRect().right -
-					this._pEndMarker.getBoundingClientRect().right +
-					halfWidth) /
-				ratio
-			);
-		}
-		return 0;
-	}
-
-	// Lock the cooltip on the given marker and seed it with the current
-	// "<label>: <value>" string, ready for live updates during the drag.
-	_pinIndentTooltip(elem: HTMLElement) {
-		if (!this._map.tooltip || !elem) return;
-		const label = elem.dataset.cooltipLabel || '';
-		const value = this._formatRulerValue(this._currentIndentMm100(elem));
-		this._map.tooltip.lock(elem, label + ': ' + value);
-	}
-
-	_updateIndentTooltip(elem: HTMLElement) {
-		if (!this._map.tooltip || !elem) return;
-		const label = elem.dataset.cooltipLabel || '';
-		const value = this._formatRulerValue(this._currentIndentMm100(elem));
-		this._map.tooltip.updateLabel(elem, label + ': ' + value);
-	}
-
-	// Lock the cooltip on a page-margin handle (left or right) and seed it
-	// with the current value derived from the live drag-handle width.
-	_pinMarginTooltip(elem: HTMLElement) {
-		if (!this._map.tooltip || !elem) return;
-		const label = elem.dataset.cooltipLabel || '';
-		const value = this._formatRulerValue(this._currentMarginMm100(elem));
-		this._map.tooltip.lock(elem, label + ': ' + value);
-	}
-
-	_updateMarginTooltip(elem: HTMLElement) {
-		if (!this._map.tooltip || !elem) return;
-		const label = elem.dataset.cooltipLabel || '';
-		const value = this._formatRulerValue(this._currentMarginMm100(elem));
-		this._map.tooltip.updateLabel(elem, label + ': ' + value);
-	}
-
-	_currentMarginMm100(elem: HTMLElement): number {
-		const widthPx = parseFloat(elem.style.width) || 0;
-		return widthPx / this.options.DraggableConvertRatio;
 	}
 }

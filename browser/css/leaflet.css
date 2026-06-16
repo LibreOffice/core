@@ -765,25 +765,23 @@ input.clipboard {
 
 .cool-ruler-indentation-marker-down {
 	width: 14px;
-	height: 10px;
-	background: url('images/indentation_marker_down.svg');
+	height: 5px;
+	background-repeat: no-repeat;
 	position: absolute;
 	left: 0;
 	top: 0;
 	z-index: 12;
-	background-repeat: no-repeat;
 	cursor: grab;
 }
 
 .cool-ruler-indentation-marker-up {
 	width: 14px;
-	height: 10px;
-	background: url('images/indentation_marker_up.svg');
+	height: 8px;
+	background-repeat: no-repeat;
 	position: absolute;
 	left: 0;
 	bottom: 0;
 	z-index: 12;
-	background-repeat: no-repeat;
 	cursor: grab;
 }
 
@@ -796,6 +794,20 @@ input.clipboard {
 .cool-ruler-indentation-marker-down:active,
 .cool-ruler-indentation-marker-up:active {
 	cursor: grabbing;
+}
+.cool-ruler-indentation-marker-down.cool-ruler-indentation-marker--grabbed,
+.cool-ruler-indentation-marker-up.cool-ruler-indentation-marker--grabbed {
+	cursor: grabbing;
+	filter: none;
+}
+
+/* The vertical ruler is rotated 90deg, so the shared marker rule pins markers
+   to the wrong edge. Pin them to the top edge, which becomes the canvas-facing
+   side of the ruler after the rotation. The icon already points the right way
+   there, so no flip is needed. */
+#vertical-ruler .cool-ruler-indentation-marker-up {
+	top: 0;
+	bottom: auto;
 }
 
 .cool-ruler-indentation-marker-center,
@@ -896,11 +908,11 @@ input.clipboard {
 }
 
 .cool-ruler-drag.cool-ruler-right {
-	border-left: 3px solid var(--color-border-dark);
+	border-left: 2px solid var(--color-border-dark);
 }
 
 .cool-ruler-drag.cool-ruler-left {
-	border-right: 3px solid var(--color-border-dark);
+	border-right: 2px solid var(--color-border-dark);
 }
 
 /* Highlight the margin handle border on hover. */
@@ -939,6 +951,49 @@ input.clipboard {
 	border-radius: var(--border-radius);
 	top: 24px;
 	color: var(--color-text-dark);
+}
+
+/* Value tooltips for the paragraph indent markers, styled to match the app's
+   standard tooltip. The secondary chips (default) are a dark pill showing just
+   the value. The focused one switches to the light tooltip look and adds an
+   icon and label. */
+.cool-value-tooltip {
+	display: none;
+	position: fixed;
+	z-index: 1106;
+	padding: 4px 8px;
+	white-space: nowrap;
+	border-radius: 6px;
+	font-family: var(--cool-font);
+	font-size: var(--tooltip-font-size);
+	background-color: var(--color-main-text);
+	color: var(--color-background-lighter);
+	pointer-events: none;
+}
+
+/* Focused tooltip: icon + label + value in the light tooltip style. */
+.cool-value-tooltip--focused {
+	background-color: var(--color-background-lighter);
+	color: var(--color-main-text);
+	box-shadow: 0px 0px 4px 0 var(--color-box-shadow);
+}
+
+/* The focused tooltip reuses the paragraph indent icons from the sidebar. The
+   image itself is set from code, not in CSS, so the dark-theme variant is used
+   in dark mode. */
+.cool-value-tooltip-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 4px;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.cool-value-tooltip-text {
+	vertical-align: middle;
 }
 
 .leaflet-canvas-container {
