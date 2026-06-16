@@ -444,15 +444,13 @@ void TestBreakIterator::testLineBreaking()
 
     //this is an example sequence from tdf92993-1.docx caught by the load crashtesting
     {
-        static constexpr OUStringLiteral aTest = u"\U0001f356\U0001f357\U0001f346"
-                                       "\U0001f364\u2668\ufe0f\U0001f3c6";
-
         aLocale.Language = u"en"_ustr;
         aLocale.Country = u"US"_ustr;
 
         {
             //This must not assert/crash
-            (void)m_xBreak->getLineBreak(aTest, 0, aLocale, 0, aHyphOptions, aUserOptions);
+            (void)m_xBreak->getLineBreak(u"\U0001f356\U0001f357\U0001f346"
+                                       "\U0001f364♨️\U0001f3c6"_ustr, 0, aLocale, 0, aHyphOptions, aUserOptions);
         }
     }
 
@@ -1663,10 +1661,8 @@ void TestBreakIterator::testChinese()
 
     // Verify dictionary-based word breakiterator
     {
-        static constexpr OUStringLiteral aTest = u"\u6A35\u6A30\u69FE\u8919\U00029EDB";
-
         i18n::Boundary aBounds
-            = m_xBreak->getWordBoundary(aTest, 4, stLocale, i18n::WordType::DICTIONARY_WORD, true);
+            = m_xBreak->getWordBoundary(u"\u6A35\u6A30\u69FE\u8919\U00029EDB"_ustr, 4, stLocale, i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
     }
