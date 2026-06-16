@@ -81,49 +81,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createUuid(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_compareUuid(
         const sal_uInt8 *pUUID1 , const sal_uInt8 *pUUID2 );
 
-/** Creates named UUIDs.
-
-    <p>
-    The version 3 UUID is meant for generating UUIDs from <em>names</em> that
-    are drawn from, and unique within, some <em>name space</em>. Some examples
-    of names (and, implicitly, name spaces) might be DNS names, URLs, ISO
-    Object IDs (OIDs), reserved words in a programming language, or X.500
-    Distinguished Names (DNs); thus, the concept of name and name space
-    should be broadly construed, and not limited to textual names.
-
-    <p>
-    The requirements for such UUIDs are as follows:
-
-    <ul>
-    <li> The UUIDs generated at different times from the same name in the
-         same namespace MUST be equal
-
-    <li> The UUIDs generated from two different names in the same namespace
-         should be different (with very high probability)
-
-    <li> The UUIDs generated from the same name in two different namespaces
-         should be different with (very high probability)
-
-    <li> If two UUIDs that were generated from names are equal, then they
-         were generated from the same name in the same namespace (with very
-         high probability).
-    </ul>
-
-    @param pTargetUUID pointer to at least 16 bytes of memory. After the call
-                       it contains the newly generated uuid in network byte order.
-    @param pNameSpaceUUID The namespace uuid. Below are some predefined ones,
-                          but any arbitrary uuid can be used as namespace.
-
-    @param pName the name
- */
-SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
-    sal_uInt8  *pTargetUUID,
-    const sal_uInt8  *pNameSpaceUUID,
-    const rtl_String *pName
-    );
-
-
-
 /*
     Predefined Namespaces
     (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;

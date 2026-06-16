@@ -22,14 +22,6 @@
 
 #include <rtl/random.h>
 #include <rtl/uuid.h>
-#include <rtl/digest.h>
-
-#define SWAP_INT16_TO_NETWORK(x)\
-               { sal_uInt16 y = x;\
-                 sal_uInt8 *p = reinterpret_cast<sal_uInt8 *>(&(x)); \
-                 p[0] = static_cast<sal_uInt8>( ( y >> 8 )  & 0xff );\
-                 p[1] = static_cast<sal_uInt8>( ( y ) & 0xff);\
-               }
 
 #define SWAP_NETWORK_TO_INT16(x)\
                { sal_uInt16 y = x;\
@@ -60,25 +52,6 @@ struct UUID
 
 }
 
-static void write_v3( sal_uInt8 *pUuid  )
-{
-    UUID uuid;
-    // copy to avoid alignment problems
-    memcpy(&uuid, pUuid, 16);
-
-    SWAP_NETWORK_TO_INT16(uuid.time_hi_and_version);
-
-    /* put in the variant and version bits */
-    uuid.time_hi_and_version &= 0x0FFF;
-    uuid.time_hi_and_version |= (3 << 12);
-    uuid.clock_seq_hi_and_reserved &= 0x3F;
-    uuid.clock_seq_hi_and_reserved |= 0x80;
-
-    SWAP_INT16_TO_NETWORK(uuid.time_hi_and_version);
-
-    memcpy(pUuid, &uuid, 16);
-}
-
 extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
                                         SAL_UNUSED_PARAMETER const sal_uInt8 *,
                                         SAL_UNUSED_PARAMETER sal_Bool)
@@ -95,21 +68,6 @@ extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
     pTargetUUID[6] |= 0x40;
     pTargetUUID[8] &= 0x3F;
     pTargetUUID[8] |= 0x80;
-}
-
-extern "C" void SAL_CALL rtl_createNamedUuid(sal_uInt8 *pTargetUUID,
-                                             const sal_uInt8 *pNameSpaceUUID,
-                                             const rtl_String *pName )
-{
-    rtlDigest digest = rtl_digest_createMD5();
-
-    rtl_digest_updateMD5(digest, pNameSpaceUUID, 16);
-    rtl_digest_updateMD5(digest, pName->buffer, pName->length);
-
-    rtl_digest_getMD5(digest, pTargetUUID, 16);
-    rtl_digest_destroyMD5(digest);
-
-    write_v3(pTargetUUID);
 }
 
 extern "C" sal_Int32 SAL_CALL rtl_compareUuid(const sal_uInt8 *pUUID1, const sal_uInt8 *pUUID2)
