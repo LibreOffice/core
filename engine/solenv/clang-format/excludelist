@@ -2754,8 +2754,6 @@ dbaccess/source/ui/uno/copytablewizard.cxx
 dbaccess/source/ui/uno/dbinteraction.cxx
 dbaccess/source/ui/uno/dbinteraction.hxx
 dbaccess/source/ui/uno/textconnectionsettings_uno.cxx
-dbaccess/source/ui/uno/unoDirectSql.cxx
-dbaccess/source/ui/uno/unoDirectSql.hxx
 dbaccess/source/ui/uno/unoadmin.cxx
 dbaccess/source/ui/uno/unosqlmessage.cxx
 dbaccess/win32/source/odbcconfig/odbcconfig.cxx

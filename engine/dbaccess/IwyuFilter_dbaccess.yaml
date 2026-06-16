@@ -146,6 +146,3 @@ excludelist:
     dbaccess/source/ui/uno/composerdialogs.cxx:
     # Actually used
     - com/sun/star/awt/XWindow.hpp
-    dbaccess/source/ui/uno/unoDirectSql.cxx:
-    # Actually used
-    - com/sun/star/connection/XConnection.hpp

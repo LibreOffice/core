@@ -240,11 +240,6 @@ inline constexpr OUString URL_COMPONENT_DATASOURCEBROWSER = u".component:DB/Data
 inline constexpr OUString URL_COMPONENT_RELATIONDESIGN = u".component:DB/RelationDesign"_ustr;
 inline constexpr OUString URL_COMPONENT_REPORTDESIGN(u".component:DB/ReportDesign"_ustr);
 
-// service names
-
-inline constexpr OUString SERVICE_SDB_DIRECTSQLDIALOG
-    = u"org.openoffice.comp.dbu.DirectSqlDialog"_ustr;
-
 // other DBU relevant strings
 
 inline constexpr OUString PROPERTY_QUERYDESIGNVIEW(u"QueryDesignView"_ustr);

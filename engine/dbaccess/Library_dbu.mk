@@ -163,7 +163,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/uno/DBTypeWizDlg \
     dbaccess/source/ui/uno/textconnectionsettings_uno \
     dbaccess/source/ui/uno/unoadmin \
-    dbaccess/source/ui/uno/unoDirectSql \
     dbaccess/source/ui/uno/unosqlmessage \
     dbaccess/source/ui/uno/UserSettingsDlg \
 ))
