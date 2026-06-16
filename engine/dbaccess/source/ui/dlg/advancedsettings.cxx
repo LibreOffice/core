@@ -22,7 +22,6 @@
 #include <memory>
 
 #include "advancedsettings.hxx"
-#include <advancedsettingsdlg.hxx>
 #include <dsitems.hxx>
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
@@ -352,118 +351,6 @@ namespace dbaui
         fillString( *_rSet, m_xAutoRetrieving.get(), DSID_AUTORETRIEVEVALUE, bChangedSomething );
 
         return bChangedSomething;
-    }
-
-    // AdvancedSettingsDialog
-    AdvancedSettingsDialog::AdvancedSettingsDialog(weld::Window* pParent, SfxItemSet* _pItems,
-        const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
-        : SfxTabDialogController(pParent, u"dbaccess/ui/advancedsettingsdialog.ui"_ustr, u"AdvancedSettingsDialog"_ustr, _pItems)
-    {
-        m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext, m_xDialog.get(), pParent, this));
-        m_pImpl->setDataSourceOrName(_aDataSourceName);
-        Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-        m_pImpl->translateProperties(xDatasource, *_pItems);
-        SetInputSet(_pItems);
-        // propagate this set as our new input set and reset the example set
-        m_xExampleSet.reset(new SfxItemSet(*GetInputSetImpl()));
-
-        const OUString eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*_pItems);
-
-        DataSourceMetaData aMeta( eType );
-        const FeatureSet& rFeatures( aMeta.getFeatureSet() );
-
-        // auto-generated values?
-        if (rFeatures.supportsGeneratedValues())
-            AddTabPage(u"generated"_ustr, ODriversSettings::CreateGeneratedValuesPage, nullptr);
-        else
-            RemoveTabPage(u"generated"_ustr);
-
-        // any "special settings"?
-        if (rFeatures.supportsAnySpecialSetting())
-            AddTabPage(u"special"_ustr, ODriversSettings::CreateSpecialSettingsPage, nullptr);
-        else
-            RemoveTabPage(u"special"_ustr);
-
-        // remove the reset button - it's meaning is much too ambiguous in this dialog
-        RemoveResetButton();
-    }
-
-    AdvancedSettingsDialog::~AdvancedSettingsDialog()
-    {
-        SetInputSet(nullptr);
-    }
-
-    bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const OUString& _sURL )
-    {
-        DataSourceMetaData aMeta( _sURL );
-        const FeatureSet& rFeatures( aMeta.getFeatureSet() );
-        return rFeatures.supportsGeneratedValues() || rFeatures.supportsAnySpecialSetting();
-    }
-
-    short AdvancedSettingsDialog::Ok()
-    {
-        short nRet = SfxTabDialogController::Ok();
-        if ( nRet == RET_OK )
-        {
-            m_xExampleSet->Put(*GetOutputItemSet());
-            m_pImpl->saveChanges(*m_xExampleSet);
-        }
-        return nRet;
-    }
-
-    void AdvancedSettingsDialog::PageCreated(const OUString& rId, SfxTabPage& _rPage)
-    {
-        // register ourself as modified listener
-        static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
-        static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
-        SfxTabDialogController::PageCreated(rId, _rPage);
-    }
-
-    const SfxItemSet* AdvancedSettingsDialog::getOutputSet() const
-    {
-        return m_xExampleSet.get();
-    }
-
-    SfxItemSet* AdvancedSettingsDialog::getWriteOutputSet()
-    {
-        return m_xExampleSet.get();
-    }
-
-    std::pair< Reference< XConnection >, bool > AdvancedSettingsDialog::createConnection()
-    {
-        return m_pImpl->createConnection();
-    }
-
-    Reference< XComponentContext > AdvancedSettingsDialog::getORB() const
-    {
-        return m_pImpl->getORB();
-    }
-
-    Reference< XDriver > AdvancedSettingsDialog::getDriver()
-    {
-        return m_pImpl->getDriver();
-    }
-
-    OUString AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
-    {
-        return dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);
-    }
-
-    void AdvancedSettingsDialog::clearPassword()
-    {
-        m_pImpl->clearPassword();
-    }
-
-    void AdvancedSettingsDialog::setTitle(const OUString& _sTitle)
-    {
-        m_xDialog->set_title(_sTitle);
-    }
-
-    void AdvancedSettingsDialog::enableConfirmSettings( bool ) {}
-
-    void AdvancedSettingsDialog::saveDatasource()
-    {
-        PrepareLeaveCurrentPage();
     }
 
 } // namespace dbaui

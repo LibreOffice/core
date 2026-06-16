@@ -154,7 +154,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/misc/WNameMatch \
     dbaccess/source/ui/misc/WTypeSelect \
     dbaccess/source/ui/uno/admindlg \
-    dbaccess/source/ui/uno/AdvancedSettingsDlg \
     dbaccess/source/ui/uno/ColumnControl \
     dbaccess/source/ui/uno/ColumnPeer \
     dbaccess/source/ui/uno/composerdialogs \

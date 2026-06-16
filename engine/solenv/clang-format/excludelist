@@ -2590,7 +2590,6 @@ dbaccess/source/ui/inc/WNameMatch.hxx
 dbaccess/source/ui/inc/WTabPage.hxx
 dbaccess/source/ui/inc/WTypeSelect.hxx
 dbaccess/source/ui/inc/adtabdlg.hxx
-dbaccess/source/ui/inc/advancedsettingsdlg.hxx
 dbaccess/source/ui/inc/asyncmodaldialog.hxx
 dbaccess/source/ui/inc/browserids.hxx
 dbaccess/source/ui/inc/brwctrlr.hxx
@@ -2734,7 +2733,6 @@ dbaccess/source/ui/tabledesign/TableRow.cxx
 dbaccess/source/ui/tabledesign/TableRowExchange.cxx
 dbaccess/source/ui/tabledesign/TableUndo.cxx
 dbaccess/source/ui/tabledesign/TableUndo.hxx
-dbaccess/source/ui/uno/AdvancedSettingsDlg.cxx
 dbaccess/source/ui/uno/ColumnControl.cxx
 dbaccess/source/ui/uno/ColumnControl.hxx
 dbaccess/source/ui/uno/ColumnModel.cxx

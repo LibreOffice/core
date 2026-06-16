@@ -54,10 +54,6 @@
     <service name="com.sun.star.frame.FrameLoader"/>
     <service name="com.sun.star.sdb.ContentLoader"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OAdvancedSettingsDialog"
-    constructor="org_openoffice_comp_dbu_OAdvancedSettingsDialog_get_implementation">
-    <service name="com.sun.star.sdb.AdvancedDatabaseSettingsDialog"/>
-  </implementation>
   <implementation name="org.openoffice.comp.dbu.ODBTypeWizDialog"
     constructor="org_openoffice_comp_dbu_ODBTypeWizDialog_get_implementation">
     <service name="com.sun.star.sdb.DataSourceTypeChangeDialog"/>
