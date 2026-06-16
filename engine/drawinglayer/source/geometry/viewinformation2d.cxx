@@ -37,18 +37,6 @@ using namespace com::sun::star;
 
 namespace drawinglayer::geometry
 {
-namespace
-{
-constexpr OUStringLiteral g_PropertyName_ObjectTransformation = u"ObjectTransformation";
-constexpr OUStringLiteral g_PropertyName_ViewTransformation = u"ViewTransformation";
-constexpr OUStringLiteral g_PropertyName_Viewport = u"Viewport";
-constexpr OUStringLiteral g_PropertyName_Time = u"Time";
-constexpr OUStringLiteral g_PropertyName_VisualizedPage = u"VisualizedPage";
-constexpr OUStringLiteral g_PropertyName_ReducedDisplayQuality = u"ReducedDisplayQuality";
-constexpr OUStringLiteral g_PropertyName_UseAntiAliasing = u"UseAntiAliasing";
-constexpr OUStringLiteral g_PropertyName_PixelSnapHairline = u"PixelSnapHairline";
-}
-
 class ImpViewInformation2D
 {
 private:
@@ -465,26 +453,26 @@ createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rVi
 
     for (auto const& rPropertyValue : rViewParameters)
     {
-        if (rPropertyValue.Name == g_PropertyName_ReducedDisplayQuality)
+        if (rPropertyValue.Name == u"ReducedDisplayQuality"_ustr)
         {
             bool bNew(false);
             rPropertyValue.Value >>= bNew;
             aRetval.setReducedDisplayQuality(bNew);
         }
-        else if (rPropertyValue.Name == g_PropertyName_PixelSnapHairline)
+        else if (rPropertyValue.Name == u"PixelSnapHairline"_ustr)
         {
             bool bNew(
                 true); //SvtOptionsDrawinglayer::IsAntiAliasing() && SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete());
             rPropertyValue.Value >>= bNew;
             aRetval.setPixelSnapHairline(bNew);
         }
-        else if (rPropertyValue.Name == g_PropertyName_UseAntiAliasing)
+        else if (rPropertyValue.Name == u"UseAntiAliasing"_ustr)
         {
             bool bNew(true); //SvtOptionsDrawinglayer::IsAntiAliasing());
             rPropertyValue.Value >>= bNew;
             aRetval.setUseAntiAliasing(bNew);
         }
-        else if (rPropertyValue.Name == g_PropertyName_ObjectTransformation)
+        else if (rPropertyValue.Name == u"ObjectTransformation"_ustr)
         {
             css::geometry::AffineMatrix2D aAffineMatrix2D;
             rPropertyValue.Value >>= aAffineMatrix2D;
@@ -492,7 +480,7 @@ createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rVi
             basegfx::unotools::homMatrixFromAffineMatrix(aTransformation, aAffineMatrix2D);
             aRetval.setObjectTransformation(aTransformation);
         }
-        else if (rPropertyValue.Name == g_PropertyName_ViewTransformation)
+        else if (rPropertyValue.Name == u"ViewTransformation"_ustr)
         {
             css::geometry::AffineMatrix2D aAffineMatrix2D;
             rPropertyValue.Value >>= aAffineMatrix2D;
@@ -500,7 +488,7 @@ createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rVi
             basegfx::unotools::homMatrixFromAffineMatrix(aTransformation, aAffineMatrix2D);
             aRetval.setViewTransformation(aTransformation);
         }
-        else if (rPropertyValue.Name == g_PropertyName_Viewport)
+        else if (rPropertyValue.Name == u"Viewport"_ustr)
         {
             css::geometry::RealRectangle2D aUnoViewport;
             rPropertyValue.Value >>= aUnoViewport;
@@ -508,13 +496,13 @@ createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rVi
                 basegfx::unotools::b2DRectangleFromRealRectangle2D(aUnoViewport));
             aRetval.setViewport(aViewport);
         }
-        else if (rPropertyValue.Name == g_PropertyName_Time)
+        else if (rPropertyValue.Name == u"Time"_ustr)
         {
             double fViewTime(0.0);
             rPropertyValue.Value >>= fViewTime;
             aRetval.setViewTime(fViewTime);
         }
-        else if (rPropertyValue.Name == g_PropertyName_VisualizedPage)
+        else if (rPropertyValue.Name == u"VisualizedPage"_ustr)
         {
             css::uno::Reference<css::drawing::XDrawPage> xVisualizedPage;
             rPropertyValue.Value >>= xVisualizedPage;

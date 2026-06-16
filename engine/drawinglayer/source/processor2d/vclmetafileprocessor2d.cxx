@@ -1682,9 +1682,6 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
                 rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, true));
             sal_Int32 nNextSentenceBreak(
                 rBreakIterator.endOfSentence(rTxt, nTextPosition, rLocale));
-            static constexpr OStringLiteral aCommentStringA("XTEXT_EOC");
-            static constexpr OStringLiteral aCommentStringB("XTEXT_EOW");
-            static constexpr OStringLiteral aCommentStringC("XTEXT_EOS");
 
             for (sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
             {
@@ -1692,21 +1689,21 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
                 if (i == nNextCellBreak)
                 {
                     mpMetaFile->AddAction(
-                        new MetaCommentAction(aCommentStringA, i - nTextPosition));
+                        new MetaCommentAction("XTEXT_EOC"_ostr, i - nTextPosition));
                     nNextCellBreak = rBreakIterator.nextCharacters(
                         rTxt, i, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                 }
                 if (i == nNextWordBoundary.endPos)
                 {
                     mpMetaFile->AddAction(
-                        new MetaCommentAction(aCommentStringB, i - nTextPosition));
+                        new MetaCommentAction("XTEXT_EOW"_ostr, i - nTextPosition));
                     nNextWordBoundary = rBreakIterator.getWordBoundary(
                         rTxt, i + 1, rLocale, css::i18n::WordType::ANY_WORD, true);
                 }
                 if (i == nNextSentenceBreak)
                 {
                     mpMetaFile->AddAction(
-                        new MetaCommentAction(aCommentStringC, i - nTextPosition));
+                        new MetaCommentAction("XTEXT_EOS"_ostr, i - nTextPosition));
                     nNextSentenceBreak = rBreakIterator.endOfSentence(rTxt, i + 1, rLocale);
                 }
             }
