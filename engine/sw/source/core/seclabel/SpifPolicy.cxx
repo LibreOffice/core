@@ -17,6 +17,51 @@ namespace sw::seclabel
 namespace
 {
 OUString toOU(std::string_view rStr) { return OStringToOUString(rStr, RTL_TEXTENCODING_UTF8); }
+
+SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
+{
+    SpifTagCategory aCategory;
+    aCategory.aName = toOU(rWalker.attribute("name"_ostr));
+    aCategory.nLacv = rWalker.attribute("lacv"_ostr).toInt64();
+    aCategory.bObsolete = rWalker.attribute("obsolete"_ostr) == "true";
+    return aCategory;
+}
+
+SpifCategoryTag parseCategoryTag(tools::XmlWalker& rWalker)
+{
+    SpifCategoryTag aTag;
+    aTag.aName = toOU(rWalker.attribute("name"_ostr));
+    aTag.aTagType = toOU(rWalker.attribute("tagType"_ostr));
+    aTag.aEnumType = toOU(rWalker.attribute("enumType"_ostr));
+    aTag.bSingleSelection = rWalker.attribute("singleSelection"_ostr) == "true";
+
+    rWalker.children();
+    while (rWalker.isValid())
+    {
+        if (rWalker.name() == "tagCategory")
+            aTag.aCategories.push_back(parseTagCategory(rWalker));
+        rWalker.next();
+    }
+    rWalker.parent();
+    return aTag;
+}
+
+SpifCategoryTagSet parseTagSet(tools::XmlWalker& rWalker)
+{
+    SpifCategoryTagSet aSet;
+    aSet.aName = toOU(rWalker.attribute("name"_ostr));
+    aSet.aId = toOU(rWalker.attribute("id"_ostr));
+
+    rWalker.children();
+    while (rWalker.isValid())
+    {
+        if (rWalker.name() == "securityCategoryTag")
+            aSet.aTags.push_back(parseCategoryTag(rWalker));
+        rWalker.next();
+    }
+    rWalker.parent();
+    return aSet;
+}
 }
 
 // SPIF elements are namespace-prefixed (spif:...); XmlWalker::name() yields the
@@ -26,6 +71,7 @@ bool SpifPolicy::parse(SvStream& rStream)
     aName.clear();
     aId.clear();
     aClassifications.clear();
+    aTagSets.clear();
 
     tools::XmlWalker aWalker;
     if (!aWalker.open(&rStream))
@@ -57,6 +103,17 @@ bool SpifPolicy::parse(SvStream& rStream)
                     aClass.bObsolete = aWalker.attribute("obsolete"_ostr) == "true";
                     aClassifications.push_back(aClass);
                 }
+                aWalker.next();
+            }
+            aWalker.parent();
+        }
+        else if (aWalker.name() == "securityCategoryTagSets")
+        {
+            aWalker.children();
+            while (aWalker.isValid())
+            {
+                if (aWalker.name() == "securityCategoryTagSet")
+                    aTagSets.push_back(parseTagSet(aWalker));
                 aWalker.next();
             }
             aWalker.parent();

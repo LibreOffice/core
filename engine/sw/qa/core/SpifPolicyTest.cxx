@@ -30,7 +30,7 @@ class SpifPolicyTest : public CppUnit::TestFixture
 
 void SpifPolicyTest::testParse()
 {
-    // Mirrors sixworks/spif-collabora.xml; the tag-set block must be skipped.
+    // Mirrors sixworks/spif-collabora.xml (policy id, classifications, tag sets).
     static const OString aSpif(
         R"xml(<?xml version="1.0" encoding="utf-8"?>
 <spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
@@ -43,6 +43,12 @@ void SpifPolicyTest::testParse()
     <spif:securityCategoryTagSet name="Release Categories" id="1.2.826.0.1310.1.2.0.0">
       <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive" singleSelection="false">
         <spif:tagCategory name="CANADA" lacv="4407630" obsolete="false" />
+        <spif:tagCategory name="UNITED KINGDOM" lacv="5591873" obsolete="false" />
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="UK Restrictive Codeword - NTK" id="1.2.826.0.1310.1.2.0.4">
+      <spif:securityCategoryTag name="UK Restrictive Codewords - NTK" tagType="enumerated" enumType="restrictive" singleSelection="false">
+        <spif:tagCategory name="INT" lacv="21745403334774610" obsolete="false" />
       </spif:securityCategoryTag>
     </spif:securityCategoryTagSet>
   </spif:securityCategoryTagSets>
@@ -67,6 +73,28 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT_EQUAL(u"SECRET"_ustr, aPolicy.aClassifications[1].aName);
     CPPUNIT_ASSERT_EQUAL(u"red"_ustr, aPolicy.aClassifications[1].aColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aPolicy.aClassifications[1].nLacv);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPolicy.aTagSets.size());
+
+    const auto& rRelSet = aPolicy.aTagSets[0];
+    CPPUNIT_ASSERT_EQUAL(u"Release Categories"_ustr, rRelSet.aName);
+    CPPUNIT_ASSERT_EQUAL(u"1.2.826.0.1310.1.2.0.0"_ustr, rRelSet.aId);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRelSet.aTags.size());
+
+    const auto& rRelTag = rRelSet.aTags[0];
+    CPPUNIT_ASSERT_EQUAL(u"Releasable To"_ustr, rRelTag.aName);
+    CPPUNIT_ASSERT_EQUAL(u"enumerated"_ustr, rRelTag.aTagType);
+    CPPUNIT_ASSERT_EQUAL(u"permissive"_ustr, rRelTag.aEnumType);
+    CPPUNIT_ASSERT(!rRelTag.bSingleSelection);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rRelTag.aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, rRelTag.aCategories[0].aName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(4407630), rRelTag.aCategories[0].nLacv);
+    CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, rRelTag.aCategories[1].aName);
+
+    // lacv exceeding 32 bits must round-trip.
+    const auto& rNtkTag = aPolicy.aTagSets[1].aTags[0];
+    CPPUNIT_ASSERT_EQUAL(u"restrictive"_ustr, rNtkTag.aEnumType);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(21745403334774610), rNtkTag.aCategories[0].nLacv);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);

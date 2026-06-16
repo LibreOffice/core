@@ -28,14 +28,41 @@ struct SpifClassification
     bool bObsolete = false; ///< @obsolete: not for newly created labels
 };
 
-/// A parsed SPIF policy. Currently models the policy identifier and the
-/// classifications; tag sets, privacy marks and marking rules follow.
+/// A selectable value within a category tag (e.g. "CANADA" under "Releasable To").
+struct SpifTagCategory
+{
+    OUString aName; ///< tagCategory/@name
+    sal_Int64 nLacv = 0; ///< @lacv (may exceed 32 bits)
+    bool bObsolete = false; ///< @obsolete: not for newly created labels
+};
+
+/// A category tag (e.g. "Releasable To") and its selectable values.
+struct SpifCategoryTag
+{
+    OUString aName; ///< securityCategoryTag/@name
+    OUString aTagType; ///< @tagType: enumerated/restrictive/permissive/tagType7/notApplicable
+    OUString aEnumType; ///< @enumType when tagType=enumerated: permissive/restrictive
+    bool bSingleSelection = false; ///< @singleSelection
+    std::vector<SpifTagCategory> aCategories;
+};
+
+/// A named set of category tags (e.g. "Release Categories").
+struct SpifCategoryTagSet
+{
+    OUString aName; ///< securityCategoryTagSet/@name
+    OUString aId; ///< @id (OID)
+    std::vector<SpifCategoryTag> aTags;
+};
+
+/// A parsed SPIF policy: policy identifier, classifications and category tag
+/// sets. Privacy marks, marking rules and relationships follow.
 class SW_DLLPUBLIC SpifPolicy
 {
 public:
     OUString aName; ///< securityPolicyId/@name
     OUString aId; ///< securityPolicyId/@id (OID)
     std::vector<SpifClassification> aClassifications;
+    std::vector<SpifCategoryTagSet> aTagSets;
 
     /// Parse a SPIF document from rStream into this instance. Returns false if
     /// the stream is not a SPIF document.
