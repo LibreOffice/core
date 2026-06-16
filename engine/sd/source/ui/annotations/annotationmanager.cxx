@@ -319,8 +319,7 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
 
 bool AnnotationManagerImpl::isVisibleAnnotations()
 {
-    return (!comphelper::COKit::isActive()
-            || comphelper::COKit::isTiledAnnotations());
+    return !comphelper::COKit::isActive();
 }
 
 void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest const & rReq )

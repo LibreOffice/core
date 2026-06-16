@@ -4670,9 +4670,9 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
                 sBackgroundThemeName = rValue.Value.get<OUString>();
         }
 
-        // Disable comments if requested
+        // Disable comments
         SdOptions* pOptions = SdModule::get()->GetSdOptions(mpDoc->GetDocumentType());
-        pOptions->SetShowComments(comphelper::COKit::isTiledAnnotations());
+        pOptions->SetShowComments(false);
 
         pViewShell->SetRuler(false);
         pViewShell->SetScrollBarsVisible(false);
