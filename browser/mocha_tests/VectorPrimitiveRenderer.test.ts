@@ -420,6 +420,36 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
+		it('applies the alpha attribute as globalAlpha', function () {
+			// alpha is a byte where 255 is opaque. The renderer sets
+			// globalAlpha to alpha / 255 inside the save/restore
+			// scope, so the value does not leak to anything drawn
+			// after this primitive.
+			const primitive = loadVectorRenderingReference('testGraphicAlpha')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.strictEqual(typeof primitive.alpha, 'number');
+			nodeassert.ok(primitive.alpha < 255, 'fixture must be partly transparent');
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(
+				draw.properties.globalAlpha,
+				primitive.alpha / 255,
+			);
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+		});
+
 		it('draws only the cropped portion of a graphic', function () {
 			// A graphic with crop attributes is drawn with a source
 			// rectangle inset by the crop fractions of the image's

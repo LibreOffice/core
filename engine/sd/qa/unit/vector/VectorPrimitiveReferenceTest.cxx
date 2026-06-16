@@ -712,6 +712,30 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicRotation)
     assertJsonPath(aJson, "/primitives/0/rotation", sal_Int64(450));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicAlpha)
+{
+    // A raster graphic with a transparency attribute. The engine
+    // writes alpha as a byte (0 transparent, 255 opaque) when it
+    // is less than 255.
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(100.0, 100.0);
+
+    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+    GraphicAttr aAttribute;
+    // 50 percent opacity.
+    aAttribute.SetAlpha(128);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject, aAttribute));
+
+    auto aJson = writeReference(u"testGraphicAlpha", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    assertJsonPath(aJson, "/primitives/0/alpha", sal_Int64(128));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvg)
 {
     // An SVG-backed Graphic goes through the writer's SVG branch.

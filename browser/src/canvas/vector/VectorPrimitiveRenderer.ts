@@ -412,6 +412,7 @@ namespace cool {
 				primitive.checksum,
 				primitive.crop,
 				primitive.rotation,
+				primitive.alpha,
 			);
 		}
 
@@ -429,12 +430,17 @@ namespace cool {
 		// rotation is in tenths of a degree and rotates around the
 		// centre of the unit square, which the matrix maps to the
 		// centre of the image in slide space.
+		//
+		// alpha is a byte where 255 is opaque. Values below 255
+		// translate to a globalAlpha that scopes to the save and
+		// restore around the draw.
 		private _drawRaster(
 			context: CanvasRenderingContext2D,
 			matrix: number[] | undefined,
 			checksum: number,
 			crop?: GraphicPrimitive['crop'],
 			rotation?: number,
+			alpha?: number,
 		): void {
 			if (!matrix || matrix.length < 6) return;
 			if (!this._bitmapLookup) return;
@@ -444,6 +450,8 @@ namespace cool {
 			if (!image.complete) return;
 
 			context.save();
+			if (typeof alpha === 'number' && alpha < 255)
+				context.globalAlpha = alpha / 255;
 			// The matrix maps the unit square to the image's bounds,
 			// so we draw the image into the unit square and let the
 			// transform place it on the slide.
