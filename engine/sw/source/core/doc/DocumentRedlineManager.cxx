@@ -2365,10 +2365,34 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
             [[fallthrough]];
         case SwComparePosition::Outside:
             {
-                // Overlaps the current one completely or has the
-                // same dimension, delete the old one
-                maRedlineTable.DeleteAndDestroy( rCtx.n );
-                rCtx.bDec = true;
+                if (bHierarchical)
+                {
+                    // Reduce the length of rCtx.pNewRedl and create a new redline if needed.
+                    if (*rCtx.pEnd == *rCtx.pREnd)
+                    {
+                        rCtx.pNewRedl->SetEnd(*rCtx.pRStt, rCtx.pEnd);
+                    }
+                    else if (*rCtx.pStart == *rCtx.pRStt)
+                    {
+                        rCtx.pNewRedl->SetStart(*rCtx.pREnd, rCtx.pStart);
+                    }
+                    else
+                    {
+                        SwRangeRedline* pNew = new SwRangeRedline(*rCtx.pNewRedl);
+                        pNew->SetStart(*rCtx.pREnd);
+                        rCtx.pNewRedl->SetEnd(*rCtx.pRStt, rCtx.pEnd);
+                        AppendRedline(pNew, rCtx.bCallDelete);
+                        rCtx.n = 0;
+                        rCtx.bDec = true;
+                    }
+                }
+                else
+                {
+                    // Overlaps the current one completely or has the
+                    // same dimension, delete the old one
+                    maRedlineTable.DeleteAndDestroy( rCtx.n );
+                    rCtx.bDec = true;
+                }
             }
             break;
 

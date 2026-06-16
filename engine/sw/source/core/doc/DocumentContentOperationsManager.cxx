@@ -1272,8 +1272,10 @@ namespace //local functions originally from docfmt.cxx
                 pRStt = pTmp->Start();
                 pREnd = pTmp->End();
                 SwComparePosition eCompare = ComparePosition( *rRg.Start(), *rRg.End(), *pRStt, *pREnd );
-                if ( eCompare == SwComparePosition::Inside || eCompare == SwComparePosition::Equal )
+                if ( eCompare == SwComparePosition::Inside || eCompare == SwComparePosition::Equal ||
+                     eCompare == SwComparePosition::Outside )
                 {
+                    // Overlaps with an existing redline in some way.
                     bExistingFormatRedlineAtRange = true;
                     if (pTmp->GetExtraData())
                     {

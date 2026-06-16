@@ -104,6 +104,52 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineIns)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testHighlightOnInsContext)
+{
+    // Given a document with "AAABBBCCC", where BBB is an insert redline by Alice:
+    createSwDoc("ins-with-context.docx");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    // When selecting ABBBC (the last A of "AAA", BBB, the first C of "CCC") and highlighting
+    // it as yellow:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"CharBackColor"_ustr,
+                                      uno::Any(static_cast<sal_Int32>(0xffff00))),
+    };
+    dispatchCommand(mxComponent, u".uno:CharBackColor"_ustr, aArgs);
+
+    // Then make sure we get format(A) + format-on-insert(BBB) + format(C), so the underlying
+    // insert is preserved:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 1
+    // i.e. we got a format redline, but lost the insert redline.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+
+    // And when rejecting the first redline (the format on the last A of "AAA"):
+    pWrtShell->RejectRedline(0, /*bDirect=*/false);
+
+    // Then make sure the highlight is gone from that A:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> aCharSet(pDoc->GetAttrPool());
+    pWrtShell->GetCurAttr(aCharSet);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 32 (SfxItemState::DEFAULT)
+    // - Actual  : 64 (SfxItemState::SET)
+    // i.e. the brush item survived the reject.
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT,
+                         aCharSet.GetItemState(RES_CHRATR_BACKGROUND, false));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatSelf)
 {
     // Given a document with <ins>A<format>B</format>C</ins> redlines, created by Alice:
