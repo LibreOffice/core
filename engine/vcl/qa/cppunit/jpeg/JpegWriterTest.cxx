@@ -18,13 +18,11 @@
 #include <tools/stream.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
 
-constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/jpeg/data/");
-
 class JpegWriterTest : public test::BootstrapFixtureBase
 {
     OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/jpeg/data/"_ustr) + sFileName;
     }
 
     Bitmap load(const OUString& aURL);

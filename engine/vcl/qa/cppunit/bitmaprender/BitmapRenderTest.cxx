@@ -25,13 +25,11 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
-constexpr OUStringLiteral gaDataUrl = u"/vcl/qa/cppunit/bitmaprender/data/";
-
 class BitmapRenderTest : public test::BootstrapFixture
 {
     OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/bitmaprender/data/"_ustr) + sFileName;
     }
 
 public:

@@ -18,8 +18,6 @@
 
 namespace {
 
-constexpr OUStringLiteral HELPIMG_FAKE_THEME(u"helpimg");
-
 OUString
 filename_from_url(std::u16string_view url)
 {
@@ -83,7 +81,7 @@ IconThemeInfo::UrlCanBeParsed(std::u16string_view url)
         return false;
     }
 
-    if (fname.indexOf(HELPIMG_FAKE_THEME) != -1 ) {
+    if (fname.indexOf("helpimg") != -1 ) {
         return false;
     }
 

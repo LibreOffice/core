@@ -20,14 +20,12 @@
 
 namespace
 {
-constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/widgetdraw/data/");
-
 class WidgetDefinitionReaderTest : public test::BootstrapFixtureBase
 {
 private:
     OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/widgetdraw/data/"_ustr) + sFileName;
     }
 
 public:

@@ -17,13 +17,11 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <tools/stream.hxx>
 
-constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/jpeg/data/");
-
 class JpegReaderTest : public test::BootstrapFixtureBase
 {
     OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/jpeg/data/"_ustr) + sFileName;
     }
 
     Graphic loadJPG(const OUString& aURL);

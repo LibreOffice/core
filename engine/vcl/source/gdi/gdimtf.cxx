@@ -1454,8 +1454,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
         {
             MetaTextLineAction* pAct = static_cast<MetaTextLineAction*>(pAction);
             // measure a test string to get ascend and descent right
-            static constexpr OUStringLiteral pStr = u"\u00c4g";
-            OUString aStr( pStr );
+            OUString aStr( u"\u00c4g"_ustr );
 
             tools::Rectangle aRect;
             aMapVDev->GetTextBoundRect( aRect, aStr, 0, 0, aStr.getLength() );

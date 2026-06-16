@@ -130,15 +130,14 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testArabic)
 
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf95650)
 {
-    static constexpr OUStringLiteral aTxt =
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    // Check that the following executes without failing assertion
+    pOutDev->ImplLayout(
         u"\u0131\u0302\u0504\u4E44\u3031\u3030\u3531\u2D30"
         "\u3037\u0706\u0908\u0B0A\u0D0C\u0F0E\u072E\u100A"
         "\u0D11\u1312\u0105\u020A\u0512\u1403\u030C\u1528"
         "\u2931\u632E\u7074\u0D20\u0E0A\u100A\uF00D\u0D20"
-        "\u030A\u0C0B\u20E0\u0A0D";
-    ScopedVclPtrInstance<VirtualDevice> pOutDev;
-    // Check that the following executes without failing assertion
-    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, {}, {}, SalLayoutFlags::BiDiRtl);
+        "\u030A\u0C0B\u20E0\u0A0D"_ustr, 9, 1, Point(), 0, {}, {}, SalLayoutFlags::BiDiRtl);
 }
 
 static void checkCompareGlyphs( const SalLayoutGlyphs& aGlyphs1, const SalLayoutGlyphs& aGlyphs2,

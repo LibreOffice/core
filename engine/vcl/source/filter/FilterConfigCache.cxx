@@ -120,14 +120,6 @@ static Reference< XInterface > openConfig(const char* sPackage)
 
 void FilterConfigCache::ImplInit()
 {
-    static constexpr OUStringLiteral STYPE                ( u"Type"                );
-    static constexpr OUStringLiteral SUINAME              ( u"UIName"              );
-    static constexpr OUStringLiteral SFLAGS               ( u"Flags"               );
-    static constexpr OUStringLiteral SMEDIATYPE           ( u"MediaType"           );
-    static constexpr OUStringLiteral SEXTENSIONS          ( u"Extensions"          );
-    static constexpr OUStringLiteral SFORMATNAME          ( u"FormatName"          );
-    static constexpr OUStringLiteral SREALFILTERNAME      ( u"RealFilterName"      );
-
     // get access to config
     Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );
     Reference< XNameAccess > xFilterAccess( openConfig("filters"), UNO_QUERY );
@@ -147,11 +139,11 @@ void FilterConfigCache::ImplInit()
         FilterConfigCacheEntry aEntry;
 
         aEntry.sInternalFilterName = sInternalFilterName;
-        xFilterSet->getPropertyValue(STYPE) >>= aEntry.sType;
-        xFilterSet->getPropertyValue(SUINAME) >>= aEntry.sUIName;
-        xFilterSet->getPropertyValue(SREALFILTERNAME) >>= aEntry.sFilterType;
+        xFilterSet->getPropertyValue(u"Type"_ustr) >>= aEntry.sType;
+        xFilterSet->getPropertyValue(u"UIName"_ustr) >>= aEntry.sUIName;
+        xFilterSet->getPropertyValue(u"RealFilterName"_ustr) >>= aEntry.sFilterType;
         Sequence< OUString > lFlags;
-        xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
+        xFilterSet->getPropertyValue(u"Flags"_ustr) >>= lFlags;
         if (lFlags.getLength()!=1 || lFlags[0].isEmpty())
             continue;
         if (lFlags[0].equalsIgnoreAsciiCase("import"))
@@ -162,7 +154,7 @@ void FilterConfigCache::ImplInit()
             aEntry.nFlags = 0;
 
         OUString sFormatName;
-        xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
+        xFilterSet->getPropertyValue(u"FormatName"_ustr) >>= sFormatName;
         aEntry.CreateFilterName( sFormatName );
 
         Reference< XPropertySet > xTypeSet;
@@ -170,9 +162,9 @@ void FilterConfigCache::ImplInit()
         if (!xTypeSet.is())
             continue;
 
-        xTypeSet->getPropertyValue(SMEDIATYPE) >>= aEntry.sMediaType;
+        xTypeSet->getPropertyValue(u"MediaType"_ustr) >>= aEntry.sMediaType;
         css::uno::Sequence<OUString> tmp;
-        if (xTypeSet->getPropertyValue(SEXTENSIONS) >>= tmp)
+        if (xTypeSet->getPropertyValue(u"Extensions"_ustr) >>= tmp)
             aEntry.lExtensionList = comphelper::sequenceToContainer<std::vector<OUString>>(tmp);
 
         // The first extension will be used

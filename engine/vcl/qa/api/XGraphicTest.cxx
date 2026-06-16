@@ -27,8 +27,6 @@ namespace
 {
 using namespace css;
 
-constexpr OUStringLiteral gaDataUrl = u"/vcl/qa/api/data/";
-
 class XGraphicTest : public test::BootstrapFixture
 {
 public:
@@ -39,7 +37,7 @@ public:
 
     OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/api/data/"_ustr) + sFileName;
     }
 
     void testGraphic();

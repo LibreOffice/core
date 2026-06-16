@@ -20,8 +20,6 @@ using namespace com::sun::star;
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/filter/igif/data/";
-
 /// Covers vcl/source/filter/igif/ fixes.
 class Test : public test::BootstrapFixture
 {
@@ -31,7 +29,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLogicLazyRead)
 {
     GraphicFilter aGraphicFilter;
     test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "logic-lazy-read.gif";
+    OUString aURL = aDirectories.getURLFromSrc(u"/vcl/qa/cppunit/filter/igif/data/"_ustr)
+                    + "logic-lazy-read.gif";
     SvFileStream aStream(aURL, StreamMode::READ);
     Graphic aGraphic = aGraphicFilter.ImportUnloadedGraphic(aStream);
     // Without the accompanying fix in place, this test would have failed with:

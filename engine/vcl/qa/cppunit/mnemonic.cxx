@@ -54,8 +54,7 @@ void VclMnemonicTest::testMnemonic()
     }
 
     {
-        static constexpr OUStringLiteral TEST = u"\u4E00b";
-        OUString sResult = aGenerator.CreateMnemonic(TEST);
+        OUString sResult = aGenerator.CreateMnemonic(u"\u4E00b"_ustr);
         CPPUNIT_ASSERT_EQUAL(u'~', sResult[1]);
     }
 
