@@ -44,7 +44,6 @@ using namespace ::sf_misc;
 #define BASPROV_PROPERTY_ID_URI         1
 #define BASPROV_PROPERTY_ID_EDITABLE    2
 
-constexpr OUStringLiteral BASPROV_PROPERTY_URI = u"URI";
 constexpr OUString BASPROV_PROPERTY_EDITABLE = u"Editable"_ustr;
 
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
@@ -89,7 +88,7 @@ namespace basprov
             }
         }
 
-        registerProperty( BASPROV_PROPERTY_URI,      BASPROV_PROPERTY_ID_URI,      BASPROV_DEFAULT_ATTRIBS(), &m_sURI,      cppu::UnoType<decltype(m_sURI)>::get() );
+        registerProperty( u"URI"_ustr,      BASPROV_PROPERTY_ID_URI,      BASPROV_DEFAULT_ATTRIBS(), &m_sURI,      cppu::UnoType<decltype(m_sURI)>::get() );
         registerProperty( BASPROV_PROPERTY_EDITABLE, BASPROV_PROPERTY_ID_EDITABLE, BASPROV_DEFAULT_ATTRIBS(), &m_bEditable, cppu::UnoType<decltype(m_bEditable)>::get() );
     }
 

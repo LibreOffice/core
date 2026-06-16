@@ -36,9 +36,6 @@ namespace uri = css::uri;
 
 constexpr OUString SHARE = u"share"_ustr;
 
-constexpr OUStringLiteral SHARE_UNO_PACKAGES_URI =
-    u"vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
-
 constexpr OUString USER = u"user"_ustr;
 constexpr OUString USER_URI =
     u"vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
@@ -122,7 +119,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
     else if (m_sLocation == "share:uno_packages")
     {
         test = u"uno_packages"_ustr;
-        uri = SHARE_UNO_PACKAGES_URI;
+        uri = u"vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"_ustr;
     }
     else if (m_sLocation.startsWith("vnd.sun.star.tdoc"))
     {

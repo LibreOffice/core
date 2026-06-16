@@ -517,7 +517,6 @@ private:
 }
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
-constexpr OUStringLiteral EVENTLSTNR_PROPERTY_MODEL = u"Model";
 
 namespace {
 
@@ -600,7 +599,7 @@ private:
 EventListener::EventListener() :
 m_bDocClosed(false), mpShell( nullptr )
 {
-    registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
+    registerProperty( u"Model"_ustr, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, cppu::UnoType<decltype(m_xModel)>::get() );
 }
 
