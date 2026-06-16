@@ -86,6 +86,11 @@ describe('View Layout Tests', function () {
 		(app.tile as any).size = { x: 3840, y: 3840 };
 		(app.socket as any).sendMessage = function () {};
 
+		// The tile grid is enumerated in steps of window.tileSize pixels. The
+		// browser sets this from the server; tests fix it at 256 pixels, which
+		// matches a 3840 twip tile at the default 15 twips per pixel.
+		window.tileSize = 256;
+
 		// CanvasSectionContainer.getDocumentAnchorSection returns null until a
 		// section has been registered as the anchor. adjustViewZoomLevel and
 		// refreshCurrentCoordList both dereference .size, so give it a minimal
@@ -98,23 +103,23 @@ describe('View Layout Tests', function () {
 	// Record every tile-combine request the production code sends. The return
 	// value includes a `sentRequests` history array (grown in-place on every
 	// call) and a `restore` hook to revert the patch.
-	function instrumentTileCombineRequests(tileMgr: any): {
+	function instrumentTileCombineRequests(tileManager: any): {
 		sentRequests: Array<Array<TileCoordData>>;
 		restore: () => void;
 	} {
 		const sentRequests: Array<Array<TileCoordData>> = [];
-		const original: Function = tileMgr.sendTileCombineRequest;
-		tileMgr.sendTileCombineRequest = function (queue: Array<TileCoordData>) {
+		const original: Function = tileManager.sendTileCombineRequest;
+		tileManager.sendTileCombineRequest = function (queue: Array<TileCoordData>) {
 			if (queue.length > 0) {
 				// Snapshot: the caller may mutate the queue after returning.
 				sentRequests.push(queue.slice());
 			}
-			original.call(tileMgr, queue);
+			original.call(tileManager, queue);
 		};
 		return {
 			sentRequests,
 			restore: () => {
-				tileMgr.sendTileCombineRequest = original;
+				tileManager.sendTileCombineRequest = original;
 			},
 		};
 	}
@@ -123,39 +128,39 @@ describe('View Layout Tests', function () {
 	// `renderedKeys` is the set of tiles currently considered to have a
 	// produced image. Every visible tile ends up here once the
 	// request/response round-trip completes.
-	function instrumentTileRendering(tileMgr: any): {
+	function instrumentTileRendering(tileManager: any): {
 		renderedKeys: Set<string>;
 		restore: () => void;
 	} {
 		const renderedKeys: Set<string> = new Set();
-		const origSet: Function = tileMgr.setBitmapOnTile;
-		const origCreate: Function = tileMgr.createTileBitmap;
-		const origReclaim: Function = tileMgr.reclaimTileBitmapMemory;
+		const origSet: Function = tileManager.setBitmapOnTile;
+		const origCreate: Function = tileManager.createTileBitmap;
+		const origReclaim: Function = tileManager.reclaimTileBitmapMemory;
 
-		tileMgr.setBitmapOnTile = function (tile: Tile, bitmap: ImageBitmap) {
+		tileManager.setBitmapOnTile = function (tile: Tile, bitmap: ImageBitmap) {
 			renderedKeys.add(tile.coords.key());
-			return origSet.call(tileMgr, tile, bitmap);
+			return origSet.call(tileManager, tile, bitmap);
 		};
-		tileMgr.createTileBitmap = function (
+		tileManager.createTileBitmap = function (
 			tile: Tile,
 			delta: any,
 			deltas: any[],
 			bitmaps: Promise<ImageBitmap>[],
 		) {
 			renderedKeys.add(tile.coords.key());
-			return origCreate.call(tileMgr, tile, delta, deltas, bitmaps);
+			return origCreate.call(tileManager, tile, delta, deltas, bitmaps);
 		};
-		tileMgr.reclaimTileBitmapMemory = function (tile: Tile) {
+		tileManager.reclaimTileBitmapMemory = function (tile: Tile) {
 			renderedKeys.delete(tile.coords.key());
-			return origReclaim.call(tileMgr, tile);
+			return origReclaim.call(tileManager, tile);
 		};
 
 		return {
 			renderedKeys,
 			restore: () => {
-				tileMgr.setBitmapOnTile = origSet;
-				tileMgr.createTileBitmap = origCreate;
-				tileMgr.reclaimTileBitmapMemory = origReclaim;
+				tileManager.setBitmapOnTile = origSet;
+				tileManager.createTileBitmap = origCreate;
+				tileManager.reclaimTileBitmapMemory = origReclaim;
 			},
 		};
 	}
@@ -165,10 +170,10 @@ describe('View Layout Tests', function () {
 	// setBitmapOnTile path with a stand-in bitmap so the test can move past
 	// the request/response boundary without wiring up fzstd +
 	// createImageBitmap. Ordering mirrors BitmapTileManager.onTileMsg.
-	function simulateTileArrival(tileMgr: any, tile: Tile): void {
+	function simulateTileArrival(tileManager: any, tile: Tile): void {
 		if (tile.wireId === 0) tile.wireId = 1;
 		const fakeBitmap = { close: function () {} } as any;
-		tileMgr.setBitmapOnTile(tile, fakeBitmap);
+		tileManager.setBitmapOnTile(tile, fakeBitmap);
 	}
 
 	// Reclaim every tile we previously installed a bitmap on. Returns the
@@ -176,12 +181,12 @@ describe('View Layout Tests', function () {
 	// independent of earlier scenarios'. In production, off-screen tiles
 	// are dropped via garbage collection over time.
 	function clearRenderedTiles(
-		tileMgr: any,
+		tileManager: any,
 		renderedKeys: Set<string>,
 	): void {
 		for (const key of Array.from(renderedKeys)) {
-			const tile = tileMgr.tiles.get(key);
-			if (tile) tileMgr.reclaimTileBitmapMemory(tile);
+			const tile = tileManager.tiles.get(key);
+			if (tile) tileManager.reclaimTileBitmapMemory(tile);
 		}
 		nodeassert.strictEqual(renderedKeys.size, 0);
 	}
@@ -210,11 +215,13 @@ describe('View Layout Tests', function () {
 		);
 	}
 
-	// Clear the RenderManager singleton's state between tests so earlier
-	// scenarios do not leak rendered tiles into later assertions.
-	function resetRenderManagerState(tileMgr: any): void {
-		tileMgr.tiles.clear();
-		if (tileMgr.tileBitmapList) tileMgr.tileBitmapList.length = 0;
+	// Install a fresh BitmapTileManager as the RenderManager singleton so each
+	// scenario starts from clean state instead of inheriting tiles, caches and
+	// queues left behind by earlier tests.
+	function resetRenderManagerState(): any {
+		const tileManager: any = new BitmapTileManager();
+		(RenderManager as any)._instance = tileManager;
+		return tileManager;
 	}
 
 	// ========================================================================
@@ -226,19 +233,17 @@ describe('View Layout Tests', function () {
 	// assertions. Caller must call ctx.restore() in a finally block.
 	function createTestContext(layout: any): {
 		layout: any;
-		tileMgr: any;
+		tileManager: any;
 		sentRequests: Array<Array<TileCoordData>>;
 		renderedKeys: Set<string>;
 		restore: () => void;
 	} {
-		void RenderManager.tileSize;
-		const tileMgr: any = (RenderManager as any)._instance;
-		resetRenderManagerState(tileMgr);
-		const tileCombine = instrumentTileCombineRequests(tileMgr);
-		const rendering = instrumentTileRendering(tileMgr);
+		const tileManager: any = resetRenderManagerState();
+		const tileCombine = instrumentTileCombineRequests(tileManager);
+		const rendering = instrumentTileRendering(tileManager);
 		return {
 			layout,
-			tileMgr,
+			tileManager,
 			sentRequests: tileCombine.sentRequests,
 			renderedKeys: rendering.renderedKeys,
 			restore: () => {
@@ -259,7 +264,7 @@ describe('View Layout Tests', function () {
 		const visibleCoords: TileCoordData[] =
 			ctx.layout.getCurrentCoordList().slice();
 		for (const coords of visibleCoords) {
-			simulateTileArrival(ctx.tileMgr, ctx.tileMgr.get(coords));
+			simulateTileArrival(ctx.tileManager, ctx.tileManager.get(coords));
 		}
 		return visibleCoords;
 	}
@@ -284,8 +289,8 @@ describe('View Layout Tests', function () {
 		const toKeep = visibleCoords.slice(3);
 
 		for (const coords of toInvalidate) {
-			ctx.tileMgr.get(coords).invalidFrom =
-				ctx.tileMgr.get(coords).wireId;
+			ctx.tileManager.get(coords).invalidFrom =
+				ctx.tileManager.get(coords).wireId;
 		}
 
 		(ctx.layout as any).refreshCurrentCoordList();
@@ -330,7 +335,7 @@ describe('View Layout Tests', function () {
 		const toKeep = visibleCoords.slice(2);
 
 		for (const coords of toForce) {
-			ctx.tileMgr.get(coords).forceKeyframe();
+			ctx.tileManager.get(coords).forceKeyframe();
 		}
 
 		const before = ctx.sentRequests.length;
@@ -378,10 +383,10 @@ describe('View Layout Tests', function () {
 		const visibleCoords: TileCoordData[] =
 			ctx.layout.getCurrentCoordList().slice();
 
-		const raceTile = ctx.tileMgr.get(visibleCoords[0]);
+		const raceTile = ctx.tileManager.get(visibleCoords[0]);
 		raceTile.invalidFrom = 5;
 
-		simulateTileArrival(ctx.tileMgr, raceTile);
+		simulateTileArrival(ctx.tileManager, raceTile);
 
 		nodeassert.ok(
 			raceTile.needsFetch(),
@@ -391,8 +396,8 @@ describe('View Layout Tests', function () {
 
 		for (let i = 1; i < visibleCoords.length; i++) {
 			simulateTileArrival(
-				ctx.tileMgr,
-				ctx.tileMgr.get(visibleCoords[i]),
+				ctx.tileManager,
+				ctx.tileManager.get(visibleCoords[i]),
 			);
 		}
 
@@ -533,15 +538,13 @@ describe('View Layout Tests', function () {
 
 		const multiPageViewLayout = new ViewLayoutMultiPage();
 
-		// RenderManager.tileSize forces lazy singleton creation; then we reach
-		// into the BitmapTileManager instance and install monkey patches for
+		// Reset to a fresh BitmapTileManager, then install monkey patches on
 		// the two observation points: the tile-combine request queue and the
-		// bitmap production/reclamation state machine.
-		void RenderManager.tileSize;
-		const tileMgr: any = (RenderManager as any)._instance;
+		// bitmap production and reclamation state machine.
+		const tileManager: any = resetRenderManagerState();
 
-		const tileCombine = instrumentTileCombineRequests(tileMgr);
-		const rendering = instrumentTileRendering(tileMgr);
+		const tileCombine = instrumentTileCombineRequests(tileManager);
+		const rendering = instrumentTileRendering(tileManager);
 		const sentTileCombineRequests = tileCombine.sentRequests;
 		const renderedKeys = rendering.renderedKeys;
 
@@ -593,12 +596,12 @@ describe('View Layout Tests', function () {
 			assertSubset(label, expectedKeys, lastRequestedKeys());
 
 			for (const coords of visibleCoords()) {
-				const tile = tileMgr.get(coords);
+				const tile = tileManager.get(coords);
 				nodeassert.ok(
 					tile,
 					label + ': tile ' + coords.key() + ' should exist after request',
 				);
-				simulateTileArrival(tileMgr, tile);
+				simulateTileArrival(tileManager, tile);
 			}
 
 			for (const coords of visibleCoords()) {
@@ -608,7 +611,7 @@ describe('View Layout Tests', function () {
 						' has no bitmap produced',
 				);
 				nodeassert.ok(
-					tileMgr.get(coords).isReadyToDraw(),
+					tileManager.get(coords).isReadyToDraw(),
 					label + ': visible tile ' + coords.key() +
 						' is not ready to draw',
 				);
@@ -658,7 +661,7 @@ describe('View Layout Tests', function () {
 			// Reset rendered state first so the subset assertion sees every
 			// tile go through the fetch path - not just the non-overlapping
 			// ones left over from zoom-in.
-			clearRenderedTiles(tileMgr, renderedKeys);
+			clearRenderedTiles(tileManager, renderedKeys);
 			multiPageViewLayout.scrollProperties.viewY = 768;
 
 			const expectedAfterScroll = [
@@ -679,7 +682,7 @@ describe('View Layout Tests', function () {
 			// isValidTile drops every x >= 256 (256*70 = 17920 >= 7500) and
 			// y = 768 for page 2 (768*70 = 53760 >= 49000). Deduped union:
 			// (0,0), (0,256), (0,512).
-			clearRenderedTiles(tileMgr, renderedKeys);
+			clearRenderedTiles(tileManager, renderedKeys);
 			app.pixelsToTwips = 70;
 			app.twipsToPixels = 1 / 70;
 			multiPageViewLayout.scrollProperties.viewX = 0;
@@ -703,7 +706,7 @@ describe('View Layout Tests', function () {
 			const toKeep = visibleAtZoomOut.slice(2);
 
 			for (const coords of toReclaim) {
-				tileMgr.reclaimTileBitmapMemory(tileMgr.get(coords));
+				tileManager.reclaimTileBitmapMemory(tileManager.get(coords));
 				nodeassert.ok(
 					!renderedKeys.has(coords.key()),
 					'reclaim: tile ' + coords.key() +
@@ -776,12 +779,10 @@ describe('View Layout Tests', function () {
 
 		const layout = new ViewLayoutMultiPage();
 
-		void RenderManager.tileSize;
-		const tileMgr: any = (RenderManager as any)._instance;
-		resetRenderManagerState(tileMgr);
+		const tileManager: any = resetRenderManagerState();
 
-		const tileCombine = instrumentTileCombineRequests(tileMgr);
-		const rendering = instrumentTileRendering(tileMgr);
+		const tileCombine = instrumentTileCombineRequests(tileManager);
+		const rendering = instrumentTileRendering(tileManager);
 
 		app.file.writer.pageRectangleList = [
 			[0, 0, 7500, 15000],
@@ -843,12 +844,12 @@ describe('View Layout Tests', function () {
 			// Full round-trip: render and verify all visible tiles
 			// are drawable.
 			for (const coords of layout.getCurrentCoordList().slice()) {
-				simulateTileArrival(tileMgr, tileMgr.get(coords));
+				simulateTileArrival(tileManager, tileManager.get(coords));
 			}
 
 			for (const coords of layout.getCurrentCoordList().slice()) {
 				nodeassert.ok(
-					tileMgr.get(coords).isReadyToDraw(),
+					tileManager.get(coords).isReadyToDraw(),
 					'boundary tile ' + coords.key() +
 						' must be ready to draw after arrival',
 				);

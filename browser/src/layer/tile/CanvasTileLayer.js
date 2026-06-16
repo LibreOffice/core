@@ -424,7 +424,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._moveTileRequests = [];
 		this._canonicalIdInitialized = false;
 
-		RenderManager.initialize();
+		RenderManager.initialize(this._docType);
 	},
 
 	_initContainer: function () {
@@ -481,6 +481,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			app.sectionContainer.addSection(new CompareChangesLabelSection());
 
 		app.sectionContainer.getSectionWithName('tiles').onResize();
+
+		// Add the vector main-view section for Impress and Draw when vector
+		// rendering is enabled. The tile grid stays empty in this mode.
+		if (RenderManager.isVectorRendering()) {
+			app.sectionContainer.addSection(new cool.VectorContentSection());
+		}
 
 		this._canvasOverlay = new CanvasOverlay(this._map, app.sectionContainer.getContext());
 		app.sectionContainer.addSection(this._canvasOverlay);
@@ -1347,7 +1353,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			const preview = this._map._docPreviews ? this._map._docPreviews[command.part] : null;
 			if (preview) { preview.invalid = true; }
 
-			this.clearCachedVectorThumbnail(command.part);
+			RenderManager.clearCachedPart(command.part);
 
 			const topLeftTwips = new cool.Point(command.x, command.y);
 			const offset = new cool.Point(command.width, command.height);
@@ -1359,12 +1365,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	// Drop the cached vector tile for the input part.
-	clearCachedVectorThumbnail: function(part) {
-		if (this._vectorThumbnails) {
-			this._vectorThumbnails.clearCachedPart(part);
-		}
-	},
 
 	handleInvalidateTilesMsg: function(textMsg) {
 		var payload = textMsg.substring('invalidatetiles:'.length + 1);

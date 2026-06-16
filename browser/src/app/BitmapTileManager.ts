@@ -29,7 +29,7 @@ let _lowDeltaMemory = 100 * 1024 * 1024; // 100Mb
 let _highTileCount = 2048;
 let _lowTileCount = _highTileCount - 128;
 
-class BitmapTileManager {
+class BitmapTileManager extends RenderManagerBase {
 	private _docLayer: any;
 	private _zoom: number;
 	private _preFetchPart: number;
@@ -56,7 +56,7 @@ class BitmapTileManager {
 	private tiles: Map<string, Tile> = new Map(); // stores all tiles, keyed by coordinates, and cached, compressed deltas
 	private tileBitmapList: Tile[] = []; // stores all tiles with bitmaps, sorted by distance from view(s)
 	private tileImageCache: Map<string, Uint8Array | null> = new Map();
-	public tileSize: number = 256;
+	public tileSize: number = window.tileSize;
 
 	// The tile distance around the visible tile area that will be requested when updating
 	private visibleTileExpansion: number = 1;

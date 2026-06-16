@@ -12,20 +12,43 @@
 
 /// Static facade exposing the RenderManager API as static methods.
 class RenderManager {
-	private static _instance: BitmapTileManager;
+	private static _instance: RenderManagerBase;
 
-	private static ensureInstance(): BitmapTileManager {
+	/// True when the document renders from vector primitives: an Impress or
+	/// Draw document with the vector rendering option enabled.
+	private static wantsVector(docType?: string): boolean {
+		return (
+			(docType === 'presentation' || docType === 'drawing') &&
+			cool.VectorRenderingConfig.isEnabled()
+		);
+	}
+
+	/// Pick the manager for the document type, replacing the instance when
+	/// an earlier one is of the wrong kind.
+	private static makeInstance(docType?: string): RenderManagerBase {
+		const wantVector = RenderManager.wantsVector(docType);
+		const haveVector = RenderManager._instance instanceof VectorManager;
+		if (!RenderManager._instance || wantVector !== haveVector) {
+			RenderManager._instance = wantVector
+				? new VectorManager()
+				: new BitmapTileManager();
+		}
+		return RenderManager._instance;
+	}
+
+	private static ensureInstance(): RenderManagerBase {
+		// Provisional default before the document type is known.
 		if (!RenderManager._instance)
 			RenderManager._instance = new BitmapTileManager();
 		return RenderManager._instance;
 	}
 
 	static get tileSize(): number {
-		return RenderManager.ensureInstance().tileSize;
+		return window.tileSize;
 	}
 
-	static initialize(): void {
-		RenderManager.ensureInstance().initialize();
+	static initialize(docType?: string): void {
+		RenderManager.makeInstance(docType).initialize();
 	}
 
 	static appendAfterFirstTileTask(task: AfterFirstTileTask): void {
@@ -116,7 +139,7 @@ class RenderManager {
 		return RenderManager.ensureInstance().isValidTile(coords);
 	}
 
-	static redraw(): BitmapTileManager {
+	static redraw(): RenderManagerBase {
 		return RenderManager.ensureInstance().redraw();
 	}
 
@@ -172,6 +195,57 @@ class RenderManager {
 
 	static touchImage(tile: Tile): void {
 		RenderManager.ensureInstance().touchImage(tile);
+	}
+
+	// vector rendering specific
+
+	static isVectorRendering(): boolean {
+		return RenderManager.ensureInstance().isVectorRendering();
+	}
+
+	static requestThumbnail(
+		id: cool.PreviewId,
+		part: number,
+		maxWidth: number,
+		maxHeight: number,
+	): void {
+		RenderManager.ensureInstance().requestThumbnail(
+			id,
+			part,
+			maxWidth,
+			maxHeight,
+		);
+	}
+
+	static requestPart(part: number): cool.VectorTileData | undefined {
+		return RenderManager.ensureInstance().requestPart(part);
+	}
+
+	static renderInto(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorTileData,
+	): void {
+		RenderManager.ensureInstance().renderInto(context, data);
+	}
+
+	static onVectorChanged(callback: () => void): void {
+		RenderManager.ensureInstance().onVectorChanged(callback);
+	}
+
+	static handleVectorTileResponse(values: cool.VectorTileResponse): void {
+		RenderManager.ensureInstance().handleVectorTileResponse(values);
+	}
+
+	static handleVectorRenderingGraphicsResponse(
+		values: cool.VectorRenderingGraphicsResponse,
+	): void {
+		RenderManager.ensureInstance().handleVectorRenderingGraphicsResponse(
+			values,
+		);
+	}
+
+	static clearCachedPart(part: number): void {
+		RenderManager.ensureInstance().clearCachedPart(part);
 	}
 }
 

@@ -348,7 +348,9 @@ COOL_JS_LST =\
 	src/app/TileCoordData.ts \
 	src/app/PaneBorder.ts \
 	src/app/Tile.ts \
+	src/app/RenderManagerBase.ts \
 	src/app/BitmapTileManager.ts \
+	src/app/VectorManager.ts \
 	src/app/TilesMiddleware.ts \
 	src/app/SearchService.ts \
 	src/app/BaseClass.ts \
@@ -440,9 +442,9 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \
 	src/canvas/vector/VectorRenderingGraphicsResponse.ts \
-	src/canvas/vector/VectorThumbnailHandler.ts \
 	src/canvas/vector/VectorTileData.ts \
 	src/canvas/vector/VectorTileResponse.ts \
+	src/canvas/vector/VectorContentSection.ts \
 	src/canvas/sections/AutoFillBaseSection.ts \
 	src/canvas/sections/CellFillMarkerSection.ts \
 	src/canvas/sections/ImpressSelectionRectangle.ts \

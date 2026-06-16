@@ -256,9 +256,8 @@ window.L.Map.include({
 		if (fetchThumbnail) {
 			// For Impress/Draw, route thumbnails through the vector renderer.
 			// The slideshow path is using the server rendered bitmaps.
-			if (!isSlideshow && docLayer._vectorThumbnails &&
-				(docLayer._docType === 'presentation' || docLayer._docType === 'drawing')) {
-				docLayer._vectorThumbnails.requestThumbnail(id, part, maxWidth, maxHeight);
+			if (!isSlideshow && RenderManager.isVectorRendering()) {
+				RenderManager.requestThumbnail(id, part, maxWidth, maxHeight);
 			} else {
 				var mode = app.activeDocument.activeModes[0];
 				this._addPreviewToQueue(part, 'tile ' +

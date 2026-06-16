@@ -44,6 +44,8 @@ interface Window {
 	touch: COOLTouch;
 	setLogging(value: boolean): void;
 	postMobileMessage(msg: string): void;
+	// Pixel side length of one document tile.
+	tileSize: number;
 }
 
 /*
