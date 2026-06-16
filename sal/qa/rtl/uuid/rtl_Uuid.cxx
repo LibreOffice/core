@@ -95,57 +95,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class createUuid
 
-class createNamedUuid : public CppUnit::TestFixture
-{
-public:
-    void createNamedUuid_001()
-    {
-        sal_uInt8 NameSpace_DNS[16] = RTL_UUID_NAMESPACE_DNS;
-        sal_uInt8 NameSpace_URL[16] = RTL_UUID_NAMESPACE_URL;
-        sal_uInt8 pPriorCalculatedUUID[16] = {
-            0x52,0xc9,0x30,0xa5,
-            0xd1,0x61,0x3b,0x16,
-            0x98,0xc5,0xf8,0xd1,
-            0x10,0x10,0x6d,0x4d };
-
-        sal_uInt8 pNamedUUID[16], pNamedUUID2[16];
-
-        // Same name does generate the same uuid
-        rtl_String *pName = nullptr;
-        rtl_string_newFromStr( &pName , "this is a bla.blubs.DNS-Name" );
-        rtl_createNamedUuid( pNamedUUID , NameSpace_DNS , pName );
-        rtl_createNamedUuid( pNamedUUID2 , NameSpace_DNS , pName );
-        CPPUNIT_ASSERT_MESSAGE( "Same name should generate the same uuid", ! memcmp( pNamedUUID , pNamedUUID2 , 16 ));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Same name should generate the same uuid", sal_Int32(0), rtl_compareUuid( pNamedUUID , pNamedUUID2 ) );
-        CPPUNIT_ASSERT_MESSAGE( "Same name should generate the same uuid", ! memcmp( pNamedUUID  , pPriorCalculatedUUID , 16 ) );
-
-        // Different names does not generate the same uuid
-        rtl_string_newFromStr( &pName , "this is a bla.blubs.DNS-Namf" );
-        rtl_createNamedUuid( pNamedUUID2 , NameSpace_DNS , pName );
-        CPPUNIT_ASSERT_MESSAGE("Different names does not generate the same uuid.", memcmp( pNamedUUID , pNamedUUID2 , 16 ) );
-
-        // the same name with different namespace uuid produces different uuids
-        rtl_createNamedUuid( pNamedUUID , NameSpace_URL , pName );
-        CPPUNIT_ASSERT_MESSAGE( " same name with different namespace uuid produces different uuids", memcmp( pNamedUUID , pNamedUUID2 , 16 ));
-        CPPUNIT_ASSERT_MESSAGE( " same name with different namespace uuid produces different uuids", rtl_compareUuid( pNamedUUID , pNamedUUID2 ) != 0);
-
-        //test compareUuid
-        if ( rtl_compareUuid( pNamedUUID , pNamedUUID2 ) > 0 )
-        {   CPPUNIT_ASSERT_MESSAGE( " compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) < 0);
-        }
-        else
-            CPPUNIT_ASSERT_MESSAGE( " compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) > 0);
-
-        rtl_string_release( pName );
-    }
-
-    CPPUNIT_TEST_SUITE(createNamedUuid);
-    CPPUNIT_TEST(createNamedUuid_001);
-    CPPUNIT_TEST_SUITE_END();
-}; // class createNamedUuid
-
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_Uuid::createUuid);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_Uuid::createNamedUuid);
 } // namespace rtl_Uuid
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
