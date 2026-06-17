@@ -146,7 +146,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         bSoundOn            = pInfo->mbSoundOn;
         nSoundOnSet         = ATTR_SET;
 
-        aSound              = pInfo->maSoundFile;
+        aSound              = pInfo->maSoundLink.getURL();
         nSoundFileSet       = ATTR_SET;
 
         bPlayFull           = pInfo->mbPlayFull;
@@ -203,7 +203,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if( bSoundOn != pInfo->mbSoundOn )
                 nSoundOnSet = ATTR_MIXED;
 
-            if( aSound != pInfo->maSoundFile )
+            if( aSound != pInfo->maSoundLink.getURL() )
                 nSoundFileSet = ATTR_MIXED;
 
             if( bPlayFull != pInfo->mbPlayFull )
@@ -319,7 +319,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aFadeColor      = pInfo->maDimColor;        nFadeColorSet       = ATTR_SET;
             bInvisible      = pInfo->mbDimHide;         nInvisibleSet       = ATTR_SET;
             bSoundOn        = pInfo->mbSoundOn;         nSoundOnSet         = ATTR_SET;
-            aSound          = pInfo->maSoundFile;       nSoundFileSet       = ATTR_SET;
+            aSound          = pInfo->maSoundLink.getURL(); nSoundFileSet     = ATTR_SET;
             bPlayFull       = pInfo->mbPlayFull;        nPlayFullSet        = ATTR_SET;
             eClickAction    = pInfo->meClickAction;     nClickActionSet     = ATTR_SET;
             aBookmark       = pInfo->GetBookmark();     nBookmarkSet        = ATTR_SET;
@@ -746,7 +746,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
             pAction->SetDimColor(pInfo->maDimColor, pInfo->maDimColor);
             pAction->SetDimHide(pInfo->mbDimHide, pInfo->mbDimHide);
             pAction->SetSoundOn(pInfo->mbSoundOn, pInfo->mbSoundOn);
-            pAction->SetSound(pInfo->maSoundFile, pInfo->maSoundFile);
+            pAction->SetSound(pInfo->maSoundLink, pInfo->maSoundLink);
             pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
             pAction->SetClickAction(pInfo->meClickAction, pInfo->meClickAction);
             pAction->SetBookmark(pInfo->GetBookmark(), pInfo->GetBookmark());
@@ -760,6 +760,13 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
         }
         else
         {
+            // A sound the user picks here is allowed; one left unchanged keeps
+            // the allowed state it already has. The undo action and the applied
+            // value share this new link, so redo restores the allow as well.
+            const SdSoundLink aNewSoundLink
+                = (nSoundFileSet == ATTR_SET && aSound != pInfo->maSoundLink.getURL())
+                      ? SdSoundLink(aSound, true)
+                      : pInfo->maSoundLink;
 
             // create undo action with old and new sizes
             SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
@@ -772,7 +779,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
             pAction->SetDimColor(pInfo->maDimColor, aFadeColor);
             pAction->SetDimHide(pInfo->mbDimHide, bInvisible);
             pAction->SetSoundOn(pInfo->mbSoundOn, bSoundOn);
-            pAction->SetSound(pInfo->maSoundFile, aSound);
+            pAction->SetSound(pInfo->maSoundLink, aNewSoundLink);
             pAction->SetPlayFull(pInfo->mbPlayFull, bPlayFull);
             pAction->SetClickAction(pInfo->meClickAction, eClickAction);
             pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
@@ -809,7 +816,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
                 pInfo->mbSoundOn = bSoundOn;
 
             if (nSoundFileSet == ATTR_SET)
-                pInfo->maSoundFile = aSound;
+                pInfo->maSoundLink = aNewSoundLink;
 
             if (nPlayFullSet == ATTR_SET)
                 pInfo->mbPlayFull = bPlayFull;
@@ -818,7 +825,16 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
                 pInfo->meClickAction = eClickAction;
 
             if (nBookmarkSet == ATTR_SET)
+            {
+                // A click-action sound the user picks here is allowed; one left
+                // unchanged keeps whatever allowed state it already had.
+                const bool bSoundChanged
+                    = pInfo->meClickAction == presentation::ClickAction_SOUND
+                      && aBookmark != pInfo->GetBookmark();
                 pInfo->SetBookmark( aBookmark );
+                if (bSoundChanged)
+                    pInfo->mbClickSoundAllowed = true;
+            }
 
             if (nSecondEffectSet == ATTR_SET)
                 pInfo->meSecondEffect = eSecondEffect;

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <xmloff/SoundReference.hxx>
 
 #include <eventqueue.hxx>
 #include "animationaudionode.hxx"
@@ -39,7 +40,7 @@ AnimationAudioNode::AnimationAudioNode(
       maSoundURL(),
       mpPlayer()
 {
-    mxAudioNode->getSource() >>= maSoundURL;
+    maSoundURL = xmloff::getSoundURL( mxAudioNode->getSource() );
 
     OSL_ENSURE( !maSoundURL.isEmpty(),
                 "could not extract sound source URL/empty URL string" );
@@ -150,6 +151,11 @@ bool AnimationAudioNode::hasPendingAnimation() const
 void AnimationAudioNode::createPlayer() const
 {
     if (mpPlayer)
+        return;
+
+    // Play the sound only when the user has allowed it this session; the
+    // slideshow start marks the audio node's source allowed.
+    if (!xmloff::getSoundAllowed(mxAudioNode->getSource()))
         return;
 
     try

@@ -133,6 +133,16 @@ namespace oox::ppt {
         {
             mpTarget->mnType = XML_sndTgt;
 
+            // a sound whose relationship points outside the package stays
+            // a reference to that location; only its URL is imported here
+            OUString aExternalURL = getRelations().getExternalTargetFromRelId(
+                rAttribs.getStringDefaulted(R_TOKEN(embed)));
+            if (!aExternalURL.isEmpty())
+            {
+                mpTarget->msValue = aExternalURL;
+                break;
+            }
+
 #if HAVE_FEATURE_AVMEDIA
             OUString srcFile = drawingml::getEmbeddedWAVAudioFile(getRelations(), rAttribs);
             Reference<css::io::XInputStream>

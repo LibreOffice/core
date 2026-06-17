@@ -350,7 +350,7 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     mbSoundOn = rSrcPage.mbSoundOn;
     mbExcluded = rSrcPage.mbExcluded;
     maLayoutName = rSrcPage.maLayoutName;
-    maSoundFile = rSrcPage.maSoundFile;
+    maSoundLink = rSrcPage.maSoundLink;
     mbLoopSound = rSrcPage.mbLoopSound;
     mbStopSound = rSrcPage.mbStopSound;
     maCreatedPageName.clear();
@@ -515,7 +515,7 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
         mbSoundOn != rOtherPage.mbSoundOn ||
         mbExcluded != rOtherPage.mbExcluded ||
         maLayoutName != rOtherPage.maLayoutName ||
-        maSoundFile != rOtherPage.maSoundFile ||
+        !maSoundLink.sameLink(rOtherPage.maSoundLink) ||
         mbLoopSound != rOtherPage.mbLoopSound ||
         mbStopSound != rOtherPage.mbStopSound ||
         maBookmarkName != rOtherPage.maBookmarkName ||

@@ -20,6 +20,7 @@
 #include <oox/ppt/timenode.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
@@ -33,6 +34,7 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -40,6 +42,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <oox/token/tokens.hxx>
+#include <xmloff/SoundReference.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -363,7 +366,31 @@ namespace oox::ppt {
                             if (xCommand.is())
                                 xCommand->setTarget(aValue);
                             if (xAudio.is())
-                                xAudio->setSource(aValue);
+                            {
+                                // a sound source is a URL, a media object source
+                                // is a shape; wrap a URL so it carries its
+                                // allowed state
+                                OUString sSoundURL;
+                                if (aValue >>= sSoundURL)
+                                {
+                                    xAudio->setSource(xmloff::makeSoundSource(sSoundURL));
+                                    // A sound outside the document package is a
+                                    // link the model tracks; tell the model so
+                                    // it knows to look for one.
+                                    if (!sSoundURL.isEmpty()
+                                        && !xmloff::isPackageSoundURL(sSoundURL))
+                                    {
+                                        Reference<XPropertySet> xModelProps(
+                                            rFilter.getModel(), UNO_QUERY);
+                                        if (xModelProps.is())
+                                            xModelProps->setPropertyValue(
+                                                u"HasExternalAnimationSoundLink"_ustr,
+                                                Any(true));
+                                    }
+                                }
+                                else
+                                    xAudio->setSource(aValue);
+                            }
                         }
                         break;
                     case NP_SUBITEM:

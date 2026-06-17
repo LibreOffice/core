@@ -19,6 +19,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <xmloff/SoundReference.hxx>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -178,7 +179,8 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
         mbValid = false;
         if (xAudio.is())
         {
-            if (xAudio->getSource() >>= sURL)
+            sURL = xmloff::getSoundURL(xAudio->getSource());
+            if (!sURL.isEmpty())
             {
                 mbValid = IsAudioURL(sURL);
 

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <xmloff/SoundReference.hxx>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <comphelper/processfactory.hxx>
@@ -1205,8 +1206,12 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo const
     bool bNeedRebuild = false;
 
     OUString aSoundFile;
+    bool bSoundAllowed = false;
     if( pInfo->mbSoundOn )
-        aSoundFile = pInfo->maSoundFile;
+    {
+        aSoundFile = pInfo->maSoundLink.getURL();
+        bSoundAllowed = pInfo->maSoundLink.isAllowed();
+    }
 
     for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
@@ -1215,7 +1220,7 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo const
         {
             if( !aSoundFile.isEmpty() )
             {
-                pEffect->createAudio( Any( aSoundFile ) );
+                pEffect->createAudio( xmloff::makeSoundSource( aSoundFile, bSoundAllowed ) );
             }
             else
             {
@@ -1252,7 +1257,7 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
                 if( pEffect->getTargetShape() == xShape )
                 {
                     if( pEffect->getAudio().is() )
-                        pEffect->getAudio()->getSource() >>= aSoundFile;
+                        aSoundFile = xmloff::getSoundURL( pEffect->getAudio()->getSource() );
                 }
             }
         }

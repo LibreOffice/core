@@ -24,6 +24,7 @@
 #include <undoanim.hxx>
 #include <strings.hrc>
 #include <sdpage.hxx>
+#include <SdSoundLink.hxx>
 #include <sdresid.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <drawdoc.hxx>
@@ -194,7 +195,7 @@ struct UndoTransitionImpl
     bool mbNewTransitionDirection;
     sal_Int32 mnNewTransitionFadeColor;
     double mfNewTransitionDuration;
-    OUString maNewSoundFile;
+    SdSoundLink maNewSoundLink;
     bool mbNewSoundOn;
     bool mbNewLoopSound;
     bool mbNewStopSound;
@@ -204,7 +205,7 @@ struct UndoTransitionImpl
     bool mbOldTransitionDirection;
     sal_Int32 mnOldTransitionFadeColor;
     double mfOldTransitionDuration;
-    OUString maOldSoundFile;
+    SdSoundLink maOldSoundLink;
     bool mbOldSoundOn;
     bool mbOldLoopSound;
     bool mbOldStopSound;
@@ -221,7 +222,7 @@ UndoTransition::UndoTransition( SdDrawDocument& rDoc, SdPage* pThePage )
     mpImpl->mbOldTransitionDirection = pThePage->mbTransitionDirection;
     mpImpl->mnOldTransitionFadeColor = pThePage->mnTransitionFadeColor;
     mpImpl->mfOldTransitionDuration = pThePage->mfTransitionDuration;
-    mpImpl->maOldSoundFile = pThePage->maSoundFile;
+    mpImpl->maOldSoundLink = pThePage->GetSoundLink();
     mpImpl->mbOldSoundOn = pThePage->mbSoundOn;
     mpImpl->mbOldLoopSound = pThePage->mbLoopSound;
     mpImpl->mbOldStopSound = pThePage->mbStopSound;
@@ -240,7 +241,7 @@ void UndoTransition::Undo()
         mpImpl->mbNewTransitionDirection = mpImpl->mpPage->mbTransitionDirection;
         mpImpl->mnNewTransitionFadeColor = mpImpl->mpPage->mnTransitionFadeColor;
         mpImpl->mfNewTransitionDuration = mpImpl->mpPage->mfTransitionDuration;
-        mpImpl->maNewSoundFile = mpImpl->mpPage->maSoundFile;
+        mpImpl->maNewSoundLink = mpImpl->mpPage->GetSoundLink();
         mpImpl->mbNewSoundOn = mpImpl->mpPage->mbSoundOn;
         mpImpl->mbNewLoopSound = mpImpl->mpPage->mbLoopSound;
         mpImpl->mbNewStopSound = mpImpl->mpPage->mbStopSound;
@@ -251,7 +252,8 @@ void UndoTransition::Undo()
     mpImpl->mpPage->mbTransitionDirection = mpImpl->mbOldTransitionDirection;
     mpImpl->mpPage->mnTransitionFadeColor = mpImpl->mnOldTransitionFadeColor;
     mpImpl->mpPage->mfTransitionDuration = mpImpl->mfOldTransitionDuration;
-    mpImpl->mpPage->maSoundFile = mpImpl->maOldSoundFile;
+    mpImpl->mpPage->SetSoundFile(mpImpl->maOldSoundLink.getURL());
+    mpImpl->mpPage->SetSoundAllowed(mpImpl->maOldSoundLink.isAllowed());
     mpImpl->mpPage->mbSoundOn = mpImpl->mbOldSoundOn;
     mpImpl->mpPage->mbLoopSound = mpImpl->mbOldLoopSound;
     mpImpl->mpPage->mbStopSound = mpImpl->mbOldStopSound;
@@ -264,7 +266,8 @@ void UndoTransition::Redo()
     mpImpl->mpPage->mbTransitionDirection = mpImpl->mbNewTransitionDirection;
     mpImpl->mpPage->mnTransitionFadeColor = mpImpl->mnNewTransitionFadeColor;
     mpImpl->mpPage->mfTransitionDuration = mpImpl->mfNewTransitionDuration;
-    mpImpl->mpPage->maSoundFile = mpImpl->maNewSoundFile;
+    mpImpl->mpPage->SetSoundFile(mpImpl->maNewSoundLink.getURL());
+    mpImpl->mpPage->SetSoundAllowed(mpImpl->maNewSoundLink.isAllowed());
     mpImpl->mpPage->mbSoundOn = mpImpl->mbNewSoundOn;
     mpImpl->mpPage->mbLoopSound = mpImpl->mbNewLoopSound;
     mpImpl->mpPage->mbStopSound = mpImpl->mbNewStopSound;

@@ -39,7 +39,7 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->maDimColor    = aOldDimColor;
             pInfo->mbDimHide     = bOldDimHide;
             pInfo->mbSoundOn     = bOldSoundOn;
-            pInfo->maSoundFile   = aOldSoundFile;
+            pInfo->maSoundLink   = aOldSoundLink;
             pInfo->mbPlayFull    = bOldPlayFull;
             pInfo->meClickAction = eOldClickAction;
             pInfo->SetBookmark( aOldBookmark );
@@ -73,7 +73,7 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->maDimColor    = aNewDimColor;
     pInfo->mbDimHide     = bNewDimHide;
     pInfo->mbSoundOn     = bNewSoundOn;
-    pInfo->maSoundFile   = aNewSoundFile;
+    pInfo->maSoundLink   = aNewSoundLink;
     pInfo->mbPlayFull    = bNewPlayFull;
     pInfo->meClickAction = eNewClickAction;
     pInfo->SetBookmark( aNewBookmark );

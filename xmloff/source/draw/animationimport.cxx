@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <xmloff/SoundReference.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
@@ -712,8 +713,20 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 if( nNodeType == AnimationNodeType::AUDIO )
                 {
+                    const OUString aRawURL( aIter.toString() );
                     Reference< XAudio > xAudio( mxNode, UNO_QUERY_THROW );
-                    xAudio->setSource( Any(lcl_GetMediaReference(GetImport(), aIter.toString())) );
+                    xAudio->setSource( xmloff::makeSoundSource(
+                        lcl_GetMediaReference(GetImport(), aRawURL)) );
+                    // A sound outside the document package is a link the model
+                    // tracks; tell the model so it knows to look for one.
+                    if( !GetImport().IsPackageURL(aRawURL) )
+                    {
+                        Reference< css::beans::XPropertySet >
+                            xModelProps( GetImport().GetModel(), UNO_QUERY );
+                        if( xModelProps.is() )
+                            xModelProps->setPropertyValue(
+                                u"HasExternalAnimationSoundLink"_ustr, css::uno::Any(true) );
+                    }
                     break;
                 }
                 [[fallthrough]];
@@ -1327,8 +1340,8 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
                         case AnimationNodeType::AUDIO:
                         {
                             Reference< XAudio > xAudio( xChildNode, UNO_QUERY_THROW );
-                            OUString sSoundURL;
-                            if( (xAudio->getSource() >>= sSoundURL) && !sSoundURL.isEmpty() )
+                            OUString sSoundURL = xmloff::getSoundURL( xAudio->getSource() );
+                            if( !sSoundURL.isEmpty() )
                             {
                                 xPageProps->setPropertyValue(u"Sound"_ustr, Any(sSoundURL) );
 

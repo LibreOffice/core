@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Copyright the LibreOffice contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+ module com {  module sun {  module star {  module presentation {
+
+
+/** A sound a presentation refers to: the slide-transition sound, an animation
+    sound, or a click-action sound.
+
+    It carries the source URL and the allowed state together as one value.
+    Allowed is runtime state, decided this session and never stored in the
+    document.
+*/
+interface XSoundReference
+{
+    /** The source of the sound. A vnd.sun.star.Package: URL is content inside
+        the document; any other non-empty URL is a link to an external file.
+    */
+    [attribute, readonly] string URL;
+
+    /** True when this sound has been allowed this session. A sound inside the
+        document package is always allowed; an external sound is allowed once the
+        user permits it, either for the whole document or for this one sound.
+    */
+    [attribute, readonly] boolean Allowed;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

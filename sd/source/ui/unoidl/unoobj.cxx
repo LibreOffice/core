@@ -511,7 +511,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
                     SdAnimationInfo* pInfo = GetAnimationInfo(true);
-                    pInfo->maSoundFile = aString;
+                    pInfo->maSoundLink = SdSoundLink(aString);
                     EffectMigration::UpdateSoundEffect( mpShape, pInfo );
                     break;
                 }

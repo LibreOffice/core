@@ -152,6 +152,7 @@ public:
     bool getStopAudio() const;
     void setStopAudio();
     void createAudio( const css::uno::Any& rSource );
+    void setAudioSource( const css::uno::Any& rSource );
     void removeAudio();
     const css::uno::Reference< css::animations::XAudio >& getAudio() const { return mxAudio; }
 
@@ -379,7 +380,7 @@ public:
     MainSequence( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );
     virtual ~MainSequence() override;
 
-    virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode() override;
+    SD_DLLPUBLIC virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode() override;
     void reset( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );
 
     /** this method rebuilds the animation nodes */

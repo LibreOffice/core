@@ -772,7 +772,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                                 pAction->SetDimColor(pInfo->maDimColor, pInfo->maDimColor);
                                 pAction->SetDimHide(pInfo->mbDimHide, pInfo->mbDimHide);
                                 pAction->SetSoundOn(pInfo->mbSoundOn, pInfo->mbSoundOn);
-                                pAction->SetSound(pInfo->maSoundFile, pInfo->maSoundFile);
+                                pAction->SetSound(pInfo->maSoundLink, pInfo->maSoundLink);
                                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
