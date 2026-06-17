@@ -26,7 +26,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <map>
