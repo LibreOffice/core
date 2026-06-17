@@ -4766,6 +4766,7 @@ void DocumentBroker::uploadPresetsToWopiHost()
             // the temp file to clean up afterwards (empty if none).
             std::string bodyPath = fileJailPath;
             std::string scrubbedPath;
+            std::optional<FileUtil::OwnedFile> scrubbedFile;
             if (group.scrubXcu)
             {
                 scrubbedPath = scrubXcuForUpload(fileJailPath);
@@ -4776,6 +4777,7 @@ void DocumentBroker::uploadPresetsToWopiHost()
                     continue;
                 }
                 bodyPath = scrubbedPath;
+                scrubbedFile.emplace(scrubbedPath);
             }
 
             std::string filePath = "/settings/userconfig/";
@@ -4800,9 +4802,6 @@ void DocumentBroker::uploadPresetsToWopiHost()
 
             auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
             auto httpResponse = httpSession->syncRequest(httpRequest);
-
-            if (!scrubbedPath.empty())
-                FileUtil::removeFile(scrubbedPath);
 
             http::StatusLine statusLine = httpResponse->statusLine();
             if (statusLine.statusCode() != http::StatusCode::OK)
