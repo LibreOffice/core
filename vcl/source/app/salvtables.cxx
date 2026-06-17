@@ -3957,9 +3957,8 @@ void SalInstanceTreeView::set_column_custom_renderer(int nColumn, bool bEnable)
 void SalInstanceTreeView::queue_draw()
 {
     // invalidate the entries
-    SvTreeList* pModel = m_xTreeView->GetModel();
     for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))
-        pModel->InvalidateEntry(*pEntry);
+        m_xTreeView->InvalidateEntry(*pEntry);
 }
 
 void SalInstanceTreeView::show()

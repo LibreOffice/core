@@ -1844,7 +1844,7 @@ void SvTreeListBox::SetEntryText(SvTreeListEntry& rEntry, const OUString& rStr)
     assert(pItem);
     pItem->SetText(rStr);
     pItem->InitViewData(*this, rEntry);
-    GetModel()->InvalidateEntry(rEntry);
+    InvalidateEntry(rEntry);
 }
 
 void SvTreeListBox::SetExpandedEntryBmp(SvTreeListEntry& rEntry, const Image& aBmp)
@@ -2275,7 +2275,7 @@ bool SvTreeListBox::Expand(SvTreeListEntry& rParent)
         nFlags = rParent.GetFlags();
         nFlags |= SvTLEntryFlags::NO_NODEBMP;
         rParent.SetFlags(nFlags);
-        GetModel()->InvalidateEntry(rParent); // repaint
+        InvalidateEntry(rParent); // repaint
     }
 
     // #i92103#
@@ -2688,7 +2688,7 @@ void SvTreeListBox::EditedText( const OUString& rStr )
         if (EditedEntry(*m_pEdEntry, *m_pEdItem, rStr))
         {
             m_pEdItem->SetText(rStr);
-            m_pModel->InvalidateEntry(*m_pEdEntry);
+            InvalidateEntry(*m_pEdEntry);
         }
         if( GetSelectionCount() == 0 )
             Select(m_pEdEntry);

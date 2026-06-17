@@ -318,7 +318,7 @@ void TreeControlPeer::updateEntry(UnoTreeListEntry& rEntry)
     }
 
     if( bChanged )
-        mpTreeImpl->GetModel()->InvalidateEntry(rEntry);
+        mpTreeImpl->InvalidateEntry(rEntry);
 }
 
 
