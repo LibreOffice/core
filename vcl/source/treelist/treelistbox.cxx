@@ -1106,9 +1106,9 @@ sal_uInt32 SvTreeListBox::GetLevelChildCount( const SvTreeListEntry* _pParent ) 
     return _pParent->m_Children.size();
 }
 
-SvViewDataEntry* SvTreeListBox::GetViewDataEntry( SvTreeListEntry const * pEntry ) const
+SvViewDataEntry* SvTreeListBox::GetViewDataEntry(const SvTreeListEntry& rEntry) const
 {
-    return const_cast<SvViewDataEntry*>(GetViewData(pEntry));
+    return const_cast<SvViewDataEntry*>(GetViewData(&rEntry));
 }
 
 SvViewDataItem& SvTreeListBox::GetViewDataItem(SvTreeListEntry const* pEntry,
@@ -2178,7 +2178,7 @@ void SvTreeListBox::CalcEntryHeight(const SvTreeListEntry& rEntry)
     short nHeightMax=0;
     sal_uInt16 nCount = rEntry.ItemCount();
     sal_uInt16 nCur = 0;
-    SvViewDataEntry* pViewData = GetViewDataEntry(&rEntry);
+    SvViewDataEntry* pViewData = GetViewDataEntry(rEntry);
     while( nCur < nCount )
     {
         auto nHeight = SvLBoxItem::GetHeight(pViewData, nCur);
@@ -2797,7 +2797,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     Size aRectSize(0, nTempEntryHeight);
 
-    SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
+    SvViewDataEntry* pViewDataEntry = GetViewDataEntry(rEntry);
     const bool bSeparator(rEntry.IsSeparator());
 
     const auto nMaxContextBmpWidthBeforeIndentIsNeeded

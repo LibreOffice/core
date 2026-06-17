@@ -99,7 +99,7 @@ bool IconView::HasSeparatorEntry() const
 void IconView::CalcEntryHeight(const SvTreeListEntry& rEntry)
 {
     int nHeight = nSpacing * 2;
-    SvViewDataEntry* pViewData = GetViewDataEntry(&rEntry);
+    SvViewDataEntry* pViewData = GetViewDataEntry(rEntry);
     const size_t nCount = rEntry.ItemCount();
     bool bHasIcon = false;
     for (size_t nCur = 0; nCur < nCount; ++nCur)
@@ -177,7 +177,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     if (aOutputSize.getHeight() < nTempEntryHeight)
         nTempEntryHeight = aOutputSize.getHeight();
 
-    const SvViewDataEntry* pViewDataEntry = GetViewDataEntry(&rEntry);
+    const SvViewDataEntry* pViewDataEntry = GetViewDataEntry(rEntry);
 
     if (pViewDataEntry->IsHighlighted())
     {

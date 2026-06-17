@@ -582,7 +582,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
 {
     SvViewDataEntry* pViewDataNewCur = nullptr;
     if( pEntry )
-        pViewDataNewCur = m_rView.GetViewDataEntry(pEntry);
+        pViewDataNewCur = m_rView.GetViewDataEntry(*pEntry);
     if( pEntry &&
         pEntry == m_pCursor &&
         pViewDataNewCur &&
@@ -596,7 +596,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
     while( pEntry && pViewDataNewCur && !pViewDataNewCur->IsSelectable() )
     {
         pEntry = m_rView.NextVisible(pEntry);
-        pViewDataNewCur = pEntry ? m_rView.GetViewDataEntry(pEntry) : nullptr;
+        pViewDataNewCur = pEntry ? m_rView.GetViewDataEntry(*pEntry) : nullptr;
     }
 
     SvTreeListEntry* pOldCursor = m_pCursor;
@@ -3128,7 +3128,7 @@ void SvImpLBox::CallEventListeners( VclEventId nEvent, void* pData )
 
 bool SvImpLBox::IsSelectable(const SvTreeListEntry& rEntry) const
 {
-    SvViewDataEntry* pViewDataNewCur = m_rView.GetViewDataEntry(&rEntry);
+    SvViewDataEntry* pViewDataNewCur = m_rView.GetViewDataEntry(rEntry);
     return (pViewDataNewCur == nullptr) || pViewDataNewCur->IsSelectable();
 }
 

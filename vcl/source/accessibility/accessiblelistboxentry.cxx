@@ -439,7 +439,7 @@ sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
                 nStateSet |= AccessibleStateType::ENABLED;
                 nStateSet |= AccessibleStateType::FOCUSABLE;
                 nStateSet |= AccessibleStateType::SELECTABLE;
-                SvViewDataEntry* pViewDataNewCur = m_pTreeListBox->GetViewDataEntry(pEntry);
+                SvViewDataEntry* pViewDataNewCur = m_pTreeListBox->GetViewDataEntry(*pEntry);
                 if (pViewDataNewCur && pViewDataNewCur->HasFocus())
                     nStateSet |= AccessibleStateType::FOCUSED;
             }
