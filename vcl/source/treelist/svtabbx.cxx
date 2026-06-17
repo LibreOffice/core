@@ -18,6 +18,7 @@
  */
 
 #include <SvHeaderTabListBox.hxx>
+#include <SvLBoxButton.hxx>
 
 #include <comphelper/types.hxx>
 #include <vcl/headbar.hxx>
@@ -63,10 +64,19 @@ void SvTabListBox::SetTabs()
     }
 }
 
-void SvTabListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& rStr, const Image& rColl,
-                             const Image& rExp)
+void SvTabListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& rStr,
+                             const Image& rCollapsedEntryImage, const Image& rExpandedEntryImage)
 {
-    SvTreeListBox::InitEntry(rEntry, rStr, rColl, rExp);
+    if (m_nTreeFlags & SvTreeFlags::CHKBTN)
+    {
+        assert(m_pCheckButtonData);
+        rEntry.AddItem(std::make_unique<SvLBoxButton>(*m_pCheckButtonData));
+    }
+
+    rEntry.AddItem(
+        std::make_unique<SvLBoxContextBmp>(rCollapsedEntryImage, rExpandedEntryImage, true));
+
+    rEntry.AddItem(std::make_unique<SvLBoxString>(rStr));
 
     // TODO: verify if nTabCount is always >0 here!
     const sal_uInt16 nCount = mvTabList.size() - 1;

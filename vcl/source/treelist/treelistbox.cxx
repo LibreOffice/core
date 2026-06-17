@@ -1771,21 +1771,6 @@ void SvTreeListBox::SetTabs()
     m_pImpl->NotifyTabsChanged();
 }
 
-void SvTreeListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& aStr,
-                              const Image& aCollEntryBmp, const Image& aExpEntryBmp)
-{
-    if (m_nTreeFlags & SvTreeFlags::CHKBTN)
-    {
-        assert(m_pCheckButtonData);
-        rEntry.AddItem(std::make_unique<SvLBoxButton>(*m_pCheckButtonData));
-    }
-
-    rEntry.AddItem(
-        std::make_unique<SvLBoxContextBmp>(aCollEntryBmp, aExpEntryBmp, true));
-
-    rEntry.AddItem(std::make_unique<SvLBoxString>(aStr));
-}
-
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
 {
     assert(pEntry);

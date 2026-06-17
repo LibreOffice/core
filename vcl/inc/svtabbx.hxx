@@ -35,10 +35,10 @@ private:
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
     Link<const EntryItemText&, bool> m_aEditedEntryHdl;
 
+    void InitEntry(SvTreeListEntry& rEntry, const OUString&, const Image&, const Image&);
+
 protected:
     virtual void                SetTabs() override;
-    virtual void InitEntry(SvTreeListEntry& rEntry, const OUString&, const Image&,
-                           const Image&) override;
 
     OUString                    GetTabEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const;
     SvTreeListEntry*            GetEntryOnPos( sal_uInt32 _nEntryPos ) const;
