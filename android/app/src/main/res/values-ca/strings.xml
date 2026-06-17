@@ -82,7 +82,7 @@
     <string name="storage_permission_required">Cal el permís d\'emmagatzematge</string>
     <string name="file_creation_failed">Ha fallat la creació del fitxer</string>
     <string name="file_exists_warning">Ja existeix un fitxer amb el mateix nom; se sobreescriurà.</string>
-    <string name="temp_file_saving_disabled">Aquest fitxer és només de lectura; els desaments estan desactivats.</string>
+    <string name="temp_file_saving_disabled">Compartit per l\'aplicació d\'origen com a fitxer de només lectura. Utilitzeu «Edita una còpia» per a fer canvis.</string>
     <string name="no_items">No hi ha cap element</string>
     <string name="no_recent_items">Obriu un fitxer mitjançant la icona de la carpeta a la barra d\'eines.</string>
     <string name="app_vendor">$VENDOR us forneix aquesta versió.</string>
