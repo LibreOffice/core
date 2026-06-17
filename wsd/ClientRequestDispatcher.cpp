@@ -1374,7 +1374,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         }
         else if (requestDetails.equals(RequestDetails::Field::Type, "wasm"))
         {
-            if (COOLWSD::WASMState == COOLWSD::WASMActivationState::Disabled)
+            if (!COOLWSD::WASMEnabled)
             {
                 LOG_ERR(
                     "WASM document request while WASM is disabled: " << requestDetails.toString());
@@ -2357,7 +2357,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
             if (serveAsAttachment)
                 response.set("Content-Disposition", "attachment; filename=\"" + fileName + '"');
 
-            if (COOLWSD::WASMState != COOLWSD::WASMActivationState::Disabled)
+            if (COOLWSD::WASMEnabled)
             {
                 response.add("Cross-Origin-Opener-Policy", "same-origin");
                 response.add("Cross-Origin-Embedder-Policy", "require-corp");
@@ -2787,7 +2787,7 @@ std::string getCapabilitiesJson(bool convertToAvailable)
 
     // Set if this instance supports WASM.
     capabilities->set("hasWASMSupport",
-                      COOLWSD::WASMState != COOLWSD::WASMActivationState::Disabled);
+                      COOLWSD::WASMEnabled);
 
     // Set if this instance supports document signing.
     capabilities->set("hasDocumentSigningSupport",

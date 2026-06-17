@@ -819,7 +819,7 @@ std::string COOLWSD::RouteToken;
 bool COOLWSD::SingleKit = false;
 bool COOLWSD::ForceCaching = false;
 #endif
-COOLWSD::WASMActivationState COOLWSD::WASMState = COOLWSD::WASMActivationState::Disabled;
+bool COOLWSD::WASMEnabled = false;
 Util::UnorderedStringMap<std::chrono::steady_clock::time_point> COOLWSD::Uri2WasmModeMap;
 #endif
 std::string COOLWSD::SysTemplate;
@@ -1700,25 +1700,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     if (ConfigUtil::hasProperty("storage.wopi.reuse_cookies"))
         LOG_WRN("NOTE: Deprecated config option storage.wopi.reuse_cookies is no longer supported");
 
-    COOLWSD::WASMState = ConfigUtil::getConfigValue<bool>(conf, "wasm.enable", false)
-                             ? COOLWSD::WASMActivationState::Enabled
-                             : COOLWSD::WASMActivationState::Disabled;
-
-#if ENABLE_DEBUG
-    if (ConfigUtil::getConfigValue<bool>(conf, "wasm.force", false))
-    {
-        if (COOLWSD::WASMState != COOLWSD::WASMActivationState::Enabled)
-        {
-            LOG_FTL(
-                "WASM is not enabled; cannot force serving WASM. Please set wasm.enabled to true "
-                "in coolwsd.xml first");
-            Util::forcedExit(EX_SOFTWARE);
-        }
-
-        LOG_INF("WASM is force-enabled. All documents will be loaded through WASM");
-        COOLWSD::WASMState = COOLWSD::WASMActivationState::Forced;
-    }
-#endif
+    COOLWSD::WASMEnabled = ConfigUtil::getConfigValue<bool>(conf, "wasm.enable", false);
 
     // Get anonymization settings.
 #if COOLWSD_ANONYMIZE_USER_DATA

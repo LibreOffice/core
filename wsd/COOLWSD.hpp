@@ -121,17 +121,7 @@ public:
     /// The file request handler used for file-serving.
     static std::unique_ptr<FileServerRequestHandler> FileRequestHandler;
 
-    /// The WASM support/activation state.
-    enum class WASMActivationState : std::uint8_t
-    {
-        Disabled,
-        Enabled
-#if ENABLE_DEBUG
-        ,
-        Forced ///< When Forced, only WASM is served.
-#endif
-    };
-    static WASMActivationState WASMState;
+    static bool WASMEnabled;
 
     /// Tracks the URIs that are switching to Disconnected (WASM) Mode.
     /// The time is when the switch request was made. We expire the request after a certain

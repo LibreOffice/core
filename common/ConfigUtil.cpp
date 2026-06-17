@@ -312,7 +312,6 @@ static const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "user_interface.brandProductURL", "" },
     { "user_interface.logoURL", "" },
     { "wasm.enable", "false" },
-    { "wasm.force", "false" },
     { "watermark.opacity", "0.2" },
     { "watermark.text", "" },
     { "welcome.enable", "false" },

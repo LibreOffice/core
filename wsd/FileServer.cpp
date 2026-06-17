@@ -599,7 +599,7 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
                 mimeType = "image/svg+xml";
 #if !MOBILEAPP
             else if (fileType == "wasm" &&
-                     COOLWSD::WASMState != COOLWSD::WASMActivationState::Disabled)
+                     COOLWSD::WASMEnabled)
                 mimeType = "application/wasm";
 #endif // !MOBILEAPP
             else
@@ -628,7 +628,7 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
             }
 
 #if !MOBILEAPP
-            if (COOLWSD::WASMState != COOLWSD::WASMActivationState::Disabled &&
+            if (COOLWSD::WASMEnabled &&
                 relPath.find("wasm") != std::string::npos)
             {
                 response.add("Cross-Origin-Opener-Policy", "same-origin");
@@ -745,7 +745,7 @@ void FileServerRequestHandler::readDirToHash(const std::string& basePath, const 
     LOG_DBG("Caching files in [" << fullPath << ']');
 
 #if !MOBILEAPP
-    if (COOLWSD::WASMState == COOLWSD::WASMActivationState::Disabled &&
+    if (!COOLWSD::WASMEnabled &&
         path.find("wasm") != std::string::npos)
     {
         LOG_INF("Skipping [" << fullPath << "] as WASM is disabled");
@@ -997,29 +997,20 @@ std::string FileServerRequestHandler::getRequestPathname(const HTTPRequest& requ
 #if !MOBILEAPP
     bool isWasm = false;
 
-#if ENABLE_DEBUG
-    if (COOLWSD::WASMState == COOLWSD::WASMActivationState::Forced)
+    const std::string wopiSrc = requestDetails.getLineModeKey(std::string());
+    if (!wopiSrc.empty())
     {
-        isWasm = (path.find("/browser/dist/wasm/") == std::string::npos);
-    }
-    else
-#endif
-    {
-        const std::string wopiSrc = requestDetails.getLineModeKey(std::string());
-        if (!wopiSrc.empty())
+        const auto it = COOLWSD::Uri2WasmModeMap.find(wopiSrc);
+        if (it != COOLWSD::Uri2WasmModeMap.end())
         {
-            const auto it = COOLWSD::Uri2WasmModeMap.find(wopiSrc);
-            if (it != COOLWSD::Uri2WasmModeMap.end())
-            {
-                const bool isRecent =
-                    (std::chrono::steady_clock::now() - it->second) <= std::chrono::minutes(1);
-                isWasm = (isRecent && path.find("/browser/dist/wasm/") == std::string::npos);
+            const bool isRecent =
+                (std::chrono::steady_clock::now() - it->second) <= std::chrono::minutes(1);
+            isWasm = (isRecent && path.find("/browser/dist/wasm/") == std::string::npos);
 
-                // Clean up only after it expires, because we need it more than once.
-                if (!isRecent)
-                {
-                    COOLWSD::Uri2WasmModeMap.erase(it);
-                }
+            // Clean up only after it expires, because we need it more than once.
+            if (!isRecent)
+            {
+                COOLWSD::Uri2WasmModeMap.erase(it);
             }
         }
     }
@@ -1592,7 +1583,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     //
     // We expect richdocuments to require these headers if our
     // capabilities shows hasWASMSupport
-    if (COOLWSD::WASMState != COOLWSD::WASMActivationState::Disabled)
+    if (COOLWSD::WASMEnabled)
     {
         httpResponse.add("Cross-Origin-Opener-Policy", "same-origin");
         httpResponse.add("Cross-Origin-Embedder-Policy", "require-corp");
@@ -1602,7 +1593,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     const bool wasm = (relPath.find("wasm") != std::string::npos);
     if (wasm)
     {
-        LOG_ASSERT(COOLWSD::WASMState != COOLWSD::WASMActivationState::Disabled);
+        LOG_ASSERT(COOLWSD::WASMEnabled);
         csp.appendDirective("script-src", "'unsafe-eval'");
     }
 #endif // !MOBILEAPP
