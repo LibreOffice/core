@@ -354,6 +354,39 @@ static void send2JS(const HWND hWnd, const char* buffer, int length)
     PostMessageW(hWnd, CODA_WM_EXECUTESCRIPT, (WPARAM)wparam, 0);
 }
 
+// Convert a file: URI to a native Windows path. A UNC location arrives as
+// "file://host/share/..." with the host in the authority and becomes
+// "\\host\share\..."; a local path arrives as "/C:/dir/file" and becomes
+// "C:\dir\file". Non-file URIs, and anything that fails to parse, are returned
+// unchanged.
+static std::string fileUriToWindowsPath(const std::string& uri)
+{
+    if (!uri.starts_with("file:"))
+        return uri;
+
+    try
+    {
+        const Poco::URI parsedUri(uri);
+        const std::string host = parsedUri.getHost();
+        std::string path = parsedUri.getPath();
+        if (!host.empty())
+            path = "\\\\" + host + path;
+        else if (path.size() > 3 && path[0] == '/' && path[2] == ':')
+            path = path.substr(1);
+        for (char& c : path)
+        {
+            if (c == '/')
+                c = '\\';
+        }
+        return path;
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Bad file URI [" << uri << "]: " << exc.what());
+        return uri;
+    }
+}
+
 // COKit file save dialog callback.
 void output_file_dialog_from_core(const char* suggestedURI, char* result, size_t resultLen)
 {
@@ -368,13 +401,12 @@ void output_file_dialog_from_core(const char* suggestedURI, char* result, size_t
         return;
     }
 
-    auto URI = Poco::URI(suggestedURI);
-    auto path = URI.getPath();
-    if (path.size() > 4 && path[0] == '/' && path[2] == ':' && path[3] == '/')
-        path = path.substr(1);
-    auto lastSlash = path.find_last_of('/');
-    auto filename = path.substr(lastSlash + 1);
-    auto folder = path.substr(0, lastSlash);
+    // fileUriToWindowsPath returns a backslash-separated native path (UNC-aware),
+    // so split the folder and filename on backslash.
+    const std::string path = fileUriToWindowsPath(suggestedURI);
+    const auto lastSlash = path.find_last_of('\\');
+    const auto filename = path.substr(lastSlash + 1);
+    const auto folder = path.substr(0, lastSlash);
     auto lastPeriod = filename.find_last_of('.');
     auto extension = filename.substr(lastPeriod + 1);
     auto filenameAndUri = fileSaveDialog(filename, folder,
@@ -397,27 +429,7 @@ void reveal_in_file_manager(const char* uri)
     if (uri == nullptr || *uri == '\0')
         return;
 
-    std::string path;
-    try
-    {
-        path = Poco::URI(uri).getPath();
-    }
-    catch (const std::exception& exc)
-    {
-        LOG_ERR("Reveal callback got bad URI [" << uri << "]: " << exc.what());
-        return;
-    }
-
-    // Turn "/C:/dir/file" into "C:\dir\file".
-    if (path.size() > 3 && path[0] == '/' && path[2] == ':')
-        path = path.substr(1);
-    for (char& c : path)
-    {
-        if (c == '/')
-            c = '\\';
-    }
-
-    std::wstring widePath = Util::string_to_wide_string(path);
+    const std::wstring widePath = Util::string_to_wide_string(fileUriToWindowsPath(uri));
     PIDLIST_ABSOLUTE pidl = nullptr;
     if (SUCCEEDED(SHParseDisplayName(widePath.c_str(), nullptr, &pidl, 0, nullptr)) && pidl)
     {
@@ -946,7 +958,11 @@ static void do_clipboard_set(int appDocId, const char* text)
 
 static void do_open_hyperlink(HWND hWnd, std::wstring url)
 {
-    ShellExecuteW(hWnd, NULL, url.c_str(), NULL, NULL, SW_SHOW);
+    // For file: URIs hand ShellExecute a native (UNC-aware) Windows path; other
+    // schemes (http:, mailto:, ...) pass through unchanged.
+    const std::wstring target =
+        Util::string_to_wide_string(fileUriToWindowsPath(Util::wide_string_to_string(url)));
+    ShellExecuteW(hWnd, NULL, target.c_str(), NULL, NULL, SW_SHOW);
 }
 
 struct MonitorInfo
