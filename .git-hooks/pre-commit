@@ -136,6 +136,16 @@ sub check_prettier()
     return unless @staged;
 
     if (-e "browser/Makefile") {
+        # The browser tree is configured for WSL/Linux: the prettier target runs
+        # node at the path autoconf detected there (e.g. /usr/bin/node), which does
+        # not exist under Git Bash/MSYS. Committing from there can't run the check,
+        # so skip it instead of failing the commit - the WSL/Linux build and CI
+        # still enforce formatting.
+        if ($^O =~ /^(?:msys|MSWin32|cygwin)$/i) {
+            print "Skipping code formatting check (Git Bash/MSYS; prettier needs the WSL toolchain)\n";
+            return;
+        }
+
         # the prettier target wants paths relative to browser/
         my @rel = map { s{^browser/}{}r } @staged;
         my $red = "\033[0;31m";
