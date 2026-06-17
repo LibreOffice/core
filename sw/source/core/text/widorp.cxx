@@ -133,6 +133,17 @@ bool SwTextFrameBreak::IsInside(SwTextMargin const& rLine, SwResizeLimitReason& 
     // Calculate extra space for bottom border.
     nLineHeight += aRectFnSet.GetBottomMargin(*m_pFrame);
 
+    // cool#15942: when checking if a follow can be merged back, the checked line (currently part
+    // of the follow) could be the last line of a cell, and then it might need additional lower
+    // space. In that case, m_pFrame would not have that space in its bottom margin yet: before
+    // the join, its content didn't include that last line. If the additional lower space were
+    // ignored here, we could falsely assume that the line fits into the available height; adding
+    // the lower space later could make it too tall, and initiate a split, causing oscillation.
+    if (m_pFrame->HasFollow() && !rLine.GetNext() && m_pFrame->IsInTab()
+        && !m_pFrame->GetFollow()->GetIndNext() // Approximation for "last line in cell"
+        && rLine.GetEnd() >= TextFrameIndex(m_pFrame->GetText().getLength()))
+        nLineHeight += m_pFrame->CalcAddLowerSpaceAsLastInTableCell();
+
     if( m_nRstHeight )
         bFit = m_nRstHeight >= nLineHeight;
     else
