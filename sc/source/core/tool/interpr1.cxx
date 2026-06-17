@@ -9423,8 +9423,6 @@ void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
     }
 
     std::vector<sal_Int32> aDelimiterPositions;
-    if (bMatchEnd && !bBefore)
-        aDelimiterPositions.push_back(0);
 
     OUString sStr(sText.getString());
     const sal_Int32 nLength (sStr.getLength());
@@ -9470,8 +9468,13 @@ void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
         nStart = nIndex + nDelLength;
     }
 
-    if (bMatchEnd && bBefore)
-        aDelimiterPositions.push_back(nLength);
+    if (bMatchEnd)
+    {
+        if (nInstanceNum < 0)
+            aDelimiterPositions.insert(aDelimiterPositions.begin(), 0);
+        else
+            aDelimiterPositions.push_back(nLength);
+    }
 
     sal_Int32 nSize(aDelimiterPositions.size());
     if (nSize == 0 || std::abs(nInstanceNum) > nSize)
