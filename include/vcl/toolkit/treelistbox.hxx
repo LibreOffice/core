@@ -332,8 +332,8 @@ protected:
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType ) override;
 
-    virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nPos, SvTreeListEntry* pParent);
-    virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos);
+    void Insert(SvTreeListEntry* pEntry, sal_uInt32 nPos, SvTreeListEntry* pParent);
+    void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos);
 
     // In-place editing
     void            EditText( const OUString&, const tools::Rectangle&,const Selection&);
@@ -622,8 +622,8 @@ public:
     */
     void    SetNodeDefaultImages();
 
-    virtual SvTreeListEntry& InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
-                                         sal_uInt32 nPos = TREELIST_APPEND);
+    SvTreeListEntry& InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
+                                 sal_uInt32 nPos = TREELIST_APPEND);
 
     void            SetCheckButtonState( SvTreeListEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
