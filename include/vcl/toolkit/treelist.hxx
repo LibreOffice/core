@@ -134,7 +134,7 @@ public:
     bool                IsEnableInvalidate() const { return mbEnableInvalidate; }
 
     // Notify all Listeners
-    void                InvalidateEntry( SvTreeListEntry* );
+    void InvalidateEntry(SvTreeListEntry& rEntry);
 
     sal_uInt32 GetEntryCount() const { return m_nEntryCount; }
     SvTreeListEntry*    First() const;

@@ -1739,7 +1739,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
     SvTreeListEntry* pParent = m_rTree.GetParent(pEntry);
     if (pParent && m_rTree.GetChildList(pParent).size() == 1)
         // draw plus sign
-        m_rTree.InvalidateEntry(pParent);
+        m_rTree.InvalidateEntry(*pParent);
 
     if (!m_rView.IsEntryVisible(pEntry))
         return;

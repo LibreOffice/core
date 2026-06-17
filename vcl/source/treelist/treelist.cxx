@@ -865,12 +865,12 @@ void SvTreeList::EnableInvalidate( bool bEnable )
     mbEnableInvalidate = bEnable;
 }
 
-void SvTreeList::InvalidateEntry( SvTreeListEntry* pEntry )
+void SvTreeList::InvalidateEntry(SvTreeListEntry& rEntry)
 {
     if (!mbEnableInvalidate)
         return;
 
-    Broadcast( SvListAction::INVALIDATE_ENTRY, pEntry );
+    Broadcast(SvListAction::INVALIDATE_ENTRY, &rEntry);
 }
 
 sal_Int32 SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const
