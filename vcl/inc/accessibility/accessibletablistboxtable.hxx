@@ -67,9 +67,8 @@ public:
     /** ctor()
         @param rxParent  XAccessible interface of the parent object.
         @param rBox  The HeaderTabListBox control. */
-    AccessibleTabListBoxTable(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        SvHeaderTabListBox& rBox );
+    AccessibleTabListBoxTable(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                              SvHeaderTabListBox& rBox);
 
 private:
     /** dtor() */

@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-AccessibleTabListBoxTable::AccessibleTabListBoxTable(const Reference<XAccessible>& rxParent,
-                                                     SvHeaderTabListBox& rBox)
-    : ImplInheritanceHelper(rxParent, rBox)
+AccessibleTabListBoxTable::AccessibleTabListBoxTable(
+    const rtl::Reference<comphelper::OAccessible>& rpParent, SvHeaderTabListBox& rBox)
+    : ImplInheritanceHelper(rpParent, rBox)
     , m_pTabListBox(&rBox)
 
 {
