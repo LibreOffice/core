@@ -864,15 +864,16 @@ bool UnusedVarsGlobal::checkForWriteWhenUsingCollectionType(const CXXMethodDecl*
     {
         mapLike = true;
     }
+    // need to this formatting to make css->cpo transition work nicely
+    // clang-format off
     else if (tc.Class("Sequence")
                  .Namespace("uno")
-                 .Namespace("star")
-                 .Namespace("sun")
-                 .Namespace("com")
+                 .Namespace("star").Namespace("sun").Namespace("com")
                  .GlobalNamespace())
     {
         cssSequence = true;
     }
+    // clang-format on
     else
         return true;
 

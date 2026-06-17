@@ -189,8 +189,11 @@ bool isBoolExpr(Expr const * expr) {
                            && args[0].getKind() == TemplateArgument::Type)
                 {
                     ty = args[0].getAsType();
-                } else if (dc.Class("Sequence").Namespace("uno").Namespace("star").Namespace("sun")
-                               .Namespace("com").GlobalNamespace()
+                }
+                // need to this formatting to make css->cpo transition work nicely
+                // clang-format off
+                else if (dc.Class("Sequence").Namespace("uno")
+                               .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()
                            && args.size() == 1
                            && args[0].getKind() == TemplateArgument::Type)
                 {
@@ -198,6 +201,7 @@ bool isBoolExpr(Expr const * expr) {
                 } else {
                     break;
                 }
+                // clang-format on
             }
             stack.pop();
             if (stack.empty()) {

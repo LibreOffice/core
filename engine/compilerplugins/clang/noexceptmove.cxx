@@ -270,15 +270,16 @@ std::optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
         if (calleeFunctionDecl->getIdentifier())
         {
             auto name = calleeFunctionDecl->getName();
+            // need to this formatting to make css->cpo transition work nicely
+            // clang-format off
             if (auto cxxMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl))
                 if (loplugin::ContextCheck(cxxMethodDecl->getParent()->getDeclContext())
                         .Namespace("uno")
-                        .Namespace("star")
-                        .Namespace("sun")
-                        .Namespace("com")
+                        .Namespace("star").Namespace("sun").Namespace("com")
                         .GlobalNamespace()
                     && (name == "acquire" || name == "release"))
                     return false;
+            // clang-format on
             if (name == "osl_releasePipe" || name == "osl_destroySocketAddr")
                 return false;
         }

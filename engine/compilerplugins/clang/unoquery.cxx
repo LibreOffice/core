@@ -44,15 +44,16 @@ bool UnoQuery::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExpr)
     if (ignoreLocation(memberCallExpr))
         return true;
 
+    // need to this formatting to make css->cpo transition work nicely
+    // clang-format off
     auto isXInterface = [](Decl const* decl) -> bool {
         return bool(loplugin::DeclCheck(decl)
                         .Class("XInterface")
                         .Namespace("uno")
-                        .Namespace("star")
-                        .Namespace("sun")
-                        .Namespace("com")
+                        .Namespace("star").Namespace("sun").Namespace("com")
                         .GlobalNamespace());
     };
+    // clang-format on
     if (!loplugin::isDerivedFrom(memberCallExpr->getRecordDecl(), isXInterface))
         return true;
     auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(

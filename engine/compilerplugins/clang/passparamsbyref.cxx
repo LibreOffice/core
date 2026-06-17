@@ -277,16 +277,19 @@ bool PassParamsByRef::isFat(QualType type) {
         return false;
     }
     loplugin::TypeCheck tc(type);
-    if ((tc.Class("Reference").Namespace("uno").Namespace("star")
-            .Namespace("sun").Namespace("com").GlobalNamespace())
-        || (tc.Class("Sequence").Namespace("uno").Namespace("star")
-            .Namespace("sun").Namespace("com").GlobalNamespace())
+    // need to this formatting to make css->cpo transition work nicely
+    // clang-format off
+    if ((tc.Class("Reference").Namespace("uno")
+            .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+        || (tc.Class("Sequence").Namespace("uno")
+            .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
         || tc.Class("OString").Namespace("rtl").GlobalNamespace()
         || tc.Class("OUString").Namespace("rtl").GlobalNamespace()
         || tc.Class("Reference").Namespace("rtl").GlobalNamespace())
     {
         return true;
     }
+    // clang-format on
     if (type->isIncompleteType()) {
         return false;
     }

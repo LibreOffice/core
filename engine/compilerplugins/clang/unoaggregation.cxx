@@ -33,34 +33,36 @@ bool isQueryInterface(CXXMethodDecl const* decl)
     {
         return false;
     }
+    // need to this formatting to make css->cpo transition work nicely
+    // clang-format off
     if (!loplugin::TypeCheck(decl->getParamDecl(0)->getType())
              .LvalueReference()
              .ConstNonVolatile()
              .Class("Type")
              .Namespace("uno")
-             .Namespace("star")
-             .Namespace("sun")
-             .Namespace("com")
+             .Namespace("star").Namespace("sun").Namespace("com")
              .GlobalNamespace())
     {
         return false;
     }
+    // clang-format on
     return true;
 }
 
 bool derivesFromXAggregation(CXXRecordDecl const* decl, bool checkSelf)
 {
+    // need to this formatting to make css->cpo transition work nicely
+    // clang-format off
     return loplugin::isDerivedFrom(decl,
                                    [](Decl const* decl) -> bool {
                                        return bool(loplugin::DeclCheck(decl)
                                                        .Class("XAggregation")
                                                        .Namespace("uno")
-                                                       .Namespace("star")
-                                                       .Namespace("sun")
-                                                       .Namespace("com")
+                                                       .Namespace("star").Namespace("sun").Namespace("com")
                                                        .GlobalNamespace());
                                    },
                                    checkSelf);
+    // clang-format on
 }
 
 // Return true if decl is an implementation of css::uno::XInterface::queryInterface in a class

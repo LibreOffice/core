@@ -126,16 +126,18 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
         if (pTemplate) {
             // Probably good templates:
             loplugin::DeclCheck dc(pTemplate);
+            // need to this formatting to make css->cpo transition work nicely
+            // clang-format off
             if ((dc.Struct("FindUnoInstanceHint").AnonymousNamespace()
                  .GlobalNamespace())
                 || (dc.Class("OMultiInstanceAutoRegistration").Namespace("abp")
                     .GlobalNamespace())
-                || (dc.Class("Reference").Namespace("uno").Namespace("star")
-                    .Namespace("sun").Namespace("com").GlobalNamespace())
-                || (dc.Class("WeakReference").Namespace("uno").Namespace("star")
-                    .Namespace("sun").Namespace("com").GlobalNamespace())
-                || (dc.Class("Sequence").Namespace("uno").Namespace("star")
-                    .Namespace("sun").Namespace("com").GlobalNamespace())
+                || (dc.Class("Reference").Namespace("uno")
+                    .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+                || (dc.Class("WeakReference").Namespace("uno")
+                    .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+                || (dc.Class("Sequence").Namespace("uno")
+                    .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
                 || (dc.Class("OAutoRegistration").Namespace("dba")
                     .GlobalNamespace())
                 || (dc.Class("OMultiInstanceAutoRegistration").Namespace("dbp")
@@ -192,6 +194,7 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
             {
                 return false;
             }
+            // clang-format on
         }
     }
     if (pType->isPointerType()) {
@@ -562,8 +565,11 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     }
 
     auto const dc = loplugin::DeclCheck(fieldDecl->getParent());
-    if ( (dc.Class("BaseReference").Namespace("uno").Namespace("star")
-          .Namespace("sun").Namespace("com").GlobalNamespace())
+    // need to this formatting to make css->cpo transition work nicely
+    // clang-format off
+    if ( (dc.Class("BaseReference").Namespace("uno")
+          .Namespace("star").Namespace("sun").Namespace("com")
+          .GlobalNamespace())
          || (dc.Class("Reference").Namespace("rtl").GlobalNamespace())
          || (dc.Union("element_alias").Namespace("detail").Namespace("cppu")
              .GlobalNamespace())
@@ -573,6 +579,7 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     {
         return true;
     }
+    // clang-format on
 
     if (containsXInterfaceSubclass(fieldDecl->getType())) {
         report(

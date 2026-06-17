@@ -48,16 +48,17 @@ bool SimplifyConstruct::VisitCXXConstructExpr(CXXConstructExpr const* constructE
     if (ignoreLocation(constructExpr))
         return true;
     auto tc = loplugin::TypeCheck(constructExpr->getType());
+    // need to this formatting to make css->cpo transition work nicely
+    // clang-format off
     if (!tc.Class("unique_ptr").StdNamespace() && !tc.Class("shared_ptr").StdNamespace()
         && !tc.Class("SvRef").Namespace("tools").GlobalNamespace()
         && !tc.Class("Reference").Namespace("rtl").GlobalNamespace()
         && !tc.Class("Reference")
                 .Namespace("uno")
-                .Namespace("star")
-                .Namespace("sun")
-                .Namespace("com")
+                .Namespace("star").Namespace("sun").Namespace("com")
                 .GlobalNamespace())
         return true;
+    // clang-format on
     if (constructExpr->getNumArgs() == 1
         && isa<CXXNullPtrLiteralExpr>(constructExpr->getArg(0)->IgnoreParenImpCasts()))
     {
