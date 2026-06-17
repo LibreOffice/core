@@ -338,6 +338,9 @@ class InitializerBase {
 		/* We need to return an empty string instead of `null` */
 		coolParams.get = function(name) {
 			const value = this.p.get(name);
+			if (name === 'lang' && value === null) {
+				return (navigator.languages && navigator.languages[0]) || navigator.language || '';
+			}
 			return value === null ? '' : value;
 		}.bind(coolParams);
 
