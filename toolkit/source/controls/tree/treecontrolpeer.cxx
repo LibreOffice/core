@@ -251,19 +251,18 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
     if (!msDefaultCollapsedGraphicURL.isEmpty())
         mpTreeImpl->SetCollapsedEntryBmp(*pEntry, maDefaultCollapsedImage);
 
-    updateEntry(pEntry);
+    updateEntry(*pEntry);
     return pEntry;
 }
 
-
-void TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
+void TreeControlPeer::updateEntry(UnoTreeListEntry& rEntry)
 {
     bool bChanged = false;
-    if( !(pEntry && pEntry->mxNode.is() && mpTreeImpl) )
+    if (!(rEntry.mxNode.is() && mpTreeImpl))
         return;
 
-    const OUString aValue( getEntryString( pEntry->mxNode->getDisplayValue() ) );
-    UnoTreeListItem* pUnoItem = dynamic_cast< UnoTreeListItem* >( &pEntry->GetItem( 1 ) );
+    const OUString aValue(getEntryString(rEntry.mxNode->getDisplayValue()));
+    UnoTreeListItem* pUnoItem = dynamic_cast<UnoTreeListItem*>(&rEntry.GetItem(1));
     if( pUnoItem )
     {
         if( aValue != pUnoItem->GetText() )
@@ -272,12 +271,12 @@ void TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             bChanged = true;
         }
 
-        if( pUnoItem->GetGraphicURL() != pEntry->mxNode->getNodeGraphicURL() )
+        if (pUnoItem->GetGraphicURL() != rEntry.mxNode->getNodeGraphicURL())
         {
             Image aImage;
-            if( loadImage( pEntry->mxNode->getNodeGraphicURL(), aImage ) )
+            if (loadImage(rEntry.mxNode->getNodeGraphicURL(), aImage))
             {
-                pUnoItem->SetGraphicURL( pEntry->mxNode->getNodeGraphicURL() );
+                pUnoItem->SetGraphicURL(rEntry.mxNode->getNodeGraphicURL());
                 pUnoItem->SetImage( aImage );
                 mpTreeImpl->AdjustEntryHeight( aImage );
                 bChanged = true;
@@ -285,39 +284,41 @@ void TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
         }
     }
 
-    if( bool(pEntry->mxNode->hasChildrenOnDemand()) != pEntry->HasChildrenOnDemand() )
+    if (bool(rEntry.mxNode->hasChildrenOnDemand()) != rEntry.HasChildrenOnDemand())
     {
-        pEntry->EnableChildrenOnDemand( pEntry->mxNode->hasChildrenOnDemand() );
+        rEntry.EnableChildrenOnDemand(rEntry.mxNode->hasChildrenOnDemand());
         bChanged = true;
     }
 
-    ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( &pEntry->GetItem( 0 ) );
+    ImplContextGraphicItem* pContextGraphicItem
+        = dynamic_cast<ImplContextGraphicItem*>(&rEntry.GetItem(0));
     if( pContextGraphicItem )
     {
-        if( pContextGraphicItem->msExpandedGraphicURL != pEntry->mxNode->getExpandedGraphicURL() )
+        if (pContextGraphicItem->msExpandedGraphicURL != rEntry.mxNode->getExpandedGraphicURL())
         {
             Image aImage;
-            if( loadImage( pEntry->mxNode->getExpandedGraphicURL(), aImage ) )
+            if (loadImage(rEntry.mxNode->getExpandedGraphicURL(), aImage))
             {
-                pContextGraphicItem->msExpandedGraphicURL = pEntry->mxNode->getExpandedGraphicURL();
-                mpTreeImpl->SetExpandedEntryBmp(*pEntry, aImage);
+                pContextGraphicItem->msExpandedGraphicURL = rEntry.mxNode->getExpandedGraphicURL();
+                mpTreeImpl->SetExpandedEntryBmp(rEntry, aImage);
                 bChanged = true;
             }
         }
-        if( pContextGraphicItem->msCollapsedGraphicURL != pEntry->mxNode->getCollapsedGraphicURL() )
+        if (pContextGraphicItem->msCollapsedGraphicURL != rEntry.mxNode->getCollapsedGraphicURL())
         {
             Image aImage;
-            if( loadImage( pEntry->mxNode->getCollapsedGraphicURL(), aImage ) )
+            if (loadImage(rEntry.mxNode->getCollapsedGraphicURL(), aImage))
             {
-                pContextGraphicItem->msCollapsedGraphicURL = pEntry->mxNode->getCollapsedGraphicURL();
-                mpTreeImpl->SetCollapsedEntryBmp(*pEntry, aImage);
+                pContextGraphicItem->msCollapsedGraphicURL
+                    = rEntry.mxNode->getCollapsedGraphicURL();
+                mpTreeImpl->SetCollapsedEntryBmp(rEntry, aImage);
                 bChanged = true;
             }
         }
     }
 
     if( bChanged )
-        mpTreeImpl->GetModel()->InvalidateEntry( pEntry );
+        mpTreeImpl->GetModel()->InvalidateEntry(&rEntry);
 }
 
 
@@ -1034,14 +1035,14 @@ void TreeControlPeer::updateChildNodes(UnoTreeListBoxImpl& rTree,
                 // node is already part of the tree, but not on the correct position
                 rTree.GetModel()->Move( pNodeEntry, pParentEntry, nChild );
                 pCurrentChild = pNodeEntry;
-                updateEntry( pCurrentChild );
+                updateEntry(*pCurrentChild);
             }
         }
         else
         {
             // child node has entry and entry is equal to current entry,
             // so no structural changes happened
-            updateEntry( pCurrentChild );
+            updateEntry(*pCurrentChild);
         }
 
         pCurrentChild = dynamic_cast< UnoTreeListEntry* >( pCurrentChild->NextSibling() );
