@@ -127,11 +127,6 @@ public:
                 }
                 else
                 {
-                    if (!compiler.getDiagnosticOpts().VerifyDiagnostics)
-                    {
-                        //TODO, left for later:
-                        continue;
-                    }
                     report(DiagnosticsEngine::Warning,
                            "directly use a %select{_ostr|_ustr}0 user-defined string literal "
                            "instead of introducing the intermediary "
