@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ref.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTableBase.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -34,9 +35,9 @@ using namespace ::com::sun::star::accessibility;
 // Ctor/Dtor/disposing --------------------------------------------------------
 
 AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
-    const Reference<XAccessible>& rxParent, vcl::IAccessibleTableProvider& rBrowseBox,
+    const rtl::Reference<OAccessible>& rpParent, vcl::IAccessibleTableProvider& rBrowseBox,
     AccessibleBrowseBoxObjType eObjType)
-    : ImplInheritanceHelper(rxParent, rBrowseBox, nullptr, eObjType)
+    : ImplInheritanceHelper(rpParent, rBrowseBox, nullptr, eObjType)
 {
 }
 

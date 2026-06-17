@@ -37,13 +37,12 @@ public:
         implSetName() and implSetDescription() (in Ctor) or later via
         setAccessibleName() and setAccessibleDescription() (these methods
         notify the listeners about the change).
-        @param rxParent         XAccessible interface of the parent object.
+        @param rpParent         Accessible of the parent object.
         @param rBrowseBox       The BrowseBox control.
         @param eObjType         Type of BrowseBox object. */
-    AccessibleBrowseBoxTableBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::vcl::IAccessibleTableProvider& rBrowseBox,
-        AccessibleBrowseBoxObjType eObjType );
+    AccessibleBrowseBoxTableBase(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                                 vcl::IAccessibleTableProvider& rBrowseBox,
+                                 AccessibleBrowseBoxObjType eObjType);
 
 protected:
     virtual ~AccessibleBrowseBoxTableBase() override = default;
