@@ -246,7 +246,11 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         impressHelper.clickSlideShowNav(win1, '#previous');
         impressHelper.waitForSlideShowIdle(win1);
 
-        // Follower presses PageDown - should skip only to leader's 2 effects, not all 3
+        // Follower presses PageDown a few times - should skip only to leader's 2 effects, not all 3
+        sendSlideshowKey(win1, 'PageDown');
+        impressHelper.waitForSlideShowIdle(win1);
+        sendSlideshowKey(win1, 'PageDown');
+        impressHelper.waitForSlideShowIdle(win1);
         sendSlideshowKey(win1, 'PageDown');
         impressHelper.waitForSlideShowIdle(win1);
         // Should be at slide2_effect2 (leader position), not slide2_effect3
