@@ -856,16 +856,28 @@ CPPUNIT_TEST_FIXTURE(Test, testItapIntblCell)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(11)->getString());
         uno::Reference<text::XTextTable> xTable5{ getParagraphOrTable(12), uno::UNO_QUERY };
         CPPUNIT_ASSERT_MESSAGE(msg, xTable5.is());
+#ifdef _WIN32
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table \r\n"_ustr,
+            xTable5->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+#else
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             msg, u"table \n"_ustr,
             xTable5->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+#endif
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(13)->getString());
         uno::Reference<text::XTextTable> xTable6{ getParagraphOrTable(14), uno::UNO_QUERY };
         CPPUNIT_ASSERT_MESSAGE(msg, xTable6.is());
+#ifdef _WIN32
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table \r\n"_ustr,
+            xTable6->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+#else
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             msg, u"table \n"_ustr,
             xTable6->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+#endif
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(15)->getString());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u"notable "_ustr, getParagraph(16)->getString());
@@ -900,9 +912,15 @@ CPPUNIT_TEST_FIXTURE(Test, testItapIntblCell)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(25)->getString());
         uno::Reference<text::XTextTable> xTable11{ getParagraphOrTable(26), uno::UNO_QUERY };
         CPPUNIT_ASSERT_MESSAGE(msg, xTable11.is());
+#ifdef _WIN32
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, u"table \r\n"_ustr,
+            xTable11->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+#else
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             msg, u"table \n"_ustr,
             xTable11->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
+#endif
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(27)->getString());
     };
