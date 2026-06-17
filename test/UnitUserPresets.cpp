@@ -77,7 +77,8 @@ public:
         if (query == "presetasset")
         {
             query = "localhost";
-            if (_phase != Phase::Finish)
+            // Not waiting for Done would lead to a hang on slow machines.
+            if (_phase != Phase::Finish && _phase != Phase::Done)
             {
                 TST_LOG(
                     "delaying dns resolution of preset host until document broker is destroyed");
