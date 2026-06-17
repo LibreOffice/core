@@ -2152,10 +2152,17 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
             session->sendTextFrameAndLogError(
                 COOLProtocol::buildErrorFrame("load", "faileddocloading",
                                               loError ? loError : ""));
-            session->shutdownNormal();
 
-            LOG_FTL("Failed to load the document. Setting TerminationFlag");
-            SigUtil::setTerminationFlag();
+            // When the kit runs in-process it is shared with the rest of the
+            // application, so a failed load must not close the connection or
+            // terminate. Only the server, with a kit process per document,
+            // shuts down here.
+            if constexpr (!Util::isKitInProcess())
+            {
+                session->shutdownNormal();
+                LOG_FTL("Failed to load the document. Setting TerminationFlag");
+                SigUtil::setTerminationFlag();
+            }
             return nullptr;
         }
 
