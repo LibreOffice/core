@@ -569,7 +569,7 @@ protected:
                    void         AdjustEntryHeight( const Image& rBmp );
     SAL_DLLPRIVATE void         AdjustEntryHeight();
 
-    SAL_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
+    SAL_DLLPRIVATE void ImpEntryInserted(SvTreeListEntry& rEntry);
     SAL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, tools::Long nLine, vcl::RenderContext& rRenderContext );
 
     SAL_DLLPRIVATE void         ImplInitStyle();

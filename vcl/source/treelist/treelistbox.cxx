@@ -1889,10 +1889,9 @@ void SvTreeListBox::CheckBoxInserted(SvTreeListEntry* pEntry)
     }
 }
 
-void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
+void SvTreeListBox::ImpEntryInserted(SvTreeListEntry& rEntry)
 {
-    SvTreeListEntry* pParent = m_pModel->GetParent(pEntry);
-    if( pParent )
+    if (SvTreeListEntry* pParent = m_pModel->GetParent(&rEntry))
     {
         SvTLEntryFlags nFlags = pParent->GetFlags();
         nFlags &= ~SvTLEntryFlags::NO_NODEBMP;
@@ -1901,25 +1900,25 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 
     if (!(m_nTreeFlags & SvTreeFlags::MANINS))
     {
-        Size aSize = GetCollapsedEntryBmp( pEntry ).GetSizePixel();
+        Size aSize = GetCollapsedEntryBmp(&rEntry).GetSizePixel();
         if (aSize.Width() > m_nContextBmpWidthMax)
         {
             m_nContextBmpWidthMax = static_cast<short>(aSize.Width());
             m_nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
-        aSize = GetExpandedEntryBmp( pEntry ).GetSizePixel();
+        aSize = GetExpandedEntryBmp(&rEntry).GetSizePixel();
         if (aSize.Width() > m_nContextBmpWidthMax)
         {
             m_nContextBmpWidthMax = static_cast<short>(aSize.Width());
             m_nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
     }
-    CalcEntryHeight( pEntry );
+    CalcEntryHeight(&rEntry);
 
     if (!(m_nTreeFlags & SvTreeFlags::CHKBTN))
         return;
 
-    CheckBoxInserted(pEntry);
+    CheckBoxInserted(&rEntry);
 }
 
 void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState eState)
@@ -2350,7 +2349,7 @@ void SvTreeListBox::ModelHasInsertedTree(SvTreeListEntry& rEntry)
     SvTreeListEntry* pTmp = &rEntry;
     do
     {
-        ImpEntryInserted( pTmp );
+        ImpEntryInserted(*pTmp);
         pTmp = Next( pTmp );
     } while (pTmp && nRefDepth < m_pModel->GetDepth(pTmp));
     m_pImpl->TreeInserted(&rEntry);
@@ -2360,7 +2359,7 @@ void SvTreeListBox::ModelHasInsertedTree(SvTreeListEntry& rEntry)
 
 void SvTreeListBox::ModelHasInserted(SvTreeListEntry& rEntry)
 {
-    ImpEntryInserted(&rEntry);
+    ImpEntryInserted(rEntry);
     m_pImpl->EntryInserted(&rEntry);
 
     ModelChangedHdl();
