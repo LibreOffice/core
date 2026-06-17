@@ -3648,7 +3648,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
     if (pStr)
         AddStringItem(*pEntry, *pStr, pEntry->ItemCount());
     pEntry->SetUserData(pUserData);
-    m_xTreeView->Insert(pEntry, iter, nInsertPos);
+    m_xTreeView->Insert(pEntry, nInsertPos, iter);
 
     if (pRet)
     {
@@ -4023,7 +4023,7 @@ void SalInstanceTreeView::bulk_insert_for_each(
         aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
         if (bGoingToSetText)
             AddStringItem(*aVclIter.iter, u""_ustr, aVclIter.iter->ItemCount());
-        m_xTreeView->Insert(aVclIter.iter, pVclParent, TREELIST_APPEND);
+        m_xTreeView->Insert(aVclIter.iter, TREELIST_APPEND, pVclParent);
         func(aVclIter, i);
         m_xTreeView->CalcEntryHeight(aVclIter.iter);
 
@@ -5071,7 +5071,7 @@ void SalInstanceIconView::do_insert(int pos, const OUString* pStr, const OUStrin
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
     pEntry->SetUserData(pUserData);
-    m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+    m_xIconView->Insert(pEntry, nInsertPos, nullptr);
     if (!m_bFixedItemWidth)
         m_xIconView->UpdateEntrySize(*pEntry);
 
@@ -5106,7 +5106,7 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
     pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
     pEntry->AddItem(std::make_unique<SvLBoxString>(sSep));
     pEntry->SetUserData(nullptr);
-    m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+    m_xIconView->Insert(pEntry, nInsertPos, nullptr);
     SvViewDataEntry* pViewData = m_xIconView->GetViewDataEntry(pEntry);
     pViewData->SetSelectable(false);
 }

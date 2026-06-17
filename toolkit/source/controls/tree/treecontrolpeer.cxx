@@ -1446,7 +1446,7 @@ IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl, SvTreeListBox*, void)
 void UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uInt32 nPos )
 {
     if( pParent )
-        SvTreeListBox::Insert( pEntry, pParent, nPos );
+        SvTreeListBox::Insert(pEntry, nPos, pParent);
     else
         SvTreeListBox::Insert( pEntry, nPos );
 }

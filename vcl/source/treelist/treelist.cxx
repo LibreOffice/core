@@ -715,7 +715,7 @@ SvTreeListEntry* SvTreeList::NextSelected(const SvTreeListBox& rView, SvTreeList
     return pEntry;
 }
 
-void SvTreeList::Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos)
+void SvTreeList::Insert(SvTreeListEntry* pEntry, sal_uInt32 nPos, SvTreeListEntry* pParent)
 {
     assert(pEntry && "Entry?");
 

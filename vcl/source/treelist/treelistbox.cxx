@@ -475,14 +475,14 @@ IMPL_LINK(SvTreeListBox, CloneHdl_Impl, SvTreeListEntry&, rEntry, SvTreeListEntr
     return CloneEntry(rEntry);
 }
 
-void SvTreeListBox::Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos)
+void SvTreeListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nPos, SvTreeListEntry* pParent)
 {
-    m_pModel->Insert(pEntry, pParent, nPos);
+    m_pModel->Insert(pEntry, nPos, pParent);
 }
 
 void SvTreeListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
 {
-    m_pModel->Insert(pEntry, nullptr, nRootPos);
+    m_pModel->Insert(pEntry, nRootPos, nullptr);
 }
 
 bool SvTreeListBox::ExpandingHdl()
@@ -1831,7 +1831,7 @@ SvTreeListEntry& SvTreeListBox::InsertEntry(const OUString& rText, SvTreeListEnt
     if( !pParent )
         Insert( pEntry, nPos );
     else
-        Insert( pEntry, pParent, nPos );
+        Insert(pEntry, nPos, pParent);
 
     m_nTreeFlags &= ~SvTreeFlags::MANINS;
 
