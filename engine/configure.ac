@@ -961,7 +961,6 @@ disable_database_connectivity_dependencies()
 build_crypto=yes
 test_clucene=no
 test_gdb_index=no
-test_openldap=yes
 test_split_debug=no
 test_webdav=yes
 usable_dlapi=yes
@@ -1055,7 +1054,6 @@ cygwin*|wsl*)
     fi
     using_x11=no
     test_unix_dlapi=no
-    test_openldap=no
     enable_pagein=no
     build_skia=yes
     _os=WINNT
@@ -1114,7 +1112,6 @@ ios*) # iOS
     using_x11=no
     build_crypto=no
     test_libcmis=no
-    test_openldap=no
     test_webdav=no
     with_gssapi=no
     if test -n "$LODE_HOME" ; then
@@ -1208,7 +1205,6 @@ linux-android*)
     using_headless_plugin=no
     using_x11=no
     build_crypto=no
-    test_openldap=no
     test_system_freetype=no
     test_webdav=no
     with_gssapi=no
@@ -1239,7 +1235,6 @@ emscripten)
     usable_dlapi=no
     using_freetype_fontconfig=yes
     using_x11=yes
-    test_openldap=no
     test_qt5=yes
     test_split_debug=yes
     test_system_freetype=no
@@ -2139,11 +2134,6 @@ libo_FUZZ_ARG_ENABLE(formula-logger,
     )
 )
 
-AC_ARG_ENABLE(ldap,
-    AS_HELP_STRING([--disable-ldap],
-        [Disable LDAP support.]),
-,enable_ldap=yes)
-
 AC_ARG_ENABLE(opencl,
     AS_HELP_STRING([--disable-opencl],
         [Disable OpenCL support.]),
@@ -2420,11 +2410,6 @@ AC_ARG_WITH(system-lzma,
     AS_HELP_STRING([--with-system-lzma],
         [Use lzma already on system.]),,
     [with_system_lzma="$with_system_libs"])
-
-AC_ARG_WITH(system-openldap,
-    AS_HELP_STRING([--with-system-openldap],
-        [Use the OpenLDAP LDAP SDK already on system.]),,
-    [with_system_openldap="$with_system_libs"])
 
 AC_ARG_WITH(system-abseil,
     AS_HELP_STRING([--with-system-abseil],
@@ -3117,7 +3102,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_extensions=no
     enable_gio=no
     enable_gpgmepp=no
-    enable_ldap=no
     enable_nss=no
     enable_opencl=no
     enable_pdfimport=no
@@ -10721,45 +10705,6 @@ elif test $_os != iOS -a "$enable_openssl" != "no"; then
     with_tls=openssl
 fi
 AC_SUBST(ENABLE_NSS)
-
-dnl ===================================================================
-dnl Enable LDAP support
-dnl ===================================================================
-
-if test "$test_openldap" = yes; then
-    AC_MSG_CHECKING([whether to enable LDAP support])
-    if test "$enable_ldap" = yes -a \( "$enable_openssl" = yes -o "$with_system_openldap" = yes \); then
-        AC_MSG_RESULT([yes])
-        ENABLE_LDAP=TRUE
-    else
-        if test "$enable_ldap" != "yes"; then
-            AC_MSG_RESULT([no])
-        else
-            AC_MSG_RESULT([no (needs OPENSSL or system openldap)])
-        fi
-    fi
-
-dnl ===================================================================
-dnl Check for system openldap
-dnl ===================================================================
-
-    if test "$ENABLE_LDAP" = TRUE; then
-        AC_MSG_CHECKING([which openldap library to use])
-        if test "$with_system_openldap" = yes; then
-            AC_MSG_RESULT([external])
-            SYSTEM_OPENLDAP=TRUE
-            AC_CHECK_HEADERS(ldap.h, [], [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
-            AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
-            AC_CHECK_LIB([ldap], [ldap_set_option], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
-        else
-            AC_MSG_RESULT([internal])
-            BUILD_TYPE="$BUILD_TYPE OPENLDAP"
-        fi
-    fi
-fi
-
-AC_SUBST(ENABLE_LDAP)
-AC_SUBST(SYSTEM_OPENLDAP)
 
 dnl ===================================================================
 dnl Check for TLS/SSL and cryptographic implementation to use

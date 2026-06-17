@@ -73,7 +73,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,NOTO_FONT,noto_font) \
 	$(call gb_Helper_optional,NSS,nss) \
 	$(call gb_Helper_optional,ODFGEN,libodfgen) \
-	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	$(call gb_Helper_optional,OPENSSL,openssl) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	$(call gb_Helper_optional,PAGEMAKER,libpagemaker) \

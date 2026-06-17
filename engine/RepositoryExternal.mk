@@ -2778,44 +2778,6 @@ endef
 
 endif # SYSTEM_HSQLDB
 
-ifeq ($(ENABLE_LDAP),TRUE)
-ifneq ($(SYSTEM_OPENLDAP),)
-
-define gb_LinkTarget__use_openldap
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	-lldap \
-	-llber \
-)
-
-endef
-
-gb_ExternalProject__use_openldap :=
-
-else # !SYSTEM_OPENLDAP
-
-define gb_LinkTarget__use_openldap
-$(call gb_LinkTarget_use_unpacked,$(1),openldap)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/openldap/include \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_use_external_project,$(1),openldap,full)
-$(call gb_LinkTarget_add_libs,$(1), \
-	$(gb_UnpackedTarball_workdir)/openldap/libraries/libldap/.libs/libldap.a \
-	$(gb_UnpackedTarball_workdir)/openldap/libraries/liblber/.libs/liblber.a \
-)
-
-endef
-endif
-
-define gb_ExternalProject__use_openldap
-$(call gb_ExternalProject_use_external_project,$(1),openldap)
-
-endef
-
-endif # SYSTEM_OPENLDAP
-
 
 ifneq (,$(filter TRUE,$(ENABLE_KF5) $(ENABLE_GTK3_KDE5)))
 

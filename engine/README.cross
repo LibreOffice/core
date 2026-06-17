@@ -232,7 +232,6 @@ JAVAINC=-I<path-to-raspbian_rootfs>/usr/lib/jvm/java-6-openjdk-armhf/include
 --with-system-icu
 --with-system-neon
 --with-system-nss
---with-system-openldap
 --with-system-openssl
 --with-system-redland
 

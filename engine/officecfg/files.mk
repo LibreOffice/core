@@ -9,7 +9,6 @@
 officecfg_XCSFILES := \
     Inet \
     Interaction \
-    LDAP \
     Office/Accelerators \
     Office/Addons \
     Office/BasicIDE \

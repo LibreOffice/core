@@ -32,12 +32,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 endif
 
-ifeq ($(ENABLE_LDAP),TRUE)
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_ldapbe2 \
-))
-endif
-
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_bib \
 ))

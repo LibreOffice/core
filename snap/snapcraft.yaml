@@ -138,7 +138,6 @@ parts:
         --disable-gtk3 \
         --disable-gui \
         --disable-kf5 \
-        --disable-ldap \
         --disable-noto-font \
         --disable-qt5 \
         --disable-randr \

@@ -385,13 +385,6 @@
         "dest-filename": "@FONT_NOTO_SANS_LISU_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@OPENLDAP_TARBALL@",
-        "sha256": "@OPENLDAP_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@OPENLDAP_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@ORCUS_TARBALL@",
         "sha256": "@ORCUS_SHA256SUM@",
         "type": "file",

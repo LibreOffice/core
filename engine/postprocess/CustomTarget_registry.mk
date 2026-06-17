@@ -121,7 +121,6 @@ postprocess_FILES_lingucomponent := \
 postprocess_FILES_main := \
 	$(postprocess_XCS)/Inet.xcs \
 	$(postprocess_XCS)/Interaction.xcs \
-	$(postprocess_XCS)/LDAP.xcs \
 	$(postprocess_XCS)/Office/Accelerators.xcs \
 	$(postprocess_XCS)/Office/Addons.xcs \
 	$(postprocess_XCS)/Office/BasicIDE.xcs \
