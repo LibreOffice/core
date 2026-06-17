@@ -981,13 +981,6 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
     bool bDone = false;
     const CommandWheelData* pData = rCEvt.GetWheelData();
-    fprintf(stderr, "DBG ScrollCommand: pData=%p cmd=%d mode=%d isDeltaPx=%d delta=%ld\n",
-            static_cast<const void*>(pData),
-            static_cast<int>(rCEvt.GetCommand()),
-            pData ? static_cast<int>(pData->GetMode()) : -1,
-            pData ? (int)pData->IsDeltaPixel() : -1,
-            pData ? static_cast<long>(pData->GetDelta()) : 0L);
-    fflush(stderr);
     if (pData && pData->GetMode() == CommandWheelMode::ZOOM)
     {
         if ( !aViewData.GetViewShell()->GetViewFrame().GetFrame().IsInPlace() )
@@ -1711,8 +1704,6 @@ void ScTabView::ScrollLines( tools::Long nDeltaX, tools::Long nDeltaY )
 
 void ScTabView::SmoothScrollY( tools::Long nPixelDelta, ScVSplitPos eWhich )
 {
-    fprintf(stderr, "DBG SmoothScrollY: nPixelDelta=%ld\n", static_cast<long>(nPixelDelta));
-    fflush(stderr);
     SAL_INFO("sc.smooth", "SmoothScrollY: nPixelDelta=" << nPixelDelta << " eWhich=" << static_cast<int>(eWhich));
 
     // Fall back to cell-granular scrolling in tiled rendering mode.
@@ -1799,17 +1790,8 @@ void ScTabView::SmoothScrollY( tools::Long nPixelDelta, ScVSplitPos eWhich )
     // when clamped at an edge, it reflects the achievable movement.
     tools::Long nBlitDelta = nRowsCrossedPx + (nCurrentOffset - nNewOffset);
 
-    fprintf(stderr, "DBG SmoothScrollY result: newOffset=%ld newPosY=%d rowsCrossedPx=%ld blitDelta=%ld\n",
-            static_cast<long>(nNewOffset), static_cast<int>(nPosY),
-            static_cast<long>(nRowsCrossedPx), static_cast<long>(nBlitDelta));
-    fflush(stderr);
-
     if (nBlitDelta == 0 && nPosY == aViewData.GetPosY(eWhich))
-    {
-        fprintf(stderr, "DBG SmoothScrollY: no movement, early return\n");
-        fflush(stderr);
         return;
-    }
 
     HideAllCursors();
 

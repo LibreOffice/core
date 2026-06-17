@@ -3180,12 +3180,6 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 
 void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 {
-    fprintf(stderr, "DBG SetPosY: eWhich=%d nNewPosY=%d (was=%d offset=%ld) caller=%p\n",
-            static_cast<int>(eWhich), static_cast<int>(nNewPosY),
-            static_cast<int>(pThisTab->nPosY[eWhich]),
-            static_cast<long>(pThisTab->nPixOffsetY[eWhich]),
-            static_cast<const void*>(__builtin_return_address(0)));
-    fflush(stderr);
     // in the tiled rendering case, nPosY [the topmost visible row] must be 0
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     if (nNewPosY != 0 && !bIsTiledRendering)
