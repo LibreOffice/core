@@ -289,7 +289,7 @@ private:
     void ActionMoved();
     void ActionInserted(SvTreeListEntry& rEntry);
     void ActionInsertedTree(SvTreeListEntry& rEntry);
-    void ActionRemoving(SvTreeListEntry* pEntry);
+    void ActionRemoving(SvTreeListEntry& pEntry);
 
     // Handler and methods for Drag - finished handler.
     // The Handle retrieved by GetDragFinishedHdl can be set on the
@@ -653,8 +653,8 @@ public:
     void ModelHasInsertedTree(SvTreeListEntry& rEntry);
     void ModelIsMoving(SvTreeListEntry* pSource);
     void ModelHasMoved(SvTreeListEntry* pSource);
-    void ModelIsRemoving(SvTreeListEntry* pEntry);
-    void ModelHasRemoved(SvTreeListEntry* pEntry);
+    void ModelIsRemoving(SvTreeListEntry& rEntry);
+    void ModelHasRemoved(SvTreeListEntry& rEntry);
     void ModelHasEntryInvalidated(SvTreeListEntry* pEntry);
 
     void            ScrollOutputArea( short nDeltaEntries );

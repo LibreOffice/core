@@ -748,19 +748,18 @@ void SvTreeListBox::RemoveViewData(SvTreeListEntry* pParent)
     }
 }
 
-void SvTreeListBox::ActionRemoving(SvTreeListEntry* pEntry)
+void SvTreeListBox::ActionRemoving(SvTreeListEntry& rEntry)
 {
-    assert(pEntry && "Remove:No Entry");
-    const auto iter = m_DataTable.find(pEntry);
+    const auto iter = m_DataTable.find(&rEntry);
     assert(iter != m_DataTable.end());
     SvViewDataEntry& rViewData = iter->second;
     sal_uInt32 nSelRemoved = 0;
     if (rViewData.IsSelected())
-        nSelRemoved = 1 + m_pModel->GetChildSelectionCount(*this, pEntry);
+        nSelRemoved = 1 + m_pModel->GetChildSelectionCount(*this, &rEntry);
     m_nSelectionCount -= nSelRemoved;
     sal_uInt32 nVisibleRemoved = 0;
-    if (m_pModel->IsEntryVisible(*this, pEntry))
-        nVisibleRemoved = 1 + m_pModel->GetVisibleChildCount(*this, pEntry);
+    if (m_pModel->IsEntryVisible(*this, &rEntry))
+        nVisibleRemoved = 1 + m_pModel->GetVisibleChildCount(*this, &rEntry);
     if (m_nVisibleCount)
     {
 #ifdef DBG_UTIL
@@ -773,10 +772,10 @@ void SvTreeListBox::ActionRemoving(SvTreeListEntry* pEntry)
     }
     m_bVisPositionsValid = false;
 
-    m_DataTable.erase(pEntry);
-    RemoveViewData(pEntry);
+    m_DataTable.erase(&rEntry);
+    RemoveViewData(&rEntry);
 
-    SvTreeListEntry* pCurEntry = pEntry->pParent;
+    SvTreeListEntry* pCurEntry = rEntry.pParent;
     if (pCurEntry && pCurEntry != m_pModel->m_pRootItem.get() && pCurEntry->m_Children.size() == 1)
     {
         SvDataTable::iterator itr = m_DataTable.find(pCurEntry);
@@ -2329,23 +2328,23 @@ void SvTreeListBox::ModelHasMoved( SvTreeListEntry* pSource )
     ModelChangedHdl();
 }
 
-void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
+void SvTreeListBox::ModelIsRemoving(SvTreeListEntry& rEntry)
 {
-    if (m_pEdEntry == pEntry)
+    if (m_pEdEntry == &rEntry)
         m_pEdEntry = nullptr;
 
-    m_pImpl->RemovingEntry(pEntry);
+    m_pImpl->RemovingEntry(&rEntry);
 }
 
-void SvTreeListBox::ModelHasRemoved( SvTreeListEntry* pEntry  )
+void SvTreeListBox::ModelHasRemoved(SvTreeListEntry& rEntry)
 {
     // WARNING WARNING WARNING
     // The supplied pointer should have been deleted
     // before this call. Be careful not to use it!!!
-    if (pEntry == m_pHdlEntry)
+    if (&rEntry == m_pHdlEntry)
         m_pHdlEntry = nullptr;
 
-    if (pEntry == m_pTargetEntry)
+    if (&rEntry == m_pTargetEntry)
         m_pTargetEntry = nullptr;
 
     m_pImpl->EntryRemoved();
@@ -3519,11 +3518,13 @@ void SvTreeListBox::ModelNotification(SvListAction eAction, SvTreeListEntry* pEn
             ModelHasInsertedTree(*pEntry);
             break;
         case SvListAction::REMOVING:
-            ModelIsRemoving(pEntry);
-            ActionRemoving(pEntry);
+            assert(pEntry && "missing entry");
+            ModelIsRemoving(*pEntry);
+            ActionRemoving(*pEntry);
             break;
         case SvListAction::REMOVED:
-            ModelHasRemoved(pEntry);
+            assert(pEntry && "missing entry");
+            ModelHasRemoved(*pEntry);
             break;
         case SvListAction::MOVING:
             ModelIsMoving(pEntry);
