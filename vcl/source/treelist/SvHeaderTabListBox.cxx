@@ -23,7 +23,6 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 
-#include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
@@ -60,7 +59,7 @@ SvHeaderTabListBox::~SvHeaderTabListBox() { disposeOnce(); }
 void SvHeaderTabListBox::dispose()
 {
     for (rtl::Reference<AccessibleBrowseBoxHeaderCell>& rxChild : m_aAccessibleChildren)
-        comphelper::disposeComponent(rxChild);
+        rxChild->dispose();
     m_aAccessibleChildren.clear();
     m_xAccessible.clear();
 
