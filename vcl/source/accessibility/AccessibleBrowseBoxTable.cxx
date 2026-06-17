@@ -37,9 +37,9 @@ using namespace ::com::sun::star::accessibility;
 // Ctor/Dtor/disposing --------------------------------------------------------
 
 AccessibleBrowseBoxTable::AccessibleBrowseBoxTable(
-        const Reference< XAccessible >& rxParent,
-        vcl::IAccessibleTableProvider& rBrowseBox ) :
-    AccessibleBrowseBoxTableBase( rxParent, rBrowseBox, AccessibleBrowseBoxObjType::Table )
+    const rtl::Reference<comphelper::OAccessible>& rpParent,
+    vcl::IAccessibleTableProvider& rBrowseBox)
+    : AccessibleBrowseBoxTableBase(rpParent, rBrowseBox, AccessibleBrowseBoxObjType::Table)
 {
 }
 
