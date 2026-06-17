@@ -144,9 +144,6 @@
 /* Define to 1 if this is the WASM app build. */
 #undef WASMAPP
 
-/* Define to 1 if the "fallback to Wasm" capability is enabled: */
-#define ENABLE_WASM_SUPPORT 0
-
 /* Define to 1 if building for macOS */
 #undef MACOS
 

@@ -95,7 +95,7 @@ using Poco::Util::Application;
 // We have files that are at least 2.5 MB already.
 // WASM files are in the order of 30 MB (250 MB in debug builds), however,
 constexpr auto MaxFileSizeToCacheInBytes = 1024 * 1024 *
-#if ENABLE_WASM_SUPPORT && ENABLE_DEBUG
+#if ENABLE_DEBUG
     500;
 #else
     50;

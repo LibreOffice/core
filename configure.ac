@@ -1173,10 +1173,8 @@ AM_CONDITIONAL([ENABLE_WASM_FALLBACK], [test -n "$with_wasm_fallback"])
 WASM_BUILDDIR="$with_wasm_fallback"
 AC_SUBST(WASM_BUILDDIR)
 AS_IF([test -n "$with_wasm_fallback"],
-      [WASM_SUPPORT_ENABLE=true
-       AC_DEFINE([ENABLE_WASM_SUPPORT],1,[Define to 1 if the "fallback to Wasm" capability is enabled])],
-      [WASM_SUPPORT_ENABLE=false
-       AC_DEFINE([ENABLE_WASM_SUPPORT],0,[Define to 1 if the "fallback to Wasm" capability is enabled])])
+      [WASM_SUPPORT_ENABLE=true],
+      [WASM_SUPPORT_ENABLE=false])
 AC_SUBST(WASM_SUPPORT_ENABLE)
 
 AM_CONDITIONAL([ENABLE_WASM_ADDITIONAL_FILES], [test -n "$with_wasm_additional_files"])
