@@ -421,6 +421,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (instance.isModalPopUp || instance.isDocumentAreaPopup || instance.isSnackbar)
 			window.L.DomUtil.addClass(instance.container, 'modalpopup');
 
+		if (instance.isAutofilter && !this.isChildAutoFilter(instance))
+			window.L.DomUtil.addClass(instance.container, 'autofilter-popup');
+
 		if (instance.isModalPopUp && !instance.popupParent) // Special case for menu popups (they are also modal dialogues).
 			instance.overlay.classList.add('dimmed');
 
@@ -903,6 +906,48 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		return false;
 	},
 
+	// Tag the check list's ancestor chain in the JSON with .autofilter-fill so
+	// the builder applies it at build time and CSS can flex the list to fill the
+	// resized popup without a :has() selector scanning the list. Must run before
+	// the dialog is built. The synthetic wrappers the builder inserts (the
+	// top-level root-container/vertical and the scrollwindow content div) have no
+	// JSON node and are matched by class in jsdialogs.css instead.
+	markAutofilterFillChain: function(instance) {
+		// Depth-first search for the listbox node, tagging each ancestor
+		// container on the way back up. Returns true once found on this branch.
+		function tagChain(node) {
+			if (!node)
+				return false;
+
+			// The list itself is handled by an id rule, so stop without tagging it.
+			if (node.id === 'check_list_box' || node.id === 'check_tree_box')
+				return true;
+
+			var children = node.children;
+			if (!children)
+				return false;
+
+			for (var i = 0; i < children.length; i++) {
+				if (tagChain(children[i])) {
+					node.cssClass = node.cssClass
+						? node.cssClass + ' autofilter-fill'
+						: 'autofilter-fill';
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// instance is the root node (its element is content, handled by its own
+		// rule); start from its children so content itself is not tagged.
+		var children = instance.children;
+		if (!children)
+			return;
+
+		for (var i = 0; i < children.length; i++)
+			tagChain(children[i]);
+	},
+
 	calculateSubmenuAutoFilterPosition: function(instance, parentAutofilter) {
 		var parentAutofilter = parentAutofilter.getElementsByClassName("ui-treeview-entry selected")[0].getBoundingClientRect();
 		instance.posx = parentAutofilter.right;
@@ -1081,6 +1126,12 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			const documentFragment = new DocumentFragment(); // do not modify dom yet
 
 			this.createContainer(instance, documentFragment);
+
+			// Tag the fill chain in the JSON before building so the builder
+			// applies the class as it creates the widgets.
+			if (instance.isAutofilter && !this.isChildAutoFilter(instance))
+				this.markAutofilterFillChain(instance);
+
 			this.createDialog(instance);
 
 			const modifyCallback = JSDialog.getDialogModificationCallback(instance.dialogid);

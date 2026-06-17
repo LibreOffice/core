@@ -1900,6 +1900,55 @@ img.context-menu-icon {
 	border-color: transparent;
 }
 
+/* Make the autofilter popup user-resizable. Selectors avoid :has() and deep
+   descendants so styling cost stays off the list's many treeview entries. */
+.autofilter-popup .jsdialog.lokdialog.ui-dialog-content {
+	resize: both;
+	overflow: auto;
+	min-width: 220px;
+	min-height: 200px;
+	max-width: 95vw;
+	max-height: 90vh;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Ancestor chain of the check list, made into flex columns so the listbox
+   fills the resized dialog. The GtkBox containers carry .autofilter-fill,
+   tagged on the JSON at build time. The builder also inserts synthetic
+   wrappers that have no JSON node (the top-level root-container/vertical and
+   the scrollwindow's inner content div), so those are matched by class here.
+   All of these are single elements, so styling cost stays off the list's
+   many treeview entries. */
+.autofilter-popup .root-container,
+.autofilter-popup .vertical,
+.autofilter-popup .ui-scrollwindow,
+.autofilter-popup .ui-scrollwindow-content,
+.autofilter-popup .autofilter-fill {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	max-height: none;
+	/* Override inline height that the scrollwindow handler may have set. */
+	height: auto !important;
+}
+
+/* Keep the 150px cap by default so the popup opens at its old compact size. */
+.autofilter-popup #check_list_box.ui-treeview,
+.autofilter-popup #check_tree_box.ui-treeview {
+	flex: 1 1 auto;
+	max-height: 150px;
+	min-height: 0;
+}
+
+/* Once the user drags the resize handle the browser writes an inline height on
+   .ui-dialog-content; drop the cap so the listbox fills the enlarged dialog. */
+.autofilter-popup .jsdialog.lokdialog.ui-dialog-content[style*='height'] #check_list_box.ui-treeview,
+.autofilter-popup .jsdialog.lokdialog.ui-dialog-content[style*='height'] #check_tree_box.ui-treeview {
+	max-height: none !important;
+}
+
 /* hide radio in filter by color */
 .jsdialog.autofilter #background .ui-treeview-entry div:nth-of-type(1),
 .jsdialog.autofilter #textcolor .ui-treeview-entry div:nth-of-type(1),

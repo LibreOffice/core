@@ -2295,6 +2295,11 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		if (control) {
 			this._setGridStyles(control, data);
 
+			// Per-node extra class(es) from the JSON. Distinct from the
+			// builder-wide options.cssClass which goes on every widget root.
+			if (data.cssClass)
+				window.L.DomUtil.addClass(control, data.cssClass);
+
 			if (data.tooltip) {
 				control.setAttribute('data-cooltip', this._cleanText(data.tooltip));
 				window.L.control.attachTooltipEventListener(control, this.map);
@@ -2409,6 +2414,12 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				}
 
 				$(table).addClass(this.options.cssClass);
+
+				// Per-node extra class(es) from the JSON. Applied here as well as
+				// in postProcess so id-less containers (not reachable by id
+				// lookup) still get them.
+				if (childData.cssClass)
+					$(table).addClass(childData.cssClass);
 
 				if (!isVertical) {
 					var rows = this._getGridRows(childData.children);
