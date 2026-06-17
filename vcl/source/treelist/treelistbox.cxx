@@ -480,11 +480,6 @@ void SvTreeListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nPos, SvTreeListE
     m_pModel->Insert(pEntry, nPos, pParent);
 }
 
-void SvTreeListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
-{
-    m_pModel->Insert(pEntry, nRootPos, nullptr);
-}
-
 bool SvTreeListBox::ExpandingHdl()
 {
     return !m_aExpandingHdl.IsSet() || m_aExpandingHdl.Call(this);

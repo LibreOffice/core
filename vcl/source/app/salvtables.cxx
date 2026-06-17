@@ -5071,7 +5071,7 @@ void SalInstanceIconView::do_insert(int pos, const OUString* pStr, const OUStrin
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
     pEntry->SetUserData(pUserData);
-    m_xIconView->Insert(pEntry, nInsertPos, nullptr);
+    m_xIconView->Insert(pEntry, nInsertPos);
     if (!m_bFixedItemWidth)
         m_xIconView->UpdateEntrySize(*pEntry);
 
@@ -5106,7 +5106,7 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
     pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
     pEntry->AddItem(std::make_unique<SvLBoxString>(sSep));
     pEntry->SetUserData(nullptr);
-    m_xIconView->Insert(pEntry, nInsertPos, nullptr);
+    m_xIconView->Insert(pEntry, nInsertPos);
     SvViewDataEntry* pViewData = m_xIconView->GetViewDataEntry(pEntry);
     pViewData->SetSelectable(false);
 }
