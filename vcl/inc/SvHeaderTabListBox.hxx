@@ -46,8 +46,6 @@ private:
     DECL_DLLPRIVATE_LINK(ScrollHdl_Impl, SvTreeListBox*, void);
     DECL_DLLPRIVATE_LINK(CreateAccessibleHdl_Impl, HeaderBar*, void);
 
-    void RecalculateAccessibleChildren();
-
 public:
     SvHeaderTabListBox(vcl::Window* pParent, WinBits nBits, HeaderBar* pHeaderBar);
     virtual ~SvHeaderTabListBox() override;
@@ -55,11 +53,6 @@ public:
 
     HeaderBar* GetHeaderBar();
     static bool IsItemChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol);
-
-    virtual SvTreeListEntry& InsertEntry(const OUString& Text, SvTreeListEntry* pParent = nullptr,
-                                         sal_uInt32 nPos = TREELIST_APPEND) override;
-    virtual void Insert(SvTreeListEntry* pEnt, SvTreeListEntry* pPar, sal_uInt32 nPos) override;
-    virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos) override;
 
     // Accessible -------------------------------------------------------------
 

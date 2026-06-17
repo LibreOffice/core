@@ -83,26 +83,6 @@ bool SvHeaderTabListBox::IsItemChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol)
     return (eState == SvButtonState::Checked);
 }
 
-SvTreeListEntry& SvHeaderTabListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                                 sal_uInt32 nPos)
-{
-    SvTreeListEntry& rEntry = SvTabListBox::InsertEntry(rText, pParent, nPos);
-    RecalculateAccessibleChildren();
-    return rEntry;
-}
-
-void SvHeaderTabListBox::Insert(SvTreeListEntry* pEnt, SvTreeListEntry* pPar, sal_uInt32 nPos)
-{
-    SvTabListBox::Insert(pEnt, pPar, nPos);
-    RecalculateAccessibleChildren();
-}
-
-void SvHeaderTabListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
-{
-    SvTabListBox::Insert(pEntry, nRootPos);
-    RecalculateAccessibleChildren();
-}
-
 IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 {
     m_xHeaderBar->SetOffset(-GetXOffset());
@@ -116,20 +96,6 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
         rtl::Reference<comphelper::OAccessible> pAccessible = new AccessibleBrowseBoxHeaderBar(
             pAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar);
         m_xHeaderBar->SetAccessible(pAccessible);
-    }
-}
-
-void SvHeaderTabListBox::RecalculateAccessibleChildren()
-{
-    if (!m_aAccessibleChildren.empty())
-    {
-        sal_uInt32 nCount = (GetRowCount() + 1) * GetColumnCount();
-        if (m_aAccessibleChildren.size() < nCount)
-            m_aAccessibleChildren.resize(nCount);
-        else
-        {
-            DBG_ASSERT(m_aAccessibleChildren.size() == nCount, "wrong children count");
-        }
     }
 }
 
@@ -322,6 +288,8 @@ SvHeaderTabListBox::CreateAccessibleColumnHeader(sal_uInt16 _nColumn)
         const sal_uInt16 nColumnCount = GetColumnCount();
         m_aAccessibleChildren.resize(nColumnCount);
     }
+
+    assert(m_aAccessibleChildren.size() == GetColumnCount());
 
     // get header
     rtl::Reference<AccessibleBrowseBoxHeaderCell> xChild = m_aAccessibleChildren[_nColumn];
