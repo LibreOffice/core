@@ -5,7 +5,7 @@
     <string name="failed_to_insert_image">No s\'ha pogut inserir la imatge</string>
     <string name="failed_to_load_file">No s\'ha pogut determinar el fitxer a carregar</string>
     <string name="storage_permission_required">Cal el permís d\'emmagatzematge</string>
-    <string name="temp_file_saving_disabled">Aquest fitxer és només de lectura; els desaments estan desactivats.</string>
+    <string name="temp_file_saving_disabled">Compartit per l\'aplicació d\'origen com a fitxer de només lectura. Utilitzeu «Edita una còpia» per a fer canvis.</string>
     <string name="preparing_for_the_first_start_after_an_update">S\'està preparant per al primer inici després d\'una actualització.</string>
     <string name="saving">S\'està desant...</string>
     <string name="rate_now">Valora ara</string>
