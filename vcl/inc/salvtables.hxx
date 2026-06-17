@@ -1574,6 +1574,8 @@ protected:
 
     int to_external_model(int col) const;
 
+    SvTreeListEntry& InsertDummyEntry(SvTreeListEntry* pParent);
+
     bool IsDummyEntry(SvTreeListEntry* pEntry) const;
 
     SvTreeListEntry* GetPlaceHolderChild(const SvTreeListEntry* pEntry) const;
