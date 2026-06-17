@@ -82,7 +82,7 @@ public:
                                   const OUString& rId, stringmap& rProps, stringmap& rAtkProps,
                                   accelmap& rAccels) override;
 
-    virtual void set_response(const OUString& rId, int nResponse) override;
+    virtual void set_response(const OUString& rId, VclResponseType nResponse) override;
 
 private:
     static void deleteObject(QObject* pObject);

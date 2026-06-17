@@ -132,7 +132,7 @@ protected:
     void addTextBuffer(const OUString& sID, TextBuffer&& rTextBuffer);
     const TextBuffer* get_buffer_by_name(const OUString& sID) const;
 
-    virtual void set_response(const OUString& rId, int nResponse) = 0;
+    virtual void set_response(const OUString& rId, VclResponseType nResponse) = 0;
 
     void handleSizeGroup(xmlreader::XmlReader& reader);
 

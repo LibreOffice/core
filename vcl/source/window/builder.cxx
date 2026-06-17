@@ -3152,8 +3152,9 @@ void BuilderBase::handleActionWidget(xmlreader::XmlReader &reader)
     if (nDelim != -1)
         sID = sID.copy(0, nDelim);
 
-    int nResponse = sResponse.toInt32();
-    switch (nResponse)
+    sal_Int32 nXmlResponse = sResponse.toInt32();
+    VclResponseType nResponse;
+    switch (nXmlResponse)
     {
         case -5:
             nResponse = RET_OK;
@@ -3174,7 +3175,8 @@ void BuilderBase::handleActionWidget(xmlreader::XmlReader &reader)
             nResponse = RET_HELP;
             break;
         default:
-            assert(nResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
+            assert(nXmlResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
+            nResponse = static_cast<VclResponseType>(nXmlResponse);
             break;
     }
 
@@ -3264,7 +3266,7 @@ vcl::Window *VclBuilder::get_by_name(std::u16string_view sID)
     return nullptr;
 }
 
-void VclBuilder::set_response(const OUString& rId, int nResponse)
+void VclBuilder::set_response(const OUString& rId, VclResponseType nResponse)
 {
     PushButton* pPushButton = get<PushButton>(rId);
     assert(pPushButton);

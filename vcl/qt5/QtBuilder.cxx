@@ -829,7 +829,7 @@ void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUSt
                                          rProperties.at(u"label"_ustr));
 }
 
-void QtBuilder::set_response(const OUString& rId, int nResponse)
+void QtBuilder::set_response(const OUString& rId, VclResponseType nResponse)
 {
     QPushButton* pPushButton = get<QPushButton>(rId);
     assert(pPushButton);
