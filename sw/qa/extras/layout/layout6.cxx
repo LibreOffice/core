@@ -2298,6 +2298,29 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf146572BidiWrapNoExtraSpace)
     assertXPath(pXmlDoc, "//txt[2]//SwLineLayout[1]/SwHolePortion", "portion", u" ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool15942_tableSplitRowReformat)
+{
+    createSwDoc("Cool15942_tableSplitRowReformat.docx");
+
+    // ~same as Tools > Update > Update All
+    getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The wide cell's paragraph wraps to two lines and the row splits at the page boundary: the
+    // first line ("MISSING...") stays in the master row on page 1, the second ("blah Blah blah")
+    // moves to the follow on page 2. Note that the layout is not perfect: Word moves the whole row
+    // to page 2, so the test could need to be fixed when that is fixed.
+    // Without the fix, the height of the line was 0.
+    OUString oLineHeight
+        = getXPath(pXmlDoc, "//page[1]/body/tab[2]/row[2]/cell[2]/txt/infos/prtBounds", "height");
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(160), oLineHeight.toInt32());
+    OUString oLineContent = getXPath(
+        pXmlDoc, "//page[1]/body/tab[2]/row[2]/cell[2]/txt/SwParaPortion/SwLineLayout", "portion");
+    CPPUNIT_ASSERT(oLineContent.startsWith("MISSING"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(80), oLineContent.getLength());
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
