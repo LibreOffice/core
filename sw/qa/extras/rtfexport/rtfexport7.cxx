@@ -856,16 +856,15 @@ CPPUNIT_TEST_FIXTURE(Test, testItapIntblCell)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(11)->getString());
         uno::Reference<text::XTextTable> xTable5{ getParagraphOrTable(12), uno::UNO_QUERY };
         CPPUNIT_ASSERT_MESSAGE(msg, xTable5.is());
-#if !defined(_WIN32) //FIXME
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            msg, u"table \n"_ustr,
+            msg, u"table "_ustr SAL_NEWLINE_STRING,
             xTable5->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(13)->getString());
         uno::Reference<text::XTextTable> xTable6{ getParagraphOrTable(14), uno::UNO_QUERY };
         CPPUNIT_ASSERT_MESSAGE(msg, xTable6.is());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            msg, u"table \n"_ustr,
+            msg, u"table "_ustr SAL_NEWLINE_STRING,
             xTable6->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(15)->getString());
@@ -902,11 +901,10 @@ CPPUNIT_TEST_FIXTURE(Test, testItapIntblCell)
         uno::Reference<text::XTextTable> xTable11{ getParagraphOrTable(26), uno::UNO_QUERY };
         CPPUNIT_ASSERT_MESSAGE(msg, xTable11.is());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            msg, u"table \n"_ustr,
+            msg, u"table "_ustr SAL_NEWLINE_STRING,
             xTable11->getCellByName(u"A1"_ustr).queryThrow<text::XTextRange>()->getString());
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, u""_ustr, getParagraph(27)->getString());
-#endif
     };
 
     verify("load");
