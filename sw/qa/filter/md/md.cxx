@@ -241,9 +241,9 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
     SwDoc* pDoc = pDocShell->GetDoc();
     IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert(u"A B C"_ustr);
+    pWrtShell->Insert(u"A B_B C"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
-    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     SwView& rView = pWrtShell->GetView();
     SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE);
     SfxItemSet aSet(
@@ -257,10 +257,10 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
     // Then make sure the format of B is exported:
     std::string aActual = TempFileToString();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: A `B` C
-    // - Actual  : A B C
+    // - Expected: A `B_B` C
+    // - Actual  : A B_B C
     // i.e. the code formatting was lost.
-    std::string aExpected("A `B` C" SAL_NEWLINE_STRING);
+    std::string aExpected("A `B_B` C" SAL_NEWLINE_STRING);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -459,14 +459,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCodeBlockMdExport)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"A"_ustr);
     pWrtShell->SplitNode();
-    pWrtShell->Insert(u"B"_ustr);
+    pWrtShell->Insert(u"B_B"_ustr);
     SwCursor* pCursor = pWrtShell->GetCursor();
     SwDoc* pDoc = pDocShell->GetDoc();
     IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
     SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE);
     pDoc->SetTextFormatColl(*pCursor, pColl);
     pWrtShell->SplitNode();
-    pWrtShell->Insert(u"C"_ustr);
+    pWrtShell->Insert(u"C_C"_ustr);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"D"_ustr);
     pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
@@ -482,16 +482,16 @@ CPPUNIT_TEST_FIXTURE(Test, testCodeBlockMdExport)
         "A" SAL_NEWLINE_STRING
         SAL_NEWLINE_STRING
         "```" SAL_NEWLINE_STRING
-        "B" SAL_NEWLINE_STRING
+        "B_B" SAL_NEWLINE_STRING
         SAL_NEWLINE_STRING
-        "C" SAL_NEWLINE_STRING
+        "C_C" SAL_NEWLINE_STRING
         "```" SAL_NEWLINE_STRING
         SAL_NEWLINE_STRING
         "D" SAL_NEWLINE_STRING
         // clang-format on
     );
     // Without the accompanying fix in place, this test would have failed with:
-    // - Actual  : A\nB\nC\nD\n
+    // - Actual  : A\nB_B\nC_C\nD\n
     // i.e. the code block formatting was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
