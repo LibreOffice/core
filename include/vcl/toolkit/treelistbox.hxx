@@ -626,8 +626,8 @@ public:
     void SetCollapsedEntryBmp(SvTreeListEntry& rEntry, const Image& _rImage);
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const;
-    static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
-    static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
+    static const Image& GetExpandedEntryBmp(const SvTreeListEntry& rEntry);
+    static const Image& GetCollapsedEntryBmp(const SvTreeListEntry& rEntry);
 
     void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right
 

@@ -1780,18 +1780,18 @@ OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
     return {};
 }
 
-const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry)
+const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry& rEntry)
 {
-    assert(pEntry);
-    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
+    const SvLBoxContextBmp* pItem
+        = static_cast<const SvLBoxContextBmp*>(rEntry.GetFirstItem(SvLBoxItemType::ContextBmp));
     assert(pItem);
     return pItem->GetBitmap2( );
 }
 
-const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry )
+const Image& SvTreeListBox::GetCollapsedEntryBmp(const SvTreeListEntry& rEntry)
 {
-    assert(pEntry);
-    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
+    const SvLBoxContextBmp* pItem
+        = static_cast<const SvLBoxContextBmp*>(rEntry.GetFirstItem(SvLBoxItemType::ContextBmp));
     assert(pItem);
     return pItem->GetBitmap1( );
 }
@@ -1868,13 +1868,13 @@ void SvTreeListBox::ImpEntryInserted(SvTreeListEntry& rEntry)
 
     if (!(m_nTreeFlags & SvTreeFlags::MANINS))
     {
-        Size aSize = GetCollapsedEntryBmp(&rEntry).GetSizePixel();
+        Size aSize = GetCollapsedEntryBmp(rEntry).GetSizePixel();
         if (aSize.Width() > m_nContextBmpWidthMax)
         {
             m_nContextBmpWidthMax = static_cast<short>(aSize.Width());
             m_nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
-        aSize = GetExpandedEntryBmp(&rEntry).GetSizePixel();
+        aSize = GetExpandedEntryBmp(rEntry).GetSizePixel();
         if (aSize.Width() > m_nContextBmpWidthMax)
         {
             m_nContextBmpWidthMax = static_cast<short>(aSize.Width());
