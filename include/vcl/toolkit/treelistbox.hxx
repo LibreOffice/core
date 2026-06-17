@@ -288,8 +288,8 @@ private:
 
     void ActionMoving(SvTreeListEntry* pEntry);
     void ActionMoved();
-    void ActionInserted(SvTreeListEntry* pEntry);
-    void ActionInsertedTree(SvTreeListEntry* pEntry);
+    void ActionInserted(SvTreeListEntry& rEntry);
+    void ActionInsertedTree(SvTreeListEntry& rEntry);
     void ActionRemoving(SvTreeListEntry* pEntry);
 
     // Handler and methods for Drag - finished handler.
@@ -656,8 +656,8 @@ public:
     void            SetUpdateMode( bool );
 
     void ModelHasCleared();
-    void ModelHasInserted(SvTreeListEntry* pEntry);
-    void ModelHasInsertedTree(SvTreeListEntry* pEntry);
+    void ModelHasInserted(SvTreeListEntry& rEntry);
+    void ModelHasInsertedTree(SvTreeListEntry& rEntry);
     void ModelIsMoving(SvTreeListEntry* pSource);
     void ModelHasMoved(SvTreeListEntry* pSource);
     void ModelIsRemoving(SvTreeListEntry* pEntry);

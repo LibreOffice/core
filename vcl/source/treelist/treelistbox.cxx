@@ -703,36 +703,35 @@ void SvTreeListBox::ActionMoved()
     m_bVisPositionsValid = false;
 }
 
-void SvTreeListBox::ActionInserted(SvTreeListEntry* pEntry)
+void SvTreeListBox::ActionInserted(SvTreeListEntry& rEntry)
 {
-    DBG_ASSERT(pEntry, "Insert:No Entry");
     SvViewDataEntry aData;
-    InitViewData(&aData, pEntry);
+    InitViewData(&aData, &rEntry);
     std::pair<SvDataTable::iterator, bool> aSuccess
-        = m_DataTable.insert(std::make_pair(pEntry, std::move(aData)));
+        = m_DataTable.insert(std::make_pair(&rEntry, std::move(aData)));
     DBG_ASSERT(aSuccess.second, "Entry already in View");
-    if (m_nVisibleCount && m_pModel->IsEntryVisible(*this, pEntry))
+    if (m_nVisibleCount && m_pModel->IsEntryVisible(*this, &rEntry))
     {
         m_nVisibleCount = 0;
         m_bVisPositionsValid = false;
     }
 }
 
-void SvTreeListBox::ActionInsertedTree(SvTreeListEntry* pEntry)
+void SvTreeListBox::ActionInsertedTree(SvTreeListEntry& rEntry)
 {
-    if (m_pModel->IsEntryVisible(*this, pEntry))
+    if (m_pModel->IsEntryVisible(*this, &rEntry))
     {
         m_nVisibleCount = 0;
         m_bVisPositionsValid = false;
     }
     // iterate over entry and its children
-    SvTreeListEntry* pCurEntry = pEntry;
+    SvTreeListEntry* pCurEntry = &rEntry;
     sal_uInt16 nRefDepth = m_pModel->GetDepth(pCurEntry);
     while (pCurEntry)
     {
         DBG_ASSERT(m_DataTable.find(pCurEntry) != m_DataTable.end(), "Entry already in Table");
         SvViewDataEntry aViewData;
-        InitViewData(&aViewData, pEntry);
+        InitViewData(&aViewData, &rEntry);
         m_DataTable.insert(std::make_pair(pCurEntry, std::move(aViewData)));
         pCurEntry = m_pModel->Next(pCurEntry);
         if (pCurEntry && m_pModel->GetDepth(pCurEntry) <= nRefDepth)
@@ -2345,24 +2344,24 @@ void SvTreeListBox::SelectAll( bool bSelect )
                              true); // even when using SelectionMode::Single, deselect the cursor
 }
 
-void SvTreeListBox::ModelHasInsertedTree( SvTreeListEntry* pEntry )
+void SvTreeListBox::ModelHasInsertedTree(SvTreeListEntry& rEntry)
 {
-    sal_uInt16 nRefDepth = m_pModel->GetDepth(pEntry);
-    SvTreeListEntry* pTmp = pEntry;
+    sal_uInt16 nRefDepth = m_pModel->GetDepth(&rEntry);
+    SvTreeListEntry* pTmp = &rEntry;
     do
     {
         ImpEntryInserted( pTmp );
         pTmp = Next( pTmp );
     } while (pTmp && nRefDepth < m_pModel->GetDepth(pTmp));
-    m_pImpl->TreeInserted(pEntry);
+    m_pImpl->TreeInserted(&rEntry);
 
     ModelChangedHdl();
 }
 
-void SvTreeListBox::ModelHasInserted( SvTreeListEntry* pEntry )
+void SvTreeListBox::ModelHasInserted(SvTreeListEntry& rEntry)
 {
-    ImpEntryInserted( pEntry );
-    m_pImpl->EntryInserted(pEntry);
+    ImpEntryInserted(&rEntry);
+    m_pImpl->EntryInserted(&rEntry);
 
     ModelChangedHdl();
 }
@@ -3542,8 +3541,9 @@ void SvTreeListBox::ModelNotification(SvListAction eAction, SvTreeListEntry* pEn
     {
         case SvListAction::INSERTED:
         {
-            ActionInserted(pEntry);
-            ModelHasInserted(pEntry);
+            assert(pEntry && "missing entry that was inserted");
+            ActionInserted(*pEntry);
+            ModelHasInserted(*pEntry);
             SvLBoxContextBmp* pBmpItem
                 = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
             if (!pBmpItem)
@@ -3563,8 +3563,9 @@ void SvTreeListBox::ModelNotification(SvListAction eAction, SvTreeListEntry* pEn
             break;
         }
         case SvListAction::INSERTED_TREE:
-            ActionInsertedTree(pEntry);
-            ModelHasInsertedTree(pEntry);
+            assert(pEntry && "missing entry");
+            ActionInsertedTree(*pEntry);
+            ModelHasInsertedTree(*pEntry);
             break;
         case SvListAction::REMOVING:
             ModelIsRemoving(pEntry);
