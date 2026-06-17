@@ -425,17 +425,6 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     SetCursorAtCell( nPosX, nPosY, bScroll );
 }
 
-bool ScViewFunctionSet::CheckRefBounds(SCCOL nPosX, SCROW nPosY)
-{
-    SCCOL startX = m_rViewData.GetRefStartX();
-    SCROW startY = m_rViewData.GetRefStartY();
-
-    SCCOL endX = m_rViewData.GetRefEndX();
-    SCROW endY = m_rViewData.GetRefEndY();
-
-    return nPosX >= startX && nPosX <= endX && nPosY >= startY && nPosY <= endY;
-}
-
 bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll )
 {
     ScTabView* pView = m_rViewData.GetView();
@@ -486,7 +475,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
     if (bRefMode)
     {
         // if no input is possible from this doc, don't move the reference cursor around
-        if ( !ScModule::get()->IsModalMode(m_rViewData.GetSfxDocShell()) && !CheckRefBounds(nPosX, nPosY))
+        if ( !ScModule::get()->IsModalMode(m_rViewData.GetSfxDocShell()))
         {
             if (!m_bAnchor)
             {
