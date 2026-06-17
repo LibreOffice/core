@@ -2920,7 +2920,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
 
             aPos = GetEntryPosition( pEntry );
             aPos.setX(m_rView.GetTabPos(pEntry, pTab)); //pTab->GetPos();
-            Size aSize(pItem->GetWidth(m_rView, pEntry), pItem->GetHeight(m_rView, pEntry));
+            Size aSize(pItem->GetWidth(m_rView, pEntry), pItem->GetHeight(m_rView, *pEntry));
             SvLBoxTab* pNextTab = NextTab( pTab );
             bool bItemClipped = false;
             // is the item cut off by its right neighbor?

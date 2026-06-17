@@ -129,7 +129,7 @@ public:
     int GetWidth(const SvTreeListBox& rView, const SvTreeListEntry* pEntry) const;
     int GetWidth(const SvTreeListBox& rView, const SvViewDataEntry* pData,
                  sal_uInt16 nItemPos) const;
-    int GetHeight(const SvTreeListBox& rView, const SvTreeListEntry* pEntry) const;
+    int GetHeight(const SvTreeListBox& rView, const SvTreeListEntry& rEntry) const;
     static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
     bool isEnable() const { return !mbDisabled; }

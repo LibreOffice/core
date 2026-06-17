@@ -114,7 +114,7 @@ void SvLBoxString::Paint(
             }
         }
     }
-    aSize.setHeight(GetHeight(rDev, &rEntry));
+    aSize.setHeight(GetHeight(rDev, rEntry));
 
     if (mbEmphasized)
     {

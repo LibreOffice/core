@@ -345,9 +345,9 @@ int SvLBoxItem::GetWidth(const SvTreeListBox& rView, const SvTreeListEntry* pEnt
     return nWidth;
 }
 
-int SvLBoxItem::GetHeight(const SvTreeListBox& rView, const SvTreeListEntry* pEntry) const
+int SvLBoxItem::GetHeight(const SvTreeListBox& rView, const SvTreeListEntry& rEntry) const
 {
-    const SvViewDataItem& rViewData = rView.GetViewDataItem(pEntry, *this);
+    const SvViewDataItem& rViewData = rView.GetViewDataItem(&rEntry, *this);
     return rViewData.mnHeight;
 }
 
@@ -2540,7 +2540,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry& rEntry, SvLBoxString& rItem,
     SvLBoxTab* pTab = GetTab(rEntry, rItem);
     DBG_ASSERT(pTab,"EditItemText:Tab not found");
 
-    auto nItemHeight(rItem.GetHeight(*this, &rEntry));
+    auto nItemHeight(rItem.GetHeight(*this, rEntry));
     Point aPos = GetEntryPosition(&rEntry);
     aPos.AdjustY((m_nEntryHeight - nItemHeight) / 2);
     aPos.setX(GetTabPos(&rEntry, pTab));

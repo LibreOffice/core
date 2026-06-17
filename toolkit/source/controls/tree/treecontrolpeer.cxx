@@ -1471,7 +1471,7 @@ void UnoTreeListItem::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     Point aPos(rPos);
-    Size aSize(GetWidth(rDev, &rEntry), GetHeight(rDev, &rEntry));
+    Size aSize(GetWidth(rDev, &rEntry), GetHeight(rDev, rEntry));
     if (!!maImage)
     {
         rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
