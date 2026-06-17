@@ -1823,6 +1823,7 @@ const std::vector<std::string>& getUploadableXcuPaths()
     };
     return sPaths;
 }
+} // namespace
 
 // True if an <item>'s oor:path is at or below one of the allowed roots.
 // Matches the prefix only on a path-segment boundary so that e.g.
@@ -1896,7 +1897,6 @@ std::string scrubXcuForUpload(const std::string& rawPath)
         return std::string();
     }
 }
-} // namespace
 
 void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
              const std::shared_ptr<ClientSession>& session)

@@ -109,6 +109,15 @@ private:
 class RequestDetails;
 class ClientSession;
 
+/// True if a registrymodifications.xcu <item>'s oor:path is at or below one
+/// of the officecfg roots COOL round-trips.
+bool isAllowedXcuPath(const std::string& path);
+
+/// Filters a registrymodifications.xcu down to the allowed oor:path subset,
+/// writing the kept items to a temp file and returning its path. Returns ""
+/// when nothing allowed remains or on parse/write failure.
+std::string scrubXcuForUpload(const std::string& rawPath);
+
 /// DocumentBroker is responsible for setting up a document in jail and brokering loading it from
 /// Storage and saving it back.
 

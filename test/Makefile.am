@@ -267,6 +267,7 @@ clienttest_SOURCES = \
 	$(wsd_sources) \
 	ClientTestStubs.cpp \
 	ClientRequestDispatcherTests.cpp \
+	XcuScrubWhiteBoxTests.cpp \
 	test.cpp
 
 clienttest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS)
