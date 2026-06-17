@@ -162,8 +162,7 @@ public:
     SvTreeListEntry*        GetEntry( sal_uInt32 nRootPos ) const;
     SvTreeListEntry*        GetEntryAtAbsPos( sal_uInt32 nAbsPos ) const;
 
-    const SvTreeListEntry* GetParent( const SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry* GetParent( SvTreeListEntry* pEntry );
+    SvTreeListEntry* GetParent(const SvTreeListEntry* pEntry) const;
 
     const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
 

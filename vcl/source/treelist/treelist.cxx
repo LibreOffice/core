@@ -1009,15 +1009,7 @@ const SvTreeListEntries& SvTreeList::GetChildList( SvTreeListEntry* pParent ) co
     return pParent->m_Children;
 }
 
-const SvTreeListEntry* SvTreeList::GetParent( const SvTreeListEntry* pEntry ) const
-{
-    const SvTreeListEntry* pParent = pEntry->pParent;
-    if (pParent == m_pRootItem.get())
-        pParent = nullptr;
-    return pParent;
-}
-
-SvTreeListEntry* SvTreeList::GetParent( SvTreeListEntry* pEntry )
+SvTreeListEntry* SvTreeList::GetParent(const SvTreeListEntry* pEntry) const
 {
     SvTreeListEntry* pParent = pEntry->pParent;
     if (pParent == m_pRootItem.get())
