@@ -28,7 +28,7 @@
 #include <xmloff/txtstyli.hxx>
 #include "formenums.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "gridcolumnproptranslator.hxx"
+#include <forms/gridcolumnproptranslator.hxx>
 #include "property_description.hxx"
 #include "property_meta_data.hxx"
 

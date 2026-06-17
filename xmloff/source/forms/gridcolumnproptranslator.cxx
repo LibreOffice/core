@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "gridcolumnproptranslator.hxx"
+#include <forms/gridcolumnproptranslator.hxx>
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
@@ -66,6 +66,8 @@ namespace xmloff
             { ParagraphAdjust_RIGHT,            awt::TextAlign::RIGHT    },
             { ParagraphAdjust_BLOCK,            awt::TextAlign::RIGHT    },
             { ParagraphAdjust_STRETCH,          awt::TextAlign::LEFT     },
+            { ParagraphAdjust_START,            awt::TextAlign::LEFT     },
+            { ParagraphAdjust_END,              awt::TextAlign::RIGHT    },
             { ParagraphAdjust::ParagraphAdjust_MAKE_FIXED_SIZE,  awt::TextAlign::LEFT     },
             { ParagraphAdjust::ParagraphAdjust_MAKE_FIXED_SIZE,  -1 }
         };
@@ -269,7 +271,7 @@ namespace xmloff
         if ( nAlignPos != -1 )
             aTranslatedNames.getArray()[ nAlignPos ] = ALIGN;
 
-        aValues = m_xGridColumn->getPropertyValues( aPropertyNames );
+        aValues = m_xGridColumn->getPropertyValues( aTranslatedNames );
         if ( nAlignPos != -1 )
             valueAlignToParaAdjust( aValues.getArray()[ nAlignPos ] );
 
