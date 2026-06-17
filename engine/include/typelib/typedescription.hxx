@@ -30,13 +30,7 @@
 #include "typelib/typedescription.h"
 
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /** C++ wrapper for typelib_TypeDescription.
@@ -210,9 +204,6 @@ inline void TypeDescription::makeComplete() const
         ::typelib_typedescription_complete( &_pTypeDescr );
 }
 
-}
-}
-}
 }
 
 #endif

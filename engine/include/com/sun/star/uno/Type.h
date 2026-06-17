@@ -26,13 +26,7 @@
 #include "rtl/alloc.h"
 
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /** Enum defining UNO_TYPE_NO_ACQUIRE for type description reference transfer.
@@ -188,9 +182,6 @@ public:
     static typelib_TypeDescriptionReference * s_pType;
 };
 
-}
-}
-}
 }
 
 #endif

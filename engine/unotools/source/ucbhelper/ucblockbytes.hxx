@@ -25,32 +25,26 @@
 #include <comphelper/errcode.hxx>
 #include <mutex>
 
-namespace com
+namespace com::sun::star
 {
-    namespace sun
+    namespace task
     {
-        namespace star
-        {
-            namespace task
-            {
-                class XInteractionHandler;
-            }
-            namespace io
-            {
-                class XStream;
-                class XInputStream;
-                class XOutputStream;
-                class XSeekable;
-            }
-            namespace ucb
-            {
-                class XContent;
-            }
-            namespace beans
-            {
-                struct PropertyValue;
-            }
-        }
+        class XInteractionHandler;
+    }
+    namespace io
+    {
+        class XStream;
+        class XInputStream;
+        class XOutputStream;
+        class XSeekable;
+    }
+    namespace ucb
+    {
+        class XContent;
+    }
+    namespace beans
+    {
+        struct PropertyValue;
     }
 }
 

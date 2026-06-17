@@ -29,13 +29,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 
@@ -71,9 +65,6 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
     return NULL;
 }
 
-}
-}
-}
 }
 
 #endif

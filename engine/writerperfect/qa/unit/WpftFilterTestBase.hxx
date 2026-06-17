@@ -22,17 +22,11 @@
 
 #include "WpftFilterFixture.hxx"
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace document
 {
 class XFilter;
-}
-}
 }
 }
 

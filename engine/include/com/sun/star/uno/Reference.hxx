@@ -38,13 +38,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 
@@ -452,9 +446,6 @@ operator <<(
     std::basic_ostream<charT, traits> & stream, BaseReference const & ref)
 { return stream << ref.get(); }
 
-}
-}
-}
 }
 
 namespace std

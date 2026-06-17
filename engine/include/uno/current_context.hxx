@@ -30,13 +30,7 @@
 #include "com/sun/star/uno/XCurrentContext.hpp"
 
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /** Getting the current context.
@@ -109,9 +103,6 @@ inline ContextLayer::~ContextLayer()
     ::uno_setCurrentContext( m_xPreviousContext.get(), m_aEnvTypeName.pData, NULL );
 }
 
-}
-}
-}
 }
 
 #endif

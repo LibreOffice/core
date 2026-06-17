@@ -35,13 +35,7 @@
 #include "com/sun/star/uno/genfunc.hxx"
 #include "cppu/unotype.hxx"
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /// @cond INTERNAL
@@ -280,9 +274,6 @@ template <class E> inline auto asNonConstRange(css::uno::Sequence<E>& s)
 
 /// @endcond
 
-}
-}
-}
 }
 
 namespace cppu {

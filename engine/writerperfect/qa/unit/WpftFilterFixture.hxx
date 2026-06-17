@@ -43,11 +43,7 @@
 #define REQUIRE_WPS_VERSION(major, minor, micro)                                                   \
     REQUIRE_VERSION(WPS_VERSION_MAJOR, WPS_VERSION_MINOR, WPS_VERSION_MICRO, major, minor, micro)
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace container
 {
@@ -60,8 +56,6 @@ class XTypeDetection;
 namespace frame
 {
 class XDesktop2;
-}
-}
 }
 }
 

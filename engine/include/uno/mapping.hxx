@@ -38,13 +38,7 @@ typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
 typedef struct _uno_Interface uno_Interface;
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /** C++ wrapper for C uno_Mapping.
@@ -286,9 +280,6 @@ inline void * Mapping::mapInterface(
     return pOut;
 }
 
-}
-}
-}
 }
 
 #endif

@@ -11,18 +11,9 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace io
+namespace com::sun::star::io
 {
 class XInputStream;
-}
-}
-}
 }
 
 css::uno::Reference<css::io::XInputStream> createDummyInput();

@@ -16,11 +16,7 @@
 
 #include <rtl/ustring.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace beans
 {
@@ -50,8 +46,6 @@ class XComponent;
 namespace uno
 {
 class XComponentContext;
-}
-}
 }
 }
 

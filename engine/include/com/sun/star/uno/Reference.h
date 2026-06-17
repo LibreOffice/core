@@ -28,13 +28,7 @@
 
 #include "rtl/alloc.h"
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 class RuntimeException;
@@ -521,9 +515,6 @@ public:
     template< class other_type > inline Reference< other_type > queryThrow() const;
 };
 
-}
-}
-}
 }
 
 #endif

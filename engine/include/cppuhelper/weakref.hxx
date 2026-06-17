@@ -29,13 +29,7 @@
 #include "cppuhelper/cppuhelperdllapi.h"
 
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 class OWeakRefListener;
@@ -201,9 +195,6 @@ public:
         { return Reference< interface_type >::query( get() ); }
 };
 
-}
-}
-}
 }
 
 #endif

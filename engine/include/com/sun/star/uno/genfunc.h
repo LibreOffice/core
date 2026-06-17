@@ -24,13 +24,7 @@
 
 typedef struct _typelib_TypeDescriptionReference typelib_TypeDescriptionReference;
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 /** Function to acquire a C++ interface.
 
@@ -49,9 +43,6 @@ inline void SAL_CALL cpp_release(void* pCppI);
     @return acquired C++ interface pointer or null
 */
 inline void* SAL_CALL cpp_queryInterface(void* pCppI, typelib_TypeDescriptionReference* pType);
-}
-}
-}
 }
 
 #endif

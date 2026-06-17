@@ -43,13 +43,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 
@@ -697,9 +691,6 @@ inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, t
     return o;
 }
 
-}
-}
-}
 }
 
 #endif

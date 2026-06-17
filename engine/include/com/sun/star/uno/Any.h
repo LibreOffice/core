@@ -33,13 +33,7 @@
 #include "rtl/alloc.h"
 
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 class Type;
@@ -410,9 +404,6 @@ inline bool SAL_CALL operator == ( const Any & rAny, const Type & value );
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value );
 
-}
-}
-}
 }
 
 #endif

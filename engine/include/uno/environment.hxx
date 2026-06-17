@@ -30,13 +30,7 @@
 
 #include "uno/lbnames.h"
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /** C++ wrapper for binary C uno_Environment.
@@ -254,9 +248,6 @@ inline Environment Environment::getCurrent(rtl::OUString const & typeName)
     return environment;
 }
 
-}
-}
-}
 }
 
 #endif

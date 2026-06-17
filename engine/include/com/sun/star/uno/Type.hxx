@@ -28,13 +28,7 @@
 #include "com/sun/star/uno/Type.h"
 #include "cppu/unotype.hxx"
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 
@@ -108,9 +102,6 @@ template<typename charT, typename traits> std::basic_ostream<charT, traits> &
 operator <<(std::basic_ostream<charT, traits> & stream, Type const & type)
 { return stream << type.getTypeName(); }
 
-}
-}
-}
 }
 
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Type * )

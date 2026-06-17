@@ -28,13 +28,7 @@
 
 /// @cond INTERNAL
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /** C++ holder reference for binary C uno_Interface.  Not for public use, may be
@@ -170,9 +164,6 @@ inline void UnoInterfaceReference::dispatch(
         m_pUnoI, pMemberType, pReturn, pArgs, ppException );
 }
 
-}
-}
-}
 }
 
 /// @endcond

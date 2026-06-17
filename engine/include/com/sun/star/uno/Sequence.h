@@ -34,13 +34,7 @@ namespace rtl
 class ByteSequence;
 }
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 
 /** Template C++ class representing an IDL sequence. Template argument is the
@@ -235,9 +229,6 @@ template<> class Sequence<bool> {
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence );
 
-}
-}
-}
 }
 
 #endif
