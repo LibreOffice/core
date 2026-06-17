@@ -3679,7 +3679,7 @@ void SalInstanceTreeView::update_checkbutton_column_width(SvTreeListEntry& rEntr
 {
     SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(rEntry);
     m_xTreeView->InitViewData(pViewData, &rEntry);
-    m_xTreeView->CheckBoxInserted(&rEntry);
+    m_xTreeView->CheckBoxInserted(rEntry);
 }
 
 void SalInstanceTreeView::InvalidateModelEntry(SvTreeListEntry* pEntry)

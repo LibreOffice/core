@@ -303,7 +303,7 @@ private:
 
     // after a checkbox entry is inserted, use this to get its width to support
     // autowidth for the 1st checkbox column
-    SAL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry* pEntry);
+    SAL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry& rEntry);
 
     SAL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
     SAL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry) const;
