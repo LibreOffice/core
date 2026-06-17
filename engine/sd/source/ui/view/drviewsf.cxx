@@ -780,6 +780,19 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                         }
                     }
                 }
+
+                // The object being edited may not be in the mark list. Keep the
+                // bullet/numbering toggle enabled whenever there is a text-edit object.
+                if (!bEnable)
+                {
+                    SdrTextObj* pEditObj = DynCastSdrTextObj(mpDrawView->GetTextEditObject());
+                    if (pEditObj && pEditObj->GetObjInventor() == SdrInventor::Default
+                        && pEditObj->GetObjIdentifier() != SdrObjKind::OLE2)
+                    {
+                        bEnable = true;
+                    }
+                }
+
                 if (bEnable)
                 {
                     bool bIsBullet = false;

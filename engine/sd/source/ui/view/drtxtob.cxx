@@ -466,6 +466,19 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell& rViewShell, ::sd::View* pV
                             }
                         }
                     }
+
+                    // The object being edited may not be in the mark list. Keep the
+                    // bullet/numbering toggle enabled whenever there is a text-edit object.
+                    if (!bEnable)
+                    {
+                        SdrTextObj* pEditObj = DynCastSdrTextObj(pDrawView->GetTextEditObject());
+                        if (pEditObj && pEditObj->GetObjInventor() == SdrInventor::Default
+                            && pEditObj->GetObjIdentifier() != SdrObjKind::OLE2)
+                        {
+                            bEnable = true;
+                        }
+                    }
+
                     if (bEnable)
                     {
                         bool bIsBullet = false;
