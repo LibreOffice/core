@@ -108,10 +108,6 @@ private:
     int nTotalWindows;
 };
 
-// Precision factor for vertical scrollbar: 1 scrollbar unit = 1/SC_VSCROLL_PRECISION of a row.
-// This enables sub-row thumb positions during dragging for pixel-level smooth scrolling.
-inline constexpr tools::Long SC_VSCROLL_PRECISION = 100;
-
 class ScTabView
 {
 private:

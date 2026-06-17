@@ -498,19 +498,40 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
     SetScrollBar( *aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bLayoutRTL );
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
-    tools::Long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, rDoc.MaxRow(), nStartY );
     {
-        // Scale vertical scrollbar by SC_VSCROLL_PRECISION for sub-row smooth dragging.
-        constexpr tools::Long P = SC_VSCROLL_PRECISION;
+        // Pixel-proportional vertical scrollbar: 1 thumb unit = 1 pixel of document height.
+        // Large rows occupy proportionally more thumb range → uniform scroll speed.
         SCROW nPosYB = aViewData.GetPosY(SC_SPLIT_BOTTOM);
         tools::Long nOffYB = aViewData.GetPixOffsetY(SC_SPLIT_BOTTOM);
         tools::Long nRowPxB = std::max(1L, aViewData.ToPixel(
             rDoc.GetRowHeight(nPosYB, nTab), aViewData.GetPPTY()));
-        // Sub-row fraction: 0..(P-1) units of the current top row already scrolled
-        tools::Long nSubRowB = nOffYB == 0 ? 0 : (-nOffYB * P + nRowPxB / 2) / nRowPxB;
-        tools::Long nThumbB  = (nPosYB - nStartY) * P + nSubRowB;
-        SetScrollBar(*aVScrollBottom, nMaxYB * P, nVisYB * P, nThumbB, false);
-        aVScrollBottom->SetLineSize(P);  // 1 arrow click = 1 full row = P precision units
+
+        // Limit range to used rows + buffer (mirrors lcl_GetScrollRange logic in pixels
+        // so the thumb stays a usable size on sheets with little data).
+        SCROW nScrollEndY = std::min(
+            std::max(static_cast<SCROW>(nUsedY + nVisYB + 2),
+                     static_cast<SCROW>(nPosYB + nVisYB + 2)),
+            rDoc.MaxRow());
+        tools::Long nTotalPxB = rDoc.GetScaledRowHeight(nStartY, nScrollEndY, nTab,
+                                                        aViewData.GetPPTY());
+
+        // Thumb = cumulative pixel height from nStartY to top-of-viewport.
+        tools::Long nThumbB = (nPosYB > nStartY)
+            ? rDoc.GetScaledRowHeight(nStartY, nPosYB - 1, nTab, aViewData.GetPPTY())
+            : 0;
+        nThumbB += (-nOffYB);  // nOffYB ≤ 0
+
+        // Visible page size = actual grid window height. Using nVisYB×currentRowHeight
+        // balloons when a large row is at the top, clamping the thumb and causing
+        // lcl_UpdateBar to fire a spurious scroll-back via SmoothScrollY.
+        tools::Long nVisPixB = 0;
+        if (pGridWin[SC_SPLIT_BOTTOMLEFT])
+            nVisPixB = pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutputSizePixel().Height();
+        if (nVisPixB <= 0)
+            nVisPixB = nVisYB * nRowPxB;  // fallback during early init
+
+        SetScrollBar(*aVScrollBottom, nTotalPxB, nVisPixB, nThumbB, false);
+        aVScrollBottom->SetLineSize(nRowPxB);
     }
 
     if (bRight)
@@ -538,17 +559,20 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
     }
 
     {
-        constexpr tools::Long P = SC_VSCROLL_PRECISION;
-        nDiff = lcl_UpdateBar(*aVScrollBottom, nVisYB * P);
-        if (nDiff)
+        // Same actual-height page size as in the SetScrollBar call above.
+        tools::Long nVisPixB2 = 0;
+        if (pGridWin[SC_SPLIT_BOTTOMLEFT])
+            nVisPixB2 = pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutputSizePixel().Height();
+        if (nVisPixB2 <= 0)
         {
             SCROW nPosYB2 = aViewData.GetPosY(SC_SPLIT_BOTTOM);
             tools::Long nRowPxB2 = std::max(1L, aViewData.ToPixel(
                 rDoc.GetRowHeight(nPosYB2, nTab), aViewData.GetPPTY()));
-            tools::Long nPxDiff = (nDiff * nRowPxB2 + (nDiff > 0 ? P/2 : -P/2)) / P;  // round
-            if (nPxDiff != 0)
-                SmoothScrollY(nPxDiff, SC_SPLIT_BOTTOM);
+            nVisPixB2 = nVisYB * nRowPxB2;
         }
+        nDiff = lcl_UpdateBar(*aVScrollBottom, nVisPixB2);
+        if (nDiff != 0)
+            SmoothScrollY(nDiff, SC_SPLIT_BOTTOM);
     }
     if (bTop)
     {
