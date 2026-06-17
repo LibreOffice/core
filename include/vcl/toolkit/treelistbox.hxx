@@ -685,7 +685,7 @@ public:
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long nLine );
     // Respects indentation
     tools::Long     GetTabPos(const SvTreeListEntry*, const SvLBoxTab*) const;
-    void            InvalidateEntry( SvTreeListEntry* );
+    void InvalidateEntry(SvTreeListEntry& rEntry);
     SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX );
     std::pair<tools::Long, tools::Long> GetItemPos(SvTreeListEntry* pEntry, sal_uInt16 nTabIdx);

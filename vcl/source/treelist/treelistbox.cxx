@@ -1954,7 +1954,7 @@ void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState 
             pItem->SetStateTristate();
             break;
     }
-    InvalidateEntry( pEntry );
+    InvalidateEntry(*pEntry);
 }
 
 SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) const
@@ -2513,7 +2513,7 @@ void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
                 if (pItemCheckBox && pItemCheckBox->isEnable() && GetItemPos(pEntry, 0).first < aPnt.X() - GetMapMode().GetOrigin().X())
                 {
                     pItemCheckBox->ClickHdl(pEntry);
-                    InvalidateEntry(pEntry);
+                    InvalidateEntry(*pEntry);
                 }
             }
         }
@@ -2764,13 +2764,9 @@ void SvTreeListBox::ImplInitStyle()
     Invalidate();
 }
 
-void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
+void SvTreeListBox::InvalidateEntry(SvTreeListEntry& rEntry)
 {
-    DBG_ASSERT(pEntry,"InvalidateEntry:No Entry");
-    if (pEntry)
-    {
-        GetModel()->InvalidateEntry(*pEntry);
-    }
+    GetModel()->InvalidateEntry(rEntry);
 }
 
 void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl::RenderContext& rRenderContext)
