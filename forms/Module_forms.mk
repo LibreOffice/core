@@ -13,6 +13,10 @@ $(eval $(call gb_Module_add_targets,forms,\
     Library_frm \
 ))
 
+$(eval $(call gb_Module_add_check_targets,forms,\
+    CppunitTest_forms_unit \
+))
+
 $(eval $(call gb_Module_add_l10n_targets,forms,\
     AllLangMoTarget_frm \
 ))
