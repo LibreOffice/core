@@ -459,7 +459,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						}
 					]
 				},
-				{ type: 'separator', id: 'help-onlinehelp-break', orientation: 'vertical' },
+				{ type: 'separator', id: 'help-keyboardshortcuts-break', orientation: 'vertical' },
 				{
 					'type': 'toolbox',
 					'children': [
@@ -472,7 +472,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						}
 					]
 				},
-				{ type: 'separator', id: 'help-keyboardshortcuts-break', orientation: 'vertical' },
+				{ type: 'separator', id: 'help-forum-break', orientation: 'vertical' },
 				{
 					'type': 'toolbox',
 					'children': [
