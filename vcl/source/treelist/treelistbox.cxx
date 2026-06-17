@@ -1821,7 +1821,6 @@ SvTreeListEntry& SvTreeListBox::InsertEntry(const OUString& rText, SvTreeListEnt
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     InitEntry(*pEntry, rText, Image(), Image());
-    pEntry->EnableChildrenOnDemand(false);
 
     Insert(pEntry, nPos, pParent);
 
