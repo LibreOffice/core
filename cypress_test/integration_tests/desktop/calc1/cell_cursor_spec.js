@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach expect require */
+/* global describe it cy beforeEach expect require Cypress */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -10,6 +10,24 @@ function closeNotebookbarPopup() {
 	cy.cGet('body').type('{esc}');
 	cy.cGet('#document-canvas').realClick();
 	cy.cGet('.jsdialog-overlay').should('not.exist');
+}
+
+// Return the text of the most recent .uno:RowColSelCount state change
+// captured by a sinon spy installed on the socket's _onMessage. Core sends
+// this message whenever the selected row/column count changes, e.g.
+//   statechanged: .uno:RowColSelCount=Selected: 51 rows, 1 column
+function lastRowColSelCount(win) {
+	var last = null;
+	win.app.socket._onMessage.getCalls().forEach(function(call) {
+		var evt = call.args && call.args[0];
+		var textMsg = evt && evt.textMsg;
+		if (typeof textMsg === 'string'
+			&& textMsg.startsWith('statechanged:')
+			&& textMsg.indexOf('.uno:RowColSelCount') !== -1) {
+			last = textMsg;
+		}
+	});
+	return last;
 }
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell selection', function() {
@@ -220,6 +238,65 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 
 		// This doesn't pass without the fix in this commit.
 		cy.cGet('#document-container').compareSnapshot('scroll-check', 0.02);
+	});
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test keyboard cell navigation and selection', function() {
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/empty-selections.ods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			helper.processToIdle(win);
+		});
+	});
+
+	it('Move down, write a cell, and select up to the top with CTRL+SHIFT+UP', function() {
+		// Start from A1.
+		calcHelper.clickOnFirstCell(true, false, 'A1');
+
+		// Move down 24 rows to stop on A25 and write content there.
+		helper.typeIntoDocument('{downArrow}'.repeat(24));
+		calcHelper.assertAddressAfterIdle(this.win, 'A25');
+		helper.typeIntoDocument('xyz');
+
+		// The first downArrow commits xyz into A25 and moves to A26; keep going
+		// down to A51 (1 commit + 25 moves = 26 presses).
+		helper.typeIntoDocument('{downArrow}'.repeat(26));
+		calcHelper.assertAddressAfterIdle(this.win, 'A51');
+
+		// Spy on incoming socket messages so we can verify the result of the
+		// selection from what core sends back. processToIdle reuses an
+		// existing spy (it does not restore one it did not create), so this
+		// spy survives the processToIdle calls below.
+		cy.then(() => {
+			Cypress.sinon.spy(this.win.app.socket, '_onMessage');
+		});
+
+		// With content present at A25, the first CTRL+SHIFT+UP only extends the
+		// selection up to that data boundary: A25:A51 (27 rows, 1 column).
+		helper.typeIntoDocument('{ctrl}{shift}{upArrow}');
+		cy.then(() => {
+			return helper.processToIdle(this.win);
+		});
+		cy.wrap(null).should(() => {
+			expect(lastRowColSelCount(this.win), 'RowColSelCount after first press with data at A25')
+				.to.contain('27 rows, 1 column');
+		});
+
+		// A second CTRL+SHIFT+UP jumps past the boundary up to the top,
+		// selecting the whole A1:A51 range again (51 rows, 1 column).
+		helper.typeIntoDocument('{ctrl}{shift}{upArrow}');
+		cy.then(() => {
+			return helper.processToIdle(this.win);
+		});
+		cy.wrap(null).should(() => {
+			expect(lastRowColSelCount(this.win), 'RowColSelCount after second press with data at A25')
+				.to.contain('51 rows, 1 column');
+		});
+
+		cy.then(() => {
+			this.win.app.socket._onMessage.restore();
+		});
 	});
 });
 
