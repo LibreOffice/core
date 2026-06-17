@@ -23,18 +23,23 @@
 
 #include <SpifPolicy.hxx>
 
-// SPIF/STANAG security label dialog. Classifications come from the SPIF policy;
-// categories are still stubbed pending tag-set parsing.
+// SPIF/STANAG security label dialog. Classifications and category tag sets come
+// from the SPIF policy; categories are shown as a flat checkable list.
 class SwSecurityLabelDlg final : public weld::GenericDialogController
 {
     sw::seclabel::SpifPolicy m_aPolicy;
+
+    // Per category row: flat index of its owning tag, and whether that tag is
+    // single-selection (toggling one of its categories clears the others).
+    std::vector<sal_Int32> m_aRowTag;
+    std::vector<bool> m_aTagSingle;
 
     std::unique_ptr<weld::ComboBox> m_xClassification;
     std::unique_ptr<weld::TreeView> m_xCategories;
     std::unique_ptr<weld::Label> m_xPreview;
 
     DECL_LINK(ClassificationHdl, weld::ComboBox&, void);
-    DECL_LINK(CategoryHdl, weld::TreeView&, void);
+    DECL_LINK(CategoryToggleHdl, const weld::TreeView::iter_col&, void);
 
     void UpdatePreview();
 
