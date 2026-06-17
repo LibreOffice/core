@@ -166,7 +166,6 @@ public:
     SvTreeListEntry* GetParent( SvTreeListEntry* pEntry );
 
     const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
-    SvTreeListEntries& GetChildList( SvTreeListEntry* pParent );
 
     sal_uInt32 GetAbsPos( const SvTreeListEntry* pEntry ) const;
     static sal_uInt32 GetRelPos( const SvTreeListEntry* pChild );

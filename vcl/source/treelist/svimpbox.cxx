@@ -3044,7 +3044,7 @@ void SvImpLBox::FindMostRight( SvTreeListEntry* pParent )
 
 void SvImpLBox::FindMostRight_Impl( SvTreeListEntry* pParent )
 {
-    SvTreeListEntries& rList = m_rTree.GetChildList(pParent);
+    const SvTreeListEntries& rList = m_rTree.GetChildList(pParent);
 
     size_t nCount = rList.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
