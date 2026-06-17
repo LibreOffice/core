@@ -231,7 +231,6 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox : public Control,
     sal_uInt16 m_nFirstSelTab;
     sal_uInt16 m_nLastSelTab;
     tools::Long mnCheckboxItemWidth;
-    bool mbContextBmpExpanded;
     bool mbQuickSearch; // Enables type-ahead search in the check list box.
     bool mbActivateOnSingleClick; // Make single click "activate" a row like a double-click normally does
     bool mbCustomEntryRenderer; // Used to define if the list entries are updated on demand

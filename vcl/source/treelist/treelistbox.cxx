@@ -396,7 +396,6 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     m_nSelectionCount(0),
     m_bVisPositionsValid(false),
     mpImpl(new SvTreeListBoxImpl(*this)),
-    mbContextBmpExpanded(false),
     mbQuickSearch(false),
     mbActivateOnSingleClick(false),
     mbCustomEntryRenderer(false),
@@ -441,7 +440,6 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     m_nEntryHeightOffs = SV_ENTRYHEIGHTOFFS_PIXEL;
     m_pImpl.reset(new SvImpLBox(*this, *m_pModel, GetStyle()));
 
-    mbContextBmpExpanded = true;
     m_nContextBmpWidthMax = 0;
 
     SetFont( GetFont() );
@@ -1783,7 +1781,7 @@ void SvTreeListBox::InitEntry(SvTreeListEntry& rEntry, const OUString& aStr,
     }
 
     rEntry.AddItem(
-        std::make_unique<SvLBoxContextBmp>(aCollEntryBmp, aExpEntryBmp, mbContextBmpExpanded));
+        std::make_unique<SvLBoxContextBmp>(aCollEntryBmp, aExpEntryBmp, true));
 
     rEntry.AddItem(std::make_unique<SvLBoxString>(aStr));
 }
