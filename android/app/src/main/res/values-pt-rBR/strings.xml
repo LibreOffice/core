@@ -7,7 +7,7 @@
     <string name="app_vendor">Esta versão foi fornecida por $VENDOR.</string>
     <string name="no_recent_items">Abra um arquivo através do ícone existente na barra de ferramentas.</string>
     <string name="no_items">Nenhum item</string>
-    <string name="temp_file_saving_disabled">Este arquivo é apenas de leitura, salvamento está desabilitado.</string>
+    <string name="temp_file_saving_disabled">Compartilhado como somente leitura pelo aplicativo de origem. Use \"Editar uma cópia\" para fazer alterações.</string>
     <string name="file_exists_warning">Um arquivo com esse nome já existe e será sobrescrito.</string>
     <string name="file_creation_failed">Falha na criação do arquivo</string>
     <string name="storage_permission_required">Permissão de armazenamento é requirida</string>
