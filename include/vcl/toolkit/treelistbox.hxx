@@ -564,8 +564,7 @@ public:
     SAL_DLLPRIVATE Image const & GetExpandedNodeBmp( ) const;
 
 protected:
-
-    virtual void                CalcEntryHeight(SvTreeListEntry const* pEntry);
+    virtual void CalcEntryHeight(const SvTreeListEntry& rEntry);
                    void         AdjustEntryHeight( const Image& rBmp );
     SAL_DLLPRIVATE void         AdjustEntryHeight();
 

@@ -49,7 +49,7 @@ public:
     void UpdateEntrySize(const SvTreeListEntry& rEntry);
 
 protected:
-    virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
+    virtual void CalcEntryHeight(const SvTreeListEntry& rEntry) override;
 
 private:
     bool HasSeparatorEntry() const;

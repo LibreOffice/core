@@ -4030,7 +4030,7 @@ void SalInstanceTreeView::bulk_insert_for_each(
             AddStringItem(*aVclIter.iter, u""_ustr, aVclIter.iter->ItemCount());
         m_xTreeView->Insert(aVclIter.iter, TREELIST_APPEND, pVclParent);
         func(aVclIter, i);
-        m_xTreeView->CalcEntryHeight(aVclIter.iter);
+        m_xTreeView->CalcEntryHeight(*aVclIter.iter);
 
         if (!pFixedWidths)
             continue;
@@ -4364,7 +4364,7 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const Image& rI
         static_cast<SvLBoxContextBmp&>(rItem).SetBitmap2(rImage);
     }
 
-    m_xTreeView->CalcEntryHeight(pEntry);
+    m_xTreeView->CalcEntryHeight(*pEntry);
     InvalidateModelEntry(pEntry);
 }
 

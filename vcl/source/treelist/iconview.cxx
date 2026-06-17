@@ -96,17 +96,17 @@ bool IconView::HasSeparatorEntry() const
     return false;
 }
 
-void IconView::CalcEntryHeight(SvTreeListEntry const* pEntry)
+void IconView::CalcEntryHeight(const SvTreeListEntry& rEntry)
 {
     int nHeight = nSpacing * 2;
-    SvViewDataEntry* pViewData = GetViewDataEntry(pEntry);
-    const size_t nCount = pEntry->ItemCount();
+    SvViewDataEntry* pViewData = GetViewDataEntry(&rEntry);
+    const size_t nCount = rEntry.ItemCount();
     bool bHasIcon = false;
     for (size_t nCur = 0; nCur < nCount; ++nCur)
     {
         nHeight += SvLBoxItem::GetHeight(pViewData, nCur);
 
-        if (!bHasIcon && pEntry->GetItem(nCur).GetType() == SvLBoxItemType::ContextBmp)
+        if (!bHasIcon && rEntry.GetItem(nCur).GetType() == SvLBoxItemType::ContextBmp)
             bHasIcon = true;
     }
 
