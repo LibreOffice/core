@@ -1823,10 +1823,7 @@ SvTreeListEntry& SvTreeListBox::InsertEntry(const OUString& rText, SvTreeListEnt
     InitEntry(*pEntry, rText, Image(), Image());
     pEntry->EnableChildrenOnDemand(false);
 
-    if( !pParent )
-        Insert( pEntry, nPos );
-    else
-        Insert(pEntry, nPos, pParent);
+    Insert(pEntry, nPos, pParent);
 
     m_nTreeFlags &= ~SvTreeFlags::MANINS;
 
