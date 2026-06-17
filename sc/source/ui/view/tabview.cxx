@@ -1338,9 +1338,6 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
     }
 
     tools::Long nDelta(0);
-    // true  → nDelta is in row/col units (LineUp/Down/Page)
-    // false → nDelta is in SC_VSCROLL_PRECISION units (vertical drag via default case)
-    bool bDeltaIsRows = true;
     switch ( eType )
     {
         case ScrollType::LineUp:
@@ -1374,35 +1371,65 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
 
                 if (!bHoriz)
                 {
-                    // Vertical scrollbar uses SC_VSCROLL_PRECISION units per row.
-                    // Compute the delta in those precision units directly from the thumb.
+                    // Vertical scrollbar: derive the pixel delta directly from the absolute
+                    // thumb value using actual per-row heights. The old approach multiplied
+                    // a precision-unit delta by the CURRENT top row's height, which gave the
+                    // wrong result when crossing into a row with a different height (large
+                    // cells snapped instead of scrolling smoothly through).
                     constexpr tools::Long P = SC_VSCROLL_PRECISION;
                     ScVSplitPos eVPLocal = (pScroll == aVScrollTop.get()) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
                     SCTAB nTabV = aViewData.CurrentTabForData();
                     ScDocument& rDocV = aViewData.GetDocument();
 
-                    tools::Long nNewThumb = pScroll->GetThumbPos();  // relative precision units
+                    tools::Long nNewThumb = pScroll->GetThumbPos();
 
-                    // Reconstruct current thumb from view state
+                    // Compute target (row, sub-row offset) from absolute thumb position.
+                    SCROW nTargetRow = static_cast<SCROW>(nNewThumb / P)
+                                       + static_cast<SCROW>(nScrollMin);
+                    tools::Long nSubFrac = nNewThumb % P;  // 0..P-1 within target row
+                    nTargetRow = std::clamp(nTargetRow,
+                                           static_cast<SCROW>(nScrollMin), rDocV.MaxRow());
+
+                    // Target pixel offset within the target row (≤ 0), using that row's
+                    // actual height — not the current top row's height.
+                    tools::Long nTargetRowPx = std::max(1L, aViewData.ToPixel(
+                        rDocV.GetRowHeight(nTargetRow, nTabV), aViewData.GetPPTY()));
+                    tools::Long nTargetOffset = -(nSubFrac * nTargetRowPx) / P;
+
+                    // Current position
                     SCROW nCurPosY = aViewData.GetPosY(eVPLocal);
                     tools::Long nCurOff = aViewData.GetPixOffsetY(eVPLocal);
-                    tools::Long nCurRowPx = std::max(1L, aViewData.ToPixel(
-                        rDocV.GetRowHeight(nCurPosY, nTabV), aViewData.GetPPTY()));
-                    tools::Long nCurSubRow = nCurOff == 0 ? 0
-                        : (-nCurOff * P + nCurRowPx / 2) / nCurRowPx;
-                    tools::Long nOldThumb = (nCurPosY - nScrollMin) * P + nCurSubRow;
 
-                    nDelta = nNewThumb - nOldThumb;  // precision units
-                    bDeltaIsRows = false;
+                    // Pixel delta = docY(target) − docY(current)
+                    //   = Σ row heights [nCurPosY..nTargetRow) + nCurOff − nTargetOffset
+                    // Positive → scroll down (content moves up).
+                    tools::Long nPixDelta = nCurOff - nTargetOffset;
+                    if (nTargetRow > nCurPosY)
+                    {
+                        for (SCROW r = nCurPosY; r < nTargetRow; ++r)
+                            nPixDelta += std::max(1L, aViewData.ToPixel(
+                                rDocV.GetRowHeight(r, nTabV), aViewData.GetPPTY()));
+                    }
+                    else if (nTargetRow < nCurPosY)
+                    {
+                        for (SCROW r = nTargetRow; r < nCurPosY; ++r)
+                            nPixDelta -= std::max(1L, aViewData.ToPixel(
+                                rDocV.GetRowHeight(r, nTabV), aViewData.GetPPTY()));
+                    }
 
+                    // Anti-jitter: suppress direction reversal during drag.
                     if (eType == ScrollType::Drag)
                     {
-                        if (nNewThumb > nPrevDragPos && nDelta < 0) nDelta = 0;
-                        else if (nNewThumb < nPrevDragPos && nDelta > 0) nDelta = 0;
-                        else if (nNewThumb == nPrevDragPos) nDelta = 0;
+                        if (nNewThumb > nPrevDragPos && nPixDelta < 0) nPixDelta = 0;
+                        else if (nNewThumb < nPrevDragPos && nPixDelta > 0) nPixDelta = 0;
                     }
                     nPrevDragPos = nNewThumb;
-                    break;  // skip horizontal default logic
+
+                    if (nPixDelta != 0)
+                        SmoothScrollY(nPixDelta, eVPLocal);
+
+                    nDelta = 0;  // handled above — skip outer if(nDelta) block
+                    break;
                 }
 
                 tools::Long nScrollPos = GetScrollBarPos( *pScroll, bLayoutRTL ) + nScrollMin;
@@ -1510,31 +1537,17 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
         }
         else
         {
+            // nDelta is in rows (LineUp/Down/Page). The vertical drag case
+            // (default:) resolves directly to pixels and sets nDelta=0, so it
+            // never reaches here.
             ScVSplitPos eVPFinal = (pScroll == aVScrollTop.get()) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
-            if (!bDeltaIsRows)
-            {
-                // nDelta is in SC_VSCROLL_PRECISION units; convert to pixels and smooth-scroll.
-                constexpr tools::Long P = SC_VSCROLL_PRECISION;
-                SCTAB nTabFinal = aViewData.CurrentTabForData();
-                tools::Long nRowPxFinal = std::max(1L, aViewData.ToPixel(
-                    aViewData.GetDocument().GetRowHeight(aViewData.GetPosY(eVPFinal), nTabFinal),
-                    aViewData.GetPPTY()));
-                tools::Long nPixFinal = nDelta * nRowPxFinal / P;
-                if (nPixFinal != 0)
-                    SmoothScrollY(nPixFinal, eVPFinal);
-                // else: sub-pixel precision delta — skip to avoid row-snap
-            }
-            else
-            {
-                // nDelta in rows (LineUp/Down/Page): convert to pixels for smooth blit.
-                SCTAB nTabFinal = aViewData.CurrentTabForData();
-                tools::Long nRowPxFinal = std::max(1L, aViewData.ToPixel(
-                    aViewData.GetDocument().GetRowHeight(aViewData.GetPosY(eVPFinal), nTabFinal),
-                    aViewData.GetPPTY()));
-                tools::Long nPixFinal = nDelta * nRowPxFinal;
-                if (nPixFinal != 0)
-                    SmoothScrollY(nPixFinal, eVPFinal);
-            }
+            SCTAB nTabFinal = aViewData.CurrentTabForData();
+            tools::Long nRowPxFinal = std::max(1L, aViewData.ToPixel(
+                aViewData.GetDocument().GetRowHeight(aViewData.GetPosY(eVPFinal), nTabFinal),
+                aViewData.GetPPTY()));
+            tools::Long nPixFinal = nDelta * nRowPxFinal;
+            if (nPixFinal != 0)
+                SmoothScrollY(nPixFinal, eVPFinal);
         }
     }
 
