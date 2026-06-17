@@ -80,6 +80,9 @@ public:
     // going to change the baseclass
     virtual DragDropMode NotifyStartDrag() override { return GetDragDropMode(); }
 
+    SvTreeListEntry& InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
+                                 sal_uInt32 nPos = TREELIST_APPEND);
+
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );
     using SvTreeListBox::SetEntryText;

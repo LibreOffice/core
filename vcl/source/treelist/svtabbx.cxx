@@ -121,6 +121,21 @@ void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions)
         Invalidate();
 }
 
+SvTreeListEntry& SvTabListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
+                                            sal_uInt32 nPos)
+{
+    m_nTreeFlags |= SvTreeFlags::MANINS;
+
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+    InitEntry(*pEntry, rText, Image(), Image());
+
+    Insert(pEntry, nPos, pParent);
+
+    m_nTreeFlags &= ~SvTreeFlags::MANINS;
+
+    return *pEntry;
+}
+
 OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry ) const
 {
     return GetEntryText( pEntry, 0xffff );

@@ -620,9 +620,6 @@ public:
     */
     void    SetNodeDefaultImages();
 
-    SvTreeListEntry& InsertEntry(const OUString& rText, SvTreeListEntry* pParent = nullptr,
-                                 sal_uInt32 nPos = TREELIST_APPEND);
-
     void            SetCheckButtonState( SvTreeListEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
     bool GetCheckButtonEnabled(SvTreeListEntry* pEntry) const;

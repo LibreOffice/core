@@ -1813,21 +1813,6 @@ const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry 
     return pItem->GetBitmap1( );
 }
 
-SvTreeListEntry& SvTreeListBox::InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                            sal_uInt32 nPos)
-{
-    m_nTreeFlags |= SvTreeFlags::MANINS;
-
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-    InitEntry(*pEntry, rText, Image(), Image());
-
-    Insert(pEntry, nPos, pParent);
-
-    m_nTreeFlags &= ~SvTreeFlags::MANINS;
-
-    return *pEntry;
-}
-
 void SvTreeListBox::SetEntryText(SvTreeListEntry& rEntry, const OUString& rStr)
 {
     SvLBoxString* pItem = static_cast<SvLBoxString*>(rEntry.GetFirstItem(SvLBoxItemType::String));
