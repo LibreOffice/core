@@ -470,7 +470,7 @@ void SvTreeListBox::Clear()
         PaintImmediately();
 }
 
-IMPL_LINK(SvTreeListBox, CloneHdl_Impl, SvTreeListEntry&, rEntry, SvTreeListEntry*)
+IMPL_STATIC_LINK(SvTreeListBox, CloneHdl_Impl, SvTreeListEntry&, rEntry, SvTreeListEntry*)
 {
     return CloneEntry(rEntry);
 }
@@ -1979,23 +1979,7 @@ bool SvTreeListBox::GetCheckButtonEnabled(SvTreeListEntry* pEntry) const
 
 SvTreeListEntry* SvTreeListBox::CloneEntry(const SvTreeListEntry& rSource)
 {
-    OUString aStr;
-    Image aCollEntryBmp;
-    Image aExpEntryBmp;
-
-    const SvLBoxString* pStringItem
-        = static_cast<const SvLBoxString*>(rSource.GetFirstItem(SvLBoxItemType::String));
-    if( pStringItem )
-        aStr = pStringItem->GetText();
-    const SvLBoxContextBmp* pBmpItem
-        = static_cast<const SvLBoxContextBmp*>(rSource.GetFirstItem(SvLBoxItemType::ContextBmp));
-    if( pBmpItem )
-    {
-        aCollEntryBmp = pBmpItem->GetBitmap1( );
-        aExpEntryBmp  = pBmpItem->GetBitmap2( );
-    }
     SvTreeListEntry* pClone = new SvTreeListEntry;
-    InitEntry(*pClone, aStr, aCollEntryBmp, aExpEntryBmp);
     pClone->Clone(rSource);
     pClone->EnableChildrenOnDemand(rSource.HasChildrenOnDemand());
     pClone->SetUserData(rSource.GetUserData());
