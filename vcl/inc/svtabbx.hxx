@@ -35,8 +35,6 @@ private:
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
     Link<const EntryItemText&, bool> m_aEditedEntryHdl;
 
-    void InitEntry(SvTreeListEntry& rEntry, const OUString&, const Image&, const Image&);
-
 protected:
     virtual void                SetTabs() override;
 
