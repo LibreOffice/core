@@ -96,8 +96,6 @@ public:
     virtual ~UnoTreeListBoxImpl() override;
     virtual void dispose() override;
 
-    void            insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos );
-
     virtual void RequestingChildren(SvTreeListEntry& rParent) override;
 
     virtual bool    EditingEntry( SvTreeListEntry* pEntry ) override;
@@ -243,7 +241,7 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
     pEntry->AddItem(std::move(pUnoItem));
 
-    mpTreeImpl->insert(pEntry, pParent, nPos);
+    mpTreeImpl->Insert(pEntry, nPos, pParent);
 
     if (!msDefaultExpandedGraphicURL.isEmpty())
         mpTreeImpl->SetExpandedEntryBmp(*pEntry, maDefaultExpandedImage);
@@ -1440,15 +1438,6 @@ IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl, SvTreeListBox*, void)
     {
         mxPeer->onExpanded( pEntry->mxNode, IsExpanded( pEntry ) );
     }
-}
-
-
-void UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uInt32 nPos )
-{
-    if( pParent )
-        SvTreeListBox::Insert(pEntry, nPos, pParent);
-    else
-        SvTreeListBox::Insert( pEntry, nPos );
 }
 
 void UnoTreeListBoxImpl::RequestingChildren(SvTreeListEntry& rParent)
