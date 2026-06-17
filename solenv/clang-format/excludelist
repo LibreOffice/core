@@ -15279,7 +15279,6 @@ xmloff/source/forms/formevents.cxx
 xmloff/source/forms/formlayerexport.cxx
 xmloff/source/forms/formlayerimport.cxx
 xmloff/source/forms/gridcolumnproptranslator.cxx
-xmloff/source/forms/gridcolumnproptranslator.hxx
 xmloff/source/forms/handler/form_handler_factory.cxx
 xmloff/source/forms/handler/vcl_date_handler.cxx
 xmloff/source/forms/handler/vcl_date_handler.hxx
