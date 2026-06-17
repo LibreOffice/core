@@ -213,7 +213,7 @@ tools::Long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
         nScrPos = nMax;
     else
     {
-        nScrPos = 0;
+        nScrPos = GetScrollPixelOffset();
         for (SCCOLROW i=GetPos(); i<nEntryNo && nScrPos<nMax; i++)
         {
             sal_uInt16 nAdd = GetEntrySize(i);
@@ -284,7 +284,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& rRenderContext, const tools::Re
     tools::Long nTransStart = nPEnd + 1;
     tools::Long nTransEnd = 0;
 
-    tools::Long nInitScrPos = 0;
+    tools::Long nInitScrPos = GetScrollPixelOffset();  // sub-cell offset (0 when no smooth scroll)
     if ( bLayoutRTL )
     {
         std::swap(nPStart, nPEnd);

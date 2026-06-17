@@ -108,6 +108,10 @@ private:
     int nTotalWindows;
 };
 
+// Precision factor for vertical scrollbar: 1 scrollbar unit = 1/SC_VSCROLL_PRECISION of a row.
+// This enables sub-row thumb positions during dragging for pixel-level smooth scrolling.
+inline constexpr tools::Long SC_VSCROLL_PRECISION = 100;
+
 class ScTabView
 {
 private:
@@ -216,6 +220,13 @@ private:
     double              mfAccumulatedZoom = 0;
     tools::Long         mnPendingaHScrollLeftDelta = 0;
     tools::Long         mnPendingaHScrollRightDelta = 0;
+
+    // Smooth scrolling: cumulative pan gesture offsets (for delta computation per Update event)
+    double              mfPreviousPanOffsetX = 0.0;
+    double              mfPreviousPanOffsetY = 0.0;
+
+    void            SmoothScrollX( tools::Long nPixelDelta, ScHSplitPos eWhich );
+    void            SmoothScrollY( tools::Long nPixelDelta, ScVSplitPos eWhich );
 
     void            Init();
 

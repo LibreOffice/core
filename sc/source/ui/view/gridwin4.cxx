@@ -509,6 +509,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     tools::Long nScrX = aScrPos.X();
     tools::Long nScrY = aScrPos.Y();
+    fprintf(stderr, "DBG Draw: nY1=%d nScrY=%ld\n",
+            static_cast<int>(nY1), static_cast<long>(nScrY));
+    fflush(stderr);
 
     SCCOL nCurX = mrViewData.GetCurX();
     SCROW nCurY = mrViewData.GetCurY();

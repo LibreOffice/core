@@ -372,4 +372,14 @@ SCCOLROW ScRowBar::GetHiddenCount( SCCOLROW nEntryNo ) const // override only fo
     return rDoc.GetHiddenRowCount( nEntryNo, nTab );
 }
 
+tools::Long ScRowBar::GetScrollPixelOffset() const
+{
+    return pTabView->GetViewData().GetPixOffsetY(meWhich);
+}
+
+tools::Long ScColBar::GetScrollPixelOffset() const
+{
+    return pTabView->GetViewData().GetPixOffsetX(meWhich);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

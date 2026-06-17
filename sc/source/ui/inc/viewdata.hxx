@@ -219,6 +219,8 @@ private:
     tools::Long            nMPosY[2];
     tools::Long            nPixPosX[2];                // Offset in Pixels
     tools::Long            nPixPosY[2];
+    tools::Long            nPixOffsetX[2];             // Sub-cell pixel offset for smooth scrolling (<=0)
+    tools::Long            nPixOffsetY[2];             // Sub-cell pixel offset for smooth scrolling (<=0)
     tools::Long            nHSplitPos;
     tools::Long            nVSplitPos;
 
@@ -462,6 +464,10 @@ public:
 
     void            SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX );
     void            SetPosY( ScVSplitPos eWhich, SCROW nNewPosY );
+    void            SetPixOffsetX( ScHSplitPos eWhich, tools::Long nOffsetPixels );
+    void            SetPixOffsetY( ScVSplitPos eWhich, tools::Long nOffsetPixels );
+    tools::Long     GetPixOffsetX( ScHSplitPos eWhich ) const { return pThisTab->nPixOffsetX[eWhich]; }
+    tools::Long     GetPixOffsetY( ScVSplitPos eWhich ) const { return pThisTab->nPixOffsetY[eWhich]; }
     void            SetCurX( SCCOL nNewCurX )                       { pThisTab->nCurX = nNewCurX; }
     void            SetCurY( SCROW nNewCurY )                       { pThisTab->nCurY = nNewCurY; }
     void            SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex );

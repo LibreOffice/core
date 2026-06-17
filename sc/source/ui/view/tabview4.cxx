@@ -499,7 +499,19 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
     tools::Long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, rDoc.MaxRow(), nStartY );
-    SetScrollBar( *aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, false );
+    {
+        // Scale vertical scrollbar by SC_VSCROLL_PRECISION for sub-row smooth dragging.
+        constexpr tools::Long P = SC_VSCROLL_PRECISION;
+        SCROW nPosYB = aViewData.GetPosY(SC_SPLIT_BOTTOM);
+        tools::Long nOffYB = aViewData.GetPixOffsetY(SC_SPLIT_BOTTOM);
+        tools::Long nRowPxB = std::max(1L, aViewData.ToPixel(
+            rDoc.GetRowHeight(nPosYB, nTab), aViewData.GetPPTY()));
+        // Sub-row fraction: 0..(P-1) units of the current top row already scrolled
+        tools::Long nSubRowB = nOffYB == 0 ? 0 : (-nOffYB * P + nRowPxB / 2) / nRowPxB;
+        tools::Long nThumbB  = (nPosYB - nStartY) * P + nSubRowB;
+        SetScrollBar(*aVScrollBottom, nMaxYB * P, nVisYB * P, nThumbB, false);
+        aVScrollBottom->SetLineSize(P);  // 1 arrow click = 1 full row = P precision units
+    }
 
     if (bRight)
     {
@@ -525,8 +537,19 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
         if (nDiff) ScrollX( nDiff, SC_SPLIT_RIGHT );
     }
 
-    nDiff = lcl_UpdateBar( *aVScrollBottom, nVisYB );
-    if (nDiff) ScrollY( nDiff, SC_SPLIT_BOTTOM );
+    {
+        constexpr tools::Long P = SC_VSCROLL_PRECISION;
+        nDiff = lcl_UpdateBar(*aVScrollBottom, nVisYB * P);
+        if (nDiff)
+        {
+            SCROW nPosYB2 = aViewData.GetPosY(SC_SPLIT_BOTTOM);
+            tools::Long nRowPxB2 = std::max(1L, aViewData.ToPixel(
+                rDoc.GetRowHeight(nPosYB2, nTab), aViewData.GetPPTY()));
+            tools::Long nPxDiff = (nDiff * nRowPxB2 + (nDiff > 0 ? P/2 : -P/2)) / P;  // round
+            if (nPxDiff != 0)
+                SmoothScrollY(nPxDiff, SC_SPLIT_BOTTOM);
+        }
+    }
     if (bTop)
     {
         nDiff = lcl_UpdateBar( *aVScrollTop, nVisYT );

@@ -115,6 +115,9 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    dispose() override;
 
+    // Sub-cell scroll pixel offset (always <= 0). Overridden by ScRowBar/ScColBar.
+    virtual tools::Long GetScrollPixelOffset() const { return 0; }
+
 public:
             ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
                              SCCOLROW nNewSize, bool bNewVertical, ScTabView* pTab );

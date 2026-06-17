@@ -54,6 +54,7 @@ public:
     virtual void        DrawInvert( tools::Long nDragPos ) override;
 
     virtual OUString    GetDragHelp( tools::Long nVal ) override;
+    virtual tools::Long GetScrollPixelOffset() const override;
 };
 
 class ScRowBar : public ScHeaderControl
@@ -84,6 +85,7 @@ public:
     virtual void        DrawInvert( tools::Long nDragPos ) override;
 
     virtual OUString    GetDragHelp( tools::Long nVal ) override;
+    virtual tools::Long GetScrollPixelOffset() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

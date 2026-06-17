@@ -523,6 +523,8 @@ ScViewDataTable::ScViewDataTable(const ScDocument& rDoc) :
     nMPosY[0]=nMPosY[1]=0;
     nPixPosX[0]=nPixPosX[1]=0;
     nPixPosY[0]=nPixPosY[1]=0;
+    nPixOffsetX[0]=nPixOffsetX[1]=0;
+    nPixOffsetY[0]=nPixOffsetY[1]=0;
 }
 
 void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB nTab) const
@@ -2624,7 +2626,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     SCCOL nPosX = GetPosX(eWhichX, nForTab);
-    tools::Long nScrPosX = 0;
+    tools::Long nScrPosX = 0;  // 0 for off-screen (nWhereX < nPosX && !bAllowNeg)
 
     if (bAllowNeg || nWhereX >= nPosX)
     {
@@ -2635,6 +2637,10 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             const auto& rNearest = pViewTable->aWidthHelper.getNearestByIndex(nWhereX - 1);
             nStartPosX = rNearest.first + 1;
             nScrPosX = rNearest.second;
+        }
+        else
+        {
+            nScrPosX = pViewTable->nPixOffsetX[eWhichX];
         }
 
         if (nWhereX >= nStartPosX)
@@ -2684,7 +2690,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
 
     SCROW nPosY = GetPosY(eWhichY, nForTab);
-    tools::Long nScrPosY = 0;
+    tools::Long nScrPosY = 0;  // 0 for off-screen (nWhereY < nPosY && !bAllowNeg)
 
     if (bAllowNeg || nWhereY >= nPosY)
     {
@@ -2696,6 +2702,10 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             nStartPosY = rNearest.first + 1;
             nScrPosY = rNearest.second;
         }
+        else
+        {
+            nScrPosY = pViewTable->nPixOffsetY[eWhichY];
+        }
 
         if (nWhereY >= nStartPosY)
         {
@@ -2705,7 +2715,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 if ( nStartPosY > mrDoc.MaxRow() )
                     nScrPosY = 0x7FFFFFFF;
                 else
-                    nScrPosY = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, CurrentTabForData(), nPPTY);
+                    nScrPosY += mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, CurrentTabForData(), nPPTY);
             }
             else
             {
@@ -3031,8 +3041,9 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
     SCROW nStartPosY = GetPosY(eVWhich, nForTab);
     rPosX = nStartPosX;
     rPosY = nStartPosY;
-    tools::Long nScrX = 0;
-    tools::Long nScrY = 0;
+    bool bIsTiledRenderingForPixel = comphelper::LibreOfficeKit::isActive();
+    tools::Long nScrX = bIsTiledRenderingForPixel ? 0 : pThisTab->nPixOffsetX[eHWhich];
+    tools::Long nScrY = bIsTiledRenderingForPixel ? 0 : pThisTab->nPixOffsetY[eVWhich];
 
     if (nClickX > 0)
     {
@@ -3163,10 +3174,18 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
         pThisTab->nMPosX[eWhich] =
         pThisTab->nPosX[eWhich] = 0;
     }
+    // Cell-granular scroll always snaps to a cell boundary; reset sub-cell offset.
+    pThisTab->nPixOffsetX[eWhich] = 0;
 }
 
 void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 {
+    fprintf(stderr, "DBG SetPosY: eWhich=%d nNewPosY=%d (was=%d offset=%ld) caller=%p\n",
+            static_cast<int>(eWhich), static_cast<int>(nNewPosY),
+            static_cast<int>(pThisTab->nPosY[eWhich]),
+            static_cast<long>(pThisTab->nPixOffsetY[eWhich]),
+            static_cast<const void*>(__builtin_return_address(0)));
+    fflush(stderr);
     // in the tiled rendering case, nPosY [the topmost visible row] must be 0
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     if (nNewPosY != 0 && !bIsTiledRendering)
@@ -3206,6 +3225,8 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         pThisTab->nMPosY[eWhich] =
         pThisTab->nPosY[eWhich] = 0;
     }
+    // Cell-granular scroll always snaps to a cell boundary; reset sub-cell offset.
+    pThisTab->nPixOffsetY[eWhich] = 0;
 }
 
 void ScViewData::RecalcPixPos()             // after zoom changes
@@ -3229,13 +3250,47 @@ void ScViewData::RecalcPixPos()             // after zoom changes
             nPixPosY -= nRowHeight;
         }
         pThisTab->nPixPosY[eWhich] = nPixPosY;
+        // Reset sub-cell offsets on zoom change so rendering is cell-aligned.
+        pThisTab->nPixOffsetX[eWhich] = 0;
+        pThisTab->nPixOffsetY[eWhich] = 0;
     }
+}
+
+void ScViewData::SetPixOffsetX( ScHSplitPos eWhich, tools::Long nOffsetPixels )
+{
+    // Guard: tiled rendering keeps nPosX == 0 and uses no sub-cell offset.
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+    OSL_ENSURE(nOffsetPixels <= 0, "ScViewData::SetPixOffsetX: offset must be <= 0");
+    pThisTab->nPixOffsetX[eWhich] = nOffsetPixels;
+    // nMPosX/nTPosX remain at cell boundary; GetLogicMode() applies the offset on the fly.
+}
+
+void ScViewData::SetPixOffsetY( ScVSplitPos eWhich, tools::Long nOffsetPixels )
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+    OSL_ENSURE(nOffsetPixels <= 0, "ScViewData::SetPixOffsetY: offset must be <= 0");
+    pThisTab->nPixOffsetY[eWhich] = nOffsetPixels;
 }
 
 const MapMode& ScViewData::GetLogicMode( ScSplitPos eWhich )
 {
-    aLogicMode.SetOrigin( Point( pThisTab->nMPosX[WhichH(eWhich)],
-                                    pThisTab->nMPosY[WhichV(eWhich)] ) );
+    ScHSplitPos eH = WhichH(eWhich);
+    ScVSplitPos eV = WhichV(eWhich);
+    tools::Long nMOffX = pThisTab->nMPosX[eH];
+    tools::Long nMOffY = pThisTab->nMPosY[eV];
+    // Apply sub-cell pixel offset (pixels -> twips -> 1/100 mm) for smooth scrolling.
+    // nPixOffsetX/Y are <= 0, so this shifts the origin further negative (content left/up).
+    if (pThisTab->nPixOffsetX[eH] != 0)
+        nMOffX += static_cast<tools::Long>(
+            o3tl::convert(pThisTab->nPixOffsetX[eH] / nPPTX,
+                          o3tl::Length::twip, o3tl::Length::mm100));
+    if (pThisTab->nPixOffsetY[eV] != 0)
+        nMOffY += static_cast<tools::Long>(
+            o3tl::convert(pThisTab->nPixOffsetY[eV] / nPPTY,
+                          o3tl::Length::twip, o3tl::Length::mm100));
+    aLogicMode.SetOrigin( Point(nMOffX, nMOffY) );
     return aLogicMode;
 }
 
