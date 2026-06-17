@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/openssl-no-multilib.patch.0 \
 	external/openssl/openssl3-CVE-2025-9230.patch.1 \
+	external/openssl/Fix-possible-use-after-free-in-OpenSSL-PKCS7_verify.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
