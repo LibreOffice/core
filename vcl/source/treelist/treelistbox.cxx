@@ -482,7 +482,7 @@ void SvTreeListBox::Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sa
 
 void SvTreeListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
 {
-    m_pModel->Insert(pEntry, nRootPos);
+    m_pModel->Insert(pEntry, nullptr, nRootPos);
 }
 
 bool SvTreeListBox::ExpandingHdl()
