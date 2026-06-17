@@ -427,7 +427,11 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
         nScrX += ScViewData::ToPixel( rDoc.GetColWidth( nX2, nTab ), nPPTX );
     }
 
-    tools::Long nScrY = 0;
+    // Start accumulation from the sub-cell pixel offset so AddPixelsWhile
+    // correctly identifies which rows cover any given clip rectangle.
+    // Without this, when nPixOffsetY < 0 the post-loop nScrY is too large,
+    // the nY2 range check fires too early, and the exposed strip is clipped short.
+    tools::Long nScrY = mrViewData.GetPixOffsetY(eVWhich);
     ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, rDoc.MaxRow(), nPPTY, &rDoc, nTab);
     SCROW nY2 = nY1;
     if (nScrY <= aPixRect.Bottom() && nY2 < rDoc.MaxRow())

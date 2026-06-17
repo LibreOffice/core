@@ -1839,25 +1839,42 @@ void ScTabView::SmoothScrollY( tools::Long nPixelDelta, ScVSplitPos eWhich )
 
     aViewData.SetPixOffsetY(eWhich, nNewOffset);
 
+    // Invalidate + PaintImmediately instead of ScrollPixel blit.
+    // ScrollPixel sets the mm100 MapMode (with fractional nPixOffsetY origin) before
+    // DrawAfterScroll, so Paint() receives rRect in mm100 logical units; the LogicToPixel
+    // round-trip can drop ±1 px from the clip rect, leaving a thin artifact line.
+    // A full invalidate+repaint costs one extra full-paint but is pixel-exact and
+    // artifact-free; the compositor's double-buffering keeps scrolling smooth.
     if (eWhich == SC_SPLIT_BOTTOM)
     {
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->ScrollPixel(0, -nBlitDelta);
+        pGridWin[SC_SPLIT_BOTTOMLEFT]->Invalidate();
+        pGridWin[SC_SPLIT_BOTTOMLEFT]->PaintImmediately();
         if (aViewData.GetHSplitMode() != SC_SPLIT_NONE)
-            pGridWin[SC_SPLIT_BOTTOMRIGHT]->ScrollPixel(0, -nBlitDelta);
+        {
+            pGridWin[SC_SPLIT_BOTTOMRIGHT]->Invalidate();
+            pGridWin[SC_SPLIT_BOTTOMRIGHT]->PaintImmediately();
+        }
     }
     else
     {
-        pGridWin[SC_SPLIT_TOPLEFT]->ScrollPixel(0, -nBlitDelta);
+        pGridWin[SC_SPLIT_TOPLEFT]->Invalidate();
+        pGridWin[SC_SPLIT_TOPLEFT]->PaintImmediately();
         if (aViewData.GetHSplitMode() != SC_SPLIT_NONE)
-            pGridWin[SC_SPLIT_TOPRIGHT]->ScrollPixel(0, -nBlitDelta);
+        {
+            pGridWin[SC_SPLIT_TOPRIGHT]->Invalidate();
+            pGridWin[SC_SPLIT_TOPRIGHT]->PaintImmediately();
+        }
     }
     if (pRowBar[eWhich])
     {
-        pRowBar[eWhich]->Scroll(0, -nBlitDelta);
+        pRowBar[eWhich]->Invalidate();
         pRowBar[eWhich]->PaintImmediately();
     }
     if (pRowOutline[eWhich])
-        pRowOutline[eWhich]->ScrollPixel(-nBlitDelta);
+    {
+        pRowOutline[eWhich]->Invalidate();
+        pRowOutline[eWhich]->PaintImmediately();
+    }
 
     UpdateScrollBars(ROW_HEADER);
     ShowAllCursors();
