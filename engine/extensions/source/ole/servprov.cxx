@@ -203,7 +203,7 @@ OleConverter::~OleConverter()
 {
 }
 
-// XBridgeSupplier --------------------------------------------------------------
+// XBridgeSupplier2 --------------------------------------------------------------
 Any SAL_CALL OleConverter::createBridge(const Any& modelDepObject,
                                         const Sequence< sal_Int8 >& ProcessId,
                                         sal_Int16 sourceModelType,

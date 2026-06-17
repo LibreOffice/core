@@ -27,7 +27,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/bridge,\
 	Bridge \
 	IiopBridge \
 	OleApplicationRegistration \
-	OleBridgeSupplier \
 	OleBridgeSupplier2 \
 	OleBridgeSupplierVar1 \
 	OleObjectFactory \
@@ -193,7 +192,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/bridge,\
 	XBridge \
 	XBridgeFactory \
 	XBridgeFactory2 \
-	XBridgeSupplier \
 	XBridgeSupplier2 \
 	XInstanceProvider \
 	XProtocolProperties \

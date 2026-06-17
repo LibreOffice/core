@@ -118,7 +118,7 @@ inline void reduceRange( Any& any)
 
 // createUnoObjectWrapper gets a wrapper instance by calling createUnoWrapperInstance
     // and initializes it via XInitialization. The wrapper object is required to implement
-    // XBridgeSupplier so that it can convert itself to IDispatch.
+    // XBridgeSupplier2 so that it can convert itself to IDispatch.
     // class T: Deriving class ( must implement XInterface )
 /** All methods are allowed to throw at least a BridgeRuntimeError.
  */

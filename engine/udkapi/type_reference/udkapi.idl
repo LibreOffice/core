@@ -398,13 +398,6 @@ module com {
     };
    };
    module bridge {
-    /** @deprecated */ published interface XBridgeSupplier {
-     interface ::com::sun::star::uno::XInterface;
-     any createBridge([in] any modelDepObject, [in] long ProcessId, [in] short sourceModelType, [in] short destModelType) raises (::com::sun::star::lang::IllegalArgumentException);
-    };
-    /** @deprecated */ published service OleBridgeSupplier {
-     interface ::com::sun::star::bridge::XBridgeSupplier;
-    };
     published interface XBridgeSupplier2 {
      interface ::com::sun::star::uno::XInterface;
      any createBridge([in] any aModelDepObject, [in] sequence< byte > aProcessId, [in] short nSourceModelType, [in] short nDestModelType) raises (::com::sun::star::lang::IllegalArgumentException);
