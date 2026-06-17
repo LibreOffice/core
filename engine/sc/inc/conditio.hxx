@@ -617,6 +617,9 @@ public:
 
     SC_DLLPUBLIC OUString GetCellStyle( const ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
+    // Whether any style this format can apply sets right or centre horizontal alignment.
+    bool            MightSetRightOrCenterAlignment() const;
+
     SC_DLLPUBLIC ScCondFormatData GetData( const ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     bool            EqualEntries( const ScConditionalFormat& r, bool bIgnoreSrcPos = false ) const;

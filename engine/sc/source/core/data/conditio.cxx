@@ -18,6 +18,7 @@
  */
 
 #include <scitems.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/numformat.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -38,6 +39,7 @@
 #include <editutil.hxx>
 #include <tokenarray.hxx>
 #include <fillinfo.hxx>
+#include <stlpool.hxx>
 #include <refupdatecontext.hxx>
 #include <reftokenhelper.hxx>
 #include <formula/errorcodes.hxx>
@@ -1960,6 +1962,40 @@ OUString ScConditionalFormat::GetCellStyle( const ScRefCellValue& rCell, const S
     }
 
     return OUString();
+}
+
+bool ScConditionalFormat::MightSetRightOrCenterAlignment() const
+{
+    ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
+    if (!pStylePool)
+        return false;
+
+    for (const auto& rxEntry : maEntries)
+    {
+        OUString aStyleName;
+        if (rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+            rxEntry->GetType() == ScFormatEntry::Type::ExtCondition)
+            aStyleName = static_cast<const ScCondFormatEntry&>(*rxEntry).GetStyle();
+        else if (rxEntry->GetType() == ScFormatEntry::Type::Date)
+            aStyleName = static_cast<const ScCondDateFormatEntry&>(*rxEntry).GetStyleName();
+        else
+            continue;
+
+        if (aStyleName.isEmpty())
+            continue;
+
+        SfxStyleSheetBase* pStyleSheet = pStylePool->Find(aStyleName, SfxStyleFamily::Para);
+        if (!pStyleSheet)
+            continue;
+
+        const SvxHorJustifyItem* pItem =
+            pStyleSheet->GetItemSet().GetItemIfSet(ATTR_HOR_JUSTIFY);
+        if (pItem && (pItem->GetValue() == SvxCellHorJustify::Right
+                      || pItem->GetValue() == SvxCellHorJustify::Center))
+            return true;
+    }
+
+    return false;
 }
 
 ScCondFormatData ScConditionalFormat::GetData( const ScRefCellValue& rCell, const ScAddress& rPos ) const

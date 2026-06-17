@@ -1371,9 +1371,14 @@ private:
 
     /**
      * In case the cell text goes beyond the column width, move the max column
-     * position to the right.  This is called from ExtendPrintArea.
+     * position to the right.
      */
     void        MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY);
+
+    // rEndCol, starting at nEditCol, is grown to the last column reached by
+    // text spilling rightwards out of the nearest non-empty cell to the left.
+    void        ExtendForOverflowingText(SCCOL nEditCol, SCROW nRow, OutputDevice* pDev,
+                                         double nPPTX, double nPPTY, SCCOL& rEndCol);
 
     void        CopyPrintRange(const ScTable& rTable);
 

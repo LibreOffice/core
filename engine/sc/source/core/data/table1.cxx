@@ -2298,6 +2298,24 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     rCol = nNewCol;
 }
 
+void ScTable::ExtendForOverflowingText(SCCOL nEditCol, SCROW nRow, OutputDevice* pDev,
+                                       double nPPTX, double nPPTY, SCCOL& rEndCol)
+{
+    // Text spills only up to the first non-empty cell, so just the nearest
+    // non-empty cell to the left can be painted across nEditCol.
+    SCCOL nSrc = nEditCol - 1;
+    while (nSrc >= 0
+           && (nSrc >= GetAllocatedColumnsCount() || aCol[nSrc].GetCellValue(nRow).isEmpty()))
+        --nSrc;
+    if (nSrc < 0)
+        return;
+
+    SCCOL nReach = nSrc;
+    MaybeAddExtraColumn(nReach, nRow, pDev, nPPTX, nPPTY);
+    if (nReach > rEndCol)
+        rEndCol = nReach;
+}
+
 namespace {
 
 class SetTableIndex

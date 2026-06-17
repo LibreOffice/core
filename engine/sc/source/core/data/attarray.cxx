@@ -29,6 +29,7 @@
 #include <poolcach.hxx>
 
 #include <global.hxx>
+#include <conditio.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
 #include <docsh.hxx>
@@ -1374,6 +1375,28 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
         SvxCellHorJustify eHorJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
         if ( eHorJust == SvxCellHorJustify::Right || eHorJust == SvxCellHorJustify::Center )
             bFound = true;
+        //  A conditional format may set right or centre alignment through a style,
+        //  which is not part of the stored pattern, so resolve its styles too.
+        else
+        {
+            const ScCondFormatIndexes& rCondFormats
+                = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+            if (!rCondFormats.empty())
+            {
+                if (ScConditionalFormatList* pList = rDocument.GetCondFormList(nTab))
+                {
+                    for (const auto nKey : rCondFormats)
+                    {
+                        const ScConditionalFormat* pFormat = pList->GetFormat(nKey);
+                        if (pFormat && pFormat->MightSetRightOrCenterAlignment())
+                        {
+                            bFound = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return bFound;

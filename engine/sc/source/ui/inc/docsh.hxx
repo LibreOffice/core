@@ -324,6 +324,10 @@ public:
 
     tools::Long     GetTwipWidthHint(const ScAddress& rPos);
 
+    // rEndCol, starting at rPos's column, is grown to the last column reached
+    // by text spilling rightwards out of the nearest non-empty cell to its left.
+    void            ExtendForOverflowingText(const ScAddress& rPos, SCCOL& rEndCol);
+
     void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, PaintPartFlags nPart,
                             sal_uInt16 nExtFlags = 0, tools::Long nMaxWidthAffectedHint = -1 );

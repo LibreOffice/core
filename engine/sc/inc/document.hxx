@@ -1735,6 +1735,11 @@ public:
     void                        ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
                                                  SCCOL nStartCol, SCROW nStartRow,
                                                  SCCOL& rEndCol, SCROW nEndRow ) const;
+
+    // rEndCol, starting at rPos's column, is grown to the last column reached
+    // by text spilling rightwards out of the nearest non-empty cell to its left.
+    SC_DLLPUBLIC void           ExtendForOverflowingText( OutputDevice* pDev, const ScAddress& rPos,
+                                                          double nPPTX, double nPPTY, SCCOL& rEndCol );
     SC_DLLPUBLIC bool           IsEmptyData(SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const;
     // I think this returns the number of empty cells starting from the given direction.

@@ -2166,6 +2166,13 @@ void ScDocument::ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
         maTabs[nTab]->ExtendPrintArea(pDev, nStartCol, nStartRow, rEndCol, nEndRow);
 }
 
+void ScDocument::ExtendForOverflowingText( OutputDevice* pDev, const ScAddress& rPos,
+                    double nPPTX, double nPPTY, SCCOL& rEndCol )
+{
+    if (ScTable* pTable = FetchTable(rPos.Tab()))
+        pTable->ExtendForOverflowingText(rPos.Col(), rPos.Row(), pDev, nPPTX, nPPTY, rEndCol);
+}
+
 SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))

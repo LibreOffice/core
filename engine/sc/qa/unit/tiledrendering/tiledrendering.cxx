@@ -4356,6 +4356,45 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartSelectionCoords)
     CPPUNIT_ASSERT_MESSAGE("Actual chart wall area spills out of the expected bounds", aChartAreaPtwips.Contains(aActualChartWall));
 }
 
+// Filling a cell that a neighbour's text overflows across must invalidate the
+// columns that overflow covered.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForOverflowingText)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocSh);
+    ScTabViewShell* pView = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // A long left aligned string in A1 spills across the empty cells to its right.
+    typeCharsInCell("This is an extremely long line of text that should overflow "
+                    "across very many empty columns to the right",
+                    0, 0, pView, pModelObj, false, true);
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aView;
+
+    // Fill B1, which A1 overflows across, isolating the commit's invalidation.
+    typeCharsInCell("x", 1, 0, pView, pModelObj, false, false);
+    aView.m_bInvalidateTiles = false;
+    aView.m_aInvalidations.clear();
+    typeCharsInCell("", 1, 0, pView, pModelObj, true, true);
+
+    CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
+    tools::Rectangle aInvalidation;
+    for (const auto& rRect : aView.m_aInvalidations)
+        aInvalidation.Union(rRect);
+
+    // Without the fix the invalidation was about one column wide.
+    const tools::Long nColWidth = rDoc.GetColWidth(1, 0);
+    CPPUNIT_ASSERT_GREATER(nColWidth * 4, aInvalidation.GetWidth());
+
+    // But not the whole row to the sheet edge, which the width hint avoids.
+    CPPUNIT_ASSERT_LESS(tools::Long(32212230), aInvalidation.Right());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

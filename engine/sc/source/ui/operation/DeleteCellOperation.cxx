@@ -100,8 +100,13 @@ bool DeleteCellOperation::runImplementation()
             std::move(pUndoDoc), mnFlags, pDataSpans, false, bDrawUndo, aRestoreExpandedMatrices);
     }
 
+    // Measured after the delete, when the cleared cell lets the spill reach
+    // its new, wider extent.
+    SCCOL nEndCol = aPosition.Col();
+    mrDocShell.ExtendForOverflowingText(aPosition, nEndCol);
+
     if (!mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi))
-        mrDocShell.PostPaint(aPosition.Col(), aPosition.Row(), aPosition.Tab(), aPosition.Col(),
+        mrDocShell.PostPaint(aPosition.Col(), aPosition.Row(), aPosition.Tab(), nEndCol,
                              aPosition.Row(), aPosition.Tab(), PaintPartFlags::Grid, nExtFlags,
                              nBefore);
 

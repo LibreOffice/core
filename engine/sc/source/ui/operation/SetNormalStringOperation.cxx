@@ -80,6 +80,11 @@ bool SetNormalStringOperation::runImplementation()
     }
 
     tools::Long nBefore(mrDocShell.GetTwipWidthHint(aPosition));
+
+    // Measured before the write, while the spill still reaches its old extent.
+    SCCOL nEndCol = aPosition.Col();
+    mrDocShell.ExtendForOverflowingText(aPosition, nEndCol);
+
     mbIsNumberFormatSet = rDoc.SetString(aPosition.Col(), aPosition.Row(), aPosition.Tab(), mrText);
     tools::Long nAfter(mrDocShell.GetTwipWidthHint(aPosition));
 
@@ -98,7 +103,9 @@ bool SetNormalStringOperation::runImplementation()
 
     syncCellToSheetViews(aPosition, pUndoEnterData);
 
-    mrDocShell.PostPaintCell(aPosition, std::max(nBefore, nAfter));
+    mrDocShell.PostPaint(ScRange(aPosition.Col(), aPosition.Row(), aPosition.Tab(), nEndCol,
+                                 aPosition.Row(), aPosition.Tab()),
+                         PaintPartFlags::Grid, SC_PF_TESTMERGE, std::max(nBefore, nAfter));
     aModificator.SetDocumentModified();
 
     // notify input handler here the same way as in PutCell

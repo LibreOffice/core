@@ -655,6 +655,20 @@ tools::Long ScDocShell::GetTwipWidthHint(const ScAddress& rPos)
     return (nWidth + 2) / nPPTX; // same as ScColumn::GetOptimalColWidth
 }
 
+void ScDocShell::ExtendForOverflowingText(const ScAddress& rPos, SCCOL& rEndCol)
+{
+    ScViewData* pViewData = GetViewData();
+    if (!pViewData)
+        return;
+
+    ScSizeDeviceProvider aProv(*this);
+    double fZoomX, fZoomY;
+    double nPPTX, nPPTY;
+    pViewData->setupSizeDeviceProviderForColWidth(aProv, fZoomX, fZoomY, nPPTX, nPPTY);
+
+    GetDocument().ExtendForOverflowingText(aProv.GetDevice(), rPos, nPPTX, nPPTY, rEndCol);
+}
+
 bool ScDocFunc::DeleteCell(
     const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
 {
