@@ -163,7 +163,12 @@ struct TransitionEffect
             {
                 rOutPage.SetStopSound( false );
                 rOutPage.SetSound( mbSoundOn );
+                // A transition sound the user picks here is allowed; one left
+                // unchanged keeps whatever allowed state it already had.
+                const bool bSoundChanged = maSound != rOutPage.GetSoundFile();
                 rOutPage.SetSoundFile( maSound );
+                if( bSoundChanged )
+                    rOutPage.SetSoundAllowed( true );
             }
         }
         if( ! mbLoopSoundAmbiguous )

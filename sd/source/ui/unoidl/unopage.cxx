@@ -27,6 +27,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
+#include <com/sun/star/presentation/XSoundReference.hpp>
+#include <xmloff/SoundReference.hxx>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XTheme.hpp>
@@ -731,13 +733,13 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_SOUNDFILE :
         {
             OUString aURL;
-            if( aValue >>= aURL )
+            css::uno::Reference<css::presentation::XSoundReference> xSound;
+            if( aValue >>= xSound )
             {
-                GetPage()->SetSoundFile( aURL );
-                GetPage()->SetSound( !aURL.isEmpty() );
-                break;
+                if( xSound.is() )
+                    aURL = xSound->getURL();
             }
-            else
+            else if( !(aValue >>= aURL) )
             {
                 bool bStopSound = false;
                 if( aValue >>= bStopSound )
@@ -745,9 +747,12 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                     GetPage()->SetStopSound( bStopSound );
                     break;
                 }
+                throw lang::IllegalArgumentException();
             }
 
-            throw lang::IllegalArgumentException();
+            GetPage()->SetSoundFile( aURL );
+            GetPage()->SetSound( !aURL.isEmpty() );
+            break;
         }
         case WID_LOOP_SOUND:
         {
@@ -1202,13 +1207,14 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         {
             aAny <<= true;
         }
-        else
+        else if( GetPage()->IsSoundOn() && !GetPage()->GetSoundFile().isEmpty() )
         {
-            OUString aURL;
-            if( GetPage()->IsSoundOn() )
-                aURL = GetPage()->GetSoundFile();
-            aAny <<= aURL;
+            const SdSoundLink& rSound = GetPage()->GetSoundLink();
+            aAny <<= css::uno::Reference<css::presentation::XSoundReference>(
+                new xmloff::SoundReference(rSound.getURL(), rSound.isAllowed()));
         }
+        else
+            aAny <<= OUString();
         break;
     }
     case WID_LOOP_SOUND:

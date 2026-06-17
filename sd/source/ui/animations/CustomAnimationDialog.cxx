@@ -1410,6 +1410,20 @@ void CustomAnimationEffectTabPage::onSoundPreview()
     if( nPos >= 2 ) try
     {
         const OUString aSoundURL( maSoundList[ nPos-2 ] );
+
+        // Preview the effect's own source only once it is allowed; a gallery or
+        // browsed sound has a different URL and is left alone.
+        if( mpSet->getPropertyState( nHandleSoundURL ) != STLPropertyState::Ambiguous )
+        {
+            OUString aEffectSoundURL;
+            mpSet->getPropertyValue( nHandleSoundURL ) >>= aEffectSoundURL;
+            bool bAllowed = true;
+            if( mpSet->getPropertyState( nHandleSoundAllowed ) != STLPropertyState::Ambiguous )
+                mpSet->getPropertyValue( nHandleSoundAllowed ) >>= bAllowed;
+            if( aSoundURL == aEffectSoundURL && !bAllowed )
+                return;
+        }
+
         mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL, u""_ustr ), uno::UNO_SET_THROW );
         mxPlayer->start();
     }

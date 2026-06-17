@@ -56,6 +56,8 @@
 #include <memory>
 #include <utility>
 #include <unomodel.hxx>
+#include <SdSoundLink.hxx>
+#include <com/sun/star/presentation/XSoundReference.hpp>
 
 class SfxObjectShell;
     // complete SfxObjectShell for SaveVBA under -fsanitize=function
@@ -201,10 +203,23 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
     if ( GetPropertyValue( aAny, mXPagePropSet, u"Sound"_ustr ) )
     {
+        css::uno::Reference<css::presentation::XSoundReference> xSound;
         OUString aSoundURL;
-        if ( aAny >>= aSoundURL )
+        if ( aAny >>= xSound )
         {
-            nSoundRef = maSoundCollection.GetId( aSoundURL );
+            if ( xSound.is() )
+            {
+                nSoundRef = maSoundCollection.GetId(
+                    SdSoundLink(xSound->getURL(), xSound->getAllowed()) );
+                bIsSound = true;
+            }
+        }
+        else if ( aAny >>= aSoundURL )
+        {
+            // a silent slide reports an empty sound string here; emit the
+            // slide-info record anyway, since it also carries the transition
+            // speed. A bare string carries no allow decision, so deny it.
+            nSoundRef = maSoundCollection.GetId( SdSoundLink(aSoundURL, false) );
             bIsSound = true;
         }
         else

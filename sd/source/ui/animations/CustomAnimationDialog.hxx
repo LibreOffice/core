@@ -66,6 +66,10 @@ const sal_Int32 nHandleCommand = 31;
 
 const sal_Int32 nHandleHasVisibleShape = 32;
 
+// the session allowed state of the animation effect sound: true when the sound
+// is in the document package or the user has allowed this external sound
+const sal_Int32 nHandleSoundAllowed = 33;
+
 const sal_Int32 nPropertyTypeNone = 0;
 const sal_Int32 nPropertyTypeDirection = 1;
 const sal_Int32 nPropertyTypeSpokes = 2;

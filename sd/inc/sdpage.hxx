@@ -33,6 +33,7 @@
 #include <xmloff/autolayout.hxx>
 #include "diadef.h"
 #include "pres.hxx"
+#include "SdSoundLink.hxx"
 #include "shapelist.hxx"
 #include "misc/scopelock.hxx"
 #include "sddllapi.h"
@@ -112,7 +113,7 @@ friend class sd::UndoAttrObject;
     bool    mbSoundOn;                ///< with / without sound.
     bool    mbExcluded;               ///< will (not) be displayed during show.
     OUString    maLayoutName;             ///< Name of the layout
-    OUString    maSoundFile;              ///< Path to sound file (MS-DOS notation).
+    SdSoundLink maSoundLink;              ///< transition sound source
     bool        mbLoopSound;
     bool        mbStopSound;
     OUString    maCreatedPageName;        ///< generated page name by GetPageName.
@@ -228,8 +229,10 @@ public:
 
     bool        IsScaleObjects() const              { return mbScaleObjects; }
 
-    void        SetSoundFile(const OUString& rStr)    { maSoundFile = rStr; }
-    const OUString& GetSoundFile() const                { return maSoundFile; }
+    void        SetSoundFile(const OUString& rStr, bool bAllowed = false);
+    const OUString& GetSoundFile() const                { return maSoundLink.getURL(); }
+    const SdSoundLink& GetSoundLink() const             { return maSoundLink; }
+    void        SetSoundAllowed(bool bAllowed)          { maSoundLink.setAllowed(bAllowed); }
 
     void        SetLoopSound( bool bLoopSound ) { mbLoopSound = bLoopSound; }
     bool        IsLoopSound() const                 { return mbLoopSound; }
@@ -301,7 +304,7 @@ public:
     void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode > const & xNode );
 
     /// @return a helper class to manipulate effects inside the main sequence
-    std::shared_ptr< sd::MainSequence > const & getMainSequence();
+    SD_DLLPUBLIC std::shared_ptr< sd::MainSequence > const & getMainSequence();
 
     /** quick check if this slide has an animation node.
         This can be used to have a cost free check if there are no animations ad this slide.

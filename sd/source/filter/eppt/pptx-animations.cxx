@@ -49,6 +49,7 @@
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
+#include <xmloff/SoundReference.hxx>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -1085,7 +1086,8 @@ void PPTXAnimationExport::WriteAnimationNodeMedia(const sal_Int16 nParentNodeTyp
     }
 
     bool bValid = false;
-    if ((xAudio->getSource() >>= sUrl) && !sUrl.isEmpty() && IsAudioURL(sUrl))
+    sUrl = xmloff::getSoundURL(xAudio->getSource());
+    if (!sUrl.isEmpty() && IsAudioURL(sUrl))
     {
         bValid = true;
     }
@@ -1109,7 +1111,7 @@ void PPTXAnimationExport::WriteAnimationNodeMedia(const sal_Int16 nParentNodeTyp
     if (!bValid)
         return;
 
-    if (!xShape.is())
+    if (!xShape.is() && xmloff::getSoundAllowed(xAudio->getSource()))
     {
         mrPowerPointExport.embedEffectAudio(mpFS, sUrl, sRelId, sName);
     }

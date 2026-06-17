@@ -41,6 +41,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <xmloff/SoundReference.hxx>
 #include <tools/debug.hxx>
 #include "STLPropertySet.hxx"
 #include <CustomAnimationPane.hxx>
@@ -1129,7 +1130,9 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
         Any aSoundSource;
         if( pEffect->getAudio().is() )
         {
-            aSoundSource = pEffect->getAudio()->getSource();
+            const Any aSource(pEffect->getAudio()->getSource());
+            aSoundSource <<= xmloff::getSoundURL(aSource);
+            addValue( pSet, nHandleSoundAllowed, Any( xmloff::getSoundAllowed(aSource) ) );
             addValue( pSet, nHandleSoundVolume, Any( pEffect->getAudio()->getVolume() ) );
 // todo     addValue( pSet, nHandleSoundEndAfterSlide, makeAny( pEffect->getAudio()->getEndAfterSlide() ) );
 // this is now stored at the XCommand parameter sequence
@@ -1397,16 +1400,17 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
                 if( !aSoundURL.isEmpty() )
                 {
+                    // The user chose this sound here, so it is allowed.
                     if( !pEffect->getAudio().is() )
                     {
-                        pEffect->createAudio( aSoundSource );
+                        pEffect->createAudio( xmloff::makeSoundSource( aSoundURL, true ) );
                         bChanged = true;
                     }
                     else
                     {
-                        if( pEffect->getAudio()->getSource() != aSoundSource )
+                        if( xmloff::getSoundURL( pEffect->getAudio()->getSource() ) != aSoundURL )
                         {
-                            pEffect->getAudio()->setSource( aSoundSource );
+                            pEffect->setAudioSource( xmloff::makeSoundSource( aSoundURL, true ) );
                             bChanged = true;
                         }
                     }

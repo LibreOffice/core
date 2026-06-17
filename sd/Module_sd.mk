@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_export_tests-ooxml3 \
     CppunitTest_sd_export_tests-ooxml4 \
     CppunitTest_sd_export_tests \
+    CppunitTest_sd_export_tests2 \
     CppunitTest_sd_filters_test \
     CppunitTest_sd_font_embedding_tests \
     CppunitTest_sd_layout_tests \

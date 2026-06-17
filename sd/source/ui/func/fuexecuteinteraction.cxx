@@ -152,15 +152,21 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
         case presentation::ClickAction_SOUND:
         {
 #if HAVE_FEATURE_AVMEDIA
-            try
+            // Fetch the sound only when its external link has been allowed this
+            // session.
+            SdSoundLink aSound(pInfo->GetBookmark(), pInfo->mbClickSoundAllowed);
+            if (aSound.isAllowed())
             {
-                mxPlayer.set(
-                    avmedia::MediaWindow::createPlayer(pInfo->GetBookmark(), u""_ustr /*TODO?*/),
-                    uno::UNO_SET_THROW);
-                mxPlayer->start();
-            }
-            catch (uno::Exception&)
-            {
+                try
+                {
+                    mxPlayer.set(
+                        avmedia::MediaWindow::createPlayer(aSound.getURL(), u""_ustr /*TODO?*/),
+                        uno::UNO_SET_THROW);
+                    mxPlayer->start();
+                }
+                catch (uno::Exception&)
+                {
+                }
             }
 #endif
         }

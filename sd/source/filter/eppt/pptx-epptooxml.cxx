@@ -33,6 +33,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <drawdoc.hxx>
+#include <SdSoundLink.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/section.hxx>
 #include <editeng/editeng.hxx>
@@ -72,6 +73,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/presentation/XSoundReference.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/hash.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
@@ -1167,8 +1169,15 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     if (!nPPTTransitionType && eFadeEffect != FadeEffect_NONE)
         nPPTTransitionType = GetTransition(eFadeEffect, nDirection);
 
-    if (ImplGetPropertyValue(mXPagePropSet, u"Sound"_ustr) && (mAny >>= sSoundUrl))
-        embedEffectAudio(pFS, sSoundUrl, sSoundRelId, sSoundName);
+    if (ImplGetPropertyValue(mXPagePropSet, u"Sound"_ustr))
+    {
+        css::uno::Reference<css::presentation::XSoundReference> xSound;
+        if ((mAny >>= xSound) && xSound.is() && xSound->getAllowed())
+        {
+            sSoundUrl = xSound->getURL();
+            embedEffectAudio(pFS, sSoundUrl, sSoundRelId, sSoundName);
+        }
+    }
 
     bool bOOXmlSpecificTransition = false;
 

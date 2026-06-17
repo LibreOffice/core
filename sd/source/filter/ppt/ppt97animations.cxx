@@ -21,6 +21,7 @@
 
 #include <svx/svdobj.hxx>
 #include <sdpage.hxx>
+#include <xmloff/SoundReference.hxx>
 #include <tools/stream.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
@@ -602,9 +603,9 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
             pEffect->setAfterEffectOnNext( HasAfterEffect_DimAtNextEffect() );
     }
 
-    // set sound effect
+    // set sound effect. Embedded in the .ppt, not a link: allow it.
     if( HasSoundEffect() )
-        pEffect->createAudio( uno::Any( m_aSoundFileUrl ) );
+        pEffect->createAudio( xmloff::makeSoundSource( m_aSoundFileUrl, /*bAllowed*/true ) );
 
     // text iteration
     pEffect->setIterateType( GetTextAnimationType() );

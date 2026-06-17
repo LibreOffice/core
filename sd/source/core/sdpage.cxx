@@ -1410,6 +1410,19 @@ void SdPage::SetCanvasPage()
     static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).StoreCanvasPage(this);
 }
 
+void SdPage::SetSoundFile(const OUString& rStr, bool bAllowed)
+{
+    // A fresh source takes the given allowed state; setting the same source
+    // again keeps the allowed state it already has.
+    if (maSoundLink.getURL() != rStr)
+        maSoundLink = SdSoundLink(rStr, bAllowed);
+    // A transition sound pointing outside the document package is a link the
+    // user allows on its own; register it as the URL is set so it joins link
+    // management.
+    if (maSoundLink.isExternalLink())
+        static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).RegisterPageSoundLink(*this);
+}
+
 static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* rRectangle ,const OUString& sLayoutType )
 {
     ::tools::Rectangle aTitleRect;

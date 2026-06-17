@@ -47,6 +47,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
+#include <com/sun/star/presentation/XSoundReference.hpp>
 #include <com/sun/star/presentation/XSlideShowNavigationListener.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -769,7 +770,13 @@ SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& r
 
     if( !(rSound >>= bStopSound) )
         bStopSound = false;
-    rSound >>= url;
+
+    // The page Sound is an XSoundReference carrying the URL and its allowed
+    // state. Take the URL only when the sound is allowed, so an unallowed
+    // external sound stays empty here and is not played.
+    uno::Reference<presentation::XSoundReference> xSound;
+    if( (rSound >>= xSound) && xSound.is() && xSound->getAllowed() )
+        url = xSound->getURL();
 
     if( !bStopSound && url.isEmpty() )
         return SoundPlayerSharedPtr();

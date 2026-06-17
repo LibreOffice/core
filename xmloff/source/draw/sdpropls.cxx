@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
+#include <com/sun/star/presentation/XSoundReference.hpp>
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -1984,7 +1985,15 @@ void XMLPageExportPropertyMapper::handleElementItem(
         case CTF_PAGE_SOUND_URL:
             {
                 OUString aSoundURL;
-                if( (rProperty.maValue >>= aSoundURL) && !aSoundURL.isEmpty() )
+                css::uno::Reference<css::presentation::XSoundReference> xSound;
+                if( rProperty.maValue >>= xSound )
+                {
+                    if( xSound.is() )
+                        aSoundURL = xSound->getURL();
+                }
+                else
+                    rProperty.maValue >>= aSoundURL;
+                if( !aSoundURL.isEmpty() )
                 {
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference(aSoundURL) );
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );

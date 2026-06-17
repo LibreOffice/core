@@ -23,6 +23,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <sdundo.hxx>
+#include <SdSoundLink.hxx>
 #include <tools/color.hxx>
 
 class SdDrawDocument;
@@ -57,8 +58,8 @@ class SdAnimationPrmsUndoAction final : public SdUndoAction
     css::presentation::AnimationSpeed  eNewSecondSpeed;
     Color           aOldDimColor;
     Color           aNewDimColor;
-    OUString        aOldSoundFile;
-    OUString        aNewSoundFile;
+    SdSoundLink     aOldSoundLink;
+    SdSoundLink     aNewSoundLink;
     css::presentation::ClickAction     eOldClickAction;
     css::presentation::ClickAction     eNewClickAction;
     OUString        aOldBookmark;
@@ -121,8 +122,8 @@ public:
             { bOldDimHide = bTheOldDimHide; bNewDimHide = bTheNewDimHide; }
         void SetSoundOn(bool bTheOldSoundOn, bool bTheNewSoundOn)
             { bOldSoundOn = bTheOldSoundOn; bNewSoundOn = bTheNewSoundOn; }
-        void SetSound(const OUString& aTheOldSound, const OUString& aTheNewSound)
-            { aOldSoundFile = aTheOldSound; aNewSoundFile = aTheNewSound; }
+        void SetSound(const SdSoundLink& aTheOldSound, const SdSoundLink& aTheNewSound)
+            { aOldSoundLink = aTheOldSound; aNewSoundLink = aTheNewSound; }
         void SetPlayFull(bool bTheOldPlayFull, bool bTheNewPlayFull)
             { bOldPlayFull = bTheOldPlayFull; bNewPlayFull = bTheNewPlayFull; }
         void SetClickAction(css::presentation::ClickAction eTheOldAction, css::presentation::ClickAction eTheNewAction)

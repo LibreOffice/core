@@ -97,6 +97,7 @@
 #include <customshowlist.hxx>
 #include <unopage.hxx>
 #include <sdpage.hxx>
+#include <anminfo.hxx>
 #include <sdmod.hxx>
 #include <app.hrc>
 #include <cusshow.hxx>
@@ -1735,14 +1736,25 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
     case ClickAction_SOUND:
     {
 #if HAVE_FEATURE_AVMEDIA
-        try
+        // Fetch the sound only when its external link has been allowed this
+        // session.
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
+        SdAnimationInfo* pInfo = pObj ? SdDrawDocument::GetShapeUserData(*pObj) : nullptr;
+        if (pInfo)
         {
-            mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark, u""_ustr/*TODO?*/), uno::UNO_SET_THROW );
-            mxPlayer->start();
-        }
-        catch( uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::click()" );
+            SdSoundLink aSound(pInfo->GetBookmark(), pInfo->mbClickSoundAllowed);
+            if (aSound.isAllowed())
+            {
+                try
+                {
+                    mxPlayer.set(avmedia::MediaWindow::createPlayer(aSound.getURL(), u""_ustr/*TODO?*/), uno::UNO_SET_THROW );
+                    mxPlayer->start();
+                }
+                catch( uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::click()" );
+                }
+            }
         }
 #endif
     }

@@ -47,6 +47,7 @@ class Timer;
 class SfxObjectShell;
 class SdPage;
 class SdAnimationInfo;
+class SdSoundLink;
 class SdStyleSheetPool;
 class SfxMedium;
 class SvxSearchItem;
@@ -374,6 +375,10 @@ private:
     bool                mbNewOrLoadCompleted;
 
     bool                mbDestroying = false;
+
+    /// true when the document may hold an animation effect sound whose source
+    /// is a file outside the document package
+    bool                mbMaybeHasAnimationSoundLinks = false;
 
     bool                mbOnlineSpell;
     bool                mbSummationOfParagraphs;
@@ -892,6 +897,25 @@ public:
     SAL_DLLPRIVATE const std::optional<CharClass>& GetCharClass() const { return moCharClass; }
 
     SAL_DLLPRIVATE void                UpdateAllLinks();
+
+    /// set whether the document may hold an animation effect sound whose source
+    /// is a file outside the document package
+    SAL_DLLPRIVATE void                SetMaybeHasAnimationSoundLinks(bool bSet) { mbMaybeHasAnimationSoundLinks = bSet; }
+    SAL_DLLPRIVATE bool                MaybeHasAnimationSoundLinks() const { return mbMaybeHasAnimationSoundLinks; }
+
+    /// register the slide-transition sound of rPage as a link bound to the
+    /// page, so allowing it marks the sound on the page allowed
+    SAL_DLLPRIVATE void                RegisterPageSoundLink(SdPage& rPage);
+
+    /// register an external click-action sound on rObject as a link bound to the
+    /// shape, so allowing it marks the sound on that shape allowed; does nothing
+    /// when the shape has no external click-action sound
+    SAL_DLLPRIVATE void                RegisterShapeSoundLink(SdrObject& rObject);
+
+    /// register the external animation-effect sounds on rPage as links bound to
+    /// their audio nodes, so allowing one marks that node's source allowed;
+    /// returns true when rPage has any such sound
+    SAL_DLLPRIVATE bool                RegisterAnimationSoundLinks(SdPage& rPage);
 
     SAL_DLLPRIVATE void                CheckMasterPages();
 

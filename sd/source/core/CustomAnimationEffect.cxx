@@ -74,6 +74,8 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <animations.hxx>
@@ -1441,6 +1443,20 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     return bChanged;
 }
 
+namespace
+{
+// Register the effect's external sound on the slide that owns it, so allowing
+// the link marks the audio node's source allowed.
+void lcl_registerEffectSoundLink(const CustomAnimationEffect& rEffect)
+{
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rEffect.getTargetShape());
+    SdrPage* pPage = pObj ? pObj->getSdrPageFromSdrObject() : nullptr;
+    if (pPage)
+        static_cast<SdDrawDocument&>(pPage->getSdrModelFromSdrPage())
+            .RegisterAnimationSoundLinks(static_cast<SdPage&>(*pPage));
+}
+}
+
 void CustomAnimationEffect::createAudio( const css::uno::Any& rSource )
 {
     DBG_ASSERT( !mxAudio.is(), "sd::CustomAnimationEffect::createAudio(), node already has an audio!" );
@@ -1455,11 +1471,20 @@ void CustomAnimationEffect::createAudio( const css::uno::Any& rSource )
         xAudio->setSource( rSource );
         xAudio->setVolume( 1.0 );
         setAudio( xAudio );
+        lcl_registerEffectSoundLink( *this );
     }
     catch( Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::createAudio()" );
     }
+}
+
+void CustomAnimationEffect::setAudioSource( const css::uno::Any& rSource )
+{
+    if( !mxAudio.is() )
+        return;
+    mxAudio->setSource( rSource );
+    lcl_registerEffectSoundLink( *this );
 }
 
 static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >& xRootNode )

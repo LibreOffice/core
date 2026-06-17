@@ -42,10 +42,17 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/fillbitmaplink.hxx>
+#include <svx/sdrpageuser.hxx>
+#include <svx/sdrobjectuser.hxx>
+#include <xmloff/SoundReference.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/lokhelper.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <unotools/securityoptions.hxx>
 #include <Outliner.hxx>
 #include <sdmod.hxx>
@@ -78,6 +85,8 @@
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
 #include <sdpage.hxx>
+#include <anminfo.hxx>
+#include <svx/svditer.hxx>
 #include <strings.hrc>
 #include <glob.hxx>
 #include <stlpool.hxx>
@@ -985,6 +994,245 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     SetChanged( false );
 }
 
+namespace
+{
+// Base for a sound link bound to a page through sdr::PageUser, so the link is
+// removed when the page goes away. A derived class implements DataChanged to
+// mark its own sound allowed.
+class SdPageBoundSoundLink : public sfx2::SvBaseLink, public sdr::PageUser
+{
+protected:
+    SdPage* m_pPage;
+
+    explicit SdPageBoundSoundLink(SdPage& rPage)
+        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE)
+        , m_pPage(&rPage)
+    {
+        m_pPage->AddPageUser(*this);
+    }
+
+    virtual ~SdPageBoundSoundLink() override
+    {
+        if (m_pPage)
+            m_pPage->RemovePageUser(*this);
+    }
+
+public:
+    const SdPage* getPage() const { return m_pPage; }
+
+    virtual void PageInDestruction(const SdrPage&) override
+    {
+        // the page is tearing down and removes its own users, so just drop the back-pointer here
+        m_pPage = nullptr;
+        tools::SvRef<SvBaseLink> xSelf(this);
+        if (sfx2::LinkManager* pLinkMgr = GetLinkManager())
+            pLinkMgr->Remove(this);
+    }
+};
+
+// The slide-transition sound link, bound to its page the way
+// sdr::SdrPageFillBitmapLink binds a fill bitmap to its host. Updating the link
+// marks the page's own SdSoundLink allowed, so the page carries that state
+// directly.
+class SdPageSoundLink final : public SdPageBoundSoundLink
+{
+public:
+    explicit SdPageSoundLink(SdPage& rPage)
+        : SdPageBoundSoundLink(rPage)
+    {
+    }
+
+    virtual UpdateResult DataChanged(const OUString&, const css::uno::Any&) override
+    {
+        if (m_pPage)
+            m_pPage->SetSoundAllowed(true);
+        return SUCCESS;
+    }
+};
+
+// The click-action sound link, bound to its shape the way SdPageSoundLink binds
+// to its page. Updating the link marks the shape's SdAnimationInfo allowed, so
+// the shape carries that state directly.
+// Bound through sdr::ObjectUser so it never outlives the shape.
+class SdShapeSoundLink final : public sfx2::SvBaseLink, public sdr::ObjectUser
+{
+    SdrObject* m_pObject;
+
+public:
+    explicit SdShapeSoundLink(SdrObject& rObject)
+        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE)
+        , m_pObject(&rObject)
+    {
+        m_pObject->AddObjectUser(*this);
+    }
+
+    virtual ~SdShapeSoundLink() override
+    {
+        if (m_pObject)
+            m_pObject->RemoveObjectUser(*this);
+    }
+
+    const SdrObject* getObject() const { return m_pObject; }
+
+    virtual UpdateResult DataChanged(const OUString&, const css::uno::Any&) override
+    {
+        if (m_pObject)
+        {
+            if (SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*m_pObject))
+                pInfo->mbClickSoundAllowed = true;
+        }
+        return SUCCESS;
+    }
+
+    virtual void ObjectInDestruction(const SdrObject&) override
+    {
+        // the shape is tearing down and removes its own users, so just drop the back-pointer here
+        m_pObject = nullptr;
+        tools::SvRef<SvBaseLink> xSelf(this);
+        if (sfx2::LinkManager* pLinkMgr = GetLinkManager())
+            pLinkMgr->Remove(this);
+    }
+};
+
+// The animation-effect sound link. It holds the audio node whose source carries
+// the sound, and is bound to the node's page like the transition sound link.
+// Updating the link marks that source allowed, so the node carries the allowed
+// state directly. The URL is kept; only the allowed state changes.
+class SdAnimationSoundLink final : public SdPageBoundSoundLink
+{
+    css::uno::Reference<css::animations::XAudio> m_xAudio;
+
+public:
+    SdAnimationSoundLink(SdPage& rPage, css::uno::Reference<css::animations::XAudio> xAudio)
+        : SdPageBoundSoundLink(rPage)
+        , m_xAudio(std::move(xAudio))
+    {
+    }
+
+    const css::uno::Reference<css::animations::XAudio>& getAudio() const { return m_xAudio; }
+
+    virtual UpdateResult DataChanged(const OUString&, const css::uno::Any&) override
+    {
+        if (m_xAudio.is())
+            m_xAudio->setSource(
+                xmloff::makeSoundSource(xmloff::getSoundURL(m_xAudio->getSource()), true));
+        return SUCCESS;
+    }
+};
+
+// True when rLinkManager already holds a link of LinkType for which rMatch
+// returns true, that is, the link's owner is already registered.
+template <typename LinkType, typename Match>
+bool lcl_hasSoundLink(const sfx2::LinkManager& rLinkManager, Match rMatch)
+{
+    for (const tools::SvRef<sfx2::SvBaseLink>& rLink : rLinkManager.GetLinks())
+    {
+        const LinkType* pLink = dynamic_cast<LinkType*>(rLink.get());
+        if (pLink && rMatch(*pLink))
+            return true;
+    }
+    return false;
+}
+
+// True when the document holds any external sound link: a transition, a
+// click-action or an animation-effect sound.
+bool lcl_hasAnySoundLink(const sfx2::LinkManager& rLinkManager)
+{
+    for (const tools::SvRef<sfx2::SvBaseLink>& rLink : rLinkManager.GetLinks())
+    {
+        sfx2::SvBaseLink* pLink = rLink.get();
+        if (dynamic_cast<SdPageSoundLink*>(pLink) || dynamic_cast<SdShapeSoundLink*>(pLink)
+            || dynamic_cast<SdAnimationSoundLink*>(pLink))
+            return true;
+    }
+    return false;
+}
+
+// Register an animation-sound link for every AUDIO node under rNode whose source
+// points outside the document package, binding each to rPage. Sets rbFound when
+// rNode holds any such sound.
+void lcl_registerAudioSoundLinks(
+    const css::uno::Reference<css::animations::XAnimationNode>& rNode,
+    SdPage& rPage, sfx2::LinkManager& rLinkManager, bool& rbFound)
+{
+    if (!rNode.is())
+        return;
+
+    if (rNode->getType() == css::animations::AnimationNodeType::AUDIO)
+    {
+        css::uno::Reference<css::animations::XAudio> xAudio(rNode, css::uno::UNO_QUERY);
+        const css::uno::Any aSource = xAudio.is() ? xAudio->getSource() : css::uno::Any();
+        const OUString aURL = xmloff::getSoundURL(aSource);
+        if (SdSoundLink(aURL).isExternalLink() && !xmloff::getSoundAllowed(aSource))
+        {
+            rbFound = true;
+            if (!lcl_hasSoundLink<SdAnimationSoundLink>(
+                    rLinkManager, [&xAudio](const SdAnimationSoundLink& rLink)
+                    { return rLink.getAudio() == xAudio; }))
+            {
+                tools::SvRef<sfx2::SvBaseLink> xLink(new SdAnimationSoundLink(rPage, xAudio));
+                rLinkManager.InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientFile, aURL);
+            }
+        }
+    }
+
+    css::uno::Reference<css::container::XEnumerationAccess> xEnumAccess(rNode, css::uno::UNO_QUERY);
+    if (xEnumAccess.is())
+    {
+        css::uno::Reference<css::container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
+        while (xEnum.is() && xEnum->hasMoreElements())
+        {
+            css::uno::Reference<css::animations::XAnimationNode> xChild(xEnum->nextElement(),
+                                                                       css::uno::UNO_QUERY);
+            lcl_registerAudioSoundLinks(xChild, rPage, rLinkManager, rbFound);
+        }
+    }
+}
+}
+
+void SdDrawDocument::RegisterPageSoundLink(SdPage& rPage)
+{
+    // No link manager on a shell-less model (for example the clipboard), which
+    // has no infobar or slideshow, so nothing needs registering there. An
+    // already-allowed sound is the document's own content, not a link.
+    if (!m_pLinkManager || !rPage.GetSoundLink().isExternalLink()
+        || rPage.GetSoundLink().isAllowed())
+        return;
+    if (lcl_hasSoundLink<SdPageSoundLink>(*m_pLinkManager, [&rPage](const SdPageSoundLink& rLink)
+                                          { return rLink.getPage() == &rPage; }))
+        return; // already registered
+    tools::SvRef<sfx2::SvBaseLink> xLink(new SdPageSoundLink(rPage));
+    m_pLinkManager->InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientFile,
+                                   rPage.GetSoundFile());
+}
+
+bool SdDrawDocument::RegisterAnimationSoundLinks(SdPage& rPage)
+{
+    if (!m_pLinkManager || !rPage.hasAnimationNode())
+        return false;
+    bool bFound = false;
+    lcl_registerAudioSoundLinks(rPage.getAnimationNode(), rPage, *m_pLinkManager, bFound);
+    return bFound;
+}
+
+void SdDrawDocument::RegisterShapeSoundLink(SdrObject& rObject)
+{
+    if (!m_pLinkManager)
+        return;
+    SdAnimationInfo* pInfo = GetShapeUserData(rObject);
+    if (!pInfo || pInfo->meClickAction != css::presentation::ClickAction_SOUND
+        || !SdSoundLink(pInfo->GetBookmark()).isExternalLink()
+        || pInfo->mbClickSoundAllowed)
+        return;
+    if (lcl_hasSoundLink<SdShapeSoundLink>(*m_pLinkManager, [&rObject](const SdShapeSoundLink& rLink)
+                                           { return rLink.getObject() == &rObject; }))
+        return; // already registered
+    tools::SvRef<sfx2::SvBaseLink> xLink(new SdShapeSoundLink(rObject));
+    m_pLinkManager->InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientFile,
+                                   pInfo->GetBookmark());
+}
+
+
 /** updates all links, only links in this document should by resolved */
 void SdDrawDocument::UpdateAllLinks()
 {
@@ -1001,6 +1249,36 @@ void SdDrawDocument::UpdateAllLinks()
     {
         registerDeferredFormImageLinks(pDocShell->GetDeferredFormControlImages(), *m_pLinkManager);
         pDocShell->ClearDeferredFormControlImages();
+    }
+
+    // Transition, animation-effect and click-action sounds that point outside
+    // the document package are links. Each is bound to what owns its URL - the
+    // transition sound to its page, the click-action sound to its shape, the
+    // animation-effect sound to its audio node - so allowing one marks that
+    // owner allowed. The transition and click-action sounds are registered as
+    // their URL is set. The animation-effect sound's source is set on its audio
+    // node by the ODF import, with no set-time hook here; the import reports one
+    // by setting the document's HasExternalAnimationSoundLink property, and only
+    // then is the animation tree of each slide walked to register it. Once any
+    // external sound link is present, warn through the link-update infobar until
+    // the document is allowed to update its links.
+    if (pDocShell)
+    {
+        if (mbMaybeHasAnimationSoundLinks)
+        {
+            for (sal_uInt16 nPage = 0, nCount = GetSdPageCount(PageKind::Standard); nPage < nCount;
+                 ++nPage)
+            {
+                SdPage* pPage = GetSdPage(nPage, PageKind::Standard);
+                if (pPage)
+                    RegisterAnimationSoundLinks(*pPage);
+            }
+        }
+        if (!pDocShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate()
+            && lcl_hasAnySoundLink(*m_pLinkManager))
+        {
+            pDocShell->SetPendingLinkUpdateInfobar();
+        }
     }
 
     if (m_pLinkManager->GetLinks().empty())
