@@ -9,6 +9,7 @@
  </office:scripts>
  <office:font-face-decls>
   <style:font-face style:name="Calibri" svg:font-family="Calibri" style:font-family-generic="swiss"/>
+  <style:font-face style:name="Cantarell" svg:font-family="Cantarell" style:font-pitch="variable"/>
   <style:font-face style:name="FreeSans" svg:font-family="FreeSans" style:font-family-generic="system" style:font-pitch="variable"/>
   <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
   <style:font-face style:name="Noto Sans" svg:font-family="&apos;Noto Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
@@ -17,12 +18,13 @@
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="no-wrap"/>
    <style:paragraph-properties style:tab-stop-distance="1.27cm"/>
    <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt" fo:language="en" fo:country="US" style:font-name-asian="WenQuanYi Micro Hei" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="FreeSans" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN"/>
   </style:default-style>
   <style:default-style style:family="graphic">
    <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" style:writing-mode="page"/>
-   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" loext:tab-stop-distance="0cm" style:writing-mode="page" style:font-independent-line-spacing="false">
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" loext:tab-stop-distance="0cm" style:font-independent-line-spacing="false">
     <style:tab-stops/>
    </style:paragraph-properties>
    <style:text-properties style:use-window-font-color="true" loext:opacity="0%" fo:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-family-asian="&apos;Segoe UI&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-family-complex="Tahoma" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
@@ -3166,6 +3168,11 @@
    <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet2.G2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet2.G2"/>
   </style:style>
+  <style:style style:name="ce41" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.G2"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="true" style:base-cell-address="Sheet2.G2"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="false" style:base-cell-address="Sheet2.G2"/>
+  </style:style>
   <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:border-bottom="0.74pt solid #c5e0b4" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border-left="0.74pt solid #c5e0b4" style:direction="ltr" fo:border-right="none" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" fo:border-top="none" style:vertical-align="bottom" loext:vertical-justify="auto">
     <loext:border-bottom-complex-color loext:theme-type="accent6" loext:color-type="theme">
@@ -3297,7 +3304,7 @@
      <text:p><text:sheet-name>???</text:sheet-name><text:s/>(<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2025-01-23">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="11:30:50.350894452">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2026-06-17">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="12:59:00.234427234">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -4643,25 +4650,19 @@
      <table:table-cell table:number-columns-repeated="12"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-matrix-columns-spanned="3" table:number-matrix-rows-spanned="6" table:formula="of:=COM.MICROSOFT.TAKE([.J3:.L8])" office:value-type="string" office:string-value="January" calcext:value-type="string">
-      <text:p>January</text:p>
+     <table:table-cell table:number-matrix-columns-spanned="3" table:number-matrix-rows-spanned="6" table:formula="of:=COM.MICROSOFT.TAKE([.J3:.L8])" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="100" calcext:value-type="float">
-      <text:p>100</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" office:value-type="string" calcext:value-type="string">
-      <text:p>January</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce26" office:value-type="float" office:value="100" calcext:value-type="float">
-      <text:p>100</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce37" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1</text:p>
-     </table:table-cell>
-     <table:table-cell table:formula="of:=([.A53]=[.D53])AND([.B53]=[.E53])AND([.C53]=[.F53])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce41" table:formula="of:=ISERROR([.A53])AND(ISERROR([.B53]))AND(ISERROR([.C53]))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>VERDADERO</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A53])" office:value-type="string" office:string-value="{=TAKE(J3:L8)}" calcext:value-type="string">
@@ -4670,25 +4671,19 @@
      <table:table-cell table:number-columns-repeated="13"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="string" office:string-value="February" calcext:value-type="string">
-      <text:p>February</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="150" calcext:value-type="float">
-      <text:p>150</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>February</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="150" calcext:value-type="float">
-      <text:p>150</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce38" office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2</text:p>
-     </table:table-cell>
-     <table:table-cell table:formula="of:=([.A54]=[.D54])AND([.B54]=[.E54])AND([.C54]=[.F54])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce18"/>
+     <table:table-cell table:style-name="ce38"/>
+     <table:table-cell table:style-name="ce41" table:formula="of:=ISERROR([.A54])AND(ISERROR([.B54]))AND(ISERROR([.C54]))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>VERDADERO</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A54])" office:value-type="string" office:string-value="{=TAKE(J3:L8)}" calcext:value-type="string">
@@ -4698,24 +4693,17 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=VLOOKUP(1; [.Y55:.Z60]; 2)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce14" table:formula="of:=VLOOKUP(1; [.Z55:.AA60]; 2)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce14" table:formula="of:=VLOOKUP(1; [.AA55:.AB60]; 2)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
-     </table:table-cell>
-     <table:table-cell table:formula="of:=ISERROR([.A55])AND(ISERROR([.B55]))AND(ISERROR([.C55]))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce41" table:formula="of:=ISERROR([.A55])AND(ISERROR([.B55]))AND(ISERROR([.C55]))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>VERDADERO</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A55])" office:value-type="string" office:string-value="{=TAKE(J3:L8)}" calcext:value-type="string">
@@ -4724,18 +4712,18 @@
      <table:table-cell table:number-columns-repeated="13"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
-      <text:p/>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
-      <text:p/>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
-      <text:p/>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="Default"/>
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:formula="of:=([.A56]=[.D56])AND([.B56]=[.E56])AND([.C56]=[.F56])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce41" table:formula="of:=ISERROR([.A56])AND(ISERROR([.B56]))AND(ISERROR([.C56]))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>VERDADERO</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A56])" office:value-type="string" office:string-value="{=TAKE(J3:L8)}" calcext:value-type="string">
@@ -4744,25 +4732,18 @@
      <table:table-cell table:number-columns-repeated="13"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell office:value-type="string" office:string-value="April" calcext:value-type="string">
-      <text:p>April</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="250" calcext:value-type="float">
-      <text:p>250</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>April</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="250" calcext:value-type="float">
-      <text:p>250</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4</text:p>
-     </table:table-cell>
-     <table:table-cell table:formula="of:=([.A57]=[.D57])AND([.B57]=[.E57])AND([.C57]=[.F57])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce41" table:formula="of:=ISERROR([.A57])AND(ISERROR([.B57]))AND(ISERROR([.C57]))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>VERDADERO</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A57])" office:value-type="string" office:string-value="{=TAKE(J3:L8)}" calcext:value-type="string">
@@ -4771,25 +4752,19 @@
      <table:table-cell table:number-columns-repeated="13"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="string" office:string-value="May" calcext:value-type="string">
-      <text:p>May</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="300" calcext:value-type="float">
-      <text:p>300</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5</text:p>
+     <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>May</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce26" office:value-type="float" office:value="300" calcext:value-type="float">
-      <text:p>300</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce37" office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5</text:p>
-     </table:table-cell>
-     <table:table-cell table:formula="of:=([.A58]=[.D58])AND([.B58]=[.E58])AND([.C58]=[.F58])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce41" table:formula="of:=ISERROR([.A58])AND(ISERROR([.B58]))AND(ISERROR([.C58]))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>VERDADERO</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A58])" office:value-type="string" office:string-value="{=TAKE(J3:L8)}" calcext:value-type="string">
@@ -5082,10 +5057,15 @@
      <table:table-cell table:number-columns-repeated="13"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.G2:Sheet2.G58 Sheet2.G60:Sheet2.G61 Sheet2.G63:Sheet2.G64 Sheet2.G69:Sheet2.G70 Sheet2.G66:Sheet2.G67 Sheet2.G72:Sheet2.G74">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.G2:Sheet2.G52 Sheet2.G60:Sheet2.G61 Sheet2.G63:Sheet2.G64 Sheet2.G69:Sheet2.G70 Sheet2.G66:Sheet2.G67 Sheet2.G72:Sheet2.G74 Sheet2.G54:Sheet2.G58">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.G2"/>
       <calcext:condition calcext:apply-style-name="true" calcext:value="=1" calcext:base-cell-address="Sheet2.G2"/>
       <calcext:condition calcext:apply-style-name="false" calcext:value="=0" calcext:base-cell-address="Sheet2.G2"/>
+     </calcext:conditional-format>
+     <calcext:conditional-format calcext:target-range-address="Sheet2.G53:Sheet2.G58">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.G53"/>
+      <calcext:condition calcext:apply-style-name="true" calcext:value="=1" calcext:base-cell-address="Sheet2.G53"/>
+      <calcext:condition calcext:apply-style-name="false" calcext:value="=0" calcext:base-cell-address="Sheet2.G53"/>
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>

@@ -8836,6 +8836,12 @@ void ScInterpreter::ScTakeOrDrop(bool bTake)
             Pop();
     }
 
+    if (!nArgCols.has_value() && !nArgRows.has_value())
+    {
+        PushIllegalArgument();
+        return;
+    }
+
     // 1st argument: take unique search range
     ScMatrixRef pMatSource = nullptr;
     SCSIZE nsC = 0, nsR = 0;
