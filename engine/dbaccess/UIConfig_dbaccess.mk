@@ -11,9 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,dbaccess))
 
 $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/admindialog \
-    dbaccess/uiconfig/ui/advancedsettingsdialog \
     dbaccess/uiconfig/ui/applycolpage \
-    dbaccess/uiconfig/ui/authentificationpage \
     dbaccess/uiconfig/ui/autocharsetpage \
     dbaccess/uiconfig/ui/choosedatasourcedialog \
     dbaccess/uiconfig/ui/colcontrolbox \
@@ -25,44 +23,30 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/dbasepage \
     dbaccess/uiconfig/ui/dbtreelist \
     dbaccess/uiconfig/ui/dbwizconnectionpage \
-    dbaccess/uiconfig/ui/dbwizmysqlintropage \
-    dbaccess/uiconfig/ui/dbwizmysqlnativepage \
-    dbaccess/uiconfig/ui/dbwizspreadsheetpage \
-    dbaccess/uiconfig/ui/dbwiztextpage \
     dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/emptypage \
     dbaccess/uiconfig/ui/fielddialog \
     dbaccess/uiconfig/ui/fielddescpage \
-    dbaccess/uiconfig/ui/finalpagewizard \
     dbaccess/uiconfig/ui/generalpagedialog \
-    dbaccess/uiconfig/ui/generalpagewizard \
     dbaccess/uiconfig/ui/generalspecialjdbcdetailspage \
     dbaccess/uiconfig/ui/generatedvaluespage \
-    dbaccess/uiconfig/ui/jdbcconnectionpage \
     dbaccess/uiconfig/ui/keymenu \
-    dbaccess/uiconfig/ui/ldapconnectionpage \
     dbaccess/uiconfig/ui/ldappage \
     dbaccess/uiconfig/ui/mysqlnativepage \
     dbaccess/uiconfig/ui/mysqlnativesettings \
     dbaccess/uiconfig/ui/namematchingpage \
     dbaccess/uiconfig/ui/odbcpage \
     dbaccess/uiconfig/ui/parametersdialog \
-    dbaccess/uiconfig/ui/password \
     dbaccess/uiconfig/ui/queryfilterdialog \
     dbaccess/uiconfig/ui/rowheightdialog \
     dbaccess/uiconfig/ui/savedialog \
     dbaccess/uiconfig/ui/savemodifieddialog \
-    dbaccess/uiconfig/ui/specialjdbcconnectionpage \
     dbaccess/uiconfig/ui/specialsettingspage \
     dbaccess/uiconfig/ui/sortdialog \
     dbaccess/uiconfig/ui/sqlexception \
-    dbaccess/uiconfig/ui/tablesfilterdialog \
-    dbaccess/uiconfig/ui/tablesfilterpage \
     dbaccess/uiconfig/ui/textconnectionsettings \
     dbaccess/uiconfig/ui/textpage \
     dbaccess/uiconfig/ui/typeselectpage \
-    dbaccess/uiconfig/ui/useradmindialog \
-    dbaccess/uiconfig/ui/useradminpage \
     dbaccess/uiconfig/ui/userdetailspage \
 ))
 
