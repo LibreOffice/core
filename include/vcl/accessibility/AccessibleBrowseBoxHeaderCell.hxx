@@ -26,9 +26,9 @@ class VCL_DLLPUBLIC AccessibleBrowseBoxHeaderCell final : public AccessibleBrows
     sal_Int32   m_nColumnRowId;
 public:
     AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
-                                      const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                                      ::vcl::IAccessibleTableProvider&                  _rBrowseBox,
-                                      AccessibleBrowseBoxObjType  _eObjType);
+                                  const rtl::Reference<comphelper::OAccessible>& rpParent,
+                                  ::vcl::IAccessibleTableProvider& _rBrowseBox,
+                                  AccessibleBrowseBoxObjType _eObjType);
     /** @return  The count of visible children. */
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 

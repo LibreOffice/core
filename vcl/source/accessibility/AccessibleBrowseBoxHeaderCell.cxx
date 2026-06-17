@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
 #include <vcl/accessibletableprovider.hxx>
@@ -29,9 +29,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(
-    sal_Int32 _nColumnRowId, const Reference<XAccessible>& rxParent,
+    sal_Int32 _nColumnRowId, const rtl::Reference<OAccessible>& rpParent,
     vcl::IAccessibleTableProvider& rBrowseBox, AccessibleBrowseBoxObjType eObjType)
-    : AccessibleBrowseBoxBase(rxParent, rBrowseBox, nullptr, eObjType,
+    : AccessibleBrowseBoxBase(rpParent, rBrowseBox, nullptr, eObjType,
                               rBrowseBox.GetAccessibleObjectName(eObjType, _nColumnRowId),
                               rBrowseBox.GetAccessibleObjectDescription(eObjType, _nColumnRowId))
     , m_nColumnRowId(_nColumnRowId)
