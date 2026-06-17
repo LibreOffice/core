@@ -41,8 +41,6 @@ enum __rtl_DigestAlgorithm
 {
     rtl_Digest_AlgorithmSHA1_StarOfficeBug,
 
-    rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
-
     rtl_Digest_AlgorithmInvalid,
     rtl_Digest_Algorithm_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
@@ -247,103 +245,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1_StarOfficeBug (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-#define RTL_DIGEST_LENGTH_HMAC_SHA1 RTL_DIGEST_LENGTH_SHA1
-
-/** Create a HMAC_SHA1 digest handle.
-
-    The HMAC_SHA1 digest algorithm is specified in
-    RFC 2104 (Informational)
-      HMAC: Keyed-Hashing for Message Authentication
-    RFC 2898 (Informational)
-      PKCS #5: Password-Based Cryptography Specification Version 2.0
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_create()
- */
-SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1_StarOfficeBug (void) SAL_THROW_EXTERN_C();
-
-/** Destroy a HMAC_SHA1 digest handle.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_destroy()
- */
-SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_SHA1 (
-    rtlDigest Digest
-) SAL_THROW_EXTERN_C();
-
-/** Initialize a HMAC_SHA1 digest.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_init()
-
-    @param[in] Digest   digest handle.
-    @param[in] pKeyData key material buffer.
-    @param[in] nKeyLen  key material length.
-
-    @retval rtl_Digest_E_None upon success.
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
-    rtlDigest Digest,
-    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen
-) SAL_THROW_EXTERN_C();
-
-/** Update a HMAC_SHA1 digest with given data.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_update()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
-    rtlDigest Digest,
-    const void *pData, sal_uInt32 nDatLen
-) SAL_THROW_EXTERN_C();
-
-/** Finalize a HMAC_SHA1 digest and retrieve the digest value.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_get()
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
-    rtlDigest Digest,
-    sal_uInt8 *pBuffer, sal_uInt32 nBufLen
-) SAL_THROW_EXTERN_C();
-
-/** Evaluate a HMAC_SHA1 digest value from given data.
-
-    This function performs an optimized call sequence on a
-    single data buffer, avoiding digest creation and destruction.
-
-    @deprecated The implementation is buggy and generates incorrect results
-                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
-
-    @see rtl_digest_initHMAC_SHA1()
-    @see rtl_digest_updateHMAC_SHA1()
-    @see rtl_digest_getHMAC_SHA1()
-
-    @param[in] pKeyData key material buffer.
-    @param[in] nKeyLen  key material length.
-    @param[in] pData    data buffer.
-    @param[in] nDatLen  data length.
-    @param[in] pBuffer  digest value buffer.
-    @param[in] nBufLen  digest value length.
-
-    @retval rtl_Digest_E_None upon success.
- */
-SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1_StarOfficeBug (
-    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
-    const void      *pData,    sal_uInt32 nDatLen,
-    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
 /** Password-Based Key Derivation Function.

@@ -90,10 +90,6 @@ rtlDigest SAL_CALL rtl_digest_create(rtlDigestAlgorithm Algorithm) noexcept
             Digest = rtl_digest_createSHA1_StarOfficeBug();
             break;
 
-        case rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug:
-            Digest = rtl_digest_createHMAC_SHA1_StarOfficeBug();
-            break;
-
         default: /* rtl_Digest_AlgorithmInvalid */
             break;
     }
@@ -869,12 +865,12 @@ static void opadHMAC_SHA1(ContextHMAC_SHA1 * ctx);
 
 const Digest_Impl HMAC_SHA1 =
 {
-    rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug,
+    rtl_Digest_Algorithm_FORCE_EQUAL_SIZE, // this is only used internally now so no need to check it
     RTL_DIGEST_LENGTH_SHA1,
-    rtl_digest_initHMAC_SHA1,
-    rtl_digest_destroyHMAC_SHA1,
-    rtl_digest_updateHMAC_SHA1,
-    rtl_digest_getHMAC_SHA1
+    nullptr, // unused now
+    nullptr, // unused now
+    nullptr, // unused now
+    nullptr, // unused now
 };
 
 static void initHMAC_SHA1(ContextHMAC_SHA1 * ctx)
@@ -914,40 +910,22 @@ static void opadHMAC_SHA1(ContextHMAC_SHA1 * ctx)
     }
 }
 
-rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1_StarOfficeBug(
-    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
-    const void      *pData,    sal_uInt32 nDatLen,
-    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen) noexcept
-{
-    DigestHMAC_SHA1_Impl digest;
-    rtlDigestError       result;
+namespace {
 
-    digest.m_digest = HMAC_SHA1;
+/** Initialize a HMAC_SHA1 digest.
 
-    result = rtl_digest_initHMAC_SHA1(&digest, pKeyData, nKeyLen);
-    if (result == rtl_Digest_E_None)
-    {
-        result = rtl_digest_updateHMAC_SHA1(&digest, pData, nDatLen);
-        if (result == rtl_Digest_E_None)
-            result = rtl_digest_getHMAC_SHA1(&digest, pBuffer, nBufLen);
-    }
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
 
-    rtl_secureZeroMemory(&digest, sizeof(digest));
-    return result;
-}
+    @see rtl_digest_init()
 
-rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1_StarOfficeBug() noexcept
-{
-    DigestHMAC_SHA1_Impl *pImpl = RTL_DIGEST_CREATE(DigestHMAC_SHA1_Impl);
-    if (pImpl)
-    {
-        pImpl->m_digest = HMAC_SHA1;
-        initHMAC_SHA1(&(pImpl->m_context));
-    }
-    return static_cast<rtlDigest>(pImpl);
-}
+    @param[in] Digest   digest handle.
+    @param[in] pKeyData key material buffer.
+    @param[in] nKeyLen  key material length.
 
-rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1(
+    @retval rtl_Digest_E_None upon success.
+ */
+rtlDigestError rtl_digest_initHMAC_SHA1(
     rtlDigest Digest, const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen) noexcept
 {
     DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
@@ -956,7 +934,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1(
     if (!pImpl || !pKeyData)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_Algorithm_FORCE_EQUAL_SIZE)
         return rtl_Digest_E_Algorithm;
 
     ctx = &(pImpl->m_context);
@@ -980,7 +958,14 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1(
     return rtl_Digest_E_None;
 }
 
-rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1(
+/** Update a HMAC_SHA1 digest with given data.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
+    @see rtl_digest_update()
+ */
+rtlDigestError rtl_digest_updateHMAC_SHA1(
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen) noexcept
 {
     DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
@@ -989,7 +974,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1(
     if (!pImpl || !pData)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_Algorithm_FORCE_EQUAL_SIZE)
         return rtl_Digest_E_Algorithm;
 
     ctx = &(pImpl->m_context);
@@ -998,7 +983,14 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1(
     return rtl_Digest_E_None;
 }
 
-rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1(
+/** Finalize a HMAC_SHA1 digest and retrieve the digest value.
+
+    @deprecated The implementation is buggy and generates incorrect results
+                for 52 <= (len % 64) <= 55; use only for bug-compatibility.
+
+    @see rtl_digest_get()
+ */
+rtlDigestError rtl_digest_getHMAC_SHA1(
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen) noexcept
 {
     DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
@@ -1007,7 +999,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1(
     if (!pImpl || !pBuffer)
         return rtl_Digest_E_Argument;
 
-    if (pImpl->m_digest.m_algorithm != rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
+    if (pImpl->m_digest.m_algorithm != rtl_Digest_Algorithm_FORCE_EQUAL_SIZE)
         return rtl_Digest_E_Algorithm;
 
     if (pImpl->m_digest.m_length > nBufLen)
@@ -1029,17 +1021,9 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1(
     return rtl_Digest_E_None;
 }
 
-void SAL_CALL rtl_digest_destroyHMAC_SHA1(rtlDigest Digest) noexcept
-{
-    DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
-    if (pImpl)
-    {
-        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_SHA1_StarOfficeBug)
-            rtl_freeZeroMemory(pImpl, sizeof(DigestHMAC_SHA1_Impl));
-        else
-            free(pImpl);
-    }
 }
+
+#define RTL_DIGEST_LENGTH_HMAC_SHA1 RTL_DIGEST_LENGTH_SHA1
 
 #define DIGEST_CBLOCK_PBKDF2 RTL_DIGEST_LENGTH_HMAC_SHA1
 
