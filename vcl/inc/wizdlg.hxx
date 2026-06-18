@@ -74,7 +74,6 @@ namespace vcl
         VclPtr<PushButton>      mpPrevBtn;
         VclPtr<PushButton>      mpNextBtn;
         VclPtr<ORoadmap>        mpRoadmap;
-        std::map<VclPtr<vcl::Window>, short> maResponses;
         sal_uInt16              mnCurLevel;
         sal_Int16               mnLeftAlignCount;
         bool                    mbEmptyViewMargin;
@@ -129,7 +128,6 @@ namespace vcl
 
         void                AddButton( Button* pButton, tools::Long nOffset = 0 );
         void                RemoveButton( Button* pButton );
-        void                AddButtonResponse( Button* pButton, int response);
 
         void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
         const Size&         GetPageSizePixel() const { return maPageSize; }

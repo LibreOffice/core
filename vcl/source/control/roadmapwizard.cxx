@@ -161,7 +161,6 @@ namespace vcl
         mpPrevBtn.reset();
         mpNextBtn.reset();
         mpRoadmap.disposeAndClear();
-        maResponses.clear();
         Dialog::dispose();
     }
 
@@ -403,11 +402,6 @@ namespace vcl
         return nullptr;
     }
 
-    void RoadmapWizard::AddButtonResponse( Button* pButton, int response)
-    {
-        maResponses[pButton] = response;
-    }
-
     void RoadmapWizard::implConstruct()
     {
         m_xWizardImpl->sTitleBase = GetText();
@@ -418,7 +412,6 @@ namespace vcl
         m_pHelp->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
         m_pHelp->Show();
         m_pHelp->set_id(u"help"_ustr);
-        AddButtonResponse(m_pHelp, RET_HELP);
         AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X);
 
         // the previous button
