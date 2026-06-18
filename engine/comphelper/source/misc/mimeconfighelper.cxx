@@ -114,7 +114,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
 
         cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", cpo::uno::Any(aPath)}
+            {u"nodepath"_ustr, cpo::uno::Any(aPath)}
         }));
         xConfig.set( m_xConfigProvider->createInstanceWithArguments(
                         u"com.sun.star.configuration.ConfigurationAccess"_ustr,
@@ -661,7 +661,7 @@ SfxFilterFlags MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterN
             if ( aFilterAny >>= aData )
             {
                 SequenceAsHashMap aFilterHM( aData );
-                nFlags = static_cast<SfxFilterFlags>(aFilterHM.getUnpackedValueOrDefault( "Flags", sal_Int32(0) ));
+                nFlags = static_cast<SfxFilterFlags>(aFilterHM.getUnpackedValueOrDefault( u"Flags"_ustr, sal_Int32(0) ));
             }
         }
     } catch( cpo::uno::Exception& )

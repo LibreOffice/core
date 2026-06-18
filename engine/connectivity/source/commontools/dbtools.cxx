@@ -426,8 +426,8 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
                 if (!sUser.isEmpty())
                 {   // use user and pwd together with the url
                     auto aInfo(::comphelper::InitPropertySequence({
-                        { "user", Any(sUser) },
-                        { "password", Any(sPwd) }
+                        { u"user"_ustr, Any(sUser) },
+                        { u"password"_ustr, Any(sPwd) }
                     }));
                     xPureConnection = xDriverManager->getConnectionWithInfo( sURL, aInfo );
                 }

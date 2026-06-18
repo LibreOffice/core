@@ -7039,22 +7039,22 @@ static void lcl_changeChartPart(SfxViewShell& rViewShell, const SdrObject& rPart
         const sal_Int32 nPercent(basegfx::fround(fOffset * 100.0));
         aChart.Dispatch(u".uno:KitTransform"_ustr,
                         comphelper::InitPropertySequence(
-                            { { "Action", cpo::uno::Any(u"PieSegmentDragging"_ustr) },
-                              { "Offset", cpo::uno::Any(nPercent) } }));
+                            { { u"Action"_ustr, cpo::uno::Any(u"PieSegmentDragging"_ustr) },
+                              { u"Offset"_ustr, cpo::uno::Any(nPercent) } }));
         return;
     }
 
     aChart.Dispatch(
         u".uno:KitTransform"_ustr,
         comphelper::InitPropertySequence({
-            { "PartFromX", cpo::uno::Any(sal_Int32(basegfx::fround(aFrom.getMinX()))) },
-            { "PartFromY", cpo::uno::Any(sal_Int32(basegfx::fround(aFrom.getMinY()))) },
-            { "PartFromWidth", cpo::uno::Any(nFromWidth) },
-            { "PartFromHeight", cpo::uno::Any(nFromHeight) },
-            { "PartToX", cpo::uno::Any(sal_Int32(basegfx::fround(aTo.getMinX()))) },
-            { "PartToY", cpo::uno::Any(sal_Int32(basegfx::fround(aTo.getMinY()))) },
-            { "PartToWidth", cpo::uno::Any(nToWidth) },
-            { "PartToHeight", cpo::uno::Any(nToHeight) },
+            { u"PartFromX"_ustr, cpo::uno::Any(sal_Int32(basegfx::fround(aFrom.getMinX()))) },
+            { u"PartFromY"_ustr, cpo::uno::Any(sal_Int32(basegfx::fround(aFrom.getMinY()))) },
+            { u"PartFromWidth"_ustr, cpo::uno::Any(nFromWidth) },
+            { u"PartFromHeight"_ustr, cpo::uno::Any(nFromHeight) },
+            { u"PartToX"_ustr, cpo::uno::Any(sal_Int32(basegfx::fround(aTo.getMinX()))) },
+            { u"PartToY"_ustr, cpo::uno::Any(sal_Int32(basegfx::fround(aTo.getMinY()))) },
+            { u"PartToWidth"_ustr, cpo::uno::Any(nToWidth) },
+            { u"PartToHeight"_ustr, cpo::uno::Any(nToHeight) },
         }));
 }
 

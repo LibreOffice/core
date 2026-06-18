@@ -14,8 +14,6 @@
 
 #include "rtl/ustring.hxx"
 
-#define M(arg) f(arg, arg)
-
 struct S
 {
     OUString s;
@@ -68,12 +66,6 @@ void f()
     takeOstring(((OString(((u8"foo")), rtl::libreoffice_internal::Dummy()))));
 
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    OUString s1u = "foo";
-    (void)s1u;
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    OUString s2u = (("foo"));
-    (void)s2u;
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
     OUString s3u("foo");
     (void)s3u;
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
@@ -87,15 +79,6 @@ void f()
     takeOustring(OUString("foo", rtl::libreoffice_internal::Dummy()));
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
     takeOustring(((OUString((("foo")), rtl::libreoffice_internal::Dummy()))));
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    takeOustring("foo");
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    takeOustring((("foo")));
-
-    // Only generate one warning here, not two, for a macro argument used twice in the macro's
-    // expansion:
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
-    M("foo");
 
     // expected-note@+1 {{intermediary variable l1 declared here [loplugin:ostr]}}
     constexpr OStringLiteral l1("foo");

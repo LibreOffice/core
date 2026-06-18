@@ -311,7 +311,7 @@ namespace /* private */
         if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
             return OUString();
 
-        exe_path = getShortPath(exe_path, ".exe");
+        exe_path = getShortPath(exe_path, u".exe"_ustr);
 
         if (exe_path.indexOf(' ') != -1)
             exe_path = quote_string(exe_path);

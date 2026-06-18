@@ -264,11 +264,11 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
            (eType == StandardButtonType::Cancel && pItem->mpPushButton->GetType() == WindowType::CANCELBUTTON) ||
            (eType == StandardButtonType::Help   && pItem->mpPushButton->GetType() == WindowType::HELPBUTTON)) )
     {
-        std::map<StandardButtonType, OUString> mapButtonTypeToID = {{StandardButtonType::Yes, "yes"},
-            {StandardButtonType::No, "no"}, {StandardButtonType::Retry, "retry"},
-            {StandardButtonType::Close, "close"}, {StandardButtonType::More, "more"},
-            {StandardButtonType::Ignore, "ignore"}, {StandardButtonType::Abort, "abort"},
-            {StandardButtonType::Less, "less"}, {StandardButtonType::Count, "count"}};
+        std::map<StandardButtonType, OUString> mapButtonTypeToID = {{StandardButtonType::Yes, u"yes"_ustr},
+            {StandardButtonType::No, u"no"_ustr}, {StandardButtonType::Retry, u"retry"_ustr},
+            {StandardButtonType::Close, u"close"_ustr}, {StandardButtonType::More, u"more"_ustr},
+            {StandardButtonType::Ignore, u"ignore"_ustr}, {StandardButtonType::Abort, u"abort"_ustr},
+            {StandardButtonType::Less, u"less"_ustr}, {StandardButtonType::Count, u"count"_ustr}};
         auto itr = mapButtonTypeToID.find(eType);
         if (itr != mapButtonTypeToID.end())
             pItem->mpPushButton->set_id(itr->second);

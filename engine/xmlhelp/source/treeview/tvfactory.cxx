@@ -71,7 +71,7 @@ TVFactory::createInstance(
 {
     cpo::uno::Sequence<cpo::uno::Any> seq(comphelper::InitAnyPropertySequence(
     {
-        {"nodepath", cpo::uno::Any(OUString())}
+        {u"nodepath"_ustr, cpo::uno::Any(OUString())}
     }));
 
     return createInstanceWithArguments( aServiceSpecifier, seq );

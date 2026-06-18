@@ -241,9 +241,9 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog(weld::Window *pParent)
     mpImpl->AddFilter( aDescr, u"*.svx"_ustr);
 #else
     aDescr = SdResId(STR_WAV_FILE);
-    mpImpl->AddFilter( aDescr, "*.wav;*.mp3;*.ogg;*.oga;*.opus;*.m4a;*.aac;*.flac" );
+    mpImpl->AddFilter( aDescr, u"*.wav;*.mp3;*.ogg;*.oga;*.opus;*.m4a;*.aac;*.flac"_ustr );
     aDescr = SdResId(STR_MIDI_FILE);
-    mpImpl->AddFilter( aDescr, "*.mid" );
+    mpImpl->AddFilter( aDescr, u"*.mid"_ustr );
 #endif
 }
 

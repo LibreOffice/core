@@ -30,8 +30,8 @@
 class NamespaceAdjustmentHandler : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
 {
     const std::map<OUString, sal_Int32> m_aNamespaces{
-        { "xmlns:r", OOX_NS(officeRel) },
-        { "xmlns:w", OOX_NS(doc) },
+        { u"xmlns:r"_ustr, OOX_NS(officeRel) },
+        { u"xmlns:w"_ustr, OOX_NS(doc) },
     };
 
     const oox::core::XmlFilterBase& m_rFilter;

@@ -44,7 +44,7 @@ static OUString FilePicker_getSystemPickerServiceName()
         return u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr;
 #endif
 #ifdef _WIN32
-    return "com.sun.star.ui.dialogs.Win32FilePicker";
+    return u"com.sun.star.ui.dialogs.Win32FilePicker"_ustr;
 #endif
 }
 

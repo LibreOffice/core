@@ -44,7 +44,7 @@ using namespace comphelper;
 
 static OUString dropTarget_getImplementationName()
 {
-    return "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1";
+    return u"com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"_ustr;
 }
 
 static Sequence<OUString> dropTarget_getSupportedServiceNames()
@@ -351,7 +351,7 @@ void AquaDropTarget::initialize(const Sequence< Any >& aArguments)
 {
     if (aArguments.getLength() < 2)
     {
-        throw RuntimeException("DropTarget::initialize: Cannot install window event handler",
+        throw RuntimeException(u"DropTarget::initialize: Cannot install window event handler"_ustr,
                                getXWeak());
     }
 

@@ -321,7 +321,7 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
         return false;
     default:
         throw cpo::uno::RuntimeException(
-            "cannot create temporary file");
+            u"cannot create temporary file"_ustr);
     }
     aFileHandle.url = *pFileURL;
     aFileHandle.writeString(
@@ -329,7 +329,7 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
         " xmlns:oor=\"http://openoffice.org/2001/registry\""
         " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
         " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
-    dumpWindowsRegistryKey(eType, hKey, "", aFileHandle);
+    dumpWindowsRegistryKey(eType, hKey, u""_ustr, aFileHandle);
     aFileHandle.writeString("</oor:items>");
     oslFileError e = aFileHandle.closeWithoutUnlink();
     if (e != osl_File_E_None)

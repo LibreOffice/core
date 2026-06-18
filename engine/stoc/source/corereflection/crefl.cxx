@@ -273,7 +273,7 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
         MutexGuard aGuard( getMutexAccess() );
         if (! _aCpp2Uno.is())
         {
-            _aCpp2Uno = Mapping( CPPU_CURRENT_LANGUAGE_BINDING_NAME, u"" UNO_LB_UNO ""_ustr );
+            _aCpp2Uno = Mapping( u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr, u"" UNO_LB_UNO ""_ustr );
             OSL_ENSURE( _aCpp2Uno.is(), "### cannot get c++ to uno mapping!" );
             if (! _aCpp2Uno.is())
             {
@@ -293,7 +293,7 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
         MutexGuard aGuard( getMutexAccess() );
         if (! _aUno2Cpp.is())
         {
-            _aUno2Cpp = Mapping( u"" UNO_LB_UNO ""_ustr, CPPU_CURRENT_LANGUAGE_BINDING_NAME );
+            _aUno2Cpp = Mapping( u"" UNO_LB_UNO ""_ustr, u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr);
             OSL_ENSURE( _aUno2Cpp.is(), "### cannot get uno to c++ mapping!" );
             if (! _aUno2Cpp.is())
             {

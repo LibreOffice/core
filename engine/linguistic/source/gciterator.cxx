@@ -668,11 +668,11 @@ lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara, sal_In
             xFlatPara, uno::UNO_QUERY_THROW);
     cpo::uno::Any a (nProofInfo);
     return comphelper::InitPropertySequence({
-        { "FieldPositions", xProps->getPropertyValue(u"FieldPositions"_ustr) },
-        { "FootnotePositions", xProps->getPropertyValue(u"FootnotePositions"_ustr) },
-        { "SortedTextId", xProps->getPropertyValue(u"SortedTextId"_ustr) },
-        { "DocumentElementsCount", xProps->getPropertyValue(u"DocumentElementsCount"_ustr) },
-        { "ProofInfo", a }
+        { u"FieldPositions"_ustr, xProps->getPropertyValue(u"FieldPositions"_ustr) },
+        { u"FootnotePositions"_ustr, xProps->getPropertyValue(u"FootnotePositions"_ustr) },
+        { u"SortedTextId"_ustr, xProps->getPropertyValue(u"SortedTextId"_ustr) },
+        { u"DocumentElementsCount"_ustr, xProps->getPropertyValue(u"DocumentElementsCount"_ustr) },
+        { u"ProofInfo"_ustr, a }
     });
 }
 

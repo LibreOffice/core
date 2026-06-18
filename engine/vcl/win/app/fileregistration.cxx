@@ -117,7 +117,7 @@ void LaunchRegistrationUI()
 
             // LaunchAdvancedAssociationUI only works for applications registered under
             // Software\RegisteredApplications (handled by the MSIX FileTypeAssociation manifest entries).
-            const OUString expanded = Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION");
+            const OUString expanded = Translate::ExpandVariables(u"%PRODUCTNAME %PRODUCTVERSION"_ustr);
             pIf->LaunchAdvancedAssociationUI(o3tl::toW(expanded.getStr()));
         }
     }

@@ -646,9 +646,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumnDuringTextEdit)
 
     // Make the first column 4 cm narrower while the cell is still being edited.
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "BorderType", uno::Any(u"column-middle"_ustr) },
-        { "Index", uno::Any(sal_uInt16(0)) },
-        { "Offset", uno::Any(sal_Int32(o3tl::toTwips(-4000, o3tl::Length::mm100))) },
+        { u"BorderType"_ustr, uno::Any(u"column-middle"_ustr) },
+        { u"Index"_ustr, uno::Any(sal_uInt16(0)) },
+        { u"Offset"_ustr, uno::Any(sal_Int32(o3tl::toTwips(-4000, o3tl::Length::mm100))) },
     }));
     dispatchCommand(mxComponent, u".uno:TableChangeCurrentBorderPosition"_ustr, aArgs);
     CPPUNIT_ASSERT(pView->IsTextEdit());
@@ -2779,7 +2779,7 @@ static void dispatchThemeCommand(const cpo::uno::Reference<css::lang::XComponent
 {
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(rThemeName) },
+            { u"NewTheme"_ustr, cpo::uno::Any(rThemeName) },
         }
     );
     unotest::MacrosTest::dispatchCommand(xComponent, rCommand, aPropertyValues);
@@ -6625,7 +6625,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnnotationDateTimeUsesViewTimezon
     // A new annotation and a reply to it are both stamped with the clock of the timezone their
     // author reads.
     createDoc("dummy.odp", comphelper::InitPropertySequence({
-                               { ".uno:Author", cpo::uno::Any(u"Kit User1"_ustr) },
+                               { u".uno:Author"_ustr, cpo::uno::Any(u"Kit User1"_ustr) },
                            }));
     SdTestViewCallback aView;
 
@@ -6648,7 +6648,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnnotationDateTimeUsesViewTimezon
     const DateTime aBefore(DateTime::SYSTEM);
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr,
                     comphelper::InitPropertySequence({
-                        { "Text", cpo::uno::Any(u"a comment"_ustr) },
+                        { u"Text"_ustr, cpo::uno::Any(u"a comment"_ustr) },
                     }));
     Scheduler::ProcessEventsToIdle();
     const DateTime aAfter(DateTime::SYSTEM);
@@ -6668,8 +6668,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnnotationDateTimeUsesViewTimezon
     const int nComment = aView.m_aCommentCallbackResult.get<int>("id");
     dispatchCommand(mxComponent, u".uno:ReplyToAnnotation"_ustr,
                     comphelper::InitPropertySequence({
-                        { "Id", cpo::uno::Any(OUString::number(nComment)) },
-                        { "Text", cpo::uno::Any(u"a reply"_ustr) },
+                        { u"Id"_ustr, cpo::uno::Any(OUString::number(nComment)) },
+                        { u"Text"_ustr, cpo::uno::Any(u"a reply"_ustr) },
                     }));
     Scheduler::ProcessEventsToIdle();
     const DateTime aAfterReply(DateTime::SYSTEM);
@@ -7613,7 +7613,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeEnterLeave)
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -7670,7 +7670,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeEntryClearsMarks)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pView->GetMarkedObjectList().GetMarkCount());
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -7687,7 +7687,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeSurvivesPaintPartS
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -7720,7 +7720,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeSurvivesSamePageSw
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -7754,7 +7754,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeDropsWhenSlideDies
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(2)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(2)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
     sd::DrawViewShell* pDrawViewShell
@@ -7784,7 +7784,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeEndsWhenOtherViewD
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(2)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(2)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
     sd::DrawViewShell* pDrawViewShell1
@@ -7861,7 +7861,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeClickRouting)
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -7916,7 +7916,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewShapeSelection)
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -7986,7 +7986,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeletePreviewShape)
     SdTestViewCallback aView;
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -8022,12 +8022,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertShapeIntoSlide)
 
     // A 4000 x 3000 twip rectangle at slide position (2000, 1500).
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "ShapeType", cpo::uno::Any(u"rectangle"_ustr) },
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
-        { "X", cpo::uno::Any(sal_Int32(2000)) },
-        { "Y", cpo::uno::Any(sal_Int32(1500)) },
-        { "Width", cpo::uno::Any(sal_Int32(4000)) },
-        { "Height", cpo::uno::Any(sal_Int32(3000)) },
+        { u"ShapeType"_ustr, cpo::uno::Any(u"rectangle"_ustr) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(2000)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(4000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(3000)) },
     }));
     dispatchCommand(mxComponent, u".uno:InsertShapeIntoSlide"_ustr, aArgs);
 
@@ -8051,7 +8051,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShape)
     SdTestViewCallback aView;
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -8063,10 +8063,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShape)
     pDrawViewShell->GetPreviewEditMode()->SetSelectedShape(pTitle);
 
     cpo::uno::Sequence<css::beans::PropertyValue> aMoveArgs(comphelper::InitPropertySequence({
-        { "X", cpo::uno::Any(sal_Int32(1000)) },
-        { "Y", cpo::uno::Any(sal_Int32(2000)) },
-        { "Width", cpo::uno::Any(sal_Int32(5000)) },
-        { "Height", cpo::uno::Any(sal_Int32(2500)) },
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(1000)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(2000)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(5000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(2500)) },
     }));
     dispatchCommand(mxComponent, u".uno:MovePreviewShape"_ustr, aMoveArgs);
 
@@ -8089,7 +8089,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShapeOut)
     SdTestViewCallback aView;
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -8103,10 +8103,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShapeOut)
     const size_t nCanvasCount = pCanvasPage->GetObjCount();
 
     cpo::uno::Sequence<css::beans::PropertyValue> aOutArgs(comphelper::InitPropertySequence({
-        { "X", cpo::uno::Any(sal_Int32(50000)) },
-        { "Y", cpo::uno::Any(sal_Int32(60000)) },
-        { "Width", cpo::uno::Any(sal_Int32(8000)) },
-        { "Height", cpo::uno::Any(sal_Int32(4000)) },
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(50000)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(60000)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(8000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(4000)) },
     }));
     dispatchCommand(mxComponent, u".uno:MovePreviewShapeOut"_ustr, aOutArgs);
 
@@ -8143,7 +8143,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDragShapeIntoPreview)
     const size_t nUndoCount = pUndoManager->GetUndoActionCount();
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
     }));
     dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
 
@@ -8243,12 +8243,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasSlideUndoStepsAreSeparate)
     // An edit made through a preview afterwards is an undo step of its own. Undoing it leaves the
     // overview page and the undo step that added it.
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "ShapeType", cpo::uno::Any(u"rectangle"_ustr) },
-        { "Part", cpo::uno::Any(sal_Int32(1)) },
-        { "X", cpo::uno::Any(sal_Int32(2000)) },
-        { "Y", cpo::uno::Any(sal_Int32(1500)) },
-        { "Width", cpo::uno::Any(sal_Int32(4000)) },
-        { "Height", cpo::uno::Any(sal_Int32(3000)) },
+        { u"ShapeType"_ustr, cpo::uno::Any(u"rectangle"_ustr) },
+        { u"Part"_ustr, cpo::uno::Any(sal_Int32(1)) },
+        { u"X"_ustr, cpo::uno::Any(sal_Int32(2000)) },
+        { u"Y"_ustr, cpo::uno::Any(sal_Int32(1500)) },
+        { u"Width"_ustr, cpo::uno::Any(sal_Int32(4000)) },
+        { u"Height"_ustr, cpo::uno::Any(sal_Int32(3000)) },
     }));
     SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
     const size_t nObjectCount = pSlide->GetObjCount();

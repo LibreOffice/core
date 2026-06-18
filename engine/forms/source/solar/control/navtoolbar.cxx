@@ -302,7 +302,7 @@ namespace frm
                     else if (pSupportedFeatures->nId == LID_RECORD_LABEL)
                         pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, getLabelString(RID_STR_LABEL_RECORD));
                     else if (pSupportedFeatures->nId == FormFeature::TotalRecords)
-                        pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, "");
+                        pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, u""_ustr);
 
                     m_aChildWins.emplace_back(pItemWindow );
                     m_pToolbar->SetItemWindow( ToolBoxItemId(pSupportedFeatures->nId), pItemWindow );

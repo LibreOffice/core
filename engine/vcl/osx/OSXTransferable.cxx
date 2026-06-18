@@ -105,7 +105,7 @@ Any OSXTransferable::getTransferData( const DataFlavor& rFlavor )
 {
   if (!isValidFlavor(rFlavor) || !isDataFlavorSupported(rFlavor))
   {
-      throw UnsupportedFlavorException("AquaClipboard: Unsupported data flavor",
+      throw UnsupportedFlavorException(u"AquaClipboard: Unsupported data flavor"_ustr,
                                        static_cast<XTransferable*>(this));
   }
 
@@ -137,7 +137,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
   if (!dp)
   {
-      throw UnsupportedFlavorException("AquaClipboard: Unsupported data flavor",
+      throw UnsupportedFlavorException(u"AquaClipboard: Unsupported data flavor"_ustr,
                                        static_cast<XTransferable*>(this));
   }
 
@@ -164,7 +164,7 @@ void OSXTransferable::initClipboardItemList()
 
   if (pboardFormats == nullptr)
   {
-      throw RuntimeException("AquaClipboard: Cannot get clipboard data",
+      throw RuntimeException(u"AquaClipboard: Cannot get clipboard data"_ustr,
                              static_cast<XTransferable*>(this));
   }
 

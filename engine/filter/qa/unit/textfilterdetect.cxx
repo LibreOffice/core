@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
         // Make sure it opens in Writer.
         // Without the accompanying fix in place, this test would have failed on Windows, as it was
         // opened in Draw instead.
-        CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
+        CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.text.TextDocument"_ustr));
     }
 
     {
@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
             osl::File::copy(createFileURL(u"hybrid_calc.pdf"), nonAsciiName.GetURL()));
         loadFromURL(nonAsciiName.GetURL());
         // Make sure it opens in Calc.
-        CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.sheet.SpreadsheetDocument"));
+        CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.sheet.SpreadsheetDocument"_ustr));
     }
 
     {
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
         loadFromURL(nonAsciiName.GetURL());
         // Make sure it opens in Impress.
         CPPUNIT_ASSERT(
-            supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
+            supportsService(mxComponent, u"com.sun.star.presentation.PresentationDocument"_ustr));
     }
 }
 #endif // _WIN32

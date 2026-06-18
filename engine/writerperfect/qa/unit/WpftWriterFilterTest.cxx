@@ -39,31 +39,31 @@ WpftWriterFilterTest::WpftWriterFilterTest()
 void WpftWriterFilterTest::test()
 {
     const writerperfect::test::WpftOptionalMap_t aEBookOptional{
-        { "FictionBook2.fb2.zip", REQUIRE_EBOOK_VERSION(0, 1, 1) },
+        { u"FictionBook2.fb2.zip"_ustr, REQUIRE_EBOOK_VERSION(0, 1, 1) },
     };
     const writerperfect::test::WpftOptionalMap_t aEtonyekOptional{
-        { "Pages_4.pages", REQUIRE_ETONYEK_VERSION(0, 1, 2) },
-        { "Pages_5.pages", REQUIRE_ETONYEK_VERSION(0, 1, 8) },
+        { u"Pages_4.pages"_ustr, REQUIRE_ETONYEK_VERSION(0, 1, 2) },
+        { u"Pages_5.pages"_ustr, REQUIRE_ETONYEK_VERSION(0, 1, 8) },
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
-        { "JazzLotus.hqx", REQUIRE_MWAW_VERSION(0, 3, 17) },
-        { "MaxWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
-        { "MouseWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
-        { "RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
-        { "RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
-        { "RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6) },
-        { "ScriptWriter", REQUIRE_MWAW_VERSION(0, 3, 21) },
-        { "StudentWritingCenter", REQUIRE_MWAW_VERSION(0, 3, 20) },
-        { "WordMaker", REQUIRE_MWAW_VERSION(0, 3, 20) },
+        { u"JazzLotus.hqx"_ustr, REQUIRE_MWAW_VERSION(0, 3, 17) },
+        { u"MaxWrite_1.hqx"_ustr, REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { u"MouseWrite_1.hqx"_ustr, REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { u"RagTime_2.1.hqx"_ustr, REQUIRE_MWAW_VERSION(0, 3, 2) },
+        { u"RagTime_3.2.hqx"_ustr, REQUIRE_MWAW_VERSION(0, 3, 2) },
+        { u"RagTime_5.5.rag"_ustr, REQUIRE_MWAW_VERSION(0, 3, 6) },
+        { u"ScriptWriter"_ustr, REQUIRE_MWAW_VERSION(0, 3, 21) },
+        { u"StudentWritingCenter"_ustr, REQUIRE_MWAW_VERSION(0, 3, 20) },
+        { u"WordMaker"_ustr, REQUIRE_MWAW_VERSION(0, 3, 20) },
     };
     const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional{
-        { "Writer_3.1.sdw", REQUIRE_STAROFFICE_VERSION(0, 0, 2) },
+        { u"Writer_3.1.sdw"_ustr, REQUIRE_STAROFFICE_VERSION(0, 0, 2) },
     };
     const writerperfect::test::WpftOptionalMap_t aWpsOptional{
-        { "PocketWord.psw", REQUIRE_WPS_VERSION(0, 4, 12) },
-        { "Word_5.0_DOS.doc", REQUIRE_WPS_VERSION(0, 4, 3) },
+        { u"PocketWord.psw"_ustr, REQUIRE_WPS_VERSION(0, 4, 12) },
+        { u"Word_5.0_DOS.doc"_ustr, REQUIRE_WPS_VERSION(0, 4, 3) },
         // The embedded OLE object needs a COM apartment, absent in the headless test code
-        { "Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2) && !bComApartmentNeededButMissing },
+        { u"Write_3.1.wri"_ustr, REQUIRE_WPS_VERSION(0, 4, 2) && !bComApartmentNeededButMissing },
     };
 
     doTest(u"com.sun.star.comp.Writer.AbiWordImportFilter"_ustr,

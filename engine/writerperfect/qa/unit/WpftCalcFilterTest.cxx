@@ -31,17 +31,17 @@ WpftCalcFilterTest::WpftCalcFilterTest()
 void WpftCalcFilterTest::test()
 {
     const writerperfect::test::WpftOptionalMap_t aEtonyekOptional{
-        { "Numbers_2.numbers", REQUIRE_ETONYEK_VERSION(0, 1, 2) },
+        { u"Numbers_2.numbers"_ustr, REQUIRE_ETONYEK_VERSION(0, 1, 2) },
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
-        { "JazzLotus.hqx", REQUIRE_MWAW_VERSION(0, 3, 17) },
-        { "Multiplan_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 14) },
+        { u"JazzLotus.hqx"_ustr, REQUIRE_MWAW_VERSION(0, 3, 17) },
+        { u"Multiplan_1.hqx"_ustr, REQUIRE_MWAW_VERSION(0, 3, 14) },
     };
     const writerperfect::test::WpftOptionalMap_t aWpsOptional{
-        { "Lotus123_3.123", REQUIRE_WPS_VERSION(0, 4, 5) },
-        { "Lotus123_98.123", REQUIRE_WPS_VERSION(0, 4, 6) },
-        { "Multiplan_3", REQUIRE_WPS_VERSION(0, 4, 9) },
-        { "QuattroPro.wb1", REQUIRE_WPS_VERSION(0, 4, 8) },
+        { u"Lotus123_3.123"_ustr, REQUIRE_WPS_VERSION(0, 4, 5) },
+        { u"Lotus123_98.123"_ustr, REQUIRE_WPS_VERSION(0, 4, 6) },
+        { u"Multiplan_3"_ustr, REQUIRE_WPS_VERSION(0, 4, 9) },
+        { u"QuattroPro.wb1"_ustr, REQUIRE_WPS_VERSION(0, 4, 8) },
     };
 
     doTest(u"com.sun.star.comp.Calc.MWAWCalcImportFilter"_ustr,

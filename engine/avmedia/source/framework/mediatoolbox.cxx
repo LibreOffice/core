@@ -123,7 +123,7 @@ void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
     aExecItem.merge( rItem );
     aExecItem.QueryValue( aAny );
     auto aArgs(::comphelper::InitPropertySequence({
-        { "AVMediaToolBox", aAny }
+        { u"AVMediaToolBox"_ustr, aAny }
     }));
 
     Dispatch( u".uno:AVMediaToolBox"_ustr , aArgs );

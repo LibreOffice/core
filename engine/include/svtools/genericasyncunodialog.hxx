@@ -77,7 +77,7 @@ public:
             UnoAsyncDialogEntryGuard aGuard(*this);
 
             if (m_bExecuting)
-                throw cpo::uno::RuntimeException("already executing the dialog (recursive call)", *this);
+                throw cpo::uno::RuntimeException(u"already executing the dialog (recursive call)"_ustr, *this);
 
             if (!m_xAsyncDialog)
             {

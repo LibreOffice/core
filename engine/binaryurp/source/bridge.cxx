@@ -174,8 +174,8 @@ Bridge::Bridge(
     factory_(factory), name_(std::move(name)), connection_(connection),
     provider_(std::move(provider)),
     binaryUno_(u"" UNO_LB_UNO ""_ustr),
-    cppToBinaryMapping_(CPPU_CURRENT_LANGUAGE_BINDING_NAME, u"" UNO_LB_UNO ""_ustr),
-    binaryToCppMapping_(u"" UNO_LB_UNO ""_ustr, CPPU_CURRENT_LANGUAGE_BINDING_NAME),
+    cppToBinaryMapping_(u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr, u"" UNO_LB_UNO ""_ustr),
+    binaryToCppMapping_(u"" UNO_LB_UNO ""_ustr, u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr),
     protPropTid_(
         reinterpret_cast< sal_Int8 const * >(".UrpProtocolPropertiesTid"),
         RTL_CONSTASCII_LENGTH(".UrpProtocolPropertiesTid")),

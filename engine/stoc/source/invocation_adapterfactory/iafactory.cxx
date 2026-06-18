@@ -658,8 +658,8 @@ AdapterImpl::AdapterImpl(
 
 
 FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
-    : m_aUno2Cpp(Mapping( u"" UNO_LB_UNO ""_ustr, CPPU_CURRENT_LANGUAGE_BINDING_NAME )),
-      m_aCpp2Uno(Mapping( CPPU_CURRENT_LANGUAGE_BINDING_NAME, u"" UNO_LB_UNO ""_ustr)),
+    : m_aUno2Cpp(Mapping( u"" UNO_LB_UNO ""_ustr, u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr )),
+      m_aCpp2Uno(Mapping( u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr, u"" UNO_LB_UNO ""_ustr)),
       m_pInvokMethodTD( nullptr ),
       m_pSetValueTD( nullptr ),
       m_pGetValueTD( nullptr ),

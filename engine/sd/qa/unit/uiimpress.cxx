@@ -6544,13 +6544,13 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testReflectionCommands)
 
     dispatchCommand(
         mxComponent, u".uno:ReflectionEffect"_ustr,
-        comphelper::InitPropertySequence({ { "ReflectionEffect", cpo::uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { u"ReflectionEffect"_ustr, cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:ReflectionDistance"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "ReflectionDistance", cpo::uno::Any(sal_Int32(500)) } }));
+                        { { u"ReflectionDistance"_ustr, cpo::uno::Any(sal_Int32(500)) } }));
     dispatchCommand(mxComponent, u".uno:ReflectionEndPosition"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "ReflectionEndPosition", cpo::uno::Any(sal_Int16(70)) } }));
+                        { { u"ReflectionEndPosition"_ustr, cpo::uno::Any(sal_Int16(70)) } }));
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(3, 0));
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
@@ -7083,7 +7083,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletOfATableCellIsCollected)
     CPPUNIT_ASSERT(pXImpressDocument);
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { u"Rows"_ustr, uno::Any(sal_Int32(2)) }, { u"Columns"_ustr, uno::Any(sal_Int32(2)) } }));
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
     Scheduler::ProcessEventsToIdle();
 

@@ -1073,8 +1073,8 @@ void JavaVirtualMachine::registerConfigChangesListener()
             // arguments for ConfigurationAccess
             cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {"nodepath", cpo::uno::Any(u"org.openoffice.Inet/Settings"_ustr)},
-                {"depth", cpo::uno::Any(sal_Int32(-1))}
+                {u"nodepath"_ustr, cpo::uno::Any(u"org.openoffice.Inet/Settings"_ustr)},
+                {u"depth"_ustr, cpo::uno::Any(sal_Int32(-1))}
             }));
             m_xInetConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(

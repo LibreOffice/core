@@ -10,7 +10,7 @@
 #include <rtl/ustring.hxx>
 
 // expected-error@+1 {{rather declare this as constexpr [loplugin:stringstatic]}}
-static const OUString TEST1 = "xxx";
+static const OUString TEST1("xxx");
 static constexpr OUString TEST2 = u"xxx"_ustr;
 
 OUString f(int);
@@ -19,7 +19,7 @@ void test2(bool b)
 {
     (void)TEST2;
     // expected-error@+1 {{rather declare this as constexpr [loplugin:stringstatic]}}
-    static const OUString XXX = "xxx";
+    static const OUString XXX("xxx");
     static constexpr OUString XXX2 = u"xxx"_ustr;
     (void)XXX;
     (void)XXX2;

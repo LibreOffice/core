@@ -64,7 +64,8 @@ void trace_event_test()
         }
 
         // This will generate a 'b' event for async3
-        std::map<OUString, OUString> aArgsAsync3({ { "foo", "bar" }, { "tem", "42" } });
+        std::map<OUString, OUString> aArgsAsync3(
+            { { u"foo"_ustr, u"bar"_ustr }, { u"tem"_ustr, u"42"_ustr } });
         auto pAsync3(std::make_shared<comphelper::AsyncEvent>("async3", aArgsAsync3));
 
         {
@@ -79,7 +80,8 @@ void trace_event_test()
         comphelper::ProfileZone aZone4("test2");
 
         // This will generate an 'i' event for instant2"
-        std::map<OUString, OUString> aArgsInstant2({ { "foo2", "bar2" }, { "tem2", "42" } });
+        std::map<OUString, OUString> aArgsInstant2(
+            { { u"foo2"_ustr, u"bar2"_ustr }, { u"tem2"_ustr, u"42"_ustr } });
         comphelper::TraceEvent::addInstantEvent("instant2", aArgsInstant2);
 
         // Leaving this scope will generate 'X' events for test2 and a

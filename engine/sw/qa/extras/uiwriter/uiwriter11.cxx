@@ -738,7 +738,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf135857_findWithoutUnderline)
     // specifying the search attributes
     uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        { { "CharUnderline", uno::Any(css::awt::FontUnderline::NONE) } }));
+        { { u"CharUnderline"_ustr, uno::Any(css::awt::FontUnderline::NONE) } }));
     xProp->setSearchAttributes(aDescriptor);
 
     // In the UI, this results in 5 matches. UNO seems to produce different results

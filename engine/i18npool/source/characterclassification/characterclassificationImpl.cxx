@@ -180,7 +180,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             return cachedItem->xCI;
         else if (xUCI.is())
         {
-            lookupTable.emplace_back( rLocale, "Unicode", xUCI );
+            lookupTable.emplace_back( rLocale, u"Unicode"_ustr, xUCI );
             cachedItem = lookupTable.back();
             return cachedItem->xCI;
         }

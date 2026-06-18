@@ -99,7 +99,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
         m_xConfigProvider = theDefaultProvider::get(comphelper::getProcessComponentContext());
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(u"/org.openoffice.VCL/DefaultFonts"_ustr)}
+            {u"nodepath"_ustr, Any(u"/org.openoffice.VCL/DefaultFonts"_ustr)}
         }));
         m_xConfigAccess =
             Reference< XNameAccess >(
@@ -303,7 +303,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
         m_xConfigProvider = theDefaultProvider::get( xContext );
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(u"/org.openoffice.VCL/FontSubstitutions"_ustr)}
+            {u"nodepath"_ustr, Any(u"/org.openoffice.VCL/FontSubstitutions"_ustr)}
         }));
         m_xConfigAccess =
             Reference< XNameAccess >(

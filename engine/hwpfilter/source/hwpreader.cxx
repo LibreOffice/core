@@ -1673,7 +1673,7 @@ void HwpReader::makePageStyle()
          {
              if( hwpinfo.back_info.type == 1 ){
 #ifdef _WIN32
-                 mxList->addAttribute("xlink:href", sXML_CDATA,
+                 mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                       hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltowin(hwpinfo.back_info.filename).c_str())).c_str()));
 #else
                  mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
@@ -3776,7 +3776,7 @@ void HwpReader::makePicture(Picture * hbox)
                     aTarget = aRest.substr(0, aRest.find('\0'));
                 }
 #ifdef _WIN32
-                mxList->addAttribute("xlink:href", sXML_CDATA,
+                mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                     hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(aTarget.c_str())).c_str()));
 #else
                 mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
@@ -3829,7 +3829,7 @@ void HwpReader::makePicture(Picture * hbox)
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
                 sprintf(d->buf, "file:///%s", hbox->picinfo.picun.path );
-                mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(reinterpret_cast<uchar *>(d->buf)).c_str()));
+                mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA, hstr2OUString(kstr2hstr(reinterpret_cast<uchar *>(d->buf)).c_str()));
 #else
                 mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
                     hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str()));
@@ -3866,13 +3866,13 @@ void HwpReader::makePicture(Picture * hbox)
                              int rc = hwpfile.oledata->pis->OpenStorage(pathname, nullptr,
                                      STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_TRANSACTED, nullptr, 0, &srcsto);
                              if (rc != S_OK) {
-                                 chars("");
+                                 chars(u""_ustr);
                              }
                              else{
                                  rc = OleLoad(srcsto, IID_IUnknown, nullptr, reinterpret_cast<LPVOID*>(&pObj));
                                  if( rc != S_OK ){
                                      srcsto->Release();
-                                     chars("");
+                                     chars(u""_ustr);
                                  }
                                  else{
                                      chars(base64_encode_string(reinterpret_cast<uchar*>(pObj), strlen(reinterpret_cast<char*>(pObj))));

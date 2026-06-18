@@ -1372,7 +1372,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvertedBackgroundLightensText)
 
     dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "NewTheme", cpo::uno::Any(u"Light"_ustr) } }));
+                        { { u"NewTheme"_ustr, cpo::uno::Any(u"Light"_ustr) } }));
 
     // An automatic color is resolved against the background and would stay readable on its own, so
     // the cell needs a color of its own to show the mapping.
@@ -1384,7 +1384,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvertedBackgroundLightensText)
     // The document background is inverted on its own, the color scheme of the view stays light.
     dispatchCommand(mxComponent, u".uno:InvertBackground"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "NewTheme", cpo::uno::Any(u"Dark"_ustr) } }));
+                        { { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) } }));
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(
         ScTabViewShell::GetActiveViewShell()->GetViewRenderingData().GetDocColor().IsDark());
@@ -1434,7 +1434,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellEditBackgroundFollowsEditingV
     ScTestViewCallback aView2;
     dispatchCommand(mxComponent, u".uno:InvertBackground"_ustr,
                     comphelper::InitPropertySequence(
-                        { { "NewTheme", cpo::uno::Any(u"Dark"_ustr) } }));
+                        { { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) } }));
     Scheduler::ProcessEventsToIdle();
 
     // The first view keeps the light background it opened with.
@@ -3973,8 +3973,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoteDateTimeUsesViewTimezone)
     const DateTime aBefore(DateTime::SYSTEM);
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr,
                     comphelper::InitPropertySequence({
-                        { "Text", cpo::uno::Any(u"a note"_ustr) },
-                        { "Author", cpo::uno::Any(u"Kit Author"_ustr) },
+                        { u"Text"_ustr, cpo::uno::Any(u"a note"_ustr) },
+                        { u"Author"_ustr, cpo::uno::Any(u"Kit Author"_ustr) },
                     }));
     Scheduler::ProcessEventsToIdle();
     const DateTime aAfter(DateTime::SYSTEM);
@@ -4011,8 +4011,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDateTimeUsesViewTi
     const DateTime aBefore(DateTime::SYSTEM);
     dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr,
                     comphelper::InitPropertySequence({
-                        { "Text", cpo::uno::Any(u"a comment"_ustr) },
-                        { "Author", cpo::uno::Any(u"Kit Author"_ustr) },
+                        { u"Text"_ustr, cpo::uno::Any(u"a comment"_ustr) },
+                        { u"Author"_ustr, cpo::uno::Any(u"Kit Author"_ustr) },
                     }));
     Scheduler::ProcessEventsToIdle();
     const DateTime aAfter(DateTime::SYSTEM);

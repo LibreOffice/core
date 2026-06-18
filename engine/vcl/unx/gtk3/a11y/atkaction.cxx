@@ -119,9 +119,9 @@ action_wrapper_get_name (AtkAction *action,
                          gint       i)
 {
     static std::map< OUString, const gchar * > aNameMap {
-        { "click", "click" },
-        { "select", "click" } ,
-        { "togglePopup", "push" }
+        { u"click"_ustr, "click" },
+        { u"select"_ustr, "click" } ,
+        { u"togglePopup"_ustr, "push" }
     };
 
     try {

@@ -225,7 +225,7 @@ handleFilterOptionsRequest_(
                     {
                         cpo::uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                         {
-                            {"ParentWindow", cpo::uno::Any(rWindow)},
+                            {u"ParentWindow"_ustr, cpo::uno::Any(rWindow)},
                         }));
 
                         uno::Reference<

@@ -62,7 +62,7 @@ using namespace cpo;
 
 static OUString clipboard_getImplementationName()
 {
-  return "com.sun.star.datatransfer.clipboard.AquaClipboard";
+  return u"com.sun.star.datatransfer.clipboard.AquaClipboard"_ustr;
 }
 
 static cpo::uno::Sequence<OUString> clipboard_getSupportedServiceNames()
@@ -94,7 +94,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
       if (mPasteboard == nil)
       {
-            throw cpo::uno::RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
+            throw cpo::uno::RuntimeException(u"AquaClipboard: Cannot create Cocoa pasteboard"_ustr,
                 static_cast<cppu::OWeakObject*>(this));
       }
     }
@@ -108,7 +108,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
         [mPasteboard release];
 
         throw cpo::uno::RuntimeException(
-            "AquaClipboard: Cannot create pasteboard change listener",
+            u"AquaClipboard: Cannot create pasteboard change listener"_ustr,
             static_cast<cppu::OWeakObject*>(this));
     }
 
@@ -202,7 +202,7 @@ void AquaClipboard::addClipboardListener(uno::Reference<datatransfer::clipboard:
     osl::MutexGuard aGuard(m_aMutex);
 
     if (!listener.is())
-        throw lang::IllegalArgumentException("empty reference",
+        throw lang::IllegalArgumentException(u"empty reference"_ustr,
                                    static_cast<cppu::OWeakObject*>(this), 1);
 
     mClipboardListeners.push_back(listener);
@@ -213,7 +213,7 @@ void AquaClipboard::removeClipboardListener(uno::Reference<datatransfer::clipboa
     osl::MutexGuard aGuard(m_aMutex);
 
     if (!listener.is())
-        throw lang::IllegalArgumentException("empty reference",
+        throw lang::IllegalArgumentException(u"empty reference"_ustr,
                                    static_cast<cppu::OWeakObject*>(this), 1);
 
     mClipboardListeners.remove(listener);

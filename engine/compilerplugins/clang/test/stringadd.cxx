@@ -113,7 +113,7 @@ struct Bar
 };
 void f(Bar b1, Bar& b2, Bar* b3)
 {
-    OUString s3 = "xxx";
+    OUString s3("xxx");
     // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s3 += b1.m_field;
     // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
@@ -124,7 +124,7 @@ void f(Bar b1, Bar& b2, Bar* b3)
 OUString side_effect();
 void f2(OUString s)
 {
-    OUString sRet = "xxx";
+    OUString sRet("xxx");
     // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sRet += side_effect();
     // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
@@ -146,7 +146,7 @@ namespace test4
 OUString side_effect();
 void f()
 {
-    OUString sRet = "xxx";
+    OUString sRet = u"xxx"_ustr;
 #if OSL_DEBUG_LEVEL > 0
     sRet += ";";
 #endif

@@ -312,7 +312,7 @@ static OUString queryFile( Printer const * pPrinter, const OUString & rJobName )
             xFilePicker->appendFilter( u"Portable Document Format"_ustr, u"*.pdf"_ustr );
 #elif defined _WIN32
         (void)pPrinter;
-        xFilePicker->appendFilter( "*.PRN", "*.prn" );
+        xFilePicker->appendFilter( u"*.PRN"_ustr, u"*.prn"_ustr );
 #endif
         // add arbitrary files
         xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), u"*.*"_ustr);

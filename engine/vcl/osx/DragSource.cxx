@@ -57,7 +57,7 @@ bool DragSource::g_DropSuccess = false;
 
 static OUString dragSource_getImplementationName()
 {
-  return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
+  return u"com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"_ustr;
 }
 
 static Sequence<OUString> dragSource_getSupportedServiceNames()
@@ -166,7 +166,7 @@ void DragSource::initialize(const Sequence< Any >& aArguments)
 {
   if (aArguments.getLength() < 2)
   {
-      throw Exception("DragSource::initialize: Not enough parameter.",
+      throw Exception(u"DragSource::initialize: Not enough parameter."_ustr,
                       getXWeak());
   }
 
@@ -184,13 +184,13 @@ void DragSource::initialize(const Sequence< Any >& aArguments)
   if (![mView respondsToSelector: @selector(registerMouseEventListener:)] ||
       ![mView respondsToSelector: @selector(unregisterMouseEventListener:)])
   {
-      throw Exception("DragSource::initialize: Provided view doesn't support mouse listener",
+      throw Exception(u"DragSource::initialize: Provided view doesn't support mouse listener"_ustr,
                       getXWeak());
   }
   NSWindow* pWin = [mView window];
   if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
   {
-      throw Exception("DragSource::initialize: Provided view is not attached to a vcl frame",
+      throw Exception(u"DragSource::initialize: Provided view is not attached to a vcl frame"_ustr,
                       getXWeak());
   }
   mpFrame = reinterpret_cast<AquaSalFrame*>([pWin performSelector: @selector(getSalFrame)]);
@@ -199,7 +199,7 @@ void DragSource::initialize(const Sequence< Any >& aArguments)
 
   if (mDragSourceHelper == nil)
   {
-      throw Exception("DragSource::initialize: Cannot initialize DragSource",
+      throw Exception(u"DragSource::initialize: Cannot initialize DragSource"_ustr,
                       getXWeak());
   }
 

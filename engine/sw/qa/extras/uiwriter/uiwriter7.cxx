@@ -378,11 +378,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
 
     // setup search for any underline text
     uno::Sequence<beans::PropertyValue> aSearchAttribute(comphelper::InitPropertySequence(
-        { { "CharUnderline", uno::Any(sal_Int32(css::awt::FontUnderline::SINGLE)) } }));
+        { { u"CharUnderline"_ustr, uno::Any(sal_Int32(css::awt::FontUnderline::SINGLE)) } }));
 
     // setup replace to also apply green highlight color
     uno::Sequence<beans::PropertyValue> aReplaceAttribute(
-        comphelper::InitPropertySequence({ { "CharBackColor", uno::Any(sal_Int32(0x00FF00)) } }));
+        comphelper::InitPropertySequence({ { u"CharBackColor"_ustr, uno::Any(sal_Int32(0x00FF00)) } }));
 
     uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();

@@ -1284,8 +1284,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetCellFormulaReadsEnglish)
     pDocSh->SetFormulaOptions(ScModule::get()->GetFormulaOptions());
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Cell", cpo::uno::Any(u"C1"_ustr) },
-          { "Formula", cpo::uno::Any(u"=SUM(A1,A2)"_ustr) } }));
+        { { u"Cell"_ustr, cpo::uno::Any(u"C1"_ustr) },
+          { u"Formula"_ustr, cpo::uno::Any(u"=SUM(A1,A2)"_ustr) } }));
     dispatchCommand(mxComponent, u".uno:SetCellFormula"_ustr, aArgs);
     Scheduler::ProcessEventsToIdle();
 
@@ -1313,8 +1313,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSetCellFormulaRespectsProtection)
     rDoc.SetTabProtection(0, &aProtection);
 
     cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Cell", cpo::uno::Any(u"D4"_ustr) },
-          { "Formula", cpo::uno::Any(u"=1+1"_ustr) } }));
+        { { u"Cell"_ustr, cpo::uno::Any(u"D4"_ustr) },
+          { u"Formula"_ustr, cpo::uno::Any(u"=1+1"_ustr) } }));
     dispatchCommand(mxComponent, u".uno:SetCellFormula"_ustr, aArgs);
     Scheduler::ProcessEventsToIdle();
 

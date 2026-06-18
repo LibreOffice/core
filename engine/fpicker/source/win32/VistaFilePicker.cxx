@@ -320,7 +320,7 @@ void VistaFilePicker::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArg
 {
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
-                "XInitialization::initialize() called without arguments.",
+                u"XInitialization::initialize() called without arguments."_ustr,
                 static_cast< cppu::OWeakObject* >( this ),
                 1);
 
@@ -495,9 +495,9 @@ void VistaFilePicker::setDescription( const OUString& aDescription )
 OUString VistaFilePicker::getImplementationName()
 {
     if (m_bFolderPicker)
-        return "com.sun.star.ui.dialogs.Win32FolderPicker";
+        return u"com.sun.star.ui.dialogs.Win32FolderPicker"_ustr;
     else
-        return "com.sun.star.ui.dialogs.Win32FilePicker";
+        return u"com.sun.star.ui.dialogs.Win32FilePicker"_ustr;
 }
 
 bool VistaFilePicker::supportsService(const OUString& sServiceName)
@@ -508,9 +508,9 @@ bool VistaFilePicker::supportsService(const OUString& sServiceName)
 cpo::uno::Sequence< OUString > VistaFilePicker::getSupportedServiceNames()
 {
         return {
-            "com.sun.star.ui.dialogs.FilePicker",
-            "com.sun.star.ui.dialogs.SystemFilePicker",
-            "com.sun.star.ui.dialogs.SystemFolderPicker" };
+            u"com.sun.star.ui.dialogs.FilePicker"_ustr,
+            u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
+            u"com.sun.star.ui.dialogs.SystemFolderPicker"_ustr };
 }
 
 } // namespace vista

@@ -66,7 +66,7 @@ inline constexpr OUString OOX_DUMP_UNKNOWN = u"?unknown"_ustr;
 
 #define OOX_DUMP_ERRASCII( ascii )          "?err:" ascii
 
-#define OOX_DUMP_ERR_NOMAP                  "no-map"
+#define OOX_DUMP_ERR_NOMAP                  u"no-map"_ustr
 inline constexpr OUString OOX_DUMP_ERR_NONAME = u"no-name"_ustr;
 #define OOX_DUMP_ERR_STREAM                 "stream-error"
 

@@ -1703,8 +1703,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeUsesViewTimezone)
     const DateTime aBefore(DateTime::SYSTEM);
     comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
                                 comphelper::InitPropertySequence({
-                                    { "Text", cpo::uno::Any(u"a comment"_ustr) },
-                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"a comment"_ustr) },
+                                    { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
                                 }));
     Scheduler::ProcessEventsToIdle();
     const DateTime aAfter(DateTime::SYSTEM);
@@ -1765,8 +1765,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeWithoutViewTimezon
     const DateTime aBefore(DateTime::SYSTEM);
     comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
                                 comphelper::InitPropertySequence({
-                                    { "Text", cpo::uno::Any(u"a comment"_ustr) },
-                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"a comment"_ustr) },
+                                    { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
                                 }));
     Scheduler::ProcessEventsToIdle();
     const DateTime aAfter(DateTime::SYSTEM);

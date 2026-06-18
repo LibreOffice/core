@@ -353,7 +353,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
 FactoryImpl::FactoryImpl()
 {
     OUString uno = u"" UNO_LB_UNO ""_ustr;
-    OUString cpp = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    OUString cpp = u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr;
 
     uno_getEnvironment(
         reinterpret_cast< uno_Environment ** >( &m_uno_env ), uno.pData, nullptr );

@@ -1591,8 +1591,8 @@ void runWindowsFileZoneTests(cpo::uno::Reference<css::frame::XDesktop> const & a
 
     // Load doc with default for UI settings: do not suppress macro
     cpo::uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
-        "MacroExecutionMode", css::document::MacroExecMode::USE_CONFIG) };
-    auto aComponent = aDesktop->loadComponentFromURL(sFileName, "_default", 0, aLoadArgs);
+        u"MacroExecutionMode"_ustr, css::document::MacroExecMode::USE_CONFIG) };
+    auto aComponent = aDesktop->loadComponentFromURL(sFileName, u"_default"_ustr, 0, aLoadArgs);
 
     // Are macro enabled in doc?
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(aComponent.get());

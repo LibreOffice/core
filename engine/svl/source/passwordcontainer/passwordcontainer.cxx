@@ -380,7 +380,7 @@ PasswordContainer::PasswordContainer( const Reference<XComponentContext>& rxCont
     mComponent.set( rxContext->getServiceManager(), UNO_QUERY );
     mComponent->addEventListener( this );
 
-    m_xStorageFile.emplace( this, "Office.Common/Passwords" );
+    m_xStorageFile.emplace( this, u"Office.Common/Passwords"_ustr );
     if( m_xStorageFile->useStorage() )
         m_aContainer = m_xStorageFile->getInfo();
 }

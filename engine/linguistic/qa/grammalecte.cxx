@@ -166,7 +166,7 @@ void TestGrammalecte::testProofreading()
 
     using GrammalecteCfg = officecfg::Office::Linguistic::GrammarChecking::Grammalecte;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    GrammalecteCfg::BaseURL::set("http://127.0.0.1:2023", batch);
+    GrammalecteCfg::BaseURL::set(u"http://127.0.0.1:2023"_ustr, batch);
     GrammalecteCfg::IsEnabled::set(true, batch);
     GrammalecteCfg::SSLCertVerify::set(false, batch);
     batch->commit();

@@ -1399,7 +1399,7 @@ static void dispatchThemeCommand(SwDocShell* pDocShell, const OUString& rCommand
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         {
-            { "NewTheme", cpo::uno::Any(rThemeName) },
+            { u"NewTheme"_ustr, cpo::uno::Any(rThemeName) },
         }
     );
     comphelper::dispatchCommand(rCommand, xFrame, aPropertyValues);

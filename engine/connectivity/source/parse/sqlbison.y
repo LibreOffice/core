@@ -4429,7 +4429,7 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString&
 
 static Locale& impl_getLocaleInstance( )
 {
-	static Locale s_aLocale( "en", "US", "" );
+	static Locale s_aLocale( u"en"_ustr, u"US"_ustr, u""_ustr );
 	return s_aLocale;
 }
 

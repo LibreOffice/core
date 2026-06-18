@@ -186,27 +186,27 @@ vcl::Window* MediaWindow::getWindow() const
 const FilterNameVector & MediaWindow::getMediaFilters()
 {
     static const FilterNameVector gMediaFilters
-           {{"Advanced Audio Coding", "aac"},
-            {"AIF Audio", "aif;aiff"},
-            {"Advanced Systems Format", "asf;wma;wmv"},
-            {"AU Audio", "au"},
-            {"AC3 Audio", "ac3"},
-            {"AVI", "avi"},
-            {"Digital Video", "dv"},
-            {"FLAC Audio", "flac"},
-            {"Matroska Media", "mkv"},
-            {"MIDI Audio", "mid;midi"},
-            {"MPEG Audio", "mp2;mp3;mpa;m4a"},
-            {"MPEG Video", "mpg;mpeg;mpv;mp4;m4v"},
-            {"Ogg Audio", "ogg;oga;opus"},
-            {"Ogg Video", "ogv;ogx"},
-            {"RMI MIDI Audio", "rmi"},
-            {"SND (SouND) Audio", "snd"},
-            {"Quicktime Video", "mov"},
-            {"WAVE Audio", "wav"},
-            {"WebM Video", "webm"},
-            {"Windows Media Audio", "wma"},
-            {"Windows Media Video", "wmv"}};
+           {{u"Advanced Audio Coding"_ustr, u"aac"_ustr},
+            {u"AIF Audio"_ustr, u"aif;aiff"_ustr},
+            {u"Advanced Systems Format"_ustr, u"asf;wma;wmv"_ustr},
+            {u"AU Audio"_ustr, u"au"_ustr},
+            {u"AC3 Audio"_ustr, u"ac3"_ustr},
+            {u"AVI"_ustr, u"avi"_ustr},
+            {u"Digital Video"_ustr, u"dv"_ustr},
+            {u"FLAC Audio"_ustr, u"flac"_ustr},
+            {u"Matroska Media"_ustr, u"mkv"_ustr},
+            {u"MIDI Audio"_ustr, u"mid;midi"_ustr},
+            {u"MPEG Audio"_ustr, u"mp2;mp3;mpa;m4a"_ustr},
+            {u"MPEG Video"_ustr, u"mpg;mpeg;mpv;mp4;m4v"_ustr},
+            {u"Ogg Audio"_ustr, u"ogg;oga;opus"_ustr},
+            {u"Ogg Video"_ustr, u"ogv;ogx"_ustr},
+            {u"RMI MIDI Audio"_ustr, u"rmi"_ustr},
+            {u"SND (SouND) Audio"_ustr, u"snd"_ustr},
+            {u"Quicktime Video"_ustr, u"mov"_ustr},
+            {u"WAVE Audio"_ustr, u"wav"_ustr},
+            {u"WebM Video"_ustr, u"webm"_ustr},
+            {u"Windows Media Audio"_ustr, u"wma"_ustr},
+            {u"Windows Media Video"_ustr, u"wmv"_ustr}};
     return gMediaFilters;
 }
 
@@ -486,10 +486,10 @@ void MediaWindow::dispatchInsertAVMedia(const cpo::uno::Reference<css::frame::XD
 
     cpo::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, u""_ustr, 0);
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "URL", cpo::uno::Any(rURL) },
-        { "Size.Width", cpo::uno::Any(rSize.Width)},
-        { "Size.Height", cpo::uno::Any(rSize.Height)},
-        { "IsLink", cpo::uno::Any(bLink) },
+        { u"URL"_ustr, cpo::uno::Any(rURL) },
+        { u"Size.Width"_ustr, cpo::uno::Any(rSize.Width)},
+        { u"Size.Height"_ustr, cpo::uno::Any(rSize.Height)},
+        { u"IsLink"_ustr, cpo::uno::Any(bLink) },
     }));
     xDispatch->dispatch(aDispatchURL, aArgs);
 }

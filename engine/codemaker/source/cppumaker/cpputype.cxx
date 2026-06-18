@@ -3535,9 +3535,9 @@ void ServiceType::dumpHppFile(
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithContext("
-                      " \"")
+                      " u\"")
                   << name_
-                  << "\", the_context), ::cpo::uno::UNO_QUERY);\n#endif\n";
+                  << "\"_ustr, the_context), ::cpo::uno::UNO_QUERY);\n#endif\n";
                 dec();
                 o << indent()
                   << "} catch (const ::cpo::uno::RuntimeException &) {\n";
@@ -3676,8 +3676,8 @@ void ServiceType::dumpHppFile(
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithArgumentsAndContext("
-                      " \"")
-                  << name_ << "\", ";
+                      " u\"")
+                  << name_ << "\"_ustr, ";
                 if (rest) {
                     o << codemaker::cpp::translateUnoToCppIdentifier(
                           u2b(cons.parameters.back().name), "param",

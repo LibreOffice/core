@@ -699,7 +699,7 @@ OUString FunnelChartDialogController::getImage()
 const tTemplateServiceChartTypeParameterMap& FunnelChartDialogController::getTemplateMap() const
 {
     static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
-        {"com.sun.star.chart2.template.Funnel" , ChartTypeParameter(1, false, false, GlobalStackMode_NONE)}
+        {u"com.sun.star.chart2.template.Funnel"_ustr , ChartTypeParameter(1, false, false, GlobalStackMode_NONE)}
     };
     return s_aTemplateMap;
 }

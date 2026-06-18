@@ -1070,7 +1070,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
             // remain unchecked after checking it had restarted the print
             // job so load the checkbox state from where it was updated in
             // ControllerProperties::changePropertyWithBoolValue().
-            const PropertyValue* pVal = pController->getValue( "PrintSelectionOnly" );
+            const PropertyValue* pVal = pController->getValue( u"PrintSelectionOnly"_ustr );
             if( pVal )
             {
                 bool bPrintSelectionOnly;
@@ -1079,7 +1079,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
             }
             else
             {
-                pVal = pController->getValue( "PrintContent" );
+                pVal = pController->getValue( u"PrintContent"_ustr );
                 if( pVal )
                     pVal->Value >>= aSelectionChecked;
             }
@@ -1197,7 +1197,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
                 {
                     addBool( pCurParent, nCurX, nCurY, 0,
                              ControllerProperties::getPrintSelectionString(), bSelectionBoxEnabled,
-                             "PrintContent", bSelectionBoxChecked,
+                             u"PrintContent"_ustr, bSelectionBoxChecked,
                              aRightColumn, pControllerProperties, pCtrlTarget );
                     bAddSelectionCheckBox = false;
                 }

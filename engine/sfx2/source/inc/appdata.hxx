@@ -137,7 +137,7 @@ class SfxDdeTriggerTopic_Impl final : public DdeTopic
 #if defined(_WIN32)
 public:
     SfxDdeTriggerTopic_Impl()
-        : DdeTopic( "TRIGGER" )
+        : DdeTopic( u"TRIGGER"_ustr )
         {}
 
     virtual bool Execute( const OUString* ) override { return true; }

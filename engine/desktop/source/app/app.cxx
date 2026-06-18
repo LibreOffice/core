@@ -1465,7 +1465,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
         vcl::fileregistration::CheckFileExtRegistration(SfxGetpApp()->GetTopWindow());
     // Registers a COM class factory of the service manager with the windows operating system.
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
-    xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
+    xSMgr->createInstance(u"com.sun.star.bridge.OleApplicationRegistration"_ustr);
 #endif
     const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
     if (pExitPostStartup && *pExitPostStartup)

@@ -305,7 +305,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
 {
     OUString pValue;
 
-    if (rtl::Bootstrap::get("HOME", pValue))
+    if (rtl::Bootstrap::get(u"HOME"_ustr, pValue))
     {
         auto const pStrValue = OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
         if (!pStrValue.isEmpty())

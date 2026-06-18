@@ -69,8 +69,8 @@ void TestRestProtocol::testProofreading()
     using DudenCfg = officecfg::Office::Linguistic::GrammarChecking::Duden;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    DudenCfg::BaseURL::set("http://127.0.0.1:2022/api", batch);
-    DudenCfg::ApiKey::set("hcvhcvhcv", batch);
+    DudenCfg::BaseURL::set(u"http://127.0.0.1:2022/api"_ustr, batch);
+    DudenCfg::ApiKey::set(u"hcvhcvhcv"_ustr, batch);
     DudenCfg::IsEnabled::set(true, batch);
     DudenCfg::SSLCertVerify::set(false, batch);
 

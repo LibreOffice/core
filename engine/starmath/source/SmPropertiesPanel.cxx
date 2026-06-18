@@ -49,10 +49,10 @@ SmPropertiesPanel::SmPropertiesPanel(weld::Widget& rParent,
     , mpFormatFontSizeButton(m_xBuilder->weld_button(u"btnFormatFontSize"_ustr))
     , mpFormatSpacingButton(m_xBuilder->weld_button(u"btnFormatSpacing"_ustr))
     , mpFormatAlignmentButton(m_xBuilder->weld_button(u"btnFormatAlignment"_ustr))
-    , maButtonCommands{ { mpFormatFontsButton.get(), ".uno:ChangeFont" },
-                        { mpFormatFontSizeButton.get(), ".uno:ChangeFontSize" },
-                        { mpFormatSpacingButton.get(), ".uno:ChangeDistance" },
-                        { mpFormatAlignmentButton.get(), ".uno:ChangeAlignment" } }
+    , maButtonCommands{ { mpFormatFontsButton.get(), u".uno:ChangeFont"_ustr },
+                        { mpFormatFontSizeButton.get(), u".uno:ChangeFontSize"_ustr },
+                        { mpFormatSpacingButton.get(), u".uno:ChangeDistance"_ustr },
+                        { mpFormatAlignmentButton.get(), u".uno:ChangeAlignment"_ustr } }
 {
     // Set localized labels to the buttons
     auto xConfs

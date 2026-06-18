@@ -31,21 +31,21 @@ WpftImpressFilterTest::WpftImpressFilterTest()
 void WpftImpressFilterTest::test()
 {
     const writerperfect::test::WpftOptionalMap_t aEtonyekOptional{
-        { "Keynote_1.key", REQUIRE_ETONYEK_VERSION(0, 1, 8) },
-        { "Keynote_2.key", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
-        { "Keynote_3.key", REQUIRE_ETONYEK_VERSION(0, 1, 1) },
-        { "Keynote_6.key", REQUIRE_ETONYEK_VERSION(0, 1, 4) },
+        { u"Keynote_1.key"_ustr, REQUIRE_ETONYEK_VERSION(0, 1, 8) },
+        { u"Keynote_2.key"_ustr, REQUIRE_ETONYEK_VERSION(0, 1, 1) },
+        { u"Keynote_3.key"_ustr, REQUIRE_ETONYEK_VERSION(0, 1, 1) },
+        { u"Keynote_6.key"_ustr, REQUIRE_ETONYEK_VERSION(0, 1, 4) },
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
-        { "ClarisWorks_6.0.cwk", REQUIRE_MWAW_VERSION(0, 3, 3) },
-        { "PowerPoint_Mac_1", REQUIRE_MWAW_VERSION(0, 3, 9) },
-        { "PowerPoint_Mac_2", REQUIRE_MWAW_VERSION(0, 3, 9) },
-        { "PowerPoint_Mac_3", REQUIRE_MWAW_VERSION(0, 3, 9) },
-        { "PowerPoint_Mac_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10) },
-        { "PowerPoint_2.ppt", REQUIRE_MWAW_VERSION(0, 3, 10) },
-        { "PowerPoint_3.ppt", REQUIRE_MWAW_VERSION(0, 3, 9) },
-        { "PowerPoint_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10) },
-        { "PowerPoint_7.ppt", REQUIRE_MWAW_VERSION(0, 3, 11) },
+        { u"ClarisWorks_6.0.cwk"_ustr, REQUIRE_MWAW_VERSION(0, 3, 3) },
+        { u"PowerPoint_Mac_1"_ustr, REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { u"PowerPoint_Mac_2"_ustr, REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { u"PowerPoint_Mac_3"_ustr, REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { u"PowerPoint_Mac_4.ppt"_ustr, REQUIRE_MWAW_VERSION(0, 3, 10) },
+        { u"PowerPoint_2.ppt"_ustr, REQUIRE_MWAW_VERSION(0, 3, 10) },
+        { u"PowerPoint_3.ppt"_ustr, REQUIRE_MWAW_VERSION(0, 3, 9) },
+        { u"PowerPoint_4.ppt"_ustr, REQUIRE_MWAW_VERSION(0, 3, 10) },
+        { u"PowerPoint_7.ppt"_ustr, REQUIRE_MWAW_VERSION(0, 3, 11) },
     };
 
     doTest(u"org.libreoffice.comp.Impress.KeynoteImportFilter"_ustr,

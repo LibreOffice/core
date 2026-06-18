@@ -28,7 +28,7 @@ void f2()
     // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const char{{ ?}}[4]') to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
     char const literal[] = "foo";
     // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
-    f(literal);
+    f(OUString(literal));
 }
 
 struct S3

@@ -388,7 +388,7 @@ void VistaFilePickerImpl::impl_sta_appendFilterGroup(Request& rRequest)
         rRequest.getArgumentOrDefault(PROP_FILTER_GROUP, cpo::uno::Sequence< css::beans::StringPair >());
 
     if ( m_lFilters.numFilter() > 0 && aFilterGroup.getLength() > 0 )
-        m_lFilters.addFilter( STRING_SEPARATOR, "", true );
+        m_lFilters.addFilter( STRING_SEPARATOR, u""_ustr, true );
 
     ::sal_Int32 c = aFilterGroup.getLength();
     ::sal_Int32 i = 0;

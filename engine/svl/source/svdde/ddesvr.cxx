@@ -393,12 +393,12 @@ DdeService::DdeService( const OUString& rService )
         }
     }
     AddFormat( SotClipboardFormatId::STRING );
-    pSysTopic = new DdeTopic( SZDDESYS_TOPIC );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_TOPICS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_SYSITEMS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_STATUS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_FORMATS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_HELP ) );
+    pSysTopic = new DdeTopic( u"" SZDDESYS_TOPIC ""_ustr );
+    pSysTopic->AddItem( DdeItem( u"" SZDDESYS_ITEM_TOPICS ""_ustr ) );
+    pSysTopic->AddItem( DdeItem( u"" SZDDESYS_ITEM_SYSITEMS ""_ustr ) );
+    pSysTopic->AddItem( DdeItem( u"" SZDDESYS_ITEM_STATUS ""_ustr ) );
+    pSysTopic->AddItem( DdeItem( u"" SZDDESYS_ITEM_FORMATS ""_ustr ) );
+    pSysTopic->AddItem( DdeItem( u"" SZDDESYS_ITEM_HELP ""_ustr ) );
     AddTopic( *pSysTopic );
 }
 
@@ -796,7 +796,7 @@ OUString DdeService::Formats()
 
 OUString DdeService::Status()
 {
-    return "Ready\r\n";
+    return u"Ready\r\n"_ustr;
 }
 
 bool DdeTopic::MakeItem( const OUString& )
