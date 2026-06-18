@@ -7,7 +7,7 @@
     <string name="failed_to_insert_image">Помилка вставки зображення</string>
     <string name="failed_to_load_file">Помилка визначення файлу для завантаження</string>
     <string name="storage_permission_required">Необхідний дозвіл на збереження</string>
-    <string name="temp_file_saving_disabled">Цей файл лише для читання, збереження неможливе.</string>
+    <string name="temp_file_saving_disabled">Цей файл лише для читання за оригінальнім додатком. Використовуйте \"Редагувати копію\" щоб зробити зміни.</string>
     <string name="exiting">Виходимо...</string>
     <string name="rate_our_app_text">Якщо вам це подобається, будь ласка, поставте нам 5 зірочок в Google Play. Ваші гарні відгуки - наша найкраща мотивація.</string>
     <string name="rate_our_app_title">Дякуємо за використання %1$s!</string>
