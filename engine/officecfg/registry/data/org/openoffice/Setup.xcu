@@ -340,41 +340,6 @@
           <value>GenericCategories</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.sdb.TextReportDesign" oor:op="replace" install:module="writer">
-        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-          <value>com.sun.star.text.TextDocument</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-          <value>writer8</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-          <value>writer8_template</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryDefaultFilter">
-          <value>writer8</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-          <value>private:factory/swriter</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryCommandConfigRef">
-          <value>WriterCommands</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryIcon">
-          <value>2</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryShortName">
-          <value>swreport</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryUIName">
-          <value xml:lang="en-US">Base: Report Design</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-          <value>WriterReportWindowState</value>
-        </prop>
-        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-          <value>GenericCategories</value>
-        </prop>
-      </node>
       <node oor:name="com.sun.star.xforms.XMLFormDocument" oor:op="replace" install:module="writer">
         <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
           <value>com.sun.star.text.TextDocument</value>

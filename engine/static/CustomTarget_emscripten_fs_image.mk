@@ -425,60 +425,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swform/toolbar/textobjectbar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swform/toolbar/toolbar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swform/toolbar/viewerbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/menubar/menubar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/anchor.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/annotation.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/drawtext.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/draw.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/formrichtext.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/form.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/frame.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/graphic.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/insertfield.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/media.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/oleobject.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/preview.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/showtrackedchanges.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/table.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/popupmenu/text.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/statusbar/statusbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/alignmentbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/arrowshapes.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/basicshapes.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/bezierobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/calloutshapes.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/colorbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/drawbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/drawingobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/drawtextobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/extrusionobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/flowchartshapes.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/fontworkobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/fontworkshapetype.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/formcontrols.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/formdesign.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/formsfilterbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/formsnavigationbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/formtextobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/frameobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/fullscreenbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/graffilterbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/graphicobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/insertbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/insertobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/mailmerge.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/mediaobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/numobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/oleobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/optimizetablebar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/previewobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/standardbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/starshapes.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/symbolshapes.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/tableobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/textobjectbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/toolbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swreport/toolbar/viewerbar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/menubar/menubar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/menubar/mscompatibleformsmenu.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/popupmenu/anchor.xml \

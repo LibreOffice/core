@@ -78,7 +78,6 @@ EnumContext::Application EnumContext::GetApplication_DI() const
          case Application::WriterWeb:
          case Application::WriterXML:
          case Application::WriterForm:
-         case Application::WriterReport:
              return Application::WriterVariants;
 
          default:
@@ -115,7 +114,6 @@ void EnumContext::ProvideApplicationContainers()
     AddEntry(u"com.sun.star.text.WebDocument"_ustr, EnumContext::Application::WriterWeb);
     AddEntry(u"com.sun.star.xforms.XMLFormDocument"_ustr, EnumContext::Application::WriterXML);
     AddEntry(u"com.sun.star.sdb.FormDesign"_ustr, EnumContext::Application::WriterForm);
-    AddEntry(u"com.sun.star.sdb.TextReportDesign"_ustr, EnumContext::Application::WriterReport);
     AddEntry(u"com.sun.star.sheet.SpreadsheetDocument"_ustr, EnumContext::Application::Calc);
     AddEntry(u"com.sun.star.chart2.ChartDocument"_ustr, EnumContext::Application::Chart);
     AddEntry(u"com.sun.star.drawing.DrawingDocument"_ustr, EnumContext::Application::Draw);

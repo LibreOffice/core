@@ -36,7 +36,6 @@ public:
         WriterWeb,
         WriterXML,
         WriterForm,
-        WriterReport,
         Calc,
         Chart,
         Draw,

@@ -93,7 +93,6 @@ namespace svxform
                 { "com.sun.star.presentation.PresentationDocument", ePresentationDocument },
                 { "com.sun.star.xforms.XMLFormDocument", eEnhancedForm },
                 { "com.sun.star.sdb.FormDesign", eDatabaseForm },
-                { "com.sun.star.sdb.TextReportDesign", eDatabaseReport },
                 { "com.sun.star.text.GlobalDocument", eTextDocument },
                 { nullptr, eUnknownDocumentType }
             };

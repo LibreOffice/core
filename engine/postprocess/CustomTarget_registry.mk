@@ -334,14 +334,12 @@ postprocess_FILES_writer := \
 	$(postprocess_XCS)/Office/UI/WriterCommands.xcs \
 	$(postprocess_XCS)/Office/UI/WriterFormWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/WriterGlobalWindowState.xcs \
-	$(postprocess_XCS)/Office/UI/WriterReportWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/WriterWebWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/WriterWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/XFormsWindowState.xcs \
 	$(postprocess_XCU)/Office/UI/WriterCommands.xcu \
 	$(postprocess_XCU)/Office/UI/WriterFormWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/WriterGlobalWindowState.xcu \
-	$(postprocess_XCU)/Office/UI/WriterReportWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/WriterWebWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/WriterWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/XFormsWindowState.xcu \

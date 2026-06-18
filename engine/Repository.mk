@@ -1036,7 +1036,6 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	modules/StartModule \
 	modules/sweb \
 	modules/swform \
-	modules/swreport \
 	modules/swriter \
 	modules/swxform \
 	sfx \

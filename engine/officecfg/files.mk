@@ -78,7 +78,6 @@ officecfg_XCSFILES := \
     Office/UI/WriterCommands \
     Office/UI/WriterFormWindowState \
     Office/UI/WriterGlobalWindowState \
-    Office/UI/WriterReportWindowState \
     Office/UI/WriterWebWindowState \
     Office/UI/WriterWindowState \
     Office/UI/XFormsWindowState \

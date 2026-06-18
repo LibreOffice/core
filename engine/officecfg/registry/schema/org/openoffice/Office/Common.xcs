@@ -5316,12 +5316,6 @@
             database form documents</desc>
           </info>
         </node-ref>
-        <node-ref oor:name="com.sun.star.sdb.TextReportDesign" oor:node-type="ApplicationControlLayout">
-          <info>
-            <desc>specifies certain default layout settings for form controls in
-            database text report documents.</desc>
-          </info>
-        </node-ref>
       </group>
       <group oor:name="PropertyBrowser">
         <info>

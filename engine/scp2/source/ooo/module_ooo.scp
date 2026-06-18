@@ -75,7 +75,6 @@ Module gid_Module_Root
              gid_File_Share_Config_Sofficecfg_uiconfig_svx,
              gid_File_Share_Config_Sofficecfg_uiconfig_sweb,
              gid_File_Share_Config_Sofficecfg_uiconfig_swform,
-             gid_File_Share_Config_Sofficecfg_uiconfig_swreport,
              gid_File_Share_Config_Sofficecfg_uiconfig_swriter,
              gid_File_Share_Config_Sofficecfg_uiconfig_swxform,
              gid_File_Share_Config_Sofficecfg_uiconfig_uui,

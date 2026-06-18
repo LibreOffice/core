@@ -331,8 +331,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
             {
                 const OUString aModuleID = xModule->getIdentifier();
                 bStoreMeta = !aModuleID.isEmpty() &&
-                    ( aModuleID == "com.sun.star.sdb.FormDesign" ||
-                      aModuleID == "com.sun.star.sdb.TextReportDesign" );
+                    ( aModuleID == "com.sun.star.sdb.FormDesign" );
             }
         }
         catch( uno::Exception& )

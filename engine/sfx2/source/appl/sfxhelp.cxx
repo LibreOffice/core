@@ -427,7 +427,6 @@ namespace
                 || aFactoryShortName == "dbtable"
                 || aFactoryShortName == "dbapp"
                 || aFactoryShortName == "dbtdata"
-                || aFactoryShortName == "swreport"
                 || aFactoryShortName == "swform" )
             aFactoryShortName = u"sdatabase"_ustr;
         else if ( aFactoryShortName == "sbibliography"

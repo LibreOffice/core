@@ -603,7 +603,6 @@ void ResourceManager::ReadContextList (
                 aApplications.push_back(vcl::EnumContext::Application::WriterWeb);
                 aApplications.push_back(vcl::EnumContext::Application::WriterXML);
                 aApplications.push_back(vcl::EnumContext::Application::WriterForm);
-                aApplications.push_back(vcl::EnumContext::Application::WriterReport);
             }
             else
             {

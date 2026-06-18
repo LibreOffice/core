@@ -60,26 +60,6 @@
                 <node oor:name="F5" oor:op="remove"/>
                 <node oor:name="F3_MOD1" oor:op="remove"/>
             </node>
-            <node oor:name="com.sun.star.sdb.TextReportDesign">
-                <node oor:name="F2_MOD1" oor:op="remove"/>
-                <node oor:name="K_MOD1_MOD2" oor:op="remove"/>
-                <node oor:name="F5" oor:op="remove"/>
-                <node oor:name="F3_MOD1" oor:op="remove"/>
-            </node>
-            <node oor:name="com.sun.star.text.TextDocument">
-                <node oor:name="F2_MOD1" oor:op="remove"/>
-                <node oor:name="K_MOD1_MOD2" oor:op="remove"/>
-                <node oor:name="F5" oor:op="remove"/>
-                <node oor:name="F5_MOD1" oor:op="remove"/>
-                <node oor:name="P_SHIFT_MOD2" oor:op="remove"/>
-                <node oor:name="F3_MOD1" oor:op="remove"/>
-            </node>
-            <node oor:name="com.sun.star.xforms.XMLFormDocument">
-                <node oor:name="F2_MOD1" oor:op="remove"/>
-                <node oor:name="K_MOD1_MOD2" oor:op="remove"/>
-                <node oor:name="F5" oor:op="remove"/>
-                <node oor:name="F3_MOD1" oor:op="remove"/>
-            </node>
         </node>
     </node>
     <node oor:name="SecondaryKeys">
