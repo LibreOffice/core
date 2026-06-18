@@ -21,6 +21,7 @@ class DocumentViewBase {
 	private color: string;
 	private _selectionSection: TextSelectionSection;
 	public hasTextSelection: boolean = false;
+	public _selectionFragmented: boolean = false;
 
 	constructor(viewID: number) {
 		this.viewID = viewID;
@@ -176,6 +177,10 @@ class DocumentViewBase {
 			}
 		}
 
+		// Detect a non-contiguous selection here, before the split-pane
+		// division below splits single ranges into multiple artificial groups.
+		this._selectionFragmented = groups.length > 1;
+
 		if (app.map._docLayer.isCalc()) {
 			Util.ensureValue(app.calc.splitCoordinate);
 			if (app.calc.splitCoordinate.x !== 0)
@@ -256,8 +261,13 @@ class DocumentViewBase {
 			else this.selectionSection.setShowSection(false);
 		} else if (rectangles.length === 0) {
 			this.hasTextSelection = false;
+			this._selectionFragmented = false;
 			this.selectionSection.setSelectionInfo(mode, part, []);
 			this.selectionSection.setShowSection(false);
 		}
+
+		// Let the autofill marker re-evaluate its visibility: it must hide for a non-contiguous selection.
+		if (app.map._docLayer.isCalc() && this === app.activeDocument.activeView)
+			app.events.fire('cellselectionfragmentchanged', null);
 	}
 }

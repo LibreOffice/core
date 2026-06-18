@@ -51,6 +51,17 @@ class AutoFillBaseSection extends CanvasSectionObject {
 			'updatepermission',
 			this.showHideOnPermissionChange.bind(this),
 		);
+
+		app.events.on(
+			'cellselectionfragmentchanged',
+			this.setMarkerPosition.bind(this),
+		);
+	}
+
+	private isSelectionFragmented(): boolean {
+		return (
+			!!app.activeDocument && app.activeDocument.activeView._selectionFragmented
+		);
 	}
 
 	protected setMarkerPosition() {
@@ -63,12 +74,16 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		var position: Array<number> = [0, 0];
 		this.setShowSection(true);
 
-		if (this.sectionProperties.selectedAreaPoint !== null)
-			position = [
-				this.sectionProperties.selectedAreaPoint[0] - center,
-				this.sectionProperties.selectedAreaPoint[1],
-			];
-		else if (this.sectionProperties.cellCursorPoint !== null)
+		if (this.sectionProperties.selectedAreaPoint !== null) {
+			if (this.isSelectionFragmented())
+				// Non-contiguous selection: autofill is disabled, hide.
+				this.setShowSection(false);
+			else
+				position = [
+					this.sectionProperties.selectedAreaPoint[0] - center,
+					this.sectionProperties.selectedAreaPoint[1],
+				];
+		} else if (this.sectionProperties.cellCursorPoint !== null)
 			position = [
 				this.sectionProperties.cellCursorPoint[0] - center,
 				this.sectionProperties.cellCursorPoint[1],
