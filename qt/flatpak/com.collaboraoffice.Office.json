@@ -1007,7 +1007,6 @@
         "--without-buildconfig-recorded",
         "--without-export-validation",
         "--without-help",
-        "--without-java",
         "--without-junit",
         "--without-lxml",
         "--without-myspell-dicts",

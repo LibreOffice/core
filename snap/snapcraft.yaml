@@ -178,7 +178,6 @@ parts:
         --with-vendor="Collabora Productivity Limited" \
         --without-buildconfig-recorded \
         --without-help \
-        --without-java \
         --without-junit \
         --without-lxml \
         --without-myspell-dicts \

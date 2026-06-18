@@ -2592,13 +2592,13 @@ AC_ARG_WITH(omindex,
 
 libo_FUZZ_ARG_WITH(java,
     AS_HELP_STRING([--with-java=<java command>],
-        [Specify the name of the Java interpreter command. Typically "java"
-         which is the default.
+        [Specify the name of the Java interpreter command. Typically "java".
 
-         To build without support for Java components, applets, accessibility
-         or the XML filters written in Java, use --without-java or --with-java=no.]),
+         Java support is disabled by default; pass --with-java (or
+         --with-java=<command>) to enable building Java components, applets,
+         accessibility, or the XML filters written in Java.]),
     [ test -z "$with_java" -o "$with_java" = "yes" && with_java=java ],
-    [ test -z "$with_java" -o "$with_java" = "yes" && with_java=java ]
+    [ with_java=no ]
 )
 
 AC_ARG_WITH(jvm-path,
