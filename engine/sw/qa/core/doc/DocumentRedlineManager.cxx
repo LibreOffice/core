@@ -150,6 +150,26 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightOnInsContext)
                          aCharSet.GetItemState(RES_CHRATR_BACKGROUND, false));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testHideChangesFormatOnDelete)
+{
+    // Given a document with a format-on-delete hierarchical redline (the deleted text has a format
+    // redline on top of the delete redline):
+    createSwDoc("del-then-format.docx");
+
+    // When hiding tracked changes:
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+
+    // Then make sure the deleted text is also omitted from the layout, just like a plain delete
+    // redline would be:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString aPortion = getXPath(pXmlDoc, "//body/txt/SwParaPortion/SwLineLayout", "portion");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected:
+    // - Actual  : BBB
+    // i.e. only delete was hidden, delete-then-format was still visible.
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aPortion);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatSelf)
 {
     // Given a document with <ins>A<format>B</format>C</ins> redlines, created by Alice:

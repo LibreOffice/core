@@ -226,6 +226,8 @@ public:
     sal_uInt32 GetMovedID(sal_uInt16 nPos = 0) const;
     const DateTime& GetTimeStamp(sal_uInt16 nPos = 0) const;
     SW_DLLPUBLIC RedlineType GetType( sal_uInt16 nPos = 0 ) const;
+    /// Like GetType(), but looks through "format" on top of delete.
+    SW_DLLPUBLIC RedlineType GetTypeIgnoringAdditonalFormat() const;
     // text content of the redline is only an annotation placeholder
     // (i.e. a comment, but don't confuse it with comment of the redline)
     bool IsAnnotation() const;

@@ -145,7 +145,8 @@ public:
                 if (m_pEndPos->GetNodeIndex() < pRed->Start()->GetNodeIndex())
                     break;
 
-                if (pRed->GetType() != RedlineType::Delete)
+                // Hide delete and delete-then-format redline content.
+                if (pRed->GetTypeIgnoringAdditonalFormat() != RedlineType::Delete)
                     continue;
 
                 auto [pStart, pEnd] = pRed->StartEnd(); // SwPosition*
