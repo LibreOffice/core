@@ -40,7 +40,6 @@
 #include <lockfile.hxx>
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
-#include <migration.hxx>
 #include "officeipcthread.hxx"
 
 #include <framework/desktop.hxx>
@@ -1211,11 +1210,6 @@ int Desktop::Main()
     bool bAbort = CheckExtensionDependencies();
     if ( bAbort )
         return EXIT_FAILURE;
-
-    if (inst_fin == userinstall::CREATED)
-    {
-        Migration::migrateSettingsIfNecessary();
-    }
 #endif
 
     // keep a language options instance...

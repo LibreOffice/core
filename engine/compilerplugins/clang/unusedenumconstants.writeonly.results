@@ -1304,8 +1304,6 @@ desktop/source/lib/init.cxx:6436
     enum (anonymous namespace)::UndoOrRedo REDO
 desktop/source/lib/init.cxx:8046
     enum (unnamed at /home/noel/libo-plugin/desktop/source/lib/init.cxx:8043:5) FULL_INIT
-desktop/source/migration/services/oo3extensionmigration.hxx:62
-    enum migration::OO3ExtensionMigration::ScanResult SCANRESULT_DONTMIGRATE_EXTENSION
 desktop/unx/source/start.cxx:178
     int ProgressExit
 desktop/unx/source/start.cxx:178

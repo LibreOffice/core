@@ -35,73 +35,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="MigrationStep">
-      <info>
-        <desc>Describes one step of migration</desc>
-      </info>
-      <prop oor:name="MigrationService" oor:type="xs:string">
-        <info>
-          <desc>an optional uno service that is called after files and nodes
-          have been copied in order to perform custom migration actions. The
-          service needs to support XInitializable and XJob interfaces according
-          do
-          http://specs.openoffice.org/appwide/migration/spec_migration.sxw</desc>
-        </info>
-      </prop>
-      <prop oor:name="IncludedFiles" oor:type="oor:string-list">
-        <info>
-          <desc>a list of wildcards relative to the old userdata origin that are
-          to be copied</desc>
-        </info>
-      </prop>
-      <prop oor:name="ExcludedFiles" oor:type="oor:string-list">
-        <info>
-          <desc>a list of wildcards relative to the old userdata origin that are
-          to be copied</desc>
-        </info>
-      </prop>
-      <prop oor:name="IncludedNodes" oor:type="oor:string-list">
-        <info>
-          <desc>a list of configuration node paths that are to be moved from the
-          old user layer to the new user layer</desc>
-        </info>
-      </prop>
-      <prop oor:name="ExcludedNodes" oor:type="oor:string-list">
-        <info>
-          <desc>a list of configuration node paths that are not to be moved from
-          the old user layer to the new user layer</desc>
-        </info>
-      </prop>
-      <prop oor:name="ExcludedExtensions" oor:type="oor:string-list">
-        <info>
-          <desc>a list of extension identifiers that are not to be copied from
-          the old user layer to the new user layer</desc>
-        </info>
-      </prop>
-    </group>
-    <group oor:name="MigrateVersion">
-      <info>
-        <desc>Describes migration steps specific for certain version(s)</desc>
-      </info>
-      <prop oor:name="VersionIdentifiers" oor:type="oor:string-list" oor:nillable="false">
-        <info>
-          <desc>version identifiers, that are supported for migration</desc>
-        </info>
-        <value/>
-      </prop>
-      <prop oor:name="Priority" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Contains the priority value to specify which migration should be
-          preferred. Higher values are preferred.</desc>
-        </info>
-        <value/>
-      </prop>
-      <set oor:name="MigrationSteps" oor:node-type="MigrationStep">
-        <info>
-          <desc>Contains necessary migration steps for specific versions</desc>
-        </info>
-      </set>
-    </group>
     <group oor:name="Factory">
       <info>
         <desc>Describes an application module (a document factory, such as
@@ -311,14 +244,6 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop oor:name="MigrationCompleted" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>This should be set to true, as soon as settings from another
-          version have been imported into this installation in order to prevent
-          multiple migrations</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="LastCompatibilityCheckID" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>The build ID of the office. On startup the office will compare
@@ -406,17 +331,6 @@
         </info>
         <value/>
       </prop>
-    </group>
-    <group oor:name="Migration">
-      <info>
-        <desc>Contains settings that control the migration process for certain
-        versions.</desc>
-      </info>
-      <set oor:name="SupportedVersions" oor:node-type="MigrateVersion">
-        <info>
-          <desc>Define migration steps for supported versions</desc>
-        </info>
-      </set>
     </group>
   </component>
 </oor:component-schema>

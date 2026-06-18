@@ -2762,16 +2762,6 @@ desktop/source/lib/kitandroid.cxx
 desktop/source/lib/kitclipboard.cxx
 desktop/source/lib/kitinteractionhandler.cxx
 desktop/source/lib/kitinteractionhandler.hxx
-desktop/source/migration/migration.cxx
-desktop/source/migration/migration_impl.hxx
-desktop/source/migration/services/basicmigration.cxx
-desktop/source/migration/services/basicmigration.hxx
-desktop/source/migration/services/jvmfwk.cxx
-desktop/source/migration/services/misc.hxx
-desktop/source/migration/services/oo3extensionmigration.cxx
-desktop/source/migration/services/oo3extensionmigration.hxx
-desktop/source/migration/services/wordbookmigration.cxx
-desktop/source/migration/services/wordbookmigration.hxx
 desktop/source/offacc/acceptor.cxx
 desktop/source/offacc/acceptor.hxx
 desktop/source/pkgchk/unopkg/unopkg_app.cxx

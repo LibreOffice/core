@@ -396,8 +396,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	lng \
 	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
-	migrationoo2 \
-	migrationoo3 \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \

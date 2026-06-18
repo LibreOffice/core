@@ -171,7 +171,6 @@ certain functionality.
 @li @c desktop.app
 @li @c desktop.deployment
 @li @c desktop.lib
-@li @c desktop.migration
 @li @c desktop.offacc
 @li @c desktop.splash
 @li @c desktop.startuptime - Log area for start up measurement time
