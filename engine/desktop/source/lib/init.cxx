@@ -4536,12 +4536,17 @@ inline static void enableViewCallbacks(LibLODocument_Impl* pDocument, const int 
 inline static int getAlternativeViewForPaint(COKitDocument* pThis, ITiledRenderable* pDoc, const SfxViewShell* pCurrentViewShell,
     const std::string_view &sCurrentViewRenderState, const int nPart, const int nMode)
 {
+    // The painted tile belongs to a single document. When several documents
+    // live in one process, other documents may have a view sitting on the
+    // requested part, so the candidate view must belong to this document.
+    const ViewShellDocId aThisDocId(static_cast<LibLODocument_Impl*>(pThis)->mnDocumentId);
+
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         bool bIsInEdit = pViewShell->GetDrawView() && pViewShell->GetDrawView()->GetTextEditOutliner();
 
-        if (!bIsInEdit && pViewShell != pCurrentViewShell)
+        if (!bIsInEdit && pViewShell != pCurrentViewShell && pViewShell->GetDocId() == aThisDocId)
         {
             if (pViewShell->getPart() == nPart && pViewShell->getEditMode() == nMode)
             {
