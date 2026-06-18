@@ -182,7 +182,7 @@ admin_fuzzer_SOURCES = \
 		       $(common_fuzzer_sources) \
 		       Admin.cpp
 admin_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS_COMMON) $(POCO_STATIC_LINKARGS) $(AM_LDFLAGS)
-admin_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES)
+admin_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
 
 clientrequest_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS)
@@ -191,7 +191,7 @@ clientrequest_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       ClientRequestDispatcherFuzz.cpp
 clientrequest_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS_COMMON) $(POCO_STATIC_LINKARGS) $(AM_LDFLAGS)
-clientrequest_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES)
+clientrequest_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
 
 clientsession_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS)
@@ -200,7 +200,7 @@ clientsession_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       ClientSession.cpp
 clientsession_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS_COMMON) $(POCO_STATIC_LINKARGS) $(AM_LDFLAGS)
-clientsession_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES)
+clientsession_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
 
 httpresponse_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS)
@@ -209,7 +209,7 @@ httpresponse_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       HttpResponse.cpp
 httpresponse_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS_COMMON) $(POCO_STATIC_LINKARGS) $(AM_LDFLAGS)
-httpresponse_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES)
+httpresponse_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
 
 httpecho_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS) \
@@ -219,7 +219,7 @@ httpecho_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       HttpEcho.cpp
 httpecho_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS_COMMON) $(POCO_STATIC_LINKARGS) $(AM_LDFLAGS)
-httpecho_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES)
+httpecho_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
 
 if ENABLE_AFL
 # AFL++ multi-variant fuzzer build.
@@ -258,7 +258,7 @@ AFL_CFLAGS = $(AFL_CPPFLAGS) $(AM_CFLAGS) $(filter-out $(AFL_FILTER_OUT),$(CFLAG
 # because afl-clang-fast emits bitcode .o under SAND mode. It comes from
 # configure (validated there) and is applied here, not in global LDFLAGS,
 # so test/ binaries built alongside the fuzzers don't pay the LTO link cost.
-AFL_LDFLAGS_COMMON = $(AM_LDFLAGS) $(LIBS) @FUZZER_LDFLAGS@
+AFL_LDFLAGS_COMMON = $(AM_LDFLAGS) $(LIBS) $(POCO_LIBS) @FUZZER_LDFLAGS@
 
 # Variant configurations: ENV_<variant>, CXX_<variant>, CC_<variant>
 ENV_native =

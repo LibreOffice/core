@@ -241,7 +241,7 @@ globals_sources = ../common/Globals.cpp
 
 unithttplib_CPPFLAGS = -I$(top_srcdir) -DBUILDING_TESTS -DSTANDALONE_CPPUNIT -g
 unithttplib_SOURCES = $(common_sources) $(globals_sources) test.cpp HttpRequestTests.cpp
-unithttplib_LDADD = $(CPPUNIT_LIBS)
+unithttplib_LDADD = $(CPPUNIT_LIBS) $(POCO_LIBS)
 
 unittest_CPPFLAGS = -I$(top_srcdir) -DBUILDING_TESTS -DSTANDALONE_CPPUNIT -g
 unittest_SOURCES = \
@@ -257,7 +257,7 @@ unittest_SOURCES = \
 	../wsd/TileCache.cpp \
 	test.cpp
 
-unittest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS)
+unittest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS) $(POCO_LIBS)
 
 clienttest_CPPFLAGS = -I$(top_srcdir) -DBUILDING_TESTS -DSTANDALONE_CPPUNIT -g
 
@@ -270,7 +270,7 @@ clienttest_SOURCES = \
 	XcuScrubWhiteBoxTests.cpp \
 	test.cpp
 
-clienttest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS)
+clienttest_LDADD = $(top_builddir)/libsimd.a $(CPPUNIT_LIBS) $(POCO_LIBS)
 
 # Add SSL dependencies if needed.
 if ENABLE_SSL
@@ -289,7 +289,7 @@ else
 
 fakesockettest_CPPFLAGS = -g
 fakesockettest_SOURCES = fakesockettest.cpp  ../net/FakeSocket.cpp ../common/DummyTraceEventEmitter.cpp ../common/Log-common.cpp ../common/Log-poco.cpp ../common/ProcUtil.cpp ../common/Util.cpp ../common/Util-server.cpp $(util_platform_cpp) ../common/Util-unix.cpp ../common/Globals.cpp
-fakesockettest_LDADD = $(CPPUNIT_LIBS)
+fakesockettest_LDADD = $(CPPUNIT_LIBS) $(POCO_LIBS)
 
 # old-style unit tests - bootstrapped via UnitClient
 unit_tiletest_la_SOURCES = UnitClient.cpp TileCacheTests.cpp KitPidHelpers.cpp

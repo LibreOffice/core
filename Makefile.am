@@ -151,8 +151,11 @@ if !HAVE_CLANG
 AM_LDFLAGS += -pthread
 endif
 
-coolwsd_LDADD = libwsdglobals.a
-coolconfig_LDADD = libglobals.a
+LDADD = $(POCO_LIBS)
+
+coolwsd_LDADD = libwsdglobals.a $(POCO_LIBS_HOST)
+coolwsd_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
+coolconfig_LDADD = libglobals.a $(LDADD)
 
 if ENABLE_SSL
 AM_LDFLAGS += ${OPENSSL_LIBS}
@@ -276,7 +279,7 @@ connect_SOURCES = \
                   common/Util.cpp \
                   tools/Connect.cpp
 
-connect_LDADD = libglobals.a
+connect_LDADD = libglobals.a $(LDADD)
 
 lokitclient_SOURCES = \
                       $(util_platform_cpp) \
@@ -292,7 +295,7 @@ lokitclient_SOURCES = \
                       common/Util.cpp \
                       tools/KitClient.cpp
 
-lokitclient_LDADD = libglobals.a
+lokitclient_LDADD = libglobals.a $(LDADD)
 
 noinst_LIBRARIES = libsimd.a libglobals.a libkitglobals.a libwsdglobals.a libkitwsdglobals.a
 
@@ -313,13 +316,14 @@ coolforkit_sources = \
                      kit/Kit.cpp \
                      kit/KitWebSocket.cpp
 
-coolforkit_ldadd = libsimd.a libkitglobals.a
+coolforkit_ldadd = libsimd.a libkitglobals.a $(POCO_LIBS_HOST)
 
 coolforkit_caps_SOURCES = $(coolforkit_sources) \
                           $(shared_sources) \
                           kit/forkit-main.cpp
 
 coolforkit_caps_LDADD = ${coolforkit_ldadd}
+coolforkit_caps_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
 
 # Define variant to ensure different binary content and thus different build-id
 coolforkit_caps_CPPFLAGS = $(AM_CPPFLAGS) -DCOOL_FORKIT_VARIANT=\"caps\"
@@ -329,6 +333,7 @@ coolforkit_ns_SOURCES = $(coolforkit_sources) \
                         kit/forkit-main.cpp
 
 coolforkit_ns_LDADD = ${coolforkit_ldadd}
+coolforkit_ns_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
 
 # Define variant to ensure different binary content and thus different build-id
 coolforkit_ns_CPPFLAGS = $(AM_CPPFLAGS) -DCOOL_FORKIT_VARIANT=\"ns\"
@@ -340,7 +345,8 @@ coolwsd_inproc_SOURCES = $(coolwsd_sources) \
                          wsd/coolwsd-inproc.cpp
 
 coolwsd_inproc_CPPFLAGS = $(AM_CPPFLAGS) -DENABLE_INPROC=1
-coolwsd_inproc_LDADD = libsimd.a libkitwsdglobals.a
+coolwsd_inproc_LDADD = libsimd.a libkitwsdglobals.a $(POCO_LIBS_HOST)
+coolwsd_inproc_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
 
 if !ENABLE_SSL
 coolwsd_inproc_LDADD += ${OPENSSL_LIBS}
@@ -360,7 +366,7 @@ clientnb_SOURCES = \
                    common/Util.cpp \
                    net/clientnb.cpp
 
-clientnb_LDADD = libsimd.a libglobals.a
+clientnb_LDADD = libsimd.a libglobals.a $(LDADD)
 
 coolmount_SOURCES = tools/mount.cpp \
                     common/CoolMount.cpp
@@ -380,7 +386,7 @@ coolbench_SOURCES = \
                     common/Util.cpp \
                     tools/Benchmark.cpp
 
-coolbench_LDADD = libsimd.a libglobals.a
+coolbench_LDADD = libsimd.a libglobals.a $(LDADD)
 
 coolconvert_SOURCES = tools/Tool.cpp
 
@@ -391,7 +397,7 @@ coolstress_SOURCES = tools/Stress.cpp \
                      common/DummyTraceEventEmitter.cpp \
                      $(shared_sources)
 
-coolstress_LDADD = libglobals.a
+coolstress_LDADD = libglobals.a $(LDADD)
 
 coolconfig_SOURCES = \
                     common/ConfigUtil.cpp \
@@ -411,7 +417,7 @@ coolsocketdump_SOURCES = tools/WebSocketDump.cpp \
 			 common/DummyTraceEventEmitter.cpp \
 			 $(shared_sources)
 
-coolsocketdump_LDADD = libglobals.a
+coolsocketdump_LDADD = libglobals.a $(LDADD)
 
 wsd_headers = \
               wsd/Admin.hpp \

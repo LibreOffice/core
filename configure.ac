@@ -501,6 +501,9 @@ AC_ARG_ENABLE([experimental],
 # (libPocoFoundation.a etc.), so there is never a debug 'd' suffix.
 POCO_DEBUG_SUFFIX=
 POCODEBUG=
+POCO_LIBS=
+POCO_LIBS_WHOLE=
+POCO_LIBS_HOST=
 
 ENABLE_DEBUG=false
 ENABLE_DEBUG_PROTOCOL=false
@@ -1984,18 +1987,45 @@ if test "$host_os" != "emscripten"; then
     # needs regardless of SSL; the mobile/desktop apps never reference it, so
     # link it for server builds only.  Both must come before the libraries they
     # depend on (PocoNet/PocoUtil/PocoFoundation) for static-link ordering.
+    # POCO_LIBS stays out of the global LIBS so Automake does not automatically append it to the
+    # dlopen'ed unit-test modules, where a second copy of the static lib would cause ODR violations.
     AS_IF([test "$ENABLE_SSL" = "true"],
-          [LIBS="$LIBS -lPocoNetSSL${POCO_DEBUG_SUFFIX}"])
+          [POCO_LIBS="$POCO_LIBS -lPocoNetSSL${POCO_DEBUG_SUFFIX}"])
     AS_IF([test "$mobile_app" != "true"],
-          [LIBS="$LIBS -lPocoCrypto${POCO_DEBUG_SUFFIX}"])
-    LIBS="$LIBS -lPocoNet${POCO_DEBUG_SUFFIX} -lPocoUtil${POCO_DEBUG_SUFFIX} -lPocoJSON${POCO_DEBUG_SUFFIX} -lPocoXML${POCO_DEBUG_SUFFIX} -lPocoFoundation${POCO_DEBUG_SUFFIX}"
+          [POCO_LIBS="$POCO_LIBS -lPocoCrypto${POCO_DEBUG_SUFFIX}"])
+    POCO_LIBS="$POCO_LIBS -lPocoNet${POCO_DEBUG_SUFFIX} -lPocoUtil${POCO_DEBUG_SUFFIX} -lPocoJSON${POCO_DEBUG_SUFFIX} -lPocoXML${POCO_DEBUG_SUFFIX} -lPocoFoundation${POCO_DEBUG_SUFFIX}"
     # The engine builds PocoXML against the engine's expat (unbundled), so the
     # PocoXML archive references expat and we must link it explicitly (after
-    # PocoXML for static-link ordering).  PocoFoundation bundles pcre2/zlib, so
-    # those need nothing extra here.
+    # PocoXML for static-link ordering).  It goes in the global LIBS rather than
+    # POCO_LIBS so the whole-archive hosts, which pull in all of PocoXML, get it
+    # too.  PocoFoundation bundles pcre2/zlib, so those need nothing extra here.
     AS_IF([test -n "$POCOLIB"],
           [LIBS="$LIBS -lexpat"])
+    # The whole-archive hosts also force-include PocoFoundation's SharedMemory, whose POSIX
+    # shm_open/shm_unlink live in librt before glibc 2.34 (and in libc since), so link librt on
+    # Linux:
+    AS_IF([test -n "$POCOLIB" && test "$(uname -s)" = Linux],
+          [LIBS="$LIBS -lrt"])
+    # The programs that load the unit-test modules at run time (coolwsd, forkit, and their variants)
+    # must provide the whole Poco lib, to cover whatever those dlopen'ed unit-test modules (that
+    # can't link against a static Poco lib themselves, to avoid ODR violations) use from it; with
+    # the engine's static Poco lib that means whole-archive (a -Wl flag that has to go in the
+    # programs' LDFLAGS: POCO_LIBS_WHOLE); with a system/shared Poco one shared copy already has
+    # everything, so it just goes in their LDADD (after the objects, where --as-needed keeps it:
+    # POCO_LIBS_HOST):
+    AS_IF([test -n "$POCOLIB"],
+          [poco_whole=
+           AS_IF([test "$ENABLE_SSL" = "true"],
+                 [poco_whole="$poco_whole,$POCOLIB/libPocoNetSSL${POCO_DEBUG_SUFFIX}.a"])
+           AS_IF([test "$mobile_app" != "true"],
+                 [poco_whole="$poco_whole,$POCOLIB/libPocoCrypto${POCO_DEBUG_SUFFIX}.a"])
+           poco_whole="$poco_whole,$POCOLIB/libPocoNet${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoUtil${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoJSON${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoXML${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoFoundation${POCO_DEBUG_SUFFIX}.a"
+           POCO_LIBS_WHOLE="-Wl,--whole-archive$poco_whole,--no-whole-archive"],
+          [POCO_LIBS_HOST="$POCO_LIBS"])
 fi
+AC_SUBST([POCO_LIBS])
+AC_SUBST([POCO_LIBS_WHOLE])
+AC_SUBST([POCO_LIBS_HOST])
 
 # For the fuzzer build, prefer linking Poco statically. The fuzzers are built
 # with CFI (-fsanitize=cfi); mixing a CFI-instrumented binary with the
@@ -2149,6 +2179,8 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
        # instead of bundled copies.  Detect by trying to link with
        # Poco::RegularExpression which needs PCRE2 from PocoFoundation.
        AC_MSG_CHECKING([if we need to link with PCRE2, expat and zlib (unbundled Poco)])
+       online_save_LIBS="$LIBS"
+       LIBS="$POCO_LIBS $LIBS"
        AC_LINK_IFELSE([AC_LANG_SOURCE([
        #include <Poco/RegularExpression.h>
        int main(int argc, char **argv)
@@ -2159,10 +2191,13 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
            return e.match(argv[[1]], m);
        }
        ])],
-                      [AC_MSG_RESULT([no])],
-                      [AC_MSG_RESULT([yes])
-                       PKG_CHECK_MODULES([PCRE2], [libpcre2-8])
-                       LIBS="$LIBS $PCRE2_LIBS -lexpat -lz"])
+                      [poco_unbundled=no],
+                      [poco_unbundled=yes])
+       LIBS="$online_save_LIBS"
+       AC_MSG_RESULT([$poco_unbundled])
+       AS_IF([test "$poco_unbundled" = yes],
+             [PKG_CHECK_MODULES([PCRE2], [libpcre2-8])
+              LIBS="$LIBS $PCRE2_LIBS -lexpat -lz"])
 
        ])
 

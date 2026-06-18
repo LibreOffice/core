@@ -92,6 +92,7 @@ endif
 
 coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CoolUrlSchemeHandler.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp $(cmake_list)
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
+coda_qt_LDADD = $(POCO_LIBS)
 
 metainfodir = $(datadir)/metainfo
 metainfo_DATA = com.collaboraoffice.Office.metainfo.xml
