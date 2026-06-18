@@ -623,6 +623,47 @@ def enforce_menuitem_id(current):
       if not child.attrib.get("id"):
         raise Exception(sys.argv[1] + ': menu item does not have an id set' , child.text)
 
+def collect_treeview_cell_renderers(element):
+  renderers = []
+  for child in element:
+      child_class = child.get("class")
+      if child_class and child_class.startswith("GtkCellRenderer"):
+        renderers.append(child_class)
+      renderers = renderers + collect_treeview_cell_renderers(child)
+  return renderers
+
+def collect_treeview_columns(element):
+  """Returns a nested list, containing a list of renderers used in each treeview column."""
+  columns = []
+  for child in element:
+      child_class = child.get("class")
+      if child_class and child_class == "GtkTreeViewColumn":
+          columns.append(collect_treeview_cell_renderers(child))
+      columns = columns + collect_treeview_columns(child)
+  return columns
+
+def enforce_treeview_column_rules(current):
+  # skip "vcl/uiconfig/ui/combobox.ui", only used by gtk3 vcl plugin for a custom combobox implementation
+  if sys.argv[1] == "vcl/uiconfig/ui/combobox.ui":
+    return
+
+  if not current.get("class") == "GtkTreeView":
+    for child in current:
+        enforce_treeview_column_rules(child)
+    return
+
+  columns = collect_treeview_columns(current)
+  # Ensure that the treeview has at least one column
+  if not columns:
+    raise Exception(sys.argv[1] + ": treeview has no columns: ", current.attrib.get("id"))
+
+  # If the first column makes use of special toggle and pixbuf columns
+  # to be accessed with column index -1 at the same time (see also doc in
+  # GtkInstanceTreeView ctor), make sure that the toggle column comes first,
+  # to match behavior of the vcl implementation
+  if len(columns[0]) >= 2 and columns[0][0] == "GtkCellRendererPixbuf" and columns[0][1] == "GtkCellRendererToggle":
+    raise Exception(sys.argv[1] + ": treeview has special toggle and pixbuf columns/renderers in wrong order: ", current.attrib.get("id"))
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -656,6 +697,7 @@ remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
 enforce_label_child_is_label(root)
 enforce_menuitem_id(root)
+enforce_treeview_column_rules(root)
 enforce_active_in_group_consistency(root)
 enforce_entry_text_column_id_column_for_gtkcombobox(root)
 remove_entry_shadow_type(root)
