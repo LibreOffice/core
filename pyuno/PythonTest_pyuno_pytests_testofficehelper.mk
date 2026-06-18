@@ -10,4 +10,9 @@ $(eval $(call gb_PythonTest_PythonTest,pyuno_pytests_testofficehelper))
 $(eval $(call gb_PythonTest_add_modules,pyuno_pytests_testofficehelper,$(SRCDIR)/pyuno/qa/pytests,\
     testofficehelper \
 ))
+
+$(eval $(call gb_PythonTest_set_defs,pyuno_pytests_testofficehelper,\
+    UNO_PATH="$(INSTDIR)/program" \
+))
+
 # vim: set noet sw=4 ts=4:
