@@ -40,10 +40,8 @@ namespace cppu
     client code.
 
     @param uri URI of the library
-    @param rPath deprecated, must be empty
     @param rImplName implementation to be retrieved from the library
     @param xMgr service manager to be provided to the component
-    @param xKey deprecated, must be null
     @return
     factory instance (css::lang::XSingleComponentFactory or legacy
     css::lang::XSingleServiceFactory)
@@ -51,10 +49,8 @@ namespace cppu
 CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & uri,
-    ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
-    css::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr,
-    css::uno::Reference< css::registry::XRegistryKey > const & xKey );
+    css::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr );
 
 /** Invokes component_writeInfo() function of specified component library.  You can give either
     a fully qualified libname or single lib name. The libname need not be pre/postfixed
@@ -66,14 +62,12 @@ SAL_CALL loadSharedLibComponentFactory(
     registered components, only for actively registered legacy ones.
 
     @param uri URI of the library
-    @param rPath deprecated, must be empty
     @param xMgr service manager to be provided to the component
     @param xKey registry key to be provided to the component
 */
 CPPUHELPER_DLLPUBLIC void
 SAL_CALL writeSharedLibComponentInfo(
     ::rtl::OUString const & uri,
-    ::rtl::OUString const & rPath,
     css::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr,
     css::uno::Reference< css::registry::XRegistryKey > const & xKey );
 

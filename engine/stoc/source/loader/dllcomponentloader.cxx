@@ -118,8 +118,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const Reference< XRegistryKey > & )
 {
     return loadSharedLibComponentFactory(
-        cppu::bootstrap_expandUri(rLibName), OUString(), rImplName, m_xSMgr,
-        css::uno::Reference<css::registry::XRegistryKey>());
+        cppu::bootstrap_expandUri(rLibName), rImplName, m_xSMgr);
 }
 
 
@@ -133,7 +132,7 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
     return sal_False;
 #else
     writeSharedLibComponentInfo(
-        cppu::bootstrap_expandUri(rLibName), OUString(), m_xSMgr, xKey );
+        cppu::bootstrap_expandUri(rLibName), m_xSMgr, xKey );
     return true;
 #endif
 }

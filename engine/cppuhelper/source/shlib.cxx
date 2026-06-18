@@ -355,13 +355,10 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 }
 
 css::uno::Reference<css::uno::XInterface> cppu::loadSharedLibComponentFactory(
-    OUString const & uri, OUString const & rPath,
+    OUString const & uri,
     OUString const & rImplName,
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
-    css::uno::Reference<css::registry::XRegistryKey> const & xKey)
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr)
 {
-    assert(rPath.isEmpty()); (void) rPath;
-    assert(!xKey.is()); (void) xKey;
     css::uno::Reference<css::uno::XInterface> fac;
     cppuhelper::detail::loadSharedLibComponentFactory(
         uri, u""_ustr, u""_ustr, rImplName, u""_ustr, xMgr, nullptr, &fac);
@@ -383,11 +380,10 @@ extern "C" void writeInfo(va_list * args) {
 }
 
 void cppu::writeSharedLibComponentInfo(
-    OUString const & uri, OUString const & rPath,
+    OUString const & uri,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
     css::uno::Reference<css::registry::XRegistryKey> const & xKey)
 {
-    assert(rPath.isEmpty()); (void) rPath;
     osl::Module mod(uri, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (!mod.is()) {
         throw css::registry::CannotRegisterImplementationException(
