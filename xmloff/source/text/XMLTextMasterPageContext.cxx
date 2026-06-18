@@ -103,10 +103,12 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
                 break;
             case XML_ELEMENT(STYLE, XML_IS_FIRST_PAGE_FOOTER_ENABLED):
             case XML_ELEMENT(LO_EXT, XML_IS_FIRST_PAGE_FOOTER_ENABLED):
+            case XML_ELEMENT(COL_EXT, XML_IS_FIRST_PAGE_FOOTER_ENABLED):
                 m_sIsFirstPageFooterEnabled = aValue;
                 break;
             case XML_ELEMENT(STYLE, XML_IS_FIRST_PAGE_HEADER_ENABLED):
             case XML_ELEMENT(LO_EXT, XML_IS_FIRST_PAGE_HEADER_ENABLED):
+            case XML_ELEMENT(COL_EXT, XML_IS_FIRST_PAGE_HEADER_ENABLED):
                 m_sIsFirstPageHeaderEnabled = aValue;
                 break;
             case XML_ELEMENT(DRAW, XML_STYLE_NAME):

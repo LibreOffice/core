@@ -177,6 +177,10 @@ namespace xmloff::token {
         XML_N_FIELD,
         XML_NP_FIELD,
 
+        // Collabora extensions
+        XML_NP_COL_EXT,
+        XML_N_COL_EXT,
+
         // units
         XML_UNIT_M,
         XML_UNIT_CM,
