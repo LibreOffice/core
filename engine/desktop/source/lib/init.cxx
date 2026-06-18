@@ -8902,7 +8902,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     if (osl::FileBase::getFileURLFromSystemPath(aAppPath, aAppURL) != osl::FileBase::E_None)
         return 0;
 
-    if (pUserProfileUrl && eStage != PRE_INIT)
+    if (pUserProfileUrl)
     {
         OUString url(
             pUserProfileUrl, strlen(pUserProfileUrl), RTL_TEXTENCODING_UTF8);
