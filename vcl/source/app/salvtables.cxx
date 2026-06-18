@@ -3664,21 +3664,21 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
     if (bChildrenOnDemand)
     {
         SvTreeListEntry& rPlaceHolder = InsertDummyEntry(pEntry);
-        SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(rPlaceHolder);
-        pViewData->SetSelectable(false);
+        SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(rPlaceHolder);
+        rViewData.SetSelectable(false);
     }
 
     if (bIsSeparator)
     {
-        SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(*pEntry);
-        pViewData->SetSelectable(false);
+        SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(*pEntry);
+        rViewData.SetSelectable(false);
     }
 }
 
 void SalInstanceTreeView::update_checkbutton_column_width(SvTreeListEntry& rEntry)
 {
-    SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(rEntry);
-    m_xTreeView->InitViewData(pViewData, rEntry);
+    SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(rEntry);
+    m_xTreeView->InitViewData(&rViewData, rEntry);
     m_xTreeView->CheckBoxInserted(rEntry);
 }
 
@@ -4134,8 +4134,8 @@ void SalInstanceTreeView::set_text(SvTreeListEntry& rEntry, const OUString& rTex
     if (static_cast<size_t>(col) == rEntry.ItemCount())
     {
         AddStringItem(rEntry, rText, col - 1);
-        SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(rEntry);
-        m_xTreeView->InitViewData(pViewData, rEntry);
+        SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(rEntry);
+        m_xTreeView->InitViewData(&rViewData, rEntry);
     }
     else
     {
@@ -4352,8 +4352,8 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const Image& rI
     if (static_cast<size_t>(col) == pEntry->ItemCount())
     {
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rImage, rImage, false));
-        SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(*pEntry);
-        m_xTreeView->InitViewData(pViewData, *pEntry);
+        SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(*pEntry);
+        m_xTreeView->InitViewData(&rViewData, *pEntry);
     }
     else
     {
@@ -4480,8 +4480,8 @@ void SalInstanceTreeView::do_set_children_on_demand(const weld::TreeIter& rIter,
     if (bChildrenOnDemand && !pPlaceHolder)
     {
         pPlaceHolder = &InsertDummyEntry(rVclIter.iter);
-        SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(*pPlaceHolder);
-        pViewData->SetSelectable(false);
+        SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(*pPlaceHolder);
+        rViewData.SetSelectable(false);
     }
     else if (!bChildrenOnDemand && pPlaceHolder)
         m_xTreeView->RemoveEntry(pPlaceHolder);
@@ -5002,8 +5002,8 @@ bool SalInstanceTreeView::ExpandRow(const SalInstanceTreeIter& rIter)
         if (!bRet)
         {
             pPlaceHolder = &InsertDummyEntry(pEntry);
-            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(*pPlaceHolder);
-            pViewData->SetSelectable(false);
+            SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(*pPlaceHolder);
+            rViewData.SetSelectable(false);
         }
         m_aExpandingPlaceHolderParents.erase(pEntry);
     }
@@ -5112,8 +5112,8 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
     pEntry->AddItem(std::make_unique<SvLBoxString>(sSep));
     pEntry->SetUserData(nullptr);
     m_xIconView->Insert(pEntry, nInsertPos);
-    SvViewDataEntry* pViewData = m_xIconView->GetViewDataEntry(*pEntry);
-    pViewData->SetSelectable(false);
+    SvViewDataEntry& rViewData = m_xIconView->GetViewDataEntry(*pEntry);
+    rViewData.SetSelectable(false);
 }
 
 IMPL_LINK(SalInstanceIconView, TooltipHdl, SvTreeListEntry&, rEntry, OUString)

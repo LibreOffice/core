@@ -468,7 +468,7 @@ public:
     sal_uInt32          GetChildCount( SvTreeListEntry const * pParent ) const;
     sal_uInt32          GetLevelChildCount( const SvTreeListEntry* pParent ) const;
 
-    SvViewDataEntry* GetViewDataEntry(const SvTreeListEntry& rEntry) const;
+    SvViewDataEntry& GetViewDataEntry(const SvTreeListEntry& rEntry) const;
     SvViewDataItem& GetViewDataItem(const SvTreeListEntry& rEntry, const SvLBoxItem& rItem);
     const SvViewDataItem& GetViewDataItem(const SvTreeListEntry& rEntry,
                                           const SvLBoxItem& rItem) const;

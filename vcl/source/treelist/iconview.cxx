@@ -99,12 +99,12 @@ bool IconView::HasSeparatorEntry() const
 void IconView::CalcEntryHeight(const SvTreeListEntry& rEntry)
 {
     int nHeight = nSpacing * 2;
-    SvViewDataEntry* pViewData = GetViewDataEntry(rEntry);
+    SvViewDataEntry& rViewData = GetViewDataEntry(rEntry);
     const size_t nCount = rEntry.ItemCount();
     bool bHasIcon = false;
     for (size_t nCur = 0; nCur < nCount; ++nCur)
     {
-        nHeight += SvLBoxItem::GetHeight(pViewData, nCur);
+        nHeight += SvLBoxItem::GetHeight(&rViewData, nCur);
 
         if (!bHasIcon && rEntry.GetItem(nCur).GetType() == SvLBoxItemType::ContextBmp)
             bHasIcon = true;
@@ -177,9 +177,9 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     if (aOutputSize.getHeight() < nTempEntryHeight)
         nTempEntryHeight = aOutputSize.getHeight();
 
-    const SvViewDataEntry* pViewDataEntry = GetViewDataEntry(rEntry);
+    const SvViewDataEntry& rViewDataEntry = GetViewDataEntry(rEntry);
 
-    if (pViewDataEntry->IsHighlighted())
+    if (rViewDataEntry.IsHighlighted())
     {
         vcl::Font aHighlightFont(rRenderContext.GetFont());
         const Color aHighlightTextColor(rSettings.GetHighlightTextColor());
@@ -197,7 +197,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         // set background pattern/color
         Wallpaper aWallpaper = rRenderContext.GetBackground();
 
-        if (pViewDataEntry->IsHighlighted())
+        if (rViewDataEntry.IsHighlighted())
         {
             Color aNewWallColor = rSettings.GetHighlightColor();
             // if the face color is bright then the deactivate color is also bright
@@ -241,7 +241,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         }
 
         aTextItems.push_back(nCurItem);
-        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nCurItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(&rViewDataEntry, nCurItem);
         nLabelHeight += nItemHeight;
     }
 
@@ -250,10 +250,10 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     {
         aEntryPos.setY(nLabelYPos);
 
-        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nCurItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(&rViewDataEntry, nCurItem);
         nLabelYPos += nItemHeight;
 
-        rEntry.GetItem(nCurItem).Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
+        rEntry.GetItem(nCurItem).Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
     }
 
     if (bFillColorSet)
@@ -263,8 +263,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     if (nIconItem < nItemCount)
     {
         SvLBoxItem& rItem = rEntry.GetItem(nIconItem);
-        auto nItemWidth = rItem.GetWidth(*this, pViewDataEntry, nIconItem);
-        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nIconItem);
+        auto nItemWidth = rItem.GetWidth(*this, &rViewDataEntry, nIconItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(&rViewDataEntry, nIconItem);
 
         aEntryPos.setY(nY);
 
@@ -278,7 +278,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         }
         aEntryPos.AdjustY((nImageAreaHeight - nItemHeight) / 2 + nSpacing);
 
-        rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
+        rItem.Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
     }
 }
 

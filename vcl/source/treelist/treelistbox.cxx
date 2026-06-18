@@ -1095,9 +1095,9 @@ sal_uInt32 SvTreeListBox::GetLevelChildCount( const SvTreeListEntry* _pParent ) 
     return _pParent->m_Children.size();
 }
 
-SvViewDataEntry* SvTreeListBox::GetViewDataEntry(const SvTreeListEntry& rEntry) const
+SvViewDataEntry& SvTreeListBox::GetViewDataEntry(const SvTreeListEntry& rEntry) const
 {
-    return const_cast<SvViewDataEntry*>(&GetViewData(&rEntry));
+    return const_cast<SvViewDataEntry&>(GetViewData(&rEntry));
 }
 
 SvViewDataItem& SvTreeListBox::GetViewDataItem(const SvTreeListEntry& rEntry,
@@ -2120,10 +2120,10 @@ void SvTreeListBox::CalcEntryHeight(const SvTreeListEntry& rEntry)
     short nHeightMax=0;
     sal_uInt16 nCount = rEntry.ItemCount();
     sal_uInt16 nCur = 0;
-    SvViewDataEntry* pViewData = GetViewDataEntry(rEntry);
+    SvViewDataEntry& rViewData = GetViewDataEntry(rEntry);
     while( nCur < nCount )
     {
-        auto nHeight = SvLBoxItem::GetHeight(pViewData, nCur);
+        auto nHeight = SvLBoxItem::GetHeight(&rViewData, nCur);
         if( nHeight > nHeightMax )
             nHeightMax = nHeight;
         nCur++;
@@ -2739,7 +2739,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     Size aRectSize(0, nTempEntryHeight);
 
-    SvViewDataEntry* pViewDataEntry = GetViewDataEntry(rEntry);
+    SvViewDataEntry& rViewDataEntry = GetViewDataEntry(rEntry);
     const bool bSeparator(rEntry.IsSeparator());
 
     const auto nMaxContextBmpWidthBeforeIndentIsNeeded
@@ -2802,7 +2802,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     const size_t nItemCount = rEntry.ItemCount();
 
-    const bool bEntryHighlighted = pViewDataEntry->IsHighlighted();
+    const bool bEntryHighlighted = rViewDataEntry.IsHighlighted();
     // We need to track, if the area for the image area has selection background; otherwise,
     // the symbol may be drawn using aHighlightTextColor (usually white) on white background
     bool bImageHighlighted = false;
@@ -2819,8 +2819,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         SvLBoxItem& rItem = rEntry.GetItem(nCurIndex);
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
-        Size aSize(rItem.GetWidth(*this, pViewDataEntry, nCurIndex),
-                   SvLBoxItem::GetHeight(pViewDataEntry, nCurIndex));
+        Size aSize(rItem.GetWidth(*this, &rViewDataEntry, nCurIndex),
+                   SvLBoxItem::GetHeight(&rViewDataEntry, nCurIndex));
         tools::Long nTabPos = GetTabPos(&rEntry, pTab);
 
         tools::Long nNextTabPos;
@@ -2945,7 +2945,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         // center vertically
         aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
 
-        rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
+        rItem.Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
 
         // division line between tabs (but not if this is a separator line)
         if (!bSeparator && pNextTab && rItem.GetType() == SvLBoxItemType::String &&
@@ -2959,7 +2959,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         rRenderContext.SetFillColor(aBackupColor);
     }
 
-    if (pViewDataEntry->IsDragTarget())
+    if (rViewDataEntry.IsDragTarget())
     {
         auto popIt = rRenderContext.ScopedPush();
         rRenderContext.SetLineColor(rSettings.GetDeactiveColor());
