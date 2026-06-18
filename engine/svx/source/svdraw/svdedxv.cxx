@@ -208,6 +208,16 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
 {
     SdrPageView* pPageView = SdrGlueEditView::ShowSdrPage(pPage);
 
+    // A transient HideSdrPage (e.g. rendering a tile of another part) drops the
+    // text-edit page view but keeps the text edit running. Rebind it when the
+    // page is shown again so the text selection survives.
+    if (pPageView && IsTextEdit() && !mpTextEditPV)
+    {
+        SdrObject* pEditObj = GetTextEditObject();
+        if (pEditObj && pEditObj->getSdrPageFromSdrObject() == pPage)
+            mpTextEditPV = pPageView;
+    }
+
     if (comphelper::COKit::isActive() && pPageView)
     {
         // Check if other views have an active text edit on the same page as

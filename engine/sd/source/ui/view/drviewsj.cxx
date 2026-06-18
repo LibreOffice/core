@@ -485,8 +485,14 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     {
         rSet.DisableItem(SID_SETLAYER);
         rSet.DisableItem( SID_ENTER_GROUP );
-        rSet.DisableItem( SID_CUT );
-        rSet.DisableItem( SID_COPY );
+        // Text being edited can still cut or copy its selected text with no
+        // object marked, so keep those enabled while a text selection exists.
+        OutlinerView* pTextEditOLV = mpDrawView->GetTextEditOutlinerView();
+        if (!pTextEditOLV || !pTextEditOLV->GetEditView().HasSelection())
+        {
+            rSet.DisableItem(SID_CUT);
+            rSet.DisableItem(SID_COPY);
+        }
         rSet.DisableItem( SID_DELETE );
         rSet.DisableItem( SID_ATTR_TRANSFORM );
 

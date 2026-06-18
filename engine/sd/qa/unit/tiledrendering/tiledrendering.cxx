@@ -1156,6 +1156,53 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     CPPUNIT_ASSERT(!aView2.m_bTilesInvalidated);
 }
 
+// Rendering a slide-panel preview transiently switches the part (with
+// bAllowChangeFocus false) to paint another slide and switches back. That must
+// keep the selection of a shape that is being text-edited, otherwise the next
+// copy is routed to an empty object copy and the selected text is lost.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testKeepTextSelectionAcrossTransientPartSwitch)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
+    CPPUNIT_ASSERT(pXImpressDocument->getParts() >= 2);
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+
+    // Edit the title of the first slide and select all of its text.
+    SdrObject* pTitle = pViewShell->GetActualPage()->GetObj(0);
+    pView->MarkObj(pTitle, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pTitle);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    pOutlinerView->GetEditView().SetSelection(ESelection(0, 0, 0, 11)); // "First slide"
+    CPPUNIT_ASSERT(pOutlinerView->GetEditView().HasSelection());
+
+    CPPUNIT_ASSERT(pView->GetTextEditPageView());
+
+    // Render a preview of the other slide: a transient switch to it and back.
+    pXImpressDocument->setPart(1, /*bAllowChangeFocus=*/false);
+    pXImpressDocument->setPart(0, /*bAllowChangeFocus=*/false);
+
+    // The text edit and its page-view binding survive, so the object stays a
+    // text edit with its selection. The transient render used to drop the
+    // binding here, which broke the copy and made the selection vanish.
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    CPPUNIT_ASSERT(pView->GetTextEditPageView());
+    OutlinerView* pOutlinerViewAfter = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerViewAfter);
+    CPPUNIT_ASSERT(pOutlinerViewAfter->GetEditView().HasSelection());
+
+    // Copying targets the selected text, not an empty object copy.
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, uno::Sequence<beans::PropertyValue>());
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard
+        = pOutlinerViewAfter->GetEditView().GetClipboard();
+    CPPUNIT_ASSERT_EQUAL("First slide"_ostr,
+                         apitest::helper::transferable::getTextSelection(
+                             xClipboard->getContents(), "text/plain;charset=utf-8"_ostr));
+}
+
 /**
  * tests a cut/paste bug around bullet items in a list and
  * graphic (bitmap) bullet items in a list (Tdf103083, Tdf166882)
@@ -2366,11 +2413,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideDuplicateUndo)
     // pointer, potentially leading to a crash.
     pXImpressDocument->setPart(2, /*bAllowChangeFocus=*/false);
 
-    // Make sure that view 0 now doesn't have an outdated page view pointer.
+    // The duplicate shifted the edited object's page from part 2 to part 3, so the
+    // earlier setPart(3) brought view 0 back onto that page. Its text-edit page view
+    // must therefore point at the live page view, never at a deleted one.
     KitHelper::setView(nView0);
     sd::ViewShell* pViewShell0 = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView0 = pViewShell0->GetView();
-    CPPUNIT_ASSERT(!pView0->GetTextEditPageView());
+    CPPUNIT_ASSERT(pView0->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(pView0->GetSdrPageView(), pView0->GetTextEditPageView());
 }
 
 namespace
