@@ -97,7 +97,7 @@ void SvLBoxString::Paint(
             case TxtAlign::Left:
             {
                 nStyle |= DrawTextFlags::Left;
-                aSize.setWidth(GetWidth(rDev, &rEntry));
+                aSize.setWidth(GetWidth(rDev, rEntry));
                 break;
             }
             case TxtAlign::Center:

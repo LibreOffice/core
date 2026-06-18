@@ -761,7 +761,7 @@ bool SvImpLBox::EntryReallyHit(SvTreeListEntry& rEntry, const Point& rPosPixel, 
 
     SvLBoxContextBmp* pBmp
         = static_cast<SvLBoxContextBmp*>(rEntry.GetFirstItem(SvLBoxItemType::ContextBmp));
-    aRect.AdjustLeft(-pBmp->GetWidth(m_rView, &rEntry));
+    aRect.AdjustLeft(-pBmp->GetWidth(m_rView, rEntry));
     aRect.AdjustLeft( -4 ); // a little tolerance
 
     Point aPos( rPosPixel );
@@ -2920,7 +2920,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
 
             aPos = GetEntryPosition( pEntry );
             aPos.setX(m_rView.GetTabPos(pEntry, pTab)); //pTab->GetPos();
-            Size aSize(pItem->GetWidth(m_rView, pEntry), pItem->GetHeight(m_rView, *pEntry));
+            Size aSize(pItem->GetWidth(m_rView, *pEntry), pItem->GetHeight(m_rView, *pEntry));
             SvLBoxTab* pNextTab = NextTab( pTab );
             bool bItemClipped = false;
             // is the item cut off by its right neighbor?
@@ -3008,7 +3008,7 @@ void SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
 
     tools::Long nNextTab = nTabPos < nMaxRight ? nMaxRight : nMaxRight + 50;
     tools::Long nTabWidth = nNextTab - nTabPos + 1;
-    auto nItemSize = rItem.GetWidth(m_rView, pEntry);
+    auto nItemSize = rItem.GetWidth(m_rView, *pEntry);
     tools::Long nOffset = pTab->CalcOffset( nItemSize, nTabWidth );
 
     tools::Long nRight = nTabPos + nOffset + nItemSize;
