@@ -62,6 +62,9 @@ class HTMLObjectSection extends CanvasSectionObject {
 	}
 
 	adjustHTMLObjectPosition() {
+		if (app.sectionContainer.isInZoomAnimation())
+			this.myTopLeft = [this.documentPosition.vX, this.documentPosition.vY];
+
 		const leftNumber = Math.round(this.myTopLeft[0] / app.dpiScale);
 		const topNumber = Math.round(this.myTopLeft[1] / app.dpiScale);
 

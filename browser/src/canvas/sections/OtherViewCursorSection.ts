@@ -46,6 +46,13 @@ class TextCursorSection extends HTMLObjectSection {
 		this.getHTMLObject().style.backgroundColor = this.sectionProperties.color;
 	}
 
+	onDraw(frameCount?: number, elapsedTime?: number): void {
+		// Outside a zoom animation the section container keeps document objects
+		// positioned via onNewDocumentTopLeft, so the base behaviour suffices.
+		if (app.sectionContainer.isInZoomAnimation())
+			super.onDraw(frameCount, elapsedTime);
+	}
+
 	checkMyVisibility() {
 		Util.ensureValue(app.activeDocument);
 
@@ -186,14 +193,12 @@ class TextCursorSection extends HTMLObjectSection {
 		} else return null;
 	}
 
-	public static updateVisibilities(hideCursors: boolean = false) {
+	public static updateVisibilities() {
 		for (let i = 0; i < TextCursorSection.sectionPointers.length; i++) {
 			const section = TextCursorSection.sectionPointers[i];
 			section.setShowSection(section.checkMyVisibility());
 			if (!section.showSection)
 				CursorHeaderSection.deletePopUpNow(section.sectionProperties.viewId);
-			if (hideCursors) section.getHTMLObject().style.opacity = '0';
-			else section.getHTMLObject().style.opacity = '1';
 		}
 		app.sectionContainer.requestReDraw();
 	}

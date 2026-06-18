@@ -3075,7 +3075,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (!app.file.textCursor.visible && !GraphicSelection.hasActiveSelection()) {
 			this._updateCursorAndOverlay();
-			TextCursorSection.updateVisibilities(true);
+			TextCursorSection.updateVisibilities();
 			return;
 		}
 
@@ -4126,7 +4126,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		TextSelections.hideHandles();
 
-		TextCursorSection.updateVisibilities(true);
+		TextCursorSection.updateVisibilities();
 	},
 
 	postZoomAnimation: function () {

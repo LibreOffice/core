@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -96,6 +96,70 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 			cy.cSetActiveFrame('#iframe1');
 			cy.cGet('#spreadsheet-tab1').click();
 			desktopHelper.assertScrollbarPosition('vertical', 400, 500);
+		});
+	});
+
+	it('Other view text cursor stays visible on a later edit', function() {
+		// The first view observes, the second view edits. The test document
+		// restores a scrolled-down position on load, so first bring the
+		// observer to A1 - otherwise the second view's A1 cursor would fall
+		// outside the observer's viewport and be legitimately hidden.
+		cy.cSetActiveFrame('#iframe1');
+		cy.getFrameWindow().then((win1) => {
+			helper.processToIdle(win1);
+		});
+		// The address input is briefly disabled during initial load, so wait
+		// for it to become editable before navigating.
+		cy.cGet(helper.addressInputSelector).should('not.be.disabled');
+		cy.cGet(helper.addressInputSelector).type('{selectAll}A1{enter}');
+		cy.getFrameWindow().then((win1) => {
+			helper.processToIdle(win1);
+		});
+
+		// First edit by the second view: enter cell edit mode, type and commit.
+		cy.cSetActiveFrame('#iframe2');
+		calcHelper.dblClickOnFirstCell();
+		helper.typeIntoDocument('first{enter}');
+		cy.getFrameWindow().then((win2) => {
+			helper.processToIdle(win2);
+		});
+
+		// Second edit by the second view: re-enter cell edit mode so a text
+		// cursor is shown again.
+		calcHelper.dblClickOnFirstCell();
+		cy.getFrameWindow().then((win2) => {
+			helper.processToIdle(win2);
+		});
+
+		// The first view must see the second view's text cursor while it edits.
+		cy.cSetActiveFrame('#iframe1');
+		cy.getFrameWindow().then((win1) => {
+			helper.processToIdle(win1);
+
+			// cy.wrap(...).should(callback) retries the callback until it
+			// passes or times out, and on timeout reports the failing
+			// assertion (with its label) instead of hanging silently.
+			cy.wrap(win1).should((win) => {
+				// Re-run the observer's own cursor-update path on every retry.
+				// In the buggy code this is _onUpdateCursor -> updateVisibilities(true),
+				// which forced every other view cursor object to opacity 0 and
+				// never restored it. Triggering it here makes the regression
+				// deterministic: a transient status: message can reset opacity
+				// to 1 and otherwise mask the bug. The fixed code no longer
+				// touches opacity, so this is a no-op for visibility.
+				win.app.map._docLayer._onUpdateCursor();
+
+				const sections = win.app.sectionContainer.sections.filter(
+					(s) => s.name.startsWith('OtherViewCursor ')
+				);
+				expect(sections.length, 'other view cursor section count').to.be.greaterThan(0);
+
+				const section = sections[0];
+				const obj = section.getHTMLObject();
+				expect(section.showSection, 'cursor showSection').to.be.true;
+				expect(obj.style.display, 'cursor div display').to.not.equal('none');
+				expect(obj.style.opacity, 'cursor div opacity').to.not.equal('0');
+			});
 		});
 	});
 });
