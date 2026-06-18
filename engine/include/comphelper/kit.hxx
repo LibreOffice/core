@@ -171,6 +171,18 @@ COMPHELPER_DLLPUBLIC void setRevealInFileManagerCallback(
 COMPHELPER_DLLPUBLIC bool canRevealInFileManager();
 COMPHELPER_DLLPUBLIC void revealInFileManager(const OUString& rURI);
 
+// Map the engine's working document URL back to the original (user-visible) one.
+// Embedders that load a working copy (e.g. macOS loads into a temp dir) record the
+// mapping when a document loads and drop it when it closes. Others record nothing,
+// so getOriginalDocumentUrl returns an empty string and callers fall back to the
+// working URL (which is already the original). The working URL is the lookup key;
+// pass a canonical main URL (this library is below tools and can't normalize URLs
+// itself), so set and get agree on the key.
+COMPHELPER_DLLPUBLIC void setOriginalDocumentUrl(const OUString& rWorkingUrl,
+                                                 const OUString& rOriginalUrl);
+COMPHELPER_DLLPUBLIC void clearOriginalDocumentUrl(const OUString& rWorkingUrl);
+COMPHELPER_DLLPUBLIC OUString getOriginalDocumentUrl(const OUString& rWorkingUrl);
+
 // These allow setting callbacks, so that set/get of a view is possible even in code that is
 // below sfx2.
 COMPHELPER_DLLPUBLIC void setViewSetter(const std::function<void(int)>& pViewSetter);

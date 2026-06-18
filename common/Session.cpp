@@ -290,6 +290,11 @@ void Session::parseDocOptions(const StringVector& tokens, int& part, std::string
             _initialClientVisibleArea = std::move(value);
             ++offset;
         }
+        else if (name == "originaldocumenturl")
+        {
+            _originalDocUrl = std::move(value);
+            ++offset;
+        }
         else if (name == "accessibilityState")
         {
             _accessibilityState = value == "true";

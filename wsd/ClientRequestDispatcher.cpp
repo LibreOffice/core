@@ -888,36 +888,38 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
     ssize_t len;
     memcpy(&len, socket->getInBuffer().data(), sizeof(ssize_t));
     const char* payload = socket->getInBuffer().data() + sizeof(ssize_t);
-    auto const space = std::string_view(payload, len).find(' ');
+    const std::string_view payloadView(payload, len);
+    auto const space = payloadView.find(' ');
     if (space != std::string_view::npos)
     {
-        // The socket buffer is not nul-terminated so we can't just call strtoull() on the number at
-        // its end, it might be followed in memory by more digits. Is there really no better way to
-        // parse the number at the end of the buffer than to copy the bytes into a nul-terminated
-        // buffer?
-        const size_t appDocIdLen = len - (space + 1);
-        char* appDocIdBuffer = (char*)malloc(appDocIdLen + 1);
-        memcpy(appDocIdBuffer, payload + space + 1, appDocIdLen);
-        appDocIdBuffer[appDocIdLen] = '\0';
-        auto [mobileAppDocId, docIdOk] = NumUtil::u64FromString(appDocIdBuffer);
+        // The message is "<url> <appDocId>" and, optionally, a third "<originalUrl>"
+        // token: the URL of the file the user actually opened, when the embedder
+        // loaded a working copy under a different URL (the macOS app loads from a
+        // temp dir). URLs are percent-encoded, so a space reliably separates tokens.
+        const std::string_view rest = payloadView.substr(space + 1);
+        const auto space2 = rest.find(' ');
+        const std::string_view appDocIdView
+            = space2 == std::string_view::npos ? rest : rest.substr(0, space2);
+        const std::string originalDocUrl
+            = space2 == std::string_view::npos ? std::string() : std::string(rest.substr(space2 + 1));
+
+        auto [mobileAppDocId, docIdOk] = NumUtil::u64FromString(appDocIdView);
         if (!docIdOk)
         {
             mobileAppDocId = 0;
-            LOG_ERR("Bad document ID \"" << appDocIdBuffer << "\" in \""
-                                         << std::string_view(payload, len) << "\"");
+            LOG_ERR("Bad document ID \"" << appDocIdView << "\" in \"" << payloadView << "\"");
         }
-        free(appDocIdBuffer);
 
         handleClientWsUpgrade(request,
-                              RequestDetails(std::string(payload, space)),
-                              disposition, socket, mobileAppDocId);
+                              RequestDetails(std::string(payloadView.substr(0, space))),
+                              disposition, socket, mobileAppDocId, originalDocUrl);
     }
     else
     {
         // no appDocId provided
         handleClientWsUpgrade(
             request,
-            RequestDetails(std::string(payload, len)),
+            RequestDetails(std::string(payloadView)),
             disposition, socket);
     }
     socket->getInBuffer().clear();
@@ -2526,7 +2528,8 @@ bool ClientRequestDispatcher::handleClientWsUpgrade(const Poco::Net::HTTPRequest
                                                     const RequestDetails& requestDetails,
                                                     SocketDisposition& disposition,
                                                     const std::shared_ptr<StreamSocket>& socket,
-                                                    unsigned mobileAppDocId)
+                                                    unsigned mobileAppDocId,
+                                                    const std::string& originalDocUrl)
 {
     const std::string url = requestDetails.getDocumentURI();
     assert(socket && "Must have a valid socket");
@@ -2588,7 +2591,8 @@ bool ClientRequestDispatcher::handleClientWsUpgrade(const Poco::Net::HTTPRequest
 
         // We have the client's WS and we either got the proactive CheckFileInfo
         // results, which we can use, or we need to issue a new async CheckFileInfo.
-        _rvs->handleRequest(_id, requestDetails, ws, socket, mobileAppDocId, disposition);
+        _rvs->handleRequest(_id, requestDetails, ws, socket, mobileAppDocId, originalDocUrl,
+                            disposition);
         return false; // async keep alive
     }
     catch (const std::exception& exc)

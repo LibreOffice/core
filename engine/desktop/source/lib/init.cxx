@@ -185,6 +185,7 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/urlobj.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -2742,6 +2743,14 @@ static void doc_destroy(COKitDocument *pThis)
 #endif
 
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    // Drop any original-document-URL mapping recorded for this document at load,
+    // keyed by the same canonical main URL used when it was set.
+    uno::Reference<frame::XModel> xModel(pDocument->mxComponent, uno::UNO_QUERY);
+    if (xModel.is())
+        comphelper::COKit::clearOriginalDocumentUrl(
+            INetURLObject(xModel->getURL()).GetMainURL(INetURLObject::DecodeMechanism::NONE));
+
     delete pDocument;
 }
 
@@ -3040,6 +3049,23 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
                 aRectangle.Height = aTokens[3].toInt32();
                 comphelper::COKit::setInitialClientVisibleArea(aRectangle);
             }
+        }
+
+        // The embedder may load a working copy under a different URL than the file
+        // the user opened (the macOS app loads from a temp dir). When it tells us
+        // the original URL, remember it against this working URL so the Properties
+        // dialog can show and reveal the real location. The value was percent-escaped
+        // for the comma-separated options string, so decode it back.
+        OUString aOriginalDocumentUrl = extractParameter(aOptions, u"OriginalDocumentUrl");
+        if (!aOriginalDocumentUrl.isEmpty())
+        {
+            aOriginalDocumentUrl = rtl::Uri::decode(aOriginalDocumentUrl, rtl_UriDecodeWithCharset,
+                                                    RTL_TEXTENCODING_UTF8);
+            // Key by the canonical main URL, matching how the Properties dialog
+            // looks it up (INetURLObject::GetMainURL with no decoding).
+            const OUString aWorkingKey
+                = INetURLObject(aURL).GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            comphelper::COKit::setOriginalDocumentUrl(aWorkingKey, aOriginalDocumentUrl);
         }
 
 #if defined(ANDROID) && HAVE_FEATURE_ANDROID_KIT

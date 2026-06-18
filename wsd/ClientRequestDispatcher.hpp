@@ -166,7 +166,8 @@ private:
     bool handleClientWsUpgrade(const Poco::Net::HTTPRequest& request,
                                const RequestDetails& requestDetails, SocketDisposition& disposition,
                                const std::shared_ptr<StreamSocket>& socket,
-                               unsigned mobileAppDocId = 0);
+                               unsigned mobileAppDocId = 0,
+                               const std::string& originalDocUrl = std::string());
 
     /// Lookup cached file content.
     static const std::string& getFileContent(const std::string& filename);

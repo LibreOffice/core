@@ -2265,6 +2265,11 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             oss << " clientvisiblearea=" << getInitialClientVisibleArea();
         }
 
+        if (!getOriginalDocUrl().empty())
+        {
+            oss << " originaldocumenturl=" << getOriginalDocUrl();
+        }
+
         if (ConfigUtil::getConfigValue<bool>("accessibility.enable", Util::isMobileApp()))
         {
             oss << " accessibilityState=" << getAccessibilityState();

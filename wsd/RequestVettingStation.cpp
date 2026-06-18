@@ -228,13 +228,15 @@ void RequestVettingStation::handleRequest(const std::string& id,
                                           const RequestDetails& requestDetails,
                                           const std::shared_ptr<WebSocketHandler>& ws,
                                           const std::shared_ptr<StreamSocket>& socket,
-                                          unsigned mobileAppDocId, SocketDisposition& /*disposition*/)
+                                          unsigned mobileAppDocId, const std::string& originalDocUrl,
+                                          SocketDisposition& /*disposition*/)
 {
     _id = id;
     _requestDetails = requestDetails;
     _ws = ws;
     _socket = socket;
     _mobileAppDocId = mobileAppDocId;
+    _originalDocUrl = originalDocUrl;
 
     std::string url = _requestDetails.getDocumentURI();
 
@@ -524,6 +526,7 @@ void RequestVettingStation::createClientSession(const std::shared_ptr<DocumentBr
     docBroker->setupTransfer(*_poll, socket,
         [wopiFileInfo = std::move(wopiFileInfo), ws = std::move(ws), id = _id,
          requestDetails = _requestDetails, docBroker, docKey, url, uriPublic,
+         originalDocUrl = _originalDocUrl,
          selfLifecycle = shared_from_this()](const std::shared_ptr<Socket>& moveSocket)
         {
             try
@@ -548,6 +551,9 @@ void RequestVettingStation::createClientSession(const std::shared_ptr<DocumentBr
                                         << "] on docKey [" << docKey << ']');
                     return;
                 }
+
+                if (!originalDocUrl.empty())
+                    clientSession->setOriginalDocUrl(originalDocUrl);
 
                 LOG_DBG_S(logPrefix << "handler is " << clientSession->getName());
 

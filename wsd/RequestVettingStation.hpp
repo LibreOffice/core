@@ -72,7 +72,7 @@ public:
     void handleRequest(const std::string& id, const RequestDetails& requestDetails,
                        const std::shared_ptr<WebSocketHandler>& ws,
                        const std::shared_ptr<StreamSocket>& socket, unsigned mobileAppDocId,
-                       SocketDisposition& disposition);
+                       const std::string& originalDocUrl, SocketDisposition& disposition);
 
 #if !MOBILEAPP
     /// Attempt to create a DocBroker and setup a transfer via disposition
@@ -125,6 +125,7 @@ private:
     std::chrono::steady_clock::time_point _checkFileInfoStart;
     std::chrono::steady_clock::time_point _checkFileInfoEnd;
     unsigned _mobileAppDocId;
+    std::string _originalDocUrl;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

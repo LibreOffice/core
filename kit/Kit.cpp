@@ -2010,6 +2010,7 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
     const std::string& userTimezone = session->getTimezone();
     const std::string& userPrivateInfo = session->getUserPrivateInfo();
     const std::string& docTemplate = session->getDocTemplate();
+    const std::string& originalDocUrl = session->getOriginalDocUrl();
     const std::string& filterOption = session->getInFilterOption();
 
     if constexpr (!Util::isMobileApp())
@@ -2037,6 +2038,16 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
 
     if (!clientVisibleArea.empty())
         options += ",ClientVisibleArea=" + clientVisibleArea;
+
+    if (!originalDocUrl.empty())
+    {
+        // The options string is comma-separated and the value is a URL that may
+        // contain a comma (and is itself percent-encoded), so escape '%' and ','
+        // here; the engine decodes it back before use.
+        std::string encoded;
+        Poco::URI::encode(originalDocUrl, "%,", encoded);
+        options += ",OriginalDocumentUrl=" + encoded;
+    }
 
     if (!userTimezone.empty())
         options += ",Timezone=" + userTimezone;
@@ -3447,7 +3458,7 @@ void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, 
     // Desktop apps can reveal the document in the native file manager; browser
     // COOL and the mobile apps cannot, so they don't register this callback (and
     // the Properties dialog hides its "Open" button accordingly).
-#if defined(_WIN32) || (defined(MACOS) && MOBILEAPP) || defined(QTAPP)
+#if defined(_WIN32) || defined(MACOSAPP) || defined(QTAPP)
     loKit->registerRevealInFileManagerCallback(reveal_in_file_manager);
 #endif
 

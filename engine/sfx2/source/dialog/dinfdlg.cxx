@@ -1184,7 +1184,17 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     else
     {
         // Desktop app (CODA) or classic desktop: show the containing folder.
-        aURL.SetSmartURL( aFile);
+        // A desktop app may load a working copy instead of the original file
+        // (e.g. macOS loads documents from a temp dir); it passes the original
+        // URL as a document load option, which we look up here so we show and
+        // reveal the real location rather than the temp copy. Embedders that load
+        // the original in place (Windows, Qt) pass nothing and we keep aFile.
+        OUString aLocationFile = aFile;
+        const OUString aOriginalUrl = comphelper::COKit::getOriginalDocumentUrl(aMainURL);
+        if (!aOriginalUrl.isEmpty())
+            aLocationFile = aOriginalUrl;
+
+        aURL.SetSmartURL( aLocationFile );
         if ( aURL.GetProtocol() == INetProtocol::File )
         {
             // Revealing in the file manager needs the file itself (so it can be

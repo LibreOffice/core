@@ -288,6 +288,13 @@ public:
 
     const std::string& getInitialClientVisibleArea() const { return _initialClientVisibleArea; }
 
+    // The original (user-visible) document URL, for embedders that load a working
+    // copy under a different URL (e.g. the macOS app loads from a temp dir). Set
+    // natively at connection time; empty otherwise. The engine uses it so the
+    // Properties dialog shows and reveals the real location, not the working copy.
+    const std::string& getOriginalDocUrl() const { return _originalDocUrl; }
+    void setOriginalDocUrl(const std::string& url) { _originalDocUrl = url; }
+
     bool getAccessibilityState() const { return _accessibilityState; }
 
     void setAccessibilityState(bool val) { _accessibilityState = val; }
@@ -448,6 +455,8 @@ private:
     std::string _macroSecurityLevel;
 
     std::string _initialClientVisibleArea;
+
+    std::string _originalDocUrl;
 
     // The url of the template file used to create the document
     std::string _docTemplate;

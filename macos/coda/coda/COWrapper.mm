@@ -219,6 +219,13 @@ static void registerAIHttpTransport()
     std::string url([[document.tempFileURL absoluteString] UTF8String]);
     // appDocId is read in ClientRequestDispatcher::handleIncomingMessage() in COOLWSD.cpp
     std::string message(url + " " + std::to_string(document.appDocId));
+    // We load a working copy from a temp dir, so pass the original file the user
+    // opened as a third token. The Online parts forward it to the engine as a
+    // document load option, so the Properties dialog shows and reveals the real
+    // location rather than the temp copy. The URL is percent-encoded (no spaces),
+    // so it stays a single token.
+    if (document.fileURL != nil)
+        message += " " + std::string([[document.fileURL absoluteString] UTF8String]);
     fakeSocketWriteQueue(document.fakeClientFd, message.c_str(), message.size());
 }
 

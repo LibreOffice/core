@@ -10,6 +10,8 @@
 #include <comphelper/kit.hxx>
 
 #include <atomic>
+#include <map>
+#include <mutex>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 
@@ -70,6 +72,15 @@ static std::function<int()> g_pMostUrgentPriorityGetter;
 static std::function<void(const char*, char*, size_t)> g_pFileSaveDialogCallback;
 
 static std::function<void(const char*)> g_pRevealInFileManagerCallback;
+
+// Maps an engine working document URL to the original (user-visible) one for
+// embedders that load a working copy (e.g. macOS loads into a temp dir). Keyed
+// by the fully decoded URL so encoding differences between how the embedder and
+// the engine spell the same file don't cause a miss. Mutated from the embedder's
+// thread when a document loads/closes and read under the SolarMutex when the
+// Properties dialog opens, so it has its own guard.
+static std::mutex g_aOriginalDocumentUrlMutex;
+static std::map<OUString, OUString> g_aOriginalDocumentUrls;
 
 static std::function<void(int)> g_pViewSetter;
 static std::function<int()> g_pViewGetter;
@@ -446,6 +457,27 @@ void revealInFileManager(const OUString& rURI)
 
     OString aURI = rURI.toUtf8();
     g_pRevealInFileManagerCallback(aURI.getStr());
+}
+
+// The key is a document URL; callers pass a canonical main URL (this library is
+// below tools, so it can't normalize URLs itself - see the header).
+void setOriginalDocumentUrl(const OUString& rWorkingUrl, const OUString& rOriginalUrl)
+{
+    std::scoped_lock aLock(g_aOriginalDocumentUrlMutex);
+    g_aOriginalDocumentUrls[rWorkingUrl] = rOriginalUrl;
+}
+
+void clearOriginalDocumentUrl(const OUString& rWorkingUrl)
+{
+    std::scoped_lock aLock(g_aOriginalDocumentUrlMutex);
+    g_aOriginalDocumentUrls.erase(rWorkingUrl);
+}
+
+OUString getOriginalDocumentUrl(const OUString& rWorkingUrl)
+{
+    std::scoped_lock aLock(g_aOriginalDocumentUrlMutex);
+    std::map<OUString, OUString>::const_iterator it = g_aOriginalDocumentUrls.find(rWorkingUrl);
+    return it == g_aOriginalDocumentUrls.end() ? OUString() : it->second;
 }
 
 void setViewSetter(const std::function<void(int)>& pViewSetter)
