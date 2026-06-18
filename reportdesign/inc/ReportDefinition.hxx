@@ -177,6 +177,8 @@ namespace reportdesign
             create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
         css::uno::Reference< css::uno::XComponentContext > getContext();
+        void setUseRPTTags(bool bUseRPTTags);
+        bool getUseRPTTags();
 
     private:
         /** abstract SdrModel provider */

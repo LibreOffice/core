@@ -120,8 +120,7 @@ namespace rptui
         if (getType() == BindType::Expression)
         {
             const OUString& sCompleteFormula = getExpression();
-            const OUString sBeginParenth = u"("_ustr;
-            sal_Int32 nBeginParenthIndex = sCompleteFormula.indexOf(sBeginParenth);
+            const sal_Int32 nBeginParenthIndex = sCompleteFormula.indexOf('(');
             if (nBeginParenthIndex == -1)
                 return sCompleteFormula;
             return sCompleteFormula.copy(0, nBeginParenthIndex);

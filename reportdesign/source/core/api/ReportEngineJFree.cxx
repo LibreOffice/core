@@ -227,6 +227,23 @@ OUString OReportEngineJFree::getNewOutputName()
         {
              sOutputName = sFileURL;
         }
+        // Store to temp file because it may contain information which isn't in the
+        // database yet. xTemp is updated in-place; aConvertedProperties holds
+        // references to xTemp/xOut so it picks up the changes.
+        m_pReport->storeToStorage(xTemp, aEmpty);
+        xJob->execute(aConvertedProperties);
+        if ( xStorageProp.is() )
+        {
+             sOutputName = sFileURL;
+        }
+    }
+    else // using C++ ReportBuilder
+    {
+        m_pReport->setUseRPTTags(false);
+        m_pReport->storeToStorage(xOut, aEmpty);
+        m_pReport->setUseRPTTags(true);
+        if ( xStorageProp.is() )
+            sOutputName = sFileURL;
     }
 
     uno::Reference<embed::XTransactedObject> xTransact(xOut,uno::UNO_QUERY);

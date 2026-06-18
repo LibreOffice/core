@@ -511,6 +511,7 @@ struct OReportDefinitionImpl
     bool                                                    m_bModified;
     bool                                                    m_bEscapeProcessing;
     bool                                                    m_bSetModifiedEnabled;
+    bool                                                    m_bUseRPTTags;
 
     explicit OReportDefinitionImpl(::osl::Mutex& _aMutex)
     :m_aStorageChangeListeners(_aMutex)
@@ -531,6 +532,7 @@ struct OReportDefinitionImpl
     ,m_bModified(false)
     ,m_bEscapeProcessing(true)
     ,m_bSetModifiedEnabled( true )
+    ,m_bUseRPTTags(true)
     {}
 };
 
@@ -1303,6 +1305,11 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         static constexpr OUString sPropName = u"MediaType"_ustr;
         OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
+        if (m_pImpl->m_bUseRPTTags) // save a report
+        {
+            if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
+                xProp->setPropertyValue( sPropName, uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT) );
+        }
     }
 
     /** property map for export info set */
@@ -1340,31 +1347,61 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     pDelegatorArguments[nArgsLen++] <<= xObjectResolver;
 
     uno::Reference<XComponent> xCom(getXWeak(),uno::UNO_QUERY);
+    bool bOk;
     // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
     // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
-    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
-    rtl::Reference<rptxml::ORptExecuteExport> pSettingsExporter
-        = rptxml::ORptExecuteExport::createSettingsExporter(m_aProps->m_xContext);
-    WriteThroughComponent(xCom, u"settings.xml"_ustr, pSettingsExporter, aDelegatorArguments,
+    if (m_pImpl->m_bUseRPTTags) // save a report
+    {
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
+        rtl::Reference<rptxml::ORptExport> pSettingsExporter
+            = rptxml::ORptExport::createSettingsExporter(m_aProps->m_xContext);
+        WriteThroughComponent(xCom, u"settings.xml"_ustr, pSettingsExporter, aDelegatorArguments,
                           _xStorageToSaveTo);
 
-    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"meta.xml"_ustr));
-    rtl::Reference<rptxml::ORptExecuteExport> pMetaExporter
-        = rptxml::ORptExecuteExport::createMetaExporter(m_aProps->m_xContext);
-    WriteThroughComponent(xCom, u"meta.xml"_ustr, pMetaExporter, aDelegatorArguments,
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"meta.xml"_ustr));
+        rtl::Reference<rptxml::ORptExport> pMetaExporter
+            = rptxml::ORptExport::createMetaExporter(m_aProps->m_xContext);
+        WriteThroughComponent(xCom, u"meta.xml"_ustr, pMetaExporter, aDelegatorArguments,
                           _xStorageToSaveTo);
 
-    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"styles.xml"_ustr));
-    rtl::Reference<rptxml::ORptExecuteExport> pStylesExporter
-        = rptxml::ORptExecuteExport::createStylesExporter(m_aProps->m_xContext);
-    WriteThroughComponent(xCom, u"styles.xml"_ustr, pStylesExporter, aDelegatorArguments,
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"styles.xml"_ustr));
+        rtl::Reference<rptxml::ORptExport> pStylesExporter
+            = rptxml::ORptExport::createStylesExporter(m_aProps->m_xContext);
+        WriteThroughComponent(xCom, u"styles.xml"_ustr, pStylesExporter, aDelegatorArguments,
                           _xStorageToSaveTo);
 
-    xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
-    rtl::Reference<rptxml::ORptExecuteExport> pExportFilter
-        = rptxml::ORptExecuteExport::createExportFilter(m_aProps->m_xContext);
-    bool bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, pExportFilter, aDelegatorArguments,
-                                     _xStorageToSaveTo);
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
+        rtl::Reference<rptxml::ORptExport> pExportFilter
+            = rptxml::ORptExport::createExportFilter(m_aProps->m_xContext);
+        bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, pExportFilter, aDelegatorArguments,
+                          _xStorageToSaveTo);
+    }
+    else // execute a report
+    {
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
+        rtl::Reference<rptxml::ORptExecuteExport> pSettingsExporter
+            = rptxml::ORptExecuteExport::createSettingsExporter(m_aProps->m_xContext);
+        WriteThroughComponent(xCom, u"settings.xml"_ustr, pSettingsExporter, aDelegatorArguments,
+                          _xStorageToSaveTo);
+
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"meta.xml"_ustr));
+        rtl::Reference<rptxml::ORptExecuteExport> pMetaExporter
+            = rptxml::ORptExecuteExport::createMetaExporter(m_aProps->m_xContext);
+        WriteThroughComponent(xCom, u"meta.xml"_ustr, pMetaExporter, aDelegatorArguments,
+                          _xStorageToSaveTo);
+
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"styles.xml"_ustr));
+        rtl::Reference<rptxml::ORptExecuteExport> pStylesExporter
+            = rptxml::ORptExecuteExport::createStylesExporter(m_aProps->m_xContext);
+        WriteThroughComponent(xCom, u"styles.xml"_ustr, pStylesExporter, aDelegatorArguments,
+                          _xStorageToSaveTo);
+
+        xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
+        rtl::Reference<rptxml::ORptExecuteExport> pExportFilter
+            = rptxml::ORptExecuteExport::createExportFilter(m_aProps->m_xContext);
+        bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, pExportFilter, aDelegatorArguments,
+                          _xStorageToSaveTo);
+    }
 
     uno::Any aImage;
     uno::Reference< embed::XVisualObject > xCurrentController(getCurrentController(),uno::UNO_QUERY);
@@ -2619,6 +2656,14 @@ uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoMana
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_pImpl->m_pUndoManager;
+}
+
+void OReportDefinition::setUseRPTTags(bool bUseRPTTags) {
+    m_pImpl->m_bUseRPTTags = bUseRPTTags;
+}
+
+bool OReportDefinition::getUseRPTTags() {
+    return m_pImpl->m_bUseRPTTags;
 }
 
 }// namespace reportdesign

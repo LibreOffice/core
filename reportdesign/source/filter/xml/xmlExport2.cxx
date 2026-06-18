@@ -31,9 +31,7 @@
 #include <com/sun/star/report/XFunction.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 
-// Putting these here for now in case some are not needed
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -43,7 +41,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/anytostring.hxx>
 #include <reportformula.hxx>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -66,21 +63,28 @@ ORptExecuteExport::ORptExecuteExport(const Reference<XComponentContext>& _rxCont
                                      SvXMLExportFlags nExportFlag)
     : ORptExport(_rxContext, implementationName, nExportFlag)
 {
-    // Get XFormulaParser
+    // The FormulaParser service requires a Calc document context.
+    // Keep the hidden document alive for the lifetime of this exporter.
     uno::Reference<lang::XMultiComponentFactory> xFactory = _rxContext->getServiceManager();
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xFactory, uno::UNO_QUERY);
-    css::uno::Reference<::css::lang::XComponent> xCalcComponent(
+    m_xCalcComponent.set(
         xServiceFactory->createInstance(u"com.sun.star.comp.Calc.SpreadsheetDocument"_ustr),
         css::uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiServiceFactory> xSM(xCalcComponent, css::uno::UNO_QUERY_THROW);
-    Reference<css::sheet::XFormulaParser> xFormulaParser(
-        xSM->createInstance(u"com.sun.star.sheet.FormulaParser"_ustr), UNO_QUERY);
-    m_xFormulaParser = xFormulaParser;
+    uno::Reference<lang::XMultiServiceFactory> xSM(m_xCalcComponent, css::uno::UNO_QUERY_THROW);
+    m_xFormulaParser.set(xSM->createInstance(u"com.sun.star.sheet.FormulaParser"_ustr), UNO_QUERY);
 
     Reference<XPropertySet> xParserProps(m_xFormulaParser, uno::UNO_QUERY);
     xParserProps->setPropertyValue(u"FormulaConvention"_ustr,
                                    uno::Any(css::sheet::AddressConvention::XL_OOX));
     xParserProps->setPropertyValue(u"RefConventionChartOOXML"_ustr, uno::Any(true));
+}
+
+ORptExecuteExport::~ORptExecuteExport()
+{
+    // Release the FormulaParser before disposing the Calc document it depends on
+    m_xFormulaParser.clear();
+    if (m_xCalcComponent.is())
+        m_xCalcComponent->dispose();
 }
 
 void ORptExecuteExport::exportReport(const Reference<XReportDefinition>& _xReportDefinition)
@@ -237,11 +241,13 @@ void ORptExecuteExport::handleTextElement(const Reference<XServiceInfo>& xElemen
 
             rptui::ReportFormula aFormula(xReportElement->getDataField());
 
+            // Field
             if (aFormula.getType() == rptui::ReportFormula::BindType::Field && aFormula.isValid())
                 GetTextParagraphExport()->exportCharacterData(
                     m_xRow->getString(getColumnNum(aFormula.getFieldName(), m_xRow)),
                     bPrevCharIsSpace);
 
+            // Expression
             if (aFormula.getType() == rptui::ReportFormula::BindType::Expression
                 && aFormula.isValid())
             {
@@ -267,10 +273,10 @@ void ORptExecuteExport::handleTextElement(const Reference<XServiceInfo>& xElemen
                         aFormulaCopy.insert(nBeginBracketIndex,
                                             m_xRow->getString(getColumnNum(sFieldName, m_xRow)));
                     }
-                    bPageSet = exportFormula(aFormulaCopy.toString(), aFormula);
+                    bPageSet = exportFormula(aFormulaCopy.toString());
                 }
                 else
-                    bPageSet = exportFormula(aFormula.getExpression(), aFormula);
+                    bPageSet = exportFormula(aFormula.getExpression());
             }
             if (bPageSet)
                 eToken = XML_FIXED_CONTENT;
@@ -283,7 +289,7 @@ void ORptExecuteExport::handleTextElement(const Reference<XServiceInfo>& xElemen
     }
 }
 
-bool ORptExecuteExport::exportFormula(const OUString& _sFormula, rptui::ReportFormula& aFormula)
+bool ORptExecuteExport::exportFormula(const OUString& _sFormula)
 {
     const OUString sFieldData = ORptExport::convertFormula(_sFormula);
 
@@ -312,10 +318,17 @@ bool ORptExecuteExport::exportFormula(const OUString& _sFormula, rptui::ReportFo
 
     if (!bRet)
     {
-        Any aAnswer = callFunction(aParams, aFormula.getFormulaName());
-        bool bPrevCharIsSpace = false;
-        OUString aRet = getStringFromAny(aAnswer);
-        GetTextParagraphExport()->exportCharacterData(aRet, bPrevCharIsSpace);
+        // Extract the function name from the actual formula string being evaluated,
+        // not from the original (possibly unsubstituted) ReportFormula object
+        const sal_Int32 nParen = _sFormula.indexOf('(');
+        if (nParen != -1)
+        {
+            const OUString sFuncName = _sFormula.copy(0, nParen);
+            Any aAnswer = callFunction(aParams, sFuncName);
+            bool bPrevCharIsSpace = false;
+            OUString aRet = getStringFromAny(aAnswer);
+            GetTextParagraphExport()->exportCharacterData(aRet, bPrevCharIsSpace);
+        }
     }
 
     return bRet;
@@ -562,18 +575,19 @@ ORptExecuteExport::createExportFilter(const Reference<XComponentContext>& rxCont
 sal_Int32 ORptExecuteExport::getColumnNum(std::u16string_view sColumnName, Reference<XRow>& xRow)
 {
     Reference<sdbcx::XColumnsSupplier> xColumns(xRow, UNO_QUERY);
+    if (!xColumns.is())
+        return -1;
     Reference<container::XNameAccess> xColumnAccess(xColumns->getColumns());
     Sequence<OUString> sColumnNames = xColumnAccess->getElementNames();
-    sal_Int16 columnNum = -1;
     for (sal_Int32 i = 0; i < sColumnNames.getLength(); i++)
     {
         if (sColumnNames[i] == sColumnName)
             return i + 1; //database columns start at 1
     }
-    return columnNum;
+    return -1;
 }
 
-// A helper function to build a list of comma seperated Column Names
+// A helper function to build a list of comma-separated Column Names
 // To be used in a SQL statement
 OUString
 ORptExecuteExport::getColumnNameString(const Reference<XReportDefinition>& _xReportDefinition)
