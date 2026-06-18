@@ -115,6 +115,24 @@ namespace rptui
         return "=" + getUndecoratedContent();
     }
 
+    OUString ReportFormula::getFormulaName() const
+    {
+        if (getType() == BindType::Expression)
+        {
+            const OUString& sCompleteFormula = getExpression();
+            const OUString sBeginParenth = u"("_ustr;
+            sal_Int32 nBeginParenthIndex = sCompleteFormula.indexOf(sBeginParenth);
+            if (nBeginParenthIndex == -1)
+                return sCompleteFormula;
+            return sCompleteFormula.copy(0, nBeginParenthIndex);
+        }
+        return u""_ustr;
+    }
+
+    bool ReportFormula::containsBracketedField() const
+    {
+        return m_sCompleteFormula.indexOf(u"[") != -1 && m_sCompleteFormula.indexOf(u"]") != -1;
+    }
 
 } // namespace rptui
 

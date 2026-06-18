@@ -95,6 +95,8 @@ namespace rptui
             which indicates a field or an expression.
         */
         OUString getBracketedFieldOrExpression() const;
+        OUString getFormulaName() const;
+        bool containsBracketedField() const;
     };
 
 
