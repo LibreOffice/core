@@ -1263,6 +1263,14 @@ img.context-menu-icon {
 	padding-inline: 4px;
 }
 
+/* The edit container is a grid cell and stretches to the row height, so its
+   input would otherwise sit at the top. Center the input vertically so it
+   lines up with the combo boxes and buttons beside it in the same row. */
+.jsdialog-window .ui-edit-container {
+	display: flex;
+	align-items: center;
+}
+
 .ui-treeview-search-input.jsdialog.ui-edit {
 	line-height: var(--default-height);
 }
