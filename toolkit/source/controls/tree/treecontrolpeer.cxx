@@ -1508,7 +1508,7 @@ void UnoTreeListItem::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry
                                    SvViewDataItem* pViewData)
 {
     if( !pViewData )
-        pViewData = &rView.GetViewDataItem(&rEntry, *this);
+        pViewData = &rView.GetViewDataItem(rEntry, *this);
 
     Size aSize(maImage.GetSizePixel());
     pViewData->mnWidth = aSize.Width();

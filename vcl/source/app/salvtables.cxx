@@ -4039,7 +4039,7 @@ void SalInstanceTreeView::bulk_insert_for_each(
         for (size_t j = 0; j < nFixedWidths; ++j)
         {
             SvLBoxItem& rItem = aVclIter.iter->GetItem(j + nExtraCols);
-            SvViewDataItem& rViewDataItem = m_xTreeView->GetViewDataItem(aVclIter.iter, rItem);
+            SvViewDataItem& rViewDataItem = m_xTreeView->GetViewDataItem(*aVclIter.iter, rItem);
             rViewDataItem.mnWidth = (*pFixedWidths)[j];
         }
     }

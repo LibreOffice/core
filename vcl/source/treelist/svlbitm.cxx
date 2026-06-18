@@ -152,7 +152,7 @@ void SvLBoxString::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                                 SvViewDataItem* pViewData)
 {
     if( !pViewData )
-        pViewData = &rView.GetViewDataItem(&rEntry, *this);
+        pViewData = &rView.GetViewDataItem(rEntry, *this);
 
     if (rEntry.IsSeparator())
     {
@@ -214,7 +214,7 @@ void SvLBoxContextBmp::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntr
                                     SvViewDataItem* pViewData)
 {
     if( !pViewData )
-        pViewData = &rView.GetViewDataItem(&rEntry, *this);
+        pViewData = &rView.GetViewDataItem(rEntry, *this);
     Size aSize = m_aImage1.GetSizePixel();
     pViewData->mnWidth = aSize.Width();
     pViewData->mnHeight = aSize.Height();

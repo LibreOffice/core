@@ -216,7 +216,7 @@ void SvLBoxButton::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                                 SvViewDataItem* pViewData)
 {
     if (!pViewData)
-        pViewData = &rView.GetViewDataItem(&rEntry, *this);
+        pViewData = &rView.GetViewDataItem(rEntry, *this);
     Size aSize = m_rData.GetSize();
 
     ControlType eCtrlType = (m_rData.IsRadio()) ? ControlType::Radiobutton : ControlType::Checkbox;

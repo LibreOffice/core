@@ -469,8 +469,9 @@ public:
     sal_uInt32          GetLevelChildCount( const SvTreeListEntry* pParent ) const;
 
     SvViewDataEntry* GetViewDataEntry(const SvTreeListEntry& rEntry) const;
-    SvViewDataItem& GetViewDataItem(SvTreeListEntry const*, const SvLBoxItem&);
-    const SvViewDataItem& GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem&) const;
+    SvViewDataItem& GetViewDataItem(const SvTreeListEntry& rEntry, const SvLBoxItem& rItem);
+    const SvViewDataItem& GetViewDataItem(const SvTreeListEntry& rEntry,
+                                          const SvLBoxItem& rItem) const;
 
     OUString GetEntryTooltip(SvTreeListEntry& rEntry) const;
 
