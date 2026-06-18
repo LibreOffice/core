@@ -57,11 +57,6 @@
 #define OSL_DEBUG_LEVEL 0
 #endif
 
-/** @internal The macro OSL_LOG_PREFIX is intended to be an office internal macro for now
-    @deprecated superseded by (C++ only) SAL_WHERE
-*/
-#define OSL_LOG_PREFIX SAL_DETAIL_WHERE
-
 /** Prints trace message.
 
     The arguments have the same meaning as the arguments of printf.

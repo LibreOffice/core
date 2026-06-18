@@ -367,7 +367,7 @@ TaskManager::startTask(
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
-        throw DuplicateCommandIdentifierException( OSL_LOG_PREFIX );
+        throw DuplicateCommandIdentifierException();
     }
     m_aTaskMap.emplace( CommandId, TaskHandling( xCommandEnv ));
 }
