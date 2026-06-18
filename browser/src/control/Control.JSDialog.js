@@ -218,7 +218,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			return;
 
 		app.layoutingService.appendLayoutingTask(() => {
-			if (!dialog.lastFocusedElement) {
+			if (!dialog.lastFocusedElement || dialog.lastFocusedElement === document.body) {
 				this.map.focus();
 				return;
 			}
@@ -227,9 +227,12 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				if (dialog.lastFocusedElement.isConnected) {
 					dialog.lastFocusedElement.focus();
 				} else {
-					var focusId = document.getElementById(dialog.lastFocusedElementId);
+					var focusId = dialog.lastFocusedElementId ?
+						document.getElementById(dialog.lastFocusedElementId) : null;
 					if (focusId) {
 						focusId.focus();
+					} else {
+						this.map.focus();
 					}
 				}
 			}
@@ -968,8 +971,11 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			instance.lastFocusedElement = this.dialogs[instance.id].lastFocusedElement;
 			instance.lastFocusedElementId = this.dialogs[instance.id].lastFocusedElementId;
 		} else if (!this.dialogs[instance.id] || !this.dialogs[instance.id].lastFocusedElement) { // Avoid to reset while updates.
-			instance.lastFocusedElement = document.activeElement;
-			instance.lastFocusedElementId = document.activeElement.id;
+			var activeElement = document.activeElement;
+			if (activeElement && activeElement !== document.body) {
+				instance.lastFocusedElement = activeElement;
+				instance.lastFocusedElementId = activeElement.id;
+			}
 		}
 
 		instance.callback = e.callback;
