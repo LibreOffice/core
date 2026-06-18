@@ -58,14 +58,12 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListEntry
     friend class SvTreeList;
     friend class SvTreeListBox;
 
-    typedef std::vector<std::unique_ptr<SvLBoxItem>> ItemsType;
-
     SvTreeListEntry*    pParent;
     SvTreeListEntries   m_Children;
     sal_uInt32          nAbsPos;
     sal_uInt32          nListPos;
     sal_uInt32          mnExtraIndent;
-    ItemsType           m_Items;
+    std::vector<std::unique_ptr<SvLBoxItem>> m_Items;
     OUString* pUserData;
     SvTLEntryFlags      nEntryFlags;
     std::optional<Color> mxTextColor;

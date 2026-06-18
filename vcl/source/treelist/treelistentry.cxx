@@ -172,20 +172,19 @@ public:
 
 const SvLBoxItem* SvTreeListEntry::GetFirstItem(SvLBoxItemType eType) const
 {
-    ItemsType::const_iterator it = std::find_if(m_Items.begin(), m_Items.end(), FindByType(eType));
+    auto it = std::find_if(m_Items.begin(), m_Items.end(), FindByType(eType));
     return (it == m_Items.end()) ? nullptr : (*it).get();
 }
 
 SvLBoxItem* SvTreeListEntry::GetFirstItem(SvLBoxItemType eType)
 {
-    ItemsType::iterator it = std::find_if(m_Items.begin(), m_Items.end(), FindByType(eType));
+    auto it = std::find_if(m_Items.begin(), m_Items.end(), FindByType(eType));
     return (it == m_Items.end()) ? nullptr : (*it).get();
 }
 
 size_t SvTreeListEntry::GetPos(const SvLBoxItem& rItem) const
 {
-    ItemsType::const_iterator it
-        = std::find_if(m_Items.begin(), m_Items.end(), FindByPointer(&rItem));
+    auto it = std::find_if(m_Items.begin(), m_Items.end(), FindByPointer(&rItem));
     assert(it != m_Items.end() && "item not found");
     return std::distance(m_Items.begin(), it);
 }
