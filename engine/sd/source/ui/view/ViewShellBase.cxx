@@ -78,6 +78,10 @@
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <editeng/editview.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
+#include <vcl/EnumContext.hxx>
 #include <tools/svborder.hxx>
 #include <o3tl/unreachable.hxx>
 
@@ -834,6 +838,28 @@ SdrView* ViewShellBase::GetDrawView() const
         return pShell->GetDrawView ();
 
     return nullptr;
+}
+
+std::vector<OUString> ViewShellBase::GetParentContextNames() const
+{
+    std::vector<OUString> aParents;
+
+    // While text inside a shape is edited the primary context is the text
+    // context, which maps to the home tab. Report the shape context too so the
+    // Shape tab stays available. A table carries its own context that already
+    // covers its text, and an OLE object owns the ribbon during in-place edit,
+    // so leave those out.
+    SdrView* pView = GetDrawView();
+    if (pView && pView->IsTextEdit())
+    {
+        const SdrObject* pObj = pView->GetTextEditObject();
+        if (pObj && pObj->GetObjIdentifier() != SdrObjKind::Table
+            && pObj->GetObjIdentifier() != SdrObjKind::OLE2)
+            aParents.push_back(
+                vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));
+    }
+
+    return aParents;
 }
 
 void ViewShellBase::SetBusyState (bool bBusy)

@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
+var impressHelper = require('../../common/impress_helper');
 
 describe(['tagdesktop'], 'Notebookbar tests', function() {
 	var newFilePath;
@@ -68,5 +69,24 @@ describe(['tagdesktop'], 'Notebookbar tests', function() {
 			var selected = $dropdown.find('.ui-grid-cell.selected');
 			expect(selected.length, 'selected layout cells').to.be.lessThan(2);
 		});
+	});
+});
+
+describe(['tagdesktop'], 'Notebookbar contextual tabs (Impress)', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('impress/top_toolbar.odp');
+		desktopHelper.switchUIToNotebookbar();
+		desktopHelper.hideSidebarImpress();
+	});
+
+	it('Shape tab stays available while editing shape text', function() {
+		// Select the text shape in the center of the slide.
+		impressHelper.selectTextShapeInTheCenter();
+
+		// Enter text edit inside the shape. The Shape tab must stay offered so
+		// the shape can still be formatted while its text is edited.
+		impressHelper.dblclickOnSelectedShape();
+		cy.cGet('#Shape-tab-label').should('be.visible');
 	});
 });
