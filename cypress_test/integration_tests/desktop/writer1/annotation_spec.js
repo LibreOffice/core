@@ -451,6 +451,92 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		helper.textSelectionShouldExist();
 	});
 
+	it('Right-click inside commented region opens the context menu', function() {
+		// A Writer comment overlays the commented passage with a
+		// CommentSection. A right-click there must be forwarded to
+		// MouseControl so core produces the document context menu, instead
+		// of the section swallowing the event. This exercises
+		// Comment.onContextMenu's delegation to MouseControl.onContextMenu.
+
+		// 50% zoom (set in beforeEach) makes the highlight too small for a
+		// reliable click, so switch to 100%.
+		desktopHelper.selectZoomLevel('100', false);
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		// Lay down a passage and select a word so the comment anchors to a
+		// real range with a usable highlight rectangle.
+		helper.typeIntoDocument('Hello world from this test document.{enter}');
+		helper.typeIntoDocument('{ctrl}{home}');
+		for (var i = 0; i < 5; ++i)
+			helper.typeIntoDocument('{shift}{rightArrow}');
+		helper.textSelectionShouldExist();
+
+		desktopHelper.insertComment('context-menu-test', true);
+		cy.cGet('.cool-annotation-content-wrapper').should('exist');
+
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		// Spy on MouseControl - the right-click must be delegated here.
+		cy.getFrameWindow().then(function(win) {
+			cy.spy(win.app.activeDocument.mouseControl, 'onContextMenu').as('mcContext');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			var commentList = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			var comment = commentList.sectionProperties.commentList[0];
+			expect(comment, 'comment must exist').to.exist;
+			expect(comment.sectionProperties.data.rectangles,
+				'comment must own a highlight rectangle').to.exist;
+			var rects = comment.sectionProperties.data.rectangles;
+			expect(rects.length, 'at least one rectangle').to.be.greaterThan(0);
+			var rect = rects[0];
+
+			var canvas = win.document.getElementById('document-canvas');
+			var bounds = canvas.getBoundingClientRect();
+
+			// v1X/v1Y are view pixels inside the canvas (viewport offset
+			// baked in); /dpiScale -> CSS pixels.
+			var cssCenterX = ((rect.v1X + rect.v2X) / 2) / win.app.dpiScale;
+			var cssCenterY = ((rect.v1Y + rect.v4Y) / 2) / win.app.dpiScale;
+			var clientX = bounds.left + cssCenterX;
+			var clientY = bounds.top + cssCenterY;
+
+			// First a plain click on the commented word, so the mouse
+			// cursor is placed inside the highlight before we right-click.
+			// mouseenter primes mouseIsInside; the container's mousedown
+			// short-circuits otherwise.
+			canvas.dispatchEvent(new win.MouseEvent('mouseenter', {
+				clientX: clientX, clientY: clientY, button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mousedown', {
+				clientX: clientX, clientY: clientY, button: 0, bubbles: true,
+			}));
+			win.document.dispatchEvent(new win.MouseEvent('mouseup', {
+				clientX: clientX, clientY: clientY, button: 0, bubbles: true,
+			}));
+
+			// Now right-click the same spot. The canvas oncontextmenu
+			// handler routes this to the CommentSection.
+			canvas.dispatchEvent(new win.MouseEvent('contextmenu', {
+				clientX: clientX, clientY: clientY, button: 2, bubbles: true,
+				cancelable: true,
+			}));
+		});
+
+		// The right-click must have flowed through MouseControl. Without
+		// the CommentSection delegation, the spy stays silent because the
+		// section consumed the event.
+		cy.get('@mcContext').should('have.been.called');
+
+		// And core must have produced the document context menu.
+		cy.cGet('#jsd-context-menu-dropdown-overlay').should('be.visible');
+	});
+
 	it('Action_GoToComment postMessage returns error for invalid comment', function() {
 		// Stub postMessage to capture the response.
 		cy.getFrameWindow().then(win => {
