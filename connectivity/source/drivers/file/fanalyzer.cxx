@@ -67,7 +67,11 @@ void OSQLAnalyzer::start(OSQLParseNode const * pSQLParseNode)
                     ||  SQL_ISRULE(pColumnRef,num_value_exp)
                     ||  SQL_ISRULE(pColumnRef,term)
                     ||  SQL_ISRULE(pColumnRef,factor)
-                    ||  SQL_ISRULE(pColumnRef,set_fct_spec) )
+                    ||  SQL_ISRULE(pColumnRef,set_fct_spec)
+                    // tdf#65685 - treat literal constants in the SELECT list as leaf nodes rather than rules
+                    ||  pColumnRef->getNodeType() == SQLNodeType::String
+                    ||  pColumnRef->getNodeType() == SQLNodeType::IntNum
+                    ||  pColumnRef->getNodeType() == SQLNodeType::ApproxNum )
                 {
                     ::rtl::Reference<OPredicateCompiler>        pCompiler = new OPredicateCompiler(this);
                     pCompiler->setOrigColumns(m_aCompiler->getOrigColumns());
