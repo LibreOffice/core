@@ -19,7 +19,7 @@
     <string name="storage_permission_required">Необхідний дозвіл на збереження</string>
     <string name="file_creation_failed">Не вдалось створити файл</string>
     <string name="file_exists_warning">Файл з такою назвою вже існує і буде перезаписаний.</string>
-    <string name="temp_file_saving_disabled">Цей файл лише для читання, збереження неможливе.</string>
+    <string name="temp_file_saving_disabled">Цей файл лише для читання за оригінальнім додатком. Використовуйте \"Редагувати копію\" щоб зробити зміни.</string>
     <string name="no_items">Немає елементів</string>
     <string name="no_recent_items">Відкрийте файл за допомогою піктограми теки на панелі інструментів.</string>
     <string name="app_vendor">Цей випуск надано $VENDOR.</string>
