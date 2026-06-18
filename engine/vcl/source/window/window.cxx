@@ -3382,6 +3382,13 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("halign", "end");
     }
 
+    // Emit hexpand as a self-property (like halign above) so single-widget
+    // updates keep the expand hint; otherwise it is only added by the parent
+    // when dumping the whole children tree, and a standalone widget update
+    // would lose it (e.g. an entry shrinking to its default char width).
+    if (get_hexpand())
+        rJsonWriter.put("hexpand", true);
+
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {
         auto childrenNode = rJsonWriter.startArray("children");

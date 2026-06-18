@@ -254,7 +254,13 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 }
                 else if (sAction == "toggle")
                 {
-                    KitTrigger::trigger_toggled(dynamic_cast<weld::Toggleable&>(*pWidget));
+                    // Flip the active state to reflect the click before
+                    // notifying, so get_active() in the toggled handler is correct.
+                    if (weld::Toggleable* pToggleable = dynamic_cast<weld::Toggleable*>(pWidget))
+                    {
+                        pToggleable->set_active(!pToggleable->get_active());
+                        KitTrigger::trigger_toggled(*pToggleable);
+                    }
                     return true;
                 }
                 else if (sAction == "keypress")

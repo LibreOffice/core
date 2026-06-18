@@ -1293,6 +1293,12 @@ void JSEntry::set_width_chars(int nChars)
     sendUpdate();
 }
 
+void JSEntry::set_visibility(bool bVisible)
+{
+    SalInstanceEntry::set_visibility(bVisible);
+    sendUpdate();
+}
+
 JSListBox::JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
                      bool bTakeOwnership)
     : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(pSender, pListBox, pBuilder,
