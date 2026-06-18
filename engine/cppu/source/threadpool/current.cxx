@@ -45,7 +45,7 @@ static typelib_InterfaceTypeDescription * impl_get_type_XCurrentContext()
     typelib_typedescriptionreference_new(&pMembers[0], typelib_TypeClass_INTERFACE_METHOD,
                                          sMethodName0.pData);
     typelib_typedescription_newInterface(
-        &pTD, sTypeName.pData, 0, 0, 0, 0, 0,
+        &pTD, sTypeName.pData,
         *typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE), 1, pMembers);
 
     typelib_typedescription_register(reinterpret_cast<typelib_TypeDescription**>(&pTD));

@@ -369,8 +369,7 @@ void freeTypeDescription(typelib_TypeDescription const * desc) {
     delete[] reinterpret_cast<char const *>(desc);
 }
 
-// In some situations (notably typelib_typedescription_newInterfaceMethod and
-// typelib_typedescription_newInterfaceAttribute), only the members nMembers,
+// In some situations (notably typelib_typedescription_newInterfaceMethod), only the members nMembers,
 // ppMembers, nAllMembers, and ppAllMembers of an incomplete interface type
 // description are necessary, but not the additional
 // pMapMemberIndexToFunctionIndex, nMapFunctionIndexToMemberIndex, and
@@ -816,15 +815,12 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
 extern "C" void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
-    SAL_UNUSED_PARAMETER sal_uInt32, SAL_UNUSED_PARAMETER sal_uInt16,
-    SAL_UNUSED_PARAMETER sal_uInt16, SAL_UNUSED_PARAMETER sal_uInt32,
-    SAL_UNUSED_PARAMETER sal_uInt32,
     typelib_TypeDescriptionReference * pBaseInterface,
     sal_Int32 nMembers,
     typelib_TypeDescriptionReference ** ppMembers ) noexcept
 {
     typelib_typedescription_newMIInterface(
-        ppRet, pTypeName, 0, 0, 0, 0, 0, pBaseInterface == nullptr ? 0 : 1,
+        ppRet, pTypeName, pBaseInterface == nullptr ? 0 : 1,
         &pBaseInterface, nMembers, ppMembers);
 }
 
@@ -903,9 +899,6 @@ void BaseList::calculate(
 extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
-    SAL_UNUSED_PARAMETER sal_uInt32, SAL_UNUSED_PARAMETER sal_uInt16,
-    SAL_UNUSED_PARAMETER sal_uInt16, SAL_UNUSED_PARAMETER sal_uInt32,
-    SAL_UNUSED_PARAMETER sal_uInt32,
     sal_Int32 nBaseInterfaces,
     typelib_TypeDescriptionReference ** ppBaseInterfaces,
     sal_Int32 nMembers,
@@ -942,12 +935,6 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
     if (nBaseInterfaces > 0) {
         pITD->pBaseTypeDescription = pITD->ppBaseTypes[0];
     }
-    // set the
-    pITD->aUik.m_Data1 = 0;
-    pITD->aUik.m_Data2 = 0;
-    pITD->aUik.m_Data3 = 0;
-    pITD->aUik.m_Data4 = 0;
-    pITD->aUik.m_Data5 = 0;
 
     BaseList aBaseList(pITD);
     pITD->nAllMembers = nMembers + aBaseList.getBaseMembers();
@@ -1103,20 +1090,6 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
         - (pInterface->nAllMembers - pInterface->nMembers);
     static_assert( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE_METHOD ) );
     assert(reinterpret_cast<typelib_TypeDescription *>(*ppRet)->pWeakRef == nullptr);
-}
-
-
-extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
-    typelib_InterfaceAttributeTypeDescription ** ppRet,
-    sal_Int32 nAbsolutePosition,
-    rtl_uString * pTypeName,
-    typelib_TypeClass eAttributeTypeClass,
-    rtl_uString * pAttributeTypeName,
-    sal_Bool bReadOnly ) noexcept
-{
-    typelib_typedescription_newExtendedInterfaceAttribute(
-        ppRet, nAbsolutePosition, pTypeName, eAttributeTypeClass,
-        pAttributeTypeName, bReadOnly, 0, nullptr, 0, nullptr);
 }
 
 
@@ -2244,11 +2217,6 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_assign(
         ::typelib_typedescriptionreference_release( *ppDest );
         *ppDest = pSource;
     }
-}
-
-
-extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 ) noexcept
-{
 }
 
 

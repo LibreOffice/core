@@ -174,7 +174,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                         &pMembers[2], typelib_TypeClass_INTERFACE_METHOD, sMethodName2.pData );
 
                     ::typelib_typedescription_newInterface(
-                        &pTD, sTypeName.pData, 0, 0, 0, 0, 0, nullptr, 3, pMembers );
+                        &pTD, sTypeName.pData, nullptr, 3, pMembers );
 
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription **>(&pTD) );
                     s_aTypes[typelib_TypeClass_INTERFACE] = pTD->aBase.pWeakRef;

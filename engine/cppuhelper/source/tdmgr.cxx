@@ -345,7 +345,6 @@ static typelib_TypeDescription * createCTD(
         typelib_typedescription_newMIInterface(
             reinterpret_cast<typelib_InterfaceTypeDescription **>(&pRet),
             aTypeName.pData,
-            0, 0, 0, 0, 0,
             nBases, pBaseTypeRefs,
             nMembers, ppMemberRefs );
 

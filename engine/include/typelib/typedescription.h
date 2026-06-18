@@ -362,12 +362,6 @@ typedef struct SAL_DLLPUBLIC_RTTI _typelib_InterfaceTypeDescription
         use nBaseTypes and ppBaseTypes instead
     */
     struct _typelib_InterfaceTypeDescription *  pBaseTypeDescription;
-    /** unique identifier of interface
-
-        @deprecated
-        should always contain all-zeros
-    */
-    typelib_Uik                                 aUik;
     /** number of members
     */
     sal_Int32                                   nMembers;
@@ -520,11 +514,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
 
     @param ppRet inout interface type description
     @param pTypeName the fully qualified name of the interface.
-    @param nUik1 uik part; deprecated and ignored, should always be 0
-    @param nUik2 uik part; deprecated and ignored, should always be 0
-    @param nUik3 uik part; deprecated and ignored, should always be 0
-    @param nUik4 uik part; deprecated and ignored, should always be 0
-    @param nUik5 uik part; deprecated and ignored, should always be 0
     @param pBaseInterface base interface type, else 0
     @param nMembers number of members
     @param ppMembers members; attributes or methods
@@ -535,7 +524,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
-    sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
     typelib_TypeDescriptionReference * pBaseInterface,
     sal_Int32 nMembers,
     typelib_TypeDescriptionReference ** ppMembers )
@@ -545,11 +533,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
 
     @param ppRet inout interface type description
     @param pTypeName the fully qualified name of the interface.
-    @param nUik1 uik part; deprecated and ignored, should always be 0
-    @param nUik2 uik part; deprecated and ignored, should always be 0
-    @param nUik3 uik part; deprecated and ignored, should always be 0
-    @param nUik4 uik part; deprecated and ignored, should always be 0
-    @param nUik5 uik part; deprecated and ignored, should always be 0
     @param nBaseInterfaces number of base interface types
     @param ppBaseInterfaces base interface types
     @param nMembers number of members
@@ -558,7 +541,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
-    sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
     sal_Int32 nBaseInterfaces,
     typelib_TypeDescriptionReference ** ppBaseInterfaces,
     sal_Int32 nMembers,
@@ -589,28 +571,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceMethod(
     typelib_Parameter_Init * pParams,
     sal_Int32 nExceptions,
     rtl_uString ** ppExceptionNames )
-    SAL_THROW_EXTERN_C();
-
-/** Creates an interface attribute type description.
-
-    @param ppRet inout attribute type description
-    @param nAbsolutePosition position of this attribute including all members of base interfaces
-    @param pAttributeName fully qualified name of attribute including interface
-    name
-    @param eAttributeTypeClass type class of attribute type
-    @param pAttributeTypeName type name of attribute type
-    @param bReadOnly determines whether attribute is read-only
-
-    @deprecated
-    use typelib_typedescription_newExtendedInterfaceAttribute instead
-*/
-CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceAttribute(
-    typelib_InterfaceAttributeTypeDescription ** ppRet,
-    sal_Int32 nAbsolutePosition,
-    rtl_uString * pAttributeName,
-    typelib_TypeClass eAttributeTypeClass,
-    rtl_uString * pAttributeTypeName,
-    sal_Bool bReadOnly )
     SAL_THROW_EXTERN_C();
 
 /** Creates an extended interface attribute type description.
@@ -682,16 +642,6 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_equals(
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_getByName(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
-    SAL_THROW_EXTERN_C();
-
-/** Sets size of type description cache.
-
-    @param nNewSize new size of cache
-
-    @deprecated  Do not use, it does not have any effect.
-*/
-CPPU_DLLPUBLIC void SAL_CALL typelib_setCacheSize(
-    sal_Int32 nNewSize )
     SAL_THROW_EXTERN_C();
 
 /** Function pointer declaration of callback function get additional descriptions. Callbacks
