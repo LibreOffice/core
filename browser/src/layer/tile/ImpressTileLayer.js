@@ -150,7 +150,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 		if (mode !== this._lastReportedViewMode) {
 			this._lastReportedViewMode = mode;
-			app.socket.sendMessage('updateviewmode mode=' + mode);
+			// updateviewmode persists the choice through the WOPI host. The
+			// native app builds have no WOPI host and no handler for it, so
+			// the bridge rejects it as an unknown command.
+			if (!window.ThisIsAMobileApp)
+				app.socket.sendMessage('updateviewmode mode=' + mode);
 		}
 	},
 
