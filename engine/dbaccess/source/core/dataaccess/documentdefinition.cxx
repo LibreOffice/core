@@ -902,10 +902,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     Reference< XModule > xModule( xModel, UNO_QUERY );
     if ( xModule.is() )
     {
-        if ( m_bForm )
-            xModule->setIdentifier( u"com.sun.star.sdb.FormDesign"_ustr );
-        else
-            xModule->setIdentifier( u"com.sun.star.text.TextDocument"_ustr );
+        xModule->setIdentifier( u"com.sun.star.text.TextDocument"_ustr );
 
         updateDocumentTitle();
     }

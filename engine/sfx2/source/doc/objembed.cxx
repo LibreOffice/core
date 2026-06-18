@@ -88,8 +88,7 @@ void SfxObjectShell::SetVisArea( const tools::Rectangle & rVisArea )
             if (IsEnableSetModified()
                 // Base forms use EMBEDDED but they actually live in their own
                 // frame - resizing that shouldn't set it to modified.
-                && pImpl->pBaseModel
-                && pImpl->pBaseModel->getIdentifier() != "com.sun.star.sdb.FormDesign")
+                && pImpl->pBaseModel)
             {
                 SetModified();
             }

@@ -264,8 +264,7 @@ bool SfxObjectShell::IsEnableSetModified() const
         // tdf#157931 form documents only in design mode
         && ((pImpl->pBaseModel
                 && !pImpl->pBaseModel->impl_isDisposed()
-                && pImpl->pBaseModel->IsInitialized()
-                && pImpl->pBaseModel->getIdentifier() != "com.sun.star.sdb.FormDesign")
+                && pImpl->pBaseModel->IsInitialized())
             || !IsReadOnly());
 }
 

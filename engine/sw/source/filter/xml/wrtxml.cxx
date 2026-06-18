@@ -323,22 +323,6 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     }
 
     bool bStoreMeta = ( SfxObjectCreateMode::EMBEDDED != m_pDoc->GetDocShell()->GetCreateMode() );
-    if ( !bStoreMeta )
-    {
-        try
-        {
-            Reference< frame::XModule > xModule( xModelComp, UNO_QUERY );
-            if ( xModule.is() )
-            {
-                const OUString aModuleID = xModule->getIdentifier();
-                bStoreMeta = !aModuleID.isEmpty() &&
-                    ( aModuleID == "com.sun.star.sdb.FormDesign" );
-            }
-        }
-        catch( uno::Exception& )
-        {}
-    }
-
     OUString sWarnFile;
     if( !m_bOrganizerMode && !m_bBlock && bStoreMeta )
     {

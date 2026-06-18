@@ -1003,7 +1003,6 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	$(call gb_Helper_optional,DBCONNECTIVITY,modules/spropctrlr) \
 	modules/StartModule \
 	modules/sweb \
-	modules/swform \
 	modules/swriter \
 	modules/swxform \
 	sfx \

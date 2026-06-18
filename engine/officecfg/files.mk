@@ -75,7 +75,6 @@ officecfg_XCSFILES := \
     Office/UI/WindowContentFactories \
     Office/UI/WindowState \
     Office/UI/WriterCommands \
-    Office/UI/WriterFormWindowState \
     Office/UI/WriterGlobalWindowState \
     Office/UI/WriterWebWindowState \
     Office/UI/WriterWindowState \

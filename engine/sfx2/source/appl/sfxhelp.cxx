@@ -427,8 +427,7 @@ namespace
                 || aFactoryShortName == "dbrelation"
                 || aFactoryShortName == "dbtable"
                 || aFactoryShortName == "dbapp"
-                || aFactoryShortName == "dbtdata"
-                || aFactoryShortName == "swform" )
+                || aFactoryShortName == "dbtdata" )
             aFactoryShortName = u"sdatabase"_ustr;
         else if ( aFactoryShortName == "sbibliography"
                 || aFactoryShortName == "sabpilot"
