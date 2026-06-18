@@ -40,6 +40,26 @@ SpifCategoryTag parseCategoryTag(tools::XmlWalker& rWalker)
     {
         if (rWalker.name() == "tagCategory")
             aTag.aCategories.push_back(parseTagCategory(rWalker));
+        else if (rWalker.name() == "markingQualifier")
+        {
+            rWalker.children();
+            while (rWalker.isValid())
+            {
+                if (rWalker.name() == "qualifier")
+                {
+                    const OString aCode = rWalker.attribute("qualifierCode"_ostr);
+                    const OUString aPhrase = toOU(rWalker.attribute("markingQualifier"_ostr));
+                    if (aCode == "prefix")
+                        aTag.aMarkingPrefix = aPhrase;
+                    else if (aCode == "separator")
+                        aTag.aMarkingSeparator = aPhrase;
+                    else if (aCode == "suffix")
+                        aTag.aMarkingSuffix = aPhrase;
+                }
+                rWalker.next();
+            }
+            rWalker.parent();
+        }
         rWalker.next();
     }
     rWalker.parent();

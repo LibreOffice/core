@@ -43,6 +43,9 @@ struct SpifCategoryTag
     OUString aTagType; ///< @tagType: enumerated/restrictive/permissive/tagType7/notApplicable
     OUString aEnumType; ///< @enumType when tagType=enumerated: permissive/restrictive
     bool bSingleSelection = false; ///< @singleSelection
+    OUString aMarkingPrefix; ///< markingQualifier qualifier @qualifierCode=prefix
+    OUString aMarkingSeparator; ///< qualifierCode=separator (precedes the values)
+    OUString aMarkingSuffix; ///< qualifierCode=suffix
     std::vector<SpifTagCategory> aCategories;
 };
 

@@ -44,6 +44,10 @@ void SpifPolicyTest::testParse()
       <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive" singleSelection="false">
         <spif:tagCategory name="CANADA" lacv="4407630" obsolete="false" />
         <spif:tagCategory name="UNITED KINGDOM" lacv="5591873" obsolete="false" />
+        <spif:markingQualifier markingCode="pageTopBottom">
+          <spif:qualifier markingQualifier="//" qualifierCode="separator" />
+          <spif:qualifier markingQualifier="." qualifierCode="suffix" />
+        </spif:markingQualifier>
       </spif:securityCategoryTag>
     </spif:securityCategoryTagSet>
     <spif:securityCategoryTagSet name="UK Restrictive Codeword - NTK" id="1.2.826.0.1310.1.2.0.4">
@@ -90,6 +94,8 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, rRelTag.aCategories[0].aName);
     CPPUNIT_ASSERT_EQUAL(sal_Int64(4407630), rRelTag.aCategories[0].nLacv);
     CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, rRelTag.aCategories[1].aName);
+    CPPUNIT_ASSERT_EQUAL(u"//"_ustr, rRelTag.aMarkingSeparator);
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, rRelTag.aMarkingSuffix);
 
     // lacv exceeding 32 bits must round-trip.
     const auto& rNtkTag = aPolicy.aTagSets[1].aTags[0];
