@@ -574,7 +574,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfLigatureTextFit)
     // trailing glyph dropped below the box.
     loadFromFile(u"pdf/ligature-textbox-fit.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setFilterOptions(u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr);
     setImportFilterName(TestFilter::FODG);
     saveAndReload(TestFilter::FODG);
 
