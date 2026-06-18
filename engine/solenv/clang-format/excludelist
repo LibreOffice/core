@@ -3255,9 +3255,6 @@ extensions/source/bibliography/loadlisteneradapter.cxx
 extensions/source/bibliography/loadlisteneradapter.hxx
 extensions/source/bibliography/toolbar.cxx
 extensions/source/bibliography/toolbar.hxx
-extensions/source/config/ldap/ldapaccess.cxx
-extensions/source/config/ldap/ldapuserprofilebe.cxx
-extensions/source/config/ldap/ldapuserprofilebe.hxx
 extensions/source/dbpilots/commonpagesdbp.cxx
 extensions/source/dbpilots/commonpagesdbp.hxx
 extensions/source/dbpilots/controlwizard.cxx

@@ -12,9 +12,6 @@ excludelist:
     - com/sun/star/awt/XWindow.hpp
     # Actually used
     - com/sun/star/beans/PropertyValue.hpp
-    extensions/source/config/ldap/ldapaccess.cxx:
-    # Needed on WIN32
-    - o3tl/char16_t2wchar_t.hxx
     extensions/source/dbpilots/listcombowizard.cxx:
     # Actually used
     - com/sun/star/container/XNameAccess.hpp
