@@ -698,7 +698,7 @@ void SvTreeListBox::ActionMoved()
 void SvTreeListBox::ActionInserted(SvTreeListEntry& rEntry)
 {
     SvViewDataEntry aData;
-    InitViewData(&aData, rEntry);
+    InitViewData(aData, rEntry);
     std::pair<SvDataTable::iterator, bool> aSuccess
         = m_DataTable.insert(std::make_pair(&rEntry, std::move(aData)));
     DBG_ASSERT(aSuccess.second, "Entry already in View");
@@ -723,7 +723,7 @@ void SvTreeListBox::ActionInsertedTree(SvTreeListEntry& rEntry)
     {
         DBG_ASSERT(m_DataTable.find(pCurEntry) != m_DataTable.end(), "Entry already in Table");
         SvViewDataEntry aViewData;
-        InitViewData(&aViewData, rEntry);
+        InitViewData(aViewData, rEntry);
         m_DataTable.insert(std::make_pair(pCurEntry, std::move(aViewData)));
         pCurEntry = m_pModel->Next(pCurEntry);
         if (pCurEntry && m_pModel->GetDepth(pCurEntry) <= nRefDepth)
@@ -1124,15 +1124,15 @@ OUString SvTreeListBox::GetEntryTooltip(SvTreeListEntry& rEntry) const
     return rEntry.GetToolTip();
 }
 
-void SvTreeListBox::InitViewData(SvViewDataEntry* pData, SvTreeListEntry& rEntry)
+void SvTreeListBox::InitViewData(SvViewDataEntry& rViewData, SvTreeListEntry& rEntry)
 {
-    pData->Init(rEntry.ItemCount());
+    rViewData.Init(rEntry.ItemCount());
     sal_uInt16 nCount = rEntry.ItemCount();
     sal_uInt16 nCurPos = 0;
     while( nCurPos < nCount )
     {
         SvLBoxItem& rItem = rEntry.GetItem(nCurPos);
-        SvViewDataItem& rItemData = pData->GetItem(nCurPos);
+        SvViewDataItem& rItemData = rViewData.GetItem(nCurPos);
         rItem.InitViewData(*this, rEntry, &rItemData);
         nCurPos++;
     }
