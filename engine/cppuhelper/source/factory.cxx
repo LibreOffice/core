@@ -706,82 +706,6 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification()
     return retVal;
 }
 
-namespace {
-
-class OFactoryProxyHelper : public WeakImplHelper< XServiceInfo, XSingleServiceFactory,
-                                                    XUnloadingPreference >
-{
-    Reference<XSingleServiceFactory >   xFactory;
-
-public:
-
-    explicit OFactoryProxyHelper( const Reference<XSingleServiceFactory > & rFactory )
-        : xFactory( rFactory )
-        {}
-
-    // XSingleServiceFactory
-    Reference<XInterface > SAL_CALL createInstance() override;
-    Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments) override;
-
-    // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    //XUnloadingPreference
-    sal_Bool SAL_CALL releaseOnNotification() override;
-
-};
-
-}
-
-// XSingleServiceFactory
-Reference<XInterface > OFactoryProxyHelper::createInstance()
-{
-    return xFactory->createInstance();
-}
-
-// XSingleServiceFactory
-Reference<XInterface > OFactoryProxyHelper::createInstanceWithArguments
-(
-    const Sequence<Any>& Arguments
-)
-{
-    return xFactory->createInstanceWithArguments( Arguments );
-}
-
-// XServiceInfo
-OUString OFactoryProxyHelper::getImplementationName()
-{
-    Reference<XServiceInfo > xInfo( xFactory, UNO_QUERY  );
-    if( xInfo.is() )
-        return xInfo->getImplementationName();
-    return OUString();
-}
-
-// XServiceInfo
-sal_Bool OFactoryProxyHelper::supportsService(const OUString& ServiceName)
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
-// XServiceInfo
-Sequence< OUString > OFactoryProxyHelper::getSupportedServiceNames()
-{
-    Reference<XServiceInfo > xInfo( xFactory, UNO_QUERY  );
-    if( xInfo.is() )
-        return xInfo->getSupportedServiceNames();
-    return Sequence< OUString >();
-}
-
-sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification()
-{
-
-    Reference<XUnloadingPreference> pref( xFactory, UNO_QUERY);
-    if( pref.is())
-        return pref->releaseOnNotification();
-    return true;
-}
-
 // global function
 Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
@@ -792,14 +716,6 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
 {
     return new OFactoryComponentHelper(
         rServiceManager, rImplementationName, pCreateFunction, nullptr, &rServiceNames, false );
-}
-
-// global function
-Reference<XSingleServiceFactory > SAL_CALL createFactoryProxy(
-    SAL_UNUSED_PARAMETER const Reference<XMultiServiceFactory > &,
-    const Reference<XSingleServiceFactory > & rFactory )
-{
-    return new OFactoryProxyHelper( rFactory );
 }
 
 // global function
@@ -823,17 +739,6 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     return new ORegistryFactoryHelper(
         rServiceManager, rImplementationName, rImplementationKey, false );
 }
-
-// global function
-Reference<XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
-    const Reference<XMultiServiceFactory > & rServiceManager,
-    const OUString & rImplementationName,
-    const Reference<XRegistryKey > & rImplementationKey )
-{
-    return new ORegistryFactoryHelper(
-        rServiceManager, rImplementationName, rImplementationKey, true );
-}
-
 
 Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,

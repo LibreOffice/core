@@ -75,14 +75,6 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
 );
 
 /** Function pointer declaration.
-    Function retrieves a component description.
-
-    @return an XML formatted string containing a short component description
-    @deprecated
-*/
-typedef const char * (SAL_CALL * component_getDescriptionFunc)(void);
-
-/** Function pointer declaration.
 
     @deprecated component_writeInfo should no longer be used in new components
 
@@ -194,25 +186,6 @@ createSingleFactory(
     const css::uno::Sequence< ::rtl::OUString > & rServiceNames,
     rtl_ModuleCount * pModCount = NULL  );
 
-/** Deprecated.  Creates a factory wrapping another one.
-    This means the methods of the interfaces XServiceProvider, XServiceInfo and
-    XSingleServiceFactory are forwarded.
-    @attention
-    The XComponent interface is not supported!
-
-    @param rServiceManager      the service manager used by the implementation.
-    @param rFactory             the wrapped service factory.
-    @return a factory that support the interfaces XServiceProvider, XServiceInfo
-    XSingleServiceFactory.
-
-    @see createSingleFactory
-    @deprecated
-*/
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
-createFactoryProxy(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
-    const css::uno::Reference< css::lang::XSingleServiceFactory > & rFactory );
-
 /** Deprecated.  Creates a single service factory which holds the instance created only once.
 
     @param rServiceManager      the service manager used by the implementation.
@@ -248,24 +221,6 @@ CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL
 createSingleRegistryFactory(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
-    const css::uno::Reference< css::registry::XRegistryKey > & rImplementationKey );
-
-/** Deprecated.  Creates a single service factory which holds the instance created only once
-    based on a registry.
-
-    @param rServiceManager      the service manager used by the implementation.
-    @param rComponentName       the implementation name. An empty string is possible.
-    @param rImplementationKey   the registry key of the implementation section.
-    @return a factory that support the interfaces XServiceProvider, XServiceInfo
-    XSingleServiceFactory and XComponent.
-
-    @see createSingleRegistryFactory
-    @deprecated
-*/
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
-createOneInstanceRegistryFactory(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
-    const ::rtl::OUString & rComponentName,
     const css::uno::Reference< css::registry::XRegistryKey > & rImplementationKey );
 
 }
