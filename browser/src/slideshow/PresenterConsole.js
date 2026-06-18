@@ -235,7 +235,10 @@ class PresenterConsole {
 		);
 	}
 
-	_onPresentInConsole() {
+	_onPresentInConsole(e) {
+		// Remember the start slide across the notes-mode exit, which re-enters
+		// this handler with no event.
+		if (e) this._startSlide = e.startSlideNumber;
 		if (app.impress.notesMode) {
 			app.console.debug(
 				'PresenterConsole._onPresentInConsole: notes mode is enabled, exiting',
@@ -252,7 +255,9 @@ class PresenterConsole {
 		}
 
 		this._active = true;
-		this._map.fire('newpresentinwindow');
+		this._map.fire('newpresentinwindow', {
+			startSlideNumber: this._startSlide,
+		});
 		if (!this._presenter._slideShowWindowProxy) {
 			this._active = false;
 			return;

@@ -501,6 +501,15 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'command': 'presentation-currentslide',
 						'accessibility': { focusBack: true, combination: 'FC', de: null }
 					},
+					(!window.ThisIsAMobileApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled ?
+					{
+						'id': 'slide-presentation-in-console',
+						'type': 'bigcustomtoolitem',
+						'text': _('Presenter View'),
+						'tooltip': _('Shows your notes, next slide, and a timer'),
+						'command': 'presenterconsole',
+						'accessibility': { focusBack: true, combination: 'PC', de: null }
+					} : {},
 				],
 			},
 			!window.ThisIsAMobileApp || window.mode.isCODesktop() ?
@@ -523,15 +532,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'command': 'presentinwindow',
 						'accessibility': { focusBack: true, combination: 'PW', de: null }
 					} : {},
-				(!window.ThisIsAMobileApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled ?
-				{
-						'id': 'slide-presentation-in-console',
-						'type': 'bigcustomtoolitem',
-						'text': _('Presenter View'),
-						'tooltip': _('Shows your notes, next slide, and a timer'),
-						'command': 'presenterconsole',
-						'accessibility': { focusBack: true, combination: 'PC', de: null }
-					}: {},
 				!window.ThisIsAMobileApp ?
 					{
 						'id': 'slide-presentation-follow-me',

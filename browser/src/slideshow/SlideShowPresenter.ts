@@ -1336,10 +1336,13 @@ class SlideShowPresenter {
 		);
 	}
 
-	_enablePresenterConsole(state: boolean) {
+	_enablePresenterConsole(disabled: boolean) {
+		// The state handler records whatever each update carries, so send the
+		// checked state and not only the disabled flag.
 		this._map.fire('commandstatechanged', {
 			commandName: 'presenterconsole',
-			disabled: state,
+			disabled: disabled,
+			state: app.map.uiManager.isPresenterConsoleEnabled() ? 'true' : 'false',
 		});
 	}
 

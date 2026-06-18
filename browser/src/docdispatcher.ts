@@ -566,25 +566,27 @@ class Dispatcher {
 		this.actionsMap['presentation'] = this.actionsMap[
 			'fullscreen-presentation'
 		] = () => {
-			if ((window as any).canvasSlideshowEnabled)
-				app.map.fire('newfullscreen', {
-					isWelcomePresentation:
-						window.coolParams.get('welcome') === 'true' ? true : false,
-				});
-			else app.map.fire('fullscreen');
+			const isWelcomePresentation =
+				window.coolParams.get('welcome') === 'true' ? true : false;
+			if ((window as any).canvasSlideshowEnabled) {
+				// The Presenter View toggle decides whether the start buttons open
+				// the presenter console. The welcome slideshow always plays plain.
+				if (
+					!isWelcomePresentation &&
+					app.map.uiManager.isPresenterConsoleEnabled()
+				)
+					app.map.fire('newpresentinconsole', {});
+				else app.map.fire('newfullscreen', { isWelcomePresentation });
+			} else app.map.fire('fullscreen');
 		};
 
-		this.actionsMap['presentation-currentslide'] = this.actionsMap[
-			'presentation-currentslide'
-		] = () => {
-			if ((window as any).canvasSlideshowEnabled)
-				app.map.fire('newfullscreen', {
-					startSlideNumber: app.map.getCurrentPartNumber(),
-				});
-			else
-				app.map.fire('fullscreen', {
-					startSlideNumber: app.map.getCurrentPartNumber(),
-				});
+		this.actionsMap['presentation-currentslide'] = () => {
+			const startSlideNumber = app.map.getCurrentPartNumber();
+			if ((window as any).canvasSlideshowEnabled) {
+				if (app.map.uiManager.isPresenterConsoleEnabled())
+					app.map.fire('newpresentinconsole', { startSlideNumber });
+				else app.map.fire('newfullscreen', { startSlideNumber });
+			} else app.map.fire('fullscreen', { startSlideNumber });
 		};
 
 		this.actionsMap['presentinwindow'] = this.actionsMap['present-in-window'] =
@@ -619,7 +621,7 @@ class Dispatcher {
 
 		this.actionsMap['presenterconsole'] = () => {
 			if ((window as any).canvasSlideshowEnabled)
-				app.map.fire('newpresentinconsole');
+				app.map.uiManager.togglePresenterConsole();
 		};
 
 		this.actionsMap['fullscreen-drawing'] = () => {

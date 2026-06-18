@@ -117,6 +117,9 @@ class UIManager extends window.L.Control {
 		this.map['stateChangeHandler'].setItemValue('toggledarktheme', 'false');
 		this.map['stateChangeHandler'].setItemValue('invertbackground', 'false');
 		this.map['stateChangeHandler'].setItemValue('showannotations', 'true');
+		// A boolean here marks the Presenter View button as a toggle. The real
+		// value is applied per document type in initializeSpecializedUI.
+		this.map['stateChangeHandler'].setItemValue('presenterconsole', 'false');
 
 		// View Changes menu: default to Hidden, sync with core state.
 		this.map['stateChangeHandler'].setItemValue('viewchanges-hidden', 'true');
@@ -662,6 +665,9 @@ class UIManager extends window.L.Control {
 		}
 
 		this.initDarkModeFromSettings();
+
+		if (docType === 'presentation')
+			this.syncPresenterConsoleToggle(this.isPresenterConsoleEnabled());
 
 		if (docType === 'spreadsheet') {
 			this.sheetsBar = JSDialog.SheetsBar(this.map, isDesktop || window.mode.isTablet());
@@ -2811,6 +2817,32 @@ class UIManager extends window.L.Control {
 	getBooleanDocTypePref(name: string, defaultValue: boolean = false): boolean {
 		const docType = this.map.getDocType();
 		return window.prefs.getBoolean(`${docType}.${name}`, defaultValue);
+	}
+
+	/**
+	 * Whether the start-presentation buttons open the presenter console.
+	 * Defaults on for the CODA desktop app and off for browser-based online.
+	 */
+	isPresenterConsoleEnabled(): boolean {
+		return this.getBooleanDocTypePref(
+			'ShowPresenterConsole',
+			(window as any).mode.isCODesktop(),
+		);
+	}
+
+	togglePresenterConsole(): void {
+		const isOn = !this.isPresenterConsoleEnabled();
+		window.prefs.set(this.map.getDocType() + '.ShowPresenterConsole', isOn);
+		this.syncPresenterConsoleToggle(isOn);
+	}
+
+	private syncPresenterConsoleToggle(isOn: boolean): void {
+		const state = isOn ? 'true' : 'false';
+		this.map['stateChangeHandler'].setItemValue('presenterconsole', state);
+		this.map.fire('commandstatechanged', {
+			commandName: 'presenterconsole',
+			state: state,
+		});
 	}
 
 	getStartCompareChanges(): boolean {
