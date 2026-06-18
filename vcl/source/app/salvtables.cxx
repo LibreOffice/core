@@ -3643,12 +3643,12 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
     if (pIconName || pImageSurface)
     {
         Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage));
     }
     else
     {
         Image aDummy;
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy));
     }
     if (pStr)
         AddStringItem(*pEntry, *pStr, pEntry->ItemCount());
@@ -4025,7 +4025,7 @@ void SalInstanceTreeView::bulk_insert_for_each(
         aVclIter.iter = new SvTreeListEntry;
         if (bHasAutoCheckButton)
             AddStringItem(*aVclIter.iter, u""_ustr, -1);
-        aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy));
         if (bGoingToSetText)
             AddStringItem(*aVclIter.iter, u""_ustr, aVclIter.iter->ItemCount());
         m_xTreeView->Insert(aVclIter.iter, TREELIST_APPEND, pVclParent);
@@ -4351,7 +4351,7 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const Image& rI
 
     if (static_cast<size_t>(col) == pEntry->ItemCount())
     {
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rImage, rImage, false));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rImage, rImage));
         SvViewDataEntry& rViewData = m_xTreeView->GetViewDataEntry(*pEntry);
         m_xTreeView->InitViewData(rViewData, *pEntry);
     }
@@ -5071,7 +5071,7 @@ void SalInstanceIconView::do_insert(int pos, const OUString* pStr, const OUStrin
         pUserData = nullptr;
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rImage, rImage, false));
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rImage, rImage));
 
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
@@ -5108,7 +5108,7 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->SetSeparator();
     const Image aDummy;
-    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy));
     pEntry->AddItem(std::make_unique<SvLBoxString>(sSep));
     pEntry->SetUserData(nullptr);
     m_xIconView->Insert(pEntry, nInsertPos);
@@ -5160,7 +5160,7 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
     Image aImage = createImage(rIcon);
     if (pItem == nullptr)
     {
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage));
     }
     else
     {

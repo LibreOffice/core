@@ -194,10 +194,9 @@ int SvLBoxString::CalcWidth(const SvTreeListBox& rView) const
 // class SvLBoxContextBmp
 // ***************************************************************
 
-SvLBoxContextBmp::SvLBoxContextBmp(const Image& aBmp1, const Image& aBmp2, bool bExpanded)
+SvLBoxContextBmp::SvLBoxContextBmp(const Image& aBmp1, const Image& aBmp2)
     : m_aImage1(aBmp1)
     , m_aImage2(aBmp2)
-    , m_bExpanded(bExpanded)
 {
 }
 
@@ -226,7 +225,7 @@ void SvLBoxContextBmp::Paint(
 {
 
     // get the image.
-    const Image& rImage = pView->IsExpanded() != m_bExpanded ? m_aImage1 : m_aImage2;
+    const Image& rImage = !pView->IsExpanded() ? m_aImage1 : m_aImage2;
 
     bool _bSemiTransparent = bool( SvTLEntryFlags::SEMITRANSPARENT & rEntry.GetFlags( ) );
     // draw
@@ -239,8 +238,7 @@ void SvLBoxContextBmp::Paint(
 std::unique_ptr<SvLBoxItem> SvLBoxContextBmp::Clone(SvLBoxItem const * pSource) const
 {
     const SvLBoxContextBmp* pContextBmp = static_cast<const SvLBoxContextBmp*>(pSource);
-    return std::make_unique<SvLBoxContextBmp>(pContextBmp->m_aImage1, pContextBmp->m_aImage2,
-                                              pContextBmp->m_bExpanded);
+    return std::make_unique<SvLBoxContextBmp>(pContextBmp->m_aImage1, pContextBmp->m_aImage2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -124,7 +124,7 @@ SvTreeListEntry& SvTabListBox::InsertEntry(const OUString& rText, SvTreeListEntr
         pEntry->AddItem(std::make_unique<SvLBoxButton>(*m_pCheckButtonData));
     }
 
-    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), true));
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image()));
 
     pEntry->AddItem(std::make_unique<SvLBoxString>(rText));
 

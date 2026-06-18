@@ -78,7 +78,7 @@ class ImplContextGraphicItem : public SvLBoxContextBmp
 {
 public:
     ImplContextGraphicItem(Image const& rI1, Image const& rI2)
-        : SvLBoxContextBmp(rI1, rI2, true)
+        : SvLBoxContextBmp(rI1, rI2)
     {
     }
 
