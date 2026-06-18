@@ -1932,7 +1932,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     //fdo#82270 Grabbing focus can invalidate the entries, re-fetch
     SvTreeListEntry* pEntry = GetEntry(aPos);
     // the entry can still be invalid!
-    if (!pEntry || !m_rView.GetViewData(pEntry))
+    if (!pEntry)
     {
         if (!rMEvt.GetModifier() && rMEvt.IsLeft())
             SelAllDestrAnch(false); // deselect all
@@ -2817,16 +2817,14 @@ void SvImpLBox::PaintDDCursor(SvTreeListEntry* pEntry, bool bShow)
 {
     if (pEntry)
     {
-        if (SvViewDataEntry* pViewData = m_rView.GetViewData(pEntry))
-        {
-            pViewData->SetDragTarget(bShow);
+        SvViewDataEntry& rViewData = m_rView.GetViewData(pEntry);
+        rViewData.SetDragTarget(bShow);
 #ifdef MACOSX
-            // in MacOS we need to draw directly (as we are synchronous) or no invalidation happens
-            m_rView.PaintEntry1(*pEntry, GetEntryLine(pEntry), *m_rView.GetOutDev());
+        // in MacOS we need to draw directly (as we are synchronous) or no invalidation happens
+        m_rView.PaintEntry1(*pEntry, GetEntryLine(pEntry), *m_rView.GetOutDev());
 #else
-            InvalidateEntry(pEntry);
+        InvalidateEntry(pEntry);
 #endif
-        }
     }
 }
 

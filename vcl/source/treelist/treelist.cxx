@@ -506,10 +506,8 @@ sal_uInt32 SvTreeList::GetVisiblePos(const SvTreeListBox& rView,
         const_cast<SvTreeListBox&>(rView).m_nVisibleCount = 0;
         GetVisibleCount(const_cast<SvTreeListBox&>(rView));
     }
-    const SvViewDataEntry* pViewData = rView.GetViewData(pEntry);
-    if (!pViewData)
-        return 0;
-    return pViewData->nVisPos;
+    const SvViewDataEntry& rViewData = rView.GetViewData(pEntry);
+    return rViewData.nVisPos;
 }
 
 sal_uInt32 SvTreeList::GetVisibleCount(SvTreeListBox& rView) const
@@ -523,8 +521,8 @@ sal_uInt32 SvTreeList::GetVisibleCount(SvTreeListBox& rView) const
     SvTreeListEntry* pEntry = First();  // first entry is always visible
     while ( pEntry )
     {
-        if (SvViewDataEntry* pViewData = rView.GetViewData(pEntry))
-            pViewData->nVisPos = nPos;
+        SvViewDataEntry& rViewData = rView.GetViewData(pEntry);
+        rViewData.nVisPos = nPos;
         nPos++;
         pEntry = NextVisible(rView, pEntry);
     }

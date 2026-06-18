@@ -589,17 +589,15 @@ bool SvTreeListBox::HasViewData() const { return m_DataTable.size() > 1; } // Th
 
 void SvTreeListBox::ExpandListEntry(SvTreeListEntry& rEntry)
 {
-    SvViewDataEntry* pViewData = GetViewData(&rEntry);
-    if (!pViewData)
-        return;
+    SvViewDataEntry& rViewData = GetViewData(&rEntry);
 
-    if (pViewData->IsExpanded())
+    if (rViewData.IsExpanded())
         return;
 
     DBG_ASSERT(!rEntry.m_Children.empty(),
                "SvTreeList::Expand: We expected to have child entries.");
 
-    pViewData->SetExpanded(true);
+    rViewData.SetExpanded(true);
     SvTreeListEntry* pParent = rEntry.pParent;
     // if parent is visible, invalidate status data
     if (IsExpanded(pParent))
@@ -612,17 +610,15 @@ void SvTreeListBox::ExpandListEntry(SvTreeListEntry& rEntry)
 void SvTreeListBox::CollapseListEntry(SvTreeListEntry* pEntry)
 {
     assert(pEntry && "Collapse:View/Entry?");
-    SvViewDataEntry* pViewData = GetViewData(pEntry);
-    if (!pViewData)
-        return;
+    SvViewDataEntry& rViewData = GetViewData(pEntry);
 
-    if (!pViewData->IsExpanded())
+    if (!rViewData.IsExpanded())
         return;
 
     DBG_ASSERT(!pEntry->m_Children.empty(),
                "SvTreeList::Collapse: We expected to have child entries.");
 
-    pViewData->SetExpanded(false);
+    rViewData.SetExpanded(false);
 
     SvTreeListEntry* pParent = pEntry->pParent;
     if (IsExpanded(pParent))
@@ -636,27 +632,25 @@ bool SvTreeListBox::SelectListEntry(SvTreeListEntry* pEntry, bool bSelect)
 {
     DBG_ASSERT(pEntry, "Select:View/Entry?");
 
-    SvViewDataEntry* pViewData = GetViewData(pEntry);
-    if (!pViewData)
-        return false;
+    SvViewDataEntry& rViewData = GetViewData(pEntry);
 
     if (bSelect)
     {
-        if (pViewData->IsSelected() || !pViewData->IsSelectable())
+        if (rViewData.IsSelected() || !rViewData.IsSelectable())
             return false;
         else
         {
-            pViewData->SetSelected(true);
+            rViewData.SetSelected(true);
             m_nSelectionCount++;
         }
     }
     else
     {
-        if (!pViewData->IsSelected())
+        if (!rViewData.IsSelected())
             return false;
         else
         {
-            pViewData->SetSelected(false);
+            rViewData.SetSelected(false);
             m_nSelectionCount--;
         }
     }
@@ -828,18 +822,16 @@ void SvTreeListBox::SetEntryFocus(SvTreeListEntry* pEntry, bool bFocus)
     itr->second.SetFocus(bFocus);
 }
 
-const SvViewDataEntry* SvTreeListBox::GetViewData(const SvTreeListEntry* pEntry) const
+const SvViewDataEntry& SvTreeListBox::GetViewData(const SvTreeListEntry* pEntry) const
 {
     SvDataTable::const_iterator itr = m_DataTable.find(const_cast<SvTreeListEntry*>(pEntry));
     assert(itr != m_DataTable.end() && "Entry not in model or wrong view");
-    if (itr == m_DataTable.end())
-        return nullptr;
-    return &itr->second;
+    return itr->second;
 }
 
-SvViewDataEntry* SvTreeListBox::GetViewData(SvTreeListEntry* pEntry)
+SvViewDataEntry& SvTreeListBox::GetViewData(SvTreeListEntry* pEntry)
 {
-    return const_cast<SvViewDataEntry*>(std::as_const(*this).GetViewData(pEntry));
+    return const_cast<SvViewDataEntry&>(std::as_const(*this).GetViewData(pEntry));
 }
 
 SvTreeListEntry* SvTreeListBox::FirstChild(const SvTreeListEntry* pParent) const
@@ -1105,7 +1097,7 @@ sal_uInt32 SvTreeListBox::GetLevelChildCount( const SvTreeListEntry* _pParent ) 
 
 SvViewDataEntry* SvTreeListBox::GetViewDataEntry(const SvTreeListEntry& rEntry) const
 {
-    return const_cast<SvViewDataEntry*>(GetViewData(&rEntry));
+    return const_cast<SvViewDataEntry*>(&GetViewData(&rEntry));
 }
 
 SvViewDataItem& SvTreeListBox::GetViewDataItem(const SvTreeListEntry& rEntry,
@@ -1118,10 +1110,9 @@ SvViewDataItem& SvTreeListBox::GetViewDataItem(const SvTreeListEntry& rEntry,
 const SvViewDataItem& SvTreeListBox::GetViewDataItem(const SvTreeListEntry& rEntry,
                                                      const SvLBoxItem& rItem) const
 {
-    const SvViewDataEntry* pEntryData = GetViewData(&rEntry);
-    assert(pEntryData && "Entry not in View");
+    const SvViewDataEntry& rEntryData = GetViewData(&rEntry);
     sal_uInt16 nItemPos = rEntry.GetPos(rItem);
-    return pEntryData->GetItem(nItemPos);
+    return rEntryData.GetItem(nItemPos);
 }
 
 OUString SvTreeListBox::GetEntryTooltip(SvTreeListEntry& rEntry) const
