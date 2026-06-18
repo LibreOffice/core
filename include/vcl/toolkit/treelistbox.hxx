@@ -339,7 +339,7 @@ protected:
 
     // InitViewData is called right after CreateViewData
     // The Entry is has not yet been added to the View in InitViewData!
-    void InitViewData(SvViewDataEntry*, SvTreeListEntry* pEntry);
+    void InitViewData(SvViewDataEntry*, SvTreeListEntry& rEntry);
     // Calls InitViewData for all Items
     void            RecalcViewData();
 

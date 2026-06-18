@@ -3678,7 +3678,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
 void SalInstanceTreeView::update_checkbutton_column_width(SvTreeListEntry& rEntry)
 {
     SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(rEntry);
-    m_xTreeView->InitViewData(pViewData, &rEntry);
+    m_xTreeView->InitViewData(pViewData, rEntry);
     m_xTreeView->CheckBoxInserted(rEntry);
 }
 
@@ -4135,7 +4135,7 @@ void SalInstanceTreeView::set_text(SvTreeListEntry& rEntry, const OUString& rTex
     {
         AddStringItem(rEntry, rText, col - 1);
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(rEntry);
-        m_xTreeView->InitViewData(pViewData, &rEntry);
+        m_xTreeView->InitViewData(pViewData, rEntry);
     }
     else
     {
@@ -4353,7 +4353,7 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const Image& rI
     {
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rImage, rImage, false));
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(*pEntry);
-        m_xTreeView->InitViewData(pViewData, pEntry);
+        m_xTreeView->InitViewData(pViewData, *pEntry);
     }
     else
     {
