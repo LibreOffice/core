@@ -80,7 +80,7 @@ public:
     typedef ::std::vector< ::std::pair< bool, TRow > >              TGrid;
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
-private:
+protected:
     TSectionsGrid                                   m_aSectionsGrid;
 
     TPropertyStyleMap                               m_aAutoStyleNames;
@@ -101,20 +101,20 @@ private:
     rtl::Reference<reportdesign::OReportDefinition> m_pReportDefinition;
     bool                                        m_bAllreadyFilled;
 
-    void                    exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
+    virtual void            exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
     void                    exportReportAttributes(const Reference<XReportDefinition>& _xReport);
     void                    exportFunctions(const Reference<XIndexAccess>& _xFunctions); /// <ref name="rpt-function"/>
     void                    exportFunction(const Reference< XFunction>& _xFunction);
     void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponent);
-    void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
-    void                    exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle = false);
-    void                    exportStyleName(XPropertySet* _xProp,comphelper::AttributeList& _rAtt,const OUString& _sName);
-    void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
+    virtual void            exportComponent(const Reference<XReportComponent>& _xReportComponent);
+    virtual void            exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle = false);
+    virtual void            exportStyleName(XPropertySet* _xProp,comphelper::AttributeList& _rAtt,const OUString& _sName);
+    virtual void            exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
     void                    exportContainer(const Reference< XSection>& _xSection);
     void                    exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph = true);
     void                    exportTableColumns(const Reference< XSection>& _xSection);
     void                    exportSectionAutoStyle(const Reference<XSection>& _xProp);
-    void                    exportReportElement(const Reference<XReportControlModel>& _xReportElement);
+    virtual void            exportReportElement(const Reference<XReportControlModel>& _xReportElement);
     void                    exportFormatConditions(const Reference<XReportControlModel>& _xReportElement);
     void                    exportAutoStyle(XPropertySet* _xProp,const Reference<XFormattedField>& _xParentFormattedField = Reference<XFormattedField>());
     void                    exportAutoStyle(const Reference<XSection>& _xProp);
@@ -126,7 +126,7 @@ private:
     bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula);
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
     static OUString  convertFormula(const OUString& _sFormula);
-    void                    handleTextElement(const Reference<XServiceInfo>& xElement, bool bShapeHandled,
+    virtual void            handleTextElement(const Reference<XServiceInfo>& xElement, bool bShapeHandled,
                                               const Reference< XSection>& _xSection);
     void                    handleNumberFormat(const Reference<XFormattedField>& xFormattedField);
     void                    handleEToken(const Reference<XReportControlModel>& xReportElement,
@@ -135,7 +135,6 @@ private:
 
     virtual void                    SetBodyAttributes() override;
 
-protected:
 
     virtual void                    ExportStyles_( bool bUsed ) override;
     virtual void                    ExportAutoStyles_() override;
@@ -164,6 +163,9 @@ public:
     createMetaExporter(const Reference<XComponentContext>& rxContext);
     static rtl::Reference<ORptExport>
     createExportFilter(const Reference<XComponentContext>& rxContext);
+
+    static void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid);
+    static void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns);
 };
 
 

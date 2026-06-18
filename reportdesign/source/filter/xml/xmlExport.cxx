@@ -41,6 +41,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <RptDef.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
@@ -82,7 +83,7 @@ namespace rptxml
 
     }
 
-static void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
+void ORptExport::lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 {
     for (auto& rEntry : _rGrid)
     {
@@ -359,7 +360,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
         exportComponent(_xReportElement);
 }
 
-static void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns)
+void ORptExport::lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns)
 {
     sal_Int32 nCountX = _aPosX.size() - 1;
     sal_Int32 nCountY = _aPosY.size() - 1;
@@ -646,6 +647,7 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
         SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, true, false);
     }
 
+    exportTableColumns(_xSection);
     exportContainer(_xSection);
 }
 
@@ -667,8 +669,6 @@ void ORptExport::exportTableColumns(const Reference< XSection>& _xSection)
 void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 {
     OSL_ENSURE(_xSection.is(),"Section is NULL -> GPF");
-
-    exportTableColumns(_xSection);
 
     TSectionsGrid::const_iterator aFind = m_aSectionsGrid.find(_xSection);
     OSL_ENSURE(aFind != m_aSectionsGrid.end(),"ORptExport::exportContainer: Section not found in grid!");
@@ -883,6 +883,7 @@ void ORptExport::handleTextElement(const Reference<XServiceInfo>& xElement, bool
         }
 
         // write <report:eToken> in handleEToken
+        SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, false, false);
         handleEToken(xReportElement, xReportDefinition, xSection, eToken);
     }
 }
@@ -890,8 +891,6 @@ void ORptExport::handleTextElement(const Reference<XServiceInfo>& xElement, bool
 void ORptExport::handleEToken(const Reference<XReportControlModel>& xReportElement, const Reference<XReportDefinition>& xReportDefinition,
                                 const Reference<XSection>& xSection, const XMLTokenEnum& eToken)
 {
-    // write <report:eToken>
-    SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, false, false);
     if ( eToken == XML_FIXED_CONTENT )
         exportParagraph(xReportElement);
     if ( xReportElement.is() )

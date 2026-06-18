@@ -97,6 +97,7 @@ $(eval $(call gb_Library_add_exception_objects,rpt,\
     reportdesign/source/filter/xml/xmlCondPrtExpr \
     reportdesign/source/filter/xml/xmlControlProperty \
     reportdesign/source/filter/xml/xmlExport \
+    reportdesign/source/filter/xml/xmlExport2 \
     reportdesign/source/filter/xml/xmlExportDocumentHandler \
     reportdesign/source/filter/xml/xmlfilter \
     reportdesign/source/filter/xml/xmlFixedContent \

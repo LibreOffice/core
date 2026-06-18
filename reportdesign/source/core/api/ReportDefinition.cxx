@@ -38,6 +38,7 @@
 #include <core_resource.hxx>
 #include <strings.hxx>
 #include <xmlExport.hxx>
+#include <xmlExport2.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -1302,8 +1303,6 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         static constexpr OUString sPropName = u"MediaType"_ustr;
         OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
-        if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
-            xProp->setPropertyValue( sPropName, uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT) );
     }
 
     /** property map for export info set */
@@ -1344,26 +1343,26 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
     // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"settings.xml"_ustr));
-    rtl::Reference<rptxml::ORptExport> pSettingsExporter
-        = rptxml::ORptExport::createSettingsExporter(m_aProps->m_xContext);
+    rtl::Reference<rptxml::ORptExecuteExport> pSettingsExporter
+        = rptxml::ORptExecuteExport::createSettingsExporter(m_aProps->m_xContext);
     WriteThroughComponent(xCom, u"settings.xml"_ustr, pSettingsExporter, aDelegatorArguments,
                           _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"meta.xml"_ustr));
-    rtl::Reference<rptxml::ORptExport> pMetaExporter
-        = rptxml::ORptExport::createMetaExporter(m_aProps->m_xContext);
+    rtl::Reference<rptxml::ORptExecuteExport> pMetaExporter
+        = rptxml::ORptExecuteExport::createMetaExporter(m_aProps->m_xContext);
     WriteThroughComponent(xCom, u"meta.xml"_ustr, pMetaExporter, aDelegatorArguments,
                           _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"styles.xml"_ustr));
-    rtl::Reference<rptxml::ORptExport> pStylesExporter
-        = rptxml::ORptExport::createStylesExporter(m_aProps->m_xContext);
+    rtl::Reference<rptxml::ORptExecuteExport> pStylesExporter
+        = rptxml::ORptExecuteExport::createStylesExporter(m_aProps->m_xContext);
     WriteThroughComponent(xCom, u"styles.xml"_ustr, pStylesExporter, aDelegatorArguments,
                           _xStorageToSaveTo);
 
     xInfoSet->setPropertyValue(u"StreamName"_ustr, uno::Any(u"content.xml"_ustr));
-    rtl::Reference<rptxml::ORptExport> pExportFilter
-        = rptxml::ORptExport::createExportFilter(m_aProps->m_xContext);
+    rtl::Reference<rptxml::ORptExecuteExport> pExportFilter
+        = rptxml::ORptExecuteExport::createExportFilter(m_aProps->m_xContext);
     bool bOk = WriteThroughComponent(xCom, u"content.xml"_ustr, pExportFilter, aDelegatorArguments,
                                      _xStorageToSaveTo);
 
