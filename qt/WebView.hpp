@@ -23,6 +23,9 @@
 
 class Bridge;
 class WebView;
+class QDragEnterEvent;
+class QDragMoveEvent;
+class QDropEvent;
 
 class CODAWebEngineView : public QWebEngineView
 {
@@ -41,6 +44,12 @@ public:
 
     void createPresentationFS();
     void destroyPresentationFS();
+
+protected:
+    // Intercept files dropped onto the window from the OS
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dragMoveEvent(QDragMoveEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
 
 private:
     QMainWindow* _mainWindow;

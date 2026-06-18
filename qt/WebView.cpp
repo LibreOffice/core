@@ -14,6 +14,7 @@
 #include "WebView.hpp"
 
 #include <qt/bridge.hpp>
+#include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Log.hpp>
@@ -33,8 +34,12 @@
 #include <QDBusReply>
 #include <QDBusVariant>
 #include <QDir>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <QFile>
 #include <QFileInfo>
+#include <QMimeData>
 #include <QGuiApplication>
 #include <QKeySequence>
 #include <QLabel>
@@ -331,6 +336,61 @@ void CODAWebEngineView::destroyPresentationFS()
         _presenterFSWindow.reset();
 
         _mainWindow->setEnabled(true);
+    }
+}
+
+namespace
+{
+
+// Collect the local filesystem paths of any files dragged in from the OS.
+QStringList droppedLocalFiles(const QMimeData* mimeData)
+{
+    QStringList files;
+    if (!mimeData || !mimeData->hasUrls())
+        return files;
+
+    for (const QUrl& url : mimeData->urls())
+    {
+        if (url.isLocalFile())
+            files << url.toLocalFile();
+    }
+    return files;
+}
+
+bool hasLocalFiles(const QMimeData* mimeData)
+{
+    if (!mimeData || !mimeData->hasUrls())
+        return false;
+
+    for (const QUrl& url : mimeData->urls())
+    {
+        if (url.isLocalFile())
+            return true;
+    }
+    return false;
+}
+
+} // namespace
+
+void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
+{
+    if (hasLocalFiles(event->mimeData()))
+        event->acceptProposedAction();
+}
+
+void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
+{
+    if (hasLocalFiles(event->mimeData()))
+        event->acceptProposedAction();
+}
+
+void CODAWebEngineView::dropEvent(QDropEvent* event)
+{
+    const QStringList files = droppedLocalFiles(event->mimeData());
+    if (!files.isEmpty())
+    {
+        event->acceptProposedAction();
+        coda::openFiles(files);
     }
 }
 
