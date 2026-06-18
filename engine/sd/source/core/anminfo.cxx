@@ -68,7 +68,6 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  meClickAction              (rAnmInfo.meClickAction),
                  meSecondEffect             (rAnmInfo.meSecondEffect),
                  meSecondSpeed              (rAnmInfo.meSecondSpeed),
-                 maSecondSoundFile          (rAnmInfo.maSecondSoundFile),
                  mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
                  mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
                  mnVerb                     (rAnmInfo.mnVerb),

@@ -48,7 +48,9 @@ public:
     css::presentation::ClickAction     meClickAction;  ///< Action at mouse click
     css::presentation::AnimationEffect meSecondEffect; ///< for object fading.
     css::presentation::AnimationSpeed  meSecondSpeed;  ///< for object fading.
-    OUString                    maSecondSoundFile; ///< for object fading.
+    // The second (object-fade) effect has no sound-file field of its own.
+    // When mbSecondSoundOn is set, its sound URL is the shape's bookmark
+    // string, set and read through SetBookmark and GetBookmark.
     bool                        mbSecondSoundOn;   ///< for object fading.
     bool                        mbSecondPlayFull;  ///< for object fading.
     sal_uInt16                  mnVerb;            ///< for OLE object

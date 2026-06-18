@@ -532,8 +532,6 @@ sccomp/source/solver/ParticelSwarmOptimization.hxx:55
     ParticleSwarmOptimizationAlgorithm maRandomDevice std::random_device
 scripting/source/stringresource/stringresource.cxx:1246
     stringresource::(anonymous namespace)::BinaryInput m_aData Sequence<sal_Int8>
-sd/inc/anminfo.hxx:51
-    SdAnimationInfo maSecondSoundFile OUString
 sd/qa/inc/sdtiledrenderingtest.hxx:79
     SdTestViewCallback m_callbackWrapper TestKitCallbackWrapper
 sd/qa/unit/tiledrendering/tiledrendering.cxx:2830
