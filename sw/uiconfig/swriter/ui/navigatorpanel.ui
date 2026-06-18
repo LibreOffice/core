@@ -714,7 +714,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:FrameDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -726,7 +725,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:ObjectTitleDescription-Frames">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -768,7 +766,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:GraphicDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -780,7 +777,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:ObjectTitleDescription-Images">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -822,7 +818,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:FrameDialog-more">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -834,7 +829,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:ObjectTitleDescription-OLEobjects">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1051,7 +1045,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:UpdateCurIndex">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1063,7 +1056,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:EditCurIndex">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="visible">True</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
@@ -1102,7 +1094,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:IndexEntryDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1185,7 +1176,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:InsertCaptionDialog">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>
@@ -1197,7 +1187,6 @@
                             <child>
                               <object class="GtkToolButton" id=".uno:ObjectTitleDescription-Drawingobjects">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                               </object>

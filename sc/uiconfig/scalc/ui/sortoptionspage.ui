@@ -101,6 +101,7 @@
                     <property name="margin-start">20</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <property name="active">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="doublenaturalsortrb-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|doublenaturalsortrb">Example: A1.14, A1.2, A2.5, A10 (with dot as separator). The locale determines which character is used as the decimal separator.</property>
@@ -328,6 +329,7 @@
                     <property name="has-entry">True</property>
                     <child internal-child="entry">
                       <object class="GtkEntry">
+                        <property name="truncate-multiline">True</property>
                         <property name="can-focus">False</property>
                       </object>
                     </child>

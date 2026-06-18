@@ -151,6 +151,7 @@
                               <object class="GtkEntry" id="basicnameentry">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="basicnameentry-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="basicnameentry-atkobject|accessible-name">Name</property>
@@ -417,6 +418,7 @@
                                         <property name="focus-on-click">False</property>
                                         <property name="receives-default">True</property>
                                         <property name="valign">center</property>
+                                        <property name="draw-indicator">True</property>
                                         <child>
                                           <placeholder/>
                                         </child>
@@ -460,6 +462,7 @@
                                         <property name="progress-pulse-step">0.02</property>
                                         <property name="adjustment">paddingadj</property>
                                         <property name="digits">2</property>
+                                        <property name="truncate-multiline">True</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="cellpaddingsb-atkobject">
                                             <property name="AtkObject::accessible-name" translatable="yes" context="cellpaddingsb-atkobject|accessible-name">Padding</property>
@@ -550,6 +553,7 @@
                                         <property name="can-focus">True</property>
                                         <property name="focus-on-click">False</property>
                                         <property name="receives-default">True</property>
+                                        <property name="draw-indicator">True</property>
                                         <child>
                                           <placeholder/>
                                         </child>
@@ -633,6 +637,7 @@
                                         <property name="can-focus">True</property>
                                         <property name="focus-on-click">False</property>
                                         <property name="receives-default">True</property>
+                                        <property name="draw-indicator">True</property>
                                         <child>
                                           <placeholder/>
                                         </child>
@@ -761,11 +766,10 @@
                                     <child>
                                       <object class="GtkToolbar" id="charhoritb">
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
+                                        <property name="can-focus">True</property>
                                         <child>
                                           <object class="GtkToggleToolButton" id="leftalign">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="leftalign|tooltip-text">Align Left</property>
                                             <property name="label" translatable="yes" context="leftalign|label">Align Left</property>
                                             <property name="use-underline">True</property>
@@ -780,7 +784,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="centeralign">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="centeralign|tooltip-text">Align Center</property>
                                             <property name="label" translatable="yes" context="centeralign|label">Align Center</property>
                                             <property name="use-underline">True</property>
@@ -795,7 +798,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="rightalign">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="rightalign|tooltip-text">Align Right</property>
                                             <property name="label" translatable="yes" context="rightalign|label">Align Right</property>
                                             <property name="use-underline">True</property>
@@ -842,11 +844,10 @@
                                     <child>
                                       <object class="GtkToolbar" id="charverttb">
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
+                                        <property name="can-focus">True</property>
                                         <child>
                                           <object class="GtkToggleToolButton" id="topalign">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="topalign|tooltip-text">Align Top</property>
                                             <property name="label" translatable="yes" context="topalign|label">Align Top</property>
                                             <property name="use-underline">True</property>
@@ -861,7 +862,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="vertcenteralign">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="vertcenteralign|tooltip-text">Center Vertically</property>
                                             <property name="label" translatable="yes" context="vertcenteralign|label">Align Center</property>
                                             <property name="use-underline">True</property>
@@ -876,7 +876,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="bottomalign">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="bottomalign|tooltip-text">Align Bottom</property>
                                             <property name="label" translatable="yes" context="bottomalign|label">Align Bottom</property>
                                             <property name="use-underline">True</property>
@@ -922,11 +921,10 @@
                                     <child>
                                       <object class="GtkToolbar" id="numbertb">
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
+                                        <property name="can-focus">True</property>
                                         <child>
                                           <object class="GtkToggleToolButton" id="decimal">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="decimal|tooltip-text">Format as Number</property>
                                             <property name="label" translatable="yes" context="decimal|label">Decimal</property>
                                             <property name="use-underline">True</property>
@@ -941,7 +939,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="percent">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="percent|tooltip-text">Format as Percentage</property>
                                             <property name="label" translatable="yes" context="percent|label">Percent</property>
                                             <property name="use-underline">True</property>
@@ -956,7 +953,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="currency">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="currency|tooltip-text">Format as Currency</property>
                                             <property name="label" translatable="yes" context="currency|label">Currency</property>
                                             <property name="use-underline">True</property>
@@ -1106,6 +1102,7 @@
                                         <property name="can-focus">True</property>
                                         <property name="focus-on-click">False</property>
                                         <property name="receives-default">True</property>
+                                        <property name="draw-indicator">True</property>
                                         <child>
                                           <placeholder/>
                                         </child>
@@ -1144,11 +1141,10 @@
                                     <child>
                                       <object class="GtkToolbar" id="charstyletb">
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
+                                        <property name="can-focus">True</property>
                                         <child>
                                           <object class="GtkToggleToolButton" id="bold">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="bold|tooltip-text">Bold</property>
                                             <property name="label" translatable="yes" context="bold|label">Bold</property>
                                             <property name="use-underline">True</property>
@@ -1163,7 +1159,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="italic">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="italic|tooltip-text">Italic</property>
                                             <property name="label" translatable="yes" context="bold|label">Italic</property>
                                             <property name="use-underline">True</property>
@@ -1178,7 +1173,6 @@
                                         <child>
                                           <object class="GtkToggleToolButton" id="underline">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
                                             <property name="tooltip-text" translatable="yes" context="underline|tooltip-text">Underline</property>
                                             <property name="label" translatable="yes" context="underline|label">Underline</property>
                                             <property name="use-underline">True</property>

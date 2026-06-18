@@ -4737,7 +4737,8 @@
                         </child>
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom38c">
-                            <property name="visible">False</property> <!-- no icon yet -->
+                            <property name="visible">False</property>
+                            <!-- no icon yet -->
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>

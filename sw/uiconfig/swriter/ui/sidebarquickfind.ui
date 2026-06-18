@@ -66,7 +66,6 @@
                 <child>
                   <object class="GtkToolButton" id="searchoptionsbutton">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="quickfindpanel|moresearchoptions|tooltip_text">Search Options</property>
                     <property name="icon-name">cmd/sc_symbolshapes.flower.png</property>
                     <child internal-child="accessible">
@@ -97,7 +96,6 @@
                 <child>
                   <object class="GtkToolButton" id="searchdialog">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="quickfindpanel|searchdialog|tooltip_text">Search with Find and Replace</property>
                     <property name="icon-name">cmd/sc_searchdialog.png</property>
                     <child internal-child="accessible">

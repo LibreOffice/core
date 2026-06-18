@@ -218,7 +218,7 @@
         <property name="top-attach">0</property>
       </packing>
     </child>
-        <child>
+    <child>
       <object class="GtkButton" id="remove">
         <property name="visible">True</property>
         <property name="can-focus">True</property>

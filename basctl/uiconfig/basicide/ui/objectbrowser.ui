@@ -58,6 +58,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="placeholder-text" translatable="yes" context="objectbrowser|FilterBox">Search objects and members...</property>
           </object>
           <packing>
@@ -172,6 +173,7 @@
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes" context="objectbrowser|ForwardButtonTip">Forward in Navigation History</property>
             <property name="image">NextImage</property>
+            <property name="always-show-image">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="ForwardButton-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="objectbrowser|extended_tip|ForwardButton">Go to the next entry in navigation history.</property>

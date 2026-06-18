@@ -149,6 +149,7 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingLeft</property>
+            <property name="truncate-multiline">True</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -175,6 +176,7 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingRight</property>
+            <property name="truncate-multiline">True</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -201,6 +203,7 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingTop</property>
+            <property name="truncate-multiline">True</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -227,6 +230,7 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingBottom</property>
+            <property name="truncate-multiline">True</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -267,6 +271,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="adjustment">adjustmentColNumber</property>
+            <property name="truncate-multiline">True</property>
             <property name="value">1</property>
           </object>
           <packing>
@@ -292,6 +297,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="adjustment">adjustmentColSpacing</property>
+            <property name="truncate-multiline">True</property>
             <property name="digits">2</property>
           </object>
           <packing>

@@ -306,7 +306,6 @@
             <child>
               <object class="GtkMenuToolButton" id="stylefiltersmenutoolbutton">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
                 <property name="no-show-all">True</property>
                 <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_FILTERS_MENU_TOOLTIP">Style Filters</property>
                 <property name="label" translatable="yes" context="templatepanel|STR_STYLE_FILTERS_MENU_LABEL">Filter</property>

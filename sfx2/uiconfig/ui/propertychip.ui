@@ -9,7 +9,7 @@
     <child>
       <object class="GtkToolbar" id="removebar">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="can-focus">True</property>
         <property name="toolbar-style">icons</property>
         <property name="show-arrow">False</property>
         <property name="icon_size">2</property>

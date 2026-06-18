@@ -195,6 +195,7 @@
                         <property name="hexpand">True</property>
                         <property name="width-chars">5</property>
                         <property name="text">x</property>
+                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="label_name"/>
                         </accessibility>
@@ -231,6 +232,7 @@
                         <property name="adjustment">adjustment_rows</property>
                         <property name="climb-rate">1</property>
                         <property name="value">3</property>
+                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="label_rows"/>
                         </accessibility>
@@ -266,6 +268,7 @@
                         <property name="adjustment">adjustment_cols</property>
                         <property name="climb-rate">1</property>
                         <property name="value">1</property>
+                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="label_columns"/>
                         </accessibility>
@@ -282,7 +285,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">18</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">fullmatrix</property>
                       </object>
@@ -299,7 +301,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">18</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">fullmatrix</property>
                       </object>
@@ -316,7 +317,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">18</property>
-                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">fullmatrix</property>
                       </object>

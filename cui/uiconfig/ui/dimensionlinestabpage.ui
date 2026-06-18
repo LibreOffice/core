@@ -287,26 +287,26 @@
                   </packing>
                 </child>
                 <child>
-                    <object class="GtkCheckButton" id="TSB_AUTO_DECIMAL_PLACES">
-                        <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_AUTO_DECIMAL_PLACES">_Automatic</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="margin-start">12</property>
-                        <property name="use-underline">True</property>
-                        <property name="inconsistent">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                            <object class="AtkObject" id="TSB_AUTO_DECIMAL_PLACES-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_AUTO_DECIMAL_PLACES">Automatically adapts the number of displayed decimal places based on the precision of the measured value.</property>
-                            </object>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">7</property>
-                        <property name="width">2</property>
-                    </packing>
+                  <object class="GtkCheckButton" id="TSB_AUTO_DECIMAL_PLACES">
+                    <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_AUTO_DECIMAL_PLACES">_Automatic</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="TSB_AUTO_DECIMAL_PLACES-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_AUTO_DECIMAL_PLACES">Automatically adapts the number of displayed decimal places based on the precision of the measured value.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">7</property>
+                    <property name="width">2</property>
+                  </packing>
                 </child>
               </object>
             </child>
