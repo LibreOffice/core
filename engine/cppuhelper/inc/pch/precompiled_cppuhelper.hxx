@@ -88,7 +88,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
-#include <typelib/uik.h>
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #endif // PCH_LEVEL >= 3

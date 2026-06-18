@@ -76,7 +76,6 @@
 #include <salhelper/thread.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
-#include <typelib/uik.h>
 #include <uno/data.h>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>

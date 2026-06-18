@@ -426,7 +426,6 @@
 #include <tools/urlobj.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
-#include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>

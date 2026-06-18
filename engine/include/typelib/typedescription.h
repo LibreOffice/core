@@ -21,7 +21,6 @@
 #define INCLUDED_TYPELIB_TYPEDESCRIPTION_H
 
 #include "cppu/cppudllapi.h"
-#include "typelib/uik.h"
 #include "typelib/typeclass.h"
 #include "rtl/ustring.h"
 

@@ -538,7 +538,6 @@
 #include <tools/weakbase.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
-#include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/current_context.h>
 #include <uno/data.h>

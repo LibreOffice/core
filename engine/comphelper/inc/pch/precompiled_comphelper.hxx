@@ -222,7 +222,6 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
-#include <typelib/uik.h>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <uno/any2.h>
 #include <uno/data.h>

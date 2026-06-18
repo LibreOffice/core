@@ -206,7 +206,6 @@
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
-#include <typelib/uik.h>
 #include <ucbhelper/content.hxx>
 #include <uno/any2.h>
 #include <uno/data.h>
