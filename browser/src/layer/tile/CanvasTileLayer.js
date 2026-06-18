@@ -3024,6 +3024,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	// Scrolls the view to selected position
 	scrollToPos: function(pos) {
+		// The multipage layout arranges pages in a grid and its scrollTo() takes a
+		// document point, locates the page containing it and brings that page into
+		// view. Pass the document point straight to the layout.
+		if (pos instanceof cool.SimplePoint &&
+			app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage') {
+			app.activeDocument.activeLayout.scrollTo(pos.pX, pos.pY);
+			return;
+		}
+
 		if (pos instanceof cool.SimplePoint) // Turn into lat/lng if required (pos may also be a simplePoint.).
 			pos = this._twipsToIntern({ x: pos.x, y: pos.y });
 
