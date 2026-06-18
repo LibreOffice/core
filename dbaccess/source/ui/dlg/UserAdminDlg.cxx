@@ -60,9 +60,6 @@ namespace dbaui
         m_xExampleSet.reset(new SfxItemSet(*GetInputSetImpl()));
 
         AddTabPage(u"settings"_ustr, OUserAdmin::Create, nullptr);
-
-        // remove the reset button - it's meaning is much too ambiguous in this dialog
-        RemoveResetButton();
     }
 
     OUserAdminDlg::~OUserAdminDlg()

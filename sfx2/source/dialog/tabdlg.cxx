@@ -96,13 +96,11 @@ SfxTabDialogItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
 
 struct TabDlg_Impl
 {
-    bool                bHideResetBtn : 1;
     bool                bStarted : 1;
     std::vector<Data_Impl*> aData;
 
     explicit TabDlg_Impl(sal_uInt8 nCnt)
-        : bHideResetBtn(false)
-        , bStarted(false)
+        : bStarted(false)
     {
         aData.reserve( nCnt );
     }
@@ -134,14 +132,17 @@ SfxTabDialogController::SfxTabDialogController
     , m_bStandardPushed(false)
 {
     m_pImpl.reset(new TabDlg_Impl(m_xTabCtrl->get_n_pages()));
-    m_pImpl->bHideResetBtn = !m_xResetBtn->get_visible();
     m_xOKBtn->connect_clicked(LINK(this, SfxTabDialogController, OkHdl));
     m_xCancelBtn->connect_clicked(LINK(this, SfxTabDialogController, CancelHdl));
-    m_xResetBtn->connect_clicked(LINK(this, SfxTabDialogController, ResetHdl));
-    m_xResetBtn->set_label(SfxResId(STR_RESET));
     m_xTabCtrl->connect_enter_page(LINK(this, SfxTabDialogController, ActivatePageHdl));
     m_xTabCtrl->connect_leave_page(LINK(this, SfxTabDialogController, DeactivatePageHdl));
-    m_xResetBtn->set_help_id(HID_TABDLG_RESET_BTN);
+
+    if (m_xResetBtn)
+    {
+        m_xResetBtn->connect_clicked(LINK(this, SfxTabDialogController, ResetHdl));
+        m_xResetBtn->set_label(SfxResId(STR_RESET));
+        m_xResetBtn->set_help_id(HID_TABDLG_RESET_BTN);
+    }
 
     if (bEditFmt)
     {
@@ -159,10 +160,6 @@ SfxTabDialogController::SfxTabDialogController
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
         m_pOutSet.reset(new SfxItemSet(*m_pSet->GetPool(), m_pSet->GetRanges()));
     }
-
-    // The reset functionality seems to be confusing to many; disable in LOK.
-    if (comphelper::LibreOfficeKit::isActive())
-        RemoveResetButton();
 }
 
 IMPL_LINK_NOARG(SfxTabDialogController, OkHdl, weld::Button&, void)
@@ -348,10 +345,13 @@ void SfxTabDialogController::ActivatePage(const OUString& rPage)
     if (m_xExampleSet)
         pTabPage->ActivatePage(*m_xExampleSet);
 
-    if (pTabPage->IsReadOnly() || m_pImpl->bHideResetBtn)
-        m_xResetBtn->hide();
-    else
-        m_xResetBtn->show();
+    if (m_xResetBtn)
+    {
+        if (pTabPage->IsReadOnly())
+            m_xResetBtn->hide();
+        else
+            m_xResetBtn->show();
+    }
 }
 
 IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OUString&, rPage, bool)
@@ -1108,12 +1108,6 @@ SfxItemSet* SfxTabDialogController::GetInputSetImpl()
 
 {
     return m_pSet.get();
-}
-
-void SfxTabDialogController::RemoveResetButton()
-{
-    m_xResetBtn->hide();
-    m_pImpl->bHideResetBtn = true;
 }
 
 void SfxTabDialogController::RemoveStandardButton()

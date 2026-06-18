@@ -192,7 +192,6 @@ public:
     weld::Button*       GetStandardButton() const { return m_xBaseFmtBtn.get(); }
     weld::Button*       GetApplyButton() const { return m_xApplyBtn.get(); }
     weld::Button*       GetResetButton() const { return m_xResetBtn.get(); }
-    void                RemoveResetButton();
     void                RemoveStandardButton();
 
     virtual short       run() override;

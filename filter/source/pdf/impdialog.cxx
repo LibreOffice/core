@@ -228,9 +228,6 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
 
     GetCancelButton().connect_clicked(LINK(this, ImpPDFTabDialog, CancelHdl));
     GetOKButton().connect_clicked(LINK(this, ImpPDFTabDialog, OkHdl));
-
-    // remove the reset button, not needed in this tabbed dialog
-    RemoveResetButton();
 }
 
 ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const

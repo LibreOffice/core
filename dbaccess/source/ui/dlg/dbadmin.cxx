@@ -49,9 +49,6 @@ ODbAdminDialog::ODbAdminDialog(weld::Window* pParent,
 
     // add the initial tab page
     AddTabPage(m_sMainPageID, OConnectionTabPage::Create, nullptr);
-
-    // remove the reset button - it's meaning is much too ambiguous in this dialog
-    RemoveResetButton();
 }
 
 ODbAdminDialog::~ODbAdminDialog()
