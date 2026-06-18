@@ -104,7 +104,7 @@ void IconView::CalcEntryHeight(const SvTreeListEntry& rEntry)
     bool bHasIcon = false;
     for (size_t nCur = 0; nCur < nCount; ++nCur)
     {
-        nHeight += SvLBoxItem::GetHeight(&rViewData, nCur);
+        nHeight += SvLBoxItem::GetHeight(rViewData, nCur);
 
         if (!bHasIcon && rEntry.GetItem(nCur).GetType() == SvLBoxItemType::ContextBmp)
             bHasIcon = true;
@@ -241,7 +241,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         }
 
         aTextItems.push_back(nCurItem);
-        auto nItemHeight = SvLBoxItem::GetHeight(&rViewDataEntry, nCurItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(rViewDataEntry, nCurItem);
         nLabelHeight += nItemHeight;
     }
 
@@ -250,7 +250,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     {
         aEntryPos.setY(nLabelYPos);
 
-        auto nItemHeight = SvLBoxItem::GetHeight(&rViewDataEntry, nCurItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(rViewDataEntry, nCurItem);
         nLabelYPos += nItemHeight;
 
         rEntry.GetItem(nCurItem).Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
@@ -263,8 +263,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     if (nIconItem < nItemCount)
     {
         SvLBoxItem& rItem = rEntry.GetItem(nIconItem);
-        auto nItemWidth = rItem.GetWidth(*this, &rViewDataEntry, nIconItem);
-        auto nItemHeight = SvLBoxItem::GetHeight(&rViewDataEntry, nIconItem);
+        auto nItemWidth = rItem.GetWidth(*this, rViewDataEntry, nIconItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(rViewDataEntry, nIconItem);
 
         aEntryPos.setY(nY);
 

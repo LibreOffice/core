@@ -127,10 +127,10 @@ public:
     virtual SvLBoxItemType GetType() const = 0;
     virtual int CalcWidth(const SvTreeListBox& rView) const;
     int GetWidth(const SvTreeListBox& rView, const SvTreeListEntry& rEntry) const;
-    int GetWidth(const SvTreeListBox& rView, const SvViewDataEntry* pData,
+    int GetWidth(const SvTreeListBox& rView, const SvViewDataEntry& rData,
                  sal_uInt16 nItemPos) const;
     int GetHeight(const SvTreeListBox& rView, const SvTreeListEntry& rEntry) const;
-    static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
+    static int GetHeight(const SvViewDataEntry& rData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
     bool isEnable() const { return !mbDisabled; }
 

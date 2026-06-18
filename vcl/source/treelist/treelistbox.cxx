@@ -351,10 +351,10 @@ int SvLBoxItem::GetHeight(const SvTreeListBox& rView, const SvTreeListEntry& rEn
     return rViewData.mnHeight;
 }
 
-int SvLBoxItem::GetWidth(const SvTreeListBox& rView, const SvViewDataEntry* pData,
+int SvLBoxItem::GetWidth(const SvTreeListBox& rView, const SvViewDataEntry& rData,
                          sal_uInt16 nItemPos) const
 {
-    const SvViewDataItem& rIData = pData->GetItem(nItemPos);
+    const SvViewDataItem& rIData = rData.GetItem(nItemPos);
     int nWidth = rIData.mnWidth;
     if (nWidth == -1)
     {
@@ -364,9 +364,9 @@ int SvLBoxItem::GetWidth(const SvTreeListBox& rView, const SvViewDataEntry* pDat
     return nWidth;
 }
 
-int SvLBoxItem::GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos)
+int SvLBoxItem::GetHeight(const SvViewDataEntry& rData, sal_uInt16 nItemPos)
 {
-    const SvViewDataItem& rIData = pData->GetItem(nItemPos);
+    const SvViewDataItem& rIData = rData.GetItem(nItemPos);
     return rIData.mnHeight;
 }
 
@@ -2123,7 +2123,7 @@ void SvTreeListBox::CalcEntryHeight(const SvTreeListEntry& rEntry)
     SvViewDataEntry& rViewData = GetViewDataEntry(rEntry);
     while( nCur < nCount )
     {
-        auto nHeight = SvLBoxItem::GetHeight(&rViewData, nCur);
+        auto nHeight = SvLBoxItem::GetHeight(rViewData, nCur);
         if( nHeight > nHeightMax )
             nHeightMax = nHeight;
         nCur++;
@@ -2819,8 +2819,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         SvLBoxItem& rItem = rEntry.GetItem(nCurIndex);
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
-        Size aSize(rItem.GetWidth(*this, &rViewDataEntry, nCurIndex),
-                   SvLBoxItem::GetHeight(&rViewDataEntry, nCurIndex));
+        Size aSize(rItem.GetWidth(*this, rViewDataEntry, nCurIndex),
+                   SvLBoxItem::GetHeight(rViewDataEntry, nCurIndex));
         tools::Long nTabPos = GetTabPos(&rEntry, pTab);
 
         tools::Long nNextTabPos;
