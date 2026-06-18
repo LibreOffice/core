@@ -1141,14 +1141,16 @@ class SlideShowPresenter {
 			window.L.bind(this._closeSlideShowWindow, this),
 		);
 		const slideShowWindow = this._slideShowWindowProxy;
-		this._map.uiManager.showSnackbar(
-			_('Presenting in window'),
-			_('Close Presentation'),
-			window.L.bind(this._closeSlideShowWindow, this),
-			-1,
-			false,
-			true,
-		);
+		if (!this.isFollowing()) {
+			this._map.uiManager.showSnackbar(
+				_('Presenting in window'),
+				_('Close Presentation'),
+				window.L.bind(this._closeSlideShowWindow, this),
+				-1,
+				false,
+				true,
+			);
+		}
 
 		this._windowCloseInterval = app.timerRegistry.setInterval(
 			'slideshowwindowclose',
