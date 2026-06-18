@@ -12,17 +12,31 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/configuration.hxx>
 
+#include <officecfg/Office/Draw.hxx>
 #include <unotools/tempfile.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <tools/color.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/region.hxx>
+#include <vcl/mapmod.hxx>
 
 #include <Annotation.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
+#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 
@@ -64,6 +78,53 @@ private:
 
     const char* sVar = nullptr;
 };
+
+// Collects the primitives produced for every view object contact during a
+// CompleteRedraw, while still forwarding them so the normal render runs.
+class PrimitiveCollector : public sdr::contact::ViewObjectContactRedirector
+{
+public:
+    drawinglayer::primitive2d::Primitive2DContainer maPrimitives;
+
+    void createRedirectedPrimitive2DSequence(
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
+    {
+        drawinglayer::primitive2d::Primitive2DContainer aLocal;
+        ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo,
+                                                                         aLocal);
+        maPrimitives.append(aLocal);
+        rVisitor.visit(std::move(aLocal));
+    }
+};
+
+// True when the primitives, decomposed recursively, contain a hairline drawn in
+// rColor. A null reference in the tree is skipped rather than dereferenced.
+bool containsHairlineOfColor(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives,
+                             const basegfx::BColor& rColor)
+{
+    for (const drawinglayer::primitive2d::Primitive2DReference& rReference : rPrimitives)
+    {
+        const drawinglayer::primitive2d::BasePrimitive2D* pPrimitive = rReference.get();
+        if (!pPrimitive)
+            continue;
+
+        if (auto* pHairline
+            = dynamic_cast<const drawinglayer::primitive2d::PolygonHairlinePrimitive2D*>(pPrimitive))
+        {
+            if (pHairline->getBColor() == rColor)
+                return true;
+            continue;
+        }
+
+        drawinglayer::primitive2d::Primitive2DContainer aChildren;
+        pPrimitive->get2DDecomposition(aChildren, drawinglayer::geometry::ViewInformation2D());
+        if (containsHairlineOfColor(aChildren, rColor))
+            return true;
+    }
+    return false;
+}
 }
 
 class SdrPdfImportTest : public UnoApiTest
@@ -506,6 +567,58 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationOverArea)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, xNew->getPosition().Y, 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(40.0, xNew->getSize().Width, 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(20.0, xNew->getSize().Height, 0.01);
+}
+
+CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testPdfHidesTextBoundaries)
+{
+    // A PDF opened in Draw must not show the text boundary guides, even when the
+    // "show boundary for margins" setting is on. Each page holds a single imported
+    // image, so the margins carry no meaning there.
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+
+    // Turn the boundary guides on, the way a user who wants them for ordinary
+    // Draw documents would.
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Draw::Misc::TextObject::ShowBoundary::set(true, xChanges);
+    xChanges->commit();
+
+    loadFromFile(u"SimplePDF.pdf");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDocument = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+    CPPUNIT_ASSERT(pDocument->IsPDFDocument());
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+    SdrView* pView = pViewShell->GetView();
+    CPPUNIT_ASSERT(pView);
+
+    // Render the whole page and gather every primitive sent to the device.
+    PrimitiveCollector aCollector;
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
+    pDevice->SetOutputSizePixel(Size(2000, 2000));
+    tools::Rectangle aPageRect(Point(), pPage->GetSize());
+    pView->CompleteRedraw(pDevice, vcl::Region(aPageRect), &aCollector);
+    CPPUNIT_ASSERT(!aCollector.maPrimitives.empty());
+
+    // The page keeps non-zero margins, which is what would make the guide
+    // appear, so the rendered page is a valid probe for this regression.
+    CPPUNIT_ASSERT(pPage->GetLeftBorder() || pPage->GetUpperBorder() || pPage->GetRightBorder()
+                   || pPage->GetLowerBorder());
+
+    // The margin guide is a hairline drawn in the document boundary color. The
+    // rendered content for a PDF page must not contain one.
+    const svtools::ColorConfig aColorConfig;
+    const basegfx::BColor aBoundaryColor
+        = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor.getBColor();
+    CPPUNIT_ASSERT(!containsHairlineOfColor(aCollector.maPrimitives, aBoundaryColor));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

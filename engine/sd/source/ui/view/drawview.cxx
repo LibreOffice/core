@@ -522,7 +522,10 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
     else if( pDoc && pDoc->GetDocumentType() == DocumentType::Draw)
     {
         // tdf#164605 & tdf#89420
-        bool bShowMargin(officecfg::Office::Draw::Misc::TextObject::ShowBoundary::get());
+        // A PDF page in Draw is a single imported image, so the text boundary
+        // guides are pointless there and would show through the background.
+        bool bShowMargin = !pDoc->IsPDFDocument()
+                           && officecfg::Office::Draw::Misc::TextObject::ShowBoundary::get();
         pDoc->SetShowMargin(bShowMargin);
     }
 
