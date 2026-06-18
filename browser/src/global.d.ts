@@ -328,6 +328,10 @@ interface A11yValidator {
 interface Window {
 	// app defined in: js/bundle.js
 	app: AppInterface;
+	// The real window.open, stashed before the mobile/desktop app redirects
+	// window.open to its own handler. Used to open real slideshow and
+	// presenter console windows. Defined in js/global.js.
+	origOpen?: typeof window.open;
 	// coolParams defined in: js/global.js
 	coolParams: {
 		p: URLSearchParams;

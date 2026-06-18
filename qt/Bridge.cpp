@@ -637,16 +637,6 @@ QVariant Bridge::cool(const QString& messageStr)
         LOG_TRC_NOFILE("GETRECENTDOCS: returning recent documents");
         return result;
     }
-    else if (tokens.equals(0, "FULLSCREENPRESENTATION"))
-    {
-        if (_webView)
-        {
-            if (tokens.equals(1, "true"))
-                _webView->createPresentationFS();
-            else
-                _webView->destroyPresentationFS();
-        }
-    }
     else if (message == "uno .uno:Open")
     {
         QFileDialog* dialog =

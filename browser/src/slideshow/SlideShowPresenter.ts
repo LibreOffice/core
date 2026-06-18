@@ -121,7 +121,11 @@ class SlideShowPresenter {
 	_fullscreen: Element = null;
 	_presenterContainer: HTMLDivElement = null;
 	_slideShowCanvas: HTMLCanvasElement = null;
-	_slideShowWindowProxy: HTMLIFrameElement = null;
+	// On the web build this is the in-page iframe the slideshow renders into.
+	// On the desktop app it is a real top-level window opened with
+	// window.origOpen, so the original document window keeps its content.
+	_slideShowWindowProxy: HTMLIFrameElement | Window = null;
+	_slideShowInSeparateWindow: boolean = false;
 	_windowCloseInterval: ReturnType<typeof setInterval> = null;
 	_slideRenderer: SlideRenderer = null;
 	_canvasLoader: CanvasLoader | null = null;
@@ -454,7 +458,10 @@ class SlideShowPresenter {
 		if (this._presenterContainer) {
 			window.L.DomUtil.remove(this._presenterContainer);
 			this._presenterContainer = null;
-			if (window.mode.isCODesktop()) {
+			// The macOS and Windows shells took the document window full screen
+			// and need to be told to restore it. The Qt app uses a separate
+			// window that closes on its own.
+			if (window.mode.isCODesktop() && !window.ThisIsTheQtApp) {
 				app.socket.sendMessage('FULLSCREENPRESENTATION false');
 			}
 		}
@@ -470,8 +477,15 @@ class SlideShowPresenter {
 		let winWidth = 0;
 		let winHeight = 0;
 		if (this._slideShowWindowProxy) {
-			winWidth = this._slideShowWindowProxy.clientWidth;
-			winHeight = this._slideShowWindowProxy.clientHeight;
+			if (this._slideShowInSeparateWindow) {
+				winWidth = (this._slideShowWindowProxy as Window).innerWidth;
+				winHeight = (this._slideShowWindowProxy as Window).innerHeight;
+			} else {
+				winWidth = (this._slideShowWindowProxy as HTMLIFrameElement)
+					.clientWidth;
+				winHeight = (this._slideShowWindowProxy as HTMLIFrameElement)
+					.clientHeight;
+			}
 		} else if (this.isFullscreen()) {
 			winWidth = window.screen.width;
 			winHeight = window.screen.height;
@@ -1066,13 +1080,22 @@ class SlideShowPresenter {
 
 	_closeSlideShowWindow() {
 		const proxy = this._slideShowWindowProxy;
+		const isSeparateWindow = this._slideShowInSeparateWindow;
 		setTimeout(
 			function () {
-				if (!proxy || !proxy.isConnected) {
-					return;
+				if (isSeparateWindow) {
+					const win = proxy as Window;
+					if (!win || win.closed) {
+						return;
+					}
+					win.close();
+				} else {
+					const frame = proxy as HTMLIFrameElement;
+					if (!frame || !frame.isConnected) {
+						return;
+					}
+					frame.parentElement.removeChild(frame);
 				}
-
-				proxy.parentElement.removeChild(proxy);
 				this._map.fire('presentinwindowclose');
 				if (this._slideShowWindowProxy === proxy)
 					this._slideShowWindowProxy = null;
@@ -1091,7 +1114,10 @@ class SlideShowPresenter {
 	}
 
 	_getProxyDocumentNode() {
-		return this._slideShowWindowProxy.contentWindow.document;
+		if (this._slideShowInSeparateWindow)
+			return (this._slideShowWindowProxy as Window).document;
+		return (this._slideShowWindowProxy as HTMLIFrameElement).contentWindow
+			.document;
 	}
 
 	_doInWindowPresentation(showSwitchMonitors: boolean) {
@@ -1099,18 +1125,45 @@ class SlideShowPresenter {
 			_('Windowed Presentation: ') + this._map['wopi'].BaseFileName;
 		const htmlContent = this._generateSlideWindowHtml(popupTitle);
 
-		this._slideShowWindowProxy = window.L.DomUtil.createWithId(
-			'iframe',
-			'slideshow-cypress-iframe',
-			document.body,
-		);
-		this._getProxyDocumentNode().open();
-		this._getProxyDocumentNode().write(htmlContent);
+		// The Qt desktop app cannot reliably move the original window to another
+		// monitor and back under Wayland, so a full-screen (showSwitchMonitors)
+		// or presenter-console presentation gets its own top-level window opened
+		// with window.origOpen, the same way the presenter console does. A plain
+		// "Present in Window" keeps the in-page iframe so it stays an ordinary,
+		// movable window. The web build always keeps the iframe, and the macOS
+		// and Windows shells still drive full screen through the
+		// FULLSCREENPRESENTATION message and the iframe.
+		const consoleDriven = !!this._map.presenterConsole?._active;
+		const separateWindowOpen =
+			(showSwitchMonitors || consoleDriven) &&
+			window.ThisIsTheQtApp &&
+			window.origOpen;
+		this._slideShowInSeparateWindow = !!separateWindowOpen;
+
+		if (separateWindowOpen) {
+			// The fragment names this window's role to the Qt app, which reads it
+			// in createWindow (qt/WebView.cpp claimChildWindow). Keep in sync.
+			this._slideShowWindowProxy = separateWindowOpen(
+				'about:blank#coda-presentation',
+				'_blank',
+				'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1,popup=true',
+			);
+		} else {
+			this._slideShowWindowProxy = window.L.DomUtil.createWithId(
+				'iframe',
+				'slideshow-cypress-iframe',
+				document.body,
+			);
+		}
 
 		if (!this._slideShowWindowProxy) {
 			this._notifyBlockedPresenting();
 			return;
 		}
+
+		this._getProxyDocumentNode().open();
+		this._getProxyDocumentNode().write(htmlContent);
+		this._getProxyDocumentNode().close();
 
 		this._slideShowWindowProxy.focus();
 
@@ -1152,10 +1205,14 @@ class SlideShowPresenter {
 			);
 		}
 
+		const isSeparateWindow = this._slideShowInSeparateWindow;
 		this._windowCloseInterval = app.timerRegistry.setInterval(
 			'slideshowwindowclose',
 			function () {
-				if (!slideShowWindow.isConnected) this.slideshowWindowCleanUp();
+				const closed = isSeparateWindow
+					? (slideShowWindow as Window).closed
+					: !(slideShowWindow as HTMLIFrameElement).isConnected;
+				if (closed) this.slideshowWindowCleanUp();
 			}.bind(this),
 			500,
 		);
@@ -1175,11 +1232,15 @@ class SlideShowPresenter {
 		this._slideShowCanvas = null;
 		if (this._presenterContainer) {
 			this._presenterContainer = null;
-			if (window.mode.isCODesktop()) {
+			// The macOS and Windows shells took the document window full screen
+			// and need to be told to restore it. The Qt app uses a separate
+			// window that closes on its own.
+			if (window.mode.isCODesktop() && !window.ThisIsTheQtApp) {
 				app.socket.sendMessage('FULLSCREENPRESENTATION false');
 			}
 		}
 		this._slideShowWindowProxy = null;
+		this._slideShowInSeparateWindow = false;
 		document.body.classList.remove('slideshow-presenting-in-window');
 		window.removeEventListener('resize', this.onSlideWindowResize);
 		window.removeEventListener('beforeunload', this.slideshowWindowCleanUp);
@@ -1246,14 +1307,18 @@ class SlideShowPresenter {
 			}
 
 			if (window.mode.isCODesktop()) {
-				// a) For qt (under wayland), we would like to be able to distinguish
-				// between a presentation going full screen, in which case we create a
-				// new window for it, vs otherwise going full screen.
-				// b) It turns out that macOS appears to also do such a substitution
-				// automatically on going full-screen, so the window handle we have isn't
-				// that of the full screen window, and it seems impracticable to get access
-				// to it, which we need to be able to swap it from one monitor to another
-				app.socket.sendMessage('FULLSCREENPRESENTATION true');
+				// On the Qt app the slideshow plays in its own top-level window
+				// rather than taking over the document window. Under Wayland the
+				// original window cannot be moved to another monitor and restored
+				// reliably, so a dedicated window sidesteps that.
+				//
+				// The macOS and Windows shells still take the document window full
+				// screen and need the FULLSCREENPRESENTATION message. On macOS going
+				// full screen substitutes a window of its own, so the handle we hold
+				// is no longer that of the full screen window, and reaching the real
+				// one to move it between monitors has proven impracticable.
+				if (!window.ThisIsTheQtApp)
+					app.socket.sendMessage('FULLSCREENPRESENTATION true');
 				this._doInWindowPresentation(true);
 				return true;
 			}

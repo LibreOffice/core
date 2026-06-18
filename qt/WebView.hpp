@@ -26,6 +26,7 @@ class WebView;
 class QDragEnterEvent;
 class QDragMoveEvent;
 class QDropEvent;
+class QUrl;
 
 class CODAWebEngineView : public QWebEngineView
 {
@@ -33,6 +34,7 @@ public:
     CODAWebEngineView(QMainWindow* parent)
         : QWebEngineView(parent)
         , _mainWindow(parent)
+        , _presentationView(nullptr)
         , _presenterConsole(nullptr)
     {
     }
@@ -42,9 +44,6 @@ public:
     void arrangePresentationWindows();
     void exchangeMonitors();
 
-    void createPresentationFS();
-    void destroyPresentationFS();
-
 protected:
     // Intercept files dropped onto the window from the OS
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -52,13 +51,19 @@ protected:
     void dropEvent(QDropEvent* event) override;
 
 private:
+    void connectScreenChanges();
+    void claimChildWindow(WebView* child, const QUrl& url);
+
     QMainWindow* _mainWindow;
     // Given the general inability of wayland based environments
     // to restore a window's position, especially after moving
-    // it to another monitor full-screen, use a throwaway window
-    // for full-screen presentations, and leave the pre-full-screen
-    // on the original screen for reuse post-presentation
-    std::unique_ptr<QMainWindow> _presenterFSWindow;
+    // it to another monitor full-screen, the slideshow and the
+    // presenter console each play in their own window, opened
+    // from the page through window.open. The original document
+    // window is left untouched on its original screen, so its
+    // content stays live and there is no full-screen window to
+    // restore.
+    WebView* _presentationView;
     WebView* _presenterConsole;
     QMetaObject::Connection _screenAdded;
     QMetaObject::Connection _screenRemoved;

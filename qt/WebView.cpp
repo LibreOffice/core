@@ -42,7 +42,6 @@
 #include <QMimeData>
 #include <QGuiApplication>
 #include <QKeySequence>
-#include <QLabel>
 #include <QMainWindow>
 #include <QObject>
 #include <QScreen>
@@ -250,9 +249,24 @@ private:
 };
 } // namespace
 
+void CODAWebEngineView::connectScreenChanges()
+{
+    if (!_screenAdded)
+        _screenAdded = QObject::connect(qApp, &QGuiApplication::screenAdded,
+                         [this]() {
+                            arrangePresentationWindows();
+                         });
+    if (!_screenRemoved)
+        _screenRemoved = QObject::connect(qApp, &QGuiApplication::screenRemoved,
+                         [this]() {
+                            arrangePresentationWindows();
+                         });
+}
+
 void CODAWebEngineView::arrangePresentationWindows()
 {
-    if (!_presenterFSWindow)
+    QMainWindow* presenterFSWindow = _presentationView ? _presentationView->mainWindow() : nullptr;
+    if (!presenterFSWindow)
         return;
 
     QScreen* laptopScreen = QGuiApplication::primaryScreen();
@@ -274,11 +288,11 @@ void CODAWebEngineView::arrangePresentationWindows()
         }
     }
 
-    _presenterFSWindow->hide();
+    presenterFSWindow->hide();
     QScreen* presenterScreen = externalScreen ? externalScreen : laptopScreen;
-    _presenterFSWindow->setScreen(presenterScreen);
-    _presenterFSWindow->move(presenterScreen->geometry().topLeft());
-    _presenterFSWindow->showFullScreen();
+    presenterFSWindow->setScreen(presenterScreen);
+    presenterFSWindow->move(presenterScreen->geometry().topLeft());
+    presenterFSWindow->showFullScreen();
 
     Window* consoleWindow = _presenterConsole ? static_cast<Window*>(_presenterConsole->mainWindow()) : nullptr;
     if (consoleWindow)
@@ -296,46 +310,6 @@ void CODAWebEngineView::arrangePresentationWindows()
             consoleWindow->resize(consoleWindow->sizeHint());
             consoleWindow->show();
         }
-    }
-}
-
-void CODAWebEngineView::createPresentationFS()
-{
-    // Move the contents into the presentation window so the original
-    // window will remain in position, so we can work around the
-    // stubbornness of wayland to allow restoring a window back to its
-    // original size and position on the screen it started on.
-    _presenterFSWindow = std::make_unique<QMainWindow>(nullptr);
-    _presenterFSWindow->setCentralWidget(this);
-    QLabel* label = new QLabel(QObject::tr("Presenting"));
-    label->setAlignment(Qt::AlignCenter);
-    _mainWindow->setCentralWidget(label);
-    _mainWindow->setEnabled(false);
-
-    arrangePresentationWindows();
-
-    _screenRemoved = QObject::connect(qApp, &QGuiApplication::screenRemoved,
-                     [this]() {
-                        arrangePresentationWindows();
-                     });
-
-    _screenAdded = QObject::connect(qApp, &QGuiApplication::screenAdded,
-                     [this]() {
-                        arrangePresentationWindows();
-                     });
-}
-
-void CODAWebEngineView::destroyPresentationFS()
-{
-    if (_presenterFSWindow)
-    {
-        _mainWindow->setCentralWidget(this);
-        _presenterFSWindow->setCentralWidget(nullptr);
-
-        _presenterFSWindow->close();
-        _presenterFSWindow.reset();
-
-        _mainWindow->setEnabled(true);
     }
 }
 
@@ -396,34 +370,74 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
 
 QWebEngineView* CODAWebEngineView::createWindow(QWebEnginePage::WebWindowType /*type*/)
 {
-    _presenterConsole = new WebView(Application::getProfile(), false);
+    // A window.open from the page. The slideshow and the presenter console each
+    // open their own top-level window, naming its role in the URL fragment they
+    // pass to window.open. The original document window is never touched, so its
+    // content stays live.
+    WebView* child = new WebView(Application::getProfile(), false);
 
-    QWebEngineView* consoleView = _presenterConsole->webEngineView();
-    QWebEnginePage* page = consoleView->page();
-    QObject::connect(page, &QWebEnginePage::windowCloseRequested,
-                     [this]() {
-                         if (!_presenterConsole)
-                             return;
-                         QMainWindow* consoleWindow = _presenterConsole->mainWindow();
-                         consoleWindow->close();
+    QWebEngineView* childView = child->webEngineView();
+    QWebEnginePage* page = childView->page();
+    QObject::connect(page, &QWebEnginePage::windowCloseRequested, page,
+                     [child]() {
+                         child->mainWindow()->close();
                      });
 
-    Window* consoleWindow = static_cast<Window*>(_presenterConsole->mainWindow());
-    consoleWindow->setCloseCallback(
-                     [this]() {
-                         _presenterConsole = nullptr;
-
-                         destroyPresentationFS();
+    Window* childWindow = static_cast<Window*>(child->mainWindow());
+    childWindow->setCloseCallback(
+                     [this, child]() {
+                         if (_presenterConsole == child)
+                             _presenterConsole = nullptr;
+                         if (_presentationView == child)
+                             _presentationView = nullptr;
                      });
 
-    createPresentationFS();
+    // The window opens at a URL whose fragment names its role. Read it once the
+    // requested URL is known and place the window on the right screen.
+    QObject::connect(page, &QWebEnginePage::urlChanged, page,
+                     [this, child](const QUrl& url) {
+                         claimChildWindow(child, url);
+                     });
 
-    return consoleView;
+    return childView;
+}
+
+void CODAWebEngineView::claimChildWindow(WebView* child, const QUrl& url)
+{
+    // The fragment values are set where window.open is called, in
+    // browser/src/slideshow/SlideShowPresenter.ts and PresenterConsole.js.
+    const QString role = url.fragment();
+    if (role == "coda-presentation")
+    {
+        if (_presentationView == child)
+            return;
+        _presentationView = child;
+        connectScreenChanges();
+    }
+    else if (role == "coda-console")
+    {
+        if (_presenterConsole == child)
+            return;
+        _presenterConsole = child;
+    }
+    else
+    {
+        // An empty fragment is the bare about:blank the window briefly reports
+        // before the role URL arrives, so only a non-empty value is a genuine
+        // mismatch between these names and the ones the page passes to
+        // window.open.
+        if (!role.isEmpty())
+            LOG_WRN("Unclaimed child window, unexpected role fragment '" << role.toStdString() << "'");
+        return;
+    }
+
+    arrangePresentationWindows();
 }
 
 void CODAWebEngineView::exchangeMonitors()
 {
-    if (!_presenterFSWindow)
+    QMainWindow* presenterFSWindow = _presentationView ? _presentationView->mainWindow() : nullptr;
+    if (!presenterFSWindow)
         return;
 
     QList<QScreen*> screens = QApplication::screens();
@@ -438,11 +452,11 @@ void CODAWebEngineView::exchangeMonitors()
     {
         if (consoleWindow && screens[i] == consoleWindow->screen())
             origConsoleScreen = i;
-        if (screens[i] == _presenterFSWindow->screen())
+        if (screens[i] == presenterFSWindow->screen())
             origPresentationScreen = i;
     }
 
-    _presenterFSWindow->hide();
+    presenterFSWindow->hide();
 
     size_t newPresentationScreen = origPresentationScreen;
 
@@ -466,11 +480,11 @@ void CODAWebEngineView::exchangeMonitors()
         newPresentationScreen = (newPresentationScreen + 1) % screens.size();
     }
 
-    _presenterFSWindow->setScreen(screens[newPresentationScreen]);
-    _presenterFSWindow->move(screens[newPresentationScreen]->geometry().topLeft());
+    presenterFSWindow->setScreen(screens[newPresentationScreen]);
+    presenterFSWindow->move(screens[newPresentationScreen]->geometry().topLeft());
 
-    _presenterFSWindow->showFullScreen();
-    _presenterFSWindow->show();
+    presenterFSWindow->showFullScreen();
+    presenterFSWindow->show();
 
     if (consoleWindow)
     {
@@ -485,6 +499,17 @@ CODAWebEngineView::~CODAWebEngineView()
         QObject::disconnect(_screenAdded);
     if (_screenRemoved)
         QObject::disconnect(_screenRemoved);
+
+    // These windows outlive the document window, and their close handlers refer
+    // back to this view, so close them while it is still valid.
+    WebView* presentationView = _presentationView;
+    WebView* presenterConsole = _presenterConsole;
+    _presentationView = nullptr;
+    _presenterConsole = nullptr;
+    if (presentationView)
+        presentationView->mainWindow()->close();
+    if (presenterConsole)
+        presenterConsole->mainWindow()->close();
 }
 
 WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parentWindow)
