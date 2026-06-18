@@ -1108,6 +1108,26 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     CPPUNIT_ASSERT_EQUAL(2.5, fBinWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogram_COExt)
+{
+    loadFromFile(u"fods/tdf163727_histogram_COExt.fods");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::data::XDataSequence> xCategories
+        = getDataSequenceFromDocByRole(xChartDoc, u"categories");
+    CPPUNIT_ASSERT(xCategories.is());
+
+    Reference<chart2::data::XTextualDataSequence> xCategoriesText(xCategories, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCategoriesText.is());
+
+    const Sequence<OUString> aBinLabels = xCategoriesText->getTextualData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBinLabels.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"[10-13.94]"_ustr, aBinLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.87]"_ustr, aBinLabels[1]);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
 {
     // Exporting an ODF-origin histogram to XLSX must write the raw

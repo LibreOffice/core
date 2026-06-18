@@ -360,12 +360,13 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
                 }
                 break;
             case XML_ELEMENT(LO_EXT, XML_CLASS):
+            case XML_ELEMENT(COL_EXT, XML_CLASS):
                 {
                     OUString aClassName;
                     sal_uInt16 nClassPrefix =
                         GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
                             aValue, &aClassName );
-                    if (XML_NAMESPACE_LO_EXT == nClassPrefix)
+                    if (XML_NAMESPACE_LO_EXT == nClassPrefix || XML_NAMESPACE_COL_EXT == nClassPrefix)
                     {
                         maSeriesChartTypeName = SchXMLTools::GetChartTypeByClassName(
                             aClassName, false /* bUseOldNames */ );

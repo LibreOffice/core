@@ -189,6 +189,9 @@ namespace xmloff::token {
         TOKEN( "urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0",   XML_N_FIELD ),
         TOKEN( "field",         XML_NP_FIELD ),
 
+        TOKEN( "coext",                           XML_NP_COL_EXT ),
+        TOKEN( "urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0", XML_N_COL_EXT ),
+
         // units
         TOKEN( "m",                               XML_UNIT_M ),
         TOKEN( "cm",                              XML_UNIT_CM ),

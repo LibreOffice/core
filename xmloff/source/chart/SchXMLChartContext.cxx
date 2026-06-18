@@ -405,13 +405,14 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
                 break;
 
             case XML_ELEMENT(LO_EXT, XML_CLASS):
+            case XML_ELEMENT(COL_EXT, XML_CLASS):
                 {
                     OUString aValue = aIter.toString();
                     OUString sClassName;
                     sal_uInt16 nClassPrefix =
                         GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
                                 aValue, &sClassName );
-                    if (XML_NAMESPACE_LO_EXT == nClassPrefix)
+                    if (XML_NAMESPACE_LO_EXT == nClassPrefix || XML_NAMESPACE_COL_EXT == nClassPrefix)
                     {
                         aOldChartTypeName = SchXMLTools::GetChartTypeByClassName(
                             sClassName, true /* bUseOldNames */ );
