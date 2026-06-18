@@ -170,12 +170,12 @@ SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
 }
 
-short SfxPrintOptionsDialog::run()
+VclResponseType SfxPrintOptionsDialog::run()
 {
     if (!m_xPage)
         return RET_CANCEL;
 
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
 
     if (nRet == RET_OK)
         m_xPage->FillItemSet( pOptions.get() );

@@ -257,8 +257,8 @@ bool RecoveryUI::impl_doEmergencySave()
     DialogReleaseGuard dialogReleaseGuard(*this, xDialog->getDialog());
 
     // start the dialog
-    short nRet = xDialog->run();
-    return (nRet==DLG_RET_OK_AUTOLAUNCH);
+    VclResponseType nRet = xDialog->run();
+    return (nRet==RET_RETRY);
 }
 
 bool RecoveryUI::impl_doRecovery()
@@ -272,7 +272,7 @@ bool RecoveryUI::impl_doRecovery()
     DialogReleaseGuard dialogReleaseGuard(*this, xDialog->getDialog());
 
     // start the dialog
-    short nRet = xDialog->run();
+    VclResponseType nRet = xDialog->run();
 
     impl_showAllRecoveredDocs();
 

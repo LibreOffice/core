@@ -75,7 +75,7 @@ void Organize(weld::Window* pParent, const css::uno::Reference<css::frame::XFram
     EnsureIde();
 
     auto xDlg(std::make_shared<OrganizeDialog>(pParent, xDocFrame, tabId));
-    weld::DialogController::runAsync(xDlg, [](int) {});
+    weld::DialogController::runAsync(xDlg, [](VclResponseType) {});
 }
 
 bool IsValidSbxName( std::u16string_view rName )
@@ -247,13 +247,13 @@ OUString ChooseMacro(weld::Window* pParent,
         aChooser.SetMode(MacroChooser::Mode::Recording);
     }
 
-    short nRetValue = aChooser.run();
+    VclResponseType nRetValue = aChooser.run();
 
     GetExtraData()->ChoosingMacro() = false;
 
     switch ( nRetValue )
     {
-        case static_cast<int>(MacroExitCode::Macro_OkRun):
+        case RET_MACRO_OK_RUN:
         {
             bool bError = false;
 
@@ -346,8 +346,11 @@ OUString ChooseMacro(weld::Window* pParent,
                 pExecData->xMethod = pMethod;   // keep alive until the event has been processed
                 Application::PostUserEvent( LINK( nullptr, MacroExecution, ExecuteMacroEvent ), pExecData );
             }
+            break;
         }
-        break;
+        default:
+            SAL_WARN("basctl.basicide", "Unhandled dialog response " << nRetValue);
+            break;
     }
 
     return aScriptURL;

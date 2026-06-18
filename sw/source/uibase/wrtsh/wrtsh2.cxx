@@ -335,7 +335,7 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool b
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(pParentWin, *this, pField, bPrevButton, bNextButton));
-    const short nRet = pDlg->Execute();
+    const VclResponseType nRet = pDlg->Execute();
 
     if (pPressedButton)
     {

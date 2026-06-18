@@ -163,9 +163,9 @@ namespace abp
             m_aNewDataSource.remove();
     }
 
-    short OAddressBookSourcePilot::run()
+    VclResponseType OAddressBookSourcePilot::run()
     {
-        short nRet = vcl::RoadmapWizardMachine::run();
+        VclResponseType nRet = vcl::RoadmapWizardMachine::run();
 
         implCleanup();
 

@@ -288,7 +288,7 @@ class AbstractHangulHanjaConversionDialog_Impl final
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
-    void EndDialog(sal_Int32 nResult) override { m_pDlg->response(nResult); }
+    void EndDialog(VclResponseType nResult) override { m_pDlg->response(nResult); }
     void EnableRubySupport(bool bVal) override { m_pDlg->EnableRubySupport(bVal); }
     void SetByCharacter(bool bByCharacter) override { m_pDlg->SetByCharacter(bByCharacter); }
     void SetConversionDirectionState(
@@ -384,7 +384,7 @@ class AbstractHyphenWordDialog_Impl final
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
 #if ENABLE_WASM_STRIP_HUNSPELL
-    short Execute() override { return 0; }
+    VclResponseType Execute() override { return RET_CANCEL; }
 #endif
 };
 }
@@ -1413,7 +1413,7 @@ public:
     OUString GetPasswordToOpen() const override { return m_pDlg->GetPasswordToOpen(); }
     OUString GetPasswordToModify() const override { return m_pDlg->GetPasswordToModify(); }
     bool IsRecommendToOpenReadonly() const override { return m_pDlg->IsRecommendToOpenReadonly(); }
-    void Response(sal_Int32 nResult) override { m_pDlg->response(nResult); }
+    void Response(VclResponseType nResult) override { m_pDlg->response(nResult); }
     void AllowEmpty() override { m_pDlg->AllowEmpty(); }
 };
 }

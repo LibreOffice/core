@@ -257,7 +257,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
     maLocalView.setOpenTemplateHdl(Link<const OUString&, void>());
 }
 
-short SfxTemplateManagerDlg::run()
+VclResponseType SfxTemplateManagerDlg::run()
 {
     //use application specific settings if there's no previous setting
     getApplicationSpecificSettings();
@@ -1326,7 +1326,7 @@ SfxTemplateSelectionDlg::~SfxTemplateSelectionDlg()
     maIdle.Stop();
 }
 
-short SfxTemplateSelectionDlg::run()
+VclResponseType SfxTemplateSelectionDlg::run()
 {
     // tdf#124597 at startup this dialog is launched before its parent window
     // has taken its final size. The parent size request is processed during

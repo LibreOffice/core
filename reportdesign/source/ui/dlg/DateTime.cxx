@@ -88,9 +88,9 @@ void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
     }
 }
 
-short ODateTimeDialog::run()
+VclResponseType ODateTimeDialog::run()
 {
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     if (nRet == RET_OK && (m_xDate->get_active() || m_xTime->get_active()))
     {
         try

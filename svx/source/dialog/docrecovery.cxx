@@ -605,13 +605,13 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, weld::Button&, void)
 {
     // start crash-save with progress
     std::unique_ptr<SaveProgressDialog> xProgress(new SaveProgressDialog(m_xDialog.get(), m_pCore));
-    short nResult = xProgress->run();
+    VclResponseType nResult = xProgress->run();
     xProgress.reset();
 
     // if "CANCEL" => return "CANCEL"
     // if "OK"     => request a restart always!
-    if (nResult == DLG_RET_OK)
-        nResult = DLG_RET_OK_AUTOLAUNCH;
+    if (nResult == RET_OK)
+        nResult = RET_RETRY;
 
     m_xDialog->response(nResult);
 }
@@ -631,14 +631,14 @@ SaveProgressDialog::~SaveProgressDialog()
         m_xProgress->dispose();
 }
 
-short SaveProgressDialog::run()
+VclResponseType SaveProgressDialog::run()
 {
     ::SolarMutexGuard aLock;
 
     m_pCore->setProgressHandler(m_xProgress);
     m_pCore->setUpdateListener(this);
     m_pCore->doEmergencySave();
-    short nRet = DialogController::run();
+    VclResponseType nRet = DialogController::run();
     m_pCore->setUpdateListener(nullptr);
     return nRet;
 }
@@ -659,7 +659,7 @@ void SaveProgressDialog::stepNext(TURLInfo* )
 
 void SaveProgressDialog::end()
 {
-    m_xDialog->response(DLG_RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 static short impl_askUserForWizardCancel(weld::Widget* pParent, TranslateId pRes)
@@ -667,9 +667,9 @@ static short impl_askUserForWizardCancel(weld::Widget* pParent, TranslateId pRes
     std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(pParent,
                                                 VclMessageType::Question, VclButtonsType::YesNo, SvxResId(pRes)));
     if (xQuery->run() == RET_YES)
-        return DLG_RET_OK;
+        return RET_OK;
     else
-        return DLG_RET_CANCEL;
+        return RET_CANCEL;
 }
 
 RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
@@ -804,7 +804,7 @@ short RecoveryDialog::execute()
                  // Do it ... but check first, if there exist some
                  // failed recovery documents. They must be saved to
                  // a user selected directory.
-                 short                 nRet                  = DLG_RET_UNKNOWN;
+                 VclResponseType    nRet = RET_UNKNOWN;
                  BrokenRecoveryDialog aBrokenRecoveryDialog(m_xDialog.get(), m_pCore, !m_bWasRecoveryStarted);
                  OUString sSaveDir = aBrokenRecoveryDialog.getSaveDirURL(); // get the default dir
                  if (aBrokenRecoveryDialog.isExecutionNeeded())
@@ -817,21 +817,21 @@ short RecoveryDialog::execute()
                  {
                      // no broken temp files exists
                      // step to the next wizard page
-                     case DLG_RET_UNKNOWN :
+                     case RET_UNKNOWN :
                           {
                               m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
-                              return DLG_RET_OK;
+                              return RET_OK;
                           }
 
                      // user decided to save the broken temp files
                      // do and forget it
                      // step to the next wizard page
-                     case DLG_RET_OK :
+                     case RET_OK :
                           {
                               m_pCore->saveBrokenTempEntries(sSaveDir);
                               m_pCore->forgetBrokenTempEntries();
                               m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
-                              return DLG_RET_OK;
+                              return RET_OK;
                           }
 
                      // user decided to ignore broken temp files.
@@ -840,17 +840,20 @@ short RecoveryDialog::execute()
                      //     IGNORE => remove broken temp files
                      //            => step to the next wizard page
                      //     CANCEL => step back to the recovery page
-                     case DLG_RET_CANCEL :
+                     case RET_CANCEL :
                           {
                               // TODO ask user ...
                               m_pCore->forgetBrokenTempEntries();
                               m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
-                              return DLG_RET_OK;
+                              return RET_OK;
                           }
+
+                    default:
+                        break;
                  }
 
                  m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
-                 return DLG_RET_OK;
+                 return RET_OK;
              }
 
         case RecoveryDialog::E_RECOVERY_CANCELED :
@@ -872,7 +875,7 @@ short RecoveryDialog::execute()
                  // They should be saved to a user defined location.
                  // If no temp files exists or user decided to ignore it ...
                  // we have to remove all recovery/session data anyway!
-                 short nRet = DLG_RET_UNKNOWN;
+                 short nRet = RET_UNKNOWN;
                  BrokenRecoveryDialog aBrokenRecoveryDialog(m_xDialog.get(), m_pCore, !m_bWasRecoveryStarted);
                  OUString sSaveDir = aBrokenRecoveryDialog.getSaveDirURL(); // get the default save location
 
@@ -885,23 +888,23 @@ short RecoveryDialog::execute()
                  }
 
                  // Possible states:
-                 // a) nRet == DLG_RET_UNKNOWN
+                 // a) nRet == RET_UNKNOWN
                  //         dialog was not shown ...
                  //         because there exists no temp file for copy.
                  //         => remove all recovery data
-                 // b) nRet == DLG_RET_OK
+                 // b) nRet == RET_OK
                  //         dialog was shown ...
                  //         user decided to save temp files
                  //         => save all OR broken temp files (depends from the time, where cancel was called)
                  //         => remove all recovery data
-                 // c) nRet == DLG_RET_CANCEL
+                 // c) nRet == RET_CANCEL
                  //         dialog was shown ...
                  //         user decided to ignore temp files
                  //         => remove all recovery data
                  // => a)/c) are the same ... b) has one additional operation
 
                  // b)
-                 if (nRet == DLG_RET_OK)
+                 if (nRet == RET_OK)
                  {
                      if (m_bWasRecoveryStarted)
                          m_pCore->saveBrokenTempEntries(sSaveDir);
@@ -917,13 +920,13 @@ short RecoveryDialog::execute()
                  m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
 
                  // THERE IS NO WAY BACK. see impl_askUserForWizardCancel()!
-                 return DLG_RET_CANCEL;
+                 return RET_CANCEL;
              }
     }
 
     // should never be reached .-)
     OSL_FAIL("Should never be reached!");
-    return DLG_RET_OK;
+    return RET_OK;
 }
 
 void RecoveryDialog::updateItems()
@@ -978,7 +981,7 @@ IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl, weld::Button&, void)
 
     if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_HANDLED)
     {
-        m_xDialog->response(DLG_RET_OK);
+        m_xDialog->response(RET_OK);
     }
 }
 
@@ -987,7 +990,7 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl, weld::Button&, void)
     switch (m_eRecoveryState)
     {
         case RecoveryDialog::E_RECOVERY_PREPARED:
-            if (impl_askUserForWizardCancel(m_xDialog.get(), RID_SVXSTR_QUERY_EXIT_RECOVERY) != DLG_RET_CANCEL)
+            if (impl_askUserForWizardCancel(m_xDialog.get(), RID_SVXSTR_QUERY_EXIT_RECOVERY) != RET_CANCEL)
             {
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
                 execute();
@@ -1205,7 +1208,7 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl, weld::Button&, void)
     while (m_sSavePath.isEmpty())
         impl_askForSavePath();
 
-    m_xDialog->response(DLG_RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl, weld::Button&, void)

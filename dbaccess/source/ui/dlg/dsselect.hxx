@@ -43,7 +43,7 @@ public:
     OUString GetSelected() const { return m_xDatasource->get_selected_text(); }
     void Select(const OUString& _rEntry) { m_xDatasource->select_text(_rEntry); }
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
 private:
     DECL_LINK(ListDblClickHdl, const weld::TreeIter&, bool);

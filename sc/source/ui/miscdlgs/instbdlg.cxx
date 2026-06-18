@@ -118,7 +118,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     }
 }
 
-short ScInsertTableDlg::run()
+VclResponseType ScInsertTableDlg::run()
 {
     if (m_xBtnFromFile->get_active())
         aBrowseTimer.Start();

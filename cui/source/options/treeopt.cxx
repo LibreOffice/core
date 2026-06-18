@@ -2487,7 +2487,7 @@ void OfaTreeOptionsDialog::SetNeedsRestart( svtools::RestartReason eReason)
     eRestartReason = eReason;
 }
 
-short OfaTreeOptionsDialog::run()
+VclResponseType OfaTreeOptionsDialog::run()
 {
     std::unique_ptr< SvxDicListChgClamp > pClamp;
     if ( !bIsFromExtensionManager )

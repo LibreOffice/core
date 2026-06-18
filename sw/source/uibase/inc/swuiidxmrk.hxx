@@ -169,7 +169,7 @@ class SwIndexMarkModalDlg final : public SfxDialogController
 public:
     SwIndexMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh, SwTOXMark const * pCurTOXMark);
     virtual ~SwIndexMarkModalDlg() override;
-    virtual short int run() override;
+    virtual VclResponseType run() override;
 };
 
 class SwAuthorMarkPane
@@ -241,7 +241,7 @@ class SwAuthMarkModalDlg final : public SfxDialogController
     void Apply();
 public:
     SwAuthMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh);
-    virtual short int run() override;
+    virtual VclResponseType run() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX

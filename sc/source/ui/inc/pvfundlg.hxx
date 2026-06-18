@@ -205,7 +205,7 @@ public:
                                css::sheet::DataPilotFieldOrientation nOrient);
     virtual ~ScDPShowDetailDlg() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     /**
      * @return String internal name of the selected field.  Note that this may

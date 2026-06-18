@@ -204,7 +204,7 @@ void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference
         m_xChartModel->unlockControllers();
 
     CreationWizardUnoDlg* xThat = this;
-    weld::DialogController::runAsync(m_xDialog, [xListener, xThat](sal_Int32 nResult){
+    weld::DialogController::runAsync(m_xDialog, [xListener, xThat](VclResponseType nResult){
             if( xListener.is() )
             {
                 ::css::uno::Reference< ::css::uno::XInterface > xSource;

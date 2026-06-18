@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CancelHdl, weld::Button&, void)
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, u"svx/ui/querysavecontchangesdialog.ui"_ustr));
         std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog(u"QuerySaveContourChangesDialog"_ustr));
-        const short nRet = xQBox->run();
+        const VclResponseType nRet = xQBox->run();
 
         if ( nRet == RET_YES )
         {

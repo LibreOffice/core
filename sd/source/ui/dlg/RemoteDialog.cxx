@@ -41,9 +41,9 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton, weld::Button&, void)
 #endif
 }
 
-short RemoteDialog::run()
+VclResponseType RemoteDialog::run()
 {
-    short nRet = weld::GenericDialogController::run();
+    VclResponseType nRet = weld::GenericDialogController::run();
 #ifdef ENABLE_SDREMOTE
     RemoteServer::restoreDiscoverable();
 #endif

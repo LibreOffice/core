@@ -1424,7 +1424,7 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogEdit(
     }
 
     // close the MacroManagerDialog
-    m_xDialog->response(0);
+    m_xDialog->response(RET_CANCEL);
 }
 
 IMPL_LINK(MacroManagerDialog, CheckPasswordHdl, SvxPasswordDialog*, pDlg, bool)
@@ -2030,7 +2030,7 @@ void MacroManagerDialog::BasicScriptsMacroEdit(const basctl::ScriptDocument& rDo
     //     pDispatcher->ExecuteList(SID_BASICIDE_EDITMACRO, SfxCallMode::ASYNCHRON, { &aInfoItem });
 
     // now it is safe to close the scripts organizer selector dialog
-    m_xDialog->response(0);
+    m_xDialog->response(RET_CANCEL);
 }
 
 // modified version of void SvxScriptOrgDialog::renameEntry(const weld::TreeIter& rEntry)

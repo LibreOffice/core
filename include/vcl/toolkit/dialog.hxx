@@ -118,7 +118,7 @@ public:
 
     virtual bool    Close() override;
 
-    short           Execute();
+    VclResponseType Execute();
     bool            IsInExecute() const { return mbInExecute; }
     // Return true when dialog is synchronously executed (calling ::Execute())
     bool            IsInSyncExecute() const { return mbInSyncExecute; };
@@ -138,7 +138,7 @@ public:
     // Dialog::Execute replacement API
 
 
-    void            EndDialog( tools::Long nResult = RET_CANCEL );
+    void            EndDialog( VclResponseType nResult = RET_CANCEL );
 
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
@@ -153,10 +153,10 @@ public:
 
     void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink);
 
-    void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);
-    void            set_default_response(int nResponse);
-    int             get_default_response() const;
-    vcl::Window*    get_widget_for_response(int nResponse);
+    void            add_button(PushButton* pButton, VclResponseType nResponse, bool bTransferOwnership);
+    void            set_default_response(VclResponseType nResponse);
+    VclResponseType get_default_response() const;
+    vcl::Window*    get_widget_for_response(VclResponseType nResponse);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

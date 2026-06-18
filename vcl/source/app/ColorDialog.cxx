@@ -70,9 +70,9 @@ void ColorDialog::SetColor(const Color& rColor) { m_pColorDialogController->SetC
 
 Color ColorDialog::GetColor() const { return m_pColorDialogController->GetColor(); }
 
-short ColorDialog::Execute() { return m_pColorDialogController->run(); }
+VclResponseType ColorDialog::Execute() { return m_pColorDialogController->run(); }
 
-void ColorDialog::ExecuteAsync(const std::function<void(sal_Int32)>& func)
+void ColorDialog::ExecuteAsync(const std::function<void(VclResponseType)>& func)
 {
     weld::DialogController::runAsync(m_pColorDialogController, func);
 }

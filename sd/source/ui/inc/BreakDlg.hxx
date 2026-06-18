@@ -40,7 +40,7 @@ public:
     BreakDlg(weld::Window* pWindow, DrawView* pDrView, DrawDocShell* pShell,
              sal_uLong nSumActionCount, sal_uLong nObjCount);
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
 private:
     std::unique_ptr<weld::Label> m_xFiObjInfo;

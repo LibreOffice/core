@@ -805,7 +805,7 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
         auto xRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more
         pDlg->StartExecuteAsync(
-            [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
+            [this, pDlg, xRequest=std::move(xRequest)] (VclResponseType nResult)->void
             {
                 if (nResult == RET_OK)
                 {
@@ -882,7 +882,7 @@ void ScTabViewShell::ExecuteInsertTable(SfxRequest& rReq)
         VclPtr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetFrameWeld(), rViewData,
             nTabSelCount, nSlot == FID_INS_TABLE_EXT));
         sfx2::ExecDialogPerRequestAndDispose(pDlg, rReq,
-                                             [this, pDlg](sal_Int32 nResult, SfxRequest& req)
+                                             [this, pDlg](VclResponseType nResult, SfxRequest& req)
                                              {
                                                  if (nResult == RET_OK)
                                                      DoInsertTableFromDialog(req, pDlg);

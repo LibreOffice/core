@@ -188,7 +188,7 @@ public:
 
     void            SetModal(bool bModal) { m_xDialog->set_modal(bModal); }
 
-    virtual void EndDialog(int nResponse) override;
+    virtual void EndDialog(VclResponseType nResponse) override;
 
     virtual bool CloseOnHide() const override { return false; }
 

@@ -126,7 +126,7 @@ class SwSvxNumBulletTabDialog final : public SfxTabDialogController
 {
     SwWrtShell&         m_rWrtSh;
 
-    virtual short   Ok() override;
+    virtual VclResponseType Ok() override;
     virtual void    PageCreated(const OUString& rPageId, SfxTabPage& rPage) override;
     DECL_LINK(RemoveNumberingHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);

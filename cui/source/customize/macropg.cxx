@@ -462,7 +462,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
     {
         AssignComponentDialog aAssignDlg(GetFrameWeld(), sEventURL);
 
-        short ret = aAssignDlg.run();
+        VclResponseType ret = aAssignDlg.run();
         if( ret )
         {
             sEventType = "UNO";
@@ -475,7 +475,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
     {
         // assign pressed
         SvxScriptSelectorDialog aDlg(GetFrameWeld(), GetFrame());
-        short ret = aDlg.run();
+        VclResponseType ret = aDlg.run();
         if ( ret )
         {
             sEventType = "Script";

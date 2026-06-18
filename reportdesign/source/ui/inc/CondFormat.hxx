@@ -84,7 +84,7 @@ namespace rptui
         );
         virtual ~ConditionalFormattingDialog() override;
         // Dialog overridables
-        virtual short run() override;
+        virtual VclResponseType run() override;
 
         // IConditionalFormatAction overridables
         virtual void addCondition( size_t _nAddAfterIndex ) override;

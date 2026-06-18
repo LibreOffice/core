@@ -40,19 +40,20 @@ public:
     virtual OUString get_secondary_text() const override;
 
     // weld::Dialog overrides
-    virtual void add_button(const OUString& rText, int nResponse,
+    virtual void add_button(const OUString& rText, VclResponseType nResponse,
                             const OUString& rHelpId = {}) override;
     virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) override;
-    std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
-    virtual int run() override;
+    std::unique_ptr<weld::Button> weld_button_for_response(VclResponseType nResponse) override;
+    virtual VclResponseType run() override;
 
     void addStandardButtons(VclButtonsType eButtonType);
     static void addStandardButtons(QMessageBox& rMessageDialog, VclButtonsType eButtonType);
 
 private:
-    static void addButton(QMessageBox& rMessageDialog, const OUString& rText, int nResponse);
+    static void addButton(QMessageBox& rMessageDialog, const OUString& rText,
+                          VclResponseType nResponse);
     void positionExtraControlsContainer();
-    QPushButton* buttonForResponseCode(int nResponse);
+    QPushButton* buttonForResponseCode(VclResponseType nResponse);
 
 protected slots:
     virtual void dialogFinished(int nResult) override;

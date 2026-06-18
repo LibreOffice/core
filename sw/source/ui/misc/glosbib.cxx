@@ -126,9 +126,9 @@ SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
     }
 }
 
-short SwGlossaryGroupDlg::run()
+VclResponseType SwGlossaryGroupDlg::run()
 {
-    short nRet = SfxDialogController::run();
+    VclResponseType nRet = SfxDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

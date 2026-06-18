@@ -111,9 +111,9 @@ void SafeModeDialog::enableDisableWidgets()
     // no disable of mxCBResetWholeUserProfile, always possible (as last choice)
 }
 
-short SafeModeDialog::run()
+VclResponseType SafeModeDialog::run()
 {
-    short nRet = weld::GenericDialogController::run();
+    VclResponseType nRet = weld::GenericDialogController::run();
     // Remove the troubleshoot mode flag before exiting this dialog
     sfx2::SafeMode::removeFlag();
     return nRet;

@@ -15,10 +15,10 @@
 
 namespace weld
 {
-short DialogController::run() { return getDialog()->run(); }
+VclResponseType DialogController::run() { return getDialog()->run(); }
 
 bool DialogController::runAsync(const std::shared_ptr<DialogController>& rController,
-                                const std::function<void(sal_Int32)>& func)
+                                const std::function<void(VclResponseType)>& func)
 {
     return rController->getDialog()->runAsync(rController, func);
 }
@@ -31,7 +31,7 @@ void DialogController::set_help_id(const OUString& rHelpId) { getDialog()->set_h
 
 OUString DialogController::get_help_id() const { return getConstDialog()->get_help_id(); }
 
-void DialogController::response(int nResponse) { getDialog()->response(nResponse); }
+void DialogController::response(VclResponseType nResponse) { getDialog()->response(nResponse); }
 
 DialogController::~DialogController() {}
 
@@ -77,7 +77,7 @@ void MessageDialogController::set_secondary_text(const OUString& rText)
     m_xDialog->set_secondary_text(rText);
 }
 
-void MessageDialogController::set_default_response(int nResponse)
+void MessageDialogController::set_default_response(VclResponseType nResponse)
 {
     m_xDialog->set_default_response(nResponse);
 }

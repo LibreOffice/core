@@ -381,7 +381,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             if (m_pDialogHelper)
                 m_pDialogHelper->incBusy();
             DependencyDialog aDlg(activeDialog(), deps);
-            short n = aDlg.run();
+            VclResponseType n = aDlg.run();
             if (m_pDialogHelper)
                 m_pDialogHelper->decBusy();
             // Distinguish between closing the dialog and programmatically

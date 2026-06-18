@@ -1685,7 +1685,7 @@ SalInstanceDialog::SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBui
 }
 
 bool SalInstanceDialog::runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
-                                 const std::function<void(sal_Int32)>& rEndDialogFn)
+                                 const std::function<void(VclResponseType)>& rEndDialogFn)
 {
     VclAbstractDialog::AsyncContext aCtx;
     aCtx.mxOwnerDialogController = rxOwner;
@@ -1697,7 +1697,7 @@ bool SalInstanceDialog::runAsync(std::shared_ptr<weld::DialogController> const& 
 }
 
 bool SalInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
-                                 const std::function<void(sal_Int32)>& rEndDialogFn)
+                                 const std::function<void(VclResponseType)>& rEndDialogFn)
 {
     assert(rxSelf.get() == this);
     VclAbstractDialog::AsyncContext aCtx;
@@ -1780,7 +1780,7 @@ void SalInstanceDialog::SetInstallLOKNotifierHdl(
     m_xDialog->SetInstallLOKNotifierHdl(rLink);
 }
 
-int SalInstanceDialog::run()
+VclResponseType SalInstanceDialog::run()
 {
     VclButtonBox* pActionArea = m_xDialog->get_action_area();
     if (pActionArea)
@@ -1788,9 +1788,10 @@ int SalInstanceDialog::run()
     return m_xDialog->Execute();
 }
 
-void SalInstanceDialog::response(int nResponse) { m_xDialog->EndDialog(nResponse); }
+void SalInstanceDialog::response(VclResponseType nResponse) { m_xDialog->EndDialog(nResponse); }
 
-void SalInstanceDialog::add_button(const OUString& rText, int nResponse, const OUString& rHelpId)
+void SalInstanceDialog::add_button(const OUString& rText, VclResponseType nResponse,
+                                   const OUString& rHelpId)
 {
     VclButtonBox* pBox = m_xDialog->get_action_area();
     VclPtr<PushButton> xButton(
@@ -1814,6 +1815,8 @@ void SalInstanceDialog::add_button(const OUString& rText, int nResponse, const O
             break;
         case RET_NO:
             xButton->set_id(u"no"_ustr);
+            break;
+        default:
             break;
     }
 
@@ -1842,7 +1845,7 @@ void SalInstanceDialog::set_centered_on_parent(bool /*bTrackGeometryRequests*/)
     }
 }
 
-void SalInstanceDialog::set_default_response(int nResponse)
+void SalInstanceDialog::set_default_response(VclResponseType nResponse)
 {
     m_xDialog->set_default_response(nResponse);
 }
@@ -2809,25 +2812,36 @@ IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
     signal_clicked();
 }
 
-std::unique_ptr<weld::Button> SalInstanceDialog::weld_button_for_response(int nResponse)
+std::unique_ptr<weld::Button> SalInstanceDialog::weld_button_for_response(VclResponseType nResponse)
 {
     PushButton* pButton = dynamic_cast<PushButton*>(m_xDialog->get_widget_for_response(nResponse));
     return pButton ? std::make_unique<SalInstanceButton>(pButton, nullptr, false) : nullptr;
 }
 
-std::unique_ptr<weld::Button> SalInstanceAssistant::weld_button_for_response(int nResponse)
+std::unique_ptr<weld::Button>
+SalInstanceAssistant::weld_button_for_response(VclResponseType nResponse)
 {
     PushButton* pButton = nullptr;
-    if (nResponse == RET_YES)
-        pButton = m_xWizard->m_pNextPage;
-    else if (nResponse == RET_NO)
-        pButton = m_xWizard->m_pPrevPage;
-    else if (nResponse == RET_OK)
-        pButton = m_xWizard->m_pFinish;
-    else if (nResponse == RET_CANCEL)
-        pButton = m_xWizard->m_pCancel;
-    else if (nResponse == RET_HELP)
-        pButton = m_xWizard->m_pHelp;
+    switch (nResponse)
+    {
+        case RET_YES:
+            pButton = m_xWizard->m_pNextPage;
+            break;
+        case RET_NO:
+            pButton = m_xWizard->m_pPrevPage;
+            break;
+        case RET_OK:
+            pButton = m_xWizard->m_pFinish;
+            break;
+        case RET_CANCEL:
+            pButton = m_xWizard->m_pCancel;
+            break;
+        case RET_HELP:
+            pButton = m_xWizard->m_pHelp;
+            break;
+        default:
+            break;
+    }
     if (pButton)
         return std::make_unique<SalInstanceButton>(pButton, nullptr, false);
     return nullptr;

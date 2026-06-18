@@ -78,7 +78,7 @@ public:
     SvInsertOleDlg(weld::Window* pParent,
         const css::uno::Reference < css::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers );
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
     css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) override;
@@ -115,7 +115,7 @@ public:
         const css::uno::Reference<css::embed::XStorage>& xStorage);
     SfxInsertFloatingFrameDialog(weld::Window* pParent,
         const css::uno::Reference<css::embed::XEmbeddedObject>& xObj);
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

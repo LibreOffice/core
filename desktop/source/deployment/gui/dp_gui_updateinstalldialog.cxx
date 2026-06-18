@@ -210,10 +210,10 @@ UpdateInstallDialog::~UpdateInstallDialog()
 {
 }
 
-short UpdateInstallDialog::run()
+VclResponseType UpdateInstallDialog::run()
 {
     m_thread->launch();
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     m_thread->stop();
     return nRet;
 }

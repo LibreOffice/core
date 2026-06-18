@@ -314,7 +314,7 @@ sal_uInt16 SwOutlineTabDialog::GetLevel(std::u16string_view rFormatName) const
     return MAXLEVEL;
 }
 
-short SwOutlineTabDialog::Ok()
+VclResponseType SwOutlineTabDialog::Ok()
 {
     SfxTabDialogController::Ok();
     // set levels for all created templates; has to be done in order to

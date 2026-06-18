@@ -454,7 +454,7 @@ namespace
             m_xQueryBox->set_default_response(RET_YES);
             m_xQueryBox->set_help_id(HID_QUERY_LOAD_TEMPLATE);
         }
-        short run() { return m_xQueryBox->run(); }
+        VclResponseType run() { return m_xQueryBox->run(); }
     };
 }
 

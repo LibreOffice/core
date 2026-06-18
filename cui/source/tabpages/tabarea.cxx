@@ -123,7 +123,7 @@ void SvxAreaTabDialog::SavePalettes()
     }
 }
 
-short SvxAreaTabDialog::Ok()
+VclResponseType SvxAreaTabDialog::Ok()
 {
     SavePalettes();
     // RET_OK is returned, if at least one

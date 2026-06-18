@@ -1813,7 +1813,7 @@ void PrinterController::createProgressDialog()
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
             mpImplData->mxProgress = std::make_shared<PrintProgressDialog>(getWindow(), getPageCountProtected());
-            weld::DialogController::runAsync(mpImplData->mxProgress, [](sal_Int32 /*nResult*/){});
+            weld::DialogController::runAsync(mpImplData->mxProgress, [](VclResponseType /*nResult*/){});
         }
     }
     else

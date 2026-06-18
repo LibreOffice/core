@@ -101,24 +101,24 @@ executeErrorDialog(
         case MessageBoxStyle::NONE:
             break;
         case MessageBoxStyle::Ok:
-            xBox->add_button(GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
+            xBox->add_button(GetStandardText(StandardButtonType::OK), RET_OK);
             break;
         case MessageBoxStyle::OkCancel:
-            xBox->add_button(GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            xBox->add_button(GetStandardText(StandardButtonType::OK), RET_OK);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
             break;
         case MessageBoxStyle::YesNo:
-            xBox->add_button(GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
-            xBox->add_button(GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), RET_YES);
+            xBox->add_button(GetStandardText(StandardButtonType::No), RET_NO);
             break;
         case MessageBoxStyle::YesNoCancel:
-            xBox->add_button(GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
-            xBox->add_button(GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), RET_YES);
+            xBox->add_button(GetStandardText(StandardButtonType::No), RET_NO);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
             break;
         case MessageBoxStyle::RetryCancel:
-            xBox->add_button(GetStandardText(StandardButtonType::Retry), static_cast<int>(DialogMask::ButtonsRetry));
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            xBox->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
             break;
     }
 

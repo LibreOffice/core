@@ -32,9 +32,9 @@ SwMergeTableDlg::SwMergeTableDlg(weld::Window* pParent, bool& rWithPrev)
 
 void SwMergeTableDlg::Apply() { m_rMergePrev = m_xMergePrevRB->get_active(); }
 
-short SwMergeTableDlg::run()
+VclResponseType SwMergeTableDlg::run()
 {
-    int nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

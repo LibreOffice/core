@@ -161,7 +161,7 @@ public:
                                 SvtFileDialog( weld::Window* pParent, PickerFlags nBits );
                                 virtual ~SvtFileDialog() override;
 
-    virtual short               run() override;
+    virtual VclResponseType     run() override;
 
             void                FileSelect();
             void                FilterSelect() override;

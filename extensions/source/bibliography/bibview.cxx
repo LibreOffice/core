@@ -123,7 +123,7 @@ namespace bib
             MessageWithCheck aQueryBox(GetFrameWeld());
             aQueryBox.set_primary_text(sErrorString);
 
-            short nResult = aQueryBox.run();
+            VclResponseType nResult = aQueryBox.run();
             BibModul::GetConfig()->SetShowColumnAssignmentWarning(!aQueryBox.get_active());
 
             if( RET_YES != nResult )

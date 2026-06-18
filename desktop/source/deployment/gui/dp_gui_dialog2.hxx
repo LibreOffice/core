@@ -215,7 +215,7 @@ public:
     UpdateRequiredDialog(weld::Window* pParent, TheExtensionManager& rManager);
     virtual        ~UpdateRequiredDialog() override;
 
-    virtual short   run() override;
+    virtual VclResponseType run() override;
 
     virtual void    showProgress( bool bStart ) override;
     virtual void    updateProgress( const OUString &rText,

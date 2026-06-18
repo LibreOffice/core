@@ -85,7 +85,7 @@ IMPL_LINK_NOARG(SwContentControlAliasButton, ClickHdl, weld::Button&, void)
     ScopedVclPtr<VclAbstractDialog> pDlg(
         pFact->CreateSwContentControlDlg(GetEditWin()->GetFrameWeld(), rWrtSh));
     VclAbstractDialog::AsyncContext aContext;
-    aContext.maEndDialogFn = [](sal_Int32) {};
+    aContext.maEndDialogFn = [](VclResponseType) {};
     pDlg->StartExecuteAsync(aContext);
 }
 

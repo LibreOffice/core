@@ -237,7 +237,7 @@ public:
 
     void                SetNeedsRestart( svtools::RestartReason eReason );
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     virtual weld::Button& GetOKButton() const override { return *xOkPB; }
     virtual const SfxItemSet* GetExampleSet() const override { return nullptr; }

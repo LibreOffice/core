@@ -1138,9 +1138,9 @@ SwIndexMarkModalDlg::~SwIndexMarkModalDlg()
     SwViewShell::SetCareDialog(nullptr);
 }
 
-short SwIndexMarkModalDlg::run()
+VclResponseType SwIndexMarkModalDlg::run()
 {
-    short nRet = SfxDialogController::run();
+    VclResponseType nRet = SfxDialogController::run();
     if (RET_OK == nRet)
         m_aContent.Apply();
     return nRet;
@@ -2030,9 +2030,9 @@ SwAuthMarkModalDlg::SwAuthMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh)
     m_aContent.ReInitDlg(rSh);
 }
 
-short SwAuthMarkModalDlg::run()
+VclResponseType SwAuthMarkModalDlg::run()
 {
-    short ret = SfxDialogController::run();
+    VclResponseType ret = SfxDialogController::run();
     if (ret == RET_OK)
         Apply();
     return ret;

@@ -2213,7 +2213,15 @@ void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result )
     SolarMutexGuard aGuard;
     VclPtr<Dialog> pDialog = GetAsDynamic< Dialog >();
     if ( pDialog )
-        pDialog->EndDialog( i_result );
+    {
+        VclResponseType nRet = static_cast<VclResponseType>(i_result);
+        if ( i_result > RET_MAX)
+        {
+            nRet = RET_MAX;
+            SAL_WARN("toolkit", "VCLXDialog result " << i_result << " > max allowed " << nRet);
+        }
+        pDialog->EndDialog( nRet );
+    }
 }
 
 void SAL_CALL VCLXDialog::setHelpId( const OUString& rId )

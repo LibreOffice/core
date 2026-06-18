@@ -45,7 +45,7 @@ namespace pcr
         );
         virtual ~ListSelectionDialog() override;
 
-        virtual short run() override;
+        virtual VclResponseType run() override;
 
     private:
         void    initialize( );

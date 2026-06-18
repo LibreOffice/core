@@ -11,6 +11,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/vclenum.hxx>
 
 #include <functional>
 
@@ -30,14 +31,14 @@ public:
     {
         return const_cast<DialogController*>(this)->getDialog();
     }
-    virtual short run();
+    virtual VclResponseType run();
     static bool runAsync(const std::shared_ptr<DialogController>& rController,
-                         const std::function<void(sal_Int32)>&);
+                         const std::function<void(VclResponseType)>&);
     void set_title(const OUString& rTitle);
     OUString get_title() const;
     void set_help_id(const OUString& rHelpId);
     OUString get_help_id() const;
-    void response(int nResponse);
+    void response(VclResponseType nResponse);
     virtual ~DialogController();
 };
 
@@ -81,7 +82,7 @@ public:
     void set_primary_text(const OUString& rText);
     OUString get_primary_text() const;
     void set_secondary_text(const OUString& rText);
-    void set_default_response(int nResponse);
+    void set_default_response(VclResponseType nResponse);
 };
 }
 

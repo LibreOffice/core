@@ -30,7 +30,7 @@ class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
     // the DialogController/Dialog/function passed to the runAsync variants
     std::shared_ptr<weld::DialogController> m_xRunAsyncDialogController;
     std::shared_ptr<weld::Dialog> m_xRunAsyncDialog;
-    std::function<void(sal_Int32)> m_aRunAsyncFunc;
+    std::function<void(VclResponseType)> m_aRunAsyncFunc;
 
     // widgets visible before collapse() was called, should be visible again after undo_collapse()
     std::vector<QWidget*> m_aVisibleWidgetsBeforeCollapsing;
@@ -40,20 +40,20 @@ public:
     ~QtInstanceDialog();
 
     virtual bool runAsync(const std::shared_ptr<weld::DialogController>& rxOwner,
-                          const std::function<void(sal_Int32)>& func) override;
+                          const std::function<void(VclResponseType)>& func) override;
 
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
-                          const std::function<void(sal_Int32)>& func) override;
+                          const std::function<void(VclResponseType)>& func) override;
 
     virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) override;
 
     virtual void undo_collapse() override;
 
-    virtual int run() override;
+    virtual VclResponseType run() override;
 
-    virtual void response(int nResponse) override;
+    virtual void response(VclResponseType nResponse) override;
 
-    virtual void add_button(const OUString& rText, int nResponse,
+    virtual void add_button(const OUString& rText, VclResponseType nResponse,
                             const OUString& rHelpId = {}) override;
 
     virtual void set_modal(bool bModal) override;
@@ -62,7 +62,8 @@ public:
 
     virtual void set_centered_on_parent(bool bTrackGeometryRequests) override;
 
-    virtual std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
+    virtual std::unique_ptr<weld::Button>
+    weld_button_for_response(VclResponseType nResponse) override;
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
 
@@ -74,13 +75,13 @@ public:
 
     /**
     * Name of the property to set on a QPushButton that holds the
-    * int VCL response code of that button.
+    * VCL response type of that button.
     */
     static const char* const PROPERTY_VCL_RESPONSE_CODE;
 
 protected:
     static QPushButton* buttonForResponseCode(const QList<QAbstractButton*>& rButtons,
-                                              int nResponse);
+                                              VclResponseType nResponse);
 
 protected slots:
     virtual void dialogFinished(int nResult);

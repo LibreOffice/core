@@ -239,6 +239,8 @@ bool FmFormShell::PrepareClose(bool bUI)
                                 break;
 
                             case RET_CANCEL:
+                                [[fallthrough]];
+                            default:
                                 return false;
                         }
                     }

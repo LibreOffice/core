@@ -279,7 +279,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwContentControlDlg(GetView().GetFrameWeld(), rWrtSh));
         VclAbstractDialog::AsyncContext aContext;
-        aContext.maEndDialogFn = [](sal_Int32){};
+        aContext.maEndDialogFn = [](VclResponseType){};
         pDlg->StartExecuteAsync(aContext);
         rReq.Done();
         break;

@@ -102,7 +102,7 @@ public:
                                                const std::vector<OUString> &rPageNames,
                                                SdCustomShowList* pCSList);
     virtual             ~SdStartPresentationDlg() override;
-    virtual short run() override;
+    virtual VclResponseType run() override;
     void                GetAttr( SfxItemSet& rOutAttrs );
 };
 

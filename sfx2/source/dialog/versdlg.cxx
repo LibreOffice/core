@@ -320,7 +320,7 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
         SfxViewVersionDialog_Impl aDlg(m_xDialog.get(), aInfo, true);
-        short nRet = aDlg.run();
+        VclResponseType nRet = aDlg.run();
         if (nRet == RET_OK)
         {
             SfxStringItem aComment( SID_DOCINFO_COMMENTS, aInfo.aComment );

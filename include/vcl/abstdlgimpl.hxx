@@ -43,7 +43,7 @@ public:
     {
     }
 
-    short Execute() override { return m_pDlg->run(); }
+    VclResponseType Execute() override { return m_pDlg->run(); }
 
     bool StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx) override
     {

@@ -480,7 +480,7 @@ public:
     SmSymDefineDialog(weld::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
     virtual ~SmSymDefineDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     void SelectOldSymbolSet(std::u16string_view rSymbolSetName)
     {

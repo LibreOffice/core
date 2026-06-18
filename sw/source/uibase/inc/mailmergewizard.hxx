@@ -78,7 +78,7 @@ public:
     bool                skipUntil( sal_uInt16 nPage)
                                 {return ::vcl::RoadmapWizardMachine::skipUntil(WizardState(nPage));}
 
-    virtual short           run() override;
+    virtual VclResponseType run() override;
 };
 #endif
 

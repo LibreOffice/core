@@ -32,10 +32,10 @@
 
 IMPL_LINK(NameClashDialog, ButtonHdl_Impl, weld::Button&, rBtn, void)
 {
-    tools::Long nRet = tools::Long(ABORT);
+    VclResponseType nRet = RET_ABORT;
     if (m_xBtnRename.get() == &rBtn)
     {
-        nRet = tools::Long(RENAME);
+        nRet = RET_RENAME;
         OUString aNewName = m_xEDNewName->get_text();
         if ( ( aNewName == m_aNewName ) || aNewName.isEmpty() )
         {
@@ -48,7 +48,7 @@ IMPL_LINK(NameClashDialog, ButtonHdl_Impl, weld::Button&, rBtn, void)
         m_aNewName = aNewName;
     }
     else if (m_xBtnOverwrite.get() == &rBtn)
-        nRet = tools::Long(OVERWRITE);
+        nRet = RET_OVERWRITE;
 
     m_xDialog->response(nRet);
 }

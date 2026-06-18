@@ -836,7 +836,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             OUString curScheme = pMyLayout->GetActiveColorSchemeId();
             auto xDlg = std::make_shared<ColorSchemeDialog>(pCurWin ? pCurWin->GetFrameWeld() : nullptr,
                                                             pMyLayout);
-            weld::DialogController::runAsync(xDlg, [xDlg, pMyLayout, curScheme](sal_Int32 nResult){
+            weld::DialogController::runAsync(xDlg, [xDlg, pMyLayout, curScheme](VclResponseType nResult){
                 OUString sNewScheme(xDlg->GetColorSchemeId());
                 // If the user canceled the dialog, restores the original color scheme
                 if (nResult != RET_OK)
@@ -876,7 +876,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             auto xRequest = std::make_shared<SfxRequest>(rReq);
             rReq.Ignore(); // the 'old' request is not relevant any more
             auto xDlg = std::make_shared<ManageLanguageDialog>(pCurWin ? pCurWin->GetFrameWeld() : nullptr, m_pCurLocalizationMgr);
-            weld::DialogController::runAsync(xDlg, [xRequest=std::move(xRequest)](sal_Int32 /*nResult*/){
+            weld::DialogController::runAsync(xDlg, [xRequest=std::move(xRequest)](VclResponseType /*nResult*/){
                     xRequest->Done();
                 });
         }

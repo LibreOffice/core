@@ -195,9 +195,9 @@ SdStartPresentationDlg::~SdStartPresentationDlg()
 {
 }
 
-short SdStartPresentationDlg::run()
+VclResponseType SdStartPresentationDlg::run()
 {
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     if (nRet == RET_OK)
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(

@@ -29,7 +29,7 @@
 #include <memory>
 #include <string_view>
 
-#define RET_ALL     100
+#define RET_ALL  RET_USER100
 
 // we only need forward decl here
 namespace com::sun::star {

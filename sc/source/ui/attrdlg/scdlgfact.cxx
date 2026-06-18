@@ -582,7 +582,7 @@ public:
     {
         return m_pDlg->GetFieldRef();
     }
-    void Response(int nResponse) override { m_pDlg->response(nResponse); }
+    void Response(VclResponseType nResponse) override { m_pDlg->response(nResponse); }
 };
 }
 
@@ -606,7 +606,7 @@ public:
     {
         m_pDlg->FillLabelData(rLabelData);
     }
-    void Response(int nResponse) override { m_pDlg->response(nResponse); }
+    void Response(VclResponseType nResponse) override { m_pDlg->response(nResponse); }
 };
 }
 

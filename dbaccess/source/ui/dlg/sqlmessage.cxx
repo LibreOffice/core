@@ -38,7 +38,7 @@
 
 #include <tools/urlobj.hxx>
 
-#define RET_MORE   RET_RETRY + 1
+#define RET_MORE   RET_USER100
 
 using namespace dbtools;
 using namespace com::sun::star::uno;
@@ -341,7 +341,7 @@ namespace
 {
     void lcl_addButton(weld::MessageDialog* pDialog, StandardButtonType eType, bool bDefault)
     {
-        sal_uInt16 nButtonID = 0;
+        VclResponseType nButtonID = RET_CANCEL;
         switch (eType)
         {
             case StandardButtonType::Yes:

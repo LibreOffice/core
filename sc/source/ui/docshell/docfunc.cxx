@@ -2309,7 +2309,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                 xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
                 xQueryBox->set_default_response(RET_YES);
 
-                short nResult = xQueryBox->run();
+                VclResponseType nResult = xQueryBox->run();
                 if ( nResult == RET_YES )
                 {
                     rList.erase(*pOld);

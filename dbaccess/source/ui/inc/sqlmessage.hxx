@@ -98,8 +98,8 @@ public:
                    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr);
 
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    void add_button(const OUString& rText, int nResponse, const OUString& rHelpId = {}) { m_xDialog->add_button(rText, nResponse, rHelpId); }
-    void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
+    void add_button(const OUString& rText, VclResponseType nResponse, const OUString& rHelpId = {}) { m_xDialog->add_button(rText, nResponse, rHelpId); }
+    void set_default_response(VclResponseType nResponse) { m_xDialog->set_default_response(nResponse); }
 
     virtual ~OSQLMessageBox() override;
 

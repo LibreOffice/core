@@ -353,9 +353,9 @@ namespace rptui
         return sDataField;
     }
 
-    short ConditionalFormattingDialog::run()
+    VclResponseType ConditionalFormattingDialog::run()
     {
-        short nRet = GenericDialogController::run();
+        VclResponseType nRet = GenericDialogController::run();
         if (nRet == RET_OK)
         {
             const OUString sUndoAction( RptResId( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );

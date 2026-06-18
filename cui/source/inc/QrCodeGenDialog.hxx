@@ -28,9 +28,9 @@ public:
     QrCodeGenDialog(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,
                     bool bEditExisting);
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
     static bool runAsync(const std::shared_ptr<QrCodeGenDialog>& rController,
-                         const std::function<void(sal_Int32)>& rFunc);
+                         const std::function<void(VclResponseType)>& rFunc);
 
     void Apply();
 #if ENABLE_ZXING

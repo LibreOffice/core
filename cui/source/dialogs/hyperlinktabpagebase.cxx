@@ -280,7 +280,7 @@ IMPL_LINK_NOARG(HyperlinkTabPageBase, ClickScriptHdl, weld::Button&, void)
     pMacroPage->AddEvent(CuiResId(RID_CUISTR_HYPDLG_MACROACT2), static_cast<SvMacroItemId>(5101));
     pMacroPage->AddEvent(CuiResId(RID_CUISTR_HYPDLG_MACROACT3), static_cast<SvMacroItemId>(5102));
 
-    short nRet = aDlg.run();
+    VclResponseType nRet = aDlg.run();
     if (RET_OK == nRet)
     {
         const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();

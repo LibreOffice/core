@@ -22,10 +22,10 @@ SignatureLineDialogBase::SignatureLineDialogBase(weld::Widget* pParent, Referenc
 {
 }
 
-short SignatureLineDialogBase::run()
+VclResponseType SignatureLineDialogBase::run()
 {
     assert(false && "these dialogs are async now");
-    return -1;
+    return RET_UNKNOWN;
 }
 
 OUString SignatureLineDialogBase::getCDataString(std::u16string_view rString)

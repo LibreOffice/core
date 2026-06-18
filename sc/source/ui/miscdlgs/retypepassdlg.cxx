@@ -49,7 +49,7 @@ ScRetypePassDlg::~ScRetypePassDlg() {}
 
 void ScRetypePassDlg::DeleteSheets() { maSheets.clear(); }
 
-short ScRetypePassDlg::run()
+VclResponseType ScRetypePassDlg::run()
 {
     PopulateDialog();
     CheckHashStatus();

@@ -2894,7 +2894,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg(pMDI));
             VclAbstractDialog::AsyncContext aContext;
-            aContext.maEndDialogFn = [](sal_Int32){};
+            aContext.maEndDialogFn = [](VclResponseType){};
             pDlg->StartExecuteAsync(aContext);
         }
         break;

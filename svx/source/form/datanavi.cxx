@@ -541,7 +541,7 @@ namespace svxform
                 AddDataItemDialog aDlg(m_pNaviWin->GetFrameWeld(), pNode.get(), m_xUIHelper);
                 aDlg.set_title(SvxResId(pResId));
                 aDlg.InitText( eType );
-                short nReturn = aDlg.run();
+                VclResponseType nReturn = aDlg.run();
                 if (  DGTInstance == m_eGroup )
                 {
                     if ( RET_OK == nReturn )

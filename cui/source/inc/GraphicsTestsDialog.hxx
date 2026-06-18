@@ -57,5 +57,5 @@ class GraphicsTestsDialog : public weld::GenericDialogController
 public:
     GraphicsTestsDialog(weld::Container* pParent);
     ~GraphicsTestsDialog();
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };

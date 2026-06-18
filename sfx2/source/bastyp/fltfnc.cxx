@@ -460,7 +460,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
                                                        aText));
         xQueryBox->set_default_response(RET_YES);
 
-        short nRet = xQueryBox->run();
+        VclResponseType nRet = xQueryBox->run();
         if ( nRet == RET_YES )
         {
 #ifdef DBG_UTIL

@@ -43,7 +43,7 @@ namespace abp
             weld::Window* _pParent,
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
-        virtual short run() override;
+        virtual VclResponseType run() override;
 
         /// get the service factory which was used to create the dialog
         const css::uno::Reference< css::uno::XComponentContext >&

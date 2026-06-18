@@ -56,7 +56,7 @@ namespace dbaui
         virtual const SfxItemSet* getOutputSet() const override;
         virtual SfxItemSet* getWriteOutputSet() override;
 
-        virtual short   run() override;
+        virtual VclResponseType   run() override;
 
         // forwards to ODbDataSourceAdministrationHelper
         virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;

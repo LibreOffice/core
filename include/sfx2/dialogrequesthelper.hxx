@@ -26,7 +26,7 @@ namespace sfx2
 // set the necessary return values. After endDialogFn exits, the dialog is disposed. Intended
 // for use in request handlers.
 template <class Fn>
-requires(std::is_invocable_v<Fn, sal_Int32, SfxRequest&>) void ExecDialogPerRequestAndDispose(
+requires(std::is_invocable_v<Fn, VclResponseType, SfxRequest&>) void ExecDialogPerRequestAndDispose(
     const VclPtr<VclAbstractDialog>& dlg, SfxRequest& req, const Fn& endDialogFn)
 {
     if (req.GetCallMode() & SfxCallMode::SYNCHRON)
@@ -36,11 +36,11 @@ requires(std::is_invocable_v<Fn, sal_Int32, SfxRequest&>) void ExecDialogPerRequ
     }
     else
     {
-        dlg->StartExecuteAsync(
-            [ dlg, endDialogFn, pRequest = std::make_shared<SfxRequest>(req) ](sal_Int32 result) {
-                endDialogFn(result, *pRequest);
-                dlg->disposeOnce();
-            });
+        dlg->StartExecuteAsync([ dlg, endDialogFn, pRequest = std::make_shared<SfxRequest>(req) ](
+            VclResponseType result) {
+            endDialogFn(result, *pRequest);
+            dlg->disposeOnce();
+        });
         req.Ignore();
     }
 }

@@ -177,7 +177,7 @@ void RemoteFilesDialog::EnableExtraMenuItems(bool bEnable)
     m_xManageServices->set_item_visible(u"change_password"_ustr, bEnable);
 }
 
-short RemoteFilesDialog::run()
+VclResponseType RemoteFilesDialog::run()
 {
     if (m_xServices_lb->get_count() > 0)
     {
@@ -191,7 +191,7 @@ short RemoteFilesDialog::run()
     }
 
     m_bIsInExecute = true;
-    short nRet = SvtFileDialog_Base::run();
+    VclResponseType nRet = SvtFileDialog_Base::run();
     m_bIsInExecute = false;
     return nRet;
 }
@@ -515,7 +515,7 @@ void RemoteFilesDialog::AddService()
 {
     PlaceEditDialog aDlg(m_xDialog.get());
     aDlg.ShowPasswordControl();
-    short aRetCode = aDlg.run();
+    VclResponseType aRetCode = aDlg.run();
 
     switch( aRetCode )
     {
@@ -579,7 +579,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OUString&, rIdent, void
         if( nPos >= 0 )
         {
             PlaceEditDialog aDlg(m_xDialog.get(), m_aServices[nPos]);
-            short aRetCode = aDlg.run();
+            VclResponseType aRetCode = aDlg.run();
 
             switch( aRetCode )
             {

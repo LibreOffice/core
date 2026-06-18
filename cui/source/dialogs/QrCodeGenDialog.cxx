@@ -261,10 +261,10 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     m_xExistingShapeProperties = std::move(xProps);
 }
 
-short QrCodeGenDialog::run()
+VclResponseType QrCodeGenDialog::run()
 {
 #if ENABLE_ZXING
-    short nRet;
+    VclResponseType nRet;
     while (true)
     {
         nRet = GenericDialogController::run();
@@ -293,28 +293,29 @@ short QrCodeGenDialog::run()
 }
 
 bool QrCodeGenDialog::runAsync(const std::shared_ptr<QrCodeGenDialog>& rController,
-                               const std::function<void(sal_Int32)>& rFunc)
+                               const std::function<void(VclResponseType)>& rFunc)
 {
 #if ENABLE_ZXING
 
-    weld::GenericDialogController::runAsync(rController, [rController, rFunc](sal_Int32 nResult) {
-        if (nResult == RET_OK)
-        {
-            try
+    weld::GenericDialogController::runAsync(
+        rController, [rController, rFunc](VclResponseType nResult) {
+            if (nResult == RET_OK)
             {
-                rController->Apply();
+                try
+                {
+                    rController->Apply();
+                }
+                catch (const std::exception&)
+                {
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                        rController->GetParent(), VclMessageType::Warning, VclButtonsType::Ok,
+                        CuiResId(RID_CUISTR_QRCODEDATALONG)));
+                    xBox->run();
+                }
             }
-            catch (const std::exception&)
-            {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                    rController->GetParent(), VclMessageType::Warning, VclButtonsType::Ok,
-                    CuiResId(RID_CUISTR_QRCODEDATALONG)));
-                xBox->run();
-            }
-        }
 
-        rFunc(nResult);
-    });
+            rFunc(nResult);
+        });
 #else
     (void)rController;
     rFunc(RET_CANCEL);

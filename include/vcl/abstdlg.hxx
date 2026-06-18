@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/vclenum.hxx>
 #include <vector>
 #include <functional>
 #include <memory>
@@ -51,7 +52,7 @@ class VCL_DLLPUBLIC VclAbstractDialog : public virtual VclReferenceBase
 protected:
     virtual             ~VclAbstractDialog() override;
 public:
-    virtual short       Execute() = 0;
+    virtual VclResponseType Execute() = 0;
 
     struct AsyncContext {
         // for the case where the owner is the dialog itself, and the dialog is an unwelded VclPtr based dialog
@@ -60,7 +61,7 @@ public:
         std::shared_ptr<weld::DialogController> mxOwnerDialogController;
         // for the case where the dialog is welded, and is running async without a DialogController
         std::shared_ptr<weld::Dialog> mxOwnerSelf;
-        std::function<void(sal_Int32)> maEndDialogFn;
+        std::function<void(VclResponseType)> maEndDialogFn;
         bool isSet() const { return !!maEndDialogFn; }
     };
 
@@ -70,7 +71,7 @@ public:
       and that handler will be executed at some stage in the future,
       instead of right now.
     */
-    bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
+    bool StartExecuteAsync(const std::function<void(VclResponseType)> &rEndDialogFn)
     {
         AsyncContext aCtx;
         aCtx.mxOwner = this;
@@ -93,7 +94,7 @@ class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
 protected:
     virtual             ~VclAbstractTerminatedDialog() override = default;
 public:
-    virtual void        EndDialog(sal_Int32 nResult) = 0;
+    virtual void        EndDialog(VclResponseType nResult) = 0;
 };
 
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
@@ -104,7 +105,7 @@ public:
     virtual OUString    GetPasswordToOpen() const   = 0;
     virtual OUString    GetPasswordToModify() const = 0;
     virtual bool        IsRecommendToOpenReadonly() const = 0;
-    virtual void        Response(sal_Int32) = 0;
+    virtual void        Response(VclResponseType) = 0;
     virtual void        AllowEmpty() = 0;
 };
 

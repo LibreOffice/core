@@ -604,7 +604,7 @@ namespace vcl
         m_pImpl->m_bTravelingSuspended = false;
     }
 
-    bool WizardMachine::Finish(short nResult)
+    bool WizardMachine::Finish(VclResponseType nResult)
     {
         if ( DeactivatePage() )
         {

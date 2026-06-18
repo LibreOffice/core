@@ -72,7 +72,7 @@ class SwGlossaryGroupDlg final : public SfxDialogController
 public:
     SwGlossaryGroupDlg(weld::Window* pParent, std::vector<OUString> const& rPathArr,
                        SwGlossaryHdl* pGlosHdl);
-    virtual short run() override;
+    virtual VclResponseType run() override;
     virtual ~SwGlossaryGroupDlg() override;
 
     const OUString& GetCreatedGroupName() const { return m_sCreatedGroup; }

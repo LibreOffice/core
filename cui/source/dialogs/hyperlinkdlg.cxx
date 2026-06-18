@@ -164,7 +164,7 @@ void HyperlinkDialog::Activate()
 
 IMPL_LINK_NOARG(HyperlinkDialog, ClickApplyHdl, weld::Button&, void) { Apply(); }
 
-short HyperlinkDialog::Ok()
+VclResponseType HyperlinkDialog::Ok()
 {
     Apply();
     return SfxTabDialogController::Ok();

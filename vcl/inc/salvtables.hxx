@@ -530,10 +530,10 @@ public:
     SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
     virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
-                          const std::function<void(sal_Int32)>& rEndDialogFn) override;
+                          const std::function<void(VclResponseType)>& rEndDialogFn) override;
 
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
-                          const std::function<void(sal_Int32)>& rEndDialogFn) override;
+                          const std::function<void(VclResponseType)>& rEndDialogFn) override;
 
     virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) override;
 
@@ -542,11 +542,11 @@ public:
     virtual void
     SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink) override;
 
-    virtual int run() override;
+    virtual VclResponseType run() override;
 
-    virtual void response(int nResponse) override;
+    virtual void response(VclResponseType nResponse) override;
 
-    virtual void add_button(const OUString& rText, int nResponse,
+    virtual void add_button(const OUString& rText, VclResponseType nResponse,
                             const OUString& rHelpId = {}) override;
 
     virtual void set_modal(bool bModal) override;
@@ -555,9 +555,10 @@ public:
 
     virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override;
 
-    virtual std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
+    virtual std::unique_ptr<weld::Button>
+    weld_button_for_response(VclResponseType nResponse) override;
 
-    virtual void set_default_response(int nResponse) override;
+    virtual void set_default_response(VclResponseType nResponse) override;
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
 
@@ -602,7 +603,7 @@ public:
     virtual void do_set_page_sensitive(const OUString& rIdent, bool bSensitive) override;
     virtual void set_page_side_help_id(const OUString& rHelpId) override;
     virtual void set_page_side_image(const OUString& rImage) override;
-    std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
+    std::unique_ptr<weld::Button> weld_button_for_response(VclResponseType nResponse) override;
 
     virtual ~SalInstanceAssistant() override;
 };

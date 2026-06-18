@@ -132,7 +132,7 @@ namespace dbp
 
         virtual bool approveControl(sal_Int16 _nClassId) = 0;
 
-        virtual short  run() override;
+        virtual VclResponseType run() override;
 
     private:
         bool initContext();

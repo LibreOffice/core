@@ -192,9 +192,9 @@ IMPL_LINK_NOARG(ORelationDialog, OKClickHdl, weld::Button&, void)
     m_xTableControl->lateInit();
 }
 
-short ORelationDialog::run()
+VclResponseType ORelationDialog::run()
 {
-    short nResult = GenericDialogController::run();
+    VclResponseType nResult = GenericDialogController::run();
     if ((nResult != RET_OK) && m_bTriedOneUpdate)
         return RET_NO;
 

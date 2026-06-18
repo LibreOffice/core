@@ -253,9 +253,9 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-short HeaderFooterDialog::run()
+VclResponseType HeaderFooterDialog::run()
 {
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     if (nRet)
         mrViewShell.GetDocSh()->SetModified();
     return nRet;

@@ -43,7 +43,7 @@ public:
                                                   const SfxItemSet *rOptions);
     virtual                 ~SfxPrintOptionsDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    DisableHelp();

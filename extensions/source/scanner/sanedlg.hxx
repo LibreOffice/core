@@ -112,7 +112,7 @@ public:
     SaneDlg(weld::Window*, Sane&, bool);
     virtual ~SaneDlg() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
     void UpdateScanArea( bool );
     bool getDoScan() const { return doScan;}
 };

@@ -349,20 +349,20 @@ static void ImplMouseAutoPos( Dialog* pDialog )
 struct DialogImpl
 {
     std::vector<VclPtr<PushButton>> maOwnedButtons;
-    std::map<VclPtr<vcl::Window>, short> maResponses;
-    tools::Long    mnResult;
+    std::map<VclPtr<vcl::Window>, VclResponseType> maResponses;
+    VclResponseType    mnResult;
     bool    mbStartedModal;
     VclAbstractDialog::AsyncContext maEndCtx;
     Link<void*, vcl::ILibreOfficeKitNotifier*> m_aInstallLOKNotifierHdl;
 
     DialogImpl()
-        : mnResult(-1)
+        : mnResult(RET_UNKNOWN)
         , mbStartedModal(false)
     {
     }
 
 #ifndef NDEBUG
-    short get_response(vcl::Window *pWindow) const
+    VclResponseType get_response(vcl::Window *pWindow) const
     {
         auto aFind = maResponses.find(pWindow);
         if (aFind != maResponses.end())
@@ -1036,7 +1036,7 @@ void Dialog::ImplEndExecuteModal()
     pSVData->maAppData.mnModalMode--;
 }
 
-short Dialog::Execute()
+VclResponseType Dialog::Execute()
 {
     VclPtr<vcl::Window> xWindow = this;
 
@@ -1046,7 +1046,7 @@ short Dialog::Execute()
         });
 
     if ( !ImplStartExecute(false) )
-        return 0;
+        return RET_CANCEL;
 
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
@@ -1065,10 +1065,10 @@ short Dialog::Execute()
     }
 
 
-    tools::Long nRet = mpDialogImpl->mnResult;
-    mpDialogImpl->mnResult = -1;
+    VclResponseType nRet = mpDialogImpl->mnResult;
+    mpDialogImpl->mnResult = RET_UNKNOWN;
 
-    return static_cast<short>(nRet);
+    return nRet;
 }
 
 // virtual
@@ -1098,7 +1098,7 @@ void Dialog::RemoveFromDlgList()
     std::erase_if(rExecuteDialogs, [this](VclPtr<Dialog>& dialog){ return dialog.get() == this; });
 }
 
-void Dialog::EndDialog( tools::Long nResult )
+void Dialog::EndDialog( VclResponseType nResult )
 {
     if (!mbInExecute || isDisposed())
         return;
@@ -1160,7 +1160,7 @@ void Dialog::EndDialog( tools::Long nResult )
         if ( mpDialogImpl->mbStartedModal )
         {
             mpDialogImpl->mbStartedModal = false;
-            mpDialogImpl->mnResult = -1;
+            mpDialogImpl->mnResult = RET_UNKNOWN;
         }
         mbInExecute = false;
         auto fn = std::move(mpDialogImpl->maEndCtx.maEndDialogFn);
@@ -1185,7 +1185,7 @@ void Dialog::EndDialog( tools::Long nResult )
         if ( mpDialogImpl->mbStartedModal )
         {
             mpDialogImpl->mbStartedModal = false;
-            mpDialogImpl->mnResult = -1;
+            mpDialogImpl->mnResult = RET_UNKNOWN;
         }
         mbInExecute = false;
         // Destroy ourselves (if we have a context with VclPtr owner)
@@ -1424,7 +1424,7 @@ IMPL_LINK(Dialog, ResponseHdl, Button*, pButton, void)
     auto aFind = mpDialogImpl->maResponses.find(pButton);
     if (aFind == mpDialogImpl->maResponses.end())
         return;
-    short nResponse = aFind->second;
+    VclResponseType nResponse = aFind->second;
     if (nResponse == RET_HELP)
     {
         vcl::Window* pFocusWin = Application::GetFocusWindow();
@@ -1437,7 +1437,7 @@ IMPL_LINK(Dialog, ResponseHdl, Button*, pButton, void)
     EndDialog(nResponse);
 }
 
-void Dialog::add_button(PushButton* pButton, int response, bool bTransferOwnership)
+void Dialog::add_button(PushButton* pButton, VclResponseType response, bool bTransferOwnership)
 {
     if (bTransferOwnership)
         mpDialogImpl->maOwnedButtons.push_back(pButton);
@@ -1468,10 +1468,10 @@ void Dialog::add_button(PushButton* pButton, int response, bool bTransferOwnersh
     }
 }
 
-vcl::Window* Dialog::get_widget_for_response(int response)
+vcl::Window* Dialog::get_widget_for_response(VclResponseType response)
 {
     //copy explicit responses
-    std::map<VclPtr<vcl::Window>, short> aResponses(mpDialogImpl->maResponses);
+    std::map<VclPtr<vcl::Window>, VclResponseType> aResponses(mpDialogImpl->maResponses);
 
     if (mpActionArea)
     {
@@ -1507,10 +1507,10 @@ vcl::Window* Dialog::get_widget_for_response(int response)
     return nullptr;
 }
 
-int Dialog::get_default_response() const
+VclResponseType Dialog::get_default_response() const
 {
     //copy explicit responses
-    std::map<VclPtr<vcl::Window>, short> aResponses(mpDialogImpl->maResponses);
+    std::map<VclPtr<vcl::Window>, VclResponseType> aResponses(mpDialogImpl->maResponses);
 
     if (mpActionArea)
     {
@@ -1547,10 +1547,10 @@ int Dialog::get_default_response() const
     return RET_CANCEL;
 }
 
-void Dialog::set_default_response(int response)
+void Dialog::set_default_response(VclResponseType response)
 {
     //copy explicit responses
-    std::map<VclPtr<vcl::Window>, short> aResponses(mpDialogImpl->maResponses);
+    std::map<VclPtr<vcl::Window>, VclResponseType> aResponses(mpDialogImpl->maResponses);
 
     if (mpActionArea)
     {

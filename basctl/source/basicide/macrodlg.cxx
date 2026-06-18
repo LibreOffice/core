@@ -179,7 +179,7 @@ void MacroChooser::RestoreMacroDescription()
     }
 }
 
-short MacroChooser::run()
+VclResponseType MacroChooser::run()
 {
     RestoreMacroDescription();
 
@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, const weld::TreeIter&, bool)
             return true;
     }
 
-    m_xDialog->response(static_cast<int>(MacroExitCode::Macro_OkRun));
+    m_xDialog->response(RET_MACRO_OK_RUN);
     return true;
 }
 
@@ -622,12 +622,12 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                 return;
         }
 
-        m_xDialog->response(static_cast<int>(MacroExitCode::Macro_OkRun));
+        m_xDialog->response(RET_MACRO_OK_RUN);
     }
     else if (&rButton == m_xCloseButton.get())
     {
         StoreMacroDescription();
-        m_xDialog->response(static_cast<int>(MacroExitCode::Macro_Close));
+        m_xDialog->response(RET_MACRO_CLOSE);
     }
     else if (&rButton == m_xEditButton.get() || &rButton == m_xDelButton.get() || &rButton == m_xNewButton.get())
     {
@@ -673,7 +673,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                 pDispatcher->ExecuteList(SID_BASICIDE_EDITMACRO,
                         SfxCallMode::ASYNCHRON, { &aInfoItem });
             }
-            m_xDialog->response(static_cast<int>(MacroExitCode::Macro_Close));
+            m_xDialog->response(RET_MACRO_CLOSE);
         }
         else
         {
@@ -717,7 +717,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                                 SfxCallMode::ASYNCHRON, { &aInfoItem });
                     }
                     StoreMacroDescription();
-                    m_xDialog->response(static_cast<int>(MacroExitCode::Macro_New));
+                    m_xDialog->response(RET_MACRO_NEW);
                 }
             }
         }
@@ -796,10 +796,10 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
         StoreMacroDescription();
 
         auto xDlg(std::make_shared<OrganizeDialog>(m_xDialog.get(), nullptr, 0));
-        weld::DialogController::runAsync(xDlg, [this](sal_Int32 nRet) {
+        weld::DialogController::runAsync(xDlg, [this](VclResponseType nRet) {
             if (nRet == RET_OK) // not only closed
             {
-                m_xDialog->response(static_cast<int>(MacroExitCode::Macro_Close));
+                m_xDialog->response(RET_MACRO_CLOSE);
                 return;
             }
 

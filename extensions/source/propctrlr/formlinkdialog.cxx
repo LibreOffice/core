@@ -223,9 +223,9 @@ namespace pcr
         }
     }
 
-    short FormLinkDialog::run()
+    VclResponseType FormLinkDialog::run()
     {
-        short nResult = GenericDialogController::run();
+        VclResponseType nResult = GenericDialogController::run();
 
         if ( RET_OK == nResult )
             commitLinkPairs();

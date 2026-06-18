@@ -3053,14 +3053,14 @@ namespace
             : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Warning, VclButtonsType::NONE, ReplaceIconName(rMessage)))
         {
             m_xQueryBox->set_title(CuiResId(RID_CUISTR_REPLACE_ICON_CONFIRM));
-            m_xQueryBox->add_button(GetStandardText(StandardButtonType::Yes), 2);
+            m_xQueryBox->add_button(GetStandardText(StandardButtonType::Yes), RET_YES);
             if (bYestoAll)
-                m_xQueryBox->add_button(CuiResId(RID_CUISTR_YESTOALL), 5);
-            m_xQueryBox->add_button(GetStandardText(StandardButtonType::No), 4);
-            m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), 6);
-            m_xQueryBox->set_default_response(2);
+                m_xQueryBox->add_button(CuiResId(RID_CUISTR_YESTOALL), RET_IGNORE);
+            m_xQueryBox->add_button(GetStandardText(StandardButtonType::No), RET_NO);
+            m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            m_xQueryBox->set_default_response(RET_YES);
         }
-        short run() { return m_xQueryBox->run(); }
+        VclResponseType run() { return m_xQueryBox->run(); }
     };
 }
 
@@ -3081,7 +3081,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                 sal_Int32 aIndex = aPath.lastIndexOf('/');
                 OUString aIconName = aPath.copy(aIndex + 1);
                 SvxIconReplacementDialog aDlg(m_xDialog.get(), aIconName, rPaths.getLength() > 1);
-                sal_uInt16 ret = aDlg.run();
+                VclResponseType ret = aDlg.run();
                 if (ret == 2)
                 {
                     replace = true;

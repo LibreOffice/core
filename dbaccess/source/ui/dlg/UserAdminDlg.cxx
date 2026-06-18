@@ -78,7 +78,7 @@ namespace dbaui
         SetInputSet(nullptr);
     }
 
-    short OUserAdminDlg::run()
+    VclResponseType OUserAdminDlg::run()
     {
         try
         {
@@ -98,7 +98,7 @@ namespace dbaui
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
-        short nRet = SfxTabDialogController::run();
+        VclResponseType nRet = SfxTabDialogController::run();
         if ( nRet == RET_OK )
             m_pImpl->saveChanges(*GetOutputItemSet());
         return nRet;

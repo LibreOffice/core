@@ -477,10 +477,10 @@ UpdateDialog::~UpdateDialog()
 {
 }
 
-short UpdateDialog::run() {
+VclResponseType UpdateDialog::run() {
     m_xThrobber->start();
     m_thread->launch();
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     m_thread->stop();
     return nRet;
 }

@@ -57,9 +57,9 @@ public:
     bool NextButtonPressed() const;
     void Apply();
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
-    virtual short run() override
+    virtual VclResponseType run() override
     {
-        short nRet = GenericDialogController::run();
+        VclResponseType nRet = GenericDialogController::run();
         if (nRet == RET_OK)
             Apply();
         return nRet;

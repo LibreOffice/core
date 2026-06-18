@@ -110,7 +110,7 @@ public:
                    const std::vector<OUString>& _rContexts, sal_Int16 nInitialContext,
                    const Link<FmSearchContext&, sal_uInt32>& lnkContextSupplier);
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     virtual ~FmSearchDialog() override;
 

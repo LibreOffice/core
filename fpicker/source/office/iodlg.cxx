@@ -928,7 +928,7 @@ IMPL_LINK_NOARG( SvtFileDialog, ConnectToServerPressed_Hdl, weld::Button&, void 
     m_xFileView->EndInplaceEditing();
 
     PlaceEditDialog aDlg(m_xDialog.get());
-    short aRetCode = aDlg.run();
+    VclResponseType aRetCode = aDlg.run();
 
     switch (aRetCode) {
         case RET_OK :
@@ -1280,14 +1280,14 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, std::u16strin
 }
 
 
-short SvtFileDialog::run()
+VclResponseType SvtFileDialog::run()
 {
     if ( !PrepareExecute() )
-        return 0;
+        return RET_CANCEL;
 
     // start the dialog
     m_bIsInExecute = true;
-    short nResult = GenericDialogController::run();
+    VclResponseType nResult = GenericDialogController::run();
     m_bIsInExecute = false;
 
     SAL_WARN_IF( m_pCurrentAsyncAction.is(), "fpicker.office", "SvtFilePicker::run: still running an async action!" );

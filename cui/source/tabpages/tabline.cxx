@@ -148,7 +148,7 @@ void SvxLineTabDialog::SavePalettes()
     }
 }
 
-short SvxLineTabDialog::Ok()
+VclResponseType SvxLineTabDialog::Ok()
 {
     SavePalettes();
 

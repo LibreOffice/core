@@ -38,6 +38,7 @@
 #include <initui.hxx>
 #include <gloslst.hxx>
 #include <swdtflvr.hxx>
+#include <glossary.hxx>
 
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
@@ -50,8 +51,6 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-
-const short RET_EDIT = 100;
 
 namespace {
 

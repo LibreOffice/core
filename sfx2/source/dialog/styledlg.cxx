@@ -79,7 +79,7 @@ SfxStyleDialogController::~SfxStyleDialogController()
 
     Override so that always RET_OK is returned.
 */
-short SfxStyleDialogController::Ok()
+VclResponseType SfxStyleDialogController::Ok()
 {
     SfxTabDialogController::Ok();
 

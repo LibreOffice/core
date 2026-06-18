@@ -569,7 +569,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             pDlg->SetCurPageId(u"criteria"_ustr);  // 1=sort field tab  2=sort options tab
 
                             VclAbstractDialog::AsyncContext aContext;
-                            aContext.maEndDialogFn = [pDlg, &rData, pTabViewShell](sal_Int32 nResult)
+                            aContext.maEndDialogFn = [pDlg, &rData, pTabViewShell](VclResponseType nResult)
                                 {
                                     if ( nResult == RET_OK )
                                     {
@@ -825,7 +825,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         VclPtr<AbstractScSelEntryDlg> pDlg(
                             pFact->CreateScSelEntryDlg(pTabViewShell->GetFrameWeld(), aList));
                         pDlg->StartExecuteAsync(
-                            [pTabViewShell, pDlg](sal_Int32 nResult)
+                            [pTabViewShell, pDlg](VclResponseType nResult)
                             {
                                 if (nResult == RET_OK)
                                 {

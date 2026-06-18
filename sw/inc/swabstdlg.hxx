@@ -100,7 +100,7 @@ class AbstractFieldInputDlg : public VclAbstractTerminatedDialog
 protected:
     virtual ~AbstractFieldInputDlg() override = default;
 public:
-    virtual void          EndDialog(sal_Int32 nResult) override = 0;
+    virtual void          EndDialog(VclResponseType nResult) override = 0;
     virtual bool          PrevButtonPressed() const = 0;
     virtual bool          NextButtonPressed() const = 0;
 };
@@ -396,9 +396,9 @@ public:
     virtual std::shared_ptr<SfxDialogController> GetController() = 0;
 };
 
-#define RET_LOAD_DOC            100
-#define RET_TARGET_CREATED      103
-#define RET_REMOVE_TARGET       104
+#define RET_LOAD_DOC            RET_USER100
+#define RET_TARGET_CREATED      RET_USER103
+#define RET_REMOVE_TARGET       RET_USER104
 
 class SwMailMergeConfigItem;
 

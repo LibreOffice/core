@@ -75,9 +75,9 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog(weld::Window* pParent, co
     m_xDialog->set_title(CuiResId(RID_CUISTR_REGISTERED_DATABASES));
 }
 
-short DatabaseRegistrationDialog::run()
+VclResponseType DatabaseRegistrationDialog::run()
 {
-    short result = SfxSingleTabDialogController::run();
+    VclResponseType result = SfxSingleTabDialogController::run();
     if (result == RET_OK)
     {
         DBG_ASSERT( GetOutputItemSet(), "DatabaseRegistrationDialog::Execute: no output items!" );

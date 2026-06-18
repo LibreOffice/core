@@ -35,7 +35,7 @@ public:
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
                 the method DisableDialog() will be called. */
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

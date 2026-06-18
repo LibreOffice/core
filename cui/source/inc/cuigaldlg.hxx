@@ -154,7 +154,7 @@ public:
     ActualizeProgress(weld::Widget* pWindow, GalleryTheme* pThm);
     virtual ~ActualizeProgress() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 class TitleDialog : public weld::GenericDialogController

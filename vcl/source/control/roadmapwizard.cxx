@@ -23,6 +23,7 @@
 #include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 #include <vcl/event.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <strings.hrc>
 #include <svdata.hxx>
@@ -560,7 +561,7 @@ namespace vcl
         ImplShowTabPage( ImplGetPage( mnCurLevel ) );
     }
 
-    void RoadmapWizard::Finish( tools::Long nResult )
+    void RoadmapWizard::Finish( VclResponseType nResult )
     {
         if ( IsInExecute() )
             EndDialog( nResult );

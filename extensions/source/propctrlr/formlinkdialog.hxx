@@ -77,7 +77,7 @@ namespace pcr
         virtual ~FormLinkDialog() override;
 
         // Dialog overridables
-        virtual short run() override;
+        virtual VclResponseType run() override;
 
     private:
         DECL_LINK( OnSuggest,    weld::Button&, void );

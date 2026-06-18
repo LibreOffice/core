@@ -152,11 +152,11 @@ namespace
             m_xQueryBox->set_title(SvxResId(RID_SVXSTR_QRY_PRINT_TITLE));
 
             m_xQueryBox->add_button(SvxResId(RID_SVXSTR_QRY_PRINT_SELECTION), RET_OK);
-            m_xQueryBox->add_button(SvxResId(RID_SVXSTR_QRY_PRINT_ALL), 2);
+            m_xQueryBox->add_button(SvxResId(RID_SVXSTR_QRY_PRINT_ALL), RET_YES);
             m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
             m_xQueryBox->set_default_response(RET_OK);
         }
-        short run() { return m_xQueryBox->run(); }
+        VclResponseType run() { return m_xQueryBox->run(); }
     };
 }
 
@@ -219,7 +219,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             {
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetEditWin().GetFrameWeld(), u"modules/swriter/ui/printmergedialog.ui"_ustr));
                 std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"PrintMergeDialog"_ustr));
-                short nRet = xBox->run();
+                VclResponseType nRet = xBox->run();
                 if(RET_NO != nRet)
                 {
                     if(RET_YES == nRet)
@@ -238,7 +238,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 if( pSh->IsSelection() || pSh->IsFrameSelected() || pSh->GetSelectedObjCount() )
                 {
                     SvxPrtQryBox aBox(GetEditWin().GetFrameWeld());
-                    short nBtn = aBox.run();
+                    VclResponseType nBtn = aBox.run();
                     if( RET_CANCEL == nBtn )
                         return;
 

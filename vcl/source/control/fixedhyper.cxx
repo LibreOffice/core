@@ -187,7 +187,7 @@ IMPL_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
         std::shared_ptr<weld::MessageDialog> xErrorBox(
             Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg));
         xErrorBox->set_title(rHyperlink.GetText());
-        xErrorBox->runAsync(xErrorBox, [](sal_Int32){});
+        xErrorBox->runAsync(xErrorBox, [](VclResponseType){});
     }
 }
 

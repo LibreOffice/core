@@ -68,9 +68,9 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
 
 CrashReportDialog::~CrashReportDialog() {}
 
-short CrashReportDialog::run()
+VclResponseType CrashReportDialog::run()
 {
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
 
     // Check whether to go to troubleshoot mode
     if (mxCBSafeMode->get_active())

@@ -23,7 +23,7 @@ public:
     SignatureLineDialogBase(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,
                             const OUString& rUIFile, const OUString& rDialogId);
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
 protected:
     css::uno::Reference<css::frame::XModel> m_xModel;

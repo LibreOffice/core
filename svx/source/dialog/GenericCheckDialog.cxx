@@ -53,7 +53,7 @@ GenericCheckDialog::GenericCheckDialog(weld::Window* pParent,
 
 GenericCheckDialog::~GenericCheckDialog() {}
 
-short GenericCheckDialog::run()
+VclResponseType GenericCheckDialog::run()
 {
     sal_Int32 i = 0;
 

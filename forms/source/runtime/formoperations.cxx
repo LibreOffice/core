@@ -449,6 +449,8 @@ namespace frm
                     needConfirmation = false;
                     return true;
                 case RET_CANCEL:
+                    [[fallthrough]];
+                default:
                     return false;
             }
             return true;

@@ -118,7 +118,7 @@ namespace vcl
         virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
         void                ShowPage(sal_uInt16 nLevel);
-        void                Finish( tools::Long nResult = 0 );
+        void                Finish( VclResponseType nResult = RET_CANCEL );
         sal_uInt16          GetCurLevel() const { return mnCurLevel; }
 
         void                AddPage( TabPage* pPage );

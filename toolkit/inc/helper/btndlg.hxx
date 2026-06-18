@@ -29,7 +29,7 @@ struct ImplBtnDlgItem;
 class PushButton;
 class Button;
 
-#define BUTTONDIALOG_BUTTON_NOTFOUND            (sal_uInt16(0xFFFF))
+#define BUTTONDIALOG_BUTTON_NOTFOUND            (VclResponseType(SAL_MAX_INT16))
 
 enum class ButtonDialogFlags
 {
@@ -56,7 +56,7 @@ public:
 
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
 
-    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags, tools::Long nSepPixel = 0 );
+    void                AddButton( StandardButtonType eType, VclResponseType nId, ButtonDialogFlags nBtnFlags, tools::Long nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
 
 protected:
@@ -72,7 +72,7 @@ private:
     Size                maPageSize;
     Size                maCtrlSize;
     tools::Long                mnButtonSize;
-    sal_uInt16          mnCurButtonId;
+    VclResponseType     mnCurButtonId;
     sal_uInt16          mnFocusButtonId;
     bool                mbFormat;
 

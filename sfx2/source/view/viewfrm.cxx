@@ -200,7 +200,7 @@ public:
         m_xQueryBox->set_primary_text(QueryString(bAllowIgnoreLock, rLockData));
         m_xQueryBox->set_default_response(RET_YES);
     }
-    short run() { return m_xQueryBox->run(); }
+    VclResponseType run() { return m_xQueryBox->run(); }
 
 private:
     static OUString QueryString(bool bAllowIgnoreLock, LockFileEntry& rLockData)
@@ -539,7 +539,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             SfxQueryOpenAsTemplate aBox(GetWindow().GetFrameWeld(),
                                                         bRetryIgnoringLock, aLockData);
 
-                            short nUserAnswer = aBox.run();
+                            VclResponseType nUserAnswer = aBox.run();
                             bOpenTemplate = RET_YES == nUserAnswer;
                             // Always reset this here to avoid infinite loop
                             bRetryIgnoringLock = RET_IGNORE == nUserAnswer;

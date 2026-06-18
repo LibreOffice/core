@@ -327,9 +327,9 @@ void SwMultiTOXTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
     }
 }
 
-short SwMultiTOXTabDialog::Ok()
+VclResponseType SwMultiTOXTabDialog::Ok()
 {
-    short nRet = SfxTabDialogController::Ok();
+    VclResponseType nRet = SfxTabDialogController::Ok();
     SwTOXDescription& rDesc = GetTOXDescription(m_eCurrentTOXType);
     SwTOXBase aNewDef(*m_rWrtShell.GetDefaultTOXBase( m_eCurrentTOXType.eType, true ));
 

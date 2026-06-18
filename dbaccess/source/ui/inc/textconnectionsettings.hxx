@@ -44,7 +44,7 @@ namespace dbaui
         */
         static void bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues );
 
-        virtual short run() override;
+        virtual VclResponseType run() override;
 
     private:
         SfxItemSet& m_rItems;

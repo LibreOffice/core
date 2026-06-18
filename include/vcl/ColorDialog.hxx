@@ -49,8 +49,8 @@ public:
     void            SetColor( const Color& rColor );
     Color           GetColor() const;
 
-    short           Execute();
-    void            ExecuteAsync(const std::function<void(sal_Int32)>& func);
+    VclResponseType Execute();
+    void            ExecuteAsync(const std::function<void(VclResponseType)>& func);
 
 private:
     std::shared_ptr<ColorDialogController> m_pColorDialogController;

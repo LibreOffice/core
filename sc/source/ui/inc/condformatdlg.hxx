@@ -22,8 +22,8 @@
 
 #include <memory>
 
-#define DLG_RET_ADD         8
-#define DLG_RET_EDIT        16
+#define DLG_RET_ADD         RET_USER100
+#define DLG_RET_EDIT        RET_USER101
 
 class ScDocument;
 class ScConditionalFormat;

@@ -233,9 +233,9 @@ void FmSearchDialog::Init(std::u16string_view strVisibleFields, const OUString& 
 
 }
 
-short FmSearchDialog::run()
+VclResponseType FmSearchDialog::run()
 {
-    short nRet = weld::GenericDialogController::run();
+    VclResponseType nRet = weld::GenericDialogController::run();
     m_pSearchEngine->CancelSearch();
     return nRet;
 }

@@ -916,9 +916,12 @@ bool OTableController::checkColumns(bool _bNew)
 
             static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
             static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->RowInserted(0);
+            break;
         }
-        break;
         case RET_CANCEL:
+            [[fallthrough]];
+        default:
+
             bOk = false;
             break;
         }

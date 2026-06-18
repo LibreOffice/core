@@ -63,7 +63,7 @@ class ODbDataSourceAdministrationHelper;
         virtual const SfxItemSet* getOutputSet() const override;
         virtual SfxItemSet* getWriteOutputSet() override;
 
-        virtual short run() override;
+        virtual VclResponseType run() override;
     };
 
 }   // namespace dbaui

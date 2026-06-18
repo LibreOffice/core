@@ -166,7 +166,7 @@ public:
     explicit SvxJavaParameterDlg(weld::Window* pParent);
     virtual ~SvxJavaParameterDlg() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     std::vector< OUString > GetParameters() const;
     void SetParameters( std::vector< OUString > const & rParams );

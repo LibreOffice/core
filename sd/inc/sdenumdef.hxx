@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define RET_SNAP_DELETE 111
+#define RET_SNAP_DELETE RET_USER111
 
 enum class SnapKind
 {

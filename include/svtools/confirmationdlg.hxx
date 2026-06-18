@@ -33,7 +33,7 @@ public:
             if (!rNoLabel.isEmpty())
                 pDlg->SetNoLabel(rNoLabel);
 
-            short nResult = pDlg->Execute();
+            VclResponseType nResult = pDlg->Execute();
 
             if (pDlg->DontShowAgain() && !bHideShowAgain)
             {

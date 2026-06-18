@@ -145,7 +145,7 @@ public:
 
     void PreRun();
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     ~SfxPasswordDialog();
 };

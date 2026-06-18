@@ -163,7 +163,7 @@ bool DialogHelper::installForAllUsers(bool &bInstallForAll)
     std::unique_ptr<weld::Builder> xBuilder(
         Application::CreateBuilder(getDialog(), u"desktop/ui/installforalldialog.ui"_ustr));
     std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"InstallForAllDialog"_ustr));
-    short nRet = xQuery->run();
+    VclResponseType nRet = xQuery->run();
     xQuery.reset();
     decBusy();
     if (nRet == RET_CANCEL)
@@ -994,7 +994,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn, weld::Button&, void)
     if ( !isBusy() )
     {
         if ( m_bHasLockedEntries )
-            m_xDialog->response(-1);
+            m_xDialog->response(RET_UNKNOWN);
         else if ( hasActiveEntries() )
             disableAllEntries();
         else
@@ -1037,7 +1037,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl, Timer *, void)
 }
 
 // VCL::Dialog
-short UpdateRequiredDialog::run()
+VclResponseType UpdateRequiredDialog::run()
 {
     //ToDo
     //I believe m_bHasLockedEntries was used to prevent showing extensions which cannot

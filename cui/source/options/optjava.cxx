@@ -771,7 +771,7 @@ void SvxJavaParameterDlg::EditParameter()
     }
 }
 
-short SvxJavaParameterDlg::run()
+VclResponseType SvxJavaParameterDlg::run()
 {
     m_xParameterEdit->grab_focus();
     m_xAssignedList->unselect_all();

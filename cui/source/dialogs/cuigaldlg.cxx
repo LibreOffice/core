@@ -385,7 +385,7 @@ ActualizeProgress::~ActualizeProgress()
 {
 }
 
-short ActualizeProgress::run()
+VclResponseType ActualizeProgress::run()
 {
     pIdle = new Idle("ActualizeProgressTimeout");
     pIdle->SetInvokeHandler( LINK( this, ActualizeProgress, TimeoutHdl ) );

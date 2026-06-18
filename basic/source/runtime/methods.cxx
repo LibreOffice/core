@@ -4121,34 +4121,34 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                 eType, VclButtonsType::NONE, aMsg));
 
-    std::vector<std::pair<StandardButtonType, sal_Int16>> buttons;
+    std::vector<std::pair<StandardButtonType, VclResponseType>> buttons;
     switch (nType & 0x0F) // delete bits 4-16
     {
         case SbMB::OK:
         default:
-            buttons.emplace_back(StandardButtonType::OK, SbMB::Response::OK);
+            buttons.emplace_back(StandardButtonType::OK, RET_OK);
             break;
         case SbMB::OKCANCEL:
-            buttons.emplace_back(StandardButtonType::OK, SbMB::Response::OK);
-            buttons.emplace_back(StandardButtonType::Cancel, SbMB::Response::CANCEL);
+            buttons.emplace_back(StandardButtonType::OK, RET_OK);
+            buttons.emplace_back(StandardButtonType::Cancel, RET_CANCEL);
             break;
         case SbMB::ABORTRETRYIGNORE:
-            buttons.emplace_back(StandardButtonType::Abort, SbMB::Response::ABORT);
-            buttons.emplace_back(StandardButtonType::Retry, SbMB::Response::RETRY);
-            buttons.emplace_back(StandardButtonType::Ignore, SbMB::Response::IGNORE);
+            buttons.emplace_back(StandardButtonType::Abort, RET_ABORT);
+            buttons.emplace_back(StandardButtonType::Retry, RET_RETRY);
+            buttons.emplace_back(StandardButtonType::Ignore, RET_IGNORE);
             break;
         case SbMB::YESNOCANCEL:
-            buttons.emplace_back(StandardButtonType::Yes, SbMB::Response::YES);
-            buttons.emplace_back(StandardButtonType::No, SbMB::Response::NO);
-            buttons.emplace_back(StandardButtonType::Cancel, SbMB::Response::CANCEL);
+            buttons.emplace_back(StandardButtonType::Yes, RET_YES);
+            buttons.emplace_back(StandardButtonType::No, RET_NO);
+            buttons.emplace_back(StandardButtonType::Cancel, RET_CANCEL);
             break;
         case SbMB::YESNO:
-            buttons.emplace_back(StandardButtonType::Yes, SbMB::Response::YES);
-            buttons.emplace_back(StandardButtonType::No, SbMB::Response::NO);
+            buttons.emplace_back(StandardButtonType::Yes, RET_YES);
+            buttons.emplace_back(StandardButtonType::No, RET_NO);
             break;
         case SbMB::RETRYCANCEL:
-            buttons.emplace_back(StandardButtonType::Retry, SbMB::Response::RETRY);
-            buttons.emplace_back(StandardButtonType::Cancel, SbMB::Response::CANCEL);
+            buttons.emplace_back(StandardButtonType::Retry, RET_RETRY);
+            buttons.emplace_back(StandardButtonType::Cancel, RET_CANCEL);
             break;
     }
 

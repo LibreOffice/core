@@ -20,7 +20,7 @@ class CrashReportDialog : public weld::GenericDialogController
 {
 public:
     explicit CrashReportDialog(weld::Window* pParent);
-    virtual short run() override;
+    virtual VclResponseType run() override;
     virtual ~CrashReportDialog() override;
 
 private:

@@ -22,7 +22,7 @@ class SafeModeDialog : public weld::GenericDialogController
 {
 public:
     explicit SafeModeDialog(weld::Window* pParent);
-    virtual short run() override;
+    virtual VclResponseType run() override;
     virtual ~SafeModeDialog() override;
 
 private:

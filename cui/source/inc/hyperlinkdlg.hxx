@@ -30,7 +30,7 @@ private:
     static OUString DetermineTabPageId(const SvxHyperlinkItem* pHyperItem);
     void Activate() override;
     void PageCreated(const OUString&, SfxTabPage& rTabPage) override;
-    virtual short Ok() override;
+    virtual VclResponseType Ok() override;
 
 protected:
     virtual SfxItemSet* CreateInputItemSet(const OUString& rName) override;

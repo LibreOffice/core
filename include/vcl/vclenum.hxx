@@ -214,9 +214,11 @@ enum class VclTaskBarStates {
 
 // Return Values from Dialog::Execute
 //!!! in case of changes adjust /basic/source/runtime/methods.cxx msgbox
+// NOTE: Type must be sal_Int16/short to preserve ABI with DialogClosedEvent.idl
 
-enum VclResponseType
+enum VclResponseType : sal_Int16
 {
+    RET_UNKNOWN = -1,
     RET_CANCEL  = 0,
     RET_OK      = 1,
     RET_YES     = 2,
@@ -224,7 +226,30 @@ enum VclResponseType
     RET_RETRY   = 4,
     RET_IGNORE  = 5,
     RET_CLOSE   = 7,
-    RET_HELP    = 10
+    // The below responses do not close the dialog
+    RET_HELP    = 10,
+    RET_APPLY   = 11,
+    RET_RESET   = 12,
+    RET_ABORT   = 13,
+    RET_FAIL    = 14,
+    // Values > 100 are dialog-specific
+    RET_USER100 = 100,
+    RET_USER101 = 101,
+    RET_USER102 = 102,
+    RET_USER103 = 103,
+    RET_USER104 = 104,
+    RET_USER105 = 105,
+    RET_USER106 = 106,
+    RET_USER107 = 107,
+    RET_USER108 = 108,
+    RET_USER109 = 109,
+    RET_USER110 = 110,
+    RET_USER111 = 111,
+    RET_USER112 = 112,
+    RET_USER113 = 113,
+    RET_USER114 = 114,
+
+    RET_MAX     = SAL_MAX_INT16,
 };
 
 enum class VclButtonsType

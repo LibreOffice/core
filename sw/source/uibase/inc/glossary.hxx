@@ -39,7 +39,7 @@ class SwWrtShell;
 class SfxViewFrame;
 class SwOneExampleFrame;
 
-const short RET_EDIT = 100;
+const VclResponseType RET_EDIT = RET_USER100;
 
 class SwGlossaryDropTarget;
 

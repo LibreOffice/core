@@ -190,7 +190,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, UserHdl, weld::Button&, void)
 {
     if (PrepareLeaveCurrentPage())
     {
-        short nRet = Ok();
+        VclResponseType nRet = Ok();
         if (RET_OK == nRet)
             nRet = RET_USER;
         else
@@ -580,7 +580,7 @@ SfxTabDialogController::~SfxTabDialogController()
     }
 }
 
-short SfxTabDialogController::Ok()
+VclResponseType SfxTabDialogController::Ok()
 
 /*  [Description]
 
@@ -1067,14 +1067,14 @@ std::vector<OUString> SfxTabDialogController::GetTabPageIds() const
     return aResult;
 }
 
-short SfxTabDialogController::run()
+VclResponseType SfxTabDialogController::run()
 {
     Start_Impl();
     return SfxDialogController::run();
 }
 
 bool SfxTabDialogController::runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
-                                      const std::function<void(sal_Int32)>& rFunc)
+                                      const std::function<void(VclResponseType)>& rFunc)
 {
     rController->Start_Impl();
     return weld::DialogController::runAsync(rController, rFunc);

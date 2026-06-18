@@ -77,7 +77,7 @@ public:
 
     virtual ~UpdateDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
     static void createNotifyJob( bool bPrepareOnly,

@@ -614,7 +614,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl, weld::Button&, void)
     updateButtons();
 }
 
-short ChineseDictionaryDialog::run()
+VclResponseType ChineseDictionaryDialog::run()
 {
     sal_Int32 nTextConversionOptions = m_nTextConversionOptions;
     if(m_nTextConversionOptions & i18n::TextConversionOption::USE_CHARACTER_VARIANTS )
@@ -623,7 +623,7 @@ short ChineseDictionaryDialog::run()
     m_xCT_DictionaryToSimplified->refillFromDictionary( nTextConversionOptions );
     m_xCT_DictionaryToTraditional->refillFromDictionary( m_nTextConversionOptions );
 
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
 
     if( nRet == RET_OK )
     {

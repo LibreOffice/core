@@ -56,7 +56,7 @@ namespace dbaui
                         bool bAllowTableSelect = false );
         virtual ~ORelationDialog() override;
 
-        virtual short run() override;
+        virtual VclResponseType run() override;
 
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update

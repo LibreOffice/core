@@ -35,7 +35,7 @@ public:
     View3DDialog(weld::Window* pWindow, const rtl::Reference<::chart::ChartModel>& xChartModel);
     virtual ~View3DDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
 private:
     DECL_LINK(ActivatePageHdl, const OUString&, void);

@@ -265,9 +265,9 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
         SetCurPageId(sPage);
 }
 
-short SwTemplateDlgController::Ok()
+VclResponseType SwTemplateDlgController::Ok()
 {
-    short nRet = SfxStyleDialogController::Ok();
+    VclResponseType nRet = SfxStyleDialogController::Ok();
     if( RET_OK == nRet )
     {
         const SfxPoolItem *pOutItem, *pExItem;

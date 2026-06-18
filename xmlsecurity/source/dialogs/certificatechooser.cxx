@@ -121,7 +121,7 @@ void CertificateChooser::BeforeRun()
     ImplInitialize();
 }
 
-short CertificateChooser::run()
+VclResponseType CertificateChooser::run()
 {
     BeforeRun();
     return GenericDialogController::run();

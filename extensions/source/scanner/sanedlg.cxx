@@ -305,7 +305,7 @@ OUString SaneResId(TranslateId aID)
 
 }
 
-short SaneDlg::run()
+VclResponseType SaneDlg::run()
 {
     if (!Sane::IsSane())
     {

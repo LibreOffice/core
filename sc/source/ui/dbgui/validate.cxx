@@ -99,7 +99,7 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
                ScTPValidationError::Create, RID_L + RID_TAB_VALIDITY_ERROR.sIconName);
 }
 
-void ScValidationDlg::EndDialog(int nResponse)
+void ScValidationDlg::EndDialog(VclResponseType nResponse)
 {
     // tdf#155708 - do not close, just hide validation window if we click in another sheet
     if (nResponse == nCloseResponseToJustHide && getDialog()->get_visible())

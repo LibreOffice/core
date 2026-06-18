@@ -51,9 +51,9 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ListDblClickHdl, const weld::TreeIter&,
     return true;
 }
 
-short ODatasourceSelectDialog::run()
+VclResponseType ODatasourceSelectDialog::run()
 {
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
 #ifdef HAVE_ODBC_ADMINISTRATION
     if (m_xODBCManagement.get())
         m_xODBCManagement->disableCallback();

@@ -435,7 +435,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, weld::Button&, rBtn, void )
         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Warning, VclButtonsType::YesNo,
                                                    SdResId(STR_ASK_DELETE_ALL_PICTURES)));
-        short nReturn = xWarn->run();
+        VclResponseType nReturn = xWarn->run();
 
         if( nReturn == RET_YES )
         {

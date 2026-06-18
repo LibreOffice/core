@@ -158,7 +158,7 @@ public:
     SAL_DLLPRIVATE void SetFactory_Impl( const SfxChildWinFactory* );
 };
 
-const int nCloseResponseToJustHide = -42;
+const VclResponseType nCloseResponseToJustHide = static_cast<VclResponseType>(1042);
 
 #define SFX_DECL_CHILDWINDOW(Class) \
     public  :   \

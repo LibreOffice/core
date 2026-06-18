@@ -31,12 +31,10 @@
 namespace basctl
 {
 
-enum class MacroExitCode {
-    Macro_Close = 110,
-    Macro_OkRun = 111,
-    Macro_New   = 112,
-    Macro_Edit  = 114,
-};
+#define RET_MACRO_CLOSE  RET_USER110
+#define RET_MACRO_OK_RUN RET_USER111
+#define RET_MACRO_NEW    RET_USER112
+#define RET_MACRO_EDIT   RET_USER114
 
 class MacroChooser : public SfxDialogController
 {
@@ -98,7 +96,7 @@ public:
     void                DeleteMacro();
     SbMethod*           CreateMacro();
 
-    virtual short       run() override;
+    virtual VclResponseType run() override;
 
     void                SetMode (Mode);
     Mode                GetMode () const { return nMode; }

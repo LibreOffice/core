@@ -759,7 +759,7 @@ public:
         m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
         m_xQueryBox->set_default_response(RET_YES);
     }
-    short run() { return m_xQueryBox->run(); }
+    VclResponseType run() { return m_xQueryBox->run(); }
 };
 
 class LanguageMismatchQueryBox
@@ -778,7 +778,7 @@ public:
         m_xQueryBox->add_button(GetStandardText(StandardButtonType::Help), RET_HELP);
         m_xQueryBox->set_default_response(RET_YES);
     }
-    short run() { return m_xQueryBox->run(); }
+    VclResponseType run() { return m_xQueryBox->run(); }
 };
 
 }
@@ -855,7 +855,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                 aQueryBoxText = aQueryBoxText.replaceAll("$(ARG1)", aXmlDlgName);
 
                 NameClashQueryBox aQueryBox(pWin, aQueryBoxTitle, aQueryBoxText);
-                sal_uInt16 nRet = aQueryBox.run();
+                VclResponseType nRet = aQueryBox.run();
                 if( nRet == RET_YES )
                 {
                     // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
@@ -912,7 +912,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                 OUString aQueryBoxTitle(IDEResId(RID_STR_DLGIMP_MISMATCH_TITLE));
                 OUString aQueryBoxText(IDEResId(RID_STR_DLGIMP_MISMATCH_TEXT));
                 LanguageMismatchQueryBox aQueryBox(pWin, aQueryBoxTitle, aQueryBoxText);
-                sal_uInt16 nRet = aQueryBox.run();
+                VclResponseType nRet = aQueryBox.run();
                 if( nRet == RET_YES )
                 {
                     // RET_YES == Add, see LanguageMismatchQueryBox::LanguageMismatchQueryBox

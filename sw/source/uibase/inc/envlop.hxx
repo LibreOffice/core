@@ -75,7 +75,7 @@ class SwEnvDlg final : public SfxTabDialogController
     std::unique_ptr<weld::Button> m_xModify;
 
     virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
-    virtual short Ok() override;
+    virtual VclResponseType Ok() override;
 
 public:
     SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt,

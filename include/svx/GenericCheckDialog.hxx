@@ -101,7 +101,7 @@ private:
 public:
     GenericCheckDialog(weld::Window* pParent, CheckDataCollection& rCheckDataCollection);
     virtual ~GenericCheckDialog() override;
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 } // end svx namespace

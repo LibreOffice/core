@@ -79,7 +79,7 @@ namespace svt::uno
         enableAutomaticNextButtonState();
     }
 
-    short WizardShell::run()
+    VclResponseType WizardShell::run()
     {
         ActivatePage();
         return WizardShell_Base::run();

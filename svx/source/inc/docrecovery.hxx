@@ -67,11 +67,6 @@ inline constexpr OUString STATEPROP_MODULE = u"Module"_ustr;
 #define RECOVERY_OPERATIONSTATE_STOP                "stop"
 #define RECOVERY_OPERATIONSTATE_UPDATE              "update"
 
-#define DLG_RET_UNKNOWN                                  -1
-#define DLG_RET_OK                                      RET_OK
-#define DLG_RET_CANCEL                                  RET_CANCEL
-#define DLG_RET_OK_AUTOLAUNCH                           101 // request a restart
-
 
 enum class EDocStates
 {
@@ -383,7 +378,7 @@ class SaveProgressDialog final : public weld::GenericDialogController
         virtual ~SaveProgressDialog() override;
 
         /** @short  start the emergency save operation. */
-        virtual short run() override;
+        virtual VclResponseType run() override;
 
         // IRecoveryUpdateListener
         virtual void updateItems() override;

@@ -51,9 +51,9 @@ OPageNumberDialog::~OPageNumberDialog()
 {
 }
 
-short OPageNumberDialog::run()
+VclResponseType OPageNumberDialog::run()
 {
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     if (nRet == RET_OK)
     {
         try

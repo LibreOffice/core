@@ -65,7 +65,7 @@ public:
     void ApplyToAll();
     void Apply();
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 }

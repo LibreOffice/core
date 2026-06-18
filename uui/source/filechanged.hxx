@@ -27,7 +27,7 @@ private:
 
 public:
     FileChangedQueryBox(weld::Window* pParent, const std::locale& pResLocale);
-    short run() { return m_xQueryBox->run(); }
+    VclResponseType run() { return m_xQueryBox->run(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

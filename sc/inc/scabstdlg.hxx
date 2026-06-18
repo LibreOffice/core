@@ -299,7 +299,7 @@ protected:
 public:
     virtual PivotFunc  GetFuncMask() const = 0;
     virtual css::sheet::DataPilotFieldReference GetFieldRef() const = 0;
-    virtual void       Response(int nResponse) = 0;
+    virtual void       Response(VclResponseType nResponse) = 0;
 };
 
 class AbstractScDPSubtotalDlg : public VclAbstractDialog
@@ -309,7 +309,7 @@ protected:
 public:
     virtual PivotFunc  GetFuncMask() const = 0;
     virtual void    FillLabelData( ScDPLabelData& rLabelData ) const = 0;
-    virtual void    Response(int nResponse) = 0;
+    virtual void    Response(VclResponseType nResponse) = 0;
 };
 
 class AbstractScDPNumGroupDlg : public VclAbstractDialog

@@ -26,18 +26,18 @@
 
 struct ImplBtnDlgItem
 {
-    sal_uInt16              mnId;
+    VclResponseType         mnId;
     bool                    mbOwnButton;
     tools::Long                    mnSepSize;
     VclPtr<PushButton>      mpPushButton;
 
-    ImplBtnDlgItem() : mnId(0), mbOwnButton(false), mnSepSize(0) {}
+    ImplBtnDlgItem() : mnId(RET_CANCEL), mbOwnButton(false), mnSepSize(0) {}
 };
 
 void ButtonDialog::ImplInitButtonDialogData()
 {
     mnButtonSize            = 0;
-    mnCurButtonId           = 0;
+    mnCurButtonId           = RET_CANCEL;
     mnFocusButtonId         = BUTTONDIALOG_BUTTON_NOTFOUND;
     mbFormat                = true;
 }
@@ -242,7 +242,7 @@ void ButtonDialog::StateChanged( StateChangedType nType )
     Dialog::StateChanged( nType );
 }
 
-void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
+void ButtonDialog::AddButton( StandardButtonType eType, VclResponseType nId,
                               ButtonDialogFlags nBtnFlags, tools::Long nSepPixel )
 {
     // PageItem anlegen

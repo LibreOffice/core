@@ -42,7 +42,7 @@ public:
     SfxStyleSheetBase&          GetStyleSheet() { return m_rStyle; }
     const SfxStyleSheetBase&    GetStyleSheet() const { return m_rStyle; }
 
-    virtual short               Ok() override;
+    virtual VclResponseType     Ok() override;
 
     static OUString GenerateUnusedName(SfxStyleSheetBasePool &rPool, SfxStyleFamily eFam);
 };

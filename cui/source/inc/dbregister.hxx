@@ -107,7 +107,7 @@ class DatabaseRegistrationDialog : public RegistrationItemSetHolder,
 public:
     DatabaseRegistrationDialog(weld::Window* pParent, const SfxItemSet& rAttr);
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 }
 

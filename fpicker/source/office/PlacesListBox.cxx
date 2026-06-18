@@ -121,7 +121,7 @@ IMPL_LINK_NOARG(PlacesListBox, DoubleClick, const weld::TreeIter&, bool)
     if ( !pPlace->IsEditable() || pPlace->IsLocal( ) )
         return true;
     PlaceEditDialog aDlg(mpDlg->getDialog(), pPlace);
-    short aRetCode = aDlg.run();
+    VclResponseType aRetCode = aDlg.run();
     switch (aRetCode)
     {
         case RET_OK :

@@ -37,7 +37,7 @@ QtInstanceDialog::~QtInstanceDialog()
 }
 
 bool QtInstanceDialog::runAsync(const std::shared_ptr<weld::DialogController>& rxOwner,
-                                const std::function<void(sal_Int32)>& func)
+                                const std::function<void(VclResponseType)>& func)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
@@ -59,7 +59,7 @@ bool QtInstanceDialog::runAsync(const std::shared_ptr<weld::DialogController>& r
 }
 
 bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
-                                const std::function<void(sal_Int32)>& func)
+                                const std::function<void(VclResponseType)>& func)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
@@ -138,28 +138,29 @@ void QtInstanceDialog::undo_collapse()
     });
 }
 
-int QtInstanceDialog::run()
+VclResponseType QtInstanceDialog::run()
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
     if (!rQtInstance.IsMainThread())
     {
-        int nResult = 0;
+        VclResponseType nResult = RET_CANCEL;
         rQtInstance.RunInMainThread([&] { nResult = run(); });
         return nResult;
     }
 
-    return m_pDialog->exec();
+    return static_cast<VclResponseType>(m_pDialog->exec());
 }
 
-void QtInstanceDialog::response(int nResponse)
+void QtInstanceDialog::response(VclResponseType nResponse)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
     rQtInstance.RunInMainThread([&] { m_pDialog->done(nResponse); });
 }
 
-void QtInstanceDialog::add_button(const OUString& rText, int nResponse, const OUString& rHelpId)
+void QtInstanceDialog::add_button(const OUString& rText, VclResponseType nResponse,
+                                  const OUString& rHelpId)
 {
     SolarMutexGuard g;
 
@@ -204,7 +205,7 @@ void QtInstanceDialog::set_centered_on_parent(bool)
     // QDialog is centered on parent toplevel by default
 }
 
-std::unique_ptr<weld::Button> QtInstanceDialog::weld_button_for_response(int nResponse)
+std::unique_ptr<weld::Button> QtInstanceDialog::weld_button_for_response(VclResponseType nResponse)
 {
     SolarMutexGuard g;
 
@@ -293,13 +294,13 @@ void QtInstanceDialog::dialogFinished(int nResult)
     // use local variables for these, as members might have got de-allocated by the time they're reset
     std::shared_ptr<weld::Dialog> xRunAsyncDialog = m_xRunAsyncDialog;
     std::shared_ptr<weld::DialogController> xRunAsyncDialogController = m_xRunAsyncDialogController;
-    std::function<void(sal_Int32)> aFunc = m_aRunAsyncFunc;
+    std::function<void(VclResponseType)> aFunc = m_aRunAsyncFunc;
     m_aRunAsyncFunc = nullptr;
     m_xRunAsyncDialogController.reset();
     m_xRunAsyncDialog.reset();
 
     if (aFunc)
-        aFunc(nResult);
+        aFunc(static_cast<VclResponseType>(nResult));
 
     xRunAsyncDialogController.reset();
     xRunAsyncDialog.reset();
@@ -325,11 +326,12 @@ QDialogButtonBox* QtInstanceDialog::findButtonBox(const QDialog* pDialog)
 }
 
 QPushButton* QtInstanceDialog::buttonForResponseCode(const QList<QAbstractButton*>& rButtons,
-                                                     int nResponse)
+                                                     VclResponseType nResponse)
 {
     for (QAbstractButton* pAbstractButton : rButtons)
     {
-        if (pAbstractButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt() == nResponse)
+        int nPropResponse = pAbstractButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt();
+        if (static_cast<VclResponseType>(nPropResponse) == nResponse)
         {
             QPushButton* pButton = qobject_cast<QPushButton*>(pAbstractButton);
             assert(pButton);
@@ -358,7 +360,7 @@ void QtInstanceDialog::handleButtonClick(QDialog& rDialog, QAbstractButton& rBut
         return;
 
     assert(aResponseProperty.canConvert<int>());
-    const int nResponseCode = aResponseProperty.toInt();
+    const int nResponseCode = static_cast<VclResponseType>(aResponseProperty.toInt());
 
     // close dialog with button's response code unless it's the "Help" button
     if (nResponseCode != RET_HELP)

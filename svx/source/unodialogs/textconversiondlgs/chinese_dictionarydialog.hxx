@@ -115,7 +115,7 @@ public:
     //this method should be called once before calling execute
     void setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
 private:
     DECL_LINK( DirectionHdl, weld::Toggleable&, void );

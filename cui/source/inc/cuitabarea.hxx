@@ -132,7 +132,7 @@ class SvxAreaTabDialog final : public SfxTabDialogController
 
     virtual void        PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 
-    virtual short       Ok() override;
+    virtual VclResponseType Ok() override;
     DECL_LINK(CancelHdlImpl, weld::Button&, void);
     void                SavePalettes();
 

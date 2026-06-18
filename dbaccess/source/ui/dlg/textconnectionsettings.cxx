@@ -51,7 +51,7 @@ namespace dbaui
         _rValues[ PROPERTY_ID_ENCODING ] = std::make_shared<SetItemPropertyStorage>( _rSet, DSID_CHARSET );
     }
 
-    short TextConnectionSettingsDialog::run()
+    VclResponseType TextConnectionSettingsDialog::run()
     {
         m_xTextConnectionHelper->implInitControls(m_rItems, true);
         return GenericDialogController::run();

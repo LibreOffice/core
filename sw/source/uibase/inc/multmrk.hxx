@@ -40,7 +40,7 @@ class SwMultiTOXMarkDlg final : public weld::GenericDialogController
 public:
     SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr);
     virtual ~SwMultiTOXMarkDlg() override;
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX

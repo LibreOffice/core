@@ -106,10 +106,10 @@ class AbstractDialogImpl_NoSync : public vcl::AbstractDialogImpl_Async<Base, Dia
 {
 public:
     using vcl::AbstractDialogImpl_Async<Base, Dialog>::AbstractDialogImpl_Async;
-    short Execute() override
+    VclResponseType Execute() override
     {
         assert(false);
-        return -1;
+        return RET_UNKNOWN;
     }
 };
 
@@ -653,7 +653,7 @@ public:
 bool AbstractSwFieldDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
 {
     return SfxTabDialogController::runAsync(m_pDlg,
-                                            [rCtx, pDlg = m_pDlg](sal_Int32 nResult)
+                                            [rCtx, pDlg = m_pDlg](VclResponseType nResult)
                                             {
                                                 pDlg->Close();
                                                 if (rCtx.isSet())
@@ -824,7 +824,7 @@ class AbstractFieldInputDlg_Impl
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
-    void EndDialog(sal_Int32 n) override { m_pDlg->response(n); }
+    void EndDialog(VclResponseType n) override { m_pDlg->response(n); }
     bool PrevButtonPressed() const override { return m_pDlg->PrevButtonPressed(); }
     bool NextButtonPressed() const override { return m_pDlg->NextButtonPressed(); }
 };

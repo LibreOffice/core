@@ -397,9 +397,9 @@ namespace dbaui
         return rFeatures.supportsGeneratedValues() || rFeatures.supportsAnySpecialSetting();
     }
 
-    short AdvancedSettingsDialog::Ok()
+    VclResponseType AdvancedSettingsDialog::Ok()
     {
-        short nRet = SfxTabDialogController::Ok();
+        VclResponseType nRet = SfxTabDialogController::Ok();
         if ( nRet == RET_OK )
         {
             m_xExampleSet->Put(*GetOutputItemSet());

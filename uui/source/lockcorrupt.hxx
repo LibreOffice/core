@@ -27,7 +27,7 @@ private:
 
 public:
     LockCorruptQueryBox(weld::Window* pParent, const std::locale& rResLocale);
-    short run() { return m_xQueryBox->run(); }
+    VclResponseType run() { return m_xQueryBox->run(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

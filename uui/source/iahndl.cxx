@@ -874,7 +874,7 @@ executeMessageBox(
         eMessageType == VclMessageType::Question ? VclButtonsType::YesNo : VclButtonsType::Ok, rMessage));
     xBox->set_title(rTitle);
 
-    short nMessResult = xBox->run();
+    VclResponseType nMessResult = xBox->run();
     DialogMask aResult = DialogMask::NONE;
     switch (nMessResult)
     {
@@ -898,17 +898,17 @@ executeMessageBox(
     return aResult;
 }
 
-NameClashResolveDialogResult executeSimpleNameClashResolveDialog(weld::Window *pParent,
-                                                                 OUString const & rTargetFolderURL,
-                                                                 OUString const & rClashingName,
-                                                                 OUString & rProposedNewName,
-                                                                 bool bAllowOverwrite)
+VclResponseType executeSimpleNameClashResolveDialog(weld::Window *pParent,
+                                                    OUString const & rTargetFolderURL,
+                                                    OUString const & rClashingName,
+                                                    OUString & rProposedNewName,
+                                                    bool bAllowOverwrite)
 {
     std::locale aResLocale = Translate::Create("uui");
     NameClashDialog aDialog(pParent, aResLocale, rTargetFolderURL,
                             rClashingName, rProposedNewName, bAllowOverwrite);
 
-    NameClashResolveDialogResult eResult = static_cast<NameClashResolveDialogResult>(aDialog.run());
+    VclResponseType eResult = aDialog.run();
     rProposedNewName = aDialog.getNewName();
     return eResult;
 }
@@ -939,7 +939,7 @@ UUIInteractionHelper::handleNameClashResolveRequest(
     OSL_ENSURE( xSupplyName.is(),
         "NameClashResolveRequest must contain SupplyName continuation" );
 
-    NameClashResolveDialogResult eResult = ABORT;
+    VclResponseType eResult = RET_ABORT;
     OUString aProposedNewName( rRequest.ProposedNewName );
 
     uno::Reference<awt::XWindow> xParent = getParentXWindow();
@@ -951,16 +951,18 @@ UUIInteractionHelper::handleNameClashResolveRequest(
 
     switch ( eResult )
     {
-    case ABORT:
+    case RET_ABORT:
+        [[fallthrough]];
+    default:
         xAbort->select();
         break;
 
-    case RENAME:
+    case RET_RENAME:
         xSupplyName->setName( aProposedNewName );
         xSupplyName->select();
         break;
 
-    case OVERWRITE:
+    case RET_OVERWRITE:
         OSL_ENSURE(
             xReplaceExistingData.is(),
             "Invalid NameClashResolveDialogResult: OVERWRITE - "

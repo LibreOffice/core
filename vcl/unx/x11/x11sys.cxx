@@ -87,8 +87,8 @@ void X11SalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& 
                                                rMessage));
     xWarn->set_title(rTitle);
 
-    xWarn->add_button(u"OK"_ustr, 0);
-    xWarn->set_default_response(0);
+    xWarn->add_button(u"OK"_ustr, RET_OK);
+    xWarn->set_default_response(RET_OK);
 
     xWarn->run();
 }

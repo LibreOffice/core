@@ -6867,7 +6867,7 @@ private:
     std::shared_ptr<weld::DialogController> m_xDialogController;
     // Used to keep ourself alive during a runAsync(when doing runAsync without a DialogController)
     std::shared_ptr<weld::Dialog> m_xRunAsyncSelf;
-    std::function<void(sal_Int32)> m_aFunc;
+    std::function<void(VclResponseType)> m_aFunc;
     gulong m_nCloseSignalId;
     gulong m_nResponseSignalId;
     gulong m_nCancelSignalId;
@@ -6919,7 +6919,7 @@ private:
     }
 #endif
 
-    static int GtkToVcl(int ret)
+    static VclResponseType GtkToVcl(int ret)
     {
         if (ret == GTK_RESPONSE_OK)
             ret = RET_OK;
@@ -6935,10 +6935,12 @@ private:
             ret = RET_NO;
         else if (ret == GTK_RESPONSE_HELP)
             ret = RET_HELP;
-        return ret;
+        else if (ret == GTK_RESPONSE_APPLY)
+            ret = RET_APPLY;
+        return static_cast<VclResponseType>(ret);
     }
 
-    static int VclToGtk(int nResponse)
+    static int VclToGtk(VclResponseType nResponse)
     {
         if (nResponse == RET_OK)
             return GTK_RESPONSE_OK;
@@ -6952,6 +6954,8 @@ private:
             return GTK_RESPONSE_NO;
         else if (nResponse == RET_HELP)
             return GTK_RESPONSE_HELP;
+        else if (nResponse == RET_APPLY)
+            return GTK_RESPONSE_APPLY;
         return nResponse;
     }
 
@@ -6983,7 +6987,7 @@ public:
     }
 
     virtual bool runAsync(const std::shared_ptr<weld::DialogController>& rDialogController,
-                          const std::function<void(sal_Int32)>& func) override
+                          const std::function<void(VclResponseType)>& func) override
     {
         assert(!m_nResponseSignalId && !m_nCancelSignalId && !m_nSignalDeleteId);
 
@@ -7003,7 +7007,7 @@ public:
         return true;
     }
 
-    virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)>& func) override
+    virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(VclResponseType)>& func) override
     {
         assert( rxSelf.get() == this );
         assert(!m_nResponseSignalId && !m_nCancelSignalId && !m_nSignalDeleteId);
@@ -7028,7 +7032,7 @@ public:
 
     GtkInstanceButton* has_click_handler(int nResponse);
 
-    virtual int run() override;
+    virtual VclResponseType run() override;
 
     virtual void show() override
     {
@@ -7086,9 +7090,9 @@ public:
 #endif
     }
 
-    virtual void response(int nResponse) override;
+    virtual void response(VclResponseType nResponse) override;
 
-    virtual void add_button(const OUString& rText, int nResponse, const OUString& rHelpId) override
+    virtual void add_button(const OUString& rText, VclResponseType nResponse, const OUString& rHelpId) override
     {
         GtkWidget* pWidget = gtk_dialog_add_button(GTK_DIALOG(m_pDialog), MapToGtkAccelerator(rText).getStr(), VclToGtk(nResponse));
         if (!rHelpId.isEmpty())
@@ -7100,7 +7104,7 @@ public:
         return GTK_BUTTON(gtk_dialog_get_widget_for_response(GTK_DIALOG(m_pDialog), nGtkResponse));
     }
 
-    virtual std::unique_ptr<weld::Button> weld_button_for_response(int nVclResponse) override;
+    virtual std::unique_ptr<weld::Button> weld_button_for_response(VclResponseType nVclResponse) override;
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override
     {
@@ -10061,7 +10065,7 @@ void GtkInstanceDialog::asyncresponse(gint ret)
     xRunAsyncSelf.reset();
 }
 
-int GtkInstanceDialog::run()
+VclResponseType GtkInstanceDialog::run()
 {
     // tdf#150723 "run" will make the dialog visible so drop m_aPosWhileInvis like show
     m_aPosWhileInvis.reset();
@@ -10087,7 +10091,7 @@ int GtkInstanceDialog::run()
     return GtkToVcl(ret);
 }
 
-std::unique_ptr<weld::Button> GtkInstanceDialog::weld_button_for_response(int nVclResponse)
+std::unique_ptr<weld::Button> GtkInstanceDialog::weld_button_for_response(VclResponseType nVclResponse)
 {
     GtkButton* pButton = get_widget_for_response(VclToGtk(nVclResponse));
     if (!pButton)
@@ -10095,7 +10099,7 @@ std::unique_ptr<weld::Button> GtkInstanceDialog::weld_button_for_response(int nV
     return std::make_unique<GtkInstanceButton>(pButton, m_pBuilder, false);
 }
 
-void GtkInstanceDialog::response(int nResponse)
+void GtkInstanceDialog::response(VclResponseType nResponse)
 {
     int nGtkResponse = VclToGtk(nResponse);
     //unblock this response now when activated through code

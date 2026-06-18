@@ -76,7 +76,7 @@ public:
     ODateTimeDialog(weld::Window* pParent,
                      css::uno::Reference< css::report::XSection> _xHoldAlive,
                      ::rptui::OReportController* _pController);
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 } // namespace rptui

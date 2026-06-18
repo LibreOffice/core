@@ -256,7 +256,7 @@ void SwMailMergeWizard::UpdateRoadmap()
     }
 }
 
-short SwMailMergeWizard::run()
+VclResponseType SwMailMergeWizard::run()
 {
     OSL_FAIL("SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
                "It creates a thread (MailDispatcher instance) that will call"

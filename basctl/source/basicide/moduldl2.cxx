@@ -719,9 +719,9 @@ void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
         [aContExtension, xDlgURLObj = std::move(xDlgURLObj), aExtension, aLibExtension,
          xModURLObj = std::move(xModURLObj), xLibDlg, xDlgLibContImport, xModLibContImport,
          rDocument, pDialog, func_remove_entry, func_insert_entry,
-         func_insert_entries](sal_Int32 nResult)
+         func_insert_entries](VclResponseType nResult)
         {
-            if (!nResult )
+            if (nResult == RET_CANCEL )
                 return;
 
             bool bChanges = false;

@@ -54,9 +54,9 @@ namespace pcr
     {
     }
 
-    short ListSelectionDialog::run()
+    VclResponseType ListSelectionDialog::run()
     {
-        short nResult = GenericDialogController::run();
+        VclResponseType nResult = GenericDialogController::run();
 
         if ( RET_OK == nResult )
             commitSelection();

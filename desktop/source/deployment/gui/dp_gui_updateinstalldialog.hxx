@@ -61,7 +61,7 @@ public:
 
     virtual ~UpdateInstallDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
 private:
     UpdateInstallDialog(UpdateInstallDialog const &) = delete;

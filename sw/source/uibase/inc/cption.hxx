@@ -76,7 +76,7 @@ class SwCaptionDialog final : public SfxDialogController
     static OUString s_aSepTextSave; // Save caption separator text
 public:
     SwCaptionDialog(weld::Window* pParent, SwView& rV);
-    virtual short run() override;
+    virtual VclResponseType run() override;
     virtual ~SwCaptionDialog() override;
 };
 

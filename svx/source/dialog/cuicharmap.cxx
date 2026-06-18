@@ -135,7 +135,7 @@ void SvxCharacterMap::prepForRun()
     }
 }
 
-short SvxCharacterMap::run()
+VclResponseType SvxCharacterMap::run()
 {
     prepForRun();
     return SfxDialogController::run();

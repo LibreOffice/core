@@ -55,7 +55,7 @@ public:
     MasterLayoutDialog(weld::Window* pParent, SdDrawDocument& rDoc, SdPage* pCurrentPage);
     virtual ~MasterLayoutDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 }

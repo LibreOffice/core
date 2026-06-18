@@ -90,7 +90,7 @@ class SwMultiTOXTabDialog final : public SfxTabDialogController
     std::unique_ptr<weld::CheckButton> m_xShowExampleCB;
     std::unique_ptr<weld::CustomWeld> m_xExampleFrameWin;
 
-    virtual short       Ok() override;
+    virtual VclResponseType Ok() override;
     std::unique_ptr<SwTOXDescription> CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
     void ShowPreview();
 

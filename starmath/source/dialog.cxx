@@ -1919,9 +1919,9 @@ SmSymDefineDialog::~SmSymDefineDialog()
 {
 }
 
-short SmSymDefineDialog::run()
+VclResponseType SmSymDefineDialog::run()
 {
-    short nResult = GenericDialogController::run();
+    VclResponseType nResult = GenericDialogController::run();
 
     // apply changes if dialog was closed by clicking OK
     if (m_aSymbolMgrCopy.IsModified() && nResult == RET_OK)

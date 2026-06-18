@@ -470,7 +470,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(rViewData.GetDialogParent(), rViewData.GetDocShell()));
-                short nRet = pDlg->Execute();
+                VclResponseType nRet = pDlg->Execute();
                 // pDlg is needed below
 
                 // while the dialog was open, edit mode may have been stopped
@@ -515,7 +515,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 {
                     pDlg->SetCurPageId(u"fonteffects"_ustr);
                 }
-                short nRet = pDlg->Execute();
+                VclResponseType nRet = pDlg->Execute();
                 // pDlg is needed below
 
                 // while the dialog was open, edit mode may have been stopped

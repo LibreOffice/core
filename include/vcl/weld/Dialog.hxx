@@ -11,6 +11,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/weld/Window.hxx>
+#include <vcl/vclenum.hxx>
 
 namespace weld
 {
@@ -22,7 +23,7 @@ class VCL_DLLPUBLIC Dialog : virtual public Window
 private:
     friend DialogController;
     virtual bool runAsync(std::shared_ptr<DialogController> const& rxOwner,
-                          const std::function<void(sal_Int32)>& func)
+                          const std::function<void(VclResponseType)>& func)
         = 0;
 
 protected:
@@ -44,15 +45,17 @@ public:
     // off again.
     virtual void set_centered_on_parent(bool bTrackGeometryRequests) = 0;
 
-    virtual int run() = 0;
+    virtual VclResponseType run() = 0;
     // Run async without a controller
     // @param self - must point to this, to enforce that the dialog was created/held by a shared_ptr
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
-                          const std::function<void(sal_Int32)>& func)
+                          const std::function<void(VclResponseType)>& func)
         = 0;
-    virtual void response(int response) = 0;
-    virtual void add_button(const OUString& rText, int response, const OUString& rHelpId = {}) = 0;
-    virtual std::unique_ptr<Button> weld_button_for_response(int response) = 0;
+    virtual void response(VclResponseType response) = 0;
+    virtual void add_button(const OUString& rText, VclResponseType response,
+                            const OUString& rHelpId = {})
+        = 0;
+    virtual std::unique_ptr<Button> weld_button_for_response(VclResponseType response) = 0;
     virtual std::unique_ptr<weld::Container> weld_content_area() = 0;
 
     // with pOld of null, automatically find the old default widget and unset
@@ -60,7 +63,7 @@ public:
     virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) = 0;
     virtual bool is_default_button(const weld::Button* pCandidate) const = 0;
 
-    virtual void set_default_response(int nResponse);
+    virtual void set_default_response(VclResponseType nResponse);
 
     // shrink the dialog down to shown just these widgets
     virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) = 0;

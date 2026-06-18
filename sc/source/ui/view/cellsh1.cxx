@@ -2675,7 +2675,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pTabViewShell->GetFrameWeld(), GetViewData().GetDocShell()));
-                switch( pDlg->Execute() )
+                VclResponseType nRet = pDlg->Execute();
+                switch( static_cast<int>(nRet) )
                 {
                     case BTN_PASTE_LIST:
                         pTabViewShell->InsertNameList();
@@ -2700,6 +2701,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 }
                             }
                         }
+                        break;
+                    default:
+                        SAL_WARN("sc", "Unhandled dialog Execute() response " << nRet);
                         break;
                 }
             }
@@ -3188,7 +3192,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 pDlg->StartExecuteAsync(
-                    [this, pDlg, &rData, pTabViewShell, aPos](sal_Int32 nRet)
+                    [this, pDlg, &rData, pTabViewShell, aPos](VclResponseType nRet)
                     {
                         std::unique_ptr<ScConditionalFormatList> pCondFormatList
                             = pDlg->GetConditionalFormatList();
@@ -3749,7 +3753,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         }
 
         pTypeDlg->StartExecuteAsync([this, pTypeDlg, pTabViewShell,
-                                    pScMod, pFact, &rDoc, &rMark, aDestPos](int nResult) mutable {
+                                    pScMod, pFact, &rDoc, &rMark, aDestPos](VclResponseType nResult) mutable {
 
             if (nResult == RET_OK )
             {
@@ -3761,7 +3765,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                             pTabViewShell->GetFrameWeld(), aSources));
 
                     pServDlg->StartExecuteAsync([pServDlg, pScMod, pTabViewShell,
-                                                 aDestPos, &rDoc](int nResult2) mutable {
+                                                 aDestPos, &rDoc](VclResponseType nResult2) mutable {
                         if ( nResult2 == RET_OK )
                         {
                             ScDPServiceDesc aServDesc(
@@ -3788,7 +3792,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                     assert(pDataDlg  && "Dialog create fail!");
 
                     pDataDlg->StartExecuteAsync([pDataDlg, pScMod, pTabViewShell,
-                                                 aDestPos, &rDoc](int nResult2) mutable {
+                                                 aDestPos, &rDoc](VclResponseType nResult2) mutable {
                         if ( nResult2 == RET_OK )
                         {
                             ScImportSourceDesc aImpDesc(&rDoc);

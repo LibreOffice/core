@@ -86,7 +86,7 @@ private:
     void addDetailPage(const OUString& rPageId, TranslateId pTextId, CreateTabPage pCreateFunc);
 
     virtual void PageCreated(const OUString& rId, SfxTabPage& _rPage) override;
-    virtual short Ok() override;
+    virtual VclResponseType Ok() override;
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void impl_selectDataSource(const css::uno::Any& _aDataSourceName);

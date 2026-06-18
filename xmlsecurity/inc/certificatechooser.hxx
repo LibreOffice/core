@@ -114,7 +114,7 @@ public:
     }
 
     void BeforeRun();
-    short run() override;
+    VclResponseType run() override;
 
     css::uno::Sequence<css::uno::Reference< css::security::XCertificate > > GetSelectedCertificates();
     css::uno::Reference< css::xml::crypto::XXMLSecurityContext > GetSelectedSecurityContext() const;

@@ -312,9 +312,9 @@ namespace
         {
         }
 
-        virtual short run() override
+        virtual VclResponseType run() override
         {
-            short nRet = GenericDialogController::run();
+            VclResponseType nRet = GenericDialogController::run();
             if (nRet == RET_OK)
                 showDocument("LICENSE");
             return nRet;
@@ -329,9 +329,9 @@ namespace
         {
         }
 
-        virtual short run() override
+        virtual VclResponseType run() override
         {
-            short nRet = MessageDialogController::run();
+            VclResponseType nRet = MessageDialogController::run();
             if (nRet == RET_OK)
             {
                 sfx2::SafeMode::putFlag();
@@ -493,7 +493,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(rReq.GetFrameWeld(),
                 &aSet, xFrame ));
 
-            const short nRet = pDlg->Execute();
+            const VclResponseType nRet = pDlg->Execute();
 
             if ( nRet )
                 bDone = true;
@@ -1647,7 +1647,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             VclPtr<VclAbstractDialog> pDlg =
                 pFact->CreateFrameDialog(rReq.GetFrameWeld(), xFrame, rReq.GetSlot(), nPageID, sPageURL);
-            short nRet = pDlg->Execute();
+            VclResponseType nRet = pDlg->Execute();
             pDlg.disposeAndClear();
             SfxViewFrame* pView = SfxViewFrame::GetFirst();
             bool bDisableActiveContent

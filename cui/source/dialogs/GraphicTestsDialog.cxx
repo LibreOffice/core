@@ -73,7 +73,7 @@ GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     m_xDownloadResults->connect_clicked(LINK(this, GraphicsTestsDialog, HandleDownloadRequest));
 }
 
-short GraphicsTestsDialog::run()
+VclResponseType GraphicsTestsDialog::run()
 {
     GraphicsRenderTests aTestObject;
     aTestObject.run(true);

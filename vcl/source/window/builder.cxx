@@ -3171,11 +3171,19 @@ void BuilderBase::handleActionWidget(xmlreader::XmlReader &reader)
         case -9:
             nResponse = RET_NO;
             break;
+        case -10:
+            nResponse = RET_APPLY;
+            break;
         case -11:
             nResponse = RET_HELP;
             break;
+        // The following are standard VCL button types that do not have
+        // corresponding GtkResponseType values
+        case RET_RESET:
+            nResponse = RET_RESET;
+            break;
         default:
-            assert(nXmlResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
+            assert(nXmlResponse >= RET_USER100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
             nResponse = static_cast<VclResponseType>(nXmlResponse);
             break;
     }

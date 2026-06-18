@@ -231,6 +231,8 @@ void ORelationTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection
             break;
 
         case RET_CANCEL:
+            [[fallthrough]];
+        default:
             // no break, as nothing happened and we don't need the code below
             return;
 

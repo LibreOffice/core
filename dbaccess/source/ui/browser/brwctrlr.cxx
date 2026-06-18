@@ -2157,6 +2157,8 @@ bool SbaXDataBrowserController::SaveModified(bool bAskFor)
                 Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());
                 return true;
             case RET_CANCEL:
+                [[fallthrough]];
+            default:
                 return false;
         }
     }

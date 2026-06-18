@@ -951,9 +951,9 @@ void SwSvxNumBulletTabDialog::PageCreated(const OUString& rPageId, SfxTabPage& r
     }
 }
 
-short  SwSvxNumBulletTabDialog::Ok()
+VclResponseType  SwSvxNumBulletTabDialog::Ok()
 {
-    short nRet = SfxTabDialogController::Ok();
+    VclResponseType nRet = SfxTabDialogController::Ok();
     m_xExampleSet->ClearItem(SID_PARAM_NUM_PRESET);
     return nRet;
 }

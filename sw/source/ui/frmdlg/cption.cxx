@@ -291,9 +291,9 @@ void SwCaptionDialog::Apply()
     s_aSepTextSave = m_xSepEdit->get_text();
 }
 
-short SwCaptionDialog::run()
+VclResponseType SwCaptionDialog::run()
 {
-    short nRet = SfxDialogController::run();
+    VclResponseType nRet = SfxDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;

@@ -48,7 +48,7 @@ namespace svt::uno
         );
 
         // Dialog overridables
-        virtual short   run() override;
+        virtual VclResponseType run() override;
 
         // OWizardMachine overridables
         virtual std::unique_ptr<BuilderPage> createPage( WizardState i_nState ) override;

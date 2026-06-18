@@ -146,7 +146,7 @@ SfxModelessDialogController::~SfxModelessDialogController()
         m_pBindings->SetActiveFrame(nullptr);
 }
 
-void SfxDialogController::EndDialog(int nResponse)
+void SfxDialogController::EndDialog(VclResponseType nResponse)
 {
     if (!m_xDialog->get_visible())
         return;
@@ -158,7 +158,7 @@ bool SfxModelessDialogController::IsClosing() const
     return m_xImpl->bClosing;
 }
 
-void SfxModelessDialogController::EndDialog(int nResponse)
+void SfxModelessDialogController::EndDialog(VclResponseType nResponse)
 {
     if (m_xImpl->bClosing)
         return;

@@ -404,7 +404,7 @@ SvxScriptOrgDialog::~SvxScriptOrgDialog()
     deleteAllTree();
 }
 
-short SvxScriptOrgDialog::run()
+VclResponseType SvxScriptOrgDialog::run()
 {
     SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
 

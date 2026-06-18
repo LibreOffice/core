@@ -98,7 +98,8 @@ OUString QtInstanceMessageDialog::get_secondary_text() const
     return toOUString(m_pMessageDialog->informativeText());
 }
 
-void QtInstanceMessageDialog::add_button(const OUString& rText, int nResponse, const OUString&)
+void QtInstanceMessageDialog::add_button(const OUString& rText, VclResponseType nResponse,
+                                         const OUString&)
 {
     addButton(*m_pMessageDialog, rText, nResponse);
 }
@@ -116,7 +117,8 @@ void QtInstanceMessageDialog::change_default_button(weld::Button*, weld::Button*
     });
 }
 
-std::unique_ptr<weld::Button> QtInstanceMessageDialog::weld_button_for_response(int nResponse)
+std::unique_ptr<weld::Button>
+QtInstanceMessageDialog::weld_button_for_response(VclResponseType nResponse)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
@@ -133,13 +135,13 @@ std::unique_ptr<weld::Button> QtInstanceMessageDialog::weld_button_for_response(
     return nullptr;
 }
 
-int QtInstanceMessageDialog::run()
+VclResponseType QtInstanceMessageDialog::run()
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
     if (!rQtInstance.IsMainThread())
     {
-        int nRet = 0;
+        VclResponseType nRet = RET_CANCEL;
         rQtInstance.RunInMainThread([&] { nRet = run(); });
         return nRet;
     }
@@ -147,9 +149,9 @@ int QtInstanceMessageDialog::run()
     // if a button was clicked, return its response code
     int nRet = m_pMessageDialog->exec();
     if (QAbstractButton* pClickedButton = m_pMessageDialog->clickedButton())
-        return pClickedButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt();
+        nRet = pClickedButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt();
 
-    return nRet;
+    return static_cast<VclResponseType>(nRet);
 }
 
 void QtInstanceMessageDialog::dialogFinished(int nResult)
@@ -208,7 +210,7 @@ void QtInstanceMessageDialog::addStandardButtons(QMessageBox& rMessageDialog,
 }
 
 void QtInstanceMessageDialog::addButton(QMessageBox& rMessageDialog, const OUString& rText,
-                                        int nResponse)
+                                        VclResponseType nResponse)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
@@ -272,7 +274,7 @@ void QtInstanceMessageDialog::positionExtraControlsContainer()
     pDialogLayout->addWidget(m_pExtraControlsContainer, nLabelRow + 1, nLabelCol);
 }
 
-QPushButton* QtInstanceMessageDialog::buttonForResponseCode(int nResponse)
+QPushButton* QtInstanceMessageDialog::buttonForResponseCode(VclResponseType nResponse)
 {
     const QList<QAbstractButton*> aButtons = m_pMessageDialog->buttons();
     return QtInstanceDialog::buttonForResponseCode(aButtons, nResponse);

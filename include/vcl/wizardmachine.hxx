@@ -136,7 +136,7 @@ namespace vcl
         WizardMachine(weld::Window* _pParent, WizardButtonFlags _nButtonFlags );
         virtual ~WizardMachine() override;
 
-        bool Finish(short nResult = RET_CANCEL);
+        bool Finish(VclResponseType nResult = RET_CANCEL);
         bool ShowPage(WizardTypes::WizardState nState);
 
         bool ShowNextPage();

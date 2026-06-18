@@ -305,7 +305,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, weld::Button&, void
     const sal_Int32 iOldLineTypePos = m_xLB_LineType->get_active();
     setActiveLineType(PosLineType::Smooth);
     weld::GenericDialogController::runAsync(
-        xDlg, [this, xDlg, aOldParameter, iOldLineTypePos](sal_Int32 nResult) {
+        xDlg, [this, xDlg, aOldParameter, iOldLineTypePos](VclResponseType nResult) {
             m_xSplinePropertiesDialog = nullptr;
             auto xNewDlg = getSplinePropertiesDialog();
 
@@ -337,7 +337,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, weld::Button&, voi
     setActiveLineType(PosLineType::Stepped);
 
     weld::GenericDialogController::runAsync(
-        xDlg, [this, xDlg, aOldParameter, iOldLineTypePos](sal_Int32 nResult) {
+        xDlg, [this, xDlg, aOldParameter, iOldLineTypePos](VclResponseType nResult) {
             m_xSteppedPropertiesDialog = nullptr;
             auto xNewDlg = getSteppedPropertiesDialog();
 

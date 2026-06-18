@@ -56,7 +56,7 @@ ODbAdminDialog::~ODbAdminDialog()
     SetInputSet(nullptr);
 }
 
-short ODbAdminDialog::Ok()
+VclResponseType ODbAdminDialog::Ok()
 {
     SfxTabDialogController::Ok();
     return ( AR_LEAVE_MODIFIED == implApplyChanges() ) ? RET_OK : RET_CANCEL;

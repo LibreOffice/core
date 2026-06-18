@@ -21,9 +21,6 @@
 
 #include <o3tl/typed_flags_set.hxx>
 
-#define SCRET_COLS 0x42
-#define SCRET_ROWS 0x43
-
 #define FDS_OPT_NONE        0  // from filldlg.hxx
 #define FDS_OPT_HORZ        1   // from filldlg.hxx
 #define FDS_OPT_VERT        2  // from filldlg.hxx
@@ -58,12 +55,14 @@ namespace o3tl {
     template<> struct typed_flags<CreateNameFlags> : is_typed_flags<CreateNameFlags, 0xf> {};
 }
 
-#define BTN_PASTE_NAME  100  // from namepast.hxx
-#define BTN_PASTE_LIST  101  // from namepast.hxx
-#define BTN_PASTE_CLOSE 102  // from namepast.hxx
+#define BTN_PASTE_NAME  RET_USER100  // from namepast.hxx
+#define BTN_PASTE_LIST  RET_USER101  // from namepast.hxx
+#define BTN_PASTE_CLOSE RET_USER102  // from namepast.hxx
 
-#define BTN_EXTEND_RANGE       150
-#define BTN_CURRENT_SELECTION  151
-#define SCRET_REMOVE    0x42 //from subtdlg.hxx
+#define BTN_EXTEND_RANGE       RET_USER103
+#define BTN_CURRENT_SELECTION  RET_USER104
+#define SCRET_REMOVE           RET_USER105 //from subtdlg.hxx
+#define SCRET_COLS             RET_USER106
+#define SCRET_ROWS             RET_USER107
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

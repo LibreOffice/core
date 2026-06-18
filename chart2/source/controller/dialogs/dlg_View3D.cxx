@@ -70,9 +70,9 @@ View3DDialog::~View3DDialog()
     m_nLastPageId = m_xTabControl->get_current_page();
 }
 
-short View3DDialog::run()
+VclResponseType View3DDialog::run()
 {
-    short nResult = GenericDialogController::run();
+    VclResponseType nResult = GenericDialogController::run();
     if (nResult == RET_OK && m_xGeometry)
         m_xGeometry->commitPendingChanges();
     return nResult;

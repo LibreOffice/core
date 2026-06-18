@@ -133,9 +133,9 @@ void ManageLanguageDialog::ClearLanguageBox()
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, weld::Button&, void)
 {
     auto xDlg = std::make_shared<SetDefaultLanguageDialog>(m_xDialog.get(), m_xLocalizationMgr);
-    weld::DialogController::runAsync(xDlg, [xDlg,this](sal_Int32 nResult)
+    weld::DialogController::runAsync(xDlg, [xDlg,this](VclResponseType nResult)
         {
-            if (!nResult )
+            if (nResult == RET_CANCEL)
                 return;
             // add new locales
             Sequence< Locale > aLocaleSeq = xDlg->GetLocales();

@@ -53,7 +53,7 @@ bool Dialog::signal_command(const CommandEvent& rCEvt)
     return Window::signal_command(rCEvt);
 }
 
-void Dialog::set_default_response(int nResponse)
+void Dialog::set_default_response(VclResponseType nResponse)
 {
     std::unique_ptr<weld::Button> pButton = weld_button_for_response(nResponse);
     change_default_button(nullptr, pButton.get());

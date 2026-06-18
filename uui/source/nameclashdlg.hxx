@@ -25,7 +25,8 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Window.hxx>
 
-enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
+#define RET_RENAME     RET_USER100
+#define RET_OVERWRITE  RET_USER101
 
 class NameClashDialog : public weld::GenericDialogController
 {

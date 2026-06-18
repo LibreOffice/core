@@ -139,7 +139,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, weld::Button&, void)
             std::shared_ptr<weld::MessageDialog>(Application::CreateMessageDialog(m_xDialog.get(),
                                                     VclMessageType::Warning, VclButtonsType::Ok,
                                                     SfxResId(STR_ERROR_WRONG_CONFIRM)));
-        m_xConfirmFailedDialog->runAsync(m_xConfirmFailedDialog, [this](sal_uInt32 response){
+        m_xConfirmFailedDialog->runAsync(m_xConfirmFailedDialog, [this](VclResponseType response){
             m_xConfirm1ED->set_text(OUString());
             m_xConfirm1ED->grab_focus();
             m_xConfirmFailedDialog->response(response);
@@ -369,7 +369,7 @@ void SfxPasswordDialog::PreRun()
     }
 }
 
-short SfxPasswordDialog::run()
+VclResponseType SfxPasswordDialog::run()
 {
     PreRun();
 

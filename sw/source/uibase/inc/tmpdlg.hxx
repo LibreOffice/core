@@ -46,7 +46,7 @@ public:
     virtual void RefreshInputSet() override;
 
     virtual void PageCreated(const OUString& rId, SfxTabPage &rPage) override;
-    virtual short Ok() override;
+    virtual VclResponseType Ok() override;
 };
 
 #endif

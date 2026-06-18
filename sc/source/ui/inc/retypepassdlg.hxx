@@ -51,7 +51,7 @@ public:
     explicit ScRetypePassDlg(weld::Window* pParent);
     virtual ~ScRetypePassDlg() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     void SetDataFromDocument(const ScDocument& rDoc);
     void SetDesiredHash(ScPasswordHash eHash);

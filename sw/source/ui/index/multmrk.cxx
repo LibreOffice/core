@@ -54,9 +54,9 @@ IMPL_LINK(SwMultiTOXMarkDlg, SelectHdl, weld::ItemView&, rBox, void)
     }
 }
 
-short SwMultiTOXMarkDlg::run()
+VclResponseType SwMultiTOXMarkDlg::run()
 {
-    short nRet = GenericDialogController::run();
+    VclResponseType nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         m_rMgr.SetCurTOXMark(m_nPos);
     return nRet;

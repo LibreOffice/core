@@ -25,7 +25,7 @@ private:
 
 public:
     explicit RemoteDialog(weld::Window* pWindow);
-    virtual short run() override;
+    virtual VclResponseType run() override;
     virtual ~RemoteDialog() override;
 };
 }

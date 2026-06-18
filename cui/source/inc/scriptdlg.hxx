@@ -140,7 +140,7 @@ public:
     SvxScriptOrgDialog(weld::Window* pParent, OUString language);
     virtual ~SvxScriptOrgDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 };
 
 class SvxScriptErrorDialog

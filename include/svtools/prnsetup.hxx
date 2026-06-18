@@ -60,7 +60,7 @@ public:
     void            SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
     Printer*        GetPrinter() const { return mpPrinter; }
 
-    virtual short   run() override;
+    virtual VclResponseType run() override;
 
     weld::Window*   GetFrameWeld() const { return m_xDialog.get(); }
 

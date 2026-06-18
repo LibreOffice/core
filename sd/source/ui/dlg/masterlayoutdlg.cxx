@@ -77,7 +77,7 @@ MasterLayoutDialog::~MasterLayoutDialog()
 {
 }
 
-short MasterLayoutDialog::run()
+VclResponseType MasterLayoutDialog::run()
 {
     if (GenericDialogController::run() == RET_OK)
         applyChanges();

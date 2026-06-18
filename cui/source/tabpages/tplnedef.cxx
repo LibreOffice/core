@@ -48,8 +48,8 @@
 
 using namespace com::sun::star;
 
-constexpr int RET_BTN_1  = 100;
-constexpr int RET_BTN_2  = 101;
+constexpr VclResponseType RET_BTN_1  = RET_USER100;
+constexpr VclResponseType RET_BTN_2  = RET_USER101;
 
 SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/linestyletabpage.ui"_ustr, u"LineStylePage"_ustr, &rInAttrs)
@@ -209,7 +209,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         xMessDlg->add_button(CuiResId(RID_CUISTR_CHANGE), RET_BTN_1);
         xMessDlg->add_button(CuiResId(RID_CUISTR_ADD), RET_BTN_2);
 
-        short nRet = xMessDlg->run();
+        VclResponseType nRet = xMessDlg->run();
 
         switch( nRet )
         {
@@ -226,6 +226,8 @@ void SvxLineDefTabPage::CheckChanges_Impl()
             break;
 
             case RET_CANCEL:
+                [[fallthrough]];
+            default:
             break;
         }
     }

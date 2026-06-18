@@ -101,7 +101,7 @@ SwFieldDlg::~SwFieldDlg()
 {
 }
 
-void SwFieldDlg::EndDialog(int nResponse)
+void SwFieldDlg::EndDialog(VclResponseType nResponse)
 {
     m_bClosing = true;
     SfxTabDialogController::EndDialog(nResponse);

@@ -159,9 +159,9 @@ void SwEnvDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
     }
 }
 
-short SwEnvDlg::Ok()
+VclResponseType SwEnvDlg::Ok()
 {
-    short nRet = SfxTabDialogController::Ok();
+    VclResponseType nRet = SfxTabDialogController::Ok();
 
     if (nRet == RET_OK || nRet == RET_USER)
     {

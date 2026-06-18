@@ -51,7 +51,7 @@ public:
     SfxTemplateManagerDlg(weld::Window* parent);
 
     virtual ~SfxTemplateManagerDlg() override;
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     SAL_DLLPRIVATE void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
     SAL_DLLPRIVATE void setTemplateViewMode(TemplateViewMode eViewMode);
@@ -179,7 +179,7 @@ public:
     SfxTemplateSelectionDlg(weld::Window* parent);
 
     virtual ~SfxTemplateSelectionDlg() override;
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     OUString const& getTemplatePath() const { return msTemplatePath; };
     bool IsStartWithTemplate() const { return mxCBXHideDlg->get_active(); };

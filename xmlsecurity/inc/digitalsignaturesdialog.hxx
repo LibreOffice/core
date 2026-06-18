@@ -119,7 +119,7 @@ public:
 
     // Execute the dialog...
     void    beforeRun();
-    short   run() override;
+    VclResponseType run() override;
 
                 // Did signatures change?
     bool    SignaturesChanged() const { return mbSignaturesChanged; }

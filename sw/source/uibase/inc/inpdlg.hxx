@@ -53,9 +53,9 @@ class SwFieldInputDlg final : public weld::GenericDialogController
 public:
     SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rSh,
                     SwField* pField, bool bPrevButton, bool bNextButton);
-    virtual short run() override
+    virtual VclResponseType run() override
     {
-        short nRet = GenericDialogController::run();
+        VclResponseType nRet = GenericDialogController::run();
         if (nRet == RET_OK)
             Apply();
         return nRet;

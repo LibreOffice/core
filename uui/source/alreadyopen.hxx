@@ -28,7 +28,7 @@ private:
 public:
     AlreadyOpenQueryBox(weld::Window* pParent, const std::locale& rResLocale,
                         const OUString& aMessage, bool bIsStoring);
-    short run() { return m_xQueryBox->run(); }
+    VclResponseType run() { return m_xQueryBox->run(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

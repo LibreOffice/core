@@ -55,7 +55,7 @@ public:
     RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits );
     virtual ~RemoteFilesDialog() override;
 
-    virtual short run() override;
+    virtual VclResponseType run() override;
 
     // SvtFileDialog_Base
 

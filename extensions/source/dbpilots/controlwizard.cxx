@@ -216,7 +216,7 @@ namespace dbp
     {
     }
 
-    short OControlWizard::run()
+    VclResponseType OControlWizard::run()
     {
         // get the class id of the control we're dealing with
         sal_Int16 nClassId = FormComponentType::CONTROL;

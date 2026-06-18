@@ -53,9 +53,9 @@ OTableSubscriptionDialog::~OTableSubscriptionDialog()
 {
 }
 
-short OTableSubscriptionDialog::run()
+VclResponseType OTableSubscriptionDialog::run()
 {
-    short nRet = RET_CANCEL;
+    VclResponseType nRet = RET_CANCEL;
     if ( !m_bStopExecution )
     {
         nRet = SfxSingleTabDialogController::run();

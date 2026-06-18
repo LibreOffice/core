@@ -32,9 +32,9 @@ ScOnlyActiveSheetSavedDlg::ScOnlyActiveSheetSavedDlg(weld::Window* pParent)
     m_xDialog->set_default_response(RET_YES);
 }
 
-short ScOnlyActiveSheetSavedDlg::run()
+VclResponseType ScOnlyActiveSheetSavedDlg::run()
 {
-    short nRet = RET_YES;
+    VclResponseType nRet = RET_YES;
     ScModule* pScMod = ScModule::get();
     assert(pScMod);
     if (pScMod->GetInputOptions().GetWarnActiveSheet())

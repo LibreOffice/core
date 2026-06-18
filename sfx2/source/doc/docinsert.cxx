@@ -218,7 +218,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                     // ask for the password
                     SfxPasswordDialog aPasswordDlg(m_pParent);
                     aPasswordDlg.ShowExtras( SfxShowExtras::CONFIRM );
-                    short nRet = aPasswordDlg.run();
+                    VclResponseType nRet = aPasswordDlg.run();
                     if ( RET_OK == nRet )
                     {
                         m_xItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswordDlg.GetPassword() ) );

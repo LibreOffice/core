@@ -119,7 +119,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
 
 void ScRedComDialog::Execute()
 {
-    short nRet=pDlg->Execute();
+    VclResponseType nRet=pDlg->Execute();
 
     if(nRet== RET_OK )
     {

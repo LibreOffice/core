@@ -449,7 +449,7 @@ void DigitalSignaturesDialog::beforeRun()
     mbVerifySignatures = false;
 }
 
-short DigitalSignaturesDialog::run()
+VclResponseType DigitalSignaturesDialog::run()
 {
     beforeRun();
     return GenericDialogController::run();

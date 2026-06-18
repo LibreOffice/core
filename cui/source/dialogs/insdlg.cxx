@@ -155,9 +155,9 @@ SvInsertOleDlg::SvInsertOleDlg(weld::Window* pParent, const Reference<embed::XSt
     m_xRbNewObject->set_active(true);
 }
 
-short SvInsertOleDlg::run()
+VclResponseType SvInsertOleDlg::run()
 {
-    short nRet = RET_OK;
+    VclResponseType nRet = RET_OK;
     SvObjectServerList  aObjS;
     if ( !m_pServers )
     {
@@ -424,9 +424,9 @@ void SfxInsertFloatingFrameDialog::Init()
     m_xBTOpen->connect_clicked(LINK(this, SfxInsertFloatingFrameDialog, OpenHdl));
 }
 
-short SfxInsertFloatingFrameDialog::run()
+VclResponseType SfxInsertFloatingFrameDialog::run()
 {
-    short nRet = RET_OK;
+    VclResponseType nRet = RET_OK;
     bool bOK = false;
     uno::Reference < beans::XPropertySet > xSet;
     if ( m_xObj.is() )

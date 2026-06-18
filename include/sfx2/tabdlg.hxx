@@ -48,7 +48,7 @@ class Notebook;
 class SizeGroup;
 }
 
-#define RET_USER        100
+#define RET_USER   RET_USER100
 
 class SFX2_DLLPUBLIC SfxTabDialogItem final : public SfxSetItem
 {
@@ -95,7 +95,7 @@ private:
     SAL_DLLPRIVATE void setPreviewsToSamePlace();
 
 protected:
-    virtual short               Ok();
+    virtual VclResponseType     Ok();
     std::set<sal_uInt16>        m_aInvalidatedWhichIds;
     virtual void                RefreshInputSet();
     virtual SfxItemSet*         CreateInputItemSet(const OUString& rName);
@@ -194,9 +194,9 @@ public:
     weld::Button*       GetResetButton() const { return m_xResetBtn.get(); }
     void                RemoveStandardButton();
 
-    virtual short       run() override;
+    virtual VclResponseType run() override;
     static bool runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
-                         const std::function<void(sal_Int32)>&);
+                         const std::function<void(VclResponseType)>&);
 
     void                SetApplyHandler(const Link<weld::Button&,void>& _rHdl);
 
