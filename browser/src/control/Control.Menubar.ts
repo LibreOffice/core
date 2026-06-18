@@ -18,6 +18,9 @@ interface MenuItem {
 	// this shouldn't be. It is used by `_getItemsForCommand()`.
 	unoid?: string;
 	type?: string;
+	// Command whose keyboard shortcut should be shown next to the entry.
+	// For action-only entries that have no uno command of their own.
+	shortcut?: string;
 	menu?: MenuItem[];
 	disabled?: boolean;
 	hidden?: boolean;
@@ -140,6 +143,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SelectAll', 'text'), uno: '.uno:SelectAll'},
 				{type: 'separator'},
 				{uno: '.uno:SearchDialog', id: 'searchreplace'},
+				{name: _('Find'), id: 'find', type: 'action', shortcut: 'home-search'},
 				{type: 'separator'},
 				{name: _UNO('.uno:ChangesMenu', 'text'), id: 'changesmenu', type: 'menu', menu: [
 					{uno: '.uno:TrackChanges'},
@@ -494,7 +498,8 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:PasteSpecial', 'presentation'), uno: '.uno:PasteSpecial'},
 				{name: _UNO('.uno:SelectAll', 'presentation'), uno: '.uno:SelectAll'},
 				{type: 'separator'},
-				{uno: '.uno:SearchDialog', id: 'searchreplace'}
+				{uno: '.uno:SearchDialog', id: 'searchreplace'},
+				{name: _('Find'), id: 'find', type: 'action', shortcut: 'home-search'}
 			]},
 			{name: _UNO('.uno:ViewMenu', 'presentation'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
@@ -676,7 +681,8 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:PasteSpecial', 'presentation'), uno: '.uno:PasteSpecial'},
 				{name: _UNO('.uno:SelectAll', 'presentation'), uno: '.uno:SelectAll'},
 				{type: 'separator'},
-				{uno: '.uno:SearchDialog', id: 'searchreplace'}
+				{uno: '.uno:SearchDialog', id: 'searchreplace'},
+				{name: _('Find'), id: 'find', type: 'action', shortcut: 'home-search'}
 			]},
 			{name: _UNO('.uno:ViewMenu', 'presentation'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
@@ -839,7 +845,8 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:PasteSpecial', 'text'), uno: '.uno:PasteSpecial'},
 				{name: _UNO('.uno:SelectAll', 'text'), uno: '.uno:SelectAll'},
 				{type: 'separator'},
-				{uno: '.uno:SearchDialog', id: 'searchreplace'}
+				{uno: '.uno:SearchDialog', id: 'searchreplace'},
+				{name: _('Find'), id: 'find', type: 'action', shortcut: 'home-search'}
 			]},
 			{name: _UNO('.uno:ViewMenu', 'spreadsheet'), id: 'view', type: 'menu', accessibility: {combination: 'MV'},
 			 menu: (window.mode.isTablet() ? [
@@ -1483,7 +1490,7 @@ class Menubar extends window.L.Control {
 		commandStates: {},
 
 		// Only these menu options will be visible in readonly mode
-		allowedReadonlyMenus: window.mode.isCODesktop() ? ['file', 'view', 'slide', 'help'] : ['file', 'downloadas', 'view', 'insert', 'slide', 'help', 'print'],
+		allowedReadonlyMenus: window.mode.isCODesktop() ? ['file', 'editmenu', 'view', 'slide', 'help'] : ['file', 'editmenu', 'downloadas', 'view', 'insert', 'slide', 'help', 'print'],
 		allowedRedlineManagementMenus: window.mode.isCODesktop() ? [] : ['editmenu', 'changesmenu', ],
 
 		math: ['.uno:ChangeFont', '.uno:ChangeFontSize', '.uno:ChangeDistance', '.uno:ChangeAlignment'],
@@ -1491,6 +1498,16 @@ class Menubar extends window.L.Control {
 		// Only these UNO commands will be enabled in readonly mode
 		allowedViewModeCommands: [
 			'.uno:Signature',
+			// Copying, selecting and navigating do not change the document, so
+			// a viewer is allowed to use them. Copy, Select All and Go to Page
+			// live in the Edit menu, which is why 'editmenu' is kept visible in
+			// allowedReadonlyMenus above; Navigator lives in the View menu.
+			// Searching uses the separate 'find' action below, not the
+			// editable Find & Replace dialog.
+			'.uno:Copy',
+			'.uno:SelectAll',
+			'.uno:GotoPage',
+			'.uno:Navigator',
 		],
 
 		allowedViewModeActions: [
@@ -1504,7 +1521,8 @@ class Menubar extends window.L.Control {
 			() => !window.L.Browser.edge ? 'fullscreen' : undefined, 'zoomin', 'zoomout', 'zoomreset', 'fitwidthzoom', 'showstatusbar', 'showresolved', 'showannotations', 'toggledarktheme', // view menu
 			'insert-signatureline', // insert menu
 			'about', 'keyboard-shortcuts', 'latestupdates', 'feedback', 'serveraudit', 'online-help', 'report-an-issue', // help menu
-			'insertcomment'
+			'insertcomment',
+			'find' // edit menu
 		],
 
 		// Only these UNO commands will be enabled in redline management mode
@@ -2541,6 +2559,11 @@ class Menubar extends window.L.Control {
 			app.dispatcher.dispatch('repair');
 		} else if (id === 'recsearch') {
 			app.dispatcher.dispatch('showsearchbar');
+		} else if (id === 'find') {
+			// Same path as the Ctrl-F shortcut: in Writer it focuses the
+			// navigator quick-find field; in Calc and Impress, which have no
+			// quick-find, it opens the Find & Replace dialog.
+			app.dispatcher.dispatch('home-search');
 		} else if (id === 'inserttextbox') {
 			this._map.sendUnoCommand('.uno:Text?CreateDirectly:bool=true');
 		} else if (id === 'pagesetup') {
@@ -2713,6 +2736,9 @@ class Menubar extends window.L.Control {
 		if (this._map.isEditMode()) {
 			switch (menuItem.id) {
 			case 'savecomments':
+			case 'find':
+				// The find-only entry is the readonly counterpart of Find &
+				// Replace, so it is hidden while the document is editable.
 				return false;
 			}
 		}
@@ -2865,6 +2891,10 @@ class Menubar extends window.L.Control {
 			}
 			if (menu[i].uno && (JSDialog.ShortcutsUtil.hasShortcut(menu[i].uno) || JSDialog.ShortcutsUtil.hasShortcut(menu[i].id))) {
 				aItem.innerHTML = JSDialog.ShortcutsUtil.getMenuLabel(aItem.innerHTML, menu[i].uno ? menu[i].uno : menu[i].id);
+			} else if (menu[i].shortcut && JSDialog.ShortcutsUtil.hasShortcut(menu[i].shortcut)) {
+				// Action-only entries have no UNO command to derive a shortcut
+				// from, so they name the command that owns it explicitly.
+				aItem.innerHTML = JSDialog.ShortcutsUtil.getMenuLabel(aItem.innerHTML, menu[i].shortcut);
 			}
 
 			if (menu[i].type === 'menu') {

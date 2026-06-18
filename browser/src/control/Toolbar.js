@@ -300,7 +300,10 @@ window.L.Map.include({
 			'.uno:ShowResolvedAnnotations', '.uno:Open', '.uno:CloseWin',
 			'.uno:ToolbarMode?Mode:string=notebookbar_online.ui', '.uno:ToolbarMode?Mode:string=Default',
 			'.uno:ExportToEPUB', '.uno:ExportToPDF', '.uno:ExportDirectToPDF', '.uno:MoveKeepInsertMode', '.uno:ShowRuler',
-			'.uno:Navigator', '.uno:GotoPage'];
+			'.uno:Navigator', '.uno:GotoPage',
+			// Selecting does not change the document, so a viewer may use it.
+			// Copy goes through the clipboard path and never reaches here.
+			'.uno:SelectAll'];
 		if (app.isCommentEditingAllowed()) {
 			allowedCommands.push('.uno:InsertAnnotation','.uno:DeleteCommentThread', '.uno:DeleteAnnotation', '.uno:DeleteNote',
 				'.uno:DeleteComment', '.uno:ReplyComment', '.uno:ReplyToAnnotation', '.uno:PromoteComment', '.uno:ResolveComment',
