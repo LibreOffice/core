@@ -646,6 +646,14 @@ label.notebookbar.ui-checkbox-label {
 	display: none;
 }
 
+/* background is always white for previews, use black text. Same trick as the
+   Styles sidebar treeview in jssidebar.css (.StyleListPanel #treeview
+   .ui-treeview-cell-text); keep the two in sync. */
+[data-theme='dark'] .jsdialog #stylesview .ui-iconview-entry span:not(.ui-iconview-entry-title),
+[data-theme='dark'] .notebookbar #stylesview .ui-iconview-entry span:not(.ui-iconview-entry-title) {
+	color: var(--color-main-background);
+}
+
 [id^='stylesview'] .ui-iconview-entry.selected {
 	border: 1px solid var(--color-border-darker);
 	border-collapse: separate; /*To use box-shadow in Internet Explorer 9 or later*/

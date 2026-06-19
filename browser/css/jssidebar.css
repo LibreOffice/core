@@ -795,7 +795,9 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 [data-theme='dark'] .StyleListPanel #TemplatePanel [id='3'] button { background: transparent url('images/dark/lc_framestyle.svg') no-repeat center; }
 [data-theme='dark'] .StyleListPanel #TemplatePanel [id='6'] button { background: transparent url('images/dark/lc_tablestyle.svg') no-repeat center; }
 
-/* background is always white for previews, use black text */
+/* background is always white for previews, use black text. The notebookbar
+   stylesview placeholder in notebookbar.css uses the same trick on the same
+   white preview background; keep the two in sync. */
 [data-theme='dark'] .StyleListPanel #treeview .ui-treeview-cell-text {
 	color: var(--color-main-background);
 }
