@@ -390,6 +390,7 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'F3', unoAction: '.uno:ExpandGlossary' }),
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', modifier: Mod.CTRL, key: 'F3' }),
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'F5' }),
+    new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'F12', unoAction: '.uno:DefaultNumbering', platform: Platform.CODAWINDOWS | Platform.CODAMAC | Platform.CODAQT }),
 
     // Impress.
     new ShortcutDescriptor({ docType: 'presentation', eventType: 'keydown', key: 'F5', dispatchAction: 'presentation' }),

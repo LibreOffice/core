@@ -1250,6 +1250,10 @@ static void arrangePresentationWindows(WindowData& data)
     }
 }
 
+// Identifier for the Ctrl+Shift+I hotkey that opens the WebView2 developer
+// tools. The range 0x0000 to 0xBFFF is reserved for application hotkeys.
+static const int HOTKEY_ID_DEVTOOLS = 0x00DA;
+
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -1520,6 +1524,26 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 auto nextDocument = filenamesAndUrisToOpen.front();
                 filenamesAndUrisToOpen.pop_front();
                 openCOOLWindow(nextDocument, DocumentMode::EDIT);
+            }
+            break;
+
+        case WM_ACTIVATE:
+            // Hold the developer-tools hotkey only while this window is the
+            // active one, so the key is not taken from other applications and
+            // each document window opens its own developer tools.
+            if (LOWORD(wParam) == WA_INACTIVE)
+                UnregisterHotKey(hWnd, HOTKEY_ID_DEVTOOLS);
+            else
+                RegisterHotKey(hWnd, HOTKEY_ID_DEVTOOLS,
+                               MOD_CONTROL | MOD_SHIFT | MOD_NOREPEAT, 'I');
+            break;
+
+        case WM_HOTKEY:
+            if (wParam == HOTKEY_ID_DEVTOOLS)
+            {
+                auto it = windowData.find(hWnd);
+                if (it != windowData.end() && it->second.webView)
+                    it->second.webView->OpenDevToolsWindow();
             }
             break;
 
@@ -2122,6 +2146,15 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                             settings->put_IsScriptEnabled(TRUE);
                             settings->put_AreDefaultScriptDialogsEnabled(TRUE);
                             settings->put_IsWebMessageEnabled(TRUE);
+                            // Stop browser shortcut keys (such as F12 for the
+                            // developer tools and F5 for reload) from being
+                            // handled by the WebView, so the keys reach the
+                            // document instead. F12 then toggles the numbered
+                            // list rather than opening the developer tools.
+                            wil::com_ptr<ICoreWebView2Settings4> settings4
+                                = settings.try_query<ICoreWebView2Settings4>();
+                            if (settings4)
+                                settings4->put_AreBrowserAcceleratorKeysEnabled(FALSE);
 
                             // Resize WebView to fit the bounds of the parent window
                             RECT bounds;
