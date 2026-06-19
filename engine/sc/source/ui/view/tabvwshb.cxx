@@ -67,6 +67,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <comphelper/kit.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKitEnums.h>
 
@@ -214,6 +215,17 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
                 double fScaleWidth = static_cast<double>(aDrawSize.Width()) / aOleSize.Width();
                 double fScaleHeight = static_cast<double>(aDrawSize.Height()) / aOleSize.Height();
                 pClient->SetSizeScale(fScaleWidth,fScaleHeight);
+            }
+
+            basegfx::B2DVector aGridOffset(0, 0);
+            if (GetScDrawView() &&
+                    GetScDrawView()->calculateGridOffsetForSdrObject(*pObj,
+                        aGridOffset)) {
+                pClient->SetGridOffset(Point(static_cast<tools::Long>(aGridOffset.getX()),
+                        static_cast<tools::Long>(aGridOffset.getY())));
+            } else {
+                // Reset it just in case
+                pClient->SetGridOffset(Point());
             }
 
             // visible section is only changed inplace!

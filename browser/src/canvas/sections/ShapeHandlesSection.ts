@@ -130,6 +130,12 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (app.map._docLayer._docType !== 'spreadsheet' || !app.map._docLayer.sheetGeometry)
 			return;
 
+		// When an element of a chart is selected, it appears the 
+		// coordinates are given by core in grid-corrected
+		// document (tile) space. So don't apply the print to tile conversion.
+		if (app.map._docLayer._oleCSelections && !app.map._docLayer._oleCSelections.empty())
+			return;
+
 		const kinds = this.sectionProperties.info?.handles?.kinds;
 		if (!kinds) return;
 

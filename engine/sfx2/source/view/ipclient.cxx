@@ -352,6 +352,9 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     {
         tools::Rectangle aRect(m_pClient->GetObjArea());
 
+        // Compensate for the grid offset
+        aRect.Move(m_pClient->GetGridOffset().X(), m_pClient->GetGridOffset().Y());
+
         if (m_pClient->GetEditWin())
         {
             if (m_pClient->GetEditWin()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
@@ -437,6 +440,9 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_fScaleWidth),
                                 tools::Long( aRealObjArea.GetHeight() * m_fScaleHeight) ) );
 
+    // Compensate for grid offset
+    aRealObjArea.Move(m_pClient->GetGridOffset().X(), m_pClient->GetGridOffset().Y());
+
     vcl::Window* pEditWin = m_pClient->GetEditWin();
     // In Writer and Impress the map mode is disabled. So when a chart is
     // activated (for in place editing) we get the chart win size in 100th mm
@@ -471,6 +477,9 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
     tools::Rectangle aRealObjArea( m_aObjArea );
     aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_fScaleWidth),
                                 tools::Long( aRealObjArea.GetHeight() * m_fScaleHeight) ) );
+
+    // Compensate for grid offset
+    aRealObjArea.Move(m_pClient->GetGridOffset().X(), m_pClient->GetGridOffset().Y());
 
     vcl::Window* pEditWin = m_pClient->GetEditWin();
     // See comment for SfxInPlaceClient_Impl::getPlacement.

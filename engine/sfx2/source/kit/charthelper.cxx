@@ -102,12 +102,9 @@ tools::Rectangle KitChartHelper::GetChartBoundingBox()
                 {
                     // In all cases, the following code fragment
                     // returns the chart bounding box in twips.
-                    const MapMode& aCWMapMode = pWindow->GetMapMode();
                     constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
-                    const double scaleX = aCWMapMode.GetScaleX();
-                    const double scaleY = aCWMapMode.GetScaleY();
-                    const double nX = p.first * scaleX / p.second;
-                    const double nY = p.first * scaleY / p.second;
+                    const double nX = static_cast<double>(p.first) / p.second;
+                    const double nY = static_cast<double>(p.first) / p.second;
 
                     Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
                     if (mbNegativeX && AllSettings::GetLayoutRTL())

@@ -45,6 +45,9 @@ friend class SfxInPlaceClient_Impl;
     SfxViewShell*           m_pViewSh;
     VclPtr<vcl::Window>     m_pEditWin;
 
+    // Grid offset in mm100 (offset between logic position & rendered posn)
+    Point                   m_aGridOffset;
+
     // called after the requested new object area was negotiated
     SAL_DLLPRIVATE virtual void ObjectAreaChanged();
 
@@ -88,6 +91,9 @@ public:
     /// To indicate that negated document X coordinates are used
     void                SetNegativeX(bool bSet);
     bool                IsNegativeX() const;
+
+    void                SetGridOffset(const Point& rOffset) { m_aGridOffset = rOffset; }
+    const Point&        GetGridOffset() const { return m_aGridOffset; }
 
     virtual void        FormatChanged(); // object format was changed (used for StarMath formulas aligning)
 

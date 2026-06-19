@@ -916,7 +916,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
     tools::Rectangle aSelection(rRect);
     tools::Long nSignX = mbNegativeX ? -1 : 1;
     bool bIsChart = false;
-    Point addLogicOffset(0, 0);
+    Point addLogicOffset(0, 0); // in mm100
     bool convertMapMode = false;
     if (!rRect.IsEmpty())
     {
@@ -940,9 +940,8 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                         aOffsetPx.setX(pViewShellWindow->GetOutOffXPixel() + pViewShellWindow->GetSizePixel().Width()
                             - pWin->GetOutOffXPixel() - pWin->GetSizePixel().Width());
                     }
-                    Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                    addLogicOffset = aLogicOffset;
-                    aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    addLogicOffset = o3tl::convert(aOffsetPx, o3tl::Length::px, o3tl::Length::mm100);
+                    aSelection.Move(addLogicOffset.getX(), addLogicOffset.getY());
                 }
             }
         }
