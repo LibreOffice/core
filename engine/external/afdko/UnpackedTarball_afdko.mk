@@ -33,6 +33,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/sfnt-named-structs.patch \
     external/afdko/antlr4-chrono.patch \
     external/afdko/ubsan.patch.0 \
+    external/afdko/classrec-fallback-ref.patch.0 \
 ))
 
 # static replacement for the cmake-generated version files

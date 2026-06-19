@@ -1,0 +1,22 @@
+--- c/addfeatures/hotconv/FeatCtx.cpp
++++ c/addfeatures/hotconv/FeatCtx.cpp
+@@ -490,7 +490,8 @@ const GPat::ClassRec &FeatCtx::lookupGlyphClass(const std::string &gcname) {
+     auto search = namedGlyphClasses.find(gcname);
+     if ( search == namedGlyphClasses.end() ) {
+         featMsg(sFATAL, "glyph class not defined");
+-        return GPat::ClassRec {};
++        static const GPat::ClassRec empty;
++        return empty;
+     }
+     return search->second;
+ }
+--- c/addfeatures/hotconv/GPOS.cpp
++++ c/addfeatures/hotconv/GPOS.cpp
+@@ -997,7 +997,7 @@ GPat::ClassRec &GPOS::getCR(uint32_t cls, int classDefInx) {
+     g->logger->log(sFATAL, "class <%u> not valid in classDef", cls);
+     */
+     assert(false);
+-    GPat::ClassRec cr;
++    static GPat::ClassRec cr;
+     return cr;
+ }
