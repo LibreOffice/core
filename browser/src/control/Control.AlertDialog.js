@@ -104,7 +104,9 @@ window.L.Control.AlertDialog = window.L.Control.extend({
 		} else if (e.cmd && e.kind) {
 			this._map.fire('hidebusy');
 
-			var msg = _('The server encountered a {0} error while parsing the {1} command.');
+			var msg = window.mode.isCODesktop()
+				? _('A {0} error occurred while processing the {1} command.')
+				: _('The server encountered a {0} error while parsing the {1} command.');
 			msg = msg.replace('{0}', e.kind);
 			msg = msg.replace('{1}', e.cmd);
 			this._map.uiManager.showErrorModal(msg, e.errorDetail);

@@ -624,7 +624,11 @@ class Socket {
 			app.sectionContainer &&
 			!app.sectionContainer.testing
 		)
-			this._map.uiManager.showSnackbar(_('The server has been disconnected.'));
+			this._map.uiManager.showSnackbar(
+				window.mode.isCODesktop()
+					? _('The connection to the document has been lost.')
+					: _('The server has been disconnected.'),
+			);
 	}
 
 	// Simulate error conditions for testing via the
@@ -1899,7 +1903,11 @@ class Socket {
 
 		// TODO: For now we expect perfect match in protocol versions
 		if (this.WSDServer.Protocol !== this.ProtocolVersionNumber) {
-			this._map.fire('error', { msg: _('Unsupported server version.') });
+			this._map.fire('error', {
+				msg: window.mode.isCODesktop()
+					? _('Unsupported version.')
+					: _('Unsupported server version.'),
+			});
 		}
 
 		return false;

@@ -188,9 +188,13 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		}
 
 		if (!(file.filename && file.url) && (file.name === '' || file.size === 0)) {
-			var errMsg =  _('The file of type: {0} cannot be uploaded to server since the file has no name');
+			var errMsg = window.mode.isCODesktop()
+				? _('The file of type: {0} cannot be inserted since the file has no name')
+				: _('The file of type: {0} cannot be uploaded to server since the file has no name');
 			if (file.size === 0)
-				errMsg = _('The file of type: {0} cannot be uploaded to server since the file is empty');
+				errMsg = window.mode.isCODesktop()
+					? _('The file of type: {0} cannot be inserted since the file is empty')
+					: _('The file of type: {0} cannot be uploaded to server since the file is empty');
 			errMsg = errMsg.replace('{0}', file.type);
 			map.fire('error', {msg: errMsg, critical: false});
 			return;

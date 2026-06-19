@@ -19,7 +19,7 @@ if (lang) {
 	String.locale = 'en-US';
 }
 
-errorMessages.diskfull = _('No disk space left on server.');
+errorMessages.diskfull = window.mode.isCODesktop() ? _('No disk space left.') : _('No disk space left on server.');
 errorMessages.emptyhosturl = _('The host URL is empty. The coolwsd server is probably misconfigured, please contact the administrator.');
 errorMessages.limitreached = _('This is an unsupported version of {productname}. To avoid the impression that it is suitable for deployment in enterprises, this message appears when more than {docs} documents or {connections} connections are in use concurrently.');
 errorMessages.infoandsupport = _('More information and support');
