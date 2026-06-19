@@ -322,16 +322,22 @@ export class TilesSection extends CanvasSectionObject {
 			if (!simpleRectangle.intersectsRectangle(viewRectangleTwips))
 				continue;
 
-			const px = simpleRectangle.v1X + this.sectionProperties.pageBackgroundInnerMargin;
-			const py = simpleRectangle.v1Y + this.sectionProperties.pageBackgroundInnerMargin;
-			const pw = simpleRectangle.v2X - simpleRectangle.v1X - this.sectionProperties.pageBackgroundInnerMargin;
-			const ph = simpleRectangle.v3Y - simpleRectangle.v1Y - this.sectionProperties.pageBackgroundInnerMargin;
-
-			this.context.fillStyle = docBg;
-			this.context.fillRect(px, py, pw, ph);
-
-			this.drawWriterLoadingSkeleton(px, py, pw, ph);
+			this.drawWriterPageBackground(simpleRectangle, docBg);
 		}
+	}
+
+	// Fill a single Writer page with the document background colour and paint a
+	// loading skeleton over it. The rectangle's view-space getters place the
+	// page (honouring its tile mode), so this works for both the inline and the
+	// side-by-side compare-changes views.
+	private drawWriterPageBackground(rectangle: cool.SimpleRectangle, docBg: string): void {
+		this.context.fillStyle = docBg;
+		this.drawViewRectangle(rectangle, true);
+
+		// Position from the view-space top-left; the page size is scale-only and
+		// independent of the column offset, so read it from the pixel getters.
+		this.drawWriterLoadingSkeleton(
+			rectangle.v1X, rectangle.v1Y, rectangle.pWidth, rectangle.pHeight);
 	}
 
 	// Paint a skeleton of a heading + a few paragraph lines on a Writer page
@@ -485,6 +491,38 @@ export class TilesSection extends CanvasSectionObject {
 		}
 	}
 
+	// The side-by-side compare-changes view renders each page twice (the
+	// original on the left, the current document on the right). Draw the page
+	// background + loading skeleton for both columns so pages whose tiles have
+	// not arrived yet show a placeholder, matching the inline Writer view.
+	private drawPageBackgroundsCompareChanges() {
+		if (this.map._docLayer._docType !== 'text')
+			return;
+
+		if (!this.containerObject.getDocumentAnchorSection())
+			return;
+
+		const viewRectangleTwips = app.activeDocument.activeLayout.viewedRectangle.toArray();
+		const docBg = this.containerObject.getDocumentBackgroundColor();
+
+		for (const mode of [TileMode.LeftSide, TileMode.RightSide]) {
+			for (let i = 0; i < app.file.writer.pageRectangleList.length; i++) {
+				const rect = app.file.writer.pageRectangleList[i];
+
+				// Both columns show the same pages; set the tile mode so the
+				// rectangle's view-space getters resolve to the correct (left or
+				// right) column.
+				const pageRectangle = new cool.SimpleRectangle(
+					rect[0], rect[1], rect[2], rect[3], -1, mode);
+
+				if (!pageRectangle.intersectsRectangle(viewRectangleTwips))
+					continue;
+
+				this.drawWriterPageBackground(pageRectangle, docBg);
+			}
+		}
+	}
+
 	private drawForViewLayoutCompareChanges() {
 		const view = app.activeDocument.activeLayout as ViewLayoutCompareChanges;
 
@@ -525,6 +563,7 @@ export class TilesSection extends CanvasSectionObject {
 		}
 		else if (app.activeDocument.activeLayout.type === 'ViewLayoutCompareChanges') {
 			this.context.translate(-this.myTopLeft[0], -this.myTopLeft[1]);
+			this.drawPageBackgroundsCompareChanges();
 			this.drawForViewLayoutCompareChanges();
 			this.context.translate(this.myTopLeft[0], this.myTopLeft[1]);
 			return;
