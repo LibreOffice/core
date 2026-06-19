@@ -606,10 +606,6 @@ AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,$LIBO_VERSION_MICRO)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
 
-git_date=`git log -1 --pretty=format:"%cd" --date=format:'%Y' 2>/dev/null`
-LIBO_THIS_YEAR=${git_date:-2026}
-AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
-
 dnl ===================================================================
 dnl Product version
 dnl ===================================================================
@@ -624,6 +620,14 @@ AC_PATH_PROG(GREP, grep)
 
 BUILDDIR=`pwd`
 cd $srcdir
+
+git_date=`git log -1 --pretty=format:"%cd" --date=format:'%Y' 2>/dev/null`
+LIBO_THIS_YEAR=${git_date:-2026}
+AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
+# commit-time in unix epoch timestamp format in prep for reproducible builds
+SOURCE_DATE_EPOCH=`git log -1 --pretty=%ct 2>/dev/null`
+AC_SUBST(SOURCE_DATE_EPOCH)
+
 SRC_ROOT=`pwd`
 cd $BUILDDIR
 x_Cygwin=[\#]
