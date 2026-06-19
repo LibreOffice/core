@@ -34,10 +34,10 @@ diff --git a/src/opts/SkRasterPipeline_opts.h b/src/opts/SkRasterPipeline_opts.h
 index d12968d876b5..27a00474e07b 100644
 --- a/src/opts/SkRasterPipeline_opts.h
 +++ b/src/opts/SkRasterPipeline_opts.h
-@@ -69,7 +69,7 @@ using NoCtx = const void*;
+@@ -75,7 +75,7 @@
  
- #if defined(SKRP_CPU_SCALAR) || defined(SKRP_CPU_NEON) || defined(SKRP_CPU_HSW) || \
-         defined(SKRP_CPU_SKX) || defined(SKRP_CPU_AVX) || defined(SKRP_CPU_SSE41) || \
+ #if defined(SKRP_CPU_SCALAR) || defined(SKRP_CPU_NEON) || defined(SKRP_CPU_AVX2) || \
+         defined(SKRP_CPU_ML4) || defined(SKRP_CPU_AVX) || defined(SKRP_CPU_SSE41) || \
 -        defined(SKRP_CPU_SSE2)
 +        defined(SKRP_CPU_SSE2) || defined(SKRP_CPU_LASX) || defined(SKRP_CPU_LSX)
      // Honor the existing setting

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#if SK_CPU_SSE_LEVEL >= SK_CPU_SSE_LEVEL_SSSE3
+#if SK_CPU_X64_LEVEL >= SK_CPU_X64_LEVEL_SSSE3
     #include <immintrin.h>
 #endif
 
@@ -25,7 +25,7 @@ static void RGB1_to_R_portable(uint8_t dst[], const uint32_t* src, int count) {
     }
 }
 
-#if SK_CPU_SSE_LEVEL >= SK_CPU_SSE_LEVEL_SSSE3
+#if SK_CPU_X64_LEVEL >= SK_CPU_X64_LEVEL_SSSE3
 inline void RGB1_to_RGB(uint8_t dst[], const uint32_t* src, int count) {
         const uint8_t X = 0xFF; // Used a placeholder.  The value of X is irrelevant.
         __m128i pack = _mm_setr_epi8(0,1,2, 4,5,6, 8,9,10, 12,13,14, X,X,X,X);

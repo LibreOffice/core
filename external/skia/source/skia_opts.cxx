@@ -40,7 +40,7 @@ void SkConvertRGBAToR(uint8_t* dest, const uint32_t* src, int count)
 
 // The rest is mostly based on Skia's SkOpts.cpp, reduced to only SSSE3 so far.
 
-#if SK_CPU_SSE_LEVEL >= SK_CPU_SSE_LEVEL_SSSE3
+#if SK_CPU_X64_LEVEL >= SK_CPU_X64_LEVEL_SSSE3
     #define SK_OPTS_NS ssse3
 #else
     #define SK_OPTS_NS portable
@@ -64,8 +64,8 @@ namespace SkLoOpts {
     static void init() {
 #if !defined(SK_BUILD_NO_OPTS)
     #if defined(SK_CPU_X86)
-        #if SK_CPU_SSE_LEVEL < SK_CPU_SSE_LEVEL_SSSE3
-            if (SkCpu::Supports(SkCpu::SSSE3)) { Init_ssse3(); }
+        #if SK_CPU_X64_LEVEL < SK_CPU_X64_LEVEL_SSSE3
+            if (SkCpu::Supports(SkX64::SSSE3)) { Init_ssse3(); }
         #endif
     #endif
 #endif

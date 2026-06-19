@@ -21,8 +21,8 @@ $(eval $(call gb_Library_add_defs,skia,\
     -DSKIA_IMPLEMENTATION=1 \
     -DSKIA_DLL \
     -DSK_USER_CONFIG_HEADER="<config_skia.h>" \
-    $(if $(filter INTEL,$(CPUNAME)),$(if $(filter WNT,$(OS)),-DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSE2,-DSK_CPU_SSE_LEVEL=0)) \
-    $(if $(filter X86_64,$(CPUNAME)),-DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSE2) \
+    $(if $(filter INTEL,$(CPUNAME)),$(if $(filter WNT,$(OS)),-DSK_CPU_X64_LEVEL=SK_CPU_X64_LEVEL_SSE2,-DSK_CPU_X64_LEVEL=0)) \
+    $(if $(filter X86_64,$(CPUNAME)),-DSK_CPU_X64_LEVEL=SK_CPU_X64_LEVEL_SSE2) \
     -DSK_ENABLE_SKSL_IN_RASTER_PIPELINE \
 ))
 
@@ -500,6 +500,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPathUtils \
     UnpackedTarball/skia/src/core/SkPath_serial \
     UnpackedTarball/skia/src/core/SkPixelRef \
+    UnpackedTarball/skia/src/core/SkPixelStorage \
     UnpackedTarball/skia/src/core/SkPixmap \
     UnpackedTarball/skia/src/core/SkPixmapDraw \
     UnpackedTarball/skia/src/core/SkPoint \
@@ -1069,6 +1070,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/gradients/GrGradientBitmapCache \
     UnpackedTarball/skia/src/gpu/ganesh/gradients/GrGradientShader \
     UnpackedTarball/skia/src/gpu/ganesh/image/GrImageUtils \
+    UnpackedTarball/skia/src/gpu/ganesh/image/GrMippedBitmap \
     UnpackedTarball/skia/src/gpu/ganesh/image/GrTextureGenerator \
     UnpackedTarball/skia/src/gpu/ganesh/image/SkImage_Ganesh \
     UnpackedTarball/skia/src/gpu/ganesh/image/SkImage_GaneshBase \
@@ -1077,6 +1079,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/image/SkImage_LazyTexture \
     UnpackedTarball/skia/src/gpu/ganesh/image/SkImage_RasterPinnable \
     UnpackedTarball/skia/src/gpu/ganesh/image/SkSpecialImage_Ganesh \
+    UnpackedTarball/skia/src/gpu/ganesh/mock/GrMockBackendSurface \
     UnpackedTarball/skia/src/gpu/ganesh/mock/GrMockCaps \
     UnpackedTarball/skia/src/gpu/ganesh/mock/GrMockGpu \
     UnpackedTarball/skia/src/gpu/ganesh/mock/GrMockTypes \
@@ -1319,9 +1322,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/opts/SkOpts_hsw \
-    UnpackedTarball/skia/src/core/SkSwizzler_opts_hsw \
-    UnpackedTarball/skia/src/core/SkBlitRow_opts_hsw \
+    UnpackedTarball/skia/src/opts/SkOpts_ml3 \
+    UnpackedTarball/skia/src/core/SkSwizzler_opts_ml3 \
+    UnpackedTarball/skia/src/core/SkBlitRow_opts_ml3 \
 	UnpackedTarball/skia/modules/skcms/src/skcms_TransformHsw, \
 	$(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
 	$(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \
