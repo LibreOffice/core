@@ -2661,7 +2661,16 @@ void ScDocument::CopyDBsFromClip(const ScRange& rDestRange, const ScRange& rClip
 
         auto pClone = std::make_unique<ScDBData>(*rxClip);
         pClone->SetIndex(0); // let the destination assign a fresh, collision-free index
+
+        // Changing the area resets the table column names, because the header
+        // range moves. Keep the names the clip carried so a structured
+        // reference still resolves a column by name. The block is a pure
+        // translation, so the names map to the same columns as before.
+        std::vector<OUString> aColumnNames = pClone->GetTableColumnNames();
         pClone->MoveTo(nDestTab, nNewCol1, nNewRow1, nNewCol2, nNewRow2);
+        if (!aColumnNames.empty())
+            pClone->SetTableColumnNames(std::move(aColumnNames));
+
         rDest.insert(std::move(pClone));
     }
 }

@@ -9950,12 +9950,15 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipShiftsNamedDBs)
 {
     // Pasting a fully-copied named table into a document that does not already
     // own it must recreate the table anchored to the paste location, not at the
-    // source coordinates.
+    // source coordinates, and the column names the copy carried must survive
+    // the re-anchor so a structured reference still resolves against the
+    // pasted table instead of evaluating to #REF!.
     m_pDoc->InsertTab(0, u"Src"_ustr);
 
     // Named table MyTable over A1:C3 on the source sheet, with some content so
     // the paste carries cells.
     auto pTable = std::make_unique<ScDBData>(u"MyTable"_ustr, 0, 0, 0, 2, 2, true, true);
+    pTable->SetTableColumnNames(std::vector<OUString>{ u"Name"_ustr, u"A"_ustr, u"B"_ustr });
     CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
     m_pDoc->SetString(0, 0, 0, u"Name"_ustr);
     m_pDoc->SetString(1, 0, 0, u"A"_ustr);
@@ -9992,6 +9995,24 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipShiftsNamedDBs)
     ScRange aPastedArea;
     pPasted->GetArea(aPastedArea);
     CPPUNIT_ASSERT_EQUAL(ScRange(2, 4, 0, 4, 6, 0), aPastedArea);
+
+    // The column names the copy carried survive the re-anchor, so a structured
+    // reference can still resolve a column by name against the pasted table.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPasted->GetTableColumnNames().size());
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pPasted->GetTableColumnNames()[0]);
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pPasted->GetTableColumnNames()[1]);
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pPasted->GetTableColumnNames()[2]);
+
+    // A structured reference resolves against the pasted table by column
+    // name and computes against the cells the copy carried. Without the
+    // names, this would fail to resolve and the cell would hold a #REF!
+    // error.
+    rDestDoc.SetString(0, 9, 0, u"=SUM(MyTable[B])"_ustr); // A10
+    rDestDoc.CalcAll();
+    ScFormulaCell* pFC = rDestDoc.GetFormulaCell(ScAddress(0, 9, 0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::NONE), int(pFC->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(42.0, rDestDoc.GetValue(0, 9, 0));
 
     // The source table must be left untouched at its original coordinates.
     const ScDBData* pSrc = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"MYTABLE"_ustr);
