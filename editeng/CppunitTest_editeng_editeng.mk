@@ -12,6 +12,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,editeng_editeng))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,editeng_editeng, \
+    editeng/qa/editeng/CharacterConversionTest \
     editeng/qa/editeng/editeng \
 ))
 
