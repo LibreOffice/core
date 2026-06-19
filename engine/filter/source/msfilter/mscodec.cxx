@@ -463,7 +463,14 @@ bool MSCodec_Std97::InitCipher(sal_uInt32 nCounter)
 bool MSCodec_CryptoAPI::InitCipher(sal_uInt32 nCounter)
 {
     // data = hash + iterator (4bytes)
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 17
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
+#endif
     std::vector<sal_uInt8> aKeyData(m_aDigestValue);
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 17
+#pragma GCC diagnostic pop
+#endif
     aKeyData.push_back(sal_uInt8((nCounter >>  0) & 0xff));
     aKeyData.push_back(sal_uInt8((nCounter >>  8) & 0xff));
     aKeyData.push_back(sal_uInt8((nCounter >> 16) & 0xff));

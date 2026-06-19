@@ -165,7 +165,14 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     {
         std::vector< sal_Int32 > aMissingValueTreatments;
         if (const SfxIntegerListItem* pValueTreatmentsItem = rInAttrs->GetItemIfSet(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS))
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 17
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
+#endif
             aMissingValueTreatments = pValueTreatmentsItem->GetList();
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 17
+#pragma GCC diagnostic pop
+#endif
 
         const SfxInt32Item* pMissingValueTreatmentItem;
         if ( aMissingValueTreatments.size()>1 &&
