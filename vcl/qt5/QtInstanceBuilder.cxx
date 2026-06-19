@@ -71,6 +71,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"cui/ui/certdialog.ui",
     u"cui/ui/comment.ui",
     u"cui/ui/editdictionarydialog.ui",
+    u"cui/ui/editmodulesdialog.ui",
     u"cui/ui/eventassigndialog.ui",
     u"cui/ui/fontfeaturesdialog.ui",
     u"cui/ui/fontfragment.ui",
