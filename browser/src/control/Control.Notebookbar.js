@@ -618,7 +618,8 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 
 		// Skip auto-snap when exiting an in-place edit (cell-edit roundtrip).
 		const returningFromEdit =
-			this._inPlaceEditingContexts.includes(this._lastContext);
+			Array.isArray(this._lastContexts) &&
+			this._inPlaceEditingContexts.includes(this._lastContexts[0]);
 
 		if (contextTab) {
 			// Switch to the tab of the context, unless we currently show the review tab
