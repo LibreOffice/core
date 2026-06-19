@@ -641,6 +641,12 @@ void SwView::MoveNavigation(bool bNext)
                     rSh.UpdateCursor(SwCursorShell::SCROLLWIN);
             }
             break;
+        case NID_HYPERLINK:
+        {
+            rSh.AssureStdMode();
+            rSh.GotoNxtPrvHyperlink(bNext);
+            break;
+        }
     }
     if (NID_POSTIT != s_nMoveType)
         m_pEditWin->GrabFocus();

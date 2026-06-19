@@ -76,6 +76,8 @@
 #include <wrtsh.hxx>
 #include <textcontentcontrol.hxx>
 
+#include <fmtanchr.hxx>
+
 using namespace ::com::sun::star;
 
 void SwCursorShell::MoveCursorToNum()
@@ -2959,6 +2961,112 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
         }
     }
     return bRet;
+}
+
+// 1. Create a sorted list of document model positions containing the current cursor position and
+//    hyperlink positions excluding TOX links.
+// 2. Search the sorted list for the current cursor position entry.
+// 3. Assign the current cursor to the next or previous list entry document model position.
+bool SwCursorShell::GotoNxtPrvHyperlink(bool bNext)
+{
+    std::vector<std::unique_ptr<SwPosition>> aArr;
+
+    // add current cursor position
+    SwPosition* pCursorPos = m_pCurrentCursor->GetPoint();
+    aArr.push_back(
+        std::make_unique<SwPosition>(*pCursorPos->GetContentNode(), pCursorPos->GetContentIndex()));
+
+    const SwCharFormats* pFormats = GetDoc()->GetCharFormats();
+    for (size_t i = pFormats->size(); i > 1;)
+    {
+        SwIterator<SwTextINetFormat, SwCharFormat> aIter(*(*pFormats)[--i]);
+        for (SwTextINetFormat* pFnd = aIter.First(); pFnd; pFnd = aIter.Next())
+        {
+            const SwTextNode* pTextNode = pFnd->GetpTextNode();
+            if (pTextNode && pTextNode->GetNodes().IsDocNodes())
+            {
+                // don't include table of contents hyperlinks
+                if (const SwSectionNode* pSectNd = pTextNode->FindSectionNode();
+                    pSectNd && pSectNd->GetSection().GetType() == SectionType::ToxContent)
+                    continue;
+
+                aArr.push_back(std::make_unique<SwPosition>(*pFnd->GetTextNode().GetContentNode(),
+                                                            pFnd->GetStart()));
+            }
+        }
+    }
+
+    // return if there is only the cursor entry in the list
+    if (aArr.size() == 1)
+        return false;
+
+    const SwNodeOffset nEndOfExtrasIndex = GetNodes().GetEndOfExtras().GetIndex();
+
+    std::stable_sort(
+        aArr.begin(), aArr.end(),
+        [nEndOfExtrasIndex](const std::unique_ptr<SwPosition>& a,
+                            const std::unique_ptr<SwPosition>& b)
+        {
+            const SwNode& aTextNode = a->GetNode();
+            const SwNode& bTextNode = b->GetNode();
+            SwPosition aPos(*aTextNode.GetContentNode(), a->GetContentIndex());
+            SwPosition bPos(*bTextNode.GetContentNode(), b->GetContentIndex());
+            // use anchor position for entries that are located in flys
+            if (nEndOfExtrasIndex >= aTextNode.GetIndex())
+                if (auto pFlyFormat = aTextNode.GetFlyFormat())
+                    if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
+                        aPos = *pPos;
+            if (nEndOfExtrasIndex >= bTextNode.GetIndex())
+                if (auto pFlyFormat = bTextNode.GetFlyFormat())
+                    if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
+                        bPos = *pPos;
+            return aPos < bPos;
+        });
+
+    // Search the array for the entry that has the cursor position then move the cursor to the
+    // position stored in the next or previous entry.
+    SwPosition aAssignPos(*aArr[0]);
+    for (size_t i = 0; i < aArr.size(); ++i)
+    {
+        if (*pCursorPos != *aArr[i])
+            continue;
+        if (bNext)
+        {
+            if (i == aArr.size() - 1)
+                i = 0;
+            else
+            {
+                while (*pCursorPos == *aArr[i])
+                {
+                    if (++i == aArr.size())
+                    {
+                        i = 0;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (i == 0)
+                i = aArr.size() - 1;
+            else
+                --i;
+        }
+        aAssignPos.Assign(*aArr[i]->GetNode().GetContentNode(), aArr[i]->GetContentIndex());
+        break;
+    }
+
+    CurrShell aCurr(this);
+    SwCallLink aLk(*this); // watch Cursor-Moves
+    SwCursorSaveState aSaveState(*m_pCurrentCursor);
+
+    m_pCurrentCursor->GetPoint()->Assign(aAssignPos.GetNode(), aAssignPos.GetContentIndex());
+
+    if (!m_pCurrentCursor->IsSelOvr())
+        UpdateCursor(SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE | SwCursorShell::READONLY);
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

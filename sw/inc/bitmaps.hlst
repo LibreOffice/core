@@ -78,6 +78,7 @@ inline constexpr OUString RID_BMP_RIBBAR_ERROR = u"sw/res/sr20019.png"_ustr;
 inline constexpr OUString RID_BMP_RIBBAR_RECENCY = u"sw/res/sr20020.png"_ustr;
 inline constexpr OUString RID_BMP_RIBBAR_FIELD = u"sw/res/sr20021.png"_ustr;
 inline constexpr OUString RID_BMP_RIBBAR_FIELD_BYTYPE = u"sw/res/sr20022.png"_ustr;
+inline constexpr OUString RID_BMP_RIBBAR_HYPERLINK = u"sw/res/nc20007.png"_ustr;
 
 inline constexpr OUString RID_BMP_NAVI_OUTLINE = u"sw/res/nc20000.png"_ustr;
 inline constexpr OUString RID_BMP_NAVI_TABLE = u"sw/res/nc20001.png"_ustr;

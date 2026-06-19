@@ -58,7 +58,7 @@
 #include <sfx2/viewfrm.hxx>
 
 // Size check
-#define NAVI_ENTRIES 21
+#define NAVI_ENTRIES 22
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -189,7 +189,8 @@ const sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR,
     NID_RECENCY,
     NID_FIELD,
-    NID_FIELD_BYTYPE
+    NID_FIELD_BYTYPE,
+    NID_HYPERLINK
 };
 
 OUString constexpr aNavigationImgIds[ NAVI_ENTRIES ] =
@@ -214,7 +215,8 @@ OUString constexpr aNavigationImgIds[ NAVI_ENTRIES ] =
     RID_BMP_RIBBAR_ERROR,
     RID_BMP_RIBBAR_RECENCY,
     RID_BMP_RIBBAR_FIELD,
-    RID_BMP_RIBBAR_FIELD_BYTYPE
+    RID_BMP_RIBBAR_FIELD_BYTYPE,
+    RID_BMP_RIBBAR_HYPERLINK
 };
 
 const TranslateId aNavigationStrIds[ NAVI_ENTRIES ] =
@@ -239,7 +241,8 @@ const TranslateId aNavigationStrIds[ NAVI_ENTRIES ] =
     ST_TABLE_FORMULA_ERROR,
     ST_RECENCY,
     STR_CONTENT_TYPE_TEXTFIELD,
-    ST_FIELD_BYTYPE
+    ST_FIELD_BYTYPE,
+    STR_CONTENT_TYPE_URLFIELD
 };
 
 // these are global strings
@@ -266,6 +269,7 @@ const TranslateId STR_IMGBTN_ARY[] =
     STR_IMGBTN_RECENCY_DOWN,
     STR_IMGBTN_FIELD_DOWN,
     STR_IMGBTN_FIELD_BYTYPE_DOWN,
+    STR_IMGBTN_HYPERLINK_DOWN,
     STR_IMGBTN_TBL_UP,
     STR_IMGBTN_FRM_UP,
     STR_IMGBTN_PGE_UP,
@@ -287,6 +291,7 @@ const TranslateId STR_IMGBTN_ARY[] =
     STR_IMGBTN_RECENCY_UP,
     STR_IMGBTN_FIELD_UP,
     STR_IMGBTN_FIELD_BYTYPE_UP,
+    STR_IMGBTN_HYPERLINK_UP
 };
 
 static OUString lcl_GetScrollToolTip(bool bNext)

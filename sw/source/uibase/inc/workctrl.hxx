@@ -53,7 +53,8 @@ using namespace ::com::sun::star;
 #define NID_RECENCY 20018
 #define NID_FIELD   20019
 #define NID_FIELD_BYTYPE    20020
-#define NID_COUNT  21
+#define NID_HYPERLINK 20021
+#define NID_COUNT  22
 
 class SwTbxAutoTextCtrl final : public SfxToolBoxControl
 {

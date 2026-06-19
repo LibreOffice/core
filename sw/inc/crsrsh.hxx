@@ -737,6 +737,7 @@ public:
     // optionally only to broken formulas
     bool GotoNxtPrvTableFormula( bool bNext = true,
                                bool bOnlyErrors = false );
+    bool GotoNxtPrvHyperlink(bool bNext);
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
     bool SelectNxtPrvHyperlink( bool bNext );
