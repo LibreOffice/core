@@ -1353,7 +1353,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			const preview = this._map._docPreviews ? this._map._docPreviews[command.part] : null;
 			if (preview) { preview.invalid = true; }
 
-			RenderManager.clearCachedPart(command.part);
+			// A vector-rendered view has no tiles. A whole-document EMPTY
+			// invalidation carries no part, so refresh every part;
+			// otherwise drop just the one that changed.
+			if (isNaN(command.part))
+				RenderManager.clearAllParts();
+			else
+				RenderManager.clearCachedPart(command.part);
 
 			const topLeftTwips = new cool.Point(command.x, command.y);
 			const offset = new cool.Point(command.width, command.height);

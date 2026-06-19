@@ -241,6 +241,15 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged();
 	}
 
+	/// Drop the cached primitive trees for every part so the views
+	/// re-fetch them. Decoded bitmaps stay cached, since an image that
+	/// actually changed comes back under a new checksum anyway.
+	clearAllParts(): void {
+		this._cache.clear();
+		this._inFlightParts.clear();
+		this._fireChanged();
+	}
+
 	/// Drop all cached data for all parts.
 	clearCache(): void {
 		this._cache.clear();

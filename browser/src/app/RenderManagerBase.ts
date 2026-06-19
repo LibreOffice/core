@@ -158,6 +158,8 @@ class RenderManagerBase {
 	): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	clearCachedPart(_part: number): void {}
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	clearAllParts(): void {}
 
 	// -- redraw --
 	redraw(): RenderManagerBase {

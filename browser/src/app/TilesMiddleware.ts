@@ -247,6 +247,10 @@ class RenderManager {
 	static clearCachedPart(part: number): void {
 		RenderManager.ensureInstance().clearCachedPart(part);
 	}
+
+	static clearAllParts(): void {
+		RenderManager.ensureInstance().clearAllParts();
+	}
 }
 
 (window as any).RenderManager = RenderManager;
