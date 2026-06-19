@@ -323,10 +323,7 @@ SuggestionDisplay::SuggestionDisplay(weld::Builder& rBuilder)
 void SuggestionDisplay::implUpdateDisplay()
 {
     m_xListBox->set_visible(m_bDisplayListBox);
-    if (!m_bDisplayListBox)
-        m_xValueSetWin->show();
-    else
-        m_xValueSetWin->hide();
+    m_xValueSetWin->set_visible(!m_bDisplayListBox);
 }
 
 weld::Widget& SuggestionDisplay::implGetCurrentControl()
