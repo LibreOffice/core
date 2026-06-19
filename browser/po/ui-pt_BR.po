@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-17 23:01+0000\n"
+"PO-Revision-Date: 2026-06-20 19:01+0000\n"
 "Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
@@ -1402,7 +1402,7 @@ msgstr "Natural"
 
 #: src/control/Control.AIChatSidebar.ts:119
 msgid "Formal"
-msgstr "Formatar"
+msgstr "Formal"
 
 #: src/control/Control.AIChatSidebar.ts:120
 msgid "Short"
@@ -1493,155 +1493,155 @@ msgstr "Inserir no cursor"
 #: src/control/Control.AIChatSidebar.ts:803
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copiar para a área de transferência"
 
 #: src/control/Control.AIChatSidebar.ts:854
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Usando o texto selecionado como contexto"
 
 #: src/control/Control.AIChatSidebar.ts:861
 msgid "Ask AI..."
-msgstr ""
+msgstr "Pergunte à IA..."
 
 #: src/control/Control.AIChatSidebar.ts:864
 msgid "Message input"
-msgstr ""
+msgstr "Entrada de mensagem"
 
 #: src/control/Control.AIChatSidebar.ts:880
 msgid "Stop generating"
-msgstr ""
+msgstr "Pare de gerar"
 
 #: src/control/Control.AIChatSidebar.ts:881
 msgid "Send message"
-msgstr ""
+msgstr "Enviar mensagem"
 
 #: src/control/Control.AIChatSidebar.ts:895
 #: src/control/Control.AIChatSidebar.ts:908
 msgid "Set tone"
-msgstr ""
+msgstr "Definir tom"
 
 #: src/control/Control.AIChatSidebar.ts:919
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Definir tom de voz"
 
 #: src/control/Control.AIChatSidebar.ts:920
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Tom de voz: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:922
 msgid "with emoji"
-msgstr ""
+msgstr "com emoticons"
 
 #: src/control/Control.AIChatSidebar.ts:964
 #: src/control/Control.AIChatSidebar.ts:1014
 #: src/control/Control.AIChatSidebar.ts:1386
-#, fuzzy
 msgid "tone"
-msgstr "Nenhum"
+msgstr "tom"
 
 #: src/control/Control.AIChatSidebar.ts:977
 #: src/control/Control.AIChatSidebar.ts:1248
 msgid "Tone of voice"
-msgstr ""
+msgstr "Tom de voz"
 
 #: src/control/Control.AIChatSidebar.ts:983
 msgid "Reset voice"
-msgstr ""
+msgstr "Redefinir voz"
 
 #: src/control/Control.AIChatSidebar.ts:986
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Redefinir tom de voz"
 
 #: src/control/Control.AIChatSidebar.ts:1002
 msgid "Your tones"
-msgstr ""
+msgstr "Seus tons"
 
 #: src/control/Control.AIChatSidebar.ts:1019
-#, fuzzy
 msgid "Edit tone"
-msgstr "Modo de edição"
+msgstr "Editar tom"
 
 #: src/control/Control.AIChatSidebar.ts:1036
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Adicionar minha própria voz"
 
 #: src/control/Control.AIChatSidebar.ts:1038
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Adicione um tom de voz personalizado"
 
 #: src/control/Control.AIChatSidebar.ts:1049
 msgid "Emojify"
-msgstr ""
+msgstr "Emojificar"
 
 #: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:162
 msgid "On"
-msgstr ""
+msgstr "Ligado"
 
 #: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:164
 #: src/control/jsdialog/Definitions.Menu.ts:1824
 msgid "Off"
-msgstr ""
+msgstr "Desligado"
 
 #: src/control/Control.AIChatSidebar.ts:1058
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Alternar emojify"
 
 #: src/control/Control.AIChatSidebar.ts:1219
 msgid "Use icon"
-msgstr ""
+msgstr "Usar ícone"
 
 #: src/control/Control.AIChatSidebar.ts:1229
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Escolha outro emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1243
 msgid "Back to tones"
-msgstr ""
+msgstr "De volta aos tons"
 
 #: src/control/Control.AIChatSidebar.ts:1256
 msgid "Icon"
-msgstr ""
+msgstr "Ícone"
 
 #: src/control/Control.AIChatSidebar.ts:1268
 msgid "Name your tone"
-msgstr ""
+msgstr "Dê um nome ao seu tom"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "Exemplo: Resposta rápida"
 
 #: src/control/Control.AIChatSidebar.ts:1277
 msgid "Tone name"
-msgstr ""
+msgstr "Nome do tom"
 
 #: src/control/Control.AIChatSidebar.ts:1282
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Descreva como a IA deveria escrever"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Escreva frases curtas e diretas. Use linguagem simples e evite conversas "
+"banais."
 
 #: src/control/Control.AIChatSidebar.ts:1294
 msgid "Tone description"
-msgstr ""
+msgstr "Descrição do tom"
 
 #: src/control/Control.AIChatSidebar.ts:1303
 #: src/control/Control.AIChatSidebar.ts:1365
 #: src/control/Control.AIChatSidebar.ts:1407
 msgid "Delete tone"
-msgstr ""
+msgstr "Excluir tom"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 msgid "Delete this tone"
-msgstr ""
+msgstr "Excluir este tom"
 
 #: src/control/Control.AIChatSidebar.ts:1318
 msgid "Save voice"
-msgstr ""
+msgstr "Salvar voz"
 
 #: src/control/Control.AIChatSidebar.ts:1320
 msgid "Save tone of voice"
@@ -1997,18 +1997,25 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Violações da Lei de Benford — verifique se a distribuição dos dígitos "
+"iniciais dos valores numéricos se desvia significativamente da distribuição "
+"esperada, o que pode sugerir manipulação de dados."
 
 #: src/control/Control.AIChatSidebar.ts:3024
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Valores discrepantes estatísticos — identificam-se valores que se desviam "
+"significativamente de sua coluna ou grupo."
 
 #: src/control/Control.AIChatSidebar.ts:3030
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Anomalias gerais — padrões suspeitos, duplicatas inesperadas, "
+"inconsistências ou problemas de formatação."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -2074,11 +2081,11 @@ msgstr "Início"
 #: src/control/Control.NotebookbarImpress.js:873
 #: src/control/Control.NotebookbarImpress.js:1482
 msgid "New"
-msgstr ""
+msgstr "Novo"
 
 #: src/control/Control.BackstageView.ts:112
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: src/control/Control.BackstageView.ts:120
 #: src/control/Control.Notebookbar.js:730
@@ -2097,7 +2104,7 @@ msgstr "Compartilhar"
 
 #: src/control/Control.BackstageView.ts:128
 msgid "Info"
-msgstr ""
+msgstr "Informações"
 
 #: src/control/Control.BackstageView.ts:144
 #: src/control/Control.NotebookbarCalc.js:180
@@ -2111,7 +2118,7 @@ msgstr "Salvar como"
 
 #: src/control/Control.BackstageView.ts:160
 msgid "Export"
-msgstr ""
+msgstr "Exportar"
 
 #: src/control/Control.BackstageView.ts:168
 msgid "Sign"
@@ -2126,11 +2133,11 @@ msgstr "Assinar"
 #: src/control/Control.NotebookbarWriter.js:431 src/control/IFrameDialog.js:35
 #: src/map/handler/Map.Settings.ts:74
 msgid "Options"
-msgstr ""
+msgstr "Opções"
 
 #: src/control/Control.BackstageView.ts:240
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "Comece um novo documento a partir de um dos seguintes modelos."
 
 #: src/control/Control.BackstageView.ts:278
 #: src/control/jsdialog/Widget.ColorPicker.ts:441
@@ -2233,28 +2240,28 @@ msgstr ""
 
 #: src/control/backstage/Sidebar.tsx:108 src/control/backstage/Sidebar.tsx:109
 msgid "Back to document"
-msgstr ""
+msgstr "Voltar ao documento"
 
 #: src/control/backstage/HomeView.tsx:52 src/control/backstage/HomeView.tsx:55
 msgid "More Templates"
-msgstr ""
+msgstr "Mais modelos"
 
 #: src/control/backstage/HomeView.tsx:70
 #: src/control/jsdialog/Widget.TreeView.ts:378
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: src/control/backstage/HomeView.tsx:72
 msgid "Modified Date"
-msgstr ""
+msgstr "Data de modificação"
 
 #: src/control/backstage/TemplatesView.tsx:126
 msgid "No templates match your search."
-msgstr ""
+msgstr "Nenhum modelo corresponde à sua pesquisa."
 
 #: src/control/backstage/TemplatesView.tsx:143
 msgid "Search templates"
-msgstr ""
+msgstr "Modelos de pesquisa"
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:391
 #: src/control/Control.Menubar.ts:1393
@@ -2268,7 +2275,7 @@ msgstr "Propriedades"
 
 #: src/control/backstage/InfoView.tsx:37
 msgid "More Property Info"
-msgstr ""
+msgstr "Mais informações sobre a propriedade"
 
 #: src/control/Control.Command.js:90
 msgid "Unlock"
@@ -2276,7 +2283,7 @@ msgstr "Desbloquear"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Nome do documento"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -2369,311 +2376,311 @@ msgstr "A transferência falhou"
 
 #: src/control/Control.ESignature.ts:127
 msgid "Andorra"
-msgstr ""
+msgstr "Andorra"
 
 #: src/control/Control.ESignature.ts:128
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "Emirados Árabes Unidos"
 
 #: src/control/Control.ESignature.ts:129
 msgid "Albania"
-msgstr ""
+msgstr "Albânia"
 
 #: src/control/Control.ESignature.ts:130
 msgid "Armenia"
-msgstr ""
+msgstr "Armênia"
 
 #: src/control/Control.ESignature.ts:131
 msgid "Argentina"
-msgstr ""
+msgstr "Argentina"
 
 #: src/control/Control.ESignature.ts:132
 msgid "Austria"
-msgstr ""
+msgstr "Áustria"
 
 #: src/control/Control.ESignature.ts:133
 msgid "Australia"
-msgstr ""
+msgstr "Austrália"
 
 #: src/control/Control.ESignature.ts:134
 msgid "Åland Islands"
-msgstr ""
+msgstr "Ilhas Åland"
 
 #: src/control/Control.ESignature.ts:135
 msgid "Azerbaijan"
-msgstr ""
+msgstr "Azerbaijão"
 
 #: src/control/Control.ESignature.ts:136
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "Bósnia e Herzegovina"
 
 #: src/control/Control.ESignature.ts:137
 msgid "Belgium"
-msgstr ""
+msgstr "Bélgica"
 
 #: src/control/Control.ESignature.ts:138
 msgid "Bulgaria"
-msgstr ""
+msgstr "Bulgária"
 
 #: src/control/Control.ESignature.ts:139
 msgid "Brazil"
-msgstr ""
+msgstr "Brasil"
 
 #: src/control/Control.ESignature.ts:140
 msgid "Belarus"
-msgstr ""
+msgstr "Bielorrússia"
 
 #: src/control/Control.ESignature.ts:141
 msgid "Canada"
-msgstr ""
+msgstr "Canadá"
 
 #: src/control/Control.ESignature.ts:142
 msgid "Switzerland"
-msgstr ""
+msgstr "Suíça"
 
 #: src/control/Control.ESignature.ts:143
 msgid "Chile"
-msgstr ""
+msgstr "Chile"
 
 #: src/control/Control.ESignature.ts:144
 msgid "China"
-msgstr ""
+msgstr "China"
 
 #: src/control/Control.ESignature.ts:145
 msgid "Cyprus"
-msgstr ""
+msgstr "Chipre"
 
 #: src/control/Control.ESignature.ts:146
 msgid "Czech Republic"
-msgstr ""
+msgstr "República Tcheca"
 
 #: src/control/Control.ESignature.ts:147
 msgid "Germany"
-msgstr ""
+msgstr "Alemanha"
 
 #: src/control/Control.ESignature.ts:148
 msgid "Denmark"
-msgstr ""
+msgstr "Dinamarca"
 
 #: src/control/Control.ESignature.ts:149
 msgid "Estonia"
-msgstr ""
+msgstr "Estônia"
 
 #: src/control/Control.ESignature.ts:150
 msgid "Spain"
-msgstr ""
+msgstr "Espanha"
 
 #: src/control/Control.ESignature.ts:151
 msgid "Finland"
-msgstr ""
+msgstr "Finlândia"
 
 #: src/control/Control.ESignature.ts:152
 msgid "France"
-msgstr ""
+msgstr "França"
 
 #: src/control/Control.ESignature.ts:153
 msgid "United Kingdom"
-msgstr ""
+msgstr "Reino Unido"
 
 #: src/control/Control.ESignature.ts:154
 msgid "Georgia"
-msgstr ""
+msgstr "Geórgia"
 
 #: src/control/Control.ESignature.ts:155
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernsey"
 
 #: src/control/Control.ESignature.ts:156
 msgid "Greece"
-msgstr ""
+msgstr "Grécia"
 
 #: src/control/Control.ESignature.ts:157
 msgid "Croatia"
-msgstr ""
+msgstr "Croácia"
 
 #: src/control/Control.ESignature.ts:158
 msgid "Hungary"
-msgstr ""
+msgstr "Hungria"
 
 #: src/control/Control.ESignature.ts:159
 msgid "Indonesia"
-msgstr ""
+msgstr "Indonésia"
 
 #: src/control/Control.ESignature.ts:160
 msgid "Ireland"
-msgstr ""
+msgstr "Irlanda"
 
 #: src/control/Control.ESignature.ts:161
 msgid "Israel"
-msgstr ""
+msgstr "Israel"
 
 #: src/control/Control.ESignature.ts:162
 msgid "India"
-msgstr ""
+msgstr "Índia"
 
 #: src/control/Control.ESignature.ts:163
 msgid "Iceland"
-msgstr ""
+msgstr "Islândia"
 
 #: src/control/Control.ESignature.ts:164
 msgid "Italy"
-msgstr ""
+msgstr "Itália"
 
 #: src/control/Control.ESignature.ts:165
 msgid "Japan"
-msgstr ""
+msgstr "Japão"
 
 #: src/control/Control.ESignature.ts:166
 msgid "Kenya"
-msgstr ""
+msgstr "Quênia"
 
 #: src/control/Control.ESignature.ts:167
 msgid "South Korea"
-msgstr ""
+msgstr "Coréia do Sul"
 
 #: src/control/Control.ESignature.ts:168
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Cazaquistão"
 
 #: src/control/Control.ESignature.ts:169
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Liechtenstein"
 
 #: src/control/Control.ESignature.ts:170
 msgid "Lithuania"
-msgstr ""
+msgstr "Lituânia"
 
 #: src/control/Control.ESignature.ts:171
 msgid "Luxembourg"
-msgstr ""
+msgstr "Luxemburgo"
 
 #: src/control/Control.ESignature.ts:172
 msgid "Latvia"
-msgstr ""
+msgstr "Letônia"
 
 #: src/control/Control.ESignature.ts:173
 msgid "Monaco"
-msgstr ""
+msgstr "Mônaco"
 
 #: src/control/Control.ESignature.ts:174
 msgid "Moldova, Republic of"
-msgstr ""
+msgstr "Moldávia, República da"
 
 #: src/control/Control.ESignature.ts:175
 msgid "Montenegro"
-msgstr ""
+msgstr "Montenegro"
 
 #: src/control/Control.ESignature.ts:176
 msgid "North Macedonia, Republic of"
-msgstr ""
+msgstr "Macedônia do Norte, República de"
 
 #: src/control/Control.ESignature.ts:177
 msgid "Malta"
-msgstr ""
+msgstr "Malta"
 
 #: src/control/Control.ESignature.ts:178
 msgid "Mexico"
-msgstr ""
+msgstr "México"
 
 #: src/control/Control.ESignature.ts:179
 msgid "Netherlands"
-msgstr ""
+msgstr "Holanda"
 
 #: src/control/Control.ESignature.ts:180
 msgid "Norway"
-msgstr ""
+msgstr "Noruega"
 
 #: src/control/Control.ESignature.ts:181
 msgid "New Zealand"
-msgstr ""
+msgstr "Nova Zelândia"
 
 #: src/control/Control.ESignature.ts:182
 msgid "Philippines"
-msgstr ""
+msgstr "Filipinas"
 
 #: src/control/Control.ESignature.ts:183
 msgid "Poland"
-msgstr ""
+msgstr "Polônia"
 
 #: src/control/Control.ESignature.ts:184
 msgid "Portugal"
-msgstr ""
+msgstr "Portugal"
 
 #: src/control/Control.ESignature.ts:185
 msgid "Qatar"
-msgstr ""
+msgstr "Catar"
 
 #: src/control/Control.ESignature.ts:186
 msgid "Romania"
-msgstr ""
+msgstr "România"
 
 #: src/control/Control.ESignature.ts:187
 msgid "Serbia"
-msgstr ""
+msgstr "Sérvia"
 
 #: src/control/Control.ESignature.ts:188
 msgid "Russian Federation"
-msgstr ""
+msgstr "Federação Russa"
 
 #: src/control/Control.ESignature.ts:189
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "Arábia Saudita"
 
 #: src/control/Control.ESignature.ts:190
 msgid "Sweden"
-msgstr ""
+msgstr "Suécia"
 
 #: src/control/Control.ESignature.ts:191
 msgid "Singapore"
-msgstr ""
+msgstr "Singapura"
 
 #: src/control/Control.ESignature.ts:192
 msgid "Slovenia"
-msgstr ""
+msgstr "Eslovênia"
 
 #: src/control/Control.ESignature.ts:193
 msgid "Slovakia"
-msgstr ""
+msgstr "Eslováquia"
 
 #: src/control/Control.ESignature.ts:194
 msgid "San Marino"
-msgstr ""
+msgstr "São Marino"
 
 #: src/control/Control.ESignature.ts:195
 msgid "Turkey"
-msgstr ""
+msgstr "Turquia"
 
 #: src/control/Control.ESignature.ts:196
 msgid "Taiwan, Province of China"
-msgstr ""
+msgstr "Taiwan, Província da China"
 
 #: src/control/Control.ESignature.ts:197
 msgid "Ukraine"
-msgstr ""
+msgstr "Ucrânia"
 
 #: src/control/Control.ESignature.ts:198
 msgid "United States of America"
-msgstr ""
+msgstr "Estados Unidos da América"
 
 #: src/control/Control.ESignature.ts:199
 msgid "Holy See (Vatican City State)"
-msgstr ""
+msgstr "Santa Sé (Estado da Cidade do Vaticano)"
 
 #: src/control/Control.ESignature.ts:200
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #: src/control/Control.ESignature.ts:201
 msgid "South Africa"
-msgstr ""
+msgstr "África do Sul"
 
 #: src/control/Control.ESignature.ts:335
 msgid "The document is being signed and will be availably shortly"
-msgstr ""
+msgstr "O documento está sendo assinado e estará disponível em breve"
 
 #: src/control/Control.ESignatureDialog.ts:91
 msgid "Country:"
-msgstr ""
+msgstr "País:"
 
 #: src/control/Control.ESignatureDialog.ts:120
 msgid "Provider:"
@@ -2682,11 +2689,11 @@ msgstr "Provedor:"
 #: src/control/Control.ESignatureDialog.ts:175
 #: src/control/Control.ESignatureDialog.ts:176
 msgid "Insert Electronic Signature"
-msgstr ""
+msgstr "Inserir Assinatura Eletrônica"
 
 #: src/control/Control.FormulaBarJSDialog.js:18
 msgid "Expand Formula Bar"
-msgstr ""
+msgstr "Expandir barra de fórmulas"
 
 #: src/control/Control.FormulaBarJSDialog.js:19
 msgid "Function Wizard"
@@ -2694,7 +2701,7 @@ msgstr "Assistente de funções"
 
 #: src/control/Control.FormulaBarJSDialog.js:76
 msgid "Select Function"
-msgstr ""
+msgstr "Selecione a função"
 
 #: src/control/Control.FormulaBarJSDialog.js:89
 #: src/control/Control.MobileTopBar.ts:42
@@ -2703,7 +2710,7 @@ msgstr "Aceitar"
 
 #: src/control/Control.FormulaBarJSDialog.js:177
 msgid "Collapse Formula Bar"
-msgstr ""
+msgstr "Recolher barra de fórmulas"
 
 #: src/control/Control.IdleHandler.ts:45
 msgid "Idle document - please click to reload and resume editing"
@@ -2715,7 +2722,7 @@ msgstr "Documento ocioso - toque para recarregar e continuar editando"
 
 #: src/control/Control.JSDialog.js:414
 msgid "Close dialog"
-msgstr ""
+msgstr "Fechar caixa de diálogo"
 
 #: src/control/Control.JSDialogBuilder.js:398
 msgid "Solid"
@@ -2782,11 +2789,11 @@ msgstr "Estilo"
 
 #: src/control/Control.JSDialogBuilder.js:1601
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Alternar menu suspenso"
 
 #: src/control/Control.JSDialogBuilder.js:1603
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Menu suspenso da caixa de diálogo"
 
 #: src/control/Control.JSDialogBuilder.js:1605
 #: src/control/Control.NotebookbarWriter.js:1629
@@ -2795,11 +2802,11 @@ msgstr "Menu suspenso"
 
 #: src/control/Control.JSDialogBuilder.js:1607
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Lista suspensa Aplicar ação"
 
 #: src/control/Control.JSDialogBuilder.js:1633
 msgid "Open {name}"
-msgstr ""
+msgstr "Abra {nome}"
 
 #: src/control/Control.JSDialogBuilder.js:1919
 #: src/control/Control.Menubar.ts:966
@@ -2833,7 +2840,7 @@ msgstr "Idioma"
 
 #: src/control/Control.Mention.ts:185
 msgid "No search results found!"
-msgstr ""
+msgstr "Nenhum resultado encontrado!"
 
 #: src/control/Control.Menubar.ts:101 src/control/Control.Menubar.ts:117
 #: src/control/Control.Menubar.ts:1101
@@ -2908,7 +2915,7 @@ msgstr "EPUB (.epub)"
 #: src/control/Control.NotebookbarBuilder.js:414
 #: src/control/Control.NotebookbarBuilder.js:604
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/control/Control.Menubar.ts:111 src/control/Control.UIManager.ts:414
 msgid "Rename Document"
@@ -2944,7 +2951,7 @@ msgstr "Documento PDF (.pdf) como..."
 
 #: src/control/Control.Menubar.ts:122 src/control/Control.Menubar.ts:796
 msgid "HTML file (.html)"
-msgstr ""
+msgstr "Arquivo HTML (.html)"
 
 #: src/control/Control.Menubar.ts:129 src/control/Control.Menubar.ts:476
 #: src/control/Control.Menubar.ts:650 src/control/Control.Menubar.ts:805
@@ -2965,7 +2972,7 @@ msgstr "Reparar"
 
 #: src/control/Control.Menubar.ts:146
 msgid "Compare Changes"
-msgstr ""
+msgstr "Comparar alterações"
 
 #: src/control/Control.Menubar.ts:165 src/control/Control.Menubar.ts:493
 #: src/control/Control.Menubar.ts:499 src/control/Control.Menubar.ts:667
@@ -2980,7 +2987,7 @@ msgstr "Restaurar zoom"
 
 #: src/control/Control.Menubar.ts:171
 msgid "Fit to Screen"
-msgstr ""
+msgstr "Ajustar à tela"
 
 #: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:505
 #: src/control/Control.Menubar.ts:679 src/control/Control.Menubar.ts:831
@@ -2991,7 +2998,7 @@ msgstr "Alternar o interface do usuário"
 #: src/control/Control.NotebookbarWriter.js:1744
 #: src/control/Control.StatusBar.js:264 src/control/Control.StatusBar.js:265
 msgid "Multi Page View"
-msgstr ""
+msgstr "Visualização de várias páginas"
 
 #: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:507
 #: src/control/Control.Menubar.ts:684 src/control/Control.Menubar.ts:832
@@ -3017,7 +3024,6 @@ msgstr "Inverter fundo"
 #: src/control/Control.Menubar.ts:182 src/control/Control.Menubar.ts:838
 #: src/control/Control.NotebookbarCalc.js:2787
 #: src/control/Control.NotebookbarWriter.js:1109
-#, fuzzy
 msgid "Style list"
 msgstr "Lista de estilos"
 
@@ -3031,7 +3037,7 @@ msgstr "Imagem do computador..."
 #: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:529
 #: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:857
 msgid "Shapes ..."
-msgstr ""
+msgstr "Formas ..."
 
 #: src/control/Control.Menubar.ts:215 src/control/Control.Menubar.ts:217
 #: src/control/Control.Menubar.ts:1366 src/control/Control.Menubar.ts:1368
@@ -3124,7 +3130,7 @@ msgstr "Leitura de tela"
 #: src/control/Control.NotebookbarImpress.js:163
 #: src/control/Control.NotebookbarWriter.js:116
 msgid "Extensions"
-msgstr ""
+msgstr "Extensões"
 
 #: src/control/Control.Menubar.ts:425 src/control/Control.Menubar.ts:614
 #: src/control/Control.Menubar.ts:760 src/control/Control.Menubar.ts:1067
@@ -3172,7 +3178,7 @@ msgstr "Enviar Feedback"
 #: src/control/Control.ServerAuditDialog.ts:299
 #: src/control/Control.ServerAuditDialog.ts:300
 msgid "Server audit"
-msgstr ""
+msgstr "Auditoria de servidor"
 
 #: src/control/Control.Menubar.ts:438 src/control/Control.Menubar.ts:627
 #: src/control/Control.Menubar.ts:773 src/control/Control.Menubar.ts:1080
@@ -3207,47 +3213,47 @@ msgstr "Salvar Comentários"
 #: src/control/Control.Menubar.ts:461
 #: src/control/Control.NotebookbarBuilder.js:470
 msgid "HTML Document (.html)"
-msgstr ""
+msgstr "Documento HTML (.html)"
 
 #: src/control/Control.Menubar.ts:462
 #: src/control/Control.NotebookbarBuilder.js:486
 msgid "Scalable Vector Graphics (.svg)"
-msgstr ""
+msgstr "Gráficos vetoriais escaláveis (.svg)"
 
 #: src/control/Control.Menubar.ts:463
 #: src/control/Control.NotebookbarBuilder.js:491
 msgid "Current slide as Bitmap (.bmp)"
-msgstr ""
+msgstr "Slide atual em formato Bitmap (.bmp)"
 
 #: src/control/Control.Menubar.ts:464
 #: src/control/Control.NotebookbarBuilder.js:496
 msgid "Current slide as Graphics Interchange Format (.gif)"
-msgstr ""
+msgstr "Slide atual em formato Graphics Interchange Format (.gif)"
 
 #: src/control/Control.Menubar.ts:465
 #: src/control/Control.NotebookbarBuilder.js:501
 msgid "Current slide as Portable Network Graphics (.png)"
-msgstr ""
+msgstr "Slide atual em formato Portable Network Graphics (.png)"
 
 #: src/control/Control.Menubar.ts:466
 #: src/control/Control.NotebookbarBuilder.js:506
 msgid "Current slide as Tag Image File Format (.tiff)"
-msgstr ""
+msgstr "Slide atual em formato de arquivo de imagem Tag (.tiff)"
 
 #: src/control/Control.Menubar.ts:473
 #: src/control/Control.NotebookbarBuilder.js:644
 msgid "Full Page Slides"
-msgstr ""
+msgstr "Slides de página inteira"
 
 #: src/control/Control.Menubar.ts:474
 #: src/control/Control.NotebookbarBuilder.js:648
 msgid "Notes Pages"
-msgstr ""
+msgstr "Páginas de notas"
 
 #: src/control/Control.Menubar.ts:508
 #: src/control/Control.NotebookbarImpress.js:693
 msgid "Notes View"
-msgstr ""
+msgstr "Visualização de notas"
 
 #: src/control/Control.Menubar.ts:512
 #: src/control/Control.NotebookbarImpress.js:699
@@ -3256,7 +3262,7 @@ msgstr "Exibição Mestre"
 
 #: src/control/Control.Menubar.ts:525
 msgid "Local Multimedia..."
-msgstr ""
+msgstr "Multimídia Local..."
 
 #: src/control/Control.Menubar.ts:595 src/control/Control.Menubar.ts:1210
 #: src/control/Control.PresentationBar.js:128
@@ -3273,7 +3279,7 @@ msgstr "Apresentar em nova janela"
 
 #: src/control/Control.Menubar.ts:599 src/slideshow/PresenterConsole.js:270
 msgid "Presenter Console"
-msgstr ""
+msgstr "Console do apresentador"
 
 #: src/control/Control.Menubar.ts:644 src/control/Control.Menubar.ts:1170
 #: src/control/Control.Menubar.ts:1231
@@ -3315,49 +3321,48 @@ msgstr "Folha ativa"
 #: src/control/Control.Menubar.ts:841
 #: src/control/Control.NotebookbarCalc.js:1551
 msgid "Focus Cell"
-msgstr ""
+msgstr "Célula de foco"
 
 #: src/control/Control.Menubar.ts:938
 #: src/control/jsdialog/Definitions.Menu.ts:1877
 msgid "Highlight cells with..."
-msgstr ""
+msgstr "Destaque células com..."
 
 #: src/control/Control.Menubar.ts:939
 #: src/control/jsdialog/Definitions.Menu.ts:1880
 msgid "Values greater than..."
-msgstr ""
+msgstr "Valores maiores que..."
 
 #: src/control/Control.Menubar.ts:940
 #: src/control/jsdialog/Definitions.Menu.ts:1884
 msgid "Values less than..."
-msgstr ""
+msgstr "Valores inferiores a..."
 
 #: src/control/Control.Menubar.ts:941
 #: src/control/jsdialog/Definitions.Menu.ts:1888
 msgid "Values equal to..."
-msgstr ""
+msgstr "Valores iguais a..."
 
 #: src/control/Control.Menubar.ts:942
 #: src/control/jsdialog/Definitions.Menu.ts:1892
 msgid "Values between..."
-msgstr ""
+msgstr "Valores entre..."
 
 #: src/control/Control.Menubar.ts:943
 #: src/control/jsdialog/Definitions.Menu.ts:1896
 msgid "Values duplicate..."
-msgstr ""
+msgstr "Valores duplicados..."
 
 #: src/control/Control.Menubar.ts:944
 #: src/control/jsdialog/Definitions.Menu.ts:1900
-#, fuzzy
 msgid "Containing text..."
-msgstr "Contém texto..."
+msgstr "Contendo texto..."
 
 #: src/control/Control.Menubar.ts:946 src/control/Control.Menubar.ts:956
 #: src/control/jsdialog/Definitions.Menu.ts:1904
 #: src/control/jsdialog/Definitions.Menu.ts:1935
 msgid "More highlights..."
-msgstr ""
+msgstr "Mais destaques..."
 
 #: src/control/Control.Menubar.ts:948
 #: src/control/jsdialog/Definitions.Menu.ts:1908
@@ -3449,10 +3454,12 @@ msgstr "Inserir formas"
 #: src/control/Control.Menubar.ts:2427
 msgid "The signature line can now be moved or resized as needed."
 msgstr ""
+"Agora é possível mover ou redimensionar a linha de assinatura conforme "
+"necessário."
 
 #: src/control/Control.Menubar.ts:2432
 msgid "Finish electronic signing"
-msgstr ""
+msgstr "Concluir assinatura eletrônica"
 
 #: src/control/Control.MobileBottomBar.js:28
 #: src/control/Control.MobileBottomBar.js:130
@@ -3488,111 +3495,111 @@ msgstr "Final do gradiente"
 
 #: src/control/Control.NavigatorPanel.ts:46
 msgid "Navigation Panel"
-msgstr ""
+msgstr "Painel de navegação"
 
 #: src/control/Control.NavigatorPanel.ts:125
-#, fuzzy
 msgid "Navigation"
-msgstr "Navegador"
+msgstr "Navegação"
 
 #: src/control/Control.NavigatorPanel.ts:146
 msgid "Close Navigation"
-msgstr ""
+msgstr "Fechar navegação"
 
 #: src/control/Control.NavigatorPanel.ts:240
 msgid "Results"
-msgstr ""
+msgstr "Resultados"
 
 #: src/control/Control.NavigatorPanel.ts:532
 #: src/control/jsdialog/Widget.Combobox.js:376
 #: src/control/jsdialog/Widget.TreeView.ts:2543
 msgid "Search..."
-msgstr ""
+msgstr "Procurar..."
 
 #: src/control/Control.QuickFindPanel.ts:122
 msgid "Type in the search box to find anything in your document"
 msgstr ""
+"Digite na caixa de pesquisa para encontrar qualquer coisa em seu documento"
 
 #: src/control/Notebookbar.CalcTableTab.ts:43
 msgid "Table Design"
-msgstr ""
+msgstr "Design de mesa"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Opções de mesa"
 
 #: src/control/Notebookbar.CalcTableTab.ts:86
 msgid "Header Row"
-msgstr ""
+msgstr "Linha de cabeçalho"
 
 #: src/control/Notebookbar.CalcTableTab.ts:101
 msgid "Total Row"
-msgstr ""
+msgstr "Linha total"
 
 #: src/control/Notebookbar.CalcTableTab.ts:123
 msgid "Banded Rows"
-msgstr ""
+msgstr "Linhas em faixas"
 
 #: src/control/Notebookbar.CalcTableTab.ts:139
 msgid "Banded Columns"
-msgstr ""
+msgstr "Colunas em faixas"
 
 #: src/control/Notebookbar.CalcTableTab.ts:161
 msgid "First Column"
-msgstr ""
+msgstr "Primeira Coluna"
 
 #: src/control/Notebookbar.CalcTableTab.ts:177
 msgid "Last Column"
-msgstr ""
+msgstr "Última Coluna"
 
 #: src/control/Notebookbar.CalcTableTab.ts:199
 msgid "Filter Buttons"
-msgstr ""
+msgstr "Botões de filtro"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 msgid "Animation"
-msgstr ""
+msgstr "Animação"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:41
 msgid "Applied animations"
-msgstr ""
+msgstr "Animações aplicadas"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:59
 msgid "Move Up"
-msgstr ""
+msgstr "Subir"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:75
 msgid "Move Down"
-msgstr ""
+msgstr "Mover para baixo"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:105
 msgid "Category"
-msgstr ""
+msgstr "Categoria"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:120
 msgid "Start"
-msgstr ""
+msgstr "Começar"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:140
 msgid "Effect"
-msgstr ""
+msgstr "Efeito"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:24
 msgid "Transition"
-msgstr ""
+msgstr "Transição"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:41
 #: src/control/Sidebar.FromNotebookbarPanel.ts:109
 msgid "Transitions"
-msgstr ""
+msgstr "Transições"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:73
 msgid "Variant"
-msgstr ""
+msgstr "Variante"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:89
 msgid "Duration"
-msgstr ""
+msgstr "Duração"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:117
 msgid "On mouse click"
