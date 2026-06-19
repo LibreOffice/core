@@ -113,6 +113,17 @@ static void traverseSettings(const Poco::Path& configPath, const Poco::Path& cur
                 if (p.depth() > 0)
                 {
                     std::string key = p.directory(p.depth() - 1);
+
+                    // The uri is sent to the browser inside JSON that is eval'd as a
+                    // JS string literal; a native Windows separator would turn
+                    // "...\userconfig\..." into the invalid escape "\u" and break
+                    // JSON.parse. Emit forward slashes, as the macOS/Online uris do.
+                    for (char& c : relPath)
+                    {
+                        if (c == '\\')
+                            c = '/';
+                    }
+
                     Poco::JSON::Object::Ptr item = new Poco::JSON::Object();
                     item->set("stamp", "");
                     item->set("uri", relPath);
