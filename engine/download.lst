@@ -574,8 +574,8 @@ POCO_TARBALL := poco-1.15.3-all.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PDFIUM_SHA256SUM := fbb7b551699a4bbf2f47986d485df0a82e9391841239cdbcd64554d88209014c
-PDFIUM_TARBALL := pdfium-7795.tar.bz2
+PDFIUM_SHA256SUM := 7d11b3f6e456fbdde392ec9ae1ae5588c85149116edcd1d6a986af0a977bda1f
+PDFIUM_TARBALL := pdfium-7897.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

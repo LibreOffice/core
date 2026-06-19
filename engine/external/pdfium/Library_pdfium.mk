@@ -270,8 +270,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_creator \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_encryptor \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_flateencoder \
-    UnpackedTarball/pdfium/core/fpdfapi/font/cfx_cttgsubtable \
-    UnpackedTarball/pdfium/core/fpdfapi/font/cfx_stockfontarray \
+    UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_stockfontarray \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cid2unicodemap \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cmap \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cmapparser \
@@ -341,6 +340,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_generateap \
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_section \
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_variabletext \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpvt_word \
 ))
 
 # fpdftext
@@ -354,22 +354,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 # fxcodec
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/fx_codec \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_ArithDecoder \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_ArithIntDecoder \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_BitStream \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_Context \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_GrdProc \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_GrrdProc \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HtrdProc \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HuffmanDecoder \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_Image \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_PatternDict \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_PddProc \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_SddProc \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_Segment \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_SymbolDict \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_TrdProc \
     UnpackedTarball/pdfium/core/fxcodec/gif/cfx_gif \
     UnpackedTarball/pdfium/core/fxcodec/gif/lzw_decompressor \
     UnpackedTarball/pdfium/core/fxcodec/cfx_codec_memory \
@@ -378,12 +362,28 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/jpeg/jpegmodule \
     UnpackedTarball/pdfium/core/fxcodec/jpx/cjpx_decoder \
     UnpackedTarball/pdfium/core/fxcodec/jpx/jpx_decode_utils \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_DocumentContext \
     UnpackedTarball/pdfium/core/fxcodec/basic/basicmodule \
     UnpackedTarball/pdfium/core/fxcodec/flate/flatemodule \
     UnpackedTarball/pdfium/core/fxcodec/icc/icc_transform \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_decoder \
     UnpackedTarball/pdfium/core/fxcodec/data_and_bytes_consumed \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_arith_decoder \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_arith_int_decoder \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_bit_stream \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_context \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_document_context \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_grd_proc \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_grrd_proc \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_htrd_proc \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_huffman_decoder \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_huffman_table \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_image \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_pattern_dict \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_pdd_proc \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_sdd_proc \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_segment \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_symbol_dict \
+    UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_trd_proc \
 ))
 
 $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
@@ -509,6 +509,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/cfx_defaultrenderdevice \
     UnpackedTarball/pdfium/core/fxge/calculate_pitch \
     UnpackedTarball/pdfium/core/fxge/cfx_charmap_resolver \
+    UnpackedTarball/pdfium/core/fxge/cfx_cttgsubtable \
+    UnpackedTarball/pdfium/core/fxge/cfx_cttnametable \
 ))
 
 # javascript, build with pdf_enable_v8 disabled.
@@ -686,9 +688,9 @@ endif
 ifeq ($(OS),MACOSX)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxge/apple/fx_apple_platform \
+    UnpackedTarball/pdfium/core/fxge/apple/capple_platform \
     UnpackedTarball/pdfium/core/fxge/apple/fx_apple_impl \
-    UnpackedTarball/pdfium/core/fxge/apple/fx_quartz_device \
+    UnpackedTarball/pdfium/core/fxge/apple/cquartz_2d \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,pdfium,\
@@ -700,9 +702,9 @@ endif
 ifeq ($(OS),iOS)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxge/apple/fx_apple_platform \
+    UnpackedTarball/pdfium/core/fxge/apple/capple_platform \
     UnpackedTarball/pdfium/core/fxge/apple/fx_apple_impl \
-    UnpackedTarball/pdfium/core/fxge/apple/fx_quartz_device \
+    UnpackedTarball/pdfium/core/fxge/apple/cquartz_2d \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,pdfium,\
@@ -714,12 +716,10 @@ endif
 ifeq ($(OS),ANDROID)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiadevicemodule \
     UnpackedTarball/pdfium/core/fxge/android/cfpf_skiafont \
     UnpackedTarball/pdfium/core/fxge/android/cfpf_skiafontmgr \
     UnpackedTarball/pdfium/core/fxge/android/cfx_androidfontinfo \
     UnpackedTarball/pdfium/core/fxge/android/fx_android_impl \
-    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiapathfont \
 ))
 endif
 

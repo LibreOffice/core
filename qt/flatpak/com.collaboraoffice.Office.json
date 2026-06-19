@@ -385,11 +385,11 @@
           "dest-filename": "quickjs-v0.13.0.tar.gz"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/pdfium-7795.tar.bz2",
-          "sha256": "fbb7b551699a4bbf2f47986d485df0a82e9391841239cdbcd64554d88209014c",
+          "url": "https://dev-www.libreoffice.org/src/pdfium-7897.tar.bz2",
+          "sha256": "7d11b3f6e456fbdde392ec9ae1ae5588c85149116edcd1d6a986af0a977bda1f",
           "type": "file",
           "dest": "external/tarballs",
-          "dest-filename": "pdfium-7795.tar.bz2"
+          "dest-filename": "pdfium-7897.tar.bz2"
         },
         {
           "url": "https://pocoproject.org/releases/poco-1.15.3/poco-1.15.3-all.tar.bz2",
