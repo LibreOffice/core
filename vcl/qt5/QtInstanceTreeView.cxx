@@ -83,13 +83,6 @@ void QtInstanceTreeView::do_insert(const weld::TreeIter* pParent, int nPos, cons
         else if (pImageSurface)
             pItem->setIcon(toQPixmap(*pImageSurface));
 
-        if (m_bExtraToggleButtonsEnabled)
-        {
-            // avoid triggering signal_toggled via QtInstanceTreeView::handleDataChanged for new item
-            QSignalBlocker aSignalBlocker(m_pModel);
-            itemFromIndex(toggleButtonModelIndex(treeIter(aIndex)))->setCheckable(true);
-        }
-
         if (bChildrenOnDemand)
             m_pModel->setChildrenOnDemand(aIndex, true);
 
