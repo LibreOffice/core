@@ -25,6 +25,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/IconView.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TreeView.hxx>
@@ -32,21 +33,12 @@
 #include <editeng/hangulhanja.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
-#include <svtools/valueset.hxx>
 
 #include <vector>
 #include <memory>
 
 namespace svx
 {
-class SuggestionSet : public ValueSet
-{
-public:
-    SuggestionSet(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
-
-    virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
-};
-
 class SuggestionDisplay
 {
 public:
@@ -66,28 +58,28 @@ public:
     OUString GetSelectedEntry() const;
 
     DECL_LINK(SelectSuggestionListBoxHdl, weld::ItemView&, void);
-    DECL_LINK(SelectSuggestionValueSetHdl, ValueSet*, void);
+    DECL_LINK(SelectSuggestionIconViewHdl, weld::ItemView&, void);
     void SelectSuggestionHdl(bool bListBox);
 
     void SetHelpIds();
 
     void set_size_request(int nWidth, int nHeight)
     {
-        m_xValueSetWin->set_size_request(nWidth, nHeight);
+        m_xIconView->set_size_request(nWidth, nHeight);
         m_xListBox->set_size_request(nWidth, nHeight);
     }
 
 private:
+    ScopedVclPtr<VirtualDevice> CreateIcon(const OUString& rText);
     void implUpdateDisplay();
     weld::Widget& implGetCurrentControl();
 
 private:
-    bool m_bDisplayListBox; //otherwise ValueSet
+    bool m_bDisplayListBox; // otherwise IconView
     bool m_bInSelectionUpdate;
     Link<SuggestionDisplay&, void> m_aSelectLink;
 
-    std::unique_ptr<SuggestionSet> m_xValueSet;
-    std::unique_ptr<weld::CustomWeld> m_xValueSetWin;
+    std::unique_ptr<weld::IconView> m_xIconView;
     std::unique_ptr<weld::TreeView> m_xListBox;
 };
 

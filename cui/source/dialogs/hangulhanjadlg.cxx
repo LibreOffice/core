@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Dialog.hxx>
@@ -47,7 +48,6 @@
 #include <comphelper/string.hxx>
 
 #define HHC editeng::HangulHanjaConversion
-#define LINE_CNT static_cast<sal_uInt16>(2)
 #define MAXNUM_SUGGESTIONS 50
 
 namespace svx
@@ -280,41 +280,18 @@ Size RubyRadioButton::GetOptimalSize() const
     return minimumSize;
 }
 
-SuggestionSet::SuggestionSet(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
-    : ValueSet(std::move(xScrolledWindow))
-
-{
-}
-
-void SuggestionSet::UserDraw(const UserDrawEvent& rUDEvt)
-{
-    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
-    ::tools::Rectangle aRect = rUDEvt.GetRect();
-    sal_uInt16 nItemId = rUDEvt.GetItemId();
-
-    OUString sText = *static_cast<OUString*>(GetItemData(nItemId));
-    pDev->DrawText(aRect, sText, DrawTextFlags::Center | DrawTextFlags::VCenter);
-}
-
 SuggestionDisplay::SuggestionDisplay(weld::Builder& rBuilder)
     : m_bDisplayListBox(true)
     , m_bInSelectionUpdate(false)
-    , m_xValueSet(new SuggestionSet(rBuilder.weld_scrolled_window(u"scrollwin"_ustr, true)))
-    , m_xValueSetWin(new weld::CustomWeld(rBuilder, u"valueset"_ustr, *m_xValueSet))
+    , m_xIconView(rBuilder.weld_icon_view(u"iconview"_ustr))
     , m_xListBox(rBuilder.weld_tree_view(u"listbox"_ustr))
 {
-    m_xValueSet->SetSelectHdl(LINK(this, SuggestionDisplay, SelectSuggestionValueSetHdl));
+    m_xIconView->connect_selection_changed(
+        LINK(this, SuggestionDisplay, SelectSuggestionIconViewHdl));
     m_xListBox->connect_selection_changed(
         LINK(this, SuggestionDisplay, SelectSuggestionListBoxHdl));
 
-    m_xValueSet->SetLineCount(LINE_CNT);
-    m_xValueSet->SetStyle(m_xValueSet->GetStyle() | WB_ITEMBORDER | WB_VSCROLL);
-
-    auto nItemWidth = 2 * m_xListBox->get_pixel_size(u"AU"_ustr).Width();
-    m_xValueSet->SetItemWidth(nItemWidth);
-
     Size aSize(m_xListBox->get_approximate_digit_width() * 42, m_xListBox->get_text_height() * 5);
-    m_xValueSet->set_size_request(aSize.Width(), aSize.Height());
     m_xListBox->set_size_request(aSize.Width(), aSize.Height());
 
     implUpdateDisplay();
@@ -323,14 +300,14 @@ SuggestionDisplay::SuggestionDisplay(weld::Builder& rBuilder)
 void SuggestionDisplay::implUpdateDisplay()
 {
     m_xListBox->set_visible(m_bDisplayListBox);
-    m_xValueSetWin->set_visible(!m_bDisplayListBox);
+    m_xIconView->set_visible(!m_bDisplayListBox);
 }
 
 weld::Widget& SuggestionDisplay::implGetCurrentControl()
 {
     if (m_bDisplayListBox)
         return *m_xListBox;
-    return *m_xValueSet->GetDrawingArea();
+    return *m_xIconView;
 }
 
 void SuggestionDisplay::DisplayListBox(bool bDisplayListBox)
@@ -352,7 +329,7 @@ void SuggestionDisplay::DisplayListBox(bool bDisplayListBox)
     implUpdateDisplay();
 }
 
-IMPL_LINK_NOARG(SuggestionDisplay, SelectSuggestionValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SuggestionDisplay, SelectSuggestionIconViewHdl, weld::ItemView&, void)
 {
     SelectSuggestionHdl(false);
 }
@@ -369,16 +346,9 @@ void SuggestionDisplay::SelectSuggestionHdl(bool bListBox)
 
     m_bInSelectionUpdate = true;
     if (bListBox)
-    {
-        sal_uInt16 nPos = m_xListBox->get_selected_index();
-        m_xValueSet->SelectItem(nPos + 1); //itemid == pos+1 (id 0 has special meaning)
-    }
+        m_xIconView->select(m_xListBox->get_selected_index());
     else
-    {
-        sal_uInt16 nPos
-            = m_xValueSet->GetSelectedItemId() - 1; //itemid == pos+1 (id 0 has special meaning)
-        m_xListBox->select(nPos);
-    }
+        m_xListBox->select(m_xIconView->get_selected_index());
     m_bInSelectionUpdate = false;
     m_aSelectLink.Call(*this);
 }
@@ -391,22 +361,40 @@ void SuggestionDisplay::SetSelectHdl(const Link<SuggestionDisplay&, void>& rLink
 void SuggestionDisplay::Clear()
 {
     m_xListBox->clear();
-    m_xValueSet->Clear();
+    m_xIconView->clear();
+}
+
+ScopedVclPtr<VirtualDevice> SuggestionDisplay::CreateIcon(const OUString& rText)
+{
+    Size aItemSize = m_xListBox->get_pixel_size(u"AU"_ustr);
+    aItemSize.scale(2, 2);
+
+    ScopedVclPtr<VirtualDevice> pDev = m_xIconView->create_virtual_device();
+    pDev->SetOutputSize(aItemSize);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    pDev->SetBackground(rStyleSettings.GetFieldColor());
+    pDev->Erase();
+    pDev->SetTextColor(rStyleSettings.GetFieldTextColor());
+    pDev->DrawText(tools::Rectangle(0, 0, aItemSize.Width(), aItemSize.Height()), rText,
+                   DrawTextFlags::Center | DrawTextFlags::VCenter);
+
+    return pDev;
 }
 
 void SuggestionDisplay::InsertEntry(const OUString& rStr)
 {
     m_xListBox->append_text(rStr);
-    sal_uInt16 nItemId = m_xListBox->n_children(); //itemid == pos+1 (id 0 has special meaning)
-    m_xValueSet->InsertItem(nItemId);
-    OUString* pItemData = new OUString(rStr);
-    m_xValueSet->SetItemData(nItemId, pItemData);
+    const int nIndex = m_xIconView->n_children();
+    const OUString* pNullIconName = nullptr;
+    m_xIconView->insert(nIndex, nullptr, nullptr, pNullIconName, nullptr);
+    ScopedVclPtr<VirtualDevice> pDev = CreateIcon(rStr);
+    m_xIconView->set_image(nIndex, *pDev);
 }
 
 void SuggestionDisplay::SelectEntryPos(sal_uInt16 nPos)
 {
     m_xListBox->select(nPos);
-    m_xValueSet->SelectItem(nPos + 1); //itemid == pos+1 (id 0 has special meaning)
+    m_xIconView->select(nPos);
 }
 
 sal_uInt16 SuggestionDisplay::GetEntryCount() const { return m_xListBox->n_children(); }
@@ -417,7 +405,7 @@ OUString SuggestionDisplay::GetSelectedEntry() const { return m_xListBox->get_se
 
 void SuggestionDisplay::SetHelpIds()
 {
-    m_xValueSet->SetHelpId(HID_HANGULDLG_SUGGESTIONS_GRID);
+    m_xIconView->set_help_id(HID_HANGULDLG_SUGGESTIONS_GRID);
     m_xListBox->set_help_id(HID_HANGULDLG_SUGGESTIONS_LIST);
 }
 
