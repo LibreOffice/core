@@ -10,6 +10,7 @@
 #include <qt/QtFileManager.hpp>
 #include <common/Log.hpp>
 
+#include <QChar>
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QDBusReply>
