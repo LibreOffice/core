@@ -244,7 +244,6 @@ class ContextMenuControl extends JSControl {
 				// Shortcut is set only on leaf entries. Submenu entries use the
 				// .ui-has-menu fixed-column grid with a chevron in the trailing
 				// column, leaving no room for a shortcut span.
-				const shortcutText = JSDialog.ShortcutsUtil.getShortcutText(command);
 				entries.push({
 					id: command,
 					uno: command,
@@ -502,19 +501,5 @@ class ContextMenuControl extends JSControl {
 		}
 
 		return contextMenu;
-	}
-
-	// Prevents right mouse button's mouseup event from triggering menu item accidentally.
-	public stopRightMouseUpEvent(): void {
-		const menuItems = document.getElementsByClassName('ui-combobox-entry');
-
-		for (let i = 0; i < menuItems.length; i++) {
-			menuItems[i].addEventListener('mouseup', function (eo: Event) {
-				const e = eo as MouseEvent;
-				if (e.button == 2)
-					// Is a right mouse button event?
-					e.stopPropagation();
-			});
-		}
 	}
 }
