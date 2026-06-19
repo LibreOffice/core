@@ -12,6 +12,7 @@
 #include <tools/stream.hxx>
 
 #include <algorithm>
+#include <set>
 
 namespace
 {
@@ -51,7 +52,17 @@ SwSecurityLabelDlg::~SwSecurityLabelDlg() {}
 
 void SwSecurityLabelDlg::PopulateCategories()
 {
-    // Rebuild the list, dropping categories the current classification excludes.
+    // Rebuild the list, dropping categories the current classification excludes
+    // while preserving the checks of those that survive. Identity is the owning
+    // tag index plus the category name (stable across rebuilds).
+    std::set<std::pair<sal_Int32, OUString>> aChecked;
+    const int nOld = m_xCategories->n_children();
+    for (int i = 0; i < nOld; ++i)
+    {
+        if (m_xCategories->get_toggle(i) == TRISTATE_TRUE)
+            aChecked.emplace(m_aRowTag[i], m_xCategories->get_text(i, 0));
+    }
+
     const OUString sClassification = m_xClassification->get_active_text();
 
     m_xCategories->clear();
@@ -72,7 +83,8 @@ void SwSecurityLabelDlg::PopulateCategories()
                     != rCategory.aExcludedClasses.end())
                     continue;
                 m_xCategories->append(xIter.get());
-                m_xCategories->set_toggle(*xIter, TRISTATE_FALSE);
+                const bool bChecked = aChecked.count({ nTag, rCategory.aName }) != 0;
+                m_xCategories->set_toggle(*xIter, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
                 m_xCategories->set_text(*xIter, rCategory.aName, 0);
                 m_aRowTag.push_back(nTag);
             }
