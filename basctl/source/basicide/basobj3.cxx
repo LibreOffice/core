@@ -42,6 +42,7 @@
 #include <basctl/basctldllpublic.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/minfitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -283,6 +284,49 @@ void RunMethod( SbMethod const * pMethod )
     SbxValues aRes;
     aRes.eType = SbxVOID;
     pMethod->Get( aRes );
+}
+
+void DeleteMacro(SbMethod& rMethod)
+{
+    SfxDispatcher* pDispatcher = GetDispatcher();
+
+    if (pDispatcher)
+        pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
+
+    // mark current doc as modified:
+    StarBASIC* pBasic = FindBasic(&rMethod);
+    assert(pBasic && "Basic?!");
+    BasicManager* pBasMgr = FindBasicManager( pBasic );
+    DBG_ASSERT( pBasMgr, "BasMgr?" );
+    ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+    if ( aDocument.isDocument() )
+    {
+        aDocument.setDocumentModified();
+        if (SfxBindings* pBindings = GetBindingsPtr())
+            pBindings->Invalidate( SID_SAVEDOC );
+    }
+
+    SbModule* pModule = rMethod.GetModule();
+    assert(pModule && "DeleteMacro: No Module?!");
+    OUString aSource( pModule->GetSource() );
+    sal_uInt16 nStart, nEnd;
+    rMethod.GetLineRange( nStart, nEnd );
+    pModule->GetMethods()->Remove( &rMethod );
+    CutLines( aSource, nStart-1, nEnd-nStart+1 );
+    pModule->SetSource( aSource );
+
+    // update module in library
+    OUString aLibName = pBasic->GetName();
+    OUString aModName = pModule->GetName();
+    OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
+
+    if (pDispatcher)
+    {
+        SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModName,
+                                    OUString(), OUString() );
+        pDispatcher->ExecuteList( SID_BASICIDE_UPDATEMODULESOURCE,
+                                  SfxCallMode::SYNCHRON, { &aInfoItem });
+    }
 }
 
 void StopBasic()

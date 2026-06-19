@@ -41,6 +41,8 @@ namespace weld
 class Widget;
 }
 
+class SbMethod;
+
 namespace basctl
 {
 BASCTL_DLLPUBLIC bool IsValidSbxName(std::u16string_view rName);
@@ -63,6 +65,8 @@ BASCTL_DLLPUBLIC void ImportLib(const ScriptDocument& rDocument, weld::Dialog* p
 
 BASCTL_DLLPUBLIC void Export(const ScriptDocument& rDocument, const OUString& aLibName,
                              weld::Dialog* pDialog);
+
+BASCTL_DLLPUBLIC void DeleteMacro(SbMethod& rMethod);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
