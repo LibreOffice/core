@@ -1781,14 +1781,22 @@ void CallbackFlushHandler::viewCallbackWithViewId(int nType, const OString& pPay
 void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
     tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
-    if (rPaintedTiles.IsEmpty())
+
+    tools::Rectangle aRect;
+    if (m_bVectorRendering)
+    {
+        // A vector-rendered view paints no bitmap tiles, so there is no
+        // painted-tile bounding box to crop against. Forward the invalidation
+        // as-is, or invalidate everything when the rect is null, so the client
+        // re-fetches the changed vector content.
+        aRect = pRect ? *pRect : RectangleAndPart::emptyAllRectangle;
+    }
+    else if (rPaintedTiles.IsEmpty())
     {
         // We have not sent any tiles: don't send invalidations.
         return;
     }
-
-    tools::Rectangle aRect;
-    if (pRect)
+    else if (pRect)
     {
         // We got an invalidate: crop it against the bbox.
         aRect = *pRect;
@@ -7144,6 +7152,19 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
+    }
+
+    if (aCommand.starts_with(".uno:VectorTile"))
+    {
+        // The requesting view renders from vector primitives rather than
+        // bitmap tiles; record that on its callback handler.
+        LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+        if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+        {
+            auto it = pDocument->mpCallbackFlushHandlers.find(pViewShell->GetViewShellId().get());
+            if (it != pDocument->mpCallbackFlushHandlers.end() && it->second)
+                it->second->setVectorRendering();
+        }
     }
 
     if (aCommand == ".uno:ReadOnly")

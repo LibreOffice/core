@@ -115,6 +115,11 @@ namespace desktop {
 
         void setViewId( int viewId ) { m_viewId = viewId; }
 
+        // True for a view that renders from vector primitives rather than
+        // painting bitmap tiles.
+        void setVectorRendering() { m_bVectorRendering = true; }
+        bool isVectorRendering() const { return m_bVectorRendering; }
+
         DESKTOP_DLLPUBLIC void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
         const OString& getViewRenderState() const { return m_aViewRenderState; }
         const std::map<int, std::map<int, tools::Rectangle>>& getPaintedTiles() const
@@ -246,6 +251,7 @@ namespace desktop {
         COKitDocument* m_pDocument;
         OString m_aViewRenderState;
         int m_viewId = -1; // view id of the associated SfxViewShell
+        bool m_bVectorRendering = false;
         COKitCallback m_pCallback;
         ImplSVEvent* m_pFlushEvent;
         void *m_pData;
