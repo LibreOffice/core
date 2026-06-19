@@ -94,6 +94,15 @@ class BackstageView extends window.L.Class {
 		else this.handleActionTab(config);
 	}
 
+	private isPdfOpen(): boolean {
+		// The backstage only exists in the desktop apps, which do not populate
+		// the WOPI CheckFileInfo properties: take the file name from the
+		// document URL. Its directory is obfuscated, but the file name keeps
+		// its real extension.
+		const name: string = String(this.map.options.doc || '').split('?')[0];
+		return name.toLowerCase().endsWith('.pdf');
+	}
+
 	private getTabsConfig(): BackstageTabConfig[] {
 		return [
 			{
@@ -178,7 +187,13 @@ class BackstageView extends window.L.Class {
 				type: 'action',
 				actionType: 'sign',
 				icon: 'lc_signature.svg',
-				visible: !this.isStarterMode && !!window.documentSigningEnabled,
+				// Hidden for PDF: the Sign action dispatches .uno:Signature, which
+				// opens the document signature dialog. That is not the way PDFs are
+				// signed here (use Insert > Signature Line instead).
+				visible:
+					!this.isStarterMode &&
+					!!window.documentSigningEnabled &&
+					!this.isPdfOpen(),
 			},
 			{
 				type: 'separator',
