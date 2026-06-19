@@ -16474,6 +16474,8 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
         mkdir -p tmp
         TEMP_DIRECTORY="$BUILDDIR/tmp"
     fi
+    # gnucp might be detected in the Linux container, force it to known cp.exe
+    GNUCP="cp.exe"
 fi
 
 # Keep in sync with list of files far up, at AC_MSG_CHECKING([for
