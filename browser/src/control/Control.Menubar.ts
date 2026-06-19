@@ -1529,7 +1529,7 @@ class Menubar extends window.L.Control {
 		commandStates: {},
 
 		// Only these menu options will be visible in readonly mode
-		allowedReadonlyMenus: window.mode.isCODesktop() ? ['file', 'editmenu', 'view', 'slide', 'help'] : ['file', 'editmenu', 'downloadas', 'view', 'insert', 'slide', 'help', 'print'],
+		allowedReadonlyMenus: window.mode.isCODesktop() ? ['file', 'editmenu', 'view', 'insert', 'slide', 'help'] : ['file', 'editmenu', 'downloadas', 'view', 'insert', 'slide', 'help', 'print'],
 		allowedRedlineManagementMenus: window.mode.isCODesktop() ? [] : ['editmenu', 'changesmenu', ],
 
 		math: ['.uno:ChangeFont', '.uno:ChangeFontSize', '.uno:ChangeDistance', '.uno:ChangeAlignment'],
