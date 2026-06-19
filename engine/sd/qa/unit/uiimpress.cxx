@@ -59,6 +59,8 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>
@@ -765,6 +767,57 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteTextboxBackgroundCrossProcess)
 
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
                          pDstShape->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteKeepsPositionInKit)
+{
+    // When kit is active the destination's visible area is not a reliable
+    // paste position. A cross-document paste arrives with the selection
+    // normalised to the origin, so place the group's top-left at the page
+    // origin instead of recentering it on that visible area. Recentering
+    // shifted the pasted shape away from the corner.
+    mxComponent2 = loadFromDesktop(createFileURL(u"odp/paste-textbox-background.odp"),
+                                   u"com.sun.star.presentation.PresentationDocument"_ustr);
+    CPPUNIT_ASSERT(mxComponent2.is());
+
+    auto* pSrcImpress = dynamic_cast<SdXImpressDocument*>(mxComponent2.get());
+    CPPUNIT_ASSERT(pSrcImpress);
+    sd::ViewShell* pSrcViewShell = pSrcImpress->GetDocShell()->GetViewShell();
+    SdPage* pSrcPage = pSrcViewShell->GetActualPage();
+
+    SdrObject* pSrcTextBox = lcl_findTextBoxByText(pSrcPage, u"xxx");
+    CPPUNIT_ASSERT_MESSAGE("source textbox 'xxx' not found", pSrcTextBox);
+    const Size aSrcSize = pSrcTextBox->GetSnapRect().GetSize();
+
+    SdrView* pSrcView = pSrcViewShell->GetView();
+    pSrcView->UnmarkAllObj();
+    pSrcView->MarkObj(pSrcTextBox, pSrcView->GetSdrPageView());
+    dispatchCommand(mxComponent2, u".uno:Copy"_ustr, {});
+
+    // Make the destination see the clipboard as foreign, the cross-process
+    // path online takes, so the paste goes through View::Paste(SdrModel).
+    SdModule::get()->pTransferClip = nullptr;
+
+    createSdImpressDoc();
+    auto* pDstImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDstImpress);
+    sd::ViewShell* pDstViewShell = pDstImpress->GetDocShell()->GetViewShell();
+    SdPage* pDstPage = pDstViewShell->GetActualPage();
+    const size_t nDstObjsBefore = pDstPage->GetObjCount();
+
+    {
+        comphelper::COKit::setActive(true);
+        comphelper::ScopeGuard aKitGuard([] { comphelper::COKit::setActive(false); });
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(nDstObjsBefore + 1, pDstPage->GetObjCount());
+    SdrObject* pDstShape = pDstPage->GetObj(nDstObjsBefore);
+
+    // The pasted shape sits at the page origin with its size preserved,
+    // rather than being shifted by the recentering offset.
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), aSrcSize),
+                         pDstShape->GetSnapRect());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlidePasteSizeMismatch)

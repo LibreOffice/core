@@ -284,6 +284,12 @@ bool SdrExchangeView::Paste(
         if (bResize)
             ResizeRect(aR,aPt0,aXResize,aYResize);
         Point aDist(aPos-aR.Center());
+        // In kit the paste position is derived from the client visible area,
+        // which is not reliable for a freshly opened document. Leave the
+        // objects at the coordinates they have in the pasted model instead of
+        // recentering them on that position.
+        if (comphelper::COKit::isActive())
+            aDist = Point(0, 0);
         Size  aSiz(aDist.X(),aDist.Y());
         size_t nCloneErrCnt = 0;
         const size_t nObjCount = pSrcPg->GetObjCount();
