@@ -52,7 +52,9 @@ void SpifPolicyTest::testParse()
     </spif:securityCategoryTagSet>
     <spif:securityCategoryTagSet name="UK Restrictive Codeword - NTK" id="1.2.826.0.1310.1.2.0.4">
       <spif:securityCategoryTag name="UK Restrictive Codewords - NTK" tagType="enumerated" enumType="restrictive" singleSelection="false">
-        <spif:tagCategory name="INT" lacv="21745403334774610" obsolete="false" />
+        <spif:tagCategory name="INT" lacv="21745403334774610" obsolete="false">
+          <spif:excludedClass>OFFICIAL</spif:excludedClass>
+        </spif:tagCategory>
       </spif:securityCategoryTag>
     </spif:securityCategoryTagSet>
   </spif:securityCategoryTagSets>
@@ -101,6 +103,8 @@ void SpifPolicyTest::testParse()
     const auto& rNtkTag = aPolicy.aTagSets[1].aTags[0];
     CPPUNIT_ASSERT_EQUAL(u"restrictive"_ustr, rNtkTag.aEnumType);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(21745403334774610), rNtkTag.aCategories[0].nLacv);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rNtkTag.aCategories[0].aExcludedClasses.size());
+    CPPUNIT_ASSERT_EQUAL(u"OFFICIAL"_ustr, rNtkTag.aCategories[0].aExcludedClasses[0]);
 
     // Marking derivation: classification + the tag's separator/values/suffix.
     std::vector<bool> aSelected(3, false);

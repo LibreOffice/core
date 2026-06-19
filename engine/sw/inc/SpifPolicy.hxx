@@ -34,6 +34,7 @@ struct SpifTagCategory
     OUString aName; ///< tagCategory/@name
     sal_Int64 nLacv = 0; ///< @lacv (may exceed 32 bits)
     bool bObsolete = false; ///< @obsolete: not for newly created labels
+    std::vector<OUString> aExcludedClasses; ///< excludedClass: classifications this category excludes
 };
 
 /// A category tag (e.g. "Releasable To") and its selectable values.

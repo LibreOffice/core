@@ -24,6 +24,15 @@ SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
     aCategory.aName = toOU(rWalker.attribute("name"_ostr));
     aCategory.nLacv = rWalker.attribute("lacv"_ostr).toInt64();
     aCategory.bObsolete = rWalker.attribute("obsolete"_ostr) == "true";
+
+    rWalker.children();
+    while (rWalker.isValid())
+    {
+        if (rWalker.name() == "excludedClass")
+            aCategory.aExcludedClasses.push_back(toOU(rWalker.content()));
+        rWalker.next();
+    }
+    rWalker.parent();
     return aCategory;
 }
 
