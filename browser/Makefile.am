@@ -1202,13 +1202,18 @@ install-demo-extensions:
 		cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/; \
 	done
 
+# tsc must compile the .js sources so TypeScript can resolve globals defined in
+# them (e.g. classes in Control.Tooltip.js referenced from .ts). This has to
+# happen in every build, not just debug; otherwise release builds fail with
+# "Cannot find name". Source maps stay debug-only.
+AllowJs=--allowJs true
 if ENABLE_DEBUG
-SourceMap=--allowJs true --sourceMap true --inlineSources true
+SourceMap=--sourceMap true --inlineSources true
 endif
 
 tscompile.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
-	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
-	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(AllowJs) $(SourceMap)
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(AllowJs) $(SourceMap)
 	@touch $@
 
 $(COOL_TS_JS_DST): tscompile.done

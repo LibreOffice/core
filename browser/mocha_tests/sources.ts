@@ -243,6 +243,7 @@
 /// <reference path="../src/control/Control.FormulaAutoCompletePopup.ts" />
 /// <reference path="../src/control/Control.AutoFillPreviewTooltip.ts" />
 /// <reference path="../src/control/Control.AddressInputField.ts" />
+/// <reference path="../src/control/Control.Tooltip.js" />
 /// <reference path="../src/control/Ruler.ts" />
 /// <reference path="../src/control/VRuler.ts" />
 /// <reference path="../src/control/HRuler.ts" />

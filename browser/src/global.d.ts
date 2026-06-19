@@ -433,25 +433,5 @@ interface Window {
 	contextMenuWizard: boolean;
 }
 
-// A small floating tooltip widget the caller instantiates and positions
-// directly (defined in Control.Tooltip.js). Unlike the shared cooltip
-// singleton, several of these can exist at once.
-declare class ValueTooltip {
-	render(content: {
-		value: string;
-		label?: string;
-		iconName?: string;
-		focused?: boolean;
-	}): void;
-	show(): void;
-	hide(): void;
-	isVisible(): boolean;
-	setPosition(left: number, top: number): void;
-	placeNearPoint(x: number, y: number): void;
-	readonly offsetWidth: number;
-	readonly offsetHeight: number;
-	destroy(): void;
-}
-
 // For localization
 declare function _(text: string): string;
