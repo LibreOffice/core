@@ -1899,9 +1899,11 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	// In Writer, a comment-highlighted region overlays the document. By default
-	// this section would swallow mouse events, so a text selection drag started
-	// on top of a commented passage never reaches core. Forward the drag
-	// lifecycle (down/move/up) to MouseControl while leaving click handling
+	// this section would swallow mouse events, so neither a text selection drag
+	// nor a plain hover started on top of a commented passage ever reaches core.
+	// That means e.g. the tracked-change tooltip is never requested when the
+	// change is also covered by a comment. Forward the drag lifecycle
+	// (down/move/up) and hover moves to MouseControl while leaving click handling
 	// to the existing onClick path.
 	private forwardWriterMouseEventToCore(handler: 'onMouseDown' | 'onMouseMove' | 'onMouseUp', point: cool.SimplePoint, dragDistance: Array<number>, e: MouseEvent): void {
 		const mousePoint = this.toMouseControlLocal(point);
@@ -1920,7 +1922,9 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	public onMouseMove(point: cool.SimplePoint, dragDistance: Array<number>, e: MouseEvent): void {
-		if (app.map._docLayer._docType === 'text' && this.containerObject.isDraggingSomething())
+		// Forward both drags (text selection) and plain hovers (so core can
+		// request tooltips, e.g. for tracked changes under the comment).
+		if (app.map._docLayer._docType === 'text')
 			this.forwardWriterMouseEventToCore('onMouseMove', point, dragDistance, e);
 	}
 

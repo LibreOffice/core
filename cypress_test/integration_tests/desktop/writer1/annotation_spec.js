@@ -537,6 +537,84 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#jsd-context-menu-dropdown-overlay').should('be.visible');
 	});
 
+    it('Hover inside commented region forwards mouse move to core', function() {
+		// A Writer comment overlays the commented passage with a
+		// CommentSection. It used to forward mouse moves to MouseControl
+		// only while a drag was active, so a plain hover over the
+		// highlighted passage never reached core. That meant core never
+		// requested a tooltip there - e.g. a tracked change that is also
+		// covered by a comment showed no track-change info popup.
+		// CommentSection now forwards hover moves too; this test exercises
+		// that path.
+
+		// 50% zoom (set in beforeEach) makes the highlight too small for a
+		// reliable hover target, so switch to 100%.
+		desktopHelper.selectZoomLevel('100', false);
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		// Lay down a passage and select a slice of it so the comment is
+		// anchored to a real range with a meaningful highlight rectangle.
+		helper.typeIntoDocument('Hello world from this test document for hover testing.{enter}');
+		helper.typeIntoDocument('{ctrl}{home}');
+		for (var i = 0; i < 17; ++i)
+			helper.typeIntoDocument('{shift}{rightArrow}');
+		helper.textSelectionShouldExist();
+
+		desktopHelper.insertComment('hover-test', true);
+		cy.cGet('.cool-annotation-content-wrapper').should('exist');
+
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		// Spy on MouseControl - if the new hover forwarding works, the plain
+		// mouse move we dispatch below must reach onMouseMove.
+		cy.getFrameWindow().then(function(win) {
+			cy.spy(win.app.activeDocument.mouseControl, 'onMouseMove').as('mcMove');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			var commentList = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			var comment = commentList.sectionProperties.commentList[0];
+			expect(comment, 'comment must exist').to.exist;
+			expect(comment.sectionProperties.data.rectangles,
+				'comment must own a highlight rectangle').to.exist;
+			var rects = comment.sectionProperties.data.rectangles;
+			expect(rects.length, 'at least one rectangle').to.be.greaterThan(0);
+			var rect = rects[0];
+
+			var canvas = win.document.getElementById('document-canvas');
+			var bounds = canvas.getBoundingClientRect();
+
+			// v1X/v1Y are view pixels inside the canvas (viewport offset
+			// baked in); /dpiScale -> CSS pixels.
+			var cssCenterX = ((rect.v1X + rect.v2X) / 2) / win.app.dpiScale;
+			var cssCenterY = ((rect.v1Y + rect.v4Y) / 2) / win.app.dpiScale;
+			var hoverX = bounds.left + cssCenterX;
+			var hoverY = bounds.top + cssCenterY;
+
+			// A plain hover: no button pressed, no preceding mousedown.
+			// Prime mouseIsInside on the section container, otherwise its
+			// onMouseMove early-exits before reaching any section.
+			var enterEvent = new win.MouseEvent('mouseenter', {
+				clientX: hoverX, clientY: hoverY, button: 0, bubbles: true,
+			});
+			canvas.dispatchEvent(enterEvent);
+			win.app.sectionContainer.onMouseEnter(enterEvent);
+			win.document.dispatchEvent(new win.MouseEvent('mousemove', {
+				clientX: hoverX, clientY: hoverY, button: 0, buttons: 0, bubbles: true,
+			}));
+		});
+
+		// The hover must have flowed through MouseControl. Without the
+		// CommentSection hover forwarding, the spy stays silent because the
+		// section consumed the event while no drag was active.
+		cy.get('@mcMove').should('have.been.called');
+	});
+
 	it('Action_GoToComment postMessage returns error for invalid comment', function() {
 		// Stub postMessage to capture the response.
 		cy.getFrameWindow().then(win => {
