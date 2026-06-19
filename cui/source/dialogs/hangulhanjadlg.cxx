@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/string_view.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Dialog.hxx>
@@ -553,11 +554,25 @@ namespace svx
         OnSuggestionModified( *m_xWordInput );
     }
 
+    static int GetCodePointCount(std::u16string_view sText)
+    {
+        sal_Int32 nCount = 0;
+        sal_Int32 nIndex = 0;
+        while (o3tl::make_unsigned(nIndex) < sText.size())
+        {
+            o3tl::iterateCodePoints(sText, &nIndex);
+            nCount++;
+        }
+
+        return nCount;
+    }
+
     IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnSuggestionModified, weld::Entry&, void )
     {
         m_xFind->set_sensitive(m_xWordInput->get_value_changed_from_saved());
 
-        bool bSameLen = m_xWordInput->get_text().getLength() == m_xOriginalWord->get_label().getLength();
+        bool bSameLen = GetCodePointCount(m_xWordInput->get_text())
+                        == GetCodePointCount(m_xOriginalWord->get_label());
         m_xReplace->set_sensitive( m_bDocumentMode && bSameLen );
         m_xReplaceAll->set_sensitive( m_bDocumentMode && bSameLen );
     }

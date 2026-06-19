@@ -25,6 +25,7 @@
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>
 #include <comphelper/sequence.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unicode/uchar.h>
 #include <memory>
@@ -132,8 +133,20 @@ TextConversion_ko::getCharConversions(std::u16string_view aText, sal_Int32 nStar
                 sal_Int16 count = Hangul_ko[current].count;
                 output.realloc(count);
                 auto poutput = output.getArray();
-                for (sal_Int16 i = 0; i < count; i++)
-                    poutput[i] = OUString(ptr + i, 1);
+
+                // split into single characters/code points
+                // (one code point can be represented by multiple UTF-16 code units)
+                const std::u16string_view sAllChars(ptr, count);
+                sal_Int32 nIndex = 0;
+                sal_Int32 nCodePointCount = 0;
+                while (o3tl::make_unsigned(nIndex) < sAllChars.size())
+                {
+                    auto nChar = o3tl::iterateCodePoints(sAllChars, &nIndex);
+                    poutput[nCodePointCount] = OUString{&nChar, 1};
+                    nCodePointCount++;
+                }
+                output.realloc(nCodePointCount);
+
                 break;
             }
         }
