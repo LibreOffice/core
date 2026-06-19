@@ -41,6 +41,7 @@ class SwSecurityLabelDlg final : public weld::GenericDialogController
     DECL_LINK(ClassificationHdl, weld::ComboBox&, void);
     DECL_LINK(CategoryToggleHdl, const weld::TreeView::iter_col&, void);
 
+    void PopulateCategories();
     void UpdatePreview();
 
 public:

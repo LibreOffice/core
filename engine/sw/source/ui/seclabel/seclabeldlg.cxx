@@ -11,6 +11,8 @@
 
 #include <tools/stream.hxx>
 
+#include <algorithm>
+
 namespace
 {
 // TODO dev stopgap: fixed policy path. Replaced by WOPI provisioning (Phase F).
@@ -37,6 +39,25 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
         m_xClassification->set_active(0);
 
     m_xCategories->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    PopulateCategories();
+
+    m_xClassification->connect_changed(LINK(this, SwSecurityLabelDlg, ClassificationHdl));
+    m_xCategories->connect_toggled(LINK(this, SwSecurityLabelDlg, CategoryToggleHdl));
+
+    UpdatePreview();
+}
+
+SwSecurityLabelDlg::~SwSecurityLabelDlg() {}
+
+void SwSecurityLabelDlg::PopulateCategories()
+{
+    // Rebuild the list, dropping categories the current classification excludes.
+    const OUString sClassification = m_xClassification->get_active_text();
+
+    m_xCategories->clear();
+    m_aRowTag.clear();
+    m_aTagSingle.clear();
+
     auto xIter = m_xCategories->make_iterator();
     sal_Int32 nTag = 0;
     for (const auto& rTagSet : m_aPolicy.aTagSets)
@@ -46,6 +67,10 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
             m_aTagSingle.push_back(rTag.bSingleSelection);
             for (const auto& rCategory : rTag.aCategories)
             {
+                if (std::find(rCategory.aExcludedClasses.begin(), rCategory.aExcludedClasses.end(),
+                              sClassification)
+                    != rCategory.aExcludedClasses.end())
+                    continue;
                 m_xCategories->append(xIter.get());
                 m_xCategories->set_toggle(*xIter, TRISTATE_FALSE);
                 m_xCategories->set_text(*xIter, rCategory.aName, 0);
@@ -54,14 +79,7 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
             ++nTag;
         }
     }
-
-    m_xClassification->connect_changed(LINK(this, SwSecurityLabelDlg, ClassificationHdl));
-    m_xCategories->connect_toggled(LINK(this, SwSecurityLabelDlg, CategoryToggleHdl));
-
-    UpdatePreview();
 }
-
-SwSecurityLabelDlg::~SwSecurityLabelDlg() {}
 
 void SwSecurityLabelDlg::UpdatePreview()
 {
@@ -73,7 +91,11 @@ void SwSecurityLabelDlg::UpdatePreview()
     m_xPreview->set_label(m_aPolicy.buildMarking(m_xClassification->get_active_text(), aSelected));
 }
 
-IMPL_LINK_NOARG(SwSecurityLabelDlg, ClassificationHdl, weld::ComboBox&, void) { UpdatePreview(); }
+IMPL_LINK_NOARG(SwSecurityLabelDlg, ClassificationHdl, weld::ComboBox&, void)
+{
+    PopulateCategories();
+    UpdatePreview();
+}
 
 IMPL_LINK(SwSecurityLabelDlg, CategoryToggleHdl, const weld::TreeView::iter_col&, rIterCol, void)
 {
