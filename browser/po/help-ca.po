@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-05-02 04:09+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2026-06-19 11:36+0000\n"
+"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "help/ca/>\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1756,6 +1756,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Barra d'estat que mostra el número de pàgina, el recompte de paraules, el "
+"mode d'inserció, el mode de selecció, la llengua, el mode d'edició, la "
+"navegació, l'escala i la cerca"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -1771,7 +1774,6 @@ msgstr ""
 "d'aquesta barra hi ha tres botons:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
 msgstr "Cerca cap enrere"
 
@@ -1784,18 +1786,16 @@ msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Cancel·la la cerca (apareix només quan s'ha cercat algun text)"
 
 #: html/cool-help.html%2Bdiv.div.div.p:401-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
 "area, the user interface is not affected. The current level of zoom is shown "
 "in this area."
 msgstr ""
-"<span class=\"def\">La barra de zoom:</span> a la dreta de la barra d'estat, "
-"hi ha un conjunt de botons que us permeten per zoom al 100%, apropar-vos i "
-"allunyar-vos. L'escala s'aplica a l'àrea del document, la interfície "
-"d'usuari no queda afectada. El nivell actual d'escala es mostra en aquesta "
-"àrea."
+"<span class=\"def\">La barra d'escala:</span> Inclou botons que us permeten "
+"per a restablir l'escala al 100 %, apropar i allunyar. L'escala s'aplica a "
+"l'àrea del document, la interfície d'usuari no queda afectada. El nivell "
+"actual d'escala es mostra en aquesta àrea."
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
@@ -1818,11 +1818,16 @@ msgid ""
 "details about the current document. The actual information depends on the "
 "nature of the document."
 msgstr ""
+"<span class=\"def\">La barra d'informació:</span> La barra d'informació "
+"mostra els detalls sobre el document actual. La informació real depèn de la "
+"naturalesa del document."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:407-29
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Barra d'informació que mostra les fletxes de navegació de la pàgina, els "
+"controls de l'escala, i el nivell d'escala"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -1974,6 +1979,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Diàleg de reparació del document que llista els estats anteriors del "
+"document, amb columnes per al tipus d'acció, autor i marca de temps"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2009,6 +2016,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Superposició del document inactiu amb el missatge: Document inactiu: feu "
+"clic per a recarregar-lo i continuar l'edició"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2105,6 +2114,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Diàleg de l'assistent de gràfics amb la llista dels tipus de gràfics a "
+"l'esquerra, les previsualitzacions dels estils, opcions del 3D i les formes"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2117,6 +2128,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Gràfic de columnes amb barres agrupades que mostren les dades per a quatre "
+"files en tres columnes"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2210,6 +2223,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Caixa de comentaris que mostra el nom de l'autor, la data i el text del "
+"comentari, mostrat al costat del document"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2238,7 +2253,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Text amb un subratllat ondulat vermell sota una paraula incorrecta"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2286,6 +2301,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Barra de fórmules que mostra la cel·la de referència B1, la icona de "
+"l'assistent de funcions, i la fórmula =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2324,6 +2341,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Diàleg del format de cel·les en la pestanya de Nombres amb la llista de "
+"categories, opcions de format, posicions dels decimals i el codi de format"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2365,6 +2384,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Menú desplegable AutoFilter en una columna d'un fill de càlcul amb ordre, "
+"filtre per color, filtre per condició i caixes de verificació per a valors "
+"individuals"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2403,6 +2425,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Full de càlcul amb controls agrupats en files i columnes que mostren el "
+"nivell de línia exterior dels botons i els commutadors de col·lapsar/expandir"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -3274,15 +3298,14 @@ msgstr "Seleccioneu el text amb la formatació desitjada"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:745-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:787-7
-#, fuzzy
 msgid ""
 "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
 "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
 "turns to a paint bucket."
 msgstr ""
-"Feu clic a la icona de clonació de format <img class=\"icon-size\" src="
-"\"images/lc_formatpaintbrush.svg\" />. El punter del ratolí es transforma en "
-"un pot de pintura."
+"Feu clic a la icona de clonació de format <img alt=\"format paintbrush\" "
+"class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. El punter del "
+"cursor es transforma en un pot de pintura."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:746-7
 msgid "Select the text you want to apply the new format."
@@ -3467,9 +3490,8 @@ msgstr ""
 "part inferior del panell:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:808-176
-#, fuzzy
 msgid "slide show"
-msgstr "Presentació de diapositives"
+msgstr "presentació de diapositives"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:812-5
 msgid "How can I change the line, area and position of a shape in my slides?"
