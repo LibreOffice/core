@@ -29,12 +29,16 @@ struct SpifClassification
 };
 
 /// A selectable value within a category tag (e.g. "CANADA" under "Releasable To").
-struct SpifTagCategory
+struct SW_DLLPUBLIC SpifTagCategory
 {
     OUString aName; ///< tagCategory/@name
     sal_Int64 nLacv = 0; ///< @lacv (may exceed 32 bits)
     bool bObsolete = false; ///< @obsolete: not for newly created labels
     std::vector<OUString> aExcludedClasses; ///< excludedClass: classifications this category excludes
+
+    /// Whether this category may be selected for a NEW label under rClassification
+    /// (not obsolete and not excluded by that classification).
+    bool isSelectable(const OUString& rClassification) const;
 };
 
 /// A category tag (e.g. "Releasable To") and its selectable values.

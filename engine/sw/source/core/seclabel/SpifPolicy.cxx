@@ -12,6 +12,8 @@
 #include <tools/XmlWalker.hxx>
 #include <tools/stream.hxx>
 
+#include <algorithm>
+
 namespace sw::seclabel
 {
 namespace
@@ -183,6 +185,14 @@ OUString SpifPolicy::buildMarking(const OUString& rClassification,
         }
     }
     return aMarking;
+}
+
+bool SpifTagCategory::isSelectable(const OUString& rClassification) const
+{
+    if (bObsolete)
+        return false;
+    return std::find(aExcludedClasses.begin(), aExcludedClasses.end(), rClassification)
+           == aExcludedClasses.end();
 }
 
 } // namespace sw::seclabel

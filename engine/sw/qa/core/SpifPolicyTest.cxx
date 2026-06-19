@@ -55,6 +55,9 @@ void SpifPolicyTest::testParse()
         <spif:tagCategory name="INT" lacv="21745403334774610" obsolete="false">
           <spif:excludedClass>OFFICIAL</spif:excludedClass>
         </spif:tagCategory>
+        <spif:tagCategory name="OPS" lacv="21745403334774611" obsolete="true">
+          <spif:excludedClass>OFFICIAL</spif:excludedClass>
+        </spif:tagCategory>
       </spif:securityCategoryTag>
     </spif:securityCategoryTagSet>
   </spif:securityCategoryTagSets>
@@ -106,8 +109,14 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rNtkTag.aCategories[0].aExcludedClasses.size());
     CPPUNIT_ASSERT_EQUAL(u"OFFICIAL"_ustr, rNtkTag.aCategories[0].aExcludedClasses[0]);
 
+    // isSelectable: obsolete or excluded-by-classification → not selectable.
+    CPPUNIT_ASSERT(rNtkTag.aCategories[0].isSelectable(u"SECRET"_ustr)); // INT ok under SECRET
+    CPPUNIT_ASSERT(!rNtkTag.aCategories[0].isSelectable(u"OFFICIAL"_ustr)); // INT excludes OFFICIAL
+    CPPUNIT_ASSERT_EQUAL(u"OPS"_ustr, rNtkTag.aCategories[1].aName);
+    CPPUNIT_ASSERT(!rNtkTag.aCategories[1].isSelectable(u"SECRET"_ustr)); // OPS obsolete
+
     // Marking derivation: classification + the tag's separator/values/suffix.
-    std::vector<bool> aSelected(3, false);
+    std::vector<bool> aSelected(4, false);
     aSelected[0] = true; // CANADA
     aSelected[1] = true; // UNITED KINGDOM
     CPPUNIT_ASSERT_EQUAL(u"SECRET//CANADA UNITED KINGDOM."_ustr,

@@ -11,7 +11,6 @@
 
 #include <tools/stream.hxx>
 
-#include <algorithm>
 #include <set>
 
 namespace
@@ -34,8 +33,13 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
     if (aStream.IsOpen())
         m_aPolicy.parse(aStream);
 
+    // Obsolete values are hidden for new labels (must still render when editing
+    // an existing label that uses them — once label loading exists).
     for (const auto& rClass : m_aPolicy.aClassifications)
-        m_xClassification->append_text(rClass.aName);
+    {
+        if (!rClass.bObsolete)
+            m_xClassification->append_text(rClass.aName);
+    }
     if (m_xClassification->get_count())
         m_xClassification->set_active(0);
 
@@ -78,9 +82,7 @@ void SwSecurityLabelDlg::PopulateCategories()
             m_aTagSingle.push_back(rTag.bSingleSelection);
             for (const auto& rCategory : rTag.aCategories)
             {
-                if (std::find(rCategory.aExcludedClasses.begin(), rCategory.aExcludedClasses.end(),
-                              sClassification)
-                    != rCategory.aExcludedClasses.end())
+                if (!rCategory.isSelectable(sClassification))
                     continue;
                 m_xCategories->append(xIter.get());
                 const bool bChecked = aChecked.count({ nTag, rCategory.aName }) != 0;
