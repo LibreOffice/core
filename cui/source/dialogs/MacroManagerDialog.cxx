@@ -37,6 +37,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/dlgname.hxx>
 #include <svx/passwd.hxx>
+#include <tools/debug.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
@@ -1165,6 +1166,9 @@ void MacroManagerDialog::CheckButtons()
             {
                 bSensitiveAssignButton = true;
 
+                if (bBasic)
+                    bSensitiveMacroDeleteButton = true;
+
                 css::uno::Reference<css::script::browse::XBrowseNode> node;
                 node = getBrowseNode(rScriptsTreeView, *xScriptsSelectedIter);
                 if (node.is())
@@ -1561,9 +1565,7 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
         }
         else if (&rButton == m_xMacroDeleteButton.get())
         {
-            // todo
-            // see: void MacroChooser::DeleteMacro()
-            return;
+            BasicScriptsMacroDelete();
         }
         else if (&rButton == m_xAssignButton.get())
         {
@@ -2033,6 +2035,27 @@ void MacroManagerDialog::BasicScriptsMacroEdit(const basctl::ScriptDocument& rDo
 
     // now it is safe to close the scripts organizer selector dialog
     m_xDialog->response(0);
+}
+
+void MacroManagerDialog::BasicScriptsMacroDelete()
+{
+    SbMethod* pMethod = GetSelectedBasicMethod();
+
+    DBG_ASSERT(pMethod, "BasicScriptsMacroDelete: no macro found!");
+
+    if (!pMethod || !basctl::QueryDelMacro(pMethod->GetName(), m_xDialog.get()))
+        return;
+
+    // Remove the macro from the list. We need to do this before calling DeleteMacro because that
+    // can trigger a notification which will cause the list of macros to be reloaded so if we do it
+    // after we’ll delete the wrong node.
+    if (std::unique_ptr<weld::TreeIter> xScriptsEntryIter
+        = m_xScriptsListBox->get_widget().get_selected())
+    {
+        m_xScriptsListBox->Remove(*xScriptsEntryIter);
+    }
+
+    basctl::DeleteMacro(*pMethod);
 }
 
 // modified version of void SvxScriptOrgDialog::renameEntry(const weld::TreeIter& rEntry)

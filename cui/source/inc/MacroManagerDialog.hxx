@@ -219,6 +219,7 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
     void BasicScriptsLibraryModuleDialogDelete(const basctl::ScriptDocument& rDocument);
     void BasicScriptsLibraryPassword(const basctl::ScriptDocument& rDocument);
     void BasicScriptsMacroEdit(const basctl::ScriptDocument& rDocument);
+    void BasicScriptsMacroDelete();
     bool IsLibraryReadOnlyOrFailedPasswordQuery(const basctl::ScriptDocument& rDocument,
                                                 const weld::TreeIter* pIter);
 
