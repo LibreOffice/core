@@ -757,6 +757,7 @@ static bool QueryDel(std::u16string_view rName, const OUString &rStr, weld::Widg
 
 bool QueryDelMacro( std::u16string_view rName, weld::Widget* pParent )
 {
+    EnsureIde();
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
