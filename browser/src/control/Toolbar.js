@@ -497,6 +497,10 @@ window.L.Map.include({
 			document.getElementById('online-help-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('online-help-content').innerHTML);
 		}
 		if (id === 'keyboard-shortcuts-content') {
+			// The desktop apps and the browser have different file
+			// shortcuts, so drop the rows tagged for the other one.
+			var dropClass = window.mode.isCODesktop() ? '.online-only' : '.coda-only';
+			contentElement.querySelectorAll(dropClass).forEach(function (row) { row.remove(); });
 			// Fill tagged shortcut cells from the locale-aware lookup
 			// table (generated from core's Accelerators.xcu).
 			if (window.JSDialog && window.JSDialog.ShortcutsUtil) {
