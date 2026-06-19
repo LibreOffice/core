@@ -370,6 +370,8 @@ class BackstageView extends window.L.Class {
 				doc.doctype = 'calc';
 			} else if (['odp', 'otp', 'ppt', 'pptx', 'fodp'].includes(ext)) {
 				doc.doctype = 'impress';
+			} else if (ext === 'pdf') {
+				doc.doctype = 'pdf';
 			} else {
 				doc.doctype = 'writer'; // Default
 			}
@@ -418,6 +420,8 @@ class BackstageView extends window.L.Class {
 				return 'backstage-doc-icon-calc';
 			case 'impress':
 				return 'backstage-doc-icon-impress';
+			case 'pdf':
+				return 'backstage-doc-icon-pdf';
 			case 'writer':
 			default:
 				return 'backstage-doc-icon-writer';
