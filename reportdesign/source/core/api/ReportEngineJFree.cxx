@@ -164,16 +164,6 @@ OUString OReportEngineJFree::getNewOutputName()
     if ( pFilter )
         sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');
 
-    uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/ m_xContext);
-    utl::DisposableComponent aTemp(xTemp);
-    uno::Sequence< beans::PropertyValue > aEmpty;
-    uno::Reference< beans::XPropertySet> xStorageProp(xTemp,uno::UNO_QUERY);
-    if ( xStorageProp.is() )
-    {
-        xStorageProp->setPropertyValue( s_sMediaType, uno::Any(sMimeType));
-    }
-    m_pReport->storeToStorage(xTemp, aEmpty); // store to temp file because it may contain information which isn't in the database yet.
-
     OUString sName = m_pReport->getCaption();
     if ( sName.isEmpty() )
         sName = m_pReport->getName();
@@ -193,57 +183,60 @@ OUString OReportEngineJFree::getNewOutputName()
 
     uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(sFileURL,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE, m_xContext);
     utl::DisposableComponent aOut(xOut);
+    uno::Sequence< beans::PropertyValue > aEmpty;
+    uno::Reference< beans::XPropertySet> xStorageProp(xOut,uno::UNO_QUERY);
     xStorageProp.set(xOut,uno::UNO_QUERY);
     if ( xStorageProp.is() )
     {
         xStorageProp->setPropertyValue( s_sMediaType, uno::Any(sMimeType));
     }
 
-    // some meta data
-    SvtUserOptions aUserOpts;
-    OUString sAuthor = aUserOpts.GetFirstName() +
-        " " +
-        aUserOpts.GetLastName();
-
-    uno::Sequence< beans::NamedValue > aConvertedProperties{
-        {u"InputStorage"_ustr, uno::Any(xTemp) },
-        {u"OutputStorage"_ustr, uno::Any(xOut) },
-        {PROPERTY_REPORTDEFINITION, uno::Any(uno::Reference<report::XReportDefinition>(m_pReport)) },
-        {PROPERTY_ACTIVECONNECTION, uno::Any(m_xActiveConnection) },
-        {PROPERTY_MAXROWS, uno::Any(m_nMaxRows) },
-        {u"Author"_ustr, uno::Any(sAuthor) },
-        {u"Title"_ustr, uno::Any(m_pReport->getCaption()) }
-    };
-
     OUString sOutputName;
 
-    // create job factory and initialize
-    const OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
-    uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
-    if (!m_pReport->getCommand().isEmpty())
+    // Set SAL_ENABLE_PENTAHO_FREE_REPORTBUILDER=1 to use the C++ ReportBuilder path
+    const char* pEnv = getenv("SAL_ENABLE_PENTAHO_FREE_REPORTBUILDER");
+    const bool bCppReportBuilder = (pEnv && pEnv[0] == '1' && pEnv[1] == '\0');
+    if (bCppReportBuilder)
     {
-        xJob->execute(aConvertedProperties);
-        if ( xStorageProp.is() )
-        {
-             sOutputName = sFileURL;
-        }
-        // Store to temp file because it may contain information which isn't in the
-        // database yet. xTemp is updated in-place; aConvertedProperties holds
-        // references to xTemp/xOut so it picks up the changes.
-        m_pReport->storeToStorage(xTemp, aEmpty);
-        xJob->execute(aConvertedProperties);
-        if ( xStorageProp.is() )
-        {
-             sOutputName = sFileURL;
-        }
-    }
-    else // using C++ ReportBuilder
-    {
+        // C++ ReportBuilder path: uses ORptExecuteExport for direct export with data
         m_pReport->setUseRPTTags(false);
         m_pReport->storeToStorage(xOut, aEmpty);
         m_pReport->setUseRPTTags(true);
         if ( xStorageProp.is() )
             sOutputName = sFileURL;
+    }
+    else
+    {
+        // Default Java (Pentaho) path: creates temp storage, executes report job
+        uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(m_xContext);
+        utl::DisposableComponent aTemp(xTemp);
+        m_pReport->storeToStorage(xTemp, aEmpty);
+
+        // some meta data
+        SvtUserOptions aUserOpts;
+        OUString sAuthor = aUserOpts.GetFirstName() +
+            " " +
+            aUserOpts.GetLastName();
+
+        uno::Sequence< beans::NamedValue > aConvertedProperties{
+            {u"InputStorage"_ustr, uno::Any(xTemp) },
+            {u"OutputStorage"_ustr, uno::Any(xOut) },
+            {PROPERTY_REPORTDEFINITION, uno::Any(uno::Reference<report::XReportDefinition>(m_pReport)) },
+            {PROPERTY_ACTIVECONNECTION, uno::Any(m_xActiveConnection) },
+            {PROPERTY_MAXROWS, uno::Any(m_nMaxRows) },
+            {u"Author"_ustr, uno::Any(sAuthor) },
+            {u"Title"_ustr, uno::Any(m_pReport->getCaption()) }
+        };
+
+        // create job factory and initialize
+        const OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
+        uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
+        if (!m_pReport->getCommand().isEmpty())
+        {
+            xJob->execute(aConvertedProperties);
+            if ( xStorageProp.is() )
+                sOutputName = sFileURL;
+        }
     }
 
     uno::Reference<embed::XTransactedObject> xTransact(xOut,uno::UNO_QUERY);
