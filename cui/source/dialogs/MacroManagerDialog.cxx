@@ -19,6 +19,8 @@
 #include <basctl/basctldllpublic.hxx>
 #include <basctl/sbxitem.hxx>
 #include <basctl/scriptdocument.hxx>
+#include <basic/basmgr.hxx>
+#include <basic/sbmeth.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/documentinfo.hxx>
@@ -2511,6 +2513,58 @@ void MacroManagerDialog::LoadLastUsedMacro()
     }
 
     UpdateUI();
+}
+
+SbModule* MacroManagerDialog::GetSelectedBasicModule() const
+{
+    weld::TreeView& rScriptContainersTreeView = m_xScriptContainersListBox->get_widget();
+    std::unique_ptr<weld::TreeIter> xIter = rScriptContainersTreeView.get_selected();
+
+    if (!xIter)
+        return nullptr;
+
+    OUString aParts[3];
+
+    // The selected node needs to be at least 4 branches deep, ie,
+    // Document->Language->Library->Module. Here we store the names of the last three and also check
+    // that the language part has a parent node.
+    for (auto& aPart : aParts)
+    {
+        aPart = rScriptContainersTreeView.get_text(*xIter);
+
+        if (!rScriptContainersTreeView.iter_parent(*xIter))
+            return nullptr;
+    }
+
+    if (aParts[2] != u"Basic"_ustr)
+        return nullptr;
+
+    basctl::ScriptDocument aDocument = m_xScriptContainersListBox->GetScriptDocument(xIter.get());
+    BasicManager* pBasicManager = aDocument.getBasicManager();
+
+    if (!pBasicManager)
+        return nullptr;
+
+    StarBASIC* pLibrary = pBasicManager->GetLib(aParts[1]);
+    if (!pLibrary)
+        return nullptr;
+
+    return pLibrary->FindModule(aParts[0]);
+}
+
+SbMethod* MacroManagerDialog::GetSelectedBasicMethod() const
+{
+    SbModule* pModule = GetSelectedBasicModule();
+
+    if (!pModule)
+        return nullptr;
+
+    OUString sScriptName = m_xScriptsListBox->GetSelectedScriptName();
+
+    if (sScriptName.getLength() <= 0)
+        return nullptr;
+
+    return pModule->FindMethod(sScriptName, SbxClassType::Method);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
