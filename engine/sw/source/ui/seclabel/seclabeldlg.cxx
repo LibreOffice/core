@@ -65,22 +65,12 @@ SwSecurityLabelDlg::~SwSecurityLabelDlg() {}
 
 void SwSecurityLabelDlg::UpdatePreview()
 {
-    // Stub marking string; the real layered derivation comes with marking rules.
-    OUString sMarking = m_xClassification->get_active_text();
-    OUString sCategories;
     const int nCount = m_xCategories->n_children();
+    std::vector<bool> aSelected(nCount);
     for (int i = 0; i < nCount; ++i)
-    {
-        if (m_xCategories->get_toggle(i) == TRISTATE_TRUE)
-        {
-            if (!sCategories.isEmpty())
-                sCategories += u" "_ustr;
-            sCategories += m_xCategories->get_text(i, 0);
-        }
-    }
-    if (!sCategories.isEmpty())
-        sMarking += u"//"_ustr + sCategories + u"."_ustr;
-    m_xPreview->set_label(sMarking);
+        aSelected[i] = m_xCategories->get_toggle(i) == TRISTATE_TRUE;
+
+    m_xPreview->set_label(m_aPolicy.buildMarking(m_xClassification->get_active_text(), aSelected));
 }
 
 IMPL_LINK_NOARG(SwSecurityLabelDlg, ClassificationHdl, weld::ComboBox&, void) { UpdatePreview(); }

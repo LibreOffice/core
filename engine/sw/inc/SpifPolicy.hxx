@@ -70,6 +70,12 @@ public:
     /// Parse a SPIF document from rStream into this instance. Returns false if
     /// the stream is not a SPIF document.
     bool parse(SvStream& rStream);
+
+    /// Derive the marking string for the given classification and selected
+    /// categories. rSelected is indexed in tag-set/tag/category order (matching
+    /// the order categories appear across aTagSets).
+    OUString buildMarking(const OUString& rClassification,
+                          const std::vector<bool>& rSelected) const;
 };
 
 } // namespace sw::seclabel

@@ -145,6 +145,37 @@ bool SpifPolicy::parse(SvStream& rStream)
     return true;
 }
 
+OUString SpifPolicy::buildMarking(const OUString& rClassification,
+                                  const std::vector<bool>& rSelected) const
+{
+    // First cut: classification, then per tag with selected values
+    // separator + prefix + space-joined names + suffix. Display modifiers
+    // (noNameDisplay/suppressClassName) and multi-level marking data: TODO.
+    OUString aMarking = rClassification;
+    size_t nIdx = 0;
+    for (const auto& rTagSet : aTagSets)
+    {
+        for (const auto& rTag : rTagSet.aTags)
+        {
+            OUString aValues;
+            for (const auto& rCategory : rTag.aCategories)
+            {
+                if (nIdx < rSelected.size() && rSelected[nIdx])
+                {
+                    if (!aValues.isEmpty())
+                        aValues += u" "_ustr;
+                    aValues += rCategory.aName;
+                }
+                ++nIdx;
+            }
+            if (!aValues.isEmpty())
+                aMarking
+                    += rTag.aMarkingSeparator + rTag.aMarkingPrefix + aValues + rTag.aMarkingSuffix;
+        }
+    }
+    return aMarking;
+}
+
 } // namespace sw::seclabel
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

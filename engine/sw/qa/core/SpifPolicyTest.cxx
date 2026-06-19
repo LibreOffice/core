@@ -101,6 +101,13 @@ void SpifPolicyTest::testParse()
     const auto& rNtkTag = aPolicy.aTagSets[1].aTags[0];
     CPPUNIT_ASSERT_EQUAL(u"restrictive"_ustr, rNtkTag.aEnumType);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(21745403334774610), rNtkTag.aCategories[0].nLacv);
+
+    // Marking derivation: classification + the tag's separator/values/suffix.
+    std::vector<bool> aSelected(3, false);
+    aSelected[0] = true; // CANADA
+    aSelected[1] = true; // UNITED KINGDOM
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//CANADA UNITED KINGDOM."_ustr,
+                         aPolicy.buildMarking(u"SECRET"_ustr, aSelected));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);
