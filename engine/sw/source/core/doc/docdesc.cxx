@@ -264,10 +264,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
         if (bFirst && rChged.IsWithoutFirstHeader())
         {
             if (rFormatHead.IsActive())
-            {
-                SwFormatHeader* pHead = new SwFormatHeader(false);
-                rDescFrameFormat.SetFormatAttr( *pHead );
-            }
+                rDescFrameFormat.SetFormatAttr( SwFormatHeader(false) );
         }
         else if ( !rFormatHead.IsActive() )
         {
@@ -348,10 +345,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
         if (bFirst && rChged.IsWithoutFirstFooter())
         {
             if (rFormatFoot.IsActive())
-            {
-                SwFormatFooter* pFoot = new SwFormatFooter(false);
-                rDescFrameFormat.SetFormatAttr( *pFoot );
-            }
+                rDescFrameFormat.SetFormatAttr( SwFormatFooter(false) );
         }
         else if ( !rFormatFoot.IsActive() )
         {
