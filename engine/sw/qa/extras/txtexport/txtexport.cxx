@@ -17,6 +17,9 @@
 
 #include <formatlinebreak.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class TxtExportTest : public SwModelTestBase

@@ -23,12 +23,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <memory>
 
-using namespace ::cppu;
-using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
-
 struct AttributeListImpl_impl;
-class AttributeListImpl : public WeakImplHelper< XAttributeList >
+class AttributeListImpl : public cppu::WeakImplHelper< css::xml::sax::XAttributeList >
 {
 protected:
     virtual ~AttributeListImpl() override;

@@ -23,6 +23,9 @@
 #include <view.hxx>
 #include <cmdid.h>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/uibase/shells/textsh.cxx fixes.

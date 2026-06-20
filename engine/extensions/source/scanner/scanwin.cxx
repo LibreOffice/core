@@ -42,6 +42,8 @@
 #include <vcl/window.hxx>
 #include "scanner.hxx"
 
+using namespace css::scanner;
+
 namespace
 {
 enum TwainState

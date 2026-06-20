@@ -35,6 +35,9 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

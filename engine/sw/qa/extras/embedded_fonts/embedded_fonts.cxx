@@ -29,6 +29,9 @@
 
 #include <docsh.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 // Tests for embedded fonts in Writer documents

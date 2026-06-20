@@ -46,6 +46,9 @@
 #include <itabenum.hxx>
 #include <officecfg/Office/Common.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// 8th set of tests asserting the behavior of Writer user interface shells.

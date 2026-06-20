@@ -38,6 +38,8 @@
 #include <com/sun/star/sheet/ConditionEntryType.hpp>
 #include <com/sun/star/sheet/DateType.hpp>
 
+using namespace css;
+
 namespace {
 
 enum CondFormatProperties

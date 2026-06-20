@@ -82,6 +82,7 @@
 #include <translatehelper.hxx>
 #include <sfx2/dispatch.hxx>
 
+using namespace css;
 
 static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {

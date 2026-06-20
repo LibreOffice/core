@@ -25,6 +25,9 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::svt;
+using namespace css::beans;
+using namespace css::task;
+using namespace css::uno;
 
 RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     : SvtFileDialog_Base( pParent, u"fps/ui/remotefilesdialog.ui"_ustr, u"RemoteFilesDialog"_ustr )

@@ -25,6 +25,8 @@
 #include "xmlFileBasedDatabase.hxx"
 #include "xmlServerDatabase.hxx"
 
+using namespace xmloff::token;
+
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;

@@ -24,6 +24,9 @@
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/core/text/widorp.cxx fixes.

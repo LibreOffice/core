@@ -36,6 +36,9 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /**
  * Maps database URIs to the registered database names for quick lookups
  */

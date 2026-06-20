@@ -108,6 +108,7 @@
 #include "pdfwriter_utils.hxx"
 
 using namespace::com::sun::star;
+using namespace vcl::pdf;
 
 static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
 

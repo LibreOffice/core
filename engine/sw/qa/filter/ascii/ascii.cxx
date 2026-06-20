@@ -17,6 +17,9 @@
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /**

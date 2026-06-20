@@ -34,8 +34,6 @@ class ScCondFormatEntry;
 class ScColorScaleEntry;
 class ScCondDateFormatEntry;
 
-using namespace com::sun::star;
-
 class ScCondFormatsObj : public cppu::WeakImplHelper<css::sheet::XConditionalFormats>,
                             public SfxListener
 {
@@ -47,11 +45,11 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // XConditionalFormats
-    virtual sal_Int32 SAL_CALL createByRange(const uno::Reference<sheet::XSheetCellRanges>& xRanges) override;
+    virtual sal_Int32 SAL_CALL createByRange(const css::uno::Reference<css::sheet::XSheetCellRanges>& xRanges) override;
 
     virtual void SAL_CALL removeByID( const sal_Int32 nID ) override;
 
-    virtual uno::Sequence< uno::Reference< sheet::XConditionalFormat > > SAL_CALL getConditionalFormats() override;
+    virtual css::uno::Sequence< css::uno::Reference< css::sheet::XConditionalFormat > > SAL_CALL getConditionalFormats() override;
 
     virtual sal_Int32 SAL_CALL getLength() override;
 
@@ -79,13 +77,13 @@ public:
 
     // XIndexAccess
 
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
 
     virtual bool SAL_CALL hasElements() override;
 
     virtual sal_Int32 SAL_CALL getCount() override;
 
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >

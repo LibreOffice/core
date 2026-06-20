@@ -38,6 +38,9 @@
 #include <formatlinebreak.hxx>
 #include <o3tl/string_view.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class Test : public SwModelTestBase
 {
 public:

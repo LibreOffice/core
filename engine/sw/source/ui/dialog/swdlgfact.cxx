@@ -95,6 +95,7 @@
 #include <translatelangselect.hxx>
 #include <copyfielddlg.hxx>
 
+using namespace css;
 using namespace css::frame;
 using namespace css::uno;
 

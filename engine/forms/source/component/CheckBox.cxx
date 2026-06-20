@@ -34,6 +34,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::util;
+using namespace ::comphelper;
 
 OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CHECKBOX)
@@ -128,7 +129,7 @@ OUString SAL_CALL OCheckBoxModel::getServiceName()
 }
 
 
-void SAL_CALL OCheckBoxModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
+void SAL_CALL OCheckBoxModel::write(const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
     OReferenceValueComponent::write(_rxOutStream);
 

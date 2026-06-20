@@ -57,6 +57,9 @@
 #include <flyfrms.hxx>
 #include <tabfrm.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

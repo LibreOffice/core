@@ -32,6 +32,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace css;
+using namespace css::uno;
 
 CustomNotebookbarGenerator::CustomNotebookbarGenerator() {}
 

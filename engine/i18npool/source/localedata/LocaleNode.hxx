@@ -27,9 +27,6 @@
 
 namespace com::sun::star::xml::sax { class XAttributeList; }
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
-
 class OFileWriter
 {
 public:
@@ -65,11 +62,11 @@ private:
 };
 
 class Attr {
-    Sequence <OUString> name;
-    Sequence <OUString> value;
+    css::uno::Sequence <OUString> name;
+    css::uno::Sequence <OUString> value;
 
 public:
-    explicit Attr (const Reference< XAttributeList > & attr);
+    explicit Attr (const css::uno::Reference< css::xml::sax::XAttributeList > & attr);
     OUString getValueByName (const char *str) const;
     const OUString& getValueByIndex (sal_Int32 idx) const ;
 };
@@ -86,7 +83,7 @@ protected:
     mutable int nError;
 
 public:
-    LocaleNode (OUString name, const Reference< XAttributeList > & attr);
+    LocaleNode (OUString name, const css::uno::Reference< css::xml::sax::XAttributeList > & attr);
     void setValue(std::u16string_view oValue) { aValue += oValue; };
     const OUString& getName() const { return aName; };
     const OUString& getValue() const { return aValue; };
@@ -118,13 +115,13 @@ public:
     // ++nError with output to stderr, pStr should contain "%s %s"
     void incErrorStrStr( const char* pStr, std::u16string_view rVal1, std::u16string_view rVal2 )
         const;
-    static LocaleNode* createNode (const OUString& name,const Reference< XAttributeList > & attr);
+    static LocaleNode* createNode (const OUString& name,const css::uno::Reference< css::xml::sax::XAttributeList > & attr);
 };
 
 class LCInfoNode : public LocaleNode {
 public:
     LCInfoNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
     virtual void generateCode (const OFileWriter &of) const override;
 };
 
@@ -132,7 +129,7 @@ public:
 class LCCTYPENode : public LocaleNode {
 public:
     LCCTYPENode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -142,7 +139,7 @@ class LCFormatNode : public LocaleNode {
     static sal_Int16 mnFormats;
 public:
     LCFormatNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -150,7 +147,7 @@ public:
 class LCCollationNode : public LocaleNode {
 public:
     LCCollationNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -158,7 +155,7 @@ public:
 class LCIndexNode : public LocaleNode {
 public:
     LCIndexNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -166,7 +163,7 @@ public:
 class LCSearchNode : public LocaleNode {
 public:
     LCSearchNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -174,7 +171,7 @@ public:
 class LCCalendarNode : public LocaleNode {
 public:
     LCCalendarNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 
@@ -185,7 +182,7 @@ public:
 class LCCurrencyNode : public LocaleNode {
 public:
     LCCurrencyNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -193,7 +190,7 @@ public:
 class LCTransliterationNode : public LocaleNode {
 public:
     LCTransliterationNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -201,7 +198,7 @@ public:
 class LCMiscNode : public LocaleNode {
 public:
     LCMiscNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -209,7 +206,7 @@ public:
 class LCNumberingLevelNode : public LocaleNode {
 public:
     LCNumberingLevelNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };
@@ -217,7 +214,7 @@ public:
 class LCOutlineNumberingLevelNode : public LocaleNode {
 public:
     LCOutlineNumberingLevelNode (const OUString& name,
-                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+                const css::uno::Reference< css::xml::sax::XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
 };

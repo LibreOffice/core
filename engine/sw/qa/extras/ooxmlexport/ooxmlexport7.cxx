@@ -25,6 +25,9 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class Test : public SwModelTestBase
 {
 public:

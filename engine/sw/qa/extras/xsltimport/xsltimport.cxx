@@ -9,6 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class XSLTImportTest : public SwModelTestBase

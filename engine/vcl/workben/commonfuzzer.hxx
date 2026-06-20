@@ -31,10 +31,6 @@
 #include "unx/fontmanager.hxx"
 #include "unx/glyphcache.hxx"
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace cppu;
-
 namespace
 {
     OUString getExecutableDir()

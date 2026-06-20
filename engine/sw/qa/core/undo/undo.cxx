@@ -30,6 +30,9 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/core/undo/ fixes.
 class SwCoreUndoTest : public SwModelTestBase
 {

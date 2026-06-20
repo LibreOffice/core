@@ -37,7 +37,11 @@
 
 #include <boost/property_tree/json_parser/error.hpp>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
 
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
     mxContext( rxContext )

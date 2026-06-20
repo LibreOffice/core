@@ -62,7 +62,7 @@
 
 namespace frm
 {
-
+using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;

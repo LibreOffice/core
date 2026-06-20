@@ -38,6 +38,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
+using namespace ::comphelper;
 
 OCurrencyControl::OCurrencyControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CURRENCYFIELD)

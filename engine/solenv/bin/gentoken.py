@@ -24,7 +24,7 @@ gperf_header = """%language=C++
 %struct-type
 struct xmltoken
 {
-  int name; XMLTokenEnum nToken;
+  int name; xmloff::token::XMLTokenEnum nToken;
 };
 %%
 """
@@ -47,7 +47,7 @@ with open(gperf_output_file, "wb") as gperf:
     gperf.write(gperf_header.encode("utf-8"))
 
     for token in sorted(tokens.keys()):
-        gperf.write("{},{}\n".format(token, tokens[token]).encode("utf-8"))
+        gperf.write("{},xmloff::token::{}\n".format(token, tokens[token]).encode("utf-8"))
 
     gperf.write("%%\n".encode("utf-8"))
 

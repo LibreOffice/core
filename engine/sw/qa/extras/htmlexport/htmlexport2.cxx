@@ -33,6 +33,9 @@
 #include <formatlinebreak.hxx>
 #include <itabenum.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)

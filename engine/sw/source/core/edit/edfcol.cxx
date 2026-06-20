@@ -105,6 +105,8 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <names.hxx>
 
+using namespace css;
+
 constexpr OUString WATERMARK_NAME = u"PowerPlusWaterMarkObject"_ustr;
 #define WATERMARK_AUTO_SIZE sal_uInt32(1)
 

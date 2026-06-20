@@ -25,9 +25,6 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 
-using namespace css::xml::sax;
-using namespace xmloff::token;
-
 class SwXMLTextBlocks;
 class SwXMLBlockListImport final : public SvXMLImport
 {
@@ -73,11 +70,11 @@ public:
 
 enum SwXMLTextBlockToken : sal_Int32
 {
-    OFFICE_BODY = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_BODY,
-    OFFICE_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_TEXT,
-    OFFICE_DOCUMENT = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_DOCUMENT,
-    OFFICE_DOCUMENT_CONTENT = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_DOCUMENT_CONTENT,
-    TEXT_P = FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_P
+    OFFICE_BODY = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | xmloff::token::XML_BODY,
+    OFFICE_TEXT = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | xmloff::token::XML_TEXT,
+    OFFICE_DOCUMENT = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | xmloff::token::XML_DOCUMENT,
+    OFFICE_DOCUMENT_CONTENT = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | xmloff::token::XML_DOCUMENT_CONTENT,
+    TEXT_P = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_TEXT | xmloff::token::XML_P
 };
 
 class SwXMLTextBlockTokenHandler final :
@@ -97,13 +94,13 @@ public:
 
 enum SwXMLBlockListToken : sal_Int32
 {
-    ABBREVIATED_NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_ABBREVIATED_NAME,
-    BLOCK = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_BLOCK,
-    BLOCK_LIST = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_BLOCK_LIST,
-    LIST_NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_LIST_NAME,
-    NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_NAME,
-    PACKAGE_NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_PACKAGE_NAME,
-    UNFORMATTED_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_UNFORMATTED_TEXT
+    ABBREVIATED_NAME = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_ABBREVIATED_NAME,
+    BLOCK = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_BLOCK,
+    BLOCK_LIST = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_BLOCK_LIST,
+    LIST_NAME = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_LIST_NAME,
+    NAME = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_NAME,
+    PACKAGE_NAME = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_PACKAGE_NAME,
+    UNFORMATTED_TEXT = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_UNFORMATTED_TEXT
 };
 
 class SwXMLBlockListTokenHandler final :

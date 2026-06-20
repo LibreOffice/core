@@ -24,6 +24,8 @@
 #include "MNSFolders.hxx"
 #include "MNSINIParser.hxx"
 
+using namespace css::mozilla;
+
 namespace connectivity::mozab
 {
         ProfileStruct::ProfileStruct()

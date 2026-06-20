@@ -37,6 +37,8 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
+using namespace com::sun::star::xml::sax;
+using namespace xmloff::token;
 
 
 constexpr OUString CONV_TYPE_HANGUL_HANJA = u"Hangul / Hanja"_ustr;

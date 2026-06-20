@@ -29,30 +29,25 @@
 #include <sfx2/tabdlg.hxx>
 #include <svtools/genericasyncunodialog.hxx>
 
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-
 typedef ::cppu::ImplInheritanceHelper < ::svt::OGenericUnoAsyncDialog<SfxTabDialogController>,
-                                        XPropertyAccess, XExporter >  PDFDialog_Base;
+                                        css::beans::XPropertyAccess, css::document::XExporter >  PDFDialog_Base;
 
 class PDFDialog final:
     public PDFDialog_Base,
     public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >
 {
 private:
-    Sequence< PropertyValue >   maMediaDescriptor;
-    Sequence< PropertyValue >   maFilterData;
-    Reference< XComponent >     mxSrcDoc;
+    css::uno::Sequence< css::beans::PropertyValue >   maMediaDescriptor;
+    css::uno::Sequence< css::beans::PropertyValue >   maFilterData;
+    css::uno::Reference< css::lang::XComponent >     mxSrcDoc;
 
     // OGenericUnoDialog
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
     virtual void executedDialog( sal_Int16 nExecutionResult ) override;
-    virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
@@ -63,16 +58,16 @@ private:
 
     // XPropertyAccess
     using OPropertySetHelper::getPropertyValues;
-    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
     using OPropertySetHelper::setPropertyValues;
-    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) override;
+    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) override;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 public:
 
-    explicit    PDFDialog( const Reference< XComponentContext >& rxContext );
+    explicit    PDFDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual     ~PDFDialog() override;
 };
 

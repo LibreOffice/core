@@ -23,6 +23,8 @@
 #include "FilterHelper.hxx"
 #include "AquaFilePickerDelegate.hxx"
 
+using namespace css;
+
 @implementation AquaFilePickerDelegate
 
 - (id)initWithFilePicker:(SalAquaFilePicker*)fPicker

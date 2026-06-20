@@ -141,8 +141,8 @@ typedef ::cppu::ImplHelper7<    css::sdbc::XCloseable,
 
 
 class ODatabaseForm :public OFormComponents
-                    ,public OPropertySetAggregationHelper
-                    ,public OPropertyChangeListener
+                    ,public comphelper::OPropertySetAggregationHelper
+                    ,public comphelper::OPropertyChangeListener
                     ,public ODatabaseForm_BASE1
                     ,public ODatabaseForm_BASE2
                     ,public ODatabaseForm_BASE3
@@ -169,7 +169,7 @@ class ODatabaseForm :public OFormComponents
 
     PropertyBagHelper           m_aPropertyBagHelper;
     ::dbtools::WarningsContainer    m_aWarnings;
-    rtl::Reference<OPropertyChangeMultiplexer> m_xAggregatePropertyMultiplexer;
+    rtl::Reference<comphelper::OPropertyChangeMultiplexer> m_xAggregatePropertyMultiplexer;
     // Management of the Control Groups
     rtl::Reference<OGroupManager>   m_pGroupManager;
     ::dbtools::ParameterManager m_aParameterManager;

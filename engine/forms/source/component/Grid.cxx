@@ -39,6 +39,7 @@ using namespace ::com::sun::star::uno;
 
 namespace frm
 {
+using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;

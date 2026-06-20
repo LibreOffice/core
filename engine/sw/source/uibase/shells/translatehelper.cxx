@@ -40,6 +40,8 @@
 #include <officecfg/Office/Linguistic.hxx>
 #include <strings.hrc>
 
+using namespace css;
+
 namespace SwTranslateHelper
 {
 OString ExportPaMToHTML(SwPaM* pCursor)

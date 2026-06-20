@@ -47,6 +47,7 @@ namespace uno = css::uno;
 namespace frame = css::frame;
 namespace container = css::container;
 namespace beans = css::beans;
+using namespace css::uno;
 
 static bool isCategoryAvailable(std::u16string_view sClassId, std::u16string_view sUIItemId,
                                 std::u16string_view sActiveCategory, bool& isCategory)

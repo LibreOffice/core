@@ -52,6 +52,8 @@
 #include <boost/property_tree/json_parser.hpp>
 
 using namespace std::string_literals;
+using namespace css;
+using namespace css::uno;
 
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase

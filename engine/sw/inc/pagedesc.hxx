@@ -35,9 +35,6 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 
-using namespace ::com::sun::star;
-
-
 class SwTextFormatColl;
 class SwNode;
 class SwPageDescs;
@@ -165,7 +162,7 @@ class SW_DLLPUBLIC SwPageDesc final
     SwPageDesc *m_pFollow;
     sal_uInt16  m_nRegHeight; ///< Sentence spacing and fontascent of style.
     sal_uInt16  m_nRegAscent; ///< For grid alignment (register accuracy / register-true).
-    drawing::TextVerticalAdjust   m_nVerticalAdjustment; // doc/docx: vertically center / justify / bottom
+    css::drawing::TextVerticalAdjust   m_nVerticalAdjustment; // doc/docx: vertically center / justify / bottom
     UseOnPage   m_eUse;
     bool        m_IsLandscape;
     bool        m_IsHidden;
@@ -269,8 +266,8 @@ public:
     void SetRegHeight(sal_uInt16 const nNew) { m_nRegHeight = nNew; }
     void SetRegAscent(sal_uInt16 const nNew) { m_nRegAscent = nNew; }
 
-    drawing::TextVerticalAdjust GetVerticalAdjustment () const {return m_nVerticalAdjustment; }
-    void SetVerticalAdjustment (const drawing::TextVerticalAdjust nVA) {m_nVerticalAdjustment = nVA; }
+    css::drawing::TextVerticalAdjust GetVerticalAdjustment () const {return m_nVerticalAdjustment; }
+    void SetVerticalAdjustment (const css::drawing::TextVerticalAdjust nVA) {m_nVerticalAdjustment = nVA; }
 
     inline void SetFollow( const SwPageDesc* pNew );
     const SwPageDesc* GetFollow() const { return m_pFollow; }

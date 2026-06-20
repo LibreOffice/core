@@ -31,8 +31,6 @@
 
 
 class ConvDic;
-using namespace css::xml::sax;
-using namespace ::xmloff::token;
 
 
 class ConvDicXMLExport : public SvXMLExport
@@ -63,9 +61,9 @@ public:
 
 enum ConvDicXMLToken : sal_Int32
 {
-    TEXT_CONVERSION_DICTIONARY = FastToken::NAMESPACE | XML_NAMESPACE_TCD | XML_BLOCK_LIST,
-    RIGHT_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_TCD | XML_RIGHT_TEXT,
-    ENTRY = FastToken::NAMESPACE | XML_NAMESPACE_TCD | XML_ENTRY,
+    TEXT_CONVERSION_DICTIONARY = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_TCD | ::xmloff::token::XML_BLOCK_LIST,
+    RIGHT_TEXT = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_TCD | ::xmloff::token::XML_RIGHT_TEXT,
+    ENTRY = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_TCD | ::xmloff::token::XML_ENTRY,
 };
 
 class ConvDicXMLImport : public SvXMLImport

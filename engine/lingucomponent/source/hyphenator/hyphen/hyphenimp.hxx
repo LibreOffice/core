@@ -41,15 +41,10 @@
 
 #include <hyphen.h>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-
 struct HDInfo {
   HyphenDict *     aPtr;
   OUString         aName;
-  Locale           aLoc;
+  css::lang::Locale aLoc;
   rtl_TextEncoding eEnc;
   std::unique_ptr<CharClass> apCC;
 };
@@ -57,18 +52,18 @@ struct HDInfo {
 class Hyphenator :
     public cppu::WeakImplHelper
     <
-        XHyphenator,
-        XLinguServiceEventBroadcaster,
-        XInitialization,
-        XComponent,
-        XServiceInfo,
-        XServiceDisplayName
+        css::linguistic2::XHyphenator,
+        css::linguistic2::XLinguServiceEventBroadcaster,
+        css::lang::XInitialization,
+        css::lang::XComponent,
+        css::lang::XServiceInfo,
+        css::lang::XServiceDisplayName
     >
 {
-    Sequence< Locale >                      aSuppLocales;
+    css::uno::Sequence< css::lang::Locale > aSuppLocales;
     std::vector< HDInfo >                   mvDicts;
 
-    ::comphelper::OInterfaceContainerHelper3<XEventListener> aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> aEvtListeners;
     std::unique_ptr<linguistic::PropertyHelper_Hyphenation> pPropHelper;
     bool                                    bDisposing;
 
@@ -87,8 +82,8 @@ public:
     virtual ~Hyphenator() override;
 
     // XSupportedLocales (for XHyphenator)
-    virtual Sequence< Locale > SAL_CALL getLocales() override;
-    virtual bool SAL_CALL hasLocale( const Locale& rLocale ) override;
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() override;
+    virtual bool SAL_CALL hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XHyphenator
     virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL hyphenate( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nMaxLeading, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
@@ -96,24 +91,24 @@ public:
     virtual css::uno::Reference< css::linguistic2::XPossibleHyphens > SAL_CALL createPossibleHyphens( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual bool SAL_CALL addLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
-    virtual bool SAL_CALL removeLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool SAL_CALL addLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool SAL_CALL removeLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) override;
+    virtual OUString SAL_CALL getServiceDisplayName( const css::lang::Locale& rLocale ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& rxListener ) override;
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& rxListener ) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void ensureLocales();

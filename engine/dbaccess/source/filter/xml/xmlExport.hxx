@@ -34,16 +34,9 @@
 
 #include <memory>
 
+using namespace css::container;
 
 namespace dbaxml {
-
-using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-
 
 class ODBExport : public SvXMLExport
 {
@@ -60,8 +53,8 @@ class ODBExport : public SvXMLExport
 
         TDelimiter() : bUsed( false ) { }
     };
-    typedef std::map< Reference<XPropertySet> ,OUString >          TPropertyStyleMap;
-    typedef std::map< Reference<XPropertySet> ,Reference<XPropertySet> >  TTableColumnMap;
+    typedef std::map< css::uno::Reference<css::beans::XPropertySet> ,OUString >          TPropertyStyleMap;
+    typedef std::map< css::uno::Reference<css::beans::XPropertySet> ,css::uno::Reference<css::beans::XPropertySet> >  TTableColumnMap;
 
     struct TypedPropertyValue
     {
@@ -95,7 +88,7 @@ class ODBExport : public SvXMLExport
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
 
-    Reference<XPropertySet>                         m_xDataSource;
+    css::uno::Reference<css::beans::XPropertySet>     m_xDataSource;
     ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
     bool                                        m_bAllreadyFilled;
 
@@ -104,7 +97,7 @@ class ODBExport : public SvXMLExport
     void                    exportDriverSettings(const TSettingsMap& _aSettings);
     void                    exportApplicationConnectionSettings(const TSettingsMap& _aSettings);
     void                    exportLogin();
-    void                    exportSequence(const Sequence< OUString>& _aValue
+    void                    exportSequence(const css::uno::Sequence< OUString>& _aValue
                                         ,::xmloff::token::XMLTokenEnum _eTokenFilter
                                         ,::xmloff::token::XMLTokenEnum _eTokenType);
     void                    exportDelimiter();
@@ -117,26 +110,26 @@ class ODBExport : public SvXMLExport
     void                    exportReports();
     void                    exportQueries(bool _bExportContext);
     void                    exportTables(bool _bExportContext);
-    void                    exportStyleName(XPropertySet* _xProp,comphelper::AttributeList& _rAtt);
-    void                    exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const Reference<XPropertySet>& _xProp,comphelper::AttributeList& _rAtt,TPropertyStyleMap& _rMap);
-    void                    exportCollection(const Reference< XNameAccess >& _xCollection
+    void                    exportStyleName(css::beans::XPropertySet* _xProp,comphelper::AttributeList& _rAtt);
+    void                    exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const css::uno::Reference<css::beans::XPropertySet>& _xProp,comphelper::AttributeList& _rAtt,TPropertyStyleMap& _rMap);
+    void                    exportCollection(const css::uno::Reference< css::container::XNameAccess >& _xCollection
                                             ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                             ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
                                             ,bool _bExportContext
-                                            ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc
+                                            ,const ::comphelper::mem_fun1_t<ODBExport,css::beans::XPropertySet* >& _aMemFunc
                                             );
-    void                    exportComponent(XPropertySet* _xProp);
-    void                    exportQuery(XPropertySet* _xProp);
-    void                    exportTable(XPropertySet* _xProp);
-    void                    exportFilter(XPropertySet* _xProp
+    void                    exportComponent(css::beans::XPropertySet* _xProp);
+    void                    exportQuery(css::beans::XPropertySet* _xProp);
+    void                    exportTable(css::beans::XPropertySet* _xProp);
+    void                    exportFilter(css::beans::XPropertySet* _xProp
                                         ,const OUString& _sProp
                                         ,enum ::xmloff::token::XMLTokenEnum _eStatementType);
-    void                    exportTableName(XPropertySet* _xProp,bool _bUpdate);
-    void                    exportAutoStyle(XPropertySet* _xProp);
-    void                    exportColumns(const Reference<XColumnsSupplier>& _xColSup);
+    void                    exportTableName(css::beans::XPropertySet* _xProp,bool _bUpdate);
+    void                    exportAutoStyle(css::beans::XPropertySet* _xProp);
+    void                    exportColumns(const css::uno::Reference<css::sdbcx::XColumnsSupplier>& _xColSup);
     void                    collectComponentStyles();
 
-    static OUString         implConvertAny(const Any& _rValue);
+    static OUString         implConvertAny(const css::uno::Any& _rValue);
 
     rtl::Reference < XMLPropertySetMapper > const & GetTableStylesPropertySetMapper() const;
 
@@ -155,7 +148,7 @@ protected:
     virtual                 ~ODBExport() override {};
 public:
 
-    ODBExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
+    ODBExport(const css::uno::Reference< css::uno::XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
 
     rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;
     rtl::Reference < XMLPropertySetMapper > const & GetCellStylesPropertySetMapper() const;
@@ -163,7 +156,7 @@ public:
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
-    const Reference<XPropertySet>& getDataSource() const { return m_xDataSource; }
+    const css::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
 };
 
 } // dbaxml

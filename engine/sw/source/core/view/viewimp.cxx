@@ -41,6 +41,8 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
+using namespace css;
+
 void SwViewShellImp::Init( const SwViewOption *pNewOpt )
 {
     OSL_ENSURE( m_pDrawView, "SwViewShellImp::Init without DrawView" );

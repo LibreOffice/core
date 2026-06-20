@@ -21,6 +21,9 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/core/draw/ fixes.
 class SwCoreDrawTest : public SwModelTestBase
 {

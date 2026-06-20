@@ -33,10 +33,6 @@ class ImpPDFTabGeneralPage;
 class ImpPDFTabOpnFtrPage;
 class ImpPDFTabLinksPage;
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-
 class ImplErrorDialog : public weld::MessageDialogController
 {
 private:
@@ -61,7 +57,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     FilterConfigItem maConfigItem;
     FilterConfigItem maConfigI18N;
 
-    Any maSelection;
+    css::uno::Any maSelection;
 
     DECL_LINK(CancelHdl, weld::Button&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
@@ -156,11 +152,11 @@ public:
     friend class                ImpPDFTabLinksPage;
     friend class                ImpPDFTabSigningPage;
 
-    ImpPDFTabDialog(weld::Window* pParent, const Sequence< PropertyValue >& rFilterData,
-                    const css::uno::Reference< XComponent >& rDoc);
+    ImpPDFTabDialog(weld::Window* pParent, const css::uno::Sequence< css::beans::PropertyValue >& rFilterData,
+                    const css::uno::Reference< css::lang::XComponent >& rDoc);
     virtual                     ~ImpPDFTabDialog() override;
 
-    Sequence< PropertyValue >   GetFilterData();
+    css::uno::Sequence< css::beans::PropertyValue >   GetFilterData();
 
     ImpPDFTabOpnFtrPage*        getOpenPage() const;
     ImpPDFTabSecurityPage*      getSecurityPage() const;

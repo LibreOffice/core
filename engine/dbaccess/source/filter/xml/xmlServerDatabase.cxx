@@ -26,8 +26,10 @@
 
 namespace dbaxml
 {
+    using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+    using namespace xmloff::token;
 
 OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
                 const Reference< XFastAttributeList > & _xAttrList) :

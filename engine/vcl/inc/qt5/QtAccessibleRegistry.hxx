@@ -15,8 +15,6 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-using namespace css::accessibility;
-
 /**
  * Maintains a mapping between XAccessible objects and the
  * associated QObjects. The corresponding QObject can be

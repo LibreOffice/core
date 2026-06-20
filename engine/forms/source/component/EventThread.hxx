@@ -35,9 +35,6 @@
 #include <rtl/ref.hxx>
 
 
-using namespace comphelper;
-
-
 namespace frm
 {
 

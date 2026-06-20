@@ -53,6 +53,8 @@
 #include <unostyle.hxx>
 #include <unoxstyle.hxx>
 
+using namespace css;
+
 namespace sw::sidebar
 {
 static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,

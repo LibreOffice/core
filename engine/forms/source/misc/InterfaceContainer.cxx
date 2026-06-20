@@ -60,6 +60,7 @@ namespace frm
 {
 
 
+using namespace comphelper;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

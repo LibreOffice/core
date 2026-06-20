@@ -32,6 +32,9 @@
 
 #include <vcl/scheduler.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/core/objectpositioning/ fixes.

@@ -43,6 +43,7 @@
 #include <limits.h>
 
 using namespace dbtools;
+using namespace comphelper;
 
 
 namespace frm

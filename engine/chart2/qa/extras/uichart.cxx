@@ -12,6 +12,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 class Chart2UiChartTest : public ChartTest
 {

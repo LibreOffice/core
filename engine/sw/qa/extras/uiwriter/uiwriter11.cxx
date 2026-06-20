@@ -36,6 +36,9 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <svx/svxids.hrc>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class SwUiWriterTest11 : public SwModelTestBase

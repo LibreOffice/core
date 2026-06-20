@@ -26,6 +26,9 @@
 #include <vcl/svapp.hxx>
 
 using namespace svx::sidebar::commands;
+using namespace css;
+using namespace css::uno;
+using namespace css::frame;
 
 namespace svx::sidebar {
 

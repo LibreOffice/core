@@ -34,6 +34,9 @@
 #include <tools/UnitConversion.hxx>
 #include <frameformats.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class Test : public SwModelTestBase
 {
 public:

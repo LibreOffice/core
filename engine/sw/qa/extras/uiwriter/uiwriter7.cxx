@@ -74,6 +74,9 @@
 #include <vcl/idletask.hxx>
 #include <test/commontesttools.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 int CountFilesInDirectory(const OUString& rURL)

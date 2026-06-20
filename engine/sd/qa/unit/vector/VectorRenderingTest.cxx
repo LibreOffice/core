@@ -37,6 +37,9 @@
 #include <fstream>
 #include <string_view>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class VectorRenderingTest : public SdModelTestBase, public JsonTestTools

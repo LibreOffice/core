@@ -20,13 +20,6 @@
 #include <svx/numvset.hxx>
 #include <vcl/weld.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::text;
-using namespace com::sun::star::container;
-using namespace com::sun::star::style;
-
 class SVX_DLLPUBLIC SvxBmpNumIconView
 {
 public:
@@ -36,19 +29,19 @@ public:
         weld::IconView* pIconView,
         NumberingPageType ePageType,
         Size previewSize,
-        const Sequence<Sequence<PropertyValue>>& rNumSettings = Sequence<Sequence<PropertyValue>>(),
-        const Sequence<Reference<XIndexAccess>>& rOutlineSettings = Sequence<Reference<XIndexAccess>>(),
-        Reference<XNumberingFormatter> const& xFormatter = nullptr,
-        const Locale& rLocale = Locale());
+        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& rNumSettings = css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>(),
+        const css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutlineSettings = css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>(),
+        css::uno::Reference<css::text::XNumberingFormatter> const& xFormatter = nullptr,
+        const css::lang::Locale& rLocale = css::lang::Locale());
 
     static ScopedVclPtr<VirtualDevice> CreatePreviewFromUserDraw(
         NumberingPageType ePageType,
         sal_Int32 nIndex,
         Size previewSize,
-        const Sequence<Sequence<PropertyValue>>& rNumSettings = Sequence<Sequence<PropertyValue>>(),
-        const Sequence<Reference<XIndexAccess>>& rOutlineSettings = Sequence<Reference<XIndexAccess>>(),
-        Reference<XNumberingFormatter> const& xFormatter = nullptr,
-        const Locale& rLocale = Locale(),
+        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& rNumSettings = css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>(),
+        const css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutlineSettings = css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>(),
+        css::uno::Reference<css::text::XNumberingFormatter> const& xFormatter = nullptr,
+        const css::lang::Locale& rLocale = css::lang::Locale(),
         const std::vector<std::pair<OUString, OUString>>& rCustomBullets = std::vector<std::pair<OUString, OUString>>());
 
     static ScopedVclPtr<VirtualDevice> CreateCustomBulletPreview(const OUString& rBulletChar, const OUString& rFontName);
@@ -57,17 +50,17 @@ public:
     static void SetNumberingSettings(
         weld::IconView* mxIconView,
         Size previewSize,
-        const Sequence<Sequence<PropertyValue>>& aNum,
-        Reference<XNumberingFormatter> const& xFormat,
-        const Locale& rLocale,
+        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& aNum,
+        css::uno::Reference<css::text::XNumberingFormatter> const& xFormat,
+        const css::lang::Locale& rLocale,
         std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());
 
     static void SetOutlineNumberingSettings(
         weld::IconView* mxIconView,
         Size previewSize,
-        const Sequence<Reference<XIndexAccess>>& rOutline,
-        Reference<XNumberingFormatter> const& xFormat,
-        const Locale& rLocale,
+        const css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutline,
+        css::uno::Reference<css::text::XNumberingFormatter> const& xFormat,
+        const css::lang::Locale& rLocale,
         std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());
 
     static ScopedVclPtr<VirtualDevice> CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex);

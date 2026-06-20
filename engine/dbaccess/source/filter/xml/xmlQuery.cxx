@@ -31,6 +31,7 @@ namespace dbaxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
+    using namespace xmloff::token;
 
 
 OXMLQuery::OXMLQuery( ODBFilter& rImport

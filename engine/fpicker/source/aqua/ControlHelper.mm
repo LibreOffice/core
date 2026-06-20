@@ -34,6 +34,7 @@
 #define POPUP_WIDTH_MIN 200
 #define POPUP_WIDTH_MAX 350
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;

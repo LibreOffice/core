@@ -48,6 +48,9 @@
 #include <officecfg/Office/Linguistic.hxx>
 #include <test/commontesttools.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

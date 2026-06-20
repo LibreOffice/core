@@ -66,6 +66,8 @@
 #include <ndtxt.hxx>
 #include <flyfrms.hxx>
 
+using namespace css;
+
 bool SwFlowFrame::s_bMoveBwdJump = false;
 
 SwFlowFrame::SwFlowFrame( SwFrame &rFrame ) :

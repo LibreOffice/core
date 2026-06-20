@@ -11,6 +11,9 @@
 
 #include <comphelper/propertyvalue.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/core/doc/number.cxx fixes.

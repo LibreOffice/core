@@ -16,6 +16,9 @@
 #include <rootfrm.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Test to assert layout / rendering result of Writer.

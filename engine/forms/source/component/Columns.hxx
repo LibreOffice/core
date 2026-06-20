@@ -34,9 +34,6 @@
 #include <cppuhelper/compbase2.hxx>
 #include <rtl/ref.hxx>
 
-using namespace comphelper;
-
-
 namespace frm
 {
 
@@ -44,7 +41,7 @@ typedef ::cppu::WeakAggComponentImplHelper2 <   css::lang::XUnoTunnel
                                             ,   css::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::cppu::BaseMutex
                     ,public OGridColumn_BASE
-                    ,public OPropertySetAggregationHelper
+                    ,public comphelper::OPropertySetAggregationHelper
                     ,public OCloneableAggregation
 {
 // [properties]
@@ -129,7 +126,7 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 // Columns
 class TextFieldColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< TextFieldColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< TextFieldColumn >
 {
 public:
     explicit TextFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -148,7 +145,7 @@ public:
 
 class PatternFieldColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< PatternFieldColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< PatternFieldColumn >
 {
 public:
     explicit PatternFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -167,7 +164,7 @@ public:
 
 class DateFieldColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< DateFieldColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< DateFieldColumn >
 {
 public:
     explicit DateFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -186,7 +183,7 @@ public:
 
 class TimeFieldColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< TimeFieldColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< TimeFieldColumn >
 {
 public:
     explicit TimeFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -205,7 +202,7 @@ public:
 
 class NumericFieldColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< NumericFieldColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< NumericFieldColumn >
 {
 public:
     explicit NumericFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -224,7 +221,7 @@ public:
 
 class CurrencyFieldColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< CurrencyFieldColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< CurrencyFieldColumn >
 {
 public:
     explicit CurrencyFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -243,7 +240,7 @@ public:
 
 class CheckBoxColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< CheckBoxColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< CheckBoxColumn >
 {
 public:
     explicit CheckBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -262,7 +259,7 @@ public:
 
 class ComboBoxColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< ComboBoxColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< ComboBoxColumn >
 {
 public:
     explicit ComboBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -281,7 +278,7 @@ public:
 
 class ListBoxColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< ListBoxColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< ListBoxColumn >
 {
 public:
     explicit ListBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
@@ -300,7 +297,7 @@ public:
 
 class FormattedFieldColumn
     :public OGridColumn
-    ,public OAggregationArrayUsageHelper< FormattedFieldColumn >
+    ,public comphelper::OAggregationArrayUsageHelper< FormattedFieldColumn >
 {
 public:
     explicit FormattedFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );

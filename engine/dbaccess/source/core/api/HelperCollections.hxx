@@ -24,15 +24,6 @@
 
 namespace dbaccess
 {
-    using namespace dbtools;
-    using namespace connectivity;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::script;
-    using namespace ::cppu;
-    using namespace ::osl;
-
     typedef connectivity::sdbcx::OCollection OPrivateColumns_Base;
     class OPrivateColumns : public OPrivateColumns_Base
     {
@@ -40,7 +31,7 @@ namespace dbaccess
     protected:
         virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override {}
-        virtual Reference< XPropertySet > createDescriptor() override
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override
         {
             return nullptr;
         }
@@ -69,21 +60,21 @@ namespace dbaccess
     // OPrivateTables
     class OPrivateTables : public OPrivateTables_BASE
     {
-        OSQLTables  m_aTables;
+        connectivity::OSQLTables  m_aTables;
     protected:
         virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override {}
-        virtual Reference< XPropertySet > createDescriptor() override
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override
         {
             return nullptr;
         }
     public:
-        OPrivateTables( OSQLTables _rTables,
+        OPrivateTables( connectivity::OSQLTables _rTables,
                         bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         std::vector< OUString> && _rVector
-                    ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
+                    ) : connectivity::sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                         ,m_aTables(std::move(_rTables))
         {
         }

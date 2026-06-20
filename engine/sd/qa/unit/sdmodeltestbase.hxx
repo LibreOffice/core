@@ -38,8 +38,6 @@
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 
-using namespace ::com::sun::star;
-
 class SdModelTestBase : public UnoApiXmlTest
 {
 public:
@@ -55,7 +53,8 @@ public:
         else
             loadFromFile(OUString::createFromAscii(pName), pPassword);
 
-        uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::lang::XServiceInfo> xServiceInfo(mxComponent,
+                                                                  css::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(
             xServiceInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr));
 
@@ -69,7 +68,8 @@ public:
         else
             loadFromFile(OUString::createFromAscii(pName), pPassword);
 
-        uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::lang::XServiceInfo> xServiceInfo(mxComponent,
+                                                                  css::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr));
 
         CPPUNIT_ASSERT(!getSdDocShell()->GetMedium()->GetWarningError());
@@ -82,19 +82,20 @@ public:
         return pImpressDocument->GetDocShell();
     }
 
-    uno::Reference<drawing::XDrawPage> getPage(int nPage)
+    css::uno::Reference<css::drawing::XDrawPage> getPage(int nPage)
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
+        css::uno::Reference<css::drawing::XDrawPagesSupplier> xDoc(mxComponent,
+                                                                   css::uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDoc.is());
-        uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nPage),
-                                                 uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nPage),
+                                                           css::uno::UNO_QUERY_THROW);
         return xPage;
     }
 
-    uno::Reference<beans::XPropertySet> getShapeFromPage(int nShape, int nPage)
+    css::uno::Reference<css::beans::XPropertySet> getShapeFromPage(int nShape, int nPage)
     {
-        uno::Reference<drawing::XDrawPage> xPage(getPage(nPage));
-        uno::Reference<beans::XPropertySet> xShape(getShape(nShape, xPage));
+        css::uno::Reference<css::drawing::XDrawPage> xPage(getPage(nPage));
+        css::uno::Reference<css::beans::XPropertySet> xShape(getShape(nShape, xPage));
         CPPUNIT_ASSERT_MESSAGE("Failed to load shape", xShape.is());
 
         return xShape;
@@ -114,61 +115,69 @@ public:
         return pPage;
     }
 
-    uno::Reference<beans::XPropertySet> getShape(int nShape,
-                                                 uno::Reference<drawing::XDrawPage> const& xPage)
+    css::uno::Reference<css::beans::XPropertySet>
+    getShape(int nShape, css::uno::Reference<css::drawing::XDrawPage> const& xPage)
     {
-        uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(nShape), uno::UNO_QUERY);
+        css::uno::Reference<css::beans::XPropertySet> xShape(xPage->getByIndex(nShape),
+                                                             css::uno::UNO_QUERY);
         CPPUNIT_ASSERT_MESSAGE("Failed to load shape", xShape.is());
         return xShape;
     }
 
-    uno::Reference<text::XTextRange>
-    getParagraphFromShape(int nPara, uno::Reference<beans::XPropertySet> const& xShape)
+    css::uno::Reference<css::text::XTextRange>
+    getParagraphFromShape(int nPara, css::uno::Reference<css::beans::XPropertySet> const& xShape)
     {
-        uno::Reference<text::XText> xText
-            = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+        css::uno::Reference<css::text::XText> xText
+            = css::uno::Reference<css::text::XTextRange>(xShape, css::uno::UNO_QUERY_THROW)
+                  ->getText();
         CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());
 
-        uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+        css::uno::Reference<css::container::XEnumerationAccess> paraEnumAccess(xText,
+                                                                               css::uno::UNO_QUERY);
+        css::uno::Reference<css::container::XEnumeration> paraEnum(
+            paraEnumAccess->createEnumeration());
 
         for (int i = 0; i < nPara; ++i)
             paraEnum->nextElement();
 
-        uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::text::XTextRange> xParagraph(paraEnum->nextElement(),
+                                                              css::uno::UNO_QUERY_THROW);
 
         return xParagraph;
     }
 
-    uno::Reference<text::XTextRange>
-    getRunFromParagraph(int nRun, uno::Reference<text::XTextRange> const& xParagraph)
+    css::uno::Reference<css::text::XTextRange>
+    getRunFromParagraph(int nRun, css::uno::Reference<css::text::XTextRange> const& xParagraph)
     {
-        uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
+        css::uno::Reference<css::container::XEnumerationAccess> runEnumAccess(xParagraph,
+                                                                              css::uno::UNO_QUERY);
+        css::uno::Reference<css::container::XEnumeration> runEnum
+            = runEnumAccess->createEnumeration();
 
         for (int i = 0; i < nRun; ++i)
             runEnum->nextElement();
 
-        uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
+        css::uno::Reference<css::text::XTextRange> xRun(runEnum->nextElement(),
+                                                        css::uno::UNO_QUERY);
 
         return xRun;
     }
 
-    uno::Reference<text::XTextField> getTextFieldFromPage(int nRun, int nPara, int nShape,
-                                                          int nPage)
+    css::uno::Reference<css::text::XTextField> getTextFieldFromPage(int nRun, int nPara, int nShape,
+                                                                    int nPage)
     {
         // get TextShape 1 from the first page
-        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(nShape, nPage));
+        css::uno::Reference<css::beans::XPropertySet> xShape(getShapeFromPage(nShape, nPage));
 
         // Get first paragraph
-        uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(nPara, xShape));
+        css::uno::Reference<css::text::XTextRange> xParagraph(getParagraphFromShape(nPara, xShape));
 
         // first chunk of text
-        uno::Reference<text::XTextRange> xRun(getRunFromParagraph(nRun, xParagraph));
+        css::uno::Reference<css::text::XTextRange> xRun(getRunFromParagraph(nRun, xParagraph));
 
-        uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::beans::XPropertySet> xPropSet(xRun, css::uno::UNO_QUERY_THROW);
 
-        uno::Reference<text::XTextField> xField;
+        css::uno::Reference<css::text::XTextField> xField;
         xPropSet->getPropertyValue(u"TextField"_ustr) >>= xField;
         return xField;
     }

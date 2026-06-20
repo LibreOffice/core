@@ -27,8 +27,6 @@
 
 #include "frm_strings.hxx"
 
-using namespace comphelper;
-
 //= property helper classes
 
 namespace frm

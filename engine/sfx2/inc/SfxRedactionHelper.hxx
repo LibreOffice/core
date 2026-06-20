@@ -22,10 +22,6 @@
 #include <string_view>
 #include <vector>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-
 class SfxRequest;
 class GDIMetaFile;
 class DocumentToGraphicRenderer;
@@ -72,7 +68,7 @@ public:
      * and inserts the shapes into the newly created draw pages.
      * */
     static void
-    addPagesToDraw(const uno::Reference<XComponent>& xComponent, sal_Int32 nPages,
+    addPagesToDraw(const css::uno::Reference<css::lang::XComponent>& xComponent, sal_Int32 nPages,
                    const std::vector<GDIMetaFile>& aMetaFiles,
                    const std::vector<::Size>& aPageSizes, const PageMargins& aPageMargins,
                    const std::vector<std::pair<RedactionTarget, OUString>>& r_aTableTargets,
@@ -103,7 +99,7 @@ public:
      * */
     static void searchInMetaFile(const RedactionTarget& rRedactionTarget, const GDIMetaFile& rMtf,
                                  std::vector<tools::Rectangle>& aRedactionRectangles,
-                                 const uno::Reference<XComponent>& xComponent);
+                                 const css::uno::Reference<css::lang::XComponent>& xComponent);
 
     /*
      * Used to find images to be redacted. Returns a list of rectangles to cover those
@@ -115,8 +111,8 @@ public:
     /*
      * Draws a redaction rectangle on the draw page referenced with its page number (0-based)
      * */
-    static void addRedactionRectToPage(const uno::Reference<XComponent>& xComponent,
-                                       const uno::Reference<drawing::XDrawPage>& xPage,
+    static void addRedactionRectToPage(const css::uno::Reference<css::lang::XComponent>& xComponent,
+                                       const css::uno::Reference<css::drawing::XDrawPage>& xPage,
                                        const std::vector<tools::Rectangle>& aNewRectangles,
                                        bool isImage);
 
@@ -126,8 +122,8 @@ public:
      * */
     static void autoRedactPage(const RedactionTarget& rRedactionTarget,
                                const GDIMetaFile& rGDIMetaFile,
-                               const uno::Reference<drawing::XDrawPage>& xPage,
-                               const uno::Reference<XComponent>& xComponent);
+                               const css::uno::Reference<css::drawing::XDrawPage>& xPage,
+                               const css::uno::Reference<css::lang::XComponent>& xComponent);
 
     /// Fill the search options based on the given redaction target
     static void fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,

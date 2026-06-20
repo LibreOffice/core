@@ -55,6 +55,7 @@
 #include <algorithm>
 
 
+using namespace comphelper;
 using namespace dbtools;
 using namespace css::uno;
 using namespace css::sdb;

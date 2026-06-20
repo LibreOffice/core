@@ -11,6 +11,9 @@
 #include <o3tl/string_view.hxx>
 #include <vcl/graph.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

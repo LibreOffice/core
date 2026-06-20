@@ -32,6 +32,8 @@
 #include "targetpropertiescreator.hxx"
 #include <tools.hxx>
 
+using namespace css;
+
 namespace slideshow::internal
 {
     namespace

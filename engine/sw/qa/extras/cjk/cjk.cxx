@@ -11,6 +11,9 @@
 
 #include <config_features.h>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

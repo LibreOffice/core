@@ -38,6 +38,9 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo81276)

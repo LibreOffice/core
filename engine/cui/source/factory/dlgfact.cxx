@@ -106,6 +106,7 @@ using namespace ::com::sun::star::container;
 using ::com::sun::star::uno::Reference;
 
 using namespace svx;
+using namespace css;
 
 namespace
 {

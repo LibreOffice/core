@@ -27,6 +27,7 @@
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
+    using namespace xmloff::token;
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport ) :
     SvXMLImportContext( rImport )

@@ -43,6 +43,9 @@
 #include <test/commontesttools.hxx>
 #include <unotools/saveopt.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 using MSFilterCfg = officecfg::Office::Common::Filter::Microsoft;

@@ -69,6 +69,8 @@
 #include <COKit/COKitEnums.h>
 #include <viscrs.hxx>
 
+using namespace css;
+
 namespace {
 
 bool HasValidPropertyValue(const uno::Any& rAny)

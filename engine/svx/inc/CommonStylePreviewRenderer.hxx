@@ -23,8 +23,6 @@
 class OutputDevice;
 class SfxStyleSheetBase;
 
-using namespace css;
-
 namespace svx
 {
 class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer

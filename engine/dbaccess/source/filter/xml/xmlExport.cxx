@@ -53,10 +53,14 @@
 #include <memory>
 
 using namespace comphelper;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
+using namespace xmloff::token;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sdb_DBExportFilter_get_implementation(
@@ -86,7 +90,7 @@ com_sun_star_comp_sdb_XMLFullExporter_get_implementation(
 
 namespace dbaxml
 {
-    static OUString lcl_implGetPropertyXMLType(const Type& _rType)
+    static OUString lcl_implGetPropertyXMLType(const css::uno::Type& _rType)
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
         // into one of these types)

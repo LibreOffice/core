@@ -23,6 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
 
+using namespace css::uno;
+using namespace css::lang;
 using namespace cppu;
 
 Reference<XInterface> ConverterProvider_CreateInstance2(   const Reference<XMultiServiceFactory> & xSMgr)

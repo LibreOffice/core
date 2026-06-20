@@ -14,6 +14,9 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/uibase/dialog/ fixes.

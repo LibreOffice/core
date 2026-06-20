@@ -22,8 +22,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
-using namespace css::uno;
-
 class CustomNotebookbarGenerator
 {
 public:
@@ -31,11 +29,11 @@ public:
     static OUString getCustomizedUIPath();
     static OUString getOriginalUIPath();
     static OString getSystemPath(OUString const& sURL);
-    static Sequence<OUString> getCustomizedUIItem(const OUString& sNotebookbarConfigType);
+    static css::uno::Sequence<OUString> getCustomizedUIItem(const OUString& sNotebookbarConfigType);
     static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
-    static void modifyCustomizedUIFile(const Sequence<OUString>& sUIItemProperties);
+    static void modifyCustomizedUIFile(const css::uno::Sequence<OUString>& sUIItemProperties);
     static void createCustomizedUIFile();
-    static void setCustomizedUIItem(const Sequence<OUString>& rUIItemProperties,
+    static void setCustomizedUIItem(const css::uno::Sequence<OUString>& rUIItemProperties,
                                     const OUString& rNotebookbarConfigType);
 };
 

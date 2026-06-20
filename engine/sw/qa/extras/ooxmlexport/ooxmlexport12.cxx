@@ -19,6 +19,9 @@
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 class Test : public SwModelTestBase
 {
 public:

@@ -56,6 +56,8 @@
 #include <unotxdoc.hxx>
 #include <unostyle.hxx>
 
+using namespace css;
+
 namespace sw
 {
 namespace

@@ -19,8 +19,9 @@
 
 #include <string_view>
 
-using uno::Reference;
-using beans::XPropertySet;
+using css::beans::XPropertySet;
+using namespace css;
+using namespace css::uno;
 
 class Chart2GeometryTest : public ChartTest
 {

@@ -82,6 +82,9 @@
 #include <textcontentcontrol.hxx>
 #include <swtestviewcallback.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
     os << static_cast<sal_Int32>(id);

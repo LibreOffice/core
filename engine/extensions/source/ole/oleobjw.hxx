@@ -40,10 +40,6 @@
 #include <typelib/typedescription.hxx>
 #include "unoconversionutilities.hxx"
 #include "windata.hxx"
-using namespace cppu;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::bridge::oleautomation;
 
 typedef std::unordered_map<OUString, std::pair<DISPID, unsigned short>> DispIdMap;
 
@@ -52,29 +48,34 @@ typedef std::unordered_multimap<OUString, unsigned int> TLBFuncIndexMap;
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents a UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
-class IUnknownWrapper : public WeakImplHelper< XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >,
-
-                             public UnoConversionUtilities<IUnknownWrapper>
+class IUnknownWrapper : public cppu::WeakImplHelper< css::bridge::XBridgeSupplier2,
+                                  css::lang::XInitialization,
+                                  css::bridge::oleautomation::XAutomationObject,
+                                  css::script::XDefaultProperty,
+                                  css::script::XDefaultMethod,
+                                  css::script::XDirectInvocation,
+                                  css::script::XAutomationInvocation >,
+                        public UnoConversionUtilities<IUnknownWrapper>
 
 {
 public:
-    IUnknownWrapper(Reference<XMultiServiceFactory> const &xFactory,
+    IUnknownWrapper(css::uno::Reference<css::lang::XMultiServiceFactory> const &xFactory,
                     sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
 
     ~IUnknownWrapper() override;
 
     //XInterface
-    Any SAL_CALL queryInterface(const Type& t) override;
+    css::uno::Any SAL_CALL queryInterface(const css::uno::Type& t) override;
 
     // XInvokation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual Any SAL_CALL invoke( const OUString& aFunctionName,
-                                 const Sequence< Any >& aParams,
-                                 Sequence< sal_Int16 >& aOutParamIndex,
-                                 Sequence< Any >& aOutParam ) override;
+    virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
+    virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName,
+                                 const css::uno::Sequence< css::uno::Any >& aParams,
+                                 css::uno::Sequence< sal_Int16 >& aOutParamIndex,
+                                 css::uno::Sequence< css::uno::Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName,
-                                    const Any& aValue ) override;
-    virtual Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+                                    const css::uno::Any& aValue ) override;
+    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
     virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
     virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
 
@@ -83,13 +84,13 @@ public:
     // IUnknown or IDispatch within the function anyToVariant. The function asks
     // every UNO object for its XBridgeSupplier2 and if it is available uses it to convert
     // the object with its own supplier.
-    virtual Any SAL_CALL createBridge( const Any& modelDepObject,
-                                       const Sequence< sal_Int8 >& aProcessId,
+    virtual css::uno::Any SAL_CALL createBridge( const css::uno::Any& modelDepObject,
+                                       const css::uno::Sequence< sal_Int8 >& aProcessId,
                                        sal_Int16 sourceModelType,
                                        sal_Int16 destModelType ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XDefaultProperty
     virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return m_sDefaultMember; }
@@ -105,28 +106,28 @@ public:
     virtual bool SAL_CALL hasMember( const OUString& aName ) override;
 
 
-    Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
+    css::uno::Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                             const OUString& sFuncName,
-                            const Sequence< Any >& Params,
-                            Sequence< sal_Int16 >& OutParamIndex,
-                            Sequence< Any >& OutParam);
+                            const css::uno::Sequence< css::uno::Any >& Params,
+                            css::uno::Sequence< sal_Int16 >& OutParamIndex,
+                            css::uno::Sequence< css::uno::Any >& OutParam);
 
 
 protected:
 
-    virtual Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
-                                       const Sequence< Any >& Params,
-                                       Sequence<sal_Int16 >& OutParamIndex,
-                                       Sequence< Any >& OutParam);
+    virtual css::uno::Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
+                                       const css::uno::Sequence< css::uno::Any >& Params,
+                                       css::uno::Sequence<sal_Int16 >& OutParamIndex,
+                                       css::uno::Sequence< css::uno::Any >& OutParam);
     // Is used for OleObjectFactory service
-    virtual Any invokeWithDispIdComTlb(const OUString& sFuncName,
-                                       const Sequence< Any >& Params,
-                                       Sequence< sal_Int16 >& OutParamIndex,
-                                       Sequence< Any >& OutParam);
+    virtual css::uno::Any invokeWithDispIdComTlb(const OUString& sFuncName,
+                                       const css::uno::Sequence< css::uno::Any >& Params,
+                                       css::uno::Sequence< sal_Int16 >& OutParamIndex,
+                                       css::uno::Sequence< css::uno::Any >& OutParam);
 
     // UnoConversionUtilities -------------------------------------------------------------------------------
-    virtual Reference<XInterface> createUnoWrapperInstance() override;
-    virtual Reference<XInterface> createComWrapperInstance() override;
+    virtual css::uno::Reference<css::uno::XInterface> createUnoWrapperInstance() override;
+    virtual css::uno::Reference<css::uno::XInterface> createComWrapperInstance() override;
 
     /**Obtains a FUNCDESC structure for a function.
        Fills the FUNCDESC structure if ITypeInfo provides information for
@@ -148,11 +149,11 @@ protected:
     // These functions are for the case if an object of this class wraps an IDispatch
     // object that implements UNO interfaces. In that case the member m_seqTypes
     // is set through XInitialization::initialize.
-    void getMethodInfo(std::u16string_view sName, TypeDescription& methodDescription);
+    void getMethodInfo(std::u16string_view sName, css::uno::TypeDescription& methodDescription);
     // After return attributInfo contains typelib_InterfaceAttributeTypeDescription::pAttributeTypeRef
-    void getAttributeInfo(std::u16string_view sName, TypeDescription& attributeInfo);
+    void getAttributeInfo(std::u16string_view sName, css::uno::TypeDescription& attributeInfo);
     // used by get MethodInfo
-    TypeDescription  getInterfaceMemberDescOfCurrentCall(std::u16string_view sName);
+    css::uno::TypeDescription  getInterfaceMemberDescOfCurrentCall(std::u16string_view sName);
     /** Returns always a valid ITypeInfo interface or throws a BridgeRuntimeError.
         The returned interface does not need to be AddRef'ed as long as it is locally
         used. The interface is kept in the instance of this class.
@@ -196,7 +197,7 @@ protected:
         Thrown if no adequate FUNCDESC could be found.
     */
     void getFuncDescForInvoke(const OUString & sFuncName,
-                              const Sequence<Any> & seqArgs, FUNCDESC** pFuncDesc);
+                              const css::uno::Sequence<css::uno::Any> & seqArgs, FUNCDESC** pFuncDesc);
 
     // Finds out whether the wrapped IDispatch is a JScript Object. This is
     // done by
@@ -214,7 +215,7 @@ protected:
     // information.
     // m_TypeDescription is only useful when an object wraps an IDispatch object that implements
     // a UNO interface. The value is set during a call to XInitialization::initialize.
-    Sequence<Type> m_seqTypes;
+    css::uno::Sequence<css::uno::Type> m_seqTypes;
     CComPtr<IUnknown> m_spUnknown;
     CComPtr<IDispatch> m_spDispatch;
         OUString m_sTypeName; // is "" ( not initialised ), "IDispatch" ( we have no idea ) or "SomeLibrary.SomeTypeName" if we managed to get a type
@@ -223,7 +224,7 @@ protected:
     */
     bool  m_bOriginalDispatch;
     DispIdMap           m_dispIdMap;
-    Reference<XIdlClass>*       m_pxIdlClass;
+    css::uno::Reference<css::reflection::XIdlClass>*       m_pxIdlClass;
 
 
     // used by isJScriptObject

@@ -58,6 +58,9 @@
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

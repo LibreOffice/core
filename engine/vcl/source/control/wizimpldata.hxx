@@ -39,36 +39,35 @@ struct WizPageData
 
 namespace vcl
 {
-    using namespace RoadmapWizardTypes;
     namespace
     {
     typedef ::std::set< WizardTypes::WizardState > StateSet;
 
     typedef ::std::map<
-        PathId,
-        WizardPath
+        RoadmapWizardTypes::PathId,
+        RoadmapWizardTypes::WizardPath
         > Paths;
     }
 
     struct RoadmapWizardImpl
     {
         Paths               aPaths;
-        PathId              nActivePath;
+        RoadmapWizardTypes::PathId nActivePath;
         StateSet            aDisabledStates;
         bool                bActivePathIsDefinite;
 
         RoadmapWizardImpl()
-            :nActivePath( PathId::INVALID )
+            :nActivePath( RoadmapWizardTypes::PathId::INVALID )
             ,bActivePathIsDefinite( false )
         {
         }
 
         /// returns the index of the current state in given path, or -1
-        static sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath );
+        static sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const RoadmapWizardTypes::WizardPath& _rPath );
         /// returns the index of the current state in the path with the given id, or -1
-        sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId );
+        sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, RoadmapWizardTypes::PathId _nPathId );
         /// returns the index of the first state in which the two given paths differ
-        static sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
+        static sal_Int32 getFirstDifferentIndex( const RoadmapWizardTypes::WizardPath& _rLHS, const RoadmapWizardTypes::WizardPath& _rRHS );
     };
 
     struct WizardMachineImplData

@@ -25,12 +25,6 @@
 
 #include <win/dnd_target.hxx>
 
-using namespace ::com::sun::star::datatransfer;
-using namespace ::com::sun::star::datatransfer::dnd;
-using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
 class TargetDragContext : public WeakImplHelper<XDropTargetDragContext>
 {
     // some calls to the functions of XDropTargetDragContext are delegated

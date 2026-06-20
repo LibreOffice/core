@@ -35,9 +35,12 @@
 namespace dbaxml
 {
     using namespace ::com::sun::star;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::xml::sax;
+    using namespace xmloff::token;
 
 OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,const uno::Reference< XFastAttributeList > & _xAttrList

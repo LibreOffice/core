@@ -18,6 +18,9 @@
 #include <frmmgr.hxx>
 #include <itabenum.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/uibase/frmdlg/ fixes.
 class SwUibaseFrmdlgTest : public SwModelTestBase
 {

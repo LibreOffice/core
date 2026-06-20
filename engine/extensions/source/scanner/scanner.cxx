@@ -23,6 +23,9 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+using namespace css::uno;
+using namespace css::scanner;
+
 Reference< XInterface > ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ )
 {
     return *( new ScannerManager() );

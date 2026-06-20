@@ -40,10 +40,6 @@
 #define DISPID_GET_STRUCT_FUNC      -102
 #define DISPID_CREATE_TYPE_FUNC     -103
 
-using namespace cppu;
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::script;
-
 struct MemberInfo
 {
     MemberInfo() : flags(0), name() {}
@@ -74,7 +70,7 @@ typedef std::unordered_map
 // An InterfaceOleWrapper object can wrap either a UNO struct or a UNO
 // interface as a COM IDispatchEx and IUnoObjectWrapper.
 
-class InterfaceOleWrapper : public WeakImplHelper<XBridgeSupplier2, XInitialization>,
+class InterfaceOleWrapper : public cppu::WeakImplHelper<css::bridge::XBridgeSupplier2, css::lang::XInitialization>,
                             public IDispatchEx,
                             public IProvideClassInfo,
                             public IConnectionPointContainer,
@@ -82,7 +78,7 @@ class InterfaceOleWrapper : public WeakImplHelper<XBridgeSupplier2, XInitializat
                             public IUnoObjectWrapper
 {
 public:
-    InterfaceOleWrapper(Reference<XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    InterfaceOleWrapper(css::uno::Reference<css::lang::XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~InterfaceOleWrapper() override;
 
     // IUnknown
@@ -150,22 +146,22 @@ public:
         /* [out] */ IConnectionPoint **ppCP) override;
 
     // XBridgeSupplier2
-    virtual Any SAL_CALL createBridge(const Any& modelDepObject,
-                                const Sequence<sal_Int8>& ProcessId,
+    virtual css::uno::Any SAL_CALL createBridge(const css::uno::Any& modelDepObject,
+                                const css::uno::Sequence<sal_Int8>& ProcessId,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // IUnoObjectWrapper
-    STDMETHOD( getWrapperXInterface)( Reference<XInterface>* pXInt) override;
-    STDMETHOD( getOriginalUnoObject)( Reference<XInterface>* pXInt) override;
-    STDMETHOD( getOriginalUnoStruct)( Any * pStruct) override;
+    STDMETHOD( getWrapperXInterface)( css::uno::Reference<css::uno::XInterface>* pXInt) override;
+    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<css::uno::XInterface>* pXInt) override;
+    STDMETHOD( getOriginalUnoStruct)( css::uno::Any * pStruct) override;
 
     // UnoConversionUtility
-    virtual Reference< XInterface > createUnoWrapperInstance() override;
-    virtual Reference< XInterface > createComWrapperInstance() override;
+    virtual css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
+    virtual css::uno::Reference< css::uno::XInterface > createComWrapperInstance() override;
 
     const OUString& getImplementationName() const
     {
@@ -174,26 +170,26 @@ public:
 
 protected:
     virtual HRESULT doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarResult,
-                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, Sequence<Any>& params);
+                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, css::uno::Sequence<css::uno::Any>& params);
 
     virtual HRESULT doGetProperty( DISPPARAMS * pdispparams, VARIANT * pvarResult,
                                         EXCEPINFO * pexcepinfo, OUString & name );
 
     virtual HRESULT doSetProperty( DISPPARAMS * pdispparams, VARIANT * pvarResult,
-                                        EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, Sequence<Any> const & params);
+                                        EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, css::uno::Sequence<css::uno::Any> const & params);
 
     virtual HRESULT InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * puArgErr, bool& bHandled);
 
     void convertDispparamsArgs( DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams,
-                            Sequence<Any>& rSeq);
+                            css::uno::Sequence<css::uno::Any>& rSeq);
 
-    bool getInvocationInfoForCall(DISPID id, InvocationInfo& info);
+    bool getInvocationInfoForCall(DISPID id, css::script::InvocationInfo& info);
 
-    Reference<XInvocation>                  m_xInvocation;
-    Reference<XExactName>                   m_xExactName;
-    Reference<XInterface>                   m_xOrigin;
+    css::uno::Reference<css::script::XInvocation>                  m_xInvocation;
+    css::uno::Reference<css::beans::XExactName>                   m_xExactName;
+    css::uno::Reference<css::uno::XInterface>                   m_xOrigin;
     NameToIdMap                     m_nameToDispIdMap;
     std::vector<MemberInfo>              m_MemberInfos;
     // This member is used to determine the default value
@@ -226,7 +222,7 @@ protected:
 class UnoObjectWrapperRemoteOpt: public InterfaceOleWrapper
 {
 public:
-    UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory> const & aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    UnoObjectWrapperRemoteOpt( css::uno::Reference<css::lang::XMultiServiceFactory> const & aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~UnoObjectWrapperRemoteOpt() override;
 
     STDMETHOD( GetIDsOfNames )( REFIID riid, LPOLESTR * rgszNames, UINT cNames,
@@ -238,12 +234,12 @@ public:
     // UnoConversionUtility
     // If UNO interfaces are converted in methods of this class then
     // they are always wrapped with instances of this class
-    virtual Reference< XInterface > createUnoWrapperInstance() override;
+    virtual css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
 
 protected:
 
     static HRESULT methodInvoke( DISPID dispidMember, DISPPARAMS * pdispparams, VARIANT * pvarResult,
-                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, Sequence<Any> const & params);
+                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, css::uno::Sequence<css::uno::Any> const & params);
     // In GetIDsOfNames are blindly passed out, that is without verifying
     // the name. If two names are passed in during different calls to
     // GetIDsOfNames and the names differ only in their cases then different

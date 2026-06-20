@@ -52,6 +52,7 @@
 #include <memory>
 
 using namespace vcl;
+using namespace vcl::pdf;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -59,7 +60,7 @@ using namespace com::sun::star::beans;
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 
 void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
-                                       VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
+                                       VirtualDevice* i_pDummyVDev, const PDFWriter::PlayMetafileContext& i_rContext )
 {
     GDIMetaFile        aTmpMtf;
     Gradient aGradient(i_rGradient);
@@ -73,7 +74,7 @@ void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, co
 }
 
 void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const Bitmap& i_rBitmap, const Graphic& i_Graphic,
-                                       VirtualDevice const * i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
+                                       VirtualDevice const * i_pDummyVDev, const PDFWriter::PlayMetafileContext& i_rContext )
 {
     if ( i_rBitmap.IsEmpty() || !i_rSize.Width() || !i_rSize.Height() )
         return;
@@ -266,7 +267,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     }
 }
 
-void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevData* i_pOutDevData, const vcl::PDFWriter::PlayMetafileContext& i_rContext, VirtualDevice* pDummyVDev )
+void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevData* i_pOutDevData, const PDFWriter::PlayMetafileContext& i_rContext, VirtualDevice* pDummyVDev )
 {
     bool bAssertionFired( false );
 

@@ -70,6 +70,9 @@
 #include <svx/svdmark.hxx>
 #include <test/commontesttools.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class SwUiWriterTest9 : public SwModelTestBase

@@ -26,14 +26,9 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
-
 class PDFInteractionHandler : public cppu::WeakImplHelper<css::lang::XInitialization,
                                                           css::task::XInteractionHandler2,
-                                                          XServiceInfo>
+                                                          css::lang::XServiceInfo>
 {
 private:
     css::uno::Reference<css::awt::XWindow> m_xParent;
@@ -41,16 +36,16 @@ protected:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // XInteractionHandler
-    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& ) override;
+    virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 
     // XInteractionHandler2
-    virtual bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) override;
+    virtual bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 
 public:
 

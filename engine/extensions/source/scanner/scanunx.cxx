@@ -28,6 +28,9 @@
 
 #include <com/sun/star/scanner/ScannerException.hpp>
 
+using namespace css::uno;
+using namespace css::scanner;
+
 BitmapTransporter::BitmapTransporter()
 {
     SAL_INFO("extensions.scanner", "BitmapTransporter");
@@ -85,7 +88,7 @@ struct SaneHolder
     Sane                m_aSane;
     rtl::Reference< BitmapTransporter > m_xBitmap;
     osl::Mutex          m_aProtector;
-    ScanError           m_nError;
+    css::scanner::ScanError m_nError;
     bool                m_bBusy;
 
     SaneHolder() : m_nError(ScanError_ScanErrorNone), m_bBusy(false) {}
@@ -177,7 +180,7 @@ void ScannerThread::run()
         m_pHolder->m_nError = ScanError_ScannerNotAvailable;
 
 
-    Reference< XInterface > xXInterface( static_cast< OWeakObject* >( m_pManager ) );
+    Reference< XInterface > xXInterface( static_cast< cppu::OWeakObject* >( m_pManager ) );
     m_xListener->disposing( css::lang::EventObject(xXInterface) );
     m_pHolder->m_bBusy = false;
 }

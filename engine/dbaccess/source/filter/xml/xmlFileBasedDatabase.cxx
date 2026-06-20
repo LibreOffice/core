@@ -28,8 +28,10 @@
 #include <dsntypes.hxx>
 namespace dbaxml
 {
+    using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+    using namespace xmloff::token;
 
 OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
                 const Reference< XFastAttributeList > & _xAttrList) :

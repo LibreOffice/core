@@ -23,6 +23,8 @@
 
 #include "swmd.hxx"
 
+using namespace css;
+
 class MDTable
 {
     const SwTable* m_pTable;

@@ -46,6 +46,9 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <swdtflvr.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/uibase/wrtsh/ fixes.

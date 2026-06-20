@@ -37,6 +37,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <test/commontesttools.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 using ScriptingCfg = officecfg::Office::Common::Security::Scripting;

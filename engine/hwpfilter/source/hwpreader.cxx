@@ -46,6 +46,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
+using namespace css;
+using namespace css::beans;
+using namespace css::document;
+using namespace css::io;
+using namespace css::lang;
+using namespace css::uno;
+
 // xmloff/xmlkyd.hxx
 constexpr OUString sXML_CDATA = u"CDATA"_ustr;
 
@@ -4739,7 +4746,7 @@ namespace
 constexpr OUString SERVICE_NAME1 = u"com.sun.star.document.ImportFilter"_ustr;
 constexpr OUString SERVICE_NAME2 = u"com.sun.star.document.ExtendedTypeDetection"_ustr;
 
-class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
+class HwpImportFilter : public cppu::WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {
 public:
     explicit HwpImportFilter(const Reference< XComponentContext >& );

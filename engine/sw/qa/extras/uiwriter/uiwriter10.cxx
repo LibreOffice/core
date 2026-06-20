@@ -38,6 +38,9 @@
 #include <officecfg/Office/Compatibility.hxx>
 #include <test/commontesttools.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest5 : public SwModelTestBase
 {

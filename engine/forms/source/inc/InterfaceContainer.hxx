@@ -42,9 +42,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-using namespace comphelper;
-
-
 namespace frm
 {
 

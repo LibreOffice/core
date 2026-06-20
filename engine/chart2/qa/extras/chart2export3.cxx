@@ -15,8 +15,9 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
-using uno::Reference;
-using beans::XPropertySet;
+using css::beans::XPropertySet;
+using namespace css;
+using namespace css::uno;
 
 class Chart2ExportTest3 : public ChartTest
 {

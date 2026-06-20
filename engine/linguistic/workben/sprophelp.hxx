@@ -34,11 +34,6 @@ namespace com::sun::star::linguistic2 {
 }}}};
 
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-
 // PropertyChgHelper
 // virtual base class for all XPropertyChangeListener members of the
 // various lingu services.

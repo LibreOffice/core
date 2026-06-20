@@ -40,6 +40,9 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <fmtftntx.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

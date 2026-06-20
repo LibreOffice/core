@@ -33,6 +33,7 @@ namespace dbaxml
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
+    using namespace xmloff::token;
 
 OXMLColumn::OXMLColumn( ODBFilter& rImport
                 ,const Reference< XFastAttributeList > & _xAttrList

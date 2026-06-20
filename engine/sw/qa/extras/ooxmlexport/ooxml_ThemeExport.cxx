@@ -12,6 +12,9 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class Test : public SwModelTestBase
 {
 public:

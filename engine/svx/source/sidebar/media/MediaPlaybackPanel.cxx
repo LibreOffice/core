@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace avmedia;
+using namespace css;
 
 namespace svx::sidebar {
 

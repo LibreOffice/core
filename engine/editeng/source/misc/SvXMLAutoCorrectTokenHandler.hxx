@@ -15,16 +15,13 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 
-using namespace css::xml::sax;
-using namespace ::xmloff::token;
-
 enum SvXMLAutoCorrectToken : sal_Int32
 {
-    NAMESPACE = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST, //65553
-    ABBREVIATED_NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_ABBREVIATED_NAME,   //65655
-    BLOCK = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_BLOCK, //65791
-    BLOCKLIST = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_BLOCK_LIST, //65792
-    NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_NAME    //66737
+    NAMESPACE = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST, //65553
+    ABBREVIATED_NAME = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_ABBREVIATED_NAME,   //65655
+    BLOCK = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_BLOCK, //65791
+    BLOCKLIST = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_BLOCK_LIST, //65792
+    NAME = css::xml::sax::FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | xmloff::token::XML_NAME    //66737
 };
 
 class SvXMLAutoCorrectTokenHandler :

@@ -26,6 +26,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class Test : public SwModelTestBase
 {
 public:

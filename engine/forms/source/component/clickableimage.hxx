@@ -56,7 +56,7 @@ namespace frm
 
     class OClickableImageBaseModel  :public OClickableImageBaseModel_Base
                                     ,public OControlModel
-                                    ,public OPropertyChangeListener
+                                    ,public comphelper::OPropertyChangeListener
     {
     protected:
         css::form::FormButtonType        m_eButtonType; // Type of the button (push, submit, reset)

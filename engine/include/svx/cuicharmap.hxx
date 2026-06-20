@@ -32,8 +32,6 @@
 #include <memory>
 #include <map>
 
-using namespace ::com::sun::star;
-
 struct ImplSVEvent;
 
 /// Provides the show characters or texts in a drawing area with special sizes and fonts.

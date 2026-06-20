@@ -44,6 +44,8 @@
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
 
+using namespace css;
+
 void SwViewShell::Init( const SwViewOption *pNewOpt, tools::Long const nFlags)
 {
     // in order to suppress event handling in

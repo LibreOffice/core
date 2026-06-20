@@ -24,8 +24,6 @@
 
 #include <vector>
 
-using namespace com::sun::star;
-
 namespace slideshow::internal {
 
 class EventMultiplexer;

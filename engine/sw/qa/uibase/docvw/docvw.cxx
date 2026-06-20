@@ -30,6 +30,9 @@
 #include <viscrs.hxx>
 #include <wrtsh.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/uibase/docvw/ fixes.

@@ -18,8 +18,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 
-using namespace css::uno;
-
 /// A clipboard implementation for COKit.
 class KitClipboard final
     : public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
@@ -45,8 +43,8 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    static Sequence<OUString> getSupportedServiceNames_static();
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    static css::uno::Sequence<OUString> getSupportedServiceNames_static();
 
     // XClipboard
     css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;

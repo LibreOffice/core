@@ -31,6 +31,7 @@
 #include "CurlSession.hxx"
 #include "SerfLockStore.hxx"
 
+using namespace css;
 using namespace http_dav_ucp;
 
 namespace http_dav_ucp {

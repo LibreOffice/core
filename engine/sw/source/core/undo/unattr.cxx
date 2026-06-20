@@ -64,6 +64,7 @@
 #include <docufld.hxx>
 #endif
 
+using namespace css;
 
 SwUndoFormatAttrHelper::SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSvDrwPt)
     : SwClient(&rFormat)

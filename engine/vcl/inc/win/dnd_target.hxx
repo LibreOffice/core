@@ -35,13 +35,6 @@ namespace com::sun::star::uno
 class XComponentContext;
 }
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cppu;
-using namespace osl;
-using namespace ::com::sun::star::datatransfer;
-using namespace ::com::sun::star::datatransfer::dnd;
-
 // The client
 // has to call XComponent::dispose. The thread that calls initialize
 // must also execute the destruction of the instance. This is because

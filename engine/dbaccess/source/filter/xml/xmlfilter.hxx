@@ -33,21 +33,10 @@
 namespace dbaxml
 {
 
-using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::xml::sax;
-
-
 class ODBFilter : public SvXMLImport
 {
 public:
-    typedef std::map< OUString, Sequence<PropertyValue> > TPropertyNameMap;
+    typedef std::map< OUString, css::uno::Sequence<css::beans::PropertyValue> > TPropertyNameMap;
 private:
     TPropertyNameMap                                m_aQuerySettings;
     TPropertyNameMap                                m_aTablesSettings;
@@ -56,11 +45,11 @@ private:
     mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    Reference<XPropertySet>                         m_xDataSource;
+    css::uno::Reference<css::beans::XPropertySet>     m_xDataSource;
     bool                                            m_bNewFormat;
 
     /// @throws RuntimeException
-    bool                            implImport( const Sequence< PropertyValue >& rDescriptor );
+    bool                            implImport( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
 
     /** fills the map with the Properties
         @param  _rValue
@@ -68,7 +57,7 @@ private:
         @param  _rMap
             The map to fill.
     */
-    static void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
+    static void fillPropertyMap(const css::uno::Any& _rValue,TPropertyNameMap& _rMap);
 
 public:
     SvXMLImportContext* CreateStylesContext( bool bIsAutoStyle );
@@ -81,10 +70,10 @@ protected:
     virtual ~ODBFilter()  noexcept override;
 public:
 
-    explicit ODBFilter( const Reference< XComponentContext >& _rxContext );
+    explicit ODBFilter( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     // XFilter
-    virtual bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
+    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
@@ -93,7 +82,7 @@ public:
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
-    const Reference<XPropertySet>& getDataSource() const { return m_xDataSource; }
+    const css::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
 
     const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
 

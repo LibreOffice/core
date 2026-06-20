@@ -25,8 +25,6 @@
 #include <formcontrolfont.hxx>
 
 
-using namespace comphelper;
-
 namespace frm
 {
 
@@ -36,7 +34,7 @@ namespace frm
     class ONavigationBarModel
                         :public OControlModel
                         ,public FontControlModel
-                        ,public OPropertyContainerHelper
+                        ,public comphelper::OPropertyContainerHelper
                         ,public ONavigationBarModel_BASE
     {
         // <properties>

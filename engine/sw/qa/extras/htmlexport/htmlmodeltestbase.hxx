@@ -217,7 +217,7 @@ void SwHtmlDomExportTest::ExportToHTML() { save(TestFilter::HTML_WRITER); }
 
 void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
 {
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+    css::uno::Sequence<css::beans::PropertyValue> aLoadProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
     };

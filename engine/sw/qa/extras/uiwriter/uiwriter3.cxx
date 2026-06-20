@@ -36,6 +36,9 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtinfmt.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Third set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest3 : public SwModelTestBase
 {

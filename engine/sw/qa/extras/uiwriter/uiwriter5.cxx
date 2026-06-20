@@ -43,6 +43,9 @@
 #include <rootfrm.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest5 : public SwModelTestBase
 {

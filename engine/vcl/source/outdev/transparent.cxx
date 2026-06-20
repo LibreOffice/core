@@ -40,6 +40,8 @@
 #define MAX_TILE_WIDTH  1024
 #define MAX_TILE_HEIGHT 1024
 
+using namespace vcl::pdf;
+
 namespace
 {
     /**
@@ -1636,7 +1638,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             aTmpSize = LogicToPixel(pPdfWriter->getCurPageSize(), MapMode(MapUnit::MapPoint));
 
             // also add error code to PDFWriter
-            pPdfWriter->insertError(vcl::PDFWriter::Warning_Transparency_Converted);
+            pPdfWriter->insertError(PDFWriter::Warning_Transparency_Converted);
         }
         else if( meOutDevType == OUTDEV_PRINTER )
         {

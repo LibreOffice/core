@@ -26,6 +26,9 @@
 #include <ndtxt.hxx>
 #include <formatcontentcontrol.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/core/crsr/ fixes.
 class SwCoreCrsrTest : public SwModelTestBase
 {

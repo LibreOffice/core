@@ -30,6 +30,9 @@
 #include <frmmgr.hxx>
 #include <UndoManager.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/core/frmedt/ fixes.
 class SwCoreFrmedtTest : public SwModelTestBase
 {

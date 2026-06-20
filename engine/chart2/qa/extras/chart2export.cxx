@@ -21,8 +21,10 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
 
-using uno::Reference;
-using beans::XPropertySet;
+using css::uno::Reference;
+using css::beans::XPropertySet;
+using namespace css;
+using namespace css::uno;
 
 class Chart2ExportTest : public ChartTest
 {

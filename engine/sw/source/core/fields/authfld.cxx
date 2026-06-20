@@ -53,6 +53,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;

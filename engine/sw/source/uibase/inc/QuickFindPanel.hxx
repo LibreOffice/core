@@ -49,10 +49,10 @@ class QuickFindPanel : public PanelLayout
 
 public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
-                                               const uno::Reference<frame::XFrame>& rxFrame,
+                                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                                SfxBindings* pBindings);
 
-    QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame,
+    QuickFindPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
                    SfxBindings* pBindings);
     virtual ~QuickFindPanel() override;
 

@@ -24,6 +24,9 @@
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Test : public SwModelTestBase

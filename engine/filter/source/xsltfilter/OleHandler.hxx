@@ -35,11 +35,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::io;
-
 namespace XSLT
 {
     /*
@@ -57,7 +52,7 @@ namespace XSLT
     class OleHandler
     {
     public:
-        OleHandler(css::uno::Reference<XComponentContext> xContext)
+        OleHandler(css::uno::Reference<css::uno::XComponentContext> xContext)
             : m_xContext(std::move(xContext))
             , m_tcontext(nullptr)
         {
@@ -77,16 +72,16 @@ namespace XSLT
         }
 
     private:
-        css::uno::Reference<XComponentContext> m_xContext;
-        css::uno::Reference<XNameContainer> m_storage;
-        css::uno::Reference<XStream> m_rootStream;
+        css::uno::Reference<css::uno::XComponentContext> m_xContext;
+        css::uno::Reference<css::container::XNameContainer> m_storage;
+        css::uno::Reference<css::io::XStream> m_rootStream;
         xsltTransformContextPtr m_tcontext;
 
         void    ensureCreateRootStorage();
         OString encodeSubStorage(const OUString& streamName);
         void    insertSubStorage(const OUString& streamName, std::string_view content);
         void    initRootStorageFromBase64(std::string_view content);
-        css::uno::Reference<XStream> createTempFile();
+        css::uno::Reference<css::io::XStream> createTempFile();
     };
 }
 

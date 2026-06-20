@@ -77,6 +77,13 @@ using namespace css::presentation;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 // - ooo elements and attributes -

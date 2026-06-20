@@ -41,6 +41,8 @@
 
 #include <autoformatpreview.hxx>
 
+using namespace css;
+
 #define FRAME_OFFSET 4
 
 AutoFormatPreview::AutoFormatPreview()

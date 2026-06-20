@@ -21,6 +21,9 @@
 #include <authfld.hxx>
 #include <fmtfld.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/core/tox/ fixes.

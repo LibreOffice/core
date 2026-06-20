@@ -23,8 +23,6 @@
 
 #include <assert.h>
 
-using namespace com::sun::star::uno;
-
 namespace io_stm
 {
 

@@ -25,10 +25,6 @@
 #include <map>
 #include "ShapesUtil.hxx"
 
-using namespace css;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
-
 namespace svx::sidebar {
 
 /** This panel provides buttons for inserting shapes into a document.
@@ -67,7 +63,7 @@ private:
     std::unique_ptr<ValueSet> mx3DObjectSet;
     std::unique_ptr<weld::CustomWeld> mx3DObjectSetWin;
 
-    Reference< XFrame >       mxFrame;
+    css::uno::Reference< css::frame::XFrame >       mxFrame;
     std::map<ValueSet*, std::map<sal_uInt16, OUString>> mpShapesSetMap;
 
     void populateShapes();

@@ -30,13 +30,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 
-using namespace cppu;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::scanner;
-
 class ScannerManager final :
     public cppu::WeakImplHelper<
-        XScannerManager2, css::awt::XBitmap, css::lang::XServiceInfo, css::lang::XInitialization>
+        css::scanner::XScannerManager2, css::awt::XBitmap, css::lang::XServiceInfo, css::lang::XInitialization>
 {
     osl::Mutex                              maProtector;
     css::uno::Reference<css::awt::XWindow>  mxDialogParent;
@@ -51,17 +47,17 @@ public:
     virtual                                 ~ScannerManager() override;
 
     // XScannerManager
-    virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() override;
-    virtual bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) override;
-    virtual bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) override;
-    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) override;
-    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) override;
-    virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) override;
+    virtual css::uno::Sequence< css::scanner::ScannerContext > SAL_CALL  getAvailableScanners() override;
+    virtual bool SAL_CALL               configureScanner( css::scanner::ScannerContext& scanner_context ) override;
+    virtual bool SAL_CALL               configureScannerAndScan( css::scanner::ScannerContext& scanner_context, const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void SAL_CALL                   startScan( const css::scanner::ScannerContext& scanner_context, const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual css::scanner::ScanError SAL_CALL              getError( const css::scanner::ScannerContext& scanner_context ) override;
+    virtual css::uno::Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const css::scanner::ScannerContext& scanner_context ) override;
 
     // XBitmap
     virtual css::awt::Size SAL_CALL              getSize() override;
-    virtual Sequence< sal_Int8 > SAL_CALL        getDIB() override;
-    virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL        getDIB() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL        getMaskDIB() override;
 
     OUString SAL_CALL getImplementationName() override;
 
@@ -78,6 +74,6 @@ public:
  };
 
 /// @throws Exception
-Reference< XInterface > ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& rxFactory );
+css::uno::Reference< css::uno::XInterface > ScannerManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxFactory );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

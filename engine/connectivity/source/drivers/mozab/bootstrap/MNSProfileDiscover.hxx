@@ -26,7 +26,6 @@
 
 #include <map>
 
-using namespace com::sun::star::mozilla;
 namespace connectivity::mozab { class ProfileStruct; }
 
 typedef std::map<OUString, ::connectivity::mozab::ProfileStruct> ProfileList;
@@ -70,7 +69,7 @@ namespace connectivity::mozab
     private:
         ProductStruct m_ProductProfileList[4];
         void      LoadProductsInfo();
-        void      LoadXPToolkitProfiles(MozillaProductType product);
+        void      LoadXPToolkitProfiles(css::mozilla::MozillaProductType product);
     };
 
 }

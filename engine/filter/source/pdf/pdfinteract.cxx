@@ -27,6 +27,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 PDFInteractionHandler::PDFInteractionHandler()
 {
 }

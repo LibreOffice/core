@@ -53,6 +53,8 @@
 #include <layouter.hxx>
 #include <fmtsrnd.hxx>
 
+using namespace css;
+
 // Tolerance in formatting and text output
 #define SLOPPY_TWIPS    5
 

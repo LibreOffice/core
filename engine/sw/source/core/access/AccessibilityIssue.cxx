@@ -34,6 +34,8 @@
 #include <txatbase.hxx>
 #include <txtfrm.hxx>
 
+using namespace css;
+
 namespace sw
 {
 AccessibilityIssue::AccessibilityIssue(sfx::AccessibilityIssueID eIssueID,

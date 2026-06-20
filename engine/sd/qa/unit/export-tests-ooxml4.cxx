@@ -40,6 +40,9 @@
 #include <SlideSectionManager.hxx>
 #include <unomodel.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class SdOOXMLExportTest4 : public SdModelTestBase
 {
 public:

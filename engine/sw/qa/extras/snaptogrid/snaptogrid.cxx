@@ -23,6 +23,9 @@
 #include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class SwSnapToGridTest : public SwModelTestBase

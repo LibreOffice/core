@@ -23,13 +23,10 @@
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-using namespace css::uno;
-using namespace css::text;
-
 class SVXCORE_DLLPUBLIC SvxNumOptionsTabPageHelper
 {
 public:
-    static Reference<XDefaultNumberingProvider> GetNumberingProvider();
+    static css::uno::Reference<css::text::XDefaultNumberingProvider> GetNumberingProvider();
 
     /** Get the numberings provided by the i18n framework (CTL, Asian, ...) and
         add them to the listbox. Extended numbering schemes present in the

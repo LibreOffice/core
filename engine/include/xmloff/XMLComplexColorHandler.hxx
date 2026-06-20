@@ -13,8 +13,6 @@
 #include <xmloff/xmlprhdl.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 
-using namespace css;
-
 class XMLOFF_DLLPUBLIC XMLComplexColorHandler final : public XMLPropertyHandler
 {
 public:
@@ -32,8 +30,8 @@ public:
 
     bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override final
     {
-        uno::Reference<util::XComplexColor> xComplexColor1;
-        uno::Reference<util::XComplexColor> xComplexColor2;
+        css::uno::Reference<css::util::XComplexColor> xComplexColor1;
+        css::uno::Reference<css::util::XComplexColor> xComplexColor2;
         rAny1 >>= xComplexColor1;
         rAny2 >>= xComplexColor2;
         model::ComplexColor aComplexColor1 = model::color::getFromXComplexColor(xComplexColor1);

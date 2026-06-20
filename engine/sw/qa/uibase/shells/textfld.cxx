@@ -16,6 +16,9 @@
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/uibase/shells/textfld.cxx fixes.

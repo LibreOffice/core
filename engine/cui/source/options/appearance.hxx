@@ -15,12 +15,11 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/IconThemeInfo.hxx>
 
-using namespace svtools;
 class SvxAppearanceTabPage : public SfxTabPage
 {
 private:
     bool m_bRestartRequired;
-    std::unique_ptr<EditableColorConfig> pColorConfig;
+    std::unique_ptr<svtools::EditableColorConfig> pColorConfig;
 
     std::unique_ptr<weld::ComboBox> m_xSchemeList;
     std::unique_ptr<weld::Button> m_xMoreThemesBtn;
@@ -84,7 +83,7 @@ private:
     void UpdateColorDropdown();
     void FillItemsList();
     void ImplDestroy();
-    ColorConfigEntry GetActiveEntry();
+    svtools::ColorConfigEntry GetActiveEntry();
 
 public:
     SvxAppearanceTabPage(weld::Container* pPage, weld::DialogController* pController,

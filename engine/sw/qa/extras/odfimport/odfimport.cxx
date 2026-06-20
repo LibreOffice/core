@@ -75,6 +75,9 @@
 #include <urlmon.h>
 #endif
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;

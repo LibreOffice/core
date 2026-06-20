@@ -14,9 +14,6 @@
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }
 
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-
 class FolderTree
 {
 private:
@@ -25,7 +22,7 @@ private:
     weld::Window* m_pTopLevel;
     rtl::Reference< ::ucbhelper::CommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
-    Sequence< OUString > m_aDenyList;
+    css::uno::Sequence< OUString > m_aDenyList;
 
     OUString m_sLastUpdatedDir;
 

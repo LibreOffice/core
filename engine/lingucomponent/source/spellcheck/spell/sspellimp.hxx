@@ -36,37 +36,32 @@
 
 #include <hunspell.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-
 class SpellChecker :
     public cppu::WeakImplHelper
     <
-        XSpellChecker,
-        XLinguServiceEventBroadcaster,
-        XInitialization,
-        XComponent,
-        XServiceInfo,
-        XServiceDisplayName
+        css::linguistic2::XSpellChecker,
+        css::linguistic2::XLinguServiceEventBroadcaster,
+        css::lang::XInitialization,
+        css::lang::XComponent,
+        css::lang::XServiceInfo,
+        css::lang::XServiceDisplayName
     >
 {
     struct DictItem
     {
         OUString                  m_aDName;
-        Locale                    m_aDLoc;
+        css::lang::Locale         m_aDLoc;
         std::unique_ptr<Hunspell> m_pDict;
         rtl_TextEncoding          m_aDEnc;
 
-        DictItem(OUString i_DName, Locale i_DLoc, rtl_TextEncoding i_DEnc);
+        DictItem(OUString i_DName, css::lang::Locale i_DLoc, rtl_TextEncoding i_DEnc);
     };
 
     std::vector<DictItem> m_DictItems;
 
-    Sequence< Locale >                 m_aSuppLocales;
+    css::uno::Sequence< css::lang::Locale >                 m_aSuppLocales;
 
-    ::comphelper::OInterfaceContainerHelper3<XEventListener> m_aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEvtListeners;
     std::unique_ptr<linguistic::PropertyHelper_Spelling> m_pPropHelper;
     bool                                    m_bDisposing;
 
@@ -79,40 +74,40 @@ class SpellChecker :
         return m_pPropHelper ? *m_pPropHelper : GetPropHelper_Impl();
     }
 
-    sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale, int& rInfo );
-    Reference< XSpellAlternatives > GetProposals( const OUString &rWord, const Locale &rLocale );
+    sal_Int16   GetSpellFailure( const OUString &rWord, const css::lang::Locale &rLocale, int& rInfo );
+    css::uno::Reference< css::linguistic2::XSpellAlternatives > GetProposals( const OUString &rWord, const css::lang::Locale &rLocale );
 
 public:
     SpellChecker();
     virtual ~SpellChecker() override;
 
     // XSupportedLocales (for XSpellChecker)
-    virtual Sequence< Locale > SAL_CALL getLocales() override;
-    virtual bool SAL_CALL hasLocale( const Locale& rLocale ) override;
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() override;
+    virtual bool SAL_CALL hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XSpellChecker
-    virtual bool SAL_CALL isValid( const OUString& rWord, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
-    virtual Reference< XSpellAlternatives > SAL_CALL spell( const OUString& rWord, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+    virtual bool SAL_CALL isValid( const OUString& rWord, const css::lang::Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& rWord, const css::lang::Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual bool SAL_CALL addLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
-    virtual bool SAL_CALL removeLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool SAL_CALL addLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool SAL_CALL removeLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) override;
+    virtual OUString SAL_CALL getServiceDisplayName( const css::lang::Locale& rLocale ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& rxListener ) override;
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& rxListener ) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

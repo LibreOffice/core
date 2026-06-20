@@ -24,6 +24,9 @@
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/uibase/dochdl/ fixes.
 class SwUibaseDochdlTest : public SwModelTestBase
 {

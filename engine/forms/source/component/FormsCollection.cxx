@@ -24,6 +24,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <rtl/ref.hxx>
 
+using namespace comphelper;
 using namespace frm;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;

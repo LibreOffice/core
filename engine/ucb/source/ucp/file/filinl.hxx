@@ -20,7 +20,8 @@
 
 #include "filtask.hxx"
 
-using namespace fileaccess;
+namespace fileaccess
+{
 
 inline const bool& TaskManager::MyProperty::IsNative() const
 {
@@ -53,6 +54,8 @@ inline void TaskManager::MyProperty::setValue( css::uno::Any theValue ) const
 inline void TaskManager::MyProperty::setState( const css::beans::PropertyState& theState ) const
 {
     const_cast<MyProperty*>(this)->State = theState;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

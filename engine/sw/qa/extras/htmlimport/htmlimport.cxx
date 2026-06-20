@@ -38,6 +38,9 @@
 #include <frameformats.hxx>
 #include <unotxdoc.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class HtmlImportTest : public SwModelTestBase

@@ -28,17 +28,14 @@
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
-using namespace com::sun::star::bridge;
-using namespace cppu;
-
 /// @throws Exception
-Reference< XInterface> ConverterProvider_CreateInstance2(  const Reference<XMultiServiceFactory> & xSMgr);
+css::uno::Reference< css::uno::XInterface> ConverterProvider_CreateInstance2(  const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-Reference< XInterface> ConverterProvider_CreateInstanceVar1(   const Reference<XMultiServiceFactory> & xSMgr);
+css::uno::Reference< css::uno::XInterface> ConverterProvider_CreateInstanceVar1(   const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-Reference<XInterface> OleClient_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr);
+css::uno::Reference<css::uno::XInterface> OleClient_CreateInstance( const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-Reference<XInterface> OleServer_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr);
+css::uno::Reference<css::uno::XInterface> OleServer_CreateInstance( const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 
 /*****************************************************************************
 
@@ -55,8 +52,8 @@ class OneInstanceOleWrapper : public IClassFactory
 {
 public:
 
-    OneInstanceOleWrapper( const Reference<XMultiServiceFactory>& smgr,
-                           std::function<const Reference<XInterface>()> xInstFunction );
+    OneInstanceOleWrapper( const css::uno::Reference<css::lang::XMultiServiceFactory>& smgr,
+                           std::function<const css::uno::Reference<css::uno::XInterface>()> xInstFunction );
     virtual ~OneInstanceOleWrapper();
 
     bool registerClass(GUID const * pGuid);
@@ -73,10 +70,10 @@ public:
 
 protected:
     oslInterlockedCount m_refCount;
-    std::function<const Reference<XInterface>()> m_xInstFunction;
+    std::function<const css::uno::Reference<css::uno::XInterface>()> m_xInstFunction;
     DWORD               m_factoryHandle;
-    Reference<XBridgeSupplier2> m_bridgeSupplier;
-    Reference<XMultiServiceFactory> m_smgr;
+    css::uno::Reference<css::bridge::XBridgeSupplier2> m_bridgeSupplier;
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_smgr;
 };
 
 // Implementation of the UNO service com.sun.star.bridge.OleBridgeSupplier2.
@@ -90,23 +87,23 @@ protected:
 // latter for OleBridgeSupplierVar1.
 // The m_nComWrapperClass specifies the class which is used as wrapper for COM interfaces.
 // Currently there is only one class available (IUnknownWrapper).
-class OleConverter : public WeakImplHelper<XBridgeSupplier2, XInitialization, css::lang::XServiceInfo>,
+class OleConverter : public cppu::WeakImplHelper<css::bridge::XBridgeSupplier2, css::lang::XInitialization, css::lang::XServiceInfo>,
                             public UnoConversionUtilities<OleConverter>
 {
 public:
-    explicit OleConverter( const Reference<XMultiServiceFactory>& smgr);
-    OleConverter( const  Reference<XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
+    explicit OleConverter( const css::uno::Reference<css::lang::XMultiServiceFactory>& smgr);
+    OleConverter( const  css::uno::Reference<css::lang::XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
     virtual ~OleConverter() override;
 
     // XBridgeSupplier2 ---------------------------------------------------
 
-    Any SAL_CALL createBridge(const Any& modelDepObject,
-                                const Sequence<sal_Int8>& ProcessId,
+    css::uno::Any SAL_CALL createBridge(const css::uno::Any& modelDepObject,
+                                const css::uno::Sequence<sal_Int8>& ProcessId,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType) override;
 
     // XInitialization
-    void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     OUString SAL_CALL getImplementationName() override;
 
@@ -115,25 +112,25 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // UnoConversionUtilities
-    Reference< XInterface > createUnoWrapperInstance() override;
-    Reference< XInterface > createComWrapperInstance() override;
+    css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
+    css::uno::Reference< css::uno::XInterface > createComWrapperInstance() override;
 protected:
 
 };
 
 // Implementation of the UNO service com.sun.star.bridge.OleObjectFactory.
 
-class OleClient : public WeakImplHelper<XMultiServiceFactory, css::lang::XServiceInfo>,
+class OleClient : public cppu::WeakImplHelper<css::lang::XMultiServiceFactory, css::lang::XServiceInfo>,
                   public UnoConversionUtilities<OleClient>
 {
 public:
-    explicit OleClient( const Reference<XMultiServiceFactory>& smgr);
+    explicit OleClient( const css::uno::Reference<css::lang::XMultiServiceFactory>& smgr);
     ~OleClient() override;
 
     // XMultiServiceFactory
-    Reference<XInterface> SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
-    Reference<XInterface> SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& Arguments) override;
-    Sequence< OUString >    SAL_CALL getAvailableServiceNames() override;
+    css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
+    css::uno::Reference<css::uno::XInterface> SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments) override;
+    css::uno::Sequence< OUString >    SAL_CALL getAvailableServiceNames() override;
 
     OUString SAL_CALL getImplementationName() override;
 
@@ -142,11 +139,11 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // UnoConversionUtilities
-    Reference< XInterface > createUnoWrapperInstance() override;
-    Reference< XInterface > createComWrapperInstance() override;
+    css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
+    css::uno::Reference< css::uno::XInterface > createComWrapperInstance() override;
 
 protected:
-    Reference<XBridgeSupplier2> m_bridgeSupplier;
+    css::uno::Reference<css::bridge::XBridgeSupplier2> m_bridgeSupplier;
 };
 
 /*****************************************************************************
@@ -163,7 +160,7 @@ protected:
 class OleServer : public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
-    explicit OleServer( const Reference<XMultiServiceFactory> &smgr);
+    explicit OleServer( const css::uno::Reference<css::lang::XMultiServiceFactory> &smgr);
     ~OleServer() override;
 
     OUString SAL_CALL getImplementationName() override;
@@ -173,12 +170,12 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 protected:
-    bool provideInstance(std::function<const Reference<XInterface>()> xInstFunction, GUID const * guid);
+    bool provideInstance(std::function<const css::uno::Reference<css::uno::XInterface>()> xInstFunction, GUID const * guid);
 
     std::list< OneInstanceOleWrapper* > m_wrapperList;
-    Reference< XBridgeSupplier2 >   m_bridgeSupplier;
+    css::uno::Reference< css::bridge::XBridgeSupplier2 >   m_bridgeSupplier;
 
-    Reference<XMultiServiceFactory> m_smgr;
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_smgr;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

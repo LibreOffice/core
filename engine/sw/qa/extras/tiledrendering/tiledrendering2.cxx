@@ -52,6 +52,9 @@
 #include <viewimp.hxx>
 #include <dview.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)

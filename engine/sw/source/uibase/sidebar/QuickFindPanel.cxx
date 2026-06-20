@@ -37,6 +37,8 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 
+using namespace css;
+
 const int CharactersBeforeAndAfter = 40;
 const OUString KitPageEntryPrefix = u"-$#~"_ustr;
 const OUString KitPageEntrySuffix = u"~#$-"_ustr;

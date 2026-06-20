@@ -137,7 +137,7 @@ class DocxExport : public MSWordExportBase
 
     std::set<SwNode*> m_aDummyFloatingTableAnchors;
 
-    std::vector<css::uno::Reference<frame::XModel>> m_aExportedCharts;
+    std::vector<css::uno::Reference<css::frame::XModel>> m_aExportedCharts;
 
 public:
 
@@ -209,8 +209,8 @@ public:
     /// Returns the relationd id
     OString OutputChart( css::uno::Reference< css::frame::XModel > const & xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer );
     OString WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID);
-    std::pair<OString,OString> WriteActiveXObject(const uno::Reference<css::drawing::XShape>& rxShape,
-                                                  const uno::Reference<awt::XControlModel>& rxControlModel);
+    std::pair<OString,OString> WriteActiveXObject(const css::uno::Reference<css::drawing::XShape>& rxShape,
+                                                  const css::uno::Reference<css::awt::XControlModel>& rxControlModel);
 
     /// Writes the shape using drawingML syntax.
     void OutputDML( css::uno::Reference< css::drawing::XShape > const & xShape );

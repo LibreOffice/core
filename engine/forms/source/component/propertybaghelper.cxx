@@ -40,7 +40,7 @@
 namespace frm
 {
 
-
+    using namespace comphelper;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::Property;

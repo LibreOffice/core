@@ -23,13 +23,11 @@
 #include <com/sun/star/animations/TargetProperties.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
-using namespace ::com::sun::star;
-
 namespace slideshow::internal::TargetPropertiesCreator
 {
             /// Generate shape property list - set bInitial to true for initial slide state
-            uno::Sequence< animations::TargetProperties > createTargetProperties(
-                const uno::Reference< animations::XAnimationNode >& rootNode,
+            css::uno::Sequence< css::animations::TargetProperties > createTargetProperties(
+                const css::uno::Reference< css::animations::XAnimationNode >& rootNode,
                 bool bInitial );
 
 } // namespace slideshow::internal::TargetPropertiesCreator

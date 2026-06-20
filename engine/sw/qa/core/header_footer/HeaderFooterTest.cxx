@@ -29,6 +29,9 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class HeaderFooterTest : public SwModelTestBase

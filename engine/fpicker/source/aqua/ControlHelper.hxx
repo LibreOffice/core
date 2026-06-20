@@ -32,8 +32,6 @@
 #include "FilterHelper.hxx"
 #include "AquaFilePickerDelegate.hxx"
 
-using namespace com::sun::star;
-
 class ControlHelper {
 
 public:
@@ -52,8 +50,8 @@ public:
 
     // XFilePickerControlAccess function delegates
 
-    void       setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue );
-    uno::Any   getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const;
+    void       setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& rValue );
+    css::uno::Any getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const;
     void       enableControl( sal_Int16 nControlId, bool bEnable ) const;
     OUString   getLabel( sal_Int16 nControlId );
     void       setLabel( sal_Int16 nControlId, NSString* aLabel );
@@ -170,7 +168,7 @@ private:
 
     // private methods
 
-    void HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const uno::Any& rValue);
+    void HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const css::uno::Any& rValue);
 
     void         createControls();
     void         createFilterControl();

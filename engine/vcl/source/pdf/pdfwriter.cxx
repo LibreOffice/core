@@ -23,6 +23,7 @@
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
 
 using namespace vcl;
+using namespace vcl::pdf;
 
 PDFWriter::AnyWidget::~AnyWidget()
 {
@@ -469,7 +470,7 @@ std::set< PDFWriter::ErrorCode > const & PDFWriter::GetErrors() const
     return xImplementation->getErrors();
 }
 
-void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
+void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
 {
     xImplementation->playMetafile( i_rMTF, i_pData, i_rPlayContext );
 }

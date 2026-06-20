@@ -59,22 +59,13 @@
 #include "drawdef.h"
 #include "attributes.hxx"
 
-using namespace ::cppu;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::xml::sax;
-
 inline constexpr OUString WRITER_IMPORTER_NAME = u"com.sun.star.comp.Writer.XMLImporter"_ustr;
 
 struct HwpReaderPrivate;
 /**
  * This class implements the external Parser interface
  */
-class HwpReader : public WeakImplHelper<XFilter>
+class HwpReader : public cppu::WeakImplHelper<css::document::XFilter>
 {
 public:
     HwpReader();
@@ -84,9 +75,9 @@ public:
     /**
      * parseStream does Parser-startup initializations
      */
-    virtual bool SAL_CALL filter(const Sequence<PropertyValue>& aDescriptor) override;
+    virtual bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
     virtual void SAL_CALL cancel() override {}
-    void setDocumentHandler(Reference<XDocumentHandler> const& xHandler)
+    void setDocumentHandler(css::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler)
     {
         m_rxDocumentHandler = xHandler;
     }
@@ -94,7 +85,7 @@ public:
     bool importHStream(std::unique_ptr<HStream> stream);
 
 private:
-    Reference<XDocumentHandler> m_rxDocumentHandler;
+    css::uno::Reference<css::xml::sax::XDocumentHandler> m_rxDocumentHandler;
     rtl::Reference<AttributeListImpl> mxList;
     HWPFile hwpfile;
     std::unique_ptr<HwpReaderPrivate> d;

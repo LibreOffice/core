@@ -33,14 +33,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/xslt/XXSLTTransformer.hpp>
 
-using namespace ::cppu;
-using namespace ::osl;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
-
-using ::std::map;
-
 #define EXT_MODULE_OLE_URI "http://libreoffice.org/2011/xslt/ole"
 
 namespace XSLT
@@ -68,8 +60,8 @@ namespace XSLT
         static const sal_Int32 OUTPUT_BUFFER_SIZE;
         static const sal_Int32 INPUT_BUFFER_SIZE;
         rtl::Reference<LibXSLTTransformer> m_transformer;
-        Sequence<sal_Int8> m_readBuf;
-        Sequence<sal_Int8> m_writeBuf;
+        css::uno::Sequence<sal_Int8> m_readBuf;
+        css::uno::Sequence<sal_Int8> m_writeBuf;
 
         std::mutex m_mutex;
         xsltTransformContextPtr m_tcontext;
@@ -92,7 +84,7 @@ namespace XSLT
      *
      * See Reader below.
      */
-    class LibXSLTTransformer : public WeakImplHelper<css::xml::xslt::XXSLTTransformer, css::lang::XServiceInfo>
+    class LibXSLTTransformer : public cppu::WeakImplHelper<css::xml::xslt::XXSLTTransformer, css::lang::XServiceInfo>
     {
     private:
         static const char* const PARAM_SOURCE_URL;
@@ -104,11 +96,11 @@ namespace XSLT
         // the UNO ServiceFactory
         css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
-        css::uno::Reference<XInputStream> m_rInputStream;
+        css::uno::Reference<css::io::XInputStream> m_rInputStream;
 
-        css::uno::Reference<XOutputStream> m_rOutputStream;
+        css::uno::Reference<css::io::XOutputStream> m_rOutputStream;
 
-        typedef ::std::deque<css::uno::Reference<XStreamListener> > ListenerList;
+        typedef ::std::deque<css::uno::Reference<css::io::XStreamListener> > ListenerList;
 
         ListenerList m_listeners;
 
@@ -140,25 +132,25 @@ namespace XSLT
 
         // XActiveDataSink
         virtual void SAL_CALL
-        setInputStream(const css::uno::Reference<XInputStream>& inputStream) override;
-        virtual css::uno::Reference<XInputStream> SAL_CALL
+        setInputStream(const css::uno::Reference<css::io::XInputStream>& inputStream) override;
+        virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
         getInputStream() override;
         // XActiveDataSource
         virtual void SAL_CALL
-        setOutputStream(const css::uno::Reference<XOutputStream>& outputStream) override;
-        virtual css::uno::Reference<XOutputStream> SAL_CALL
+        setOutputStream(const css::uno::Reference<css::io::XOutputStream>& outputStream) override;
+        virtual css::uno::Reference<css::io::XOutputStream> SAL_CALL
         getOutputStream() override;
         // XActiveDataControl
         virtual void SAL_CALL
-        addListener(const css::uno::Reference<XStreamListener>& listener) override;
+        addListener(const css::uno::Reference<css::io::XStreamListener>& listener) override;
         virtual void SAL_CALL
-        removeListener(const css::uno::Reference<XStreamListener>& listener) override;
+        removeListener(const css::uno::Reference<css::io::XStreamListener>& listener) override;
         virtual void SAL_CALL
         start() override;
         virtual void SAL_CALL
         terminate() override;
         virtual void SAL_CALL
-        initialize(const Sequence<Any>& params) override;
+        initialize(const css::uno::Sequence<css::uno::Any>& params) override;
 
         void
         done();

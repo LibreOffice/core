@@ -63,6 +63,9 @@
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)

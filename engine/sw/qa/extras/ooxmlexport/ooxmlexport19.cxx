@@ -38,6 +38,9 @@
 #include <IDocumentMarkAccess.hxx>
 #include <xmloff/odffields.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class Test : public SwModelTestBase
 {
 public:

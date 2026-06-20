@@ -21,6 +21,9 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 class Chart2ImportTest2 : public ChartTest
 {
 public:

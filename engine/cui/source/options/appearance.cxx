@@ -24,6 +24,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 
+using namespace svtools;
+
 namespace
 {
 struct StringPair

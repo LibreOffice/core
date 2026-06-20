@@ -23,8 +23,6 @@
 #include <svtools/genericunodialog.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace css::uno;
-
 namespace svt
 {
 typedef cppu::ImplInheritanceHelper<::svt::OGenericUnoDialog,
@@ -79,7 +77,7 @@ public:
             UnoAsyncDialogEntryGuard aGuard(*this);
 
             if (m_bExecuting)
-                throw RuntimeException("already executing the dialog (recursive call)", *this);
+                throw css::uno::RuntimeException("already executing the dialog (recursive call)", *this);
 
             if (!m_xAsyncDialog)
             {

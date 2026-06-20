@@ -32,8 +32,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-using namespace com::sun::star::uno;
-
 
 class BitmapTransporter: public cppu::WeakImplHelper<css::awt::XBitmap>
 {
@@ -46,8 +44,8 @@ public:
     virtual                             ~BitmapTransporter() override;
 
     virtual css::awt::Size SAL_CALL          getSize() override;
-    virtual Sequence< sal_Int8 > SAL_CALL    getDIB() override;
-    virtual Sequence< sal_Int8 > SAL_CALL    getMaskDIB() override { return Sequence< sal_Int8 >(); }
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL    getDIB() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL    getMaskDIB() override { return css::uno::Sequence< sal_Int8 >(); }
 
     // Misc
     void                                lock() { m_aProtector.acquire(); }

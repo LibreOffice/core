@@ -50,6 +50,7 @@
 #include <names.hxx>
 
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::xmloff::token;

@@ -33,12 +33,6 @@
 #include "linguistic/misc.hxx"
 #include "sprophelp.hxx"
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-
-
 class SpellChecker :
     public cppu::WeakImplHelper
     <

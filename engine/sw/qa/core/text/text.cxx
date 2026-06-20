@@ -51,6 +51,9 @@
 #include <inftxt.hxx>
 #include <itrtxt.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/core/text/ fixes.
 class SwCoreTextTest : public SwModelTestBase
 {

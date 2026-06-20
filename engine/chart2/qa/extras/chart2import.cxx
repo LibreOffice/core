@@ -37,6 +37,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <docmodel/uno/UnoGradientTools.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class Chart2ImportTest : public ChartTest

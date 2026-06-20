@@ -26,6 +26,9 @@
 #include <cellatr.hxx>
 #include <swdtflvr.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /**

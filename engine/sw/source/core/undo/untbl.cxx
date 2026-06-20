@@ -70,6 +70,8 @@
 #include <utility>
 #include <vector>
 
+using namespace css;
+
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else

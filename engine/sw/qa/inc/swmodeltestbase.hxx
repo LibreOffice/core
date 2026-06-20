@@ -100,7 +100,7 @@ protected:
     template< typename T >
     T getProperty( const css::uno::Any& obj, const OUString& name ) const
     {
-        css::uno::Reference< css::beans::XPropertySet > properties( obj, uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::beans::XPropertySet > properties( obj, css::uno::UNO_QUERY_THROW );
         T data;
         if (!css::uno::fromAny(properties->getPropertyValue(name), &data))
         {
@@ -114,7 +114,7 @@ protected:
     template< typename T >
     T getProperty( const css::uno::Reference< css::uno::XInterface >& obj, const OUString& name ) const
     {
-        css::uno::Reference< css::beans::XPropertySet > properties( obj, uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::beans::XPropertySet > properties( obj, css::uno::UNO_QUERY_THROW );
         T data = T();
         if (!(properties->getPropertyValue(name) >>= data))
         {
@@ -130,7 +130,7 @@ protected:
         if (!hasProperty(object, name))
             return false;
 
-        css::uno::Reference< css::beans::XPropertySet > properties(object, uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::beans::XPropertySet > properties(object, css::uno::UNO_QUERY_THROW);
         return !properties->getPropertyValue(name).hasValue();
     }
 
@@ -138,7 +138,7 @@ protected:
 
     css::xml::AttributeData getUserDefineAttribute(const css::uno::Any& obj, const OUString& name, const OUString& rValue) const;
 
-    int getParagraphs( css::uno::Reference<text::XText> const & xText );
+    int getParagraphs( css::uno::Reference<css::text::XText> const & xText );
 
     /// Get number of paragraphs of the document.
     int getParagraphs();
@@ -157,7 +157,7 @@ protected:
         int const index, css::uno::Reference<css::text::XTextRange> const & xPara) const;
 
     /// Get run (counted from 1) of a paragraph, optionally check it contains the given text.
-    css::uno::Reference<css::text::XTextRange> getRun(uno::Reference<css::text::XTextRange> const & xParagraph, int number, const OUString& content = OUString()) const;
+    css::uno::Reference<css::text::XTextRange> getRun(css::uno::Reference<css::text::XTextRange> const & xParagraph, int number, const OUString& content = OUString()) const;
 
     /// Get math formula string of a run.
     OUString getFormula(css::uno::Reference<css::text::XTextRange> const & xRun) const;

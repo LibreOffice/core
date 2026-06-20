@@ -28,6 +28,8 @@
 #include <vector>
 #include <officecfg/Office/Calc.hxx>
 
+using namespace css;
+
 ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
                                              css::uno::Sequence<uno::Sequence<uno::Any>>& rData,
                                              ScViewData& rViewData, ScRange& rRange)

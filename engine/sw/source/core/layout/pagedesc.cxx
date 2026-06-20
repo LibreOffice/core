@@ -42,6 +42,8 @@
 #include <poolfmt.hxx>
 #include <calbck.hxx>
 
+using namespace css;
+
 SwPageDesc::SwPageDesc(const UIName& rName, SwFrameFormat *pFormat, SwDoc& rDoc)
     : sw::BroadcastingModify()
     , m_StyleName( rName )

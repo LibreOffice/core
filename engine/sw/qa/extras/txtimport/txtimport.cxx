@@ -17,6 +17,9 @@
 #include <wrtsh.hxx>
 #include <rtl/ustrbuf.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 class TxtImportTest : public SwModelTestBase

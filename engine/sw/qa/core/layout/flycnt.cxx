@@ -34,6 +34,9 @@
 #include <IDocumentSettingAccess.hxx>
 #include <formatwraptextatflystart.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/core/layout/flycnt.cxx fixes, i.e. mostly SwFlyAtContentFrame.

@@ -65,6 +65,8 @@
 
 #include "swmd.hxx"
 
+using namespace css;
+
 namespace
 {
 bool allowAccessLink(const SwDoc& rDoc)

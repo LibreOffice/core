@@ -39,20 +39,14 @@
 #include <rtl/uuid.h>
 
 #define UNO_2_OLE_EXCEPTIONCODE 1001
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::beans;
-using namespace osl;
 
-VARTYPE getVarType(const Any& val);
+VARTYPE getVarType(const css::uno::Any& val);
 /* creates a Type object for a given type name.
 
     The function returns false if the name does not represent
     a valid type.
 */
-bool getType(BSTR name, Type& type);
+bool getType(BSTR name, css::uno::Type& type);
 void o2u_attachCurrentThread();
 
 class BridgeRuntimeError
@@ -65,6 +59,6 @@ public:
     OUString message;
 };
 
-Mutex* getBridgeMutex();
+osl::Mutex* getBridgeMutex();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

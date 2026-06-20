@@ -17,8 +17,9 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-using uno::Reference;
-using beans::XPropertySet;
+using css::beans::XPropertySet;
+using namespace css;
+using namespace css::uno;
 
 class Chart2ExportTest2 : public ChartTest
 {

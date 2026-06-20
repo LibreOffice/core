@@ -20,6 +20,8 @@
 
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 
+using namespace css;
+
 namespace sc
 {
 namespace

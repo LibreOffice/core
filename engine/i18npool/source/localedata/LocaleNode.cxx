@@ -42,6 +42,8 @@ typedef ::o3tl::sorted_vector< OUString > NameSet;
 typedef ::o3tl::sorted_vector< sal_Int16 > ValueSet;
 
 namespace cssi = css::i18n;
+using namespace css::uno;
+using namespace css::xml::sax;
 
 LocaleNode::LocaleNode (OUString name, const Reference< XAttributeList > & attr)
     : aName(std::move(name))

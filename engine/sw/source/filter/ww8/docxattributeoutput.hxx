@@ -211,7 +211,7 @@ public:
     /// Closes a currently open SDT block.
     void EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
-    void GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt,
+    void GetSdtParamsFromGrabBag(const css::uno::Sequence<css::beans::PropertyValue>& aGrabBagSdt,
                                  const SwPosition* pStartPosition);
 };
 
@@ -824,10 +824,10 @@ private:
     void WritePostponedCustomShape();
     void WriteFlyFrame(const ww8::Frame& rFrame);
 
-    void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
-    void WriteSdtPlainText(const OUString& sValue, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
-    void WriteSdtDropDownStart(const OUString& rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
-    void WriteSdtDropDownEnd(OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
+    void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const css::uno::Sequence<css::beans::PropertyValue>& aGrabBagSdt);
+    void WriteSdtPlainText(const OUString& sValue, const css::uno::Sequence<css::beans::PropertyValue>& aGrabBagSdt);
+    void WriteSdtDropDownStart(const OUString& rName, OUString const& rSelected, css::uno::Sequence<OUString> const& rListItems);
+    void WriteSdtDropDownEnd(OUString const& rSelected, css::uno::Sequence<OUString> const& rListItems);
     void WriteContentControlStart();
     void WriteContentControlEnd();
 

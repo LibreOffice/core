@@ -38,6 +38,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::util;
+using namespace ::comphelper;
 
 namespace
 {
@@ -77,7 +78,7 @@ OEditBaseModel::~OEditBaseModel( )
 
 // XPersist
 
-void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OEditBaseModel::write(const uno::Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
     OBoundControlModel::write(_rxOutStream);
 

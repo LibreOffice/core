@@ -48,6 +48,9 @@
 #include <MarkManager.hxx>
 #include <fldmgr.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
 {

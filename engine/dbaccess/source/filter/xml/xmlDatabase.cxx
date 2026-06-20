@@ -37,6 +37,7 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbcx;
+    using namespace xmloff::token;
 
 OXMLDatabase::OXMLDatabase( ODBFilter& rImport ) :
     SvXMLImportContext( rImport )

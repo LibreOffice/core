@@ -26,8 +26,6 @@
 
 class Menu;
 
-using namespace ::com::sun::star;
-
 // double entry! hrc and hxx
 // these Ids say what the buttons below the scrollbar are doing
 #define NID_START   20000
@@ -100,7 +98,7 @@ class NavElementBox_Base
 {
 public:
     NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox,
-                       uno::Reference<frame::XFrame> xFrame);
+                       css::uno::Reference<css::frame::XFrame> xFrame);
 
     virtual ~NavElementBox_Base() {}
 
@@ -113,7 +111,7 @@ public:
 
 protected:
     std::unique_ptr<weld::ComboBox> m_xComboBox;
-    uno::Reference< frame::XFrame > m_xFrame;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
 
     virtual bool DoKeyInput(const KeyEvent& /*rKEvt*/);
 
@@ -127,7 +125,7 @@ class NavElementBox_Impl final : public InterimItemWindow, public NavElementBox_
 {
 public:
     NavElementBox_Impl(vcl::Window* pParent,
-                       const uno::Reference<frame::XFrame>& xFrame);
+                       const css::uno::Reference<css::frame::XFrame>& xFrame);
 
     virtual void dispose() override
     {
@@ -150,7 +148,7 @@ public:
     }
 };
 
-typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, lang::XServiceInfo> NavElementToolBoxControl_Base;
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> NavElementToolBoxControl_Base;
 class NavElementToolBoxControl final : public NavElementToolBoxControl_Base
 {
 public:

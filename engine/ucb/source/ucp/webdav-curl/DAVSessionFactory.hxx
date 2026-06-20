@@ -30,8 +30,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <ucbhelper/proxydecider.hxx>
 
-using namespace com::sun::star;
-
 namespace com::sun::star::beans
 {
 struct NamedValue;

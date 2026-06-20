@@ -28,11 +28,6 @@
 #include "fileview.hxx"
 #include "foldertree.hxx"
 
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui::dialogs;
-
 enum SvtRemoteDlgMode
 {
     REMOTEDLG_MODE_OPEN = 0,
@@ -97,8 +92,8 @@ public:
     virtual OUString getCurFilter( ) const override;
 
 private:
-    Reference< XComponentContext > m_xContext;
-    Reference< XPasswordContainer2 > m_xMasterPasswd;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::task::XPasswordContainer2 > m_xMasterPasswd;
 
     SvtRemoteDlgMode m_eMode;
     SvtRemoteDlgType m_eType;

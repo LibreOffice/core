@@ -25,9 +25,6 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/chart2/PieChartSubType.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
-
 namespace chart
 {
 
@@ -72,7 +69,7 @@ public:
             enum SubPieType eType) const = 0;
 
     // Get the properties for the wedge and subtype
-    virtual uno::Reference< beans::XPropertySet > getProps(
+    virtual css::uno::Reference< css::beans::XPropertySet > getProps(
             const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const = 0;
 };
@@ -89,7 +86,7 @@ public:
     double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
             [[maybe_unused]]enum SubPieType eType) const;
 
-    virtual uno::Reference< beans::XPropertySet > getProps(
+    virtual css::uno::Reference< css::beans::XPropertySet > getProps(
             const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const;
 };
@@ -113,7 +110,7 @@ public:
     double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const;
 
-    virtual uno::Reference< beans::XPropertySet > getProps(
+    virtual css::uno::Reference< css::beans::XPropertySet > getProps(
             const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const;
 private:
@@ -168,7 +165,7 @@ private: //methods
 
     rtl::Reference<SvxShape> createBarDataPoint(
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
-            const uno::Reference<beans::XPropertySet>& xObjectProperties,
+            const css::uno::Reference<css::beans::XPropertySet>& xObjectProperties,
             const ShapeParam& rParam,
             double fBarSegBottom, double fBarSegTop);
     /** This method creates a text shape for a label of a data point.

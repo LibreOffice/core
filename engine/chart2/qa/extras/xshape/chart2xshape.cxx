@@ -18,6 +18,9 @@
 #include <fstream>
 #include <string_view>
 
+using namespace css;
+using namespace css::uno;
+
 class Chart2XShapeTest : public ChartTest
 {
 public:

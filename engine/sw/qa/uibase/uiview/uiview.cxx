@@ -47,6 +47,9 @@
 #include <view.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 /// Covers sw/source/uibase/uiview/ fixes.
 class SwUibaseUiviewTest : public SwModelTestBase
 {

@@ -23,8 +23,6 @@ namespace com::sun::star::beans
 class XPropertySet;
 }
 
-using namespace com::sun::star;
-
 namespace model
 {
 enum class ColorStyleMethod

@@ -39,8 +39,6 @@ namespace com::sun::star {
     namespace accessibility { class XAccessible; }
 }
 
-using namespace ::com::sun::star;
-
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
 
@@ -94,7 +92,7 @@ public:
     virtual void Show() override { mxScrollArea->show(); }
     virtual void Hide() override { mxScrollArea->hide(); }
 
-    uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
 
 private:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

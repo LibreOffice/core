@@ -24,9 +24,6 @@ namespace com::sun::star::graphic { class XGraphicProvider; }
 class SdDrawDocument;
 class GraphicFilter;
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-
 namespace sd
 {
 
@@ -67,14 +64,14 @@ private:
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(TypeSelectHdl, weld::ComboBox&, void);
 
-    Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
-        const Reference< drawing::XDrawPages >& xDrawPages);
+    css::uno::Reference< css::drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
+        const css::uno::Reference< css::drawing::XDrawPages >& xDrawPages);
 
-    static awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
-    static awt::Size createASRSizeCrop(const awt::Size& aPicSize, const awt::Size& aMaxSize);
-    void createCaption(const awt::Size& aPageSize);
-    static Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
-        const Reference< graphic::XGraphicProvider>& xProvider);
+    static css::awt::Size createASRSize(const css::awt::Size& aPicSize, const css::awt::Size& aMaxSize);
+    static css::awt::Size createASRSizeCrop(const css::awt::Size& aPicSize, const css::awt::Size& aMaxSize);
+    void createCaption(const css::awt::Size& aPageSize);
+    static css::uno::Reference< css::graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
+        const css::uno::Reference< css::graphic::XGraphicProvider>& xProvider);
 
     void EnableDisableButtons();
 

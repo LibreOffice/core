@@ -56,6 +56,8 @@ using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::utl;
+using namespace ::connectivity;
+using namespace ::dbtools;
 
 namespace dbaccess
 {

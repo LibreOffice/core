@@ -45,26 +45,21 @@
 #include <memory>
 #include <vector>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-
 namespace com::sun::star::beans { class XPropertySet; }
 
 class Thesaurus :
     public cppu::WeakImplHelper
     <
-        XThesaurus,
-        XInitialization,
-        XComponent,
-        XServiceInfo,
-        XServiceDisplayName
+        css::linguistic2::XThesaurus,
+        css::lang::XInitialization,
+        css::lang::XComponent,
+        css::lang::XServiceInfo,
+        css::lang::XServiceDisplayName
     >
 {
-    Sequence< Locale >                      aSuppLocales;
+    css::uno::Sequence< css::lang::Locale > aSuppLocales;
 
-    ::comphelper::OInterfaceContainerHelper3<XEventListener> aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> aEvtListeners;
     linguistic::PropertyHelper_Thesaurus*       pPropHelper;
     bool                                    bDisposing;
     struct ThesInfo
@@ -72,13 +67,13 @@ class Thesaurus :
         std::unique_ptr<CharClass> aCharSetInfo;
         std::unique_ptr<MyThes> aThes;
         rtl_TextEncoding aEncoding;
-        Locale aLocale;
+        css::lang::Locale aLocale;
         OUString aName;
     };
     std::vector<ThesInfo>                   mvThesInfo;
 
     // cache for the Thesaurus dialog
-    Sequence < Reference < css::linguistic2::XMeaning > > prevMeanings;
+    css::uno::Sequence < css::uno::Reference < css::linguistic2::XMeaning > > prevMeanings;
     OUString  prevTerm;
     LanguageType prevLocale;
 
@@ -96,27 +91,27 @@ public:
     virtual ~Thesaurus() override;
 
     // XSupportedLocales (for XThesaurus)
-    virtual Sequence< Locale > SAL_CALL getLocales() override;
-    virtual bool SAL_CALL hasLocale( const Locale& rLocale ) override;
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() override;
+    virtual bool SAL_CALL hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XThesaurus
-    virtual Sequence< Reference < css::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+    virtual css::uno::Sequence< css::uno::Reference < css::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const css::lang::Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) override;
+    virtual OUString SAL_CALL getServiceDisplayName( const css::lang::Locale& rLocale ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& rxListener ) override;
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& rxListener ) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     static OUString makeLowerCase(const OUString&, CharClass const *);

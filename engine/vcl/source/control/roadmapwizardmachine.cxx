@@ -28,6 +28,8 @@
 
 #include <vector>
 
+using namespace vcl::RoadmapWizardTypes;
+
 namespace vcl
 {
     RoadmapWizardMachine::RoadmapWizardMachine(weld::Window* pParent)

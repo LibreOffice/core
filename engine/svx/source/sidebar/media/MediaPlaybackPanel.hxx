@@ -27,9 +27,6 @@
 #include <avmedia/MediaControlBase.hxx>
 #include <vcl/idle.hxx>
 
-using namespace css;
-using namespace ::com::sun::star::frame;
-
 namespace svx::sidebar {
 
 /** This panel provides media playback control in document

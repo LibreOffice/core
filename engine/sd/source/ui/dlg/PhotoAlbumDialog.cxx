@@ -35,6 +35,9 @@
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace sd
 {
 

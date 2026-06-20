@@ -20,8 +20,6 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-using namespace com::sun::star::uno;
-
 MIDL_INTERFACE("e40a2331-3bc1-11d4-8321-005004526ab4")
 IJScriptValueObject: public IUnknown
 {
@@ -40,9 +38,9 @@ protected:
 MIDL_INTERFACE("7B5C3410-66FA-11d4-832A-005004526AB4")
 IUnoObjectWrapper: public IUnknown
 {
-    STDMETHOD( getWrapperXInterface)( Reference<XInterface>* pInt)=0;
-    STDMETHOD( getOriginalUnoObject)( Reference<XInterface>* pInt)=0;
-    STDMETHOD( getOriginalUnoStruct)( Any * pStruct)=0;
+    STDMETHOD( getWrapperXInterface)( css::uno::Reference<css::uno::XInterface>* pInt)=0;
+    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<css::uno::XInterface>* pInt)=0;
+    STDMETHOD( getOriginalUnoStruct)( css::uno::Any * pStruct)=0;
 
 protected:
     ~IUnoObjectWrapper() {}

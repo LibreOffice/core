@@ -93,8 +93,6 @@ namespace o3tl {
 namespace vcl
 {
 
-using namespace vcl::pdf;
-
 namespace filter
 {
 class PDFObjectElement;
@@ -726,14 +724,14 @@ public:
     friend struct vcl::pdf::PDFPage;
 
     const char* getStructureTag(vcl::pdf::StructElement eElement);
-    static const char* getAttributeTag(PDFWriter::StructAttribute eAtr );
-    static const char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
+    static const char* getAttributeTag(pdf::PDFWriter::StructAttribute eAtr );
+    static const char* getAttributeValueTag( pdf::PDFWriter::StructAttributeValue eVal );
 
     // returns true if compression was done
     // else false
     static bool compressStream( SvMemoryStream* );
 
-    static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
+    static void convertLineInfoToExtLineInfo( const LineInfo& rIn, pdf::PDFWriter::ExtLineInfo& rOut );
 
 private:
     bool ImplNewFont() const override;
@@ -744,35 +742,35 @@ private:
 
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     StyleSettings                       m_aWidgetStyleSettings;
-    std::vector< PDFPage >              m_aPages;
+    std::vector< pdf::PDFPage >         m_aPages;
     /* maps object numbers to file offsets (needed for xref) */
     std::vector< sal_uInt64 >           m_aObjects;
     /* contains Bitmaps until they are written to the
      *  file stream as XObjects*/
-    std::list< BitmapEmit >             m_aBitmaps;
+    std::list< pdf::BitmapEmit >        m_aBitmaps;
     /* contains JPG streams until written to file     */
-    std::vector<JPGEmit>                m_aJPGs;
+    std::vector<pdf::JPGEmit>           m_aJPGs;
     /*--->i56629 contains all named destinations ever set during the PDF creation,
        destination id is always the destination's position in this vector
      */
-    std::vector<PDFNamedDest>           m_aNamedDests;
+    std::vector<pdf::PDFNamedDest>      m_aNamedDests;
     /* contains all dests ever set during the PDF creation,
        dest id is always the dest's position in this vector
      */
-    std::vector<PDFDest>                m_aDests;
+    std::vector<pdf::PDFDest>           m_aDests;
     /** contains destinations accessible via a public Id, instead of being linked to by an ordinary link
     */
     ::std::map< sal_Int32, sal_Int32 >  m_aDestinationIdTranslation;
     /* contains all links ever set during PDF creation,
        link id is always the link's position in this vector
     */
-    std::vector<PDFLink>                m_aLinks;
+    std::vector<pdf::PDFLink>           m_aLinks;
     /// Contains all screen annotations.
-    std::vector<PDFScreen> m_aScreens;
+    std::vector<pdf::PDFScreen> m_aScreens;
     /// Contains embedded files.
-    std::vector<PDFEmbeddedFile> m_aEmbeddedFiles;
+    std::vector<pdf::PDFEmbeddedFile> m_aEmbeddedFiles;
 
-    std::vector<PDFDocumentAttachedFile> m_aDocumentAttachedFiles;
+    std::vector<pdf::PDFDocumentAttachedFile> m_aDocumentAttachedFiles;
 
     /* makes correctly encoded for export to PDF URLS
     */
@@ -784,13 +782,13 @@ private:
     /* contains all outline items,
        object 0 is the outline root
      */
-    std::vector<PDFOutlineEntry>        m_aOutline;
+    std::vector<pdf::PDFOutlineEntry>   m_aOutline;
     /* contains all notes set during PDF creation
      */
-    std::vector<PDFNoteEntry>           m_aNotes;
+    std::vector<pdf::PDFNoteEntry>      m_aNotes;
     /* the root of the structure tree
      */
-    std::vector<PDFStructureElement>    m_aStructure;
+    std::vector<pdf::PDFStructureElement> m_aStructure;
     /* current object in the structure hierarchy
      */
     sal_Int32                           m_nCurrentStructElement;
@@ -807,8 +805,8 @@ private:
     std::unordered_set<sal_Int32> m_StructElemObjsWithID;
 
     /* contains all widgets used in the PDF */
-    std::vector<PDFWidget> m_aWidgets;
-    std::vector<PDFWidgetCopy> m_aCopiedWidgets;
+    std::vector<pdf::PDFWidget> m_aWidgets;
+    std::vector<pdf::PDFWidgetCopy> m_aCopiedWidgets;
 
     /* maps radio group id to index of radio group control in m_aWidgets */
     std::map< sal_Int32, sal_Int32 >    m_aRadioGroupWidgets;
@@ -817,14 +815,14 @@ private:
 
     /* contains Bitmaps for gradient functions until they are written
      *  to the file stream */
-    std::list< GradientEmit >           m_aGradients;
+    std::list< pdf::GradientEmit >      m_aGradients;
     /* contains bitmap tiling patterns */
-    std::vector< TilingEmit >           m_aTilings;
-    std::vector< TransparencyEmit >     m_aTransparentObjects;
+    std::vector< pdf::TilingEmit >      m_aTilings;
+    std::vector< pdf::TransparencyEmit >  m_aTransparentObjects;
     /*  contains all font subsets in use */
-    std::map<FontSubsetKey, FontSubset> m_aSubsets;
-    std::map<const vcl::font::PhysicalFontFace*, EmbedFont> m_aSystemFonts;
-    std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aType3Fonts;
+    std::map<pdf::FontSubsetKey, pdf::FontSubset> m_aSubsets;
+    std::map<const vcl::font::PhysicalFontFace*, pdf::EmbedFont> m_aSystemFonts;
+    std::map<const vcl::font::PhysicalFontFace*, pdf::FontSubset> m_aType3Fonts;
     sal_Int32                           m_nNextFID;
 
     /// Cache some most recent bitmaps we've exported, in case we encounter them again..
@@ -839,30 +837,30 @@ private:
     sal_Int64                           m_nSignatureContentOffset;
     sal_Int64                           m_nSignatureLastByteRangeNoOffset;
     sal_Int32                           m_nResourceDict;
-    ResourceDict                        m_aGlobalResourceDict;
+    pdf::ResourceDict                   m_aGlobalResourceDict;
     sal_Int32                           m_nFontDictObject;
     std::map< sal_Int32, sal_Int32 >    m_aBuildinFontToObjectMap;
 
-    PDFWriter::PDFWriterContext         m_aContext;
+    pdf::PDFWriter::PDFWriterContext    m_aContext;
     osl::File                           m_aFile;
     bool                                m_bOpen;
 
     ExternalPDFStreams m_aExternalPDFStreams;
 
-    std::shared_ptr<IPDFEncryptor> m_pPDFEncryptor;
+    std::shared_ptr<pdf::IPDFEncryptor> m_pPDFEncryptor;
 
     /* output redirection; e.g. to accumulate content streams for
        XObjects
      */
-    std::list< StreamRedirect >         m_aOutputStreams;
+    std::list< pdf::StreamRedirect >        m_aOutputStreams;
 
-    std::list< GraphicsState >              m_aGraphicsStack;
-    GraphicsState                           m_aCurrentPDFState;
+    std::list< pdf::GraphicsState >         m_aGraphicsStack;
+    pdf::GraphicsState                      m_aCurrentPDFState;
 
     std::unique_ptr<ZCodec>                 m_pCodec;
     std::unique_ptr<SvMemoryStream>         m_pMemStream;
 
-    std::set< PDFWriter::ErrorCode >        m_aErrors;
+    std::set< pdf::PDFWriter::ErrorCode >   m_aErrors;
 
     ::comphelper::Hash                      m_DocDigest;
 
@@ -906,8 +904,8 @@ private:
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
-    void drawVerticalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, const Matrix3& rRotScale, double fAngle, double fXScale, sal_Int32 nFontHeight );
-    void drawHorizontalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, bool bFirst, double fAngle, double fXScale, sal_Int32 nFontHeight, sal_Int32 nPixelFontHeight );
+    void drawVerticalGlyphs( const std::vector<pdf::PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, const pdf::Matrix3& rRotScale, double fAngle, double fXScale, sal_Int32 nFontHeight );
+    void drawHorizontalGlyphs( const std::vector<pdf::PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, bool bFirst, double fAngle, double fXScale, sal_Int32 nFontHeight, sal_Int32 nPixelFontHeight );
     void drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines );
     void drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines );
     void drawShadow( SalLayout& rLayout, const OUString& rText, bool bTextLines );
@@ -915,34 +913,34 @@ private:
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
      */
-    void updateGraphicsState(Mode mode = Mode::DEFAULT);
+    void updateGraphicsState(pdf::Mode mode = pdf::Mode::DEFAULT);
 
     /* writes a transparency group object */
-    void writeTransparentObject( TransparencyEmit& rObject );
+    void writeTransparentObject( pdf::TransparencyEmit& rObject );
 
     /* writes an XObject of type image, may create
        a second for the mask
      */
-    bool writeBitmapObject( const BitmapEmit& rObject );
+    bool writeBitmapObject( const pdf::BitmapEmit& rObject );
     /* writes an XObject of type mask image
      */
     bool writeBitmapMaskObject( sal_Int32 nMaskObject, const AlphaMask& rAlphaMask );
 
-    void writeJPG( const JPGEmit& rEmit );
+    void writeJPG( const pdf::JPGEmit& rEmit );
     /// Writes the form XObject proxy for the image.
-    void writeReferenceXObject(const ReferenceXObjectEmit& rEmit);
+    void writeReferenceXObject(const pdf::ReferenceXObjectEmit& rEmit);
 
     void mergeAnnotationsFromExternalPage(filter::PDFObjectElement* pPage,  std::map<sal_Int32, sal_Int32>& rCopiedResourcesMap);
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
-    const BitmapEmit& createBitmapEmit( const Bitmap& rBitmap, const Graphic& rGraphic, std::list<BitmapEmit>& rBitmaps, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams );
-    const BitmapEmit& createBitmapEmit( const Bitmap& rBitmap, const Graphic& rGraphic );
+    const pdf::BitmapEmit& createBitmapEmit( const Bitmap& rBitmap, const Graphic& rGraphic, std::list<pdf::BitmapEmit>& rBitmaps, pdf::ResourceDict& rResourceDict, std::list<pdf::StreamRedirect>& rOutputStreams );
+    const pdf::BitmapEmit& createBitmapEmit( const Bitmap& rBitmap, const Graphic& rGraphic );
 
     /* writes the Do operation inside the content stream */
-    void drawBitmap( const Point& rDestPt, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor );
+    void drawBitmap( const Point& rDestPt, const Size& rDestSize, const pdf::BitmapEmit& rBitmap, const Color& rFillColor );
     /* write the function object for a Gradient */
-    bool writeGradientFunction( GradientEmit const & rObject );
+    bool writeGradientFunction( pdf::GradientEmit const & rObject );
     /* creates a GradientEmit and returns its object number */
     sal_Int32 createGradient(  const Gradient& rGradient, const Size& rSize );
 
@@ -953,9 +951,9 @@ private:
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
     sal_Int32 emitBuildinFont( const pdf::BuildinFontFace*, sal_Int32 nObject );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitSystemFont(const vcl::font::PhysicalFontFace*, EmbedFont const &);
+    std::map< sal_Int32, sal_Int32 > emitSystemFont(const vcl::font::PhysicalFontFace*, pdf::EmbedFont const &);
     /* writes a type3 font object and appends it to the font id mapping, or returns false in case of failure */
-    bool emitType3Font(const vcl::font::PhysicalFontFace*, const FontSubset&, std::map<sal_Int32, sal_Int32>&);
+    bool emitType3Font(const vcl::font::PhysicalFontFace*, const pdf::FontSubset&, std::map<sal_Int32, sal_Int32>&);
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor(const vcl::font::PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream);
     /* writes a ToUnicode cmap, returns the corresponding stream object */
@@ -977,8 +975,8 @@ private:
         return m_nFontDictObject;
     }
     /* push resource into current (redirected) resource dict */
-    static void pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams );
-    void pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject );
+    static void pushResource( pdf::ResourceKind eKind, const OString& rResource, sal_Int32 nObject, pdf::ResourceDict& rResourceDict, std::list<pdf::StreamRedirect>& rOutputStreams );
+    void pushResource( pdf::ResourceKind eKind, const OString& rResource, sal_Int32 nObject );
 
     void appendBuildinFontsToDict( OStringBuffer& rDict ) const;
     /* writes the font dictionary and emits all font objects
@@ -996,15 +994,15 @@ private:
     // Write all screen annotations.
     bool emitScreenAnnotations();
 
-    void emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote,
+    void emitTextAnnotationLine(OStringBuffer & aLine, pdf::PDFNoteEntry const & rNote,
                                 std::map<sal_uInt64, sal_Int32> const & rAnnotIdToObject);
-    static void emitStateChangeAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote);
-    static void emitPopupAnnotationLine(OStringBuffer & aLine, PDFPopupAnnotation const & rPopUp);
+    static void emitStateChangeAnnotationLine(OStringBuffer & aLine, pdf::PDFNoteEntry const & rNote);
+    static void emitPopupAnnotationLine(OStringBuffer & aLine, pdf::PDFPopupAnnotation const & rPopUp);
     // write all notes
     bool emitNoteAnnotations();
 
     // write the appearance streams of a widget
-    bool emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDict );
+    bool emitAppearances( pdf::PDFWidget& rWidget, OStringBuffer& rAnnotDict );
     // clean up radio button "On" values
     void ensureUniqueRadioOnValues();
     // write all widgets
@@ -1017,20 +1015,20 @@ private:
     sal_Int32 emitNamedDestinations();//i56629
     // writes outline dict and tree
     sal_Int32 emitOutline();
-    template<typename T> void AppendAnnotKid(PDFStructureElement& i_rEle, T & rAnnot);
+    template<typename T> void AppendAnnotKid(pdf::PDFStructureElement& i_rEle, T & rAnnot);
     // puts the attribute objects of a structure element into the returned string,
     // helper for emitStructure
-    OString emitStructureAttributes( PDFStructureElement& rEle );
+    OString emitStructureAttributes( pdf::PDFStructureElement& rEle );
     //--->i94258
     // the maximum array elements allowed for PDF array object
     static const sal_uInt32 ncMaxPDFArraySize = 8191;
     //check if internal dummy container are needed in the structure elements
-    void addInternalStructureContainer( PDFStructureElement& rEle );
+    void addInternalStructureContainer( pdf::PDFStructureElement& rEle );
     //<---i94258
     // writes namespaces
     void emitNamespaces();
     // writes document structure
-    sal_Int32 emitStructure( PDFStructureElement& rEle );
+    sal_Int32 emitStructure( pdf::PDFStructureElement& rEle );
     // writes structure parent tree
     sal_Int32 emitStructParentTree( sal_Int32 nTreeObject );
     // writes structure IDTree
@@ -1059,22 +1057,22 @@ private:
                                       sal_Int32 nItemLevel,
                                       sal_Int32 nCurrentItemId );
     // default appearances for widgets
-    sal_Int32 findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rRadio );
+    sal_Int32 findRadioGroupWidget( const pdf::PDFWriter::RadioButtonWidget& rRadio );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
     sal_Int32 getBestBuildinFont( const Font& rFont );
     sal_Int32 getSystemFont( const Font& i_rFont );
 
     // used for edit and listbox
-    Font drawFieldBorder( PDFWidget&, const PDFWriter::AnyWidget&, const StyleSettings& );
+    Font drawFieldBorder( pdf::PDFWidget&, const pdf::PDFWriter::AnyWidget&, const StyleSettings& );
 
-    void createDefaultPushButtonAppearance( PDFWidget&, const PDFWriter::PushButtonWidget& rWidget );
-    void createDefaultCheckBoxAppearance( PDFWidget&, const PDFWriter::CheckBoxWidget& rWidget );
-    void createDefaultRadioButtonAppearance( PDFWidget&, const PDFWriter::RadioButtonWidget& rWidget );
-    void createDefaultEditAppearance( PDFWidget&, const PDFWriter::EditWidget& rWidget );
-    void createDefaultListBoxAppearance( PDFWidget&, const PDFWriter::ListBoxWidget& rWidget );
+    void createDefaultPushButtonAppearance( pdf::PDFWidget&, const pdf::PDFWriter::PushButtonWidget& rWidget );
+    void createDefaultCheckBoxAppearance( pdf::PDFWidget&, const pdf::PDFWriter::CheckBoxWidget& rWidget );
+    void createDefaultRadioButtonAppearance( pdf::PDFWidget&, const pdf::PDFWriter::RadioButtonWidget& rWidget );
+    void createDefaultEditAppearance( pdf::PDFWidget&, const pdf::PDFWriter::EditWidget& rWidget );
+    void createDefaultListBoxAppearance( pdf::PDFWidget&, const pdf::PDFWriter::ListBoxWidget& rWidget );
 
     /* ensure proper escapement and uniqueness of field names */
-    void createWidgetFieldName( sal_Int32 i_nWidgetsIndex, const PDFWriter::AnyWidget& i_rInWidget );
+    void createWidgetFieldName( sal_Int32 i_nWidgetsIndex, const pdf::PDFWriter::AnyWidget& i_rInWidget );
     /// See vcl::PDFObjectContainer::createObject().
     sal_Int32 createObject() override;
     /// See vcl::PDFObjectContainer::updateObject().
@@ -1119,7 +1117,7 @@ private:
     /* PDF/UA support enabled */
     bool m_bIsPDF_UA = false;
 
-    PDFWriter&      m_rOuterFace;
+    pdf::PDFWriter& m_rOuterFace;
 
     /*
     i12626
@@ -1130,24 +1128,24 @@ private:
 
     // helper for playMetafile
     void implWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
-                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+                            VirtualDevice* pDummyVDev, const pdf::PDFWriter::PlayMetafileContext& );
     void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const Bitmap& rBitmap, const Graphic& i_pGraphic,
-                           VirtualDevice const * pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+                           VirtualDevice const * pDummyVDev, const pdf::PDFWriter::PlayMetafileContext& );
 
     // color helper functions
     void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
     void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
 public:
-    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, PDFWriter& );
+    PDFWriterImpl( const pdf::PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, pdf::PDFWriter& );
     ~PDFWriterImpl() override;
     void dispose() override;
 
     /* document structure */
-    void newPage( double nPageWidth , double nPageHeight, PDFWriter::Orientation eOrientation );
+    void newPage( double nPageWidth , double nPageHeight, pdf::PDFWriter::Orientation eOrientation );
     bool emit();
-    const std::set< PDFWriter::ErrorCode > & getErrors() const { return m_aErrors;}
-    void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
-    void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const vcl::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = nullptr );
+    const std::set< pdf::PDFWriter::ErrorCode > & getErrors() const { return m_aErrors;}
+    void insertError( pdf::PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
+    void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const pdf::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = nullptr );
 
     Size getCurPageSize() const
     {
@@ -1173,13 +1171,13 @@ public:
     void setLineColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aLineColor = rColor.IsTransparent() ? COL_TRANSPARENT : rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::LineColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::LineColor;
     }
 
     void setFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFillColor = rColor.IsTransparent() ? COL_TRANSPARENT : rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::FillColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::FillColor;
     }
 
     void setTextLineColor()
@@ -1206,25 +1204,25 @@ public:
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
         m_aGraphicsStack.front().m_aFont.SetTransparent( rColor.IsTransparent() );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::Font;
     }
     void setTextFillColor()
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( COL_TRANSPARENT );
         m_aGraphicsStack.front().m_aFont.SetTransparent( true );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::Font;
     }
     void setTextColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetColor( rColor );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::Font;
     }
 
     void clearClipRegion()
     {
         m_aGraphicsStack.front().m_aClipRegion.clear();
         m_aGraphicsStack.front().m_bClipRegion = false;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::ClipRegion;
     }
 
     void setClipRegion( const basegfx::B2DPolyPolygon& rRegion );
@@ -1238,19 +1236,19 @@ public:
     void setLayoutMode( vcl::text::ComplexTextLayoutFlags nLayoutMode )
     {
         m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::LayoutMode;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::LayoutMode;
     }
 
     void setDigitLanguage( LanguageType eLang )
     {
         m_aGraphicsStack.front().m_aDigitLanguage = eLang;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::DigitLanguage;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::DigitLanguage;
     }
 
     void setTextAlign( TextAlign eAlign )
     {
         m_aGraphicsStack.front().m_aFont.SetAlignment( eAlign );
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
+        m_aGraphicsStack.front().m_nUpdateFlags |= pdf::GraphicsStateUpdateFlags::Font;
     }
 
     /* actual drawing functions */
@@ -1273,7 +1271,7 @@ public:
     void drawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void drawPolyLine( const tools::Polygon& rPoly );
     void drawPolyLine( const tools::Polygon& rPoly, const LineInfo& rInfo );
-    void drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo );
+    void drawPolyLine( const tools::Polygon& rPoly, const pdf::PDFWriter::ExtLineInfo& rInfo );
 
     void drawPixel( const Point& rPt, const Color& rColor );
 
@@ -1286,7 +1284,7 @@ public:
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap );
     void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const AlphaMask& rAlphaMask, const Graphic& rGraphic );
     /// Stores the original PDF data from rGraphic as an embedded file.
-    void createEmbeddedFile(const Graphic& rGraphic, ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject);
+    void createEmbeddedFile(const Graphic& rGraphic, pdf::ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject);
 
     void drawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
     void drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
@@ -1298,7 +1296,7 @@ public:
     void emitComment( const char* pComment );
 
     //--->i56629 named destinations
-    sal_Int32 createNamedDest( const OUString& sDestName, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
+    sal_Int32 createNamedDest( const OUString& sDestName, const tools::Rectangle& rRect, sal_Int32 nPageNr, pdf::PDFWriter::DestAreaType eType );
 
     //--->i59651
     //emits output intent
@@ -1309,8 +1307,8 @@ public:
 
     // links
     sal_Int32 createLink(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText);
-    sal_Int32 createDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
-    sal_Int32 registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
+    sal_Int32 createDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, pdf::PDFWriter::DestAreaType eType );
+    sal_Int32 registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, pdf::PDFWriter::DestAreaType eType );
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
@@ -1327,25 +1325,25 @@ public:
     void      setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
 
     // notes
-    sal_Int32 createNote(const tools::Rectangle& rRect, const tools::Rectangle& rPopupRect, const PDFNote& rNote, sal_Int32 nPageNr);
+    sal_Int32 createNote(const tools::Rectangle& rRect, const tools::Rectangle& rPopupRect, const pdf::PDFNote& rNote, sal_Int32 nPageNr);
     // structure elements
     sal_Int32 ensureStructureElement();
     void initStructureElement(sal_Int32 id, vcl::pdf::StructElement eType, std::u16string_view rAlias);
     void beginStructureElement(sal_Int32 id);
     void endStructureElement();
     bool setCurrentStructureElement( sal_Int32 nElement );
-    bool setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal );
-    bool setStructureAttributeNumerical( enum PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
+    bool setStructureAttribute( enum pdf::PDFWriter::StructAttribute eAttr, enum pdf::PDFWriter::StructAttributeValue eVal );
+    bool setStructureAttributeNumerical( enum pdf::PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
     void setStructureBoundingBox( const tools::Rectangle& rRect );
     void setStructureAnnotIds(::std::vector<sal_Int32> const& rAnnotIds);
     void setActualText( const OUString& rText );
     void setAlternateText( const OUString& rText );
 
     // transitional effects
-    void setPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr );
+    void setPageTransition( pdf::PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr );
 
     // controls
-    sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
+    sal_Int32 createControl( const pdf::PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
 
     // attached file
     void addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> rStream);

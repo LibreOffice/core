@@ -39,8 +39,6 @@
 
 #include <vector>
 
-using namespace comphelper;
-
 /** ListBox is a bit confusing / different from other form components,
     so here are a few notes:
 
@@ -243,7 +241,7 @@ typedef ::cppu::ImplHelper4 <   css::awt::XFocusListener
 
 class OListBoxControl   :public OBoundControl
                         ,public OListBoxControl_BASE
-                        ,public IEventProcessor
+                        ,public comphelper::IEventProcessor
 {
 private:
     ::comphelper::OInterfaceContainerHelper3<css::form::XChangeListener> m_aChangeListeners;

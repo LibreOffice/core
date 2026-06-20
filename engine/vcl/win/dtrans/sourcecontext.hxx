@@ -24,12 +24,6 @@
 
 #include <win/dnd_source.hxx>
 
-using namespace ::com::sun::star::datatransfer;
-using namespace ::com::sun::star::datatransfer::dnd;
-using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
 // This class fires events to XDragSourceListener implementations.
 // Of that interface only dragDropEnd and dropActionChanged are called.
 // The functions dragEnter, dragExit and dragOver are not supported

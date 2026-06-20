@@ -24,6 +24,8 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+using namespace css;
+using namespace css::uno;
 
 class SdActiveXControlsTest: public SdModelTestBase
 {

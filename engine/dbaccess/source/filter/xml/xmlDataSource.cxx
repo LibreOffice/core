@@ -32,8 +32,10 @@
 
 namespace dbaxml
 {
+    using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+    using namespace xmloff::token;
 
 OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& _xAttrList,

@@ -19,6 +19,9 @@
 
 #include <sdpage.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 class SdOOXMLExportTest3 : public SdModelTestBase
 {
 public:

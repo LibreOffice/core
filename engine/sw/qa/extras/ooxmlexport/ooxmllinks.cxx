@@ -14,6 +14,9 @@
 #include <o3tl/string_view.hxx>
 #include <test/commontesttools.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 // This file contains tests to check relative/absolute hyperlinks handling
 
 // decide if output link should be converted to absolute

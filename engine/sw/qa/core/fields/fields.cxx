@@ -44,6 +44,9 @@
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace
 {
 /// Covers sw/source/core/fields/ fixes.
