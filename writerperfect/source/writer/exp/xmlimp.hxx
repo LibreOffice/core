@@ -81,6 +81,8 @@ class XMLImport : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
     std::map<OUString, librevenge::RVNGPropertyList> maTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticGraphicStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maGraphicStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> maAutomaticListStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> maListStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maPageLayouts;
     std::map<OUString, librevenge::RVNGPropertyList> maMasterStyles;
     librevenge::RVNGPropertyListVector maCoverImages;
@@ -110,6 +112,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticListStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetTextStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetParagraphStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetCellStyles();
@@ -117,6 +120,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList>& GetRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetListStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetPageLayouts();
     std::map<OUString, librevenge::RVNGPropertyList>& GetMasterStyles();
     const librevenge::RVNGPropertyListVector& GetCoverImages() const;

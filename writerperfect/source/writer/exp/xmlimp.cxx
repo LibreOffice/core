@@ -498,6 +498,11 @@ std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticGraphic
     return maAutomaticGraphicStyles;
 }
 
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetAutomaticListStyles()
+{
+    return maAutomaticListStyles;
+}
+
 std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetTextStyles()
 {
     return maTextStyles;
@@ -528,6 +533,11 @@ std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetTableStyles()
 std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetGraphicStyles()
 {
     return maGraphicStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetListStyles()
+{
+    return maListStyles;
 }
 
 std::map<OUString, librevenge::RVNGPropertyList>& XMLImport::GetPageLayouts()

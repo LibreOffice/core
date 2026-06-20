@@ -42,6 +42,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentListStyles();
     std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentPageLayouts();
     std::map<OUString, librevenge::RVNGPropertyList>& GetCurrentMasterStyles();
 
@@ -53,6 +54,7 @@ private:
     std::map<OUString, librevenge::RVNGPropertyList>& m_rRowStyles;
     std::map<OUString, librevenge::RVNGPropertyList>& m_rTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList>& m_rGraphicStyles;
+    std::map<OUString, librevenge::RVNGPropertyList>& m_rListStyles;
     std::map<OUString, librevenge::RVNGPropertyList>& m_rPageLayouts;
     std::map<OUString, librevenge::RVNGPropertyList>& m_rMasterStyles;
 };

@@ -8,7 +8,6 @@
  */
 
 #include "txtstyli.hxx"
-
 #include "xmlfmt.hxx"
 
 using namespace com::sun::star;
@@ -117,6 +116,74 @@ void XMLGraphicPropertiesContext::startElement(
         OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
         mrStyle.GetGraphicPropertyList().insert(sName.getStr(), sValue.getStr());
     }
+}
+
+namespace
+{
+/// Handler for <text:list-level-style-number> and <text:text:list-level-style-bullet>.
+class XMLListPropertiesContext : public XMLImportContext
+{
+public:
+    XMLListPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle,
+                             const OUString& rStyleName);
+
+    void SAL_CALL
+    startElement(const OUString& rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+
+private:
+    XMLStyleContext& mrStyle;
+    const OUString& mrStyleName;
+};
+}
+
+XMLListPropertiesContext::XMLListPropertiesContext(XMLImport& rImport, XMLStyleContext& rStyle,
+                                                   const OUString& rStyleName)
+    : XMLImportContext(rImport)
+    , mrStyle(rStyle)
+    , mrStyleName(rStyleName)
+{
+}
+
+void XMLListPropertiesContext::startElement(
+    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+{
+    OString aStyleName = OUStringToOString(mrStyleName, RTL_TEXTENCODING_UTF8);
+
+    // a list style is defined with:
+    // 1 "text:list-style" tag which only contains the attribute "style:name"
+    // several (most of times 10) "text:list-level-style-number" or "text:list-level-style-bullet" subtags
+    // remark: these subtags contains other elements but we haven't dealt with them
+    // anyway, that's why we need a RVNGPropertyListVector, this one will contains subtags
+    // all attributes of the a subtag will be in a RVNGPropertyList
+
+    // declare the vector for the current style
+    librevenge::RVNGPropertyListVector aStyleCurrentVector;
+
+    // check if there's an existing one and if it's the case, use it
+    const librevenge::RVNGProperty* pStyleProperty
+        = mrStyle.GetListPropertyList().child(aStyleName.getStr());
+    if (pStyleProperty)
+    {
+        const librevenge::RVNGPropertyListVector* pStyleVector
+            = static_cast<const librevenge::RVNGPropertyListVector*>(pStyleProperty);
+        aStyleCurrentVector = *pStyleVector;
+    }
+
+    // create a RVNGPropertyList for the subtag of a style
+    librevenge::RVNGPropertyList aCurrentPropertyList;
+    // save all attributes of the subtag
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+        aCurrentPropertyList.insert(sName.getStr(), sValue.getStr());
+    }
+    // now we can add the subtag in the vector
+    aStyleCurrentVector.append(aCurrentPropertyList);
+
+    // and insert/reinsert it in mrStyle.GetListPropertyList
+    mrStyle.GetListPropertyList().insert(aStyleName.getStr(), aStyleCurrentVector);
 }
 
 namespace
@@ -325,6 +392,8 @@ rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(
         return new XMLTablePropertiesContext(GetImport(), *this);
     if (rName == "style:graphic-properties")
         return new XMLGraphicPropertiesContext(GetImport(), *this);
+    if (rName == "text:list-level-style-number" || rName == "text:list-level-style-bullet")
+        return new XMLListPropertiesContext(GetImport(), *this, m_aName);
     if (rName == "style:page-layout-properties")
         return new XMLPageLayoutPropertiesContext(GetImport(), *this);
     return nullptr;
@@ -348,6 +417,7 @@ void XMLStyleContext::startElement(
         m_aTextPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aParagraphPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aGraphicPropertyList.insert(sName.getStr(), sValue.getStr());
+        m_aListPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aPageLayoutPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aMasterPagePropertyList.insert(sName.getStr(), sValue.getStr());
         m_aTablePropertyList.insert(sName.getStr(), sValue.getStr());
@@ -373,6 +443,8 @@ void XMLStyleContext::endElement(const OUString& rName)
         m_rStyles.GetCurrentTableStyles()[m_aName] = m_aTablePropertyList;
     else if (m_aFamily == "graphic")
         m_rStyles.GetCurrentGraphicStyles()[m_aName] = m_aGraphicPropertyList;
+    else if (rName == "text:list-style")
+        m_rStyles.GetCurrentListStyles()[m_aName] = m_aListPropertyList;
     else if (rName == "style:page-layout")
         m_rStyles.GetCurrentPageLayouts()[m_aName] = m_aPageLayoutPropertyList;
     else if (rName == "style:master-page")
@@ -404,6 +476,8 @@ librevenge::RVNGPropertyList& XMLStyleContext::GetGraphicPropertyList()
 {
     return m_aGraphicPropertyList;
 }
+
+librevenge::RVNGPropertyList& XMLStyleContext::GetListPropertyList() { return m_aListPropertyList; }
 
 librevenge::RVNGPropertyList& XMLStyleContext::GetPageLayoutPropertyList()
 {

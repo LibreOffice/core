@@ -28,6 +28,16 @@ public:
                  const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/) override;
 
     void SAL_CALL endElement(const OUString& rName) override;
+
+private:
+    // this static variable will be incremented each time we open "text:list"
+    // and will be decremented each time we close "text:list"
+    static int nLevel;
+    // this static variable will keep last style name used for list
+    // since sublist can have no style:name attribute
+    // until we close the list
+    static OUString aStyleName;
+    bool m_bIsOrderedList = false;
 };
 
 } // namespace writerperfect::exp

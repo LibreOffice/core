@@ -496,10 +496,10 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testList)
 
     xmlDocUniquePtr mpXmlDoc = parseExport(u"OEBPS/sections/section0001.xhtml"_ustr);
     // This was "C", i.e. in-list content was ignored.
-    assertXPathContent(mpXmlDoc, "//xhtml:ol[1]/xhtml:li[1]/xhtml:p[1]/xhtml:span", u"B");
+    assertXPathContent(mpXmlDoc, "//xhtml:ul[1]/xhtml:li[1]/xhtml:p[1]/xhtml:span", u"B");
     // Test nested list content.
     assertXPathContent(
-        mpXmlDoc, "//xhtml:ol[2]/xhtml:li[1]/xhtml:ol[1]/xhtml:li[1]/xhtml:p[1]/xhtml:span", u"F");
+        mpXmlDoc, "//xhtml:ul[2]/xhtml:li[1]/xhtml:ol[1]/xhtml:li[1]/xhtml:p[1]/xhtml:span", u"F");
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImage)
